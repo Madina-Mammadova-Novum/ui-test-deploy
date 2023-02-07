@@ -1,0 +1,313 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .wrapper-with-span span {
+    @apply text-primary;
+  }
+
+  .linear-gradient-gallery {
+    background-color: linear-gradient(
+      179.62deg,
+      #f4f4f4 0.32%,
+      rgba(255, 255, 255, 0) 229.29%,
+      rgba(244, 244, 244, 0) 229.29%
+    );
+    transform: matrix(0, 1, -1, 0, 0, 0);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* CKEditor 5 Styles */
+
+  .content-wrapper ul {
+    @apply list-inside list-disc;
+  }
+
+  .content-wrapper h1 {
+    @apply text-5xl font-bold;
+  }
+
+  .content-wrapper h2 {
+    @apply text-lg font-bold;
+  }
+
+  .content-wrapper p {
+    @apply text-black mb-3 text-sm sm:text-base md:text-lg;
+  }
+
+  .content-wrapper ul li,
+  .content-wrapper ol li {
+    @apply text-black mb-3 text-sm sm:text-base md:text-lg;
+  }
+
+  .content-wrapper ul li::marker {
+    color: #57617a;
+  }
+
+  .content-wrapper.list-white ul li::marker {
+    color: #fff;
+  }
+
+  /* Swiper */
+
+  .swiper {
+    width: calc(100% + 16px);
+  }
+
+  .swiper .swiper-scrollbar {
+    @apply hidden;
+  }
+
+  .swiper.swiperTestimonial .swiper-wrapper,
+  .swiper.swiperTeam .swiper-wrapper,
+  .swiper.swiperImprovements .swiper-wrapper {
+    @apply !pb-11 mt-10 lg:mt-14 2lg:mt-16;
+  }
+  .swiper.swiperIngredients .swiper-wrapper {
+    @apply !pb-8 md:!pb-0;
+  }
+
+  .swiper .swiper-pagination {
+    @apply md:hidden;
+  }
+
+  .swiper .swiper-button-prev,
+  .swiper .swiper-button-next {
+    @apply hidden md:block after:hidden absolute;
+  }
+
+  .swiper .swiper-button-prev {
+    @apply bg-[url(/arrow-left.webp)] w-10 h-10;
+  }
+
+  .swiper .swiper-button-next {
+    @apply bg-[url(/arrow-right.webp)] w-10 h-10;
+  }
+
+  .swiper .swiper-pagination .swiper-pagination-bullet {
+    @apply w-[6px] h-[6px] rounded-[3px] !mx-[5px];
+  }
+
+  .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    @apply w-4 h-2 bg-primary rounded-[10px];
+  }
+
+  @media only screen and (min-width: 768px) {
+    .swiper {
+      width: calc(100% + 38px);
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    .swiper {
+      width: calc(100% + 38px);
+      position: unset !important;
+    }
+
+    .swiper.swiperImprovements {
+      @apply w-full;
+    }
+
+    .swiper.swiperIngredients .swiper-button-next {
+      top: 25px;
+      right: 0;
+    }
+    .swiper.swiperIngredients .swiper-button-prev {
+      top: 25px;
+      left: unset;
+      right: 60px;
+    }
+
+    .swiper.swiperTestimonial .swiper-button-next,
+    .swiper.swiperTeam .swiper-button-next {
+      right: 0;
+      top: 98px;
+    }
+
+    .swiper.swiperTestimonial .swiper-button-prev,
+    .swiper.swiperTeam .swiper-button-prev {
+      right: 60px;
+      left: unset;
+      top: 98px;
+    }
+
+    .swiper .swiper-button-prev.swiper-button-disabled,
+    .swiper .swiper-button-next.swiper-button-disabled {
+      opacity: unset;
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    .swiper {
+      width: calc(100% + 80px);
+    }
+
+    .swiper.swiperTestimonial .swiper-button-next,
+    .swiper.swiperTeam .swiper-button-next {
+      right: 0;
+      top: 98px;
+    }
+
+    .swiper.swiperTestimonial .swiper-button-prev,
+    .swiper.swiperTeam .swiper-button-prev {
+      right: 60px;
+      left: unset;
+      top: 98px;
+    }
+
+    .swiper .swiper-button-prev.swiper-button-disabled,
+    .swiper .swiper-button-next.swiper-button-disabled {
+      opacity: unset;
+    }
+  }
+
+  @media only screen and (min-width: 1920px) {
+    .swiper.swiperTestimonial,
+    .swiper.swiperTeam {
+      width: calc(100vw - (100vw - 1920px) / 2 - 100px);
+    }
+    .swiper.swiperIngredients {
+      width: calc(100% + (100vw - 1920px) / 2 + 100px);
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    .content-wrapper h4 {
+      @apply text-lg font-bold mb-3;
+    }
+  }
+
+  @media only screen and (min-width: 1920px) {
+    .content-wrapper h4 {
+      @apply text-xl font-bold mb-5;
+    }
+  }
+}
+
+/* Swiper Concern Gallery  */
+
+.bg-swiper-navigation {
+  background-image: url('/angle.webp'),
+    linear-gradient(179.62deg, #f4f4f4 0.32%, rgba(255, 255, 255, 0) 229.29%, rgba(244, 244, 244, 0) 229.29%);
+}
+
+.swiper.swiperConcernGalleryThumbs {
+  @apply w-full !relative;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-prev,
+.swiper.swiperConcernGalleryThumbs .swiper-button-next {
+  @apply hidden sm:block after:hidden absolute;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-prev.swiper-button-disabled,
+.swiper.swiperConcernGalleryThumbs .swiper-button-next.swiper-button-disabled {
+  @apply hidden;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-prev {
+  @apply bg-swiper-navigation/*  bg-[url(/angle.webp)] */ bg-no-repeat bg-center w-16 h-[calc(100%-40px)] rotate-180 m-0 top-0 left-0;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-next {
+  @apply bg-swiper-navigation /* bg-[url(/angle.webp)] */ bg-no-repeat bg-center w-16 h-[calc(100%-40px)] m-0 top-0 right-0;
+}
+
+@media only screen and (min-width: 1280px) {
+  .swiper.swiperConcernGalleryThumbs .swiper-button-prev {
+    @apply w-16 h-28  -top-6 left-6 -rotate-90;
+  }
+  .swiper.swiperConcernGalleryThumbs .swiper-button-next {
+    @apply w-16 h-28 -bottom-6 top-auto left-6 rotate-90;
+  }
+}
+
+/* Animation  */
+
+.animation-base {
+  transition: all 0.3s ease-in-out;
+}
+
+.animation-burger {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Phone Field Rewrites */
+
+.react-tel-input .form-control.phone-field {
+  @apply h-[42px] w-full text-black rounded-[10px] border pl-[68px] font-kumbh-sans placeholder-secondary border-secondary-light outline-none caret-primary focus:border-primary;
+}
+
+.react-tel-input .form-control.phone-field.invalid-number,
+.react-tel-input .form-control.phone-field.invalid-number:focus {
+  @apply border-error bg-error-light;
+}
+
+.react-tel-input .flag-dropdown.country-field.invalid-number,
+.react-tel-input .flag-dropdown.country-field.invalid-number.open,
+.react-tel-input .flag-dropdown.invalid-number .selected-flag,
+.react-tel-input .flag-dropdown.invalid-number.open .selected-flag {
+  @apply !bg-error-light;
+}
+
+.react-tel-input .flag-dropdown.country-field {
+  @apply text-black rounded-[10px] border border-none h-[28px] top-[7px] left-[1px] bg-white pl-3;
+}
+
+.react-tel-input .country-list .country {
+  @apply !h-10 !px-4;
+}
+
+.react-tel-input .country-list .country-name {
+  @apply hidden;
+}
+
+.react-tel-input .country-list {
+  @apply !w-28 !rounded-[6px];
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0px 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.react-tel-input .country-list .dial-code {
+  @apply text-xsm text-secondary;
+}
+
+.react-tel-input .flag-dropdown .selected-flag {
+  @apply p-0;
+}
+
+.react-tel-input .selected-flag {
+  @apply !w-12 border-r border-[#E7E7E9];
+}
+
+.react-tel-input .selected-flag .arrow {
+  @apply !border-0 !w-5 !h-5 !mt-[-5px] !top-0 bg-[url('/angle-down.png')];
+}
+
+.react-tel-input .selected-flag .arrow.up {
+  @apply bg-[url('/angle-up.png')];
+}
+
+/* Input Password Field */
+
+input[type='password'] {
+  @apply text-black;
+}

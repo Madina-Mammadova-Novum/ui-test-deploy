@@ -1,0 +1,22 @@
+{
+  "log_in": "Log in",
+  "login": "Login",
+  "already_have_account": "Already have an account?",
+  "agree_to_the": " I agree to the ",
+  "privacy_policy": "Privacy Policy",
+  "start_consultation": "Start consultation",
+  "are_you_new_here": "Are you new here?",
+  "create_account": "Create account",
+  "email": "Email",
+  "email_placeholder": "john.doe@gmail.com",
+  "password": "Password",
+  "at_leat_8_symbols": "At least 8 symbols",
+  "one_number": "One number",
+  "one_big_letter": "One big letter",
+  "forgot_password": "Forgot password?",
+  "reset_password_subtitle": "Please enter your email that is connected to your account, so we can sent you a reset password link. If you don’t see it, please check your spam",
+  "sent_resent_password_link": "Sent reset password link",
+  "didnt_get_email": "Didn’t get the email?",
+  "resent_link": "Resent link",
+  "return_to": "Return to"
+}
