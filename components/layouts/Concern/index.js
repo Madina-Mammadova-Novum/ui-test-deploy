@@ -9,15 +9,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { linkPropTypes, mediaPropTypes } from '@/utils/types';
 
-import { imagesAdapter } from '@/adapters/image';
 import { ConcernLabels } from '@/collections';
 import { BlockTitle, ContentElement, NextLink } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
 const ConcernLayout = ({ title, description, images, labels, buttons, children }) => {
   const [activeSlide, setActiveSlide] = useState(0);
-
-  const gallery = imagesAdapter(images);
+  // Requires Image Adapter
+  const gallery = [];
 
   return (
     <div className="w-full px-4 sm:px-[38px] lg:px-20 2lg:px-[100px] 2lg:container mx-auto">

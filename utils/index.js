@@ -1,20 +1,20 @@
 import delve from 'dlv';
 import pluralize from 'pluralize';
 
-import { entityDataAdapter } from '@/adapters/entityData';
-import {
-  contactInformationAdapter,
-  ctaFeaturedAdapter,
-  ctaJoinTeamAdapter,
-  footerAdapter,
-  footerNavigationAdapter,
-  forgotPasswordContentAdapter,
-  headerAdapter,
-  howItWorkBlockAdapter,
-  loginContentAdapter,
-  registrationContentAdapter,
-  whyWeAreBetterBlockAdapter,
-} from '@/adapters/global';
+// import { entityDataAdapter } from '@/adapters/entityData';
+// import {
+//   contactInformationAdapter,
+//   ctaFeaturedAdapter,
+//   ctaJoinTeamAdapter,
+//   footerAdapter,
+//   footerNavigationAdapter,
+//   forgotPasswordContentAdapter,
+//   headerAdapter,
+//   howItWorkBlockAdapter,
+//   loginContentAdapter,
+//   registrationContentAdapter,
+//   whyWeAreBetterBlockAdapter,
+// } from '@/adapters/global';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
@@ -147,7 +147,7 @@ export async function getEntityData(pathArray, locale, preview) {
       slug,
       locale,
       collectionType,
-      data: data.length > 0 ? await entityDataAdapter({ data: data[0] }) : null,
+      // data: data.length > 0 ? await entityDataAdapter({ data: data[0] }) : null,
       meta,
     };
   }
