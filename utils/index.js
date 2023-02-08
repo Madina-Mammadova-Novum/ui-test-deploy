@@ -1,20 +1,5 @@
 import delve from 'dlv';
 import pluralize from 'pluralize';
-
-import { entityDataAdapter } from '@/adapters/entityData';
-import {
-  contactInformationAdapter,
-  ctaFeaturedAdapter,
-  ctaJoinTeamAdapter,
-  footerAdapter,
-  footerNavigationAdapter,
-  forgotPasswordContentAdapter,
-  headerAdapter,
-  howItWorkBlockAdapter,
-  loginContentAdapter,
-  registrationContentAdapter,
-  whyWeAreBetterBlockAdapter,
-} from '@/adapters/global';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
@@ -110,13 +95,7 @@ export function getCollectionType(slug) {
 }
 
 export async function getGlobalData() {
-  const global = await Promise.all([
-    getNavigations().then((data) => ['navigation', data]),
-    getHeader().then((data) => ['header', data]),
-    getContactInformation().then((data) => ['contacts', data]),
-    getFooter().then((data) => ['footer', data]),
-    getFooterNavigation().then((data) => ['footerNavigation', data]),
-  ])
+  const global = await Promise.all([getNavigations().then((data) => ['navigation', data])])
     .then((values) => {
       return Object.fromEntries(values);
     })
@@ -147,7 +126,8 @@ export async function getEntityData(pathArray, locale, preview) {
       slug,
       locale,
       collectionType,
-      data: data.length > 0 ? await entityDataAdapter({ data: data[0] }) : null,
+      // Requires adapter
+      data: data.length > 0 ? data : null,
       meta,
     };
   }
@@ -205,101 +185,6 @@ export async function getNavigations() {
   });
 
   return navigations;
-}
-
-export async function getHowItWorksBlock() {
-  const response = await fetch(
-    getStrapiURL(
-      `/how-it-work?populate[0]=values&populate[1]=values.value&populate[2]=values.value.coverImage,values.value.valueType`
-    )
-  );
-
-  const data = await response.json();
-  return howItWorkBlockAdapter(data);
-}
-
-export async function getHeader() {
-  const response = await fetch(getStrapiURL(`/header?populate[0]=buttons&populate[1]=buttons.linkOptions`));
-
-  const data = await response.json();
-  return headerAdapter(data);
-}
-
-export async function getContactInformation() {
-  const response = await fetch(getStrapiURL(`/contact-information`));
-
-  const data = await response.json();
-  return contactInformationAdapter(data);
-}
-
-export async function getWhyWeAreBetterBlock() {
-  const response = await fetch(
-    getStrapiURL(
-      `/why-we-are-better?populate[0]=values&populate[1]=values.value&populate[2]=values.value.coverImage,values.value.valueType`
-    )
-  );
-
-  const data = await response.json();
-  return whyWeAreBetterBlockAdapter(data);
-}
-
-export async function getCtaFeaturedBlock() {
-  const response = await fetch(
-    getStrapiURL(`/cta-featured?populate[0]=coverImage,additionalImage,button&populate[1]=button.linkOptions`)
-  );
-
-  const data = await response.json();
-  return ctaFeaturedAdapter(data);
-}
-
-export async function getCtaJoinTeamBlock() {
-  const response = await fetch(
-    getStrapiURL(`/cta-join-team?populate[0]=coverImage,button&populate[1]=button.buttonOptions`)
-  );
-
-  const data = await response.json();
-  return ctaJoinTeamAdapter(data);
-}
-
-export async function getFooter() {
-  const response = await fetch(
-    getStrapiURL(
-      `/footer?populate[0]=privacyLink,socials&populate[1]=socials.coverImage,privacyLink.linkOptions,socials.linkOptions`
-    )
-  );
-
-  const data = await response.json();
-  return footerAdapter(data);
-}
-
-export async function getFooterNavigation() {
-  const response = await fetch(
-    getStrapiURL(`/footer-navigation?populate[0]=coverImage,links&populate[1]=links.coverImage,links.linkOptions`)
-  );
-
-  const data = await response.json();
-  return footerNavigationAdapter(data);
-}
-
-export async function getRegistrationContent() {
-  const response = await fetch(getStrapiURL(`/registration-page?populate[0]=coverImage`));
-
-  const data = await response.json();
-  return registrationContentAdapter(data);
-}
-
-export async function getLoginContent() {
-  const response = await fetch(getStrapiURL(`/login-page?populate[0]=coverImage`));
-
-  const data = await response.json();
-  return loginContentAdapter(data);
-}
-
-export async function getForgotPasswordContent() {
-  const response = await fetch(getStrapiURL(`/forgot-password-page?populate[0]=coverImage`));
-
-  const data = await response.json();
-  return forgotPasswordContentAdapter(data);
 }
 
 export async function getCollectionTypesData(key) {
