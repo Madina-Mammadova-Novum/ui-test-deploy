@@ -1,20 +1,5 @@
 import delve from 'dlv';
 import pluralize from 'pluralize';
-
-// import { entityDataAdapter } from '@/adapters/entityData';
-// import {
-//   contactInformationAdapter,
-//   ctaFeaturedAdapter,
-//   ctaJoinTeamAdapter,
-//   footerAdapter,
-//   footerNavigationAdapter,
-//   forgotPasswordContentAdapter,
-//   headerAdapter,
-//   howItWorkBlockAdapter,
-//   loginContentAdapter,
-//   registrationContentAdapter,
-//   whyWeAreBetterBlockAdapter,
-// } from '@/adapters/global';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
