@@ -4,8 +4,12 @@
     "paths": {
       "@/adapters": ["adapters/index"],
       "@/adapters/*": ["adapters/*"],
+      "@/providers": ["providers/index"],
+      "@/providers/*": ["providers/*"],
       "@/services": ["services/index"],
       "@/services/*": ["services/*"],
+      "@/store": ["store/index"],
+      "@/store/*": ["store/*"],
       "@/assets": ["assets/index"],
       "@/assets/*": ["assets/*"],
       "@/blocks": ["components/blocks/index"],

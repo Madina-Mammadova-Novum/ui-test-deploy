@@ -37,6 +37,7 @@
     "ecmaVersion": 2020
   },
   "rules": {
+    "import/prefer-default-export": "off",
     "no-console": ["warn", { "allow": ["info", "error"] }],
     "no-param-reassign": [
       2,
@@ -48,6 +49,7 @@
     "no-unsafe-optional-chaining": 0,
     "object-curly-spacing": [2, "always"],
     "react-hooks/rules-of-hooks": "error",
+    "react/react-in-jsx-scope": "off",
     "react/function-component-definition": [0, { "namedComponents": "arrow-function" }],
     "react/jsx-props-no-spreading": 0,
     "prefer-promise-reject-errors": 0,
