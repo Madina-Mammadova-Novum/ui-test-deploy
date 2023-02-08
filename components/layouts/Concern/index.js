@@ -16,7 +16,7 @@ import { getStrapiMedia } from '@/utils';
 const ConcernLayout = ({ title, description, images, labels, buttons, children }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   // Requires Image Adapter
-  const gallery = [];
+  const gallery = [...images];
 
   return (
     <div className="w-full px-4 sm:px-[38px] lg:px-20 2lg:px-[100px] 2lg:container mx-auto">

@@ -9,7 +9,6 @@ const BlockCta = dynamic(() => import('@/blocks/Cta'), {
   ssr: true,
 });
 
-
 const getBlockComponent = ({ __component, ...rest }) => {
   let Block;
 
@@ -17,7 +16,7 @@ const getBlockComponent = ({ __component, ...rest }) => {
     case 'blocks.cta':
       Block = BlockCta;
       break;
-    
+
     default:
       return null;
   }

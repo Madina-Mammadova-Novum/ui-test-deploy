@@ -7,7 +7,7 @@ import { LayoutManager, Seo } from '@/common';
 import Footer from '@/common/Footer';
 import Header from '@/common/Header';
 
-const BaseLayout = ({ global, children, pageData, meta, preview, type }) => {
+const BaseLayout = ({ global, children, pageData, meta, type }) => {
   return (
     <div className="isolate bg-lightBlue">
       <Seo seo={delve(pageData, 'seo')} />
