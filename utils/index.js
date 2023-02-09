@@ -1,5 +1,6 @@
 import delve from 'dlv';
 import pluralize from 'pluralize';
+
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 

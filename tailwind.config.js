@@ -20,6 +20,7 @@ module.exports = {
       '2xs': '480px',
       sm: '768px',
       '2sm': '980px',
+      '3sm': '1024px',
       md: '1280px',
       lg: '1440px',
       '2lg': '1920px',
@@ -34,35 +35,34 @@ module.exports = {
       },
       colors: {
         black: {
-          DEFAULT: '#2D2D2D',
+          DEFAULT: '#072D46',
         },
         gray: {
-          DEFAULT: '#57617A',
-          light: '#F3F4F6',
+          DEFAULT: '#828C9C',
+          darker: '#DADFEA',
+          light: '#F8FAFB',
         },
         white: '#FFFFFF',
-        lightBlue: {
-          DEFAULT: '#F0F0F0',
+        purple: {
+          light: '#E7ECF8'
         },
-        greyDescriptive: {
-          DEFAULT: '#595959',
+        blue: {
+          DEFAULT: '#199AF5',
+          darker: '#067FD3',
+          hover: '#204258'
         },
-        primary: {
-          DEFAULT: '#4286C5',
-          darker: '#1A5E9D',
+        green: {
+          DEFAULT: '#24D364',
+          light: '#E4F9E6'
         },
-        secondary: {
-          DEFAULT: '#97A3B7',
-          darker: '#374151',
-          light: '#E2E7EB',
+        yellow: {
+          DEFAULT: '#FFCD5A',
+          light: '#FFF6E1'
         },
-        error: {
-          DEFAULT: '#FF4B55',
-          light: '#FFF6F7',
-          dark: '#FFCED1',
-        },
-        tertiary: {
-          DEFAULT: '#BBCAD7',
+        red: {
+          DEFAULT: '#E53636',
+          medium: '#F7C3C3',
+          light: '#FFE2E2'
         },
       },
       animation: {
