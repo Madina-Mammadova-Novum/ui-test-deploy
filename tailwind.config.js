@@ -44,25 +44,25 @@ module.exports = {
         },
         white: '#FFFFFF',
         purple: {
-          light: '#E7ECF8'
+          light: '#E7ECF8',
         },
         blue: {
           DEFAULT: '#199AF5',
           darker: '#067FD3',
-          hover: '#204258'
+          hover: '#204258',
         },
         green: {
           DEFAULT: '#24D364',
-          light: '#E4F9E6'
+          light: '#E4F9E6',
         },
         yellow: {
           DEFAULT: '#FFCD5A',
-          light: '#FFF6E1'
+          light: '#FFF6E1',
         },
         red: {
           DEFAULT: '#E53636',
           medium: '#F7C3C3',
-          light: '#FFE2E2'
+          light: '#FFE2E2',
         },
       },
       animation: {

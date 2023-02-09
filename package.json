@@ -53,6 +53,7 @@
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
     "@reduxjs/toolkit": "^1.9.2",
+    "@svgr/webpack": "^6.5.1",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "dlv": "^1.1.3",

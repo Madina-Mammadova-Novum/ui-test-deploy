@@ -3,29 +3,32 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const Button = ({ button, customStyles, disabled, ...rest }) => {
-  const { label, buttonOptions } = button;
-  const { style } = buttonOptions;
+const Button = ({ buttonProps, customStyles, disabled, ...rest }) => {
+  const { icon, text, variant } = buttonProps;
 
   return (
     <button
       type="button"
-      {...rest}
       className={classnames(
-        'text-sm font-bold rounded whitespace-nowrap max-w-min',
+        'px-5 py-2.5 rounded-md flex items-center',
         {
-          'bg-primary text-white rounded-[5px] px-9 flex items-center h-[50px]  hover:bg-primary-darker active:bg-primary-darker':
-            style === 'primary',
-          'bg-white text-black h-[48px] px-9 flex items-center hover:text-primary active:text-primary':
-            style === 'secondary',
-          'text-xsm text-black': style === 'base',
-          'text-xsm text-primary': style === 'link',
-          'pointer-events-none': disabled,
+          'bg-blue text-white hover:bg-blue-darker ': variant === 'primary-l',
+          'bg-black text-white hover:bg-blue-hover': variant === 'secondary-l',
+          'bg-white text-black border border-grey hover:border-black': variant === 'tertiary-l',
+          'bg-white text-red border border-red-medium hover:border-red': variant === 'delete-l',
+          'bg-white px-2.5 py-1 text-blue border border-blue hover:border-blue-darker ': variant === 'primary-m',
+          'bg-white px-2.5 py-1 text-black border border-grey hover:border-black ': variant === 'secondary-m',
+          'bg-white px-2.5 py-1 text-red border border-red-medium hover:border-red ': variant === 'delete-m',
+          'bg-white !p-0 text-blue hover:text-blue-darker': variant === 'primary-s',
+          'opacity-50 pointer-events-none': disabled,
         },
         customStyles
       )}
+      disabled={disabled}
+      {...rest}
     >
-      {label}
+      {icon && <span className="mr-1.5">{icon}</span>}
+      {text && text}
     </button>
   );
 };
@@ -36,11 +39,10 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
-  button: {
-    label: PropTypes.string.isRequired,
-    buttonOptions: PropTypes.shape({
-      style: PropTypes.oneOf(['default', 'primary', 'secondary', 'link']),
-    }),
+  buttonProps: {
+    text: PropTypes.string,
+    icon: PropTypes.node,
+    variant: PropTypes.string,
   }.isRequired,
   customStyles: PropTypes.string,
   disabled: PropTypes.bool,
