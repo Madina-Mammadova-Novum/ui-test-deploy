@@ -3,7 +3,15 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const Button = ({ buttonProps, customStyles, disabled, ...rest }) => {
+const Button = ({ 
+  buttonProps = {
+    text: '',
+    icon: null,
+    variant: ''
+  }, 
+  customStyles = '', 
+  disabled = false, 
+  ...rest }) => {
   const { icon, text, variant } = buttonProps;
 
   return (
@@ -13,7 +21,7 @@ const Button = ({ buttonProps, customStyles, disabled, ...rest }) => {
         'px-5 py-2.5 rounded-md flex items-center',
         {
           'bg-blue text-white hover:bg-blue-darker ': variant === 'primary-l',
-          'bg-black text-white hover:bg-blue-hover': variant === 'secondary-l',
+          'bg-black text-white hover:bg-blue-dark': variant === 'secondary-l',
           'bg-white text-black border border-grey hover:border-black': variant === 'tertiary-l',
           'bg-white text-red border border-red-medium hover:border-red': variant === 'delete-l',
           'bg-white px-2.5 py-1 text-blue border border-blue hover:border-blue-darker ': variant === 'primary-m',

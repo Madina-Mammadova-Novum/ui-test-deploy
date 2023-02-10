@@ -49,7 +49,7 @@ module.exports = {
         blue: {
           DEFAULT: '#199AF5',
           darker: '#067FD3',
-          hover: '#204258',
+          dark: '#204258',
         },
         green: {
           DEFAULT: '#24D364',

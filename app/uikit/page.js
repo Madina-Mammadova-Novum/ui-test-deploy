@@ -40,7 +40,7 @@ const UiKit = () => (
 
     {/* Collapsible */}
 
-    <Collapsible title="Collapsible" />
+    <Collapsible title="Collapsible" items={[1, 2, 3]}/>
   </div>
 );
 
