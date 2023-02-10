@@ -1,22 +1,17 @@
-import React from 'react';
-
-import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 
 import { makeId } from '@/utils/helpers';
-
-const BlockCta = dynamic(() => import('@/blocks/Cta'), {
-  ssr: true,
-});
 
 const getBlockComponent = ({ __component, ...rest }) => {
   let Block;
 
   switch (__component) {
-    case 'blocks.cta':
-      Block = BlockCta;
+    case 'map':
+      Block = () => <p>Map</p>;
       break;
-
+    case 'form':
+      Block = () => <p>Form</p>;
+      break;
     default:
       return null;
   }
@@ -24,12 +19,8 @@ const getBlockComponent = ({ __component, ...rest }) => {
   return Block ? <Block key={makeId()} {...rest} /> : null;
 };
 
-const BlockManager = ({ blocks }) => {
+const BlockManager = ({ blocks = null }) => {
   return blocks.map(getBlockComponent);
-};
-
-BlockManager.defaultProps = {
-  blocks: null,
 };
 
 BlockManager.propTypes = {
@@ -37,9 +28,6 @@ BlockManager.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       __component: PropTypes.string.isRequired,
-      title: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null]).isRequired]),
-      subTitle: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null]).isRequired]),
-      shortDescription: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null]).isRequired]),
     })
   ),
 };

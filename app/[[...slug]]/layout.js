@@ -1,6 +1,5 @@
-import Providers from './provider';
+import Providers from '@/app/provider';
 
-// eslint-disable-next-line react/prop-types
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 /* Types */
-import { USERS } from './types';
+import { USERS } from '@/store/entities/example/types';
 
 /* Services */
-import { getUsers } from '@/services/page';
+import { getUsers } from '@/services/users';
 
 export const fetchUsers = createAsyncThunk(USERS.GET_ALL, async () => {
   const data = await getUsers();
