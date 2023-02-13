@@ -10,7 +10,7 @@ const Collapsible = ({ title, items }) => {
   return (
     <div className="w-min">
       <button
-      type="button"
+        type="button"
         className="flex items-center px-5 py-3 cursor-pointer"
         onClick={() => setToggle((prevValue) => !prevValue)}
       >
@@ -30,14 +30,9 @@ const Collapsible = ({ title, items }) => {
   );
 };
 
-Collapsible.defaultProps = {
-  items: [],
-  title: '',
-};
-
 Collapsible.propTypes = {
-  title: PropTypes.string,
-  items: PropTypes.shape([]),
+  title: PropTypes.string.isRequired,
+  items: PropTypes.shape([]).isRequired,
 };
 
 export default Collapsible;

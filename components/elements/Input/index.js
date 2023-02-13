@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import classNames from 'classnames';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const Input = ({
@@ -18,9 +18,11 @@ const Input = ({
   const [filled, setFilled] = useState(false);
   return (
     <div className={disabled && 'opacity-50 pointer-events-none'}>
-      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">{label}</label>
+      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">
+        {label}
+      </label>
       <div
-        className={classNames(
+        className={classnames(
           'flex w-full max-w-[296px] h-10 border border-box rounded-md px-4 py-2.5 hover:border-blue hover:bg-white focus-within:bg-white focus-within:border-blue',
           {
             'bg-purple-light': filled,

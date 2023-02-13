@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 const TextArea = ({ label, type, disabled, placeholder, customStyles, id, ...rest }) => {
   return (
     <div className={disabled && 'opacity-50 pointer-events-none'}>
-      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">{label}</label>
+      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">
+        {label}
+      </label>
       <textarea
         className={classnames(
           'border border-gray-darker rounded-md resize-none outline-none text-xsm border-box px-4 py-2.5 min-h-[60px] min-w-[296px] hover:border-blue focus:border-blue',
