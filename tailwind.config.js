@@ -29,6 +29,15 @@ module.exports = {
       fontFamily: {
         'kumbh-sans': ['Kumbh Sans', 'sans-serif'],
       },
+      fontSize: {
+        xxs: [
+          '0.625rem',
+          {
+            lineHeight: '120%',
+            letterSpacing: '0.01em',
+          },
+        ],
+      },
       cursor: {
         link: 'url(/hover.webp), pointer',
         drag: 'url(/drag.webp), grabbing',

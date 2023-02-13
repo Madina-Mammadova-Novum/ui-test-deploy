@@ -1,3 +1,1 @@
-import BlockCta from './Cta';
-
-export default { BlockCta };
+export { default as Sidebar } from '@/blocks/Sidebar/Sidebar';

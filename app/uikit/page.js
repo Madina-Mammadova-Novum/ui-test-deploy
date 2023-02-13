@@ -2,7 +2,8 @@
 
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
-import { Button, Collapsible, Input, TextArea } from '@/elements';
+import { Sidebar } from '@/blocks';
+import { Button, Input, TextArea } from '@/elements';
 import '@/styles/index.css';
 
 const UiKit = () => (
@@ -40,9 +41,7 @@ const UiKit = () => (
     <Button buttonProps={{ text: 'Hello', variant: 'primary-s' }} disabled />
 
     {/* Collapsible */}
-
-    <Collapsible title="Collapsible" items={[1, 2, 3]} />
-
+    <Sidebar />
     {/* Inputs */}
 
     <Input label="title" placeholder="Enter the file title" />

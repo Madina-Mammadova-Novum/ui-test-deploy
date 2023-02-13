@@ -96,3 +96,8 @@ export const categoryPropType = PropTypes.shape({
   title: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
 });
+
+export const iconPropTypes = {
+  width: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+  height: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+};
