@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
@@ -61,4 +62,15 @@ export function useValidationErrors() {
   );
 
   return { errors, addError, removeErrorByKey };
+}
+
+export function useFetchEffect(ref, action) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (ref.current === false) dispatch(action());
+    return () => {
+      ref.current = true;
+    };
+  }, [action, dispatch, ref]);
 }
