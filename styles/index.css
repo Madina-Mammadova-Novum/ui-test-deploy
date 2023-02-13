@@ -107,7 +107,7 @@
   }
 
   .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
-    @apply w-4 h-2 bg-primary rounded-[10px];
+    @apply w-4 h-2 rounded-[10px];
   }
 
   @media only screen and (min-width: 768px) {
@@ -253,19 +253,7 @@
 /* Phone Field Rewrites */
 
 .react-tel-input .form-control.phone-field {
-  @apply h-[42px] w-full text-black rounded-[10px] border pl-[68px] font-kumbh-sans placeholder-secondary border-secondary-light outline-none caret-primary focus:border-primary;
-}
-
-.react-tel-input .form-control.phone-field.invalid-number,
-.react-tel-input .form-control.phone-field.invalid-number:focus {
-  @apply border-error bg-error-light;
-}
-
-.react-tel-input .flag-dropdown.country-field.invalid-number,
-.react-tel-input .flag-dropdown.country-field.invalid-number.open,
-.react-tel-input .flag-dropdown.invalid-number .selected-flag,
-.react-tel-input .flag-dropdown.invalid-number.open .selected-flag {
-  @apply !bg-error-light;
+  @apply h-[42px] w-full text-black rounded-[10px] border pl-[68px] font-kumbh-sans outline-none;
 }
 
 .react-tel-input .flag-dropdown.country-field {
@@ -287,7 +275,7 @@
 }
 
 .react-tel-input .country-list .dial-code {
-  @apply text-xsm text-secondary;
+  @apply text-xsm;
 }
 
 .react-tel-input .flag-dropdown .selected-flag {
