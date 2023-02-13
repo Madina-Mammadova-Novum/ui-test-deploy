@@ -3,82 +3,39 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TextArea = (props) => {
-  const {
-    id,
-    variant = 'primary',
-    type = 'text',
-    rows,
-    customStyles,
-    label,
-    labelVisible = true,
-    icon,
-    isError,
-    errorMessage,
-    disabled,
-    ...rest
-  } = props;
-
+const TextArea = ({ label, type, disabled, placeholder, customStyles, id, ...rest }) => {
   return (
-    <div className="flex flex-1 flex-col">
-      <label
-        htmlFor={id}
-        className={classnames('text-secondary-darker text-xsm mb-1 inline-block', {
-          'opacity-50': disabled,
-          'sr-only': !labelVisible,
-        })}
-      >
-        {label}
-      </label>
-      <div className="relative flex flex-1">
-        <textarea
-          id={id}
-          className={classnames(
-            'h-[106px] px-3 py-[9px] w-full',
-            {
-              'text-black rounded-[10px] border placeholder-secondary border-secondary-light outline-none caret-primary focus:border-primary':
-                variant === 'primary',
-              'opacity-50': disabled,
-              'border-error bg-error-light placeholder-error-dark': isError,
-            },
-            customStyles
-          )}
-          type={type}
-          rows={rows}
-          disabled={disabled}
-          {...rest}
-        />
-        {icon && <span className="absolute top-1/2 -translate-y-1/2 right-3">{icon}</span>}
-      </div>
-      {isError && <span className="text-xsm mt-1 text-error">{errorMessage}</span>}
+    <div className={disabled && 'opacity-50 pointer-events-none'}>
+      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">{label}</label>
+      <textarea
+        className={classnames(
+          'border border-gray-darker rounded-md resize-none outline-none text-xsm border-box px-4 py-2.5 min-h-[60px] min-w-[296px] hover:border-blue focus:border-blue',
+          customStyles
+        )}
+        type={type}
+        disabled={disabled}
+        placeholder={placeholder}
+        id={id}
+        {...rest}
+      />
     </div>
   );
 };
 
 TextArea.defaultProps = {
-  variant: 'primary',
-  type: 'text',
-  rows: 3,
-  customStyles: '',
   label: '',
-  labelVisible: true,
-  icon: null,
-  isError: false,
-  errorMessage: '',
+  type: 'text',
+  placeholder: '',
+  customStyles: '',
   disabled: false,
 };
 
 TextArea.propTypes = {
   id: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(['primary']),
-  type: PropTypes.string,
-  rows: PropTypes.number,
-  customStyles: PropTypes.string,
   label: PropTypes.string,
-  labelVisible: PropTypes.bool,
-  icon: PropTypes.node,
-  isError: PropTypes.bool,
-  errorMessage: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  customStyles: PropTypes.string,
   disabled: PropTypes.bool,
 };
 

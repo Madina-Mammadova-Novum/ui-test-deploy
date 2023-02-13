@@ -1,84 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-const Input = (props) => {
-  const {
-    id,
-    variant = 'primary',
-    type = 'text',
-    customStyles,
-    label,
-    labelVisible = true,
-    icon,
-    isError,
-    errorMessage,
-    placeholder,
-    disabled,
-    ...rest
-  } = props;
-
+const Input = ({
+  id,
+  label,
+  placeholder,
+  type = 'text',
+  customStyles = '',
+  icon = null,
+  disabled = false,
+  error = '',
+  helperText = '',
+  ...rest
+}) => {
+  const [filled, setFilled] = useState(false);
   return (
-    <div className="flex flex-1 flex-col">
-      <label
-        htmlFor={id}
-        className={classnames('text-secondary-darker text-xsm mb-1 inline-block', {
-          'opacity-50': disabled,
-          'sr-only': !labelVisible,
-        })}
+    <div className={disabled && 'opacity-50 pointer-events-none'}>
+      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">{label}</label>
+      <div
+        className={classNames(
+          'flex w-full max-w-[296px] h-10 border border-box rounded-md px-4 py-2.5 hover:border-blue hover:bg-white focus-within:bg-white focus-within:border-blue',
+          {
+            'bg-purple-light': filled,
+            '!border-red': error,
+          },
+          customStyles
+        )}
       >
-        {label}
-      </label>
-      <div className="relative flex flex-1">
         <input
-          className={classnames(
-            'h-[42px] px-3 w-full',
-            {
-              'text-black rounded-[10px] border placeholder-secondary border-secondary-light outline-none caret-primary focus:border-primary':
-                variant === 'primary',
-              'opacity-50': disabled,
-              'border-error bg-error-light placeholder-error-dark': isError,
-            },
-            customStyles
-          )}
-          type={type}
           id={id}
+          onChange={({ target }) => setFilled(!!target.value)}
+          className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
+          type={type}
           placeholder={placeholder}
-          disabled={disabled}
           {...rest}
         />
-        {icon && <span className="absolute top-1/2 -translate-y-1/2 right-3">{icon}</span>}
+        {icon && <span className="ml-2.5">{icon}</span>}
       </div>
-      {isError && <span className="text-xsm mt-1 text-error">{errorMessage}</span>}
+      {error && <p className="text-[12px] text-red">{error}</p>}
+      {helperText && <p className="text-[12px]">{helperText}</p>}
     </div>
   );
 };
 
 Input.defaultProps = {
-  variant: 'primary',
-  type: 'text',
-  customStyles: '',
   label: '',
-  labelVisible: true,
-  icon: null,
-  isError: false,
-  errorMessage: '',
   placeholder: '',
+  type: '',
+  customStyles: '',
+  error: '',
+  helperText: '',
+  icon: null,
   disabled: false,
 };
 
 Input.propTypes = {
   id: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(['primary']),
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
   type: PropTypes.string,
   customStyles: PropTypes.string,
-  label: PropTypes.string,
-  labelVisible: PropTypes.bool,
+  error: PropTypes.string,
+  helperText: PropTypes.string,
   icon: PropTypes.node,
-  isError: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  placeholder: PropTypes.string,
   disabled: PropTypes.bool,
 };
 

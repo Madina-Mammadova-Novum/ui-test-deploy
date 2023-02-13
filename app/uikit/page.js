@@ -1,7 +1,8 @@
 'use client';
 
+import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
-import { Button, Collapsible } from '@/elements';
+import { Button, Collapsible, Input, TextArea } from '@/elements';
 import '@/styles/index.css';
 
 const UiKit = () => (
@@ -40,7 +41,31 @@ const UiKit = () => (
 
     {/* Collapsible */}
 
-    <Collapsible title="Collapsible" items={[1, 2, 3]}/>
+    <Collapsible title="Collapsible" items={[1, 2, 3]} />
+
+    {/* Inputs */}
+
+    <Input label="title" placeholder="Enter the file title" />
+    <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
+    <Input label="title" placeholder="Enter the file title" helperText="hello" />
+    <Input
+      label="title"
+      placeholder="Enter the file title"
+      helperText="hello"
+      icon={<PasswordHiddenSVG className="w-5" />}
+    />
+    <Input label="title" placeholder="Enter the file title" error="hello" />
+    <Input
+      label="title"
+      placeholder="Enter the file title"
+      error="hello"
+      icon={<PasswordHiddenSVG className="w-5" />}
+    />
+
+    {/* TextAreas */}
+
+    <TextArea label="title" placeholder="Some text" />
+    <TextArea label="title" placeholder="Some text" disabled />
   </div>
 );
 

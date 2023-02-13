@@ -3,15 +3,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const Button = ({ 
-  buttonProps = {
-    text: '',
-    icon: null,
-    variant: ''
-  }, 
-  customStyles = '', 
-  disabled = false, 
-  ...rest }) => {
+const Button = ({ buttonProps, customStyles, disabled, ...rest }) => {
   const { icon, text, variant } = buttonProps;
 
   return (
