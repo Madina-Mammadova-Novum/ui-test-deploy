@@ -3,7 +3,7 @@
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { Sidebar } from '@/blocks';
-import { Button, Input, TextArea } from '@/elements';
+import { Alert, Button, Input, TextArea } from '@/elements';
 import '@/styles/index.css';
 
 const UiKit = () => (
@@ -65,6 +65,23 @@ const UiKit = () => (
 
     <TextArea label="title" placeholder="Some text" />
     <TextArea label="title" placeholder="Some text" disabled />
+
+    {/* Alerts */}
+    <Alert
+      variant="access"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
+    <Alert
+      variant="error"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
+    <Alert
+      variant="warning"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
   </div>
 );
 

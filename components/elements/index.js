@@ -1,3 +1,4 @@
+import Alert from '@/elements/Alert';
 import AnimatedTitleText from '@/elements/AnimatedTitleText';
 import BlockShortDescription from '@/elements/BlockShortDescription';
 import BlockTitle from '@/elements/BlockTitle';
@@ -26,4 +27,5 @@ export {
   PhoneField,
   Button,
   Collapsible,
+  Alert,
 };

@@ -1,6 +1,9 @@
 export { default as ArrowIcon } from './Arrow';
+export { default as AcceptIcon } from '@/assets/Icons/Accept';
 export { default as AnchorIcon } from '@/assets/Icons/Anchor';
+export { default as CloseIcon } from '@/assets/Icons/Close';
 export { default as FaqIcon } from '@/assets/Icons/Faq';
 export { default as OfferIcon } from '@/assets/Icons/Offer';
 export { default as PositionIcon } from '@/assets/Icons/Position';
+export { default as InfoIcon } from '@/assets/Icons/Info';
 export { default as Logo } from '@/assets/Icons/Logo';
