@@ -1015,7 +1015,7 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
-"@babel/runtime@^7.12.1", "@babel/runtime@^7.20.6", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.12.1", "@babel/runtime@^7.20.6", "@babel/runtime@^7.20.7", "@babel/runtime@^7.9.2":
   version "7.20.13"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.20.13.tgz#7055ab8a7cff2b8f6058bf6ae45ff84ad2aded4b"
   integrity sha512-gt3PKXs0DBoL9xCvOIIZ2NEqAGZqHjAnmVbfQtB620V0uReIQutpel14KcneZuer7UioY8ALKZ7iocavvzTNFA==
@@ -1446,6 +1446,14 @@
     picocolors "^1.0.0"
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
+
+"@redux-devtools/extension@^3.2.5":
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/@redux-devtools/extension/-/extension-3.2.5.tgz#a3daaf7b9edc82988366133f0c741b5266c4dcef"
+  integrity sha512-UhyDF7WmdnCrN1s++YC4sdQCo0z6YUnoB2eCh15nXDDq3QH1jDju1144UNRU6Nvi4inxhaIum4m9BXVYWVC1ng==
+  dependencies:
+    "@babel/runtime" "^7.20.7"
+    immutable "^4.2.2"
 
 "@reduxjs/toolkit@^1.9.2":
   version "1.9.2"
@@ -3889,6 +3897,11 @@ immer@^9.0.16:
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.19.tgz#67fb97310555690b5f9cd8380d38fc0aabb6b38b"
   integrity sha512-eY+Y0qcsB4TZKwgQzLaE/lqYMlKhv5J9dyd2RhhtGhNo2njPXDqU9XPfcNfa3MIDsdtZt5KlkIsirlo4dHsWdQ==
 
+immutable@^4.2.2:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.2.4.tgz#83260d50889526b4b531a5e293709a77f7c55a2a"
+  integrity sha512-WDxL3Hheb1JkRN3sQkyujNlL/xRjAo3rJtaU5xeufUauG66JdMr32bLj4gF+vWl84DIA3Zxw7tiAjneYzRRw+w==
+
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.npmjs.org/import-fresh/-/import-fresh-3.3.0.tgz"
@@ -4621,30 +4634,35 @@ next-i18next@^13.1.4:
     hoist-non-react-statics "^3.3.2"
     i18next-fs-backend "^2.1.0"
 
+next-redux-wrapper@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-8.1.0.tgz#d9c135f1ceeb2478375bdacd356eb9db273d3a07"
+  integrity sha512-2hIau0hcI6uQszOtrvAFqgc0NkZegKYhBB7ZAKiG3jk7zfuQb4E7OV9jfxViqqojh3SEHdnFfPkN9KErttUKuw==
+
 next@^13.1.7-canary.7:
-  version "13.1.7-canary.8"
-  resolved "https://registry.yarnpkg.com/next/-/next-13.1.7-canary.8.tgz#676cddc4283138132ab1f7ab78b2ea9a8c486578"
-  integrity sha512-JqmeYZBiWxFJTmTyrbLPdl+YaeDKz0zI9XMLP21fua428JmH/30CFlmoHnJYjrDyYWzDX1MSLRDlc7LL13crLg==
+  version "13.1.7-canary.7"
+  resolved "https://registry.yarnpkg.com/next/-/next-13.1.7-canary.7.tgz#1526687ed0d765c49930ea378fb63a1e7ee45747"
+  integrity sha512-ekVXWHSPLsE799i97f0qYpElO+CsG5V9/48KmxlL/g5ASuLB/BNmR2Lj+zqO8s7q7qjV+JteMwFl2dXH4srgNg==
   dependencies:
-    "@next/env" "13.1.7-canary.8"
+    "@next/env" "13.1.7-canary.7"
     "@swc/helpers" "0.4.14"
     caniuse-lite "^1.0.30001406"
     postcss "8.4.14"
     styled-jsx "5.1.1"
   optionalDependencies:
-    "@next/swc-android-arm-eabi" "13.1.7-canary.8"
-    "@next/swc-android-arm64" "13.1.7-canary.8"
-    "@next/swc-darwin-arm64" "13.1.7-canary.8"
-    "@next/swc-darwin-x64" "13.1.7-canary.8"
-    "@next/swc-freebsd-x64" "13.1.7-canary.8"
-    "@next/swc-linux-arm-gnueabihf" "13.1.7-canary.8"
-    "@next/swc-linux-arm64-gnu" "13.1.7-canary.8"
-    "@next/swc-linux-arm64-musl" "13.1.7-canary.8"
-    "@next/swc-linux-x64-gnu" "13.1.7-canary.8"
-    "@next/swc-linux-x64-musl" "13.1.7-canary.8"
-    "@next/swc-win32-arm64-msvc" "13.1.7-canary.8"
-    "@next/swc-win32-ia32-msvc" "13.1.7-canary.8"
-    "@next/swc-win32-x64-msvc" "13.1.7-canary.8"
+    "@next/swc-android-arm-eabi" "13.1.7-canary.7"
+    "@next/swc-android-arm64" "13.1.7-canary.7"
+    "@next/swc-darwin-arm64" "13.1.7-canary.7"
+    "@next/swc-darwin-x64" "13.1.7-canary.7"
+    "@next/swc-freebsd-x64" "13.1.7-canary.7"
+    "@next/swc-linux-arm-gnueabihf" "13.1.7-canary.7"
+    "@next/swc-linux-arm64-gnu" "13.1.7-canary.7"
+    "@next/swc-linux-arm64-musl" "13.1.7-canary.7"
+    "@next/swc-linux-x64-gnu" "13.1.7-canary.7"
+    "@next/swc-linux-x64-musl" "13.1.7-canary.7"
+    "@next/swc-win32-arm64-msvc" "13.1.7-canary.7"
+    "@next/swc-win32-ia32-msvc" "13.1.7-canary.7"
+    "@next/swc-win32-x64-msvc" "13.1.7-canary.7"
 
 node-abi@^3.3.0:
   version "3.31.0"
