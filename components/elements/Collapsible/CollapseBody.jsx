@@ -8,12 +8,15 @@ const CollapseBody = ({ list, toggle, className }) => {
 
   const printMenuItem = (item) => {
     return (
-      <div key={item?.id} className="flex flex-col  px-5 py-1.5 relative">
-        <span className="text-gray uppercase font-bold text-xxs">{item?.label}</span>
-        <Link href={item?.path ?? '/'} className="text-xs font-semibold">
+      <div
+        key={item?.id}
+        className="flex flex-col active:bg-blue text-gray active:text-white  px-5 py-1.5 hover:bg-blue-dark rounded-xl relative"
+      >
+        <span className="uppercase font-bold text-xxs">{item?.label}</span>
+        <Link href={item?.path ?? '/'} className="text-xs text-white font-semibold">
           {item.title}
         </Link>
-        <div className="absolute -top-5 w-px h-full rotate-180 left-0 bg-blue-dark">
+        <div className="absolute -top-5 -left-2 w-px h-full rotate-180 bg-blue-dark">
           <hr className="absolute w-2.5 h-px border-none right-0 bg-blue-dark" />
         </div>
       </div>
@@ -25,10 +28,10 @@ const CollapseBody = ({ list, toggle, className }) => {
   return (
     <div
       ref={ref}
-      className={`overflow-hidden transition-height duration-150 px-5 ${className}`}
+      className={`overflow-hidden transition-all px-5 ${className}`}
       style={{ height: toggle ? `${ref?.current?.scrollHeight}px` : '0px' }}
     >
-      {!list.lenght ? renderMenuItems : <p>No Data</p>}
+      {renderMenuItems}
     </div>
   );
 };

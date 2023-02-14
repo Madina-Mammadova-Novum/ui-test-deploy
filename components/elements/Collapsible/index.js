@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
@@ -6,49 +7,61 @@ import CollapseBody from './CollapseBody';
 import CollapseHeader from './CollapseHeader';
 
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/Icons';
+import { setActive, setOpen } from '@/store/entities/system/slice';
 
 const Collapsible = ({ data }) => {
-  const [toggle, setToggle] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleToggle = () => setToggle((prevValue) => !prevValue);
+  const { open, active } = useSelector(({ system }) => system.sidebar);
+
+  const handleMore = useCallback(() => {
+    dispatch(setOpen());
+  }, [dispatch]);
+
+  const isActive = Boolean(active === data.id);
 
   const printIcon = useMemo(() => {
     switch (data?.variant) {
       case 'positions':
-        return <PositionIcon />;
+        return <PositionIcon isActive={isActive} />;
       case 'offers':
-        return <OfferIcon />;
+        return <OfferIcon isActive={open} />;
       case 'fleets':
-        return <AnchorIcon />;
+        return <AnchorIcon isActive={isActive} />;
       case 'faq':
-        return <FaqIcon />;
+        return <FaqIcon isActive={isActive} />;
       default:
         return null;
     }
-  }, [data?.variant]);
+  }, [data?.variant, isActive, open]);
 
   const printTitle = useMemo(() => {
     return (
-      <span className="flex text-sm font-semibold capitalize gap-3.5 px-5 py-3 rounded-xl hover:bg-blue-dark">
+      <span
+        aria-hidden="true"
+        onClick={() => dispatch(setActive(data?.id))}
+        className="flex text-sm font-semibold capitalize gap-3.5 px-5 py-3 rounded-xl"
+      >
         {printIcon}
         {data?.title}
       </span>
     );
-  }, [data?.title, printIcon]);
+  }, [data?.id, data?.title, dispatch, printIcon]);
 
   return (
-    <div className="bg-transparent">
+    <>
       <CollapseHeader
-        toggle={toggle}
-        onClick={handleToggle}
+        toggle={open}
+        active={isActive}
+        onClick={handleMore}
         href={data?.path ?? '/'}
         isSubMenu={Boolean(data?.items?.length)}
-        className="flex items-center"
+        className="flex items-center transition-all"
       >
         {data?.title ? printTitle : <p>Title not found</p>}
       </CollapseHeader>
-      <CollapseBody list={data?.items} toggle={toggle} />
-    </div>
+      <CollapseBody list={data?.items} toggle={open} />
+    </>
   );
 };
 

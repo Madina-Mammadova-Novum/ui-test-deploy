@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { AcceptIcon, CloseIcon, InfoIcon } from '@/assets/Icons';
 
-const Alert = ({ variant, title = '', description = '', handleClose }) => {
+const Alert = ({ variant, title, description, handleClose }) => {
   const printIcon = useMemo(() => {
     switch (variant) {
       case 'access':

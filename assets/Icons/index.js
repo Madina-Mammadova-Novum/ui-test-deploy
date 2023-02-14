@@ -6,4 +6,5 @@ export { default as FaqIcon } from '@/assets/Icons/Faq';
 export { default as OfferIcon } from '@/assets/Icons/Offer';
 export { default as PositionIcon } from '@/assets/Icons/Position';
 export { default as InfoIcon } from '@/assets/Icons/Info';
+export { default as SearchIcon } from '@/assets/Icons/Search';
 export { default as Logo } from '@/assets/Icons/Logo';

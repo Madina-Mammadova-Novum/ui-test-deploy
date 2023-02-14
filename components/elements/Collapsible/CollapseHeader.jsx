@@ -5,17 +5,23 @@ import PropTypes from 'prop-types';
 
 import { ArrowIcon } from '@/assets/Icons';
 
-const CollapseHeader = ({ children, href, toggle, className, onClick, isSubMenu }) => {
+const CollapseHeader = ({ children, href, toggle, active, className, onClick, isSubMenu }) => {
   const printLink = useMemo(() => {
-    return <Link href={href}>{children}</Link>;
-  }, [children, href]);
+    return (
+      <Link href={href} className={`${active ? 'bg-blue' : 'hover:bg-blue-dark'} rounded-xl `}>
+        {children}
+      </Link>
+    );
+  }, [active, children, href]);
 
   const printCta = useMemo(() => {
     return (
       <div
         onClick={onClick}
         aria-hidden="true"
-        className={`cursor-pointer text-sm font-semibold flex justify-between pr-5 items-center capitalize rounded-xl hover:bg-blue-dark ${className}`}
+        className={`cursor-pointer w-full rounded-xl transition-all text-sm font-semibold flex justify-between pr-5 items-center capitalize  ${className} ${
+          toggle ? 'bg-blue' : 'hover:bg-blue-dark'
+        }`}
       >
         {children}
         <ArrowIcon className={`transition duration-150 ${toggle && 'rotate-180'}`} width="12px" />
@@ -42,16 +48,19 @@ CollapseHeader.defaultProps = {
   href: '/',
   children: null,
   isSubMenu: false,
+  active: false,
+  toggle: false,
   onClick: () => {},
 };
 
 CollapseHeader.propTypes = {
   children: PropTypes.node,
-  toggle: PropTypes.bool.isRequired,
+  toggle: PropTypes.bool,
   className: PropTypes.string,
   href: PropTypes.string,
   onClick: PropTypes.func,
   isSubMenu: PropTypes.bool,
+  active: PropTypes.bool,
 };
 
 export default CollapseHeader;

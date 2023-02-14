@@ -5,6 +5,7 @@ import UploadSVG from '@/assets/images/upload.svg';
 import { Sidebar } from '@/blocks';
 import { Alert, Button, Input, TextArea } from '@/elements';
 import '@/styles/index.css';
+import { sidebarData } from '@/utils/mocks';
 
 const UiKit = () => (
   <div className="h-screen px-5 py-5">
@@ -41,7 +42,7 @@ const UiKit = () => (
     <Button buttonProps={{ text: 'Hello', variant: 'primary-s' }} disabled />
 
     {/* Collapsible */}
-    <Sidebar />
+    <Sidebar data={sidebarData} />
     {/* Inputs */}
 
     <Input label="title" placeholder="Enter the file title" />

@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import PropTypes from 'prop-types';
 
-const Logo = memo(({ width, height, className, fill = '#F9FBFC' }) => {
+const Logo = memo(({ width, height, className, fill }) => {
   return (
     <svg
       width={width}
