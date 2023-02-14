@@ -4,6 +4,7 @@ import BlockShortDescription from '@/elements/BlockShortDescription';
 import BlockTitle from '@/elements/BlockTitle';
 import Button from '@/elements/Button';
 import Collapsible from '@/elements/Collapsible';
+import Search from '@/elements/Collapsible/CollapseSearch';
 import ContentElement from '@/elements/ContentElement';
 import Dropdown from '@/elements/Dropdown';
 import FilterLabel from '@/elements/FilterLabel';
@@ -28,4 +29,5 @@ export {
   Button,
   Collapsible,
   Alert,
+  Search,
 };
