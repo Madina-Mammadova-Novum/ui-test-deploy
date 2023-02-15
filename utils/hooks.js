@@ -88,7 +88,7 @@ export function useDebounce(value, delay) {
     return () => {
       clearTimeout(timer);
     };
-  }, [value, delay])
+  }, [value, delay]);
 
   return debouncedValue;
 }

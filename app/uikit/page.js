@@ -3,22 +3,21 @@
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import {
+  Alert,
   Button,
   CheckBox,
   ExpandableRow,
   Input,
   RadioButton,
+  Table,
   TextArea,
   TextWithLabel,
   Toggle,
-  Alert,
-  Table
 } from '@/elements';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
 import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
 import { Sidebar } from '@/blocks';
-import '@/styles/index.css';
 import { sidebarData } from '@/utils/mocks';
 
 const UiKit = () => (
