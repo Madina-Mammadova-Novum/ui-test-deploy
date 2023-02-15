@@ -21,6 +21,8 @@
       "@/common/*": ["components/common/*"],
       "@/elements": ["components/elements/index"],
       "@/elements/*": ["components/elements/*"],
+      "@/ui": ["components/ui/index"],
+      "@/ui/*": ["components/ui/*"],
       "@/layouts": ["components/layouts/index"],
       "@/layouts/*": ["components/layouts/*"],
       "@/lib": ["lib/index"],

@@ -2,47 +2,62 @@
 
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
-import { Button, Collapsible, Input, TextArea } from '@/elements';
+import {
+  Alert,
+  Button,
+  CheckBox,
+  ExpandableRow,
+  Input,
+  RadioButton,
+  Table,
+  TextArea,
+  TextWithLabel,
+  Toggle,
+} from '@/elements';
 import '@/styles/index.css';
+import { FleetRowHeader, RadioWithText } from '@/ui';
+import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
+import { Sidebar } from '@/blocks';
+import { sidebarData } from '@/utils/mocks';
 
 const UiKit = () => (
   <div className="h-screen px-5 py-5">
     {/* Large Buttons */}
-    <Button buttonProps={{ text: 'Hello', variant: 'primary-l', icon: <UploadSVG width="16px" fill="white" /> }} />
     <Button
-      buttonProps={{ text: 'Hello', variant: 'primary-l', icon: <UploadSVG width="16px" fill="white" /> }}
+      buttonProps={{ text: 'Hello', variant: 'primary', size: 'large', icon: <UploadSVG width="16px" fill="white" /> }}
+    />
+    <Button
+      buttonProps={{ text: 'Hello', variant: 'primary', size: 'large', icon: <UploadSVG width="16px" fill="white" /> }}
       disabled
     />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary-l' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary-l' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'tertiary-l' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'tertiary-l' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'delete-l' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'delete-l' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} disabled />
 
     {/* Medium Buttons */}
 
-    <Button buttonProps={{ text: 'Hello', variant: 'primary-m' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'primary-m' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary-m' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary-m' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'delete-m' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'delete-m' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} disabled />
 
     {/* Small Buttons */}
 
-    <Button buttonProps={{ text: 'Hello', variant: 'primary-s' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'primary-s' }} disabled />
+    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} />
+    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
 
     {/* Collapsible */}
-
-    <Collapsible title="Collapsible" items={[1, 2, 3]} />
-
+    <Sidebar data={sidebarData} />
     {/* Inputs */}
 
     <Input label="title" placeholder="Enter the file title" />
@@ -66,6 +81,55 @@ const UiKit = () => (
 
     <TextArea label="title" placeholder="Some text" />
     <TextArea label="title" placeholder="Some text" disabled />
+
+    {/* Toggle */}
+
+    <div className="blocks">
+      <Toggle />
+    </div>
+
+    {/* RadioButton */}
+
+    <div className="blocks">
+      <RadioButton />
+    </div>
+
+    {/* CheckBox */}
+
+    <div className="blocks">
+      <CheckBox />
+    </div>
+
+    {/* Radio with text */}
+
+    <RadioWithText text="Sample text" />
+
+    {/* Text with Title */}
+
+    <TextWithLabel label="text" text="description" />
+
+    {/* Expandable row */}
+
+    <ExpandableRow headerComponent={<FleetRowHeader />}>
+      <Table headerData={fleetsHeader} rows={fleetsTableRow} />
+    </ExpandableRow>
+    <br />
+    {/* Alerts */}
+    <Alert
+      variant="access"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
+    <Alert
+      variant="error"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
+    <Alert
+      variant="warning"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
   </div>
 );
 

@@ -29,6 +29,21 @@ module.exports = {
       fontFamily: {
         'kumbh-sans': ['Kumbh Sans', 'sans-serif'],
       },
+      fontSize: {
+        xxs: [
+          '0.625rem',
+          {
+            lineHeight: '120%',
+            letterSpacing: '0.01em',
+          },
+        ],
+        'xs-sm': [
+          '0.75rem',
+          {
+            lineHeight: '130%',
+          },
+        ],
+      },
       cursor: {
         link: 'url(/hover.webp), pointer',
         drag: 'url(/drag.webp), grabbing',
@@ -65,6 +80,12 @@ module.exports = {
           light: '#FFE2E2',
         },
       },
+      padding: {
+        4.5: '1.125rem',
+      },
+      borderRadius: {
+        base: '0.625rem',
+      },
       animation: {
         'spin-slow': 'spin 5s linear infinite',
         'fade-in': 'fadeIn 3s ease-in-out',
@@ -91,6 +112,9 @@ module.exports = {
           '0%': { opacity: 0.4 },
           '100%': { opacity: 1 },
         },
+      },
+      boxShadow: {
+        xmd: '0 4px 20px #DEE3EE',
       },
     },
   },

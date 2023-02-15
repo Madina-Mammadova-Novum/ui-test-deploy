@@ -13,17 +13,20 @@ const Input = ({
   disabled = false,
   error = '',
   helperText = '',
+  onChange,
   ...rest
 }) => {
   const [filled, setFilled] = useState(false);
   return (
     <div className={disabled && 'opacity-50 pointer-events-none'}>
-      <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">
+          {label}
+        </label>
+      )}
       <div
         className={classnames(
-          'flex w-full max-w-[296px] h-10 border border-box rounded-md px-4 py-2.5 hover:border-blue hover:bg-white focus-within:bg-white focus-within:border-blue',
+          'flex w-full max-w-[296px] h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-white focus-within:bg-white focus-within:border-blue',
           {
             'bg-purple-light': filled,
             '!border-red': error,
@@ -33,7 +36,10 @@ const Input = ({
       >
         <input
           id={id}
-          onChange={({ target }) => setFilled(!!target.value)}
+          onChange={({ target }) => {
+            setFilled(!!target.value);
+            onChange(target);
+          }}
           className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
           type={type}
           placeholder={placeholder}
@@ -56,6 +62,7 @@ Input.defaultProps = {
   helperText: '',
   icon: null,
   disabled: false,
+  onChange: () => {},
 };
 
 Input.propTypes = {
@@ -68,6 +75,7 @@ Input.propTypes = {
   helperText: PropTypes.string,
   icon: PropTypes.node,
   disabled: PropTypes.bool,
+  onChange: PropTypes.func,
 };
 
 export default Input;
