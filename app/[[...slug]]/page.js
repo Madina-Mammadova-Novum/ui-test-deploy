@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { BlockManager } from '@/common';
 
 const data = [
@@ -27,7 +29,7 @@ const res = await getData();
 export default async function Home() {
   return (
     <main>
-      <h1>Home</h1>
+      <Link href="/uikit">ui-kit</Link>
       {data && <BlockManager blocks={data} />}
     </main>
   );

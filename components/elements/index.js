@@ -4,7 +4,9 @@ import Alert from '@/elements/Alert';
 import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
 import CheckBox from '@/elements/CheckBox';
+import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
+import File from '@/elements/File';
 import Input from '@/elements/Input';
 import RadioButton from '@/elements/RadioButton';
 import Table from '@/elements/Table';
@@ -21,9 +23,11 @@ export {
   Search,
   Badge,
   CheckBox,
+  Dropzone,
   ExpandableRow,
   RadioButton,
   TextWithLabel,
   Toggle,
   Table,
+  File,
 };

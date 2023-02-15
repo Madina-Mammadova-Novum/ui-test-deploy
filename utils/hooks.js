@@ -100,6 +100,7 @@ export const useColor = () => {
   const red = delve(PALLETE, 'COLORS.RED.DEFAULT');
   const yellow = delve(PALLETE, 'COLORS.YELLOW.DEFAULT');
   const green = delve(PALLETE, 'COLORS.GREEN.DEFAULT');
+  const blue = delve(PALLETE, 'COLORS.BLUE.DEFAULT');
 
   return {
     white,
@@ -108,6 +109,7 @@ export const useColor = () => {
     red,
     yellow,
     green,
+    blue,
   };
 };
 

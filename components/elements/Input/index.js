@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -6,17 +6,30 @@ import PropTypes from 'prop-types';
 const Input = ({
   id,
   label,
+  name,
+  register,
+  required,
+  multiple,
   placeholder,
+  helperText = '',
   type = 'text',
-  customStyles = '',
   icon = null,
   disabled = false,
   error = '',
-  helperText = '',
+  customStyles = '',
   onChange,
   ...rest
 }) => {
   const [filled, setFilled] = useState(false);
+
+  const handleChange = useCallback(
+    ({ value }) => {
+      onChange(value);
+      setFilled(!!value);
+    },
+    [onChange]
+  );
+
   return (
     <div className={disabled && 'opacity-50 pointer-events-none'}>
       {label && (
@@ -26,7 +39,7 @@ const Input = ({
       )}
       <div
         className={classnames(
-          'flex w-full max-w-[296px] h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-white focus-within:bg-white focus-within:border-blue',
+          'flex w-full h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue',
           {
             'bg-purple-light': filled,
             '!border-red': error,
@@ -36,13 +49,13 @@ const Input = ({
       >
         <input
           id={id}
-          onChange={({ target }) => {
-            setFilled(!!target.value);
-            onChange(target);
-          }}
           className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
           type={type}
           placeholder={placeholder}
+          name={name}
+          onChange={({ target }) => handleChange(target)}
+          multiple={multiple}
+          {...register(name, { required })}
           {...rest}
         />
         {icon && <span className="ml-2.5">{icon}</span>}
@@ -62,6 +75,10 @@ Input.defaultProps = {
   helperText: '',
   icon: null,
   disabled: false,
+  required: false,
+  multiple: false,
+  name: '',
+  register: () => {},
   onChange: () => {},
 };
 
@@ -76,6 +93,10 @@ Input.propTypes = {
   icon: PropTypes.node,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
+  register: PropTypes.func,
+  name: PropTypes.string,
+  required: PropTypes.bool,
+  multiple: PropTypes.bool,
 };
 
 export default Input;
