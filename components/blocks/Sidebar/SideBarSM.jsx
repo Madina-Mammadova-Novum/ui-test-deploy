@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ArrowIcon, Logo } from '@/assets/Icons';
 import { Accordion, Search } from '@/elements';
 
-const SideBarMin = memo(({ data, isResized, onResize }) => {
+const SideBarSM = memo(({ data, isResized, onResize }) => {
   const printMenu = (item) => <Accordion variant="collapsed" key={item?.id} data={item} />;
 
   return (
@@ -34,7 +34,7 @@ const SideBarMin = memo(({ data, isResized, onResize }) => {
   );
 });
 
-SideBarMin.propTypes = {
+SideBarSM.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   searchVal: PropTypes.string.isRequired,
   isResized: PropTypes.bool.isRequired,
@@ -42,4 +42,4 @@ SideBarMin.propTypes = {
   onSearch: PropTypes.func.isRequired,
 };
 
-export default SideBarMin;
+export default SideBarSM;

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ArrowIcon, Logo } from '@/assets/Icons';
 import { Accordion, Search } from '@/elements';
 
-const SideBarMax = memo(({ data, searchVal, isResized, onResize, onSearch }) => {
+const SideBarXL = memo(({ data, searchVal, isResized, onResize, onSearch }) => {
   const printMenu = (item) => <Accordion variant="opened" key={item?.id} data={item} />;
 
   return (
@@ -30,7 +30,7 @@ const SideBarMax = memo(({ data, searchVal, isResized, onResize, onSearch }) => 
   );
 });
 
-SideBarMax.propTypes = {
+SideBarXL.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   searchVal: PropTypes.string.isRequired,
   isResized: PropTypes.bool.isRequired,
@@ -38,4 +38,4 @@ SideBarMax.propTypes = {
   onSearch: PropTypes.func.isRequired,
 };
 
-export default SideBarMax;
+export default SideBarXL;
