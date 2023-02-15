@@ -5,6 +5,7 @@ const initialState = {
     open: false,
     resize: false,
     active: false,
+    onFocus: false,
     search: '',
   },
 };
@@ -13,10 +14,10 @@ const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    setOpen: (state) => ({
+    setOpen: (state, { payload }) => ({
       sidebar: {
         ...state.sidebar,
-        open: !state.sidebar.open,
+        open: payload ?? !state.sidebar.open,
       },
     }),
     setResize: (state) => ({
@@ -37,9 +38,15 @@ const systemSlice = createSlice({
         search: payload,
       },
     }),
+    setFocus: (state, { payload }) => ({
+      sidebar: {
+        ...state.sidebar,
+        onFocus: payload,
+      },
+    }),
   },
 });
 
-export const { setOpen, setResize, setActive, setSearch } = systemSlice.actions;
+export const { setOpen, setResize, setActive, setSearch, setFocus } = systemSlice.actions;
 
 export default systemSlice.reducer;

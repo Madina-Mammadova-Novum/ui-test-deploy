@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
-import CollapseBody from './CollapseBody';
-import CollapseHeader from './CollapseHeader';
+import AccordionBody from './AccordionBody';
+import AccordionHeader from './AccordionHeader';
 
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/Icons';
 import { setActive, setOpen } from '@/store/entities/system/slice';
 
-const Collapsible = ({ data }) => {
+const AccordionXL = ({ data }) => {
   const dispatch = useDispatch();
 
   const { open, active } = useSelector(({ system }) => system.sidebar);
@@ -50,7 +50,7 @@ const Collapsible = ({ data }) => {
 
   return (
     <>
-      <CollapseHeader
+      <AccordionHeader
         toggle={open}
         active={isActive}
         onClick={handleMore}
@@ -59,13 +59,13 @@ const Collapsible = ({ data }) => {
         className="flex items-center transition-all"
       >
         {data?.title ? printTitle : <p>Title not found</p>}
-      </CollapseHeader>
-      <CollapseBody list={data?.items} toggle={open} />
+      </AccordionHeader>
+      <AccordionBody list={data?.items} toggle={open} />
     </>
   );
 };
 
-Collapsible.propTypes = {
+AccordionXL.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
@@ -75,4 +75,4 @@ Collapsible.propTypes = {
   }).isRequired,
 };
 
-export default Collapsible;
+export default AccordionXL;

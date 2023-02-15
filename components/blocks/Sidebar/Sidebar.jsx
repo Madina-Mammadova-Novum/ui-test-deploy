@@ -1,15 +1,17 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
-import { Logo } from '@/assets/Icons';
-import { Collapsible, Search } from '@/elements';
-import { setSearch } from '@/store/entities/system/slice';
+import SideBarSM from './SideBarSM';
+import SideBarXL from './SideBarXL';
+
+import { setFocus, setOpen, setResize, setSearch } from '@/store/entities/system/slice';
 
 const Sidebar = ({ data }) => {
   const dispatch = useDispatch();
-  const { search } = useSelector(({ system }) => system.sidebar);
+
+  const { search, resize, open } = useSelector(({ system }) => system.sidebar);
 
   const handleSearch = useCallback(
     ({ value }) => {
@@ -18,14 +20,49 @@ const Sidebar = ({ data }) => {
     [dispatch]
   );
 
-  const printMenu = (item) => <Collapsible key={item?.id} data={item} />;
+  useEffect(() => {
+    if (!resize && open) dispatch(setOpen(true));
+
+    return () => {
+      dispatch(setOpen(false));
+      dispatch(setFocus(false));
+    };
+  }, [dispatch, open, resize]);
+
+  const handleResize = useCallback(() => {
+    dispatch(setResize());
+  }, [dispatch]);
+
+  const printSideBar = useMemo(() => {
+    switch (resize) {
+      case false:
+        return (
+          <SideBarXL
+            data={data}
+            isResized={resize}
+            searchVal={search}
+            onSearch={({ target }) => handleSearch(target)}
+            onResize={handleResize}
+          />
+        );
+      case true:
+        return <SideBarSM data={data} isResized={resize} onResize={handleResize} />;
+      default:
+        return (
+          <SideBarXL
+            data={data}
+            isResized={resize}
+            searchVal={search}
+            onSearch={({ target }) => handleSearch(target)}
+            onResize={handleResize}
+          />
+        );
+    }
+  }, [data, handleResize, handleSearch, resize, search]);
+
   return (
-    <aside className="flex flex-col px-5 py-3 w-64 bg-black text-white">
-      <Logo />
-      <div className="mt-8 flex flex-col gap-1.5 relative">
-        <Search value={search} onChange={({ target }) => handleSearch(target)} />
-        {data?.map(printMenu)}
-      </div>
+    <aside className={`flex flex-col px-3.5 py-5 gap-2 bg-black text-white ${resize ? ' w-16' : ' w-64'}`}>
+      {printSideBar}
     </aside>
   );
 };

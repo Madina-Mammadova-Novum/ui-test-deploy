@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { ArrowIcon } from '@/assets/Icons';
 
-const CollapseHeader = ({ children, href, toggle, active, className, onClick, isSubMenu }) => {
+const AccordionHeader = ({ children, href, toggle, active, className, onClick, isSubMenu }) => {
   const printLink = useMemo(() => {
     return (
       <Link href={href} className={`${active ? 'bg-blue' : 'hover:bg-blue-dark'} rounded-xl `}>
@@ -43,7 +43,7 @@ const CollapseHeader = ({ children, href, toggle, active, className, onClick, is
   return printHeader;
 };
 
-CollapseHeader.defaultProps = {
+AccordionHeader.defaultProps = {
   className: '',
   href: '/',
   children: null,
@@ -53,7 +53,7 @@ CollapseHeader.defaultProps = {
   onClick: () => {},
 };
 
-CollapseHeader.propTypes = {
+AccordionHeader.propTypes = {
   children: PropTypes.node,
   toggle: PropTypes.bool,
   className: PropTypes.string,
@@ -63,4 +63,4 @@ CollapseHeader.propTypes = {
   active: PropTypes.bool,
 };
 
-export default CollapseHeader;
+export default AccordionHeader;

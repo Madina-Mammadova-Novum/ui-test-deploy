@@ -3,7 +3,7 @@ import { useMemo, useRef } from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-const CollapseBody = ({ list, toggle, className }) => {
+const AccordionBody = ({ list, toggle, className }) => {
   const ref = useRef(null);
 
   const printMenuItem = (item) => {
@@ -36,14 +36,14 @@ const CollapseBody = ({ list, toggle, className }) => {
   );
 };
 
-CollapseBody.defaultProps = {
+export default AccordionBody;
+
+AccordionBody.defaultProps = {
   className: '',
 };
 
-CollapseBody.propTypes = {
+AccordionBody.propTypes = {
   toggle: PropTypes.bool.isRequired,
   list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   className: PropTypes.string,
 };
-
-export default CollapseBody;

@@ -1,10 +1,10 @@
+import Accordion from '@/elements/Accordion';
+import Search from '@/elements/Accordion/AccordionSearch';
 import Alert from '@/elements/Alert';
 import AnimatedTitleText from '@/elements/AnimatedTitleText';
 import BlockShortDescription from '@/elements/BlockShortDescription';
 import BlockTitle from '@/elements/BlockTitle';
 import Button from '@/elements/Button';
-import Collapsible from '@/elements/Collapsible';
-import Search from '@/elements/Collapsible/CollapseSearch';
 import ContentElement from '@/elements/ContentElement';
 import Dropdown from '@/elements/Dropdown';
 import FilterLabel from '@/elements/FilterLabel';
@@ -27,7 +27,7 @@ export {
   TextArea,
   PhoneField,
   Button,
-  Collapsible,
+  Accordion,
   Alert,
   Search,
 };
