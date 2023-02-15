@@ -5,18 +5,21 @@ import UploadSVG from '@/assets/images/upload.svg';
 import {
   Button,
   CheckBox,
-  Collapsible,
   ExpandableRow,
   Input,
   RadioButton,
   TextArea,
   TextWithLabel,
   Toggle,
+  Alert,
+  Table
 } from '@/elements';
-import Table from '@/elements/Table';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
 import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
+import { Sidebar } from '@/blocks';
+import '@/styles/index.css';
+import { sidebarData } from '@/utils/mocks';
 
 const UiKit = () => (
   <div className="h-screen px-5 py-5">
@@ -55,9 +58,7 @@ const UiKit = () => (
     <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
 
     {/* Collapsible */}
-
-    <Collapsible title="Collapsible" items={[1, 2, 3]} />
-
+    <Sidebar data={sidebarData} />
     {/* Inputs */}
 
     <Input label="title" placeholder="Enter the file title" />
@@ -114,6 +115,22 @@ const UiKit = () => (
       <Table headerData={fleetsHeader} rows={fleetsTableRow} />
     </ExpandableRow>
     <br />
+    {/* Alerts */}
+    <Alert
+      variant="access"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
+    <Alert
+      variant="error"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
+    <Alert
+      variant="warning"
+      title="Your request has been sent for review"
+      description="You will be notified soon. The rest of the changes have been edited"
+    />
   </div>
 );
 
