@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import delve from 'dlv';
+
+import { PALLETE } from '@/lib/constants';
+
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
@@ -76,3 +80,27 @@ export function useDebounce(value, delay) {
 
   return debouncedValue;
 }
+
+export const useColor = () => {
+  const white = delve(PALLETE, 'COLORS.WHITE.DEFAULT');
+  const black = delve(PALLETE, 'COLORS.BLACK.DEFAULT');
+  const grey = delve(PALLETE, 'COLORS.GREY.DEFAULT');
+  const red = delve(PALLETE, 'COLORS.RED.DEFAULT');
+  const yellow = delve(PALLETE, 'COLORS.YELLOW.DEFAULT');
+  const green = delve(PALLETE, 'COLORS.GREEN.DEFAULT');
+
+  return {
+    white,
+    black,
+    grey,
+    red,
+    yellow,
+    green,
+  };
+};
+
+export const useActiveColors = (isAcitve) => {
+  const { white, grey } = useColor();
+
+  return isAcitve ? white : grey;
+};

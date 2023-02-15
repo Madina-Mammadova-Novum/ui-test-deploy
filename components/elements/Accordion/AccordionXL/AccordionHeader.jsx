@@ -33,8 +33,6 @@ const AccordionHeader = ({ children, href, toggle, active, className, onClick, i
     switch (isSubMenu) {
       case true:
         return printCta;
-      case false:
-        return printLink;
       default:
         return printLink;
     }
