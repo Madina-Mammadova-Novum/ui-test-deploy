@@ -1,34 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 /* Actions */
-import { fetchUsers } from './actions';
+import { fetchUsers } from '@/store/entities/example/actions';
 
 const initialState = {
   data: [],
-  loading: false,
-  value: 10,
-  error: '',
+  pending: false,
+  error: false,
 };
 
 const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    rehydrate(state, { payload }) {
+      state.data = payload.data;
+      state.pending = payload.pending;
+      state.error = payload.error;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, { payload }) => {
-      state.loading = false;
+      state.pending = false;
       state.data = [...payload];
     });
     builder.addCase(fetchUsers.pending, (state) => {
-      state.loading = true;
+      state.pending = true;
     });
   },
 });
 
-export const { increment } = userSlice.actions;
+export const { rehydrate } = userSlice.actions;
 
 export default userSlice.reducer;

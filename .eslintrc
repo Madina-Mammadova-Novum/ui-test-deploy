@@ -37,6 +37,7 @@
     "ecmaVersion": 2020
   },
   "rules": {
+    "react/prop-types": [2, { "ignore": ["children"] }],
     "import/prefer-default-export": "off",
     "no-console": ["warn", { "allow": ["info", "error"] }],
     "no-param-reassign": [

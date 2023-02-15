@@ -113,6 +113,9 @@ module.exports = {
           '100%': { opacity: 1 },
         },
       },
+      boxShadow: {
+        xmd: '0 4px 20px #DEE3EE',
+      },
     },
   },
   variants: {

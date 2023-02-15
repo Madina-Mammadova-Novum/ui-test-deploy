@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import delve from 'dlv';
 
@@ -67,6 +68,17 @@ export function useValidationErrors() {
   return { errors, addError, removeErrorByKey };
 }
 
+export function useFetchEffect(ref, action) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (ref.current === false) dispatch(action());
+    return () => {
+      ref.current = true;
+    };
+  }, [action, dispatch, ref]);
+}
+
 export function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -76,7 +88,7 @@ export function useDebounce(value, delay) {
     return () => {
       clearTimeout(timer);
     };
-  }, [value, delay]);
+  }, [value, delay])
 
   return debouncedValue;
 }
