@@ -299,3 +299,23 @@
 input[type='password'] {
   @apply text-black;
 }
+
+.my_position-table tr:first-child {
+  @apply bg-gray-darker text-left uppercase text-[12px] h-7;
+}
+
+.my_position-table tr {
+  @apply h-9;
+}
+
+.my_position-table tr th {
+  @apply pl-5;
+}
+
+.my_position-table tr td {
+  @apply border border-gray-darker;
+}
+
+.my_position-table tr td div {
+  @apply flex box-border pl-5;
+}
