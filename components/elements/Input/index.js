@@ -53,6 +53,7 @@ const Input = ({
           type={type}
           placeholder={placeholder}
           name={name}
+          max={10}
           onChange={({ target }) => handleChange(target)}
           multiple={multiple}
           {...register(name, { required })}

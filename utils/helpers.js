@@ -127,3 +127,10 @@ export function getCurrentYear() {
 export function noSSR(Component) {
   return dynamic(() => Promise.resolve(Component), { ssr: false });
 }
+
+export const updateFormats = (data = []) => {
+  return data
+    .map((format) => format)
+    .join(', ')
+    .replaceAll('.', '');
+};

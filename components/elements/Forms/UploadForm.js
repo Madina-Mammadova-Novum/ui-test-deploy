@@ -1,49 +1,96 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 
-// import PropTypes from 'prop-types';
-
+import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
 import { ArrowIcon } from '@/assets/Icons';
 import { Button, Dropzone, File, Input, TextArea } from '@/elements';
+import { AVAILABLE_FORMATS } from '@/lib/constants';
 import { options } from '@/utils/formOptions';
+import { updateFormats } from '@/utils/helpers';
 
 const UploadForm = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [toggle, setToggle] = useState(false);
 
   const contentRef = useRef(null);
+  const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
   const {
     register,
     setValue,
     handleSubmit,
+    setError,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm(options.upload);
-
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-    onDrop: (files) => setValue('file', files[0]),
-  });
-
-  useEffect(() => {
-    setSelectedFile(acceptedFiles[0]);
-  }, [acceptedFiles]);
-
-  const setClear = () => {
-    reset();
-    setValue('file', []);
-    setSelectedFile(null);
-  };
-
   const handleToggle = () => setToggle((prev) => !prev);
 
+  const resetDropzone = useCallback(() => {
+    setValue('files', []);
+    setFiles([]);
+  }, [setValue]);
+
+  const onDrop = (acceptedFiles, rejections) => {
+    if (rejections && rejections.length > 0) {
+      setError('files', {
+        type: 'manual',
+        message: rejections && rejections[0].errors[0].message,
+      });
+      resetDropzone();
+    } else {
+      setFiles(acceptedFiles.map(fileUpdateAdapter));
+      acceptedFiles.forEach(fileReaderAdapter(setValue('files', acceptedFiles, { shouldValidate: true })));
+    }
+  };
+
+  const onRemove = useCallback(
+    (e, file) => {
+      e.preventDefault();
+      const newFiles = [...files].filter((el) => el.id !== file.id);
+      if (newFiles.length > 0) {
+        setFiles(newFiles);
+        setValue('files', newFiles);
+      } else {
+        resetDropzone();
+      }
+    },
+    [files, resetDropzone, setValue]
+  );
+
   const onSubmit = async (data) => {
-    setClear();
+    reset();
+    resetDropzone();
     return data;
   };
 
-  const setTextCta = useMemo(() => {
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    multiple: true,
+    accept: {
+      files: AVAILABLE_FORMATS.DOCS,
+    },
+  });
+
+  const printFileTemplate = useCallback(
+    (file) => <File key={file.id} title={file?.path} onClick={(e) => onRemove(e, file)} />,
+    [onRemove]
+  );
+
+  const printHelpers = useMemo(() => {
+    return (
+      <div className="flex flex-wrap gap-3 h-auto self-end w-full justify-between py-2 text-xs-sm">
+        <p className="flex gap-2 text-gray-darker">
+          Supports: <span className="text-gray">{formats}</span>
+        </p>
+        <p className="flex gap-2 text-gray-darker">
+          Max size: <span className="text-gray">10mb</span>
+        </p>
+      </div>
+    );
+  }, [formats]);
+
+  const printTextCta = useMemo(() => {
     switch (toggle) {
       case true:
         return 'Hide';
@@ -61,7 +108,7 @@ const UploadForm = () => {
       <div className="flex justify-between">
         <h5 className="text-sm text-black font-semibold">Upload a new file</h5>
         <button type="button" className="flex items-center gap-2 text-blue font-medium text-xsm" onClick={handleToggle}>
-          {setTextCta} <ArrowIcon fill="blue" className={`${toggle && 'rotate-180'}`} />
+          {printTextCta} <ArrowIcon fill="blue" className={`${toggle && 'rotate-180'}`} />
         </button>
       </div>
 
@@ -91,11 +138,19 @@ const UploadForm = () => {
               register={register}
             />
           </div>
-          {!selectedFile ? (
-            <Dropzone areaParams={getRootProps} inputParams={getInputProps} />
+          {files.length <= 0 ? (
+            <Dropzone
+              areaParams={getRootProps}
+              inputParams={getInputProps}
+              error={errors?.file?.message}
+              formats={formats}
+            >
+              {printHelpers}
+            </Dropzone>
           ) : (
-            <div className="w-full h-auto border-dashed border hover:border-blue border-gray-darker relative rounded-md p-5">
-              <File title={selectedFile?.path} onClick={setClear} />
+            <div className="flex flex-wrap w-full h-auto gap-x-3 gap-y-0 border-dashed border hover:border-blue border-gray-darker relative rounded-md pt-5 px-3">
+              {files.map(printFileTemplate)}
+              {printHelpers}
             </div>
           )}
         </div>
@@ -104,6 +159,7 @@ const UploadForm = () => {
           type="submit"
           customStyles="flex self-end"
           buttonProps={{ text: 'Upload', variant: 'secondary', size: 'large' }}
+          disabled={!isDirty}
         />
       </form>
     </div>
