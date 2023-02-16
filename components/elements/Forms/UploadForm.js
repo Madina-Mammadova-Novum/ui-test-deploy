@@ -30,18 +30,17 @@ const UploadForm = () => {
     setSelectedFile(acceptedFiles[0]);
   }, [acceptedFiles]);
 
-  const setClear = (callback) => {
+  const setClear = () => {
+    reset();
     setValue('file', []);
     setSelectedFile(null);
-    callback();
   };
 
   const handleToggle = () => setToggle((prev) => !prev);
 
   const onSubmit = async (data) => {
-    setClear(reset);
-
-    return { data };
+    setClear();
+    return data;
   };
 
   const setTextCta = useMemo(() => {
