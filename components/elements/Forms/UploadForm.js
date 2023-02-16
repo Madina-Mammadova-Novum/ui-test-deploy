@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
-import { ArrowIcon } from '@/assets/Icons';
+import { ArrowIcon, UploadIcon } from '@/assets/Icons';
 import { Button, Dropzone, File, Input, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
 import { options } from '@/utils/formOptions';
@@ -158,7 +158,7 @@ const UploadForm = () => {
         <Button
           type="submit"
           customStyles="flex self-end"
-          buttonProps={{ text: 'Upload', variant: 'secondary', size: 'large' }}
+          buttonProps={{ text: 'Upload file', variant: 'secondary', size: 'large', icon: <UploadIcon /> }}
           disabled={!isDirty}
         />
       </form>

@@ -9,3 +9,4 @@ export { default as InfoIcon } from '@/assets/Icons/Info';
 export { default as SearchIcon } from '@/assets/Icons/Search';
 export { default as FileIcon } from '@/assets/Icons/File';
 export { default as Logo } from '@/assets/Icons/Logo';
+export { default as UploadIcon } from '@/assets/Icons/Upload';
