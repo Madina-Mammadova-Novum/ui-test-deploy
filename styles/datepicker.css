@@ -1,0 +1,15 @@
+.single_date .rdrCalendarWrapper {
+    box-shadow: 0px 4px 20px #DEE3EE;
+}
+
+.single_date .rdrCalendarWrapper, .single_date .rdrMonth {
+    width: 294px;
+}
+
+.range_date .rdrCalendarWrapper {
+    width: 536px;
+}
+
+.range_date-hidden  .rdrMonthAndYearWrapper, .range_date-hidden .rdrMonths {
+    display: none;
+}

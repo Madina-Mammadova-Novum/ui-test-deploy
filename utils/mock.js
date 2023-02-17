@@ -69,3 +69,18 @@ export const fleetsTableRow = [
     },
   ],
 ];
+
+export const dropdownOptions = [
+    {
+        countryFlag: usFlag,
+        value: 'Agioi Theodoroi, GRAGT'
+    },
+    {
+        countryFlag: usFlag,
+        value: 'Akrotiri, CYAKT'
+    },
+    {
+        countryFlag: usFlag,
+        value: 'Castellon de la Plana, ESCAS'
+    },
+]

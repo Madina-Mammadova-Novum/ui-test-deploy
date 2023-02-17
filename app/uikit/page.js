@@ -3,23 +3,26 @@
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import {
+  Alert,
   Button,
   CheckBox,
   ExpandableRow,
   Input,
   RadioButton,
+  Table,
   TextArea,
   TextWithLabel,
   Toggle,
-  Alert,
-  Table
+  DatePicker,
+  RangeDatePicker,
+  Dropdown
 } from '@/elements';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
 import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
 import { Sidebar } from '@/blocks';
-import '@/styles/index.css';
 import { sidebarData } from '@/utils/mocks';
+
 
 const UiKit = () => (
   <div className="h-screen px-5 py-5">
@@ -115,7 +118,9 @@ const UiKit = () => (
       <Table headerData={fleetsHeader} rows={fleetsTableRow} />
     </ExpandableRow>
     <br />
+
     {/* Alerts */}
+
     <Alert
       variant="access"
       title="Your request has been sent for review"
@@ -131,6 +136,20 @@ const UiKit = () => (
       title="Your request has been sent for review"
       description="You will be notified soon. The rest of the changes have been edited"
     />
+
+  {/* Datepickers */}
+
+    <div style={{ marginBottom: '20px'}}>
+      <DatePicker />
+    </div>
+
+    <div className='mb-5'>
+      <RangeDatePicker />
+    </div>
+
+  {/* Dropdowns */}
+
+    <Dropdown label="Open Port"/>
   </div>
 );
 
