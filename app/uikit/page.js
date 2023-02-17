@@ -6,9 +6,12 @@ import { Sidebar, Upload } from '@/blocks';
 import {
   Button,
   CheckBox,
+  DatePicker,
+  Dropdown,
   ExpandableRow,
   Input,
   RadioButton,
+  RangeDatePicker,
   Table,
   TextArea,
   TextWithLabel,
@@ -163,7 +166,23 @@ const UiKit = () => {
           onClick={handleErrorToast}
         />
       </div>
+
+      {/* Datepickers */}
+
+      <div style={{ marginBottom: '20px' }}>
+        <DatePicker />
+      </div>
+
+      <div className="mb-5">
+        <RangeDatePicker />
+      </div>
+
+      {/* Dropdowns */}
+
+      <Dropdown label="Open Port" />
+
       {/* Upload form */}
+
       <Upload />
     </div>
   );
