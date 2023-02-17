@@ -319,3 +319,15 @@ input[type='password'] {
 .my_position-table tr td div {
   @apply flex box-border pl-5;
 }
+
+.Toastify__toast {
+  @apply shadow-none p-0 bg-transparent mb-0;
+}
+
+.Toastify__toast-container {
+  @apply w-full p-0 ml-auto;
+}
+
+.Toastify__toast-body {
+  @apply p-0;
+}

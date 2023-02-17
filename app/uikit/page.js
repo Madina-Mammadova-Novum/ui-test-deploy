@@ -4,7 +4,6 @@ import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { Sidebar, Upload } from '@/blocks';
 import {
-  Alert,
   Button,
   CheckBox,
   ExpandableRow,
@@ -17,122 +16,157 @@ import {
 } from '@/elements';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
-import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
-import { sidebarData } from '@/utils/mocks';
+import { useToast } from '@/utils/hooks';
+import { fleetsHeader, fleetsTableRow, sidebarData } from '@/utils/mock';
 
-const UiKit = () => (
-  <div className="h-screen px-5 py-5">
-    {/* Large Buttons */}
-    <Button
-      buttonProps={{ text: 'Hello', variant: 'primary', size: 'large', icon: <UploadSVG width="16px" fill="white" /> }}
-    />
-    <Button
-      buttonProps={{ text: 'Hello', variant: 'primary', size: 'large', icon: <UploadSVG width="16px" fill="white" /> }}
-      disabled
-    />
+const UiKit = () => {
+  const handleSuccessToast = useToast({
+    variant: 'success',
+    data: {
+      title: 'Your request has been sent for review',
+      description: 'You will be notified soon. The rest of the changes have been edited',
+    },
+  });
 
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} disabled />
+  const handleErrorToast = useToast({
+    variant: 'error',
+    data: {
+      title: 'Your request has been sent for review',
+      description: 'You will be notified soon. The rest of the changes have been edited',
+    },
+  });
 
-    <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} disabled />
+  const handleWarningToast = useToast({
+    variant: 'warning',
+    data: {
+      title: 'Your request has been sent for review',
+      description: 'You will be notified soon. The rest of the changes have been edited',
+    },
+  });
 
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} disabled />
+  return (
+    <div className="h-screen px-5 py-5">
+      {/* Large Buttons */}
+      <Button
+        buttonProps={{
+          text: 'Hello',
+          variant: 'primary',
+          size: 'large',
+          icon: <UploadSVG width="16px" fill="white" />,
+        }}
+      />
+      <Button
+        buttonProps={{
+          text: 'Hello',
+          variant: 'primary',
+          size: 'large',
+          icon: <UploadSVG width="16px" fill="white" />,
+        }}
+        disabled
+      />
 
-    {/* Medium Buttons */}
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} disabled />
+      <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} disabled />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} disabled />
+      {/* Medium Buttons */}
 
-    {/* Small Buttons */}
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} disabled />
 
-    {/* Collapsible */}
-    <Sidebar data={sidebarData} />
-    {/* Inputs */}
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} disabled />
 
-    <Input label="title" placeholder="Enter the file title" />
-    <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
-    <Input label="title" placeholder="Enter the file title" helperText="hello" />
-    <Input
-      label="title"
-      placeholder="Enter the file title"
-      helperText="hello"
-      icon={<PasswordHiddenSVG className="w-5" />}
-    />
-    <Input label="title" placeholder="Enter the file title" error="hello" />
-    <Input
-      label="title"
-      placeholder="Enter the file title"
-      error="hello"
-      icon={<PasswordHiddenSVG className="w-5" />}
-    />
+      {/* Small Buttons */}
 
-    {/* TextAreas */}
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
 
-    <TextArea label="title" placeholder="Some text" />
-    <TextArea label="title" placeholder="Some text" disabled />
+      {/* Collapsible */}
+      <Sidebar data={sidebarData} />
+      {/* Inputs */}
 
-    {/* Toggle */}
+      <Input label="title" placeholder="Enter the file title" />
+      <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
+      <Input label="title" placeholder="Enter the file title" helperText="hello" />
+      <Input
+        label="title"
+        placeholder="Enter the file title"
+        helperText="hello"
+        icon={<PasswordHiddenSVG className="w-5" />}
+      />
+      <Input label="title" placeholder="Enter the file title" error="hello" />
+      <Input
+        label="title"
+        placeholder="Enter the file title"
+        error="hello"
+        icon={<PasswordHiddenSVG className="w-5" />}
+      />
 
-    <div className="blocks">
-      <Toggle />
+      {/* TextAreas */}
+
+      <TextArea label="title" placeholder="Some text" />
+      <TextArea label="title" placeholder="Some text" disabled />
+
+      {/* Toggle */}
+
+      <div className="blocks">
+        <Toggle />
+      </div>
+
+      {/* RadioButton */}
+
+      <div className="blocks">
+        <RadioButton />
+      </div>
+
+      {/* CheckBox */}
+
+      <div className="blocks">
+        <CheckBox />
+      </div>
+
+      {/* Radio with text */}
+
+      <RadioWithText text="Sample text" />
+
+      {/* Text with Title */}
+
+      <TextWithLabel label="text" text="description" />
+
+      {/* Expandable row */}
+
+      <ExpandableRow headerComponent={<FleetRowHeader />}>
+        <Table headerData={fleetsHeader} rows={fleetsTableRow} />
+      </ExpandableRow>
+      <br />
+
+      <div className="flex gap-5">
+        <Button
+          buttonProps={{ text: 'Success toast', variant: 'secondary', size: 'medium' }}
+          onClick={handleSuccessToast}
+        />
+        <Button
+          buttonProps={{ text: 'Warning toast', variant: 'secondary', size: 'medium' }}
+          onClick={handleWarningToast}
+        />
+        <Button
+          buttonProps={{ text: 'Error toast', variant: 'secondary', size: 'medium' }}
+          onClick={handleErrorToast}
+        />
+      </div>
+      {/* Upload form */}
+      <Upload />
     </div>
-
-    {/* RadioButton */}
-
-    <div className="blocks">
-      <RadioButton />
-    </div>
-
-    {/* CheckBox */}
-
-    <div className="blocks">
-      <CheckBox />
-    </div>
-
-    {/* Radio with text */}
-
-    <RadioWithText text="Sample text" />
-
-    {/* Text with Title */}
-
-    <TextWithLabel label="text" text="description" />
-
-    {/* Expandable row */}
-
-    <ExpandableRow headerComponent={<FleetRowHeader />}>
-      <Table headerData={fleetsHeader} rows={fleetsTableRow} />
-    </ExpandableRow>
-    <br />
-    {/* Alerts */}
-    <Alert
-      variant="access"
-      title="Your request has been sent for review"
-      description="You will be notified soon. The rest of the changes have been edited"
-    />
-    <Alert
-      variant="error"
-      title="Your request has been sent for review"
-      description="You will be notified soon. The rest of the changes have been edited"
-    />
-    <Alert
-      variant="warning"
-      title="Your request has been sent for review"
-      description="You will be notified soon. The rest of the changes have been edited"
-    />
-    {/* Upload form */}
-    <Upload />
-  </div>
-);
+  );
+};
 
 export default UiKit;

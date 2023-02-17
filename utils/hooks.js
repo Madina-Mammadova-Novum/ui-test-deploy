@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import delve from 'dlv';
 
+import { Alert } from '@/elements';
 import { PALLETE } from '@/lib/constants';
 
 export function useOnClickOutside(ref, handler) {
@@ -117,4 +119,11 @@ export const useActiveColors = (isAcitve) => {
   const { white, grey } = useColor();
 
   return isAcitve ? white : grey;
+};
+
+export const useToast = ({ data, variant }) => {
+  return () =>
+    toast(({ closeToast }) => (
+      <Alert variant={variant} title={data?.title} description={data?.description} handleClose={closeToast} />
+    ));
 };
