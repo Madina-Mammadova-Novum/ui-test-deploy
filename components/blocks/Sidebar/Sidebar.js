@@ -35,16 +35,6 @@ const Sidebar = ({ data }) => {
 
   const printSideBar = useMemo(() => {
     switch (resize) {
-      case false:
-        return (
-          <SideBarXL
-            data={data}
-            isResized={resize}
-            searchVal={search}
-            onSearch={({ target }) => handleSearch(target)}
-            onResize={handleResize}
-          />
-        );
       case true:
         return <SideBarSM data={data} isResized={resize} onResize={handleResize} />;
       default:

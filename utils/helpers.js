@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+
 /**
  * createMarkup
  * @param content
@@ -121,3 +123,14 @@ export function getCurrentYear() {
   const year = date.getFullYear();
   return year;
 }
+
+export function noSSR(Component) {
+  return dynamic(() => Promise.resolve(Component), { ssr: false });
+}
+
+export const updateFormats = (data = []) => {
+  return data
+    .map((format) => format)
+    .join(', ')
+    .replaceAll('.', '');
+};

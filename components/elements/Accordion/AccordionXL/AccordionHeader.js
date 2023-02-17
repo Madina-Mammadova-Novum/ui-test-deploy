@@ -3,29 +3,36 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-const AccordionHeader = ({ children, href, className, onClick, isSubMenu }) => {
+import { ArrowIcon } from '@/assets/Icons';
+
+const AccordionHeader = ({ children, href, toggle, active, className, onClick, isSubMenu }) => {
   const printLink = useMemo(() => {
-    return <Link href={href}>{children}</Link>;
-  }, [children, href]);
+    return (
+      <Link href={href} className={`${active ? 'bg-blue' : 'hover:bg-blue-dark'} rounded-xl `}>
+        {children}
+      </Link>
+    );
+  }, [active, children, href]);
 
   const printCta = useMemo(() => {
     return (
       <div
         onClick={onClick}
         aria-hidden="true"
-        className={`cursor-pointer rounded-md transition-all text-sm font-semibold flex justify-between items-center capitalize  ${className}`}
+        className={`cursor-pointer w-full rounded-xl transition-all text-sm font-semibold flex justify-between pr-5 items-center capitalize  ${className} ${
+          toggle ? 'bg-blue' : 'hover:bg-blue-dark'
+        }`}
       >
         {children}
+        <ArrowIcon className={`transition duration-150 ${toggle && 'rotate-180'}`} width="12px" />
       </div>
     );
-  }, [children, className, onClick]);
+  }, [children, className, onClick, toggle]);
 
   const printHeader = useMemo(() => {
     switch (isSubMenu) {
       case true:
         return printCta;
-      case false:
-        return printLink;
       default:
         return printLink;
     }

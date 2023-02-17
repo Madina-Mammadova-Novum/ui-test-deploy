@@ -8,8 +8,6 @@ import AccordionSearchXL from './AccordionXL/AccordionSearch';
 const AccordionSearch = ({ variant, value, onChange, isResized }) => {
   const printSearch = useMemo(() => {
     switch (variant) {
-      case 'xl':
-        return <AccordionSearchXL value={value} isResized={isResized} onChange={onChange} />;
       case 'sm':
         return <AccordionSearchSM isResized={isResized} />;
       default:

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import TableHeaderCell from '@/elements/Table/TableHeaderCell';
+import { noSSR } from '@/utils/helpers';
 
 const TableHeader = ({ headerData }) => {
   return (
@@ -16,4 +17,4 @@ TableHeader.propTypes = {
   headerData: PropTypes.shape([]).isRequired,
 };
 
-export default TableHeader;
+export default noSSR(TableHeader);
