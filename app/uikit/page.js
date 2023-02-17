@@ -6,23 +6,22 @@ import {
   Alert,
   Button,
   CheckBox,
+  DatePicker,
+  Dropdown,
   ExpandableRow,
   Input,
   RadioButton,
+  RangeDatePicker,
   Table,
   TextArea,
   TextWithLabel,
   Toggle,
-  DatePicker,
-  RangeDatePicker,
-  Dropdown
 } from '@/elements';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
 import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
 import { Sidebar } from '@/blocks';
 import { sidebarData } from '@/utils/mocks';
-
 
 const UiKit = () => (
   <div className="h-screen px-5 py-5">
@@ -137,19 +136,19 @@ const UiKit = () => (
       description="You will be notified soon. The rest of the changes have been edited"
     />
 
-  {/* Datepickers */}
+    {/* Datepickers */}
 
-    <div style={{ marginBottom: '20px'}}>
+    <div style={{ marginBottom: '20px' }}>
       <DatePicker />
     </div>
 
-    <div className='mb-5'>
+    <div className="mb-5">
       <RangeDatePicker />
     </div>
 
-  {/* Dropdowns */}
+    {/* Dropdowns */}
 
-    <Dropdown label="Open Port"/>
+    <Dropdown label="Open Port" />
   </div>
 );
 

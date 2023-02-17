@@ -1,7 +1,6 @@
-import { NextImage } from "@/elements"
-
 import PropTypes from 'prop-types';
 
+import { NextImage } from '@/elements';
 import Badge from '@/elements/Badge';
 import Toggle from '@/elements/Toggle';
 
