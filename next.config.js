@@ -6,6 +6,7 @@ const nextConfig = {
     appDir: true,
   },
   reactStrictMode: true,
+  swcMinify: true,
   images: {
     unoptimized: false, // true for `yarn export`
     formats: ['image/avif', 'image/webp'],

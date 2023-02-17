@@ -2,6 +2,7 @@
 
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
+import { Sidebar, Upload } from '@/blocks';
 import {
   Alert,
   Button,
@@ -17,7 +18,6 @@ import {
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
 import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
-import { Sidebar } from '@/blocks';
 import { sidebarData } from '@/utils/mocks';
 
 const UiKit = () => (
@@ -130,6 +130,8 @@ const UiKit = () => (
       title="Your request has been sent for review"
       description="You will be notified soon. The rest of the changes have been edited"
     />
+    {/* Upload form */}
+    <Upload />
   </div>
 );
 
