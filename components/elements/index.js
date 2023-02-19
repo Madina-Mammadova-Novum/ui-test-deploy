@@ -13,11 +13,11 @@ import Input from '@/elements/Input';
 import NextImage from '@/elements/NextImage';
 import RadioButton from '@/elements/RadioButton';
 import RangeDatePicker from '@/elements/RangeDatePicker';
-
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Toggle from '@/elements/Toggle';
+import Tooltip from '@/elements/Tooltip';
 
 export {
   Input,
@@ -31,9 +31,10 @@ export {
   Dropzone,
   ExpandableRow,
   RadioButton,
-  TextWithLabel,
-  Toggle,
   Table,
+  TextWithLabel,
+  Tooltip,
+  Toggle,
   DatePicker,
   RangeDatePicker,
   Dropdown,

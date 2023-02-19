@@ -17,6 +17,7 @@ import {
   TextWithLabel,
   Toggle,
 } from '@/elements';
+import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
 import { useToast } from '@/utils/hooks';
@@ -152,6 +153,8 @@ const UiKit = () => {
       </ExpandableRow>
       <br />
 
+      {/* Alerts */}
+
       <div className="flex gap-5">
         <Button
           buttonProps={{ text: 'Success toast', variant: 'secondary', size: 'medium' }}
@@ -166,6 +169,19 @@ const UiKit = () => {
           onClick={handleErrorToast}
         />
       </div>
+
+      {/* Tooltips */}
+
+      <Tooltip
+        tooltipText="Title"
+        variant="manual"
+        data={{
+          title: 'IMO',
+          content: `
+          
+          `,
+        }}
+      />
 
       {/* Datepickers */}
 
