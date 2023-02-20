@@ -19,6 +19,7 @@ import Tabs from '@/elements/Tabs';
 import TextArea from '@/elements/TextArea';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Toggle from '@/elements/Toggle';
+import Tooltip from '@/elements/Tooltip';
 
 export {
   Input,
@@ -32,9 +33,10 @@ export {
   Dropzone,
   ExpandableRow,
   RadioButton,
-  TextWithLabel,
-  Toggle,
   Table,
+  TextWithLabel,
+  Tooltip,
+  Toggle,
   DatePicker,
   RangeDatePicker,
   Dropdown,

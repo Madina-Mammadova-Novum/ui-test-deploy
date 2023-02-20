@@ -4,7 +4,6 @@ import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { Sidebar, Upload } from '@/blocks';
 import {
-  Alert,
   Button,
   CheckBox,
   DatePicker,
@@ -20,135 +19,187 @@ import {
   TextWithLabel,
   Toggle,
 } from '@/elements';
+import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
-import { fleetsHeader, fleetsTableRow, tabs } from '@/utils/mock';
-import { sidebarData } from '@/utils/mocks';
+// import { fleetsHeader, fleetsTableRow, tabs } from '@/utils/mock';
+// import { sidebarData } from '@/utils/mocks';
 
-const UiKit = () => (
-  <div className="h-screen px-5 py-5">
-    {/* Large Buttons */}
-    <Button
-      buttonProps={{ text: 'Hello', variant: 'primary', size: 'large', icon: <UploadSVG width="16px" fill="white" /> }}
-    />
-    <Button
-      buttonProps={{ text: 'Hello', variant: 'primary', size: 'large', icon: <UploadSVG width="16px" fill="white" /> }}
-      disabled
-    />
+import { useToast } from '@/utils/hooks';
+import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} disabled />
+const UiKit = () => {
+  const handleSuccessToast = useToast({
+    variant: 'success',
+    data: {
+      title: 'Your request has been sent for review',
+      description: 'You will be notified soon. The rest of the changes have been edited',
+    },
+  });
 
-    <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} disabled />
+  const handleErrorToast = useToast({
+    variant: 'error',
+    data: {
+      title: 'Your request has been sent for review',
+      description: 'You will be notified soon. The rest of the changes have been edited',
+    },
+  });
 
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} disabled />
+  const handleWarningToast = useToast({
+    variant: 'warning',
+    data: {
+      title: 'Your request has been sent for review',
+      description: 'You will be notified soon. The rest of the changes have been edited',
+    },
+  });
 
-    {/* Medium Buttons */}
+  return (
+    <div className="h-screen px-5 py-5">
 
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} disabled />
+      {/* Large Buttons */}
 
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} disabled />
+      <Button
+        buttonProps={{
+          text: 'Hello',
+          variant: 'primary',
+          size: 'large',
+          icon: <UploadSVG width="16px" fill="white" />,
+        }}
+      />
+      <Button
+        buttonProps={{
+          text: 'Hello',
+          variant: 'primary',
+          size: 'large',
+          icon: <UploadSVG width="16px" fill="white" />,
+        }}
+        disabled
+      />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} disabled />
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'large' }} disabled />
 
-    {/* Small Buttons */}
+      <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'tertiary', size: 'large' }} disabled />
 
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} />
-    <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'large' }} disabled />
 
-    {/* Collapsible */}
+      {/* Medium Buttons */}
 
-    <Sidebar data={sidebarData} />
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'medium' }} disabled />
 
-    {/* Inputs */}
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'secondary', size: 'medium' }} disabled />
 
-    <Input label="title" placeholder="Enter the file title" customStyles="max-w-[296px]" />
-    <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
-    <Input label="title" placeholder="Enter the file title" helperText="hello" />
-    <Input
-      label="title"
-      placeholder="Enter the file title"
-      helperText="hello"
-      icon={<PasswordHiddenSVG className="w-5" />}
-    />
-    <Input label="title" placeholder="Enter the file title" error="hello" />
-    <Input
-      label="title"
-      placeholder="Enter the file title"
-      error="hello"
-      icon={<PasswordHiddenSVG className="w-5" />}
-    />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'delete', size: 'medium' }} disabled />
 
-    {/* TextAreas */}
+      {/* Small Buttons */}
 
-    <TextArea label="title" placeholder="Some text" />
-    <TextArea label="title" placeholder="Some text" disabled />
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} />
+      <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
 
-    {/* Toggle */}
+      {/* Collapsible */}
+      <Sidebar data={sidebarData} />
+      {/* Inputs */}
 
-    <div className="blocks">
-      <Toggle />
-    </div>
+      <Input label="title" placeholder="Enter the file title" customStyles="max-w-[296px]" />
+      <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
+      <Input label="title" placeholder="Enter the file title" helperText="hello" />
+      <Input
+        label="title"
+        placeholder="Enter the file title"
+        helperText="hello"
+        icon={<PasswordHiddenSVG className="w-5" />}
+      />
+      <Input label="title" placeholder="Enter the file title" error="hello" />
+      <Input
+        label="title"
+        placeholder="Enter the file title"
+        error="hello"
+        icon={<PasswordHiddenSVG className="w-5" />}
+      />
 
-    {/* RadioButton */}
+      {/* TextAreas */}
 
-    <div className="blocks">
-      <RadioButton />
-    </div>
+      <TextArea label="title" placeholder="Some text" />
+      <TextArea label="title" placeholder="Some text" disabled />
 
-    {/* CheckBox */}
+      {/* Toggle */}
 
-    <div className="blocks">
-      <CheckBox />
-    </div>
+      <div className="blocks">
+        <Toggle />
+      </div>
 
-    {/* Radio with text */}
+      {/* RadioButton */}
 
-    <RadioWithText text="Sample text" />
+      <div className="blocks">
+        <RadioButton />
+      </div>
 
-    {/* Text with Title */}
+      {/* CheckBox */}
 
-    <TextWithLabel label="text" text="description" />
+      <div className="blocks">
+        <CheckBox />
+      </div>
 
-    {/* Expandable row */}
+      {/* Radio with text */}
 
-    <ExpandableRow headerComponent={<FleetRowHeader />}>
-      <Table headerData={fleetsHeader} rows={fleetsTableRow} />
-    </ExpandableRow>
-    <br />
+      <RadioWithText text="Sample text" />
 
-    {/* Alerts */}
+      {/* Text with Title */}
 
-    <Alert
-      variant="access"
-      title="Your request has been sent for review"
-      description="You will be notified soon. The rest of the changes have been edited"
-    />
-    <Alert
-      variant="error"
-      title="Your request has been sent for review"
-      description="You will be notified soon. The rest of the changes have been edited"
-    />
-    <Alert
-      variant="warning"
-      title="Your request has been sent for review"
-      description="You will be notified soon. The rest of the changes have been edited"
-    />
+      <TextWithLabel label="text" text="description" />
 
-    {/* Datepickers */}
+      {/* Expandable row */}
 
-    <div style={{ marginBottom: '20px' }}>
-      <DatePicker />
-    </div>
+      <ExpandableRow headerComponent={<FleetRowHeader />}>
+        <Table headerData={fleetsHeader} rows={fleetsTableRow} />
+      </ExpandableRow>
+      <br />
 
-    <div className="mb-5">
-      <RangeDatePicker />
-    </div>
+      {/* Alerts */}
+
+      <div className="flex gap-5">
+        <Button
+          buttonProps={{ text: 'Success toast', variant: 'secondary', size: 'medium' }}
+          onClick={handleSuccessToast}
+        />
+        <Button
+          buttonProps={{ text: 'Warning toast', variant: 'secondary', size: 'medium' }}
+          onClick={handleWarningToast}
+        />
+        <Button
+          buttonProps={{ text: 'Error toast', variant: 'secondary', size: 'medium' }}
+          onClick={handleErrorToast}
+        />
+      </div>
+
+      {/* Tooltips */}
+
+      <Tooltip
+        tooltipText="Title"
+        variant="manual"
+        data={{
+          title: 'IMO',
+          content: `
+          
+          `,
+        }}
+      />
+
+      {/* Datepickers */}
+
+      <div style={{ marginBottom: '20px' }}>
+        <DatePicker />
+      </div>
+
+      <div className="mb-5">
+        <RangeDatePicker />
+      </div>
+
 
     {/* Dropdowns */}
 
@@ -166,6 +217,6 @@ const UiKit = () => (
 
     <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
   </div>
-);
+)}
 
 export default UiKit;

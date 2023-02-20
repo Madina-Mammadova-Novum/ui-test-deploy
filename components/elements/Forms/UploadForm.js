@@ -17,11 +17,11 @@ const UploadForm = () => {
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
   const {
+    reset,
     register,
     setValue,
-    handleSubmit,
     setError,
-    reset,
+    handleSubmit,
     formState: { errors, isDirty },
   } = useForm(options.upload);
   const handleToggle = () => setToggle((prev) => !prev);
@@ -101,7 +101,7 @@ const UploadForm = () => {
 
   return (
     <div
-      className="box-border transition-all pt-5 pb-3 duration-500 overflow-hidden rounded-lg border border-solid border-grey-darker px-5 py-3"
+      className="box-border mt-5 transition-all pt-5 pb-3 duration-500 overflow-hidden rounded-lg border border-solid border-grey-darker px-5 py-3"
       ref={contentRef}
       style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '64px' }}
     >
@@ -138,7 +138,7 @@ const UploadForm = () => {
               register={register}
             />
           </div>
-          {files.length <= 0 ? (
+          {!files.length ? (
             <Dropzone
               areaParams={getRootProps}
               inputParams={getInputProps}
