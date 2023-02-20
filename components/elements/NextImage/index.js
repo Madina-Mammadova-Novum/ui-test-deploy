@@ -10,7 +10,7 @@ NextImage.defaultProps = {
 };
 
 NextImage.propTypes = {
-  src: PropTypes.oneOf(PropTypes.node, PropTypes.string).isRequired,
+  src: PropTypes.oneOf([PropTypes.node, PropTypes.string]).isRequired,
   alt: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,

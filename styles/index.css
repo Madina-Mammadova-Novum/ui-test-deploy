@@ -200,6 +200,26 @@
       @apply text-xl font-bold mb-5;
     }
   }
+
+  /* Datepickers */
+
+  .single_date .rdrCalendarWrapper {
+    @apply shadow-xmd;
+  }
+
+  .single_date .rdrCalendarWrapper,
+  .single_date .rdrMonth {
+    @apply w-[294px];
+  }
+
+  .range_date .rdrCalendarWrapper {
+    @apply w-[536px];
+  }
+
+  .range_date-hidden .rdrMonthAndYearWrapper,
+  .range_date-hidden .rdrMonths {
+    @apply hidden;
+  }
 }
 
 /* Swiper Concern Gallery  */

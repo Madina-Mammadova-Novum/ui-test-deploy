@@ -13,11 +13,12 @@ import Input from '@/elements/Input';
 import NextImage from '@/elements/NextImage';
 import RadioButton from '@/elements/RadioButton';
 import RangeDatePicker from '@/elements/RangeDatePicker';
-
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Toggle from '@/elements/Toggle';
+import Pagination from '@/elements/Pagination';
+import Tabs from '@/elements/Tabs';
 
 export {
   Input,
@@ -39,4 +40,6 @@ export {
   Dropdown,
   NextImage,
   File,
+  Pagination,
+  Tabs
 };

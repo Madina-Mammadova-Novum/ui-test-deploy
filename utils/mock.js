@@ -84,3 +84,14 @@ export const dropdownOptions = [
     value: 'Castellon de la Plana, ESCAS',
   },
 ];
+
+export const tabs = [
+  {
+    value: 'value-1',
+    label: 'tab-1'
+  },
+  {
+    value: 'value-2',
+    label: 'tab-2'
+  },
+]

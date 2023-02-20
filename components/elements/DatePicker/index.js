@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import '@/styles/datepicker.css';
 import { Calendar } from 'react-date-range';
 
 import classnames from 'classnames';

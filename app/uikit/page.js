@@ -17,10 +17,12 @@ import {
   TextArea,
   TextWithLabel,
   Toggle,
+  Pagination,
+  Tabs
 } from '@/elements';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
-import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
+import { fleetsHeader, fleetsTableRow, tabs } from '@/utils/mock';
 import { sidebarData } from '@/utils/mocks';
 
 const UiKit = () => (
@@ -60,10 +62,12 @@ const UiKit = () => (
     <Button buttonProps={{ text: 'Hello', variant: 'primary', size: 'small' }} disabled />
 
     {/* Collapsible */}
+
     <Sidebar data={sidebarData} />
+
     {/* Inputs */}
 
-    <Input label="title" placeholder="Enter the file title" />
+    <Input label="title" placeholder="Enter the file title" customStyles='max-w-[296px]'/>
     <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
     <Input label="title" placeholder="Enter the file title" helperText="hello" />
     <Input
@@ -153,6 +157,18 @@ const UiKit = () => (
     {/* Upload form */}
 
     <Upload />
+
+    {/* Pagination */}
+
+    <Pagination pageCount={9} onPageChange={() => {}} currentPage={1}/>
+
+    {/* Tabs */}
+
+    <Tabs 
+      tabs={tabs}
+      defaultTab={tabs[0].value}
+      activeTab={null}
+    />
   </div>
 );
 
