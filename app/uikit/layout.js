@@ -1,6 +1,5 @@
-import Providers from './provider';
+import Layout from '@/common/Layout';
 
-// eslint-disable-next-line react/prop-types
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -10,7 +9,7 @@ export default function RootLayout({ children }) {
       */}
       <head />
       <body>
-        <Providers>{children}</Providers>
+        <Layout>{children}</Layout>
       </body>
     </html>
   );

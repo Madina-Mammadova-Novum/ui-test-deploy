@@ -1,4 +1,4 @@
-import Providers from '@/app/provider';
+import Layout from '@/common/Layout';
 
 export default function RootLayout({ children }) {
   return (
@@ -9,7 +9,7 @@ export default function RootLayout({ children }) {
       */}
       <head />
       <body>
-        <Providers>{children}</Providers>
+        <Layout>{children}</Layout>
       </body>
     </html>
   );
