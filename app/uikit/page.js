@@ -11,14 +11,14 @@ import {
   Dropdown,
   ExpandableRow,
   Input,
+  Pagination,
   RadioButton,
   RangeDatePicker,
   Table,
+  Tabs,
   TextArea,
   TextWithLabel,
   Toggle,
-  Pagination,
-  Tabs
 } from '@/elements';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
@@ -67,7 +67,7 @@ const UiKit = () => (
 
     {/* Inputs */}
 
-    <Input label="title" placeholder="Enter the file title" customStyles='max-w-[296px]'/>
+    <Input label="title" placeholder="Enter the file title" customStyles="max-w-[296px]" />
     <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
     <Input label="title" placeholder="Enter the file title" helperText="hello" />
     <Input
@@ -160,15 +160,11 @@ const UiKit = () => (
 
     {/* Pagination */}
 
-    <Pagination pageCount={9} onPageChange={() => {}} currentPage={1}/>
+    <Pagination pageCount={9} onPageChange={() => {}} currentPage={1} />
 
     {/* Tabs */}
 
-    <Tabs 
-      tabs={tabs}
-      defaultTab={tabs[0].value}
-      activeTab={null}
-    />
+    <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
   </div>
 );
 

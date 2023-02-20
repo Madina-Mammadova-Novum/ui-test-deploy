@@ -88,10 +88,10 @@ export const dropdownOptions = [
 export const tabs = [
   {
     value: 'value-1',
-    label: 'tab-1'
+    label: 'tab-1',
   },
   {
     value: 'value-2',
-    label: 'tab-2'
+    label: 'tab-2',
   },
-]
+];

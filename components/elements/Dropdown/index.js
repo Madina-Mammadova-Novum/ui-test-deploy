@@ -33,7 +33,7 @@ const dropdownStyles = (selectedOption) => ({
     ...base,
     display: 'none',
   }),
-})
+});
 
 const dropdownTheme = (theme) => ({
   ...theme,
@@ -43,7 +43,7 @@ const dropdownTheme = (theme) => ({
     primary25: 'transpasrent',
     primary: 'transparent',
   },
-})
+});
 
 const Dropdown = ({ onChange, label, id }) => {
   const [selectedOption, setSelectedOption] = useState(null);

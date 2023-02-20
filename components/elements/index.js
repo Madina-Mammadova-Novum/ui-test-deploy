@@ -11,14 +11,14 @@ import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
 import Input from '@/elements/Input';
 import NextImage from '@/elements/NextImage';
+import Pagination from '@/elements/Pagination';
 import RadioButton from '@/elements/RadioButton';
 import RangeDatePicker from '@/elements/RangeDatePicker';
 import Table from '@/elements/Table';
+import Tabs from '@/elements/Tabs';
 import TextArea from '@/elements/TextArea';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Toggle from '@/elements/Toggle';
-import Pagination from '@/elements/Pagination';
-import Tabs from '@/elements/Tabs';
 
 export {
   Input,
@@ -41,5 +41,5 @@ export {
   NextImage,
   File,
   Pagination,
-  Tabs
+  Tabs,
 };
