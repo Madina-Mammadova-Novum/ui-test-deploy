@@ -1,6 +1,9 @@
+import { toast } from 'react-toastify';
+
 import delve from 'dlv';
 import pluralize from 'pluralize';
 
+import { Alert } from '@/elements';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
@@ -192,4 +195,18 @@ export async function getCollectionTypesData(key) {
   const response = await fetch(getStrapiURL(`/${pluralize(key)}`));
   const { data } = await response.json();
   return data;
+}
+
+/**
+ * toastFunc
+ * @param type
+ * @param title
+ * @param description
+ * @returns {function(): number | string}
+ */
+export function toastFunc(type, title, description = '') {
+  return () =>
+    toast(({ closeToast }) => (
+      <Alert variant={type} title={title} description={description} handleClose={closeToast} />
+    ));
 }

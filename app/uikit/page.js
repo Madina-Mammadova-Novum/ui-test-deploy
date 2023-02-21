@@ -20,33 +20,34 @@ import {
   Tooltip,
 } from '@/elements';
 import { FleetRowHeader, RadioWithText, Sidebar, Upload } from '@/ui';
-import { useToast } from '@/utils/hooks';
+import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
 const UiKit = () => {
-  const handleSuccessToast = useToast({
-    variant: 'success',
-    data: {
-      title: 'Your request has been sent for review',
-      description: 'You will be notified soon. The rest of the changes have been edited',
-    },
-  });
+  const handleSuccessToast = useSuccessToast(
+    'Your request has been sent for review',
+    'You will be notified soon. The rest of the changes have been edited'
+  );
 
-  const handleErrorToast = useToast({
-    variant: 'error',
-    data: {
-      title: 'Your request has been sent for review',
-      description: 'You will be notified soon. The rest of the changes have been edited',
-    },
-  });
+  const handleErrorToast = useErrorToast(
+    'Your request has been sent for review',
+    'You will be notified soon. The rest of the changes have been edited'
+  );
 
-  const handleWarningToast = useToast({
-    variant: 'warning',
-    data: {
-      title: 'Your request has been sent for review',
-      description: 'You will be notified soon. The rest of the changes have been edited',
-    },
-  });
+  const handleWarningToast = useWarningToast(
+    'Your request has been sent for review',
+    'You will be notified soon. The rest of the changes have been edited'
+  );
+
+  const handleInfoToast = useInfoToast(
+    'Your request has been sent for review',
+    'You will be notified soon. The rest of the changes have been edited'
+  );
+
+  const handleDefaultToast = useToast(
+    'Your request has been sent for review',
+    'You will be notified soon. The rest of the changes have been edited'
+  );
 
   return (
     <div className="h-screen px-5 py-5">
@@ -167,6 +168,11 @@ const UiKit = () => {
         <Button
           buttonProps={{ text: 'Error toast', variant: 'secondary', size: 'medium' }}
           onClick={handleErrorToast}
+        />
+        <Button buttonProps={{ text: 'Info toast', variant: 'primary', size: 'medium' }} onClick={handleInfoToast} />
+        <Button
+          buttonProps={{ text: 'Default toast', variant: 'primary', size: 'small' }}
+          onClick={handleDefaultToast}
         />
       </div>
 
