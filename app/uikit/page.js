@@ -2,7 +2,6 @@
 
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
-import { Sidebar, Upload } from '@/blocks';
 import {
   Button,
   CheckBox,
@@ -18,10 +17,9 @@ import {
   TextArea,
   TextWithLabel,
   Toggle,
+  Tooltip,
 } from '@/elements';
-import Tooltip from '@/elements/Tooltip';
-import '@/styles/index.css';
-import { FleetRowHeader, RadioWithText } from '@/ui';
+import { FleetRowHeader, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
