@@ -2,6 +2,9 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
+import 'react-toastify/dist/ReactToastify.css';
+import '@/styles/index.css';
+
 const BaseLayout = ({ children }) => {
   return (
     <html lang="en">
