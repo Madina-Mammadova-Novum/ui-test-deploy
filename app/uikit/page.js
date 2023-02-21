@@ -10,14 +10,14 @@ import {
   Dropdown,
   ExpandableRow,
   Input,
+  Pagination,
   RadioButton,
   RangeDatePicker,
   Table,
+  Tabs,
   TextArea,
   TextWithLabel,
   Toggle,
-  Pagination,
-  Tabs
 } from '@/elements';
 import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
@@ -210,7 +210,6 @@ const UiKit = () => {
       {/* Tabs */}
 
       <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
-
     </div>
   );
 };
