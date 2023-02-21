@@ -199,9 +199,9 @@ export async function getCollectionTypesData(key) {
 
 /**
  * toastFunc
- * @param type
- * @param title
- * @param description
+ * @param {string} type - You can use predefined values: default, info, warning, error, success
+ * @param {string} title - The required field with the title in toast pop-up
+ * @param {string} description - The detailed message in toast pop-up
  * @returns {function(): number | string}
  */
 export function toastFunc(type, title, description = '') {
