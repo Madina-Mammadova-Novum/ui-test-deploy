@@ -1,3 +1,5 @@
+'use client';
+
 import { Provider as RTKProvider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
