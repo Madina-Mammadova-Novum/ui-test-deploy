@@ -10,21 +10,18 @@ import {
   Dropdown,
   ExpandableRow,
   Input,
-  Pagination,
   RadioButton,
   RangeDatePicker,
   Table,
-  Tabs,
   TextArea,
   TextWithLabel,
   Toggle,
+  Pagination,
+  Tabs
 } from '@/elements';
 import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
 import { FleetRowHeader, RadioWithText } from '@/ui';
-// import { fleetsHeader, fleetsTableRow, tabs } from '@/utils/mock';
-// import { sidebarData } from '@/utils/mocks';
-
 import { useToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
@@ -56,7 +53,6 @@ const UiKit = () => {
   return (
     <div className="h-screen px-5 py-5">
       {/* Large Buttons */}
-
       <Button
         buttonProps={{
           text: 'Hello',
@@ -104,7 +100,7 @@ const UiKit = () => {
       <Sidebar data={sidebarData} />
       {/* Inputs */}
 
-      <Input label="title" placeholder="Enter the file title" customStyles="max-w-[296px]" />
+      <Input label="title" placeholder="Enter the file title" />
       <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
       <Input label="title" placeholder="Enter the file title" helperText="hello" />
       <Input
@@ -214,6 +210,7 @@ const UiKit = () => {
       {/* Tabs */}
 
       <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
+
     </div>
   );
 };
