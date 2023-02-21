@@ -1,9 +1,7 @@
 'use client';
 
-import { Provider as RTKProvider } from 'react-redux';
-
-import store from '@/store';
+import { ProviderManager } from '@/common';
 
 export default function Providers({ children }) {
-  return <RTKProvider store={store}>{children}</RTKProvider>;
+  return <ProviderManager>{children}</ProviderManager>;
 }
