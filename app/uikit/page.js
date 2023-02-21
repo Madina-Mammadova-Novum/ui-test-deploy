@@ -55,7 +55,6 @@ const UiKit = () => {
 
   return (
     <div className="h-screen px-5 py-5">
-
       {/* Large Buttons */}
 
       <Button
@@ -200,23 +199,23 @@ const UiKit = () => {
         <RangeDatePicker />
       </div>
 
+      {/* Dropdowns */}
 
-    {/* Dropdowns */}
+      <Dropdown label="Open Port" />
 
-    <Dropdown label="Open Port" />
+      {/* Upload form */}
 
-    {/* Upload form */}
+      <Upload />
 
-    <Upload />
+      {/* Pagination */}
 
-    {/* Pagination */}
+      <Pagination pageCount={9} onPageChange={() => {}} currentPage={1} />
 
-    <Pagination pageCount={9} onPageChange={() => {}} currentPage={1} />
+      {/* Tabs */}
 
-    {/* Tabs */}
-
-    <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
-  </div>
-)}
+      <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
+    </div>
+  );
+};
 
 export default UiKit;

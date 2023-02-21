@@ -7,9 +7,10 @@ import classnames from 'classnames';
 
 import CalendarSVG from '@/assets/images/calendar.svg';
 import { Input } from '@/elements';
+import { transformDate } from '@/utils/date';
 
 const DatePicker = () => {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
   return (
@@ -24,7 +25,7 @@ const DatePicker = () => {
           <Input
             customStyles={classnames('pointer-events-none !w-[296px]', showPicker && 'border-blue')}
             label="date"
-            value={date}
+            value={transformDate(date, "MMM dd, yyyy")}
             icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
           />
         </button>
