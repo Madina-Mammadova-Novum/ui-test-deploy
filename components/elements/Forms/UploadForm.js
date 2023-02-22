@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
 import { ArrowIcon, UploadIcon } from '@/assets/Icons';
 import { Button, Dropzone, File, Input, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
-import { options } from '@/utils/formOptions';
+// import { options } from '@/utils/formOptions';
 import { updateFormats } from '@/utils/helpers';
 
 const UploadForm = () => {
@@ -23,7 +23,7 @@ const UploadForm = () => {
     setError,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useFormContext(options.upload);
+  } = useForm();
   const handleToggle = () => setToggle((prev) => !prev);
 
   const resetDropzone = useCallback(() => {
@@ -61,6 +61,7 @@ const UploadForm = () => {
   const onSubmit = async (data) => {
     reset();
     resetDropzone();
+
     return data;
   };
 

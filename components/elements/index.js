@@ -9,6 +9,7 @@ import Dropdown from '@/elements/Dropdown';
 import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
+import SignupForm from '@/elements/Forms/Signup/SignupForm';
 import Input from '@/elements/Input';
 import NextImage from '@/elements/NextImage';
 import Pagination from '@/elements/Pagination';
@@ -44,4 +45,5 @@ export {
   File,
   Pagination,
   Tabs,
+  SignupForm,
 };

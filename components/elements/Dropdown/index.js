@@ -4,7 +4,6 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 
 import OptionRow from '@/elements/Dropdown/OptionRow';
-import { dropdownOptions } from '@/utils/mock';
 
 const dropdownStyles = (selectedOption) => ({
   option: (base) => ({
@@ -21,6 +20,7 @@ const dropdownStyles = (selectedOption) => ({
     },
     background: selectedOption && '#E7ECF8',
     borderRadius: '6px',
+    padding: '0.13rem',
     border: menuIsOpen ? '1px solid #199AF5' : '1px solid #DADFEA',
   }),
   dropdownIndicator: (base, { isFocused }) => ({
@@ -45,7 +45,7 @@ const dropdownTheme = (theme) => ({
   },
 });
 
-const Dropdown = ({ onChange, label, id }) => {
+const Dropdown = ({ onChange, label, id, dropdownOptions }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (option) => {
@@ -56,7 +56,7 @@ const Dropdown = ({ onChange, label, id }) => {
   const renderOption = ({ countryFlag, value }) => <OptionRow countryFlag={countryFlag} value={value} />;
 
   return (
-    <div className="max-w-[296px]">
+    <div className="relative bottom-1.5">
       <label htmlFor={id} className="text-[12px] text-gray font-semibold uppercase">
         {label}
       </label>
@@ -82,6 +82,7 @@ Dropdown.propTypes = {
   onChange: PropTypes.func,
   label: PropTypes.string,
   id: PropTypes.oneOf([PropTypes.string, PropTypes.number]).isRequired,
+  dropdownOptions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default Dropdown;

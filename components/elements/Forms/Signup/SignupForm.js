@@ -2,16 +2,16 @@ import { useFormContext } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
-import Step from './Signup/Step';
+import Step from './Step';
 
 import { Button } from '@/elements';
-import { options } from '@/utils/formOptions';
 
 const SignupForm = () => {
-  const { handleSubmit } = useFormContext(options.signupSchema);
+  const { handleSubmit, reset } = useFormContext();
 
-  const onSubmit = async (data) => {
-    console.log(data);
+  const onSubmit = (data) => {
+    reset();
+    return data;
   };
 
   return (
@@ -25,7 +25,7 @@ const SignupForm = () => {
       <Step number="4" title="How many tankers do you have?" />
       <hr className="divide" />
       <Step number="5" title="Company Addresss" />
-      <hr className="divide" />
+
       <Button
         buttonProps={{ text: 'Create account', variant: 'primary', size: 'large' }}
         customStyles="flex justify-center"
