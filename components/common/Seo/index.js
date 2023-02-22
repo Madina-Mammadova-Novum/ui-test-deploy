@@ -4,18 +4,15 @@ import delve from 'dlv';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 
-import { getStrapiMedia } from '@/utils';
-
 const Seo = ({ seo }) => {
   const metaTitle = delve(seo, 'metaTitle');
   const metaImage = delve(seo, 'metaImage');
   const metaRobots = delve(seo, 'metaRobots');
-  const metaSocial = delve(seo, 'metaSocial');
+  // const metaSocial = delve(seo, 'metaSocial');
   const structuredData = delve(seo, 'structuredData');
   const preventIndexing = delve(seo, 'preventIndexing');
   const metaDescription = delve(seo, 'metaDescription');
 
-  console.dir({ metaSocial, getStrapiMedia });
   return (
     <Head>
       <title>{metaTitle}</title>

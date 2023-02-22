@@ -1,7 +1,7 @@
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-export default function Header({ params, title }) {
+export default function Seo({ params, title }) {
   const metaTitle = delve(params, 'metaTitle');
   const metaImage = delve(params, 'metaImage');
   const metaRobots = delve(params, 'metaRobots');
@@ -55,12 +55,12 @@ export default function Header({ params, title }) {
   );
 }
 
-Header.defaultProps = {
+Seo.defaultProps = {
   params: {},
   title: '',
 };
 
-Header.propTypes = {
+Seo.propTypes = {
   params: PropTypes.shape({}),
   title: PropTypes.string,
 };

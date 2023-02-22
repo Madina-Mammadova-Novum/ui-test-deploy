@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
 import { ArrowIcon, UploadIcon } from '@/assets/Icons';
@@ -23,7 +23,7 @@ const UploadForm = () => {
     setError,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm(options.upload);
+  } = useFormContext(options.upload);
   const handleToggle = () => setToggle((prev) => !prev);
 
   const resetDropzone = useCallback(() => {

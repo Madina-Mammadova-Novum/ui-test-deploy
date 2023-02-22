@@ -2,7 +2,7 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 
 const NextImage = ({ src, alt, width, height, customStyles, ...rest }) => {
-  return <Image src={src} width={width} height={height} className={customStyles} {...rest} />;
+  return <Image src={src} alt={alt} width={width} height={height} className={customStyles} {...rest} />;
 };
 
 NextImage.defaultProps = {
@@ -10,7 +10,7 @@ NextImage.defaultProps = {
 };
 
 NextImage.propTypes = {
-  src: PropTypes.oneOf([PropTypes.node, PropTypes.string]).isRequired,
+  src: PropTypes.shape({}).isRequired,
   alt: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,

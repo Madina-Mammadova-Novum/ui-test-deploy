@@ -13,7 +13,7 @@ const BaseLayout = ({ children }) => {
         head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body className="container max-w-screen-2lg py-1.5">{children}</body>
     </html>
   );
 };

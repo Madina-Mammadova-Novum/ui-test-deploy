@@ -50,7 +50,7 @@ const UiKit = () => {
   );
 
   return (
-    <div className="h-screen px-5 py-5">
+    <div className="px-5 py-5">
       {/* Large Buttons */}
       <Button
         buttonProps={{
@@ -183,9 +183,7 @@ const UiKit = () => {
         variant="manual"
         data={{
           title: 'IMO',
-          content: `
-          
-          `,
+          content: ``,
         }}
       />
 

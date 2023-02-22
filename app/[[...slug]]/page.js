@@ -28,9 +28,9 @@ const res = await getData();
 
 export default async function Home() {
   return (
-    <main>
+    <section>
       <Link href="/uikit">ui-kit</Link>
       {data && <BlockManager blocks={data} />}
-    </main>
+    </section>
   );
 }
