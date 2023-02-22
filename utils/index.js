@@ -1,6 +1,9 @@
+import { toast } from 'react-toastify';
+
 import delve from 'dlv';
 import pluralize from 'pluralize';
 
+import { Alert } from '@/elements';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
@@ -192,4 +195,18 @@ export async function getCollectionTypesData(key) {
   const response = await fetch(getStrapiURL(`/${pluralize(key)}`));
   const { data } = await response.json();
   return data;
+}
+
+/**
+ * toastFunc
+ * @param {string} type - You can use predefined values: default, info, warning, error, success
+ * @param {string} title - The required field with the title in toast pop-up
+ * @param {string} description - The detailed message in toast pop-up
+ * @returns {function(): number | string}
+ */
+export function toastFunc(type, title, description = '') {
+  return () =>
+    toast(({ closeToast }) => (
+      <Alert variant={type} title={title} description={description} handleClose={closeToast} />
+    ));
 }

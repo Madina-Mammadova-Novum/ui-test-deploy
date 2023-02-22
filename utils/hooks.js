@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import delve from 'dlv';
 
 import { PALLETE } from '@/lib/constants';
+import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
@@ -117,4 +118,24 @@ export const useActiveColors = (isAcitve) => {
   const { white, grey } = useColor();
 
   return isAcitve ? white : grey;
+};
+
+export const useSuccessToast = (title, description = '') => {
+  return toastFunc('success', title, description);
+};
+
+export const useErrorToast = (title, description = '') => {
+  return toastFunc('error', title, description);
+};
+
+export const useWarningToast = (title, description = '') => {
+  return toastFunc('warning', title, description);
+};
+
+export const useInfoToast = (title, description = '') => {
+  return toastFunc('info', title, description);
+};
+
+export const useToast = (title, description = '') => {
+  return toastFunc('default', title, description);
 };

@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import PropTypes from 'prop-types';
 
+import { NextImage } from '@/elements';
 import Badge from '@/elements/Badge';
 import Toggle from '@/elements/Toggle';
 
@@ -8,7 +8,7 @@ const TableCell = ({ countryFlag, text, toggle, badge }) => {
   return (
     <td>
       <div className="flex items-center">
-        {countryFlag && <Image width={20} height={15} className="max-h-[15px] mr-1.5" src={countryFlag} />}
+        {countryFlag && <NextImage width={20} height={15} customStyles="max-h-[15px] mr-1.5" src={countryFlag} />}
         {toggle ? <Toggle /> : text}
         {badge && <Badge>{badge}</Badge>}
       </div>

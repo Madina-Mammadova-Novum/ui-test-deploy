@@ -33,7 +33,7 @@ const Input = ({
   return (
     <div className={disabled && 'opacity-50 pointer-events-none'}>
       {label && (
-        <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase">
+        <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase text-left">
           {label}
         </label>
       )}

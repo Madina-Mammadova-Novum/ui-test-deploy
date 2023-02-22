@@ -7,7 +7,7 @@ import { AcceptIcon, CloseIcon, InfoIcon } from '@/assets/Icons';
 const Alert = ({ variant, title, description, handleClose }) => {
   const printIcon = useMemo(() => {
     switch (variant) {
-      case 'access':
+      case 'success':
         return <AcceptIcon />;
       case 'error':
         return <InfoIcon variant="error" />;
@@ -20,7 +20,7 @@ const Alert = ({ variant, title, description, handleClose }) => {
 
   const printTheme = useMemo(() => {
     switch (variant) {
-      case 'access':
+      case 'success':
         return 'bg-green-light border-green';
       case 'error':
         return 'bg-red-light border-red';
@@ -33,7 +33,7 @@ const Alert = ({ variant, title, description, handleClose }) => {
 
   return (
     <div
-      className={`box-border max-w-xl my-3 px-4.5 py-2.5 gap-2.5 flex justify-between border border-solid rounded-base ${printTheme}`}
+      className={`box-border ml-auto mb-0 max-w-lg my-3 px-4.5 py-2.5 gap-2.5 flex justify-between border border-solid rounded-base ${printTheme}`}
     >
       <div className="flex items-center gap-2.5">
         {printIcon}
