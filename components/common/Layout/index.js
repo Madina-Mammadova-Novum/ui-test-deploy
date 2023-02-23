@@ -1,8 +1,10 @@
+import { Header } from '@/common';
+
 const Layout = ({ children }) => {
   return (
     <div id="portal">
-      <header>header</header>
-      {children}
+      <Header />
+      <main>{children}</main>
       <footer>footer</footer>
     </div>
   );

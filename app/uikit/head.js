@@ -1,5 +1,5 @@
-import Header from '@/common/Layout/head';
+import Seo from '@/common/Layout/seo';
 
 export default function Head() {
-  return <Header title="UiKit page" />;
+  return <Seo title="uikit" />;
 }

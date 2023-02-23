@@ -1,6 +1,6 @@
 module.exports = {
-  // mode: 'jit',
-  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './assets/**/*.{js,ts,jsx,tsx}'],
+  mode: 'jit',
+  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './assets/**/*.{js,ts,jsx,tsx}'],
   theme: {
     fontSize: {
       xsm: ['14px', '130%'],
@@ -14,6 +14,12 @@ module.exports = {
       '5xl': ['55px', '130%'],
       '6xl': ['65px', '130%'],
       '7xl': ['80px', '130%'],
+    },
+    container: {
+      padding: {
+        DEFAULT: '2.5rem',
+        lg: '5rem',
+      },
     },
     screens: {
       xs: '375px',

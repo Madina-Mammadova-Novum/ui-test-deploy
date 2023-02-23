@@ -9,7 +9,7 @@ export const fileUpdateAdapter = (file) => ({
 export const fileReaderAdapter = (file, cb) => {
   const reader = new window.FileReader();
   reader.onabort = () => {
-    throw new Error('aboated');
+    throw new Error('aborted');
   };
   reader.onerror = () => {
     throw new Error('error');

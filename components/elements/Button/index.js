@@ -49,8 +49,8 @@ Button.propTypes = {
   buttonProps: {
     text: PropTypes.string,
     icon: PropTypes.node,
-    variant: PropTypes.string,
-    size: PropTypes.string,
+    variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'delete']),
+    size: PropTypes.oneOf(['large', 'medium', 'small']),
   }.isRequired,
   type: PropTypes.string,
   customStyles: PropTypes.string,
