@@ -15,7 +15,7 @@ const SignupForm = () => {
   };
 
   return (
-    <form className="flex flex-col gap-5 pt-5" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-5 pt-5" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Step number="1" title="Choose who you are" />
       <hr className="divide" />
       <Step number="2" title="Personal details" />
