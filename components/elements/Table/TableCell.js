@@ -1,15 +1,14 @@
 import PropTypes from 'prop-types';
 
-import { NextImage } from '@/elements';
-import Badge from '@/elements/Badge';
-import Toggle from '@/elements/Toggle';
+import { NextImage, Badge, Toggle } from '@/elements';
+import { makeId } from '@/utils/helpers';
 
 const TableCell = ({ countryFlag, text, toggle, badge }) => {
   return (
     <td>
       <div className="flex items-center">
-        {countryFlag && <NextImage width={20} height={15} customStyles="max-h-[15px] mr-1.5" src={countryFlag} />}
-        {toggle ? <Toggle /> : text}
+        {countryFlag && <NextImage width={20} height={15} customStyles="max-h-[15px] mr-1.5" src={countryFlag} alt={`${countryFlag} flag`}/>}
+        {toggle ? <Toggle id={makeId()} /> : text}
         {badge && <Badge>{badge}</Badge>}
       </div>
     </td>

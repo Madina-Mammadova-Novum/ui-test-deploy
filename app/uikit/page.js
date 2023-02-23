@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState } from 'react';
+
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import {
@@ -9,7 +11,9 @@ import {
   Dropdown,
   ExpandableRow,
   Input,
+  Modal,
   Pagination,
+  PasswordInput,
   RadioButton,
   RangeDatePicker,
   Table,
@@ -17,13 +21,16 @@ import {
   TextArea,
   TextWithLabel,
   Toggle,
-  Tooltip,
 } from '@/elements';
-import { FleetRowHeader, RadioWithText, Sidebar, Upload } from '@/ui';
+import Tooltip from '@/elements/Tooltip';
+import '@/styles/index.css';
+import { FleetRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
 const UiKit = () => {
+  const [modal, setModal] = useState(false);
+
   const handleSuccessToast = useSuccessToast(
     'Your request has been sent for review',
     'You will be notified soon. The rest of the changes have been edited'
@@ -99,7 +106,7 @@ const UiKit = () => {
       <Sidebar data={sidebarData} />
       {/* Inputs */}
 
-      <Input label="title" placeholder="Enter the file title" />
+      <Input label="title" placeholder="Enter the file title" customStyles="max-w-[296px]" />
       <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
       <Input label="title" placeholder="Enter the file title" helperText="hello" />
       <Input
@@ -115,6 +122,8 @@ const UiKit = () => {
         error="hello"
         icon={<PasswordHiddenSVG className="w-5" />}
       />
+
+      <PasswordInput label="choose new password" placeholder="Enter your password" customStyles="max-w-[296px]" />
 
       {/* TextAreas */}
 
@@ -212,6 +221,22 @@ const UiKit = () => {
       {/* Tabs */}
 
       <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
+
+      {/* Password Validation */}
+
+      <PasswordValidation title="Enter a strong password according to our requirements" />
+
+      {/* Modal */}
+      <div>
+        <button type="button" onClick={() => setModal(true)}>
+          click
+        </button>
+        {modal && (
+          <Modal closeModal={() => setModal(false)}>
+            <div>Hello</div>
+          </Modal>
+        )}
+      </div>
     </div>
   );
 };
