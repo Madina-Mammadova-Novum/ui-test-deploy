@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState } from 'react';
+
 import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { Sidebar, Upload } from '@/blocks';
@@ -10,22 +12,25 @@ import {
   Dropdown,
   ExpandableRow,
   Input,
+  Modal,
+  Pagination,
+  PasswordInput,
   RadioButton,
   RangeDatePicker,
   Table,
+  Tabs,
   TextArea,
   TextWithLabel,
   Toggle,
-  Pagination,
-  Tabs
 } from '@/elements';
 import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
-import { FleetRowHeader, RadioWithText } from '@/ui';
+import { FleetRowHeader, PasswordValidation, RadioWithText } from '@/ui';
 import { useToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
 const UiKit = () => {
+  const [modal, setModal] = useState(false);
   const handleSuccessToast = useToast({
     variant: 'success',
     data: {
@@ -100,7 +105,7 @@ const UiKit = () => {
       <Sidebar data={sidebarData} />
       {/* Inputs */}
 
-      <Input label="title" placeholder="Enter the file title" />
+      <Input label="title" placeholder="Enter the file title" customStyles="max-w-[296px]" />
       <Input label="title" placeholder="Enter the file title" icon={<PasswordHiddenSVG className="w-5" />} />
       <Input label="title" placeholder="Enter the file title" helperText="hello" />
       <Input
@@ -116,6 +121,8 @@ const UiKit = () => {
         error="hello"
         icon={<PasswordHiddenSVG className="w-5" />}
       />
+
+      <PasswordInput label="choose new password" placeholder="Enter your password" customStyles="max-w-[296px]" />
 
       {/* TextAreas */}
 
@@ -211,6 +218,21 @@ const UiKit = () => {
 
       <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
 
+      {/* Password Validation */}
+
+      <PasswordValidation title="Enter a strong password according to our requirements" />
+
+      {/* Modal */}
+      <div>
+        <button type="button" onClick={() => setModal(true)}>
+          click
+        </button>
+        {modal && (
+          <Modal closeModal={() => setModal(false)}>
+            <div>Hello</div>
+          </Modal>
+        )}
+      </div>
     </div>
   );
 };

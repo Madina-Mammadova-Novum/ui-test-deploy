@@ -8,6 +8,22 @@
   html {
     @apply scroll-smooth;
   }
+
+  h1 {
+    @apply font-bold text-[30px];
+  }
+
+  h2 {
+    @apply font-bold text-[20px];
+  }
+
+  h3 {
+    @apply font-semibold text-sm;
+  }
+
+  h4 {
+    @apply font-bold text-xsm;
+  }
 }
 
 @layer components {
