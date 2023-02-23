@@ -31,7 +31,7 @@ const Input = ({
   );
 
   return (
-    <div className={disabled && 'opacity-50 pointer-events-none'}>
+    <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
       {label && (
         <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase text-left">
           {label}
@@ -43,8 +43,7 @@ const Input = ({
           {
             'bg-purple-light': filled,
             '!border-red': error,
-          },
-          customStyles
+          }
         )}
       >
         <input

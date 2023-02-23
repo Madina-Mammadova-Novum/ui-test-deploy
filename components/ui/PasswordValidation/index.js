@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-useless-escape */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -31,8 +32,13 @@ const initialState = [
   },
 ];
 
-const PasswordValidation = ({ title, customStyles }) => {
+const PasswordValidation = ({ title, customStyles, submitCount }) => {
   const [validation, setValidation] = useState(initialState);
+  const { register } = useFormContext();
+
+  useEffect(() => {
+    if (submitCount) setValidation(initialState);
+  }, [submitCount]);
 
   const passwordValidation = (password) => {
     const validationValues = [];
@@ -53,12 +59,26 @@ const PasswordValidation = ({ title, customStyles }) => {
       <h3>{title}</h3>
       <div className="flex mt-4">
         <div className="w-[296px]">
-          <PasswordInput label="chose password" placeholder="Enter your password" onChange={passwordValidation} />
-          <PasswordInput label="confirm password" placeholder="Enter your password" customStyles="mt-4" />
+          <PasswordInput
+            submitCount={submitCount}
+            register={register}
+            name="password"
+            label="chose password"
+            placeholder="Enter your password"
+            onChange={passwordValidation}
+          />
+          <PasswordInput
+            submitCount={submitCount}
+            register={register}
+            name="confirm_password"
+            label="confirm password"
+            placeholder="Enter your password"
+            customStyles="mt-4"
+          />
         </div>
 
         <div className="ml-5">
-          <h4>Password requirements</h4>
+          <h4 className="whitespace-nowrap">Password requirements</h4>
 
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
@@ -76,11 +96,14 @@ const PasswordValidation = ({ title, customStyles }) => {
 
 PasswordValidation.defaultProps = {
   customStyles: '',
+  title: '',
+  submitCount: 0,
 };
 
 PasswordValidation.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   customStyles: PropTypes.string,
+  submitCount: PropTypes.number,
 };
 
 export default PasswordValidation;

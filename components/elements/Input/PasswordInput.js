@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -19,6 +19,7 @@ const PasswordInput = ({
   error = '',
   customStyles = '',
   onChange,
+  submitCount,
   ...rest
 }) => {
   const [filled, setFilled] = useState(false);
@@ -31,6 +32,10 @@ const PasswordInput = ({
     },
     [onChange]
   );
+
+  useEffect(() => {
+    if (submitCount) setFilled(false);
+  }, [submitCount]);
 
   return (
     <div className={classnames(customStyles, disabled && 'opacity-50 pointer-events-none')}>
@@ -57,7 +62,10 @@ const PasswordInput = ({
           max={10}
           onChange={({ target }) => handleChange(target)}
           multiple={multiple}
-          {...register(name, { required })}
+          {...register(name, {
+            required,
+            onChange: ({ target }) => handleChange(target),
+          })}
           {...rest}
         />
         <button
@@ -86,6 +94,7 @@ PasswordInput.defaultProps = {
   name: '',
   register: () => {},
   onChange: () => {},
+  submitCount: 0,
 };
 
 PasswordInput.propTypes = {
@@ -101,6 +110,7 @@ PasswordInput.propTypes = {
   name: PropTypes.string,
   required: PropTypes.bool,
   multiple: PropTypes.bool,
+  submitCount: PropTypes.number,
 };
 
 export default PasswordInput;
