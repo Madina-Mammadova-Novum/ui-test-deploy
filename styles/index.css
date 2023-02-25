@@ -9,6 +9,10 @@
     @apply scroll-smooth;
   }
 
+  body {
+    @apply overflow-x-clip;
+  }
+
   h1 {
     @apply font-bold text-[30px];
   }
@@ -330,6 +334,19 @@
   @apply bg-[url('/angle-up.png')];
 }
 
+/* Input Number Field */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 /* Input Password Field */
 
 input[type='password'] {
@@ -366,4 +383,20 @@ input[type='password'] {
 
 .Toastify__toast-body {
   @apply p-0;
+}
+
+.selected-flag {
+  @apply !min-w-[68px] !pl-4.5;
+}
+
+.react-tel-input .selected-flag .arrow {
+  @apply !left-5;
+}
+
+.react-tel-input .selected-flag {
+  @apply !border-r-0 !border-gray-darker !bg-purple-light;
+}
+
+.react-tel-input .country-list {
+  @apply !w-[262px];
 }

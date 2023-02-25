@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-useless-escape */
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -32,6 +33,8 @@ const initialState = [
 ];
 
 const PasswordValidation = ({ title, customStyles }) => {
+  const { setValue } = useFormContext();
+
   const [validation, setValidation] = useState(initialState);
 
   const passwordValidation = (password) => {
@@ -48,13 +51,31 @@ const PasswordValidation = ({ title, customStyles }) => {
     );
   };
 
+  const isValid = validation.every((value) => value?.isValidated === true);
+
+  const handlePassword = (psw, field) => {
+    passwordValidation(psw);
+
+    return () => isValid && setValue(field, psw);
+  };
+
   return (
     <div className={classnames('max-w-[612px]', customStyles)}>
       <h3>{title}</h3>
       <div className="flex mt-4">
         <div className="w-[296px]">
-          <PasswordInput label="chose password" placeholder="Enter your password" onChange={passwordValidation} />
-          <PasswordInput label="confirm password" placeholder="Enter your password" customStyles="mt-4" />
+          <PasswordInput
+            label="chose password"
+            placeholder="Enter your password"
+            name="user.password"
+            onChange={(v) => handlePassword(v, 'user.password')}
+          />
+          <PasswordInput
+            label="confirm password"
+            placeholder="Enter your password"
+            customStyles="mt-4"
+            onChange={(v) => handlePassword(v, 'user.passwordConf')}
+          />
         </div>
 
         <div className="ml-5">
