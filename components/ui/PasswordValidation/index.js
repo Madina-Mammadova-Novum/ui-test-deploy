@@ -53,7 +53,7 @@ const PasswordValidation = ({ title, customStyles }) => {
 
   const isValid = validation.every((value) => value?.isValidated === true);
 
-  const handlePassword = (psw, field) => {
+  const handlePassword = (psw, callback, field) => {
     passwordValidation(psw);
 
     return () => isValid && setValue(field, psw);

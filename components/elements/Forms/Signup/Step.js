@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import StepWrapper from './StepWrapper';
 
-import { CheckBox, Dropdown, Input, Tabs } from '@/elements';
+import { Button, CheckBox, Dropdown, Input, Tabs } from '@/elements';
 import { PasswordValidation } from '@/ui';
 import { dropdownOptions } from '@/utils/mock';
 
@@ -34,6 +34,9 @@ const Step = ({ title, number }) => {
   const [activeTab, setActiveTab] = useState(params.tabs[0].value);
   const [address, setAddress] = useState(false);
   const [rule, setRule] = useState(false);
+  const [tankers, setTankers] = useState(null);
+
+  const [arr, setArr] = useState([]);
 
   const handleRule = useCallback(() => {
     setRule((prev) => !prev);
@@ -63,6 +66,14 @@ const Step = ({ title, number }) => {
     },
     [setValue]
   );
+
+  const handleTankers = useCallback((value) => {
+    setTankers(parseInt(value, 10));
+  }, []);
+
+  const applyTankers = useCallback(() => {
+    setArr([tankers]);
+  }, [tankers]);
 
   const printStep1 = useMemo(() => {
     return (
@@ -211,19 +222,38 @@ const Step = ({ title, number }) => {
 
   const printStep4 = useMemo(() => {
     return (
-      <div className="grid grid-cols-2">
-        <Input
-          type="number"
-          label="Number of tankers"
-          name="tankers"
-          placeholder="tankers"
-          error={errors.tankers?.message}
-          register={register}
-          required
-        />
-      </div>
+      <>
+        <div className="grid grid-cols-2 relative">
+          <Input
+            type="number"
+            label="Number of tankers"
+            value={tankers}
+            onChange={handleTankers}
+            placeholder="tankers"
+            customStyles="z-10"
+          />
+
+          <Button
+            type="button"
+            buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
+            onClick={applyTankers}
+            customStyles="absolute top-[18px] left-[42%] my-1 z-40"
+          />
+        </div>
+        <ul>
+          {Array.from({ length: arr }, (_, index) => (
+            <Input
+              type="number"
+              label="IMO"
+              name={`tankers.container_${index + 1}`}
+              register={register}
+              key={index + 1}
+            />
+          ))}
+        </ul>
+      </>
     );
-  }, [errors.tankers?.message, register]);
+  }, [applyTankers, arr, handleTankers, register, tankers]);
 
   const printStep5 = useMemo(() => {
     return (

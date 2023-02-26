@@ -8,7 +8,6 @@ import {
   Button,
   CheckBox,
   DatePicker,
-  Dropdown,
   ExpandableRow,
   Input,
   Modal,
@@ -24,7 +23,7 @@ import {
 } from '@/elements';
 import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
-import { FleetRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
+import { FleetRowHeader, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
@@ -208,7 +207,7 @@ const UiKit = () => {
 
       {/* Dropdowns */}
 
-      <Dropdown label="Open Port" />
+      {/* <Dropdown label="Open Port" /> */}
 
       {/* Upload form */}
 
@@ -224,7 +223,7 @@ const UiKit = () => {
 
       {/* Password Validation */}
 
-      <PasswordValidation title="Enter a strong password according to our requirements" />
+      {/* <PasswordValidation title="Enter a strong password according to our requirements" /> */}
 
       {/* Modal */}
       <div>

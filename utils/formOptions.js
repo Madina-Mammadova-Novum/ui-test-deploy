@@ -4,7 +4,7 @@ import { signupSchema } from '@/lib/schemas';
 
 export const options = {
   signup: {
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: yupResolver(signupSchema),
   },
 };
