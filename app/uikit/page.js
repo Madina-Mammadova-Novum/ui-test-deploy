@@ -27,6 +27,7 @@ import '@/styles/index.css';
 import { FleetRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
+import { FormManager } from '@/common';
 
 const UiKit = () => {
   const [modal, setModal] = useState(false);
@@ -223,8 +224,9 @@ const UiKit = () => {
       <Tabs tabs={tabs} defaultTab={tabs[0].value} activeTab={null} />
 
       {/* Password Validation */}
-
-      <PasswordValidation title="Enter a strong password according to our requirements" />
+      <FormManager>
+        <PasswordValidation title="Enter a strong password according to our requirements" />
+      </FormManager>
 
       {/* Modal */}
       <div>
