@@ -23,9 +23,11 @@ const Header = () => {
   const printNav = useMemo(() => {
     switch (pathName) {
       case ROUTES.LOGIN:
-        return <Navbar placeholder="Don’t have an account?" cta="Registration" onClick={handleNavigate} />;
+        return (
+          <Navbar placeholder="Don’t have an account?" cta="Registration" contrasted={false} onClick={handleNavigate} />
+        );
       default:
-        return <Navbar placeholder="Already have an account?" cta="Log in" onClick={handleNavigate} />;
+        return <Navbar placeholder="Already have an account?" cta="Log in" contrasted onClick={handleNavigate} />;
     }
   }, [handleNavigate, pathName]);
 

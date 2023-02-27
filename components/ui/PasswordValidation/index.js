@@ -96,12 +96,11 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
 
 PasswordValidation.defaultProps = {
   customStyles: '',
-  title: '',
   submitCount: 0,
 };
 
 PasswordValidation.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   customStyles: PropTypes.string,
   submitCount: PropTypes.number,
 };

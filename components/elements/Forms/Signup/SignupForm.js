@@ -7,15 +7,22 @@ import Step from './Step';
 import { Button } from '@/elements';
 
 const SignupForm = () => {
-  const { handleSubmit, reset } = useFormContext();
+  const {
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isDirty, isValid },
+  } = useFormContext();
 
   const onSubmit = (data) => {
     reset();
     return data;
   };
 
+  const isRules = watch('params.rule');
+
   return (
-    <form className="flex flex-col gap-5 pt-5" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-5 pt-5" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Step number="1" title="Choose who you are" />
       <hr className="divide" />
       <Step number="2" title="Personal details" />
@@ -30,6 +37,7 @@ const SignupForm = () => {
         buttonProps={{ text: 'Create account', variant: 'primary', size: 'large' }}
         customStyles="flex justify-center"
         type="submit"
+        disabled={!isRules || !isDirty || !isValid}
       />
     </form>
   );

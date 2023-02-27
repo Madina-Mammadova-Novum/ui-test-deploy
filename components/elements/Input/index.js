@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -20,12 +20,9 @@ const Input = ({
   onChange,
   ...rest
 }) => {
-  const [filled, setFilled] = useState(false);
-
   const handleChange = useCallback(
     ({ value }) => {
       onChange(value);
-      setFilled(!!value);
     },
     [onChange]
   );
@@ -41,7 +38,7 @@ const Input = ({
         className={classnames(
           'flex w-full min-h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue',
           {
-            'bg-purple-light': filled,
+            // 'bg-purple-light': filled,
             '!border-red': error,
           }
         )}
@@ -52,7 +49,6 @@ const Input = ({
           type={type}
           placeholder={placeholder}
           name={name}
-          max={10}
           onChange={({ target }) => handleChange(target)}
           multiple={multiple}
           {...register(name, { required })}

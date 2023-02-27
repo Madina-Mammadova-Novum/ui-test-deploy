@@ -1,5 +1,3 @@
-import React from 'react';
-
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -9,6 +7,7 @@ const Tabs = ({ tabs, customStyles, activeTab, defaultTab, onClick }) => {
       {tabs.map(({ value, label }) => (
         <button
           type="button"
+          value={value}
           onClick={onClick}
           className={classnames(
             'whitespace-nowrap min-w-16 w-full h-7 px-5 rounded-md',
