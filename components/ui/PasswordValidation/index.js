@@ -13,44 +13,45 @@ const initialState = [
   {
     text: 'At least 8 characters',
     isValidated: false,
+    expression: /^.{8,}/g,
   },
   {
     text: 'One lower case letter',
     isValidated: false,
+    expression: /[a-z]/g,
   },
   {
     text: 'One upper case letter',
     isValidated: false,
+    expression: /[A-Z]/g,
   },
   {
     text: 'At least one digit',
     isValidated: false,
+    expression: /\d/g,
   },
   {
     text: 'One special symbol',
     isValidated: false,
+    expression: /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g,
   },
 ];
 
 const PasswordValidation = ({ title, customStyles, submitCount }) => {
   const [validation, setValidation] = useState(initialState);
   const { register } = useFormContext();
-
   useEffect(() => {
     if (submitCount) setValidation(initialState);
   }, [submitCount]);
 
   const passwordValidation = (password) => {
-    const validationValues = [];
-    password.length >= 8 ? validationValues.push(true) : validationValues.push(false);
-    password.match(/[a-z]/g) ? validationValues.push(true) : validationValues.push(false);
-    password.match(/[A-Z]/g) ? validationValues.push(true) : validationValues.push(false);
-    password.match(/\d/g) ? validationValues.push(true) : validationValues.push(false);
-    password.match(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g)
-      ? validationValues.push(true)
-      : validationValues.push(false);
-    setValidation((prevValue) =>
-      prevValue.map((validationObject, index) => ({ ...validationObject, isValidated: validationValues[index] }))
+    setValidation((conditions) =>
+      conditions.map((validationObject) => {
+        return {
+          ...validationObject,
+          isValidated: password.match(validationObject.expression),
+        };
+      })
     );
   };
 
