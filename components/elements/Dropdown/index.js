@@ -50,7 +50,7 @@ const Dropdown = ({ onChange, name, control, label, id, dropdownOptions, error }
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (option) => {
-    setSelectedOption(option);
+    setSelectedOption(option.value);
     onChange(option.value);
   };
 

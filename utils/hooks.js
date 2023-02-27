@@ -5,6 +5,7 @@ import delve from 'dlv';
 
 import { PALLETE } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
+import { useFormContext } from 'react-hook-form';
 
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
@@ -138,4 +139,10 @@ export const useInfoToast = (title, description = '') => {
 
 export const useToast = (title, description = '') => {
   return toastFunc('default', title, description);
+};
+
+export const useHookForm = () => {
+  const methods = useFormContext();
+
+  return { ...methods };
 };
