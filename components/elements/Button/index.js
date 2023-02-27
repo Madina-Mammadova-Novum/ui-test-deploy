@@ -9,7 +9,7 @@ const Button = ({ buttonProps, customStyles, disabled, type, onClick, ...rest })
   return (
     <button
       className={classnames(
-        'px-5 py-2.5 rounded-md flex items-center',
+        'px-5 py-2.5 rounded-md flex items-center justify-center',
         {
           'bg-blue text-white hover:bg-blue-darker ': variant === 'primary' && size === 'large',
           'bg-black text-white hover:bg-blue-dark': variant === 'secondary' && size === 'large',

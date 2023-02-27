@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-useless-escape */
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import classnames from 'classnames';
@@ -32,10 +32,13 @@ const initialState = [
   },
 ];
 
-const PasswordValidation = ({ title, customStyles }) => {
-  const { setValue } = useFormContext();
-
+const PasswordValidation = ({ title, customStyles, submitCount }) => {
   const [validation, setValidation] = useState(initialState);
+  const { register } = useFormContext();
+
+  useEffect(() => {
+    if (submitCount) setValidation(initialState);
+  }, [submitCount]);
 
   const passwordValidation = (password) => {
     const validationValues = [];
@@ -51,35 +54,31 @@ const PasswordValidation = ({ title, customStyles }) => {
     );
   };
 
-  const isValid = validation.every((value) => value?.isValidated === true);
-
-  const handlePassword = (psw, callback, field) => {
-    passwordValidation(psw);
-
-    return () => isValid && setValue(field, psw);
-  };
-
   return (
     <div className={classnames('max-w-[612px]', customStyles)}>
       <h3>{title}</h3>
       <div className="flex mt-4">
         <div className="w-[296px]">
           <PasswordInput
+            submitCount={submitCount}
+            register={register}
+            name="password"
             label="chose password"
             placeholder="Enter your password"
-            name="user.password"
-            onChange={(v) => handlePassword(v, 'user.password')}
+            onChange={passwordValidation}
           />
           <PasswordInput
+            submitCount={submitCount}
+            register={register}
+            name="confirm_password"
             label="confirm password"
             placeholder="Enter your password"
             customStyles="mt-4"
-            onChange={(v) => handlePassword(v, 'user.passwordConf')}
           />
         </div>
 
         <div className="ml-5">
-          <h4>Password requirements</h4>
+          <h4 className="whitespace-nowrap">Password requirements</h4>
 
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
@@ -97,11 +96,13 @@ const PasswordValidation = ({ title, customStyles }) => {
 
 PasswordValidation.defaultProps = {
   customStyles: '',
+  submitCount: 0,
 };
 
 PasswordValidation.propTypes = {
   title: PropTypes.string.isRequired,
   customStyles: PropTypes.string,
+  submitCount: PropTypes.number,
 };
 
 export default PasswordValidation;
