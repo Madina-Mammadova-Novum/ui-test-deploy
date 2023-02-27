@@ -1,9 +1,12 @@
-import { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const Input = ({
+import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
+import ShowPasswordSVG from '@/assets/images/showPassword.svg';
+
+const PasswordInput = ({
   id,
   label,
   name,
@@ -12,23 +15,25 @@ const Input = ({
   multiple,
   placeholder,
   helperText = '',
-  type = 'text',
-  icon = null,
   disabled = false,
   error = '',
   customStyles = '',
   onChange,
   ...rest
 }) => {
+  const [filled, setFilled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = useCallback(
     ({ value }) => {
       onChange(value);
+      setFilled(!!value);
     },
     [onChange]
   );
 
   return (
-    <div className={disabled && 'opacity-50 pointer-events-none'}>
+    <div className={classnames(customStyles, disabled && 'opacity-50 pointer-events-none')}>
       {label && (
         <label htmlFor={id} className="block text-gray text-[12px] font-semibold uppercase text-left">
           {label}
@@ -36,26 +41,32 @@ const Input = ({
       )}
       <div
         className={classnames(
-          'flex w-full min-h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue',
+          'relative flex w-full min-h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue',
           {
-            // 'bg-purple-light': filled,
+            'bg-purple-light': filled,
             '!border-red': error,
-          },
-          customStyles
+          }
         )}
       >
         <input
           id={id}
           className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
-          type={type}
+          type={showPassword ? 'text' : 'password'}
           placeholder={placeholder}
           name={name}
+          max={10}
           onChange={({ target }) => handleChange(target)}
           multiple={multiple}
           {...register(name, { required })}
           {...rest}
         />
-        {icon && <span className="ml-2.5">{icon}</span>}
+        <button
+          type="button"
+          onClick={() => setShowPassword((prevValue) => !prevValue)}
+          className="w-6 h-6 absolute right-4 top-[50%] translate-y-[-50%]"
+        >
+          {showPassword ? <PasswordHiddenSVG /> : <ShowPasswordSVG />}
+        </button>
       </div>
       {error && <p className="text-[12px] text-red">{error}</p>}
       {helperText && <p className="text-[12px]">{helperText}</p>}
@@ -63,14 +74,12 @@ const Input = ({
   );
 };
 
-Input.defaultProps = {
+PasswordInput.defaultProps = {
   label: '',
   placeholder: '',
-  type: '',
   customStyles: '',
   error: '',
   helperText: '',
-  icon: null,
   disabled: false,
   required: false,
   multiple: false,
@@ -79,15 +88,13 @@ Input.defaultProps = {
   onChange: () => {},
 };
 
-Input.propTypes = {
+PasswordInput.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  type: PropTypes.string,
   customStyles: PropTypes.string,
   error: PropTypes.string,
   helperText: PropTypes.string,
-  icon: PropTypes.node,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
   register: PropTypes.func,
@@ -96,4 +103,4 @@ Input.propTypes = {
   multiple: PropTypes.bool,
 };
 
-export default Input;
+export default PasswordInput;

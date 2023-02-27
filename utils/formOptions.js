@@ -1,9 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { uploadSchema } from '@/lib/schemas';
+import { signupSchema } from '@/lib/schemas';
 
 export const options = {
-  upload: {
-    resolver: yupResolver(uploadSchema),
+  signup: {
+    mode: 'onChange',
+    resolver: yupResolver(signupSchema),
   },
 };

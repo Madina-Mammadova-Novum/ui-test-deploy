@@ -9,9 +9,13 @@ import Dropdown from '@/elements/Dropdown';
 import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
+import SignupForm from '@/elements/Forms/Signup/SignupForm';
 import Input from '@/elements/Input';
+import PasswordInput from '@/elements/Input/PasswordInput';
+import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
 import Pagination from '@/elements/Pagination';
+import Portal from '@/elements/Portal';
 import RadioButton from '@/elements/RadioButton';
 import RangeDatePicker from '@/elements/RangeDatePicker';
 import Table from '@/elements/Table';
@@ -44,4 +48,8 @@ export {
   File,
   Pagination,
   Tabs,
+  PasswordInput,
+  Portal,
+  Modal,
+  SignupForm,
 };

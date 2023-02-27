@@ -2,12 +2,13 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
+import { Header } from '@/common';
 import { BaseLayout } from '@/layouts';
 
 const PageLayout = ({ children }) => {
   return (
     <BaseLayout>
-      <header>header</header>
+      <Header />
       {children}
       <footer>footer</footer>
     </BaseLayout>
