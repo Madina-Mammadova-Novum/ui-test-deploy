@@ -56,7 +56,7 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
 
   return (
     <div className={classnames('max-w-[612px]', customStyles)}>
-      <h3>{title}</h3>
+      {title !== '' ?? <h3>{title}</h3>}
       <div className="flex mt-4">
         <div className="w-[296px]">
           <PasswordInput
@@ -97,10 +97,11 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
 PasswordValidation.defaultProps = {
   customStyles: '',
   submitCount: 0,
+  title: '',
 };
 
 PasswordValidation.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   customStyles: PropTypes.string,
   submitCount: PropTypes.number,
 };
