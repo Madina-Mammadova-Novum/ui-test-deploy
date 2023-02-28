@@ -58,8 +58,8 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
   return (
     <div className={classnames('max-w-[612px]', customStyles)}>
       {title !== '' ?? <h3>{title}</h3>}
-      <div className="flex mt-4">
-        <div className="w-[296px]">
+      <div className="grid gap-5 grid-cols-1 md:grid-cols-2">
+        <div className="w-full md:w-[296px]">
           <PasswordInput
             submitCount={submitCount}
             register={register}
@@ -67,6 +67,7 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
             label="chose password"
             placeholder="Enter your password"
             onChange={passwordValidation}
+            required
           />
           <PasswordInput
             submitCount={submitCount}
@@ -75,10 +76,11 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
             label="confirm password"
             placeholder="Enter your password"
             customStyles="mt-4"
+            required
           />
         </div>
 
-        <div className="ml-5">
+        <div className="pl-0 md:pl-5">
           <h4 className="whitespace-nowrap">Password requirements</h4>
 
           <ul className="mt-2 text-[12px] text-black">
