@@ -1,6 +1,6 @@
 import BlockManager from '@/common/BlockManager';
 import FormManager from '@/common/FormManager';
-import Header from '@/common/Header';
+import LayoutManager from '@/common/LayoutManager';
 import ProviderManager from '@/common/ProviderManager';
 
-export { BlockManager, ProviderManager, Header, FormManager };
+export { BlockManager, ProviderManager, FormManager, LayoutManager };

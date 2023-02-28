@@ -23,15 +23,17 @@ const SignupForm = () => {
 
   return (
     <form className="flex flex-col gap-5 pt-5" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-      <Step number="1" title="Choose who you are" />
+      <Step number="1" title="Step 1: Choose who you are" />
       <hr className="divide" />
-      <Step number="2" title="Personal details" />
+      <Step number="2" title="Step 2: Personal details" />
       <hr className="divide" />
-      <Step number="3" title="Company Details" />
+      <Step number="3" title="Step 3: Company Details" />
       <hr className="divide" />
-      <Step number="4" title="How many tankers do you have?" />
+      <Step number="4" title="Step 4: How many tankers do you have?" />
       <hr className="divide" />
-      <Step number="5" title="Company Addresss" />
+      <Step number="5" title="Step 5: Company Addresss" />
+
+      <Step number="5" title="Step without step" />
 
       <Button
         buttonProps={{ text: 'Create account', variant: 'primary', size: 'large' }}

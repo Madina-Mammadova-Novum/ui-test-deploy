@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import 'react-toastify/dist/ReactToastify.css';
-import '@/styles/index.css';
+import '@/assets/styles/index.css';
 
 const BaseLayout = ({ children }) => {
   return (

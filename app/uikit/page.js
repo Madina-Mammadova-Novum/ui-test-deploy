@@ -21,9 +21,9 @@ import {
   TextArea,
   TextWithLabel,
   Toggle,
+  Tooltip
 } from '@/elements';
-import Tooltip from '@/elements/Tooltip';
-import '@/styles/index.css';
+import '@/assets/styles/index.css';
 import { FleetRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
 import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
