@@ -1,7 +1,9 @@
 import FleetRowHeader from '@/ui/FleetRowHeader';
 import ForgotPasswordBlock from '@/ui/ForgotPassword';
 import Navbar from '@/ui/Navbar';
+import Notification from '@/ui/Notification';
 import PasswordValidation from '@/ui/PasswordValidation';
+import ProfileMenu from '@/ui/ProfileMenu';
 import RadioWithText from '@/ui/RadioWithText';
 import ResetPasswordBlock from '@/ui/ResetPassword';
 import Sidebar from '@/ui/Sidebar/Sidebar';
@@ -16,4 +18,6 @@ export {
   Upload,
   ForgotPasswordBlock,
   ResetPasswordBlock,
+  Notification,
+  ProfileMenu,
 };

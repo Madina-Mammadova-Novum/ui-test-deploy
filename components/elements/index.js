@@ -10,10 +10,12 @@ import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
 import SignupForm from '@/elements/Forms/Signup/SignupForm';
+import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
 import PasswordInput from '@/elements/Input/PasswordInput';
 import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
+import NextLink from '@/elements/NextLink';
 import Pagination from '@/elements/Pagination';
 import Portal from '@/elements/Portal';
 import RadioButton from '@/elements/RadioButton';
@@ -52,4 +54,6 @@ export {
   Portal,
   Modal,
   SignupForm,
+  HoverableIcon,
+  NextLink,
 };

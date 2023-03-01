@@ -7,9 +7,9 @@ import { Button } from '@/elements';
 
 const Navbar = memo(({ placeholder, cta, contrasted, onClick }) => {
   return (
-    <nav className="flex z-50 w-full justify-between">
+    <nav className="flex w-full justify-between items-center bg-white 3sm:bg-transparent">
       <Logo variant="xl" width={200} height={44} contrasted={contrasted} />
-      <ul className="flex items-center gap-5">
+      <ul className="relative flex items-center gap-5 w-3/5 bg-white justify-end py-1.5">
         <li>
           <p>{placeholder}</p>
         </li>

@@ -8,7 +8,7 @@ import SideBarXL from './SideBarXL';
 
 import { setFocus, setOpen, setResize, setSearch } from '@/store/entities/system/slice';
 
-const Sidebar = ({ data }) => {
+const Sidebar = ({ data, containerStyles }) => {
   const dispatch = useDispatch();
 
   const { search, resize, open } = useSelector(({ system }) => system.sidebar);
@@ -51,14 +51,21 @@ const Sidebar = ({ data }) => {
   }, [data, handleResize, handleSearch, resize, search]);
 
   return (
-    <aside className={`flex flex-col px-3.5 py-5 gap-2 bg-black text-white ${resize ? ' w-16' : ' w-64'}`}>
+    <aside
+      className={`flex flex-col px-3.5 py-5 gap-2 bg-black text-white ${containerStyles} ${resize ? ' w-16' : ' w-64'}`}
+    >
       {printSideBar}
     </aside>
   );
 };
 
+Sidebar.defaultProps = {
+  containerStyles: '',
+}
+
 Sidebar.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  containerStyles: PropTypes.string,
 };
 
 export default Sidebar;

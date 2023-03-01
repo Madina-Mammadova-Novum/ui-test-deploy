@@ -1,5 +1,5 @@
-import { PageLayout } from '@/layouts';
+import LayoutManager from '@/common/LayoutManager';
 
 export default function RootLayout({ children }) {
-  return <PageLayout>{children}</PageLayout>;
+  return <LayoutManager>{children}</LayoutManager>;
 }
