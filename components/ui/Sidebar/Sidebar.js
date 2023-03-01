@@ -61,7 +61,7 @@ const Sidebar = ({ data, containerStyles }) => {
 
 Sidebar.defaultProps = {
   containerStyles: '',
-}
+};
 
 Sidebar.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

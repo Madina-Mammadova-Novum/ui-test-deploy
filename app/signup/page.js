@@ -12,10 +12,9 @@ export default function SignUp() {
       </div>
       <div className="3sm:ml-[40%] flex items-center justify-center h-full">
         <div className="col-start-2 mt-14 mb-2">
-        <Signup containerClass="col-start-2 mt-11" />
-
+          <Signup containerClass="col-start-2 mt-11" />
         </div>
       </div>
-      </section>
+    </section>
   );
 }
