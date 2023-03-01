@@ -12,7 +12,7 @@ import { signUpTab } from '@/utils/mock';
 
 const Signup = ({ containerClass }) => {
   const dispatch = useDispatch();
-  const { role, sameAddress } = useSignupSelector();
+  const { role, sameAddress, isNested } = useSignupSelector();
 
   const handleActiveTab = useCallback(
     (value) => {
@@ -41,7 +41,7 @@ const Signup = ({ containerClass }) => {
           onClick={({ target }) => handleActiveTab(target?.value)}
         />
       </Step>
-      <FormManager options={signupOptions({ sameAddress })}>{printForm}</FormManager>
+      <FormManager options={signupOptions({ sameAddress, isNested })}>{printForm}</FormManager>
     </div>
   );
 };

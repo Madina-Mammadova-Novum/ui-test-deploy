@@ -6,15 +6,18 @@ import PropTypes from 'prop-types';
 import InputsList from '../InputsList';
 
 import { Button, Input } from '@/elements';
-import { resetSlots } from '@/store/entities/signup/slice';
+import { checkNested, resetSlots } from '@/store/entities/signup/slice';
 import { useSignupSelector } from '@/store/selectors';
+import { hasNestedArrays } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SlotsDetails = ({ label, placeholder, onClick }) => {
   const dispatch = useDispatch();
-  const { list } = useSignupSelector();
+  const { list, role } = useSignupSelector();
 
   const { register, setValue, formState } = useHookForm();
+
+  const nestedList = hasNestedArrays(list);
   const { errors } = formState;
 
   const handleResetSlots = useCallback(() => {
@@ -23,8 +26,12 @@ const SlotsDetails = ({ label, placeholder, onClick }) => {
   }, [dispatch, setValue]);
 
   useEffect(() => {
-    return () => handleResetSlots();
-  }, [handleResetSlots]);
+    dispatch(checkNested(nestedList));
+  }, [dispatch, nestedList]);
+
+  useEffect(() => {
+    if (role) handleResetSlots();
+  }, [handleResetSlots, role]);
 
   return (
     <div className="grid gap-5">
@@ -46,7 +53,7 @@ const SlotsDetails = ({ label, placeholder, onClick }) => {
           onClick={onClick}
         />
       </div>
-      {list && <InputsList data={list} />}
+      {list && <InputsList data={list} isNested={nestedList} />}
     </div>
   );
 };

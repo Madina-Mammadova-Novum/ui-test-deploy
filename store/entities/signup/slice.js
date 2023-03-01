@@ -7,6 +7,7 @@ const initialState = {
   list: [],
   rules: false,
   sameAddress: false,
+  isNested: false,
 };
 
 const signupSlice = createSlice({
@@ -31,9 +32,12 @@ const signupSlice = createSlice({
     setAddress: (state, { payload }) => {
       state.sameAddress = payload;
     },
+    checkNested: (state, { payload }) => {
+      state.isNested = payload;
+    },
   },
 });
 
-export const { setAddress, setRole, setRules, setTankers, setCargoes, resetSlots } = signupSlice.actions;
+export const { setAddress, setRole, setRules, setTankers, setCargoes, checkNested, resetSlots } = signupSlice.actions;
 
 export default signupSlice.reducer;

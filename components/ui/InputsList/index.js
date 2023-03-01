@@ -3,32 +3,30 @@ import { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { DatePicker, Dropdown, Input } from '@/elements';
-import { hasNestedArrays } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const InputsList = ({ data }) => {
+const InputsList = ({ data, isNested }) => {
   const { register, control, formState } = useHookForm();
   const { errors } = formState;
-  const isCaroges = hasNestedArrays(data);
 
   const containerStyles = useMemo(() => {
-    return isCaroges ? 'grid grid-cols-1 gap-5' : 'grid grid-cols-2 md:grid-cols-4 gap-5';
-  }, [isCaroges]);
+    return isNested ? 'grid grid-cols-1 gap-5' : 'grid grid-cols-2 md:grid-cols-4 gap-5';
+  }, [isNested]);
 
   const inputName = useCallback(
     (rowIndex, colIndex, element) => {
-      return isCaroges ? `slots.list[${rowIndex}][${colIndex}].${element?.name}` : `slots.list[${rowIndex}]`;
+      return isNested ? `slots.list[${rowIndex}][${colIndex}].${element?.name}` : `slots.list[${rowIndex}]`;
     },
-    [isCaroges]
+    [isNested]
   );
 
   const inputError = useCallback(
     (rowIndex, colIndex, element) => {
-      return isCaroges
+      return isNested
         ? errors.slots?.list?.[rowIndex]?.[colIndex]?.[element?.name]?.message
         : errors.slots?.list?.[rowIndex]?.message;
     },
-    [errors.slots?.list, isCaroges]
+    [errors.slots?.list, isNested]
   );
 
   const printInput = useCallback(
@@ -100,13 +98,14 @@ const InputsList = ({ data }) => {
 
   return (
     <ul className={containerStyles}>
-      {data?.map((item, index) => (isCaroges ? printCargoes(item, index) : printInput(item, index)))}
+      {data?.map((item, index) => (isNested ? printCargoes(item, index) : printInput(item, index)))}
     </ul>
   );
 };
 
 InputsList.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  isNested: PropTypes.bool.isRequired,
 };
 
 export default InputsList;
