@@ -1,32 +1,33 @@
 import { useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { CheckBox } from '@/elements';
+import { setAddress } from '@/store/entities/signup/slice';
+import { useSignupSelector } from '@/store/selectors';
 import { AddressDetails } from '@/ui';
 import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresess = () => {
-  const { watch, setValue, resetField } = useHookForm();
+  const dispatch = useDispatch();
+  const { resetField } = useHookForm();
+  const { sameAddress } = useSignupSelector();
 
-  const rules = watch('params.rules');
-  const sameAddress = watch('params.address');
+  const handleResetCorresponce = useCallback(() => {
+    resetField('address.correspondence.line.one');
+    resetField('address.correspondence.line.two');
+    resetField('address.correspondence.city');
+    resetField('address.correspondence.state');
+    resetField('address.correspondence.zip');
+    resetField('address.correspondence.country');
+  }, [resetField]);
 
   useEffect(() => {
-    if (sameAddress) {
-      resetField('address.secondary.line.one');
-      resetField('address.secondary.line.two');
-      resetField('address.secondary.city');
-      resetField('address.secondary.state');
-      resetField('address.secondary.zip');
-    }
-  }, [resetField, sameAddress]);
+    handleResetCorresponce();
+  }, [handleResetCorresponce, resetField, sameAddress]);
 
   const handleAddress = useCallback(() => {
-    setValue('params.address', !sameAddress);
-  }, [sameAddress, setValue]);
-
-  const handleRules = useCallback(() => {
-    setValue('params.rules', !rules);
-  }, [rules, setValue]);
+    dispatch(setAddress(!sameAddress));
+  }, [dispatch, sameAddress]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -41,16 +42,6 @@ const CompanyAddresess = () => {
         </div>
       </AddressDetails>
       {!sameAddress && <AddressDetails title="Сompany registration address" variant="correspondence" />}
-      <div className="col-span-2 row-auto">
-        <CheckBox
-          label="I agree with all"
-          checked={rules}
-          onChange={handleRules}
-          labelStyles="text-black inline-flex gap-1 text-xsm"
-        >
-          <p>Privacy Policy and Terms of Use</p>
-        </CheckBox>
-      </div>
     </div>
   );
 };

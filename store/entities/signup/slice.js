@@ -1,25 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { imoAdapter } from '@/adapters/imoAdapter';
+import { cargoesAdapter, tankersAdapter } from '@/adapters';
 
 const initialState = {
   role: 'owner',
-  imos: [],
+  list: [],
+  rules: false,
+  sameAddress: false,
 };
 
 const signupSlice = createSlice({
   name: 'signupForm',
   initialState,
   reducers: {
+    resetSlots: (state) => {
+      state.list = [];
+    },
     setRole: (state, { payload }) => {
       state.role = payload;
     },
-    setImos: (state, { payload }) => {
-      state.imos = imoAdapter(payload);
+    setTankers: (state, { payload }) => {
+      state.list = tankersAdapter(payload);
+    },
+    setCargoes: (state, { payload }) => {
+      state.list = cargoesAdapter(payload);
+    },
+    setRules: (state, { payload }) => {
+      state.rules = payload;
+    },
+    setAddress: (state, { payload }) => {
+      state.sameAddress = payload;
     },
   },
 });
 
-export const { setRole, setTankers, setImos } = signupSlice.actions;
+export const { setAddress, setRole, setRules, setTankers, setCargoes, resetSlots } = signupSlice.actions;
 
 export default signupSlice.reducer;

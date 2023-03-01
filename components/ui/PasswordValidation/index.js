@@ -62,7 +62,7 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
           <PasswordInput
             submitCount={submitCount}
             register={register}
-            name="password"
+            name="user.password"
             label="chose password"
             placeholder="Enter your password"
             onChange={passwordValidation}
@@ -70,7 +70,7 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
           <PasswordInput
             submitCount={submitCount}
             register={register}
-            name="confirm_password"
+            name="user.confirm_password"
             label="confirm password"
             placeholder="Enter your password"
             customStyles="mt-4"
