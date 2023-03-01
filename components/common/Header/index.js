@@ -31,7 +31,7 @@ const Header = () => {
     }
   }, [handleNavigate, pathName]);
 
-  return <header className="flex bg-transparent">{printNav}</header>;
+  return <header className="flex bg-transparent w-full fixed z-10 left-0 top-0 px-10">{printNav}</header>;
 };
 
 export default Header;

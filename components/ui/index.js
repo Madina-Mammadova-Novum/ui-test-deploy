@@ -4,8 +4,10 @@ import CompanyDetails from '@/ui/CompanyDetails';
 import FleetRowHeader from '@/ui/FleetRowHeader';
 import ForgotPasswordBlock from '@/ui/ForgotPassword';
 import Navbar from '@/ui/Navbar';
+import Notification from '@/ui/Notification';
 import PasswordValidation from '@/ui/PasswordValidation';
 import PersonalDetails from '@/ui/PersonalDetails';
+import ProfileMenu from '@/ui/ProfileMenu';
 import RadioWithText from '@/ui/RadioWithText';
 import ResetPasswordBlock from '@/ui/ResetPassword';
 import Sidebar from '@/ui/Sidebar/Sidebar';
@@ -24,6 +26,8 @@ export {
   Signup,
   ForgotPasswordBlock,
   ResetPasswordBlock,
+  Notification,
+  ProfileMenu,
   PersonalDetails,
   CompanyDetails,
   TankerDetails,

@@ -9,12 +9,15 @@ import Dropdown from '@/elements/Dropdown';
 import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
+// import SignupForm from '@/elements/Forms/Signup/SignupForm';
 import OwnerForm from '@/elements/Forms/OwnerForm';
+import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
 import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
+import NextLink from '@/elements/NextLink';
 import Pagination from '@/elements/Pagination';
 import Portal from '@/elements/Portal';
 import RadioButton from '@/elements/RadioButton';
@@ -54,6 +57,9 @@ export {
   PasswordInput,
   Portal,
   Modal,
+  // SignupForm,
+  HoverableIcon,
+  NextLink,
   Step,
   OwnerForm,
 };
