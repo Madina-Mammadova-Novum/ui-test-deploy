@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Form, Step } from '@/elements';
+import { CompanyAddresess, CompanyDetails, PersonalDetails, SlotsDetails, TermsAndConditions } from '@/modules';
 import { setCargoes, setRules } from '@/store/entities/signup/slice';
 import { useSignupSelector } from '@/store/selectors';
-import { CompanyAddresess, CompanyDetails, PersonalDetails, SlotsDetails, TermsAndConditions } from '@/ui';
 import { useHookForm } from '@/utils/hooks';
 
 const ChartererForm = () => {
