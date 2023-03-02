@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PageLayout, SignupLayout } from '@/layouts';
+import { AuthLayout, PageLayout } from '@/layouts';
 
 const layoutComponent = ({ pageData, meta, children }) => {
   let Layout;
@@ -13,7 +13,7 @@ const layoutComponent = ({ pageData, meta, children }) => {
     case 'forgot-password':
     case 'reset-password':
     case 'signup':
-      Layout = SignupLayout;
+      Layout = AuthLayout;
       break;
     default:
       return null;
