@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
-import ResetPasswordForm from '@/ui/ResetPassword/ResetPasswordForm';
+import ResetPasswordForm from '@/modules/ResetPassword/ResetPasswordForm';
 
 const ResetPasswordBlock = ({ title, subtitle }) => {
   const router = useRouter();

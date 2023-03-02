@@ -1,5 +1,5 @@
 import { Input, PhoneInput } from '@/elements';
-import { PasswordValidation } from '@/ui';
+import { PasswordValidation } from '@/modules';
 import { useHookForm } from '@/utils/hooks';
 
 const PersonalDetails = () => {

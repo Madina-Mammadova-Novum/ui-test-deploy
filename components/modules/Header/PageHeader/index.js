@@ -1,9 +1,8 @@
 'use client';
 
-import ProviderManager from '../ProviderManager';
-
 import profileMock from '@/assets/images/profileMock.png';
-import { Notification, ProfileMenu } from '@/ui';
+import ProviderManager from '@/common/ProviderManager';
+import { Notification, ProfileMenu } from '@/modules';
 
 const PageHeader = () => {
   return (

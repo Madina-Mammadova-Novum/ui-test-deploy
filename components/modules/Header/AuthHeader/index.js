@@ -5,9 +5,9 @@ import { useCallback, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { ROUTES } from '@/lib/constants';
-import { Navbar } from '@/ui';
+import { Navbar } from '@/modules';
 
-const Header = () => {
+const AuthHeader = () => {
   const pathName = usePathname();
   const router = useRouter();
 
@@ -34,4 +34,4 @@ const Header = () => {
   return <header className="flex bg-transparent w-full fixed z-10 left-0 top-0 px-10">{printNav}</header>;
 };
 
-export default Header;
+export default AuthHeader;

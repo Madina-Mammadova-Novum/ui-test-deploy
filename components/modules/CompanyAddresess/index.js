@@ -1,10 +1,12 @@
+'use client';
+
 import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { CheckBox } from '@/elements';
+import { AddressDetails } from '@/modules';
 import { setAddress } from '@/store/entities/signup/slice';
 import { useSignupSelector } from '@/store/selectors';
-import { AddressDetails } from '@/ui';
 import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresess = () => {

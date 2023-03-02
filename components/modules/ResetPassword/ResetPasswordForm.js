@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/elements';
-import { PasswordValidation } from '@/ui';
+import { PasswordValidation } from '@/modules';
 
 const ResetPasswordForm = () => {
   const {
