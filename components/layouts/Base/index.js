@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import 'react-toastify/dist/ReactToastify.css';
-import '@/assets/styles/index.css';
+import '@/styles';
 
 const BaseLayout = ({ children }) => {
   return (
@@ -14,7 +14,8 @@ const BaseLayout = ({ children }) => {
       */}
       <head />
       <body className="max-w-screen-2lg">
-        <div id="portal">{children}</div>
+        {children}
+        <div id="portal" />
       </body>
     </html>
   );

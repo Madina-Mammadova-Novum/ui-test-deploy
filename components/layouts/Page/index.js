@@ -2,8 +2,8 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { PageHeader } from '@/common';
 import { BaseLayout } from '@/layouts';
+import { PageHeader } from '@/modules/Header';
 
 const PageLayout = ({ children }) => {
   return (
