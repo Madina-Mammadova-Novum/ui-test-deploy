@@ -12,7 +12,8 @@ import RadioWithText from '@/ui/RadioWithText';
 import ResetPasswordBlock from '@/ui/ResetPassword';
 import Sidebar from '@/ui/Sidebar/Sidebar';
 import Signup from '@/ui/Signup';
-import TankerDetails from '@/ui/TankerDetails';
+import SlotsDetails from '@/ui/SlotsDetails';
+import TermsAndConditions from '@/ui/Terms&Conditions';
 import Upload from '@/ui/Upload';
 
 export {
@@ -30,6 +31,7 @@ export {
   ProfileMenu,
   PersonalDetails,
   CompanyDetails,
-  TankerDetails,
+  SlotsDetails,
   AddressDetails,
+  TermsAndConditions,
 };
