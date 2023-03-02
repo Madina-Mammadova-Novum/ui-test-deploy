@@ -1,5 +1,8 @@
-import Seo from '@/components/ui/Layout/seo';
+import { Seo } from '@/modules';
 
+const seo = {
+  metaTitle: 'forgot-password',
+};
 export default function Head() {
-  return <Seo title="forgot-password" />;
+  return <Seo seo={seo} />;
 }

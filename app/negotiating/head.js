@@ -1,5 +1,8 @@
-import Seo from '@/common/Layout/seo';
+import { Seo } from '@/modules';
 
+const seo = {
+  metaTitle: 'negotiating',
+};
 export default function Head() {
-  return <Seo title="negotiating" />;
+  return <Seo seo={seo} />;
 }
