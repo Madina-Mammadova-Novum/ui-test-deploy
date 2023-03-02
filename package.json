@@ -52,6 +52,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
+    "@hookform/devtools": "^4.3.0",
     "@hookform/resolvers": "2.8.5",
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.2",

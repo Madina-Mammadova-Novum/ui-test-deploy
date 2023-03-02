@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import delve from 'dlv';
@@ -138,4 +139,10 @@ export const useInfoToast = (title, description = '') => {
 
 export const useToast = (title, description = '') => {
   return toastFunc('default', title, description);
+};
+
+export const useHookForm = () => {
+  const methods = useFormContext();
+
+  return { ...methods };
 };

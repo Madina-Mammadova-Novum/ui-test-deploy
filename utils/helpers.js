@@ -134,3 +134,9 @@ export const updateFormats = (data = []) => {
     .join(', ')
     .replaceAll('.', '');
 };
+
+export function hasNestedArrays(data) {
+  const isNested = data.every((val) => Array.isArray(val));
+
+  return isNested;
+}

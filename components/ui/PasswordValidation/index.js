@@ -58,29 +58,30 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
   return (
     <div className={classnames('max-w-[612px]', customStyles)}>
       {title !== '' ?? <h3>{title}</h3>}
-      <div className="flex mt-4">
-        <div className="w-[296px]">
+      <div className="flex gap-5">
+        <div className="w-full w-[296px]">
           <PasswordInput
             submitCount={submitCount}
             register={register}
-            name="password"
+            name="user.password"
             label="chose password"
             placeholder="Enter your password"
             onChange={passwordValidation}
+            required
           />
           <PasswordInput
             submitCount={submitCount}
             register={register}
-            name="confirm_password"
+            name="user.confirm_password"
             label="confirm password"
             placeholder="Enter your password"
             customStyles="mt-4"
+            required
           />
         </div>
 
-        <div className="ml-5">
+        <div className="pl-0 md:pl-5">
           <h4 className="whitespace-nowrap">Password requirements</h4>
-
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
               <li className={classnames('flex items-center', index && 'mt-1.5')}>
