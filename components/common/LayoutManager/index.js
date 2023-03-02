@@ -1,16 +1,19 @@
 import React from 'react';
 
-import { ConcernLayout, PageLayout } from '@/layouts';
+import { PageLayout, SignupLayout } from '@/layouts';
 
-const layoutComponent = ({ type, pageData, meta, children }) => {
-  if (pageData === undefined) return null;
+const layoutComponent = ({ pageData, meta, children }) => {
   let Layout;
-  switch (type) {
+  switch (children.props.childProp.segment) {
     case 'page':
+    case 'negotiating':
+    case 'uikit':
       Layout = PageLayout;
       break;
-    case 'concern':
-      Layout = ConcernLayout;
+    case 'forgot-password':
+    case 'reset-password':
+    case 'signup':
+      Layout = SignupLayout;
       break;
     default:
       return null;

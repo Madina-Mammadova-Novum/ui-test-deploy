@@ -13,52 +13,53 @@ const initialState = [
   {
     text: 'At least 8 characters',
     isValidated: false,
+    expression: /^.{8,}/g,
   },
   {
     text: 'One lower case letter',
     isValidated: false,
+    expression: /[a-z]/g,
   },
   {
     text: 'One upper case letter',
     isValidated: false,
+    expression: /[A-Z]/g,
   },
   {
     text: 'At least one digit',
     isValidated: false,
+    expression: /\d/g,
   },
   {
     text: 'One special symbol',
     isValidated: false,
+    expression: /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g,
   },
 ];
 
 const PasswordValidation = ({ title, customStyles, submitCount }) => {
   const [validation, setValidation] = useState(initialState);
   const { register } = useFormContext();
-
   useEffect(() => {
     if (submitCount) setValidation(initialState);
   }, [submitCount]);
 
   const passwordValidation = (password) => {
-    const validationValues = [];
-    password.length >= 8 ? validationValues.push(true) : validationValues.push(false);
-    password.match(/[a-z]/g) ? validationValues.push(true) : validationValues.push(false);
-    password.match(/[A-Z]/g) ? validationValues.push(true) : validationValues.push(false);
-    password.match(/\d/g) ? validationValues.push(true) : validationValues.push(false);
-    password.match(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g)
-      ? validationValues.push(true)
-      : validationValues.push(false);
-    setValidation((prevValue) =>
-      prevValue.map((validationObject, index) => ({ ...validationObject, isValidated: validationValues[index] }))
+    setValidation((conditions) =>
+      conditions.map((validationObject) => {
+        return {
+          ...validationObject,
+          isValidated: password.match(validationObject.expression),
+        };
+      })
     );
   };
 
   return (
     <div className={classnames('max-w-[612px]', customStyles)}>
-      <h3>{title}</h3>
-      <div className="grid gap-5 grid-cols-1 md:grid-cols-2">
-        <div className="w-full md:w-[296px]">
+      {title !== '' ?? <h3>{title}</h3>}
+      <div className="flex gap-5">
+        <div className="w-full w-[296px]">
           <PasswordInput
             submitCount={submitCount}
             register={register}
@@ -66,6 +67,7 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
             label="chose password"
             placeholder="Enter your password"
             onChange={passwordValidation}
+            required
           />
           <PasswordInput
             submitCount={submitCount}
@@ -80,7 +82,6 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
 
         <div className="pl-0 md:pl-5">
           <h4 className="whitespace-nowrap">Password requirements</h4>
-
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
               <li className={classnames('flex items-center', index && 'mt-1.5')}>
@@ -98,10 +99,11 @@ const PasswordValidation = ({ title, customStyles, submitCount }) => {
 PasswordValidation.defaultProps = {
   customStyles: '',
   submitCount: 0,
+  title: '',
 };
 
 PasswordValidation.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   customStyles: PropTypes.string,
   submitCount: PropTypes.number,
 };

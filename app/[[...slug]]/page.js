@@ -7,8 +7,8 @@ const data = [
   { __component: 'form', id: 2 },
 ];
 
-/* 
-SPA: fetching 
+/*
+SPA: fetching
 
 1.add 'use client' for document
 2.inside of your page:
@@ -17,8 +17,8 @@ const ref = useRef(false);
 useFetchEffect(ref, fetchData);
 */
 
-/* 
-SSR: fetching 
+/*
+SSR: fetching
 
 1. remove 'use client' from document
 2. make your page as 'async'
@@ -29,7 +29,21 @@ const res = await getData();
 export default async function Home() {
   return (
     <section>
-      <Link href="/uikit">ui-kit</Link>
+      <ul>
+        <li>
+          <Link href="/uikit">ui-kit</Link>
+        </li>
+        <li>
+          <Link href="/forgot-password">forgot-password</Link>
+        </li>
+        <li>
+          <Link href="/reset-password">reset-password</Link>
+        </li>
+        <li>
+          <Link href="/signup">signup</Link>
+        </li>
+      </ul>
+
       {data && <BlockManager blocks={data} />}
     </section>
   );
