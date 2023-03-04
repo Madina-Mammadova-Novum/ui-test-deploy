@@ -8,6 +8,7 @@ function getPublicUrl(slug) {
  * @returns []
  */
 function getKeywords(string) {
+  if (string === undefined || string === null) return [];
   return string.split(',').map((item) => {
     return item.trim();
   });

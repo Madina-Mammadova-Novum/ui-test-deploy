@@ -205,8 +205,7 @@ export async function getCollectionTypesData(key) {
  * @returns {function(): number | string}
  */
 export function toastFunc(type, title, description = '') {
-  return () =>
-    toast(({ closeToast }) => (
-      <Alert variant={type} title={title} description={description} handleClose={closeToast} />
-    ));
+  toast(({ closeToast }) => {
+    return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
+  });
 }

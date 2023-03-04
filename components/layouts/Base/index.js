@@ -2,8 +2,8 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import 'react-toastify/dist/ReactToastify.css';
 import '@/styles/index.css';
+import { ClientSidePackages } from '@/common';
 
 const BaseLayout = ({ children }) => {
   return (
@@ -15,14 +15,14 @@ const BaseLayout = ({ children }) => {
       <head />
       <body className="max-w-screen-2lg">
         {children}
-        <div id="portal" />
+        <ClientSidePackages />
       </body>
     </html>
   );
 };
 
 BaseLayout.propTypes = {
-  children: PropTypes.shape({}).isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 
 export default BaseLayout;

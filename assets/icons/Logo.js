@@ -1,7 +1,12 @@
+'use client';
+
+// todo: need to render on the server side
+
 import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
+import { PALETTE, SIZES } from '@/lib';
 import { useColor } from '@/utils/hooks';
 
 const Logo = ({ width, height, className, contrasted, variant }) => {
@@ -162,16 +167,16 @@ const Logo = ({ width, height, className, contrasted, variant }) => {
 };
 
 Logo.defaultProps = {
-  width: 20,
-  height: 20,
+  width: SIZES.LOGO.width,
+  height: SIZES.LOGO.height,
   className: '',
-  fill: '#F9FBFC',
+  fill: PALETTE.COLORS.WHITE[100],
   variant: 'xl',
 };
 
 Logo.propTypes = {
-  width: PropTypes.string,
-  height: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
   fill: PropTypes.string,
   variant: PropTypes.oneOf(['xl', 'sm']),
   className: PropTypes.string,

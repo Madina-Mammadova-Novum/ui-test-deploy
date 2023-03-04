@@ -2,9 +2,9 @@
 // import CompanyAddresess from '@/modules/CompanyAddresess';
 // import CompanyDetails from '@/modules/CompanyDetails';
 // import FleetRowHeader from '@/modules/FleetRowHeader';
-// import ForgotPasswordBlock from '@/modules/ForgotPassword';
-// import Navbar from '@/modules/Navbar';
-import { PageHeader } from '@/modules/Header';
+import ForgotPassword from '@/modules/ForgotPassword';
+import { AuthHeader, PageHeader } from '@/modules/Header';
+import Navbar from '@/modules/Navbar';
 import Notification from '@/modules/Notification';
 // import PasswordValidation from '@/modules/PasswordValidation';
 // import PersonalDetails from '@/modules/PersonalDetails';
@@ -24,10 +24,10 @@ export {
   // PasswordValidation,
   // CompanyAddresess,
   // Sidebar,
-  // Navbar,
+  Navbar,
   // Upload,
   // Signup,
-  // ForgotPasswordBlock,
+  ForgotPassword,
   // ResetPasswordBlock,
   Notification,
   ProfileMenu,
@@ -38,4 +38,5 @@ export {
   // TermsAndConditions,
   // Seo,
   PageHeader,
+  AuthHeader,
 };

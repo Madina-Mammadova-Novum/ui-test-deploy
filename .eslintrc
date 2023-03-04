@@ -130,7 +130,8 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "react/require-default-props": "off"
   },
   "parser": "@typescript-eslint/parser",
   "overrides": [

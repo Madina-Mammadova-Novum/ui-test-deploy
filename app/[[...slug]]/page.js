@@ -1,6 +1,6 @@
-import Link from 'next/link';
-
 import { metaData } from '@/adapters/metaData';
+import { NextLink } from '@/elements';
+import { ROUTES } from '@/lib';
 import { getPage } from '@/services/page';
 // import { BlockManager } from "@/common";
 
@@ -12,21 +12,28 @@ export default async function Home({ params, searchParams }) {
   console.log({ params, searchParams });
   const { title, blocks } = await getPage(params);
   console.log({ blocks });
+
   return (
     <section>
       <h1>{title}</h1>
       <ul>
         <li>
-          <Link href="/uikit">ui-kit</Link>
+          <NextLink href="/uikit">ui-kit</NextLink>
         </li>
         <li>
-          <Link href="/forgot-password">forgot-password</Link>
+          <NextLink href={ROUTES.LOGIN}>LOGIN</NextLink>
         </li>
         <li>
-          <Link href="/reset-password">reset-password</Link>
+          <NextLink href={ROUTES.FORGOT_PASSWORD}>FORGOT_PASSWORD</NextLink>
         </li>
         <li>
-          <Link href="/signup">signup</Link>
+          <NextLink href={ROUTES.RESET_PASSWORD}>RESET_PASSWORD</NextLink>
+        </li>
+        <li>
+          <NextLink href={ROUTES.SIGNUP}>SIGNUP</NextLink>
+        </li>
+        <li>
+          <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink>
         </li>
       </ul>
 

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import delve from 'dlv';
 
-import { PALLETE } from '@/lib/constants';
+import { PALETTE } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -98,13 +98,13 @@ export function useDebounce(value, delay) {
 }
 
 export const useColor = () => {
-  const white = delve(PALLETE, 'COLORS.WHITE.DEFAULT');
-  const black = delve(PALLETE, 'COLORS.BLACK.DEFAULT');
-  const grey = delve(PALLETE, 'COLORS.GREY.DEFAULT');
-  const red = delve(PALLETE, 'COLORS.RED.DEFAULT');
-  const yellow = delve(PALLETE, 'COLORS.YELLOW.DEFAULT');
-  const green = delve(PALLETE, 'COLORS.GREEN.DEFAULT');
-  const blue = delve(PALLETE, 'COLORS.BLUE.DEFAULT');
+  const white = delve(PALETTE, 'COLORS.WHITE.DEFAULT');
+  const black = delve(PALETTE, 'COLORS.BLACK.DEFAULT');
+  const grey = delve(PALETTE, 'COLORS.GREY.DEFAULT');
+  const red = delve(PALETTE, 'COLORS.RED.DEFAULT');
+  const yellow = delve(PALETTE, 'COLORS.YELLOW.DEFAULT');
+  const green = delve(PALETTE, 'COLORS.GREEN.DEFAULT');
+  const blue = delve(PALETTE, 'COLORS.BLUE.DEFAULT');
 
   return {
     white,
@@ -123,7 +123,7 @@ export const useActiveColors = (isAcitve) => {
   return isAcitve ? white : grey;
 };
 
-export const useSuccessToast = (title, description = '') => {
+export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
 };
 

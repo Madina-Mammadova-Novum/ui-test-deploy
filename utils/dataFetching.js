@@ -24,7 +24,7 @@ export function fetchOptions(requestMethod, data = null) {
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
     options.body = JSON.stringify(data);
   }
-
+  console.log(options);
   return options;
 }
 
@@ -53,5 +53,13 @@ export function getData(path) {
   return apiHandler({
     url: getApiPublicURL(path),
     requestMethod: 'GET',
+  });
+}
+
+export function postData(path, data) {
+  return apiHandler({
+    url: getApiPublicURL(path),
+    requestMethod: 'POST',
+    data,
   });
 }

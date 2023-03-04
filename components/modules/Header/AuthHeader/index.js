@@ -1,37 +1,20 @@
-'use client';
+import PropTypes from 'prop-types';
 
-import { useCallback, useMemo } from 'react';
+import { navBarPropTypes } from '@/lib/types';
 
-import { usePathname, useRouter } from 'next/navigation';
-
-import { ROUTES } from '@/lib/constants';
 import { Navbar } from '@/modules';
 
-const AuthHeader = () => {
-  const pathName = usePathname();
-  const router = useRouter();
+const AuthHeader = ({ navigation }) => {
+  const { placeholder, cta, contrasted, path } = navigation;
+  return (
+    <header className="flex bg-transparent w-full fixed z-10 left-0 top-0 px-10">
+      <Navbar placeholder={placeholder} cta={cta} contrasted={contrasted} path={path} />
+    </header>
+  );
+};
 
-  const handleNavigate = useCallback(() => {
-    switch (pathName) {
-      case ROUTES.LOGIN:
-        return router.push(ROUTES.SIGNUP);
-      default:
-        return router.push(ROUTES.LOGIN);
-    }
-  }, [pathName, router]);
-
-  const printNav = useMemo(() => {
-    switch (pathName) {
-      case ROUTES.LOGIN:
-        return (
-          <Navbar placeholder="Don’t have an account?" cta="Registration" contrasted={false} onClick={handleNavigate} />
-        );
-      default:
-        return <Navbar placeholder="Already have an account?" cta="Log in" contrasted onClick={handleNavigate} />;
-    }
-  }, [handleNavigate, pathName]);
-
-  return <header className="flex bg-transparent w-full fixed z-10 left-0 top-0 px-10">{printNav}</header>;
+AuthHeader.propTypes = {
+  navigation: PropTypes.shape(navBarPropTypes).isRequired,
 };
 
 export default AuthHeader;

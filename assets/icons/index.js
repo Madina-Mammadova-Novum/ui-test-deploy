@@ -1,0 +1,12 @@
+export { default as ArrowIcon } from './Arrow';
+export { default as AcceptIcon } from '@/assets/icons/Accept';
+export { default as AnchorIcon } from '@/assets/icons/Anchor';
+export { default as CloseIcon } from '@/assets/icons/Close';
+export { default as FaqIcon } from '@/assets/icons/Faq';
+export { default as OfferIcon } from '@/assets/icons/Offer';
+export { default as PositionIcon } from '@/assets/icons/Position';
+export { default as InfoIcon } from '@/assets/icons/Info';
+export { default as SearchIcon } from '@/assets/icons/Search';
+export { default as FileIcon } from '@/assets/icons/File';
+export { default as Logo } from '@/assets/icons/Logo';
+export { default as UploadIcon } from '@/assets/icons/Upload';

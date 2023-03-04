@@ -1,27 +1,21 @@
 import React from 'react';
 
 import { metaData } from '@/adapters/metaData';
-import { ForgotPassword } from '@/modules';
 
 export async function generateMetadata({ params }) {
   // eslint-disable-next-line no-console
-  console.log({ params });
+  console.log({ temp: params });
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Forgot Password',
+        metaTitle: 'Login',
       },
     },
   });
 }
 
 const ForgotPasswordPage = () => {
-  return (
-    <ForgotPassword
-      title="Forgot your password?"
-      subtitle="Enter your email address and you will receive an email with password reset link"
-    />
-  );
+  return <h1>Login page content</h1>;
 };
 
 export default ForgotPasswordPage;
