@@ -8,7 +8,6 @@ import AccountInfoSVG from '@/assets/images/accountInfo.svg';
 import ArrowSVG from '@/assets/images/arrow.svg';
 import LogoutSVG from '@/assets/images/logout.svg';
 import { NextImage, NextLink } from '@/elements';
-import { noSSR } from '@/utils/helpers';
 
 const ProfileMenu = ({ image }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -24,7 +23,7 @@ const ProfileMenu = ({ image }) => {
       onClick={() => setShowProfileMenu(true)}
     >
       <div className="overflow-hidden h-10 w-10 rounded-[50%]">
-        <NextImage src={image} height={40} width={40} />
+        <NextImage src={image} height={40} width={40} alt="some_alt" />
       </div>
       <div className="flex items-center mx-2.5">
         <span>Some text</span>
@@ -57,4 +56,4 @@ ProfileMenu.propTypes = {
   image: PropTypes.string.isRequired,
 };
 
-export default noSSR(ProfileMenu);
+export default ProfileMenu;

@@ -1,34 +1,20 @@
 import Link from 'next/link';
 
-import { BlockManager } from '@/common';
+import { metaData } from '@/adapters/metaData';
+import { getPage } from '@/services/page';
+// import { BlockManager } from "@/common";
 
-const data = [
-  { __component: 'map', id: 1 },
-  { __component: 'form', id: 2 },
-];
-
-/*
-SPA: fetching
-
-1.add 'use client' for document
-2.inside of your page:
-
-const ref = useRef(false);
-useFetchEffect(ref, fetchData);
-*/
-
-/*
-SSR: fetching
-
-1. remove 'use client' from document
-2. make your page as 'async'
-
-const res = await getData();
-*/
-
-export default async function Home() {
+export async function generateMetadata({ params }) {
+  const data = await getPage(params);
+  return metaData({ data });
+}
+export default async function Home({ params, searchParams }) {
+  console.log({ params, searchParams });
+  const { title, blocks } = await getPage(params);
+  console.log({ blocks });
   return (
     <section>
+      <h1>{title}</h1>
       <ul>
         <li>
           <Link href="/uikit">ui-kit</Link>
@@ -44,7 +30,7 @@ export default async function Home() {
         </li>
       </ul>
 
-      {data && <BlockManager blocks={data} />}
+      {/* {blocks && <BlockManager blocks={blocks} />} */}
     </section>
   );
 }

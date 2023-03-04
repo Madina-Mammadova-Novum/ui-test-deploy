@@ -3,12 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { BaseLayout } from '@/layouts';
-import { PageHeader } from '@/modules/Header';
+import { PageHeader } from '@/modules';
 
 const PageLayout = ({ children }) => {
   return (
     <BaseLayout>
-      {/* <Header /> */}
       <div className="ml-auto">
         <PageHeader />
         {children}

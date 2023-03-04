@@ -15,7 +15,7 @@ const Notification = ({ numberOfNotifications }) => {
 };
 
 Notification.propTypes = {
-  numberOfNotifications: PropTypes.oneOf([PropTypes.number, PropTypes.string]).isRequired,
+  numberOfNotifications: PropTypes.number.isRequired,
 };
 
 export default Notification;

@@ -26,7 +26,6 @@
       "@/services/*": ["services/*"],
       "@/store": ["store/store"],
       "@/store/*": ["store/*"],
-      "@/styles": ["assets/styles/index.css"],
       "@/styles/*": ["assets/styles/*"],
       "@/units": ["components/units/index"],
       "@/units/*": ["components/units/*"],
