@@ -5,3 +5,12 @@ export function forgotPasswordAdapter({ data }) {
     email,
   };
 }
+
+export function resetPasswordAdapter({ data }) {
+  if (data === null) return null;
+  const { password, confirmPassword } = data;
+  return {
+    password,
+    confirmPassword,
+  };
+}

@@ -7,7 +7,9 @@ import { SIZES } from '@/lib';
 const Navbar = ({ placeholder, cta, path, contrasted }) => {
   return (
     <nav className="flex w-full justify-between items-center bg-white 3sm:bg-transparent">
-      <Logo variant="xl" width={SIZES.LOGO.width} height={SIZES.LOGO.height} contrasted={contrasted} />
+      <NextLink href="/">
+        <Logo variant="xl" width={SIZES.LOGO.width} height={SIZES.LOGO.height} contrasted={contrasted} />
+      </NextLink>
       <ul className="relative flex items-center gap-5 w-3/5 bg-white justify-end py-1.5">
         <li>
           <p>{placeholder}</p>

@@ -1,3 +1,3 @@
-import ForgotPasswordForm from '@/units/ForgotPasswordForm';
+import PasswordValidation from '@/units/PasswordValidation';
 
-export { ForgotPasswordForm };
+export { PasswordValidation };

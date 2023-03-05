@@ -1,19 +1,29 @@
-'use client';
-
 import React from 'react';
 
-import AuthLayout from '@/layouts/AuthLayout';
-import { ResetPasswordBlock } from '@/modules';
+import { metaData } from '@/adapters/metaData';
+import { AuthWrapper, ResetPasswordForm } from '@/modules';
 
-const ResetPassword = () => {
+export async function generateMetadata({ params }) {
+  // eslint-disable-next-line no-console
+  console.log({ params });
+  return metaData({
+    data: {
+      seo: {
+        metaTitle: 'Reset Password',
+      },
+    },
+  });
+}
+
+const ResetPasswordPage = () => {
   return (
-    <AuthLayout>
-      <ResetPasswordBlock
-        title="Reset your password"
-        subtitle="Pick and set a new password for your account and you’re good to go!"
-      />
-    </AuthLayout>
+    <AuthWrapper
+      title="Reset your password"
+      subtitle="Pick and set a new password for your account and you’re good to go!"
+    >
+      <ResetPasswordForm />
+    </AuthWrapper>
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordPage;

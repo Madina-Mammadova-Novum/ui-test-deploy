@@ -2,33 +2,30 @@
 // import CompanyAddresess from '@/modules/CompanyAddresess';
 // import CompanyDetails from '@/modules/CompanyDetails';
 // import FleetRowHeader from '@/modules/FleetRowHeader';
-import ForgotPassword from '@/modules/ForgotPassword';
+import AuthWrapper from '@/modules/AuthWrapper';
+import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
 import Navbar from '@/modules/Navbar';
 import Notification from '@/modules/Notification';
-// import PasswordValidation from '@/modules/PasswordValidation';
 // import PersonalDetails from '@/modules/PersonalDetails';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
-// import ResetPasswordBlock from '@/modules/ResetPassword';
 // import Seo from '@/modules/Seo';
 // import Sidebar from '@/modules/Sidebar/Sidebar';
 // import Signup from '@/modules/Signup';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
 // import Upload from '@/modules/Upload';
+import ResetPasswordForm from '@/modules/ResetPasswordForm';
 
 export {
   // RadioWithText,
   // FleetRowHeader,
-  // PasswordValidation,
   // CompanyAddresess,
   // Sidebar,
   Navbar,
   // Upload,
   // Signup,
-  ForgotPassword,
-  // ResetPasswordBlock,
   Notification,
   ProfileMenu,
   // PersonalDetails,
@@ -39,4 +36,7 @@ export {
   // Seo,
   PageHeader,
   AuthHeader,
+  AuthWrapper,
+  ForgotPasswordForm,
+  ResetPasswordForm,
 };

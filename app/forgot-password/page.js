@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { metaData } from '@/adapters/metaData';
-import { ForgotPassword } from '@/modules';
+import { AuthWrapper, ForgotPasswordForm } from '@/modules';
 
 export async function generateMetadata({ params }) {
   // eslint-disable-next-line no-console
@@ -17,10 +17,12 @@ export async function generateMetadata({ params }) {
 
 const ForgotPasswordPage = () => {
   return (
-    <ForgotPassword
+    <AuthWrapper
       title="Forgot your password?"
       subtitle="Enter your email address and you will receive an email with password reset link"
-    />
+    >
+      <ForgotPasswordForm />
+    </AuthWrapper>
   );
 };
 

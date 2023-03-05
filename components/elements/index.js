@@ -12,7 +12,7 @@ import Button from '@/elements/Button';
 // import { ChartererForm, Form, OwnerForm } from '@/elements/Forms';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
-// import PasswordInput from '@/elements/Input/PasswordInput';
+import PasswordInput from '@/elements/Input/PasswordInput';
 // import PhoneInput from '@/elements/Input/PhoneInput';
 // import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
@@ -53,7 +53,7 @@ export {
   // File,
   // Pagination,
   // Tabs,
-  // PasswordInput,
+  PasswordInput,
   // Portal,
   // Modal,
   // SignupForm,
