@@ -38,7 +38,6 @@ const ResetPasswordForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log({ data });
     setButtonDisabled(true);
     const { message } = await resetPassword({ data });
     successToast(message, 'Some description');
