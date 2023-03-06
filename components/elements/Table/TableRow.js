@@ -23,8 +23,12 @@ const TableRow = ({ rowData }) => {
   );
 };
 
+TableRow.defaultProps = {
+  rowData: [],
+};
+
 TableRow.propTypes = {
-  rowData: PropTypes.shape([]).isRequired,
+  rowData: PropTypes.shape([]),
 };
 
 export default noSSR(TableRow);

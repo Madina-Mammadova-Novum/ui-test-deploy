@@ -1,6 +1,6 @@
 'use client';
 
-import { NegotiatingUi , Sidebar } from '@/ui';
+import { NegotiatingUi, Sidebar } from '@/ui';
 import { sidebarData } from '@/utils/mock';
 
 const Negotiating = () => {

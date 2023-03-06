@@ -15,6 +15,7 @@ import Sidebar from '@/ui/Sidebar/Sidebar';
 import Signup from '@/ui/Signup';
 import SlotsDetails from '@/ui/SlotsDetails';
 import TermsAndConditions from '@/ui/Terms&Conditions';
+import ToggleRows from '@/ui/ToggleRows';
 import Upload from '@/ui/Upload';
 
 export {
@@ -36,4 +37,5 @@ export {
   AddressDetails,
   NegotiatingUi,
   TermsAndConditions,
+  ToggleRows,
 };

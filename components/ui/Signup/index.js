@@ -34,12 +34,7 @@ const Signup = ({ containerClass }) => {
     <div className={containerClass}>
       <h1 className="text-lg text-black font-bold">Registration</h1>
       <Step title="Step #1: Choose who you are" containerClass="flex flex-col pt-5 gap-5">
-        <Tabs
-          tabs={signUpTab?.tabs}
-          activeTab={role}
-          defaultTab={role}
-          onClick={(value) => handleActiveTab(value)}
-        />
+        <Tabs tabs={signUpTab?.tabs} activeTab={role} defaultTab={role} onClick={(value) => handleActiveTab(value)} />
       </Step>
       <FormManager options={signupOptions({ sameAddress, isNested })}>{printForm}</FormManager>
     </div>

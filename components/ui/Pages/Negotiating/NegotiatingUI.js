@@ -5,14 +5,13 @@ import React, { useState } from 'react';
 import FleetRowHeader from '../../FleetRowHeader';
 import NegotiatingExpandedData from './NegotiatingExpandedData';
 
-import DoubleArrowSVG from '@/assets/images/doubleArrow.svg';
-import { Button, ExpandableRow, Pagination, SimpleSelect } from '@/elements';
+import { ExpandableRow, Pagination, SimpleSelect } from '@/elements';
+import ToggleRows from '@/ui/ToggleRows';
 import { noSSR } from '@/utils/helpers';
 import { negotiatingExpandableRowHeader } from '@/utils/mock';
 
-
 const NegotiatingUi = () => {
-  const [expandAll, setExpandAll] = useState(false);
+  const [expandAll, setExpandAll] = useState({ value: false });
   const [pagination, setPagination] = useState({
     offersPerPage: 5,
     currentPage: 1,
@@ -23,24 +22,10 @@ const NegotiatingUi = () => {
         <div className="uppercase text-[10px] text-gray font-bold">offer stage #1</div>
         <div className="flex justify-between items-center">
           <h1>Negotiating</h1>
-          <div className="flex">
-            <button
-              type="button"
-              className="flex gap-x-2.5 text-blue text-xsm pr-5 border-r border-gray-darker"
-              onClick={() => setExpandAll({ value: true })}
-            >
-              <DoubleArrowSVG />
-              <Button buttonProps={{ text: 'Expand all groups', variant: 'primary', size: 'small' }} />
-            </button>
-            <button
-              type="button"
-              className="flex gap-x-2.5 text-xsm pl-4"
-              onClick={() => setExpandAll({ value: false })}
-            >
-              <DoubleArrowSVG />
-              <Button buttonProps={{ text: 'Collapse all groups', variant: 'primary', size: 'small' }} />
-            </button>
-          </div>
+          <ToggleRows
+            onExpandClick={() => setExpandAll({ value: true })}
+            onCollapseClick={() => setExpandAll({ value: false })}
+          />
         </div>
       </div>
 
