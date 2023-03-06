@@ -42,7 +42,7 @@ const PasswordValidation = ({ title, customStyles }) => {
   const [password, setPassword] = useState();
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useFormContext();
   const [comparisonError, setComparisonError] = useState(null);
 
@@ -84,6 +84,7 @@ const PasswordValidation = ({ title, customStyles }) => {
             label="Chose password"
             placeholder="Enter your password"
             error={passwordError?.message}
+            disabled={isSubmitting}
             onChange={passwordValidation}
           />
           <PasswordInput
@@ -91,6 +92,7 @@ const PasswordValidation = ({ title, customStyles }) => {
             label="Confirm password"
             placeholder="Enter your password"
             error={comparisonError !== null ? comparisonError : confirmPasswordError?.message}
+            disabled={isSubmitting}
             onChange={passwordComparison}
             customStyles="mt-4"
           />

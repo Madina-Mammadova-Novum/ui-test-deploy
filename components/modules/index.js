@@ -8,15 +8,16 @@ import { AuthHeader, PageHeader } from '@/modules/Header';
 import Navbar from '@/modules/Navbar';
 import Notification from '@/modules/Notification';
 // import PersonalDetails from '@/modules/PersonalDetails';
+import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
 // import Sidebar from '@/modules/Sidebar/Sidebar';
-// import Signup from '@/modules/Signup';
+import ResetPasswordForm from '@/modules/ResetPasswordForm';
+import Signup from '@/modules/Signup';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
 // import Upload from '@/modules/Upload';
-import ResetPasswordForm from '@/modules/ResetPasswordForm';
 
 export {
   // RadioWithText,
@@ -25,7 +26,7 @@ export {
   // Sidebar,
   Navbar,
   // Upload,
-  // Signup,
+  Signup,
   Notification,
   ProfileMenu,
   // PersonalDetails,
@@ -39,4 +40,5 @@ export {
   AuthWrapper,
   ForgotPasswordForm,
   ResetPasswordForm,
+  OwnerRegistrationForm,
 };

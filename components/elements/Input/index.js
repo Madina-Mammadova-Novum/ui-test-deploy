@@ -3,6 +3,8 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
+import { InputErrorMessage } from '@/elements';
+
 const Input = React.forwardRef(
   (
     {
@@ -44,7 +46,7 @@ const Input = React.forwardRef(
           />
           {icon && <span className="ml-2.5">{icon}</span>}
         </div>
-        {error && <p className="text-[12px] text-red">{error}</p>}
+        {error && <InputErrorMessage message={error} />}
         {helperText && <p className="text-[12px]">{helperText}</p>}
       </div>
     );

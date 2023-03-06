@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,21 +16,18 @@ const schema = yup
   .required();
 
 const ForgotPasswordForm = () => {
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
-    setButtonDisabled(true);
     const { message } = await forgotPassword({ data });
     successToast(message, 'Some description');
     reset();
-    setButtonDisabled(false);
   };
 
   return (
@@ -42,17 +38,17 @@ const ForgotPasswordForm = () => {
         placeholder="Enter your email"
         customStyles="mt-4"
         type="email"
-        disabled={buttonDisabled}
+        disabled={isSubmitting}
         error={errors.email?.message}
       />
       <Button
         type="submit"
         buttonProps={{
-          text: buttonDisabled ? 'Please wait...' : 'Get a new password',
-          variant: buttonDisabled ? 'secondary' : 'primary',
+          text: isSubmitting ? 'Please wait...' : 'Get a new password',
+          variant: isSubmitting ? 'secondary' : 'primary',
           size: 'large',
         }}
-        disabled={buttonDisabled}
+        disabled={isSubmitting}
         customStyles="mt-4 w-full"
       />
     </form>

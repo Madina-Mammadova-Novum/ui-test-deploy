@@ -13,7 +13,8 @@ import Button from '@/elements/Button';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
 import PasswordInput from '@/elements/Input/PasswordInput';
-// import PhoneInput from '@/elements/Input/PhoneInput';
+import PhoneInput from '@/elements/Input/PhoneInput';
+import InputErrorMessage from '@/elements/InputErrorMessage';
 // import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
@@ -31,7 +32,8 @@ import NextLink from '@/elements/NextLink';
 
 export {
   Input,
-  // PhoneInput,
+  PhoneInput,
+  InputErrorMessage,
   // TextArea,
   Button,
   // Accordion,
