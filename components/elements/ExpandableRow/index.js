@@ -1,12 +1,18 @@
-import React, { cloneElement, useRef, useState } from 'react';
+import React, { cloneElement, useEffect, useRef, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const ExpandableRow = ({ headerComponent, children }) => {
+import { noSSR } from '@/utils/helpers';
+
+const ExpandableRow = ({ headerComponent, children, expandAll }) => {
   const [toggle, setToggle] = useState(false);
   const contentRef = useRef(null);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
+
+  useEffect(() => {
+    setToggle(expandAll.value);
+  }, [expandAll]);
   return (
     <div className="rounded-[10px] shadow-xmd box-border px-6">
       <button type="button" className="w-full" onClick={() => setToggle((prevValue) => !prevValue)}>
@@ -25,9 +31,18 @@ const ExpandableRow = ({ headerComponent, children }) => {
   );
 };
 
+ExpandableRow.defaultProps = {
+  expandAll: {
+    value: false,
+  },
+};
+
 ExpandableRow.propTypes = {
   headerComponent: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
+  expandAll: PropTypes.shape({
+    value: PropTypes.string,
+  }),
 };
 
-export default ExpandableRow;
+export default noSSR(ExpandableRow);

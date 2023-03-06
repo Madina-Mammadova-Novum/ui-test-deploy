@@ -5,6 +5,7 @@ import FleetRowHeader from '@/ui/FleetRowHeader';
 import ForgotPasswordBlock from '@/ui/ForgotPassword';
 import Navbar from '@/ui/Navbar';
 import Notification from '@/ui/Notification';
+import NegotiatingUi from '@/ui/Pages/Negotiating/NegotiatingUI';
 import PasswordValidation from '@/ui/PasswordValidation';
 import PersonalDetails from '@/ui/PersonalDetails';
 import ProfileMenu from '@/ui/ProfileMenu';
@@ -32,4 +33,5 @@ export {
   CompanyDetails,
   TankerDetails,
   AddressDetails,
+  NegotiatingUi,
 };

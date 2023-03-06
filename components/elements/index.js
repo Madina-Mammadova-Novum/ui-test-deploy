@@ -9,7 +9,6 @@ import Dropdown from '@/elements/Dropdown';
 import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
-// import SignupForm from '@/elements/Forms/Signup/SignupForm';
 import OwnerForm from '@/elements/Forms/OwnerForm';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
@@ -22,6 +21,8 @@ import Pagination from '@/elements/Pagination';
 import Portal from '@/elements/Portal';
 import RadioButton from '@/elements/RadioButton';
 import RangeDatePicker from '@/elements/RangeDatePicker';
+import SimpleSelect from '@/elements/SimpleSelect';
+import StatusIndicator from '@/elements/StatusIndicator';
 import Step from '@/elements/Step';
 import Table from '@/elements/Table';
 import Tabs from '@/elements/Tabs';
@@ -57,9 +58,10 @@ export {
   PasswordInput,
   Portal,
   Modal,
-  // SignupForm,
   HoverableIcon,
   NextLink,
   Step,
   OwnerForm,
+  StatusIndicator,
+  SimpleSelect,
 };

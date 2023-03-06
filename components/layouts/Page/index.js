@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { PageHeader } from '@/common';
+import { PageFooter, PageHeader } from '@/common';
 import { BaseLayout } from '@/layouts';
 
 const PageLayout = ({ children }) => {
@@ -12,7 +12,7 @@ const PageLayout = ({ children }) => {
       <div className="ml-auto">
         <PageHeader />
         {children}
-        <footer className="fixed right-0 bottom-0 h-10 w-[calc(100vw-256px)] shadow-xmd">footer</footer>
+        <PageFooter />
       </div>
     </BaseLayout>
   );
