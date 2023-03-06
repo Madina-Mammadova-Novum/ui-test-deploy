@@ -57,7 +57,7 @@ const Dropdown = ({ onChange, name, control, label, id, dropdownOptions, error }
   const renderOption = ({ countryFlag, value }) => <OptionRow countryFlag={countryFlag} value={value} />;
 
   return (
-    <div className="relative bottom-1.5">
+    <div className="relative bottom-0.5">
       <label htmlFor={id} className="text-[12px] text-gray font-semibold uppercase">
         {label}
       </label>

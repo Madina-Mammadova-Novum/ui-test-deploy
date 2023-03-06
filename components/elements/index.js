@@ -9,7 +9,7 @@ import Dropdown from '@/elements/Dropdown';
 import Dropzone from '@/elements/Dropzone';
 import ExpandableRow from '@/elements/ExpandableRow';
 import File from '@/elements/File';
-import OwnerForm from '@/elements/Forms/OwnerForm';
+import { ChartererForm, Form, OwnerForm } from '@/elements/Forms';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
 import PasswordInput from '@/elements/Input/PasswordInput';
@@ -61,7 +61,9 @@ export {
   HoverableIcon,
   NextLink,
   Step,
+  Form,
   OwnerForm,
   StatusIndicator,
   SimpleSelect,
+  ChartererForm,
 };

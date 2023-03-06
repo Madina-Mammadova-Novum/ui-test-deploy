@@ -4,17 +4,15 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { FormManager } from '@/common';
-import { OwnerForm, Step, Tabs } from '@/elements';
+import { ChartererForm, OwnerForm, Step, Tabs } from '@/elements';
 import { setRole } from '@/store/entities/signup/slice';
 import { useSignupSelector } from '@/store/selectors';
-import { options } from '@/utils/formOptions';
+import { signupOptions } from '@/utils/formOptions';
 import { signUpTab } from '@/utils/mock';
 
 const Signup = ({ containerClass }) => {
   const dispatch = useDispatch();
-  const { role } = useSignupSelector();
-
-  const { signup } = options;
+  const { role, sameAddress, isNested } = useSignupSelector();
 
   const handleActiveTab = useCallback(
     (value) => {
@@ -23,19 +21,10 @@ const Signup = ({ containerClass }) => {
     [dispatch]
   );
 
-  const setFormOptions = useMemo(() => {
-    switch (role) {
-      case 'charterer':
-        return signup.charterer;
-      default:
-        return signup.owner;
-    }
-  }, [role, signup.charterer, signup.owner]);
-
   const printForm = useMemo(() => {
     switch (role) {
       case 'charterer':
-        return null;
+        return <ChartererForm />;
       default:
         return <OwnerForm />;
     }
@@ -49,10 +38,10 @@ const Signup = ({ containerClass }) => {
           tabs={signUpTab?.tabs}
           activeTab={role}
           defaultTab={role}
-          onClick={({ target }) => handleActiveTab(target?.value)}
+          onClick={(value) => handleActiveTab(value)}
         />
       </Step>
-      <FormManager options={setFormOptions}>{printForm}</FormManager>
+      <FormManager options={signupOptions({ sameAddress, isNested })}>{printForm}</FormManager>
     </div>
   );
 };
