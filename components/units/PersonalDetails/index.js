@@ -32,9 +32,9 @@ const PersonalDetails = () => {
           {...register('email')}
           label="Email"
           placeholder="Enter your email"
-          type="email"
           error={errors.email?.message}
           disabled={isSubmitting}
+          type="email"
         />
       </div>
       <div className="flex flex-col gap-5">
