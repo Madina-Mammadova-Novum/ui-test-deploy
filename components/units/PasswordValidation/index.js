@@ -40,11 +40,11 @@ const initialState = [
 const PasswordValidation = ({ title, customStyles }) => {
   const [validation, setValidation] = useState(initialState);
   const [password, setPassword] = useState();
+  const [comparisonError, setComparisonError] = useState(null);
   const {
     register,
     formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useFormContext();
-  const [comparisonError, setComparisonError] = useState(null);
 
   const { password: passwordError, confirmPassword: confirmPasswordError } = errors;
 
