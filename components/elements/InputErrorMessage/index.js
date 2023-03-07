@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-const InputErrorMessage = (message) => {
+const InputErrorMessage = ({ message }) => {
   return <p className="text-[12px] text-red">{message}</p>;
 };
 
