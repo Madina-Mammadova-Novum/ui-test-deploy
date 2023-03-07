@@ -1,4 +1,5 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
+
 import { Input } from '@/elements';
 
 const CompanyDetails = () => {

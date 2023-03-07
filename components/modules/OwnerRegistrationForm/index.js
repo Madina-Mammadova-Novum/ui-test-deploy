@@ -8,7 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 // import { signupSumbitAdapter } from '@/adapters/signupSubmitAdapter';
 import { Button } from '@/elements';
 import { resetPassword } from '@/services/user';
-import { CompanyDetails, PersonalDetails, Step } from "@/units";
+import { CompanyDetails, PersonalDetails, Step } from '@/units';
 import { successToast } from '@/utils/hooks';
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import { signupSubmit } from '@/services/signup';
