@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { signupSchema } from '@/lib';
+import { loginSchema, signupSchema } from '@/lib';
 
 export const signupOptions = (params) => ({
-  mode: 'onChange',
+  mode: 'onBlur',
   defaultValues: {
     user: {
       name: '',
@@ -46,4 +46,13 @@ export const signupOptions = (params) => ({
     },
   },
   resolver: yupResolver(signupSchema(params)),
+});
+
+export const loginOptions = () => ({
+  mode: 'onBlur',
+  defaultValues: {
+    email: '',
+    password: '',
+  },
+  resolver: yupResolver(loginSchema()),
 });

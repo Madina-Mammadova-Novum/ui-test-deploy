@@ -8,11 +8,9 @@ import { PageHeader } from '@/modules';
 const PageLayout = ({ children }) => {
   return (
     <BaseLayout>
-      <div className="ml-auto">
-        <PageHeader />
-        {children}
-        <footer className="fixed right-0 bottom-0 h-10 w-[calc(100vw-256px)] shadow-xmd">footer</footer>
-      </div>
+      <PageHeader />
+      {children}
+      <footer className="relative right-0 top-0 w-full ml-auto shadow-xmd py-2 px-5">footer</footer>
     </BaseLayout>
   );
 };

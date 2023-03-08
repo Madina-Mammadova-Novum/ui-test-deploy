@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import '@/styles/index.css';
 import { ClientSidePackages } from '@/common';
 
-const BaseLayout = ({ children }) => {
+const BaseLayout = ({ children, className }) => {
   return (
     <html lang="en">
       {/*
@@ -13,7 +13,7 @@ const BaseLayout = ({ children }) => {
         head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="max-w-screen-2lg">
+      <body className={`${className} max-w-screen-2lg min-h-screen flex flex-col`}>
         {children}
         <ClientSidePackages />
       </body>
@@ -21,7 +21,12 @@ const BaseLayout = ({ children }) => {
   );
 };
 
+BaseLayout.defaultProps = {
+  className: '',
+};
+
 BaseLayout.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 

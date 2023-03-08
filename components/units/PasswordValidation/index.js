@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import TickInCircleSVG from '@/assets/images/tickInCircle.svg';
-import { PasswordInput } from '@/elements';
+import { PasswordInput, Title } from '@/elements';
 
 const initialState = [
   {
@@ -75,10 +75,10 @@ const PasswordValidation = ({ title, customStyles }) => {
   };
 
   return (
-    <div className={classnames('max-w-[612px]', customStyles)}>
-      {title !== '' ?? <h3>{title}</h3>}
+    <div className={classnames(customStyles, 'pt-4')}>
+      {title !== '' ?? <Title component="h3">{title}</Title>}
       <div className="flex gap-5">
-        <div className="w-full w-[296px]">
+        <div className="w-full">
           <PasswordInput
             {...register('password')}
             label="Chose password"

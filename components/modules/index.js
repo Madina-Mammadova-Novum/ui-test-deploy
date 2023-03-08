@@ -5,6 +5,7 @@
 import AuthWrapper from '@/modules/AuthWrapper';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
+import LoginForm from '@/modules/LoginForm';
 import Navbar from '@/modules/Navbar';
 import Notification from '@/modules/Notification';
 // import PersonalDetails from '@/modules/PersonalDetails';
@@ -38,6 +39,7 @@ export {
   PageHeader,
   AuthHeader,
   AuthWrapper,
+  LoginForm,
   ForgotPasswordForm,
   ResetPasswordForm,
   OwnerRegistrationForm,
