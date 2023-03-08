@@ -21,6 +21,8 @@ import Pagination from '@/elements/Pagination';
 import Portal from '@/elements/Portal';
 import RadioButton from '@/elements/RadioButton';
 import RangeDatePicker from '@/elements/RangeDatePicker';
+import SimpleSelect from '@/elements/SimpleSelect';
+import StatusIndicator from '@/elements/StatusIndicator';
 import Step from '@/elements/Step';
 import Table from '@/elements/Table';
 import Tabs from '@/elements/Tabs';
@@ -56,11 +58,12 @@ export {
   PasswordInput,
   Portal,
   Modal,
-  // SignupForm,
   HoverableIcon,
   NextLink,
   Step,
   Form,
   OwnerForm,
+  StatusIndicator,
+  SimpleSelect,
   ChartererForm,
 };

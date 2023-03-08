@@ -5,6 +5,7 @@ import FleetRowHeader from '@/ui/FleetRowHeader';
 import ForgotPasswordBlock from '@/ui/ForgotPassword';
 import Navbar from '@/ui/Navbar';
 import Notification from '@/ui/Notification';
+import NegotiatingUi from '@/ui/Pages/Negotiating/NegotiatingUI';
 import PasswordValidation from '@/ui/PasswordValidation';
 import PersonalDetails from '@/ui/PersonalDetails';
 import ProfileMenu from '@/ui/ProfileMenu';
@@ -14,6 +15,7 @@ import Sidebar from '@/ui/Sidebar/Sidebar';
 import Signup from '@/ui/Signup';
 import SlotsDetails from '@/ui/SlotsDetails';
 import TermsAndConditions from '@/ui/Terms&Conditions';
+import ToggleRows from '@/ui/ToggleRows';
 import Upload from '@/ui/Upload';
 
 export {
@@ -33,5 +35,7 @@ export {
   CompanyDetails,
   SlotsDetails,
   AddressDetails,
+  NegotiatingUi,
   TermsAndConditions,
+  ToggleRows,
 };

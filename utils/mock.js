@@ -1,6 +1,6 @@
 import usFlag from '@/assets/images/flag.png';
 
-export const fleetsHeader = [
+export const fleetsTableHeader = [
   {
     text: '#',
   },
@@ -19,6 +19,203 @@ export const fleetsHeader = [
   {
     text: 'tanker status',
   },
+];
+
+export const negotiatingIncomingTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'status',
+  },
+  {
+    text: 'date received',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingCounterofferTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'date sent',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+export const negotiatingFailedTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'date failed',
+  },
+  {
+    text: 'reason',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingExpandableRowHeader = [
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
 ];
 
 export const fleetsTableRow = [
@@ -66,6 +263,207 @@ export const fleetsTableRow = [
     },
     {
       toggle: true,
+    },
+  ],
+];
+
+export const negotiatingIncomingTableRow = [
+  [
+    {
+      text: '1',
+    },
+    {
+      text: 'QW1122',
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'New offer',
+      status: 'new',
+      semibold: true,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: ['View offer'],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      text: 'QW1122',
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Counteroffer',
+      status: 'counteroffer',
+      semibold: true,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: ['View offer'],
+    },
+  ],
+];
+export const negotiatingCounterofferTableRow = [
+  [
+    {
+      text: '1',
+    },
+    {
+      text: 'AS5566',
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: ['View counteroffer'],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      text: 'QW1122',
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: ['View counteroffer'],
+    },
+  ],
+];
+export const negotiatingFailedTableRow = [
+  [
+    {
+      text: '1',
+    },
+    {
+      text: 'ZX9988',
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Offer timed out',
+      semibold: true,
+    },
+    {
+      actions: ['View failed offer'],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      text: 'QW1122',
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Offer declined by me',
+      semibold: true,
+    },
+    {
+      actions: ['View failed offer'],
     },
   ],
 ];
@@ -171,3 +569,18 @@ export const signUpTab = {
     },
   ],
 };
+
+export const expandedNegotiatingRowTabs = [
+  {
+    value: 'incoming',
+    label: 'Incoming',
+  },
+  {
+    value: 'counteroffers',
+    label: 'Sent counteroffers',
+  },
+  {
+    value: 'failed',
+    label: 'Failed',
+  },
+];

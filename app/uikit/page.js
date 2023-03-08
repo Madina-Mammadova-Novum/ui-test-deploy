@@ -26,7 +26,7 @@ import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
 import { FleetRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
-import { fleetsHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
+import { fleetsTableHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
 const UiKit = () => {
   const [modal, setModal] = useState(false);
@@ -159,7 +159,7 @@ const UiKit = () => {
       {/* Expandable row */}
 
       <ExpandableRow headerComponent={<FleetRowHeader />}>
-        <Table headerData={fleetsHeader} rows={fleetsTableRow} />
+        <Table headerData={fleetsTableHeader} rows={fleetsTableRow} />
       </ExpandableRow>
       <br />
 

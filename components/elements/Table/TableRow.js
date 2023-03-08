@@ -6,15 +6,29 @@ import { noSSR } from '@/utils/helpers';
 const TableRow = ({ rowData }) => {
   return (
     <tr>
-      {rowData.map(({ countryFlag, text, action, toggle, badge }) => (
-        <TableCell countryFlag={countryFlag} text={text} action={action} toggle={toggle} badge={badge} />
+      {rowData.map(({ countryFlag, text, actions, toggle, badge, status, timer, semibold, color }) => (
+        <TableCell
+          countryFlag={countryFlag}
+          text={text}
+          actions={actions}
+          toggle={toggle}
+          badge={badge}
+          status={status}
+          timer={timer}
+          semibold={semibold}
+          color={color}
+        />
       ))}
     </tr>
   );
 };
 
+TableRow.defaultProps = {
+  rowData: [],
+};
+
 TableRow.propTypes = {
-  rowData: PropTypes.shape([]).isRequired,
+  rowData: PropTypes.shape([]),
 };
 
 export default noSSR(TableRow);

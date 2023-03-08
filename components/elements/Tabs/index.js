@@ -2,13 +2,14 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const Tabs = ({ tabs, customStyles, activeTab, defaultTab, onClick }) => {
+  const handleClick = (value) => onClick(value);
   return (
     <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
       {tabs.map(({ value, label }) => (
         <button
           type="button"
           value={value}
-          onClick={onClick}
+          onClick={() => handleClick(value)}
           className={classnames(
             'whitespace-nowrap min-w-16 w-full h-7 px-5 rounded-md',
             value === (activeTab || defaultTab) && 'bg-white text-blue shadow-2xmd'
