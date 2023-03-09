@@ -1,17 +1,38 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
-const FormManager = ({ children, options }) => {
-  const methods = useForm(options);
+import { Form } from '@/elements';
 
-  return <FormProvider {...methods}>{children}</FormProvider>;
+const FormManager = ({ children, submitAction, submitProps }) => {
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+  } = useFormContext();
+
+  const onSubmit = async (data) => {
+    reset();
+    submitAction(data);
+  };
+
+  return (
+    <Form
+      className="flex flex-col gap-4"
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+      ctaProps={submitProps}
+    >
+      {children}
+    </Form>
+  );
 };
 
 FormManager.propTypes = {
-  options: PropTypes.shape({}).isRequired,
+  submitProps: PropTypes.shape({}).isRequired,
+  submitAction: PropTypes.func.isRequired,
 };
 
 export default FormManager;

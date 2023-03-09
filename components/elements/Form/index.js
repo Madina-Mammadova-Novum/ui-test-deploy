@@ -10,9 +10,13 @@ const Form = ({ className, ctaProps, onSubmit, children, disabled }) => {
       {children}
       <Button
         type="submit"
-        customStyles={`${ctaClass} flex justify-center`}
-        buttonProps={{ text, variant, size }}
+        buttonProps={{
+          text: disabled ? 'Please wait...' : text,
+          variant: disabled ? 'secondary' : variant,
+          size,
+        }}
         disabled={disabled}
+        customStyles={`${ctaClass} mt-4 w-full`}
       />
     </form>
   );

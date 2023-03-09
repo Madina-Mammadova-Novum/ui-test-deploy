@@ -7,27 +7,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { Button } from '@/elements';
+import { passwordSchema } from '@/lib/schemas';
 import { resetPassword } from '@/services/user';
 import { PasswordValidation } from '@/units';
 import { successToast } from '@/utils/hooks';
 
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}[\]\\|;:'",.<>/?-]).{8,}$/;
 const schema = yup
   .object({
-    password: yup
-      .string()
-      .required()
-      .matches(
-        passwordPattern,
-        'Password must contain at least 8 characters, one uppercase, one number and one special case character'
-      ),
-    confirmPassword: yup
-      .string()
-      .required()
-      .matches(
-        passwordPattern,
-        'Password must contain at least 8 characters, one uppercase, one number and one special case character'
-      ),
+    password: passwordSchema(),
+    confirmPassword: passwordSchema(),
   })
   .required();
 
