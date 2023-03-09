@@ -2,6 +2,8 @@
 // import CompanyAddresess from '@/modules/CompanyAddresess';
 // import CompanyDetails from '@/modules/CompanyDetails';
 // import FleetRowHeader from '@/modules/FleetRowHeader';
+import AccountDetails from '@/modules/AccountDetails';
+import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
@@ -21,6 +23,8 @@ import Signup from '@/modules/Signup';
 // import Upload from '@/modules/Upload';
 
 export {
+  AccountWrapper,
+  AccountDetails,
   // RadioWithText,
   // FleetRowHeader,
   // CompanyAddresess,

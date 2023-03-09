@@ -1,17 +1,16 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
-
 import PropTypes from 'prop-types';
 
 import { Form } from '@/elements';
+import { useHookForm } from '@/utils/hooks';
 
 const FormManager = ({ children, submitAction, submitProps }) => {
   const {
     handleSubmit,
     formState: { isSubmitting },
     reset,
-  } = useFormContext();
+  } = useHookForm();
 
   const onSubmit = async (data) => {
     reset();

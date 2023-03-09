@@ -29,10 +29,12 @@ import NextLink from '@/elements/NextLink';
 // import TextWithLabel from '@/elements/TextWithLabel';
 // import Toggle from '@/elements/Toggle';
 // import Tooltip from '@/elements/Tooltip';
+import TextRow from '@/elements/TextRow';
 import Title from '@/elements/Title';
 
 export {
   Title,
+  TextRow,
   Input,
   PhoneInput,
   InputErrorMessage,
