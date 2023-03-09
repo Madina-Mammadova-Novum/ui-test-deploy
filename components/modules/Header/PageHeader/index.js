@@ -3,8 +3,8 @@ import { Notification, ProfileMenu } from '@/modules';
 
 const PageHeader = () => {
   return (
-    <header className="fixed right-0 top-0 h-[52px] w-[calc(100vw-256px)] shadow-xmd px-5 flex items-center">
-      <div className="ml-auto flex items-center">
+    <header className="relative right-0 top-0 w-full ml-auto shadow-xmd px-5 flex items-center">
+      <div className="flex justify-end w-full items-center py-2">
         <Notification numberOfNotifications={20} />
         <ProfileMenu image={profileMock} />
       </div>

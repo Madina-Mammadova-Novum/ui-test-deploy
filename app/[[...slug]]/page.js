@@ -1,20 +1,21 @@
-import { metaData } from '@/adapters/metaData';
+// import { metaData } from '@/adapters/metaData';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 import { getPage } from '@/services/page';
 // import { BlockManager } from "@/common";
 
-export async function generateMetadata({ params }) {
-  const data = await getPage(params);
-  return metaData({ data });
-}
+// export async function generateMetadata({ params }) {
+//   const data = await getPage(params);
+//   return metaData({ data });
+// }
+
 export default async function Home({ params, searchParams }) {
   console.log({ params, searchParams });
   const { title, blocks } = await getPage(params);
   console.log({ blocks });
 
   return (
-    <section>
+    <section className="container flex-grow">
       <h1>{title}</h1>
       <ul>
         <li>

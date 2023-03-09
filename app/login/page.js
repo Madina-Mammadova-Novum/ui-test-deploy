@@ -1,6 +1,9 @@
-import React from 'react';
+'use client';
 
 import { metaData } from '@/adapters/metaData';
+import { FormManager } from '@/common';
+import { AuthWrapper, LoginForm } from '@/modules';
+import { loginOptions } from '@/utils/formOptions';
 
 export async function generateMetadata({ params }) {
   // eslint-disable-next-line no-console
@@ -14,8 +17,14 @@ export async function generateMetadata({ params }) {
   });
 }
 
-const ForgotPasswordPage = () => {
-  return <h1>Login page content</h1>;
+const LoginPage = () => {
+  return (
+    <AuthWrapper title="Log in" containerClass="w-3/4">
+      <FormManager options={loginOptions()}>
+        <LoginForm />
+      </FormManager>
+    </AuthWrapper>
+  );
 };
 
-export default ForgotPasswordPage;
+export default LoginPage;

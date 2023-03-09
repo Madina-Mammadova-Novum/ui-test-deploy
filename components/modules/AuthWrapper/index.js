@@ -1,24 +1,25 @@
 import PropTypes from 'prop-types';
 
-import { NextLink } from '@/elements';
-import { ROUTES } from '@/lib';
+import { Title } from '@/elements';
 
-const AuthWrapper = ({ title, subtitle, children }) => {
+const AuthWrapper = ({ title, subtitle, children, containerClass }) => {
   return (
-    <>
-      <h2>{title}</h2>
-      <p className="mt-5 text-xsm text-black max-w-[296px]">{subtitle}</p>
+    <div className={`grid-start-1 3sm:col-start-2 m-auto ${containerClass}`}>
+      <Title component="h2">{title}</Title>
+      <p className="pt-5 text-xsm text-black max-w-[296px]">{subtitle}</p>
       {children}
-      <NextLink href={ROUTES.LOGIN} customStyles="w-full mt-2.5">
-        Return to Log in
-      </NextLink>
-    </>
+    </div>
   );
+};
+
+AuthWrapper.defaultProps = {
+  containerClass: 'w-full',
 };
 
 AuthWrapper.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
+  containerClass: PropTypes.string,
 };
 
 export default AuthWrapper;

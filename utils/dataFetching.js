@@ -24,7 +24,6 @@ export function fetchOptions(requestMethod, data = null) {
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
     options.body = JSON.stringify(data);
   }
-  console.log(options);
   return options;
 }
 
