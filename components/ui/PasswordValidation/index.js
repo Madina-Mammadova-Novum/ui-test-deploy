@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-useless-escape */
 import React, { useEffect, useState } from 'react';

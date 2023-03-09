@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import FleetRowHeader from '../../FleetRowHeader';
+import ExpandableRowHeader from '../../ExpandableRowHeader';
 import NegotiatingExpandedData from './NegotiatingExpandedData';
 
 import { ExpandableRow, Pagination, SimpleSelect } from '@/elements';
@@ -31,7 +31,7 @@ const NegotiatingUi = () => {
 
       <div className="mt-5">
         {negotiatingExpandableRowHeader.map((rowHeader) => (
-          <ExpandableRow expandAll={expandAll} headerComponent={<FleetRowHeader headerData={rowHeader} />}>
+          <ExpandableRow expandAll={expandAll} headerComponent={<ExpandableRowHeader headerData={rowHeader} />}>
             <NegotiatingExpandedData />
           </ExpandableRow>
         ))}

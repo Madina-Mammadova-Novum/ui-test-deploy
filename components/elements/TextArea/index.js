@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const TextArea = ({
@@ -19,7 +18,7 @@ const TextArea = ({
   const handleChange = useCallback(({ value }) => onChange(value), [onChange]);
 
   return (
-    <div className={disabled && 'opacity-50 pointer-events-none'}>
+    <div className={`${disabled && 'opacity-50 pointer-events-none'} ${customStyles}`}>
       <label htmlFor={id ?? label} className="block text-gray text-[12px] font-semibold uppercase">
         {label}
       </label>
@@ -32,10 +31,7 @@ const TextArea = ({
         onChange={({ target }) => handleChange(target)}
         {...register(name)}
         {...rest}
-        className={classnames(
-          'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] min-w-[296px] hover:border-blue focus:border-blue',
-          customStyles
-        )}
+        className="border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue"
       />
     </div>
   );

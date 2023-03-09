@@ -12,22 +12,23 @@ import {
 } from '@/utils/mock';
 
 const NegotiatingExpandedData = () => {
-  const [cutrentTab, setCurrentTab] = useState(expandedNegotiatingRowTabs[0].value);
+  const [currentTab, setCurrentTab] = useState(expandedNegotiatingRowTabs[0].value);
   return (
     <div>
       <Tabs
         onClick={setCurrentTab}
-        defaultTab={cutrentTab}
+        defaultTab={expandedNegotiatingRowTabs[0].value}
+        activeTab={currentTab}
         tabs={expandedNegotiatingRowTabs}
         customStyles="my-3 mx-auto"
       />
-      {cutrentTab === 'incoming' && (
+      {currentTab === 'incoming' && (
         <Table headerData={negotiatingIncomingTableHeader} rows={negotiatingIncomingTableRow} />
       )}
-      {cutrentTab === 'counteroffers' && (
+      {currentTab === 'counteroffers' && (
         <Table headerData={negotiatingCounterofferTableHeader} rows={negotiatingCounterofferTableRow} />
       )}
-      {cutrentTab === 'failed' && <Table headerData={negotiatingFailedTableHeader} rows={negotiatingFailedTableRow} />}
+      {currentTab === 'failed' && <Table headerData={negotiatingFailedTableHeader} rows={negotiatingFailedTableRow} />}
     </div>
   );
 };

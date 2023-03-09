@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
@@ -19,7 +21,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
           onClick={() => setIsOpened(true)}
         >
           <span className="box-border flex-1">{currentItem}</span>
-          <ArrowSVG className={`w-2.5 transition duration-500 ${isOpened && 'rotate-180 fill-blue'}`} />
+          <ArrowSVG className={`w-2.5 ml-2 transition duration-500 ${isOpened && 'rotate-180 fill-blue'}`} />
           {isOpened && (
             <div className="absolute -bottom-0.5 left-0 translate-y-[100%] px-2.5 py-2 rounded-md bg-white shadow-xmd w-full overflow-y-auto max-h-[112px]">
               {selectableItems.map((item) => (

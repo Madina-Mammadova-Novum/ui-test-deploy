@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import Select from 'react-select';
@@ -46,8 +48,19 @@ const dropdownTheme = (theme) => ({
   },
 });
 
-const Dropdown = ({ onChange, name, control, label, id, dropdownOptions, error }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const Dropdown = ({
+  onChange,
+  name,
+  control,
+  label,
+  id,
+  dropdownOptions,
+  error,
+  defaultValue,
+  disabled,
+  customStyles,
+}) => {
+  const [selectedOption, setSelectedOption] = useState(defaultValue);
 
   const handleChange = (option) => {
     setSelectedOption(option.value);
@@ -57,7 +70,7 @@ const Dropdown = ({ onChange, name, control, label, id, dropdownOptions, error }
   const renderOption = ({ countryFlag, value }) => <OptionRow countryFlag={countryFlag} value={value} />;
 
   return (
-    <div className="relative bottom-0.5">
+    <div className={`relative bottom-0.5 ${disabled && 'opacity-50 pointer-events-none'} ${customStyles}`}>
       <label htmlFor={id} className="text-[12px] text-gray font-semibold uppercase">
         {label}
       </label>
@@ -70,6 +83,7 @@ const Dropdown = ({ onChange, name, control, label, id, dropdownOptions, error }
             options={dropdownOptions}
             closeMenuOnSelect={false}
             value={selectedOption}
+            defaultInputValue={defaultValue}
             onChange={(option) => handleChange(option)}
             formatOptionLabel={renderOption}
             styles={dropdownStyles(selectedOption, error)}
@@ -88,7 +102,10 @@ Dropdown.defaultProps = {
   label: '',
   error: '',
   name: '',
+  defaultValue: '',
+  customStyles: '',
   control: {},
+  disabled: false,
 };
 
 Dropdown.propTypes = {
@@ -96,9 +113,12 @@ Dropdown.propTypes = {
   onChange: PropTypes.func,
   error: PropTypes.string,
   label: PropTypes.string,
+  defaultValue: PropTypes.string,
+  customStyles: PropTypes.string,
   control: PropTypes.shape({}),
   id: PropTypes.oneOf([PropTypes.string, PropTypes.number]).isRequired,
   dropdownOptions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default Dropdown;
