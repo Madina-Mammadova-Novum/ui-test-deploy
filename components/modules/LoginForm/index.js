@@ -1,13 +1,13 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input, NextLink, PasswordInput } from '@/elements';
 import { emailSchema, passwordSchema } from '@/lib/schemas';
+import { useHookFormParams } from '@/utils/hooks';
 
 const schema = yup
   .object({
@@ -17,9 +17,7 @@ const schema = yup
   .required();
 
 const LoginForm = () => {
-  const methods = useForm({
-    resolver: yupResolver(schema),
-  });
+  const methods = useHookFormParams({ schema });
 
   const {
     register,
@@ -27,7 +25,7 @@ const LoginForm = () => {
   } = methods;
 
   const onSubmit = (data) => {
-    console.log('data: ', data);
+    return data;
   };
 
   return (

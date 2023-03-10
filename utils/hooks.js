@@ -1,13 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import delve from 'dlv';
 
 import { PALETTE } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
@@ -147,6 +148,14 @@ export const useHookForm = () => {
   const methods = useFormContext();
 
   return { ...methods };
+};
+
+export const useHookFormParams = ({ schema }) => {
+  const params = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  return { ...params };
 };
 
 export const useMediaQuery = (query) => {

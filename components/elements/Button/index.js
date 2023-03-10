@@ -21,6 +21,7 @@ const Button = ({ buttonProps, customStyles, disabled, type, onClick, ...rest })
             variant === 'secondary' && size === 'medium',
           'bg-white px-2.5 py-1 text-red border border-red-medium hover:border-red ':
             variant === 'delete' && size === 'medium',
+          'text-red': variant === 'delete' && size === 'small',
           'bg-white !p-0 text-blue hover:text-blue-darker': variant === 'primary' && size === 'small',
           'opacity-50 pointer-events-none': disabled,
         },

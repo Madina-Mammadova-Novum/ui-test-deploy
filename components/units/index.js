@@ -8,6 +8,8 @@ import Tabs from '@/units/Tabs';
 import TankerSlotsDetails from '@/units/TankerSlotsDetails';
 import TermsAndConditions from '@/units/TermsAndConditions';
 
+export * from '@/units/Account';
+
 export {
   AddressDetails,
   PasswordValidation,

@@ -6,14 +6,11 @@ import { getPage } from '@/services/page';
 
 export async function generateMetadata({ params }) {
   const data = await getPage(params);
-  console.log('data: ', data);
   return metaData({ data });
 }
 
-export default async function Home({ params, searchParams }) {
-  console.log({ params, searchParams });
-  const { title, blocks } = await getPage(params);
-  console.log({ blocks });
+export default async function Home({ params }) {
+  const { title } = await getPage(params);
 
   return (
     <section className="container flex-grow">
