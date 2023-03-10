@@ -1,5 +1,5 @@
 // import AddressDetails from '@/modules/AddressDetails';
-// import CompanyAddresess from '@/modules/CompanyAddresess';
+// import CompanyAddresses from '@/modules/CompanyAddresses';
 // import CompanyDetails from '@/modules/CompanyDetails';
 // import FleetRowHeader from '@/modules/FleetRowHeader';
 import AuthWrapper from '@/modules/AuthWrapper';
@@ -23,7 +23,7 @@ import Signup from '@/modules/Signup';
 export {
   // RadioWithText,
   // FleetRowHeader,
-  // CompanyAddresess,
+  // CompanyAddresses,
   // Sidebar,
   Navbar,
   // Upload,

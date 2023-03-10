@@ -3,15 +3,15 @@
 import Alert from '@/elements/Alert';
 // import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
-// import CheckBox from '@/elements/CheckBox';
 // import DatePicker from '@/elements/DatePicker';
-// import Dropdown from '@/elements/Dropdown';
+import Dropdown from '@/elements/Dropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
 import Form from '@/elements/Form';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
+import CheckBoxInput from '@/elements/Input/CheckBoxInput';
 import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
@@ -42,7 +42,7 @@ export {
   Alert,
   // Search,
   // Badge,
-  // CheckBox,
+  CheckBoxInput,
   // Dropzone,
   // ExpandableRow,
   // RadioButton,
@@ -52,7 +52,7 @@ export {
   // Toggle,
   // DatePicker,
   // RangeDatePicker,
-  // Dropdown,
+  Dropdown,
   NextImage,
   Form,
   // File,

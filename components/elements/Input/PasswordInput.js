@@ -8,7 +8,7 @@ import { Input } from '@/elements';
 
 const PasswordInput = React.forwardRef(({ ...rest }, ref) => {
   const [showPassword, setShowPassword] = useState(false);
-
+  // todo: controller
   return (
     <div className="relative">
       <Input {...rest} ref={ref} type={showPassword ? 'text' : 'password'} min={8} />

@@ -2,55 +2,36 @@
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-// import { useCallback } from 'react';
-// import { useDispatch } from 'react-redux';
-
-// import { signupSumbitAdapter } from '@/adapters/signupSubmitAdapter';
 import { Button } from '@/elements';
 import { resetPassword } from '@/services/user';
-import { CompanyDetails, PersonalDetails, Step } from '@/units';
+import {
+  CompanyAddresses,
+  CompanyDetails,
+  PersonalDetails,
+  Step,
+  TankerSlotsDetails,
+  TermsAndConditions,
+} from '@/units';
 import { successToast } from '@/utils/hooks';
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { signupSubmit } from '@/services/signup';
-// import { setRules, setTankers } from '@/store/entities/signup/slice';
-// import { useSignupSelector } from '@/store/selectors';
-// import { CompanyAddresess, CompanyDetails, PersonalDetails, SlotsDetails, TermsAndConditions } from '@/ui';
-// import { useHookForm } from '@/utils/hooks';
 
 const OwnerRegistrationForm = () => {
   const methods = useForm({
     // resolver: yupResolver(schema),
   });
+
   const onSubmit = async (data) => {
     console.log({ data });
     const { message } = await resetPassword({ data });
     successToast(message, 'Some description');
     methods.reset();
   };
-  // const dispatch = useDispatch();
-  // const { rules, role, sameAddress } = useSignupSelector();
-  // const [signup] = signupSubmit();
-  // const { watch, reset, handleSubmit } = useHookForm();
-
-  // const slots = watch('slots.count');
-
-  // const handleRules = useCallback(() => {
-  //   dispatch(setRules(!rules));
-  // }, [dispatch, rules]);
-  //
-  // const handleSlots = useCallback(() => {
-  //   dispatch(setTankers([slots]));
-  // }, [dispatch, slots]);
-
-  // const onSubmit = async (data) => {
-  //   const result = signupSumbitAdapter(role, data, sameAddress);
-  //   await signup({ role, ...result }).unwrap();
-  //   reset();
-  // };
   const {
     handleSubmit,
+    watch,
     formState: { isSubmitting },
   } = methods;
+
+  const [agreedRules] = watch(['agreedRules']);
 
   return (
     <FormProvider {...methods}>
@@ -63,6 +44,15 @@ const OwnerRegistrationForm = () => {
         <Step title="Step #3: Choose who you are" containerClass="flex flex-col py-5 gap-5">
           <CompanyDetails />
         </Step>
+        <hr className="divide" />
+        <Step title="Step 4: How many tankers do you have?" containerClass="flex flex-col py-5 gap-5">
+          <TankerSlotsDetails />
+        </Step>
+        <hr className="divide" />
+        <Step title="Step #5: Company Addresss" containerClass="flex flex-col py-5 gap-5">
+          <CompanyAddresses />
+        </Step>
+        <TermsAndConditions />
         <Button
           type="submit"
           buttonProps={{
@@ -70,7 +60,7 @@ const OwnerRegistrationForm = () => {
             variant: isSubmitting ? 'secondary' : 'primary',
             size: 'large',
           }}
-          disabled={isSubmitting}
+          disabled={!agreedRules || isSubmitting}
           customStyles="mt-4 w-full"
         />
       </form>

@@ -21,7 +21,13 @@ const Input = React.forwardRef(
     ref
   ) => {
     return (
-      <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
+      <div
+        className={classnames(
+          disabled && 'opacity-50 pointer-events-none',
+          customStyles,
+          type === 'hidden' && 'hidden'
+        )}
+      >
         {label && (
           <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase text-left">
             {label}

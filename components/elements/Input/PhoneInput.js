@@ -20,8 +20,8 @@ const PhoneInput = ({ name, label }) => {
             <p className="block text-gray text-[12px] font-semibold uppercase text-left">{label}</p>
             <Phone
               ref={ref}
+              id={name}
               {...field}
-              country="gb"
               inputClass={`!border-l-0 !pl-[72px] !w-full
           ${error ? '!border-red' : '!border-gray-darker'}`}
               buttonClass={`!border-r-0 !bg-purple-light 
