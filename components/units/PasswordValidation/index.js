@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import TickInCircleSVG from '@/assets/images/tickInCircle.svg';
 import { PasswordInput, Title } from '@/elements';
+import { useHookForm } from '@/utils/hooks';
 
 const initialState = [
   {
@@ -44,7 +44,7 @@ const PasswordValidation = ({ title, customStyles }) => {
   const {
     register,
     formState: { errors, isSubmitSuccessful, isSubmitting },
-  } = useFormContext();
+  } = useHookForm();
 
   const { password: passwordError, confirmPassword: confirmPasswordError } = errors;
 

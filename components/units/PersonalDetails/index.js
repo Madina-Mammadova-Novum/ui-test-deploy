@@ -1,15 +1,14 @@
-// import { Input, PhoneInput } from '@/elements';
-import { useFormContext } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 import { Input, PhoneInput } from '@/elements';
 import { PasswordValidation } from '@/units';
-// import { useHookForm } from '@/utils/hooks';
+import { useHookForm } from '@/utils/hooks';
 
-const PersonalDetails = () => {
+const PersonalDetails = ({ includePassword }) => {
   const {
     register,
     formState: { errors, isSubmitting },
-  } = useFormContext();
+  } = useHookForm();
 
   return (
     <>
@@ -53,13 +52,25 @@ const PersonalDetails = () => {
             error={errors.secondaryPhoneNumber?.message}
           />
         </div>
-        <div>
-          <p className="text-black font-semibold text-sm py-5">Enter a strong password according to our requirements</p>
-          <PasswordValidation />
-        </div>
+        {includePassword && (
+          <div>
+            <p className="text-black font-semibold text-sm py-5">
+              Enter a strong password according to our requirements
+            </p>
+            <PasswordValidation />
+          </div>
+        )}
       </div>
     </>
   );
+};
+
+PersonalDetails.defaultProps = {
+  includePassword: true,
+};
+
+PersonalDetails.propTypes = {
+  includePassword: PropTypes.bool,
 };
 
 export default PersonalDetails;
