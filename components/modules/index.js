@@ -60,5 +60,5 @@ export {
   ForgotPasswordForm,
   ResetPasswordForm,
   OwnerRegistrationForm,
-  ChartererRegistrationForm
+  ChartererRegistrationForm,
 };

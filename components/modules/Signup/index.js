@@ -5,7 +5,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { ROLES } from '@/lib/constants';
-import { OwnerRegistrationForm, ChartererRegistrationForm } from '@/modules';
+import { ChartererRegistrationForm, OwnerRegistrationForm } from '@/modules';
 import { Step, Tabs } from '@/units';
 import { signUpTab } from '@/utils/mock';
 

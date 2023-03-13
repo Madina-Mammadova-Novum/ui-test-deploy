@@ -23,5 +23,5 @@ export {
   TankerSlotsDetails,
   CompanyAddresses,
   TermsAndConditions,
-  CargoesSlotsDetails
+  CargoesSlotsDetails,
 };

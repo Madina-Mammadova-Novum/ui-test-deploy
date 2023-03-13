@@ -1,17 +1,17 @@
 'use client';
 
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-import { FormManager } from "@/common";
+import { FormManager } from '@/common';
 import {
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
   // tankerSlotsDetailsSchema
-} from "@/lib/schemas";
+} from '@/lib/schemas';
 import {
   CharteringSlotsDetails,
   CompanyAddresses,
@@ -19,8 +19,8 @@ import {
   PasswordValidation,
   PersonalDetails,
   Step,
-  TermsAndConditions
-} from "@/units";
+  TermsAndConditions,
+} from '@/units';
 
 const schema = yup
   .object({
@@ -40,7 +40,7 @@ const ChartererRegistrationForm = () => {
 
   const onSubmit = async (formData) => {
     console.log({ formData });
-  }
+  };
 
   return (
     <FormProvider {...methods}>
