@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
 import { personalDetailsSchema } from '@/lib/schemas';
-import { updatePersonalInfo } from '@/services';
+import { updateInfo } from '@/services';
 import { Notes, PersonalDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { successToast, useHookFormParams } from '@/utils/hooks';
@@ -23,11 +23,11 @@ const state = {
   secondaryPhoneNumber: '',
 };
 
-const PersonalInfoForm = ({ title }) => {
+const PersonalDetailsForm = ({ title }) => {
   const methods = useHookFormParams({ state, schema });
 
   const onSubmit = async (data) => {
-    const { message } = await updatePersonalInfo({ data });
+    const { message } = await updateInfo({ data });
     successToast(message, 'You will be notified soon. The rest of the changes have been edited');
   };
 
@@ -59,12 +59,12 @@ const PersonalInfoForm = ({ title }) => {
   );
 };
 
-PersonalInfoForm.defaultProps = {
+PersonalDetailsForm.defaultProps = {
   title: '',
 };
 
-PersonalInfoForm.propTypes = {
+PersonalDetailsForm.propTypes = {
   title: PropTypes.string,
 };
 
-export default PersonalInfoForm;
+export default PersonalDetailsForm;

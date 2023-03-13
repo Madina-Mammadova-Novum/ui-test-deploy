@@ -23,7 +23,7 @@ export function updatePasswordAdapter({ data }) {
   };
 }
 
-export function updatePersonalInfoAdapter({ data }) {
+export function updateInfoAdapter({ data }) {
   if (data === null) return null;
   const { firstName, lastName, email } = data;
   return {
@@ -33,7 +33,7 @@ export function updatePersonalInfoAdapter({ data }) {
   };
 }
 
-export function updatePersonalCompanyAdapter({ data }) {
+export function updateCompanyAdapter({ data }) {
   if (data === null) return null;
   const {
     imo,

@@ -10,14 +10,14 @@ import {
   DeactivateAccountForm,
   DeleteAccountForm,
   PasswordInfoForm,
-  PersonalInfoForm,
+  PersonalDetailsForm,
 } from '@/modules';
 
 const ModalManager = ({ modalId, opened, onClose }) => {
   const printModalContent = useMemo(() => {
     switch (modalId) {
       case 'personal_details':
-        return <PersonalInfoForm title="Edit Personal Details" />;
+        return <PersonalDetailsForm title="Edit Personal Details" />;
       case 'company_details':
         return <CompanyInfoForm title="Edit Company Details" />;
       case 'password_details':

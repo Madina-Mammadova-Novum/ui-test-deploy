@@ -18,7 +18,7 @@ import Notification from '@/modules/Notification';
 // import PersonalDetails from '@/modules/PersonalDetails';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
-import PersonalInfoForm from '@/modules/PersonalInfoForm';
+import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
@@ -55,7 +55,7 @@ export {
   AuthWrapper,
   ModalWrapper,
   LoginForm,
-  PersonalInfoForm,
+  PersonalDetailsForm,
   PasswordInfoForm,
   ForgotPasswordForm,
   ResetPasswordForm,

@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
-import { updatePersonalCompany } from '@/services';
+import { updateCompany } from '@/services';
 import { CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { successToast, useHookFormParams } from '@/utils/hooks';
@@ -32,7 +32,7 @@ const CompanyInfoForm = ({ title }) => {
   const methods = useHookFormParams({ state, schema });
 
   const onSubmit = async (data) => {
-    const { message } = await updatePersonalCompany({ data });
+    const { message } = await updateCompany({ data });
     successToast(message, 'You will be notified soon. The rest of the changes have been edited');
   };
 
