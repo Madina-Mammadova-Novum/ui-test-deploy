@@ -30,13 +30,13 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
 };
 
 FormManager.defaultProps = {
-  className: ''
+  className: '',
 };
 
 FormManager.propTypes = {
   submitButton: PropTypes.shape({}).isRequired,
   submitAction: PropTypes.func.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default FormManager;

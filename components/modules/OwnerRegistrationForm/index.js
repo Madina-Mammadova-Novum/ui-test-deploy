@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { FormManager } from "@/common";
+import { FormManager } from '@/common';
 import {
   // companyAddressesSchema,
   companyDetailsSchema,
@@ -61,7 +61,7 @@ const OwnerRegistrationForm = () => {
         submitButton={{
           text: 'Create account',
           variant: 'primary',
-          size: 'large'
+          size: 'large',
         }}
         submitAction={onSubmit}
       >
