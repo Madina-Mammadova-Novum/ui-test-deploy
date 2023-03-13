@@ -127,3 +127,12 @@ export function singUpAdapter({ data }) {
     imos: imo,
   };
 }
+
+export function loginAdapter({ data }) {
+  if (data === null) return null;
+  const { email, password } = data;
+  return {
+    email,
+    password,
+  };
+}

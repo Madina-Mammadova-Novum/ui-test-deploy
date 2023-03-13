@@ -150,13 +150,19 @@ export const useHookForm = () => {
   return { ...methods };
 };
 
+/**
+ *
+ * @param state
+ * @param schema
+ * @returns {UseFormReturn<FieldValues, any>}
+ */
 export const useHookFormParams = ({ state, schema }) => {
   const params = useForm({
     defaultValues: { ...state },
     resolver: yupResolver(schema),
   });
 
-  return { ...params };
+  return params;
 };
 
 export const useMediaQuery = (query) => {

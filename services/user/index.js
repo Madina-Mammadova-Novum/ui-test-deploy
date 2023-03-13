@@ -1,5 +1,6 @@
 import {
   forgotPasswordAdapter,
+  loginAdapter,
   resetPasswordAdapter,
   singUpAdapter,
   updateCompanyAdapter,
@@ -31,6 +32,12 @@ export async function resetPassword({ data }) {
 export async function singUp({ data }) {
   const body = singUpAdapter({ data });
   const response = await postData(`auth/sing-up`, JSON.stringify(body));
+  return response;
+}
+
+export async function login({ data }) {
+  const body = loginAdapter({ data });
+  const response = await postData(`auth/login`, JSON.stringify(body));
   return response;
 }
 
