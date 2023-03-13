@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import delve from 'dlv';
 
 import { PALETTE } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
@@ -128,7 +128,7 @@ export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
 };
 
-export const useErrorToast = (title, description = '') => {
+export const errorToast = (title, description = '') => {
   return toastFunc('error', title, description);
 };
 

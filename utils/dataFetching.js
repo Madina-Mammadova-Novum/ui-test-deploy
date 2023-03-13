@@ -1,4 +1,4 @@
-import { responseAdapter } from '@/adapters/response';
+import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 
 export function getApiPublicURL(path) {
   return `${process.env.NEXT_PUBLIC_API_URL}/api/${path}`;
@@ -35,16 +35,21 @@ export async function apiHandler(options) {
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
 
+    const result = await response.json();
     // Recommendation: handle errors
     if (!response.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error('failed_to_fetch_data');
+      //   // This will activate the closest `error.js` Error Boundary
+      return responseErrorAdapter(result);
+      //
     }
-
-    const result = await response.json();
     return responseAdapter(result);
   } catch (error) {
-    throw new Error('something_wrong');
+    return responseErrorAdapter({
+      data: {
+        message: error.message,
+        errors: error,
+      },
+    });
   }
 }
 

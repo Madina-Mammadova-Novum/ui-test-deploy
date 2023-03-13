@@ -21,7 +21,7 @@ const CompanyDetails = () => {
         {...register('companyNumberOfOperation')}
         label="Years of operation"
         placeholder="Years"
-        error={errors.companyName?.message}
+        error={errors.companyNumberOfOperation?.message}
         disabled={isSubmitting}
         type="number"
       />

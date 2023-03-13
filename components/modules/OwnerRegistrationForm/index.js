@@ -2,8 +2,19 @@
 
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
 import { Button } from '@/elements';
-import { resetPassword } from '@/services/user';
+import {
+  // companyAddressesSchema,
+  companyDetailsSchema,
+  passwordValidationSchema,
+  personalDetailsSchema,
+  tankerSlotsDetailsSchema,
+  // termsAndConditionsSchema
+} from '@/lib/schemas';
+import { singUp } from '@/services/user';
 import {
   CompanyAddresses,
   CompanyDetails,
@@ -12,18 +23,35 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { successToast } from '@/utils/hooks';
+import { errorToast, successToast } from '@/utils/hooks';
+
+const schema = yup
+  .object({
+    ...personalDetailsSchema(),
+    ...passwordValidationSchema(),
+    ...companyDetailsSchema(),
+    ...tankerSlotsDetailsSchema(),
+    // ...companyAddressesSchema(),
+    // ...termsAndConditionsSchema()
+  })
+  .required();
 
 const OwnerRegistrationForm = () => {
   const methods = useForm({
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data) => {
-    console.log({ data });
-    const { message } = await resetPassword({ data });
-    successToast(message, 'Some description');
-    methods.reset();
+  const onSubmit = async (formData) => {
+    const { error, data } = await singUp({ data: formData });
+    if (data) {
+      successToast(data.message, 'Check your email for validating the account');
+      methods.reset();
+    }
+    if (error) {
+      const { message, errors, description } = error;
+      console.error(errors);
+      errorToast(message, description);
+    }
   };
   const {
     handleSubmit,

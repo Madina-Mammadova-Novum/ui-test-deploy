@@ -1,12 +1,12 @@
-import AddressDetails from '@/units/AddressDetails';
-import CompanyAddresses from '@/units/CompanyAddresses';
-import CompanyDetails from '@/units/CompanyDetails';
-import PasswordValidation from '@/units/PasswordValidation';
-import PersonalDetails from '@/units/PersonalDetails';
+import AddressDetails from '@/units/AddressDetailsForm';
+import CompanyAddresses from '@/units/CompanyAddressesForm';
+import CompanyDetails from '@/units/CompanyDetailsForm';
+import PasswordValidation from '@/units/PasswordValidationForm';
+import PersonalDetails from '@/units/PersonalDetailsForm';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
-import TankerSlotsDetails from '@/units/TankerSlotsDetails';
-import TermsAndConditions from '@/units/TermsAndConditions';
+import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
+import TermsAndConditions from '@/units/TermsAndConditionsForm';
 
 export * from '@/units/Account';
 

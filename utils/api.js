@@ -1,9 +1,10 @@
 import { serialize } from 'cookie';
 
-export const errorHandler = (res, status, message) => {
+export const errorHandler = (res, status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
   return res.status(status).send({
     message: statusMessage,
+    errors,
   });
 };
 
@@ -85,46 +86,41 @@ export function getApiURL(path, apiVersion = 'v1') {
 export const apiHandler = async (options, req, res) => {
   const { requestMethod, allowedMethods, endpoint } = options;
   if (checkRequestMethod(req, allowedMethods)) {
-    try {
-      let response;
-      switch (requestMethod.toLowerCase()) {
-        case 'post': {
-          response = await postData(endpoint, req, req.body);
-          break;
-        }
-        case 'patch': {
-          response = await patchData(endpoint, req, req.body);
-          break;
-        }
-        case 'delete': {
-          response = await deleteData(endpoint, req, req.body);
-          break;
-        }
-        default: {
-          response = await getData(endpoint, req);
-        }
+    let response;
+    switch (requestMethod.toLowerCase()) {
+      case 'post': {
+        response = await postData(endpoint, req, req.body);
+        break;
       }
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        return errorHandler(res, response.status, result?.message);
+      case 'patch': {
+        response = await patchData(endpoint, req, req.body);
+        break;
       }
-
-      /* Set Authorization token */
-      if (result?.token) {
-        const cookie = serialize('auth_token', `${result.token}`, {
-          httpOnly: true,
-          path: '/',
-        });
-        res.setHeader('Set-Cookie', cookie);
+      case 'delete': {
+        response = await deleteData(endpoint, req, req.body);
+        break;
       }
-
-      return res.status(200).json(result); // TODO: need to wrap with global adapter
-    } catch (error) {
-      console.log({ error });
-      return errorHandler(res, 500, 'something_wrong');
+      default: {
+        response = await getData(endpoint, req);
+      }
     }
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return errorHandler(res, response.status, result?.title, result?.errors);
+    }
+
+    /* Set Authorization token */
+    if (result?.token) {
+      const cookie = serialize('auth_token', `${result.token}`, {
+        httpOnly: true,
+        path: '/',
+      });
+      res.setHeader('Set-Cookie', cookie);
+    }
+
+    return res.status(200).json(result); // TODO: need to wrap with global adapter
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };

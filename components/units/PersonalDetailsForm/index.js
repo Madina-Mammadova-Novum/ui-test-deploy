@@ -1,9 +1,7 @@
-// import { Input, PhoneInput } from '@/elements';
 import { useFormContext } from 'react-hook-form';
 
 import { Input, PhoneInput } from '@/elements';
 import { PasswordValidation } from '@/units';
-// import { useHookForm } from '@/utils/hooks';
 
 const PersonalDetails = () => {
   const {

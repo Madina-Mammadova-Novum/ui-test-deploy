@@ -69,13 +69,14 @@ const TankerSlotsDetails = () => {
       </div>
       {indexes.map((index) => {
         const fieldName = `imo[${index}]`;
+        const error = errors.imo ? errors.imo[index] : null;
         return (
-          <div key={index}>
+          <div key={fieldName}>
             <Input
               {...register(fieldName)}
               label={`Imo #${index + 1}`}
               placeholder="IMO number"
-              error={errors[fieldName]?.message}
+              error={error?.message}
               disabled={isSubmitting}
               type="number"
             />

@@ -7,17 +7,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { Button } from '@/elements';
-import { passwordSchema } from '@/lib/schemas';
+import { passwordValidationSchema } from '@/lib/schemas';
 import { resetPassword } from '@/services/user';
 import { PasswordValidation } from '@/units';
 import { successToast } from '@/utils/hooks';
 
-const schema = yup
-  .object({
-    password: passwordSchema(),
-    confirmPassword: passwordSchema(),
-  })
-  .required();
+const schema = yup.object(passwordValidationSchema()).required();
 
 const ResetPasswordForm = () => {
   const [buttonDisabled, setButtonDisabled] = useState(false);

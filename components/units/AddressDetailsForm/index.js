@@ -39,7 +39,7 @@ const AddressDetails = ({ title, type, countries }) => {
         <div className="grid grid-cols-0 md:grid-cols-2 gap-5">
           <Dropdown label="Country" name={`${type}CountryId`} options={countries} onChange={handleCountryChange} />
           <Dropdown
-            label="Country"
+            label="City"
             name={`${type}CityId`}
             options={cities}
             onChange={handleCityChange}
@@ -49,7 +49,7 @@ const AddressDetails = ({ title, type, countries }) => {
             {...register(`${type}State`)}
             label="State / Province / Region (optional)"
             placeholder="NY"
-            error={errors[`${type}AddressOptional`]?.message}
+            error={errors[`${type}State`]?.message}
             disabled={disabled || isSubmitting}
           />
           <Input
