@@ -15,6 +15,63 @@ export function resetPasswordAdapter({ data }) {
   };
 }
 
+export function updatePasswordAdapter({ data }) {
+  if (data === null) return null;
+  const { password } = data;
+  return {
+    password,
+  };
+}
+
+export function updatePersonalInfoAdapter({ data }) {
+  if (data === null) return null;
+  const { firstName, lastName, email } = data;
+  return {
+    firstName,
+    lastName,
+    email,
+  };
+}
+
+export function updatePersonalCompanyAdapter({ data }) {
+  if (data === null) return null;
+  const {
+    imo,
+    sameAddresses,
+    numberOfTankers,
+    companyNumberOfOperation,
+    companyName,
+    registrationState,
+    registrationPostalCode,
+    registrationAddress,
+    registrationAddressOptional,
+    registrationCityId,
+    correspondenceState,
+    correspondencePostalCode,
+    correspondenceAddress,
+    correspondenceAddressOptional,
+    correspondenceCityId,
+  } = data;
+
+  return {
+    companyName,
+    estimatedAverageTankerDWT: 0,
+    yearsInOperation: companyNumberOfOperation,
+    numberOfVessels: numberOfTankers,
+    registrationAddress,
+    registrationPostalCode,
+    registrationProvince: registrationState,
+    registrationAddress2: registrationAddressOptional,
+    registrationCityId: registrationCityId?.value,
+    correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
+    correspondenceCityId: !sameAddresses ? correspondenceCityId?.value : registrationCityId?.value,
+    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
+    imos: imo,
+  };
+}
+
 export function singUpAdapter({ data }) {
   if (data === null) return null;
   const {

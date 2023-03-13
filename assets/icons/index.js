@@ -10,3 +10,4 @@ export { default as SearchIcon } from '@/assets/icons/Search';
 export { default as FileIcon } from '@/assets/icons/File';
 export { default as Logo } from '@/assets/icons/Logo';
 export { default as UploadIcon } from '@/assets/icons/Upload';
+export { default as TrashIcon } from '@/assets/icons/Trash';

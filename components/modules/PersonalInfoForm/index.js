@@ -8,16 +8,17 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
 import { personalDetailsSchema } from '@/lib/schemas';
+import { updatePersonalInfo } from '@/services';
 import { Notes, PersonalDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
-import { useHookFormParams } from '@/utils/hooks';
+import { successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({ ...personalDetailsSchema() });
 
 const state = {
   firstName: 'John',
   lastName: 'Doe',
-  email: ' john_doe@ship.link.com',
+  email: ' john_doe@shiplink.com',
   primaryPhoneNumber: '971457753981',
   secondaryPhoneNumber: '',
 };
@@ -25,8 +26,9 @@ const state = {
 const PersonalInfoForm = ({ title }) => {
   const methods = useHookFormParams({ state, schema });
 
-  const onSubmit = (data) => {
-    return data;
+  const onSubmit = async (data) => {
+    const { message } = await updatePersonalInfo({ data });
+    successToast(message, 'You will be notified soon. The rest of the changes have been edited');
   };
 
   const noteList = [

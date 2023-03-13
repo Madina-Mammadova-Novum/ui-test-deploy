@@ -8,8 +8,9 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { Input, Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
+import { updatePersonalPassword } from '@/services';
 import { PasswordValidation } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { successToast, useHookFormParams } from '@/utils/hooks';
 
 const state = {
   currentPassword: '12345678',
@@ -27,8 +28,9 @@ const PasswordInfoForm = ({ title }) => {
     formState: { errors },
   } = methods;
 
-  const onSubmit = (data) => {
-    return data;
+  const onSubmit = async (data) => {
+    const { message } = await updatePersonalPassword({ data });
+    successToast(message);
   };
 
   return (

@@ -374,15 +374,15 @@ input[type='password'] {
 }
 
 .Toastify__toast {
-  @apply shadow-none p-0 bg-transparent mb-0;
+  @apply !shadow-none p-0 !bg-transparent !mb-0;
 }
 
 .Toastify__toast-container {
-  @apply w-full p-0 ml-auto;
+  @apply !w-full !p-0 !ml-auto;
 }
 
 .Toastify__toast-body {
-  @apply p-0;
+  @apply !p-0;
 }
 
 .selected-flag {

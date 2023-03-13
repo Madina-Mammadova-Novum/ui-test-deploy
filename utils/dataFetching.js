@@ -46,7 +46,7 @@ export async function apiHandler(options) {
   } catch (error) {
     return responseErrorAdapter({
       data: {
-        message: error.message,
+        message: error?.message,
         errors: error,
       },
     });
