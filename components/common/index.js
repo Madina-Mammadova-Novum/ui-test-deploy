@@ -1,4 +1,5 @@
 import ClientSidePackages from '@/common/ClientSidePackages';
 import FormManager from '@/common/FormManager';
+import ModalManager from '@/common/ModalManager';
 
-export { ClientSidePackages, FormManager };
+export { ClientSidePackages, ModalManager, FormManager };

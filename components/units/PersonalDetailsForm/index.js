@@ -1,13 +1,11 @@
-import { useFormContext } from 'react-hook-form';
-
 import { Input, PhoneInput } from '@/elements';
-import { PasswordValidation } from '@/units';
+import { useHookForm } from '@/utils/hooks';
 
 const PersonalDetails = () => {
   const {
     register,
     formState: { errors, isSubmitting },
-  } = useFormContext();
+  } = useHookForm();
 
   return (
     <>
@@ -50,10 +48,6 @@ const PersonalDetails = () => {
             disabled={isSubmitting}
             error={errors.secondaryPhoneNumber?.message}
           />
-        </div>
-        <div>
-          <p className="text-black font-semibold text-sm py-5">Enter a strong password according to our requirements</p>
-          <PasswordValidation />
         </div>
       </div>
     </>

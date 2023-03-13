@@ -1,6 +1,7 @@
 import AddressDetails from '@/units/AddressDetailsForm';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
+import Notes from '@/units/Notes';
 import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
 import Step from '@/units/Step';
@@ -15,6 +16,7 @@ export {
   PasswordValidation,
   Tabs,
   Step,
+  Notes,
   PersonalDetails,
   CompanyDetails,
   TankerSlotsDetails,

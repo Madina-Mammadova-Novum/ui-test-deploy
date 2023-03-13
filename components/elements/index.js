@@ -16,10 +16,10 @@ import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
 // import Modal from '@/elements/Modal';
+import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
 // import Pagination from '@/elements/Pagination';
-// import Portal from '@/elements/Portal';
 // import RadioButton from '@/elements/RadioButton';
 // import RangeDatePicker from '@/elements/RangeDatePicker';
 // import Step from '@/elements/Step';
@@ -29,6 +29,7 @@ import NextLink from '@/elements/NextLink';
 // import TextWithLabel from '@/elements/TextWithLabel';
 // import Toggle from '@/elements/Toggle';
 // import Tooltip from '@/elements/Tooltip';
+import Portal from '@/elements/Portal';
 import TextRow from '@/elements/TextRow';
 import Title from '@/elements/Title';
 
@@ -37,6 +38,7 @@ export {
   TextRow,
   Input,
   PhoneInput,
+  Portal,
   InputErrorMessage,
   // TextArea,
   Button,
@@ -57,6 +59,7 @@ export {
   Dropdown,
   NextImage,
   Form,
+  Modal,
   // File,
   // Pagination,
   // Tabs,

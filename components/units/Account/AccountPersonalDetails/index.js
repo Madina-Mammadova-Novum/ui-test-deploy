@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Button, TextRow, Title } from '@/elements';
 
-const AccountPersonalDetails = ({ user }) => {
+const AccountPersonalDetails = ({ user, onEdit }) => {
   return (
     <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
       <div className="flex justify-between items-center">
@@ -14,6 +14,7 @@ const AccountPersonalDetails = ({ user }) => {
         <Button
           buttonProps={{ text: 'Edit personal details', variant: 'primary', size: 'medium' }}
           customStyles="!py-1 !px-2.5"
+          onClick={onEdit}
         />
       </div>
       <div className="grid grid-cols-1 3sm:grid-cols-2">
@@ -32,6 +33,7 @@ const AccountPersonalDetails = ({ user }) => {
 };
 
 AccountPersonalDetails.propTypes = {
+  onEdit: PropTypes.func.isRequired,
   user: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,

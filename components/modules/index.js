@@ -5,13 +5,19 @@
 import AccountDetails from '@/modules/AccountDetails';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
+import CompanyInfoForm from '@/modules/CompanyInfoForm';
+import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
+import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
+import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
 import Notification from '@/modules/Notification';
 // import PersonalDetails from '@/modules/PersonalDetails';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
+import PasswordInfoForm from '@/modules/PasswordInfoForm';
+import PersonalInfoForm from '@/modules/PersonalInfoForm';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
@@ -25,6 +31,9 @@ import Signup from '@/modules/Signup';
 export {
   AccountWrapper,
   AccountDetails,
+  CompanyInfoForm,
+  DeleteAccountForm,
+  DeactivateAccountForm,
   // RadioWithText,
   // FleetRowHeader,
   // CompanyAddresses,
@@ -43,7 +52,10 @@ export {
   PageHeader,
   AuthHeader,
   AuthWrapper,
+  ModalWrapper,
   LoginForm,
+  PersonalInfoForm,
+  PasswordInfoForm,
   ForgotPasswordForm,
   ResetPasswordForm,
   OwnerRegistrationForm,

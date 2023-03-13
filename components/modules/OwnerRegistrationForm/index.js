@@ -18,6 +18,7 @@ import { singUp } from '@/services/user';
 import {
   CompanyAddresses,
   CompanyDetails,
+  PasswordValidation,
   PersonalDetails,
   Step,
   TankerSlotsDetails,
@@ -67,6 +68,8 @@ const OwnerRegistrationForm = () => {
         <hr className="divide" />
         <Step title="Step #2: Personal details" containerClass="flex flex-col py-5 gap-5">
           <PersonalDetails />
+          <p className="text-black font-semibold text-sm py-5">Enter a strong password according to our requirements</p>
+          <PasswordValidation />
         </Step>
         <hr className="divide" />
         <Step title="Step #3: Choose who you are" containerClass="flex flex-col py-5 gap-5">
