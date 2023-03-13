@@ -3,8 +3,8 @@ import {
   resetPasswordAdapter,
   singUpAdapter,
   updatePasswordAdapter,
-  updatePersonalCompanyAdapter,
-  updatePersonalInfoAdapter,
+  updateCompanyAdapter,
+  updateInfoAdapter,
 } from '@/adapters/user';
 import { postData } from '@/utils/dataFetching';
 
@@ -34,31 +34,31 @@ export async function singUp({ data }) {
   return response;
 }
 
-export async function updatePersonalPassword({ data }) {
+export async function updatePassword({ data }) {
   const body = updatePasswordAdapter({ data });
   const {
     data: { message },
-  } = await postData(`personal/update-password`, body);
+  } = await postData(`account/update-password`, body);
   return {
     message,
   };
 }
 
-export async function updatePersonalInfo({ data }) {
-  const body = updatePersonalInfoAdapter({ data });
+export async function updateInfo({ data }) {
+  const body = updateInfoAdapter({ data });
   const {
     data: { message },
-  } = await postData(`personal/update-user-info`, body);
+  } = await postData(`account/update-info`, body);
   return {
     message,
   };
 }
 
-export async function updatePersonalCompany({ data }) {
-  const body = updatePersonalCompanyAdapter({ data });
+export async function updateCompany({ data }) {
+  const body = updateCompanyAdapter({ data });
   const {
     data: { message },
-  } = await postData(`personal/update-company`, body);
+  } = await postData(`account/update-company`, body);
   return {
     message,
   };
