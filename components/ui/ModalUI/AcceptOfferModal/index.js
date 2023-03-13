@@ -14,13 +14,13 @@ import {
   incomingOfferVoyageDetailData,
 } from '@/utils/mock';
 
-const AcceptOfferModal = ({ setModalId, closeModal }) => {
+const AcceptOfferModal = ({ setStep, closeModal }) => {
   const [currentTab, setCurrentTab] = useState(acceptOfferTabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
 
   return (
     <div className="w-[610px]">
-      <ModalHeader title="Accept the offer" goBack={() => setModalId('view_offer')} />
+      <ModalHeader title="Accept the offer" goBack={() => setStep('view_offer')} />
 
       <Countdown time="1d 1h 50m" customStyles="mt-5" />
 
@@ -48,12 +48,12 @@ const AcceptOfferModal = ({ setModalId, closeModal }) => {
 };
 
 AcceptOfferModal.defaultProps = {
-  setModalId: () => {},
+  setStep: () => {},
   closeModal: () => {},
 };
 
 AcceptOfferModal.propTypes = {
-  setModalId: PropTypes.func,
+  setStep: PropTypes.func,
   closeModal: PropTypes.func,
 };
 

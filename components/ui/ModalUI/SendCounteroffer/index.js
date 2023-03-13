@@ -12,14 +12,14 @@ import CounterofferCommentsContent from '@/ui/ModalUI/SendCounteroffer/Counterof
 import CounterofferCOTContent from '@/ui/ModalUI/SendCounteroffer/CounterofferCOTContent';
 import { incomingOfferCommentsData, incomingOfferVoyageDetailData, sendCounterofferModalTabs } from '@/utils/mock';
 
-const SendCounteroffer = ({ setModalId, closeModal }) => {
+const SendCounteroffer = ({ setStep, closeModal }) => {
   const [currentTab, setCurrentTab] = useState(sendCounterofferModalTabs[0].value);
   const [responseCountdown, setResponseCountdown] = useState('20 min');
   const [showScroll, setShowScroll] = useState(false);
 
   return (
     <div className="w-[610px]">
-      <ModalHeader title="Send Counteroffer" goBack={() => setModalId('view_offer')} />
+      <ModalHeader title="Send Counteroffer" goBack={() => setStep('view_offer')} />
 
       <div className="flex text-[12px] items-center mt-5">
         <Countdown time="1h 50m" />
@@ -63,7 +63,7 @@ const SendCounteroffer = ({ setModalId, closeModal }) => {
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
         <Button
-          onClick={() => setModalId('offer_counteroffer_confirm')}
+          onClick={() => setStep('offer_counteroffer_confirm')}
           buttonProps={{ text: 'Confirm changes', variant: 'primary', size: 'large' }}
         />
       </div>
@@ -72,12 +72,12 @@ const SendCounteroffer = ({ setModalId, closeModal }) => {
 };
 
 SendCounteroffer.defaultProps = {
-  setModalId: () => {},
+  setStep: () => {},
   closeModal: () => {},
 };
 
 SendCounteroffer.propTypes = {
-  setModalId: PropTypes.func,
+  setStep: PropTypes.func,
   closeModal: PropTypes.func,
 };
 

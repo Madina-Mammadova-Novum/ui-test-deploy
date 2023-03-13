@@ -13,12 +13,12 @@ import {
   incomingOfferVoyageDetailData,
 } from '@/utils/mock';
 
-const ConfirmCounteroffer = ({ setModalId, closeModal }) => {
+const ConfirmCounteroffer = ({ setStep, closeModal }) => {
   const [responseCountdown, setResponseCountdown] = useState('20 min');
   const [showScroll, setShowScroll] = useState(false);
   return (
     <div className="w-[610px]">
-      <ModalHeader title="Confirm Changes to Send Counteroffer" goBack={() => setModalId('offer_counteroffer')} />
+      <ModalHeader title="Confirm Changes to Send Counteroffer" goBack={() => setStep('offer_counteroffer')} />
 
       <div className="flex text-[12px] items-center mt-5">
         <Countdown time="1h 50m" />
@@ -57,12 +57,12 @@ const ConfirmCounteroffer = ({ setModalId, closeModal }) => {
 };
 
 ConfirmCounteroffer.defaultProps = {
-  setModalId: () => {},
+  setStep: () => {},
   closeModal: () => {},
 };
 
 ConfirmCounteroffer.propTypes = {
-  setModalId: PropTypes.func,
+  setStep: PropTypes.func,
   closeModal: PropTypes.func,
 };
 

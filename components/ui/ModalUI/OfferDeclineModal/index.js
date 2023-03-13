@@ -36,7 +36,7 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineModal = ({ setModalId, closeModal }) => {
+const OfferDeclineModal = ({ setStep, closeModal }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
   const [showTextField, setShowTextField] = useState(false);
   const handleCheck = (id) => {
@@ -48,7 +48,7 @@ const OfferDeclineModal = ({ setModalId, closeModal }) => {
 
   return (
     <div className="w-[300px]">
-      <ModalHeader title="Decline the Offer" goBack={() => setModalId('view_offer')} />
+      <ModalHeader title="Decline the Offer" goBack={() => setStep('view_offer')} />
 
       <Countdown time="1d 1h 50m" customStyles="mt-5" />
 
@@ -85,12 +85,12 @@ const OfferDeclineModal = ({ setModalId, closeModal }) => {
 };
 
 OfferDeclineModal.defaultProps = {
-  setModalId: () => {},
+  setStep: () => {},
   closeModal: () => {},
 };
 
 OfferDeclineModal.propTypes = {
-  setModalId: PropTypes.func,
+  setStep: PropTypes.func,
   closeModal: PropTypes.func,
 };
 

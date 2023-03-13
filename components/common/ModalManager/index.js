@@ -2,16 +2,7 @@
 
 import PropTypes from 'prop-types';
 
-import {
-  AcceptOfferModal,
-  ChartererInformationModal,
-  ConfirmCounteroffer,
-  CounterofferModal,
-  FailedOfferModal,
-  IncomingOfferModal,
-  OfferDeclineModal,
-  SendCounteroffer,
-} from '@/ui';
+import { ChartererInformationModal, CounterofferModal, FailedOfferModal, IncomingOfferModal } from '@/ui';
 
 const ModalManager = ({ modalId, data, setModalId, closeModal }) => {
   switch (modalId) {
@@ -23,14 +14,6 @@ const ModalManager = ({ modalId, data, setModalId, closeModal }) => {
       return <FailedOfferModal data={data} closeModal={closeModal} />;
     case 'charterer_info':
       return <ChartererInformationModal data={data} />;
-    case 'offer_decline':
-      return <OfferDeclineModal data={data} setModalId={setModalId} closeModal={closeModal} />;
-    case 'offer_counteroffer':
-      return <SendCounteroffer data={data} setModalId={setModalId} closeModal={closeModal} />;
-    case 'offer_counteroffer_confirm':
-      return <ConfirmCounteroffer data={data} setModalId={setModalId} closeModal={closeModal} />;
-    case 'offer_accept':
-      return <AcceptOfferModal data={data} setModalId={setModalId} closeModal={closeModal} />;
     default:
       return null;
   }
