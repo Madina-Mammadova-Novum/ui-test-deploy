@@ -1,31 +1,33 @@
 'use client';
 
+import { useFormContext } from 'react-hook-form';
+
 import PropTypes from 'prop-types';
 
-import { Form } from '@/elements';
-import { useHookForm } from '@/utils/hooks';
+import { Button } from '@/elements';
+import { SIZES, STYLES } from '@/lib/constants';
 
 const FormManager = ({ children, submitAction, submitButton, className }) => {
   const {
     handleSubmit,
     formState: { isSubmitting },
-    reset,
-  } = useHookForm();
-
-  const onSubmit = async (data) => {
-    submitAction(data);
-    reset();
-  };
+  } = useFormContext();
+  const { text, variant, size, className: buttonClassName } = submitButton;
 
   return (
-    <Form
-      className={`${className} flex flex-col gap-4`}
-      onSubmit={handleSubmit(onSubmit)}
-      disabled={isSubmitting}
-      submitButton={submitButton}
-    >
+    <form className={`${className} flex flex-col gap-4`} autoComplete="off" onSubmit={handleSubmit(submitAction)}>
       {children}
-    </Form>
+      <Button
+        type="submit"
+        buttonProps={{
+          text: isSubmitting ? 'Please wait...' : text,
+          variant: isSubmitting ? 'secondary' : variant,
+          size,
+        }}
+        disabled={isSubmitting}
+        customStyles={`${buttonClassName} mt-4 w-full`}
+      />
+    </form>
   );
 };
 
@@ -34,7 +36,12 @@ FormManager.defaultProps = {
 };
 
 FormManager.propTypes = {
-  submitButton: PropTypes.shape({}).isRequired,
+  submitButton: {
+    text: PropTypes.string,
+    icon: PropTypes.node,
+    variant: PropTypes.oneOf(STYLES),
+    size: PropTypes.oneOf(SIZES.BUTTONS),
+  }.isRequired,
   submitAction: PropTypes.func.isRequired,
   className: PropTypes.string,
 };

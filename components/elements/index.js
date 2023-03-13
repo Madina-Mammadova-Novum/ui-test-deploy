@@ -8,7 +8,6 @@ import Dropdown from '@/elements/Dropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
-import Form from '@/elements/Form';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
@@ -58,7 +57,6 @@ export {
   // RangeDatePicker,
   Dropdown,
   NextImage,
-  Form,
   Modal,
   // File,
   // Pagination,

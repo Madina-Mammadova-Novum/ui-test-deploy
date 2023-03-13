@@ -5,7 +5,7 @@ import { FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
-import { Input, NextLink, PasswordInput } from '@/elements';
+import { Input, PasswordInput } from '@/elements';
 import { emailSchema, passwordSchema } from '@/lib/schemas';
 import { useHookFormParams } from '@/utils/hooks';
 
@@ -45,11 +45,6 @@ const LoginForm = () => {
           error={errors?.password?.message}
         />
       </FormManager>
-      <div className="ml-auto">
-        <NextLink href="/forgot-password" className="text-blue underline text-xsm">
-          Forgot your password
-        </NextLink>
-      </div>
     </FormProvider>
   );
 };
