@@ -2,9 +2,9 @@ import {
   forgotPasswordAdapter,
   resetPasswordAdapter,
   singUpAdapter,
-  updatePasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
+  updatePasswordAdapter,
 } from '@/adapters/user';
 import { postData } from '@/utils/dataFetching';
 
