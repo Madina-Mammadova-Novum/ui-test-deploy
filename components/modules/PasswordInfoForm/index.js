@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
-import { Input, Title } from '@/elements';
+import { PasswordInput, Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
-import { updatePersonalPassword } from '@/services';
+import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -29,7 +29,7 @@ const PasswordInfoForm = ({ title }) => {
   } = methods;
 
   const onSubmit = async (data) => {
-    const { message } = await updatePersonalPassword({ data });
+    const { message } = await updatePassword({ data });
     successToast(message);
   };
 
@@ -42,10 +42,10 @@ const PasswordInfoForm = ({ title }) => {
         <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
           {title}
         </Title>
-        <Input
+        <PasswordInput
           {...register('currentPassword')}
-          type="password"
           label="Current password"
+          placeholder="Enter your password"
           error={errors.currentPassword?.message}
           disabled
         />
