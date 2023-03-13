@@ -1,4 +1,5 @@
 import AddressDetails from '@/units/AddressDetailsForm';
+import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
 import Notes from '@/units/Notes';
@@ -22,4 +23,5 @@ export {
   TankerSlotsDetails,
   CompanyAddresses,
   TermsAndConditions,
+  CargoesSlotsDetails
 };

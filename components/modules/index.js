@@ -5,6 +5,7 @@
 import AccountDetails from '@/modules/AccountDetails';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
+import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
@@ -59,4 +60,5 @@ export {
   ForgotPasswordForm,
   ResetPasswordForm,
   OwnerRegistrationForm,
+  ChartererRegistrationForm
 };

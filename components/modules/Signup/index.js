@@ -5,7 +5,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { ROLES } from '@/lib/constants';
-import { OwnerRegistrationForm } from '@/modules';
+import { OwnerRegistrationForm, ChartererRegistrationForm } from '@/modules';
 import { Step, Tabs } from '@/units';
 import { signUpTab } from '@/utils/mock';
 
@@ -20,8 +20,7 @@ const Signup = () => {
   const handleFormType = (typeOfForm) => {
     switch (typeOfForm) {
       case ROLES.CHARTERER:
-        //   return <ChartererForm />;
-        return null;
+        return <ChartererRegistrationForm />;
       default:
         return <OwnerRegistrationForm />;
     }
