@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { Button } from '@/elements';
+import { FormManager } from "@/common";
 import {
   // companyAddressesSchema,
   companyDetailsSchema,
@@ -54,17 +54,17 @@ const OwnerRegistrationForm = () => {
       errorToast(message, description);
     }
   };
-  const {
-    handleSubmit,
-    watch,
-    formState: { isSubmitting },
-  } = methods;
-
-  const [agreedRules] = watch(['agreedRules']);
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <FormManager
+        submitButton={{
+          text: 'Create account',
+          variant: 'primary',
+          size: 'large'
+        }}
+        submitAction={onSubmit}
+      >
         <hr className="divide" />
         <Step title="Step #2: Personal details" containerClass="flex flex-col py-5 gap-5">
           <PersonalDetails />
@@ -84,17 +84,7 @@ const OwnerRegistrationForm = () => {
           <CompanyAddresses />
         </Step>
         <TermsAndConditions />
-        <Button
-          type="submit"
-          buttonProps={{
-            text: isSubmitting ? 'Please wait...' : 'Create account',
-            variant: isSubmitting ? 'secondary' : 'primary',
-            size: 'large',
-          }}
-          disabled={!agreedRules || isSubmitting}
-          customStyles="mt-4 w-full"
-        />
-      </form>
+      </FormManager>
     </FormProvider>
   );
 };

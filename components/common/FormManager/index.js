@@ -13,8 +13,8 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
   } = useHookForm();
 
   const onSubmit = async (data) => {
-    reset();
     submitAction(data);
+    reset();
   };
 
   return (
@@ -22,7 +22,7 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
       className={`${className} flex flex-col gap-4`}
       onSubmit={handleSubmit(onSubmit)}
       disabled={isSubmitting}
-      ctaProps={submitButton}
+      submitButton={submitButton}
     >
       {children}
     </Form>
@@ -30,13 +30,13 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
 };
 
 FormManager.defaultProps = {
-  className: '',
+  className: ''
 };
 
 FormManager.propTypes = {
   submitButton: PropTypes.shape({}).isRequired,
   submitAction: PropTypes.func.isRequired,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default FormManager;

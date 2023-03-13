@@ -33,7 +33,10 @@ const PasswordInfoForm = ({ title }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager submitAction={onSubmit} submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}>
+      <FormManager
+        submitAction={onSubmit}
+        submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
+      >
         <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
           {title}
         </Title>

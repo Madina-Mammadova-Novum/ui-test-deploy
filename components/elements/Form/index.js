@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 
 import { Button } from '@/elements';
 
-const Form = ({ className, ctaProps, onSubmit, children, disabled }) => {
-  const { text, variant, size, className: ctaClass } = ctaProps;
+const Form = ({ className, submitButton, onSubmit, children, disabled }) => {
+  const { text, variant, size, className: buttonClassName } = submitButton;
 
   return (
     <form className={className} autoComplete="off" onSubmit={onSubmit}>
@@ -16,7 +16,7 @@ const Form = ({ className, ctaProps, onSubmit, children, disabled }) => {
           size,
         }}
         disabled={disabled}
-        customStyles={`${ctaClass} mt-4 w-full`}
+        customStyles={`${buttonClassName} mt-4 w-full`}
       />
     </form>
   );
@@ -31,7 +31,7 @@ Form.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   onSubmit: PropTypes.func,
-  ctaProps: {
+  submitButton: {
     text: PropTypes.string,
     icon: PropTypes.node,
     variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'delete']),
