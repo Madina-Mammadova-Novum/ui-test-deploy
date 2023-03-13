@@ -30,7 +30,7 @@ const LoginForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager submitAction={onSubmit} submitProps={{ text: 'Log in', variant: 'primary', size: 'large' }}>
+      <FormManager submitAction={onSubmit} submitButton={{ text: 'Log in', variant: 'primary', size: 'large' }}>
         <Input
           {...register('email')}
           type="email"

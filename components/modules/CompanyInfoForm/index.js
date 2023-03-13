@@ -51,7 +51,7 @@ const CompanyInfoForm = ({ title }) => {
     <FormProvider {...methods}>
       <FormManager
         submitAction={onSubmit}
-        submitProps={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
+        submitButton={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
       >
         <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
           {title}

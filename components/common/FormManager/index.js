@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Form } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const FormManager = ({ children, submitAction, submitProps, className }) => {
+const FormManager = ({ children, submitAction, submitButton, className }) => {
   const {
     handleSubmit,
     formState: { isSubmitting },
@@ -22,7 +22,7 @@ const FormManager = ({ children, submitAction, submitProps, className }) => {
       className={`${className} flex flex-col gap-4`}
       onSubmit={handleSubmit(onSubmit)}
       disabled={isSubmitting}
-      ctaProps={submitProps}
+      ctaProps={submitButton}
     >
       {children}
     </Form>
@@ -34,7 +34,7 @@ FormManager.defaultProps = {
 };
 
 FormManager.propTypes = {
-  submitProps: PropTypes.shape({}).isRequired,
+  submitButton: PropTypes.shape({}).isRequired,
   submitAction: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
