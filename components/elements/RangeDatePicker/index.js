@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';

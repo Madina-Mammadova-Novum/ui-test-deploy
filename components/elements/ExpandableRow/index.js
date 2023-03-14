@@ -1,3 +1,5 @@
+'use client';
+
 import React, { cloneElement, useEffect, useRef, useState } from 'react';
 
 import classnames from 'classnames';

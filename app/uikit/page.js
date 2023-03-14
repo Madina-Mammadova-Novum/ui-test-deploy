@@ -24,7 +24,7 @@ import {
 } from '@/elements';
 import Tooltip from '@/elements/Tooltip';
 import '@/styles/index.css';
-import { FleetRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
+import { ExpandableRowHeader, PasswordValidation, RadioWithText, Sidebar, Upload } from '@/ui';
 import { useErrorToast, useInfoToast, useSuccessToast, useToast, useWarningToast } from '@/utils/hooks';
 import { fleetsTableHeader, fleetsTableRow, sidebarData, tabs } from '@/utils/mock';
 
@@ -158,7 +158,7 @@ const UiKit = () => {
 
       {/* Expandable row */}
 
-      <ExpandableRow headerComponent={<FleetRowHeader />}>
+      <ExpandableRow headerComponent={<ExpandableRowHeader />}>
         <Table headerData={fleetsTableHeader} rows={fleetsTableRow} />
       </ExpandableRow>
       <br />
@@ -188,8 +188,7 @@ const UiKit = () => {
       {/* Tooltips */}
 
       <Tooltip
-        tooltipText="Title"
-        variant="manual"
+        tooltipText="text"
         data={{
           title: 'IMO',
           content: ``,

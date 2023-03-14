@@ -4,9 +4,13 @@ import { Portal } from '@/elements';
 import ModalWrapper from '@/elements/Modal/ModalWrapper';
 
 const Modal = ({ closeModal, children }) => {
+  const handleClose = (e) => {
+    e.stopPropagation();
+    closeModal();
+  };
   return (
     <Portal>
-      <ModalWrapper closeModal={closeModal}>{children}</ModalWrapper>
+      <ModalWrapper closeModal={handleClose}>{children}</ModalWrapper>
     </Portal>
   );
 };

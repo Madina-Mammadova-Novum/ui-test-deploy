@@ -5,11 +5,22 @@ import ClockSVG from '@/assets/images/clock.svg';
 import { Badge, Button, NextImage, StatusIndicator, Toggle } from '@/elements';
 import { makeId } from '@/utils/helpers';
 
-const TableCell = ({ countryFlag, text, toggle, badge, actions, status, timer, semibold, color }) => {
+const TableCell = ({
+  countryFlag,
+  text,
+  toggle,
+  badge,
+  actions,
+  status,
+  timer,
+  semibold,
+  color,
+  handleActionClick,
+}) => {
   return (
     <td>
       <div
-        className={classnames('flex items-center font-normal', color && `text-${color}`, {
+        className={classnames('flex items-center font-normal text-xsm', color && `text-${color}`, {
           '!font-semibold': semibold,
         })}
       >
@@ -25,10 +36,11 @@ const TableCell = ({ countryFlag, text, toggle, badge, actions, status, timer, s
         {status && <StatusIndicator status={status} customStyles="mr-1.5" />}
         {timer && <ClockSVG className="fill-red mr-1" />}
         {actions &&
-          actions.map((action) => (
-            <Button customStyles="text-xsm" buttonProps={{ text: action, variant: 'primary', size: 'medium' }}>
-              {action}
-            </Button>
+          actions.map(({ text: btnText, value, size }) => (
+            <Button
+              buttonProps={{ text: btnText, variant: 'primary', size: size || 'medium' }}
+              onClick={() => handleActionClick({ id: value })}
+            />
           ))}
         {toggle && <Toggle id={makeId()} />}
         {badge && <Badge>{badge}</Badge>}
@@ -48,6 +60,7 @@ TableCell.defaultProps = {
   timer: false,
   semibold: false,
   color: '',
+  handleActionClick: () => {},
 };
 
 TableCell.propTypes = {
@@ -60,6 +73,7 @@ TableCell.propTypes = {
   timer: PropTypes.bool,
   semibold: PropTypes.bool,
   color: PropTypes.string,
+  handleActionClick: PropTypes.func,
 };
 
 export default TableCell;

@@ -6,7 +6,7 @@ import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
 import { noSSR } from '@/utils/helpers';
 
-const FleetRowHeader = ({ toggle, headerData }) => {
+const ExpandableRowHeader = ({ toggle, headerData }) => {
   return (
     <div className="w-full h-[60px] flex items-center">
       <DragSVG className="fill-gray mr-3.5" />
@@ -22,14 +22,14 @@ const FleetRowHeader = ({ toggle, headerData }) => {
   );
 };
 
-FleetRowHeader.defaultProps = {
+ExpandableRowHeader.defaultProps = {
   toggle: false,
   headerData: [],
 };
 
-FleetRowHeader.propTypes = {
+ExpandableRowHeader.propTypes = {
   toggle: PropTypes.bool,
   headerData: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
-export default noSSR(FleetRowHeader);
+export default noSSR(ExpandableRowHeader);

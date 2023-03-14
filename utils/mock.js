@@ -273,7 +273,7 @@ export const negotiatingIncomingTableRow = [
       text: '1',
     },
     {
-      text: 'QW1122',
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
       semibold: true,
       color: 'blue',
     },
@@ -301,7 +301,7 @@ export const negotiatingIncomingTableRow = [
       color: 'red',
     },
     {
-      actions: ['View offer'],
+      actions: [{ text: 'View offer', value: 'view_offer' }],
     },
   ],
   [
@@ -309,7 +309,7 @@ export const negotiatingIncomingTableRow = [
       text: '2',
     },
     {
-      text: 'QW1122',
+      actions: [{ text: 'QW6969', value: 'charterer_info', size: 'small' }],
       semibold: true,
       color: 'blue',
     },
@@ -337,7 +337,7 @@ export const negotiatingIncomingTableRow = [
       color: 'red',
     },
     {
-      actions: ['View offer'],
+      actions: [{ text: 'View offer', value: 'view_offer' }],
     },
   ],
 ];
@@ -347,7 +347,7 @@ export const negotiatingCounterofferTableRow = [
       text: '1',
     },
     {
-      text: 'AS5566',
+      actions: [{ text: 'AS5566', value: 'charterer_info', size: 'small' }],
       semibold: true,
       color: 'blue',
     },
@@ -370,7 +370,7 @@ export const negotiatingCounterofferTableRow = [
       color: 'red',
     },
     {
-      actions: ['View counteroffer'],
+      actions: [{ text: 'View counteroffer', value: 'view_counteroffer' }],
     },
   ],
   [
@@ -378,7 +378,7 @@ export const negotiatingCounterofferTableRow = [
       text: '2',
     },
     {
-      text: 'QW1122',
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
       semibold: true,
       color: 'blue',
     },
@@ -401,7 +401,7 @@ export const negotiatingCounterofferTableRow = [
       color: 'red',
     },
     {
-      actions: ['View counteroffer'],
+      actions: [{ text: 'View counteroffer', value: 'view_counteroffer' }],
     },
   ],
 ];
@@ -411,7 +411,7 @@ export const negotiatingFailedTableRow = [
       text: '1',
     },
     {
-      text: 'ZX9988',
+      actions: [{ text: 'ZX9988', value: 'charterer_info', size: 'small' }],
       semibold: true,
       color: 'blue',
     },
@@ -433,7 +433,7 @@ export const negotiatingFailedTableRow = [
       semibold: true,
     },
     {
-      actions: ['View failed offer'],
+      actions: [{ text: 'View failed offer', value: 'view_failed_offer' }],
     },
   ],
   [
@@ -441,7 +441,7 @@ export const negotiatingFailedTableRow = [
       text: '2',
     },
     {
-      text: 'QW1122',
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
       semibold: true,
       color: 'blue',
     },
@@ -463,7 +463,7 @@ export const negotiatingFailedTableRow = [
       semibold: true,
     },
     {
-      actions: ['View failed offer'],
+      actions: [{ text: 'View failed offer', value: 'view_failed_offer' }],
     },
   ],
 ];
@@ -582,5 +582,195 @@ export const expandedNegotiatingRowTabs = [
   {
     value: 'failed',
     label: 'Failed',
+  },
+];
+
+export const incomingOffersModalTabs = [
+  {
+    value: 'voyage_details',
+    label: 'Voyage details',
+  },
+  {
+    value: 'commercial_offer_terms',
+    label: 'Commercial offer terms',
+  },
+  {
+    value: 'comments',
+    label: 'Comments',
+  },
+];
+
+export const sendCounterofferModalTabs = [
+  {
+    value: 'commercial_offer_terms',
+    label: 'Commercial offer terms',
+  },
+  {
+    value: 'voyage_details',
+    label: 'Voyage details',
+  },
+  {
+    value: 'comments',
+    label: 'Comments',
+  },
+];
+
+export const acceptOfferTabs = [
+  {
+    value: 'message',
+    label: 'Message',
+  },
+  {
+    value: 'commercial_offer_terms',
+    label: 'Commercial offer terms',
+  },
+  {
+    value: 'voyage_details',
+    label: 'Voyage details',
+  },
+];
+
+export const incomingOfferVoyageDetailData = {
+  dates: [
+    [
+      {
+        key: 'Laycan start:',
+        label: 'Dec 18, 2021',
+      },
+      {
+        key: 'Laycan end:',
+        label: 'Dec 30, 2021',
+      },
+    ],
+  ],
+  ports: [
+    [
+      {
+        key: 'Load port:',
+        label: 'Barcelona, ESBCN',
+        countryFlag: usFlag,
+      },
+      {
+        key: 'Load terminal:',
+        label: 'Oil terminal #1',
+      },
+    ],
+    [
+      {
+        key: 'Discharge port:',
+        label: 'Benghazi, LYBEN',
+        countryFlag: usFlag,
+      },
+      {
+        key: 'Discharge terminal:',
+        label: 'Oil terminal #4',
+      },
+    ],
+  ],
+};
+export const incomingOfferCommercialTermsData = {
+  cargo: [
+    {
+      key: 'Cargo Type:',
+      label: 'Crude Oil',
+    },
+  ],
+  products: [
+    [
+      {
+        key: 'Product #1:',
+        label: 'Light Crude Oil',
+      },
+      {
+        key: 'Density:',
+        label: '0.764 mt/m3',
+      },
+      {
+        key: 'Min quantity:',
+        label: '24,118 tons',
+      },
+    ],
+    [
+      {
+        key: 'Product #2:',
+        label: 'Medium Crude Oil',
+      },
+      {
+        key: 'Density:',
+        label: '0.803 mt/m3',
+      },
+      {
+        key: 'Min quantity:',
+        label: '19,001 tons',
+      },
+    ],
+  ],
+  details: [
+    {
+      key: 'Freight:',
+      label: 'WS 110',
+    },
+    {
+      key: 'Demurrage rate:',
+      label: '$17,000 per day',
+    },
+    {
+      key: 'Laytime + NOR:',
+      label: '72 hrs + (6 + 6 hrs)',
+    },
+    {
+      key: 'Undisputed demurrage payment terms:',
+      label: '3 days undisputed demmurage to be paid along with freight',
+    },
+    {
+      key: 'Payment terms:',
+      label: 'Total freight amount to be paid before breaking bulk (BBB)',
+    },
+  ],
+};
+
+export const incomingOfferCommentsData = [
+  {
+    title:
+      'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing is placeholder text commonly. ',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+  },
+  {
+    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+  },
+  {
+    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+    latest: true,
+  },
+];
+
+export const chartererInfoData = [
+  {
+    key: 'Years in Operation:',
+    label: '3-5 years',
+  },
+  {
+    key: 'Estimated Number of Charters per Year:',
+    label: '4-9 charters',
+  },
+  {
+    key: 'Average Tonnage per Charter:',
+    label: '121 - 200 kt',
+  },
+  {
+    key: 'Country of registration:',
+    label: 'United States',
+    countryFlag: usFlag,
+  },
+];
+
+export const acceptOfferMessages = [
+  {
+    text: 'Dear John Doe, our broker will be in toch with you to fix other terms and conditions of the charter party within 5 - 10 minutes',
   },
 ];

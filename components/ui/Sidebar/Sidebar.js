@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

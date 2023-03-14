@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableCell from '@/elements/Table/TableCell';
 import { noSSR } from '@/utils/helpers';
 
-const TableRow = ({ rowData }) => {
+const TableRow = ({ rowData, handleActionClick }) => {
   return (
     <tr>
       {rowData.map(({ countryFlag, text, actions, toggle, badge, status, timer, semibold, color }) => (
@@ -17,6 +17,7 @@ const TableRow = ({ rowData }) => {
           timer={timer}
           semibold={semibold}
           color={color}
+          handleActionClick={handleActionClick}
         />
       ))}
     </tr>
@@ -25,10 +26,12 @@ const TableRow = ({ rowData }) => {
 
 TableRow.defaultProps = {
   rowData: [],
+  handleActionClick: () => {},
 };
 
 TableRow.propTypes = {
   rowData: PropTypes.shape([]),
+  handleActionClick: PropTypes.func,
 };
 
 export default noSSR(TableRow);
