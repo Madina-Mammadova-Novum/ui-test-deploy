@@ -1,5 +1,7 @@
 'use client';
 
+// todo: that must rendered on server side
+
 import { useMemo } from 'react';
 
 import { navBarPropTypes } from '@/lib/types';
