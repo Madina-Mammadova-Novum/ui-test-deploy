@@ -7,7 +7,7 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import {
-  // companyAddressesSchema,
+  companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
@@ -32,10 +32,19 @@ const schema = yup
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
     ...tankerSlotsDetailsSchema(),
-    // ...companyAddressesSchema(),
+    ...companyAddressesSchema(),
     // ...termsAndConditionsSchema()
   })
   .required();
+
+console.log({
+  ...personalDetailsSchema(),
+  ...passwordValidationSchema(),
+  ...companyDetailsSchema(),
+  ...tankerSlotsDetailsSchema(),
+  ...companyAddressesSchema(),
+  // ...termsAndConditionsSchema()
+});
 
 const OwnerRegistrationForm = () => {
   const methods = useForm({

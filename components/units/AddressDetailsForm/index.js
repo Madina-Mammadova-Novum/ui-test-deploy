@@ -59,6 +59,7 @@ const AddressDetails = ({ title, type, countries }) => {
             type="text"
             label="Zip / Postal Code (optional)"
             placeholder="10012"
+            error={errors[`${type}PostalCode`]?.message}
             disabled={disabled || isSubmitting}
           />
         </div>

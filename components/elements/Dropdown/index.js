@@ -25,7 +25,8 @@ const Dropdown = ({ name, label, options, onChange, disabled }) => {
     <Controller
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
-        const error = errors[name];
+        console.log({ errors });
+        const error = errors[name]?.value;
         return (
           <div className="relative bottom-1.5">
             <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">
