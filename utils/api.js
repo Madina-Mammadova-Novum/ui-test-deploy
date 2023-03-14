@@ -26,84 +26,46 @@ export const getCookieFromReq = (req, cookieKey) => {
   return cookie.split('=')[1];
 };
 
-export const postData = async (url, req, data = {}) => {
-  const response = await fetch(url, {
-    ...fetchOptions(req),
-    method: 'POST',
-    body: data, // body data type must match "Content-Type" header
-  });
-  return response;
-};
-
-export const patchData = async (url, req, data = {}) => {
-  const response = await fetch(url, {
-    ...fetchOptions(req),
-    method: 'PATCH',
-    body: data, // body data type must match "Content-Type" header
-  });
-  return response;
-};
-
-export const deleteData = async (url, req, data = {}) => {
-  const response = await fetch(url, {
-    ...fetchOptions(req),
-    method: 'DELETE',
-    body: data, // body data type must match "Content-Type" header
-  });
-  return response;
-};
-
-export const getData = async (url, req) => {
-  const response = await fetch(url, {
-    ...fetchOptions(req),
-    method: 'GET',
-  });
-  return response;
-};
-
-const fetchOptions = (req) => {
-  const authToken = getCookieFromReq(req, 'auth_token');
-  const token = `Bearer ${authToken}`;
-
-  return {
-    // mode: 'cors', // no-cors, *cors, same-origin
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *same-origin, omit
+const fetchOptions = (requestMethod) => {
+  const method = requestMethod.toUpperCase();
+  const options = {
+    method, // *GET, POST, PUT, DELETE, etc.
+    // mode: "cors", // no-cors, *cors, same-origin
+    // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: "same-origin", // include, *same-origin, omit
     headers: {
       'Content-Type': 'application/json',
-      Authorization: authToken ? token : '',
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    // redirect: 'follow', // manual, *follow, error
-    // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    // redirect: "follow", // manual, *follow, error
+    // referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    // body: JSON.stringify(data), // body data type must match "Content-Type" header
   };
+
+  console.log({ options });
+  // if (['POST', 'PUT', 'PATCH'].includes(method)) {
+  //   options.body = JSON.stringify(data);
+  // }
+  return options;
 };
 
 export function getApiURL(path, apiVersion = 'v1') {
-  return `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${apiVersion}/${path}`;
+  return `${process.env.BACKEND_API_URL}/${apiVersion}/${path}`;
+}
+
+export function getIdentityApiURL(path, apiVersion = null) {
+  let pathString = `/${path}`;
+  if (apiVersion !== null) {
+    pathString = `/${apiVersion}${pathString}`;
+  }
+  return `${process.env.IDENTITY_API_URL}${pathString}`;
 }
 
 export const apiHandler = async (options, req, res) => {
-  const { requestMethod, allowedMethods, endpoint } = options;
+  const { endpoint, requestMethod, allowedMethods } = options;
   if (checkRequestMethod(req, allowedMethods)) {
-    let response;
-    switch (requestMethod.toLowerCase()) {
-      case 'post': {
-        response = await postData(endpoint, req, req.body);
-        break;
-      }
-      case 'patch': {
-        response = await patchData(endpoint, req, req.body);
-        break;
-      }
-      case 'delete': {
-        response = await deleteData(endpoint, req, req.body);
-        break;
-      }
-      default: {
-        response = await getData(endpoint, req);
-      }
-    }
+    const requestOptions = fetchOptions(requestMethod);
+    const response = await fetch(endpoint, requestOptions);
 
     const result = await response.json();
 
@@ -167,6 +129,18 @@ export const deleteHandler = (path, req, res) => {
       endpoint: getApiURL(path),
       requestMethod: 'DELETE',
       allowedMethods: ['OPTIONS', 'DELETE'],
+    },
+    req,
+    res
+  );
+};
+
+export const identityHandler = (path, req, res) => {
+  return apiHandler(
+    {
+      endpoint: getIdentityApiURL(path),
+      requestMethod: 'POST',
+      allowedMethods: ['OPTIONS', 'POST'],
     },
     req,
     res
