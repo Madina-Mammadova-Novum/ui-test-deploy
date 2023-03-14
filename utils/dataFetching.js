@@ -45,10 +45,8 @@ export async function apiHandler(options) {
     return responseAdapter(result);
   } catch (error) {
     return responseErrorAdapter({
-      data: {
-        message: error?.message,
-        errors: error,
-      },
+      message: error?.message,
+      errors: error,
     });
   }
 }
