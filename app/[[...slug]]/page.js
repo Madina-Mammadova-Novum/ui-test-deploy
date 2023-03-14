@@ -17,9 +17,6 @@ export default async function Home({ params }) {
       <h1>{title}</h1>
       <ul>
         <li>
-          <NextLink href="/uikit">ui-kit</NextLink>
-        </li>
-        <li>
           <NextLink href={ROUTES.LOGIN}>LOGIN</NextLink>
         </li>
         <li>
@@ -31,9 +28,9 @@ export default async function Home({ params }) {
         <li>
           <NextLink href={ROUTES.SIGNUP}>SIGNUP</NextLink>
         </li>
-        <li>
+        {/* <li>
           <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink>
-        </li>
+        </li> */}
       </ul>
 
       {/* {blocks && <BlockManager blocks={blocks} />} */}

@@ -43,12 +43,13 @@ const ChartererRegistrationForm = () => {
   return (
     <FormProvider {...methods}>
       <FormManager
+        className="pb-5"
+        submitAction={onSubmit}
         submitButton={{
           text: 'Create account',
           variant: 'primary',
           size: 'large',
         }}
-        submitAction={onSubmit}
       >
         <Divider className="mt-5" />
         <Step title="Step #2: Personal details" containerClass="flex flex-col gap-5">
@@ -73,5 +74,5 @@ const ChartererRegistrationForm = () => {
     </FormProvider>
   );
 };
-//
+
 export default ChartererRegistrationForm;

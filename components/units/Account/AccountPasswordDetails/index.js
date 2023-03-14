@@ -1,33 +1,34 @@
 'use client';
 
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-import { Button, Title } from '@/elements';
+import { Button, Modal, Title } from '@/elements';
 
-const AccountPasswordDetails = ({ onEdit }) => {
+const AccountPasswordDetails = ({ children }) => {
+  const [opened, setOpened] = useState(false);
+
+  const handleOpenModal = () => setOpened(true);
+  const handleCloseModal = () => setOpened(false);
+
   return (
-    <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
-      <div className="flex justify-between items-center">
-        <Title component="h3" className="text-lg text-black font-bold">
-          Password
-        </Title>
-        <Button
-          buttonProps={{ text: 'Change your password', variant: 'primary', size: 'medium' }}
-          customStyles="!py-1 !px-2.5"
-          onClick={onEdit}
-        />
+    <>
+      <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
+        <div className="flex justify-between items-center">
+          <Title component="h3" className="text-lg text-black font-bold">
+            Password
+          </Title>
+          <Button
+            buttonProps={{ text: 'Change your password', variant: 'primary', size: 'medium' }}
+            customStyles="!py-1 !px-2.5"
+            onClick={handleOpenModal}
+          />
+        </div>
       </div>
-    </div>
+      <Modal opened={opened} onClose={handleCloseModal}>
+        {children}
+      </Modal>
+    </>
   );
-};
-
-AccountPasswordDetails.defaultProps = {
-  data: {},
-};
-
-AccountPasswordDetails.propTypes = {
-  onEdit: PropTypes.func.isRequired,
-  data: PropTypes.shape({}),
 };
 
 export default AccountPasswordDetails;

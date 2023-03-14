@@ -2,7 +2,6 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -20,7 +19,7 @@ const state = {
 
 const schema = yup.object({ ...updatePasswordSchema() });
 
-const PasswordInfoForm = ({ title }) => {
+const PasswordInfoForm = () => {
   const methods = useHookFormParams({ state, schema });
 
   const {
@@ -40,7 +39,7 @@ const PasswordInfoForm = ({ title }) => {
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
         <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
-          {title}
+          Change Your Password
         </Title>
         <PasswordInput
           {...register('currentPassword')}
@@ -54,14 +53,6 @@ const PasswordInfoForm = ({ title }) => {
       </FormManager>
     </FormProvider>
   );
-};
-
-PasswordInfoForm.defaultProps = {
-  title: '',
-};
-
-PasswordInfoForm.propTypes = {
-  title: PropTypes.string,
 };
 
 export default PasswordInfoForm;

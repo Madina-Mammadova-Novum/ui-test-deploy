@@ -2,7 +2,6 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -28,7 +27,7 @@ const state = {
   AddressOptional: '',
 };
 
-const CompanyInfoForm = ({ title }) => {
+const CompanyInfoForm = () => {
   const methods = useHookFormParams({ state, schema });
 
   const onSubmit = async (data) => {
@@ -56,7 +55,7 @@ const CompanyInfoForm = ({ title }) => {
         submitButton={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
       >
         <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
-          {title}
+          Edit Company Details
         </Title>
         <Notes
           title="Please note!"
@@ -74,14 +73,6 @@ const CompanyInfoForm = ({ title }) => {
       </FormManager>
     </FormProvider>
   );
-};
-
-CompanyInfoForm.defaultProps = {
-  title: '',
-};
-
-CompanyInfoForm.propTypes = {
-  title: PropTypes.string,
 };
 
 export default CompanyInfoForm;

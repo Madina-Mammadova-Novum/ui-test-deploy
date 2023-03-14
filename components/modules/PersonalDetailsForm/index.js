@@ -2,7 +2,6 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -23,7 +22,7 @@ const state = {
   secondaryPhoneNumber: '',
 };
 
-const PersonalDetailsForm = ({ title }) => {
+const PersonalDetailsForm = () => {
   const methods = useHookFormParams({ state, schema });
 
   const onSubmit = async (data) => {
@@ -46,7 +45,7 @@ const PersonalDetailsForm = ({ title }) => {
         submitButton={{ text: 'Edit personal details', variant: 'primary', size: 'large' }}
       >
         <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
-          {title}
+          Edit Personal Details
         </Title>
         <Notes
           title="Please note!"
@@ -57,14 +56,6 @@ const PersonalDetailsForm = ({ title }) => {
       </FormManager>
     </FormProvider>
   );
-};
-
-PersonalDetailsForm.defaultProps = {
-  title: '',
-};
-
-PersonalDetailsForm.propTypes = {
-  title: PropTypes.string,
 };
 
 export default PersonalDetailsForm;

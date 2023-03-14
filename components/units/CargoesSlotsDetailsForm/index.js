@@ -81,8 +81,10 @@ const CargoesSlotsDetailsForm = () => {
       </div>
 
       {indexes?.map((element, index) => {
+        const rowIndex = indexes.findIndex((obj) => obj === element);
+
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={element.imo.id}>
+          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={rowIndex}>
             <Input
               {...register(inputName(element.imo.name, index))}
               type="number"
