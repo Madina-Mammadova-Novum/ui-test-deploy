@@ -1,19 +1,20 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
+import Divider from '@/elements/Divider';
 import {
+  companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
-  // tankerSlotsDetailsSchema
+  // termsAndConditionsSchema,
 } from '@/lib/schemas';
 import {
-  CharteringSlotsDetails,
+  CargoesSlotsDetails,
   CompanyAddresses,
   CompanyDetails,
   PasswordValidation,
@@ -21,25 +22,22 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
+import { useHookFormParams } from '@/utils/hooks';
 
 const schema = yup
   .object({
     ...personalDetailsSchema(),
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
-    // ...tankerSlotsDetailsSchema(),
-    // ...companyAddressesSchema(),
-    // ...termsAndConditionsSchema()
+    ...companyAddressesSchema(),
   })
   .required();
 
 const ChartererRegistrationForm = () => {
-  const methods = useForm({
-    resolver: yupResolver(schema),
-  });
+  const methods = useHookFormParams({ schema });
 
   const onSubmit = async (formData) => {
-    console.log({ formData });
+    return { formData };
   };
 
   return (
@@ -52,21 +50,23 @@ const ChartererRegistrationForm = () => {
         }}
         submitAction={onSubmit}
       >
-        <hr className="divide" />
-        <Step title="Step #2: Personal details" containerClass="flex flex-col py-5 gap-5">
+        <Divider className="mt-5" />
+        <Step title="Step #2: Personal details" containerClass="flex flex-col gap-5">
           <PersonalDetails />
-          <p className="text-black font-semibold text-sm py-5">Enter a strong password according to our requirements</p>
+          <p className="text-black font-semibold text-sm pt-5">Enter a strong password according to our requirements</p>
           <PasswordValidation />
         </Step>
-        <hr className="divide" />
-        <Step title="Step #3: Choose who you are" containerClass="flex flex-col py-5 gap-5">
+        <Divider />
+        <Step title="Step #3: Choose who you are" containerClass="flex flex-col gap-5">
           <CompanyDetails />
         </Step>
-        <Step title="Step #4: Company Addresss" containerClass="flex flex-col py-5 gap-5">
+        <Divider />
+        <Step title="Step #4: Company Addresss" containerClass="flex flex-col gap-5">
           <CompanyAddresses />
         </Step>
-        <Step title="Step 5: Recent Chartering Experience" containerClass="flex flex-col py-5 gap-5">
-          <CharteringSlotsDetails />
+        <Divider />
+        <Step title="Step #5: Recent Chartering Experience" containerClass="flex flex-col gap-5">
+          <CargoesSlotsDetails />
         </Step>
         <TermsAndConditions />
       </FormManager>

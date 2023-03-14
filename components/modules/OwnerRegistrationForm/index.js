@@ -6,8 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
+import Divider from '@/elements/Divider';
 import {
   companyAddressesSchema,
+  // companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
@@ -37,14 +39,14 @@ const schema = yup
   })
   .required();
 
-console.log({
-  ...personalDetailsSchema(),
-  ...passwordValidationSchema(),
-  ...companyDetailsSchema(),
-  ...tankerSlotsDetailsSchema(),
-  ...companyAddressesSchema(),
-  // ...termsAndConditionsSchema()
-});
+// console.log({
+//   ...personalDetailsSchema(),
+//   ...passwordValidationSchema(),
+//   ...companyDetailsSchema(),
+//   ...tankerSlotsDetailsSchema(),
+//   ...companyAddressesSchema(),
+// ...termsAndConditionsSchema()
+// });
 
 const OwnerRegistrationForm = () => {
   const methods = useForm({
@@ -74,22 +76,22 @@ const OwnerRegistrationForm = () => {
         }}
         submitAction={onSubmit}
       >
-        <hr className="divide" />
-        <Step title="Step #2: Personal details" containerClass="flex flex-col py-5 gap-5">
+        <Divider className="mt-5" />
+        <Step title="Step #2: Personal details" containerClass="flex flex-col gap-5">
           <PersonalDetails />
-          <p className="text-black font-semibold text-sm py-5">Enter a strong password according to our requirements</p>
+          <p className="text-black font-semibold text-sm pt-5">Enter a strong password according to our requirements</p>
           <PasswordValidation />
         </Step>
-        <hr className="divide" />
-        <Step title="Step #3: Choose who you are" containerClass="flex flex-col py-5 gap-5">
+        <Divider />
+        <Step title="Step #3: Choose who you are" containerClass="flex flex-col gap-5">
           <CompanyDetails />
         </Step>
-        <hr className="divide" />
-        <Step title="Step 4: How many tankers do you have?" containerClass="flex flex-col py-5 gap-5">
+        <Divider />
+        <Step title="Step 4: How many tankers do you have?" containerClass="flex flex-col gap-5">
           <TankerSlotsDetails />
         </Step>
-        <hr className="divide" />
-        <Step title="Step #5: Company Addresss" containerClass="flex flex-col py-5 gap-5">
+        <Divider />
+        <Step title="Step #5: Company Addresss" containerClass="flex flex-col gap-5">
           <CompanyAddresses />
         </Step>
         <TermsAndConditions />

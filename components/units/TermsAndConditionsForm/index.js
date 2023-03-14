@@ -16,7 +16,7 @@ const TermsAndConditions = () => {
   };
 
   return (
-    <div className="col-span-2 row-auto pb-5">
+    <div className="col-span-2 row-auto">
       <CheckBoxInput
         name="agreedRules"
         checked={agreedRules}

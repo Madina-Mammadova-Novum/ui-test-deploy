@@ -3,7 +3,7 @@
 import Alert from '@/elements/Alert';
 // import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
-// import DatePicker from '@/elements/DatePicker';
+import DatePicker from '@/elements/DatePicker';
 import Dropdown from '@/elements/Dropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
@@ -53,7 +53,7 @@ export {
   // TextWithLabel,
   // Tooltip,
   // Toggle,
-  // DatePicker,
+  DatePicker,
   // RangeDatePicker,
   Dropdown,
   NextImage,

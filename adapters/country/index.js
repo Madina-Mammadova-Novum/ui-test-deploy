@@ -10,7 +10,7 @@ export const countryAdapter = ({ data }) => {
 
 export const countriesAdapter = ({ data }) => {
   if (data === null) return [];
-  return data.map((country) => {
+  return data?.map((country) => {
     return countryAdapter({ data: country });
   });
 };

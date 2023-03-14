@@ -11,3 +11,4 @@ export { default as FileIcon } from '@/assets/icons/File';
 export { default as Logo } from '@/assets/icons/Logo';
 export { default as UploadIcon } from '@/assets/icons/Upload';
 export { default as TrashIcon } from '@/assets/icons/Trash';
+export { default as PlusIcon } from '@/assets/icons/Plus';

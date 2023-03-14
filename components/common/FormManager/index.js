@@ -15,7 +15,7 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
   const { text, variant, size, className: buttonClassName } = submitButton;
 
   return (
-    <form className={`${className} flex flex-col gap-4`} autoComplete="off" onSubmit={handleSubmit(submitAction)}>
+    <form className={`${className} flex flex-col gap-5 pb-5`} autoComplete="off" onSubmit={handleSubmit(submitAction)}>
       {children}
       <Button
         type="submit"

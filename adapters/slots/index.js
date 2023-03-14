@@ -10,10 +10,10 @@ export const cargoesAdapter = (length) => {
   const result = Array.from({ length });
 
   return result.map(() => {
-    return {
-      imo: { name: `vesselIMO`, label: 'imo', id: makeId() },
-      port: { name: `loadPortId`, label: 'load port', options: [], id: makeId() },
-      date: { name: `billOfLadingDate`, label: 'BILL OF LADING DATE', id: makeId() },
-    };
+    return [
+      { name: 'imo', label: 'imo', id: makeId() },
+      { name: 'port', label: 'load port', options: [], id: makeId() },
+      { name: 'date', label: 'BILL OF LADING DATE', id: makeId() },
+    ];
   });
 };

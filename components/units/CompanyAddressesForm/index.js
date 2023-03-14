@@ -15,7 +15,7 @@ const CompanyAddresses = () => {
   useEffect(() => {
     (async () => {
       const data = await getCountries();
-      const countriesOptions = data.map(({ countryId, countryName }) => {
+      const countriesOptions = data?.map(({ countryId, countryName }) => {
         return { value: countryId, label: countryName };
       });
       setCountries(countriesOptions);

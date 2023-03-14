@@ -1,10 +1,17 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { ModalManager } from '@/common';
+import { Modal } from '@/elements';
+import {
+  CompanyInfoForm,
+  DeactivateAccountForm,
+  DeleteAccountForm,
+  PasswordInfoForm,
+  PersonalDetailsForm,
+} from '@/modules';
 import { AccountCompanyDetails, AccountDisabledTools, AccountPasswordDetails, AccountPersonalDetails } from '@/units';
 
 const AccountDetails = ({ containerClass }) => {
@@ -24,6 +31,23 @@ const AccountDetails = ({ containerClass }) => {
     }));
   }, []);
 
+  const printModalContent = useMemo(() => {
+    switch (modalState?.modalId) {
+      case 'personal_details':
+        return <PersonalDetailsForm title="Edit Personal Details" />;
+      case 'company_details':
+        return <CompanyInfoForm title="Edit Company Details" />;
+      case 'password_details':
+        return <PasswordInfoForm title="Change Your Password" />;
+      case 'delete_details':
+        return <DeleteAccountForm title="Delete your account" />;
+      case 'deactivate_details':
+        return <DeactivateAccountForm title="Deactivation of your account" />;
+      default:
+        return null;
+    }
+  }, [modalState?.modalId]);
+
   return (
     <>
       <div className={containerClass}>
@@ -35,7 +59,9 @@ const AccountDetails = ({ containerClass }) => {
           onDeactivate={() => handleEdit('deactivate_details')}
         />
       </div>
-      <ModalManager opened={modalState.isOpened} modalId={modalState?.modalId} onClose={handleCloseModal} />
+      <Modal opened={modalState?.isOpened} onClose={handleCloseModal}>
+        {printModalContent}
+      </Modal>
     </>
   );
 };
