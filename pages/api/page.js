@@ -13,7 +13,7 @@ export default function handler(req, res) {
         coverImage: { data: null },
         seo: {
           id: 2,
-          metaTitle: ' Blockchance 23',
+          metaTitle: 'Home',
           metaDescription:
             "We provide international stars of the blockchain scene, newcomers and local greats to Hamburg. You'll get access to a mix of the most inspiring leaders.",
           keywords: 'BLOCKCHAIN CONFERENCE 23',
