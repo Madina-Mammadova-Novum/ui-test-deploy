@@ -140,3 +140,7 @@ export function hasNestedArrays(data) {
 
   return isNested;
 }
+
+export function getFilledArray(length) {
+  return Array.from({ length });
+}

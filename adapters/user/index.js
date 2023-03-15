@@ -33,6 +33,37 @@ export function updateInfoAdapter({ data }) {
   };
 }
 
+function companyAddressesAdapter({ data }) {
+  if (data === null) return null;
+
+  const {
+    sameAddresses,
+    registrationState,
+    registrationPostalCode,
+    registrationAddress,
+    registrationAddressOptional,
+    registrationCityId,
+    correspondenceState,
+    correspondencePostalCode,
+    correspondenceAddress,
+    correspondenceAddressOptional,
+    correspondenceCityId,
+  } = data;
+
+  return {
+    registrationAddress,
+    registrationAddress2: registrationAddressOptional,
+    registrationCityId: registrationCityId.value,
+    registrationProvince: registrationState,
+    registrationPostalCode,
+    correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
+    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
+    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
+  };
+}
+
 export function updateCompanyAdapter({ data }) {
   if (data === null) return null;
   const {
@@ -125,6 +156,36 @@ export function singUpAdapter({ data }) {
     correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
     correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
     imos: imo,
+  };
+}
+
+export function chartererSignUpAdapter({ data }) {
+  if (data === null) return null;
+  const {
+    experiences,
+    numberOfTankers,
+    companyNumberOfOperation,
+    companyName,
+    password,
+    secondaryPhoneNumber,
+    primaryPhoneNumber,
+    email,
+    lastName,
+    firstName,
+  } = data;
+
+  return {
+    ownerName: firstName,
+    ownerSurname: lastName,
+    email: email?.split('.')[0],
+    password,
+    phone: `+${primaryPhoneNumber}`,
+    secondaryPhone: `+${secondaryPhoneNumber}`,
+    companyName,
+    yearsInOperation: companyNumberOfOperation,
+    estimatedNumberOfChartersPerYear: numberOfTankers,
+    experiences,
+    ...companyAddressesAdapter({ data }),
   };
 }
 

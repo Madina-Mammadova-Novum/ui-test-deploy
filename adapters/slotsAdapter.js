@@ -1,20 +1,18 @@
-import { makeId } from '@/utils/helpers';
+import { getFilledArray, makeId } from '@/utils/helpers';
 
-export const tankersAdapter = (length) => {
-  // todo: it's not adapter it's more helper
-  const result = Array.from({ length });
+export const tankersAdapter = (value) => {
+  const result = getFilledArray(value);
 
   return result.map(() => ({ name: 'imo', label: 'imo', id: makeId() }));
 };
 
-export const cargoesAdapter = (length) => {
-  // todo: it's not adapter it's more helper
-  const result = Array.from({ length });
+export const cargoesAdapter = (value) => {
+  const result = getFilledArray(value);
 
   return result.map(() => {
     return {
       imo: { name: `vesselIMO`, label: 'imo', id: makeId() },
-      port: { name: `loadPortId`, label: 'load port', options: [], id: makeId() },
+      port: { name: `loadPortId`, label: 'load port', id: makeId() },
       date: { name: `billOfLadingDate`, label: 'BILL OF LADING DATE', id: makeId() },
     };
   });

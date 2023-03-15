@@ -13,6 +13,7 @@ import {
   personalDetailsSchema,
   // termsAndConditionsSchema,
 } from '@/lib/schemas';
+import { chartererSignUp } from '@/services';
 import {
   CargoesSlotsDetails,
   CompanyAddresses,
@@ -22,7 +23,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup
   .object({
@@ -37,7 +38,16 @@ const ChartererRegistrationForm = () => {
   const methods = useHookFormParams({ schema });
 
   const onSubmit = async (formData) => {
-    return { formData };
+    const { error, data } = await chartererSignUp({ data: formData });
+    if (data) {
+      successToast(data.message, 'Check your email for validating the account');
+      methods.reset();
+    }
+    if (error) {
+      const { message, errors, description } = error;
+      console.error(errors);
+      errorToast(message, description);
+    }
   };
 
   return (

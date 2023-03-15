@@ -1,4 +1,5 @@
 import {
+  chartererSignUpAdapter,
   forgotPasswordAdapter,
   loginAdapter,
   resetPasswordAdapter,
@@ -31,7 +32,13 @@ export async function resetPassword({ data }) {
 
 export async function singUp({ data }) {
   const body = singUpAdapter({ data });
-  const response = await postData(`auth/sing-up`, JSON.stringify(body));
+  const response = await postData(`auth/sing-up`, body);
+  return response;
+}
+
+export async function chartererSignUp({ data }) {
+  const body = chartererSignUpAdapter({ data });
+  const response = await postData(`auth/charterer-sign-up`, body);
   return response;
 }
 

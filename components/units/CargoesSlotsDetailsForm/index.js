@@ -29,6 +29,7 @@ const CargoesSlotsDetailsForm = () => {
 
   const fetchPorts = useCallback(async () => {
     const ports = await getPorts();
+
     setPortsOption(ports);
   }, []);
 
@@ -66,11 +67,7 @@ const CargoesSlotsDetailsForm = () => {
     });
   }, []);
 
-  const handlePortChange = useCallback(
-    (option, index) => setValue(inputName(option.name, index), option.id),
-    [setValue]
-  );
-
+  const handlePortChange = useCallback((name, id, index) => setValue(inputName(name, index), id), [setValue]);
   const handleDateChange = useCallback((name, value, index) => setValue(inputName(name, index), value), [setValue]);
 
   const inputName = (name, index) => `experiences[${index}].${name}`;
@@ -113,13 +110,13 @@ const CargoesSlotsDetailsForm = () => {
               label={element.port.label}
               options={portsOption}
               control={control}
-              onChange={() => handlePortChange(element.port, index)}
+              onChange={({ id }) => handlePortChange(element.port.name, id, index)}
             />
             <DatePicker
               name={element.date.name}
               inputClass="w-full"
-              onChange={(value) => handleDateChange(element.date.name, value, index)}
               label={element.date.label}
+              onChange={(value) => handleDateChange(element.date.name, value, index)}
             />
             <Button
               type="button"

@@ -1,10 +1,11 @@
-import { makeId } from '@/utils/helpers';
-
-export const portAdapter = ({ data = [] }) => {
+export const portAdapter = ({ data }) => {
+  if (data === null) return [];
   // todo: create similar structure with other adapters
-  return data?.map(({ portId, name }) => ({
-    id: portId ?? makeId(),
-    value: name ?? '',
-    label: name ?? '',
-  }));
+  return data?.map(({ terminals = [] }) =>
+    terminals?.map(({ portId, name }) => ({
+      id: portId ?? '',
+      value: name ?? '',
+      label: name ?? '',
+    }))
+  );
 };
