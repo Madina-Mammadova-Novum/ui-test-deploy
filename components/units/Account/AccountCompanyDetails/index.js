@@ -1,51 +1,36 @@
-'use client';
-
-import { useState } from 'react';
-
 import PropTypes from 'prop-types';
 
-import { Button, Modal, TextRow, Title } from '@/elements';
+import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
+import Divider from '@/elements/Divider';
 import { CompanyInfoForm } from '@/modules';
-import { AddressInfo } from '@/units';
+import { AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company }) => {
-  const [opened, setOpened] = useState(false);
-
-  const handleOpenModal = () => setOpened(true);
-  const handleCloseModal = () => setOpened(false);
-
   return (
     // todo: rules for fields
-    <>
-      <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
-        <div className="flex justify-between items-center pb-2.5">
-          <Title component="h3" className="text-lg text-black font-bold">
-            Company Details
-          </Title>
-          <Button
-            buttonProps={{ text: 'Edit company details', variant: 'primary', size: 'medium' }}
-            customStyles="!py-1 !px-2.5"
-            onClick={handleOpenModal}
-          />
+    <FieldsetWrapper>
+      <FieldsetHeader title="Company Details">
+        <ModalWindow buttonProps={{ text: 'Edit company details', variant: 'primary', size: 'medium' }}>
+          <CompanyInfoForm />
+        </ModalWindow>
+      </FieldsetHeader>
+      <FieldsetContentWrapper>
+        <FieldsetContent label="Company information">
+          <TextRow title="Company name" subtitle={company?.name} />
+          <TextRow title="Years in operation" subtitle={company?.years} />
+          <TextRow title="Number of tankers" subtitle={company?.totalTankers} />
+        </FieldsetContent>
+        <Divider />
+        <div className="grid grid-cols-2">
+          <FieldsetContent className="col-start-1" label="Registration address">
+            <AddressInfo data={company?.registration} />
+          </FieldsetContent>
+          <FieldsetContent className="col-start-1 3sm:col-start-2" label="Correspondence address">
+            <AddressInfo data={company?.correspondence} />
+          </FieldsetContent>
         </div>
-        <div className="flex flex-col gap-4">
-          <div>
-            <p className="text-gray font-semibold text-xs-sm uppercase pb-2.5">company information</p>
-            <TextRow title="Company name" subtitle={company?.name} />
-            <TextRow title="Years in operation" subtitle={company?.years} />
-            <TextRow title="Number of tankers" subtitle={company?.totalTankers} />
-          </div>
-          <hr className="h-px w-full bg-gray" />
-          <div className="grid grid-cols-2">
-            <AddressInfo containerClass="col-start-1" label="registration address" data={company?.registration} />
-            <AddressInfo containerClass="col-start-2" label="correspondence address" data={company?.correspondence} />
-          </div>
-        </div>
-      </div>
-      <Modal opened={opened} onClose={handleCloseModal}>
-        <CompanyInfoForm />
-      </Modal>
-    </>
+      </FieldsetContentWrapper>
+    </FieldsetWrapper>
   );
 };
 

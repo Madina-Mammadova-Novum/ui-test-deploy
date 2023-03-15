@@ -8,6 +8,10 @@ import Dropdown from '@/elements/Dropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
+import FieldsetContent from '@/elements/FieldsetContent';
+import FieldsetContentWrapper from '@/elements/FieldsetContentWrapper';
+import FieldsetHeader from '@/elements/FieldsetHeader';
+import FieldsetWrapper from '@/elements/FieldsetWrapper';
 import HoverableIcon from '@/elements/HoverableIcon';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
@@ -70,4 +74,8 @@ export {
   // Step,
   // OwnerForm,
   // ChartererForm,
+  FieldsetWrapper,
+  FieldsetHeader,
+  FieldsetContentWrapper,
+  FieldsetContent,
 };
