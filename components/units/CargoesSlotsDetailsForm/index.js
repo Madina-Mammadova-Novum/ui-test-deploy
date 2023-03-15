@@ -6,11 +6,13 @@ import { cargoesAdapter } from '@/adapters';
 import { PlusIcon, TrashIcon } from '@/assets/icons';
 import { Button, DatePicker, Dropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
+import { getPorts } from '@/services/port';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
   const [slots, setSlots] = useState(0);
   const [indexes, setIndexes] = useState([]);
+  const [portsOption, setPortsOption] = useState(null);
 
   const {
     register,
@@ -22,8 +24,17 @@ const CargoesSlotsDetailsForm = () => {
   useEffect(() => {
     const numberOfTankers = indexes.length > 0 ? indexes.length : '';
     setValue('numberOfTankers', numberOfTankers);
-    setValue('experiences', indexes);
+    // setValue('experiences', indexes);
   }, [indexes, setValue]);
+
+  const fetchPorts = useCallback(async () => {
+    const ports = await getPorts();
+    setPortsOption(ports);
+  }, []);
+
+  useEffect(() => {
+    fetchPorts();
+  }, [fetchPorts]);
 
   const handleSlotsCount = (event) => {
     let numberOfTankers = Number(event.target.value);
@@ -54,6 +65,13 @@ const CargoesSlotsDetailsForm = () => {
       return [...prevIndexes.filter((_, index) => index !== rowIndex)];
     });
   }, []);
+
+  const handlePortChange = useCallback(
+    (option, index) => setValue(inputName(option.name, index), option.id),
+    [setValue]
+  );
+
+  const handleDateChange = useCallback((name, value, index) => setValue(inputName(name, index), value), [setValue]);
 
   const inputName = (name, index) => `experiences[${index}].${name}`;
 
@@ -91,16 +109,17 @@ const CargoesSlotsDetailsForm = () => {
               label={`${element.imo.label}#${index + 1}`}
             />
             <Dropdown
+              name={element.port.name}
               label={element.port.label}
-              name={inputName(element.port.name, index)}
-              options={[]}
+              options={portsOption}
               control={control}
+              onChange={() => handlePortChange(element.port, index)}
             />
             <DatePicker
+              name={element.date.name}
               inputClass="w-full"
+              onChange={(value) => handleDateChange(element.date.name, value, index)}
               label={element.date.label}
-              name={inputName(element.date.name, index)}
-              {...register(inputName(element.date.name, index))}
             />
             <Button
               type="button"
