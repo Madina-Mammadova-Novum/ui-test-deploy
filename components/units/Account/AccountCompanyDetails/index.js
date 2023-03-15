@@ -6,14 +6,15 @@ import PropTypes from 'prop-types';
 
 import { Button, Modal, TextRow, Title } from '@/elements';
 import { AddressInfo } from '@/units';
+import { CompanyInfoForm } from "@/modules";
 
-const AccountCompanyDetails = ({ company, children }) => {
+const AccountCompanyDetails = ({ company }) => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => setOpened(true);
   const handleCloseModal = () => setOpened(false);
 
-  return (
+  return ( // todo: rules for fields
     <>
       <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
         <div className="flex justify-between items-center pb-2.5">
@@ -41,7 +42,7 @@ const AccountCompanyDetails = ({ company, children }) => {
         </div>
       </div>
       <Modal opened={opened} onClose={handleCloseModal}>
-        {children}
+        <CompanyInfoForm />
       </Modal>
     </>
   );

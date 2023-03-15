@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 import { Button, Modal, Title } from '@/elements';
+import { PasswordInfoForm } from "@/modules";
 
-const AccountPasswordDetails = ({ children }) => {
+const AccountPasswordDetails = () => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => setOpened(true);
@@ -25,7 +26,7 @@ const AccountPasswordDetails = ({ children }) => {
         </div>
       </div>
       <Modal opened={opened} onClose={handleCloseModal}>
-        {children}
+        <PasswordInfoForm />
       </Modal>
     </>
   );

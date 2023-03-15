@@ -1,8 +1,11 @@
+'use client'
+
 import { useState } from 'react';
 
 import { Button, Modal } from '@/elements';
+import { DeactivateAccountForm } from "@/modules";
 
-const AccountDeactivateDetails = ({ children }) => {
+const AccountDeactivateDetails = () => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => setOpened(true);
@@ -16,7 +19,7 @@ const AccountDeactivateDetails = ({ children }) => {
         onClick={handleOpenModal}
       />
       <Modal opened={opened} onClose={handleCloseModal}>
-        {children}
+        <DeactivateAccountForm />
       </Modal>
     </>
   );
