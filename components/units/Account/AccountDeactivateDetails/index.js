@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 
 import { Button, Modal } from '@/elements';
-import { DeactivateAccountForm } from "@/modules";
+import { DeactivateAccountForm } from '@/modules';
 
 const AccountDeactivateDetails = () => {
   const [opened, setOpened] = useState(false);

@@ -5,9 +5,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, Modal, TextRow, Title } from '@/elements';
-import { PersonalDetailsForm } from "@/modules";
+import { PersonalDetailsForm } from '@/modules';
 
-const AccountPersonalDetails = ({ user }) => { // todo: rules for fields
+const AccountPersonalDetails = ({ user }) => {
+  // todo: rules for fields
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => setOpened(true);

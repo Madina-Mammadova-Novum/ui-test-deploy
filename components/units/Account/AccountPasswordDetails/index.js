@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Button, Modal, Title } from '@/elements';
-import { PasswordInfoForm } from "@/modules";
+import { PasswordInfoForm } from '@/modules';
 
 const AccountPasswordDetails = () => {
   const [opened, setOpened] = useState(false);

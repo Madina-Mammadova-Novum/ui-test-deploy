@@ -5,8 +5,8 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, Modal, TextRow, Title } from '@/elements';
+import { CompanyInfoForm } from '@/modules';
 import { AddressInfo } from '@/units';
-import { CompanyInfoForm } from "@/modules";
 
 const AccountCompanyDetails = ({ company }) => {
   const [opened, setOpened] = useState(false);
@@ -14,7 +14,8 @@ const AccountCompanyDetails = ({ company }) => {
   const handleOpenModal = () => setOpened(true);
   const handleCloseModal = () => setOpened(false);
 
-  return ( // todo: rules for fields
+  return (
+    // todo: rules for fields
     <>
       <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
         <div className="flex justify-between items-center pb-2.5">
