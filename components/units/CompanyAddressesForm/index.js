@@ -16,6 +16,7 @@ const CompanyAddresses = () => {
     (async () => {
       const data = await getCountries();
       const countriesOptions = data?.map(({ countryId, countryName }) => {
+        // todo: why you did it 'data?'. if we don't have some countries we need notify about that
         return { value: countryId, label: countryName };
       });
       setCountries(countriesOptions);

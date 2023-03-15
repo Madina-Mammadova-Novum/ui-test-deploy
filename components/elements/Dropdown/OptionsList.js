@@ -1,4 +1,4 @@
-import { components } from 'react-select';
+import { components } from 'react-select'; // todo: make destructure with 'Option'
 
 import PropTypes from 'prop-types';
 

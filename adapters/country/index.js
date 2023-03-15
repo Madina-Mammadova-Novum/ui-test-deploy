@@ -11,6 +11,7 @@ export const countryAdapter = ({ data }) => {
 export const countriesAdapter = ({ data }) => {
   if (data === null) return [];
   return data?.map((country) => {
+    // todo: extend condition in 12 line with this condition
     return countryAdapter({ data: country });
   });
 };
