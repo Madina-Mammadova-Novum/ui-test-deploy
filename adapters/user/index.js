@@ -68,20 +68,9 @@ export function updateCompanyAdapter({ data }) {
   if (data === null) return null;
   const {
     imo,
-    sameAddresses,
     numberOfTankers,
     companyNumberOfOperation,
     companyName,
-    registrationState,
-    registrationPostalCode,
-    registrationAddress,
-    registrationAddressOptional,
-    registrationCityId,
-    correspondenceState,
-    correspondencePostalCode,
-    correspondenceAddress,
-    correspondenceAddressOptional,
-    correspondenceCityId,
   } = data;
 
   return {
@@ -89,16 +78,7 @@ export function updateCompanyAdapter({ data }) {
     estimatedAverageTankerDWT: 0,
     yearsInOperation: companyNumberOfOperation,
     numberOfVessels: numberOfTankers,
-    registrationAddress,
-    registrationPostalCode,
-    registrationProvince: registrationState,
-    registrationAddress2: registrationAddressOptional,
-    registrationCityId: registrationCityId?.value,
-    correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
-    correspondenceCityId: !sameAddresses ? correspondenceCityId?.value : registrationCityId?.value,
-    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
-    correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
+    ...companyAddressesAdapter({ data }),
     imos: imo,
   };
 }
@@ -118,20 +98,9 @@ export function singUpAdapter({ data }) {
     email,
     lastName,
     firstName,
-    sameAddresses,
-    registrationState,
-    registrationPostalCode,
-    registrationAddress,
-    registrationAddressOptional,
     // registrationCountryId,
-    registrationCityId,
     // agreedRules,
-    correspondenceState,
-    correspondencePostalCode,
-    correspondenceAddress,
-    correspondenceAddressOptional,
     // correspondenceCountryId,
-    correspondenceCityId,
   } = data;
 
   return {
@@ -145,16 +114,7 @@ export function singUpAdapter({ data }) {
     estimatedAverageTankerDWT: 0,
     yearsInOperation: companyNumberOfOperation,
     numberOfVessels: numberOfTankers,
-    registrationAddress,
-    registrationAddress2: registrationAddressOptional,
-    registrationCityId: registrationCityId.value,
-    registrationProvince: registrationState,
-    registrationPostalCode,
-    correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
-    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
-    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
-    correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
+    ...companyAddressesAdapter({ data }),
     imos: imo,
   };
 }

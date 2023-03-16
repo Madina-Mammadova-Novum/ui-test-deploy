@@ -32,13 +32,13 @@ export async function resetPassword({ data }) {
 
 export async function singUp({ data }) {
   const body = singUpAdapter({ data });
-  const response = await postData(`auth/sing-up`, body);
+  const response = await postData(`auth/sing-up?type=owner`, body);
   return response;
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/charterer-sign-up`, body);
+  const response = await postData(`auth/sign-up?type=charterer`, body);
   return response;
 }
 
