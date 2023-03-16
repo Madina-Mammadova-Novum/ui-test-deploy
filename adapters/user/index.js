@@ -66,12 +66,7 @@ function companyAddressesAdapter({ data }) {
 
 export function updateCompanyAdapter({ data }) {
   if (data === null) return null;
-  const {
-    imo,
-    numberOfTankers,
-    companyNumberOfOperation,
-    companyName,
-  } = data;
+  const { imo, numberOfTankers, companyNumberOfOperation, companyName } = data;
 
   return {
     companyName,
