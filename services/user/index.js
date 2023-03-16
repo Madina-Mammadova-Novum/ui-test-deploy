@@ -42,6 +42,11 @@ export async function chartererSignUp({ data }) {
   return response;
 }
 
+export async function postVeriffData({ data }) {
+  const response = await postData(`auth/veriffication`, data);
+  return response;
+}
+
 export async function login({ data }) {
   const body = loginAdapter({ data });
   const response = await postData(`auth/login`, JSON.stringify(body));

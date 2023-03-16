@@ -16,7 +16,6 @@ const CargoesSlotsDetailsForm = () => {
 
   const {
     register,
-    control,
     setValue,
     formState: { errors, isSubmitting },
   } = useHookForm();
@@ -109,7 +108,6 @@ const CargoesSlotsDetailsForm = () => {
               name={element.port.name}
               label={element.port.label}
               options={portsOption}
-              control={control}
               onChange={({ id }) => handlePortChange(element.port.name, id, index)}
             />
             <DatePicker

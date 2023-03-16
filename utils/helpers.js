@@ -144,3 +144,13 @@ export function hasNestedArrays(data) {
 export function getFilledArray(length) {
   return Array.from({ length });
 }
+
+export function checkObjectValues({ data }) {
+  const isNotNullOrUndefined = Object.keys(data).every((key) => data[key] !== null && data[key] !== undefined);
+
+  if (!isNotNullOrUndefined) {
+    return { message: `Error: One or more values not founded.` };
+  }
+
+  return { data };
+}

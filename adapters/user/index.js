@@ -132,7 +132,7 @@ export function chartererSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email: email?.split('.')[0],
+    email,
     password,
     phone: `+${primaryPhoneNumber}`,
     secondaryPhone: `+${secondaryPhoneNumber}`,

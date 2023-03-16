@@ -37,10 +37,10 @@ export async function apiHandler(options) {
 
     const result = await response.json();
     // Recommendation: handle errors
+
     if (!response.ok) {
-      //   // This will activate the closest `error.js` Error Boundary
+      // This will activate the closest `error.js` Error Boundary
       return responseErrorAdapter(result);
-      //
     }
     return responseAdapter(result);
   } catch (error) {

@@ -10,6 +10,7 @@ import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
+import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 
 export * from '@/units/Account';
 
@@ -26,4 +27,5 @@ export {
   TermsAndConditions,
   CargoesSlotsDetails,
   ModalWindow,
+  VerifficationUserAccount,
 };
