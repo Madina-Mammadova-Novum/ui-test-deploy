@@ -1,18 +1,20 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cargoesAdapter } from '@/adapters';
 import { PlusIcon, TrashIcon } from '@/assets/icons';
 import { Button, DatePicker, Dropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
+import { disableDefaultBehaviour } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
   const [slots, setSlots] = useState(0);
   const [indexes, setIndexes] = useState([]);
   const [portsOption, setPortsOption] = useState(null);
+  const tankersInputRef = useRef(null);
 
   const {
     register,
@@ -24,8 +26,11 @@ const CargoesSlotsDetailsForm = () => {
   useEffect(() => {
     const numberOfTankers = indexes.length > 0 ? indexes.length : '';
     setValue('numberOfTankers', numberOfTankers);
-    // setValue('experiences', indexes);
   }, [indexes, setValue]);
+
+  useEffect(() => {
+    return tankersInputRef.current && tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+  }, [tankersInputRef]);
 
   const fetchPorts = useCallback(async () => {
     const ports = await getPorts();
@@ -59,16 +64,16 @@ const CargoesSlotsDetailsForm = () => {
     setValue('applySlots', cargoes.length > 0);
   }, [setValue, slots]);
 
-  const handleAddSlot = useCallback(() => {
+  const handleAddSlot = () => {
     setIndexes((prevIndexes) => [...prevIndexes, ...cargoesAdapter(1)]);
-  }, []);
+  };
 
-  const handleRemoveSlot = useCallback((element) => {
+  const handleRemoveSlot = (element) => {
     setIndexes((prevIndexes) => {
       const rowIndex = prevIndexes.findIndex((obj) => obj === element);
       return [...prevIndexes.filter((_, index) => index !== rowIndex)];
     });
-  }, []);
+  };
 
   const handlePortChange = useCallback((name, id, index) => setValue(inputName(name, index), id), [setValue]);
   const handleDateChange = useCallback((name, value, index) => setValue(inputName(name, index), value), [setValue]);
@@ -85,6 +90,7 @@ const CargoesSlotsDetailsForm = () => {
           error={errors.numberOfTankers?.message}
           disabled={isSubmitting}
           type="number"
+          ref={tankersInputRef}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
         />

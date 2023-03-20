@@ -1,15 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TrashIcon } from '@/assets/icons';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
+import { disableDefaultBehaviour } from '@/utils/helpers';
 
 const TankerSlotsDetails = () => {
   const [slots, setSlots] = useState(0);
   const [indexes, setIndexes] = useState([]);
+  const tankersInputRef = useRef(null);
+
   const {
     register,
     setValue,
@@ -21,6 +24,10 @@ const TankerSlotsDetails = () => {
     const numberOfTankers = indexes.length > 0 ? indexes.length : '';
     setValue('numberOfTankers', numberOfTankers);
   }, [indexes, setValue]);
+
+  useEffect(() => {
+    return tankersInputRef.current && tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+  }, [tankersInputRef]);
 
   const handleSlotsCount = (event) => {
     clearErrors('numberOfTankers');
@@ -60,6 +67,7 @@ const TankerSlotsDetails = () => {
           disabled={isSubmitting}
           type="number"
           customStyles="z-10 w-full"
+          ref={tankersInputRef}
           onChange={handleSlotsCount}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />

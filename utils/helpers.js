@@ -154,3 +154,5 @@ export function checkObjectValues({ data }) {
 
   return { data };
 }
+
+export const disableDefaultBehaviour = (e) => e.preventDefault();
