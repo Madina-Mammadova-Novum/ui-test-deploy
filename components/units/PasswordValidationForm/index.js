@@ -43,6 +43,7 @@ const PasswordValidation = ({ title, customStyles }) => {
   const [comparisonError, setComparisonError] = useState(null);
   const {
     register,
+    clearErrors,
     formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useHookForm();
 
@@ -53,6 +54,8 @@ const PasswordValidation = ({ title, customStyles }) => {
   }, [isSubmitSuccessful]);
 
   const passwordValidation = (event) => {
+    clearErrors(['password', 'confirmPassword']);
+
     const { value } = event.target;
     setPassword(value);
     setValidation((conditions) =>

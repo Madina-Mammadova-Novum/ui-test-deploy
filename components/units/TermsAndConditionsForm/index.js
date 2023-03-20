@@ -24,7 +24,7 @@ const TermsAndConditions = () => {
         labelStyles="text-black inline-flex gap-1 text-xsm"
       >
         <p>
-          I agree with all{' '}
+          I agree with all
           <NextLink href={ROUTES.PRIVACY_POLICY} className="text-blue underline">
             Privacy Policy
           </NextLink>

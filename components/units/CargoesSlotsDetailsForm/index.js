@@ -17,6 +17,7 @@ const CargoesSlotsDetailsForm = () => {
   const {
     register,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useHookForm();
 
@@ -37,6 +38,8 @@ const CargoesSlotsDetailsForm = () => {
   }, [fetchPorts]);
 
   const handleSlotsCount = (event) => {
+    clearErrors('numberOfTankers');
+
     let numberOfTankers = Number(event.target.value);
     if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
     if (numberOfTankers <= 0) {
@@ -44,6 +47,7 @@ const CargoesSlotsDetailsForm = () => {
       setValue('applySlots', false);
       setIndexes([]);
     }
+
     setValue('numberOfTankers', numberOfTankers);
     setSlots(numberOfTankers);
   };

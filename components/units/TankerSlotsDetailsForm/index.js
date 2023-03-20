@@ -13,6 +13,7 @@ const TankerSlotsDetails = () => {
   const {
     register,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext();
 
@@ -22,6 +23,8 @@ const TankerSlotsDetails = () => {
   }, [indexes, setValue]);
 
   const handleSlotsCount = (event) => {
+    clearErrors('numberOfTankers');
+
     let numberOfTankers = Number(event.target.value);
     if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
     if (numberOfTankers <= 0) {
@@ -62,7 +65,7 @@ const TankerSlotsDetails = () => {
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-1 z-10"
+          customStyles="absolute top-[18px] right-1 my-1 !py-1"
           buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
           onClick={handleApply}
           disabled={isSubmitting}

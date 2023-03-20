@@ -1,21 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import { CheckBoxInput } from '@/elements';
 import { getCountries } from '@/services';
 import { AddressDetails } from '@/units';
+import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresses = () => {
-  const { setValue } = useFormContext();
+  const { setValue, watch } = useHookForm();
   const [countries, setCountries] = useState([]);
-  const [showCorrespondenceAddress, setShowCorrespondenceAddress] = useState(false);
+
+  const correspondenceAddress = watch('sameAddresses', true);
 
   useEffect(() => {
     (async () => {
       const data = await getCountries();
-      const countriesOptions = data?.map(({ countryId, countryName }) => {
+      const countriesOptions = data.map(({ countryId, countryName }) => {
         // todo: why you did it 'data?'. if we don't have some countries we need notify about that
         return { value: countryId, label: countryName };
       });
@@ -25,10 +26,8 @@ const CompanyAddresses = () => {
 
   const handleSameAddress = (event) => {
     const { checked } = event.target;
-    setShowCorrespondenceAddress(!checked);
+    setValue('sameAddresses', checked);
   };
-
-  setValue('sameAddresses', !showCorrespondenceAddress);
 
   return (
     <div className="flex flex-col gap-5">
@@ -37,14 +36,14 @@ const CompanyAddresses = () => {
         <CheckBoxInput
           name="sameAddresses"
           onChange={handleSameAddress}
-          checked={!showCorrespondenceAddress}
+          checked={correspondenceAddress}
           labelStyles="text-black text-xsm"
         >
           The company Registration Address is the same as the Correspondence Address.
         </CheckBoxInput>
       </div>
-      {showCorrespondenceAddress && (
-        <AddressDetails title="Сompany registration address" type="correspondence" countries={countries} />
+      {!correspondenceAddress && (
+        <AddressDetails title="Сompany correspondence address" type="correspondence" countries={countries} />
       )}
     </div>
   );

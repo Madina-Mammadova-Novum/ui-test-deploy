@@ -26,7 +26,7 @@ export const getCookieFromReq = (req, cookieKey) => {
   return cookie.split('=')[1];
 };
 
-const fetchOptions = (requestMethod) => {
+const fetchOptions = (requestMethod, req) => {
   const method = requestMethod.toUpperCase();
   const options = {
     method, // *GET, POST, PUT, DELETE, etc.
@@ -42,10 +42,9 @@ const fetchOptions = (requestMethod) => {
     // body: JSON.stringify(data), // body data type must match "Content-Type" header
   };
 
-  console.log({ options });
-  // if (['POST', 'PUT', 'PATCH'].includes(method)) {
-  //   options.body = JSON.stringify(data);
-  // }
+  if (['POST', 'PUT', 'PATCH'].includes(method)) {
+    options.body = JSON.stringify(req.body);
+  }
   return options;
 };
 
@@ -64,7 +63,7 @@ export function getIdentityApiURL(path, apiVersion = null) {
 export const apiHandler = async (options, req, res) => {
   const { endpoint, requestMethod, allowedMethods } = options;
   if (checkRequestMethod(req, allowedMethods)) {
-    const requestOptions = fetchOptions(requestMethod);
+    const requestOptions = fetchOptions(requestMethod, req);
     const response = await fetch(endpoint, requestOptions);
 
     const result = await response.json();

@@ -14,10 +14,13 @@ const AddressDetails = ({ title, type, countries }) => {
   const {
     register,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext();
 
   const handleCountryChange = async (option) => {
+    clearErrors([`${type}CountryId`, `${type}CityId`]);
+
     const { value: countryId } = option;
     const data = await getCities(countryId);
     const citiesOptions = data.map(({ cityId, cityName }) => {

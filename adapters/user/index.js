@@ -70,7 +70,7 @@ export function updateCompanyAdapter({ data }) {
 
   return {
     companyName,
-    estimatedAverageTankerDWT: 0,
+    estimatedAverageTankerDWT: 1,
     yearsInOperation: companyNumberOfOperation,
     numberOfVessels: numberOfTankers,
     ...companyAddressesAdapter({ data }),
@@ -78,7 +78,7 @@ export function updateCompanyAdapter({ data }) {
   };
 }
 
-export function singUpAdapter({ data }) {
+export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
     imo,
@@ -106,7 +106,7 @@ export function singUpAdapter({ data }) {
     phone: `+${primaryPhoneNumber}`,
     secondaryPhone: `+${secondaryPhoneNumber}`,
     companyName,
-    estimatedAverageTankerDWT: 0,
+    estimatedAverageTankerDWT: 1,
     yearsInOperation: companyNumberOfOperation,
     numberOfVessels: numberOfTankers,
     ...companyAddressesAdapter({ data }),

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -11,7 +12,7 @@ import {
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
-  // termsAndConditionsSchema,
+  tankerSlotsDetailsSchema,
 } from '@/lib/schemas';
 import { chartererSignUp } from '@/services';
 import {
@@ -25,17 +26,23 @@ import {
 } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const schema = yup
-  .object({
+const ChartererRegistrationForm = () => {
+  const [sameAddress, setSameAddress] = useState(true);
+
+  const schema = yup.object().shape({
     ...personalDetailsSchema(),
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
-    ...companyAddressesSchema(),
-  })
-  .required();
+    ...tankerSlotsDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
+  });
 
-const ChartererRegistrationForm = () => {
   const methods = useHookFormParams({ schema });
+  const value = methods.watch('sameAddresses', sameAddress);
+
+  useEffect(() => {
+    setSameAddress(value);
+  }, [value]);
 
   const onSubmit = async (formData) => {
     const { error, data } = await chartererSignUp({ data: formData });
