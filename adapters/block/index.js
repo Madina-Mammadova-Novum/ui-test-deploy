@@ -1,3 +1,4 @@
+import { linkAdapter } from '@/adapters/global';
 import { imageAdapter } from '@/adapters/image';
 import { teamMembersAdapter } from '@/adapters/team';
 import { testimonialsAdapter } from '@/adapters/testimonial';
@@ -17,7 +18,7 @@ export const blocksDataAdapter = async (blocks) => {
             title,
             shortDescription: text,
             subTitle: null,
-            buttons,
+            buttons: buttons.length > 0 ? buttons.map((button) => linkAdapter(button)) : [],
           };
         }
         case 'blocks.improvement-process': {
@@ -83,8 +84,4 @@ export const blocksDataAdapter = async (blocks) => {
       });
   });
   return updatedBlocks;
-};
-
-export const ping = () => {
-  return 'pong';
 };

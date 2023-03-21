@@ -1,20 +1,22 @@
+import delve from 'dlv';
+
 import { metaData } from '@/adapters/metaData';
+import { BlockManager } from '@/common';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 import { getEntityData } from '@/services/page';
-// import { BlockManager } from "@/common";
 
 export async function generateMetadata({ params }) {
   const data = await getEntityData(params);
-  return metaData({ data });
+  return metaData(data);
 }
 
 export default async function Home({ params }) {
-  const { title } = await getEntityData(params);
-
+  const data = await getEntityData(params);
+  const blocks = delve(data, 'data.blocks');
   return (
     <section className="container flex-grow">
-      <h1>{title}</h1>
+      <h1>Home</h1>
       <ul>
         <li>
           <NextLink href={ROUTES.LOGIN}>LOGIN</NextLink>
@@ -33,7 +35,7 @@ export default async function Home({ params }) {
         </li> */}
       </ul>
 
-      {/* {blocks && <BlockManager blocks={blocks} />} */}
+      {blocks && <BlockManager blocks={blocks} />}
     </section>
   );
 }

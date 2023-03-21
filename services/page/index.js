@@ -48,7 +48,11 @@ export function getEndpoint(slug, locale, apiID, preview = false) {
   return `/${pluralize(apiID)}?${previewParams}
     &locale=${locale}
     &filters[slug][$eq]=${slug}
-    &populate[blocks][populate]=*,buttons.link,coverImage,button,button.linkOptions,changableTitles,descriptionItems.title
+    &populate[blocks][populate]=*,
+      buttons.linkOptions,
+      coverImage,
+      button,
+      button.linkOptions,changableTitles,descriptionItems.title
       ingredients,ingredients.coverImage,ingredients.concerns,ingredients.concerns.category,ingredients.concerns.images,
       concerns,concerns.category,concerns.images,
       items,items.coverImage,items.button,items.button.linkOptions,
@@ -72,6 +76,7 @@ export async function getEntityData(params, preview = false) {
   const { collectionType, slug, locale } = getCollectionType(pathArray);
   const response = await getData(`entity?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
   const { data, meta } = response;
+  if (data === undefined) return null;
   return {
     slug,
     locale,
