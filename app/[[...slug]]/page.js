@@ -1,16 +1,16 @@
 import { metaData } from '@/adapters/metaData';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
-import { getPage } from '@/services/page';
+import { getEntityData } from '@/services/page';
 // import { BlockManager } from "@/common";
 
 export async function generateMetadata({ params }) {
-  const data = await getPage(params);
+  const data = await getEntityData(params);
   return metaData({ data });
 }
 
 export default async function Home({ params }) {
-  const { title } = await getPage(params);
+  const { title } = await getEntityData(params);
 
   return (
     <section className="container flex-grow">

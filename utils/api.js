@@ -1,5 +1,7 @@
 import { serialize } from 'cookie';
 
+import { getStrapiURL } from '@/utils/index';
+
 export const errorHandler = (res, status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
   return res.status(status).send({
@@ -98,10 +100,21 @@ export const postHandler = (path, req, res) => {
   );
 };
 
-export const getHandler = (path, req, res) => {
+export const getHandler = (path, provider, req, res) => {
+  let apiURL = '';
+  switch (provider) {
+    case 'backend': {
+      apiURL = getApiURL(path);
+      break;
+    }
+    default: {
+      apiURL = getStrapiURL(path);
+      break;
+    }
+  }
   return apiHandler(
     {
-      endpoint: getApiURL(path),
+      endpoint: apiURL,
       requestMethod: 'GET',
       allowedMethods: ['OPTIONS', 'GET'],
     },
