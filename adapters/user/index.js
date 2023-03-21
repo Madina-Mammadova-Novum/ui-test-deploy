@@ -58,7 +58,7 @@ function companyAddressesAdapter({ data }) {
     registrationPostalCode,
     correspondenceAddress: sameAddresses ? correspondenceAddress : registrationAddress,
     correspondenceAddress2: sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
-    correspondenceCityId: sameAddresses ? correspondenceCityId?.value : registrationCityId?.value,
+    correspondenceCityId: sameAddresses ? correspondenceCityId.value : registrationCityId.value,
     correspondenceProvince: sameAddresses ? correspondenceState : registrationState,
     correspondencePostalCode: sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
