@@ -32,27 +32,25 @@ const CommercialOfferTerms = () => {
             label={`product #${index + 1}`}
             defaultValue="Light Crude Oil"
             id="product_1"
-            name={`product${index}`}
+            name={`products[${index}].product`}
             disabled
             customStyles="w-[296px]"
             options={testOption}
           />
           <Input
-            {...register(`density${index}`)}
+            {...register(`products[${index}].density`)}
             label="density"
-            name={`density${index}`}
             placeholder="mt/m³"
             customStyles="max-w-[138px]"
-            error={errors[`density${index}`]?.message}
+            error={errors.products ? errors.products[index]?.density?.message : null}
             disabled={isSubmitting}
           />
           <Input
-            {...register(`quantity${index}`)}
+            {...register(`products[${index}].quantity`)}
             label="min quantity"
-            name={`quantity${index}`}
             placeholder="tons"
             customStyles="max-w-[138px]"
-            error={errors[`quantity${index}`]?.message}
+            error={errors.products ? errors.products[index]?.quantity?.message : null}
             disabled={isSubmitting}
           />
         </div>

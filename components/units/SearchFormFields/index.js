@@ -20,8 +20,18 @@ const SearchFormFields = () => {
     <div className="flex">
       <div className="w-full flex flex-col gap-y-4 pr-5 mr-5 border-r">
         <div className="flex gap-x-5">
-          <DatePicker label="laycan start" inputClass="w-full" onChange={(date) => handleChange('laycanStart', date)} />
-          <DatePicker label="laycan end" inputClass="w-full" onChange={(date) => handleChange('laycanEnd', date)} />
+          <DatePicker
+            label="laycan start"
+            inputClass="w-full"
+            onChange={(date) => handleChange('laycanStart', date)}
+            error={errors.laycanStart?.message}
+          />
+          <DatePicker
+            label="laycan end"
+            inputClass="w-full"
+            onChange={(date) => handleChange('laycanEnd', date)}
+            error={errors.laycanEnd?.message}
+          />
         </div>
         <div className="flex gap-x-5">
           <Dropdown
@@ -70,37 +80,34 @@ const SearchFormFields = () => {
         {[1, 2].map((_, index) => (
           <div className="flex gap-x-5" key={`products${_}`}>
             <Dropdown
-              onChange={(option) => handleChange(`product${index}`, option)}
-              name={`product${index}`}
+              onChange={(option) => handleChange(`products[${index}].product`, option)}
+              name={`products[${index}].product`}
               options={testOption}
               label={`product #${index + 1}`}
               customStyles="w-1/2"
             />
             <Input
-              {...register(`density${index}`)}
-              name="density"
+              {...register(`products[${index}].density`)}
               label="density"
               placeholder="mt/m³"
               customStyles="w-2/5"
-              error={errors.density?.message}
+              error={errors.products ? errors.products[index]?.density?.message : null}
               disabled={isSubmitting}
             />
             <Input
-              {...register(`quantity${index}`)}
-              name={`quantity${index}`}
+              {...register(`products[${index}].quantity`)}
               label="quantity"
               placeholder="tons"
               customStyles="w-2/5"
-              error={errors.quantity?.message}
+              error={errors.products ? errors.products[index]?.quantity?.message : null}
               disabled={isSubmitting}
             />
             <Input
-              {...register(`tolerance${index}`)}
-              name={`tolerance${index}`}
+              {...register(`products[${index}].tolerance`)}
               label="tolerance"
               placeholder="%"
               customStyles="w-1/5"
-              error={errors.tolerance?.message}
+              error={errors.products ? errors.products[index]?.tolerance?.message : null}
               disabled={isSubmitting}
             />
           </div>

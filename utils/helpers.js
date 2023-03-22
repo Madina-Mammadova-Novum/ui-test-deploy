@@ -140,3 +140,13 @@ export function hasNestedArrays(data) {
 
   return isNested;
 }
+
+export function getValueWithPath(object, path, defaultValue) {
+  return path
+    //eslint-disable-next-line no-useless-escape
+    .replace(/[\[\]]/g, '.')
+    .replace(/['"]/g, '')
+    .split('.')
+    .filter((key) => key)
+    .reduce((o, p) => (o ? o[p] : defaultValue), object);
+}

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import { Button, SimpleSelect, Title } from '@/elements';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
-import { OfferForm , Tabs } from '@/units';
+import { OfferForm, Tabs } from '@/units';
 import { incomingOfferCommentsData, incomingOfferVoyageDetailData } from '@/utils/mock';
 
 const tabs = [

@@ -19,7 +19,7 @@ const DatePicker = ({ name, label, inputClass, error, onChange, ...rest }) => {
 
   const handleDate = (pickedDate) => {
     setDate(pickedDate);
-    onChange({ value: transformDate(pickedDate, 'MMM dd, yyyy') });
+    onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
   };
 
   return (
