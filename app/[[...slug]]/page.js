@@ -13,10 +13,12 @@ export async function generateMetadata({ params }) {
 
 export default async function Home({ params }) {
   const data = await getEntityData(params);
-  const blocks = delve(data, 'data.blocks');
+  const pageData = delve(data, 'data');
+  const blocks = delve(pageData, 'blocks');
+  const { title, content } = pageData;
   return (
     <section className="container flex-grow">
-      <h1>Home</h1>
+      <h1>{title}</h1>
       <ul>
         <li>
           <NextLink href={ROUTES.LOGIN}>LOGIN</NextLink>
@@ -34,7 +36,7 @@ export default async function Home({ params }) {
           <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink>
         </li> */}
       </ul>
-
+      {content}
       {blocks && <BlockManager blocks={blocks} />}
     </section>
   );
