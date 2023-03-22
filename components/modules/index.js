@@ -6,9 +6,11 @@ import AccountDetails from '@/modules/AccountDetails';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
+import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
+import ExpandableRow from '@/modules/ExpandableRow';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
@@ -25,6 +27,8 @@ import ProfileMenu from '@/modules/ProfileMenu';
 // import Sidebar from '@/modules/Sidebar/Sidebar';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import Signup from '@/modules/Signup';
+import TankerSearch from '@/modules/TankerSearch';
+import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
 // import Upload from '@/modules/Upload';
@@ -61,4 +65,8 @@ export {
   ResetPasswordForm,
   OwnerRegistrationForm,
   ChartererRegistrationForm,
+  TankerSearch,
+  ExpandableRow,
+  VoyageDetailsContent,
+  CommentsContent,
 };

@@ -11,12 +11,12 @@ import OptionRow from '@/elements/Dropdown/OptionRow';
 import OptionsList from '@/elements/Dropdown/OptionsList';
 import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
 
-const Dropdown = ({ name, label, options, onChange, disabled }) => {
+const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (option) => {
-    onChange(option);
     setSelectedOption(option);
+    onChange(option);
   };
 
   const renderOption = ({ countryFlag, label: value }) => <OptionRow countryFlag={countryFlag} value={value} />;
@@ -27,7 +27,7 @@ const Dropdown = ({ name, label, options, onChange, disabled }) => {
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = errors[name]?.value;
         return (
-          <div className="relative bottom-1">
+          <div className={`relative bottom-1 ${customStyles}`}>
             <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">
               {label}
             </label>
@@ -55,11 +55,13 @@ const Dropdown = ({ name, label, options, onChange, disabled }) => {
 Dropdown.defaultProps = {
   label: null,
   disabled: false,
+  customStyles: '',
 };
 
 Dropdown.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  customStyles: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

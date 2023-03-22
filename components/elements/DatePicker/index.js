@@ -13,11 +13,14 @@ import { transformDate } from '@/utils/date';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
-const DatePicker = ({ name, label, inputClass, error, ...rest }) => {
+const DatePicker = ({ name, label, inputClass, error, onChange, ...rest }) => {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
-  const handleDate = (pickedDate) => setDate(pickedDate);
+  const handleDate = (pickedDate) => {
+    setDate(pickedDate);
+    onChange({ value: transformDate(pickedDate, 'MMM dd, yyyy') });
+  };
 
   return (
     <>
@@ -26,7 +29,7 @@ const DatePicker = ({ name, label, inputClass, error, ...rest }) => {
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
-      <div className="single_date relative cursor-pointer">
+      <div className="single_date relative cursor-pointer w-full">
         <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
           <Input
             customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
@@ -56,6 +59,7 @@ DatePicker.defaultProps = {
   error: null,
   register: () => {},
   setValue: () => {},
+  onChange: () => {},
 };
 
 DatePicker.propTypes = {
@@ -65,6 +69,7 @@ DatePicker.propTypes = {
   register: PropTypes.func,
   setValue: PropTypes.func,
   error: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default DatePicker;

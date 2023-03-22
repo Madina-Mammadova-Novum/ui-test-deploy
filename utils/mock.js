@@ -171,3 +171,186 @@ export const signUpTab = {
     },
   ],
 };
+
+export const searchRowHeaders = {
+  exactResults: [
+    [
+      {
+        label: 'tanker name',
+        content: {
+          text: 'Hidden name',
+        },
+      },
+      {
+        label: 'imo',
+        content: {
+          text: 'Hidden number',
+        },
+      },
+      {
+        label: 'flag',
+        content: {
+          text: 'United States',
+          image: usFlag,
+        },
+      },
+      {
+        label: 'dwt',
+        content: {
+          text: '140,*** tons',
+        },
+      },
+      {
+        label: 'estimated arrival',
+        content: {
+          text: 'Dec 11, 2021',
+        },
+      },
+      {
+        label: 'ballast leg',
+        content: {
+          text: 'Short',
+        },
+      },
+    ],
+    [
+      {
+        label: 'tanker name',
+        content: {
+          text: 'Hidden name',
+        },
+      },
+      {
+        label: 'imo',
+        content: {
+          text: 'Hidden number',
+        },
+      },
+      {
+        label: 'flag',
+        content: {
+          text: 'United States',
+          image: usFlag,
+        },
+      },
+      {
+        label: 'dwt',
+        content: {
+          text: '140,*** tons',
+        },
+      },
+      {
+        label: 'estimated arrival',
+        content: {
+          text: 'Dec 11, 2021',
+        },
+      },
+      {
+        label: 'ballast leg',
+        content: {
+          text: 'Short',
+        },
+      },
+    ],
+  ],
+  partialResults: [
+    [
+      {
+        label: 'tanker name',
+        content: {
+          text: 'Hidden name',
+        },
+      },
+      {
+        label: 'imo',
+        content: {
+          text: 'Hidden number',
+        },
+      },
+      {
+        label: 'flag',
+        content: {
+          text: 'United States',
+          image: usFlag,
+        },
+      },
+      {
+        label: 'dwt',
+        content: {
+          text: '140,*** tons',
+        },
+      },
+      {
+        label: 'estimated arrival',
+        content: {
+          text: 'Dec 11, 2021',
+        },
+      },
+      {
+        label: 'ballast leg',
+        content: {
+          text: 'Short',
+        },
+      },
+    ],
+  ],
+};
+
+export const incomingOfferVoyageDetailData = {
+  dates: [
+    [
+      {
+        key: 'Laycan start:',
+        label: 'Dec 18, 2021',
+      },
+      {
+        key: 'Laycan end:',
+        label: 'Dec 30, 2021',
+      },
+    ],
+  ],
+  ports: [
+    [
+      {
+        key: 'Load port:',
+        label: 'Barcelona, ESBCN',
+        countryFlag: usFlag,
+      },
+      {
+        key: 'Load terminal:',
+        label: 'Oil terminal #1',
+      },
+    ],
+    [
+      {
+        key: 'Discharge port:',
+        label: 'Benghazi, LYBEN',
+        countryFlag: usFlag,
+      },
+      {
+        key: 'Discharge terminal:',
+        label: 'Oil terminal #4',
+      },
+    ],
+  ],
+};
+
+export const incomingOfferCommentsData = [
+  {
+    title:
+      'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing is placeholder text commonly. ',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+  },
+  {
+    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+  },
+  {
+    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+    latest: true,
+  },
+];

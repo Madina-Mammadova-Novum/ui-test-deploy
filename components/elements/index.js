@@ -9,6 +9,7 @@ import Dropdown from '@/elements/Dropdown';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
 import HoverableIcon from '@/elements/HoverableIcon';
+import InformationRow from '@/elements/InformationRow';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
 import PasswordInput from '@/elements/Input/PasswordInput';
@@ -23,13 +24,13 @@ import NextLink from '@/elements/NextLink';
 // import RangeDatePicker from '@/elements/RangeDatePicker';
 // import Step from '@/elements/Step';
 // import Table from '@/elements/Table';
-// import Tabs from '@/elements/Tabs';
-// import TextArea from '@/elements/TextArea';
-// import TextWithLabel from '@/elements/TextWithLabel';
+import Portal from '@/elements/Portal';
+import SimpleSelect from '@/elements/SimpleSelect';
+import TextArea from '@/elements/TextArea';
+import TextRow from '@/elements/TextRow';
+import TextWithLabel from '@/elements/TextWithLabel';
 // import Toggle from '@/elements/Toggle';
 // import Tooltip from '@/elements/Tooltip';
-import Portal from '@/elements/Portal';
-import TextRow from '@/elements/TextRow';
 import Title from '@/elements/Title';
 
 export {
@@ -39,7 +40,7 @@ export {
   PhoneInput,
   Portal,
   InputErrorMessage,
-  // TextArea,
+  TextArea,
   Button,
   // Accordion,
   Alert,
@@ -50,7 +51,7 @@ export {
   // ExpandableRow,
   // RadioButton,
   // Table,
-  // TextWithLabel,
+  TextWithLabel,
   // Tooltip,
   // Toggle,
   DatePicker,
@@ -60,7 +61,6 @@ export {
   Modal,
   // File,
   // Pagination,
-  // Tabs,
   PasswordInput,
   // Portal,
   // Modal,
@@ -70,4 +70,6 @@ export {
   // Step,
   // OwnerForm,
   // ChartererForm,
+  InformationRow,
+  SimpleSelect,
 };
