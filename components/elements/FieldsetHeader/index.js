@@ -4,7 +4,7 @@ import { Title } from '@/elements';
 
 const FieldsetHeader = ({ title, children }) => {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center pb-2.5">
       <Title component="h3" className="text-lg text-black font-bold">
         {title}
       </Title>

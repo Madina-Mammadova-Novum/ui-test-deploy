@@ -20,7 +20,9 @@ const AccountCompanyDetails = ({ company }) => {
           <TextRow title="Years in operation" subtitle={company?.years} />
           <TextRow title="Number of tankers" subtitle={company?.totalTankers} />
         </FieldsetContent>
-        <Divider />
+
+        <Divider className="my-4" />
+
         <div className="grid grid-cols-2">
           <FieldsetContent className="col-start-1" label="Registration address">
             <AddressInfo data={company?.registration} />

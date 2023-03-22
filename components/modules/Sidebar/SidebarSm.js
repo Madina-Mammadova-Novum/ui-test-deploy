@@ -12,7 +12,7 @@ const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
   return (
     <>
       <NextLink href="/">
-        <Logo className="relative right-1" />
+        <Logo className="relative right-1.5 fill-white" />
       </NextLink>
       <div className="mt-4 flex flex-col items-center justify-center gap-1.5 relative">
         <Button
