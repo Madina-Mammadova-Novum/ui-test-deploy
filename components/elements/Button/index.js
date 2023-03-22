@@ -33,7 +33,7 @@ const Button = ({ buttonProps, customStyles, disabled, type, onClick, ...rest })
       disabled={disabled}
       {...rest}
     >
-      {icon && <span className="mr-1.5">{icon}</span>}
+      {icon && <span>{icon}</span>}
       {text && text}
     </button>
   );

@@ -1,5 +1,6 @@
-// import Accordion from '@/elements/Accordion';
-// import Search from '@/elements/Accordion/AccordionSearch';
+import Accordion from '@/elements/Accordion';
+import AccordionSm from '@/elements/Accordion/AccordionSm';
+import AccordionXl from '@/elements/Accordion/AccordionXl';
 import Alert from '@/elements/Alert';
 // import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
@@ -45,7 +46,9 @@ export {
   InputErrorMessage,
   // TextArea,
   Button,
-  // Accordion,
+  Accordion,
+  AccordionSm,
+  AccordionXl,
   Alert,
   // Search,
   // Badge,

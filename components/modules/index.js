@@ -9,6 +9,7 @@ import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
+import { PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
@@ -22,8 +23,8 @@ import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
-// import Sidebar from '@/modules/Sidebar/Sidebar';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
+import Sidebar from '@/modules/Sidebar';
 import Signup from '@/modules/Signup';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
@@ -38,7 +39,7 @@ export {
   // RadioWithText,
   // FleetRowHeader,
   // CompanyAddresses,
-  // Sidebar,
+  Sidebar,
   Navbar,
   // Upload,
   Signup,
@@ -51,6 +52,7 @@ export {
   // TermsAndConditions,
   // Seo,
   PageHeader,
+  PageFooter,
   AuthHeader,
   AuthWrapper,
   ModalWrapper,
