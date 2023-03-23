@@ -145,6 +145,18 @@ export function getFilledArray(length) {
   return Array.from({ length });
 }
 
+export function getValueWithPath(object, path, defaultValue) {
+  return (
+    path
+      // eslint-disable-next-line no-useless-escape
+      .replace(/[\[\]]/g, '.')
+      .replace(/['"]/g, '')
+      .split('.')
+      .filter((key) => key)
+      .reduce((o, p) => (o ? o[p] : defaultValue), object)
+  );
+}
+
 export function checkObjectValues({ data }) {
   const isNotNullOrUndefined = Object.keys(data).every((key) => data[key] !== null && data[key] !== undefined);
 
