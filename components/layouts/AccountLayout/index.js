@@ -1,9 +1,11 @@
 import { BaseLayout } from '@/layouts';
-import { PageFooter, PageHeader } from '@/modules';
+import { PageFooter, PageHeader, Sidebar } from '@/modules';
+import { sidebarData } from '@/utils/mock';
 
-const PageLayout = ({ children }) => {
+const AccountLayout = ({ children }) => {
   return (
     <BaseLayout className="bg-gray-light flex min-h-screen max-w-screen-2lg">
+      <Sidebar data={sidebarData} containerStyles="z-50" />
       <div className="flex flex-col grow">
         <PageHeader />
         {children}
@@ -13,4 +15,4 @@ const PageLayout = ({ children }) => {
   );
 };
 
-export default PageLayout;
+export default AccountLayout;

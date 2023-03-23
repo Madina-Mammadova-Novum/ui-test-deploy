@@ -9,7 +9,7 @@ const Navbar = ({ placeholder, cta, path }) => {
   return (
     <nav className="flex w-full justify-between items-center z-50 bg-white 3sm:bg-transparent">
       <NextLink href="/">
-        <Logo className="fill-white 3sm:fill-black" />
+        <Logo className="3sm:fill-white fill-black" />
       </NextLink>
       <ul className="flex h-full items-center gap-5 w-full 3sm:w-1/2 justify-end z-50">
         <li className="text-xsm text-black font-normal">
