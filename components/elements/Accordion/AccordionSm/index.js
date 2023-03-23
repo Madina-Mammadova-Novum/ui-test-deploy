@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import AccordionHeader from '../AccordionHeader';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/Icons';
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/icons';
 import { Button } from '@/elements';
 
 const AccordionSM = ({ data, active, onChange }) => {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { ArrowIcon } from '@/assets/Icons';
+import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
 import { Accordion, Button, NextLink } from '@/elements';
 

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/Icons';
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/icons';
 import AccordionBody from '@/elements/Accordion/AccordionBody';
 import AccordionHeader from '@/elements/Accordion/AccordionHeader';
 

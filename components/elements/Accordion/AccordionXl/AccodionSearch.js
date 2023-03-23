@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { SearchIcon } from '@/assets/Icons';
+import { SearchIcon } from '@/assets/icons';
 import { Input } from '@/elements';
 
 const AccordionSearchXL = ({ value, focused, onChange }) => {

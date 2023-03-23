@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { SearchIcon } from '@/assets/Icons';
+import { SearchIcon } from '@/assets/icons';
 import { Button } from '@/elements';
 
 const AccordionSearchSm = ({ focused, onChange }) => {
