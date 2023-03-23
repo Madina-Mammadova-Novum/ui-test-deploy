@@ -11,7 +11,7 @@ const Navbar = ({ placeholder, cta, path }) => {
       <NextLink href="/">
         <Logo className="3sm:fill-white fill-black" />
       </NextLink>
-      <ul className="flex h-full items-center gap-5 w-full 3sm:w-1/2 justify-end z-50">
+      <ul className="flex h-full items-center gap-5 w-full 3sm:w-1/2 justify-end bg-white z-50">
         <li className="text-xsm text-black font-normal">
           <p>{placeholder}</p>
         </li>
