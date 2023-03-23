@@ -8,6 +8,7 @@
 // import BlockPrivacyPolicy from './BlockPrivacyPolicy';
 // import BlockTeam from './BlockTeam';
 // import BlockTestimonials from './BlockTestimonials';
+import BlockCtaSingleImage from './BlockCtaSingleImage';
 import BlockCta from './Cta';
 // import BlockCtaImages from './CtaImages';
 // import BlockHeroAnimatedWithTitle from './HeroAnimatedTitle';
@@ -16,6 +17,7 @@ import BlockCta from './Cta';
 
 export {
   BlockCta,
+  BlockCtaSingleImage,
   // BlockValues,
   // BlockHeroAnimatedWithTitle,
   // BlockTestimonials,

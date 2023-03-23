@@ -49,6 +49,11 @@ export const blocksDataAdapter = async (blocks) => {
           block.coverImage = coverImage !== undefined ? imageAdapter(coverImage) : null;
           return block;
         }
+        case 'blocks.cta-single-image': {
+          const { coverImage } = block;
+          block.coverImage = coverImage !== undefined ? imageAdapter(coverImage) : null;
+          return block;
+        }
         case 'blocks.testimonials': {
           const { testimonials } = block;
           block.testimonials = testimonials !== undefined ? testimonialsAdapter(testimonials) : [];

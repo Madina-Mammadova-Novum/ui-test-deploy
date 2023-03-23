@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {
   // BlockCompanyHistory,
   BlockCta,
+  BlockCtaSingleImage,
   // BlockCtaFeatured,
   // BlockCtaImages,
   // BlockFAQs,
@@ -25,6 +26,9 @@ const getBlockComponent = ({ __component, ...rest }) => {
   switch (__component) {
     case 'blocks.cta':
       Block = BlockCta;
+      break;
+    case 'blocks.cta-single-image':
+      Block = BlockCtaSingleImage;
       break;
     // case 'blocks.single-how-it-works':
     //   Block = BlockHowItWorks;
