@@ -39,21 +39,27 @@ export const whyWeAreBetterBlockAdapter = ({ data }) => {
 };
 
 export const linkAdapter = (link) => {
-  const { linkOptions } = link;
-  const type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions?.style : 'default';
+  const { linkOptions, label, path } = link;
+  const type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions.style : 'default';
+  const target = linkOptions?.target !== null && linkOptions?.target !== undefined ? linkOptions.target : null;
+  const isExternal =
+    linkOptions?.isExternal !== null && linkOptions?.isExternal !== undefined ? linkOptions.isExternal : false;
+  const rel = linkOptions?.rel !== null && linkOptions?.rel !== undefined ? linkOptions.rel : null;
   return {
-    ...link,
+    label,
+    path,
     type,
+    target,
+    isExternal,
+    rel,
   };
 };
 
 export const linkImageAdapter = (link) => {
-  const { linkOptions, coverImage } = link;
-  const type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions?.style : 'default';
+  const { coverImage } = link;
   return {
-    ...link,
-    type,
-    image: imageAdapter(coverImage),
+    ...linkAdapter(link),
+    image: imageAdapter(coverImage), // todo: change image to coverImage
   };
 };
 
