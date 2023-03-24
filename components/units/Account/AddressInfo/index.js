@@ -2,22 +2,22 @@ import PropTypes from 'prop-types';
 
 import { TextRow } from '@/elements';
 
-const AddressInfo = ({ data }) => {
-  // todo: rules for fields
+const AddressInfo = ({ address }) => {
+  const { addressLine1, addressLine2, city, state, postal, country } = address;
   return (
     <>
-      <TextRow title="Address line #1:" subtitle={data?.addressLine1} />
-      <TextRow title="Address line #2:" subtitle={data?.addressLine2} />
-      <TextRow title="City:" subtitle={data?.city} />
-      <TextRow title="State / Province / Region:" subtitle={data?.state} />
-      <TextRow title="Zip / Postal code:" subtitle={data?.postal} />
-      <TextRow title="Country:" subtitle={data?.country} />
+      <TextRow title="Address line #1:" subtitle={addressLine1} />
+      <TextRow title="Address line #2:" subtitle={addressLine2} />
+      <TextRow title="City:" subtitle={city} />
+      <TextRow title="State / Province / Region:" subtitle={state} />
+      <TextRow title="Zip / Postal code:" subtitle={postal} />
+      <TextRow title="Country:" subtitle={country} />
     </>
   );
 };
 
 AddressInfo.propTypes = {
-  data: PropTypes.shape({
+  address: PropTypes.shape({
     addressLine1: PropTypes.string,
     addressLine2: PropTypes.string,
     state: PropTypes.string,

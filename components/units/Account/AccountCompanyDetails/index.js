@@ -6,8 +6,8 @@ import { CompanyInfoForm } from '@/modules';
 import { AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company }) => {
+  const { name, years, totalTankers, registration, correspondence } = company;
   return (
-    // todo: rules for fields
     <FieldsetWrapper>
       <FieldsetHeader title="Company Details">
         <ModalWindow buttonProps={{ text: 'Edit company details', variant: 'primary', size: 'medium' }}>
@@ -16,20 +16,24 @@ const AccountCompanyDetails = ({ company }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information">
-          <TextRow title="Company name" subtitle={company?.name} />
-          <TextRow title="Years in operation" subtitle={company?.years} />
-          <TextRow title="Number of tankers" subtitle={company?.totalTankers} />
+          {name ?? <TextRow title="Company name" subtitle={name} />}
+          {years ?? <TextRow title="Years in operation" subtitle={years} />}
+          {totalTankers ?? <TextRow title="Number of tankers" subtitle={totalTankers} />}
         </FieldsetContent>
 
         <Divider className="my-4" />
 
         <div className="grid grid-cols-2">
-          <FieldsetContent className="col-start-1" label="Registration address">
-            <AddressInfo data={company?.registration} />
-          </FieldsetContent>
-          <FieldsetContent className="col-start-1 3sm:col-start-2" label="Correspondence address">
-            <AddressInfo data={company?.correspondence} />
-          </FieldsetContent>
+          {registration ?? (
+            <FieldsetContent className="col-start-1" label="Registration address">
+              <AddressInfo data={registration} />
+            </FieldsetContent>
+          )}
+          {correspondence ?? (
+            <FieldsetContent className="col-start-1 3sm:col-start-2" label="Correspondence address">
+              <AddressInfo data={correspondence} />
+            </FieldsetContent>
+          )}
         </div>
       </FieldsetContentWrapper>
     </FieldsetWrapper>
