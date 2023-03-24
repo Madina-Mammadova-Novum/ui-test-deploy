@@ -1,17 +1,46 @@
-const singularPortAdapter = ({ data }) => {
-  if (data === null) return null;
+import { countryAdapter } from '@/adapters/country';
+import { terminalsAdapter } from '@/adapters/terminal';
 
-  const { id, name } = data;
-
-  return {
-    label: name,
-    value: name,
+export const portAdapter = ({ data }) => {
+  if (data === null || data === undefined) return [];
+  const {
     id,
+    name,
+    locode,
+    longtitude,
+    latitude,
+    isRegistryPort,
+    appearsInSearch,
+    isConnectionPort,
+    enabled,
+    basinId,
+    // countryId,
+    country,
+    terminals,
+  } = data;
+  return {
+    id,
+    name,
+    code: locode,
+    coordinates: {
+      longtitude,
+      latitude,
+    },
+    options: {
+      isRegistryPort,
+      isConnectionPort,
+      appearsInSearch,
+      enabled,
+    },
+    basinId,
+    country: countryAdapter({ data: country }),
+    terminals: terminalsAdapter({ data: terminals }),
   };
 };
 
-export const portAdapter = ({ data }) => {
+export const portsAdapter = ({ data }) => {
   if (data === null) return [];
-  // todo: create similar structure with other adapters
-  return data?.map((el) => singularPortAdapter({ data: el }));
+  return data.map((port) => {
+    return portAdapter({ data: port });
+  });
 };
