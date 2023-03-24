@@ -1,5 +1,7 @@
 import { serialize } from 'cookie';
 
+import { responseAdapter } from '@/adapters/response';
+
 export const errorHandler = (res, status, errors) => {
   const statusMessage = errors !== undefined || errors.length !== 0 ? 'Something went wrong' : errors.join('');
   return res.status(status).send({
@@ -81,7 +83,7 @@ export const apiHandler = async (options, req, res) => {
       res.setHeader('Set-Cookie', cookie);
     }
 
-    return res.status(200).json(result); // TODO: need to wrap with global adapter
+    return responseAdapter(res.status(200).json(result));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };
