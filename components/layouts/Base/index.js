@@ -13,7 +13,10 @@ const BaseLayout = ({ children, className }) => {
         head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className={`${className} max-w-screen-2lg min-h-screen flex flex-col`}>
+      <body
+        className={`${className}`}
+        // className={`${className} max-w-screen-2lg min-h-screen flex flex-col`}
+      >
         {children}
         <ClientSidePackages />
       </body>

@@ -19,6 +19,7 @@ import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
 // import Modal from '@/elements/Modal';
+import LinkAsButton from '@/elements/LinkAsButton';
 import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
@@ -60,6 +61,7 @@ export {
   DatePicker,
   // RangeDatePicker,
   Dropdown,
+  LinkAsButton,
   NextImage,
   Modal,
   // File,

@@ -17,7 +17,7 @@ export default async function Home({ params }) {
   const blocks = delve(pageData, 'blocks');
   const { title, content } = pageData;
   return (
-    <section className="container flex-grow">
+    <main>
       <h1>{title}</h1>
       <ul>
         <li>
@@ -38,6 +38,6 @@ export default async function Home({ params }) {
       </ul>
       {content}
       {blocks && <BlockManager blocks={blocks} />}
-    </section>
+    </main>
   );
 }
