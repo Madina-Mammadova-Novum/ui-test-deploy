@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
+
 import { Button, Modal } from '@/elements';
-import { SIZES } from '@/lib';
-import { STYLES } from '@/lib/constants';
 
 const AccountCompanyDetails = ({ children, buttonProps }) => {
   const [opened, setOpened] = useState(false);
@@ -30,8 +30,8 @@ AccountCompanyDetails.propTypes = {
   children: PropTypes.node.isRequired,
   buttonProps: PropTypes.shape({
     text: PropTypes.string.isRequired,
-    variant: PropTypes.oneOf(STYLES).isRequired,
-    size: PropTypes.oneOf(SIZES.BUTTONS).isRequired,
+    variant: buttonVariantsPropTypes.isRequired,
+    size: buttonSizesPropTypes.isRequired,
   }),
 };
 

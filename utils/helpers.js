@@ -163,3 +163,25 @@ export function formatDate(dateString) {
 }
 
 export const disableDefaultBehaviour = (e) => e.preventDefault();
+
+export const getButtonClassNames = (variant, size) => {
+  // todo: need to connect constants for variants and sizes values
+  if (variant === 'primary') {
+    if (size === 'large') return 'bg-blue text-white hover:bg-blue-darker';
+    if (size === 'medium') return 'bg-white px-2.5 py-1 text-blue border border-blue hover:border-blue-darker';
+    if (size === 'small') return 'bg-white !p-0 text-blue hover:text-blue-darker';
+  }
+  if (variant === 'secondary') {
+    if (size === 'large') return 'bg-black text-white hover:bg-blue-dark';
+    if (size === 'medium') return 'bg-white px-2.5 py-1 text-black border border-grey hover:border-black';
+  }
+  if (variant === 'tertiary') {
+    if (size === 'large') return 'bg-white text-black border border-grey hover:border-black';
+  }
+  if (variant === 'delete') {
+    if (size === 'large') return 'bg-white text-red border border-red-medium hover:border-red';
+    if (size === 'medium') return 'bg-white px-2.5 py-1 text-red border border-red-medium hover:border-red';
+    if (size === 'small') return 'text-red';
+  }
+  return null;
+};
