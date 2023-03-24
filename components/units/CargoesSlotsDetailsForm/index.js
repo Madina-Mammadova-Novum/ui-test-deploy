@@ -24,37 +24,37 @@ const CargoesSlotsDetailsForm = () => {
   } = useHookForm();
 
   useEffect(() => {
-    const numberOfTankers = indexes.length > 0 ? indexes.length : '';
-    setValue('numberOfTankers', numberOfTankers);
+    const numberOfCargoes = indexes.length > 0 ? indexes.length : '';
+    setValue('numberOfCargoes', numberOfCargoes);
   }, [indexes, setValue]);
 
   useEffect(() => {
     return tankersInputRef.current && tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
   }, [tankersInputRef]);
 
-  const fetchPorts = useCallback(async () => {
-    const ports = await getPorts();
-
-    setPortsOption(ports);
+  useEffect(() => {
+    (async () => {
+      const data = await getPorts();
+      const portsOptions = data.map(({ id, name }) => {
+        return { value: id, label: name };
+      });
+      setPortsOption(portsOptions);
+    })();
   }, []);
 
-  useEffect(() => {
-    fetchPorts();
-  }, [fetchPorts]);
-
   const handleSlotsCount = (event) => {
-    clearErrors('numberOfTankers');
+    clearErrors('numberOfCargoes');
 
-    let numberOfTankers = Number(event.target.value);
-    if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
-    if (numberOfTankers <= 0) {
-      numberOfTankers = '';
+    let numberOfCargoes = Number(event.target.value);
+    if (numberOfCargoes > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfCargoes = SETTINGS.MAX_NUMBER_OF_TANKERS;
+    if (numberOfCargoes <= 0) {
+      numberOfCargoes = '';
       setValue('applySlots', false);
       setIndexes([]);
     }
 
-    setValue('numberOfTankers', numberOfTankers);
-    setSlots(numberOfTankers);
+    setValue('numberOfCargoes', numberOfCargoes);
+    setSlots(numberOfCargoes);
   };
 
   const handleApply = useCallback(() => {
@@ -75,7 +75,12 @@ const CargoesSlotsDetailsForm = () => {
     });
   };
 
-  const handlePortChange = useCallback((name, id, index) => setValue(inputName(name, index), id), [setValue]);
+  const handlePortChange = (data) => {
+    const { option, index } = data;
+    const fieldName = `cargoes[${index}][port]`;
+    setValue(fieldName, option);
+  };
+
   const handleDateChange = useCallback((name, value, index) => setValue(inputName(name, index), value), [setValue]);
 
   const inputName = (name, index) => `experiences[${index}].${name}`;
@@ -84,10 +89,10 @@ const CargoesSlotsDetailsForm = () => {
     <div className="grid gap-5">
       <div className="w-full !relative">
         <Input
-          {...register('numberOfTankers')}
-          label="HOW MANY CARGOES HAVE YOU CHARTERED DURING THE LAST 6 MONTHS?"
+          {...register('numberOfCargoes')}
+          label="How many cargoes have you chartered during the last 6 months?"
           placeholder="Cargoes"
-          error={errors.numberOfTankers?.message}
+          error={errors.numberOfCargoes?.message}
           disabled={isSubmitting}
           type="number"
           ref={tankersInputRef}
@@ -107,23 +112,21 @@ const CargoesSlotsDetailsForm = () => {
       {indexes?.map((element, index) => {
         const rowIndex = indexes.findIndex((obj) => obj === element);
 
+        const fieldName = `cargoes[${index}]`;
+
         return (
           <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={rowIndex}>
-            <Input
-              {...register(inputName(element.imo.name, index))}
-              type="number"
-              label={`${element.imo.label}#${index + 1}`}
-            />
+            <Input {...register(`${fieldName}[name]`, index)} type="number" label={`Imo#${index + 1}`} />
             <Dropdown
-              name={element.port.name}
-              label={element.port.label}
+              name={`${fieldName}[port]`}
+              label="Load port"
               options={portsOption}
-              onChange={({ id }) => handlePortChange(element.port.name, id, index)}
+              onChange={(option) => handlePortChange({ option, index })}
             />
             <DatePicker
-              name={element.date.name}
+              name={`${fieldName}[date]`}
               inputClass="w-full"
-              label={element.date.label}
+              label="Bill of lading date"
               onChange={(value) => handleDateChange(element.date.name, value, index)}
             />
             <Button

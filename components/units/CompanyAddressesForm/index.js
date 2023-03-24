@@ -17,7 +17,6 @@ const CompanyAddresses = () => {
     (async () => {
       const data = await getCountries();
       const countriesOptions = data.map(({ countryId, countryName }) => {
-        // todo: why you did it 'data?'. if we don't have some countries we need notify about that
         return { value: countryId, label: countryName };
       });
       setCountries(countriesOptions);
@@ -43,6 +42,7 @@ const CompanyAddresses = () => {
         </CheckBoxInput>
       </div>
       {!correspondenceAddress && (
+        // todo: registration - to constant
         <AddressDetails title="Сompany correspondence address" type="correspondence" countries={countries} />
       )}
     </div>
