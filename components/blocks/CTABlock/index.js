@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { NextLink } from '@/elements';
 import { makeId } from '@/utils/helpers';
 
-const Cta = ({ title, shortDescription, buttons }) => {
+const CTABlock = ({ title, shortDescription, buttons }) => {
   return (
     <div className="relative px-6 lg:px-8">
       <div className="mx-auto pt-20 pb-32 sm:pt-48 sm:pb-40">
@@ -68,22 +68,21 @@ const Cta = ({ title, shortDescription, buttons }) => {
   );
 };
 
-Cta.defaultProps = {
+CTABlock.defaultProps = {
   title: '',
   shortDescription: '',
   buttons: [],
 };
 
-Cta.propTypes = {
+CTABlock.propTypes = {
   title: PropTypes.string,
   shortDescription: PropTypes.string,
   buttons: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
       label: PropTypes.string,
       path: PropTypes.string,
     })
   ),
 };
 
-export default Cta;
+export default CTABlock;

@@ -40,7 +40,7 @@ const BlockCtaSingleImage = ({ title, shortDescription, coverImage, button }) =>
                 size: 'large',
               }}
               customStyles="max-w-[115px] mx-auto"
-              target={button.linkOptions.target}
+              target={button.target}
             >
               {button.label}
             </LinkAsButton>
