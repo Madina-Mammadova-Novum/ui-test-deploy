@@ -39,6 +39,7 @@ export const whyWeAreBetterBlockAdapter = ({ data }) => {
 };
 
 export const linkAdapter = (link) => {
+  if (link === null) return null;
   const { linkOptions, label, path } = link;
   const type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions.style : 'default';
   const target = linkOptions?.target !== null && linkOptions?.target !== undefined ? linkOptions.target : null;
