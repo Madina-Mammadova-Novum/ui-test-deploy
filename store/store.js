@@ -15,7 +15,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
-const store = configureStore({
+export const accountStore = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -26,7 +26,5 @@ const store = configureStore({
   devTools: process.env.NODE_ENV === 'development' && devToolsEnhancer(),
 });
 
-setupListeners(store.dispatch);
-
-export const persistore = persistStore(store);
-export { store };
+export const persistore = persistStore(accountStore);
+setupListeners(accountStore.dispatch);

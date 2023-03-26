@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { CheckBoxInput } from '@/elements';
+import { ADDRESS } from '@/lib/constants';
 import { getCountries } from '@/services';
 import { AddressDetails } from '@/units';
+import { convertDataToOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresses = () => {
@@ -13,24 +15,29 @@ const CompanyAddresses = () => {
 
   const correspondenceAddress = watch('sameAddresses', true);
 
-  useEffect(() => {
-    (async () => {
-      const data = await getCountries();
-      const countriesOptions = data.map(({ countryId, countryName }) => {
-        return { value: countryId, label: countryName };
-      });
-      setCountries(countriesOptions);
-    })();
-  }, []);
-
   const handleSameAddress = (event) => {
     const { checked } = event.target;
     setValue('sameAddresses', checked);
   };
 
+  const fetchCountries = async () => {
+    const data = await getCountries();
+    const options = convertDataToOptions(data, 'countryId', 'countryName');
+
+    setCountries(options);
+  };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
+
   return (
     <div className="flex flex-col gap-5">
-      <AddressDetails title="Company registration address" type="registration" countries={countries} />
+      <AddressDetails
+        title={`Company ${ADDRESS.REGISTRATION} address`}
+        type={ADDRESS.REGISTRATION}
+        countries={countries}
+      />
       <div className="col-span-2 row-auto">
         <CheckBoxInput
           name="sameAddresses"
@@ -42,8 +49,11 @@ const CompanyAddresses = () => {
         </CheckBoxInput>
       </div>
       {!correspondenceAddress && (
-        // todo: registration - to constant
-        <AddressDetails title="Сompany correspondence address" type="correspondence" countries={countries} />
+        <AddressDetails
+          title={`Company ${ADDRESS.CORRESPONDENCE} address`}
+          type={ADDRESS.CORRESPONDENCE}
+          countries={countries}
+        />
       )}
     </div>
   );

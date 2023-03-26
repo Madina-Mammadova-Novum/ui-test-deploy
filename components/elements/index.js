@@ -3,6 +3,7 @@ import AccordionSm from '@/elements/Accordion/AccordionSm';
 import AccordionXl from '@/elements/Accordion/AccordionXl';
 import Alert from '@/elements/Alert';
 // import Badge from '@/elements/Badge';
+import AsyncDropdown from '@/elements/AsyncDropdown';
 import Button from '@/elements/Button';
 import DatePicker from '@/elements/DatePicker';
 import Dropdown from '@/elements/Dropdown';
@@ -62,6 +63,7 @@ export {
   // Toggle,
   DatePicker,
   // RangeDatePicker,
+  AsyncDropdown,
   Dropdown,
   NextImage,
   Modal,

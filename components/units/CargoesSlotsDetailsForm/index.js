@@ -2,19 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { cargoesAdapter } from '@/adapters';
 import { PlusIcon, TrashIcon } from '@/assets/icons';
-import { Button, DatePicker, Dropdown, Input } from '@/elements';
+import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
-import { disableDefaultBehaviour } from '@/utils/helpers';
+import { cargoesTemplate, convertDataToOptions, disableDefaultBehaviour } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
-  const [slots, setSlots] = useState(0);
-  const [indexes, setIndexes] = useState([]);
-  const [portsOption, setPortsOption] = useState(null);
-  const tankersInputRef = useRef(null);
+  const [cargoesState, setCargoesState] = useState({
+    slots: 0,
+    indexes: [],
+    portsOptions: null,
+  });
 
   const {
     register,
@@ -23,24 +23,14 @@ const CargoesSlotsDetailsForm = () => {
     formState: { errors, isSubmitting },
   } = useHookForm();
 
-  useEffect(() => {
-    const numberOfCargoes = indexes.length > 0 ? indexes.length : '';
-    setValue('numberOfCargoes', numberOfCargoes);
-  }, [indexes, setValue]);
+  const cargoesInputRef = useRef(null);
+  const { slots, portsOptions, indexes } = cargoesState;
 
-  useEffect(() => {
-    return tankersInputRef.current && tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
-  }, [tankersInputRef]);
-
-  useEffect(() => {
-    (async () => {
-      const data = await getPorts();
-      const portsOptions = data.map(({ id, name }) => {
-        return { value: id, label: name };
-      });
-      setPortsOption(portsOptions);
-    })();
-  }, []);
+  const handleChangeState = (key, value) =>
+    setCargoesState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
 
   const handleSlotsCount = (event) => {
     clearErrors('numberOfCargoes');
@@ -50,40 +40,54 @@ const CargoesSlotsDetailsForm = () => {
     if (numberOfCargoes <= 0) {
       numberOfCargoes = '';
       setValue('applySlots', false);
-      setIndexes([]);
+      handleChangeState('indexes', []);
     }
 
     setValue('numberOfCargoes', numberOfCargoes);
-    setSlots(numberOfCargoes);
+    handleChangeState('slots', numberOfCargoes);
   };
 
   const handleApply = useCallback(() => {
-    const cargoes = cargoesAdapter(slots);
+    const cargoes = cargoesTemplate(slots);
 
-    setIndexes(cargoes);
     setValue('applySlots', cargoes.length > 0);
+    handleChangeState('indexes', cargoes);
   }, [setValue, slots]);
 
   const handleAddSlot = () => {
-    setIndexes((prevIndexes) => [...prevIndexes, ...cargoesAdapter(1)]);
+    handleChangeState('indexes', [...indexes, ...cargoesTemplate(1)]);
   };
 
   const handleRemoveSlot = (element) => {
-    setIndexes((prevIndexes) => {
-      const rowIndex = prevIndexes.findIndex((obj) => obj === element);
-      return [...prevIndexes.filter((_, index) => index !== rowIndex)];
-    });
+    const rowIndex = indexes.findIndex((obj) => obj === element);
+    handleChangeState('indexes', [...indexes.filter((_, index) => index !== rowIndex)]);
   };
 
-  const handlePortChange = (data) => {
-    const { option, index } = data;
-    const fieldName = `cargoes[${index}][port]`;
+  const handleChangeValue = (data) => {
+    const { option, index, key } = data;
+    const fieldName = `cargoes[${index}][${key}]`;
     setValue(fieldName, option);
   };
 
-  const handleDateChange = useCallback((name, value, index) => setValue(inputName(name, index), value), [setValue]);
+  const fetchPorts = async () => {
+    const data = await getPorts();
+    const options = convertDataToOptions(data, 'id', 'name');
 
-  const inputName = (name, index) => `experiences[${index}].${name}`;
+    handleChangeState('portsOptions', options);
+  };
+
+  useEffect(() => {
+    fetchPorts();
+  }, []);
+
+  useEffect(() => {
+    const numberOfCargoes = indexes.length > 0 ? indexes.length : '';
+    setValue('numberOfCargoes', numberOfCargoes);
+  }, [indexes, setValue]);
+
+  useEffect(() => {
+    return cargoesInputRef.current && cargoesInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+  }, [cargoesInputRef]);
 
   return (
     <div className="grid gap-5">
@@ -95,7 +99,7 @@ const CargoesSlotsDetailsForm = () => {
           error={errors.numberOfCargoes?.message}
           disabled={isSubmitting}
           type="number"
-          ref={tankersInputRef}
+          ref={cargoesInputRef}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
         />
@@ -110,24 +114,22 @@ const CargoesSlotsDetailsForm = () => {
       </div>
 
       {indexes?.map((element, index) => {
-        const rowIndex = indexes.findIndex((obj) => obj === element);
-
         const fieldName = `cargoes[${index}]`;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={rowIndex}>
+          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={element.id}>
             <Input {...register(`${fieldName}[name]`, index)} type="number" label={`Imo#${index + 1}`} />
-            <Dropdown
+            <AsyncDropdown
               name={`${fieldName}[port]`}
               label="Load port"
-              options={portsOption}
-              onChange={(option) => handlePortChange({ option, index })}
+              options={portsOptions}
+              onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
             />
             <DatePicker
               name={`${fieldName}[date]`}
               inputClass="w-full"
               label="Bill of lading date"
-              onChange={(value) => handleDateChange(element.date.name, value, index)}
+              onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />
             <Button
               type="button"

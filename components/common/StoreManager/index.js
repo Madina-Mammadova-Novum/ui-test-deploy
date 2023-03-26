@@ -6,11 +6,11 @@ import { Provider } from 'react-redux';
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { persistore, store } from '@/store/store';
+import { accountStore, persistore } from '@/store/store';
 
 export default function StoreManager({ children }) {
   return (
-    <Provider store={store}>
+    <Provider store={accountStore}>
       <PersistGate loading={null} persistor={persistore}>
         {children}
       </PersistGate>

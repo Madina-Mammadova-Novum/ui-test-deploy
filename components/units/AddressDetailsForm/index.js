@@ -5,12 +5,14 @@ import { useFormContext } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
-import { Dropdown, Input } from '@/elements';
+import { AsyncDropdown, Input } from '@/elements';
 import { getCities } from '@/services';
+import { convertDataToOptions } from '@/utils/helpers';
 
 const AddressDetails = ({ title, type, countries }) => {
   const [cities, setCities] = useState([]);
   const [disabled, setDisabled] = useState(true);
+
   const {
     register,
     setValue,
@@ -18,23 +20,29 @@ const AddressDetails = ({ title, type, countries }) => {
     formState: { errors, isSubmitting },
   } = useFormContext();
 
-  const handleCountryChange = async (option) => {
+  const fetchCities = async (id) => {
+    const data = await getCities(id);
+    const options = convertDataToOptions(data, 'cityId', 'cityName');
+    return { options };
+  };
+
+  const handleCountryChange = async (data) => {
     clearErrors([`${type}CountryId`, `${type}CityId`]);
 
-    const { value: countryId } = option;
-    const data = await getCities(countryId);
-    const citiesOptions = data.map(({ cityId, cityName }) => {
-      return { value: cityId, label: cityName };
-    });
-    setValue(`${type}CountryId`, option);
+    const { value: countryId } = data;
+    const { options } = await fetchCities(countryId);
+
+    setValue(`${type}CountryId`, data);
     setValue(`${type}CityId`, null);
-    setDisabled(true);
-    setCities(citiesOptions);
+
+    if (options.length > 0) {
+      setCities(options);
+      setDisabled(false);
+    }
   };
 
   const handleCityChange = (option) => {
     setValue(`${type}CityId`, option);
-    setDisabled(false);
   };
 
   return (
@@ -42,13 +50,13 @@ const AddressDetails = ({ title, type, countries }) => {
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
         <div className="grid grid-cols-0 md:grid-cols-2 gap-5">
-          <Dropdown label="Country" name={`${type}CountryId`} options={countries} onChange={handleCountryChange} />
-          <Dropdown
+          <AsyncDropdown name={`${type}CountryId`} label="Country" options={countries} onChange={handleCountryChange} />
+          <AsyncDropdown
             label="City"
             name={`${type}CityId`}
             options={cities}
             onChange={handleCityChange}
-            disabled={cities.length === 0}
+            disabled={disabled}
           />
           <Input
             {...register(`${type}State`)}

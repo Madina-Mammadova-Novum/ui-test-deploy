@@ -168,3 +168,21 @@ export function checkObjectValues({ data }) {
 }
 
 export const disableDefaultBehaviour = (e) => e.preventDefault();
+
+export const cargoeTemplate = () => ({
+  imo: { name: `vesselIMO`, label: 'imo', id: makeId() },
+  port: { name: `loadPortId`, label: 'load port', id: makeId() },
+  date: { name: `billOfLadingDate`, label: 'bill of lading date', id: makeId() },
+});
+
+export const cargoesTemplate = (value) => {
+  const result = getFilledArray(value);
+
+  return result.map(cargoeTemplate);
+};
+
+export const convertDataToOptions = (data, keyValue, keyLabel) => {
+  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
+    return { value, label };
+  });
+};

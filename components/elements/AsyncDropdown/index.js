@@ -2,21 +2,31 @@
 
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import Select from 'react-select';
 
 import PropTypes from 'prop-types';
+import AsyncSelect from 'react-select/async';
 
 import { InputErrorMessage } from '@/elements';
-import OptionRow from '@/elements/Dropdown/OptionRow';
-import OptionsList from '@/elements/Dropdown/OptionsList';
-import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
+import OptionRow from '@/elements/AsyncDropdown/OptionRow';
+import OptionsList from '@/elements/AsyncDropdown/OptionsList';
+import { dropdownStyles, dropdownTheme } from '@/elements/AsyncDropdown/styles';
 
-const Dropdown = ({ name, label, options, onChange, disabled }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
+  const [selectedOption, setSelectedOption] = useState('');
 
   const handleChange = (option) => {
     onChange(option);
     setSelectedOption(option);
+  };
+
+  const filteredOptions = (inputValue) => {
+    return options.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+  };
+
+  const loadOptions = (inputValue, callback) => {
+    setTimeout(() => {
+      callback(filteredOptions(inputValue));
+    }, 1000);
   };
 
   const renderOption = ({ countryFlag, label: value }) => <OptionRow countryFlag={countryFlag} value={value} />;
@@ -32,14 +42,18 @@ const Dropdown = ({ name, label, options, onChange, disabled }) => {
             <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">
               {label}
             </label>
-            <Select
+            <AsyncSelect
+              {...field}
               ref={ref}
               id={name}
-              {...field}
-              options={options}
+              cacheOptions
+              closeMenuOnSelect
+              value={selectedOption}
+              defaultOptions={options}
+              loadOptions={loadOptions}
+              isLoading={!options?.length}
               components={{ Option: OptionsList }}
               onChange={handleChange}
-              closeMenuOnSelect={false}
               formatOptionLabel={renderOption}
               styles={dropdownStyles(selectedOption, error)}
               theme={dropdownTheme}
@@ -53,17 +67,18 @@ const Dropdown = ({ name, label, options, onChange, disabled }) => {
   );
 };
 
-Dropdown.defaultProps = {
+AsyncDropdown.defaultProps = {
   label: null,
   disabled: false,
 };
 
-Dropdown.propTypes = {
+AsyncDropdown.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  loadOptions: PropTypes.func.isRequired,
 };
 
-export default Dropdown;
+export default AsyncDropdown;
