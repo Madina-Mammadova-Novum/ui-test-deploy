@@ -34,7 +34,7 @@ const TankerSearch = () => {
   return (
     <>
       <SearchForm onSubmit={handleSearch} />
-      {/* eslint-disable-next-line no-nested-ternary */ }
+      {/* eslint-disable-next-line no-nested-ternary */}
       {!loading ? (
         searchResult?.exactResults?.length || searchResult?.partialResults?.length ? (
           <TankerSearchResults setSortParams={setSortParams} sortParams={sortParams} searchResult={searchResult} />
