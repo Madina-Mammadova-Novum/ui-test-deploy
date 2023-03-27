@@ -17,7 +17,7 @@ export default async function Home({ params }) {
   const blocks = delve(pageData, 'blocks');
   const { title, content } = pageData;
   return (
-    <main>
+    <main className="space-y-[100px]">
       <h1>{title}</h1>
       <ul>
         <li>

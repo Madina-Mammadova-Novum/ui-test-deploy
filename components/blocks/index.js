@@ -1,15 +1,19 @@
-// import BlockCompanyHistory from './BlockCompanyHistory';
+import BlockCompanyHistory from './BlockCompanyHistory';
 // import BlockCtaFeatured from './BlockCtaFeatured';
 // import BlockJoinTeam from './BlockCtaJoinTeam';
 // import BlockFAQs from './BlockFAQs';
+import BlockCtaSingleImage from './BlockCtaSingleImage';
 // import BlockHeroImage from './BlockHeroImage';
+
 // import BlockHowItWorks from './BlockHowItWorks';
 // import BlockImprovements from './BlockImprovements';
 // import BlockPrivacyPolicy from './BlockPrivacyPolicy';
 // import BlockTeam from './BlockTeam';
 // import BlockTestimonials from './BlockTestimonials';
-import BlockCtaSingleImage from './BlockCtaSingleImage';
+import BlockWhatWeOffer from './BlockWhatWeOffer';
 import BlockCta from './Cta';
+
+import BlockOurMission from "@/blocks/BlockOurMission";
 // import BlockCtaImages from './CtaImages';
 // import BlockHeroAnimatedWithTitle from './HeroAnimatedTitle';
 // import JoinTeamModal from './JoinTeamModal';
@@ -18,6 +22,8 @@ import BlockCta from './Cta';
 export {
   BlockCta,
   BlockCtaSingleImage,
+  BlockWhatWeOffer,
+  BlockOurMission,
   // BlockValues,
   // BlockHeroAnimatedWithTitle,
   // BlockTestimonials,
@@ -27,7 +33,7 @@ export {
   // BlockJoinTeam,
   // BlockHowItWorks,
   // BlockHeroImage,
-  // BlockCompanyHistory,
+  BlockCompanyHistory,
   // JoinTeamModal,
   // BlockImprovements,
   // BlockPrivacyPolicy,

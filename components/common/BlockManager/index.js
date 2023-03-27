@@ -3,14 +3,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  // BlockCompanyHistory,
+  BlockCompanyHistory,
   BlockCta,
   BlockCtaSingleImage,
+  BlockWhatWeOffer,
   // BlockCtaFeatured,
   // BlockCtaImages,
   // BlockFAQs,
   // BlockHeroAnimatedWithTitle,
   // BlockHeroImage,
+  BlockOurMission,
   // BlockHowItWorks,
   // BlockImprovements,
   // BlockJoinTeam,
@@ -29,6 +31,12 @@ const getBlockComponent = ({ __component, ...rest }) => {
       break;
     case 'blocks.cta-single-image':
       Block = BlockCtaSingleImage;
+      break;
+    case 'blocks.single-what-we-offer':
+      Block = BlockWhatWeOffer;
+      break;
+    case 'blocks.our-mission':
+      Block = BlockOurMission;
       break;
     // case 'blocks.single-how-it-works':
     //   Block = BlockHowItWorks;
@@ -63,9 +71,9 @@ const getBlockComponent = ({ __component, ...rest }) => {
     // case 'blocks.hero-image':
     //   Block = BlockHeroImage;
     //   break;
-    // case 'blocks.company-history':
-    //   Block = BlockCompanyHistory;
-    //   break;
+    case 'blocks.company-history':
+      Block = BlockCompanyHistory;
+      break;
     // case 'blocks.privacy-policy':
     //   Block = BlockPrivacyPolicy;
     //   break;

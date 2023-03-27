@@ -44,6 +44,11 @@ export const blocksDataAdapter = async (blocks) => {
           });
           return block;
         }
+        case 'blocks.our-mission': {
+          const { coverImage } = block;
+          block.coverImage = coverImage !== undefined ? imageAdapter(coverImage) : null;
+          return block;
+        }
         case 'blocks.hero-animated-title': {
           const { coverImage } = block;
           block.coverImage = coverImage !== undefined ? imageAdapter(coverImage) : null;
