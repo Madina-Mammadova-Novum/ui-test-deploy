@@ -1,3 +1,4 @@
+import { updateBlockHeroImage } from '@/blocks/BlockHeroImage/adapter';
 import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
 
@@ -13,6 +14,8 @@ export const blocksDataAdapter = async (blocks) => {
           return updateCTABlock(block);
         case 'blocks.cta-single-image':
           return updateCTASingleImageBlock(block);
+        case 'blocks.hero-image':
+          return updateBlockHeroImage(block);
         default:
           return block;
       }
