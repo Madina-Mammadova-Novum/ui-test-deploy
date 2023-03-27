@@ -4,6 +4,7 @@ import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
+import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
 import Notes from '@/units/Notes';
 import OfferForm from '@/units/OfferForm';
@@ -35,6 +36,7 @@ export {
   SearchFormFields,
   ToggleRows,
   ExpandableRowHeader,
+  ExpandableRowFooter,
   OfferForm,
   Comment,
   CommercialOfferTerms,

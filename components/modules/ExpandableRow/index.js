@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import { noSSR } from '@/utils/helpers';
 
-const ExpandableRow = ({ headerComponent, children, expandAll }) => {
+const ExpandableRow = ({ headerComponent, footerComponent, children, expandAll }) => {
   const [toggle, setToggle] = useState(false);
   const contentRef = useRef(null);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
@@ -17,8 +17,8 @@ const ExpandableRow = ({ headerComponent, children, expandAll }) => {
   }, [expandAll]);
 
   return (
-    <div className="rounded-[10px] shadow-xmd box-border px-6">
-      <div aria-hidden className="w-full cursor-pointer" onClick={() => setToggle((prevValue) => !prevValue)}>
+    <div className="rounded-[10px] shadow-xmd box-border">
+      <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerComponentWithProps}
       </div>
       <div
@@ -28,7 +28,8 @@ const ExpandableRow = ({ headerComponent, children, expandAll }) => {
         })}
         style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
       >
-        {children}
+        <div className="px-6">{children}</div>
+        {footerComponent}
       </div>
     </div>
   );
@@ -42,6 +43,7 @@ ExpandableRow.defaultProps = {
 
 ExpandableRow.propTypes = {
   headerComponent: PropTypes.node.isRequired,
+  footerComponent: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
   expandAll: PropTypes.shape({
     value: PropTypes.string,

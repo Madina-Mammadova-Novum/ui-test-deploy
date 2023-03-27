@@ -2,6 +2,7 @@
 
 import { FormProvider } from 'react-hook-form';
 
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -13,14 +14,14 @@ const schema = yup.object({
   ...searchForTankerSchema(),
 });
 
-const SearchForm = () => {
+const SearchForm = ({ onSubmit }) => {
   const methods = useHookFormParams({ schema });
-  const handleSubmit = (data) => console.log(data);
+
   return (
     <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
       <FormProvider {...methods}>
         <FormManager
-          submitAction={handleSubmit}
+          submitAction={(formData) => onSubmit(formData, methods)}
           submitButton={{ text: 'Show results', variant: 'secondary', size: 'large', className: '!w-max ml-auto' }}
         >
           <SearchFormFields />
@@ -28,6 +29,10 @@ const SearchForm = () => {
       </FormProvider>
     </div>
   );
+};
+
+SearchForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchForm;

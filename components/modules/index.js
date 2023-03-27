@@ -28,6 +28,7 @@ import ProfileMenu from '@/modules/ProfileMenu';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import Signup from '@/modules/Signup';
 import TankerSearch from '@/modules/TankerSearch';
+import TankerSearchResults from '@/modules/TankerSearchResults';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
@@ -69,4 +70,5 @@ export {
   ExpandableRow,
   VoyageDetailsContent,
   CommentsContent,
+  TankerSearchResults,
 };

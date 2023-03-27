@@ -9,7 +9,6 @@ import Dropdown from '@/elements/Dropdown';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
 import HoverableIcon from '@/elements/HoverableIcon';
-import InformationRow from '@/elements/InformationRow';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
 import PasswordInput from '@/elements/Input/PasswordInput';
@@ -70,6 +69,5 @@ export {
   // Step,
   // OwnerForm,
   // ChartererForm,
-  InformationRow,
   SimpleSelect,
 };

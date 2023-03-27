@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import InfoSVG from '@/assets/images/info.svg';
-import { InformationRow } from '@/elements';
+import { TextRow } from '@/elements';
 
 const VoyageDetailsContent = ({ data }) => {
   return (
@@ -19,7 +19,7 @@ const VoyageDetailsContent = ({ data }) => {
         {data.dates.map((pair) => (
           <div className="mt-2.5">
             {pair.map((detail) => (
-              <InformationRow keyTextProps={{ keyText: detail.key }} labelProps={{ label: detail.label }} />
+              <TextRow title={detail.key} subtitle={detail.label} />
             ))}
           </div>
         ))}
@@ -30,11 +30,7 @@ const VoyageDetailsContent = ({ data }) => {
         {data.ports.map((pair) => (
           <div className="mt-2.5">
             {pair.map((detail) => (
-              <InformationRow
-                keyTextProps={{ keyText: detail.key }}
-                labelProps={{ label: detail.label }}
-                iconProps={{ src: detail.countryFlag, alt: detail.countryCode || 'country flag' }}
-              />
+              <TextRow title={detail.key} subtitle={detail.label} icon={detail.countryFlag} />
             ))}
           </div>
         ))}

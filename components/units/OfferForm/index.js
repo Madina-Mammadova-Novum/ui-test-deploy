@@ -4,8 +4,9 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
+import { sendOffer } from '@/services/offer';
 import { CommercialOfferTerms } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...offerSchema(),
@@ -13,7 +14,20 @@ const schema = yup.object({
 
 const OfferForm = () => {
   const methods = useHookFormParams({ schema });
-  const handleSubmit = (data) => console.log(data);
+
+  const handleSubmit = async (formData) => {
+    const { error, data } = await sendOffer({ data: formData });
+    if (data) {
+      successToast(data.message, 'Have a good deal!');
+      methods.reset();
+    }
+    if (error) {
+      const { message, errors, description } = error;
+      console.error(errors);
+      errorToast(message, description);
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <FormManager

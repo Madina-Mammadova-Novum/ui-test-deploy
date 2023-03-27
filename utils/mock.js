@@ -300,11 +300,11 @@ export const incomingOfferVoyageDetailData = {
   dates: [
     [
       {
-        key: 'Laycan start:',
+        key: 'Laycan start',
         label: 'Dec 18, 2021',
       },
       {
-        key: 'Laycan end:',
+        key: 'Laycan end',
         label: 'Dec 30, 2021',
       },
     ],
@@ -312,12 +312,12 @@ export const incomingOfferVoyageDetailData = {
   ports: [
     [
       {
-        key: 'Load port:',
+        key: 'Load port',
         label: 'Barcelona, ESBCN',
         countryFlag: usFlag,
       },
       {
-        key: 'Load terminal:',
+        key: 'Load terminal',
         label: 'Oil terminal #1',
       },
     ],
