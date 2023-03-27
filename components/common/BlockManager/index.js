@@ -2,12 +2,13 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { CTABlock, CTASingleImageBlock } from '@/blocks';
+import { CTABlock, CTASingleImageBlock, HowItWorksBlock } from '@/blocks';
 import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
   'blocks.cta': CTABlock,
   'blocks.cta-single-image': CTASingleImageBlock,
+  'blocks.single-how-it-works': HowItWorksBlock,
 };
 
 const BlockManager = ({ blocks }) => {

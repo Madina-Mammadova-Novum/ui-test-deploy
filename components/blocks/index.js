@@ -1,4 +1,5 @@
 import CTABlock from './CTABlock';
 import CTASingleImageBlock from './CTASingleImageBlock';
+import HowItWorksBlock from './HowItWorksBlock';
 
-export { CTABlock, CTASingleImageBlock };
+export { CTABlock, CTASingleImageBlock, HowItWorksBlock };

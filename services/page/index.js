@@ -1,20 +1,12 @@
-// import { entityDataAdapter } from '@/adapters/entityData';
 import pluralize from 'pluralize';
 
 import { entityDataAdapter } from '@/adapters/entityData';
 import { COLLECTIONS_TYPES } from '@/lib';
 import { getData } from '@/utils/dataFetching';
 
-// export async function getPage({ data }) {
-// console.log({ temp: data });
-// const response = await getData(`page`);
-// return entityDataAdapter(response);
-// }
-
 export function getCollectionType(slug) {
   if (slug !== undefined) {
     const locale = slug.shift(); // defaultLocale form next-i18next.config.js
-    console.log({ locale });
     if (slug.length > 0) {
       const prefix = slug.shift();
       const collectionType = Object.keys(COLLECTIONS_TYPES)
