@@ -169,6 +169,7 @@ export function checkObjectValues({ data }) {
 
 export const disableDefaultBehaviour = (e) => e.preventDefault();
 
+// todo: need to remove functions `cargoeTemplate`, `cargoesTemplate` and refactored here components/units/CargoesSlotsDetailsForm/index.js without using these functions
 export const cargoeTemplate = () => ({
   imo: { name: `vesselIMO`, label: 'imo', id: makeId() },
   port: { name: `loadPortId`, label: 'load port', id: makeId() },
@@ -182,6 +183,7 @@ export const cargoesTemplate = (value) => {
 };
 
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
+  // todo: need to handle if data is empty or undefined
   return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
     return { value, label };
   });

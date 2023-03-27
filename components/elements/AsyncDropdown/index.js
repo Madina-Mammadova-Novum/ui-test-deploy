@@ -11,6 +11,7 @@ import OptionRow from '@/elements/AsyncDropdown/OptionRow';
 import OptionsList from '@/elements/AsyncDropdown/OptionsList';
 import { dropdownStyles, dropdownTheme } from '@/elements/AsyncDropdown/styles';
 
+// todo: move this component to Dropdown element and compare it with original
 const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -20,11 +21,12 @@ const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
   };
 
   const filteredOptions = (inputValue) => {
-    return options.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+    return options.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase())); // todo: what is it?
   };
 
   const loadOptions = (inputValue, callback) => {
     setTimeout(() => {
+      // todo: refactor this without setTimeout
       callback(filteredOptions(inputValue));
     }, 1000);
   };

@@ -50,13 +50,20 @@ const AddressDetails = ({ title, type, countries }) => {
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
         <div className="grid grid-cols-0 md:grid-cols-2 gap-5">
-          <AsyncDropdown name={`${type}CountryId`} label="Country" options={countries} onChange={handleCountryChange} />
+          <AsyncDropdown
+            name={`${type}CountryId`}
+            label="Country"
+            options={countries}
+            onChange={handleCountryChange}
+            // todo: added required attribute `loadOptions`
+          />
           <AsyncDropdown
             label="City"
             name={`${type}CityId`}
             options={cities}
             onChange={handleCityChange}
             disabled={disabled}
+            // todo: added required attribute `loadOptions`
           />
           <Input
             {...register(`${type}State`)}

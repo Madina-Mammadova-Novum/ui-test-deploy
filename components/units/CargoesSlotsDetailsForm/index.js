@@ -6,6 +6,7 @@ import { PlusIcon, TrashIcon } from '@/assets/icons';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
+// todo: we don't need to use `cargoesTemplate`, `convertDataToOptions` here. Please remove it
 import { cargoesTemplate, convertDataToOptions, disableDefaultBehaviour } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -124,6 +125,7 @@ const CargoesSlotsDetailsForm = () => {
               label="Load port"
               options={portsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
+              // todo: added required attribute `loadOptions`
             />
             <DatePicker
               name={`${fieldName}[date]`}
