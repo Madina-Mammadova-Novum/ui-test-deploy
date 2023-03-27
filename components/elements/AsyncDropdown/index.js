@@ -80,7 +80,6 @@ AsyncDropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  loadOptions: PropTypes.func.isRequired,
 };
 
 export default AsyncDropdown;

@@ -2,6 +2,7 @@ import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
+import ExpandableCard from '@/units/ExpandableCard';
 import ModalWindow from '@/units/ModalWindow';
 import Notes from '@/units/Notes';
 import PasswordValidation from '@/units/PasswordValidationForm';
@@ -26,6 +27,7 @@ export {
   CompanyAddresses,
   TermsAndConditions,
   CargoesSlotsDetails,
+  ExpandableCard,
   ModalWindow,
   VerifficationUserAccount,
 };

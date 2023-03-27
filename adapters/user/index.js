@@ -152,3 +152,35 @@ export function loginAdapter({ data }) {
     password,
   };
 }
+
+export function tankerInfoAdapter({ data }) {
+  if (data === null) return null;
+  const { id, title, imo, port, date, status } = data;
+  return {
+    id,
+    title,
+    imo,
+    port,
+    date,
+    status,
+  };
+}
+
+export function positionAdapter({ data }) {
+  if (data === null) return null;
+  const { id, type, title, activeTankers, inActiveTankers, tankersInfo } = data;
+
+  return {
+    id,
+    type,
+    title,
+    activeTankers,
+    inActiveTankers,
+    tankers: tankersInfo.map((item) => tankerInfoAdapter({ data: item })),
+  };
+}
+
+export function positionsAdapter({ data }) {
+  if (data === null) return null;
+  return data.map((item) => positionAdapter({ data: item }));
+}

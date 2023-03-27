@@ -6,10 +6,13 @@ import Alert from '@/elements/Alert';
 import AsyncDropdown from '@/elements/AsyncDropdown';
 import Button from '@/elements/Button';
 import DatePicker from '@/elements/DatePicker';
+import Divider from '@/elements/Divider';
 import Dropdown from '@/elements/Dropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
+import ExpandableCardHeader from '@/elements/ExpandableCardHeader';
+import ExpandableCardWrapper from '@/elements/ExpandableCardWrapper';
 import FieldsetContent from '@/elements/FieldsetContent';
 import FieldsetContentWrapper from '@/elements/FieldsetContentWrapper';
 import FieldsetHeader from '@/elements/FieldsetHeader';
@@ -21,6 +24,7 @@ import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
 // import Modal from '@/elements/Modal';
+import Label from '@/elements/Label';
 import Modal from '@/elements/Modal';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
@@ -28,17 +32,18 @@ import NextLink from '@/elements/NextLink';
 // import RadioButton from '@/elements/RadioButton';
 // import RangeDatePicker from '@/elements/RangeDatePicker';
 // import Step from '@/elements/Step';
-// import Table from '@/elements/Table';
+import Portal from '@/elements/Portal';
+import Table from '@/elements/Table';
 // import Tabs from '@/elements/Tabs';
 // import TextArea from '@/elements/TextArea';
-// import TextWithLabel from '@/elements/TextWithLabel';
 // import Toggle from '@/elements/Toggle';
 // import Tooltip from '@/elements/Tooltip';
-import Portal from '@/elements/Portal';
 import TextRow from '@/elements/TextRow';
+import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
 
 export {
+  Table,
   Title,
   TextRow,
   Input,
@@ -58,7 +63,7 @@ export {
   // ExpandableRow,
   // RadioButton,
   // Table,
-  // TextWithLabel,
+  TextWithLabel,
   // Tooltip,
   // Toggle,
   DatePicker,
@@ -79,6 +84,10 @@ export {
   // Step,
   // OwnerForm,
   // ChartererForm,
+  Label,
+  Divider,
+  ExpandableCardHeader,
+  ExpandableCardWrapper,
   FieldsetWrapper,
   FieldsetHeader,
   FieldsetContentWrapper,
