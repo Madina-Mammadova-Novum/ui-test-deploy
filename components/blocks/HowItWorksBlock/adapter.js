@@ -1,5 +1,5 @@
-import { valuesAdapter } from "@/adapters/value";
-import { getSingleType } from "@/services/singleType";
+import { valuesAdapter } from '@/adapters/value';
+import { getSingleType } from '@/services/singleType';
 
 export const updateHowItWorksBlock = async (block) => {
   const response = await getSingleType('why-we-are-better', 'en');
