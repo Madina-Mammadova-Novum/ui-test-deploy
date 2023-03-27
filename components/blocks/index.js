@@ -13,7 +13,7 @@ import BlockCtaSingleImage from './BlockCtaSingleImage';
 import BlockWhatWeOffer from './BlockWhatWeOffer';
 import BlockCta from './Cta';
 
-import BlockOurMission from "@/blocks/BlockOurMission";
+import BlockOurMission from '@/blocks/BlockOurMission';
 // import BlockCtaImages from './CtaImages';
 // import BlockHeroAnimatedWithTitle from './HeroAnimatedTitle';
 // import JoinTeamModal from './JoinTeamModal';

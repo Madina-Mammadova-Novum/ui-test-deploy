@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import { mediaPropTypes } from '@/utils/types';
 
-import { Title } from "@/elements";
+import { Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
 const BlockOurMission = ({ title, coverImage, longDescription }) => {
@@ -30,11 +30,7 @@ const BlockOurMission = ({ title, coverImage, longDescription }) => {
             {title}
           </Title>
         )}
-         {longDescription && (
-          <p  className="text-white text-center">
-            {longDescription}
-          </p>
-         )}
+        {longDescription && <p className="text-white text-center">{longDescription}</p>}
       </div>
     </section>
   );
@@ -42,7 +38,7 @@ const BlockOurMission = ({ title, coverImage, longDescription }) => {
 
 BlockOurMission.defaultProps = {
   title: '',
-  longDescription: ''
+  longDescription: '',
 };
 
 BlockOurMission.propTypes = {
