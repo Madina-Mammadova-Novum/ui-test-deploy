@@ -1,6 +1,6 @@
-import { PageLayout } from '@/layouts';
+import { AccountLayout } from '@/layouts';
 
 export default function RootLayout(props) {
   const { children } = props;
-  return <PageLayout>{children}</PageLayout>;
+  return <AccountLayout>{children}</AccountLayout>;
 }

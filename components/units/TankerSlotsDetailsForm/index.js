@@ -1,18 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TrashIcon } from '@/assets/icons';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
+import { disableDefaultBehaviour } from '@/utils/helpers';
 
 const TankerSlotsDetails = () => {
   const [slots, setSlots] = useState(0);
   const [indexes, setIndexes] = useState([]);
+  const tankersInputRef = useRef(null);
+
   const {
     register,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext();
 
@@ -21,7 +25,13 @@ const TankerSlotsDetails = () => {
     setValue('numberOfTankers', numberOfTankers);
   }, [indexes, setValue]);
 
+  useEffect(() => {
+    return tankersInputRef.current && tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+  }, [tankersInputRef]);
+
   const handleSlotsCount = (event) => {
+    clearErrors('numberOfTankers');
+
     let numberOfTankers = Number(event.target.value);
     if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
     if (numberOfTankers <= 0) {
@@ -57,12 +67,13 @@ const TankerSlotsDetails = () => {
           disabled={isSubmitting}
           type="number"
           customStyles="z-10 w-full"
+          ref={tankersInputRef}
           onChange={handleSlotsCount}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-1 z-10"
+          customStyles="absolute top-[18px] right-1 my-1 !py-1"
           buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
           onClick={handleApply}
           disabled={isSubmitting}

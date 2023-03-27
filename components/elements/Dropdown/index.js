@@ -26,6 +26,7 @@ const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) =>
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value;
+
         return (
           <div className={`relative bottom-1 ${customStyles}`}>
             <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">

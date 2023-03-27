@@ -3,13 +3,6 @@
 import PropTypes from 'prop-types';
 
 import {
-  CompanyInfoForm,
-  DeactivateAccountForm,
-  DeleteAccountForm,
-  PasswordInfoForm,
-  PersonalDetailsForm,
-} from '@/modules';
-import {
   AccountCompanyDetails,
   AccountDeactivateDetails,
   AccountDeleteDetails,
@@ -20,25 +13,11 @@ import {
 const AccountDetails = ({ containerClass }) => {
   return (
     <div className={containerClass}>
-      <AccountPersonalDetails>
-        <PersonalDetailsForm />
-      </AccountPersonalDetails>
-
-      <AccountCompanyDetails>
-        <CompanyInfoForm />
-      </AccountCompanyDetails>
-
-      <AccountPasswordDetails>
-        <PasswordInfoForm />
-      </AccountPasswordDetails>
-
-      <AccountDeactivateDetails>
-        <DeactivateAccountForm />
-      </AccountDeactivateDetails>
-
-      <AccountDeleteDetails>
-        <DeleteAccountForm />
-      </AccountDeleteDetails>
+      <AccountPersonalDetails />
+      <AccountCompanyDetails />
+      <AccountPasswordDetails />
+      <AccountDeactivateDetails />
+      <AccountDeleteDetails />
     </div>
   );
 };

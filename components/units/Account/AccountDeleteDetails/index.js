@@ -1,24 +1,11 @@
-import { useState } from 'react';
+import { DeleteAccountForm } from '@/modules';
+import { ModalWindow } from '@/units';
 
-import { Button, Modal } from '@/elements';
-
-const AccountDeleteDetails = ({ children }) => {
-  const [opened, setOpened] = useState(false);
-
-  const handleOpenModal = () => setOpened(true);
-  const handleCloseModal = () => setOpened(false);
-
+const AccountDeleteDetails = () => {
   return (
-    <>
-      <Button
-        buttonProps={{ text: 'Do you want to delete your account?', variant: 'delete', size: 'small' }}
-        customStyles="!p-0"
-        onClick={handleOpenModal}
-      />
-      <Modal opened={opened} onClose={handleCloseModal}>
-        {children}
-      </Modal>
-    </>
+    <ModalWindow buttonProps={{ text: 'Do you want to delete your account?', variant: 'delete', size: 'small' }}>
+      <DeleteAccountForm />
+    </ModalWindow>
   );
 };
 

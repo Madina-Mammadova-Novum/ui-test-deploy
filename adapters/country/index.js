@@ -1,16 +1,19 @@
 export const countryAdapter = ({ data }) => {
   if (data === null) return null;
-  const { id, name, codeISO3 } = data;
+  const { id, name, codeISO3, codeISO2 } = data;
+  if (name === null) return null;
+  const commonCode = codeISO3 === null ? codeISO2 : codeISO3;
+  const code = commonCode === null ? name.substring(0, 3) : commonCode;
   return {
     countryId: id,
     countryName: name,
-    countryCode: codeISO3.toLowerCase(),
+    countryCode: code.toLowerCase(),
   };
 };
 
 export const countriesAdapter = ({ data }) => {
   if (data === null) return [];
-  return data?.map((country) => {
+  return data.map((country) => {
     return countryAdapter({ data: country });
   });
 };

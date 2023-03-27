@@ -31,16 +31,17 @@ export async function apiHandler(options) {
   const { url, requestMethod, data } = options;
   try {
     const requestOptions = fetchOptions(requestMethod, data);
+
     const response = await fetch(url, requestOptions);
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
 
     const result = await response.json();
     // Recommendation: handle errors
+
     if (!response.ok) {
-      //   // This will activate the closest `error.js` Error Boundary
+      // This will activate the closest `error.js` Error Boundary
       return responseErrorAdapter(result);
-      //
     }
     return responseAdapter(result);
   } catch (error) {

@@ -1,4 +1,7 @@
+import { makeId } from './helpers';
+
 import usFlag from '@/assets/images/flag.png';
+import { ROUTES } from '@/lib';
 
 export const fleetsHeader = [
   {
@@ -72,61 +75,61 @@ export const fleetsTableRow = [
 
 export const sidebarData = [
   {
-    id: 1,
+    id: makeId(),
     title: 'My positions',
     variant: 'positions',
-    path: '/',
+    path: ROUTES.ACCOUNT_POSITIONS,
     items: [],
   },
   {
-    id: 2,
+    id: makeId(),
     title: 'Offers',
     variant: 'offers',
     items: [
       {
-        id: Math.random(),
+        id: makeId(),
         label: 'offer stage #1',
         title: 'Negotiating',
-        path: '/',
+        path: ROUTES.NEGOTIATING,
       },
       {
-        id: Math.random(),
+        id: makeId(),
         label: 'offer stage #2',
         title: 'Pre-fixture',
-        path: '/',
+        path: ROUTES.ACCOUNT_PREFIXTURE,
       },
       {
-        id: Math.random(),
+        id: makeId(),
         label: 'offer stage #3',
         title: 'On subs',
-        path: '/',
+        path: ROUTES.ACCOUNT_ONSUBS,
       },
       {
-        id: Math.random(),
+        id: makeId(),
         label: 'offer stage #4',
         title: 'Fixture',
-        path: '/',
+        path: ROUTES.ACCOUNT_FIXTURE,
       },
       {
-        id: Math.random(),
+        id: makeId(),
         label: 'offer stage #5',
         title: 'Post-fixture',
-        path: '/',
+        path: ROUTES.ACCOUNT_POSTFIXTURE,
       },
     ],
   },
   {
-    id: 3,
+    id: makeId(),
     title: 'Fleets',
     variant: 'fleets',
-    path: '/',
+    path: ROUTES.FLEETS,
     items: [],
   },
   {
-    id: 4,
+    id: makeId(),
     title: 'FAQ',
     variant: 'faq',
-    path: '/',
+    path: ROUTES.FAQ,
     items: [],
   },
 ];

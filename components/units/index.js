@@ -6,6 +6,7 @@ import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import ModalWindow from '@/units/ModalWindow';
 import Notes from '@/units/Notes';
 import OfferForm from '@/units/OfferForm';
 import PasswordValidation from '@/units/PasswordValidationForm';
@@ -17,6 +18,7 @@ import Tabs from '@/units/Tabs';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
+import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 
 export * from '@/units/Account';
 
@@ -40,4 +42,6 @@ export {
   OfferForm,
   Comment,
   CommercialOfferTerms,
+  ModalWindow,
+  VerifficationUserAccount,
 };

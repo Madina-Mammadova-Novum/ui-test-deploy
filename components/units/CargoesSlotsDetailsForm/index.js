@@ -1,72 +1,106 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { cargoesAdapter } from '@/adapters';
 import { PlusIcon, TrashIcon } from '@/assets/icons';
-import { Button, DatePicker, Dropdown, Input } from '@/elements';
+import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
+import { getPorts } from '@/services/port';
+// todo: we don't need to use `cargoesTemplate`, `convertDataToOptions` here. Please remove it
+import { cargoesTemplate, convertDataToOptions, disableDefaultBehaviour } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
-  const [slots, setSlots] = useState(0);
-  const [indexes, setIndexes] = useState([]);
+  const [cargoesState, setCargoesState] = useState({
+    slots: 0,
+    indexes: [],
+    portsOptions: null,
+  });
 
   const {
     register,
-    control,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useHookForm();
 
-  useEffect(() => {
-    const numberOfTankers = indexes.length > 0 ? indexes.length : '';
-    setValue('numberOfTankers', numberOfTankers);
-    setValue('experiences', indexes);
-  }, [indexes, setValue]);
+  const cargoesInputRef = useRef(null);
+  const { slots, portsOptions, indexes } = cargoesState;
+
+  const handleChangeState = (key, value) =>
+    setCargoesState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
 
   const handleSlotsCount = (event) => {
-    let numberOfTankers = Number(event.target.value);
-    if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
-    if (numberOfTankers <= 0) {
-      numberOfTankers = '';
+    clearErrors('numberOfCargoes');
+
+    let numberOfCargoes = Number(event.target.value);
+    if (numberOfCargoes > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfCargoes = SETTINGS.MAX_NUMBER_OF_TANKERS;
+    if (numberOfCargoes <= 0) {
+      numberOfCargoes = '';
       setValue('applySlots', false);
-      setIndexes([]);
+      handleChangeState('indexes', []);
     }
-    setValue('numberOfTankers', numberOfTankers);
-    setSlots(numberOfTankers);
+
+    setValue('numberOfCargoes', numberOfCargoes);
+    handleChangeState('slots', numberOfCargoes);
   };
 
   const handleApply = useCallback(() => {
-    const cargoes = cargoesAdapter(slots);
+    const cargoes = cargoesTemplate(slots);
 
-    setIndexes(cargoes);
     setValue('applySlots', cargoes.length > 0);
+    handleChangeState('indexes', cargoes);
   }, [setValue, slots]);
 
-  const handleAddSlot = useCallback(() => {
-    setIndexes((prevIndexes) => [...prevIndexes, ...cargoesAdapter(1)]);
+  const handleAddSlot = () => {
+    handleChangeState('indexes', [...indexes, ...cargoesTemplate(1)]);
+  };
+
+  const handleRemoveSlot = (element) => {
+    const rowIndex = indexes.findIndex((obj) => obj === element);
+    handleChangeState('indexes', [...indexes.filter((_, index) => index !== rowIndex)]);
+  };
+
+  const handleChangeValue = (data) => {
+    const { option, index, key } = data;
+    const fieldName = `cargoes[${index}][${key}]`;
+    setValue(fieldName, option);
+  };
+
+  const fetchPorts = async () => {
+    const data = await getPorts();
+    const options = convertDataToOptions(data, 'id', 'name');
+
+    handleChangeState('portsOptions', options);
+  };
+
+  useEffect(() => {
+    fetchPorts();
   }, []);
 
-  const handleRemoveSlot = useCallback((element) => {
-    setIndexes((prevIndexes) => {
-      const rowIndex = prevIndexes.findIndex((obj) => obj === element);
-      return [...prevIndexes.filter((_, index) => index !== rowIndex)];
-    });
-  }, []);
+  useEffect(() => {
+    const numberOfCargoes = indexes.length > 0 ? indexes.length : '';
+    setValue('numberOfCargoes', numberOfCargoes);
+  }, [indexes, setValue]);
 
-  const inputName = (name, index) => `experiences[${index}].${name}`;
+  useEffect(() => {
+    return cargoesInputRef.current && cargoesInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+  }, [cargoesInputRef]);
 
   return (
     <div className="grid gap-5">
       <div className="w-full !relative">
         <Input
-          {...register('numberOfTankers')}
-          label="HOW MANY CARGOES HAVE YOU CHARTERED DURING THE LAST 6 MONTHS?"
+          {...register('numberOfCargoes')}
+          label="How many cargoes have you chartered during the last 6 months?"
           placeholder="Cargoes"
-          error={errors.numberOfTankers?.message}
+          error={errors.numberOfCargoes?.message}
           disabled={isSubmitting}
           type="number"
+          ref={cargoesInputRef}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
         />
@@ -81,26 +115,23 @@ const CargoesSlotsDetailsForm = () => {
       </div>
 
       {indexes?.map((element, index) => {
-        const rowIndex = indexes.findIndex((obj) => obj === element);
+        const fieldName = `cargoes[${index}]`;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={rowIndex}>
-            <Input
-              {...register(inputName(element.imo.name, index))}
-              type="number"
-              label={`${element.imo.label}#${index + 1}`}
-            />
-            <Dropdown
-              label={element.port.label}
-              name={inputName(element.port.name, index)}
-              options={[]}
-              control={control}
+          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={element.id}>
+            <Input {...register(`${fieldName}[name]`, index)} type="number" label={`Imo#${index + 1}`} />
+            <AsyncDropdown
+              name={`${fieldName}[port]`}
+              label="Load port"
+              options={portsOptions}
+              onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
+              // todo: added required attribute `loadOptions`
             />
             <DatePicker
+              name={`${fieldName}[date]`}
               inputClass="w-full"
-              label={element.date.label}
-              name={inputName(element.date.name, index)}
-              {...register(inputName(element.date.name, index))}
+              label="Bill of lading date"
+              onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />
             <Button
               type="button"

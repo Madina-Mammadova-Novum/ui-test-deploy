@@ -1,11 +1,7 @@
-import React from 'react';
-
 import { metaData } from '@/adapters/metaData';
 import { AuthWrapper, Signup } from '@/modules';
 
-export async function generateMetadata({ params }) {
-  // eslint-disable-next-line no-console
-  console.log({ params });
+export async function generateMetadata() {
   return metaData({
     data: {
       seo: {
@@ -17,7 +13,7 @@ export async function generateMetadata({ params }) {
 
 export default function SignUp() {
   return (
-    <AuthWrapper title="Registration" subtitle="Here can be some registration text">
+    <AuthWrapper title="Registration">
       <Signup />
     </AuthWrapper>
   );

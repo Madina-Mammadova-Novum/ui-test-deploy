@@ -4,12 +4,12 @@ import { Title } from '@/elements';
 
 const AccountWrapper = ({ title, children, containerClass }) => {
   return (
-    <div className={containerClass}>
+    <main className={containerClass}>
       <Title component="h1" className="text-2xl text-black py-5">
         {title}
       </Title>
       {children}
-    </div>
+    </main>
   );
 };
 

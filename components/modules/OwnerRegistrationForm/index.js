@@ -1,22 +1,20 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { FormProvider } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import {
   companyAddressesSchema,
-  // companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
   tankerSlotsDetailsSchema,
-  // termsAndConditionsSchema
 } from '@/lib/schemas';
-import { singUp } from '@/services/user';
+import { ownerSignUp } from '@/services/user';
 import {
   CompanyAddresses,
   CompanyDetails,
@@ -26,35 +24,28 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { errorToast, successToast } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const schema = yup
-  .object({
+const OwnerRegistrationForm = () => {
+  const [sameAddress, setSameAddress] = useState(true);
+
+  const schema = yup.object().shape({
     ...personalDetailsSchema(),
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
     ...tankerSlotsDetailsSchema(),
-    ...companyAddressesSchema(),
-    // ...termsAndConditionsSchema()
-  })
-  .required();
-
-// console.log({
-//   ...personalDetailsSchema(),
-//   ...passwordValidationSchema(),
-//   ...companyDetailsSchema(),
-//   ...tankerSlotsDetailsSchema(),
-//   ...companyAddressesSchema(),
-// ...termsAndConditionsSchema()
-// });
-
-const OwnerRegistrationForm = () => {
-  const methods = useForm({
-    resolver: yupResolver(schema),
+    ...companyAddressesSchema(sameAddress),
   });
 
+  const methods = useHookFormParams({ schema });
+  const value = methods.watch('sameAddresses', sameAddress);
+
+  useEffect(() => {
+    setSameAddress(value);
+  }, [value]);
+
   const onSubmit = async (formData) => {
-    const { error, data } = await singUp({ data: formData });
+    const { error, data } = await ownerSignUp({ data: formData });
     if (data) {
       successToast(data.message, 'Check your email for validating the account');
       methods.reset();
@@ -69,6 +60,7 @@ const OwnerRegistrationForm = () => {
   return (
     <FormProvider {...methods}>
       <FormManager
+        className="pb-5"
         submitButton={{
           text: 'Create account',
           variant: 'primary',

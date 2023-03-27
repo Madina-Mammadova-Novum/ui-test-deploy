@@ -141,6 +141,10 @@ export function hasNestedArrays(data) {
   return isNested;
 }
 
+export function getFilledArray(length) {
+  return Array.from({ length });
+}
+
 export function getValueWithPath(object, path, defaultValue) {
   return (
     path
@@ -152,3 +156,35 @@ export function getValueWithPath(object, path, defaultValue) {
       .reduce((o, p) => (o ? o[p] : defaultValue), object)
   );
 }
+
+export function checkObjectValues({ data }) {
+  const isNotNullOrUndefined = Object.keys(data).every((key) => data[key] !== null && data[key] !== undefined);
+
+  if (!isNotNullOrUndefined) {
+    return { message: `Error: One or more values not founded.` };
+  }
+
+  return { data };
+}
+
+export const disableDefaultBehaviour = (e) => e.preventDefault();
+
+// todo: need to remove functions `cargoeTemplate`, `cargoesTemplate` and refactored here components/units/CargoesSlotsDetailsForm/index.js without using these functions
+export const cargoeTemplate = () => ({
+  imo: { name: `vesselIMO`, label: 'imo', id: makeId() },
+  port: { name: `loadPortId`, label: 'load port', id: makeId() },
+  date: { name: `billOfLadingDate`, label: 'bill of lading date', id: makeId() },
+});
+
+export const cargoesTemplate = (value) => {
+  const result = getFilledArray(value);
+
+  return result.map(cargoeTemplate);
+};
+
+export const convertDataToOptions = (data, keyValue, keyLabel) => {
+  // todo: need to handle if data is empty or undefined
+  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
+    return { value, label };
+  });
+};

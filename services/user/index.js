@@ -1,8 +1,9 @@
 import {
+  chartererSignUpAdapter,
   forgotPasswordAdapter,
   loginAdapter,
+  ownerSignUpAdapter,
   resetPasswordAdapter,
-  singUpAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
@@ -29,9 +30,20 @@ export async function resetPassword({ data }) {
   };
 }
 
-export async function singUp({ data }) {
-  const body = singUpAdapter({ data });
-  const response = await postData(`auth/sing-up`, JSON.stringify(body));
+export async function ownerSignUp({ data }) {
+  const body = ownerSignUpAdapter({ data });
+  const response = await postData(`auth/sing-up?type=owner`, body);
+  return response;
+}
+
+export async function chartererSignUp({ data }) {
+  const body = chartererSignUpAdapter({ data });
+  const response = await postData(`auth/sign-up?type=charterer`, body);
+  return response;
+}
+
+export async function postVeriffData({ data }) {
+  const response = await postData(`auth/veriffication`, data);
   return response;
 }
 

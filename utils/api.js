@@ -1,7 +1,9 @@
 import { serialize } from 'cookie';
 
-export const errorHandler = (res, status, message, errors = []) => {
-  const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
+import { responseAdapter } from '@/adapters/response';
+
+export const errorHandler = (res, status, errors) => {
+  const statusMessage = errors !== undefined || errors.length !== 0 ? 'Something went wrong' : errors.join('');
   return res.status(status).send({
     message: statusMessage,
     errors,
@@ -26,7 +28,7 @@ export const getCookieFromReq = (req, cookieKey) => {
   return cookie.split('=')[1];
 };
 
-const fetchOptions = (requestMethod) => {
+const fetchOptions = (requestMethod, req) => {
   const method = requestMethod.toUpperCase();
   const options = {
     method, // *GET, POST, PUT, DELETE, etc.
@@ -42,10 +44,9 @@ const fetchOptions = (requestMethod) => {
     // body: JSON.stringify(data), // body data type must match "Content-Type" header
   };
 
-  console.log({ options });
-  // if (['POST', 'PUT', 'PATCH'].includes(method)) {
-  //   options.body = JSON.stringify(data);
-  // }
+  if (['POST', 'PUT', 'PATCH'].includes(method)) {
+    options.body = JSON.stringify(req.body);
+  }
   return options;
 };
 
@@ -64,13 +65,13 @@ export function getIdentityApiURL(path, apiVersion = null) {
 export const apiHandler = async (options, req, res) => {
   const { endpoint, requestMethod, allowedMethods } = options;
   if (checkRequestMethod(req, allowedMethods)) {
-    const requestOptions = fetchOptions(requestMethod);
+    const requestOptions = fetchOptions(requestMethod, req);
     const response = await fetch(endpoint, requestOptions);
 
     const result = await response.json();
 
     if (!response.ok) {
-      return errorHandler(res, response.status, result?.title, result?.errors);
+      return errorHandler(res, response.status, result);
     }
 
     /* Set Authorization token */
@@ -82,7 +83,7 @@ export const apiHandler = async (options, req, res) => {
       res.setHeader('Set-Cookie', cookie);
     }
 
-    return res.status(200).json(result); // TODO: need to wrap with global adapter
+    return responseAdapter(res.status(200).json(result));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };
