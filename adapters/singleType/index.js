@@ -1,10 +1,12 @@
 export const singleTypeAdapter = ({ data }) => {
   if (data === null || data === undefined) return null;
-  console.log({ data });
-  const { id, name, codeISO3 } = data;
+  const { id, attributes } = data;
+  const { title, subTitle, shortDescription } = attributes;
   return {
-    countryId: id,
-    countryName: name,
-    countryCode: codeISO3.toLowerCase(),
+    ...attributes,
+    id,
+    title,
+    subTitle,
+    shortDescription,
   };
 };
