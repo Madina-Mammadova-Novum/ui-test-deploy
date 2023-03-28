@@ -8,11 +8,11 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import {
-  companyAddressesSchema,
-  companyDetailsSchema,
-  passwordValidationSchema,
-  personalDetailsSchema,
-  // cargoesSlotsDetailsSchema,
+  // companyAddressesSchema,
+  // companyDetailsSchema,
+  // passwordValidationSchema,
+  // personalDetailsSchema,
+  cargoesSlotsDetailsSchema,
 } from '@/lib/schemas';
 import { chartererSignUp } from '@/services';
 import {
@@ -30,11 +30,11 @@ const ChartererRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(true);
 
   const schema = yup.object().shape({
-    ...personalDetailsSchema(),
-    ...passwordValidationSchema(),
-    ...companyDetailsSchema(),
-    ...companyAddressesSchema(sameAddress),
-    // ...cargoesSlotsDetailsSchema(),
+    // ...personalDetailsSchema(),
+    // ...passwordValidationSchema(),
+    // ...companyDetailsSchema(),
+    // ...companyAddressesSchema(sameAddress),
+    ...cargoesSlotsDetailsSchema(),
   });
 
   const methods = useHookFormParams({ schema });

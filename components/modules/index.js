@@ -3,6 +3,7 @@
 // import CompanyDetails from '@/modules/CompanyDetails';
 // import FleetRowHeader from '@/modules/FleetRowHeader';
 import AccountDetails from '@/modules/AccountDetails';
+import AccountPositions from '@/modules/AccountPositions';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
@@ -38,6 +39,7 @@ import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 
 export {
   AccountWrapper,
+  AccountPositions,
   AccountDetails,
   CompanyInfoForm,
   DeleteAccountForm,

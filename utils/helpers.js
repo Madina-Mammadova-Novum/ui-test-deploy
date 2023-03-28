@@ -183,8 +183,12 @@ export const cargoesTemplate = (value) => {
 };
 
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
-  // todo: need to handle if data is empty or undefined
+  if (data === null || data === undefined) return [];
+
   return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
+    if (value === null || value === undefined) throw new Error('value cannot be empty');
+    if (label === null || label === undefined) throw new Error('label cannot be empty');
+
     return { value, label };
   });
 };

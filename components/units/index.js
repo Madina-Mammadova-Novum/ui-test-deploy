@@ -6,6 +6,7 @@ import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import ExpandableCard from '@/units/ExpandableCard';
 import ModalWindow from '@/units/ModalWindow';
 import Notes from '@/units/Notes';
 import OfferForm from '@/units/OfferForm';
@@ -42,6 +43,7 @@ export {
   OfferForm,
   Comment,
   CommercialOfferTerms,
+  ExpandableCard,
   ModalWindow,
   VerifficationUserAccount,
 };
