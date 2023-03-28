@@ -1,12 +1,11 @@
 import React from 'react';
 
 import delve from 'dlv';
-import Image from 'next/image';
 import PropTypes from 'prop-types';
 
 import { linkPropTypes, mediaPropTypes } from '@/utils/types';
 
-import { LinkAsButton, Title } from '@/elements';
+import { LinkAsButton, NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
 const BlockCtaSingleImage = ({ title, shortDescription, coverImage, button }) => {
@@ -14,7 +13,7 @@ const BlockCtaSingleImage = ({ title, shortDescription, coverImage, button }) =>
     <section className="relative py-24">
       {coverImage && (
         <div className="absolute w-full h-full inset-0 -z-10">
-          <Image
+          <NextImage
             width={1440}
             height={410}
             alt={delve(coverImage, 'alternativeText')}

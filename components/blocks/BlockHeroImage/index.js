@@ -30,7 +30,7 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
             {title}
           </Title>
         )}
-        {shortDescription && <p className="text-white text-center">{shortDescription}</p>}
+        {shortDescription && <p className="text-white text-xsm text-center">{shortDescription}</p>}
       </div>
     </section>
   );

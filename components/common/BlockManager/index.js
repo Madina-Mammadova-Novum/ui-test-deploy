@@ -2,7 +2,15 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { BlockHeroImage, CTABlock, CTASingleImageBlock, SimpleContentBlock, WhatWeOfferBlock } from '@/blocks';
+import {
+  BlockHeroImage,
+  CTABlock,
+  CTASingleImageBlock,
+  ImageSliderBlock,
+  SimpleContentBlock,
+  TeamBlock,
+  WhatWeOfferBlock
+} from '@/blocks';
 import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
@@ -11,6 +19,8 @@ const BLOCK_COMPONENTS = {
   'blocks.hero-image': BlockHeroImage,
   'blocks.simple-content': SimpleContentBlock,
   'blocks.single-what-we-offer': WhatWeOfferBlock,
+  'blocks.image-slider': ImageSliderBlock,
+  'blocks.team': TeamBlock
 };
 
 const BlockManager = ({ blocks }) => {

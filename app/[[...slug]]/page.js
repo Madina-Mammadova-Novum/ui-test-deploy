@@ -1,6 +1,7 @@
 import React from 'react';
 
 import delve from 'dlv';
+import parse from 'html-react-parser';
 
 import { metaData } from '@/adapters/metaData';
 import waves from '@/assets/images/waves.jpg';
@@ -38,7 +39,7 @@ export default async function Home({ params }) {
       {/*    <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink> */}
       {/*  </li> *!/ */}
       {/* </ul> */}
-      <section className="relative pt-[115px] pb-[86px]">
+      <section className="relative pt-[115px] pb-[86px] text-white">
         <div className="container mx-auto max-w-[960px]">
           <NextImage
             src={waves}
@@ -47,10 +48,12 @@ export default async function Home({ params }) {
             height={352}
             width={1440}
           />
-          <Title component="h1" className="text-center text-white mb-2.5">
+          <Title component="h1" className="mb-2.5 text-center">
             {title}
           </Title>
-          {content && <p className="text-white">{content}</p>}
+          <div className="text-xsm">
+            {content && parse(content) }
+          </div>
         </div>
       </section>
       {blocks && <BlockManager blocks={blocks} />}
