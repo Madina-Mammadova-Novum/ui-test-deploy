@@ -1,8 +1,8 @@
 import { updateBlockHeroImage } from '@/blocks/BlockHeroImage/adapter';
 import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
-import { updateImageSliderBlock } from '@/blocks/ImageSliderBlock/adapter';
 import { updateHowItWorksBlock } from '@/blocks/HowItWorksBlock/adapter';
+import { updateImageSliderBlock } from '@/blocks/ImageSliderBlock/adapter';
 
 export const blocksDataAdapter = async (blocks) => {
   if (!blocks || blocks.length === 0) {

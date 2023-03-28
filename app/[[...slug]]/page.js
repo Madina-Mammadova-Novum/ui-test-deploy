@@ -51,9 +51,7 @@ export default async function Home({ params }) {
           <Title component="h1" className="mb-2.5 text-center">
             {title}
           </Title>
-          <div className="text-xsm">
-            {content && parse(content) }
-          </div>
+          <div className="text-xsm">{content && parse(content)}</div>
         </div>
       </section>
       {blocks && <BlockManager blocks={blocks} />}

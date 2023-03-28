@@ -6,11 +6,12 @@ import {
   BlockHeroImage,
   CTABlock,
   CTASingleImageBlock,
+  HowItWorksBlock,
   ImageSliderBlock,
   SimpleContentBlock,
   TeamBlock,
   WhatWeOfferBlock,
-  HowItWorksBlock } from '@/blocks';
+} from '@/blocks';
 import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {

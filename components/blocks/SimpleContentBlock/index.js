@@ -14,10 +14,7 @@ const SimpleContentBlock = ({ title, content }) => {
             {title}
           </Title>
         )}
-        <div className='space-y-2.5 text-xsm text-black'>
-          {content && parse( content )}
-        </div>
-
+        <div className="space-y-2.5 text-xsm text-black">{content && parse(content)}</div>
       </div>
     </section>
   );

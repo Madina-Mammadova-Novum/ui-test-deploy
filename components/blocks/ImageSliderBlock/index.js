@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import delve from "dlv";
+import delve from 'dlv';
 import PropTypes from 'prop-types';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,9 +11,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { mediaPropTypes } from '@/utils/types';
 
-
-import { NextImage } from "@/elements";
-import { getStrapiMedia } from "@/utils";
+import { NextImage } from '@/elements';
+import { getStrapiMedia } from '@/utils';
 
 const ImageSliderBlock = ({ items }) => {
   return (
@@ -35,20 +34,18 @@ const ImageSliderBlock = ({ items }) => {
           {items.map(({ id, coverImage }) => {
             return (
               <SwiperSlide key={id} className="">
-                  <NextImage
-                    width={800}
-                    height={450}
-                    alt={delve(coverImage, 'alternativeText')}
-                    src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
-                    className="h-full w-full object-cover object-center rounded-[10px]"
-                    quality={100}
-                  />
+                <NextImage
+                  width={800}
+                  height={450}
+                  alt={delve(coverImage, 'alternativeText')}
+                  src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
+                  className="h-full w-full object-cover object-center rounded-[10px]"
+                  quality={100}
+                />
               </SwiperSlide>
-
             );
           })}
         </Swiper>
-
       </div>
     </section>
   );
