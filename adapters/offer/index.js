@@ -1,3 +1,5 @@
+import { productsAdapter } from '@/adapters';
+
 export function sendOfferAdapter({ data }) {
   const placeholder = 'placeholder';
   if (data === null) return null;
@@ -12,10 +14,6 @@ export function sendOfferAdapter({ data }) {
     paymentTerms: paymentTerms.value,
     undisputedDemurrage: undisputedDemurrage.value,
     value,
-    products: products.map(({ density, quantity }) => ({
-      productId: placeholder,
-      density,
-      quantity,
-    })),
+    products: productsAdapter({ data: products }),
   };
 }

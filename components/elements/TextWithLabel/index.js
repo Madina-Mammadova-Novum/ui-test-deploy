@@ -1,12 +1,14 @@
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-import NextImage from '../NextImage';
+import { NextImage, Title } from '@/elements';
 
 const TextWithLabel = ({ image, text, label, customStyles }) => {
   return (
     <div className={classnames('font-semibold text-left min-w-[90px]', customStyles)}>
-      <h6 className="text-[12px] text-gray uppercase">{label}</h6>
+      <Title component="h6" className="text-[12px] text-gray uppercase">
+        {label}
+      </Title>
       <p className="text-xsm">
         {image && <NextImage {...image} customStyles="inline" />}
         <span className={image && 'ml-1.5'}>{text}</span>

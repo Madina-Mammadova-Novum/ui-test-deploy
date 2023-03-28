@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 
+import { DateTimeRow, Title } from '@/elements';
+
 const Comment = ({ title, date, time }) => {
   return (
     <>
-      <h6 className="text-xsm font-semibold mt-2.5">{title}</h6>
-      <div className="text-[12px] text-gray mt-1.5">
-        {date} at {time}
-      </div>
+      <Title component="h6" className="text-xsm font-semibold mt-2.5">
+        {title}
+      </Title>
+      <DateTimeRow date={date} time={time} />
     </>
   );
 };

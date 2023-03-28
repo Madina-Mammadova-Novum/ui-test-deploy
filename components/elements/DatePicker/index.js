@@ -20,8 +20,6 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
   const handleDate = (pickedDate) => {
     setDate(pickedDate);
     onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
-    // onChange(pickedDate);
-    // setDate(pickedDate);
   };
 
   return (

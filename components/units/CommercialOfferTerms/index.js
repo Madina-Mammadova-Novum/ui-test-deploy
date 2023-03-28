@@ -1,4 +1,4 @@
-import { Dropdown, Input } from '@/elements';
+import { Dropdown, Input, Title } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
 const testOption = [{ label: 'testLabel', value: 'testValue' }];
@@ -16,11 +16,10 @@ const CommercialOfferTerms = () => {
 
   return (
     <div className="pb-5">
-      <h3>Commercial offer terms</h3>
+      <Title component="h3">Commercial offer terms</Title>
       <Dropdown
         label="cargo type"
         defaultValue="Crude Oil"
-        id="cargo_type"
         disabled
         customStyles="max-w-[296px] mt-3"
         name="cargoType"
@@ -31,7 +30,6 @@ const CommercialOfferTerms = () => {
           <Dropdown
             label={`product #${index + 1}`}
             defaultValue="Light Crude Oil"
-            id="product_1"
             name={`products[${index}].product`}
             disabled
             customStyles="w-[296px]"
@@ -59,7 +57,6 @@ const CommercialOfferTerms = () => {
         <Dropdown
           label="freight"
           name="freight"
-          id="freight"
           customStyles="max-w-[138px]"
           options={testOption}
           onChange={(option) => handleChange('freight', option)}
@@ -108,7 +105,6 @@ const CommercialOfferTerms = () => {
 
       <Dropdown
         label="undisputed demurrage payment terms"
-        id="undisputed_demurrage"
         name="undisputedDemurrage"
         customStyles="mt-3"
         options={testOption}
@@ -118,7 +114,6 @@ const CommercialOfferTerms = () => {
       <Dropdown
         label="payemnt terms"
         name="paymentTerms"
-        id="payment_teerms"
         customStyles="mt-3"
         options={testOption}
         onChange={(option) => handleChange('paymentTerms', option)}

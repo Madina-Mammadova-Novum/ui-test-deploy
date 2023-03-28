@@ -11,7 +11,6 @@ const TextArea = ({
   disabled,
   placeholder,
   customStyles,
-  id,
   onChange,
   ...rest
 }) => {
@@ -19,11 +18,13 @@ const TextArea = ({
 
   return (
     <div className={`${disabled && 'opacity-50 pointer-events-none'} ${customStyles}`}>
-      <label htmlFor={id ?? label} className="block text-gray text-[12px] font-semibold uppercase">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase">
+          {label}
+        </label>
+      )}
       <textarea
-        id={id}
+        id={name}
         type={type}
         name={name}
         disabled={disabled}
@@ -38,8 +39,6 @@ const TextArea = ({
 };
 
 TextArea.defaultProps = {
-  id: null,
-  name: '',
   label: '',
   type: 'text',
   placeholder: '',
@@ -51,8 +50,7 @@ TextArea.defaultProps = {
 };
 
 TextArea.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   register: PropTypes.func,
   required: PropTypes.bool,
   label: PropTypes.string,

@@ -5,13 +5,13 @@ export async function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Account Information',
+        metaTitle: 'Search',
       },
     },
   });
 }
 
-const AccountInformation = () => {
+const VesselsSearch = () => {
   return (
     <section className="grow px-5">
       <AccountWrapper title="Search" containerClass="w-full">
@@ -21,4 +21,4 @@ const AccountInformation = () => {
   );
 };
 
-export default AccountInformation;
+export default VesselsSearch;

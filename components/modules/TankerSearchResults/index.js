@@ -4,17 +4,19 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { SimpleSelect, TextRow, Title } from '@/elements';
+import { NotFound, SimpleSelect, TextRow, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
 import { ExpandableRowHeader, ToggleRows } from '@/units';
 
-const TankerSearchResults = ({ setSortParams, sortParams, searchResult }) => {
-  const [expandExactResults, setExpandExactResults] = useState({ value: false });
-  const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
+const TankerSearchResults = ({ request, setSort, sort, searchResult }) => {
+  const [expandExactResults, setExpandExactResults] = useState(false);
+  const [expandPartialResults, setExpandPartialResults] = useState(false);
 
-  return (
+  if (!request) return null;
+
+  return searchResult?.exactResults?.length || searchResult?.partialResults?.length ? (
     <>
       <div className="mt-8 flex">
         <Title component="h2" className="mr-auto">
@@ -23,29 +25,26 @@ const TankerSearchResults = ({ setSortParams, sortParams, searchResult }) => {
         <SimpleSelect
           label="Sort tankers by:"
           selectableItems={['Ballast leg']}
-          currentItem={sortParams.freeParam}
-          onChange={(param) => setSortParams((prevSortParams) => ({ ...prevSortParams, freeParam: param }))}
+          currentItem={sort.freeParam}
+          onChange={(param) => setSort((prevSortParams) => ({ ...prevSortParams, freeParam: param }))}
         />
         <SimpleSelect
           selectableItems={['Ascending', 'Descending']}
-          currentItem={sortParams.direction}
-          onChange={(param) => setSortParams((prevSortParams) => ({ ...prevSortParams, direction: param }))}
+          currentItem={sort.direction}
+          onChange={(param) => setSort((prevSortParams) => ({ ...prevSortParams, direction: param }))}
         />
       </div>
 
       <div className="mt-5 flex justify-between">
-        <TextRow title="Exact Matches (arrival within laycan)" subtitle={`${3} results`} />
-        <ToggleRows
-          onToggleClick={() => setExpandExactResults((prevValue) => ({ value: !prevValue.value }))}
-          value={expandExactResults.value}
-        />
+        <TextRow title="Exact Matches (arrival within laycan)">{`${3} results`}</TextRow>
+        <ToggleRows onToggleClick={() => setExpandExactResults((prevValue) => !prevValue)} value={expandExactResults} />
       </div>
       <div className="flex flex-col gap-y-2.5 mt-3">
         {searchResult.exactResults.map((rowHeader) => (
           <ExpandableRow
-            headerComponent={<ExpandableRowHeader headerData={rowHeader} />}
-            footerComponent={<TankerExpandedFooter />}
-            expandAll={expandExactResults}
+            header={<ExpandableRowHeader headerData={rowHeader} />}
+            footer={<TankerExpandedFooter />}
+            expand={expandExactResults}
           >
             <ExpandedContent />
           </ExpandableRow>
@@ -53,29 +52,32 @@ const TankerSearchResults = ({ setSortParams, sortParams, searchResult }) => {
       </div>
 
       <div className="mt-5 flex justify-between">
-        <TextRow title="Partial matches (arrival outside of laycan)" subtitle={`${1} result`} />
+        <TextRow title="Partial matches (arrival outside of laycan)">{`${1} result`}</TextRow>
         <ToggleRows
-          onToggleClick={() => setExpandPartialResults((prevValue) => ({ value: !prevValue.value }))}
+          onToggleClick={() => setExpandPartialResults((prevValue) => !prevValue)}
           value={expandPartialResults.value}
         />
       </div>
       <div className="flex flex-col gap-y-2.5 mt-3">
         {searchResult.partialResults.map((rowHeader) => (
           <ExpandableRow
-            headerComponent={<ExpandableRowHeader headerData={rowHeader} />}
-            expandAll={expandPartialResults}
+            header={<ExpandableRowHeader headerData={rowHeader} />}
+            footer={<TankerExpandedFooter />}
+            expand={expandPartialResults}
           >
             <ExpandedContent />
           </ExpandableRow>
         ))}
       </div>
     </>
+  ) : (
+    <NotFound />
   );
 };
 
 TankerSearchResults.propTypes = {
-  setSortParams: () => {},
-  sortParams: {
+  setSort: () => {},
+  sort: {
     freeParam: '',
     direction: '',
   },
@@ -86,8 +88,9 @@ TankerSearchResults.propTypes = {
 };
 
 TankerSearchResults.propTypes = {
-  setSortParams: PropTypes.func,
-  sortParams: PropTypes.shape({
+  setSort: PropTypes.func,
+  request: PropTypes.bool.isRequired,
+  sort: PropTypes.shape({
     freeParam: PropTypes.string,
     direction: PropTypes.string,
   }),

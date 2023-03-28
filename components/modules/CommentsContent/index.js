@@ -9,18 +9,22 @@ const CommentsContent = ({ data, areaDisabled }) => {
   return (
     <div>
       <Title component="h3">Comments</Title>
-      <Title component="h5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
-        historical negotiating comments
-      </Title>
+      {data.length && (
+        <>
+          <Title component="h5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
+            historical negotiating comments
+          </Title>
 
-      {data.map(({ title, date, time }) => (
-        <Comment title={title} date={date} time={time} />
-      ))}
+          {data.map(({ title, date, time }) => (
+            <Comment title={title} date={date} time={time} />
+          ))}
+        </>
+      )}
 
       {!areaDisabled && (
         <>
           <hr className="my-4" />
-          <TextArea label="your comment" placeholder="Type your message here" customStyles="!w-full" />
+          <TextArea name="comment" label="your comment" placeholder="Type your message here" customStyles="!w-full" />
         </>
       )}
     </div>

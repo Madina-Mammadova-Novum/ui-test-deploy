@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, SimpleSelect, Title } from '@/elements';
+import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
 import { OfferForm, Tabs } from '@/units';
 import { incomingOfferCommentsData, incomingOfferVoyageDetailData } from '@/utils/mock';
@@ -26,8 +27,19 @@ const tabs = [
 
 const OfferModalContent = ({ closeModal }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [responseCountdown, setResponseCountdown] = useState('20 min');
+  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[0]);
   const [showScroll, setShowScroll] = useState(false);
+
+  const tabContent = () => {
+    switch (currentTab) {
+      case 'voyage_details':
+        return <VoyageDetailsContent data={incomingOfferVoyageDetailData} />;
+      case 'comments':
+        return <CommentsContent data={incomingOfferCommentsData} />;
+      default:
+        return <OfferForm />;
+    }
+  };
 
   return (
     <div className="w-[610px]">
@@ -41,7 +53,7 @@ const OfferModalContent = ({ closeModal }) => {
           <SimpleSelect
             onChange={setResponseCountdown}
             currentItem={responseCountdown}
-            selectableItems={['20 min', '40 min', '60 min']}
+            selectableItems={COUNTDOWN_OPTIONS}
           />
         </div>
       </div>
@@ -57,9 +69,7 @@ const OfferModalContent = ({ closeModal }) => {
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
         className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
-        {currentTab === 'commercial_offer_terms' && <OfferForm />}
-        {currentTab === 'voyage_details' && <VoyageDetailsContent data={incomingOfferVoyageDetailData} />}
-        {currentTab === 'comments' && <CommentsContent data={incomingOfferCommentsData} />}
+        {tabContent()}
       </div>
 
       <div className="flex text-xsm gap-x-2.5 mt-4">

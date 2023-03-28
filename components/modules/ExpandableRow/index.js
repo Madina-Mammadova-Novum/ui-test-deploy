@@ -5,21 +5,19 @@ import React, { cloneElement, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-import { noSSR } from '@/utils/helpers';
-
-const ExpandableRow = ({ headerComponent, footerComponent, children, expandAll }) => {
+const ExpandableRow = ({ header, footer, children, expand }) => {
   const [toggle, setToggle] = useState(false);
   const contentRef = useRef(null);
-  const headerComponentWithProps = cloneElement(headerComponent, { toggle });
+  const headerWithProps = cloneElement(header, { toggle });
 
   useEffect(() => {
-    setToggle(expandAll.value);
-  }, [expandAll]);
+    setToggle(expand);
+  }, [expand]);
 
   return (
     <div className="rounded-[10px] shadow-xmd box-border">
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
-        {headerComponentWithProps}
+        {headerWithProps}
       </div>
       <div
         ref={contentRef}
@@ -29,25 +27,21 @@ const ExpandableRow = ({ headerComponent, footerComponent, children, expandAll }
         style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
       >
         <div className="px-6">{children}</div>
-        {footerComponent}
+        {footer}
       </div>
     </div>
   );
 };
 
 ExpandableRow.defaultProps = {
-  expandAll: {
-    value: false,
-  },
+  expand: false,
 };
 
 ExpandableRow.propTypes = {
-  headerComponent: PropTypes.node.isRequired,
-  footerComponent: PropTypes.node.isRequired,
+  header: PropTypes.node.isRequired,
+  footer: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
-  expandAll: PropTypes.shape({
-    value: PropTypes.string,
-  }),
+  expand: PropTypes.bool,
 };
 
-export default noSSR(ExpandableRow);
+export default ExpandableRow;

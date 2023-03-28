@@ -87,7 +87,9 @@ const PasswordValidation = ({ title, customStyles }) => {
           />
         </div>
         <div className="pl-0 md:pl-5">
-          <h4 className="whitespace-nowrap">Password requirements</h4>
+          <Title component="h4" className="whitespace-nowrap">
+            Password requirements
+          </Title>
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
               <li className={classnames('flex items-center', index && 'mt-1.5')}>

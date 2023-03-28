@@ -326,12 +326,12 @@ export const incomingOfferVoyageDetailData = {
     ],
     [
       {
-        key: 'Discharge port:',
+        key: 'Discharge port',
         label: 'Benghazi, LYBEN',
         countryFlag: usFlag,
       },
       {
-        key: 'Discharge terminal:',
+        key: 'Discharge terminal',
         label: 'Oil terminal #4',
       },
     ],

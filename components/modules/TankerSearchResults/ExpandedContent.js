@@ -1,7 +1,7 @@
 import React from 'react';
 
 import usFlag from '@/assets/images/flag.png';
-import { TextRow, Title } from '@/elements';
+import { IconComponent, TextRow, Title } from '@/elements';
 
 const ExpandedContent = () => {
   return (
@@ -13,9 +13,9 @@ const ExpandedContent = () => {
           <Title component="h5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
             About the Vessel Owner
           </Title>
-          <TextRow title="Years in Operation" subtitle="3-5 years" />
-          <TextRow title="Number of Tankers" subtitle="6-10 tankers" />
-          <TextRow title="Estimated average tanker DWT" subtitle="21-40 kt" />
+          <TextRow title="Years in Operation">3-5 years</TextRow>
+          <TextRow title="Number of Tankers">6-10 tankers</TextRow>
+          <TextRow title="Estimated average tanker DWT">21-40 kt</TextRow>
         </div>
 
         <div className="mt-2.5 md:mt-0">
@@ -24,19 +24,31 @@ const ExpandedContent = () => {
           </Title>
           <div className="flex gap-x-10">
             <div>
-              <TextRow title="Ship age" subtitle="≤ 5" />
-              <TextRow title="Cubic capacity 98%" subtitle="25,*** m³" />
-              <TextRow title="Number of Segregations" subtitle="5" />
-              <TextRow title="LOA" subtitle="100 m" />
-              <TextRow title="Beam" subtitle="23 m" />
-              <TextRow title="Type of Hull" subtitle="Double Hull" />
+              <TextRow title="Ship age">≤ 5</TextRow>
+              <TextRow title="Cubic capacity 98%">25,*** m³</TextRow>
+              <TextRow title="Number of Segregations">5</TextRow>
+              <TextRow title="LOA">100 m</TextRow>
+              <TextRow title="Beam">23 m</TextRow>
+              <TextRow title="Type of Hull">Double Hull</TextRow>
             </div>
 
             <div>
-              <TextRow title="Country of Registered Owner" subtitle="Turkey" icon={usFlag} />
-              <TextRow title="Country of Disponent Owner" subtitle="The Netherlands" icon={usFlag} />
-              <TextRow title="Country of Technical Operator" subtitle="The Netherlands" icon={usFlag} />
-              <TextRow title="Country of Commercial Operator" subtitle="Turkey" icon={usFlag} />
+              <TextRow title="Country of Registered Owner">
+                <IconComponent icon={usFlag} />
+                Turkey
+              </TextRow>
+              <TextRow title="Country of Disponent Owner">
+                <IconComponent icon={usFlag} />
+                The Netherlands
+              </TextRow>
+              <TextRow title="Country of Technical Operator">
+                <IconComponent icon={usFlag} />
+                The Netherlands
+              </TextRow>
+              <TextRow title="Country of Commercial Operator">
+                <IconComponent icon={usFlag} />
+                Turkey
+              </TextRow>
             </div>
           </div>
         </div>

@@ -1,3 +1,5 @@
+import { productsAdapter } from '@/adapters';
+
 export function searchVesselAdapter({ data }) {
   if (data === null) return null;
   const { laycanStart, laycanEnd, cargoType, dischargeTerminal, loadTerminal, products, dischargePort, loadPort } =
@@ -11,11 +13,6 @@ export function searchVesselAdapter({ data }) {
     cargoTypeId: cargoType.value,
     laycanStart,
     laycanEnd,
-    cargoes: products.map(({ product, density, quantity, tolerance }) => ({
-      productId: product.value,
-      referenceDensity: density,
-      quantity,
-      tolerance,
-    })),
+    cargoes: productsAdapter({ data: products }),
   };
 }
