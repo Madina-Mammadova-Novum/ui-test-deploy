@@ -9,8 +9,8 @@ import {
   ImageSliderBlock,
   SimpleContentBlock,
   TeamBlock,
-  WhatWeOfferBlock
-} from '@/blocks';
+  WhatWeOfferBlock,
+  HowItWorksBlock } from '@/blocks';
 import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
@@ -20,7 +20,8 @@ const BLOCK_COMPONENTS = {
   'blocks.simple-content': SimpleContentBlock,
   'blocks.single-what-we-offer': WhatWeOfferBlock,
   'blocks.image-slider': ImageSliderBlock,
-  'blocks.team': TeamBlock
+  'blocks.team': TeamBlock,
+  'blocks.single-how-it-works': HowItWorksBlock,
 };
 
 const BlockManager = ({ blocks }) => {

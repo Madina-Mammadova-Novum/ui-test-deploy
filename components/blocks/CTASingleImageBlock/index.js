@@ -8,7 +8,7 @@ import { linkPropTypes, mediaPropTypes } from '@/utils/types';
 import { LinkAsButton, NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
-const BlockCtaSingleImage = ({ title, shortDescription, coverImage, button }) => {
+const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) => {
   return (
     <section className="relative py-24">
       {coverImage && (
@@ -50,18 +50,18 @@ const BlockCtaSingleImage = ({ title, shortDescription, coverImage, button }) =>
   );
 };
 
-BlockCtaSingleImage.defaultProps = {
+CTASingleImageBlock.defaultProps = {
   title: '',
   shortDescription: '',
   button: {},
   coverImage: {},
 };
 
-BlockCtaSingleImage.propTypes = {
+CTASingleImageBlock.propTypes = {
   title: PropTypes.string,
   shortDescription: PropTypes.string,
   button: linkPropTypes,
   coverImage: mediaPropTypes,
 };
 
-export default BlockCtaSingleImage;
+export default CTASingleImageBlock;

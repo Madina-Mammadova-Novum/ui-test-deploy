@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
+import { buttonVariantsPropTypes } from '@/lib/types';
+
 import { STYLES } from '@/lib/constants';
 
 export const mediaPropTypes = PropTypes.shape({
@@ -21,11 +23,12 @@ export const linkOptionsPropTypes = PropTypes.shape({
 });
 
 export const linkPropTypes = PropTypes.shape({
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  path: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(STYLES),
-  linkOptions: linkOptionsPropTypes,
+  path: PropTypes.string.isRequired,
+  type: buttonVariantsPropTypes,
+  target: PropTypes.oneOf([null, '_blank', '_self', '_parent', '_top']),
+  isExternal: PropTypes.bool,
+  rel: PropTypes.oneOf([null, 'noopener noreferrer', 'noopener', 'noreferrer']),
 });
 
 export const linkImagePropTypes = PropTypes.shape({
