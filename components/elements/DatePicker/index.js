@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Calendar } from 'react-date-range';
 
 import classnames from 'classnames';
@@ -32,6 +32,7 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
       <div className="single_date relative cursor-pointer">
         <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
           <Input
+            name={name}
             customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
             label={label}
             value={transformDate(date, 'MMM dd, yyyy')}

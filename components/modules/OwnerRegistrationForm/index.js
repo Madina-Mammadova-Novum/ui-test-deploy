@@ -27,7 +27,7 @@ import {
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = () => {
-  const [sameAddress, setSameAddress] = useState(true);
+  const [sameAddress, setSameAddress] = useState(false);
 
   const schema = yup.object().shape({
     ...personalDetailsSchema(),
@@ -38,11 +38,12 @@ const OwnerRegistrationForm = () => {
   });
 
   const methods = useHookFormParams({ schema });
-  const value = methods.watch('sameAddresses', sameAddress);
+  const addressValue = methods.watch('sameAddresses', sameAddress);
 
   useEffect(() => {
-    setSameAddress(value);
-  }, [value]);
+    methods.setValue('sameAddresses', addressValue);
+    setSameAddress(addressValue);
+  }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
     const { error, data } = await ownerSignUp({ data: formData });

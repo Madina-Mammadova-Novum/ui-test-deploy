@@ -56,11 +56,11 @@ function companyAddressesAdapter({ data }) {
     registrationCityId: registrationCityId.value,
     registrationProvince: registrationState,
     registrationPostalCode,
-    correspondenceAddress: sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
-    correspondenceCityId: sameAddresses ? correspondenceCityId.value : registrationCityId.value,
-    correspondenceProvince: sameAddresses ? correspondenceState : registrationState,
-    correspondencePostalCode: sameAddresses ? correspondencePostalCode : registrationPostalCode,
+    correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
+    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
+    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
 }
 

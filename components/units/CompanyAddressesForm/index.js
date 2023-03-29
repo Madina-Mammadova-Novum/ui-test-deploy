@@ -10,10 +10,10 @@ import { convertDataToOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresses = () => {
-  const { setValue, watch } = useHookForm();
+  const { setValue, getValues } = useHookForm();
   const [countries, setCountries] = useState([]);
 
-  const correspondenceAddress = watch('sameAddresses', true);
+  const { sameAddresses } = getValues();
 
   const handleSameAddress = (event) => {
     const { checked } = event.target;
@@ -42,13 +42,13 @@ const CompanyAddresses = () => {
         <CheckBoxInput
           name="sameAddresses"
           onChange={handleSameAddress}
-          checked={correspondenceAddress}
+          checked={sameAddresses}
           labelStyles="text-black text-xsm"
         >
           The company Registration Address is the same as the Correspondence Address.
         </CheckBoxInput>
       </div>
-      {!correspondenceAddress && (
+      {!sameAddresses && (
         <AddressDetails
           title={`Company ${ADDRESS.CORRESPONDENCE} address`}
           type={ADDRESS.CORRESPONDENCE}

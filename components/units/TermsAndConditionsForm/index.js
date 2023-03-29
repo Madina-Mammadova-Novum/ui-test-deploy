@@ -25,11 +25,11 @@ const TermsAndConditions = () => {
       >
         <p>
           I agree with all
-          <NextLink href={ROUTES.PRIVACY_POLICY} className="text-blue underline">
+          <NextLink href={ROUTES.PRIVACY_POLICY} className="text-blue underline px-1.5">
             Privacy Policy
           </NextLink>
-          <span className="px-1.5">and</span>
-          <NextLink href={ROUTES.TERMS_AND_CONDITIONS} className="text-blue underline">
+          <span>and</span>
+          <NextLink href={ROUTES.TERMS_AND_CONDITIONS} className="text-blue underline px-1.5">
             Terms of Use
           </NextLink>
         </p>

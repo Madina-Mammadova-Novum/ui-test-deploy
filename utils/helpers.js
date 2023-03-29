@@ -169,17 +169,19 @@ export function checkObjectValues({ data }) {
 
 export const disableDefaultBehaviour = (e) => e.preventDefault();
 
-// todo: need to remove functions `cargoeTemplate`, `cargoesTemplate` and refactored here components/units/CargoesSlotsDetailsForm/index.js without using these functions
-export const cargoeTemplate = () => ({
-  imo: { name: `vesselIMO`, label: 'imo', id: makeId() },
-  port: { name: `loadPortId`, label: 'load port', id: makeId() },
-  date: { name: `billOfLadingDate`, label: 'bill of lading date', id: makeId() },
-});
+export const disablePlusMinusSymbols = (e) => {
+  const clipboardPasteKey = e.ctrlKey && e.key === 'v';
 
-export const cargoesTemplate = (value) => {
-  const result = getFilledArray(value);
+  const disabledKeyCodes =
+    e.keyCode === 38 ||
+    e.keyCode === 40 ||
+    e.keyCode === 69 ||
+    e.keyCode === 107 ||
+    e.keyCode === 109 ||
+    e.keyCode === 187 ||
+    e.keyCode === 189;
 
-  return result.map(cargoeTemplate);
+  if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
 export const convertDataToOptions = (data, keyValue, keyLabel) => {

@@ -8,11 +8,11 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import {
-  // companyAddressesSchema,
-  // companyDetailsSchema,
-  // passwordValidationSchema,
-  // personalDetailsSchema,
   cargoesSlotsDetailsSchema,
+  companyAddressesSchema,
+  companyDetailsSchema,
+  passwordValidationSchema,
+  personalDetailsSchema,
 } from '@/lib/schemas';
 import { chartererSignUp } from '@/services';
 import {
@@ -27,22 +27,24 @@ import {
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = () => {
-  const [sameAddress, setSameAddress] = useState(true);
+  const [sameAddress, setSameAddress] = useState(false);
 
   const schema = yup.object().shape({
-    // ...personalDetailsSchema(),
-    // ...passwordValidationSchema(),
-    // ...companyDetailsSchema(),
-    // ...companyAddressesSchema(sameAddress),
+    ...personalDetailsSchema(),
+    ...passwordValidationSchema(),
+    ...companyDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
     ...cargoesSlotsDetailsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
-  const value = methods.watch('sameAddresses', sameAddress);
+
+  const addressValue = methods.watch('sameAddresses', sameAddress);
 
   useEffect(() => {
-    setSameAddress(value);
-  }, [value]);
+    methods.setValue('sameAddresses', addressValue);
+    setSameAddress(addressValue);
+  }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
     const { error, data } = await chartererSignUp({ data: formData });

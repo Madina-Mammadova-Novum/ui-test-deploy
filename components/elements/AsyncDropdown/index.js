@@ -12,7 +12,7 @@ import OptionsList from '@/elements/AsyncDropdown/OptionsList';
 import { dropdownStyles, dropdownTheme } from '@/elements/AsyncDropdown/styles';
 
 // todo: move this component to Dropdown element and compare it with original
-const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
+const AsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = [] }) => {
   const [selectedOption, setSelectedOption] = useState('');
 
   const handleChange = (option) => {
@@ -25,10 +25,7 @@ const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
   };
 
   const loadOptions = (inputValue, callback) => {
-    setTimeout(() => {
-      // todo: refactor this without setTimeout
-      callback(filteredOptions(inputValue));
-    }, 1000);
+    callback(filteredOptions(inputValue));
   };
 
   const renderOption = ({ countryFlag, label: value }) => <OptionRow countryFlag={countryFlag} value={value} />;
@@ -37,7 +34,7 @@ const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
     <Controller
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
-        const error = errors[name];
+        const error = errorMsg ?? errors[name]?.message;
 
         return (
           <div className="relative bottom-1">
@@ -61,7 +58,7 @@ const AsyncDropdown = ({ name, label, onChange, disabled, options = [] }) => {
               theme={dropdownTheme}
               isDisabled={disabled || isSubmitting}
             />
-            {error && <InputErrorMessage message={error?.message} />}
+            {error && <InputErrorMessage message={error} />}
           </div>
         );
       }}
@@ -80,6 +77,7 @@ AsyncDropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  errorMsg: PropTypes.string,
 };
 
 export default AsyncDropdown;
