@@ -142,7 +142,7 @@ export function hasNestedArrays(data) {
 }
 
 export function getFilledArray(length) {
-  return Array.from({ length });
+  return Array.from({ length }).map((_, index) => index);
 }
 
 export function getValueWithPath(object, path, defaultValue) {

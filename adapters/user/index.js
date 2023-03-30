@@ -135,7 +135,7 @@ export function chartererSignUpAdapter({ data }) {
     email: email.replace(/\.com$/, ''),
     password,
     phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: `+${secondaryPhoneNumber}`,
+    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
     companyName,
     yearsInOperation: companyNumberOfOperation,
     estimatedNumberOfChartersPerYear: numberOfTankers,

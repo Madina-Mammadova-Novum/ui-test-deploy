@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import {
-  cargoesSlotsDetailsSchema,
+  // cargoesSlotsDetailsSchema,
   companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
@@ -34,7 +34,7 @@ const ChartererRegistrationForm = () => {
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
-    ...cargoesSlotsDetailsSchema(),
+    // ...cargoesSlotsDetailsSchema(),
   });
 
   const methods = useHookFormParams({ schema });

@@ -34,7 +34,10 @@ const CargoesSlotsDetailsForm = () => {
   const handleChangeValue = (data) => {
     const { option, index, key } = data;
     const fieldName = `cargoes[${index}][${key}]`;
+
     setValue(fieldName, option);
+
+    clearErrors(fieldName);
   };
 
   const handleCargoesCount = (event) => {
@@ -58,7 +61,7 @@ const CargoesSlotsDetailsForm = () => {
   };
 
   const handleAddSlot = () => {
-    handleChangeState('cargoes', [...cargoes, getFilledArray(1)]);
+    handleChangeState('cargoes', [...cargoes, ...getFilledArray(1)]);
   };
 
   const handleRemoveSlot = (index) => {
@@ -116,12 +119,11 @@ const CargoesSlotsDetailsForm = () => {
         return (
           <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={makeId()}>
             <Input
-              name={`${fieldName}[name]`}
+              {...register(`${fieldName}[name]`)}
               label={`Imo #${index + 1}`}
               placeholder="IMO number"
               error={error?.imo?.message}
               disabled={isSubmitting}
-              onChange={({ target }) => handleChangeValue({ option: target.value, index, key: 'imo' })}
               type="number"
             />
             <AsyncDropdown
