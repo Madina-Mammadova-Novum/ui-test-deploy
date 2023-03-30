@@ -70,7 +70,7 @@
   }
 
   .content-wrapper p {
-    @apply text-black mb-3 text-sm sm:text-base md:text-lg;
+    @apply text-black;
   }
 
   .content-wrapper ul li,
@@ -84,6 +84,10 @@
 
   .content-wrapper.list-white ul li::marker {
     color: #fff;
+  }
+
+  .content-wrapper blockquote {
+    @apply !my-4 py-[5px] pl-4 font-semibold border-l-2 border-blue;
   }
 
   /* Swiper */
