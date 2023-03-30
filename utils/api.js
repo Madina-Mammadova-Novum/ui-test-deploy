@@ -4,6 +4,10 @@ import { getStrapiURL } from '@/utils/index';
 
 export const errorHandler = (res, status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
+import { responseAdapter } from '@/adapters/response';
+
+export const errorHandler = (res, status, errors) => {
+  const statusMessage = errors !== undefined || errors.length !== 0 ? 'Something went wrong' : errors.join('');
   return res.status(status).send({
     message: statusMessage,
     errors,
@@ -71,7 +75,7 @@ export const apiHandler = async (options, req, res) => {
     const result = await response.json();
 
     if (!response.ok) {
-      return errorHandler(res, response.status, result?.title, result?.errors);
+      return errorHandler(res, response.status, result);
     }
 
     /* Set Authorization token */
@@ -83,7 +87,7 @@ export const apiHandler = async (options, req, res) => {
       res.setHeader('Set-Cookie', cookie);
     }
 
-    return res.status(200).json(result); // TODO: need to wrap with global adapter
+    return responseAdapter(res.status(200).json(result));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };

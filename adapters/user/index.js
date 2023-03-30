@@ -56,11 +56,11 @@ function companyAddressesAdapter({ data }) {
     registrationCityId: registrationCityId.value,
     registrationProvince: registrationState,
     registrationPostalCode,
-    correspondenceAddress: sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
-    correspondenceCityId: sameAddresses ? correspondenceCityId.value : registrationCityId.value,
-    correspondenceProvince: sameAddresses ? correspondenceState : registrationState,
-    correspondencePostalCode: sameAddresses ? correspondencePostalCode : registrationPostalCode,
+    correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
+    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
+    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
 }
 
@@ -101,7 +101,7 @@ export function ownerSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email,
+    email: email.replace(/\.com$/, ''),
     password,
     phone: `+${primaryPhoneNumber}`,
     secondaryPhone: `+${secondaryPhoneNumber}`,
@@ -132,7 +132,7 @@ export function chartererSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email,
+    email: email.replace(/\.com$/, ''),
     password,
     phone: `+${primaryPhoneNumber}`,
     secondaryPhone: `+${secondaryPhoneNumber}`,
@@ -151,4 +151,36 @@ export function loginAdapter({ data }) {
     email,
     password,
   };
+}
+
+export function tankerInfoAdapter({ data }) {
+  if (data === null) return null;
+  const { id, title, imo, port, date, status } = data;
+  return {
+    id,
+    title,
+    imo,
+    port,
+    date,
+    status,
+  };
+}
+
+export function positionAdapter({ data }) {
+  if (data === null) return null;
+  const { id, type, title, activeTankers, inActiveTankers, tankersInfo } = data;
+
+  return {
+    id,
+    type,
+    title,
+    activeTankers,
+    inActiveTankers,
+    tankers: tankersInfo.map((item) => tankerInfoAdapter({ data: item })),
+  };
+}
+
+export function positionsAdapter({ data }) {
+  if (data === null) return null;
+  return data.map((item) => positionAdapter({ data: item }));
 }

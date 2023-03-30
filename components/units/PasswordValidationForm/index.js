@@ -39,8 +39,6 @@ const initialState = [
 
 const PasswordValidation = ({ title, customStyles }) => {
   const [validation, setValidation] = useState(initialState);
-  const [password, setPassword] = useState();
-  const [comparisonError, setComparisonError] = useState(null);
   const {
     register,
     clearErrors,
@@ -55,9 +53,7 @@ const PasswordValidation = ({ title, customStyles }) => {
 
   const passwordValidation = (event) => {
     clearErrors(['password', 'confirmPassword']);
-
     const { value } = event.target;
-    setPassword(value);
     setValidation((conditions) =>
       conditions.map((validationObject) => {
         return {
@@ -66,15 +62,6 @@ const PasswordValidation = ({ title, customStyles }) => {
         };
       })
     );
-  };
-
-  const passwordComparison = (event) => {
-    const confirmPassword = event.target.value;
-    if (password !== confirmPassword) {
-      setComparisonError('Passwords do not match');
-    } else {
-      setComparisonError(null);
-    }
   };
 
   return (
@@ -94,9 +81,8 @@ const PasswordValidation = ({ title, customStyles }) => {
             {...register('confirmPassword')}
             label="Confirm password"
             placeholder="Enter your password"
-            error={comparisonError !== null ? comparisonError : confirmPasswordError?.message}
+            error={confirmPasswordError?.message}
             disabled={isSubmitting}
-            onChange={passwordComparison}
             customStyles="mt-4"
           />
         </div>

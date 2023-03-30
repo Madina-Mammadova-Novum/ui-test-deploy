@@ -145,6 +145,18 @@ export function getFilledArray(length) {
   return Array.from({ length });
 }
 
+export function getValueWithPath(object, path, defaultValue) {
+  return (
+    path
+      // eslint-disable-next-line no-useless-escape
+      .replace(/[\[\]]/g, '.')
+      .replace(/['"]/g, '')
+      .split('.')
+      .filter((key) => key)
+      .reduce((o, p) => (o ? o[p] : defaultValue), object)
+  );
+}
+
 export function checkObjectValues({ data }) {
   const isNotNullOrUndefined = Object.keys(data).every((key) => data[key] !== null && data[key] !== undefined);
 
@@ -184,4 +196,30 @@ export const getButtonClassNames = (variant, size) => {
     if (size === 'small') return 'text-red';
   }
   return null;
+}
+
+export const disablePlusMinusSymbols = (e) => {
+  const clipboardPasteKey = e.ctrlKey && e.key === 'v';
+
+  const disabledKeyCodes =
+    e.keyCode === 38 ||
+    e.keyCode === 40 ||
+    e.keyCode === 69 ||
+    e.keyCode === 107 ||
+    e.keyCode === 109 ||
+    e.keyCode === 187 ||
+    e.keyCode === 189;
+
+  if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
+};
+
+export const convertDataToOptions = (data, keyValue, keyLabel) => {
+  if (data === null || data === undefined) return [];
+
+  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
+    if (value === null || value === undefined) throw new Error('value cannot be empty');
+    if (label === null || label === undefined) throw new Error('label cannot be empty');
+
+    return { value, label };
+  });
 };

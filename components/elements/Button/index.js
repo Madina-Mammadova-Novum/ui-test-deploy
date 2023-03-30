@@ -24,7 +24,7 @@ const Button = ({ buttonProps: { icon, text, variant, size }, customStyles, disa
       {...rest}
     >
       {/* todo: need to change to children like in LinkAsButton component */}
-      {icon && <span className="mr-1.5">{icon}</span>}
+      {icon && <span>{icon}</span>}
       {text && text}
     </button>
   );

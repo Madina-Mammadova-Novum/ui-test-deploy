@@ -44,7 +44,7 @@ const PersonalDetails = () => {
           />
           <PhoneInput
             {...register('secondaryPhoneNumber')}
-            label="Secondary phone number"
+            label="Secondary phone number (optional)"
             disabled={isSubmitting}
             error={errors.secondaryPhoneNumber?.message}
           />

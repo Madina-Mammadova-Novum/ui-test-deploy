@@ -11,7 +11,7 @@ import { AuthHeader } from '@/modules';
 
 const AuthLayout = ({ navigation, children }) => {
   return (
-    <BaseLayout className="container">
+    <BaseLayout className="container max-w-screen-2lg min-h-screen flex flex-col">
       <AuthHeader navigation={navigation} />
       <section className="grid grid-cols-1 3sm:grid-cols-2 flex-grow gap-20">
         <div className="fixed left-0 top-0 -z-50 h-full w-full hidden 3sm:block">

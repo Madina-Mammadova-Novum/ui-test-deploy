@@ -1,27 +1,17 @@
 'use client';
 
-// todo: that must rendered on server side
-
-import { useMemo } from 'react';
-
 import { navBarPropTypes } from '@/lib/types';
 
-import { Logo } from '@/assets/icons';
+import Logo from '@/assets/images/logo.svg';
 import { NextLink } from '@/elements';
-import { SIZES } from '@/lib';
-import { SCREENS } from '@/lib/constants';
-import { useMediaQuery } from '@/utils/hooks';
 
-const Navbar = ({ placeholder, cta, path, contrasted }) => {
-  const lgScreen = useMediaQuery(SCREENS.lg);
-  const logoColor = useMemo(() => (!lgScreen ? contrasted : !contrasted), [contrasted, lgScreen]);
-
+const Navbar = ({ placeholder, cta, path }) => {
   return (
     <nav className="flex w-full justify-between items-center z-50 bg-white 3sm:bg-transparent">
       <NextLink href="/">
-        <Logo variant="xl" width={SIZES.LOGO.width} height={SIZES.LOGO.height} contrasted={logoColor} />
+        <Logo className="3sm:fill-white fill-black" />
       </NextLink>
-      <ul className="flex h-full items-center gap-5 bg-white w-full 3sm:w-1/2 justify-end z-50">
+      <ul className="flex h-full items-center gap-5 w-full 3sm:w-1/2 justify-end bg-white z-50">
         <li className="text-xsm text-black font-normal">
           <p>{placeholder}</p>
         </li>

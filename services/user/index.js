@@ -3,12 +3,13 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
+  positionsAdapter,
   resetPasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
-import { postData } from '@/utils/dataFetching';
+import { getData, postData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
@@ -81,4 +82,9 @@ export async function updateCompany({ data }) {
   return {
     message,
   };
+}
+
+export async function getUserPositions() {
+  const { data } = await getData(`account/my-positions`);
+  return positionsAdapter({ data });
 }

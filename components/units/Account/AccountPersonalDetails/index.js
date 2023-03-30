@@ -5,8 +5,7 @@ import { PersonalDetailsForm } from '@/modules';
 import { ModalWindow } from '@/units';
 
 const AccountPersonalDetails = ({ user }) => {
-  // todo: rules for fields
-
+  const { firstName, lastName, email, primaryPhone, secondaryPhone } = user;
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Personal Details">
@@ -16,13 +15,13 @@ const AccountPersonalDetails = ({ user }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent className="col-start-1">
-          <TextRow title="First Name" subtitle={user?.firstName} />
-          <TextRow title="Last Name" subtitle={user?.lastName} />
-          <TextRow title="Email Address" subtitle={user?.email} />
+          {firstName ?? <TextRow title="First Name" subtitle={firstName} />}
+          {lastName ?? <TextRow title="Last Name" subtitle={lastName} />}
+          {email ?? <TextRow title="Email Address" subtitle={email} />}
         </FieldsetContent>
         <FieldsetContent className="col-start-1 3sm:col-start-2">
-          <TextRow title="Primary phone number" subtitle={user?.primaryPhone} />
-          <TextRow title="Secondary phone number" subtitle={user?.secondaryPhone} />
+          {primaryPhone ?? <TextRow title="Primary phone number" subtitle={primaryPhone} />}
+          {secondaryPhone ?? <TextRow title="Secondary phone number" subtitle={secondaryPhone} />}
         </FieldsetContent>
       </FieldsetContentWrapper>
     </FieldsetWrapper>

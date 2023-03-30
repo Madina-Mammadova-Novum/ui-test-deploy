@@ -1,17 +1,30 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { devToolsEnhancer } from '@redux-devtools/extension';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import { authApi, citiesApi, portsApi, signupApi } from '@/store/entities';
 import { reducer } from '@/store/reducers';
 
-const store = configureStore({
-  reducer,
+const persistConfig = {
+  key: 'root',
+  storage,
+  version: 1,
+};
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+export const accountStore = configureStore({
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(citiesApi.middleware, signupApi.middleware, portsApi.middleware, authApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }), // could be extended by api reducers
   devTools: process.env.NODE_ENV === 'development' && devToolsEnhancer(),
 });
 
-setupListeners(store.dispatch);
-
-export default store;
+export const persistore = persistStore(accountStore);
+setupListeners(accountStore.dispatch);
