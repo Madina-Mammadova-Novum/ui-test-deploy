@@ -7,7 +7,7 @@ import { metaData } from '@/adapters/metaData';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage, Title } from '@/elements';
-import { getEntityData } from '@/services/page';
+import { getEntityData } from '@/services/collectionType';
 
 export async function generateMetadata({ params }) {
   const data = await getEntityData(params);

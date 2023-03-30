@@ -223,3 +223,9 @@ export const convertDataToOptions = (data, keyValue, keyLabel) => {
     return { value, label };
   });
 };
+
+export const removeByIndex = (data, index) => {
+  if (data === null || data === undefined) return null;
+
+  return data.filter((_, idx) => idx !== index);
+};

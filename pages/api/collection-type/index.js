@@ -1,4 +1,4 @@
-import { getEndpoint } from '@/services/page';
+import { getEndpoint } from '@/services/collectionType';
 import { getHandler } from '@/utils/api';
 
 export default async function handler(req, res) {

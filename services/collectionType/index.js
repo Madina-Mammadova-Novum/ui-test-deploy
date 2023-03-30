@@ -40,33 +40,14 @@ export function getEndpoint(slug, locale, apiID, preview = false) {
   return `/${pluralize(apiID)}?${previewParams}
     &locale=${locale}
     &filters[slug][$eq]=${slug}
-    &populate[blocks][populate]=*,
-      buttons.linkOptions,
-      coverImage,
-      button,
-      button.linkOptions,changableTitles,descriptionItems.title
-      ingredients,ingredients.coverImage,ingredients.concerns,ingredients.concerns.category,ingredients.concerns.images,
-      concerns,concerns.category,concerns.images,
-      items,items.coverImage,items.button,items.button.linkOptions,
-      testimonials,testimonials.coverImage,testimonials.concern,testimonials.concern.images,testimonials.concern.category,
-      members,members.category,members.coverImage,
-      faqQuestions,faqQuestions.category,
-      description.title,
-      values,values.value,values.value.valueType,values.value.coverImage
-    &populate[questions][populate]=*,field,category,category.emoji,field.fields,field.fields.coverImage,field.fields.nextQuestion,nextQuestion,prevQuestion,
-    &populate[startQuestion][populate]=*,field,category,category.emoji,field.fields,field.fields.coverImage,field.fields.nextQuestion,nextQuestion,prevQuestion,
-    &populate[labels][populate]=*,coverImage
-    &populate[images]=*
-    &populate[buttons][populate]=*,linkOptions
-    &populate[coverImage]=*
-    &populate[imagesGallery]=*
+    &populate[blocks][populate]=*
     &populate[seo]=metaSocial`.replace(/\s+|\n/g, '');
 }
 
 export async function getEntityData(params, preview = false) {
   const { slug: pathArray } = params;
   const { collectionType, slug, locale } = getCollectionType(pathArray);
-  const response = await getData(`entity?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
+  const response = await getData(`collection-type?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
   const { data, meta } = response;
   if (data === undefined) return null;
   return {
