@@ -37,7 +37,7 @@ const CargoesSlotsDetailsForm = () => {
     const fieldName = `cargoes[${index}].${key}`;
     const isError = errors?.cargoes?.[index];
 
-    if (isError?.[key]) {
+    if (isError[key]) {
       clearErrors(fieldName);
     }
 
