@@ -1,0 +1,16 @@
+import { getSingleType } from '@/services/singleType';
+import { getValue } from '@/services/value';
+
+export const updateWhatWeOfferBlock = async (block) => {
+  const response = await getSingleType('what-we-offer', 'en');
+  if (response === null) return null;
+  const { title, values } = response;
+
+  const valuesData = await Promise.all(values.map((value) => getValue(value.id))).then((valueItems) => valueItems);
+
+  return {
+    ...block,
+    title,
+    values: valuesData,
+  };
+};

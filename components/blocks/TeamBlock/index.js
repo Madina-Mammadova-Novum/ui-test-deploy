@@ -2,14 +2,16 @@
 
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import waves from '@/assets/images/waves.jpg';
 import { NextImage, Title } from '@/elements';
 
-const TeamBlock = () => {
+const TeamBlock = ({ title }) => {
   return (
     <section>
       <div className="container mx-auto px-[54px] max-w-[1258px]">
-        <Title className="mb-5 text-center text-black">title</Title>
+        {title && <Title className="mb-5 text-center text-black">{title}</Title>}
         <div className="grid grid-cols-3 gap-5 pt-[60px]">
           <div className="flex items-center flex-col text-black shadow px-[30px] pb-[30px] bg-white rounded-[10px]">
             <NextImage
@@ -22,7 +24,7 @@ const TeamBlock = () => {
             <Title component="h2" className="mb-1">
               fullName
             </Title>
-            <Title component="h4" className="mb-1">
+            <Title component="h4" className="font-semibold mb-1">
               position
             </Title>
             <p className="text-xsm">
@@ -41,7 +43,7 @@ const TeamBlock = () => {
             <Title component="h2" className="mb-1">
               fullName
             </Title>
-            <Title component="h4" className="mb-1">
+            <Title component="h4" className="font-semibold mb-1">
               position
             </Title>
             <p className="text-xsm">
@@ -60,7 +62,7 @@ const TeamBlock = () => {
             <Title component="h2" className="mb-1">
               fullName
             </Title>
-            <Title component="h4" className="mb-1">
+            <Title component="h4" className="font-semibold mb-1">
               position
             </Title>
             <p className="text-xsm">
@@ -74,6 +76,9 @@ const TeamBlock = () => {
   );
 };
 
-TeamBlock.propTypes = {};
+TeamBlock.propTypes = {
+  title: PropTypes.string,
+  // members: PropTypes.arrayOf(),
+};
 
 export default TeamBlock;

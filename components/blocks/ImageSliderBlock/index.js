@@ -24,10 +24,6 @@ const ImageSliderBlock = ({ items }) => {
           pagination={{
             clickable: true,
           }}
-          scrollbar={{
-            draggable: true,
-            dragSize: 50,
-          }}
           modules={[Pagination]}
           className="swiperAboutUs -mt-[165px]"
         >

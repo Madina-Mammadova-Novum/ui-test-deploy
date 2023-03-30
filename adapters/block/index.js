@@ -3,6 +3,8 @@ import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
 import { updateHowItWorksBlock } from '@/blocks/HowItWorksBlock/adapter';
 import { updateImageSliderBlock } from '@/blocks/ImageSliderBlock/adapter';
+import { updateProductFeaturesBlock } from '@/blocks/ProductFeaturesBlock/adapter';
+import { updateWhatWeOfferBlock } from '@/blocks/WhatWeOfferBlock/adapter';
 
 export const blocksDataAdapter = async (blocks) => {
   if (!blocks || blocks.length === 0) {
@@ -22,6 +24,10 @@ export const blocksDataAdapter = async (blocks) => {
           return updateImageSliderBlock(block);
         case 'blocks.single-how-it-works':
           return updateHowItWorksBlock(block);
+        case 'blocks.single-what-we-offer':
+          return updateWhatWeOfferBlock(block);
+        case 'blocks.product-features':
+          return updateProductFeaturesBlock(block);
         default:
           return block;
       }

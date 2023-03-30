@@ -8,6 +8,8 @@ import {
   CTASingleImageBlock,
   HowItWorksBlock,
   ImageSliderBlock,
+  // LetsTalkBlock,
+  ProductFeaturesBlock,
   SimpleContentBlock,
   TeamBlock,
   WhatWeOfferBlock,
@@ -23,6 +25,7 @@ const BLOCK_COMPONENTS = {
   'blocks.image-slider': ImageSliderBlock,
   'blocks.team': TeamBlock,
   'blocks.single-how-it-works': HowItWorksBlock,
+  'blocks.product-features': ProductFeaturesBlock,
 };
 
 const BlockManager = ({ blocks }) => {

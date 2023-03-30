@@ -88,12 +88,8 @@
 
   /* Swiper */
 
-  .swiper {
-    width: calc(100% + 16px);
-  }
-
-  .swiper .swiper-scrollbar {
-    @apply hidden;
+  .swiper .swiper-pagination {
+    @apply relative !bottom-0 mt-3;
   }
 
   .swiper.swiperTestimonial .swiper-wrapper,
@@ -103,10 +99,6 @@
   }
   .swiper.swiperIngredients .swiper-wrapper {
     @apply !pb-8 md:!pb-0;
-  }
-
-  .swiper .swiper-pagination {
-    @apply md:hidden;
   }
 
   .swiper .swiper-button-prev,
@@ -123,90 +115,11 @@
   }
 
   .swiper .swiper-pagination .swiper-pagination-bullet {
-    @apply w-[6px] h-[6px] rounded-[3px] !mx-[5px];
+    @apply w-[10px] h-[10px] rounded-[5px] !mx-[5px] bg-gray-darker opacity-100;
   }
 
   .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
-    @apply w-4 h-2 rounded-[10px];
-  }
-
-  @media only screen and (min-width: 768px) {
-    .swiper {
-      width: calc(100% + 38px);
-    }
-  }
-
-  @media only screen and (min-width: 1280px) {
-    .swiper {
-      width: calc(100% + 38px);
-      position: unset !important;
-    }
-
-    .swiper.swiperImprovements {
-      @apply w-full;
-    }
-
-    .swiper.swiperIngredients .swiper-button-next {
-      top: 25px;
-      right: 0;
-    }
-    .swiper.swiperIngredients .swiper-button-prev {
-      top: 25px;
-      left: unset;
-      right: 60px;
-    }
-
-    .swiper.swiperTestimonial .swiper-button-next,
-    .swiper.swiperTeam .swiper-button-next {
-      right: 0;
-      top: 98px;
-    }
-
-    .swiper.swiperTestimonial .swiper-button-prev,
-    .swiper.swiperTeam .swiper-button-prev {
-      right: 60px;
-      left: unset;
-      top: 98px;
-    }
-
-    .swiper .swiper-button-prev.swiper-button-disabled,
-    .swiper .swiper-button-next.swiper-button-disabled {
-      opacity: unset;
-    }
-  }
-
-  @media only screen and (min-width: 1440px) {
-    .swiper {
-      width: calc(100% + 80px);
-    }
-
-    .swiper.swiperTestimonial .swiper-button-next,
-    .swiper.swiperTeam .swiper-button-next {
-      right: 0;
-      top: 98px;
-    }
-
-    .swiper.swiperTestimonial .swiper-button-prev,
-    .swiper.swiperTeam .swiper-button-prev {
-      right: 60px;
-      left: unset;
-      top: 98px;
-    }
-
-    .swiper .swiper-button-prev.swiper-button-disabled,
-    .swiper .swiper-button-next.swiper-button-disabled {
-      opacity: unset;
-    }
-  }
-
-  @media only screen and (min-width: 1920px) {
-    .swiper.swiperTestimonial,
-    .swiper.swiperTeam {
-      width: calc(100vw - (100vw - 1920px) / 2 - 100px);
-    }
-    .swiper.swiperIngredients {
-      width: calc(100% + (100vw - 1920px) / 2 + 100px);
-    }
+    @apply bg-black;
   }
 
   @media only screen and (min-width: 1440px) {

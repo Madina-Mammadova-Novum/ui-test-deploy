@@ -1,67 +1,58 @@
 import React from 'react';
 
+import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import { valuesPropTypes } from '@/utils/types';
+import { mediaPropTypes, valuesPropTypes } from '@/utils/types';
 
-import waves from '@/assets/images/waves.jpg';
 import { NextImage, Title } from '@/elements';
+import { getStrapiMedia } from '@/utils';
+import { makeId } from '@/utils/helpers';
 
-const WhatWeOfferBlock = ({ title }) => {
+const Offer = ({ item, index }) => {
   return (
-    <section>
+    <div key={index} className="flex items-center gap-10 even:flex-row-reverse">
+      {item.coverImage && (
+        <div className="w-[380px] h-[350px] shrink-0 rounded-[10px]">
+          <NextImage
+            src={getStrapiMedia(delve(item.coverImage, 'format.original.url'), '?format=webp')}
+            alt={delve(item.coverImage, 'alternativeText')}
+            className="h-full w-full object-cover object-center rounded-[10px]"
+            quality={75}
+            height={350}
+            width={380}
+          />
+        </div>
+      )}
+      <div>
+        {item.title && (
+          <Title component="h2" className="text-black mb-2.5">
+            {item.title}
+          </Title>
+        )}
+        {item.shortDescription && <p className="text-black text-xsm">{item.shortDescription}</p>}
+      </div>
+    </div>
+  );
+};
+
+Offer.propTypes = {
+  item: PropTypes.shape({
+    title: PropTypes.string,
+    coverImage: mediaPropTypes,
+    shortDescription: PropTypes.string,
+  }),
+  index: PropTypes.number.isRequired,
+};
+const WhatWeOfferBlock = ({ title, values }) => {
+  return (
+    <section id="what-we-offer">
       <div className="container mx-auto max-w-[960px]">
-        {title && <Title>{title}</Title>}
+        {title && <Title className="text-center text-black mb-5">{title}</Title>}
         <div className="space-y-4">
-          <div className="flex items-center gap-10 even:flex-row-reverse">
-            <div className="w-[380px] h-[350px] shrink-0 rounded-[10px]">
-              <NextImage
-                src={waves}
-                alt={waves}
-                height={350}
-                width={380}
-                className="h-full w-full object-cover object-center rounded-[10px]"
-              />
-            </div>
-            <div>
-              <Title component="h2" className="text-black mb-2.5">
-                Easy system to negotiate
-              </Title>
-              <p className="text-black text-xsm">
-                Liberty ship sections were prefabricated in locations across the United States and then assembled by
-                shipbuilders in an average of six weeks
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-10 even:flex-row-reverse">
-            <div className="w-[380px] h-[350px] shrink-0 rounded-[10px]">
-              <NextImage
-                src={waves}
-                alt={waves}
-                height={350}
-                width={380}
-                className="h-full w-full object-cover object-center rounded-[10px]"
-              />
-            </div>
-            <div>
-              <Title component="h2" className="text-black mb-2.5">
-                Easy system to negotiate
-              </Title>
-              <p className="text-black text-xsm">
-                Liberty ship sections were prefabricated in locations across the United States and then assembled by
-                shipbuilders in an average of six weeks
-              </p>
-            </div>
-          </div>
-          {/* {values.map((item) => { */}
-          {/* return ( */}
-          {/*   <> */}
-          {/*     {item.value.title} */}
-          {/*     {item.value.shortDescription} */}
-          {/*     {item.value.coverImage} */}
-          {/*   </> */}
-          {/* ); */}
-          {/* })} */}
+          {values.map((item, index) => {
+            return <Offer key={makeId()} item={item} index={index} />;
+          })}
         </div>
       </div>
     </section>
@@ -69,8 +60,8 @@ const WhatWeOfferBlock = ({ title }) => {
 };
 
 WhatWeOfferBlock.propTypes = {
-  title: PropTypes.string.isRequired,
-  values: valuesPropTypes.isRequired,
+  title: PropTypes.string,
+  values: valuesPropTypes,
 };
 
 export default WhatWeOfferBlock;
