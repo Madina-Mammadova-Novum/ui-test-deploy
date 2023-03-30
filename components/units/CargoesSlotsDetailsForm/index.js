@@ -54,11 +54,11 @@ const CargoesSlotsDetailsForm = () => {
   };
 
   const handleApplySlot = () => {
-    handleChangeState('cargoes', ...getFilledArray(cargoesCount));
+    handleChangeState('cargoes', getFilledArray(cargoesCount));
   };
 
   const handleAddSlot = () => {
-    handleChangeState('cargoes', [...cargoes, ...getFilledArray(1)]);
+    handleChangeState('cargoes', [...cargoes, getFilledArray(1)]);
   };
 
   const handleRemoveSlot = (index) => {
