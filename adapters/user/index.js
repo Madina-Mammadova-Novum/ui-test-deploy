@@ -181,6 +181,6 @@ export function positionAdapter({ data }) {
 }
 
 export function positionsAdapter({ data }) {
-  if (data === null) return null;
+  if (data === null || data === undefined) return null;
   return data.map((item) => positionAdapter({ data: item }));
 }
