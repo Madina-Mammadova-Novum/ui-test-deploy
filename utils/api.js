@@ -1,13 +1,11 @@
 import { serialize } from 'cookie';
 
+import { responseAdapter } from '@/adapters/response';
 import { getStrapiURL } from '@/utils/index';
 
 export const errorHandler = (res, status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
-import { responseAdapter } from '@/adapters/response';
 
-export const errorHandler = (res, status, errors) => {
-  const statusMessage = errors !== undefined || errors.length !== 0 ? 'Something went wrong' : errors.join('');
   return res.status(status).send({
     message: statusMessage,
     errors,

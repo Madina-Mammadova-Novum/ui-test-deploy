@@ -196,7 +196,7 @@ export const getButtonClassNames = (variant, size) => {
     if (size === 'small') return 'text-red';
   }
   return null;
-}
+};
 
 export const disablePlusMinusSymbols = (e) => {
   const clipboardPasteKey = e.ctrlKey && e.key === 'v';
