@@ -16,9 +16,9 @@ const AccountCompanyDetails = ({ company }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information">
-          {name ?? <TextRow title="Company name" subtitle={name} />}
-          {years ?? <TextRow title="Years in operation" subtitle={years} />}
-          {totalTankers ?? <TextRow title="Number of tankers" subtitle={totalTankers} />}
+          {name ?? <TextRow title="Company name">{name}</TextRow>}
+          {years ?? <TextRow title="Years in operation">{years}</TextRow>}
+          {totalTankers ?? <TextRow title="Number of tankers">{totalTankers}</TextRow>}
         </FieldsetContent>
 
         <Divider className="my-4" />

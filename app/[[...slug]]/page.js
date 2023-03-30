@@ -28,6 +28,12 @@ export default async function Home({ params }) {
         <li>
           <NextLink href={ROUTES.SIGNUP}>SIGNUP</NextLink>
         </li>
+        <li>
+          <NextLink href={ROUTES.SEARCH}>SEARCH</NextLink>
+        </li>
+        <li>
+          <NextLink href={ROUTES.ACCOUNT_PREFIXTURE}>PRE-FIXTURE</NextLink>
+        </li>
         {/* <li>
           <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink>
         </li> */}
