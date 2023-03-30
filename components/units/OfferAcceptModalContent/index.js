@@ -1,0 +1,78 @@
+import React, { useState } from 'react';
+
+import PropTypes from 'prop-types';
+
+import { Button, Title } from '@/elements';
+import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
+import { COTData, voyageDetailData } from '@/utils/mock';
+
+const tabs = [
+  {
+    label: 'Voyage details',
+    value: 'voyage_details',
+  },
+  {
+    label: 'Commercial offer terms',
+    value: 'commercial_offer_terms',
+  },
+];
+
+const OfferAcceptModalContent = ({ closeModal }) => {
+  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const [showScroll, setShowScroll] = useState(false);
+
+  const tabContent = () => {
+    switch (currentTab) {
+      case 'commercial_offer_terms':
+        return <COTTabContent data={COTData} />;
+      default:
+        return <VoyageDetailsTabContent data={voyageDetailData} />;
+    }
+  };
+
+  return (
+    <div className="w-[610px]">
+      <Title component="h2">Accept the Pre-fixture Offer</Title>
+
+      <Countdown time="1d 1h 50m" customStyles="mt-5" />
+
+      <Tabs
+        tabs={tabs}
+        activeTab={currentTab}
+        onClick={({ target }) => setCurrentTab(target.value)}
+        customStyles="mx-auto mt-5"
+      />
+
+      <div
+        ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
+        className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+      >
+        {tabContent()}
+        {/* {currentTab === 'message' && <MessageContent data={acceptOfferMessages} />}
+        {currentTab === 'voyage_details' && <VoyageDetailsContent data={incomingOfferVoyageDetailData} />}
+        {currentTab === 'commercial_offer_terms' && <IncomingCOTContent data={incomingOfferCommercialTermsData} />} */}
+      </div>
+
+      <div className="flex text-xsm gap-x-2.5 mt-4">
+        <Button
+          onClick={closeModal}
+          customStyles="ml-auto"
+          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
+        />
+        <Button buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }} />
+      </div>
+    </div>
+  );
+};
+
+OfferAcceptModalContent.defaultProps = {
+  setStep: () => {},
+  closeModal: () => {},
+};
+
+OfferAcceptModalContent.propTypes = {
+  setStep: PropTypes.func,
+  closeModal: PropTypes.func,
+};
+
+export default OfferAcceptModalContent;

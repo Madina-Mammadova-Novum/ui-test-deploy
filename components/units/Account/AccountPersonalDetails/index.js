@@ -4,7 +4,7 @@ import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrappe
 import { PersonalDetailsForm } from '@/modules';
 import { ModalWindow } from '@/units';
 
-const AccountPersonalDetails = ({ user }) => {
+const AccountPersonalDetails = ({ user = {} }) => {
   const { firstName, lastName, email, primaryPhone, secondaryPhone } = user;
   return (
     <FieldsetWrapper>

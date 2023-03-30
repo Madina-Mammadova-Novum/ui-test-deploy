@@ -338,6 +338,61 @@ export const incomingOfferVoyageDetailData = {
   ],
 };
 
+export const preFixtureHeaderData = [
+  [
+    {
+      label: 'cargo id',
+      content: {
+        text: 'TY7621',
+      },
+    },
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: usFlag,
+      },
+    },
+    {
+      label: 'cargo type',
+      content: {
+        text: 'Gas (Liquified)',
+      },
+    },
+    {
+      label: 'quantity',
+      content: {
+        text: '24,118 tons',
+      },
+    },
+    {
+      label: 'load port',
+      content: {
+        text: 'Botas Natural Gas T... ESBCN',
+        image: usFlag,
+      },
+    },
+    {
+      label: 'laycan start',
+      content: {
+        text: 'Dec 21, 2021',
+      },
+    },
+    {
+      label: 'laycan end',
+      content: {
+        text: 'Dec 30, 2021',
+      },
+    },
+    {
+      label: 'countdown',
+      content: {
+        text: '15min',
+      },
+    },
+  ],
+];
+
 export const incomingOfferCommentsData = [
   {
     title:
@@ -357,3 +412,103 @@ export const incomingOfferCommentsData = [
     latest: true,
   },
 ];
+
+export const voyageDetailData = {
+  dates: [
+    [
+      {
+        key: 'Laycan start',
+        label: 'Dec 18, 2021',
+      },
+      {
+        key: 'Laycan end',
+        label: 'Dec 30, 2021',
+      },
+    ],
+  ],
+  ports: [
+    [
+      {
+        key: 'Load port',
+        label: 'Barcelona, ESBCN',
+        countryFlag: usFlag,
+      },
+      {
+        key: 'Load terminal',
+        label: 'Oil terminal #1',
+      },
+    ],
+    [
+      {
+        key: 'Discharge port',
+        label: 'Benghazi, LYBEN',
+        countryFlag: usFlag,
+      },
+      {
+        key: 'Discharge terminal',
+        label: 'Oil terminal #4',
+      },
+    ],
+  ],
+};
+
+export const COTData = {
+  cargo: [
+    {
+      key: 'Cargo Type',
+      label: 'Crude Oil',
+    },
+  ],
+  products: [
+    [
+      {
+        key: 'Product #1',
+        label: 'Light Crude Oil',
+      },
+      {
+        key: 'Density',
+        label: '0.764 mt/m3',
+      },
+      {
+        key: 'Min quantity',
+        label: '24,118 tons',
+      },
+    ],
+    [
+      {
+        key: 'Product #2',
+        label: 'Medium Crude Oil',
+      },
+      {
+        key: 'Density',
+        label: '0.803 mt/m3',
+      },
+      {
+        key: 'Min quantity',
+        label: '19,001 tons',
+      },
+    ],
+  ],
+  details: [
+    {
+      key: 'Freight',
+      label: 'WS 110',
+    },
+    {
+      key: 'Demurrage rate',
+      label: '$17,000 per day',
+    },
+    {
+      key: 'Laytime + NOR',
+      label: '72 hrs + (6 + 6 hrs)',
+    },
+    {
+      key: 'Undisputed demurrage payment terms',
+      label: '3 days undisputed demmurage to be paid along with freight',
+    },
+    {
+      key: 'Payment terms',
+      label: 'Total freight amount to be paid before breaking bulk (BBB)',
+    },
+  ],
+};

@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 
 import { NextImage } from '@/elements';
 
-const IconComponent = ({ icon }) => (icon ? <NextImage src={icon} alt={`${icon} flag`} className="mr-1 h-4" /> : null);
+const IconComponent = ({ icon }) =>
+  icon ? <NextImage src={icon} alt={`${icon} flag`} className="inline mr-1 h-4" /> : null;
 
 IconComponent.defaultProps = {
   icon: '',
