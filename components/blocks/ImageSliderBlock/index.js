@@ -18,7 +18,7 @@ const ImageSliderBlock = ({ gallery }) => {
   return (
     <section>
       <div className="container mx-auto max-w-[960px]">
-         <Swiper
+        <Swiper
           slidesPerView="1"
           spaceBetween={20}
           pagination={{
@@ -26,8 +26,8 @@ const ImageSliderBlock = ({ gallery }) => {
           }}
           modules={[Pagination]}
           className="swiperAboutUs -mt-[165px]"
-         >
-           {gallery.map( coverImage  => {
+        >
+          {gallery.map((coverImage) => {
             return (
               <SwiperSlide className="">
                 <NextImage
@@ -40,8 +40,8 @@ const ImageSliderBlock = ({ gallery }) => {
                 />
               </SwiperSlide>
             );
-           })}
-         </Swiper>
+          })}
+        </Swiper>
       </div>
     </section>
   );
