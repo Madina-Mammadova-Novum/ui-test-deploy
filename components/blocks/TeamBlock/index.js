@@ -1,4 +1,3 @@
-import { makeId } from "@/utils/helpers";
 import React from 'react';
 
 import delve from 'dlv';
@@ -9,6 +8,7 @@ import { authorPropTypes } from '@/lib/types';
 
 import { HoverableIcon, NextImage, NextLink, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
+import { makeId } from '@/utils/helpers';
 
 const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   return (
@@ -21,7 +21,10 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
           <div className="grid grid-cols-3 gap-5">
             {members.map(({ fullName, content, position, coverImage, socialLinks }) => {
               return (
-                <div key={makeId()} className="flex items-center flex-col mt-[60px] text-black shadow px-[30px] pb-[30px] bg-white rounded-[10px]">
+                <div
+                  key={makeId()}
+                  className="flex items-center flex-col mt-[60px] text-black shadow px-[30px] pb-[30px] bg-white rounded-[10px]"
+                >
                   {coverImage && (
                     <NextImage
                       alt={delve(coverImage, 'alternativeText')}

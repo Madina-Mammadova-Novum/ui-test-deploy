@@ -1,4 +1,3 @@
-import { makeId } from "@/utils/helpers";
 import React from 'react';
 
 import delve from 'dlv';
@@ -9,6 +8,7 @@ import { linkPropTypes, mediaPropTypes } from '@/utils/types';
 
 import { NextLink } from '@/elements';
 import { getStrapiMedia } from '@/utils';
+import { makeId } from '@/utils/helpers';
 
 const CtaImages = ({ items }) => {
   if (!items) return null;
