@@ -3,6 +3,7 @@ import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
 import { updateHowItWorksBlock } from '@/blocks/HowItWorksBlock/adapter';
 import { updateImageSliderBlock } from '@/blocks/ImageSliderBlock/adapter';
+import { updateLetsTalkBlock } from '@/blocks/LetsTalkBlock/adapter';
 import { updateProductFeaturesBlock } from '@/blocks/ProductFeaturesBlock/adapter';
 import { updateTeamBlock } from '@/blocks/TeamBlock/adapter';
 import { updateWhatWeOfferBlock } from '@/blocks/WhatWeOfferBlock/adapter';
@@ -31,6 +32,8 @@ export const blocksDataAdapter = async (blocks) => {
           return updateProductFeaturesBlock(block);
         case 'blocks.team':
           return updateTeamBlock(block);
+        case 'blocks.lets-talk-block':
+          return updateLetsTalkBlock(block);
         default:
           return block;
       }
