@@ -1,5 +1,5 @@
 // import { linkAdapter } from "@/adapters/global";
-import { linkAdapter } from "@/adapters/global";
+import { linkAdapter } from '@/adapters/global';
 import { imageAdapter } from '@/adapters/image';
 
 export const updateProductFeaturesBlock = (block) => {

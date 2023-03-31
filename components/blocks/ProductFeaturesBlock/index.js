@@ -34,22 +34,23 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         {title && <Title className="text-black mb-5">{title}</Title>}
         <div className="flex gap-5">
           <div className="flex-1">
-            {ctaList && ctaList.map((ctaBlock, id) => {
-              return (
-                <>
-                  <Tabs
-                    tabs={[
-                      {
-                        id,
-                        label: ctaBlock.title,
-                        value: ctaBlock.title,
-                      }
-                    ]}
-                    onClick={handleActiveTab}
-                    activeTab={role}
-                  />
-                   {ctaBlock.cta.map(item => {
-                    return (
+            {ctaList &&
+              ctaList.map((ctaBlock, id) => {
+                return (
+                  <>
+                    <Tabs
+                      tabs={[
+                        {
+                          id,
+                          label: ctaBlock.title,
+                          value: ctaBlock.title,
+                        },
+                      ]}
+                      onClick={handleActiveTab}
+                      activeTab={role}
+                    />
+                    {ctaBlock.cta.map((item) => {
+                      return (
                         <div className="divide-y divide-gray-darker mt-1">
                           <div
                             className={classnames(
@@ -69,31 +70,30 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
                                   text: '',
                                   variant: 'tertiary',
                                   size: 'small',
-                                  icon: open ? <MinusIcon width={24} height={24} /> : <PlusIcon width={24} height={24} />,
+                                  icon: open ? (
+                                    <MinusIcon width={24} height={24} />
+                                  ) : (
+                                    <PlusIcon width={24} height={24} />
+                                  ),
                                 }}
                               />
                             </div>
                             {open && (
                               <div className="pl-[30px] pb-4 pr-[74px] content-wrapper">
-                                {item.text &&
-                                  <p>
-                                    {item.text}
-                                  </p>
-                                }
-                                {item.buttons && item.buttons.map(button => {
-                                  return (
-                                    <p>{button.label}</p>
-                                  )
-                                })}
+                                {item.text && <p>{item.text}</p>}
+                                {item.buttons &&
+                                  item.buttons.map((button) => {
+                                    return <p>{button.label}</p>;
+                                  })}
                               </div>
                             )}
                           </div>
                         </div>
-                    )
-                   })}
-                </>
-              )
-            })}
+                      );
+                    })}
+                  </>
+                );
+              })}
             {role === 'owner' ? (
               <div className="divide-y divide-gray-darker mt-1">
                 <div className="text-black pb-2.5 pt-[20px]">

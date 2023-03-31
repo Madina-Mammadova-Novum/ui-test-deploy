@@ -11,7 +11,7 @@ import { makeId } from '@/utils/helpers';
 
 const Step = ({ item, index }) => {
   return (
-    <div key={index} className="step relative flex justify-start md:justify-between gap-x-[27px] sm:gap-x-[56px]">
+    <div key={makeId()} className="step relative flex justify-start md:justify-between gap-x-[27px] sm:gap-x-[56px]">
       <div className="relative col-span-2 min-w-[32px] sm:col-span-1 md:min-w-[40px] lg:col-span-2 dotted-step-how-it-works">
         <div className="absolute top-1/2 left-0 -translate-y-1/2 flex items-center justify-center h-8 w-8 border border-black rounded-full md:h-10 md:w-10">
           {index + 1}

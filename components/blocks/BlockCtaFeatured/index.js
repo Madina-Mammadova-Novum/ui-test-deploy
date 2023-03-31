@@ -1,3 +1,4 @@
+import { makeId } from "@/utils/helpers";
 import React from 'react';
 
 import delve from 'dlv';
@@ -35,7 +36,7 @@ const BlockCtaFeatured = ({ title, shortDescription, button, images }) => {
           <div className="col-span-1 grid grid-cols-1 gap-y-3 sm:grid-cols-2 sm:gap-x-3 md:col-span-2 md:gap-x-6">
             {images.map((image) => {
               return (
-                <div className="col-span-1 max-h-[343px] rounded overflow-hidden sm:rounded-[10px] sm:max-h-[384px] md:max-h-[640px]">
+                <div key={makeId()} className="col-span-1 max-h-[343px] rounded overflow-hidden sm:rounded-[10px] sm:max-h-[384px] md:max-h-[640px]">
                   <Image
                     width={558}
                     height={640}

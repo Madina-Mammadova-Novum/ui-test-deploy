@@ -1,8 +1,9 @@
-import { getAuthor } from '@/services/author';
+import { authorAdapter } from "@/adapters/author";
 
 export const updateTeamBlock = async (block) => {
   const { member } = block;
-  console.log({ block });
-  block.members = await Promise.all(member.map((value) => getAuthor(value.id))).then((valueItems) => valueItems);
+  block.members = member.map(({ author }) => {
+    return authorAdapter(author)
+  });
   return block;
 };

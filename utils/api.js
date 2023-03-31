@@ -84,8 +84,7 @@ export const apiHandler = async (options, req, res) => {
       });
       res.setHeader('Set-Cookie', cookie);
     }
-
-    return responseAdapter(res.status(200).json(result));
+    return res.status(200).json(responseAdapter(result));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };

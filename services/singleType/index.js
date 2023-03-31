@@ -4,7 +4,7 @@ import { getData } from '@/utils/dataFetching';
 export function getSingleTypeEndpoint(apiID, locale) {
   return `/${apiID}
     ?locale=${locale}
-    &populate=*
+    &populate=*,values.value
     `.replace(/\s+|\n/g, '');
 }
 
