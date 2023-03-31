@@ -40,7 +40,7 @@ export function getEndpoint(slug, locale, apiID, preview = false) {
   return `/${pluralize(apiID)}?${previewParams}
     &locale=${locale}
     &filters[slug][$eq]=${slug}
-    &populate[blocks][populate]=*
+    &populate[blocks][populate]=*,gallery,member
     &populate[seo]=metaSocial`.replace(/\s+|\n/g, '');
 }
 

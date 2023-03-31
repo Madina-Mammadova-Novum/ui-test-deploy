@@ -1,12 +1,7 @@
-import { imageAdapter } from '@/adapters/image';
+import { imagesAdapter } from '@/adapters/image';
 
 export const updateImageSliderBlock = (block) => {
-  const { items } = block;
-  block.items = items.map((item) => {
-    return {
-      ...item,
-      coverImage: imageAdapter(item.coverImage),
-    };
-  });
+  const { gallery } = block;
+  block.gallery = imagesAdapter(gallery);
   return block;
 };
