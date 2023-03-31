@@ -2,20 +2,20 @@
 
 import React, { useState } from 'react';
 
-import classnames from 'classnames';
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
+
 import { mediaPropTypes } from '@/utils/types';
 
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import { Button, NextImage, Title } from '@/elements';
-import { Tabs } from '@/units';
+import { Accordion, Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
 
-const ProductFeaturesBlock = ({ title, coverImage }) => {
+const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   const [role, setRole] = useState('owner');
 
   const handleActiveTab = (event) => {
@@ -32,91 +32,49 @@ const ProductFeaturesBlock = ({ title, coverImage }) => {
     <section>
       <div className="container mx-auto px-[54px] max-w-[1258px]">
         {title && <Title className="text-black mb-5">{title}</Title>}
-        {/* {ctaList.map(({ id, subTitle }) => { */}
-        {/*  return ( */}
-        {/*    <p>{id}, {subTitle}</p> */}
-        {/*  ) */}
-        {/* })} */}
         <div className="flex gap-5">
           <div className="flex-1">
-            <Tabs
-              tabs={[
-                {
-                  id: 1,
-                  label: 'For Vessel Owner',
-                  value: 'owner',
-                },
-                {
-                  id: 2,
-                  label: 'For Charterer',
-                  value: 'charterer',
-                },
-              ]}
-              onClick={handleActiveTab}
-              activeTab={role}
-            />
-            {role === 'owner' ? (
-              <div className="divide-y divide-gray-darker mt-1">
-                <div className="text-black pb-2.5 pt-[20px]">
-                  <div className="pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                  </div>
-                </div>
-
-                <div
-                  className={classnames(
-                    open ? 'relative border-none rounded-[10px] pt-[30px] bg-white shadow-xmd' : 'pt-[20px]',
-                    'text-black pb-2.5 peer:bg-blue-500'
-                  )}
-                >
-                  <div className="flex justify-between pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                    <Button
-                      type="button"
-                      customStyles="!py-0 !px-0"
-                      onClick={handleOpen}
-                      buttonProps={{
-                        text: '',
-                        variant: 'tertiary',
-                        size: 'small',
-                        icon: open ? <MinusIcon width={24} height={24} /> : <PlusIcon width={24} height={24} />,
-                      }}
-                    />
-                  </div>
-                  {open && (
-                    <div className="pl-[30px] pb-4 pr-[74px] content-wrapper">
-                      <p>
-                        We are at the forefront of developing innovative supply chain solutions, fusing our global
-                        network and depth of expertise with pioneering digital innovations to enable our customers to
-                        stay ahead.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <div className="text-black pb-2.5 pt-[20px]">
-                  <div className="pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                  </div>
-                </div>
-
-                <div className="text-black pb-2.5 pt-[20px]">
-                  <div className="pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div>Charterer</div>
+            {ctaList && (
+              <Tabs
+                tabs={ctaList.map((ctaBlock) => {
+                  return {
+                    label: ctaBlock.title,
+                    value: ctaBlock.title,
+                  };
+                })}
+                onClick={handleActiveTab}
+                activeTab={role}
+              />
             )}
+            {ctaList &&
+              ctaList.map((ctaBlock) => {
+                return (
+                  <>
+                    {ctaBlock.cta.map((item) => {
+                      return (
+                        <Accordion
+                          activeItem={1}
+                          onClick={() => {}}
+                          items={[
+                            {
+                              headerContent: item.title,
+                              bodyContent: (
+                                <div>
+                                  <p>{item.text}</p>
+                                  {item.buttons &&
+                                    item.buttons.map((button) => {
+                                      return <p>{button.label}</p>;
+                                    })}
+                                </div>
+                              ),
+                            },
+                          ]}
+                        />
+                      );
+                    })}
+                  </>
+                );
+              })}
           </div>
 
           {coverImage && (
@@ -132,7 +90,7 @@ const ProductFeaturesBlock = ({ title, coverImage }) => {
             </div>
           )}
         </div>
-
+        {/* HTML for FAQ */}
         <div className="rounded-[10px] pt-1.5 px-5 pb-5 bg-white shadow-xmd divide-y divide-gray-darker mt-1">
           <div className="text-black py-4">
             <div className="flex justify-between">
@@ -215,10 +173,21 @@ const ProductFeaturesBlock = ({ title, coverImage }) => {
 ProductFeaturesBlock.propTypes = {
   title: PropTypes.string,
   coverImage: mediaPropTypes,
-  // ctaList: PropTypes.arrayOf({
-  //   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  //   subTitle: PropTypes.string
-  // }),
+  ctaList: PropTypes.arrayOf({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string,
+    cta: PropTypes.arrayOf({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      title: PropTypes.string,
+      text: PropTypes.string,
+      buttons: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          path: PropTypes.string,
+        })
+      ),
+    }),
+  }),
 };
 
 export default ProductFeaturesBlock;

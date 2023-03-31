@@ -14,7 +14,7 @@ import { mediaPropTypes } from '@/utils/types';
 import { NextImage } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
-const ImageSliderBlock = ({ items }) => {
+const ImageSliderBlock = ({ gallery }) => {
   return (
     <section>
       <div className="container mx-auto max-w-[960px]">
@@ -27,15 +27,15 @@ const ImageSliderBlock = ({ items }) => {
           modules={[Pagination]}
           className="swiperAboutUs -mt-[165px]"
         >
-          {items.map(({ id, coverImage }) => {
+          {gallery.map((coverImage) => {
             return (
-              <SwiperSlide key={id} className="">
+              <SwiperSlide className="">
                 <NextImage
                   width={800}
                   height={450}
                   alt={delve(coverImage, 'alternativeText')}
                   src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
-                  className="h-full w-full object-cover object-center rounded-[10px]"
+                  className="h-[450px] w-full object-cover object-center rounded-[10px]"
                   quality={100}
                 />
               </SwiperSlide>
@@ -48,10 +48,10 @@ const ImageSliderBlock = ({ items }) => {
 };
 
 ImageSliderBlock.propTypes = {
-  items: PropTypes.arrayOf({
+  gallery: PropTypes.arrayOf({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     coverImage: PropTypes.shape(mediaPropTypes),
-  }).isRequired,
+  }),
 };
 
 export default ImageSliderBlock;

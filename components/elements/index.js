@@ -1,6 +1,7 @@
 import Accordion from '@/elements/Accordion';
 import AccordionSm from '@/elements/Accordion/AccordionSm';
 import AccordionXl from '@/elements/Accordion/AccordionXl';
+import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
 // import Badge from '@/elements/Badge';
 import AsyncDropdown from '@/elements/AsyncDropdown';
@@ -44,6 +45,7 @@ import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
 
 export {
+  AccordionBody,
   Table,
   Title,
   TextRow,
