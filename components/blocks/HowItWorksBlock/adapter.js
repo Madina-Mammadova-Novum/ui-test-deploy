@@ -1,4 +1,4 @@
-import { valueAdapter } from "@/adapters/value";
+import { valueAdapter } from '@/adapters/value';
 import { getSingleType } from '@/services/singleType';
 
 export const updateHowItWorksBlock = async (block) => {
@@ -8,12 +8,12 @@ export const updateHowItWorksBlock = async (block) => {
 
   block.values = values.map(({ value }) => {
     return valueAdapter(value);
-  })
+  });
 
   return {
     ...block,
     title,
     shortDescription,
-    subTitle
+    subTitle,
   };
 };

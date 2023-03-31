@@ -1,4 +1,3 @@
-import { makeId } from "@/utils/helpers";
 import React, { useEffect, useState } from 'react';
 
 import delve from 'dlv';
@@ -9,6 +8,7 @@ import PropTypes from 'prop-types';
 import { linkImagePropTypes, mediaPropTypes } from '@/utils/types';
 
 import { getStrapiMedia } from '@/utils';
+import { makeId } from '@/utils/helpers';
 
 const FooterNavigation = ({ footerNavigation }) => {
   const [layoutImage, setLayoutImage] = useState('');

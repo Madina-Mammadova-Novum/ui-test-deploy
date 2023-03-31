@@ -8,11 +8,12 @@ import PropTypes from 'prop-types';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
+
 import { mediaPropTypes } from '@/utils/types';
 
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import { Button, NextImage, Title } from '@/elements';
-import { Tabs } from '@/units';
+import { Accordion, Tabs } from "@/units";
 import { getStrapiMedia } from '@/utils';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
@@ -35,127 +36,41 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         <div className="flex gap-5">
           <div className="flex-1">
             {ctaList &&
-              ctaList.map((ctaBlock, id) => {
+            <Tabs
+              tabs={
+              ctaList.map((ctaBlock) => {
+                return (
+                  {
+                    label: ctaBlock.title,
+                    value: ctaBlock.title,
+                  }
+                )
+              })
+            }
+              onClick={handleActiveTab} activeTab={role}/>
+            }
+            {ctaList &&
+              ctaList.map((ctaBlock) => {
                 return (
                   <>
-                    <Tabs
-                      tabs={[
-                        {
-                          id,
-                          label: ctaBlock.title,
-                          value: ctaBlock.title,
-                        },
-                      ]}
-                      onClick={handleActiveTab}
-                      activeTab={role}
-                    />
                     {ctaBlock.cta.map((item) => {
                       return (
-                        <div className="divide-y divide-gray-darker mt-1">
-                          <div
-                            className={classnames(
-                              open ? 'relative border-none rounded-[10px] pt-[30px] bg-white shadow-xmd' : 'pt-[20px]',
-                              'text-black pb-2.5 peer:bg-blue-500'
-                            )}
-                          >
-                            <div className="flex justify-between pb-2.5 px-[30px]">
-                              <Title component="h2" className="text-black">
-                                {item.title}
-                              </Title>
-                              <Button
-                                type="button"
-                                customStyles="!py-0 !px-0"
-                                onClick={handleOpen}
-                                buttonProps={{
-                                  text: '',
-                                  variant: 'tertiary',
-                                  size: 'small',
-                                  icon: open ? (
-                                    <MinusIcon width={24} height={24} />
-                                  ) : (
-                                    <PlusIcon width={24} height={24} />
-                                  ),
-                                }}
-                              />
+                        <Accordion activeItem={1} onClick={()=>{}} items={[{
+                            headerContent: item.title,
+                            bodyContent: <div>
+                              <p>{item.text}</p>
+                              {item.buttons &&
+                              item.buttons.map((button) => {
+                                return <p>{button.label}</p>;
+                              })}
                             </div>
-                            {open && (
-                              <div className="pl-[30px] pb-4 pr-[74px] content-wrapper">
-                                {item.text && <p>{item.text}</p>}
-                                {item.buttons &&
-                                  item.buttons.map((button) => {
-                                    return <p>{button.label}</p>;
-                                  })}
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                          }]
+                        }/>
                       );
                     })}
                   </>
                 );
               })}
-            {role === 'owner' ? (
-              <div className="divide-y divide-gray-darker mt-1">
-                <div className="text-black pb-2.5 pt-[20px]">
-                  <div className="pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                  </div>
-                </div>
-
-                <div
-                  className={classnames(
-                    open ? 'relative border-none rounded-[10px] pt-[30px] bg-white shadow-xmd' : 'pt-[20px]',
-                    'text-black pb-2.5 peer:bg-blue-500'
-                  )}
-                >
-                  <div className="flex justify-between pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                    <Button
-                      type="button"
-                      customStyles="!py-0 !px-0"
-                      onClick={handleOpen}
-                      buttonProps={{
-                        text: '',
-                        variant: 'tertiary',
-                        size: 'small',
-                        icon: open ? <MinusIcon width={24} height={24} /> : <PlusIcon width={24} height={24} />,
-                      }}
-                    />
-                  </div>
-                  {open && (
-                    <div className="pl-[30px] pb-4 pr-[74px] content-wrapper">
-                      <p>
-                        We are at the forefront of developing innovative supply chain solutions, fusing our global
-                        network and depth of expertise with pioneering digital innovations to enable our customers to
-                        stay ahead.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <div className="text-black pb-2.5 pt-[20px]">
-                  <div className="pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                  </div>
-                </div>
-
-                <div className="text-black pb-2.5 pt-[20px]">
-                  <div className="pb-2.5 px-[30px]">
-                    <Title component="h2" className="text-black">
-                      Supply Chain and Logistics
-                    </Title>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div>Charterer</div>
-            )}
           </div>
 
           {coverImage && (
@@ -171,7 +86,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
             </div>
           )}
         </div>
-
+        {/* HTML for FAQ */}
         <div className="rounded-[10px] pt-1.5 px-5 pb-5 bg-white shadow-xmd divide-y divide-gray-darker mt-1">
           <div className="text-black py-4">
             <div className="flex justify-between">
