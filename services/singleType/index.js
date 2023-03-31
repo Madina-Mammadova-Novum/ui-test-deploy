@@ -4,7 +4,9 @@ import { getData } from '@/utils/dataFetching';
 export function getSingleTypeEndpoint(apiID, locale) {
   return `/${apiID}
     ?locale=${locale}
-    &populate=*,values.value
+    &populate=*,
+    values.value,
+    ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions
     `.replace(/\s+|\n/g, '');
 }
 
