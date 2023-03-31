@@ -69,17 +69,21 @@
     @apply text-lg font-bold;
   }
 
+  .content-wrapper h4 {
+    @apply text-xsm text-black font-bold mb-1.5;
+  }
+
   .content-wrapper p {
-    @apply text-black;
+    @apply text-xsm text-black;
   }
 
   .content-wrapper ul li,
   .content-wrapper ol li {
-    @apply text-black mb-3 text-sm sm:text-base md:text-lg;
+    @apply text-black text-xsm;
   }
 
   .content-wrapper ul li::marker {
-    color: #57617a;
+    color: #072D46;
   }
 
   .content-wrapper.list-white ul li::marker {
@@ -124,18 +128,6 @@
 
   .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
     @apply bg-black;
-  }
-
-  @media only screen and (min-width: 1440px) {
-    .content-wrapper h4 {
-      @apply text-lg font-bold mb-3;
-    }
-  }
-
-  @media only screen and (min-width: 1920px) {
-    .content-wrapper h4 {
-      @apply text-xl font-bold mb-5;
-    }
   }
 
   /* Datepickers */

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { PlusIcon, TrashIcon } from '@/assets/icons';
+import { PlusCircleIcon, TrashIcon } from '@/assets/icons';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
@@ -156,7 +156,7 @@ const CargoesSlotsDetailsForm = () => {
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
             disabled={cargoes?.length >= 10}
             onClick={handleAddSlot}
-            buttonProps={{ text: 'Add more ports', variant: 'tertiary', size: 'small', icon: <PlusIcon /> }}
+            buttonProps={{ text: 'Add more ports', variant: 'tertiary', size: 'small', icon: <PlusCircleIcon /> }}
           />
         </div>
       )}
