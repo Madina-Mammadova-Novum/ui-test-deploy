@@ -1,10 +1,10 @@
-import {  useState } from "react";
+import { useState } from 'react';
 
-import classnames from "classnames";
-import PropTypes from "prop-types";
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-import { AccordionBody } from "@/elements";
-import { AccordionHeader } from "@/units";
+import { AccordionBody } from '@/elements';
+import { AccordionHeader } from '@/units';
 
 const Accordion = ({ items }) => {
   const [open, setOpen] = useState(0);
@@ -21,23 +21,21 @@ const Accordion = ({ items }) => {
             'text-black pb-2.5 peer:bg-blue-500'
           )}
         >
-          <AccordionHeader onClick={() => handleOpen(1)}>
-            {headerContent}
-          </AccordionHeader>
-          <AccordionBody>
-            {bodyContent}
-          </AccordionBody>
+          <AccordionHeader onClick={() => handleOpen(1)}>{headerContent}</AccordionHeader>
+          <AccordionBody>{bodyContent}</AccordionBody>
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 Accordion.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    headerContent: PropTypes.string,
-    bodyContent: PropTypes.node,
-  })).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      headerContent: PropTypes.string,
+      bodyContent: PropTypes.node,
+    })
+  ).isRequired,
   activeItem: PropTypes.string.isRequired,
 };
 

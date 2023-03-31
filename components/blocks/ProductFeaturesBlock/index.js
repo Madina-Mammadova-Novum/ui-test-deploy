@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 
-import classnames from 'classnames';
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
@@ -13,7 +12,7 @@ import { mediaPropTypes } from '@/utils/types';
 
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import { Button, NextImage, Title } from '@/elements';
-import { Accordion, Tabs } from "@/units";
+import { Accordion, Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
@@ -35,37 +34,42 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         {title && <Title className="text-black mb-5">{title}</Title>}
         <div className="flex gap-5">
           <div className="flex-1">
-            {ctaList &&
-            <Tabs
-              tabs={
-              ctaList.map((ctaBlock) => {
-                return (
-                  {
+            {ctaList && (
+              <Tabs
+                tabs={ctaList.map((ctaBlock) => {
+                  return {
                     label: ctaBlock.title,
                     value: ctaBlock.title,
-                  }
-                )
-              })
-            }
-              onClick={handleActiveTab} activeTab={role}/>
-            }
+                  };
+                })}
+                onClick={handleActiveTab}
+                activeTab={role}
+              />
+            )}
             {ctaList &&
               ctaList.map((ctaBlock) => {
                 return (
                   <>
                     {ctaBlock.cta.map((item) => {
                       return (
-                        <Accordion activeItem={1} onClick={()=>{}} items={[{
-                            headerContent: item.title,
-                            bodyContent: <div>
-                              <p>{item.text}</p>
-                              {item.buttons &&
-                              item.buttons.map((button) => {
-                                return <p>{button.label}</p>;
-                              })}
-                            </div>
-                          }]
-                        }/>
+                        <Accordion
+                          activeItem={1}
+                          onClick={() => {}}
+                          items={[
+                            {
+                              headerContent: item.title,
+                              bodyContent: (
+                                <div>
+                                  <p>{item.text}</p>
+                                  {item.buttons &&
+                                    item.buttons.map((button) => {
+                                      return <p>{button.label}</p>;
+                                    })}
+                                </div>
+                              ),
+                            },
+                          ]}
+                        />
                       );
                     })}
                   </>

@@ -1,5 +1,5 @@
-import Accordion from '@/units/Accordion'
-import AccordionHeader from '@/units/AccordionHeader'
+import Accordion from '@/units/Accordion';
+import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
@@ -33,5 +33,5 @@ export {
   ModalWindow,
   VerifficationUserAccount,
   AccordionHeader,
-  Accordion
+  Accordion,
 };
