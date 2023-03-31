@@ -6,6 +6,7 @@ import {
   BlockHeroImage,
   CTABlock,
   CTASingleImageBlock,
+  FAQBlock,
   HowItWorksBlock,
   ImageSliderBlock,
   ProductFeaturesBlock,
@@ -26,6 +27,8 @@ const BLOCK_COMPONENTS = {
   'blocks.single-how-it-works': HowItWorksBlock,
   'blocks.product-features': ProductFeaturesBlock,
   'blocks.lets-talk-block': CTASingleImageBlock,
+  'blocks.faq-block': FAQBlock,
+  'blocks.faq-by-category-block': FAQBlock,
 };
 
 const BlockManager = ({ blocks }) => {

@@ -1,12 +1,13 @@
-import BlockHeroImage from './BlockHeroImage';
-import CTABlock from './CTABlock';
-import CTASingleImageBlock from './CTASingleImageBlock';
-import HowItWorksBlock from './HowItWorksBlock';
-import ImageSliderBlock from './ImageSliderBlock';
-import ProductFeaturesBlock from './ProductFeaturesBlock';
-import SimpleContentBlock from './SimpleContentBlock';
-import TeamBlock from './TeamBlock';
-import WhatWeOfferBlock from './WhatWeOfferBlock';
+import BlockHeroImage from '@/blocks/BlockHeroImage';
+import CTABlock from '@/blocks/CTABlock';
+import CTASingleImageBlock from '@/blocks/CTASingleImageBlock';
+import FAQBlock from '@/blocks/FAQBlock';
+import HowItWorksBlock from '@/blocks/HowItWorksBlock';
+import ImageSliderBlock from '@/blocks/ImageSliderBlock';
+import ProductFeaturesBlock from '@/blocks/ProductFeaturesBlock';
+import SimpleContentBlock from '@/blocks/SimpleContentBlock';
+import TeamBlock from '@/blocks/TeamBlock';
+import WhatWeOfferBlock from '@/blocks/WhatWeOfferBlock';
 
 export {
   CTABlock,
@@ -18,4 +19,5 @@ export {
   TeamBlock,
   HowItWorksBlock,
   ProductFeaturesBlock,
+  FAQBlock,
 };
