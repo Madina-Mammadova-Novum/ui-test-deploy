@@ -1,3 +1,4 @@
+import { makeId } from "@/utils/helpers";
 import React, { useEffect, useState } from 'react';
 
 import delve from 'dlv';
@@ -41,10 +42,10 @@ const FooterNavigation = ({ footerNavigation }) => {
       {links && (
         <div className="absolute top-0 bg-black opacity-50 h-full w-full ">
           <div className="h-full flex flex-col items-center justify-between px-4 py-20 sm:px-[38px] lg:flex-row lg:px-20 2lg:px-[100px] 2lg:container mx-auto">
-            {links.map(({ id, label, path, image }) => {
+            {links.map(({ label, path, image }) => {
               return (
                 <Link
-                  key={id}
+                  key={makeId()}
                   className="cursor-link text-2xl sm:text-4xl 2lg:text-5xl font-bold text-white"
                   href={path}
                   onMouseOver={() => onLinkOver(image)}

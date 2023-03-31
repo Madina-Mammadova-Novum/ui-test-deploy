@@ -1,3 +1,4 @@
+import { makeId } from "@/utils/helpers";
 import React from 'react';
 
 import delve from 'dlv';
@@ -15,10 +16,10 @@ const CtaImages = ({ items }) => {
   return (
     <section className="mb-28 sm:mb-44 2lg:mb-64">
       <div className="flex flex-col items-center gap-y-3 lg:flex-row lg:gap-x-5">
-        {items.map(({ id, title, coverImage, button }) => {
+        {items.map(({ title, coverImage, button }) => {
           return (
             <div
-              key={id}
+              key={makeId()}
               className="relative rounded-[10px] sm:rounded-[20px] sm:w-[692px] sm:h-[690px] lg:w-full lg:h-full lg:max-w-[848px] lg:max-h-[832px] overflow-hidden"
             >
               <div>

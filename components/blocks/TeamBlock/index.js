@@ -1,3 +1,4 @@
+import { makeId } from "@/utils/helpers";
 import React from 'react';
 
 import delve from 'dlv';
@@ -20,7 +21,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
           <div className="grid grid-cols-3 gap-5">
             {members.map(({ fullName, content, position, coverImage, socialLinks }) => {
               return (
-                <div className="flex items-center flex-col mt-[60px] text-black shadow px-[30px] pb-[30px] bg-white rounded-[10px]">
+                <div key={makeId()} className="flex items-center flex-col mt-[60px] text-black shadow px-[30px] pb-[30px] bg-white rounded-[10px]">
                   {coverImage && (
                     <NextImage
                       alt={delve(coverImage, 'alternativeText')}
@@ -44,7 +45,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
                     <div className="flex gap-x-2.5 mb-2.5">
                       {socialLinks.map((link) => {
                         return (
-                          <NextLink href={delve(link, 'path')} title={delve(link, 'title')}>
+                          <NextLink key={makeId()} href={delve(link, 'path')} title={delve(link, 'title')}>
                             <HoverableIcon
                               className="border border-gray-darker rounded-md"
                               icon={
