@@ -6,11 +6,11 @@ import { IconComponent, TextRow, Title } from '@/elements';
 const ExpandedContent = () => {
   return (
     <div className="mt-3 mb-5">
-      <Title component="h3">Tanker Information</Title>
+      <Title level="3">Tanker Information</Title>
 
       <div className="md:flex text-xsm mt-2.5 gap-x-20">
         <div>
-          <Title component="h5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
+          <Title level="5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
             About the Vessel Owner
           </Title>
           <TextRow title="Years in Operation">3-5 years</TextRow>
@@ -19,7 +19,7 @@ const ExpandedContent = () => {
         </div>
 
         <div className="mt-2.5 md:mt-0">
-          <Title component="h5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
+          <Title level="5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
             About the Tanker
           </Title>
           <div className="flex gap-x-10">

@@ -28,7 +28,7 @@ const Notes = ({ title, subtitle, data }) => {
 
   return (
     <article className="flex flex-col py-3 px-5 gap-1.5 rounded-lg bg-gray-light border border-solid border-gray-darker">
-      <Title component="h6" className="text-xsm font-semibold">
+      <Title level="6" className="text-xsm font-semibold">
         {title}
       </Title>
       <p className="text-xs-sm text-black">{subtitle}</p>

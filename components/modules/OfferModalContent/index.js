@@ -43,7 +43,7 @@ const OfferModalContent = ({ closeModal }) => {
 
   return (
     <div className="w-[610px]">
-      <Title component="h2">Send Offer</Title>
+      <Title level="2">Send Offer</Title>
 
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">

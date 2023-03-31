@@ -38,7 +38,7 @@ const PasswordInfoForm = () => {
         submitAction={onSubmit}
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
-        <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
+        <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Change Your Password
         </Title>
         <PasswordInput

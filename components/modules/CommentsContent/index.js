@@ -8,10 +8,10 @@ import { Comment } from '@/units';
 const CommentsContent = ({ data, areaDisabled }) => {
   return (
     <div>
-      <Title component="h3">Comments</Title>
+      <Title level="3">Comments</Title>
       {data.length && (
         <>
-          <Title component="h5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
+          <Title level="5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
             historical negotiating comments
           </Title>
 

@@ -19,7 +19,7 @@ const TankerSearchResults = ({ request, setSort, sort, searchResult }) => {
   return searchResult?.exactResults?.length || searchResult?.partialResults?.length ? (
     <>
       <div className="mt-8 flex">
-        <Title component="h2" className="mr-auto">
+        <Title level="2" className="mr-auto">
           Search results
         </Title>
         <SimpleSelect

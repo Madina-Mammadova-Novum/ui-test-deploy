@@ -16,7 +16,7 @@ const CommercialOfferTerms = () => {
 
   return (
     <div className="pb-5">
-      <Title component="h3">Commercial offer terms</Title>
+      <Title level="3">Commercial offer terms</Title>
       <Dropdown
         label="cargo type"
         defaultValue="Crude Oil"
