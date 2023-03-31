@@ -11,15 +11,15 @@ import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
-const state = {
-  currentPassword: '12345678',
-  password: '',
-  confirmPassword: '',
-};
-
-const schema = yup.object({ ...updatePasswordSchema() });
-
 const PasswordInfoForm = () => {
+  const schema = yup.object({ ...updatePasswordSchema() });
+
+  const state = {
+    currentPassword: '12345678',
+    password: '',
+    confirmPassword: '',
+  };
+
   const methods = useHookFormParams({ state, schema });
 
   const {
