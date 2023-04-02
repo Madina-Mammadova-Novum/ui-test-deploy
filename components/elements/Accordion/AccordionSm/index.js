@@ -1,55 +1,62 @@
-import { useCallback, useMemo } from 'react';
+'use client';
+
+import { useMemo, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import AccordionHeader from '../AccordionHeader';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/icons';
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
 import { Button } from '@/elements';
+import AccordionNestedLink from '@/elements/Accordion/AccordionNestedLink';
 
-const AccordionSM = ({ data, active, onChange }) => {
-  const handleMore = useCallback(() => {
-    onChange('opened', true);
-    onChange('resized', true);
-  }, [onChange]);
+const AccordionSM = ({ data, active }) => {
+  const [showLinks, setShowLinks] = useState(false);
 
-  const isActive = Boolean(active === data.id);
+  const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
     switch (data?.variant) {
+      case 'search':
+        return <SearchIcon isActive={active} width="20px" height="20px" />;
       case 'positions':
-        return <PositionIcon isActive={isActive} width="20px" height="20px" />;
+        return <PositionIcon isActive={active} width="20px" height="20px" />;
       case 'offers':
-        return <OfferIcon isActive={isActive} width="20px" height="20px" />;
+        return <OfferIcon isActive={active} width="20px" height="20px" />;
       case 'fleets':
-        return <AnchorIcon isActive={isActive} width="20px" height="20px" />;
+        return <AnchorIcon isActive={active} width="20px" height="20px" />;
       case 'faq':
-        return <FaqIcon isActive={isActive} width="20px" height="20px" />;
+        return <FaqIcon isActive={active} width="20px" height="20px" />;
       default:
         return null;
     }
-  }, [data?.variant, isActive]);
+  }, [data?.variant, active]);
 
   return (
     <AccordionHeader
-      onClick={handleMore}
-      isSubMenu={Boolean(data?.items?.length)}
-      href={data?.path ?? '/'}
-      className="flex items-center transition-all"
+      href={data?.path}
+      onClick={() => setShowLinks(!showLinks)}
+      isSubMenu={hasNestedLinks}
+      className="flex items-center transition-all relative"
     >
-      {data?.title ? (
+      {data?.title && (
         <div className="flex flex-col justify-center items-center">
           <Button
-            onClick={() => onChange('active', data?.id)}
             buttonProps={{ icon: printIcon, variant: 'tertiary', size: 'small' }}
             customStyles={`flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2 
-            ${isActive ? 'bg-blue' : 'hover:bg-blue-dark'}`}
+            ${active ? 'bg-blue' : 'hover:bg-blue-dark'} 
+            ${showLinks && 'bg-blue-dark'}`}
           />
 
-          <span className="text-xxs font-bold text-center">{data?.title}</span>
+          <span className="text-xxs font-bold text-center">{data.title}</span>
         </div>
-      ) : (
-        <p>Title not found</p>
+      )}
+      {showLinks && (
+        <div className="absolute w-auto h-auto pr-2 py-2 left-[50px] top-5 bg-black">
+          {data?.items?.map((link) => (
+            <AccordionNestedLink key={link.id} data={link} collapsed />
+          ))}
+        </div>
       )}
     </AccordionHeader>
   );
@@ -59,7 +66,7 @@ AccordionSM.propTypes = {
   active: PropTypes.bool,
   onChange: PropTypes.func,
   data: PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+    id: PropTypes.string,
     title: PropTypes.string,
     path: PropTypes.string,
     variant: PropTypes.string,

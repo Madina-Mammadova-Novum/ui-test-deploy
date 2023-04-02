@@ -13,11 +13,9 @@ export async function generateMetadata() {
 
 const VesselsSearch = () => {
   return (
-    <section className="grow px-5">
-      <AccountWrapper title="Search" containerClass="w-full">
-        <TankerSearch />
-      </AccountWrapper>
-    </section>
+    <AccountWrapper title="Search" containerClass="grow px-5">
+      <TankerSearch />
+    </AccountWrapper>
   );
 };
 
