@@ -1,22 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PlusIcon, TrashIcon } from '@/assets/icons';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
-// todo: we don't need to use `cargoesTemplate`, `convertDataToOptions` here. Please remove it
-import { cargoesTemplate, convertDataToOptions, disableDefaultBehaviour } from '@/utils/helpers';
+import { convertDataToOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
-  const [cargoesState, setCargoesState] = useState({
-    slots: 0,
-    indexes: [],
-    portsOptions: null,
-  });
-
   const {
     register,
     setValue,
@@ -24,8 +17,13 @@ const CargoesSlotsDetailsForm = () => {
     formState: { errors, isSubmitting },
   } = useHookForm();
 
-  const cargoesInputRef = useRef(null);
-  const { slots, portsOptions, indexes } = cargoesState;
+  const [cargoesState, setCargoesState] = useState({
+    cargoesCount: 0,
+    cargoes: [],
+    cargoesPortsOptions: null,
+  });
+
+  const { cargoesCount, cargoesPortsOptions, cargoes } = cargoesState;
 
   const handleChangeState = (key, value) =>
     setCargoesState((prevState) => ({
@@ -33,48 +31,53 @@ const CargoesSlotsDetailsForm = () => {
       [key]: value,
     }));
 
-  const handleSlotsCount = (event) => {
+  const handleChangeValue = (data) => {
+    const { option, index, key } = data;
+
+    const fieldName = `cargoes[${index}].${key}`;
+    const isError = errors?.cargoes?.[index];
+
+    if (isError[key]) {
+      clearErrors(fieldName);
+    }
+
+    setValue(fieldName, option);
+  };
+
+  const handleCargoesCount = (event) => {
     clearErrors('numberOfCargoes');
 
     let numberOfCargoes = Number(event.target.value);
-    if (numberOfCargoes > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfCargoes = SETTINGS.MAX_NUMBER_OF_TANKERS;
+    if (numberOfCargoes > SETTINGS.MAX_NUMBER_OF_CARGOES) numberOfCargoes = SETTINGS.MAX_NUMBER_OF_CARGOES;
+
     if (numberOfCargoes <= 0) {
       numberOfCargoes = '';
       setValue('applySlots', false);
-      handleChangeState('indexes', []);
+      handleChangeState('cargoes', []);
     }
 
     setValue('numberOfCargoes', numberOfCargoes);
-    handleChangeState('slots', numberOfCargoes);
+    handleChangeState('cargoesCount', numberOfCargoes);
   };
 
-  const handleApply = useCallback(() => {
-    const cargoes = cargoesTemplate(slots);
-
-    setValue('applySlots', cargoes.length > 0);
-    handleChangeState('indexes', cargoes);
-  }, [setValue, slots]);
+  const handleApplySlot = () => {
+    handleChangeState('cargoes', getFilledArray(cargoesCount));
+  };
 
   const handleAddSlot = () => {
-    handleChangeState('indexes', [...indexes, ...cargoesTemplate(1)]);
+    handleChangeState('cargoes', [...cargoes, ...getFilledArray(1)]);
   };
 
-  const handleRemoveSlot = (element) => {
-    const rowIndex = indexes.findIndex((obj) => obj === element);
-    handleChangeState('indexes', [...indexes.filter((_, index) => index !== rowIndex)]);
-  };
-
-  const handleChangeValue = (data) => {
-    const { option, index, key } = data;
-    const fieldName = `cargoes[${index}][${key}]`;
-    setValue(fieldName, option);
+  const handleRemoveSlot = (index) => {
+    setValue('cargoes', removeByIndex(cargoes, index));
+    handleChangeState('cargoes', removeByIndex(cargoes, index));
   };
 
   const fetchPorts = async () => {
     const data = await getPorts();
     const options = convertDataToOptions(data, 'id', 'name');
 
-    handleChangeState('portsOptions', options);
+    handleChangeState('cargoesPortsOptions', options);
   };
 
   useEffect(() => {
@@ -82,74 +85,83 @@ const CargoesSlotsDetailsForm = () => {
   }, []);
 
   useEffect(() => {
-    const numberOfCargoes = indexes.length > 0 ? indexes.length : '';
-    setValue('numberOfCargoes', numberOfCargoes);
-  }, [indexes, setValue]);
+    const numberOfCargoes = cargoes.length > 0 ? cargoes.length : '';
 
-  useEffect(() => {
-    return cargoesInputRef.current && cargoesInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
-  }, [cargoesInputRef]);
+    setValue('numberOfCargoes', numberOfCargoes);
+    setValue('applySlots', Boolean(numberOfCargoes));
+
+    handleChangeState('cargoesCount', numberOfCargoes);
+  }, [cargoes, setValue]);
 
   return (
     <div className="grid gap-5">
       <div className="w-full !relative">
         <Input
-          {...register('numberOfCargoes')}
           label="How many cargoes have you chartered during the last 6 months?"
           placeholder="Cargoes"
-          error={errors.numberOfCargoes?.message}
           disabled={isSubmitting}
+          value={cargoesCount}
           type="number"
-          ref={cargoesInputRef}
           customStyles="z-10 w-full"
-          onChange={handleSlotsCount}
+          onChange={handleCargoesCount}
+          error={errors.numberOfCargoes?.message}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
           customStyles="absolute top-[18px] right-1 my-1 !py-1 z-10"
           buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
-          onClick={handleApply}
-          disabled={isSubmitting}
+          onClick={handleApplySlot}
+          disabled={cargoesCount <= 0 || isSubmitting}
         />
       </div>
 
-      {indexes?.map((element, index) => {
+      {cargoes?.map((index) => {
         const fieldName = `cargoes[${index}]`;
+        const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={element.id}>
-            <Input {...register(`${fieldName}[name]`, index)} type="number" label={`Imo#${index + 1}`} />
+          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={index}>
+            <Input
+              name={`${fieldName}.name`}
+              label={`Imo #${index + 1}`}
+              placeholder="IMO number"
+              error={error?.imo?.message}
+              disabled={isSubmitting}
+              onChange={({ target }) => handleChangeValue({ option: target.value, index, key: 'imo' })}
+              type="number"
+            />
             <AsyncDropdown
-              name={`${fieldName}[port]`}
+              name={`${fieldName}.port`}
               label="Load port"
-              options={portsOptions}
+              errorMsg={error?.port?.message}
+              options={cargoesPortsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
-              // todo: added required attribute `loadOptions`
             />
             <DatePicker
-              name={`${fieldName}[date]`}
+              name={`${fieldName}.date`}
               inputClass="w-full"
               label="Bill of lading date"
+              error={error?.date?.message}
               onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />
             <Button
               type="button"
               customStyles="absolute -right-8 top-8 !p-0"
               buttonProps={{ icon: <TrashIcon />, variant: 'tertiary', size: 'small' }}
-              onClick={() => handleRemoveSlot(element)}
+              onClick={() => handleRemoveSlot(index)}
               disabled={isSubmitting}
             />
           </div>
         );
       })}
 
-      {indexes.length > 0 && (
+      {cargoes.length > 0 && (
         <div className="flex justify-between">
           <Button
             type="button"
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
-            disabled={indexes?.length >= 10}
+            disabled={cargoes?.length >= 10}
             onClick={handleAddSlot}
             buttonProps={{ text: 'Add more ports', variant: 'tertiary', size: 'small', icon: <PlusIcon /> }}
           />

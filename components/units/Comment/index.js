@@ -5,7 +5,7 @@ import { DateTimeRow, Title } from '@/elements';
 const Comment = ({ title, date, time }) => {
   return (
     <>
-      <Title component="h6" className="text-xsm font-semibold mt-2.5">
+      <Title level="6" className="text-xsm font-semibold mt-2.5">
         {title}
       </Title>
       <DateTimeRow date={date} time={time} />

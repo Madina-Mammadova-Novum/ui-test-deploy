@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import ModalHeader from '../ModalHeader';
+
 import { Button, RadioInput, TextArea, Title } from '@/elements';
 import { Countdown } from '@/units';
 
@@ -35,7 +37,7 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineFields = ({ closeModal }) => {
+const OfferDeclineFields = ({ closeModal, title, goBack }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
   const [showTextField, setShowTextField] = useState(false);
   const handleCheck = (id) => {
@@ -47,9 +49,9 @@ const OfferDeclineFields = ({ closeModal }) => {
 
   return (
     <div className="w-[300px]">
-      <Title component="h2">Decline Pre-fixture Offer</Title>
+      <ModalHeader goBack={goBack}>{title}</ModalHeader>
       <Countdown time="1d 1h 50m" customStyles="mt-5" />
-      <Title component="h3" className="mt-5">
+      <Title level={3} className="mt-5">
         Indicate the reason for decline:
       </Title>
 
@@ -86,13 +88,15 @@ const OfferDeclineFields = ({ closeModal }) => {
 };
 
 OfferDeclineFields.defaultProps = {
-  setStep: () => {},
+  goBack: () => {},
   closeModal: () => {},
+  title: '',
 };
 
 OfferDeclineFields.propTypes = {
-  setStep: PropTypes.func,
+  goBack: PropTypes.func,
   closeModal: PropTypes.func,
+  title: PropTypes.string,
 };
 
 export default OfferDeclineFields;

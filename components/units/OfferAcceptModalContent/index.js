@@ -32,7 +32,7 @@ const OfferAcceptModalContent = ({ closeModal }) => {
 
   return (
     <div className="w-[610px]">
-      <Title component="h2">Accept the Pre-fixture Offer</Title>
+      <Title level={2}>Accept the Pre-fixture Offer</Title>
 
       <Countdown time="1d 1h 50m" customStyles="mt-5" />
 
@@ -48,9 +48,6 @@ const OfferAcceptModalContent = ({ closeModal }) => {
         className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
-        {/* {currentTab === 'message' && <MessageContent data={acceptOfferMessages} />}
-        {currentTab === 'voyage_details' && <VoyageDetailsContent data={incomingOfferVoyageDetailData} />}
-        {currentTab === 'commercial_offer_terms' && <IncomingCOTContent data={incomingOfferCommercialTermsData} />} */}
       </div>
 
       <div className="flex text-xsm gap-x-2.5 mt-4">

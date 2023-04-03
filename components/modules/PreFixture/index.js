@@ -6,12 +6,15 @@ import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
 import { ExpandableRow } from '@/modules';
-import { ExpandableRowHeader, ToggleRows } from '@/units';
+import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { preFixtureHeaderData } from '@/utils/mock';
-
 
 const PreFixture = () => {
   const [toggle, setToggle] = useState(false);
+  const [pagination, setPagination] = useState({
+    offersPerPage: 5,
+    currentPage: 1,
+  });
 
   return (
     <div>
@@ -19,7 +22,7 @@ const PreFixture = () => {
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
-      <div>
+      <div className="flex flex-col gap-y-2.5 mt-5">
         {preFixtureHeaderData.map((headerData) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={headerData} />}
@@ -30,6 +33,8 @@ const PreFixture = () => {
           </ExpandableRow>
         ))}
       </div>
+
+      <ComplexPagination pagination={pagination} setPagination={setPagination} />
     </div>
   );
 };

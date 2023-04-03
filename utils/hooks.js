@@ -193,3 +193,19 @@ export const useMounted = () => {
 
   return mounted.current;
 };
+
+export const useWatchFormValue = (key, defaultValue) => {
+  if (key === '' || key === undefined || key === null) throw new Error('Key must equal to form param');
+
+  const [formValue, setFormValue] = useState(defaultValue);
+  const methods = useHookFormParams({});
+
+  const watcher = methods.watch(key, formValue);
+
+  useEffect(() => {
+    setFormValue(watcher);
+    methods.setValue(key, watcher);
+  }, [key, methods, watcher]);
+
+  return { value: formValue };
+};

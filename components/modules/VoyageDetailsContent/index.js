@@ -9,7 +9,7 @@ const VoyageDetailsContent = ({ data }) => {
   return (
     <div>
       <div className="flex justify-between">
-        <Title component="h3">Voyage details</Title>
+        <Title level="3">Voyage details</Title>
         <div className="flex ">
           <span className="mr-1.5">Charterer Information</span>
           <InfoSVG className="fill-black w-3.5" />
@@ -17,7 +17,7 @@ const VoyageDetailsContent = ({ data }) => {
       </div>
 
       <div className="text-xsm mt-2.5">
-        <Title component="h5" className="uppercase text-[12px] text-gray font-semibold">
+        <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
           dates
         </Title>
         {dates.map((pair) => (
@@ -30,7 +30,7 @@ const VoyageDetailsContent = ({ data }) => {
 
         <hr className="my-4" />
 
-        <Title component="h5" className="uppercase text-[12px] text-gray font-semibold">
+        <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
           ports
         </Title>
         {ports.map((pair) => (

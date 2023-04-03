@@ -15,7 +15,7 @@ const DetailsContent = () => {
     <div className="flex flex-col gap-y-2.5">
       <div className="flex gap-x-2.5">
         <FieldsetWrapper>
-          <Title component="h3">Charterer Information</Title>
+          <Title level={3}>Charterer Information</Title>
           <FieldsetContent className="mt-2.5">
             <TextRow title="Years of Operation">3-5 years</TextRow>
             <TextRow title="Estimated Number of Charters per Year">4-9 charters</TextRow>
@@ -27,7 +27,7 @@ const DetailsContent = () => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title component="h3">Cargo Details</Title>
+          <Title level={3}>Cargo Details</Title>
 
           <FieldsetContent className="mt-2.5">
             <TextRow title="Cargo Type">Crude Oil</TextRow>
@@ -50,7 +50,7 @@ const DetailsContent = () => {
 
       <div className="flex gap-x-2.5">
         <FieldsetWrapper>
-          <Title component="h3">Commercial Offer Terms</Title>
+          <Title level={3}>Commercial Offer Terms</Title>
 
           <FieldsetContent className="mt-2.5">
             <TextRow title="Freight">WS 110</TextRow>
@@ -64,7 +64,7 @@ const DetailsContent = () => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title component="h3">Voyage Details</Title>
+          <Title level={3}>Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             <TextRow title="Laycan start">Dec 18, 2021</TextRow>
@@ -91,7 +91,7 @@ const DetailsContent = () => {
         </FieldsetWrapper>
       </div>
       <FieldsetWrapper>
-        <Title component="h3">Additional Charter Party Terms</Title>
+        <Title level={3}>Additional Charter Party Terms</Title>
 
         <FieldsetContent className="mt-3.5 flex gap-2.5">
           {partyTermsMock.map(({ title, content }) => (

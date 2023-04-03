@@ -66,7 +66,7 @@ const PasswordValidation = ({ title, customStyles }) => {
 
   return (
     <div className={classnames(customStyles, 'pt-4')}>
-      {title !== '' ?? <Title component="h3">{title}</Title>}
+      {title !== '' ?? <Title level="3">{title}</Title>}
       <div className="flex gap-5">
         <div className="w-full">
           <PasswordInput
@@ -87,7 +87,7 @@ const PasswordValidation = ({ title, customStyles }) => {
           />
         </div>
         <div className="pl-0 md:pl-5">
-          <Title component="h4" className="whitespace-nowrap">
+          <Title level="4" className="whitespace-nowrap">
             Password requirements
           </Title>
           <ul className="mt-2 text-[12px] text-black">

@@ -7,7 +7,7 @@ import { ExpandableCard } from '@/units';
 const AccountPositions = ({ data, containerClass }) => {
   const printExpandable = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
-  return <div className={containerClass}>{data?.map(printExpandable)}</div>;
+  return <section className={containerClass}>{data?.map(printExpandable)}</section>;
 };
 
 AccountPositions.propTypes = {

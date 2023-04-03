@@ -299,45 +299,6 @@ export const searchRowHeaders = {
   ],
 };
 
-export const incomingOfferVoyageDetailData = {
-  dates: [
-    [
-      {
-        key: 'Laycan start',
-        label: 'Dec 18, 2021',
-      },
-      {
-        key: 'Laycan end',
-        label: 'Dec 30, 2021',
-      },
-    ],
-  ],
-  ports: [
-    [
-      {
-        key: 'Load port',
-        label: 'Barcelona, ESBCN',
-        countryFlag: usFlag,
-      },
-      {
-        key: 'Load terminal',
-        label: 'Oil terminal #1',
-      },
-    ],
-    [
-      {
-        key: 'Discharge port',
-        label: 'Benghazi, LYBEN',
-        countryFlag: usFlag,
-      },
-      {
-        key: 'Discharge terminal',
-        label: 'Oil terminal #4',
-      },
-    ],
-  ],
-};
-
 export const preFixtureHeaderData = [
   [
     {
@@ -512,3 +473,406 @@ export const COTData = {
     },
   ],
 };
+
+/// //// Negotiating
+
+export const negotiatingHeaderData = [
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+];
+
+export const negotiatingIncomingTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'status',
+  },
+  {
+    text: 'date received',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingIncomingTableRows = [
+  [
+    {
+      text: '1',
+    },
+    {
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'New offer',
+      status: 'new',
+      semibold: true,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View offer', value: 'view_offer' }],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      actions: [{ text: 'QW6969', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Counteroffer',
+      status: 'counteroffer',
+      semibold: true,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View offer', value: 'view_offer' }],
+    },
+  ],
+];
+
+export const negotiatingCounterofferTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'date sent',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingCounterofferTableRows = [
+  [
+    {
+      text: '1',
+    },
+    {
+      actions: [{ text: 'AS5566', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View counteroffer', value: 'view_counteroffer' }],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View counteroffer', value: 'view_counteroffer' }],
+    },
+  ],
+];
+
+export const negotiatingFailedTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'date failed',
+  },
+  {
+    text: 'reason',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingFailedTableRows = [
+  [
+    {
+      text: '1',
+    },
+    {
+      actions: [{ text: 'ZX9988', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Offer timed out',
+      semibold: true,
+    },
+    {
+      actions: [{ text: 'View failed offer', value: 'view_failed_offer' }],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Offer declined by me',
+      semibold: true,
+    },
+    {
+      actions: [{ text: 'View failed offer', value: 'view_failed_offer' }],
+    },
+  ],
+];

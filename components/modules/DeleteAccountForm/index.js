@@ -37,7 +37,7 @@ const DeleteAccountForm = ({ title }) => {
         submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
       >
         <div className="text-black flex flex-col gap-2.5">
-          <Title component="h3" className="text-lg font-bold">
+          <Title level="3" className="text-lg font-bold">
             {title}
           </Title>
           <Notes

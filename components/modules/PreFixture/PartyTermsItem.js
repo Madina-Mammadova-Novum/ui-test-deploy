@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types'
+
+import PropTypes from 'prop-types';
+
 import { Button, Modal, Title } from '@/elements';
 
 const PartyTermsItem = ({ title, content }) => {
@@ -24,12 +26,12 @@ const PartyTermsItem = ({ title, content }) => {
 };
 
 PartyTermsItem.propTypes = {
-    content: 'No Content Provided'
-}
+  content: 'No Content Provided',
+};
 
 PartyTermsItem.propTypes = {
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string,
-}
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string,
+};
 
 export default PartyTermsItem;

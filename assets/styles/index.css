@@ -362,11 +362,11 @@ input[type='password'] {
 }
 
 .my_position-table tr th {
-  @apply pl-5;
+  @apply pl-5 whitespace-nowrap;
 }
 
 .my_position-table tr td {
-  @apply border border-gray-darker;
+  @apply border border-gray-darker whitespace-nowrap;
 }
 
 .my_position-table tr td div {

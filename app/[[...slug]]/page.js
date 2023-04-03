@@ -29,14 +29,14 @@ export default async function Home({ params }) {
           <NextLink href={ROUTES.SIGNUP}>SIGNUP</NextLink>
         </li>
         <li>
-          <NextLink href={ROUTES.SEARCH}>SEARCH</NextLink>
+          <NextLink href={ROUTES.ACCOUNT_SEARCH}>SEARCH</NextLink>
         </li>
         <li>
           <NextLink href={ROUTES.ACCOUNT_PREFIXTURE}>PRE-FIXTURE</NextLink>
         </li>
-        {/* <li>
-          <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink>
-        </li> */}
+        <li>
+          <NextLink href={ROUTES.ACCOUNT_NEGOTIATING}>NEGOTIATING</NextLink>
+        </li>
       </ul>
 
       {/* {blocks && <BlockManager blocks={blocks} />} */}

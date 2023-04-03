@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
-const Table = ({ headerData, rows }) => {
+const Table = ({ headerData, rows, handleActionClick }) => {
   return (
     <div className="overflow-auto">
       <div
@@ -14,7 +14,7 @@ const Table = ({ headerData, rows }) => {
       >
         <table className="my_position-table w-full border-collapse">
           {headerData.length && <TableHeader headerData={headerData} />}
-          {rows.length && rows.map((rowData) => <TableRow rowData={rowData} />)}
+          {rows.length && rows.map((rowData) => <TableRow rowData={rowData} handleActionClick={handleActionClick} />)}
         </table>
       </div>
     </div>
@@ -24,11 +24,13 @@ const Table = ({ headerData, rows }) => {
 Table.defaultProps = {
   headerData: [],
   rows: [],
+  handleActionClick: () => {},
 };
 
 Table.propTypes = {
   headerData: PropTypes.shape([]),
   rows: PropTypes.shape([]),
+  handleActionClick: PropTypes.func,
 };
 
 export default Table;

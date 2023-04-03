@@ -1,5 +1,6 @@
 import { metaData } from '@/adapters/metaData';
 import { AccountDetails, AccountWrapper } from '@/modules';
+import { getUserDetails } from '@/services';
 
 export async function generateMetadata() {
   return metaData({
@@ -11,11 +12,13 @@ export async function generateMetadata() {
   });
 }
 
-const AccountInformation = () => {
+const AccountInformation = async () => {
+  const data = await getUserDetails();
+
   return (
     <section className="grow px-5">
       <AccountWrapper title="Account information" containerClass="w-full">
-        <AccountDetails containerClass="flex justify-start items-start flex-col gap-2.5" />
+        <AccountDetails data={data} containerClass="flex justify-start items-start flex-col gap-2.5" />
       </AccountWrapper>
     </section>
   );

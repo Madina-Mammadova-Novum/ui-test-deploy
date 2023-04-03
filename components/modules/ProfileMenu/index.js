@@ -27,7 +27,7 @@ const ProfileMenu = ({ image }) => {
         <NextImage src={image} height={40} width={40} alt="some_alt" />
       </div>
       <div className="flex items-center mx-2.5">
-        <span>Some text</span>
+        <span className="text-black font-semibold text-xsm">John Doe</span>
         <ArrowSVG className={`w-2.5 ml-6 transition duration-500 ${showProfileMenu && 'fill-blue rotate-180'}`} />
       </div>
 

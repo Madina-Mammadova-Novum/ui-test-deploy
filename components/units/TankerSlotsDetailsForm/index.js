@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { TrashIcon } from '@/assets/icons';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { disableDefaultBehaviour } from '@/utils/helpers';
+import { disableDefaultBehaviour, disablePlusMinusSymbols } from '@/utils/helpers';
 
 const TankerSlotsDetails = () => {
   const [slots, setSlots] = useState(0);
@@ -23,10 +23,14 @@ const TankerSlotsDetails = () => {
   useEffect(() => {
     const numberOfTankers = indexes.length > 0 ? indexes.length : '';
     setValue('numberOfTankers', numberOfTankers);
+    setSlots(numberOfTankers);
   }, [indexes, setValue]);
 
   useEffect(() => {
-    return tankersInputRef.current && tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+    if (tankersInputRef.current) {
+      tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
+      tankersInputRef.current.addEventListener('keydown', disablePlusMinusSymbols);
+    }
   }, [tankersInputRef]);
 
   const handleSlotsCount = (event) => {
@@ -61,14 +65,15 @@ const TankerSlotsDetails = () => {
       <div className="w-full !relative">
         <Input
           {...register('numberOfTankers')}
+          type="number"
+          value={slots}
+          ref={tankersInputRef}
           label="Number of tankers"
           placeholder="Tankers"
+          customStyles="z-10 w-full"
+          onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message}
           disabled={isSubmitting}
-          type="number"
-          customStyles="z-10 w-full"
-          ref={tankersInputRef}
-          onChange={handleSlotsCount}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
@@ -79,7 +84,7 @@ const TankerSlotsDetails = () => {
           disabled={isSubmitting}
         />
       </div>
-      {indexes.map((index) => {
+      {indexes.map((_, index) => {
         const fieldName = `imo[${index}]`;
         const error = errors.imo ? errors.imo[index] : null;
         return (

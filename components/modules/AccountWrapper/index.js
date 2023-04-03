@@ -7,11 +7,11 @@ const AccountWrapper = ({ title, suptitle, children, containerClass }) => {
     <main className={containerClass}>
       <div className="text-black py-5">
         {suptitle && (
-          <Title component="h6" className="uppercase text-gray font-bold text-[10px]">
+          <Title level="6" className="uppercase text-gray font-bold text-[10px]">
             {suptitle}
           </Title>
         )}
-        <Title component="h1" className="text-2xl">
+        <Title level="1" className="text-2xl">
           {title}
         </Title>
       </div>

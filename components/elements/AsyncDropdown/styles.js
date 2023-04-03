@@ -2,6 +2,7 @@ export const dropdownStyles = (selectedOption, error) => ({
   option: (base) => ({
     ...base,
     '&:hover': {
+      cursor: 'pointer',
       background: 'transparent',
     },
   }),
@@ -10,6 +11,7 @@ export const dropdownStyles = (selectedOption, error) => ({
     '&:hover': {
       border: menuIsOpen && '1px solid #199AF5',
     },
+    cursor: 'pointer',
     background: selectedOption && '#E7ECF8',
     borderRadius: '6px',
     border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#E7ECF8' : '#E53636'} `,

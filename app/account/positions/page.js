@@ -12,7 +12,7 @@ export async function generateMetadata() {
   });
 }
 
-const AccountPostions = async () => {
+export default async function AccountPostions() {
   const data = await getUserPositions();
 
   return (
@@ -20,6 +20,4 @@ const AccountPostions = async () => {
       <AccountPositions data={data} containerClass="flex flex-col gap-2" />
     </AccountWrapper>
   );
-};
-
-export default AccountPostions;
+}

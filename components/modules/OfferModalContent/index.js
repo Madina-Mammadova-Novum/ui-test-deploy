@@ -8,7 +8,7 @@ import { Button, SimpleSelect, Title } from '@/elements';
 import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
 import { OfferForm, Tabs } from '@/units';
-import { incomingOfferCommentsData, incomingOfferVoyageDetailData } from '@/utils/mock';
+import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
   {
@@ -33,7 +33,7 @@ const OfferModalContent = ({ closeModal }) => {
   const tabContent = () => {
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsContent data={incomingOfferVoyageDetailData} />;
+        return <VoyageDetailsContent data={voyageDetailData} />;
       case 'comments':
         return <CommentsContent data={incomingOfferCommentsData} />;
       default:
@@ -43,7 +43,7 @@ const OfferModalContent = ({ closeModal }) => {
 
   return (
     <div className="w-[610px]">
-      <Title component="h2">Send Offer</Title>
+      <Title level="2">Send Offer</Title>
 
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">
