@@ -6,7 +6,7 @@ import { PlusCircleIcon, TrashIcon } from '@/assets/icons';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
-import { convertDataToOptions, getFilledArray, makeId, removeByIndex } from '@/utils/helpers';
+import { convertDataToOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
@@ -33,7 +33,14 @@ const CargoesSlotsDetailsForm = () => {
 
   const handleChangeValue = (data) => {
     const { option, index, key } = data;
-    const fieldName = `cargoes[${index}][${key}]`;
+
+    const fieldName = `cargoes[${index}].${key}`;
+    const isError = errors?.cargoes?.[index];
+
+    if (isError[key]) {
+      clearErrors(fieldName);
+    }
+
     setValue(fieldName, option);
   };
 
@@ -54,7 +61,7 @@ const CargoesSlotsDetailsForm = () => {
   };
 
   const handleApplySlot = () => {
-    handleChangeState('cargoes', ...getFilledArray(cargoesCount));
+    handleChangeState('cargoes', getFilledArray(cargoesCount));
   };
 
   const handleAddSlot = () => {
@@ -109,14 +116,14 @@ const CargoesSlotsDetailsForm = () => {
         />
       </div>
 
-      {cargoes?.map((_, index) => {
+      {cargoes?.map((index) => {
         const fieldName = `cargoes[${index}]`;
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={makeId()}>
+          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={index}>
             <Input
-              name={`${fieldName}[name]`}
+              name={`${fieldName}.name`}
               label={`Imo #${index + 1}`}
               placeholder="IMO number"
               error={error?.imo?.message}
@@ -125,14 +132,14 @@ const CargoesSlotsDetailsForm = () => {
               type="number"
             />
             <AsyncDropdown
-              name={`${fieldName}[port]`}
+              name={`${fieldName}.port`}
               label="Load port"
               errorMsg={error?.port?.message}
               options={cargoesPortsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
             />
             <DatePicker
-              name={`${fieldName}[date]`}
+              name={`${fieldName}.date`}
               inputClass="w-full"
               label="Bill of lading date"
               error={error?.date?.message}

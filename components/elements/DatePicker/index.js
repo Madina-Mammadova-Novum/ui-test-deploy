@@ -18,8 +18,8 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDate = (pickedDate) => {
-    onChange(pickedDate);
     setDate(pickedDate);
+    onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
   };
 
   return (
@@ -29,7 +29,7 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
-      <div className="single_date relative cursor-pointer">
+      <div className="single_date relative cursor-pointer w-full">
         <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
           <Input
             name={name}
@@ -58,6 +58,8 @@ DatePicker.defaultProps = {
   label: '',
   inputClass: 'w-[296px]',
   error: null,
+  register: () => {},
+  setValue: () => {},
   onChange: () => {},
 };
 
@@ -65,6 +67,8 @@ DatePicker.propTypes = {
   inputClass: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
+  setValue: PropTypes.func,
+  register: PropTypes.func,
   onChange: PropTypes.func,
   error: PropTypes.string,
 };

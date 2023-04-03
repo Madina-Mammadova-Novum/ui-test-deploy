@@ -35,9 +35,6 @@ export default async function Home({ params }) {
       {/*  <li> */}
       {/*    <NextLink href={ROUTES.SIGNUP}>SIGNUP</NextLink> */}
       {/*  </li> */}
-      {/*  /!* <li> */}
-      {/*    <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink> */}
-      {/*  </li> *!/ */}
       {/* </ul> */}
       <section className="relative pt-[115px] pb-[86px] text-white">
         <div className="container mx-auto max-w-[960px]">

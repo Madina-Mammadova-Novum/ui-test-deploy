@@ -5,25 +5,25 @@ import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { AccordionSm, AccordionXl } from '@/elements';
+import { useSidebarActiveColor } from '@/utils/hooks';
 
-const Accordion = ({ data, variant, opened, active, onChange }) => {
+const Accordion = ({ data, variant, opened, onChange }) => {
+  const { isActive } = useSidebarActiveColor(data.path);
+
   const printAccordion = useMemo(() => {
     switch (variant) {
       case 'collapsed':
-        return <AccordionSm data={data} active={active} onChange={onChange} />;
-      case 'opened':
-        return <AccordionXl opened={opened} data={data} active={active} onChange={onChange} />;
+        return <AccordionSm data={data} active={isActive} onChange={onChange} />;
       default:
-        return <AccordionXl opened={opened} data={data} active={active} onChange={onChange} />;
+        return <AccordionXl opened={opened} data={data} active={isActive} onChange={onChange} />;
     }
-  }, [active, data, onChange, opened, variant]);
+  }, [isActive, data, onChange, opened, variant]);
 
   return printAccordion;
 };
 
 Accordion.propTypes = {
   opened: PropTypes.bool,
-  active: PropTypes.string,
   onChange: PropTypes.func,
   variant: PropTypes.string,
   data: PropTypes.shape({

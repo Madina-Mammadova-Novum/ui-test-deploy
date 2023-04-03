@@ -44,7 +44,7 @@ const PersonalDetailsForm = () => {
         submitAction={onSubmit}
         submitButton={{ text: 'Edit personal details', variant: 'primary', size: 'large' }}
       >
-        <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
+        <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Edit Personal Details
         </Title>
         <Notes

@@ -16,22 +16,22 @@ const AccountCompanyDetails = ({ company }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information">
-          {name ?? <TextRow title="Company name" subtitle={name} />}
-          {years ?? <TextRow title="Years in operation" subtitle={years} />}
-          {totalTankers ?? <TextRow title="Number of tankers" subtitle={totalTankers} />}
+          {name && <TextRow title="Company name">{name}</TextRow>}
+          {years && <TextRow title="Years in operation">{years}</TextRow>}
+          {totalTankers && <TextRow title="Number of tankers">{totalTankers}</TextRow>}
         </FieldsetContent>
 
         <Divider className="my-4" />
 
         <div className="grid grid-cols-2">
-          {registration ?? (
+          {registration && (
             <FieldsetContent className="col-start-1" label="Registration address">
-              <AddressInfo data={registration} />
+              <AddressInfo address={registration} />
             </FieldsetContent>
           )}
-          {correspondence ?? (
+          {correspondence && (
             <FieldsetContent className="col-start-1 3sm:col-start-2" label="Correspondence address">
-              <AddressInfo data={correspondence} />
+              <AddressInfo address={correspondence} />
             </FieldsetContent>
           )}
         </div>

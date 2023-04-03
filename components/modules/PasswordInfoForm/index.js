@@ -11,15 +11,15 @@ import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
-const state = {
-  currentPassword: '12345678',
-  password: '',
-  confirmPassword: '',
-};
-
-const schema = yup.object({ ...updatePasswordSchema() });
-
 const PasswordInfoForm = () => {
+  const schema = yup.object({ ...updatePasswordSchema() });
+
+  const state = {
+    currentPassword: '12345678',
+    password: '',
+    confirmPassword: '',
+  };
+
   const methods = useHookFormParams({ state, schema });
 
   const {
@@ -38,7 +38,7 @@ const PasswordInfoForm = () => {
         submitAction={onSubmit}
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
-        <Title component="h3" className="text-lg text-black font-bold capitalize pb-5">
+        <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Change Your Password
         </Title>
         <PasswordInput

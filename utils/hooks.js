@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import delve from 'dlv';
+import { usePathname } from 'next/navigation';
 
 import { PALETTE } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
@@ -194,18 +195,10 @@ export const useMounted = () => {
   return mounted.current;
 };
 
-export const useWatchFormValue = (key, defaultValue) => {
-  if (key === '' || key === undefined || key === null) throw new Error('Key must equal to form param');
+export const useSidebarActiveColor = (path) => {
+  const pathname = usePathname();
 
-  const [formValue, setFormValue] = useState(defaultValue);
-  const methods = useHookFormParams({});
+  if (path === pathname) return { isActive: true };
 
-  const watcher = methods.watch(key, formValue);
-
-  useEffect(() => {
-    setFormValue(watcher);
-    methods.setValue(key, watcher);
-  }, [key, methods, watcher]);
-
-  return { value: formValue };
+  return { isActive: false };
 };

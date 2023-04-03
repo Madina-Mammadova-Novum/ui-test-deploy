@@ -15,13 +15,13 @@ const AccountPersonalDetails = ({ user }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent className="col-start-1">
-          {firstName ?? <TextRow title="First Name" subtitle={firstName} />}
-          {lastName ?? <TextRow title="Last Name" subtitle={lastName} />}
-          {email ?? <TextRow title="Email Address" subtitle={email} />}
+          {firstName && <TextRow title="First Name">{firstName}</TextRow>}
+          {lastName && <TextRow title="Last Name">{lastName}</TextRow>}
+          {email && <TextRow title="Email Address">{email}</TextRow>}
         </FieldsetContent>
         <FieldsetContent className="col-start-1 3sm:col-start-2">
-          {primaryPhone ?? <TextRow title="Primary phone number" subtitle={primaryPhone} />}
-          {secondaryPhone ?? <TextRow title="Secondary phone number" subtitle={secondaryPhone} />}
+          {primaryPhone && <TextRow title="Primary phone number">{primaryPhone}</TextRow>}
+          {secondaryPhone && <TextRow title="Secondary phone number">{secondaryPhone}</TextRow>}
         </FieldsetContent>
       </FieldsetContentWrapper>
     </FieldsetWrapper>

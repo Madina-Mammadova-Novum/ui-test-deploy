@@ -8,6 +8,7 @@ import {
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
+  userDetailsAdapter,
 } from '@/adapters/user';
 import { getData, postData } from '@/utils/dataFetching';
 
@@ -87,4 +88,9 @@ export async function updateCompany({ data }) {
 export async function getUserPositions() {
   const { data } = await getData(`account/my-positions`);
   return positionsAdapter({ data });
+}
+
+export async function getUserDetails() {
+  const { data } = await getData(`account/user-info`);
+  return userDetailsAdapter({ data });
 }

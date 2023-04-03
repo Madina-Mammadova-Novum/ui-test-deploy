@@ -7,9 +7,11 @@ import AccountPositions from '@/modules/AccountPositions';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
+import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
+import ExpandableRow from '@/modules/ExpandableRow';
 import { PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AuthHeader, PageHeader } from '@/modules/Header';
@@ -21,12 +23,16 @@ import Notification from '@/modules/Notification';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
+import PreFixture from '@/modules/PreFixture';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import Sidebar from '@/modules/Sidebar';
 import Signup from '@/modules/Signup';
+import TankerSearch from '@/modules/TankerSearch';
+import TankerSearchResults from '@/modules/TankerSearchResults';
+import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
 // import Upload from '@/modules/Upload';
@@ -65,4 +71,10 @@ export {
   ResetPasswordForm,
   OwnerRegistrationForm,
   ChartererRegistrationForm,
+  TankerSearch,
+  ExpandableRow,
+  VoyageDetailsContent,
+  CommentsContent,
+  TankerSearchResults,
+  PreFixture,
 };

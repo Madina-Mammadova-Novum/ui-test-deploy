@@ -12,28 +12,22 @@ const AccordionHeader = ({ children, href, className, onClick, isSubMenu }) => {
       {children}
     </div>
   ) : (
-    <NextLink href={href}>{children} </NextLink>
+    <NextLink href={href}>{children}</NextLink>
   );
 };
 
 AccordionHeader.defaultProps = {
   className: '',
   href: '/',
-  children: null,
   isSubMenu: false,
-  active: false,
-  toggle: false,
   onClick: () => {},
 };
 
 AccordionHeader.propTypes = {
-  children: PropTypes.node,
-  toggle: PropTypes.bool,
   className: PropTypes.string,
   href: PropTypes.string,
   onClick: PropTypes.func,
   isSubMenu: PropTypes.bool,
-  active: PropTypes.bool,
 };
 
 export default AccordionHeader;

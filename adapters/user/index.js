@@ -1,3 +1,54 @@
+export function userDetailsAdapter({ data }) {
+  if (data === null) return null;
+
+  const {
+    firstName,
+    lastName,
+    email,
+    primaryPhone,
+    secondaryPhone,
+    currentPassword,
+    companyName,
+    yearsInOperation,
+    numberOfTankers,
+    registrAddress,
+    correspondAddress,
+  } = data;
+  return {
+    personalDetails: {
+      firstName,
+      lastName,
+      email,
+      primaryPhone,
+      secondaryPhone,
+    },
+    companyDetails: {
+      name: companyName,
+      years: yearsInOperation,
+      totalTankers: numberOfTankers,
+      registration: {
+        addressLine1: registrAddress?.primaryLine,
+        addressLine2: registrAddress?.secondaryLine,
+        city: registrAddress?.city,
+        state: registrAddress?.state,
+        postal: registrAddress?.zip,
+        country: registrAddress?.country,
+      },
+      correspondence: {
+        addressLine1: correspondAddress?.primaryLine,
+        addressLine2: correspondAddress?.secondaryLine,
+        city: correspondAddress?.city,
+        state: correspondAddress?.state,
+        postal: correspondAddress?.zip,
+        country: correspondAddress?.country,
+      },
+    },
+    accountDetails: {
+      currentPassword,
+    },
+  };
+}
+
 export function forgotPasswordAdapter({ data }) {
   if (data === null) return null;
   const { email } = data;
@@ -135,7 +186,7 @@ export function chartererSignUpAdapter({ data }) {
     email: email.replace(/\.com$/, ''),
     password,
     phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: `+${secondaryPhoneNumber}`,
+    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
     companyName,
     yearsInOperation: companyNumberOfOperation,
     estimatedNumberOfChartersPerYear: numberOfTankers,
@@ -181,6 +232,6 @@ export function positionAdapter({ data }) {
 }
 
 export function positionsAdapter({ data }) {
-  if (data === null) return null;
+  if (data === null || data === undefined) return null;
   return data.map((item) => positionAdapter({ data: item }));
 }

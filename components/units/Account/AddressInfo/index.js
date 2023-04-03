@@ -5,14 +5,18 @@ import { TextRow } from '@/elements';
 const AddressInfo = ({ address }) => {
   const { addressLine1, addressLine2, city, state, postal, country } = address;
   return (
-    <>
-      <TextRow title="Address line #1:" subtitle={addressLine1} />
-      <TextRow title="Address line #2:" subtitle={addressLine2} />
-      <TextRow title="City:" subtitle={city} />
-      <TextRow title="State / Province / Region:" subtitle={state} />
-      <TextRow title="Zip / Postal code:" subtitle={postal} />
-      <TextRow title="Country:" subtitle={country} />
-    </>
+    <div>
+      {addressLine1 && <TextRow title="Address line #1">{addressLine1}</TextRow>}
+      {addressLine2 && <TextRow title="Address line #2">{addressLine2}</TextRow>}
+      {city && (
+        <TextRow title="City" subtitle={city}>
+          {city}
+        </TextRow>
+      )}
+      {state && <TextRow title="State / Province / Region">{state}</TextRow>}
+      {postal && <TextRow title="Zip / Postal code">{postal}</TextRow>}
+      {country && <TextRow title="Country">{country}</TextRow>}
+    </div>
   );
 };
 

@@ -1,37 +1,24 @@
-import { useMemo } from 'react';
+import React from 'react';
 
 import PropTypes from 'prop-types';
 
-const Title = ({ component, children, className }) => {
-  const printTitle = useMemo(() => {
-    switch (component) {
-      case 'h1':
-        return <h1 className={className}>{children}</h1>;
-      case 'h2':
-        return <h2 className={className}>{children}</h2>;
-      case 'h3':
-        return <h3 className={className}>{children}</h3>;
-      case 'h4':
-        return <h4 className={className}>{children}</h4>;
-      case 'h5':
-        return <h5 className={className}>{children}</h5>;
-      case 'h6':
-        return <h6 className={className}>{children}</h6>;
-      default:
-        return <h1 className={className}>{children}</h1>;
-    }
-  }, [children, className, component]);
-
-  return printTitle;
-};
-
-Title.defaultProps = {
-  className: 'text-black font-bold',
+const Title = ({ level, children, className, ...rest }) => {
+  const Tag = `h${level}`;
+  return (
+    <Tag className={className} {...rest}>
+      {children}
+    </Tag>
+  );
 };
 
 Title.propTypes = {
-  component: PropTypes.string,
+  level: PropTypes.oneOf([1, 2, 3, 4, 5, 6]).isRequired,
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
+};
+
+Title.defaultProps = {
+  className: '',
 };
 
 export default Title;

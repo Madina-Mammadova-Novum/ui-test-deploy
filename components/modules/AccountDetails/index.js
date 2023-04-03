@@ -10,12 +10,13 @@ import {
   AccountPersonalDetails,
 } from '@/units';
 
-const AccountDetails = ({ containerClass }) => {
+const AccountDetails = ({ data, containerClass }) => {
+  const { personalDetails, companyDetails, accountDetails } = data;
   return (
     <div className={containerClass}>
-      <AccountPersonalDetails />
-      <AccountCompanyDetails />
-      <AccountPasswordDetails />
+      <AccountPersonalDetails user={personalDetails} />
+      <AccountCompanyDetails company={companyDetails} />
+      <AccountPasswordDetails user={accountDetails} />
       <AccountDeactivateDetails />
       <AccountDeleteDetails />
     </div>
@@ -23,6 +24,11 @@ const AccountDetails = ({ containerClass }) => {
 };
 
 AccountDetails.propTypes = {
+  data: PropTypes.shape({
+    personalDetails: PropTypes.shape({}),
+    companyDetails: PropTypes.shape({}),
+    accountDetails: PropTypes.shape({}),
+  }),
   containerClass: PropTypes.string,
 };
 

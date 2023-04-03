@@ -2,54 +2,48 @@ import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon } from '@/assets/icons';
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
 import AccordionBody from '@/elements/Accordion/AccordionBody';
 import AccordionHeader from '@/elements/Accordion/AccordionHeader';
+import AccordionTitle from '@/elements/Accordion/AccordionTitle';
 
 const AccordionXl = ({ data, active, opened, onChange }) => {
-  const isActive = Boolean(active === data.id);
+  const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
     switch (data?.variant) {
+      case 'search':
+        return <SearchIcon isActive={active} />;
       case 'positions':
-        return <PositionIcon isActive={isActive} />;
+        return <PositionIcon isActive={active} />;
       case 'offers':
-        return <OfferIcon isActive={isActive} />;
+        return <OfferIcon isActive={active} />;
       case 'fleets':
-        return <AnchorIcon isActive={isActive} />;
+        return <AnchorIcon isActive={active} />;
       case 'faq':
-        return <FaqIcon isActive={isActive} />;
+        return <FaqIcon isActive={active} />;
       default:
         return null;
     }
-  }, [data?.variant, isActive]);
-
-  const printTitle = useMemo(() => {
-    return (
-      <span
-        aria-hidden="true"
-        onClick={() => onChange('active', data?.id)}
-        className={`flex text-sm font-semibold capitalize gap-3.5 w-full px-5 py-3 rounded-xl  ${
-          isActive ? 'bg-blue' : 'hover:bg-blue-dark'
-        }`}
-      >
-        {printIcon}
-        {data?.title}
-      </span>
-    );
-  }, [data?.id, data?.title, isActive, onChange, printIcon]);
+  }, [data?.variant, active]);
 
   return (
     <>
       <AccordionHeader
-        toggle={opened}
-        active={isActive}
+        href={data.path}
         onClick={() => onChange('opened', !opened)}
-        href={data?.path ?? '/'}
-        isSubMenu={Boolean(data?.items?.length)}
+        isSubMenu={hasNestedLinks}
         className="flex items-center transition-all"
       >
-        {data?.title ? printTitle : <p>Title not found</p>}
+        {data.title && (
+          <AccordionTitle
+            icon={printIcon}
+            title={data.title}
+            isActive={active}
+            isOpened={opened}
+            hasNestedLinks={hasNestedLinks}
+          />
+        )}
       </AccordionHeader>
       <AccordionBody list={data?.items} toggle={opened} />
     </>
