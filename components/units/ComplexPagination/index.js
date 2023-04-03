@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+
 import { SimpleSelect } from '@/elements';
 import { PaginationComponent } from '@/units';
 
@@ -23,11 +24,11 @@ const ComplexPagination = ({ pagination, setPagination }) => {
 };
 
 ComplexPagination.propTypes = {
-    pagination: PropTypes.shape({
-        offersPerPage: PropTypes.number,
-        currentPage: PropTypes.number,
-    }).isRequired,
-    setPagination: PropTypes.func.isRequired,
-}
+  pagination: PropTypes.shape({
+    offersPerPage: PropTypes.number,
+    currentPage: PropTypes.number,
+  }).isRequired,
+  setPagination: PropTypes.func.isRequired,
+};
 
 export default ComplexPagination;

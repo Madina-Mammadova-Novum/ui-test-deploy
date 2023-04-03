@@ -92,13 +92,13 @@ const ViewOffer = ({ setStep, closeModal }) => {
 };
 
 ViewOffer.defaultProps = {
-    setStep: () => {},
-    closeModal: () => {},
-}
+  setStep: () => {},
+  closeModal: () => {},
+};
 
 ViewOffer.propTypes = {
-    setStep: PropTypes.func,
-    closeModal: PropTypes.func,
-}
+  setStep: PropTypes.func,
+  closeModal: PropTypes.func,
+};
 
 export default ViewOffer;

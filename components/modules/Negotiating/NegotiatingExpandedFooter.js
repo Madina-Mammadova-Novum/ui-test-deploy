@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+
 import SearchSVG from '@/assets/images/search.svg';
 import { Button, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
@@ -23,11 +24,11 @@ const NegotiatingExpandedFooter = ({ isCharterer }) => {
 };
 
 NegotiatingExpandedFooter.defaultProps = {
-    isCharterer: false
-}
+  isCharterer: false,
+};
 
 NegotiatingExpandedFooter.propTypes = {
-    isCharterer: PropTypes.bool,
-}
+  isCharterer: PropTypes.bool,
+};
 
 export default NegotiatingExpandedFooter;
