@@ -26,7 +26,7 @@ const BLOCK_COMPONENTS = {
   'blocks.team': TeamBlock,
   'blocks.single-how-it-works': HowItWorksBlock,
   'blocks.product-features': ProductFeaturesBlock,
-  'blocks.lets-talk-block': CTASingleImageBlock,
+  'blocks.let-s-talk': CTASingleImageBlock,
   'blocks.faq-block': FAQBlock,
   'blocks.faq-by-category-block': FAQBlock,
 };

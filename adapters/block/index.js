@@ -34,7 +34,7 @@ export const blocksDataAdapter = async (blocks) => {
           return updateProductFeaturesBlock(block);
         case 'blocks.team':
           return updateTeamBlock(block);
-        case 'blocks.lets-talk-block':
+        case 'blocks.let-s-talk':
           return updateLetsTalkBlock(block);
         case 'blocks.faq-block':
           return updateFAQBlock(block);
