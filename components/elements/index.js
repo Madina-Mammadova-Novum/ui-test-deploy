@@ -41,18 +41,20 @@ import Portal from '@/elements/Portal';
 import SimpleSelect from '@/elements/SimpleSelect';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
-// import Toggle from '@/elements/Toggle';
 // import Tooltip from '@/elements/Tooltip';
 // import Tabs from '@/elements/Tabs';
 // import TextArea from '@/elements/TextArea';
 // import Toggle from '@/elements/Toggle';
-// import Tooltip from '@/elements/Tooltip';
 import TextRow from '@/elements/TextRow';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
+import Toggle from '@/elements/Toggle';
+import Tooltip from '@/elements/Tooltip';
 
 export {
   Table,
+  Tooltip,
+  Toggle,
   Title,
   TextRow,
   Input,
