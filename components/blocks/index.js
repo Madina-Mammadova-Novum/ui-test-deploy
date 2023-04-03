@@ -10,7 +10,6 @@ import SimpleContentBlock from '@/blocks/SimpleContentBlock';
 import TeamBlock from '@/blocks/TeamBlock';
 import WhatWeOfferBlock from '@/blocks/WhatWeOfferBlock';
 
-
 export {
   CTABlock,
   CTASingleImageBlock,
@@ -22,5 +21,5 @@ export {
   HowItWorksBlock,
   ProductFeaturesBlock,
   FAQBlock,
-  LetsTalkBlock
+  LetsTalkBlock,
 };
