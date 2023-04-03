@@ -26,7 +26,7 @@ const Offer = ({ item, index }) => {
       )}
       <div>
         {item.title && (
-          <Title component="h2" className="text-black mb-2.5">
+          <Title level="2" className="text-black mb-2.5">
             {item.title}
           </Title>
         )}
@@ -48,7 +48,11 @@ const WhatWeOfferBlock = ({ title, values }) => {
   return (
     <section id="what-we-offer">
       <div className="container mx-auto max-w-[960px]">
-        {title && <Title className="text-center text-black mb-5">{title}</Title>}
+        {title && (
+          <Title level="1" className="text-center text-black mb-5">
+            {title}
+          </Title>
+        )}
         <div className="space-y-4">
           {values.map((item, index) => {
             return <Offer key={makeId()} item={item} index={index} />;

@@ -10,7 +10,7 @@ const SimpleContentBlock = ({ title, content }) => {
     <section className="">
       <div className="container mx-auto max-w-[960px]">
         {title && (
-          <Title component="h1" className="text-center text-black my-2.5">
+          <Title level="1" className="text-center text-black my-2.5">
             {title}
           </Title>
         )}

@@ -45,7 +45,7 @@ export default async function Home({ params }) {
             height={352}
             width={1440}
           />
-          <Title component="h1" className="mb-2.5 text-center">
+          <Title level="1" className="mb-2.5 text-center">
             {title}
           </Title>
           <div className="text-xsm">{content && parse(content)}</div>

@@ -8,7 +8,7 @@ import { Button, Title } from '@/elements';
 const AccordionHeader = ({ children, onClick, isActive }) => {
   return (
     <div className="flex justify-between pb-2.5 px-[30px]">
-      <Title component="h2" className="text-black">
+      <Title level="2" className="text-black">
         {children}
       </Title>
       <Button

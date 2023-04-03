@@ -94,7 +94,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         <div className="rounded-[10px] pt-1.5 px-5 pb-5 bg-white shadow-xmd divide-y divide-gray-darker mt-1">
           <div className="text-black py-4">
             <div className="flex justify-between">
-              <Title component="h3" className="text-black">
+              <Title level="3" className="text-black">
                 Supply Chain and Logistics
               </Title>
               <Button
@@ -121,7 +121,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
           </div>
           <div className="text-black py-4">
             <div className="flex justify-between">
-              <Title component="h3" className="text-black">
+              <Title level="3" className="text-black">
                 Supply Chain and Logistics
               </Title>
               <Button
@@ -153,7 +153,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
           </div>
           <div className="text-black pt-5">
             <div className="rounded-[10px] border border-gray-darker bg-gray-light px-5 py-3">
-              <Title component="h3">Everything you need to know</Title>
+              <Title level="3">Everything you need to know</Title>
               <div className="flex gap-x-2.5 items-center">
                 <p className="text-xsm">Can’t find the answer you’re looking for?</p>
                 <Button

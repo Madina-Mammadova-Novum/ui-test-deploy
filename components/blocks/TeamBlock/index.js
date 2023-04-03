@@ -35,12 +35,12 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
                     />
                   )}
                   {fullName && (
-                    <Title component="h2" className="mb-1">
+                    <Title level="2" className="mb-1">
                       {fullName}
                     </Title>
                   )}
                   {position && (
-                    <Title component="h4" className="font-semibold mb-1">
+                    <Title level="4" className="font-semibold mb-1">
                       {delve(position, 'title')}
                     </Title>
                   )}

@@ -26,7 +26,7 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
       )}
       <div className="max-w-[800px] mx-auto">
         {title && (
-          <Title component="h1" className="text-white text-center mb-2.5">
+          <Title level="1" className="text-white text-center mb-2.5">
             {title}
           </Title>
         )}
