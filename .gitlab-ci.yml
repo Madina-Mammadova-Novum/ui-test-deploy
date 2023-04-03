@@ -11,7 +11,7 @@ build-staging:
   tags:
     - staging
   script:
-   - npm i
+   - npm i --legacy-peer-deps --force
    - npm run build
    - rsync -a --progress . /var/www/web 
    - cd /var/www/web 
