@@ -1,17 +1,50 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
-const FormManager = ({ children, options }) => {
-  const methods = useForm(options);
+import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
 
-  return <FormProvider {...methods}>{children}</FormProvider>;
+import { Button } from '@/elements';
+
+const FormManager = ({ children, submitAction, submitButton, className }) => {
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useFormContext();
+  const { text, variant, size, className: buttonClassName } = submitButton;
+
+  return (
+    <form className={`${className} flex flex-col gap-5`} onSubmit={handleSubmit(submitAction)}>
+      {children}
+      <Button
+        type="submit"
+        buttonProps={{
+          text: isSubmitting ? 'Please wait...' : text,
+          variant: isSubmitting ? 'secondary' : variant,
+          size,
+        }}
+        disabled={isSubmitting}
+        customStyles={`${buttonClassName} mt-4 w-full`}
+      />
+    </form>
+  );
+};
+
+FormManager.defaultProps = {
+  className: '',
 };
 
 FormManager.propTypes = {
-  options: PropTypes.shape({}).isRequired,
+  submitButton: {
+    text: PropTypes.string,
+    icon: PropTypes.node,
+    variant: buttonVariantsPropTypes,
+    size: buttonSizesPropTypes,
+  }.isRequired,
+  submitAction: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 export default FormManager;

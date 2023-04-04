@@ -2,10 +2,10 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import 'react-toastify/dist/ReactToastify.css';
 import '@/styles/index.css';
+import { ClientSidePackages } from '@/common';
 
-const BaseLayout = ({ children }) => {
+const BaseLayout = ({ children, className }) => {
   return (
     <html lang="en">
       {/*
@@ -13,15 +13,21 @@ const BaseLayout = ({ children }) => {
         head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="max-w-screen-2lg">
-        <div id="portal">{children}</div>
+      <body className={className}>
+        {children}
+        <ClientSidePackages />
       </body>
     </html>
   );
 };
 
+BaseLayout.defaultProps = {
+  className: '',
+};
+
 BaseLayout.propTypes = {
-  children: PropTypes.shape({}).isRequired,
+  className: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 
 export default BaseLayout;

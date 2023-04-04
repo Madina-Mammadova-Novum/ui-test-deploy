@@ -140,3 +140,92 @@ export function hasNestedArrays(data) {
 
   return isNested;
 }
+
+export function getFilledArray(length) {
+  return Array.from({ length }).map((_, index) => index);
+}
+
+export function getValueWithPath(object, path, defaultValue) {
+  return (
+    path
+      // eslint-disable-next-line no-useless-escape
+      .replace(/[\[\]]/g, '.')
+      .replace(/['"]/g, '')
+      .split('.')
+      .filter((key) => key)
+      .reduce((o, p) => (o ? o[p] : defaultValue), object)
+  );
+}
+
+export function checkObjectValues({ data }) {
+  const isNotNullOrUndefined = Object.keys(data).every((key) => data[key] !== null && data[key] !== undefined);
+
+  if (!isNotNullOrUndefined) {
+    return { message: `Error: One or more values not founded.` };
+  }
+
+  return { data };
+}
+
+export function formatDate(dateString) {
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-US', options);
+  return formatter.format(date);
+}
+
+export const disableDefaultBehaviour = (e) => e.preventDefault();
+
+export const getButtonClassNames = (variant, size) => {
+  // todo: need to connect constants for variants and sizes values
+  if (variant === 'primary') {
+    if (size === 'large') return 'bg-blue text-white hover:bg-blue-darker';
+    if (size === 'medium') return 'bg-white px-2.5 py-1 text-blue border border-blue hover:border-blue-darker';
+    if (size === 'small') return 'bg-white !p-0 text-blue hover:text-blue-darker';
+  }
+  if (variant === 'secondary') {
+    if (size === 'large') return 'bg-black text-white hover:bg-blue-dark';
+    if (size === 'medium') return 'bg-white px-2.5 py-1 text-black border border-grey hover:border-black';
+  }
+  if (variant === 'tertiary') {
+    if (size === 'large') return 'bg-white text-black border border-grey hover:border-black';
+  }
+  if (variant === 'delete') {
+    if (size === 'large') return 'bg-white text-red border border-red-medium hover:border-red';
+    if (size === 'medium') return 'bg-white px-2.5 py-1 text-red border border-red-medium hover:border-red';
+    if (size === 'small') return 'text-red';
+  }
+  return null;
+};
+
+export const disablePlusMinusSymbols = (e) => {
+  const clipboardPasteKey = e.ctrlKey && e.key === 'v';
+
+  const disabledKeyCodes =
+    e.keyCode === 38 ||
+    e.keyCode === 40 ||
+    e.keyCode === 69 ||
+    e.keyCode === 107 ||
+    e.keyCode === 109 ||
+    e.keyCode === 187 ||
+    e.keyCode === 189;
+
+  if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
+};
+
+export const convertDataToOptions = (data, keyValue, keyLabel) => {
+  if (data === null || data === undefined) return [];
+
+  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
+    if (value === null || value === undefined) throw new Error('value cannot be empty');
+    if (label === null || label === undefined) throw new Error('label cannot be empty');
+
+    return { value, label };
+  });
+};
+
+export const removeByIndex = (data, index) => {
+  if (data === null || data === undefined) return null;
+
+  return data.filter((_, idx) => idx !== index);
+};

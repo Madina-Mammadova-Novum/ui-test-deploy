@@ -1,20 +1,16 @@
 import PropTypes from 'prop-types';
 
 import TableHeaderCell from '@/elements/Table/TableHeaderCell';
-import { noSSR } from '@/utils/helpers';
 
-const TableHeader = ({ headerData }) => {
-  return (
-    <tr>
-      {headerData.map(({ text }) => (
-        <TableHeaderCell text={text} />
-      ))}
-    </tr>
-  );
+const TableHeader = ({ headerData, className }) => {
+  const printHeaderCell = (item, index) => <TableHeaderCell key={index} text={item?.text} />;
+
+  return <tr className={className}>{headerData?.map(printHeaderCell)}</tr>;
 };
 
 TableHeader.propTypes = {
   headerData: PropTypes.shape([]).isRequired,
+  className: PropTypes.string,
 };
 
-export default noSSR(TableHeader);
+export default TableHeader;

@@ -1,0 +1,22 @@
+import { metaData } from '@/adapters/metaData';
+import { AccountWrapper, TankerSearch } from '@/modules';
+
+export async function generateMetadata() {
+  return metaData({
+    data: {
+      seo: {
+        metaTitle: 'Search',
+      },
+    },
+  });
+}
+
+const VesselsSearch = () => {
+  return (
+    <AccountWrapper title="Search" containerClass="grow px-5">
+      <TankerSearch />
+    </AccountWrapper>
+  );
+};
+
+export default VesselsSearch;

@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 
 import TableCell from '@/elements/Table/TableCell';
-import { noSSR } from '@/utils/helpers';
+
+/* Draft Version */
 
 const TableRow = ({ rowData, handleActionClick }) => {
   return (
@@ -34,4 +35,4 @@ TableRow.propTypes = {
   handleActionClick: PropTypes.func,
 };
 
-export default noSSR(TableRow);
+export default TableRow;

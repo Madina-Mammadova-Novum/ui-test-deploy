@@ -1,5 +1,6 @@
+// import AuthLayout from '@/layouts/AuthLayout';
+import AccountLayout from '@/layouts/AccountLayout';
 import BaseLayout from '@/layouts/Base';
 import PageLayout from '@/layouts/Page';
-import SignupLayout from '@/layouts/SignupLayout';
 
-export { BaseLayout, PageLayout, SignupLayout };
+export { BaseLayout, AccountLayout, PageLayout };

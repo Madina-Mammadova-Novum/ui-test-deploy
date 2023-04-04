@@ -1,5 +1,6 @@
-import { ProviderManager } from '@/common';
+// import { ProviderManager } from '@/common';
 
 export default function RootTemplate({ children }) {
-  return <ProviderManager>{children}</ProviderManager>;
+  return children;
+  // return <ProviderManager>{children}</ProviderManager>;
 }

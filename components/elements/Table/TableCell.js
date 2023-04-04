@@ -1,22 +1,11 @@
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-import ClockSVG from '@/assets/images/clock.svg';
-import { Badge, Button, NextImage, StatusIndicator, Toggle } from '@/elements';
-import { makeId } from '@/utils/helpers';
+import { Button, NextImage } from '@/elements';
 
-const TableCell = ({
-  countryFlag,
-  text,
-  toggle,
-  badge,
-  actions,
-  status,
-  timer,
-  semibold,
-  color,
-  handleActionClick,
-}) => {
+/* Draft Version */
+
+const TableCell = ({ countryFlag, text, actions, semibold, color, handleActionClick }) => {
   return (
     <td>
       <div
@@ -33,8 +22,7 @@ const TableCell = ({
             alt={`${countryFlag} flag`}
           />
         )}
-        {status && <StatusIndicator status={status} customStyles="mr-1.5" />}
-        {timer && <ClockSVG className="fill-red mr-1" />}
+
         {actions &&
           actions.map(({ text: btnText, value, size }) => (
             <Button
@@ -42,8 +30,7 @@ const TableCell = ({
               onClick={() => handleActionClick({ id: value })}
             />
           ))}
-        {toggle && <Toggle id={makeId()} />}
-        {badge && <Badge>{badge}</Badge>}
+
         {text}
       </div>
     </td>
