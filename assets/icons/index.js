@@ -14,3 +14,4 @@ export { default as TrashIcon } from '@/assets/icons/Trash';
 export { default as PlusIcon } from '@/assets/icons/Plus';
 export { default as PlusCircleIcon } from '@/assets/icons/PlusCircle';
 export { default as MinusIcon } from '@/assets/icons/Minus';
+export { default as ExternalLinkAltIcon } from '@/assets/icons/ExternalLinkAlt';

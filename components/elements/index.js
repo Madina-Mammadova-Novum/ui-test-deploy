@@ -31,6 +31,7 @@ import Label from '@/elements/Label';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loading from '@/elements/Loading';
 import Modal from '@/elements/Modal';
+import NavButton from '@/elements/NavButton';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
 // import Pagination from '@/elements/Pagination';
@@ -109,4 +110,5 @@ export {
   Loading,
   NotFound,
   DateTimeRow,
+  NavButton,
 };
