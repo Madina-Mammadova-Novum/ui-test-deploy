@@ -1,30 +1,26 @@
-import classnames from 'classnames';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-const NextLink = ({ children, href, type, customStyles }) => {
+import { linkTargetPropTypes } from '@/lib/types';
+
+const NextLink = ({ children, href, className, target, ...rest }) => {
   return (
-    <Link
-      href={href}
-      className={classnames(customStyles, {
-        'text-[12px] border-b border-black': type === 'default',
-      })}
-    >
+    <Link href={href} className={className} target={target} {...rest}>
       {children}
     </Link>
   );
 };
 
 NextLink.defaultProps = {
-  customStyles: '',
-  type: 'default',
+  className: '',
+  target: null,
 };
 
 NextLink.propTypes = {
   children: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-  type: PropTypes.string,
+  className: PropTypes.string,
+  target: linkTargetPropTypes,
 };
 
 export default NextLink;

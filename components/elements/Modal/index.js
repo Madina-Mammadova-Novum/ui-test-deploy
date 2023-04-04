@@ -1,23 +1,21 @@
 import PropTypes from 'prop-types';
 
 import { Portal } from '@/elements';
-import ModalWrapper from '@/elements/Modal/ModalWrapper';
+import { ModalWrapper } from '@/modules';
 
-const Modal = ({ closeModal, children }) => {
-  const handleClose = (e) => {
-    e.stopPropagation();
-    closeModal();
-  };
+const Modal = ({ opened, onClose, children }) => {
   return (
     <Portal>
-      <ModalWrapper closeModal={handleClose}>{children}</ModalWrapper>
+      <ModalWrapper opened={opened} onClose={onClose}>
+        {children}
+      </ModalWrapper>
     </Portal>
   );
 };
 
 Modal.propTypes = {
-  children: PropTypes.node.isRequired,
-  closeModal: PropTypes.func.isRequired,
+  opened: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Modal;

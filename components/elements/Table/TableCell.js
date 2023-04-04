@@ -1,28 +1,25 @@
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-import ClockSVG from '@/assets/images/clock.svg';
-import { Badge, Button, NextImage, StatusIndicator, Toggle } from '@/elements';
-import { makeId } from '@/utils/helpers';
+import EditIcon from '@/assets/images/edit.svg';
+import { NextImage, Toggle } from '@/elements';
+import { ModalWindow } from '@/units';
 
-const TableCell = ({
-  countryFlag,
-  text,
-  toggle,
-  badge,
-  actions,
-  status,
-  timer,
-  semibold,
-  color,
-  handleActionClick,
-}) => {
+/* Draft Version */
+
+const TableCell = ({ cellProps }) => {
+  const { text, name, fontStyle, disabled, toggle, editable, countryFlag, id } = cellProps;
+
   return (
-    <td>
+    <td className={`${disabled ? 'bg-gray-light' : 'bg-white'}`}>
       <div
-        className={classnames('flex items-center font-normal text-xsm', color && `text-${color}`, {
-          '!font-semibold': semibold,
-        })}
+        className={classnames(
+          'flex items-center font-normal text-black text-xsm',
+          fontStyle?.color && `text-${fontStyle?.color}`,
+          {
+            '!font-semibold': fontStyle?.semibold,
+          }
+        )}
       >
         {countryFlag && (
           <NextImage
@@ -33,47 +30,44 @@ const TableCell = ({
             alt={`${countryFlag} flag`}
           />
         )}
-        {status && <StatusIndicator status={status} customStyles="mr-1.5" />}
-        {timer && <ClockSVG className="fill-red mr-1" />}
-        {actions &&
-          actions.map(({ text: btnText, value, size }) => (
-            <Button
-              buttonProps={{ text: btnText, variant: 'primary', size: size || 'medium' }}
-              onClick={() => handleActionClick({ id: value })}
-            />
-          ))}
-        {toggle && <Toggle id={makeId()} />}
-        {badge && <Badge>{badge}</Badge>}
-        {text}
+
+        <div className="flex items-center gap-x-2.5">
+          <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{text}</span>
+          {editable && (
+            <ModalWindow
+              buttonProps={{
+                icon: <EditIcon />,
+                variant: 'tertiary',
+                size: 'small',
+                className: 'hover:bg-gray-darker !py-1 !px-2',
+              }}
+            >
+              {name}
+            </ModalWindow>
+          )}
+        </div>
+
+        {toggle && <Toggle id={id} value={toggle.value} disabled={disabled} />}
       </div>
     </td>
   );
 };
 
-TableCell.defaultProps = {
-  countryFlag: '',
-  text: '',
-  badge: '',
-  toggle: false,
-  actions: [],
-  status: '',
-  timer: false,
-  semibold: false,
-  color: '',
-  handleActionClick: () => {},
-};
-
 TableCell.propTypes = {
-  countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
-  text: PropTypes.string,
-  badge: PropTypes.string,
-  toggle: PropTypes.bool,
-  actions: PropTypes.shape([]),
-  status: PropTypes.string,
-  timer: PropTypes.bool,
-  semibold: PropTypes.bool,
-  color: PropTypes.string,
-  handleActionClick: PropTypes.func,
+  cellProps: PropTypes.shape({
+    countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
+    text: PropTypes.string,
+    name: PropTypes.string,
+    fontStyle: PropTypes.shape({
+      semibold: PropTypes.bool,
+      color: PropTypes.string,
+    }),
+    badge: PropTypes.string,
+    toggle: PropTypes.bool,
+    editable: PropTypes.bool,
+    disabled: PropTypes.bool,
+    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+  }).isRequired,
 };
 
 export default TableCell;

@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import delve from 'dlv';
+import { usePathname } from 'next/navigation';
 
-import { PALLETE } from '@/lib/constants';
+import { PALETTE } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -96,13 +100,13 @@ export function useDebounce(value, delay) {
 }
 
 export const useColor = () => {
-  const white = delve(PALLETE, 'COLORS.WHITE.DEFAULT');
-  const black = delve(PALLETE, 'COLORS.BLACK.DEFAULT');
-  const grey = delve(PALLETE, 'COLORS.GREY.DEFAULT');
-  const red = delve(PALLETE, 'COLORS.RED.DEFAULT');
-  const yellow = delve(PALLETE, 'COLORS.YELLOW.DEFAULT');
-  const green = delve(PALLETE, 'COLORS.GREEN.DEFAULT');
-  const blue = delve(PALLETE, 'COLORS.BLUE.DEFAULT');
+  const white = delve(PALETTE, 'COLORS.WHITE.DEFAULT');
+  const black = delve(PALETTE, 'COLORS.BLACK.DEFAULT');
+  const grey = delve(PALETTE, 'COLORS.GREY.DEFAULT');
+  const red = delve(PALETTE, 'COLORS.RED.DEFAULT');
+  const yellow = delve(PALETTE, 'COLORS.YELLOW.DEFAULT');
+  const green = delve(PALETTE, 'COLORS.GREEN.DEFAULT');
+  const blue = delve(PALETTE, 'COLORS.BLUE.DEFAULT');
 
   return {
     white,
@@ -121,11 +125,11 @@ export const useActiveColors = (isAcitve) => {
   return isAcitve ? white : grey;
 };
 
-export const useSuccessToast = (title, description = '') => {
+export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
 };
 
-export const useErrorToast = (title, description = '') => {
+export const errorToast = (title, description = '') => {
   return toastFunc('error', title, description);
 };
 
@@ -145,4 +149,56 @@ export const useHookForm = () => {
   const methods = useFormContext();
 
   return { ...methods };
+};
+
+/**
+ *
+ * @param state
+ * @param schema
+ * @returns {UseFormReturn<FieldValues, any>}
+ */
+export const useHookFormParams = ({ state, schema }) => {
+  const params = useForm({
+    defaultValues: { ...state },
+    resolver: yupResolver(schema),
+  });
+
+  return params;
+};
+
+export const useMediaQuery = (query) => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+
+    if (media.matches !== matches) setMatches(media.matches);
+    const listener = () => setMatches(media.matches);
+
+    window.addEventListener('resize', listener);
+    return () => window.removeEventListener('resize', listener);
+  }, [matches, query]);
+
+  return matches;
+};
+
+export const useMounted = () => {
+  const mounted = useRef(false);
+  useEffect(() => {
+    mounted.current = true;
+
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  return mounted.current;
+};
+
+export const useSidebarActiveColor = (path) => {
+  const pathname = usePathname();
+
+  if (path === pathname) return { isActive: true };
+
+  return { isActive: false };
 };

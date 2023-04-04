@@ -2,18 +2,13 @@
 
 import { useMemo, useState } from 'react';
 
-import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 
 import HoverTooltip from '@/elements/Tooltip/HoverTooltip';
 import ManualTooltip from '@/elements/Tooltip/ManualTooltip';
 
-const Tooltip = ({ variant, tooltipText, data }) => {
+const Tooltip = ({ variant, children, data }) => {
   const [showTooltip, setShowTooltip] = useState(false);
-
-  const paresedContent = useMemo(() => {
-    return (data?.content !== undefined || data?.content !== '') && parse(data?.content);
-  }, [data?.content]);
 
   const handleEnter = () => setShowTooltip(true);
   const handleClose = () => setShowTooltip(false);
@@ -23,36 +18,38 @@ const Tooltip = ({ variant, tooltipText, data }) => {
       case 'manual':
         return (
           <ManualTooltip
-            tooltipText={tooltipText}
             onEnter={handleEnter}
             onClose={handleClose}
             inView={showTooltip}
             title={data?.title}
-            description={paresedContent}
-          />
+            description={data?.description}
+          >
+            {children}
+          </ManualTooltip>
         );
       default:
         return (
           <HoverTooltip
-            tooltipText={tooltipText}
             onEnter={handleEnter}
             onClose={handleClose}
             inView={showTooltip}
-            description={paresedContent}
-          />
+            title={data?.title}
+            description={data?.description}
+          >
+            {children}
+          </HoverTooltip>
         );
     }
-  }, [data?.title, paresedContent, showTooltip, tooltipText, variant]);
+  }, [children, data?.description, data?.title, showTooltip, variant]);
 
   return printTooltip;
 };
 
 Tooltip.propTypes = {
   variant: PropTypes.string.isRequired,
-  tooltipText: PropTypes.string.isRequired,
   data: PropTypes.shape({
     title: PropTypes.string,
-    content: PropTypes.element,
+    description: PropTypes.element,
   }).isRequired,
 };
 

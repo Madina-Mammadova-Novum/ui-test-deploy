@@ -3,16 +3,16 @@ stages:
   - build
 cache:
   paths:
-  - node_modules/
+    - node_modules/
 build-staging:
   stage: build
   only:
-   - master
+    - master
   tags:
     - staging
   script:
-   - npm i --legacy-peer-deps --force
-   - npm run build
-   - rsync -a --progress . /var/www/web 
-   - cd /var/www/web 
-   - pm2 restart ecosystem.config.js
+    - npm i --legacy-peer-deps --force
+    - npm run build
+    - rsync -a --progress . /var/www/web
+    - cd /var/www/web
+    - pm2 restart ecosystem.config.js

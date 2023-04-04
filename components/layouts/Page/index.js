@@ -1,25 +1,16 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
-
-import { PageFooter, PageHeader } from '@/common';
 import { BaseLayout } from '@/layouts';
+import { PageFooter, PageHeader } from '@/modules';
 
 const PageLayout = ({ children }) => {
   return (
-    <BaseLayout>
-      {/* <Header /> */}
-      <div className="ml-auto">
+    <BaseLayout className="bg-gray-light flex min-h-screen max-w-screen-2lg">
+      <div className="flex flex-col grow">
         <PageHeader />
         {children}
         <PageFooter />
       </div>
     </BaseLayout>
   );
-};
-
-PageLayout.propTypes = {
-  children: PropTypes.shape({}).isRequired,
 };
 
 export default PageLayout;

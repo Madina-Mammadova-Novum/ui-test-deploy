@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply text-black;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply overflow-x-clip;
+  }
+
+  h1 {
+    @apply font-bold text-[26px] 3sm:text-[30px];
+  }
+
+  h2 {
+    @apply font-bold text-[20px];
+  }
+
+  h3 {
+    @apply font-semibold text-sm;
+  }
+
+  h4 {
+    @apply font-bold text-xsm;
+  }
+
+  .title-main {
+    @apply uppercase font-semibold text-[12px];
+  }
+}
+
+@layer components {
+  .wrapper-with-span span {
+    @apply text-primary;
+  }
+
+  .linear-gradient-gallery {
+    background-color: linear-gradient(
+      179.62deg,
+      #f4f4f4 0.32%,
+      rgba(255, 255, 255, 0) 229.29%,
+      rgba(244, 244, 244, 0) 229.29%
+    );
+    transform: matrix(0, 1, -1, 0, 0, 0);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* CKEditor 5 Styles */
+
+  .content-wrapper ul {
+    @apply list-inside list-disc;
+  }
+
+  .content-wrapper h1 {
+    @apply text-5xl font-bold;
+  }
+
+  .content-wrapper h2 {
+    @apply text-lg font-bold;
+  }
+
+  .content-wrapper h4 {
+    @apply text-xsm text-black font-bold mb-1.5;
+  }
+
+  .content-wrapper p {
+    @apply text-xsm text-black;
+  }
+
+  .content-wrapper ul li,
+  .content-wrapper ol li {
+    @apply text-black text-xsm;
+  }
+
+  .content-wrapper ul li::marker {
+    color: #072d46;
+  }
+
+  .content-wrapper.list-white ul li::marker {
+    color: #fff;
+  }
+
+  .content-wrapper blockquote {
+    @apply !my-4 py-[5px] pl-4 font-semibold border-l-2 border-blue;
+  }
+
+  /* Swiper */
+
+  .swiper .swiper-pagination {
+    @apply relative !bottom-0 mt-3;
+  }
+
+  .swiper.swiperTestimonial .swiper-wrapper,
+  .swiper.swiperTeam .swiper-wrapper,
+  .swiper.swiperImprovements .swiper-wrapper {
+    @apply !pb-11 mt-10 lg:mt-14 2lg:mt-16;
+  }
+  .swiper.swiperIngredients .swiper-wrapper {
+    @apply !pb-8 md:!pb-0;
+  }
+
+  .swiper .swiper-button-prev,
+  .swiper .swiper-button-next {
+    @apply hidden md:block after:hidden absolute;
+  }
+
+  .swiper .swiper-button-prev {
+    @apply bg-[url(/arrow-left.webp)] w-10 h-10;
+  }
+
+  .swiper .swiper-button-next {
+    @apply bg-[url(/arrow-right.webp)] w-10 h-10;
+  }
+
+  .swiper .swiper-pagination .swiper-pagination-bullet {
+    @apply w-[10px] h-[10px] rounded-[5px] !mx-[5px] bg-gray-darker opacity-100;
+  }
+
+  .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    @apply bg-black;
+  }
+
+  /* Datepickers */
+
+  .single_date .rdrCalendarWrapper {
+    @apply shadow-xmd;
+  }
+
+  .single_date .rdrCalendarWrapper,
+  .single_date .rdrMonth {
+    @apply w-[294px];
+  }
+
+  .range_date .rdrCalendarWrapper {
+    @apply w-[536px];
+  }
+
+  .range_date-hidden .rdrMonthAndYearWrapper,
+  .range_date-hidden .rdrMonths {
+    @apply hidden;
+  }
+}
+
+/* Swiper Concern Gallery  */
+
+.bg-swiper-navigation {
+  background-image: url('/angle.webp'),
+    linear-gradient(179.62deg, #f4f4f4 0.32%, rgba(255, 255, 255, 0) 229.29%, rgba(244, 244, 244, 0) 229.29%);
+}
+
+.swiper.swiperConcernGalleryThumbs {
+  @apply w-full !relative;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-prev,
+.swiper.swiperConcernGalleryThumbs .swiper-button-next {
+  @apply hidden sm:block after:hidden absolute;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-prev.swiper-button-disabled,
+.swiper.swiperConcernGalleryThumbs .swiper-button-next.swiper-button-disabled {
+  @apply hidden;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-prev {
+  @apply bg-swiper-navigation/*  bg-[url(/angle.webp)] */ bg-no-repeat bg-center w-16 h-[calc(100%-40px)] rotate-180 m-0 top-0 left-0;
+}
+
+.swiper.swiperConcernGalleryThumbs .swiper-button-next {
+  @apply bg-swiper-navigation /* bg-[url(/angle.webp)] */ bg-no-repeat bg-center w-16 h-[calc(100%-40px)] m-0 top-0 right-0;
+}
+
+@media only screen and (min-width: 1280px) {
+  .swiper.swiperConcernGalleryThumbs .swiper-button-prev {
+    @apply w-16 h-28  -top-6 left-6 -rotate-90;
+  }
+  .swiper.swiperConcernGalleryThumbs .swiper-button-next {
+    @apply w-16 h-28 -bottom-6 top-auto left-6 rotate-90;
+  }
+}
+
+/* Animation  */
+
+.animation-base {
+  transition: all 0.3s ease-in-out;
+}
+
+.animation-burger {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Phone Field Rewrites */
+
+.react-tel-input .form-control.phone-field {
+  @apply h-[42px] w-full text-black rounded-[10px] border pl-[68px] font-kumbh-sans outline-none;
+}
+
+.react-tel-input .flag-dropdown.country-field {
+  @apply text-black rounded-[10px] border border-none h-[28px] top-[7px] left-[1px] bg-white pl-3;
+}
+
+.react-tel-input .country-list .country {
+  @apply !h-10 !px-4;
+}
+
+.react-tel-input .country-list .country-name {
+  @apply hidden;
+}
+
+.react-tel-input .country-list {
+  @apply !w-28 !rounded-[6px];
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0px 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.react-tel-input .country-list .dial-code {
+  @apply text-xsm;
+}
+
+.react-tel-input .flag-dropdown .selected-flag {
+  @apply p-0;
+}
+
+.react-tel-input .selected-flag {
+  @apply !w-12 border-r border-[#E7E7E9];
+}
+
+.react-tel-input .selected-flag .arrow {
+  @apply !border-0 !w-5 !h-5 !mt-[-5px] !top-0 bg-[url('/angle-down.png')];
+}
+
+.react-tel-input .selected-flag .arrow.up {
+  @apply bg-[url('/angle-up.png')];
+}
+
+/* Input Number Field */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Input Password Field */
+
+input[type='password'] {
+  @apply text-black;
+}
+
+.my_position-table tr:first-child {
+  @apply bg-gray-darker text-left uppercase text-[12px] h-7;
+}
+
+.my_position-table tr {
+  @apply h-9;
+}
+
+.my_position-table tr th {
+  @apply pl-5;
+}
+
+.my_position-table tr td {
+  @apply border-l-0 border-r border-b border-t-0 border-b-gray-darker;
+}
+
+.my_position-table tr td div {
+  @apply flex box-border pl-5;
+}
+
+.Toastify__toast {
+  @apply !shadow-none p-0 !bg-transparent !mb-0;
+}
+
+.Toastify__toast-container {
+  @apply !w-full !p-0 !ml-auto;
+}
+
+.Toastify__toast-body {
+  @apply !p-0;
+}
+
+.selected-flag {
+  @apply !min-w-[68px] !pl-4.5;
+}
+
+.react-tel-input .selected-flag .arrow {
+  @apply !left-5;
+}
+
+.react-tel-input .selected-flag {
+  @apply !border-r-0 !border-gray-darker !bg-purple-light;
+}
+
+.react-tel-input .country-list {
+  @apply !w-[262px];
+}

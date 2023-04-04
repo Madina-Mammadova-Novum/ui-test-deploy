@@ -1,0 +1,37 @@
+'use client';
+
+import PropTypes from 'prop-types';
+
+import { getUserDetails } from '@/services';
+import {
+  AccountCompanyDetails,
+  AccountDeactivateDetails,
+  AccountDeleteDetails,
+  AccountPasswordDetails,
+  AccountPersonalDetails,
+} from '@/units';
+
+const AccountDetails = async ({ containerClass }) => {
+  const data = await getUserDetails();
+  const { personalDetails, companyDetails, accountDetails } = data;
+  return (
+    <div className={containerClass}>
+      <AccountPersonalDetails user={personalDetails} />
+      <AccountCompanyDetails company={companyDetails} />
+      <AccountPasswordDetails user={accountDetails} />
+      <AccountDeactivateDetails />
+      <AccountDeleteDetails />
+    </div>
+  );
+};
+
+AccountDetails.propTypes = {
+  data: PropTypes.shape({
+    personalDetails: PropTypes.shape({}),
+    companyDetails: PropTypes.shape({}),
+    accountDetails: PropTypes.shape({}),
+  }),
+  containerClass: PropTypes.string,
+};
+
+export default AccountDetails;

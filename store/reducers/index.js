@@ -1,7 +1,9 @@
+// import example from '@/store/entities/example/slice';
+
 import { combineReducers } from '@reduxjs/toolkit';
 
-// import example from '@/store/entities/example/slice';
-import signup from '@/store/entities/signup/slice';
-import system from '@/store/entities/system/slice';
+import { user } from '@/store/entities';
 
-export default combineReducers({ system, signup });
+export const reducer = combineReducers({
+  user,
+});

@@ -1,12 +1,10 @@
-import { memo } from 'react';
-
 import PropTypes from 'prop-types';
 
-const HoverTooltip = memo(({ title, description, tooltipText, inView, onEnter, onClose }) => {
+const HoverTooltip = ({ title, description, children, inView, onEnter, onClose }) => {
   return (
     <div className="group relative transition-all">
       <span onMouseEnter={onEnter} onMouseLeave={onClose} className="text-gray cursor-help font-bold text-xxs">
-        {tooltipText}
+        {children}
       </span>
       {inView && (
         <div className="bg-white transition-all max-w-xs flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-lg absolute left-0 top-7 transform -translate-x-0">
@@ -16,7 +14,7 @@ const HoverTooltip = memo(({ title, description, tooltipText, inView, onEnter, o
       )}
     </div>
   );
-});
+};
 
 HoverTooltip.propTypes = {
   title: PropTypes.string.isRequired,

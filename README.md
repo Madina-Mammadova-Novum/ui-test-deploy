@@ -32,3 +32,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Common password validation
+
+```javascript
+`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}[\]\\|;:'",.<>/?-]).{8,}$`;
+```
+
+Let's break it down:
+
+`^`: start of string anchor\
+`(?=.*[a-z])`: positive lookahead for at least one lowercase letter\
+`(?=.*[A-Z])`: positive lookahead for at least one uppercase letter\
+`(?=.*\d)`: positive lookahead for at least one digit\
+`(?=.*[!@#$%^&*()_+={}[\]\\|;:'",.<>/?-])`: positive lookahead for at least one special symbol\
+`.{8,}`: match any character (except newline) at least 8 times\
+`$`: end of string anchor\
+
+This regular expression uses positive lookaheads to assert that each of the requirements is present in the string, and then matches any character (except newline) at least 8 times. The special symbols in the positive lookahead can be modified to include other symbols if desired.
