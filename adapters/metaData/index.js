@@ -96,28 +96,28 @@ export const metaData = ({ data }) => {
       address: false,
       telephone: false,
     },
-    // openGraph: {
-    //   title,
-    //   description,
-    //   url,
-    //   siteName,
-    //   images: [
-    //     {
-    //       url: '/og.jpg',
-    //       width: 800,
-    //       height: 600,
-    //       alt: title,
-    //     },
-    //     {
-    //       url: '/og.jpg',
-    //       width: 1800,
-    //       height: 1600,
-    //       alt: title,
-    //     },
-    //   ],
-    //   locale: 'en-US',
-    //   type: 'website',
-    // },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName,
+      images: [
+        {
+          url: 'https://shiplink.oyihost.com/og.jpg',
+          width: 800,
+          height: 600,
+          alt: title,
+        },
+        {
+          url: 'https://shiplink.oyihost.com/og.jpg',
+          width: 1800,
+          height: 1600,
+          alt: title,
+        },
+      ],
+      locale: 'en-US',
+      type: 'website',
+    },
     robots: getRobots(metaRobots),
     // icons: {
     //   icon: '/icon.png',
