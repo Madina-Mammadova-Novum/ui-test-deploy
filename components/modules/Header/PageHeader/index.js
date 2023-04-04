@@ -1,5 +1,8 @@
+import React from 'react';
+
 import Logo from '@/assets/images/logo.svg';
 import { LinkAsButton, NavButton, NextLink } from '@/elements';
+import { ROUTES } from '@/lib';
 
 const PageHeader = () => {
   return (
@@ -26,7 +29,7 @@ const PageHeader = () => {
             <ul className="flex gap-x-2.5">
               <li>
                 <LinkAsButton
-                  href="/"
+                  href={ROUTES.LOGIN}
                   buttonProps={{
                     variant: 'tertiary',
                     size: 'large',
@@ -38,7 +41,7 @@ const PageHeader = () => {
               </li>
               <li>
                 <LinkAsButton
-                  href="/"
+                  href={ROUTES.SIGNUP}
                   buttonProps={{
                     variant: 'primary',
                     size: 'large',
