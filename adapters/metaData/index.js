@@ -102,13 +102,13 @@ export const metaData = ({ data }) => {
       siteName,
       images: [
         {
-          url: 'https://nextjs.org/og.png',
+          url: 'https://shiplink.oyihost.com/og.jpg',
           width: 800,
           height: 600,
           alt: title,
         },
         {
-          url: 'https://nextjs.org/og-alt.png',
+          url: 'https://shiplink.oyihost.com/og.jpg',
           width: 1800,
           height: 1600,
           alt: title,
