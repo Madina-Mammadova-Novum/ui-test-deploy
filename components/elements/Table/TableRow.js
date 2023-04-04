@@ -1,37 +1,27 @@
 import PropTypes from 'prop-types';
 
+import { tableRowsAdapter } from '@/adapters';
 import TableCell from '@/elements/Table/TableCell';
 
 /* Draft Version */
 
-const TableRow = ({ rowData, handleActionClick }) => {
-  return (
-    <tr>
-      {rowData.map(({ countryFlag, text, actions, toggle, badge, status, timer, semibold, color }) => (
-        <TableCell
-          countryFlag={countryFlag}
-          text={text}
-          actions={actions}
-          toggle={toggle}
-          badge={badge}
-          status={status}
-          timer={timer}
-          semibold={semibold}
-          color={color}
-          handleActionClick={handleActionClick}
-        />
-      ))}
-    </tr>
-  );
+const TableRow = ({ rowData: data, indexCell: index }) => {
+  const result = tableRowsAdapter({ data, index });
+
+  const printTableCell = (props) => <TableCell cellProps={props} />;
+
+  return <tr>{result.map(printTableCell)}</tr>;
 };
 
 TableRow.defaultProps = {
   rowData: [],
+  indexCell: null,
   handleActionClick: () => {},
 };
 
 TableRow.propTypes = {
   rowData: PropTypes.shape([]),
+  indexCell: PropTypes.number,
   handleActionClick: PropTypes.func,
 };
 

@@ -13,8 +13,8 @@ const Table = ({ headerData, rows }) => {
         style={{ marginTop: '12px', marginBottom: '21px' }}
       >
         <table className="my_position-table w-full border-collapse">
-          {headerData.length && <TableHeader headerData={headerData} />}
-          {rows.length && rows.map((rowData) => <TableRow rowData={rowData} />)}
+          {headerData.length && <TableHeader className="bg-gray-darker text-black" headerData={headerData} />}
+          {rows.length && rows.map((rowData, index) => <TableRow rowData={rowData} indexCell={index + 1} />)}
         </table>
       </div>
     </div>

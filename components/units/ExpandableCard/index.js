@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 
-import { fleetsHeaderDataAdapter } from '@/adapters';
+import { fleetsHeaderDataAdapter, fleetsRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, ExpandableCardWrapper, Table } from '@/elements';
-import { fleetsHeader, fleetsTableRow } from '@/utils/mock';
+import { fleetsHeader } from '@/utils/mock';
 
 const ExpandableCard = ({ data }) => {
   const headerData = fleetsHeaderDataAdapter({ data });
+  const rowsData = fleetsRowsDataAdapter({ data: data.tankers });
 
   return (
     <ExpandableCardWrapper headerComponent={<ExpandableCardHeader headerData={headerData} />}>
-      {/* Table is draft version */}
-      <Table headerData={fleetsHeader} rows={fleetsTableRow} />
+      <Table headerData={fleetsHeader} rows={rowsData} />
     </ExpandableCardWrapper>
   );
 };
