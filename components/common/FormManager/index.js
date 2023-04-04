@@ -13,7 +13,7 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
     handleSubmit,
     formState: { isSubmitting },
   } = useFormContext();
-  const { text, variant, size, className: buttonClassName } = submitButton;
+  const { text, variant, size, disabled, className: buttonClassName } = submitButton;
 
   return (
     <form className={`${className} flex flex-col gap-5`} onSubmit={handleSubmit(submitAction)}>
@@ -25,8 +25,8 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
           variant: isSubmitting ? 'secondary' : variant,
           size,
         }}
-        disabled={isSubmitting}
-        customStyles={`${buttonClassName} mt-4 w-full`}
+        disabled={disabled || isSubmitting}
+        customStyles={`${buttonClassName} w-full`}
       />
     </form>
   );
@@ -40,8 +40,9 @@ FormManager.propTypes = {
   submitButton: {
     text: PropTypes.string,
     icon: PropTypes.node,
-    variant: buttonVariantsPropTypes,
-    size: buttonSizesPropTypes,
+    disabled: PropTypes.bool,
+    variant: PropTypes.oneOf(STYLES),
+    size: PropTypes.oneOf(SIZES.BUTTONS),
   }.isRequired,
   submitAction: PropTypes.func.isRequired,
   className: PropTypes.string,

@@ -3,7 +3,8 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
+const Button = ({ buttonProps, customStyles, disabled, type, onClick, ...rest }) => {
+  const { icon, text, helper, variant, size } = buttonProps;
 
 import { getButtonClassNames } from '@/utils/helpers';
 
@@ -23,9 +24,9 @@ const Button = ({ buttonProps: { icon, text, variant, size }, customStyles, disa
       disabled={disabled}
       {...rest}
     >
-      {/* todo: need to change to children like in LinkAsButton component */}
-      {icon && <span>{icon}</span>}
+      {icon && <span className="mr-1.5">{icon}</span>}
       {text && text}
+      {helper && <span>{helper}</span>}
     </button>
   );
 };

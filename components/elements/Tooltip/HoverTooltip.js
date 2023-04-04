@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 const HoverTooltip = ({ title, description, children, inView, onEnter, onClose }) => {
   return (
     <div className="group relative transition-all">
-      <span onMouseEnter={onEnter} onMouseLeave={onClose} className="text-gray cursor-help font-bold text-xxs">
+      <span onMouseEnter={onEnter} onMouseLeave={onClose} className="text-gray cursor-help">
         {children}
       </span>
       {inView && (
-        <div className="bg-white transition-all max-w-xs flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-lg absolute left-0 top-7 transform -translate-x-0">
+        <div className="bg-white transition-all w-[550px] flex flex-col h-auto text-black z-50 border border-solid border-gray-darker font-semibold py-2 px-2 rounded-lg absolute left-0 top-7 transform -translate-x-0">
           {title && <span>{title}</span>}
           {description ?? ''}
         </div>
