@@ -56,7 +56,7 @@ const BlockHowItWorks = ({ title, shortDescription, subTitle, values }) => {
     <section id="how-it-works" className="mb-28 sm:mb-44 2lg:mb-64">
       <div className="relative flex flex-col md:flex-row md:justify-between lg:mt-14 2lg:mt-16">
         <div className="md:sticky md:top-0 md:self-start md:min-w-[521px]">
-          {title && <Title>{title}</Title>}
+          {title && <Title level="1">{title}</Title>}
           {shortDescription && shortDescription}
           {subTitle && subTitle}
         </div>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types'
+
+import PropTypes from 'prop-types';
+
 import SearchSVG from '@/assets/images/search.svg';
 import { Button, NextLink, Table, Tabs } from '@/elements';
 import {
@@ -11,7 +13,6 @@ import {
   negotiatingIncomingTableHeader,
   negotiatingIncomingTableRow,
 } from '@/utils/mock';
-
 
 const NegotiatingExpandedData = ({ isCharterer }) => {
   const [currentTab, setCurrentTab] = useState(expandedNegotiatingRowTabs[0].value);
@@ -50,11 +51,11 @@ const NegotiatingExpandedData = ({ isCharterer }) => {
 };
 
 NegotiatingExpandedData.defaultProps = {
-  isCharterer: false
-}
+  isCharterer: false,
+};
 
 NegotiatingExpandedData.propTypes = {
-  isCharterer: PropTypes.bool
-}
+  isCharterer: PropTypes.bool,
+};
 
 export default NegotiatingExpandedData;

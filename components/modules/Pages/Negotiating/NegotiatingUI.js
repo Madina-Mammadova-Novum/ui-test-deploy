@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 
-import ExpandableRowHeader from '../../ExpandableRowHeader';
 import NegotiatingExpandedData from './NegotiatingExpandedData';
+import ExpandableRowHeader from '../../ExpandableRowHeader';
 
 import { ExpandableRow, Pagination, SimpleSelect } from '@/elements';
 import ToggleRows from '@/ui/ToggleRows';

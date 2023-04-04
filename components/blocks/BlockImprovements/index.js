@@ -14,7 +14,7 @@ import { Title } from '@/elements';
 const BlockImprovements = ({ title, values }) => {
   return (
     <section className="relative mb-28 sm:mb-44 2lg:mb-64">
-      {title && <Title>{title}</Title>}
+      {title && <Title level='1'>{title}</Title>}
       {values && (
         <Swiper
           freeMode

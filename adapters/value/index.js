@@ -2,7 +2,7 @@ import { categoryAdapter } from '@/adapters/category';
 import { imageAdapter } from '@/adapters/image';
 
 export const valueAdapter = ({ data }) => {
-  if (data === null) return null;
+  if (data === null || data === undefined) return null;
   const { id, attributes } = data;
   const { title, subTitle, shortDescription, coverImage, valueType } = attributes;
   return {
