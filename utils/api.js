@@ -1,9 +1,11 @@
 import { serialize } from 'cookie';
 
 import { responseAdapter } from '@/adapters/response';
+import { getStrapiURL } from '@/utils/index';
 
-export const errorHandler = (res, status, errors) => {
-  const statusMessage = errors !== undefined || errors.length !== 0 ? 'Something went wrong' : errors.join('');
+export const errorHandler = (res, status, message, errors = []) => {
+  const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
+
   return res.status(status).send({
     message: statusMessage,
     errors,
@@ -82,8 +84,7 @@ export const apiHandler = async (options, req, res) => {
       });
       res.setHeader('Set-Cookie', cookie);
     }
-
-    return responseAdapter(res.status(200).json(result));
+    return res.status(200).json(responseAdapter(result));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };
@@ -100,10 +101,21 @@ export const postHandler = (path, req, res) => {
   );
 };
 
-export const getHandler = (path, req, res) => {
+export const getHandler = (path, provider, req, res) => {
+  let apiURL = '';
+  switch (provider) {
+    case 'backend': {
+      apiURL = getApiURL(path);
+      break;
+    }
+    default: {
+      apiURL = getStrapiURL(path);
+      break;
+    }
+  }
   return apiHandler(
     {
-      endpoint: getApiURL(path),
+      endpoint: apiURL,
       requestMethod: 'GET',
       allowedMethods: ['OPTIONS', 'GET'],
     },

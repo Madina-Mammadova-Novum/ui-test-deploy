@@ -59,6 +59,7 @@ function getRobots(string) {
 export const metaData = ({ data }) => {
   if (data === null) return null; // todo: if data === null need to set default values
   const { title: pageTile, slug, seo } = data;
+  if (seo === null) return null; // todo: if seo === null need to set default values
   const { metaTitle, metaDescription, keywords, metaRobots, canonicalURL } = seo; // todo: metaViewport isset in seo but temporary not use
   const title = metaTitle !== null ? metaTitle : pageTile;
   const description = metaDescription !== null ? metaDescription : '';

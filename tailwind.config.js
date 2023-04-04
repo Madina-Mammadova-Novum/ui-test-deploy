@@ -122,6 +122,7 @@ module.exports = {
       boxShadow: {
         xmd: '0 4px 20px #DEE3EE',
         '2xmd': '0 2px 6px #CED5E7;',
+        vInset: '0 -6px 7px -7px #C4C4C4 inset , 0 6px 7px -7px #C4C4C4 inset',
       },
     },
   },

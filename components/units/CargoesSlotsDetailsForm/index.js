@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { PlusIcon, TrashIcon } from '@/assets/icons';
+import { PlusCircleIcon, TrashIcon } from '@/assets/icons';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';

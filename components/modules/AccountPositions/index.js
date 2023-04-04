@@ -2,9 +2,11 @@
 
 import PropTypes from 'prop-types';
 
+import { getUserPositions } from '@/services';
 import { ExpandableCard } from '@/units';
 
-const AccountPositions = ({ data, containerClass }) => {
+const AccountPositions = async ({ containerClass }) => {
+  const data = await getUserPositions();
   const printExpandable = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
   return <section className={containerClass}>{data?.map(printExpandable)}</section>;

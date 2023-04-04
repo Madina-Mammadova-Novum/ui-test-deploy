@@ -4,8 +4,9 @@ import { useFormContext } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
+import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
+
 import { Button } from '@/elements';
-import { SIZES, STYLES } from '@/lib/constants';
 
 const FormManager = ({ children, submitAction, submitButton, className }) => {
   const {

@@ -1,3 +1,5 @@
+import Accordion from '@/units/Accordion';
+import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import Comment from '@/units/Comment';

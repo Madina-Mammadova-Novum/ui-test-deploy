@@ -1,6 +1,6 @@
 import { BaseLayout } from '@/layouts';
 import { ROUTES } from '@/lib';
-import { PageFooter, PageHeader, Sidebar } from '@/modules';
+import { AccountFooter, AccountHeader, Sidebar } from '@/modules';
 import { makeId } from '@/utils/helpers';
 
 const AccountLayout = ({ children }) => {
@@ -77,9 +77,9 @@ const AccountLayout = ({ children }) => {
     <BaseLayout className="bg-gray-light flex min-h-screen max-w-screen-2lg">
       <Sidebar data={sidebarData} containerStyles="z-50" />
       <div className="flex flex-col grow">
-        <PageHeader />
+        <AccountHeader />
         {children}
-        <PageFooter />
+        <AccountFooter />
       </div>
     </BaseLayout>
   );
