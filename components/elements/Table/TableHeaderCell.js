@@ -5,7 +5,7 @@ import { Tooltip } from '@/elements';
 const TableHeaderCell = ({ text, helperData, icon, className }) => {
   return (
     <th className={className}>
-      <p className="flex items-center gap-x-2">
+      <p className="flex pl-5 items-center gap-x-2">
         <span>{text}</span>
         {helperData && (
           <Tooltip variant="manual" data={helperData}>
