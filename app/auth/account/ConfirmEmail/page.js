@@ -2,7 +2,7 @@ import { metaData } from '@/adapters/metaData';
 import { AuthWrapper } from '@/modules';
 import { VerifficationUserAccount } from '@/units';
 
-export async function generateMetadata() {
+export function generateMetadata() {
   return metaData({
     data: {
       seo: {
