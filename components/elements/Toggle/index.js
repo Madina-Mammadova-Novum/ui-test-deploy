@@ -17,7 +17,7 @@ const Toggle = ({ value, id, disabled, className }) => {
         type="checkbox"
         className="hidden peer"
       />
-      <span className="absolute cursor-pointer bg-gray-darker rounded-[25px] top-0 left-0 bottom-0 right-0 transition before:absolute before:content-[''] before:left-0.5 before:top-[50%] before:translate-y-[-50%] before:w-3 before:h-3 before:rounded-[50%] before:bg-white before:transition peer-checked:bg-blue peer-checked:before:translate-x-[13px]" />
+      <span className="absolute cursor-pointer bg-gray-darker rounded-[25px] w-[30px] top-0 left-0 bottom-0 right-0 transition before:absolute before:content-[''] before:left-0.5 before:top-[50%] before:translate-y-[-50%] before:w-3 before:h-3 before:rounded-[50%] before:bg-white before:transition peer-checked:bg-blue peer-checked:before:translate-x-[13px]" />
     </label>
   );
 };

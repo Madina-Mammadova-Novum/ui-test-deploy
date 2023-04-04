@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const Button = ({ buttonProps, customStyles, disabled, type, onClick, ...rest }) => {
-  const { icon, text, variant, size } = buttonProps;
+  const { icon, text, helper, variant, size } = buttonProps;
 
   return (
     <button
@@ -33,8 +33,9 @@ const Button = ({ buttonProps, customStyles, disabled, type, onClick, ...rest })
       disabled={disabled}
       {...rest}
     >
-      {icon && <span>{icon}</span>}
+      {icon && <span className="mr-1.5">{icon}</span>}
       {text && text}
+      {helper && <span>{helper}</span>}
     </button>
   );
 };
