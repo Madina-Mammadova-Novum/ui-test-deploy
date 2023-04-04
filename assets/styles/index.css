@@ -366,7 +366,7 @@ input[type='password'] {
 }
 
 .my_position-table tr td {
-  @apply border border-gray-darker;
+  @apply border-l-0 border-r border-b border-t-0 border-b-gray-darker;
 }
 
 .my_position-table tr td div {

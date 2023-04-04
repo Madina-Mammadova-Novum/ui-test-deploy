@@ -8,17 +8,17 @@ import { Button, Modal } from '@/elements';
 import { SIZES } from '@/lib';
 import { STYLES } from '@/lib/constants';
 
-const AccountCompanyDetails = ({ children, buttonProps }) => {
+const ModalWindow = ({ children, buttonProps }) => {
   const [opened, setOpened] = useState(false);
 
-  const { text, variant, size, icon } = buttonProps;
+  const { text, variant, size, icon, className } = buttonProps;
 
   const handleOpenModal = () => setOpened(true);
   const handleCloseModal = () => setOpened(false);
 
   return (
     <>
-      <Button buttonProps={{ text, variant, size, icon }} customStyles="!py-1 !px-2.5" onClick={handleOpenModal} />
+      <Button buttonProps={{ text, variant, size, icon }} customStyles={className} onClick={handleOpenModal} />
       <Modal opened={opened} onClose={handleCloseModal}>
         {children}
       </Modal>
@@ -26,9 +26,10 @@ const AccountCompanyDetails = ({ children, buttonProps }) => {
   );
 };
 
-AccountCompanyDetails.propTypes = {
+ModalWindow.propTypes = {
   children: PropTypes.node.isRequired,
   buttonProps: PropTypes.shape({
+    className: PropTypes.string,
     icon: PropTypes.node,
     text: PropTypes.string,
     variant: PropTypes.oneOf(STYLES),
@@ -36,4 +37,4 @@ AccountCompanyDetails.propTypes = {
   }).isRequired,
 };
 
-export default AccountCompanyDetails;
+export default ModalWindow;
