@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { TextRow } from '@/elements';
 
-const AddressInfo = ({ address }) => {
+const AddressInfo = ({ address = {} }) => {
   const { addressLine1, addressLine2, city, state, postal, country } = address;
   return (
     <div className="flex flex-col gap-y-[2px]">

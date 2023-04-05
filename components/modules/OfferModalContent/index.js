@@ -8,7 +8,7 @@ import { Button, SimpleSelect, Title } from '@/elements';
 import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
 import { OfferForm, Tabs } from '@/units';
-import { incomingOfferCommentsData, incomingOfferVoyageDetailData } from '@/utils/mock';
+import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
   {
@@ -33,7 +33,7 @@ const OfferModalContent = ({ closeModal }) => {
   const tabContent = () => {
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsContent data={incomingOfferVoyageDetailData} />;
+        return <VoyageDetailsContent data={voyageDetailData} />;
       case 'comments':
         return <CommentsContent data={incomingOfferCommentsData} />;
       default:

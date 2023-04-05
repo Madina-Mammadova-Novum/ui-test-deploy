@@ -68,7 +68,7 @@ export const fleetsRowsDataAdapter = ({ data }) => {
 export const fleetTableCellAdapter = ({ data, index }) => {
   if (data === null || data === undefined) return [];
 
-  const { tankerName, imo, port, tankerStatus, date, id } = data;
+  const { tankerName = {}, imo = {}, port = {}, tankerStatus = {}, date = {}, id } = data;
 
   return [
     {

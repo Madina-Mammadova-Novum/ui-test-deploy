@@ -178,22 +178,26 @@ export const disableDefaultBehaviour = (e) => e.preventDefault();
 
 export const getButtonClassNames = (variant, size) => {
   // todo: need to connect constants for variants and sizes values
-  if (variant === 'primary') {
-    if (size === 'large') return 'bg-blue text-white hover:bg-blue-darker';
-    if (size === 'medium') return 'bg-white px-2.5 py-1 text-blue border border-blue hover:border-blue-darker';
-    if (size === 'small') return 'bg-white !p-0 text-blue hover:text-blue-darker';
+  if (size === 'large') {
+    if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker';
+    if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-dark';
+    if (variant === 'tertiary')
+      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-grey hover:border-black';
+    if (variant === 'delete')
+      return 'bg-white text-red h-10 px-5 py-2.5 rounded-md border border-red-medium hover:border-red';
   }
-  if (variant === 'secondary') {
-    if (size === 'large') return 'bg-black text-white hover:bg-blue-dark';
-    if (size === 'medium') return 'bg-white px-2.5 py-1 text-black border border-grey hover:border-black';
+  if (size === 'medium') {
+    if (variant === 'primary')
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-red';
+    if (variant === 'secondary')
+      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-grey hover:border-black';
+    if (variant === 'delete')
+      return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
-  if (variant === 'tertiary') {
-    if (size === 'large') return 'bg-white text-black border border-grey hover:border-black';
-  }
-  if (variant === 'delete') {
-    if (size === 'large') return 'bg-white text-red border border-red-medium hover:border-red';
-    if (size === 'medium') return 'bg-white px-2.5 py-1 text-red border border-red-medium hover:border-red';
-    if (size === 'small') return 'text-red';
+  if (size === 'small') {
+    if (variant === 'primary') return 'bg-white p-0 text-blue hover:text-blue-darker';
+    if (variant === 'secondary') return 'bg-white p-0 text-black hover:text-blue-darker';
+    if (variant === 'delete') return 'text-red';
   }
   return null;
 };

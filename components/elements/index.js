@@ -25,6 +25,7 @@ import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
 import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
+import RadioInput from '@/elements/Input/RadioInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
 // import Modal from '@/elements/Modal';
 import Label from '@/elements/Label';
@@ -112,5 +113,6 @@ export {
   Loading,
   NotFound,
   DateTimeRow,
+  RadioInput,
   NavButton,
 };

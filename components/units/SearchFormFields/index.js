@@ -1,16 +1,22 @@
 'use client';
 
 import { DatePicker, Dropdown, Input } from '@/elements';
+import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = () => {
   const {
     register,
+    clearErrors,
     formState: { errors, isSubmitting },
     setValue,
   } = useHookForm();
 
   const handleChange = (key, value) => {
+    const error = getValueWithPath(errors, key);
+    if (error) {
+      clearErrors(key);
+    }
     setValue(key, value);
   };
 
