@@ -3,11 +3,18 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-import { buttonSizesPropTypes, buttonVariantsPropTypes } from "@/lib/types";
+import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
 
 import { getButtonClassNames } from '@/utils/helpers';
 
-const Button = ({ buttonProps: { icon, text, helper, variant, size }, customStyles, disabled, type, onClick, ...rest }) => {
+const Button = ({
+  buttonProps: { icon, text, helper, variant, size },
+  customStyles,
+  disabled,
+  type,
+  onClick,
+  ...rest
+}) => {
   const buttonClassNames = getButtonClassNames(variant, size);
   return (
     <button
