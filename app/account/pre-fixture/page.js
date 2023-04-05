@@ -1,7 +1,7 @@
 import { metaData } from '@/adapters/metaData';
 import { AccountWrapper, PreFixture } from '@/modules';
 
-export async function generateMetadata() {
+export function generateMetadata() {
   return metaData({
     data: {
       seo: {

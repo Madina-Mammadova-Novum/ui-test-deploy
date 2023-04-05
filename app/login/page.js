@@ -3,9 +3,7 @@ import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 import { AuthWrapper, LoginForm } from '@/modules';
 
-export async function generateMetadata({ params }) {
-  // eslint-disable-next-line no-console
-  console.log({ temp: params });
+export function generateMetadata() {
   return metaData({
     data: {
       seo: {

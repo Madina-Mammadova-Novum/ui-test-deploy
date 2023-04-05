@@ -72,9 +72,10 @@ export const metaData = ({ data }) => {
     keywords: keywords !== null ? getKeywords(keywords) : [],
     generator: 'Next.js',
     applicationName: siteName,
-    // referrer: 'origin-when-cross-origin',
+    referrer: 'origin-when-cross-origin',
     // authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],
     // colorScheme: 'dark',
+    url: 'https://shiplink.oyihost.com',
     creator: 'Otakoyi',
     // publisher: 'Sebastian Markbåge',
     alternates: {
@@ -102,13 +103,13 @@ export const metaData = ({ data }) => {
       siteName,
       images: [
         {
-          url: 'https://nextjs.org/og.png',
+          url: 'https://shiplink.oyihost.com/og.jpg',
           width: 800,
           height: 600,
           alt: title,
         },
         {
-          url: 'https://nextjs.org/og-alt.png',
+          url: 'https://shiplink.oyihost.com/og.jpg',
           width: 1800,
           height: 1600,
           alt: title,

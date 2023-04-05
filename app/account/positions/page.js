@@ -1,7 +1,7 @@
 import { metaData } from '@/adapters/metaData';
 import { AccountPositions, AccountWrapper } from '@/modules';
 
-export async function generateMetadata() {
+export function generateMetadata() {
   return metaData({
     data: {
       seo: {
@@ -11,7 +11,7 @@ export async function generateMetadata() {
   });
 }
 
-export default async function AccountPostions() {
+export default function AccountPostions() {
   return (
     <AccountWrapper title="My positions" containerClass="grow px-5">
       <AccountPositions containerClass="flex flex-col gap-2" />
