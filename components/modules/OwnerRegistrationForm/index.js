@@ -46,15 +46,13 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await ownerRegistration({ data: formData });
+    const data = await ownerRegistration({ data: formData });
     if (data) {
       successToast(data.message, 'Check your email for validating the account');
       methods.reset();
     }
-    if (error) {
-      const { message, errors, description } = error;
-      console.error(errors);
-      errorToast(message, description);
+    if (!data) {
+      errorToast('Oops data is not filled');
     }
   };
 

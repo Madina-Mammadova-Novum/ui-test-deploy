@@ -46,28 +46,28 @@ export async function chartererSignUp({ data }) {
 
 export async function ownerRegistration({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await fetch('https://shiplink-api.azurewebsites.net/v1/owner/company/create', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-  return response;
+  // const response = await fetch('https://shiplink-api.azurewebsites.net/v1/owner/company/create', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  //   body: JSON.stringify(body),
+  // });
+  return body;
 }
 
 export async function chartererRegistration({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await fetch('https://shiplink-api.azurewebsites.net/v1/charterer/company/create', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-  return response;
+  // const response = await fetch('https://shiplink-api.azurewebsites.net/v1/charterer/company/create', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  //   body: JSON.stringify(body),
+  // });
+  return body;
 }
 
 export async function postVeriffData({ data }) {

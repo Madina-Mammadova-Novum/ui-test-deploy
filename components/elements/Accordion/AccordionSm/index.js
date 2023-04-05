@@ -48,7 +48,7 @@ const AccordionSM = ({ data, active }) => {
             ${showLinks && 'bg-blue-dark'}`}
           />
 
-          <span className="text-xxs font-bold text-center">{data.title}</span>
+          <span className="text-xxs font-bold text-white text-center">{data.title}</span>
         </div>
       )}
       {showLinks && (

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import { PlusIcon, TrashIcon } from '@/assets/icons';
+import { TrashIcon } from '@/assets/icons';
+import PlusSVG from '@/assets/images/plusCircle.svg';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
@@ -110,7 +111,7 @@ const CargoesSlotsDetailsForm = () => {
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-1 z-10"
+          customStyles="absolute top-[18px] right-1 my-1 !py-4 z-10"
           buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
           onClick={handleApplySlot}
           disabled={cargoesCount <= 0 || isSubmitting}
@@ -162,9 +163,10 @@ const CargoesSlotsDetailsForm = () => {
             buttonProps={{
               text: 'Add more cargoes',
               helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
+              iconContainerStyles: 'pr-1.5',
               variant: 'tertiary',
               size: 'small',
-              icon: <PlusIcon />,
+              icon: <PlusSVG />,
             }}
             type="button"
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
