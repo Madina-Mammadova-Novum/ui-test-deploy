@@ -78,10 +78,10 @@ const TankerSlotsDetails = () => {
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-1"
+          customStyles="absolute top-[18px] right-1 my-1 !py-4"
           buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
           onClick={handleApply}
-          disabled={isSubmitting}
+          disabled={slots <= 0 || isSubmitting}
         />
       </div>
       {indexes.map((_, index) => {

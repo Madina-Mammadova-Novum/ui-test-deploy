@@ -13,11 +13,9 @@ export function generateMetadata() {
 
 const PreFixturePage = () => {
   return (
-    <section className="grow px-5">
-      <AccountWrapper title="Pre-fixture" suptitle="Offer stage #2" containerClass="w-full">
-        <PreFixture />
-      </AccountWrapper>
-    </section>
+    <AccountWrapper title="Pre-fixture" suptitle="Offer stage #2" containerClass="grow px-5">
+      <PreFixture />
+    </AccountWrapper>
   );
 };
 
