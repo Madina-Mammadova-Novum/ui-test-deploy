@@ -12,6 +12,7 @@ build-staging:
     - staging
   script:
     - yarn install
+    - cp .env.staging .env
     - yarn build
     - rsync -a . /var/www/web
     - cd /var/www/web
