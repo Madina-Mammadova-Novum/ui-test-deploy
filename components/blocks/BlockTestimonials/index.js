@@ -12,7 +12,7 @@ import { Title } from '@/elements';
 const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
   return (
     <section className="relative mb-28 sm:mb-44 2lg:mb-64">
-      {title && <Title>{title}</Title>}
+      {title && <Title level="1">{title}</Title>}
       {shortDescription && shortDescription}
       {testimonials && (
         <Swiper
