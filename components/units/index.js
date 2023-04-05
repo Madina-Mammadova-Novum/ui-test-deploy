@@ -29,6 +29,7 @@ import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
+import TabsAsLinks from '@/units/TabsAsLinks';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
@@ -38,8 +39,6 @@ import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
 export * from '@/units/Account';
 
 export {
-  Accordion,
-  AccordionHeader,
   AddressDetails,
   DateDetailsForm,
   PasswordValidation,
@@ -63,6 +62,9 @@ export {
   ExpandableCard,
   ModalWindow,
   VerifficationUserAccount,
+  AccordionHeader,
+  Accordion,
+  TabsAsLinks,
   Countdown,
   OfferDeclineForm,
   OfferAcceptModalContent,

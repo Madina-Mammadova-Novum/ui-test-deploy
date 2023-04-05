@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -8,23 +8,23 @@ import PropTypes from 'prop-types';
 import { AccordionBody } from '@/elements';
 import { AccordionHeader } from '@/units';
 
-const Accordion = ({ items }) => {
-  const [open, setOpen] = useState(0);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
+const Accordion = ({ items, isFullWidth, open, onClick }) => {
   return (
-    <div className="divide-y divide-gray-darker mt-1">
+    <div>
       {items.map(({ headerContent, bodyContent }) => (
         <div
           className={classnames(
-            open ? 'relative border-none rounded-[10px] pt-[30px] bg-white shadow-xmd' : 'pt-[20px]',
+            open && !isFullWidth ? 'relative border-none rounded-[10px] pt-[30px] bg-white shadow-xmd' : 'pt-[20px]',
             'text-black pb-2.5 peer:bg-blue-500'
           )}
         >
-          <AccordionHeader onClick={() => handleOpen(1)}>{headerContent}</AccordionHeader>
-          <AccordionBody>{bodyContent}</AccordionBody>
+          <AccordionHeader isFullWidth={isFullWidth} isActive={open} onClick={onClick}>
+            {headerContent}
+          </AccordionHeader>
+
+          <div className={classnames(open ? 'h-auto' : 'h-0', 'overflow-hidden transition-all duration-100')}>
+            <AccordionBody>{bodyContent}</AccordionBody>
+          </div>
         </div>
       ))}
     </div>
@@ -38,7 +38,9 @@ Accordion.propTypes = {
       bodyContent: PropTypes.node,
     })
   ).isRequired,
-  activeItem: PropTypes.string.isRequired,
+  isFullWidth: PropTypes.bool,
+  open: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Accordion;
