@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 
+import { getUserDetails } from '@/services';
 import {
   AccountCompanyDetails,
   AccountDeactivateDetails,
@@ -10,7 +11,8 @@ import {
   AccountPersonalDetails,
 } from '@/units';
 
-const AccountDetails = ({ data, containerClass }) => {
+const AccountDetails = async ({ containerClass }) => {
+  const data = await getUserDetails();
   const { personalDetails, companyDetails, accountDetails } = data;
   return (
     <div className={containerClass}>

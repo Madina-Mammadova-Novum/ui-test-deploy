@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-import delve from 'dlv';
+// import delve from 'dlv';
 import pluralize from 'pluralize';
 
 import { Alert } from '@/elements';
@@ -14,11 +14,11 @@ export function getStrapiMedia(url, query = '') {
   if (url.startsWith('http') || url.startsWith('//')) {
     return url;
   }
-  return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337'}${url}${query}`;
+  return `${process.env.STRAPI_API_URL || 'http://localhost:1337'}${url}${query}`;
 }
 
 export function getStrapiURL(path) {
-  return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337'}/api${path}`;
+  return `${process.env.STRAPI_API_URL || 'http://localhost:1337'}/api${path}`;
 }
 
 export function handleRedirection(preview, custom) {
@@ -73,31 +73,6 @@ export async function getPaths() {
   return paths;
 }
 
-export function getCollectionType(slug) {
-  if (slug !== undefined) {
-    const prefix = slug.shift();
-    const collectionType = Object.keys(COLLECTIONS_TYPES)
-      .filter((type) => {
-        return COLLECTIONS_TYPES[type].prefix === prefix;
-      })
-      .shift();
-    if (slug.length > 0 && collectionType !== undefined) {
-      return {
-        collectionType,
-        slug: slug.join('/'),
-      };
-    }
-    return {
-      collectionType: 'page',
-      slug: [prefix, ...slug].join('/'),
-    };
-  }
-  return {
-    collectionType: 'page',
-    slug: ['home'].join('/'),
-  };
-}
-
 export async function getGlobalData() {
   const global = await Promise.all([getNavigations().then((data) => ['navigation', data])])
     .then((values) => {
@@ -117,50 +92,6 @@ export async function getGlobalData() {
     });
   return {
     global,
-  };
-}
-
-export async function getEntityData(pathArray, locale, preview) {
-  const { collectionType, slug } = getCollectionType(pathArray);
-  const requestData = getData(slug, locale, collectionType, 'collectionType', preview);
-  const response = await fetch(delve(requestData, 'data'));
-  if (response.ok) {
-    const { data, meta } = await response.json();
-    return {
-      slug,
-      locale,
-      collectionType,
-      // Requires adapter
-      data: data.length > 0 ? data : null,
-      meta,
-    };
-  }
-  return Promise.reject(response);
-}
-
-export function getData(slug, locale, apiID, kind, preview) {
-  const previewParams = preview ? '&publicationState=preview&published_at_null=true' : '';
-  const apiUrl = `/${pluralize(apiID)}?${previewParams}
-    &locale=${locale}
-    &filters[slug][$eq]=${slug}
-    &populate[blocks][populate]=*,buttons.link,coverImage,button,button.linkOptions,changableTitles,descriptionItems.title
-      ingredients,ingredients.coverImage,ingredients.concerns,ingredients.concerns.category, ingredients.concerns.images,
-      concerns,concerns.category,concerns.images,
-      items,items.coverImage,items.button,items.button.linkOptions,
-      testimonials,testimonials.coverImage,testimonials.concern,testimonials.concern.images,testimonials.concern.category,
-      members,members.category,members.coverImage,
-      faqQuestions,faqQuestions.category,
-      description.title,
-      values,values.value,values.value.valueType,values.value.coverImage
-    &populate[labels][populate]=*,coverImage
-    &populate[images]=*
-    &populate[buttons][populate]=*,linkOptions
-    &populate[coverImage]=*
-    &populate[imagesGallery]=*
-    &populate[seo]=metaSocial`.replace(/\s+|\n/g, '');
-  return {
-    data: getStrapiURL(apiUrl),
-    kind,
   };
 }
 

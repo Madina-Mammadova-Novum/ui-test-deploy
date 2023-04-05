@@ -3,7 +3,7 @@ import { blocksDataAdapter } from '@/adapters/block';
 export const entityDataAdapter = async ({ data }) => {
   if (data === null) return null;
   const { id, attributes } = data;
-  const { title, slug, content, sections, seo } = attributes;
+  const { title, slug, content, blocks, seo } = attributes;
   if (title === undefined) return null;
   return {
     ...attributes,
@@ -11,7 +11,7 @@ export const entityDataAdapter = async ({ data }) => {
     title,
     slug,
     content,
-    blocks: sections !== undefined ? await blocksDataAdapter(sections) : [],
+    blocks: blocks !== undefined ? await blocksDataAdapter(blocks) : [],
     seo: seo !== undefined ? seo : null,
   };
 };

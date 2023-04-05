@@ -4,8 +4,9 @@ import { useFormContext } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
+import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
+
 import { Button } from '@/elements';
-import { SIZES, STYLES } from '@/lib/constants';
 
 const FormManager = ({ children, submitAction, submitButton, className }) => {
   const {
@@ -40,8 +41,8 @@ FormManager.propTypes = {
     text: PropTypes.string,
     icon: PropTypes.node,
     disabled: PropTypes.bool,
-    variant: PropTypes.oneOf(STYLES),
-    size: PropTypes.oneOf(SIZES.BUTTONS),
+    variant: buttonVariantsPropTypes,
+    size: buttonSizesPropTypes,
   }.isRequired,
   submitAction: PropTypes.func.isRequired,
   className: PropTypes.string,
