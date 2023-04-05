@@ -43,6 +43,9 @@ const Input = React.forwardRef(
               'mt-1.5': type === 'checkbox',
             },
             {
+              '!p-0 border-none': type === 'radio',
+            },
+            {
               // 'bg-purple-light': filled,
               '!border-red': error,
             }

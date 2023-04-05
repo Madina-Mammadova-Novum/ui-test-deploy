@@ -16,7 +16,7 @@ const TankerSearch = () => {
   const [requestOptions, setRequestOptions] = useState({ request: false, loading: false });
   const [searchResult, setSearchResult] = useState([]);
 
-  const handleSearch = async (formData, methods) => {
+  const handleSearch = async (formData) => {
     setRequestOptions((prevState) => ({ ...prevState, loading: true }));
     const { error, data } = await searchVessels({ data: formData });
     setRequestOptions((prevState) => ({ ...prevState, loading: false }));
@@ -24,7 +24,6 @@ const TankerSearch = () => {
       setSearchResult(data.results);
       setRequestOptions((prevState) => ({ ...prevState, request: true }));
       successToast(data.message);
-      methods.reset();
     }
     if (error) {
       const { message, errors, description } = error;

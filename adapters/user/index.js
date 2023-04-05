@@ -133,20 +133,15 @@ export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
     imo,
-    // applySlots,
     numberOfTankers,
     companyNumberOfOperation,
     companyName,
-    // confirmPassword,
     password,
     secondaryPhoneNumber,
     primaryPhoneNumber,
     email,
     lastName,
     firstName,
-    // registrationCountryId,
-    // agreedRules,
-    // correspondenceCountryId,
   } = data;
 
   return {
@@ -165,11 +160,19 @@ export function ownerSignUpAdapter({ data }) {
   };
 }
 
+const cargoesAdapter = ({ data }) => {
+  return data?.map((item) => ({
+    vesselIMO: item?.imo,
+    loadPortId: item?.port?.value,
+    billOfLadingDate: new Date(item?.date),
+  }));
+};
+
 export function chartererSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
-    experiences,
-    numberOfTankers,
+    cargoes,
+    numberOfCargoes,
     companyNumberOfOperation,
     companyName,
     password,
@@ -189,8 +192,8 @@ export function chartererSignUpAdapter({ data }) {
     secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
     companyName,
     yearsInOperation: companyNumberOfOperation,
-    estimatedNumberOfChartersPerYear: numberOfTankers,
-    experiences,
+    estimatedNumberOfChartersPerYear: numberOfCargoes,
+    experience: cargoesAdapter({ data: cargoes }),
     ...companyAddressesAdapter({ data }),
   };
 }

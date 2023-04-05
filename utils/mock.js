@@ -199,7 +199,82 @@ export const searchRowHeaders = {
   ],
 };
 
-export const incomingOfferVoyageDetailData = {
+export const preFixtureHeaderData = [
+  [
+    {
+      label: 'cargo id',
+      content: {
+        text: 'TY7621',
+      },
+    },
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: usFlag,
+      },
+    },
+    {
+      label: 'cargo type',
+      content: {
+        text: 'Gas (Liquified)',
+      },
+    },
+    {
+      label: 'quantity',
+      content: {
+        text: '24,118 tons',
+      },
+    },
+    {
+      label: 'load port',
+      content: {
+        text: 'Botas Natural Gas T... ESBCN',
+        image: usFlag,
+      },
+    },
+    {
+      label: 'laycan start',
+      content: {
+        text: 'Dec 21, 2021',
+      },
+    },
+    {
+      label: 'laycan end',
+      content: {
+        text: 'Dec 30, 2021',
+      },
+    },
+    {
+      label: 'countdown',
+      content: {
+        text: '15min',
+      },
+    },
+  ],
+];
+
+export const incomingOfferCommentsData = [
+  {
+    title:
+      'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing is placeholder text commonly. ',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+  },
+  {
+    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+  },
+  {
+    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
+    date: 'Friday, December 3, 2021',
+    time: '10:16 AM',
+    latest: true,
+  },
+];
+
+export const voyageDetailData = {
   dates: [
     [
       {
@@ -238,22 +313,466 @@ export const incomingOfferVoyageDetailData = {
   ],
 };
 
-export const incomingOfferCommentsData = [
+export const COTData = {
+  cargo: [
+    {
+      key: 'Cargo Type',
+      label: 'Crude Oil',
+    },
+  ],
+  products: [
+    [
+      {
+        key: 'Product #1',
+        label: 'Light Crude Oil',
+      },
+      {
+        key: 'Density',
+        label: '0.764 mt/m3',
+      },
+      {
+        key: 'Min quantity',
+        label: '24,118 tons',
+      },
+    ],
+    [
+      {
+        key: 'Product #2',
+        label: 'Medium Crude Oil',
+      },
+      {
+        key: 'Density',
+        label: '0.803 mt/m3',
+      },
+      {
+        key: 'Min quantity',
+        label: '19,001 tons',
+      },
+    ],
+  ],
+  details: [
+    {
+      key: 'Freight',
+      label: 'WS 110',
+    },
+    {
+      key: 'Demurrage rate',
+      label: '$17,000 per day',
+    },
+    {
+      key: 'Laytime + NOR',
+      label: '72 hrs + (6 + 6 hrs)',
+    },
+    {
+      key: 'Undisputed demurrage payment terms',
+      label: '3 days undisputed demmurage to be paid along with freight',
+    },
+    {
+      key: 'Payment terms',
+      label: 'Total freight amount to be paid before breaking bulk (BBB)',
+    },
+  ],
+};
+
+/// //// Negotiating
+
+export const negotiatingHeaderData = [
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+  [
+    {
+      label: 'tanker name',
+      content: {
+        text: 'Harvey Deep Sea',
+        image: null,
+      },
+    },
+    {
+      label: 'imo',
+      content: {
+        text: '9131034',
+        image: null,
+      },
+    },
+    {
+      label: 'fleet name',
+      content: {
+        text: 'Fleet Base West',
+        image: null,
+      },
+    },
+    {
+      label: 'open date',
+      content: {
+        text: 'Dec 21, 2021',
+        image: null,
+      },
+    },
+    {
+      label: 'open port',
+      content: {
+        text: 'Botas Natural Gas Terminal, ESBCN',
+        image: null,
+      },
+    },
+  ],
+];
+
+export const negotiatingIncomingTableHeader = [
   {
-    title:
-      'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing is placeholder text commonly. ',
-    date: 'Friday, December 3, 2021',
-    time: '10:16 AM',
+    text: '#',
   },
   {
-    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
-    date: 'Friday, December 3, 2021',
-    time: '10:16 AM',
+    text: 'cargo id',
   },
   {
-    title: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing',
-    date: 'Friday, December 3, 2021',
-    time: '10:16 AM',
-    latest: true,
+    text: 'laycan start',
   },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'status',
+  },
+  {
+    text: 'date received',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingIncomingTableRows = [
+  [
+    {
+      text: '1',
+    },
+    {
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'New offer',
+      status: 'new',
+      semibold: true,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View offer', value: 'view_offer' }],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      actions: [{ text: 'QW6969', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Counteroffer',
+      status: 'counteroffer',
+      semibold: true,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View offer', value: 'view_offer' }],
+    },
+  ],
+];
+
+export const negotiatingCounterofferTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'date sent',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingCounterofferTableRows = [
+  [
+    {
+      text: '1',
+    },
+    {
+      actions: [{ text: 'AS5566', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View counteroffer', value: 'view_counteroffer' }],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: '1d 1h 50m',
+      timer: true,
+      color: 'red',
+    },
+    {
+      actions: [{ text: 'View counteroffer', value: 'view_counteroffer' }],
+    },
+  ],
+];
+
+export const negotiatingFailedTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'cargo id',
+  },
+  {
+    text: 'laycan start',
+  },
+  {
+    text: 'laycan end',
+  },
+  {
+    text: 'load port',
+  },
+  {
+    text: 'date failed',
+  },
+  {
+    text: 'reason',
+  },
+  {
+    text: '',
+  },
+];
+
+export const negotiatingFailedTableRows = [
+  [
+    {
+      text: '1',
+    },
+    {
+      actions: [{ text: 'ZX9988', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Offer timed out',
+      semibold: true,
+    },
+    {
+      actions: [{ text: 'View failed offer', value: 'view_failed_offer' }],
+    },
+  ],
+  [
+    {
+      text: '2',
+    },
+    {
+      actions: [{ text: 'QW1122', value: 'charterer_info', size: 'small' }],
+      semibold: true,
+      color: 'blue',
+    },
+    {
+      text: 'Dec 18, 2021',
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Barcelona, ESBCN',
+      countryFlag: usFlag,
+    },
+    {
+      text: 'Dec 19, 2021',
+    },
+    {
+      text: 'Offer declined by me',
+      semibold: true,
+    },
+    {
+      actions: [{ text: 'View failed offer', value: 'view_failed_offer' }],
+    },
+  ],
 ];

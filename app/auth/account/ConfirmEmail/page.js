@@ -1,6 +1,6 @@
 import { metaData } from '@/adapters/metaData';
 import { AuthWrapper } from '@/modules';
-import { VerifficationUserAccount } from '@/units';
+// import { VerifficationUserAccount } from '@/units';
 
 export function generateMetadata() {
   return metaData({
@@ -12,12 +12,10 @@ export function generateMetadata() {
   });
 }
 
-const ConfirmEmailPage = () => {
+export default function ConfirmEmailPage() {
   return (
     <AuthWrapper title="Verifficate your account" containerClass="w-full text-center h-[90vh]">
-      <VerifficationUserAccount />
+       {/* <VerifficationUserAccount /> */}
     </AuthWrapper>
   );
 };
-
-export default ConfirmEmailPage;

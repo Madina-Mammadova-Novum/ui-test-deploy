@@ -6,7 +6,14 @@ const AccountPasswordDetails = () => {
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Password">
-        <ModalWindow buttonProps={{ text: 'Change your password', variant: 'primary', size: 'medium' }}>
+        <ModalWindow
+          buttonProps={{
+            text: 'Change your password',
+            variant: 'primary',
+            size: 'medium',
+            className: '!px-2.5 !py-0.5 text-xsm',
+          }}
+        >
           <PasswordInfoForm />
         </ModalWindow>
       </FieldsetHeader>

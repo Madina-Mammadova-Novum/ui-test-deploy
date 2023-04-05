@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import { Button, Title } from '@/elements';
 
-const AccordionHeader = ({ children, onClick, isActive }) => {
+const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
   return (
-    <div className="flex justify-between pb-2.5 px-[30px]">
-      <Title level="2" className="text-black">
+    <div className="flex justify-between pb-2.5 px-[30px] transition-colors">
+      <Title level={isFullWidth ? '2' : '3'} className="text-black">
         {children}
       </Title>
       <Button
@@ -30,6 +30,7 @@ AccordionHeader.propTypes = {
   children: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   isActive: PropTypes.bool,
+  isFullWidth: PropTypes.bool,
 };
 
 export default AccordionHeader;

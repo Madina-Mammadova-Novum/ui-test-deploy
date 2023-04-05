@@ -4,24 +4,31 @@ import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrappe
 import { PersonalDetailsForm } from '@/modules';
 import { ModalWindow } from '@/units';
 
-const AccountPersonalDetails = ({ user }) => {
+const AccountPersonalDetails = ({ user = {} }) => {
   const { firstName, lastName, email, primaryPhone, secondaryPhone } = user;
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Personal Details">
-        <ModalWindow buttonProps={{ text: 'Edit personal details', variant: 'primary', size: 'medium' }}>
+        <ModalWindow
+          buttonProps={{
+            text: 'Edit personal details',
+            variant: 'primary',
+            size: 'medium',
+            className: '!px-2.5 !py-0.5 text-xsm',
+          }}
+        >
           <PersonalDetailsForm />
         </ModalWindow>
       </FieldsetHeader>
-      <FieldsetContentWrapper>
+      <FieldsetContentWrapper className="grid grid-cols-1 3sm:grid-cols-2 pt-2.5">
         <FieldsetContent className="col-start-1">
-          {firstName && <TextRow title="First Name">{firstName}</TextRow>}
-          {lastName && <TextRow title="Last Name">{lastName}</TextRow>}
-          {email && <TextRow title="Email Address">{email}</TextRow>}
+          <TextRow title="First Name">{firstName || '—'}</TextRow>
+          <TextRow title="Last Name">{lastName || '—'}</TextRow>
+          <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
         <FieldsetContent className="col-start-1 3sm:col-start-2">
-          {primaryPhone && <TextRow title="Primary phone number">{primaryPhone}</TextRow>}
-          {secondaryPhone && <TextRow title="Secondary phone number">{secondaryPhone}</TextRow>}
+          <TextRow title="Primary phone number">{primaryPhone || '—'}</TextRow>
+          <TextRow title="Secondary phone number">{secondaryPhone || '—'}</TextRow>
         </FieldsetContent>
       </FieldsetContentWrapper>
     </FieldsetWrapper>
