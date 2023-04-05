@@ -9,6 +9,7 @@ import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
+import ConfirmCounteroffer from '@/modules/ConfirmCounteroffer';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
@@ -18,6 +19,8 @@ import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
+import Negotiating from '@/modules/Negotiating';
+import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import Notification from '@/modules/Notification';
 // import PersonalDetails from '@/modules/PersonalDetails';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
@@ -28,10 +31,15 @@ import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
+import SendCounteroffer from '@/modules/SendCounteroffer';
 import Sidebar from '@/modules/Sidebar';
 import Signup from '@/modules/Signup';
 import TankerSearch from '@/modules/TankerSearch';
 import TankerSearchResults from '@/modules/TankerSearchResults';
+import ViewCounteroffer from '@/modules/ViewCounteroffer';
+import ViewFailedOffer from '@/modules/ViewFailedOffer';
+import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
+import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 // import SlotsDetails from '@/modules/SlotsDetails';
 // import TermsAndConditions from '@/modules/Terms&Conditions';
@@ -79,4 +87,12 @@ export {
   CommentsContent,
   TankerSearchResults,
   PreFixture,
+  Negotiating,
+  ViewIncomingOffer,
+  SendCounteroffer,
+  ConfirmCounteroffer,
+  NegotiatingAcceptOffer,
+  ViewCounteroffer,
+  ViewFailedOffer,
+  ViewOffer,
 };

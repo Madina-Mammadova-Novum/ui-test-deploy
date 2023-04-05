@@ -5,7 +5,7 @@ import Divider from '@/elements/Divider';
 import { CompanyInfoForm } from '@/modules';
 import { AddressInfo, ModalWindow } from '@/units';
 
-const AccountCompanyDetails = ({ company }) => {
+const AccountCompanyDetails = ({ company = {} }) => {
   const { name, years, totalTankers, registration, correspondence } = company;
   return (
     <FieldsetWrapper>

@@ -24,11 +24,13 @@ const Table = ({ headerData, rows }) => {
 Table.defaultProps = {
   headerData: [],
   rows: [],
+  handleActionClick: () => {},
 };
 
 Table.propTypes = {
   headerData: PropTypes.shape([]),
   rows: PropTypes.shape([]),
+  handleActionClick: PropTypes.func,
 };
 
 export default Table;

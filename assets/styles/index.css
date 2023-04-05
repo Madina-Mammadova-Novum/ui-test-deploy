@@ -279,7 +279,7 @@ input[type='password'] {
 }
 
 .my_position-table tr th {
-  @apply pl-5;
+  @apply pl-5 whitespace-nowrap;
 }
 
 .my_position-table tr td {

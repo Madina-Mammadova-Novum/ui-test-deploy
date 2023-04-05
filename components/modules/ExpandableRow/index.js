@@ -15,7 +15,7 @@ const ExpandableRow = ({ header, footer, children, expand }) => {
   }, [expand]);
 
   return (
-    <div className="rounded-[10px] shadow-xmd box-border">
+    <div className="rounded-[10px] shadow-xmd box-border bg-white">
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerWithProps}
       </div>
