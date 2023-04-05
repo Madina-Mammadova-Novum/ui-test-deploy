@@ -1,4 +1,5 @@
 import { Dropdown, Input, Title } from '@/elements';
+import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const testOption = [{ label: 'testLabel', value: 'testValue' }];
@@ -6,11 +7,16 @@ const testOption = [{ label: 'testLabel', value: 'testValue' }];
 const CommercialOfferTerms = () => {
   const {
     register,
+    clearErrors,
     formState: { errors, isSubmitting },
     setValue,
   } = useHookForm();
 
   const handleChange = (key, value) => {
+    const error = getValueWithPath(errors, key)
+    if(error) {
+      clearErrors(key)
+    }
     setValue(key, value);
   };
 
