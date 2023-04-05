@@ -7,14 +7,13 @@ cache:
 build-staging:
   stage: build
   only:
-    - develop
+    - main
   tags:
     - staging
   script:
-    #    - npm i --legacy-peer-deps --force
-    #    - npm run build
     - yarn install
+    - cp .env.staging .env
     - yarn build
-    - rsync -a --progress . /var/www/web
+    - rsync -a . /var/www/web
     - cd /var/www/web
     - pm2 restart ecosystem.config.js
