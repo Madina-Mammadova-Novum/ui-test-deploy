@@ -82,6 +82,7 @@ const CargoesSlotsDetailsForm = () => {
 
   useEffect(() => {
     fetchPorts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -121,14 +122,13 @@ const CargoesSlotsDetailsForm = () => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={item}>
+          <div className="grid relative grid-cols-3 justify-center items-center gap-x-5" key={item}>
             <Input
-              name={`${fieldName}.name`}
+              {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
               placeholder="IMO number"
               error={error?.imo?.message}
               disabled={isSubmitting}
-              onChange={({ target }) => handleChangeValue({ option: target.value, index, key: 'imo' })}
               type="number"
             />
             <AsyncDropdown
@@ -159,17 +159,17 @@ const CargoesSlotsDetailsForm = () => {
       {cargoes.length > 0 && (
         <div className="flex justify-between">
           <Button
-            type="button"
-            customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
-            disabled={cargoes?.length >= 10}
-            onClick={handleAddSlot}
             buttonProps={{
-              text: 'Add more ports',
-              helperText: '(max 10 ports)',
+              text: 'Add more cargoes',
+              helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
               variant: 'tertiary',
               size: 'small',
               icon: <PlusIcon />,
             }}
+            type="button"
+            customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
+            disabled={cargoes?.length >= SETTINGS.MAX_NUMBER_OF_CARGOES}
+            onClick={handleAddSlot}
           />
         </div>
       )}

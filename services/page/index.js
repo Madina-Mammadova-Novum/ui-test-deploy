@@ -1,8 +1,7 @@
 import { entityDataAdapter } from '@/adapters/entityData';
 import { getData } from '@/utils/dataFetching';
 
-export async function getPage({ data }) {
-  console.log({ temp: data });
+export async function getPage() {
   const response = await getData(`page`);
   return entityDataAdapter(response);
 }

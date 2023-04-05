@@ -10,12 +10,19 @@ const AccountCompanyDetails = ({ company }) => {
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Company Details">
-        <ModalWindow buttonProps={{ text: 'Edit company details', variant: 'primary', size: 'medium' }}>
+        <ModalWindow
+          buttonProps={{
+            text: 'Edit company details',
+            variant: 'primary',
+            size: 'medium',
+            className: '!px-2.5 !py-0.5 text-xsm',
+          }}
+        >
           <CompanyInfoForm />
         </ModalWindow>
       </FieldsetHeader>
       <FieldsetContentWrapper>
-        <FieldsetContent label="Company information">
+        <FieldsetContent label="Company information" className="pt-5">
           {name && <TextRow title="Company name">{name}</TextRow>}
           {years && <TextRow title="Years in operation">{years}</TextRow>}
           {totalTankers && <TextRow title="Number of tankers">{totalTankers}</TextRow>}
@@ -23,7 +30,7 @@ const AccountCompanyDetails = ({ company }) => {
 
         <Divider className="my-4" />
 
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-1 3sm:grid-cols-2 gap-y-5">
           {registration && (
             <FieldsetContent className="col-start-1" label="Registration address">
               <AddressInfo address={registration} />
