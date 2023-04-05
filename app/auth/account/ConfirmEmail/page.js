@@ -1,3 +1,5 @@
+'use client';
+
 import { metaData } from '@/adapters/metaData';
 import { AuthWrapper } from '@/modules';
 import { VerifficationUserAccount } from '@/units';

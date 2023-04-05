@@ -19,7 +19,7 @@ const EditPortForm = ({ title, portName }) => {
   const methods = useHookFormParams({ schema });
 
   const onSubmit = async (formData) => {
-    console.log('formData: ', formData);
+    return { formData };
   };
 
   return (

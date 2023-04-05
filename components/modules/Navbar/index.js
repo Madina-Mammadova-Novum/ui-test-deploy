@@ -7,7 +7,7 @@ import { NextLink } from '@/elements';
 
 const Navbar = ({ placeholder, cta, path }) => {
   return (
-    <nav className="flex w-full justify-between items-center z-50 bg-white 3sm:bg-transparent">
+    <nav className="flex w-full justify-between items-center z-50 py-1.5 bg-white 3sm:bg-transparent">
       <NextLink href="/">
         <Logo className="3sm:fill-white fill-black" />
       </NextLink>
