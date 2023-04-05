@@ -12,7 +12,7 @@ const AccordionNestedLink = ({ data, collapsed = false }) => {
         isActive ? 'bg-blue text-white' : 'hover:bg-blue-dark'
       } flex flex-col text-gray my-2 px-5 py-1 rounded-xl relative`}
     >
-      <span className="uppercase font-bold text-xxs">{data?.label}</span>
+      <span className={`uppercase font-bold ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{data?.label}</span>
       <NextLink href={data?.path ?? '/'} className="text-xs text-white font-semibold">
         {data?.title}
       </NextLink>

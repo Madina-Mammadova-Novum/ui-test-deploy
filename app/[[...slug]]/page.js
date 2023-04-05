@@ -6,8 +6,7 @@ import parse from 'html-react-parser';
 import { metaData } from '@/adapters/metaData';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
-import { NextImage, NextLink, Title } from '@/elements';
-import { ROUTES } from '@/lib';
+import { NextImage, Title } from '@/elements';
 import { getEntityData } from '@/services/collectionType';
 
 export async function generateMetadata({ params }) {
@@ -35,25 +34,6 @@ export default async function Home({ params }) {
           <Title level="1" className="mb-2.5 text-center">
             {title}
           </Title>
-          <div className="text-xsm">
-            <ul>
-              <li>
-                <NextLink href={ROUTES.FORGOT_PASSWORD}>FORGOT_PASSWORD</NextLink>
-              </li>
-              <li>
-                <NextLink href={ROUTES.RESET_PASSWORD}>RESET_PASSWORD</NextLink>
-              </li>
-              <li>
-                <NextLink href={ROUTES.SEARCH}>SEARCH</NextLink>
-              </li>
-              <li>
-                <NextLink href={ROUTES.ACCOUNT_PREFIXTURE}>PRE-FIXTURE</NextLink>
-              </li>
-              <li>
-                <NextLink href={ROUTES.NEGOTIATING}>NEGOTIATING</NextLink>
-              </li>
-            </ul>
-          </div>
           {content && <div className="text-xsm">{parse(content)}</div>}
         </div>
       </section>
