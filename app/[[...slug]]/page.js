@@ -1,5 +1,8 @@
 import React from 'react';
 
+import delve from 'dlv';
+import parse from 'html-react-parser';
+
 import { metaData } from '@/adapters/metaData';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
@@ -7,12 +10,15 @@ import { NextImage, Title } from '@/elements';
 import { getEntityData } from '@/services/collectionType';
 
 export async function generateMetadata({ params }) {
-  const data = await getPage(params);
-  return metaData({ data });
+  const data = await getEntityData(params);
+  return metaData(data);
 }
 
 export default async function Home({ params }) {
-  const { title } = await getPage(params);
+  const data = await getEntityData(params);
+  const pageData = delve(data, 'data');
+  const blocks = delve(pageData, 'blocks');
+  const { title, content } = pageData;
 
   return (
     <main className="space-y-[100px]">

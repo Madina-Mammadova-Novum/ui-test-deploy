@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import { Loader } from '@/elements';
 import { getUserPositions } from '@/services';
 import { ExpandableCard } from '@/units';
-import { Loader } from '@/elements';
 
 const AccountPositions = ({ containerClass }) => {
   const [userPositions, setUserPositions] = useState(null);
