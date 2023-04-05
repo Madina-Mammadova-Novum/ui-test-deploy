@@ -15,7 +15,7 @@ export function generateMetadata() {
 export default function ConfirmEmailPage() {
   return (
     <AuthWrapper title="Verifficate your account" containerClass="w-full text-center h-[90vh]">
-       {/* <VerifficationUserAccount /> */}
+      {/* <VerifficationUserAccount /> */}
     </AuthWrapper>
   );
-};
+}
