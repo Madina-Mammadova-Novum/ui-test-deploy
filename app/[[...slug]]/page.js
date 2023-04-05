@@ -1,8 +1,9 @@
+import React from 'react';
+
 import { metaData } from '@/adapters/metaData';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 import { getPage } from '@/services/page';
-// import { BlockManager } from "@/common";
 
 export async function generateMetadata({ params }) {
   const data = await getPage(params);

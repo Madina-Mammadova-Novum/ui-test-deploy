@@ -18,7 +18,10 @@
     "release:first": "standard-version --no-verify -- --first-release",
     "release:minor": "standard-version --no-verify --release-as minor",
     "release:patch": "standard-version --no-verify --release-as patch",
-    "release:major": "standard-version --no-verify --release-as major"
+    "release:major": "standard-version --no-verify --release-as major",
+    "clear-all": "rm -rf .next node_modules out",
+    "restart": "rm -rf .next node_modules out && yarn install && yarn develop",
+    "rebuild": "rm -rf .next node_modules out && yarn install && yarn build"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
@@ -64,7 +67,7 @@
     "eslint": "^8.30.0",
     "eslint-config-next": "^13.0.6",
     "form-data": "^4.0.0",
-    "html-react-parser": "^3.0.9",
+    "html-react-parser": "^3.0.15",
     "i18next": "^22.4.9",
     "next": "^13.2.1",
     "next-i18next": "^13.1.4",

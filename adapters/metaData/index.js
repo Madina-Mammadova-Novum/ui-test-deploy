@@ -59,6 +59,7 @@ function getRobots(string) {
 export const metaData = ({ data }) => {
   if (data === null) return null; // todo: if data === null need to set default values
   const { title: pageTile, slug, seo } = data;
+  if (seo === null) return null; // todo: if seo === null need to set default values
   const { metaTitle, metaDescription, keywords, metaRobots, canonicalURL } = seo; // todo: metaViewport isset in seo but temporary not use
   const title = metaTitle !== null ? metaTitle : pageTile;
   const description = metaDescription !== null ? metaDescription : '';
@@ -71,9 +72,10 @@ export const metaData = ({ data }) => {
     keywords: keywords !== null ? getKeywords(keywords) : [],
     generator: 'Next.js',
     applicationName: siteName,
-    // referrer: 'origin-when-cross-origin',
+    referrer: 'origin-when-cross-origin',
     // authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],
     // colorScheme: 'dark',
+    url: 'https://shiplink.oyihost.com',
     creator: 'Otakoyi',
     // publisher: 'Sebastian Markbåge',
     alternates: {
@@ -101,13 +103,13 @@ export const metaData = ({ data }) => {
       siteName,
       images: [
         {
-          url: 'https://nextjs.org/og.png',
+          url: 'https://shiplink.oyihost.com/og.jpg',
           width: 800,
           height: 600,
           alt: title,
         },
         {
-          url: 'https://nextjs.org/og-alt.png',
+          url: 'https://shiplink.oyihost.com/og.jpg',
           width: 1800,
           height: 1600,
           alt: title,

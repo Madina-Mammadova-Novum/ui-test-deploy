@@ -1,8 +1,7 @@
 import { metaData } from '@/adapters/metaData';
 import { AccountDetails, AccountWrapper } from '@/modules';
-import { getUserDetails } from '@/services';
 
-export async function generateMetadata() {
+export function generateMetadata() {
   return metaData({
     data: {
       seo: {
@@ -12,16 +11,12 @@ export async function generateMetadata() {
   });
 }
 
-const AccountInformation = async () => {
-  const data = await getUserDetails();
-
+export default function AccountInformation() {
   return (
     <section className="grow px-5">
       <AccountWrapper title="Account information" containerClass="w-full">
-        <AccountDetails data={data} containerClass="flex justify-start items-start flex-col gap-2.5" />
+        <AccountDetails containerClass="flex justify-start items-start flex-col gap-2.5" />
       </AccountWrapper>
     </section>
   );
-};
-
-export default AccountInformation;
+}

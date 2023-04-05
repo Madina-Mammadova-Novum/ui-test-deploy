@@ -13,9 +13,9 @@ const CommercialOfferTerms = () => {
   } = useHookForm();
 
   const handleChange = (key, value) => {
-    const error = getValueWithPath(errors, key)
-    if(error) {
-      clearErrors(key)
+    const error = getValueWithPath(errors, key);
+    if (error) {
+      clearErrors(key);
     }
     setValue(key, value);
   };

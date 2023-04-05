@@ -4,9 +4,9 @@ import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
 import { Accordion, Button, NextLink } from '@/elements';
 
-const SidebarXl = ({ data, opened, active, onChange, isResized, onResize }) => {
+const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
   const printMenu = (item) => (
-    <Accordion variant="opened" opened={opened} active={active} onChange={onChange} key={item?.id} data={item} />
+    <Accordion variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
   );
 
   return (
@@ -14,7 +14,7 @@ const SidebarXl = ({ data, opened, active, onChange, isResized, onResize }) => {
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <div className="mt-8 flex flex-col gap-1.5 relative">
+      <div className="flex flex-col gap-1.5 relative">
         <Button
           buttonProps={{
             icon: (
@@ -40,7 +40,6 @@ const SidebarXl = ({ data, opened, active, onChange, isResized, onResize }) => {
 
 SidebarXl.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  active: PropTypes.string.isRequired,
   opened: PropTypes.bool.isRequired,
   searchVal: PropTypes.string.isRequired,
   isResized: PropTypes.bool.isRequired,

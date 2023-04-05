@@ -13,9 +13,9 @@ import ConfirmCounteroffer from '@/modules/ConfirmCounteroffer';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
-import { PageFooter } from '@/modules/Footer';
+import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
-import { AuthHeader, PageHeader } from '@/modules/Header';
+import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
@@ -68,7 +68,9 @@ export {
   // TermsAndConditions,
   // Seo,
   PageHeader,
+  AccountHeader,
   PageFooter,
+  AccountFooter,
   AuthHeader,
   AuthWrapper,
   ModalWrapper,

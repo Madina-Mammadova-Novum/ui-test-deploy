@@ -14,7 +14,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
 const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDate = (pickedDate) => {
@@ -25,7 +25,7 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
   return (
     <>
       <div
-        aria-hidden
+        aria-hidden="true"
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
@@ -56,7 +56,7 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
 DatePicker.defaultProps = {
   name: '',
   label: '',
-  inputClass: 'w-[296px]',
+  inputClass: 'min-w-[296px]',
   error: null,
   register: () => {},
   setValue: () => {},

@@ -1,12 +1,15 @@
 export const categoryAdapter = ({ data }) => {
   if (data === null) return null;
   const { id, attributes } = data;
-  const { title, code } = attributes;
+  const { title, slug, content, shortDescription, coverImage } = attributes;
 
   return {
     id,
     title,
-    code,
+    slug,
+    content,
+    shortDescription,
+    coverImage,
   };
 };
 

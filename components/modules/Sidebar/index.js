@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -9,14 +9,11 @@ import SidebarXl from './SidebarXl';
 
 const Sidebar = ({ data, containerStyles }) => {
   const [sidebarState, setSidebarState] = useState({
-    focus: false,
     opened: false,
     resized: false,
-    active: null,
-    searchValue: '',
   });
 
-  const { opened, active, resized } = sidebarState;
+  const { opened, resized } = sidebarState;
 
   const handleChange = (key, val) => {
     setSidebarState((prevState) => ({
@@ -27,40 +24,16 @@ const Sidebar = ({ data, containerStyles }) => {
 
   const handleResize = useCallback(() => handleChange('resized', !resized), [resized]);
 
-  const printSideBar = useMemo(() => {
-    switch (resized) {
-      case true:
-        return (
-          <SidebarSm
-            data={data}
-            active={active}
-            opened={opened}
-            isResized={resized}
-            onChange={handleChange}
-            onResize={handleResize}
-          />
-        );
-      default:
-        return (
-          <SidebarXl
-            data={data}
-            active={active}
-            opened={opened}
-            isResized={resized}
-            onChange={handleChange}
-            onResize={handleResize}
-          />
-        );
-    }
-  }, [resized, active, opened, data, handleResize]);
-
   return (
     <aside
-      className={`flex flex-col items-stretch px-3.5 py-5 gap-2 bg-black text-white ${containerStyles} ${
-        resized ? 'w-16' : 'w-64'
-      }`}
+      className={`${containerStyles} flex flex-col items-stretch px-3.5 py-5 gap-2 bg-black text-white 
+      ${resized ? 'w-16' : 'w-64'}`}
     >
-      {printSideBar}
+      {resized ? (
+        <SidebarSm data={data} opened={opened} isResized={resized} onChange={handleChange} onResize={handleResize} />
+      ) : (
+        <SidebarXl data={data} opened={opened} isResized={resized} onChange={handleChange} onResize={handleResize} />
+      )}
     </aside>
   );
 };

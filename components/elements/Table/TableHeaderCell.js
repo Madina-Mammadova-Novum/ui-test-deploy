@@ -1,11 +1,29 @@
 import PropTypes from 'prop-types';
 
-const TableHeaderCell = ({ text, className }) => {
-  return <th className={className}>{text}</th>;
+import { Tooltip } from '@/elements';
+
+const TableHeaderCell = ({ text, helperData, icon, className }) => {
+  return (
+    <th className={className}>
+      <p className="flex pl-5 items-center gap-x-2">
+        <span>{text}</span>
+        {helperData && (
+          <Tooltip variant="manual" data={helperData}>
+            {icon}
+          </Tooltip>
+        )}
+      </p>
+    </th>
+  );
 };
 
 TableHeaderCell.propTypes = {
   text: PropTypes.string.isRequired,
+  helperData: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
+  icon: PropTypes.node,
   className: PropTypes.string,
 };
 
