@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 'use client';
 
 import { Provider } from 'react-redux';

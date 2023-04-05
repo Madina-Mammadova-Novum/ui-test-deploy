@@ -30,6 +30,8 @@ import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 export * from '@/units/Account';
 
 export {
+  Accordion,
+  AccordionHeader,
   AddressDetails,
   DateDetailsForm,
   PasswordValidation,
