@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { NextLink } from '@/elements';
-import { postVeriffData } from '@/services';
+import { postVeriff } from '@/services';
 import { checkObjectValues } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const VerifficationUserAccount = () => {
-  const [veriffUrl, setVeriffUrl] = useState(null);
+  const [veriffUrl] = useState(null);
 
   const query = useSearchParams();
 
@@ -28,14 +28,15 @@ const VerifficationUserAccount = () => {
     if (message) errorToast(message);
 
     if (data) {
-      const { data: result, error } = await postVeriffData({ data });
-      if (error) errorToast('Oops something went wrong...');
-      setVeriffUrl(result);
+      const res = await postVeriff({ data });
+      return res;
     }
+    return null;
   };
 
   useEffect(() => {
     fetchVeriffUrl();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return !invalidUrl ? (

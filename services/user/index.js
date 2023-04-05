@@ -44,8 +44,46 @@ export async function chartererSignUp({ data }) {
   return response;
 }
 
+export async function ownerRegistration({ data }) {
+  const body = ownerSignUpAdapter({ data });
+  const response = await fetch('https://shiplink-api.azurewebsites.net/v1/owner/company/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify(body),
+  });
+  return response;
+}
+
+export async function chartererRegistration({ data }) {
+  const body = chartererSignUpAdapter({ data });
+  const response = await fetch('https://shiplink-api.azurewebsites.net/v1/charterer/company/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify(body),
+  });
+  return response;
+}
+
 export async function postVeriffData({ data }) {
   const response = await postData(`auth/veriffication`, data);
+  return response;
+}
+
+export async function postVeriff({ data }) {
+  const response = await fetch(`https://shiplink-api.azurewebsites.net/auth/confirmemai`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify(data),
+  });
   return response;
 }
 

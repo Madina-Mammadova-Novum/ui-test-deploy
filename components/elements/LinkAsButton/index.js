@@ -12,7 +12,7 @@ const LinkAsButton = ({ buttonProps: { variant, size }, children, href, customSt
     <NextLink
       href={href}
       className={classnames(
-        'text-xsm h-10 px-5 py-2.5 rounded-md flex items-center justify-center whitespace-nowrap',
+        'text-xsm flex items-center justify-center whitespace-nowrap',
         buttonClassNames,
         disabled && 'opacity-50 pointer-events-none',
         customStyles

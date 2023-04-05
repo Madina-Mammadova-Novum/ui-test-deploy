@@ -1,0 +1,37 @@
+'use client';
+
+import React, { useState } from 'react';
+
+import PropTypes from 'prop-types';
+
+import { ConfirmCounteroffer, NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
+import { OfferDeclineForm } from '@/units';
+
+const ViewIncomingOffer = ({ closeModal }) => {
+  const [step, setStep] = useState('view_offer');
+
+  switch (step) {
+    case 'offer_decline':
+      return (
+        <OfferDeclineForm title="Decline the Offer" closeModal={closeModal} goBack={() => setStep('view_offer')} />
+      );
+    case 'offer_counteroffer':
+      return <SendCounteroffer closeModal={closeModal} goBack={setStep} />;
+    case 'offer_counteroffer_confirm':
+      return <ConfirmCounteroffer closeModal={closeModal} goBack={setStep} />;
+    case 'offer_accept':
+      return <NegotiatingAcceptOffer closeModal={closeModal} goBack={() => setStep('view_offer')} />;
+    default:
+      return <ViewOffer setStep={setStep} closeModal={closeModal} />;
+  }
+};
+
+ViewIncomingOffer.defaultProps = {
+  closeModal: () => {},
+};
+
+ViewIncomingOffer.propTypes = {
+  closeModal: PropTypes.func,
+};
+
+export default ViewIncomingOffer;

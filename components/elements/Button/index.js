@@ -8,7 +8,7 @@ import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
 import { getButtonClassNames } from '@/utils/helpers';
 
 const Button = ({
-  buttonProps: { icon, text, helper, variant, size },
+  buttonProps: { icon, helperText, text, variant, size },
   customStyles,
   disabled,
   type,
@@ -32,7 +32,7 @@ const Button = ({
     >
       {icon && <span className="mr-1.5">{icon}</span>}
       {text && text}
-      {helper && <span>{helper}</span>}
+      {helperText && <span className="text-gray text-xs-sm font-normal">{helperText}</span>}
     </button>
   );
 };
@@ -47,6 +47,7 @@ Button.defaultProps = {
 Button.propTypes = {
   buttonProps: {
     text: PropTypes.string,
+    helperText: PropTypes.string,
     icon: PropTypes.node,
     variant: buttonVariantsPropTypes.isRequired,
     size: buttonSizesPropTypes.isRequired,

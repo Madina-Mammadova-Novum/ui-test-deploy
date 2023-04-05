@@ -1,22 +1,17 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
-import { companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
+import { companyAddressesSchema, companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { successToast, useHookFormParams } from '@/utils/hooks';
-
-const schema = yup.object({
-  ...companyDetailsSchema(),
-  ...tankerSlotsDetailsSchema(),
-  // ...companyAddressesSchema()
-});
 
 const state = {
   companyName: 'Ship.link',
@@ -28,7 +23,22 @@ const state = {
 };
 
 const CompanyInfoForm = () => {
+  const [sameAddress, setSameAddress] = useState(false);
+
+  const schema = yup.object({
+    ...companyDetailsSchema(),
+    ...tankerSlotsDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
+  });
+
   const methods = useHookFormParams({ state, schema });
+
+  const addressValue = methods.watch('sameAddresses', sameAddress);
+
+  useEffect(() => {
+    methods.setValue('sameAddresses', addressValue);
+    setSameAddress(addressValue);
+  }, [addressValue, methods]);
 
   const onSubmit = async (data) => {
     const { message } = await updateCompany({ data });

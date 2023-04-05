@@ -19,8 +19,10 @@ const AccountDetails = async ({ containerClass }) => {
       <AccountPersonalDetails user={personalDetails} />
       <AccountCompanyDetails company={companyDetails} />
       <AccountPasswordDetails user={accountDetails} />
-      <AccountDeactivateDetails />
-      <AccountDeleteDetails />
+      <div className="pt-2.5 pb-5">
+        <AccountDeactivateDetails />
+        <AccountDeleteDetails />
+      </div>
     </div>
   );
 };
