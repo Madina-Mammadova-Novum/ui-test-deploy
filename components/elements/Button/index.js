@@ -7,7 +7,14 @@ import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
 
 import { getButtonClassNames } from '@/utils/helpers';
 
-const Button = ({ buttonProps: { icon, text, variant, size }, customStyles, disabled, type, onClick, ...rest }) => {
+const Button = ({
+  buttonProps: { icon, text, helper, variant, size },
+  customStyles,
+  disabled,
+  type,
+  onClick,
+  ...rest
+}) => {
   const buttonClassNames = getButtonClassNames(variant, size);
   return (
     <button
@@ -23,9 +30,9 @@ const Button = ({ buttonProps: { icon, text, variant, size }, customStyles, disa
       disabled={disabled}
       {...rest}
     >
-      {/* todo: need to change to children like in LinkAsButton component */}
-      {icon && <span>{icon}</span>}
+      {icon && <span className="mr-1.5">{icon}</span>}
       {text && text}
+      {helper && <span>{helper}</span>}
     </button>
   );
 };

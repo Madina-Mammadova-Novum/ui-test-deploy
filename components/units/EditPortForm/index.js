@@ -1,0 +1,46 @@
+'use client';
+
+import { FormProvider } from 'react-hook-form';
+
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
+import { FormManager } from '@/common';
+import { Title } from '@/elements';
+import { portsSchema } from '@/lib/schemas';
+import { PortDetailsForm } from '@/units';
+import { useHookFormParams } from '@/utils/hooks';
+
+const EditPortForm = ({ title, portName }) => {
+  const schema = yup.object().shape({
+    ...portsSchema(),
+  });
+
+  const methods = useHookFormParams({ schema });
+
+  const onSubmit = async (formData) => {
+    console.log('formData: ', formData);
+  };
+
+  return (
+    <FormProvider {...methods}>
+      <FormManager
+        className="min-w-[320px]"
+        submitAction={onSubmit}
+        submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
+      >
+        <Title level="h2" className="font-bold capitalize text-black text-lg">
+          {title}
+        </Title>
+        <PortDetailsForm portName={portName} />
+      </FormManager>
+    </FormProvider>
+  );
+};
+
+EditPortForm.propTypes = {
+  title: PropTypes.string.isRequired,
+  portName: PropTypes.string,
+};
+
+export default EditPortForm;

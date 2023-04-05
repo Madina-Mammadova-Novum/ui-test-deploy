@@ -1,7 +1,7 @@
 import { metaData } from '@/adapters/metaData';
 import { AuthWrapper, Signup } from '@/modules';
 
-export async function generateMetadata() {
+export function generateMetadata() {
   return metaData({
     data: {
       seo: {

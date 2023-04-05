@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { PlusCircleIcon, TrashIcon } from '@/assets/icons';
+import { PlusIcon, TrashIcon } from '@/assets/icons';
 import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
@@ -37,7 +37,7 @@ const CargoesSlotsDetailsForm = () => {
     const fieldName = `cargoes[${index}].${key}`;
     const isError = errors?.cargoes?.[index];
 
-    if (isError[key]) {
+    if (isError?.[key]) {
       clearErrors(fieldName);
     }
 
@@ -116,12 +116,12 @@ const CargoesSlotsDetailsForm = () => {
         />
       </div>
 
-      {cargoes?.map((index) => {
+      {cargoes?.map((item, index) => {
         const fieldName = `cargoes[${index}]`;
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={index}>
+          <div className="grid relative grid-cols-3 justify-center items-center gap-5" key={item}>
             <Input
               name={`${fieldName}.name`}
               label={`Imo #${index + 1}`}
@@ -163,7 +163,13 @@ const CargoesSlotsDetailsForm = () => {
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
             disabled={cargoes?.length >= 10}
             onClick={handleAddSlot}
-            buttonProps={{ text: 'Add more ports', variant: 'tertiary', size: 'small', icon: <PlusCircleIcon /> }}
+            buttonProps={{
+              text: 'Add more ports',
+              helperText: '(max 10 ports)',
+              variant: 'tertiary',
+              size: 'small',
+              icon: <PlusIcon />,
+            }}
           />
         </div>
       )}

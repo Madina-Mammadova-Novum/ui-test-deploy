@@ -1,25 +1,31 @@
-import classnames from 'classnames';
+import { useMemo } from 'react';
+
 import PropTypes from 'prop-types';
 
 import EditIcon from '@/assets/images/edit.svg';
 import { NextImage, Toggle } from '@/elements';
-import { ModalWindow } from '@/units';
-
-/* Draft Version */
+import { TYPE } from '@/lib/constants';
+import { EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { text, name, fontStyle, disabled, toggle, editable, countryFlag, id } = cellProps;
+  const { type, value, name, fontStyle, disabled, toggle, editable, countryFlag, id } = cellProps;
+
+  const printModal = useMemo(() => {
+    switch (type) {
+      case TYPE.PORT:
+        return <EditPortForm title="edit open port" portName={name} />;
+      case TYPE.DATE:
+        return <EditDateForm title="edit open date" portName={name} />;
+      default:
+        return null;
+    }
+  }, [name, type]);
 
   return (
     <td className={`${disabled ? 'bg-gray-light' : 'bg-white'}`}>
       <div
-        className={classnames(
-          'flex items-center font-normal text-black text-xsm',
-          fontStyle?.color && `text-${fontStyle?.color}`,
-          {
-            '!font-semibold': fontStyle?.semibold,
-          }
-        )}
+        className={`flex items-center text-xsm text-${fontStyle?.color ?? 'black'} 
+        ${fontStyle?.semibold ? 'font-semibold' : 'font-normal'} `}
       >
         {countryFlag && (
           <NextImage
@@ -31,23 +37,23 @@ const TableCell = ({ cellProps }) => {
           />
         )}
 
-        <div className="flex items-center gap-x-2.5">
-          <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{text}</span>
+        <div className="flex w-full items-center text-center">
+          <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
           {editable && (
             <ModalWindow
               buttonProps={{
                 icon: <EditIcon />,
                 variant: 'tertiary',
                 size: 'small',
-                className: 'hover:bg-gray-darker !py-1 !px-2',
+                className: 'hover:bg-gray-darker !py-1 !pr-0 !pl-1.5 !ml-auto mr-1.5',
               }}
             >
-              {name}
+              {printModal}
             </ModalWindow>
           )}
         </div>
 
-        {toggle && <Toggle id={id} value={toggle.value} disabled={disabled} />}
+        {toggle && <Toggle id={id} value={toggle.value} className="-left-[80%]" disabled={disabled} />}
       </div>
     </td>
   );
@@ -56,7 +62,8 @@ const TableCell = ({ cellProps }) => {
 TableCell.propTypes = {
   cellProps: PropTypes.shape({
     countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
-    text: PropTypes.string,
+    type: PropTypes.string,
+    value: PropTypes.string,
     name: PropTypes.string,
     fontStyle: PropTypes.shape({
       semibold: PropTypes.bool,

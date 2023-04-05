@@ -1,4 +1,4 @@
-import { NO_DATA_MESSAGE } from '@/lib/constants';
+import { NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
@@ -72,12 +72,13 @@ export const fleetTableCellAdapter = ({ data, index }) => {
 
   return [
     {
-      text: index,
+      value: index,
       disabled: tankerName.disabled,
     },
     {
       id,
-      text: tankerName.value,
+      value: tankerName.value,
+      type: TYPE.TANKER_NAME,
       editable: tankerName.editable,
       disabled: tankerName.disabled,
       fontStyle: {
@@ -87,7 +88,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     },
     {
       id,
-      text: imo.value,
+      value: imo.value,
+      type: TYPE.IMO,
       editable: imo.editable,
       disabled: imo.disabled,
       fontStyle: {
@@ -98,7 +100,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     {
       id,
       name: tankerName.value,
-      text: port.value,
+      type: TYPE.PORT,
+      value: port.value,
       editable: port.editable,
       disabled: port.disabled,
       fontStyle: {
@@ -108,8 +111,9 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     },
     {
       id,
+      type: TYPE.DATE,
       name: tankerName.value,
-      text: date.value,
+      value: date.value,
       editable: date.editable,
       disabled: date.disabled,
       fontStyle: {
@@ -122,6 +126,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       toggle: {
         value: tankerStatus.value,
       },
+      type: TYPE.TANKER_STATUS,
       editable: tankerStatus.editable,
       disabled: tankerStatus.disabled,
       fontStyle: {
