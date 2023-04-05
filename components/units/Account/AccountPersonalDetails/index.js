@@ -35,6 +35,16 @@ const AccountPersonalDetails = ({ user = {} }) => {
   );
 };
 
+AccountPersonalDetails.defaultProps = {
+  user: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    primaryPhone: '',
+    secondaryPhone: '',
+  },
+};
+
 AccountPersonalDetails.propTypes = {
   user: PropTypes.shape({
     firstName: PropTypes.string,
