@@ -8,32 +8,29 @@ import PropTypes from 'prop-types';
 import { AccordionBody } from '@/elements';
 import { AccordionHeader } from '@/units';
 
-
-
 const Accordion = ({ items, isFullWidth, open, onClick, icon }) => {
   const ref = useRef(null);
 
-  return (
-      items.map(({ headerContent, bodyContent }) => (
-        <div
-          className={classnames(
-            open && !isFullWidth && 'relative border-none rounded-[10px] pt-[10px] bg-white shadow-xmd',
-            'text-black pb-2.5'
-          )}
-        >
-          <AccordionHeader isFullWidth={isFullWidth} isActive={open} onClick={onClick} icon={icon}>
-            {headerContent}
-          </AccordionHeader>
+  return items.map(({ headerContent, bodyContent }) => (
+    <div
+      className={classnames(
+        open && !isFullWidth && 'relative border-none rounded-[10px] pt-[10px] bg-white shadow-xmd',
+        'text-black pb-2.5'
+      )}
+    >
+      <AccordionHeader isFullWidth={isFullWidth} isActive={open} onClick={onClick} icon={icon}>
+        {headerContent}
+      </AccordionHeader>
 
-          <div
-            ref={ref}
-            className="overflow-hidden transition-all"
-               style={{ height: open ?  `${ref?.current?.scrollHeight}px` : '0px' }}>
-            <AccordionBody isFullWidth={isFullWidth}>{bodyContent}</AccordionBody>
-          </div>
-        </div>
-      ))
-  );
+      <div
+        ref={ref}
+        className="overflow-hidden transition-all"
+        style={{ height: open ? `${ref?.current?.scrollHeight}px` : '0px' }}
+      >
+        <AccordionBody isFullWidth={isFullWidth}>{bodyContent}</AccordionBody>
+      </div>
+    </div>
+  ));
 };
 
 Accordion.propTypes = {

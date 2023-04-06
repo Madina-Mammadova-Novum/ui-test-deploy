@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classnames from "classnames";
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { MinusIcon, PlusIcon } from '@/assets/icons';
@@ -10,9 +10,9 @@ const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
   return (
     // eslint-disable-next-line react/button-has-type
     <button
-      className={classnames(
-      !isFullWidth && 'px-[30px]',
-      'flex justify-between pb-2.5 pt-5 w-full')} onClick={onClick}>
+      className={classnames(!isFullWidth && 'px-[30px]', 'flex justify-between pb-2.5 pt-5 w-full')}
+      onClick={onClick}
+    >
       <Title level={isFullWidth ? '3' : '2'} className="text-black">
         {children}
       </Title>

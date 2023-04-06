@@ -94,11 +94,11 @@
     @apply text-black text-xsm;
   }
 
-  .content-wrapper img{
+  .content-wrapper img {
     @apply rounded-[10px] h-full;
   }
 
-  .content-wrapper iframe{
+  .content-wrapper iframe {
     @apply w-full rounded-[10px];
   }
 
@@ -114,10 +114,10 @@
     @apply !my-4 py-[5px] pl-4 font-semibold border-l-2 border-blue;
   }
 
-  .heading-wrapper h1{
+  .heading-wrapper h1 {
     @apply text-white mb-2.5;
   }
-  .heading-wrapper p{
+  .heading-wrapper p {
     @apply text-xsm text-white max-w-[800px] mx-auto;
   }
 
