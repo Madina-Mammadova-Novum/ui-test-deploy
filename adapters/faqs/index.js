@@ -9,7 +9,7 @@ export const faqAdapter = ({ data }) => {
     id,
     question,
     category: categoryAdapter(category),
-    answer,
+    answer: answer === null ? '' : answer,
   };
 };
 
