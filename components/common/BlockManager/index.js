@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import {
   BlockHeroImage,
-  Categorylist,
   CTABlock,
   CTASingleImageBlock,
   FAQBlock,
@@ -30,7 +29,6 @@ const BLOCK_COMPONENTS = {
   'blocks.lets-talk-block': CTASingleImageBlock,
   'blocks.faq-block': FAQBlock,
   'blocks.faq-by-category-block': FAQBlock,
-  'blocks.category-list': Categorylist,
 };
 
 const BlockManager = ({ blocks }) => {

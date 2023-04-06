@@ -48,10 +48,10 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
                 return (
                   currentTab === ctaBlock.title && (
                     <div key={ctaBlock.title} className="mt-1 divide-y divide-gray-darker">
-                      {ctaBlock.cta.map((item) => {
+                      {ctaBlock.cta.map(( item) => {
                         return (
                           <Accordion
-                            key={item.title}
+                            key={`0${item.id}`}
                             open={open === item.title}
                             onClick={() => handleOpen(item.title)}
                             items={[
