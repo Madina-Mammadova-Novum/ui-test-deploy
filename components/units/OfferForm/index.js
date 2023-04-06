@@ -32,7 +32,12 @@ const OfferForm = () => {
     <FormProvider {...methods}>
       <FormManager
         submitAction={handleSubmit}
-        submitButton={{ text: 'Send offer', variant: 'primary', size: 'large', className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]' }}
+        submitButton={{
+          text: 'Send offer',
+          variant: 'primary',
+          size: 'large',
+          className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
+        }}
       >
         <CommercialOfferTerms />
       </FormManager>

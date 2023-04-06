@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react'
-import { Button, DatePicker, Dropdown, Input } from '@/elements';
-import { getValueWithPath, getFilledArray } from '@/utils/helpers';
-import { useHookForm } from '@/utils/hooks';
+import React, { useState } from 'react';
+
 import { TrashIcon } from '@/assets/icons';
-import PlusInCircleSVG from "@/assets/images/plusInCircle.svg"
+import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
+import { Button, DatePicker, Dropdown, Input } from '@/elements';
+import { getFilledArray, getValueWithPath } from '@/utils/helpers';
+import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = () => {
   const {
@@ -15,9 +16,9 @@ const SearchFormFields = () => {
     setValue,
   } = useHookForm();
 
-  const [productState, setProductState] = useState([0])
+  const [productState, setProductState] = useState([0]);
 
-  const productsLimitExceeded = productState.length >= 3
+  const productsLimitExceeded = productState.length >= 3;
 
   const handleChange = (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -28,14 +29,14 @@ const SearchFormFields = () => {
   };
 
   const handleAddProduct = () => {
-    setProductState(prevState => (getFilledArray(prevState.length + 1)))
-  }
+    setProductState((prevState) => getFilledArray(prevState.length + 1));
+  };
 
   const handleRemoveProduct = (id) => {
-    setProductState(prevState => prevState.filter(product => product !== id))
-    setValue(`products[${id}]`, null)
-    clearErrors(`products[${id}]`)
-  }
+    setProductState((prevState) => prevState.filter((product) => product !== id));
+    setValue(`products[${id}]`, null);
+    clearErrors(`products[${id}]`);
+  };
 
   const testOption = [{ label: 'testLabel', value: 'testValue' }];
 
@@ -137,18 +138,18 @@ const SearchFormFields = () => {
               />
             </div>
             {!!index && (
-              <Button 
-                buttonProps={{ text: "Delete", variant: "tertiary", size: "small", suffixIcon: <TrashIcon /> }} 
+              <Button
+                buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', suffixIcon: <TrashIcon /> }}
                 customStyles="ml-auto !p-0"
                 onClick={() => handleRemoveProduct(index)}
               />
             )}
           </div>
         ))}
-        <Button 
+        <Button
           disabled={productsLimitExceeded}
-          buttonProps={{ text: "Add more Products", variant: "primary", size: "small", icon: <PlusInCircleSVG />}} 
-          customStyles="self-start text-xsm" 
+          buttonProps={{ text: 'Add more Products', variant: 'primary', size: 'small', icon: <PlusInCircleSVG /> }}
+          customStyles="self-start text-xsm"
           onClick={handleAddProduct}
         />
       </div>

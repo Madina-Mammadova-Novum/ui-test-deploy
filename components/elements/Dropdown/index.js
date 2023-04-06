@@ -39,7 +39,7 @@ const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) =>
               options={options}
               components={{ Option: OptionsList }}
               onChange={handleChange}
-              closeMenuOnSelect={true}
+              closeMenuOnSelect
               formatOptionLabel={renderOption}
               styles={dropdownStyles(selectedOption, error)}
               theme={dropdownTheme}
