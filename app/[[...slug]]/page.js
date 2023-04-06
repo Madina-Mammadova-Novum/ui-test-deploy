@@ -36,6 +36,9 @@ export default async function Home({ params }) {
           <NextLink href={ROUTES.ACCOUNT_PREFIXTURE}>PRE-FIXTURE</NextLink>
         </li>
         <li>
+          <NextLink href={ROUTES.ACCOUNT_FIXTURE}>FIXTURE</NextLink>
+        </li>
+        <li>
           <NextLink href={ROUTES.ACCOUNT_NEGOTIATING}>NEGOTIATING</NextLink>
         </li>
       </ul>

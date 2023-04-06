@@ -31,7 +31,7 @@ const CounterofferCOTContent = () => {
       ))}
       <div className="flex gap-x-5 items-center mt-3">
         <Dropdown label="freight" control={control} id="cargo_type" customStyles="max-w-[138px]" />
-        <Input label="value" placeholder="WS" customStyles="max-w-[138px]" />
+        <Input label="value" type="number" placeholder="WS" customStyles="max-w-[138px]" />
       </div>
 
       <Input label="demurrage rate" placeholder="Daily payment" customStyles="max-w-[296px] mt-3" />

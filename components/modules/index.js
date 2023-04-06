@@ -27,6 +27,7 @@ import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PreFixture from '@/modules/PreFixture';
+import Fixture from '@/modules/Fixture';
 import ProfileMenu from '@/modules/ProfileMenu';
 // import RadioWithText from '@/modules/RadioWithText';
 // import Seo from '@/modules/Seo';
@@ -87,6 +88,7 @@ export {
   CommentsContent,
   TankerSearchResults,
   PreFixture,
+  Fixture,
   Negotiating,
   ViewIncomingOffer,
   SendCounteroffer,
