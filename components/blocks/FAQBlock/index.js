@@ -48,9 +48,13 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
             ))}
           <div className="text-black pt-5">
             {cta && (
-              <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={  cta.buttons.map((button) => {
-                return ({ path: button.path, label: button.label })
-              })}/>
+              <AccordionCTA
+                shortDescription={cta.shortDescription}
+                title={cta.title}
+                buttons={cta.buttons.map((button) => {
+                  return { path: button.path, label: button.label };
+                })}
+              />
             )}
           </div>
         </div>

@@ -34,9 +34,7 @@ export default async function Home({ params }) {
           <div className="heading-wrapper text-white">{content && parse(content)}</div>
         </div>
       </section>
-      <div className="space-y-[100px]">
-        {blocks && <BlockManager blocks={blocks} />}
-      </div>
+      <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div>
     </main>
   );
 }
