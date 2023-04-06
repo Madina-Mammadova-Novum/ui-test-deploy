@@ -18,7 +18,7 @@ const VerifficationUserAccount = () => {
 
   const queryData = {
     userId: query.get('UserId'),
-    code: query.get('Code')?.replace(/\s+/g, '+'),
+    code: query.get('Code')?.replace(/\s+/g, '+'), // todo: temporary solution
     userType: query.get('UserType'),
   };
 
@@ -38,7 +38,6 @@ const VerifficationUserAccount = () => {
 
   useEffect(() => {
     fetchVeriffUrl();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -14,7 +14,7 @@ import {
   personalDetailsSchema,
   tankerSlotsDetailsSchema,
 } from '@/lib/schemas';
-import { ownerSignUp } from '@/services/user';
+import { ownerRegistration } from '@/services/user';
 import {
   CompanyAddresses,
   CompanyDetails,
@@ -46,14 +46,14 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const data = await ownerSignUp({ data: formData });
-    if (data) {
-      successToast(data.message, 'Check your email for validating the account');
+    const { message, error } = await ownerRegistration({ data: formData });
+
+    if (message) {
+      successToast(message);
       methods.reset();
     }
-    if (!data) {
-      errorToast('Oops data is not filled');
-    }
+
+    if (error) errorToast(error);
   };
 
   return (
