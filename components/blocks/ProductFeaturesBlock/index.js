@@ -10,7 +10,8 @@ import 'swiper/css/pagination';
 
 import { mediaPropTypes } from '@/utils/types';
 
-import { LinkAsButton, NextImage, Title } from '@/elements';
+import Item from "@/blocks/ProductFeaturesBlock/Item";
+import { NextImage, Title } from '@/elements';
 import { Accordion, Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
 
@@ -51,30 +52,15 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
                       {ctaBlock.cta.map((item) => {
                         return (
                           <Accordion
-                            key={`0${item.id}`}
+                            key={`id-${item.id}`}
                             open={open === item.title}
                             onClick={() => handleOpen(item.title)}
-                            items={[
-                              {
+                            items={[{
                                 headerContent: item.title,
                                 bodyContent: (
-                                  <div>
-                                    <p>{item.text}</p>
-                                    {item.buttons &&
-                                      item.buttons.map((button) => {
-                                        return (
-                                          <LinkAsButton
-                                            href="/"
-                                            buttonProps={{ variant: 'secondary', size: 'large' }}
-                                            customStyles="w-fit mt-5"
-                                          >
-                                            {button.label}
-                                          </LinkAsButton>
-                                        );
-                                      })}
-                                  </div>
-                                ),
-                              },
+                                  <Item text={item.text}
+                                        buttons={item.buttons}/>
+                                ) },
                             ]}
                           />
                         );

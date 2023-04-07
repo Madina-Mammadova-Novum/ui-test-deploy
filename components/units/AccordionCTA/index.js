@@ -11,10 +11,10 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
       <div className="flex gap-x-2.5 items-center">
         {shortDescription && <p className="text-xsm">{shortDescription}</p>}
         {buttons &&
-          buttons.map((button) => {
+          buttons.map(({ path, label }) => {
             return (
-              <LinkAsButton href={button.path} buttonProps={{ variant: 'primary', size: 'medium' }}>
-                {button.label}
+              <LinkAsButton href={path} buttonProps={{ variant: 'primary', size: 'medium' }}>
+                {label}
               </LinkAsButton>
             );
           })}
@@ -22,6 +22,7 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
     </div>
   );
 };
+
 
 AccordionCTA.propTypes = ctaPropTypes;
 

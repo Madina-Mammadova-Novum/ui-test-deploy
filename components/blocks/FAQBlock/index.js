@@ -34,7 +34,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
           {items &&
             items.map(({ id, answer, question }) => (
               <Accordion
-                key={`0${id}`}
+                key={`id-${id}`}
                 open={open === id}
                 onClick={() => handleOpen(id)}
                 isFullWidth
@@ -51,9 +51,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
               <AccordionCTA
                 shortDescription={cta.shortDescription}
                 title={cta.title}
-                buttons={cta.buttons.map((button) => {
-                  return { path: button.path, label: button.label };
-                })}
+                buttons={cta.buttons}
               />
             )}
           </div>

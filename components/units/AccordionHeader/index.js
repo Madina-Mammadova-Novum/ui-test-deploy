@@ -8,9 +8,10 @@ import { Title } from '@/elements';
 
 const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
   return (
-    // eslint-disable-next-line react/button-has-type
+    // todo: to enable using element Button - add no-styles-variant, change text(string) to children (html element)
     <button
       className={classnames(!isFullWidth && 'px-[30px]', 'flex justify-between pb-2.5 pt-5 w-full')}
+      type="button"
       onClick={onClick}
     >
       <Title level={isFullWidth ? '3' : '2'} className="text-black">
