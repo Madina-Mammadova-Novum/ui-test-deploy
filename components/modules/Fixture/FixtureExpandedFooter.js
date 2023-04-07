@@ -6,7 +6,7 @@ const FixtureExpandedFooter = () => {
     <ExpandableRowFooter>
       <Button
         buttonProps={{ text: 'Charter party (generate pdf)', variant: 'tertiary', size: 'large' }}
-        customStyles="hover:border-black"
+        customStyles="self-start"
       />
     </ExpandableRowFooter>
   );

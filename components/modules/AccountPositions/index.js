@@ -1,15 +1,30 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
 
+import { Loader } from '@/elements';
 import { getUserPositions } from '@/services';
 import { ExpandableCard } from '@/units';
 
-const AccountPositions = async ({ containerClass }) => {
-  const data = await getUserPositions();
+const AccountPositions = ({ containerClass }) => {
+  const [userPositions, setUserPositions] = useState(null);
+
+  const fetchData = async () => {
+    const data = await getUserPositions();
+    setUserPositions(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const printExpandable = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
-  return <section className={containerClass}>{data?.map(printExpandable)}</section>;
+  return (
+    <section className={containerClass}>{userPositions ? userPositions?.map(printExpandable) : <Loader />}</section>
+  );
 };
 
 AccountPositions.propTypes = {

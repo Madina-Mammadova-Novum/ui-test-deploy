@@ -14,7 +14,9 @@ const SearchFormFields = () => {
     clearErrors,
     formState: { errors, isSubmitting },
     setValue,
+    unregister
   } = useHookForm();
+  console.log(errors.products, 'rere');
 
   const [productState, setProductState] = useState([0]);
 
@@ -34,7 +36,7 @@ const SearchFormFields = () => {
 
   const handleRemoveProduct = (id) => {
     setProductState((prevState) => prevState.filter((product) => product !== id));
-    setValue(`products[${id}]`, null);
+    unregister(`products[${id}]`)
     clearErrors(`products[${id}]`);
   };
 
@@ -148,8 +150,8 @@ const SearchFormFields = () => {
         ))}
         <Button
           disabled={productsLimitExceeded}
-          buttonProps={{ text: 'Add more Products', variant: 'primary', size: 'small', icon: <PlusInCircleSVG /> }}
-          customStyles="self-start text-xsm"
+          buttonProps={{ text: 'Add more Products', variant: 'primary', size: 'small', icon: <PlusInCircleSVG />, iconContainerStyles: 'mr-1.5' }}
+          customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
         />
       </div>

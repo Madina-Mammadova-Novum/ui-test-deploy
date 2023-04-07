@@ -77,8 +77,12 @@
     @apply text-lg font-bold;
   }
 
+  .content-wrapper h3 {
+    @apply text-black mb-1.5;
+  }
+
   .content-wrapper h4 {
-    @apply text-xsm text-black font-bold mb-1.5;
+    @apply text-black mb-3 font-semibold;
   }
 
   .content-wrapper p {
@@ -88,6 +92,14 @@
   .content-wrapper ul li,
   .content-wrapper ol li {
     @apply text-black text-xsm;
+  }
+
+  .content-wrapper img {
+    @apply rounded-[10px] h-full;
+  }
+
+  .content-wrapper iframe {
+    @apply w-full rounded-[10px];
   }
 
   .content-wrapper ul li::marker {
@@ -100,6 +112,13 @@
 
   .content-wrapper blockquote {
     @apply !my-4 py-[5px] pl-4 font-semibold border-l-2 border-blue;
+  }
+
+  .heading-wrapper h1 {
+    @apply text-white mb-2.5;
+  }
+  .heading-wrapper p {
+    @apply text-xsm text-white max-w-[800px] mx-auto;
   }
 
   /* Swiper */

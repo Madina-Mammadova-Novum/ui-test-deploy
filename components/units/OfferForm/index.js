@@ -1,3 +1,5 @@
+'use client';
+
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';

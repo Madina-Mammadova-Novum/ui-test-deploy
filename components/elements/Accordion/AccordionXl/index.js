@@ -45,6 +45,7 @@ const AccordionXl = ({ data, active, opened, onChange }) => {
           />
         )}
       </AccordionHeader>
+
       <AccordionBody list={data?.items} toggle={opened} />
     </>
   );

@@ -16,6 +16,7 @@ const ToggleRows = ({ onToggleClick, value }) => {
       <DoubleArrowSVG className={`transition duration-500 ${value && 'rotate-180'}`} />
       <Button
         buttonProps={{ text: `${value ? 'Collapse' : 'Expand'} all groups`, variant: 'primary', size: 'small' }}
+        customStyles="bg-[transparent] px-0 py-0"
       />
     </div>
   );

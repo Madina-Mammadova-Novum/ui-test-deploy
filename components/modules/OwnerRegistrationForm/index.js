@@ -46,16 +46,14 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await ownerRegistration({ data: formData });
-    if (data) {
-      successToast(data.message, 'Check your email for validating the account');
+    const { message, error } = await ownerRegistration({ data: formData });
+
+    if (message) {
+      successToast(message);
       methods.reset();
     }
-    if (error) {
-      const { message, errors, description } = error;
-      console.error(errors);
-      errorToast(message, description);
-    }
+
+    if (error) errorToast(error);
   };
 
   return (

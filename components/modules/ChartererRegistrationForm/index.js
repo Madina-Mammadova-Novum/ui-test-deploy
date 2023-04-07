@@ -47,17 +47,14 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await chartererRegistration({ data: formData });
+    const { message, error } = await chartererRegistration({ data: formData });
 
-    if (data) {
-      successToast(data.message, 'Check your email for validating the account');
+    if (message) {
+      successToast(message);
       methods.reset();
     }
-    if (error) {
-      const { message, errors, description } = error;
-      console.error(errors);
-      errorToast(message, description);
-    }
+
+    if (error) errorToast(error);
   };
 
   return (

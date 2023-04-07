@@ -1,49 +1,40 @@
 import React from 'react';
 
+import delve from 'dlv';
+import parse from 'html-react-parser';
+
 import { metaData } from '@/adapters/metaData';
-import { NextLink } from '@/elements';
-import { ROUTES } from '@/lib';
-import { getPage } from '@/services/page';
+import waves from '@/assets/images/waves.jpg';
+import { BlockManager } from '@/common';
+import { NextImage } from '@/elements';
+import { getEntityData } from '@/services/collectionType';
 
 export async function generateMetadata({ params }) {
-  const data = await getPage(params);
-  return metaData({ data });
+  const data = await getEntityData(params);
+  return metaData(data);
 }
 
 export default async function Home({ params }) {
-  const { title } = await getPage(params);
+  const data = await getEntityData(params);
+  const pageData = delve(data, 'data');
+  const blocks = delve(pageData, 'blocks');
+  const { content } = pageData;
 
   return (
-    <section className="container flex-grow">
-      <h1>{title}</h1>
-      <ul>
-        <li>
-          <NextLink href={ROUTES.LOGIN}>LOGIN</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.FORGOT_PASSWORD}>FORGOT_PASSWORD</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.RESET_PASSWORD}>RESET_PASSWORD</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.SIGNUP}>SIGNUP</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.ACCOUNT_SEARCH}>SEARCH</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.ACCOUNT_PREFIXTURE}>PRE-FIXTURE</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.ACCOUNT_FIXTURE}>FIXTURE</NextLink>
-        </li>
-        <li>
-          <NextLink href={ROUTES.ACCOUNT_NEGOTIATING}>NEGOTIATING</NextLink>
-        </li>
-      </ul>
-
-      {/* {blocks && <BlockManager blocks={blocks} />} */}
-    </section>
+    <main>
+      <section className="relative pt-[115px] pb-[195px]">
+        <div className="container mx-auto px-[54px] max-w-[1258px]">
+          <NextImage
+            src={waves}
+            alt="waves"
+            customStyles="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+            height={352}
+            width={1440}
+          />
+          <div className="heading-wrapper text-white">{content && parse(content)}</div>
+        </div>
+      </section>
+      <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div>
+    </main>
   );
 }
