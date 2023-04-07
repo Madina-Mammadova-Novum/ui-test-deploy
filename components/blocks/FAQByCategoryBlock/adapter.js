@@ -1,4 +1,5 @@
 import { categoryAdapter } from '@/adapters/category';
+import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { getFAQs } from '@/services/faq';
 
 export const updateFAQByCategoryBlock = async (block) => {
@@ -10,5 +11,6 @@ export const updateFAQByCategoryBlock = async (block) => {
     });
   block.category = categoryAdapter(block.category);
   block.items = items.filter(({ category }) => category.id === block.category.id);
+  block.cta = updateCTABlock(block.cta);
   return block;
 };

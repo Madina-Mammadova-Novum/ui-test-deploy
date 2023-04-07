@@ -5,13 +5,11 @@ import React, { useState } from 'react';
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 
-import { categoryPropTypes } from '@/lib/types';
+import { categoryPropTypes, ctaPropTypes } from '@/lib/types';
 
-import { LinkAsButton, Title } from '@/elements';
-import { Accordion, TabsAsLinks } from '@/units';
-import { makeId } from '@/utils/helpers';
+import { Accordion, AccordionCTA, TabsAsLinks } from '@/units';
 
-const FAQBlock = ({ title, subTitle, shortDescription, items, categories, category }) => {
+const FAQBlock = ({ title, subTitle, shortDescription, items, categories, category, cta }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -26,8 +24,8 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
   });
 
   return (
-    <section className="relative z-10">
-      <div className="container mx-auto px-[54px] max-w-[1258px] -mt-[165px]">
+    <section className="relative z-10 -mt-[175px]">
+      <div className="container mx-auto px-[54px] max-w-[1258px]">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
@@ -36,7 +34,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
           {items &&
             items.map(({ id, answer, question }) => (
               <Accordion
-                key={makeId()}
+                key={`id-${id}`}
                 open={open === id}
                 onClick={() => handleOpen(id)}
                 isFullWidth
@@ -49,16 +47,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
               />
             ))}
           <div className="text-black pt-5">
-            {/* todo: it's can be a unit */}
-            <div className="rounded-[10px] border border-gray-darker bg-gray-light px-5 py-3">
-              <Title level="3">Everything you need to know</Title>
-              <div className="flex gap-x-2.5 items-center">
-                <p className="text-xsm">Can’t find the answer you’re looking for?</p>
-                <LinkAsButton href="/" buttonProps={{ variant: 'primary', size: 'medium' }}>
-                  Help Center
-                </LinkAsButton>
-              </div>
-            </div>
+            {cta && <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />}
           </div>
         </div>
       </div>
@@ -79,6 +68,7 @@ FAQBlock.propTypes = {
   ).isRequired,
   categories: PropTypes.arrayOf(categoryPropTypes),
   category: categoryPropTypes,
+  cta: ctaPropTypes,
 };
 
 export default FAQBlock;
