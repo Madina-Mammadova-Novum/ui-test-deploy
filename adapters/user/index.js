@@ -150,13 +150,13 @@ export function ownerSignUpAdapter({ data }) {
     email: email.replace(/\.com$/, ''),
     password,
     phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: `+${secondaryPhoneNumber}`,
+    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyNumberOfOperation,
     numberOfVessels: numberOfTankers,
-    ...companyAddressesAdapter({ data }),
     imos: imo,
+    ...companyAddressesAdapter({ data }),
   };
 }
 
@@ -164,7 +164,7 @@ const cargoesAdapter = ({ data }) => {
   return data?.map((item) => ({
     vesselIMO: item?.imo,
     loadPortId: item?.port?.value,
-    billOfLadingDate: new Date(item?.date),
+    billOfLadingDate: new Date(item?.date).toISOString(),
   }));
 };
 
@@ -193,7 +193,7 @@ export function chartererSignUpAdapter({ data }) {
     companyName,
     yearsInOperation: companyNumberOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
-    experience: cargoesAdapter({ data: cargoes }),
+    experiences: cargoesAdapter({ data: cargoes }),
     ...companyAddressesAdapter({ data }),
   };
 }
