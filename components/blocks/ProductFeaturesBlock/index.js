@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 
 import { mediaPropTypes } from '@/utils/types';
 
-import Item from "@/blocks/ProductFeaturesBlock/Item";
+import Item from '@/blocks/ProductFeaturesBlock/Item';
 import { NextImage, Title } from '@/elements';
 import { Accordion, Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
@@ -55,12 +55,11 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
                             key={`id-${item.id}`}
                             open={open === item.title}
                             onClick={() => handleOpen(item.title)}
-                            items={[{
+                            items={[
+                              {
                                 headerContent: item.title,
-                                bodyContent: (
-                                  <Item text={item.text}
-                                        buttons={item.buttons}/>
-                                ) },
+                                bodyContent: <Item text={item.text} buttons={item.buttons} />,
+                              },
                             ]}
                           />
                         );

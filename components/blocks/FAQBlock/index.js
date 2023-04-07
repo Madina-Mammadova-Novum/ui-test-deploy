@@ -47,13 +47,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
               />
             ))}
           <div className="text-black pt-5">
-            {cta && (
-              <AccordionCTA
-                shortDescription={cta.shortDescription}
-                title={cta.title}
-                buttons={cta.buttons}
-              />
-            )}
+            {cta && <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />}
           </div>
         </div>
       </div>

@@ -23,7 +23,6 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
   );
 };
 
-
 AccordionCTA.propTypes = ctaPropTypes;
 
 export default AccordionCTA;
