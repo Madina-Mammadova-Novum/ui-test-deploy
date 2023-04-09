@@ -10,6 +10,7 @@ import ComplexPagination from '@/units/ComplexPagination';
 import COTTabContent from '@/units/COTTabContent';
 import Countdown from '@/units/Countdown';
 import DateDetailsForm from '@/units/DateDetailsForm';
+import DeactivateTankerForm from '@/units/DeactivateTankerForm';
 import EditDateForm from '@/units/EditDateForm';
 import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
@@ -76,4 +77,5 @@ export {
   EditPortForm,
   EditDateForm,
   PortDetailsForm,
+  DeactivateTankerForm,
 };

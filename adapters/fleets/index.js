@@ -125,6 +125,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       id,
       toggle: {
         value: tankerStatus.value,
+        name: tankerName.value,
       },
       type: TYPE.TANKER_STATUS,
       editable: tankerStatus.editable,
