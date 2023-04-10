@@ -22,7 +22,12 @@ const SearchForm = ({ onSubmit }) => {
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData, methods)}
-          submitButton={{ text: 'Show results', variant: 'secondary', size: 'large', className: '!w-max ml-auto !text-white' }}
+          submitButton={{
+            text: 'Show results',
+            variant: 'secondary',
+            size: 'large',
+            className: '!w-max ml-auto !text-white',
+          }}
         >
           <SearchFormFields />
         </FormManager>

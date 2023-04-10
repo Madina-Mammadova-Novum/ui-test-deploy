@@ -34,7 +34,7 @@ const Button = ({
         {...rest}
       >
         {before && <IconWrapper iconData={{ className: iconContainerStyles, icon: before }} />}
-        <span className="px-1.5 text-inherit">{text && text}</span>
+        {text && <span className="px-1.5 text-inherit">{text}</span>}
         {after && <IconWrapper iconData={{ className: iconContainerStyles, icon: after }} />}
       </button>
       {helperText && <span className="text-gray text-xs-sm font-normal">{helperText}</span>}
