@@ -36,6 +36,7 @@ import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
+import IconWrapper from '@/units/IconWrapper';
 
 export * from '@/units/Account';
 
@@ -78,4 +79,5 @@ export {
   EditDateForm,
   PortDetailsForm,
   AccordionCTA,
+  IconWrapper
 };

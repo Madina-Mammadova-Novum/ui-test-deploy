@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
 
 import { getButtonClassNames } from '@/utils/helpers';
+import { IconWrapper } from '@/units';
 
 const Button = ({
   buttonProps: { icon = {}, iconContainerStyles, helperText, text, variant, size },
@@ -32,17 +33,9 @@ const Button = ({
         disabled={disabled}
         {...rest}
       >
-        {before && (
-          <span className={classnames(iconContainerStyles, before && 'mr-1.5')}>
-            {before}
-          </span>
-        )}
+        {before && <IconWrapper iconData={{ className: classnames(iconContainerStyles, 'mr-1.5'), icon: before}} />}
         {text && text}
-        {after && (
-          <span className={classnames(iconContainerStyles, 'ml-1.5')}>
-            {after}
-          </span>
-        )}
+        {after && <IconWrapper iconData={{ className: classnames(iconContainerStyles, 'ml-1.5'), icon: after}} />}
       </button>
       {helperText && <span className="text-gray text-xs-sm font-normal">{helperText}</span>}
     </div>
