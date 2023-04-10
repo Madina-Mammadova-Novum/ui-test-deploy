@@ -15,7 +15,7 @@ const NegotiatingExpandedFooter = ({ isCharterer }) => {
             text: 'Search for Alternative Tankers',
             variant: 'secondary',
             size: 'large',
-            icon: <SearchSVG className="w-4 fill-white" />,
+            icon: { before: <SearchSVG className="w-4 fill-white" /> },
           }}
         />
       </NextLink>

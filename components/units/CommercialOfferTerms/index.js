@@ -43,7 +43,7 @@ const CommercialOfferTerms = () => {
           />
           <Input
             {...register(`products[${index}].density`)}
-            label="density"
+            label="Density"
             placeholder="mt/m³"
             customStyles="max-w-[138px]"
             error={errors.products ? errors.products[index]?.density?.message : null}
@@ -61,7 +61,7 @@ const CommercialOfferTerms = () => {
       ))}
       <div className="flex gap-x-5 items-center mt-3">
         <Dropdown
-          label="freight"
+          label="Freight"
           name="freight"
           customStyles="max-w-[138px]"
           options={testOption}
@@ -69,7 +69,7 @@ const CommercialOfferTerms = () => {
         />
         <Input
           {...register('value')}
-          label="value"
+          label="Value"
           name="value"
           placeholder="WS"
           customStyles="max-w-[138px]"
@@ -80,7 +80,7 @@ const CommercialOfferTerms = () => {
 
       <Input
         {...register('demurrageRate')}
-        label="demurrage rate"
+        label="Demurrage rate"
         name="demurrageRate"
         placeholder="Daily payment"
         customStyles="max-w-[296px] mt-3"

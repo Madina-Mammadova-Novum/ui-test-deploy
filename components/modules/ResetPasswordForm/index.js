@@ -31,6 +31,7 @@ const ResetPasswordForm = () => {
           text: 'Reset password',
           variant: 'primary',
           size: 'large',
+          className: 'w-[calc(100%-183px)] md:w-[calc(100%-203px)]',
         }}
         submitAction={onSubmit}
       >
