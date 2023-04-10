@@ -16,7 +16,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
   return (
     <>
       {isOpened && (
-        <div className="fixed top-0 left-0 bottom-0 right-0" aria-hidden onClick={() => setIsOpened(false)} />
+        <div className="fixed top-0 left-0 bottom-0 right-0 z-[1]" aria-hidden onClick={() => setIsOpened(false)} />
       )}
       <div className="flex items-center">
         {label && <span className="text-[12px] font-semibold text-gray uppercase">{label}</span>}
@@ -28,7 +28,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
           <span className="box-border flex-1">{currentItem}</span>
           <ArrowSVG className={`w-2.5 ml-2 transition duration-500 ${isOpened && 'rotate-180 fill-blue'}`} />
           {isOpened && (
-            <div className="absolute -bottom-0.5 left-0 translate-y-[100%] px-2.5 py-2 rounded-md bg-white shadow-xmd w-full overflow-y-auto max-h-[112px]">
+            <div className="absolute -bottom-0.5 left-0 translate-y-[100%] px-2.5 py-2 rounded-md bg-white shadow-xmd w-full overflow-y-auto max-h-[112px] z-[1]">
               {selectableItems.map((item) => (
                 <div
                   key={item}

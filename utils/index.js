@@ -14,11 +14,11 @@ export function getStrapiMedia(url, query = '') {
   if (url.startsWith('http') || url.startsWith('//')) {
     return url;
   }
-  return `${process.env.STRAPI_API_URL || 'http://localhost:1337'}${url}${query}`;
+  return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'}${url}${query}`;
 }
 
 export function getStrapiURL(path) {
-  return `${process.env.STRAPI_API_URL || 'http://localhost:1337'}/api${path}`;
+  return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'}/api${path}`;
 }
 
 export function handleRedirection(preview, custom) {

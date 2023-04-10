@@ -78,7 +78,7 @@ const OfferModalContent = ({ closeModal }) => {
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button onClick={() => {}} buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }} />
+        <Button buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }} customStyles="opacity-[0]" />
       </div>
     </div>
   );

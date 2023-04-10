@@ -36,11 +36,11 @@ const PreFixtureExpandedContent = () => {
           activeTab={currentTab}
           tabs={tabs}
           onClick={({ target }) => setCurrentTab(target.value)}
-          customStyles="mx-auto mt-5 mb-3"
+          customStyles="mx-auto mt-5 mb-10 md:mb-3"
         />
         <Button
           buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase text-[10px] font-bold absolute right-0 top-[50%] translate-y-[-50%]"
+          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase text-[10px] font-bold absolute left-1/2 md:left-[unset] -translate-x-1/2 md:translate-x-[unset] md:right-0 bottom-[10%] md:bottom-[unset] md:top-[50%] md:translate-y-[-75%] whitespace-nowrap"
         />
       </div>
       {tabContent()}

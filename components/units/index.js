@@ -17,6 +17,7 @@ import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import IconWrapper from '@/units/IconWrapper';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import Notes from '@/units/Notes';
@@ -79,5 +80,6 @@ export {
   EditPortForm,
   EditDateForm,
   PortDetailsForm,
-  DeactivateTankerForm,
+  AccordionCTA,
+  IconWrapper,
 };
