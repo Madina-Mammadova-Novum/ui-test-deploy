@@ -1,3 +1,5 @@
+import { imageAdapter } from '@/adapters/image';
+
 export const categoryAdapter = ({ data }) => {
   if (data === null) return null;
   const { id, attributes } = data;
@@ -9,7 +11,7 @@ export const categoryAdapter = ({ data }) => {
     slug,
     content,
     shortDescription,
-    coverImage,
+    coverImage: coverImage ? imageAdapter(coverImage) : null,
   };
 };
 

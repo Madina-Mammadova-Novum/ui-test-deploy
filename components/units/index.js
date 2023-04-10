@@ -1,4 +1,5 @@
 import Accordion from '@/units/Accordion';
+import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
@@ -76,4 +77,5 @@ export {
   EditPortForm,
   EditDateForm,
   PortDetailsForm,
+  AccordionCTA,
 };
