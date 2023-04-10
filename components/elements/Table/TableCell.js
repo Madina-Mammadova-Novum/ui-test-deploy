@@ -2,15 +2,12 @@ import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import EditIcon from '@/assets/images/edit.svg';
-import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
-import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { NextImage } from '@/elements';
 import { TYPE } from '@/lib/constants';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { type, value, name, fontStyle, disabled, toggle, editable, countryFlag } = cellProps;
+  const { type, value, name, fontStyle, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
 
   const printModal = useMemo(() => {
     switch (type) {
@@ -32,51 +29,39 @@ const TableCell = ({ cellProps }) => {
   }, [name, toggle?.name, type]);
 
   return (
-    <td className={`${disabled ? 'bg-gray-light' : 'bg-white'} pl-5`}>
-      <div
-        className={`flex items-center text-xsm text-${fontStyle?.color ?? 'black'} 
-        ${fontStyle?.semibold ? 'font-semibold' : 'font-normal'} `}
-      >
-        {countryFlag && (
-          <NextImage
-            width={20}
-            height={15}
-            customStyles="max-h-[15px] mr-1.5"
-            src={countryFlag}
-            alt={`${countryFlag} flag`}
-          />
-        )}
+    <td name={type} className={`${disabled ? 'bg-gray-light' : 'bg-white'}`}>
+      {value && (
+        <div
+          className={`flex items-center ${!toggle ? 'w-full' : 'w-auto'} text-xsm text-${fontStyle?.color ?? 'black'} ${
+            fontStyle?.semibold ? 'font-semibold' : 'font-normal'
+          } `}
+        >
+          {countryFlag && (
+            <NextImage
+              width={20}
+              height={15}
+              customStyles="max-h-[15px] mr-1.5"
+              src={countryFlag}
+              alt={`${countryFlag} flag`}
+            />
+          )}
 
-        <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
-        {editable && (
-          <div className="flex justify-end ml-auto">
-            <ModalWindow
-              buttonProps={{
-                icon: <EditIcon />,
-                variant: 'tertiary',
-                size: 'small',
-                className: 'hover:bg-gray-darker !py-1 !px-1.5 mr-5',
-              }}
-            >
-              {printModal}
-            </ModalWindow>
-          </div>
-        )}
+          <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
+        </div>
+      )}
 
-        {toggle && (
-          <ModalWindow
-            buttonProps={{
-              icon: !disabled ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
-              variant: 'tertiary',
-              size: 'small',
-              className: 'relative -left-1/2',
-              disabled,
-            }}
-          >
-            {printModal}
-          </ModalWindow>
-        )}
-      </div>
+      {editable && (
+        <ModalWindow
+          buttonProps={{
+            icon: editIcon,
+            variant: 'tertiary',
+            size: 'small',
+            className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5 mr-5' : '!p-0',
+          }}
+        >
+          {printModal}
+        </ModalWindow>
+      )}
     </td>
   );
 };
@@ -91,6 +76,7 @@ TableCell.propTypes = {
       semibold: PropTypes.bool,
       color: PropTypes.string,
     }),
+    editIcon: PropTypes.node,
     badge: PropTypes.string,
     toggle: PropTypes.bool,
     editable: PropTypes.bool,

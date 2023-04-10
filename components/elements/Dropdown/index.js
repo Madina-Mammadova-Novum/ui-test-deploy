@@ -12,7 +12,7 @@ import OptionsList from '@/elements/Dropdown/OptionsList';
 import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
-const Dropdown = ({ name, label, value, options, onChange, disabled, customStyles, useForm = true }) => {
+const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (option) => {
@@ -23,7 +23,8 @@ const Dropdown = ({ name, label, value, options, onChange, disabled, customStyle
   const renderOption = ({ countryFlag, label: labelValue }) => (
     <OptionRow countryFlag={countryFlag} value={labelValue} />
   );
-  return useForm ? (
+
+  return (
     <Controller
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
@@ -52,19 +53,6 @@ const Dropdown = ({ name, label, value, options, onChange, disabled, customStyle
         );
       }}
     />
-  ) : (
-    <Select
-      id={name}
-      value={value}
-      options={options}
-      components={{ Option: OptionsList }}
-      onChange={handleChange}
-      closeMenuOnSelect
-      formatOptionLabel={renderOption}
-      styles={dropdownStyles(selectedOption)}
-      theme={dropdownTheme}
-      isDisabled={disabled}
-    />
   );
 };
 
@@ -72,19 +60,15 @@ Dropdown.defaultProps = {
   label: null,
   disabled: false,
   customStyles: '',
-  useForm: true,
-  value: '',
 };
 
 Dropdown.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string,
   label: PropTypes.string,
   customStyles: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  useForm: PropTypes.bool,
 };
 
 export default Dropdown;

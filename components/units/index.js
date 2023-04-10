@@ -66,6 +66,7 @@ export {
   VerifficationUserAccount,
   AccordionHeader,
   Accordion,
+  AccordionCTA,
   TabsAsLinks,
   Countdown,
   OfferDeclineForm,
