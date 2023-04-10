@@ -46,7 +46,10 @@
         "props": false
       }
     ],
-    "no-underscore-dangle": ["error", { "allow": ["__SERVER__", "__PRELOADED__STATE__", "__component"] }],
+    "no-underscore-dangle": [
+      "error",
+      { "allow": ["__SERVER__", "__PRELOADED__STATE__", "__component", "__contentType"] }
+    ],
     "no-unsafe-optional-chaining": 0,
     "object-curly-spacing": [2, "always"],
     "react-hooks/rules-of-hooks": "error",
