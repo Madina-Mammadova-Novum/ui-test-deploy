@@ -67,7 +67,6 @@ export {
   VerifficationUserAccount,
   AccordionHeader,
   Accordion,
-  AccordionCTA,
   TabsAsLinks,
   Countdown,
   OfferDeclineForm,
@@ -82,4 +81,5 @@ export {
   PortDetailsForm,
   AccordionCTA,
   IconWrapper,
+  DeactivateTankerForm,
 };

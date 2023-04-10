@@ -47,25 +47,13 @@ const TableCell = ({ cellProps }) => {
           )}
 
           <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
-          {editable && (
-            <ModalWindow
-              buttonProps={{
-                icon: { before: <EditIcon /> },
-                variant: 'tertiary',
-                size: 'small',
-                className: 'hover:bg-gray-darker !py-1 !pr-0 !pl-1.5 !ml-auto mr-1.5',
-              }}
-            >
-              {printModal}
-            </ModalWindow>
-          )}
         </div>
       )}
 
       {editable && (
         <ModalWindow
           buttonProps={{
-            icon: editIcon,
+            icon: { before: editIcon },
             variant: 'tertiary',
             size: 'small',
             className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5 mr-5' : '!p-0',
