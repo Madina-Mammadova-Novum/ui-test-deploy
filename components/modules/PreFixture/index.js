@@ -16,17 +16,17 @@ const PreFixture = () => {
     currentPage: 1,
   });
 
-  return (
+  return preFixtureHeaderData.length ? (
     <div>
       <div className="flex items-center justify-end">
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
       <div className="flex flex-col gap-y-2.5 mt-5">
-        {preFixtureHeaderData.map((headerData) => (
+        {preFixtureHeaderData.map((headerData, index) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={headerData} />}
-            footer={<PreFixtureExpandedFooter />}
+            footer={<PreFixtureExpandedFooter underNegotiation={index} />}
             expand={toggle}
           >
             <PreFixtureExpandedContent />
@@ -36,7 +36,7 @@ const PreFixture = () => {
 
       <ComplexPagination pagination={pagination} setPagination={setPagination} />
     </div>
-  );
+  ) : null;
 };
 
 export default PreFixture;

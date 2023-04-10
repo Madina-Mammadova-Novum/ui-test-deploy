@@ -8,13 +8,14 @@ import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
 import { getButtonClassNames } from '@/utils/helpers';
 
 const Button = ({
-  buttonProps: { icon, iconContainerStyles, helperText, text, variant, size, suffixIcon },
+  buttonProps: { icon = {}, iconContainerStyles, helperText, text, variant, size },
   customStyles,
   disabled,
   type,
   onClick,
   ...rest
 }) => {
+  const { before, after } = icon;
   const buttonClassNames = getButtonClassNames(variant, size);
   return (
     <div className="flex flex-col justify-center items-center">
@@ -23,6 +24,7 @@ const Button = ({
           'px-5 py-2.5 rounded-md flex items-center justify-center',
           buttonClassNames,
           disabled && 'opacity-50 pointer-events-none',
+          after && 'flex-row-reverse',
           customStyles
         )}
         onClick={onClick}
@@ -31,10 +33,12 @@ const Button = ({
         disabled={disabled}
         {...rest}
       >
-        {icon && <span className={iconContainerStyles}>{icon}</span>}
+        {icon && (
+          <span className={classnames(iconContainerStyles, before && 'mr-1.5', after && 'ml-1.5')}>
+            {before || after}
+          </span>
+        )}
         {text && text}
-        {suffixIcon && <span className="ml-1.5">{suffixIcon}</span>}
-
       </button>
       {helperText && <span className="text-gray text-xs-sm font-normal">{helperText}</span>}
     </div>
@@ -53,8 +57,10 @@ Button.propTypes = {
     text: PropTypes.string,
     helperText: PropTypes.string,
     iconContainerStyles: PropTypes.string,
-    icon: PropTypes.node,
-    suffixIcon: PropTypes.node,
+    icon: { 
+      before: PropTypes.node,
+      after: PropTypes.node,
+    },
     variant: buttonVariantsPropTypes.isRequired,
     size: buttonSizesPropTypes.isRequired,
   }.isRequired,

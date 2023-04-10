@@ -25,7 +25,7 @@ const CounterofferCOTContent = () => {
             disabled
             customStyles="w-[296px]"
           />
-          <Input label="density" placeholder="mt/m³" customStyles="max-w-[138px]" />
+          <Input label="Density" placeholder="mt/m³" customStyles="max-w-[138px]" />
           <Input label="min quantity" placeholder="tons" customStyles="max-w-[138px]" />
         </div>
       ))}

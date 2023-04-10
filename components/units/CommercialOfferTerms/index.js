@@ -43,7 +43,7 @@ const CommercialOfferTerms = () => {
           />
           <Input
             {...register(`products[${index}].density`)}
-            label="density"
+            label="Density"
             placeholder="mt/m³"
             customStyles="max-w-[138px]"
             error={errors.products ? errors.products[index]?.density?.message : null}

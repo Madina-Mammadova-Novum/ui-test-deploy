@@ -14,9 +14,8 @@ const SearchFormFields = () => {
     clearErrors,
     formState: { errors, isSubmitting },
     setValue,
-    unregister
+    unregister,
   } = useHookForm();
-  console.log(errors.products, 'rere');
 
   const [productState, setProductState] = useState([0]);
 
@@ -36,7 +35,7 @@ const SearchFormFields = () => {
 
   const handleRemoveProduct = (id) => {
     setProductState((prevState) => prevState.filter((product) => product !== id));
-    unregister(`products[${id}]`)
+    unregister(`products[${id}]`);
     clearErrors(`products[${id}]`);
   };
 
@@ -141,7 +140,7 @@ const SearchFormFields = () => {
             </div>
             {!!index && (
               <Button
-                buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', suffixIcon: <TrashIcon /> }}
+                buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
                 customStyles="ml-auto !p-0"
                 onClick={() => handleRemoveProduct(index)}
               />
@@ -150,7 +149,13 @@ const SearchFormFields = () => {
         ))}
         <Button
           disabled={productsLimitExceeded}
-          buttonProps={{ text: 'Add more Products', variant: 'primary', size: 'small', icon: <PlusInCircleSVG />, iconContainerStyles: 'mr-1.5' }}
+          buttonProps={{
+            text: 'Add more Products',
+            variant: 'primary',
+            size: 'small',
+            icon: { before: <PlusInCircleSVG /> },
+            iconContainerStyles: 'mr-1.5',
+          }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
         />

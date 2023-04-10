@@ -17,15 +17,17 @@ const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
       <div className="flex flex-col gap-1.5 relative">
         <Button
           buttonProps={{
-            icon: (
-              <ArrowIcon
-                className={`${
-                  !isResized && 'rotate-90'
-                } transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
-                width="14px"
-                height="14px"
-              />
-            ),
+            icon: {
+              before: (
+                <ArrowIcon
+                  className={`${
+                    !isResized && 'rotate-90'
+                  } transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
+                  width="14px"
+                  height="14px"
+                />
+              ),
+            },
             size: 'small',
             variant: 'tertiary',
           }}

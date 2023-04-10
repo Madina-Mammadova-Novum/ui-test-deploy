@@ -42,7 +42,7 @@ const AccordionSM = ({ data, active }) => {
       {data?.title && (
         <div className="flex flex-col justify-center items-center">
           <Button
-            buttonProps={{ icon: printIcon, variant: 'tertiary', size: 'small' }}
+            buttonProps={{ icon: { before: printIcon }, variant: 'tertiary', size: 'small' }}
             customStyles={`flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2 
             ${active ? 'bg-blue' : 'hover:bg-blue-dark'} 
             ${showLinks && 'bg-blue-dark'}`}
