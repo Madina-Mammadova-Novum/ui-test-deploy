@@ -61,7 +61,6 @@ const SearchFormFields = () => {
         <div className="flex flex-col 3sm:flex-row gap-x-5">
           <Dropdown
             name="loadPort"
-            value="54"
             options={testOption}
             id="loadPort"
             label="load port"
@@ -122,7 +121,7 @@ const SearchFormFields = () => {
               />
               <Input
                 {...register(`products[${index}].quantity`)}
-                label="quantity"
+                label="Quantity"
                 placeholder="tons"
                 customStyles="w-[45%] 3sm:w-2/5"
                 error={errors.products ? errors.products[index]?.quantity?.message : null}
@@ -130,7 +129,7 @@ const SearchFormFields = () => {
               />
               <Input
                 {...register(`products[${index}].tolerance`)}
-                label="tolerance"
+                label="Tolerance"
                 type="number"
                 placeholder="%"
                 customStyles="w-[45%] 3sm:w-1/5"
@@ -154,7 +153,6 @@ const SearchFormFields = () => {
             variant: 'primary',
             size: 'small',
             icon: { before: <PlusInCircleSVG /> },
-            iconContainerStyles: 'mr-1.5',
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}

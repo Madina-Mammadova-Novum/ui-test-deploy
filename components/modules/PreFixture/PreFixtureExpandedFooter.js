@@ -34,7 +34,6 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
               buttonProps={{
                 text: 'Under negotiation',
                 icon: { before: <CircleArrowsSVG /> },
-                iconContainerStyles: 'mr-1.5',
                 variant: 'tertiary',
                 size: 'large',
               }}

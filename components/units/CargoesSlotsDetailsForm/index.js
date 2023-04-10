@@ -163,7 +163,6 @@ const CargoesSlotsDetailsForm = () => {
             buttonProps={{
               text: 'Add more cargoes',
               helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
-              iconContainerStyles: 'pr-1.5',
               variant: 'tertiary',
               size: 'small',
               icon: { before: <PlusSVG /> },
