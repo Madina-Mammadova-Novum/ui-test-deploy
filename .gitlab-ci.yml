@@ -14,6 +14,6 @@ build-staging:
     - yarn install
     - cp .env.staging .env
     - yarn build
-    - sudo rsync -a . /var/www/web
+    - rsync -a . /var/www/web
     - cd /var/www/web
     - pm2 restart ecosystem.config.js
