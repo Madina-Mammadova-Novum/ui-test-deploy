@@ -13,7 +13,7 @@ const ModalWrapper = ({ opened, onClose, children }) => {
             type="button"
             onClick={onClose}
             className="absolute top-3 right-3"
-            buttonProps={{ icon: <CloseIcon /> }}
+            buttonProps={{ icon: { before: <CloseIcon /> } }}
           />
           {children}
         </div>

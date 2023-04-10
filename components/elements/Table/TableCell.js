@@ -42,7 +42,7 @@ const TableCell = ({ cellProps }) => {
           {editable && (
             <ModalWindow
               buttonProps={{
-                icon: <EditIcon />,
+                icon: { before: <EditIcon /> },
                 variant: 'tertiary',
                 size: 'small',
                 className: 'hover:bg-gray-darker !py-1 !pr-0 !pl-1.5 !ml-auto mr-1.5',

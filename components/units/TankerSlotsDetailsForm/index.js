@@ -100,7 +100,7 @@ const TankerSlotsDetails = () => {
             <Button
               type="button"
               customStyles="absolute top-[30px] right-1.5 z-10 !p-0"
-              buttonProps={{ icon: <TrashIcon />, variant: 'tertiary', size: 'small' }}
+              buttonProps={{ icon: { before: <TrashIcon /> }, variant: 'tertiary', size: 'small' }}
               onClick={() => handleRemoveSlot(index)}
               disabled={isSubmitting}
             />
