@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+
 import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
 import { Button, Modal } from '@/elements';
 import { ExpandableRowFooter, OfferAcceptModalContent, OfferDeclineForm } from '@/units';
@@ -70,6 +71,6 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
 
 PreFixtureExpandedFooter.propTypes = {
   underNegotiation: PropTypes.bool.isRequired,
-}
+};
 
 export default PreFixtureExpandedFooter;
