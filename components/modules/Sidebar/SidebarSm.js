@@ -21,15 +21,17 @@ const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
           buttonProps={{
             variant: 'tertiary',
             size: 'small',
-            icon: (
-              <ArrowIcon
-                className={`transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 ${
-                  isResized && '-rotate-90'
-                }`}
-                width="14px"
-                height="14px"
-              />
-            ),
+            icon: {
+              before: (
+                <ArrowIcon
+                  className={`transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 ${
+                    isResized && '-rotate-90'
+                  }`}
+                  width="14px"
+                  height="14px"
+                />
+              ),
+            },
           }}
         />
         {data?.map(printMenu)}

@@ -6,7 +6,8 @@ export function getSingleTypeEndpoint(apiID, locale) {
     ?locale=${locale}
     &populate=*,
     values.value,
-    ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions
+    ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions,
+    buttons,buttons.linkOptions
     `.replace(/\s+|\n/g, '');
 }
 
