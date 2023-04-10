@@ -25,7 +25,7 @@ const ImageSliderBlock = ({ gallery }) => {
             clickable: true,
           }}
           modules={[Pagination]}
-          className="swiperAboutUs -mt-[165px]"
+          className="swiperAboutUs -mt-[175px]"
         >
           {gallery.map((coverImage) => {
             return (
