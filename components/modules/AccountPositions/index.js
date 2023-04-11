@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { Loader, SimpleSelect } from '@/elements';
+import { Loader, SimpleSelect, Title } from '@/elements';
 import { getUserPositions } from '@/services';
-import { ExpandableCard } from '@/units';
+import { ComplexPagination, ExpandableCard } from '@/units';
 
-const AccountPositions = ({ containerClass }) => {
+const AccountPositions = ({ title, containerClass }) => {
   const options = ['ascending', 'descending'];
 
   const [userStore, setUserStore] = useState({
-    positionOptions: options,
-    positionSortType: options[0],
     userPositions: null,
+    sortOptions: options,
+    sortValue: options[0],
   });
 
   /* Change handler by key-value for userStore */
@@ -24,8 +24,6 @@ const AccountPositions = ({ containerClass }) => {
       [key]: value,
     }));
   };
-
-  const handleChange = (option) => handleChangeState('positionSortType', option);
 
   /* fetching user positions data */
   const fetchData = async () => {
@@ -37,24 +35,28 @@ const AccountPositions = ({ containerClass }) => {
     fetchData();
   }, []);
 
+  const handleChange = (option) => handleChangeState('sortValue', option);
+
   const printExpandable = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
-  const { positionOptions, positionSortType, userPositions } = userStore;
+  const { userPositions, sortOptions, sortValue } = userStore;
 
   return (
     <section className={containerClass}>
       {userPositions ? (
-        <div className="flex flex-col">
-          <div className="flex justify-end items-center relative -top-14 gap-x-2.5">
+        <>
+          <div className="flex justify-between items-center pt-5 w-full">
+            <Title level={1}>{title}</Title>
             <SimpleSelect
               label="Sort by open day:"
-              currentItem={positionSortType}
-              selectableItems={positionOptions}
+              currentItem={sortValue}
+              selectableItems={sortOptions}
               onChange={handleChange}
             />
           </div>
           {userPositions?.map(printExpandable)}
-        </div>
+          <ComplexPagination />
+        </>
       ) : (
         <Loader />
       )}
@@ -63,6 +65,7 @@ const AccountPositions = ({ containerClass }) => {
 };
 
 AccountPositions.propTypes = {
+  title: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.shape({})),
   containerClass: PropTypes.string,
 };

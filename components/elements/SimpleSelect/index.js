@@ -22,7 +22,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
         {label && <span className="text-[12px] font-semibold text-gray uppercase">{label}</span>}
         <div
           aria-hidden
-          className="relative bg-white capitalize flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[150px]"
+          className="relative bg-white capitalize flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[120px]"
           onClick={() => setIsOpened(true)}
         >
           <span className="box-border flex-1">{currentItem}</span>

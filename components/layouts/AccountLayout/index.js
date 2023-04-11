@@ -9,7 +9,7 @@ const AccountLayout = ({ children }) => {
       id: makeId(),
       title: 'Search',
       variant: 'search',
-      path: ROUTES.SEARCH,
+      path: ROUTES.ACCOUNT_SEARCH,
       items: [],
     },
     {
