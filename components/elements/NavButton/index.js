@@ -1,7 +1,7 @@
 'use client';
 
 import classnames from 'classnames';
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
 
 import { linkTargetPropTypes } from '@/lib/types';
@@ -9,8 +9,8 @@ import { linkTargetPropTypes } from '@/lib/types';
 import { NextLink } from '@/elements';
 
 const NavButton = ({ children, path, customStyles, disabled, target, ...rest }) => {
-  const pathname = usePathname()
-  const isActive = pathname === path
+  const pathname = usePathname();
+  const isActive = pathname === path;
 
   return (
     <NextLink
