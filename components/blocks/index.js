@@ -1,5 +1,5 @@
 import BlockHeroImage from '@/blocks/BlockHeroImage';
-import ContactUsBlock from "@/blocks/ContactUsBlock";
+import ContactUsBlock from '@/blocks/ContactUsBlock';
 import CTABlock from '@/blocks/CTABlock';
 import CTASingleImageBlock from '@/blocks/CTASingleImageBlock';
 import FAQBlock from '@/blocks/FAQBlock';

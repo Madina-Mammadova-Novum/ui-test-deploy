@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,7 +40,7 @@ const ContactUsForm = () => {
           text: 'Send Message',
           variant: 'secondary',
           size: 'large',
-          className: '!w-fit self-baseline'
+          className: '!w-fit self-baseline',
         }}
         submitAction={onSubmit}
       >
@@ -52,32 +52,35 @@ const ContactUsForm = () => {
               placeholder="Enter your "
               type="email"
               disabled={isSubmitting}
-              error={errors.email?.message}/>
+              error={errors.email?.message}
+            />
             <Input
               {...register('firstName')}
               label="first name"
               placeholder="Enter your "
               type="email"
               disabled={isSubmitting}
-              error={errors.email?.message}/>
+              error={errors.email?.message}
+            />
             <Input
               {...register('firstName')}
               label="first name"
               placeholder="Enter your "
               type="email"
               disabled={isSubmitting}
-              error={errors.email?.message}/>
+              error={errors.email?.message}
+            />
             <Input
               {...register('firstName')}
               label="first name"
               placeholder="Enter your "
               type="email"
               disabled={isSubmitting}
-              error={errors.email?.message}/>
+              error={errors.email?.message}
+            />
           </div>
-          <Dropdown label="subject"
-                    onChange={()=>{}} name="1" options={['1', '2', '3']}/>
-          <TextArea name="label" label="MESSAGE"/>
+          <Dropdown label="subject" onChange={() => {}} name="1" options={['1', '2', '3']} />
+          <TextArea name="label" label="MESSAGE" />
         </div>
       </FormManager>
     </FormProvider>
