@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -8,6 +8,11 @@ import ArrowSVG from '@/assets/images/arrow.svg';
 
 const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
   const [isOpened, setIsOpened] = useState(false);
+
+  const handleChange = (item) => {
+    onChange(item);
+  };
+
   return (
     <>
       {isOpened && (
@@ -17,7 +22,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
         {label && <span className="text-[12px] font-semibold text-gray uppercase">{label}</span>}
         <div
           aria-hidden
-          className="relative flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[68px]"
+          className="relative bg-white capitalize flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[150px]"
           onClick={() => setIsOpened(true)}
         >
           <span className="box-border flex-1">{currentItem}</span>
@@ -26,9 +31,10 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
             <div className="absolute -bottom-0.5 left-0 translate-y-[100%] px-2.5 py-2 rounded-md bg-white shadow-xmd w-full overflow-y-auto max-h-[112px] z-[1]">
               {selectableItems.map((item) => (
                 <div
-                  className={`px-2.5 py-1.5 rounded-md hover:bg-purple-light ${currentItem === item && 'text-blue'}`}
+                  key={item}
                   aria-hidden
-                  onClick={() => onChange(item)}
+                  onClick={() => handleChange(item)}
+                  className={`px-2.5 py-1.5 rounded-md hover:bg-purple-light ${currentItem === item && 'text-blue'}`}
                 >
                   {item}
                 </div>
