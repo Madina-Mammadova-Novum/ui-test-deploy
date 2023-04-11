@@ -19,7 +19,7 @@ export const navigationItemAdapter = ({ data }) => {
 
 export const navigationAdapter = ({ data }) => {
   if (data === null) return [];
-  return data.map((author) => {
-    return navigationItemAdapter({ data: author });
+  return data.map((item) => {
+    return navigationItemAdapter({ data: item });
   });
 };
