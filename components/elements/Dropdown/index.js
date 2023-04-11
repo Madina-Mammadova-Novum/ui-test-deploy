@@ -1,72 +1,116 @@
 'use client';
 
-import { useState } from 'react';
-import { Controller } from 'react-hook-form';
-import Select from 'react-select';
+import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { InputErrorMessage } from '@/elements';
-import OptionRow from '@/elements/Dropdown/OptionRow';
-import OptionsList from '@/elements/Dropdown/OptionsList';
-import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
-import { getValueWithPath } from '@/utils/helpers';
+import { ControlledAsyncDropdown } from '@/elements/Dropdown/ControlledAsyncDropdown';
+import { ControlledDropdown } from '@/elements/Dropdown/ControlledDropdown';
+import { DefaultAsyncDropdown } from '@/elements/Dropdown/DefaultAsyncDropdown';
+import { DefaultDropdown } from '@/elements/Dropdown/DefaultDropdown';
 
-const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  const handleChange = (option) => {
-    setSelectedOption(option);
-    onChange(option);
-  };
-
-  const renderOption = ({ countryFlag, label: labelValue }) => (
-    <OptionRow countryFlag={countryFlag} value={labelValue} />
-  );
-
-  return (
-    <Controller
-      name={name}
-      render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
-        const error = getValueWithPath(errors, name)?.value;
-
+const Dropdown = ({
+  name,
+  label,
+  options,
+  onChange,
+  disabled,
+  errorMsg,
+  customStyles = { className: '', dropdownWidth: '' },
+  config = { syncControll: false, asyncControll: false, async: false, sync: true },
+  ...rest
+}) => {
+  const printDropdown = useMemo(() => {
+    switch (config) {
+      case config?.syncControll:
         return (
-          <div className={`relative bottom-1 ${customStyles}`}>
-            <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">
-              {label}
-            </label>
-            <Select
-              ref={ref}
-              id={name}
-              {...field}
-              options={options}
-              components={{ Option: OptionsList }}
-              onChange={handleChange}
-              closeMenuOnSelect
-              formatOptionLabel={renderOption}
-              styles={dropdownStyles(selectedOption, error)}
-              theme={dropdownTheme}
-              isDisabled={disabled || isSubmitting}
-            />
-            {error && <InputErrorMessage message={error?.message} />}
-          </div>
+          <ControlledDropdown
+            {...rest}
+            name={name}
+            label={label}
+            options={options}
+            onChange={onChange}
+            disabled={disabled}
+            customStyles={customStyles}
+          />
         );
-      }}
-    />
-  );
+      case config?.asyncControll:
+        return (
+          <ControlledAsyncDropdown
+            {...rest}
+            name={name}
+            errorMsg={errorMsg}
+            label={label}
+            options={options}
+            onChange={onChange}
+            disabled={disabled}
+            customStyles={customStyles}
+          />
+        );
+      case config?.async:
+        return (
+          <DefaultAsyncDropdown
+            {...rest}
+            name={name}
+            label={label}
+            options={options}
+            onChange={onChange}
+            disabled={disabled}
+            customStyles={customStyles}
+          />
+        );
+      case config?.sync:
+        return (
+          <DefaultDropdown
+            {...rest}
+            name={name}
+            label={label}
+            options={options}
+            onChange={onChange}
+            disabled={disabled}
+            customStyles={customStyles}
+          />
+        );
+      default:
+        return (
+          <DefaultDropdown
+            {...rest}
+            name={name}
+            label={label}
+            options={options}
+            onChange={onChange}
+            disabled={disabled}
+            customStyles={customStyles}
+          />
+        );
+    }
+  }, [config, customStyles, disabled, errorMsg, label, name, onChange, options, rest]);
+
+  return printDropdown;
 };
 
 Dropdown.defaultProps = {
   label: null,
   disabled: false,
-  customStyles: '',
+  customStyles: {
+    dropdownWidth: '',
+    className: '',
+  },
 };
 
 Dropdown.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   label: PropTypes.string,
-  customStyles: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  customStyles: PropTypes.shape({
+    dropdownWidth: PropTypes.string,
+    className: PropTypes.string,
+  }),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    })
+  ).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };

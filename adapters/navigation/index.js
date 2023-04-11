@@ -23,3 +23,8 @@ export const navigationAdapter = ({ data }) => {
     return navigationItemAdapter({ data: author });
   });
 };
+
+export const navigationPagesAdapter = (item) => ({
+  label: item,
+  value: item,
+});

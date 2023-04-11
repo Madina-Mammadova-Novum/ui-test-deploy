@@ -4,17 +4,16 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { Loader, SimpleSelect, Title } from '@/elements';
+import { Dropdown, Loader, Title } from '@/elements';
+import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { getUserPositions } from '@/services';
 import { ComplexPagination, ExpandableCard } from '@/units';
 
 const AccountPositions = ({ title, containerClass }) => {
-  const options = ['ascending', 'descending'];
-
   const [userStore, setUserStore] = useState({
     userPositions: null,
-    sortOptions: options,
-    sortValue: options[0],
+    sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
+    sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
   });
 
   /* Change handler by key-value for userStore */
@@ -41,17 +40,21 @@ const AccountPositions = ({ title, containerClass }) => {
 
   const { userPositions, sortOptions, sortValue } = userStore;
 
+  const dropdownStyles = { dropdownWidth: 150, className: 'flex items-center gap-x-5' };
+
   return (
     <section className={containerClass}>
       {userPositions ? (
         <>
           <div className="flex justify-between items-center pt-5 w-full">
             <Title level={1}>{title}</Title>
-            <SimpleSelect
+            <Dropdown
               label="Sort by open day:"
-              currentItem={sortValue}
-              selectableItems={sortOptions}
+              options={sortOptions}
+              defaultValue={sortValue}
               onChange={handleChange}
+              config={{ sync: true }}
+              customStyles={dropdownStyles}
             />
           </div>
           {userPositions?.map(printExpandable)}

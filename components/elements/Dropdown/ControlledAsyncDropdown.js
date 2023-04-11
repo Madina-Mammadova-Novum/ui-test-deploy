@@ -6,13 +6,12 @@ import { Controller } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 
-import { InputErrorMessage } from '@/elements';
-import OptionRow from '@/elements/AsyncDropdown/OptionRow';
-import OptionsList from '@/elements/AsyncDropdown/OptionsList';
-import { dropdownStyles, dropdownTheme } from '@/elements/AsyncDropdown/styles';
+import { InputErrorMessage, Label } from '@/elements';
+import OptionRow from '@/elements/Dropdown/OptionRow';
+import OptionsList from '@/elements/Dropdown/OptionsList';
+import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
 
-// todo: move this component to Dropdown element and compare it with original
-const AsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = [] }) => {
+export const ControlledAsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = [] }) => {
   const [selectedOption, setSelectedOption] = useState('');
 
   const handleChange = (option) => {
@@ -28,7 +27,9 @@ const AsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = []
     callback(filteredOptions(inputValue));
   };
 
-  const renderOption = ({ countryFlag, label: value }) => <OptionRow countryFlag={countryFlag} value={value} />;
+  const printOptions = ({ countryFlag, label: labelValue }) => (
+    <OptionRow countryFlag={countryFlag} value={labelValue} />
+  );
 
   return (
     <Controller
@@ -38,9 +39,9 @@ const AsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = []
 
         return (
           <div className="relative bottom-1">
-            <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">
+            <Label htmlFor={name} className="text-xs-sm">
               {label}
-            </label>
+            </Label>
             <AsyncSelect
               {...field}
               ref={ref}
@@ -53,7 +54,7 @@ const AsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = []
               isLoading={!options?.length}
               components={{ Option: OptionsList }}
               onChange={handleChange}
-              formatOptionLabel={renderOption}
+              formatOptionLabel={printOptions}
               styles={dropdownStyles(selectedOption, error)}
               theme={dropdownTheme}
               isDisabled={disabled || isSubmitting}
@@ -66,12 +67,12 @@ const AsyncDropdown = ({ name, label, onChange, disabled, errorMsg, options = []
   );
 };
 
-AsyncDropdown.defaultProps = {
+ControlledAsyncDropdown.defaultProps = {
   label: null,
   disabled: false,
 };
 
-AsyncDropdown.propTypes = {
+ControlledAsyncDropdown.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -80,4 +81,4 @@ AsyncDropdown.propTypes = {
   errorMsg: PropTypes.string,
 };
 
-export default AsyncDropdown;
+export default ControlledAsyncDropdown;
