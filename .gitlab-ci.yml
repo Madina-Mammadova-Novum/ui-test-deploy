@@ -7,7 +7,7 @@ cache:
 build-staging:
   stage: build
   only:
-    - main
+    - develop
   tags:
     - staging
   script:
