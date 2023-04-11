@@ -10,14 +10,14 @@ import { HoverableIcon, LinkAsButton, NextLink, Title } from '@/elements';
 
 const PageFooter = () => {
   return (
-    <footer className="py-[30px]">
+    <footer className="py-[30px] bg-white">
       <div className="container mx-auto  px-[54px] max-w-[1258px] ">
         <NextLink href="/">
           <Logo className="fill-black" />
         </NextLink>
         <div className="flex mt-[30px] gap-x-10">
           <div className="w-40">
-            <Title level="5" className="title-main text-gray mb-4">
+            <Title level={5} className="title-main text-gray mb-4">
               Company
             </Title>
             <ul className="space-y-2 text-black">
@@ -39,7 +39,7 @@ const PageFooter = () => {
             </ul>
           </div>
           <div className="w-40">
-            <Title level="5" className="title-main text-gray mb-4">
+            <Title level={5} className="title-main text-gray mb-4">
               LEGAL
             </Title>
             <ul className="space-y-2 text-black">
@@ -61,7 +61,7 @@ const PageFooter = () => {
             </ul>
           </div>
           <div className="w-40">
-            <Title level="5" className="title-main text-gray mb-4">
+            <Title level={5} className="title-main text-gray mb-4">
               Address
             </Title>
             <ul className="space-y-2 text-black">
@@ -85,7 +85,7 @@ const PageFooter = () => {
             </ul>
           </div>
           <div className="text-black ml-auto w-40">
-            <Title level="5" className="title-main text-gray mb-4">
+            <Title level={5} className="title-main text-gray mb-4">
               contacts
             </Title>
             <ul className="space-y-2 text-black">
@@ -118,7 +118,7 @@ const PageFooter = () => {
             </div>
           </div>
         </div>
-        <div className="pt-4 text-xsm flex justify-between text-gray border-grey-darker border-t">
+        <div className="pt-5 text-xsm flex justify-between text-gray border-grey-darker border-t">
           <p>Copyright © 2021 Ship.link. All rights reserved</p>
           <OtakoyiLogo />
         </div>

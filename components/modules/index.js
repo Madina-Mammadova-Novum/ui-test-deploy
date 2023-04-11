@@ -2,6 +2,7 @@
 // import CompanyAddresses from '@/modules/CompanyAddresses';
 // import CompanyDetails from '@/modules/CompanyDetails';
 // import FleetRowHeader from '@/modules/FleetRowHeader';
+
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
 import AccountWrapper from '@/modules/AccountWrapper';
@@ -10,6 +11,7 @@ import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import ConfirmCounteroffer from '@/modules/ConfirmCounteroffer';
+import ContactUsForm from '@/modules/ContactUsForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
@@ -50,6 +52,7 @@ export {
   AccountPositions,
   AccountDetails,
   CompanyInfoForm,
+  ContactUsForm,
   DeleteAccountForm,
   DeactivateAccountForm,
   // RadioWithText,
