@@ -157,7 +157,7 @@ export const useHookForm = () => {
  * @param schema
  * @returns {UseFormReturn<FieldValues, any>}
  */
-export const useHookFormParams = ({ state, schema }) => {
+export const useHookFormParams = ({ state = {}, schema = {} }) => {
   const params = useForm({
     defaultValues: { ...state },
     resolver: yupResolver(schema),

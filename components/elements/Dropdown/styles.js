@@ -18,6 +18,8 @@ export const dropdownStyles = (selectedOption, error) => ({
     ...base,
     background: 'transparent',
     padding: '4px 10px',
+    minWidth: '140px',
+    textTransform: 'capitalize',
     position: 'relative',
     left: '4px',
   }),

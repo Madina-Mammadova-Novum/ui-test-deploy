@@ -20,7 +20,10 @@ const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) =>
     onChange(option);
   };
 
-  const renderOption = ({ countryFlag, label: value }) => <OptionRow countryFlag={countryFlag} value={value} />;
+  const renderOption = ({ countryFlag, label: labelValue }) => (
+    <OptionRow countryFlag={countryFlag} value={labelValue} />
+  );
+
   return (
     <Controller
       name={name}
