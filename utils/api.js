@@ -52,8 +52,8 @@ const fetchOptions = (requestMethod, req) => {
   return options;
 };
 
-export function getApiURL(path, apiVersion = 'v1') {
-  return `${process.env.BACKEND_API_URL}/${apiVersion}/${path}`;
+export function getApiURL(path) {
+  return `${process.env.BACKEND_API_URL}/${path}`;
 }
 
 export function getIdentityApiURL(path, apiVersion = null) {

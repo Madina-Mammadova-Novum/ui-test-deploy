@@ -25,16 +25,16 @@ const CounterofferCOTContent = () => {
             disabled
             customStyles="w-[296px]"
           />
-          <Input label="density" placeholder="mt/m³" customStyles="max-w-[138px]" />
+          <Input label="Density" placeholder="mt/m³" customStyles="max-w-[138px]" />
           <Input label="min quantity" placeholder="tons" customStyles="max-w-[138px]" />
         </div>
       ))}
       <div className="flex gap-x-5 items-center mt-3">
-        <Dropdown label="freight" control={control} id="cargo_type" customStyles="max-w-[138px]" />
-        <Input label="value" placeholder="WS" customStyles="max-w-[138px]" />
+        <Dropdown label="Freight" control={control} id="cargo_type" customStyles="max-w-[138px]" />
+        <Input label="Value" type="number" placeholder="WS" customStyles="max-w-[138px]" />
       </div>
 
-      <Input label="demurrage rate" placeholder="Daily payment" customStyles="max-w-[296px] mt-3" />
+      <Input label="Demurrage rate" placeholder="Daily payment" customStyles="max-w-[296px] mt-3" />
 
       <div className="flex gap-x-5">
         <Input

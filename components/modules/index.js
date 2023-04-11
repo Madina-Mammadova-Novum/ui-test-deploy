@@ -15,6 +15,7 @@ import ContactUsForm from '@/modules/ContactUsForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
+import Fixture from '@/modules/Fixture';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
@@ -90,6 +91,7 @@ export {
   CommentsContent,
   TankerSearchResults,
   PreFixture,
+  Fixture,
   Negotiating,
   ViewIncomingOffer,
   SendCounteroffer,

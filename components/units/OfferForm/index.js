@@ -1,3 +1,5 @@
+'use client';
+
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -18,7 +20,7 @@ const OfferForm = () => {
   const handleSubmit = async (formData) => {
     const { error, data } = await sendOffer({ data: formData });
     if (data) {
-      successToast(data.message, 'Have a good deal!');
+      successToast(data.message);
       methods.reset();
     }
     if (error) {
@@ -32,7 +34,12 @@ const OfferForm = () => {
     <FormProvider {...methods}>
       <FormManager
         submitAction={handleSubmit}
-        submitButton={{ text: 'Submit', variant: 'primary', size: 'large', className: '' }}
+        submitButton={{
+          text: 'Send offer',
+          variant: 'primary',
+          size: 'large',
+          className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
+        }}
       >
         <CommercialOfferTerms />
       </FormManager>

@@ -149,7 +149,7 @@ const CargoesSlotsDetailsForm = () => {
             <Button
               type="button"
               customStyles="absolute -right-8 top-8 !p-0"
-              buttonProps={{ icon: <TrashIcon />, variant: 'tertiary', size: 'small' }}
+              buttonProps={{ icon: { before: <TrashIcon /> }, variant: 'tertiary', size: 'small' }}
               onClick={() => handleRemoveSlot(index)}
               disabled={isSubmitting}
             />
@@ -163,10 +163,9 @@ const CargoesSlotsDetailsForm = () => {
             buttonProps={{
               text: 'Add more cargoes',
               helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
-              iconContainerStyles: 'pr-1.5',
               variant: 'tertiary',
               size: 'small',
-              icon: <PlusSVG />,
+              icon: { before: <PlusSVG /> },
             }}
             type="button"
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"

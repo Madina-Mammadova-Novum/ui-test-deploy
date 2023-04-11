@@ -14,7 +14,7 @@ const ManualTooltip = ({ title, description, children, inView, onEnter, onClose 
           <div className="flex justify-between items-center min-w-[280px]">
             {title && <span className="capitalize font-semibold text-xsm">{title}</span>}
             <Button
-              buttonProps={{ icon: <CloseIcon /> }}
+              buttonProps={{ icon: { before: <CloseIcon /> } }}
               customStyles="!pl-1 !pr-0 hover:bg-gray-darker !py-0"
               onClick={onClose}
             />
