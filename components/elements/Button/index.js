@@ -22,7 +22,7 @@ const Button = ({
     <div className="flex flex-col justify-center items-center">
       <button
         className={classnames(
-          'px-3.5 py-2.5 rounded-md flex items-center justify-center',
+          'text-xsm px-3.5 py-2.5 rounded-md flex items-center justify-center',
           buttonClassNames,
           disabled && 'opacity-50 pointer-events-none',
           customStyles

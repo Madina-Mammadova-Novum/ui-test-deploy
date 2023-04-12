@@ -1,14 +1,19 @@
-'use client';
-
-import { ExternalLinkAltIcon } from '@/assets/icons';
+// import { ExternalLinkAltIcon } from '@/assets/icons';
 import FacebookSVG from '@/assets/images/facebook.svg';
 import LinkedinSVG from '@/assets/images/linkedin.svg';
 import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
 import TwitterSVG from '@/assets/images/twitter.svg';
 import { HoverableIcon, LinkAsButton, NextLink, Title } from '@/elements';
+import { getNavigation } from "@/services/navigation";
+import { getSingleType } from "@/services/singleType";
+import { FooterNavBlock } from "@/units";
 
-const PageFooter = () => {
+const PageFooter = async () => {
+  const { navigation: navigationSlug } = await getSingleType('footer', 'en');
+  const  contactInfo  = await getSingleType('contact-information', 'en');
+  const { address } = contactInfo
+  const navigation = await getNavigation(navigationSlug, 'en');
   return (
     <footer className="py-[30px] bg-white">
       <div className="container mx-auto  px-[54px] max-w-[1258px] ">
@@ -16,57 +21,19 @@ const PageFooter = () => {
           <Logo className="fill-black" />
         </NextLink>
         <div className="flex mt-[30px] gap-x-10">
-          <div className="w-40">
-            <Title level={5} className="title-main text-gray mb-4">
-              Company
-            </Title>
-            <ul className="space-y-2 text-black">
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  About Us
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Contact Us
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  FAQ
-                </NextLink>
-              </li>
-            </ul>
-          </div>
-          <div className="w-40">
-            <Title level={5} className="title-main text-gray mb-4">
-              LEGAL
-            </Title>
-            <ul className="space-y-2 text-black">
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Privacy Policy
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Terms of Use
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Cookie Statement
-                </NextLink>
-              </li>
-            </ul>
-          </div>
+           {navigation.length > 0 && (
+            navigation.map(({ title, items }) => {
+              return (
+                <FooterNavBlock items={items} title= {title}/>
+              )})
+           )}
           <div className="w-40">
             <Title level={5} className="title-main text-gray mb-4">
               Address
             </Title>
             <ul className="space-y-2 text-black">
               <li>
-                <p className="text-xsm">1981 Broadway, New York, NY 10023, United States</p>
+                <p className="text-xsm">{address}</p>
               </li>
               <li>
                 {/* todo: create small-btn element */}
@@ -79,12 +46,12 @@ const PageFooter = () => {
                   customStyles="!py-0 !px-0 font-medium h-auto w-[fit-content] gap-x-1"
                 >
                   View on Google Maps
-                  <ExternalLinkAltIcon />
+                  {/* <ExternalLinkAltIcon /> */}
                 </LinkAsButton>
               </li>
             </ul>
           </div>
-          <div className="text-black ml-auto w-40">
+          <div className="ml-auto w-40">
             <Title level={5} className="title-main text-gray mb-4">
               contacts
             </Title>
