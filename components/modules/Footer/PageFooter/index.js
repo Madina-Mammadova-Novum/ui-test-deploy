@@ -5,14 +5,14 @@ import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
 import TwitterSVG from '@/assets/images/twitter.svg';
 import { HoverableIcon, LinkAsButton, NextLink, Title } from '@/elements';
-import { getNavigation } from "@/services/navigation";
-import { getSingleType } from "@/services/singleType";
-import { FooterNavBlock } from "@/units";
+import { getNavigation } from '@/services/navigation';
+import { getSingleType } from '@/services/singleType';
+import { FooterNavBlock } from '@/units';
 
 const PageFooter = async () => {
   const { navigation: navigationSlug } = await getSingleType('footer', 'en');
-  const  contactInfo  = await getSingleType('contact-information', 'en');
-  const { address } = contactInfo
+  const contactInfo = await getSingleType('contact-information', 'en');
+  const { address } = contactInfo;
   const navigation = await getNavigation(navigationSlug, 'en');
   return (
     <footer className="py-[30px] bg-white">
@@ -21,12 +21,10 @@ const PageFooter = async () => {
           <Logo className="fill-black" />
         </NextLink>
         <div className="flex mt-[30px] gap-x-10">
-           {navigation.length > 0 && (
+          {navigation.length > 0 &&
             navigation.map(({ title, items }) => {
-              return (
-                <FooterNavBlock items={items} title= {title}/>
-              )})
-           )}
+              return <FooterNavBlock items={items} title={title} />;
+            })}
           <div className="w-40">
             <Title level={5} className="title-main text-gray mb-4">
               Address

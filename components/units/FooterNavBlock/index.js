@@ -1,9 +1,8 @@
 import React from 'react';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 import { NextLink, Title } from '@/elements';
-
 
 const FooterNavBlock = ({ title, items }) => {
   return (
@@ -19,7 +18,7 @@ const FooterNavBlock = ({ title, items }) => {
                 {item.title}
               </NextLink>
             </li>
-          )
+          );
         })}
       </ul>
     </div>
@@ -29,10 +28,10 @@ const FooterNavBlock = ({ title, items }) => {
 FooterNavBlock.propTypes = {
   title: PropTypes.string,
   items: PropTypes.arrayOf({
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  title: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string.isRequired,
     path: PropTypes.string,
-}),
+  }),
 };
 
 export default FooterNavBlock;

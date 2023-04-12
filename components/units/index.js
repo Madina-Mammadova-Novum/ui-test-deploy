@@ -16,7 +16,7 @@ import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
-import FooterNavBlock from "@/units/FooterNavBlock";
+import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';

@@ -9,10 +9,12 @@ export const navigationItemAdapter = ({ data }) => {
     path: path === '/home' ? '/' : path,
     externalPath,
     collapsed,
-    related: related ? {
-      id: related.id,
-      contentType: related.__contentType,
-    } : null,
+    related: related
+      ? {
+          id: related.id,
+          contentType: related.__contentType,
+        }
+      : null,
     items: items.length > 0 ? navigationAdapter({ data: items }) : [],
   };
 };
