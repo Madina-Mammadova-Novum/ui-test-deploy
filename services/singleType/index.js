@@ -8,7 +8,7 @@ export function getSingleTypeEndpoint(apiID, locale) {
     values.value,
     ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions,
     buttons,buttons.linkOptions,
-    phones,emails,
+    phones,emails,link,link.linkOptions,
     socials,socials.coverImage,socials.linkOptions
     `.replace(/\s+|\n/g, '');
 }
