@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { Loader } from '@/elements';
+import { Loader, Title } from '@/elements';
 import { getUserDetails } from '@/services';
 import {
   AccountCompanyDetails,
@@ -14,7 +14,7 @@ import {
   AccountPersonalDetails,
 } from '@/units';
 
-const AccountDetails = ({ containerClass = '' }) => {
+const AccountDetails = ({ title, containerClass = '' }) => {
   const [accountData, setAccountData] = useState(null);
 
   const fetchData = async () => {
@@ -28,6 +28,9 @@ const AccountDetails = ({ containerClass = '' }) => {
 
   return (
     <div className={containerClass}>
+      <Title level={1} className="py-5">
+        {title}
+      </Title>
       {accountData ? (
         <>
           <AccountPersonalDetails user={accountData?.personalDetails} />
@@ -39,13 +42,14 @@ const AccountDetails = ({ containerClass = '' }) => {
           </div>
         </>
       ) : (
-        <Loader />
+        <Loader className="h-8 w-8 absolute top-1/2" />
       )}
     </div>
   );
 };
 
 AccountDetails.propTypes = {
+  title: PropTypes.string.isRequired,
   data: PropTypes.shape({
     personalDetails: PropTypes.shape({}),
     companyDetails: PropTypes.shape({}),

@@ -9,6 +9,7 @@ import DatePicker from '@/elements/DatePicker';
 import DateTimeRow from '@/elements/DateTimeRow';
 import Divider from '@/elements/Divider';
 import Dropdown from '@/elements/Dropdown';
+import FormDropdown from '@/elements/Dropdown/FormDropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
@@ -85,6 +86,7 @@ export {
   DatePicker,
   // RangeDatePicker,
   Dropdown,
+  FormDropdown,
   LinkAsButton,
   NextImage,
   Modal,

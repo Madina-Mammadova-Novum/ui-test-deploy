@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
-import { Button, DatePicker, Dropdown, Input } from '@/elements';
+import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { getFilledArray, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -59,42 +59,42 @@ const SearchFormFields = () => {
           />
         </div>
         <div className="flex flex-col 3sm:flex-row gap-x-5">
-          <Dropdown
+          <FormDropdown
             name="loadPort"
             options={testOption}
             id="loadPort"
             label="load port"
-            customStyles="w-full"
+            customStyles={{ className: 'w-full', dropdownWidth: 3 }}
             onChange={(option) => handleChange('loadPort', option)}
           />
-          <Dropdown
+          <FormDropdown
             name="loadTerminal"
             options={testOption}
             label="load terminal"
-            customStyles="w-full"
+            customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
           />
         </div>
         <div className="flex flex-col 3sm:flex-row gap-x-5">
-          <Dropdown
+          <FormDropdown
             name="dischargePort"
             options={testOption}
             label="discharge port"
-            customStyles="w-full"
+            customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
           />
-          <Dropdown
+          <FormDropdown
             name="dischargeTerminal"
             options={testOption}
             label="dischargee terminal"
-            customStyles="w-full"
+            customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargeTerminal', option)}
           />
         </div>
       </div>
 
       <div className="w-full flex flex-col gap-y-4">
-        <Dropdown
+        <FormDropdown
           label="cargo type"
           name="cargoType"
           id="cargoType"
@@ -104,12 +104,12 @@ const SearchFormFields = () => {
         {productState.map((index) => (
           <div key={`product_${index}`}>
             <div className="flex flex-wrap 3sm:flex-nowrap justify-between gap-x-5 gap-y-1">
-              <Dropdown
+              <FormDropdown
                 onChange={(option) => handleChange(`products[${index}].product`, option)}
                 name={`products[${index}].product`}
                 options={testOption}
                 label={`product #${index + 1}`}
-                customStyles="w-full 3sm:w-1/2"
+                customStyles={{ className: 'w-full 3sm:w-1/2' }}
               />
               <Input
                 {...register(`products[${index}].density`)}

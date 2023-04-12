@@ -217,6 +217,8 @@ export const disablePlusMinusSymbols = (e) => {
   if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
+export const options = (values) => values.map((value) => ({ label: value, value }));
+
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
   if (data === null || data === undefined) return [];
 
@@ -232,4 +234,8 @@ export const removeByIndex = (data, index) => {
   if (data === null || data === undefined) return null;
 
   return data.filter((_, idx) => idx !== index);
+};
+
+export const filterDataByLowerCase = (inputValue, data) => {
+  return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };

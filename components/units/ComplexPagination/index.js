@@ -38,19 +38,19 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
       <Dropdown
         label="offers per page:"
         placeholder="5"
+        defaultValue={NAVIGATION_PARAMS.DATA_PER_PAGE[0]}
         options={NAVIGATION_PARAMS.DATA_PER_PAGE}
         onChange={handlePerPageChange}
         customStyles={dropdownStyles}
-        config={{ sync: true }}
       />
       <PaginationComponent currentPage={currentPage} pageCount={pages.length} onPageChange={handlePageChange} />
       <Dropdown
         label="Go to page:"
         placeholder="1"
+        defaultValue={pages[currentPage - 1]}
         options={pages}
         onChange={handleSelectedPageChange}
         customStyles={dropdownStyles}
-        config={{ sync: true }}
       />
     </div>
   );

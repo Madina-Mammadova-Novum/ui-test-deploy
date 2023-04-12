@@ -17,6 +17,7 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
   container: (base) => ({
     ...base,
     minWidth: minWidth ?? 34,
+    zIndex: 10,
   }),
   valueContainer: (base) => ({
     ...base,
@@ -26,6 +27,7 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
     textTransform: 'capitalize',
     position: 'relative',
     left: '4px',
+    zIndex: 10,
   }),
   menu: (base) => ({
     ...base,

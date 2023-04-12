@@ -5,12 +5,7 @@ import { Label, NextImage } from '@/elements';
 
 const TextWithLabel = ({ image, text, label, customStyles }) => {
   return (
-    <div
-      className={classnames(
-        'font-semibold text-left min-w-[90px] flex items-center md:items-start md:flex-col',
-        customStyles
-      )}
-    >
+    <div className={classnames('font-semibold text-left min-w-[90px] flex flex-col', customStyles)}>
       <Label className="text-xs-sm whitespace-nowrap w-[100px] md:w-auto">{label}</Label>
       <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap">
         {image && <NextImage {...image} customStyles="inline" />}

@@ -28,7 +28,7 @@ const AccountLayout = ({ children }) => {
           id: makeId(),
           label: 'offer stage #1',
           title: 'Negotiating',
-          path: ROUTES.NEGOTIATING,
+          path: ROUTES.ACCOUNT_NEGOTIATING,
         },
         {
           id: makeId(),

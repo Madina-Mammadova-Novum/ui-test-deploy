@@ -53,7 +53,6 @@ const AccountPositions = ({ title, containerClass }) => {
               options={sortOptions}
               defaultValue={sortValue}
               onChange={handleChange}
-              config={{ sync: true }}
               customStyles={dropdownStyles}
             />
           </div>
@@ -61,7 +60,7 @@ const AccountPositions = ({ title, containerClass }) => {
           <ComplexPagination />
         </>
       ) : (
-        <Loader />
+        <Loader className="h-8 w-8 absolute top-1/2" />
       )}
     </section>
   );
