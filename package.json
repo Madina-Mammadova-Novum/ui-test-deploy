@@ -21,7 +21,8 @@
     "release:major": "standard-version --no-verify --release-as major",
     "clear-all": "rm -rf .next node_modules out",
     "restart": "rm -rf .next node_modules out && yarn install && yarn develop",
-    "rebuild": "rm -rf .next node_modules out && yarn install && yarn build"
+    "rebuild": "rm -rf .next node_modules out && yarn install && yarn build",
+    "turbo-build": "turbo build"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
@@ -95,6 +96,7 @@
     "swiper": "^8.4.5",
     "tailwindcss": "^3.2.4",
     "tostify": "^0.0.1",
+    "turbo": "^1.9.0",
     "yup": "^1.0.0"
   },
   "author": {

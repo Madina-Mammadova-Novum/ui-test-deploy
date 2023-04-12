@@ -14,7 +14,7 @@ build-staging:
     # ~/builds/sdfsd/sdfsdfsd
     - yarn install
     - cp .env.staging .env
-    - yarn build
+    - yarn turbo-build
     - rm -rf /var/www/web/.next
     - rsync -a . /var/www/web
     - cd /var/www/web
