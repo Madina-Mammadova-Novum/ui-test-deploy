@@ -1,16 +1,16 @@
-'use client';
-
 import React from 'react';
 
+import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import FacebookSVG from '@/assets/images/facebook.svg';
-import LinkedinSVG from '@/assets/images/linkedin.svg';
-import TwitterSVG from '@/assets/images/twitter.svg';
-import { HoverableIcon, NextLink, Title } from '@/elements';
-import { ContactUsForm } from '@/modules';
+import { linkImagePropTypes } from '@/utils/types';
 
-const ContactUsBlock = ({ title, subTitle, shortDescription }) => {
+import { HoverableIcon, NextImage, NextLink, Title } from '@/elements';
+import { ContactUsForm } from '@/modules';
+import { getStrapiMedia } from '@/utils';
+import { makeId } from '@/utils/helpers';
+
+const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, socialLinks }) => {
   return (
     <section className="relative z-10 -mt-[175px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
@@ -42,7 +42,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription }) => {
                 </Title>
                 <ul className="space-y-2 text-black">
                   <li>
-                    <p className="text-xsm">1981 Broadway, New York, NY 10023, United States</p>
+                    <p className="text-xsm">{address}</p>
                   </li>
                 </ul>
               </div>
@@ -51,21 +51,20 @@ const ContactUsBlock = ({ title, subTitle, shortDescription }) => {
                   Contacts
                 </Title>
                 <ul>
-                  <li>
-                    <NextLink href="#" className="text-xsm mt-1">
-                      + 1 212-444-3400
-                    </NextLink>
-                  </li>
-                  <li>
-                    <NextLink href="#" className="text-xsm mt-1">
-                      + 1 212-444-3400
-                    </NextLink>
-                  </li>
-                  <li>
-                    <NextLink href="#" className="text-xsm mt-2">
-                      hello@ship.link.com
-                    </NextLink>
-                  </li>
+                  {phones.map((phone) => (
+                    <li>
+                      <NextLink href={`tel:${phone}`} className="text-xsm mt-1">
+                        {phone}
+                      </NextLink>
+                    </li>
+                  ))}
+                  {emails.map((email) => (
+                    <li>
+                      <NextLink href={`mailto:${email}`} className="text-xsm mt-1">
+                        {email}
+                      </NextLink>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="w-[330px] 3sm:w-[150px] text-xsm">
@@ -73,18 +72,28 @@ const ContactUsBlock = ({ title, subTitle, shortDescription }) => {
                   Schedule
                 </Title>
                 <div className="flex flex-row 3sm:flex-col gap-[30px] 3sm:gap-5">
-                  <p>Monday to Friday 8:00 AM - 5:00 PM</p>
-                  <div className="flex gap-x-2.5">
-                    <NextLink href="/">
-                      <HoverableIcon className="border border-gray-darker rounded-md" icon={<LinkedinSVG />} />
-                    </NextLink>
-                    <NextLink href="/">
-                      <HoverableIcon className="border border-gray-darker rounded-md" icon={<TwitterSVG />} />
-                    </NextLink>
-                    <NextLink href="/">
-                      <HoverableIcon className="border border-gray-darker rounded-md" icon={<FacebookSVG />} />
-                    </NextLink>
-                  </div>
+                  <p>{schedule}</p>
+                  {socialLinks && (
+                    <div className="flex gap-x-2.5">
+                      {socialLinks.map((link) => {
+                        return (
+                          <NextLink key={makeId()} href={delve(link, 'path')} title={delve(link, 'title')}>
+                            <HoverableIcon
+                              className="border border-gray-darker rounded-md"
+                              icon={
+                                <NextImage
+                                  alt={delve(link, 'title')}
+                                  src={getStrapiMedia(delve(link, 'image.format.original.url'), '')}
+                                  height={20}
+                                  width={20}
+                                />
+                              }
+                            />
+                          </NextLink>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -99,6 +108,11 @@ ContactUsBlock.propTypes = {
   title: PropTypes.string,
   subTitle: PropTypes.string,
   shortDescription: PropTypes.string,
+  phones: PropTypes.arrayOf(PropTypes.string),
+  emails: PropTypes.arrayOf(PropTypes.string),
+  address: PropTypes.string,
+  schedule: PropTypes.string,
+  socialLinks: PropTypes.arrayOf(linkImagePropTypes),
 };
 
 export default ContactUsBlock;
