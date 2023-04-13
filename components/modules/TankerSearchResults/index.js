@@ -61,7 +61,7 @@ const TankerSearchResults = ({ request, params, direction, data, onChange }) => 
         <TextRow title="Partial matches (arrival outside of laycan)">{`${1} result`}</TextRow>
         <ToggleRows
           onToggleClick={() => setExpandPartialResults((prevValue) => !prevValue)}
-          value={expandPartialResults.value}
+          value={expandPartialResults?.value}
         />
       </div>
       <div className="flex flex-col gap-y-2.5 mt-3">

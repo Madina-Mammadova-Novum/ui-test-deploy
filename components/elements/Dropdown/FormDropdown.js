@@ -8,12 +8,10 @@ import PropTypes from 'prop-types';
 import { SimpleDropdown } from './SimpleDropdown';
 
 import { InputErrorMessage, Label } from '@/elements';
-import OptionRow from '@/elements/Dropdown/OptionRow';
-import OptionsList from '@/elements/Dropdown/OptionsList';
-import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
+import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
-const FormDropdown = ({ async, name, label, options, onChange, disabled, customStyles }) => {
+const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, customStyles }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const { dropdownWidth, className } = customStyles;
@@ -24,49 +22,6 @@ const FormDropdown = ({ async, name, label, options, onChange, disabled, customS
       onChange(option);
     },
     [onChange]
-  );
-
-  const printDropdown = useCallback(
-    ({ ref, error, isSubmitting, field }) => {
-      if (async) {
-        return (
-          <SimpleDropdown
-            {...field}
-            ref={ref}
-            id={name}
-            options={options}
-            components={{ Option: OptionsList }}
-            onChange={handleChange}
-            formatOptionLabel={printOptions}
-            styles={dropdownStyles(selectedOption, error, dropdownWidth)}
-            theme={dropdownTheme}
-            isDisabled={disabled || isSubmitting}
-            closeMenuOnSelect
-            async
-          />
-        );
-      }
-      return (
-        <SimpleDropdown
-          {...field}
-          ref={ref}
-          id={name}
-          options={options}
-          components={{ Option: OptionsList }}
-          onChange={handleChange}
-          formatOptionLabel={printOptions}
-          styles={dropdownStyles(selectedOption, error, dropdownWidth)}
-          theme={dropdownTheme}
-          isDisabled={disabled || isSubmitting}
-          closeMenuOnSelect
-        />
-      );
-    },
-    [async, disabled, dropdownWidth, handleChange, name, options, selectedOption]
-  );
-
-  const printOptions = ({ countryFlag, label: labelValue }) => (
-    <OptionRow countryFlag={countryFlag} value={labelValue} />
   );
 
   return (
@@ -80,7 +35,16 @@ const FormDropdown = ({ async, name, label, options, onChange, disabled, customS
             <Label htmlFor={name} className="text-xs-sm">
               {label}
             </Label>
-            {printDropdown({ ref, error, isSubmitting, field })}
+            <SimpleDropdown
+              {...field}
+              ref={ref}
+              id={name}
+              options={options}
+              onChange={handleChange}
+              styles={dropdownStyles(selectedOption, error, dropdownWidth)}
+              isDisabled={disabled || isSubmitting}
+              asyncCall={asyncCall}
+            />
             {error && <InputErrorMessage message={error?.message} />}
           </div>
         );
@@ -92,7 +56,7 @@ const FormDropdown = ({ async, name, label, options, onChange, disabled, customS
 FormDropdown.defaultProps = {
   label: null,
   disabled: false,
-  async: false,
+  asyncCall: false,
   customStyles: '',
 };
 
@@ -103,7 +67,7 @@ FormDropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  async: PropTypes.bool,
+  asyncCall: PropTypes.bool,
 };
 
 export default FormDropdown;

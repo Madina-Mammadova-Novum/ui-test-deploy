@@ -23,14 +23,16 @@ const CommercialOfferTerms = () => {
   return (
     <>
       <Title level="3">Commercial offer terms</Title>
-      <FormDropdown
-        label="cargo type"
-        defaultValue="Crude Oil"
-        disabled
-        customStyles={{ className: 'w-1/2 mt-3 pr-5' }}
-        name="cargoType"
-        options={testOption}
-      />
+      <div className="flex items-center mt-3">
+        <FormDropdown
+          label="cargo type"
+          defaultValue="Crude Oil"
+          disabled
+          customStyles={{ className: 'w-1/2 pr-6' }}
+          name="cargoType"
+          options={testOption}
+        />
+      </div>
       {[1, 2].map((_, index) => (
         <div className="flex items-center mt-3 gap-x-5">
           <FormDropdown
@@ -88,14 +90,14 @@ const CommercialOfferTerms = () => {
         disabled={isSubmitting}
       />
 
-      <div className="flex gap-x-2.5">
+      <div className="flex">
         <Input
           {...register('layTime')}
           label="lay time"
           name="layTime"
           helperText="The maximum laytime is 100 hours"
           placeholder="Daily payment"
-          customStyles="w-1/2 mt-3 pr-2.5"
+          customStyles="w-1/2 mt-3 pr-5"
           error={errors.layTime?.message}
           disabled={isSubmitting}
         />

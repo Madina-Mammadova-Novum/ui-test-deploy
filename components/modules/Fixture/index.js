@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import FixtureExpandedFooter from './FixtureExpandedFooter';
 
 import { Label, Title } from '@/elements';
@@ -11,15 +9,15 @@ import { ExpandableRow } from '@/modules';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { preFixtureHeaderData } from '@/utils/mock';
 
-const Fixture = ({ title, label }) => {
+const Fixture = () => {
   const [toggle, setToggle] = useState(false);
 
   return (
     <div>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
-          <Label className="text-xs-sm">{label}</Label>
-          <Title level={1}>{title}</Title>
+          <Label className="text-xs-sm">Offer stage #4</Label>
+          <Title level={1}>Fixture</Title>
         </div>
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
@@ -39,11 +37,6 @@ const Fixture = ({ title, label }) => {
       <ComplexPagination />
     </div>
   );
-};
-
-Fixture.propTypes = {
-  title: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
 };
 
 export default Fixture;

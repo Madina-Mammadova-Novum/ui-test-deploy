@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import { Loader, Title } from '@/elements';
 import { getUserDetails } from '@/services';
 import {
@@ -14,7 +12,7 @@ import {
   AccountPersonalDetails,
 } from '@/units';
 
-const AccountDetails = ({ title, containerClass = '' }) => {
+const AccountDetails = () => {
   const [accountData, setAccountData] = useState(null);
 
   const fetchData = async () => {
@@ -27,9 +25,9 @@ const AccountDetails = ({ title, containerClass = '' }) => {
   }, []);
 
   return (
-    <div className={containerClass}>
+    <section className="flex justify-start items-start flex-col gap-2.5">
       <Title level={1} className="py-5">
-        {title}
+        Account information
       </Title>
       {accountData ? (
         <>
@@ -44,18 +42,8 @@ const AccountDetails = ({ title, containerClass = '' }) => {
       ) : (
         <Loader className="h-8 w-8 absolute top-1/2" />
       )}
-    </div>
+    </section>
   );
-};
-
-AccountDetails.propTypes = {
-  title: PropTypes.string.isRequired,
-  data: PropTypes.shape({
-    personalDetails: PropTypes.shape({}),
-    companyDetails: PropTypes.shape({}),
-    accountDetails: PropTypes.shape({}),
-  }),
-  containerClass: PropTypes.string,
 };
 
 export default AccountDetails;

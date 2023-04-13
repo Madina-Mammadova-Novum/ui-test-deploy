@@ -14,7 +14,7 @@ export async function generateMetadata() {
 const PreFixturePage = () => {
   return (
     <AccountWrapper containerClass="grow px-5">
-      <Negotiating title="Negotiating" label="Offer stage #1" />
+      <Negotiating />
     </AccountWrapper>
   );
 };

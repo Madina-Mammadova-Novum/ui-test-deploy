@@ -5,45 +5,55 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 
+import { dropdownOptionTypes } from '@/lib/types';
+
+import OptionRow from '@/elements/Dropdown/OptionRow';
+import OptionsList from '@/elements/Dropdown/OptionsList';
+import { dropdownTheme } from '@/elements/Dropdown/styles';
 import { filterDataByLowerCase } from '@/utils/helpers';
 
-export const SimpleDropdown = ({ async, options, ...rest }) => {
-  if (async) {
+export const SimpleDropdown = ({ asyncCall, options, ...rest }) => {
+  const printOptions = ({ countryFlag, label: labelValue }) => (
+    <OptionRow countryFlag={countryFlag} value={labelValue} />
+  );
+
+  if (asyncCall) {
     const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue));
 
     return (
       <AsyncSelect
+        {...rest}
         cacheOptions
         defaultOptions={options}
-        isLoading={!options?.length}
         loadOptions={loadOptions}
-        {...rest}
+        components={{ Option: OptionsList }}
+        formatOptionLabel={printOptions}
+        isLoading={!options?.length}
+        theme={dropdownTheme}
+        closeMenuOnSelect
       />
     );
   }
 
-  return <Select options={options} {...rest} />;
+  return (
+    <Select
+      {...rest}
+      options={options}
+      components={{ Option: OptionsList }}
+      formatOptionLabel={printOptions}
+      isLoading={!options?.length}
+      theme={dropdownTheme}
+      closeMenuOnSelect
+    />
+  );
 };
 
 SimpleDropdown.defaultProps = {
-  async: false,
-  options: [],
-  loadOptions: [],
+  asyncCall: false,
 };
 
 SimpleDropdown.propTypes = {
-  async: PropTypes.bool,
-
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }).isRequired
-  ),
-  loadOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }).isRequired
-  ),
+  asyncCall: PropTypes.bool,
+  options: PropTypes.arrayOf(dropdownOptionTypes).isRequired,
+  loadOptions: PropTypes.arrayOf(dropdownOptionTypes).isRequired,
 };

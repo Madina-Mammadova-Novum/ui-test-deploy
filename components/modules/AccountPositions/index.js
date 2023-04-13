@@ -2,14 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { getUserPositions } from '@/services';
 import { ComplexPagination, ExpandableCard } from '@/units';
 
-const AccountPositions = ({ title, containerClass }) => {
+const AccountPositions = () => {
   const [userStore, setUserStore] = useState({
     userPositions: null,
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
@@ -36,27 +34,27 @@ const AccountPositions = ({ title, containerClass }) => {
 
   const handleChange = (option) => handleChangeState('sortValue', option);
 
-  const printExpandable = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
+  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
   const { userPositions, sortOptions, sortValue } = userStore;
 
   const dropdownStyles = { dropdownWidth: 150, className: 'flex items-center gap-x-5' };
 
   return (
-    <section className={containerClass}>
+    <section className="flex flex-col gap-y-5">
       {userPositions ? (
         <>
           <div className="flex justify-between items-center pt-5 w-full">
-            <Title level={1}>{title}</Title>
+            <Title level={1}>My positions</Title>
             <Dropdown
               label="Sort by open day:"
               options={sortOptions}
               defaultValue={sortValue}
-              onChange={handleChange}
               customStyles={dropdownStyles}
+              onChange={handleChange}
             />
           </div>
-          {userPositions?.map(printExpandable)}
+          {userPositions?.map(printExpandableCard)}
           <ComplexPagination />
         </>
       ) : (
@@ -64,12 +62,6 @@ const AccountPositions = ({ title, containerClass }) => {
       )}
     </section>
   );
-};
-
-AccountPositions.propTypes = {
-  title: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.shape({})),
-  containerClass: PropTypes.string,
 };
 
 export default AccountPositions;

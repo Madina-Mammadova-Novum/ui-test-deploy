@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import { Label, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
@@ -11,15 +9,14 @@ import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpanded
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { negotiatingHeaderData } from '@/utils/mock';
 
-const Negotiating = ({ title, label }) => {
+const Negotiating = () => {
   const [toggle, setToggle] = useState(false);
-
   return (
-    <div>
+    <section>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
-          <Label className="text-xs-sm">{label}</Label>
-          <Title level={1}>{title}</Title>
+          <Label className="text-xs-sm">Offer stage #1</Label>
+          <Title level={1}>Negotiating</Title>
         </div>
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
@@ -37,13 +34,8 @@ const Negotiating = ({ title, label }) => {
       </div>
 
       <ComplexPagination />
-    </div>
+    </section>
   );
-};
-
-Negotiating.propTypes = {
-  title: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
 };
 
 export default Negotiating;

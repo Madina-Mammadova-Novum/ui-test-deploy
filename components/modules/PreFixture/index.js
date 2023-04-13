@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
@@ -12,19 +10,15 @@ import { ExpandableRow } from '@/modules';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { preFixtureHeaderData } from '@/utils/mock';
 
-const PreFixture = ({ title, label }) => {
+const PreFixture = () => {
   const [toggle, setToggle] = useState(false);
-  const [pagination, setPagination] = useState({
-    offersPerPage: 5,
-    currentPage: 1,
-  });
 
   return preFixtureHeaderData.length ? (
-    <div>
+    <section>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
-          <Label className="text-xs-sm">{label}</Label>
-          <Title level={1}>{title}</Title>
+          <Label className="text-xs-sm">Offer stage #2</Label>
+          <Title level={1}>Pre-fixture</Title>
         </div>
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
@@ -41,16 +35,11 @@ const PreFixture = ({ title, label }) => {
         ))}
       </div>
 
-      <ComplexPagination pagination={pagination} setPagination={setPagination} />
-    </div>
+      <ComplexPagination />
+    </section>
   ) : (
     <Loader className="h-8 w-8 absolute top-1/2" />
   );
-};
-
-PreFixture.propTypes = {
-  title: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
 };
 
 export default PreFixture;
