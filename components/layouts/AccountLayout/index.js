@@ -78,7 +78,7 @@ const AccountLayout = ({ children }) => {
       <Sidebar data={sidebarData} containerStyles="z-50" />
       <div className="flex flex-col grow">
         <AccountHeader />
-        {children}
+        <main className="grow">{children}</main>
         <AccountFooter />
       </div>
     </BaseLayout>

@@ -34,7 +34,7 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
   const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
 
   return (
-    <div className="flex justify-between mt-5">
+    <div className="flex justify-between my-5">
       <Dropdown
         label="offers per page:"
         placeholder="5"

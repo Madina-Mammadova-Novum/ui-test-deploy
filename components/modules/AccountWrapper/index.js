@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 const AccountWrapper = ({ children, containerClass }) => {
-  return <main className={containerClass}>{children}</main>;
+  return <div className={containerClass}>{children}</div>;
 };
 
 AccountWrapper.defaultProps = {

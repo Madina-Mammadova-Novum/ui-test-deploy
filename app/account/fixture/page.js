@@ -13,7 +13,7 @@ export function generateMetadata() {
 
 const FixturePage = () => {
   return (
-    <AccountWrapper containerClass="grow px-5">
+    <AccountWrapper containerClass="px-5">
       <Fixture />
     </AccountWrapper>
   );
