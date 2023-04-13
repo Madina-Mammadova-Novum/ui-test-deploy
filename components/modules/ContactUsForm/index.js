@@ -3,35 +3,16 @@
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-
 import { FormManager } from '@/common';
 import { Dropdown, Input, TextArea } from '@/elements';
-import { forgotPassword } from '@/services/user';
-import { successToast } from '@/utils/hooks';
-
-const schema = yup
-  .object({
-    email: yup.string().required().email(),
-  })
-  .required();
 
 const ContactUsForm = () => {
-  const methods = useForm({
-    resolver: yupResolver(schema),
-  });
+  const methods = useForm();
 
   const {
-    reset,
-    register,
-    formState: { isSubmitting, errors },
+    register
   } = methods;
-  const onSubmit = async (data) => {
-    const { message } = await forgotPassword({ data });
-    successToast(message, 'Some description');
-    reset();
-  };
+  const onSubmit = async () => {};
 
   return (
     <FormProvider {...methods}>
@@ -49,34 +30,23 @@ const ContactUsForm = () => {
             <Input
               {...register('firstName')}
               label="first name"
-              placeholder="Enter your "
-              type="email"
-              disabled={isSubmitting}
-              error={errors.email?.message}
+              placeholder="Enter your first name"
             />
             <Input
-              {...register('firstName')}
-              label="first name"
-              placeholder="Enter your "
-              type="email"
-              disabled={isSubmitting}
-              error={errors.email?.message}
+              {...register('lastName')}
+              label="Last name"
+              placeholder="Enter your last name"
             />
             <Input
-              {...register('firstName')}
-              label="first name"
-              placeholder="Enter your "
+              {...register('emailAddress')}
+              label="EMAIL ADDRESS"
+              placeholder="Enter your email"
               type="email"
-              disabled={isSubmitting}
-              error={errors.email?.message}
             />
             <Input
-              {...register('firstName')}
-              label="first name"
-              placeholder="Enter your "
-              type="email"
-              disabled={isSubmitting}
-              error={errors.email?.message}
+              {...register('phoneNumber')}
+              label="phone number"
+              placeholder="Enter your phone number"
             />
           </div>
           <Dropdown label="subject" onChange={() => {}} name="1" options={['1', '2', '3']} />

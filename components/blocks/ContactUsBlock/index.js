@@ -12,16 +12,17 @@ import { makeId } from '@/utils/helpers';
 
 const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, socialLinks }) => {
   return (
-    <section className="relative z-10 -mt-[175px] mb-[100px]">
+    <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
-        {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <div className="rounded-[10px] p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker">
           <div className="pr-5">
+            {title &&
             <Title level={2} className="mb-5">
-              Write to us
+              {title}
             </Title>
+            }
             <ContactUsForm />
           </div>
           <div className="pl-5">
@@ -67,11 +68,11 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
                   ))}
                 </ul>
               </div>
-              <div className="w-[330px] 3sm:w-[150px] text-xsm">
+              <div className="w-[330px] md:w-[150px] text-xsm">
                 <Title level={4} className="mb-2">
                   Schedule
                 </Title>
-                <div className="flex flex-row 3sm:flex-col gap-[30px] 3sm:gap-5">
+                <div className="flex flex-row md:flex-col gap-[30px] md:gap-5">
                   <p>{schedule}</p>
                   {socialLinks && (
                     <div className="flex gap-x-2.5">
