@@ -9,17 +9,19 @@ export const navigationItemAdapter = ({ data }) => {
     path: path === '/home' ? '/' : path,
     externalPath,
     collapsed,
-    related: {
-      id: related.id,
-      contentType: related.__contentType,
-    },
+    related: related
+      ? {
+          id: related.id,
+          contentType: related.__contentType,
+        }
+      : null,
     items: items.length > 0 ? navigationAdapter({ data: items }) : [],
   };
 };
 
 export const navigationAdapter = ({ data }) => {
   if (data === null) return [];
-  return data.map((author) => {
-    return navigationItemAdapter({ data: author });
+  return data.map((item) => {
+    return navigationItemAdapter({ data: item });
   });
 };

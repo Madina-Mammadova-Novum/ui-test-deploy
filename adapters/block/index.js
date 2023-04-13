@@ -1,4 +1,5 @@
 import { updateBlockHeroImage } from '@/blocks/BlockHeroImage/adapter';
+import { updateContactUsBlock } from '@/blocks/ContactUsBlock/adapter';
 import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
 import { updateFAQBlock } from '@/blocks/FAQBlock/adapter';
@@ -20,6 +21,8 @@ export const blocksDataAdapter = async (blocks) => {
       switch (block.__component) {
         case 'blocks.cta':
           return updateCTABlock(block);
+        case 'blocks.contact-us':
+          return updateContactUsBlock(block);
         case 'blocks.cta-single-image':
           return updateCTASingleImageBlock(block);
         case 'blocks.hero-image':

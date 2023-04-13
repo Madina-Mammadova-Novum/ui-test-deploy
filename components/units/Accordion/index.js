@@ -14,7 +14,7 @@ const Accordion = ({ items, isFullWidth, open, onClick, icon }) => {
   return items.map(({ headerContent, bodyContent }) => (
     <div
       className={classnames(
-        open && !isFullWidth && 'relative border-none rounded-[10px] pt-[10px] bg-white shadow-xmd',
+        open && !isFullWidth && 'relative border-none rounded-[10px] pt-[10px] bg-white shadow-xmd -m-1',
         'text-black pb-2.5'
       )}
     >

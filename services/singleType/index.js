@@ -7,11 +7,14 @@ export function getSingleTypeEndpoint(apiID, locale) {
     &populate=*,
     values.value,
     ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions,
-    buttons,buttons.linkOptions
+    buttons,buttons.linkOptions,
+    phones,emails,link,link.linkOptions,
+    socials,socials.coverImage,socials.linkOptions
     `.replace(/\s+|\n/g, '');
 }
 
 export const getSingleType = async (apiID, locale) => {
   const response = await getData(`single-type?s=${apiID}&l=${locale}`);
+  console.log(apiID, { response });
   return singleTypeAdapter(response);
 };

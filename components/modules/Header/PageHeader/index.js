@@ -21,7 +21,7 @@ const PageHeader = async () => {
                 {navigation.map(({ path, title }) => {
                   return (
                     <li key={path}>
-                      <NavButton href={path}>{title}</NavButton>
+                      <NavButton path={path}>{title}</NavButton>
                     </li>
                   );
                 })}
