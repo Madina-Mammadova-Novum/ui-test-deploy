@@ -1,9 +1,9 @@
 import React from 'react';
 
 import delve from 'dlv';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { linkImagePropTypes } from "@/utils/types";
+import { linkImagePropTypes } from '@/utils/types';
 
 import { HoverableIcon, NextImage, NextLink } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -34,7 +34,7 @@ const SocialNetworks = ({ socialLinks }) => {
 };
 
 SocialNetworks.propTypes = {
-  socialLinks: PropTypes.arrayOf(linkImagePropTypes)
+  socialLinks: PropTypes.arrayOf(linkImagePropTypes),
 };
 
 export default SocialNetworks;
