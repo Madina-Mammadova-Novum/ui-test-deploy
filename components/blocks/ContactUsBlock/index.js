@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import delve from 'dlv';
@@ -17,14 +19,22 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <div className="rounded-[10px] p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker">
-          <div className="pr-5">
-            {title &&
-            <Title level={2} className="mb-5">
-              {title}
-            </Title>
-            }
-            <ContactUsForm />
+          <div className="pr-5 flex flex-col justify-center">
+            <div>
+              {title && (
+                <Title level={2} className="mb-5">
+                  {title}
+                </Title>
+              )}
+              <ContactUsForm />
+            </div>
+            {/* <div className="flex flex-col text-center items-center"> */}
+            {/*  <Title level={2} className="mb-2.5">Thank you!</Title> */}
+            {/*  <p className="text-xsm mb-4 max-w-[240px]">Your message has been submitted. Someone from our team will contact you shortly.</p> */}
+            {/* <Button buttonProps={{ text: "Fill the form again", size: 'large', variant: 'secondary' }} onClick={()=> {}}/> */}
+            {/* </div> */}
           </div>
+
           <div className="pl-5">
             <iframe
               title="map"
