@@ -294,20 +294,32 @@ input[type='password'] {
 }
 
 .my_position-table tr {
-  @apply h-9;
+  @apply h-9 flex justify-between w-full;
+}
+
+.my_position-table tr > th:first-child {
+  @apply w-auto pr-5;
 }
 
 .my_position-table tr th {
-  @apply pl-5 whitespace-nowrap;
+  @apply pl-5 whitespace-nowrap w-full flex justify-start items-center;
 }
 
 .my_position-table tr td {
-  @apply border-l-0 border-r border-b border-t-0 border-b-gray-darker;
+  @apply pl-5 w-full  flex justify-start items-center border-l-0 border-r border-b border-t-0 border-b-gray-darker;
 }
 
 .my_position-table tr td div {
-  @apply flex box-border pl-5;
+  @apply box-border;
 }
+
+.my_position-table tr > td:first-child {
+  @apply w-auto pr-5;
+}
+
+/* .my_position-table td[name='TANKER_STATUS'] {
+  @apply w-[500px];
+} */
 
 .Toastify__toast {
   @apply !shadow-none p-0 !bg-transparent !mb-0;

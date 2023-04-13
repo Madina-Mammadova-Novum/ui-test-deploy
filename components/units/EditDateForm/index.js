@@ -25,7 +25,7 @@ const EditDateForm = ({ title, portName }) => {
   return (
     <FormProvider {...methods}>
       <FormManager
-        className="min-w-[320px]"
+        className="w-[356px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
       >
