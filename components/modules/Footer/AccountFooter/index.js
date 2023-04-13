@@ -7,7 +7,7 @@ import { SocialNetworks } from '@/units';
 
 const AccountFooter = async () => {
   const { socials } = await getSingleType('social-network', 'en');
-  const socialLinks = socials.map((socialLink) => linkImageAdapter(socialLink));
+  const socialLinks = socials ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
   return (
     <footer className="shadow-xmd flex items-center px-5 justify-between py-2.5">
       <SocialNetworks socialLinks={socialLinks} />

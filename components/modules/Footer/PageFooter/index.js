@@ -13,7 +13,7 @@ const PageFooter = async () => {
   const { navigation: navigationSlug } = await getSingleType('footer', 'en');
   const contactInfo = await getSingleType('contact-information', 'en');
   const { socials } = await getSingleType('social-network', 'en');
-  const socialLinks = socials.map((socialLink) => linkImageAdapter(socialLink));
+  const socialLinks = socials ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
   const { address, phones, emails, link } = contactInfo;
   const mapLink = linkAdapter(link);
   const navigation = await getNavigation(navigationSlug, 'en');
