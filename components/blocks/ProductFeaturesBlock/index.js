@@ -48,7 +48,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
               ctaList.map((ctaBlock) => {
                 return (
                   currentTab === ctaBlock.title && (
-                    <div key={ctaBlock.title} className="mt-1 divide-y divide-gray-darker">
+                    <div key={ctaBlock.title} className="mt-2 divide-y divide-gray-darker">
                       {ctaBlock.cta.map((item) => {
                         return (
                           <Accordion

@@ -31,6 +31,7 @@ import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
+import SocialNetworks from '@/units/SocialNetworks';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
@@ -84,4 +85,5 @@ export {
   AccordionCTA,
   IconWrapper,
   DeactivateTankerForm,
+  SocialNetworks,
 };

@@ -1,17 +1,13 @@
 import React from 'react';
 
-import delve from 'dlv';
-
 import { linkAdapter, linkImageAdapter } from '@/adapters/global';
 import { ExternalLinkAltIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
-import { HoverableIcon, NextImage, NextLink, Title } from '@/elements';
+import { NextLink, Title } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
-import { FooterNavBlock } from '@/units';
-import { getStrapiMedia } from '@/utils';
-import { makeId } from '@/utils/helpers';
+import { FooterNavBlock, SocialNetworks } from '@/units';
 
 const PageFooter = async () => {
   const { navigation: navigationSlug } = await getSingleType('footer', 'en');
@@ -21,6 +17,8 @@ const PageFooter = async () => {
   const { address, phones, emails, link } = contactInfo;
   const mapLink = linkAdapter(link);
   const navigation = await getNavigation(navigationSlug, 'en');
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="py-[30px] bg-white">
       <div className="container mx-auto  px-[54px] max-w-[1258px] ">
@@ -79,32 +77,19 @@ const PageFooter = async () => {
             </ul>
             {socials && (
               <div className="flex gap-x-2.5 my-4">
-                <div className="flex gap-x-2.5">
-                  {socialLinks.map((socialLink) => {
-                    return (
-                      <NextLink key={makeId()} href={delve(socialLink, 'path')} title={delve(socialLink, 'title')}>
-                        <HoverableIcon
-                          className="border border-gray-darker rounded-md"
-                          icon={
-                            <NextImage
-                              alt={delve(socialLink, 'title')}
-                              src={getStrapiMedia(delve(socialLink, 'image.format.original.url'), '')}
-                              height={20}
-                              width={20}
-                            />
-                          }
-                        />
-                      </NextLink>
-                    );
-                  })}
-                </div>
+                <SocialNetworks socialLinks={socialLinks} />
               </div>
             )}
           </div>
         </div>
-        <div className="pt-5 text-xsm flex justify-between text-gray border-grey-darker border-t">
-          <p>Copyright © 2021 Ship.link. All rights reserved</p>
-          <OtakoyiLogo />
+        <div className="pt-5 text-xsm flex justify-between border-grey-darker border-t">
+          <p className="text-gray">Copyright © {currentYear} Ship.link. All rights reserved</p>
+          <div className="flex items-center gap-x-2">
+            <p className="text-gray text-xsm">Development by</p>
+            <NextLink href="https://otakoyi.software/" target="_blank">
+              <OtakoyiLogo />
+            </NextLink>
+          </div>
         </div>
       </div>
     </footer>

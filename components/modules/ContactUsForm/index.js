@@ -25,10 +25,10 @@ const ContactUsForm = () => {
       >
         <div className="grid gap-y-4">
           <div className="grid grid-cols-2 gap-x-5 gap-y-4">
-            <Input {...register('firstName')} label="first name" placeholder="Enter your first name" />
+            <Input {...register('firstName')} label="First name" placeholder="Enter your first name" />
             <Input {...register('lastName')} label="Last name" placeholder="Enter your last name" />
-            <Input {...register('emailAddress')} label="EMAIL ADDRESS" placeholder="Enter your email" type="email" />
-            <Input {...register('phoneNumber')} label="phone number" placeholder="Enter your phone number" />
+            <Input {...register('emailAddress')} label="Email address" placeholder="Enter your email" type="email" />
+            <Input {...register('phoneNumber')} label="Phone number" placeholder="Enter your phone number" />
           </div>
           <Dropdown label="subject" onChange={() => {}} name="1" options={['1', '2', '3']} />
           <TextArea name="label" label="MESSAGE" />

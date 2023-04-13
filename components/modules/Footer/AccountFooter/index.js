@@ -1,16 +1,16 @@
-import FacebookSVG from '@/assets/images/facebook.svg';
-import LinkedinSVG from '@/assets/images/linkedin.svg';
-import TwitterSVG from '@/assets/images/twitter.svg';
-import { HoverableIcon, NextLink } from '@/elements';
+import React from 'react';
 
-const AccountFooter = () => {
+import { linkImageAdapter } from '@/adapters/global';
+import { NextLink } from '@/elements';
+import { getSingleType } from '@/services/singleType';
+import { SocialNetworks } from '@/units';
+
+const AccountFooter = async () => {
+  const { socials } = await getSingleType('social-network', 'en');
+  const socialLinks = socials.map((socialLink) => linkImageAdapter(socialLink));
   return (
     <footer className="shadow-xmd flex items-center px-5 justify-between py-2.5">
-      <div className="flex gap-x-2.5">
-        <HoverableIcon className="border border-gray-darker rounded-md" icon={<LinkedinSVG />} />
-        <HoverableIcon className="border border-gray-darker rounded-md" icon={<TwitterSVG />} />
-        <HoverableIcon className="border border-gray-darker rounded-md" icon={<FacebookSVG />} />
-      </div>
+      <SocialNetworks socialLinks={socialLinks} />
 
       <div className="flex gap-x-5 text-black">
         <NextLink href="#" className="underline">
