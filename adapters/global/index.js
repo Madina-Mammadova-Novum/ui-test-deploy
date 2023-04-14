@@ -41,27 +41,29 @@ export const whyWeAreBetterBlockAdapter = ({ data }) => {
 };
 
 export const linkAdapter = (link) => {
-  // todo: need to refuctor
-  if (link === null) return null;
-  const linkOptions = delve(link, 'linkOptions');
+  if (!link || !link.path) {
+    return null;
+  }
+
+  let linkOptions = delve(link, 'linkOptions');
   const label = delve(link, 'label');
   const path = delve(link, 'path');
-  if (path === undefined) return null;
-  let type = 'default';
-  let target = null;
-  let isExternal = false;
-  let rel = null;
-  if (linkOptions !== undefined) {
-    type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions.style : 'default';
-    target = linkOptions?.target !== null && linkOptions?.target !== undefined ? linkOptions.target : null;
-    isExternal =
-      linkOptions?.isExternal !== null && linkOptions?.isExternal !== undefined ? linkOptions.isExternal : false;
-    rel = linkOptions?.rel !== null && linkOptions?.rel !== undefined ? linkOptions.rel : null;
+
+  if (!linkOptions) {
+    linkOptions = {
+      style: 'default',
+      target: null,
+      isExternal: false,
+      rel: null,
+    };
   }
+
+  const { style = 'default', target = null, isExternal = false, rel = null } = linkOptions;
+
   return {
     label,
     path,
-    type,
+    type: style,
     target,
     isExternal,
     rel,
@@ -176,22 +178,21 @@ export const forgotPasswordContentAdapter = ({ data }) => {
 };
 
 export const footerAdapter = ({ data }) => {
-  if (data === null) return null;
-  const { attributes = {} } = data;
-  const { privacyLink, socials } = attributes;
+  if (!data) return null;
 
-  return {
-    privacyLink,
-    socials: socials?.map((link) => linkImageAdapter(link)) ?? [],
-  };
+  const { attributes = {} } = data;
+  const { privacyLink, socials = [] } = attributes;
+
+  const adaptedSocials = socials.map(linkImageAdapter);
+
+  return { privacyLink, socials: adaptedSocials };
 };
 
 export const headerAdapter = ({ data }) => {
-  if (data === null) return null;
-  const { attributes } = data;
-  const { buttons } = attributes;
+  if (!data) return null;
 
-  if (buttons.length === 0) return [];
+  const { buttons = [] } = data.attributes;
+  if (!buttons.length) return [];
 
   return {
     buttons: buttons.map((button) => linkAdapter(button)),

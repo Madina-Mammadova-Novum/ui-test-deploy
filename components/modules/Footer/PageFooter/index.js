@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { linkAdapter, linkImageAdapter } from '@/adapters/global';
+import { linkAdapter } from '@/adapters/global';
 import { ExternalLinkAltIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
@@ -12,8 +12,6 @@ import { FooterNavBlock, SocialNetworks } from '@/units';
 const PageFooter = async () => {
   const { navigation: navigationSlug } = await getSingleType('footer', 'en');
   const contactInfo = await getSingleType('contact-information', 'en');
-  const { socials } = await getSingleType('social-network', 'en');
-  const socialLinks = socials ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
   const { address, phones, emails, link } = contactInfo;
   const mapLink = linkAdapter(link);
   const navigation = await getNavigation(navigationSlug, 'en');
@@ -75,11 +73,9 @@ const PageFooter = async () => {
                   </li>
                 ))}
             </ul>
-            {socials && (
-              <div className="flex gap-x-2.5 my-4">
-                <SocialNetworks socialLinks={socialLinks} />
-              </div>
-            )}
+            <div className="flex gap-x-2.5 my-4">
+              <SocialNetworks />
+            </div>
           </div>
         </div>
         <div className="pt-5 text-xsm flex justify-between border-grey-darker border-t">
