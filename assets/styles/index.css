@@ -270,7 +270,7 @@
 }
 
 .react-tel-input .flag-dropdown .selected-flag {
-  @apply p-0;
+  @apply p-0 rounded-l-md;
 }
 
 .react-tel-input .selected-flag {

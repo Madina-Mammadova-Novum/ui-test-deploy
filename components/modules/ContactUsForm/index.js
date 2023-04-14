@@ -7,16 +7,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
-import { Button, Dropdown, Input, TextArea, Title } from '@/elements';
+import { Button, FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
+import { contactInfoSchema } from '@/lib/schemas';
+import { getValueWithPath } from '@/utils/helpers';
 
-const schema = yup
-  .object({
-    email: yup.string().required().email(),
-  })
-  .required();
+const schema = yup.object({
+  ...contactInfoSchema(),
+});
 
 const ContactUsForm = () => {
-  // todo: setup submit function
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const methods = useForm({
@@ -26,15 +25,47 @@ const ContactUsForm = () => {
   const {
     reset,
     register,
-    formState: { isSubmitting, errors },
+    formState: { errors, isSubmitting },
+    setValue,
+    clearErrors,
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     setIsSubmitted(true);
-    reset();
+    return data;
   };
 
-  return (
+  const onSubmitAgain = () => {
+    reset();
+    setIsSubmitted(false);
+  };
+  const testOption = [
+    { label: 'testLabel', value: 'testValue' },
+    { label: 'testLabel2', value: 'testValue2' },
+  ];
+
+  const handleChange = (key, value) => {
+    const error = getValueWithPath(errors, key);
+    if (error) {
+      clearErrors(key);
+    }
+    setValue(key, value);
+  };
+
+  return isSubmitted ? (
+    <div className="flex flex-col text-center items-center m-auto">
+      <Title level={2} className="mb-2.5">
+        Thank you!
+      </Title>
+      <p className="text-xsm mb-4 max-w-[240px]">
+        Your message has been submitted. Someone from our team will contact you shortly.
+      </p>
+      <Button
+        buttonProps={{ text: 'Fill the form again', size: 'large', variant: 'secondary' }}
+        onClick={onSubmitAgain}
+      />
+    </div>
+  ) : (
     <FormProvider {...methods}>
       <FormManager
         submitButton={{
@@ -45,42 +76,43 @@ const ContactUsForm = () => {
         }}
         submitAction={onSubmit}
       >
-        {isSubmitted ? (
-          <div className="flex flex-col text-center items-center m-auto">
-            <Title level={2} className="mb-2.5">
-              Thank you!
-            </Title>
-            <p className="text-xsm mb-4 max-w-[240px]">
-              Your message has been submitted. Someone from our team will contact you shortly.
-            </p>
-            <Button
-              buttonProps={{ text: 'Fill the form again', size: 'large', variant: 'secondary' }}
-              onClick={() => {}}
+        <Title level={2} className="mb-5">
+          Write to us
+        </Title>
+        <div className="grid gap-y-4">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4">
+            <Input
+              {...register('firstName')}
+              label="First name"
+              placeholder="John"
+              disabled={isSubmitting}
+              error={errors.firstName?.message}
+            />
+            <Input {...register('lastName')} label="Last name" placeholder="Doe" error={errors.lastName?.message} />
+            <Input
+              {...register('email')}
+              label="Email address"
+              placeholder="Enter your email"
+              type="email"
+              error={errors.email?.message}
+            />
+            <PhoneInput
+              {...register('phoneNumber')}
+              label=" Phone number"
+              disabled={isSubmitting}
+              error={errors.phoneNumber?.message}
             />
           </div>
-        ) : (
-          <div className="grid gap-y-4">
-            <div className="grid grid-cols-2 gap-x-5 gap-y-4">
-              <Input
-                {...register('firstName')}
-                label="First name"
-                placeholder="Enter your first name"
-                disabled={isSubmitting}
-              />
-              <Input {...register('lastName')} label="Last name" placeholder="Enter your last name" />
-              <Input
-                {...register('emailAddress')}
-                label="Email address"
-                placeholder="Enter your email"
-                type="email"
-                error={errors.email?.message}
-              />
-              <Input {...register('phoneNumber')} label="Phone number" placeholder="Enter your phone number" />
-            </div>
-            <Dropdown label="subject" onChange={() => {}} name="1" options={['1', '2', '3']} />
-            <TextArea name="label" label="MESSAGE" />
-          </div>
-        )}
+          <FormDropdown
+            label="Subject"
+            defaultValue="Some category"
+            name="subject"
+            options={testOption}
+            onChange={(option) => handleChange('subject', option)}
+            error={errors.subject?.message}
+          />
+          <TextArea name="message" label="Message" placeholder="Type your message here" inputStyles="h-20" />
+        </div>
       </FormManager>
     </FormProvider>
   );
