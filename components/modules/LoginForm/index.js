@@ -8,7 +8,7 @@ import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
 import { emailSchema, passwordSchema } from '@/lib/schemas';
 import { login } from '@/services';
-import { successToast, useHookFormParams } from '@/utils/hooks';
+import { useHookFormParams } from '@/utils/hooks';
 
 const schema = yup
   .object({
@@ -27,8 +27,7 @@ const LoginForm = () => {
   } = methods;
 
   const onSubmit = async (data) => {
-    const { message } = await login({ data });
-    successToast(message, 'Some description');
+    await login({ data });
     reset();
   };
 

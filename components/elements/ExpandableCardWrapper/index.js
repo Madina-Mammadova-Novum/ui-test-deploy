@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import { Divider } from '@/elements';
 
-const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, expandAll }) => {
+const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, expandAll, className }) => {
   const contentRef = useRef(null);
 
   const [toggle, setToggle] = useState(false);
@@ -17,7 +17,7 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, exp
   }, [expandAll]);
 
   return (
-    <div className="rounded-base shadow-xmd box-border">
+    <div className={`rounded-base shadow-xmd box-border ${className}`}>
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerComponentWithProps}
       </div>
@@ -37,6 +37,7 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, exp
 };
 
 ExpandableCardWrapper.defaultProps = {
+  className: '',
   expandAll: {
     value: false,
   },
@@ -48,6 +49,7 @@ ExpandableCardWrapper.propTypes = {
   expandAll: PropTypes.shape({
     value: PropTypes.string,
   }),
+  className: PropTypes.string,
 };
 
 export default ExpandableCardWrapper;

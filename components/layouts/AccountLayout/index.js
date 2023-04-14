@@ -9,7 +9,7 @@ const AccountLayout = ({ children }) => {
       id: makeId(),
       title: 'Search',
       variant: 'search',
-      path: ROUTES.SEARCH,
+      path: ROUTES.ACCOUNT_SEARCH,
       items: [],
     },
     {
@@ -28,7 +28,7 @@ const AccountLayout = ({ children }) => {
           id: makeId(),
           label: 'offer stage #1',
           title: 'Negotiating',
-          path: ROUTES.NEGOTIATING,
+          path: ROUTES.ACCOUNT_NEGOTIATING,
         },
         {
           id: makeId(),
@@ -78,7 +78,7 @@ const AccountLayout = ({ children }) => {
       <Sidebar data={sidebarData} containerStyles="z-50" />
       <div className="flex flex-col grow">
         <AccountHeader />
-        {children}
+        <main className="grow">{children}</main>
         <AccountFooter />
       </div>
     </BaseLayout>

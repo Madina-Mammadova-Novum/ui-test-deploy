@@ -34,6 +34,7 @@ const OfferForm = () => {
     <FormProvider {...methods}>
       <FormManager
         submitAction={handleSubmit}
+        className="!gap-0"
         submitButton={{
           text: 'Send offer',
           variant: 'primary',

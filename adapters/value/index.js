@@ -4,6 +4,7 @@ import { imageAdapter } from '@/adapters/image';
 export const valueAdapter = ({ data }) => {
   if (data === null || data === undefined) return null;
   const { id, attributes } = data;
+  if (attributes === null || attributes === undefined) return null;
   const { title, subTitle, shortDescription, coverImage, valueType } = attributes;
   return {
     id,

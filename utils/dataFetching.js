@@ -29,7 +29,6 @@ export function fetchOptions(requestMethod, data = null) {
 
 export async function apiHandler(options) {
   const { url, requestMethod, data } = options;
-  console.log({ url });
   try {
     const requestOptions = fetchOptions(requestMethod, data);
 

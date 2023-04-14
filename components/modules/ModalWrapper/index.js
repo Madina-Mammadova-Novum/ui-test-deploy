@@ -1,9 +1,21 @@
+'use client';
+
+import { useEffect } from 'react';
+
 import PropTypes from 'prop-types';
 
 import { CloseIcon } from '@/assets/icons';
 import { Button } from '@/elements';
 
 const ModalWrapper = ({ opened, onClose, children }) => {
+  useEffect(() => {
+    if (opened) document.body.classList.add('overflow-hidden');
+
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [opened]);
+
   return (
     opened && (
       <>

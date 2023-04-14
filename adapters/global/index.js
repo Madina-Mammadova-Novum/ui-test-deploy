@@ -1,3 +1,5 @@
+import delve from 'dlv';
+
 import { imageAdapter } from '@/adapters/image';
 import { valueAdapter } from '@/adapters/value';
 import { formatDate } from '@/utils/helpers';
@@ -39,13 +41,23 @@ export const whyWeAreBetterBlockAdapter = ({ data }) => {
 };
 
 export const linkAdapter = (link) => {
+  // todo: need to refuctor
   if (link === null) return null;
-  const { linkOptions, label, path } = link;
-  const type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions.style : 'default';
-  const target = linkOptions?.target !== null && linkOptions?.target !== undefined ? linkOptions.target : null;
-  const isExternal =
-    linkOptions?.isExternal !== null && linkOptions?.isExternal !== undefined ? linkOptions.isExternal : false;
-  const rel = linkOptions?.rel !== null && linkOptions?.rel !== undefined ? linkOptions.rel : null;
+  const linkOptions = delve(link, 'linkOptions');
+  const label = delve(link, 'label');
+  const path = delve(link, 'path');
+  if (path === undefined) return null;
+  let type = 'default';
+  let target = null;
+  let isExternal = false;
+  let rel = null;
+  if (linkOptions !== undefined) {
+    type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions.style : 'default';
+    target = linkOptions?.target !== null && linkOptions?.target !== undefined ? linkOptions.target : null;
+    isExternal =
+      linkOptions?.isExternal !== null && linkOptions?.isExternal !== undefined ? linkOptions.isExternal : false;
+    rel = linkOptions?.rel !== null && linkOptions?.rel !== undefined ? linkOptions.rel : null;
+  }
   return {
     label,
     path,
@@ -165,12 +177,12 @@ export const forgotPasswordContentAdapter = ({ data }) => {
 
 export const footerAdapter = ({ data }) => {
   if (data === null) return null;
-  const { attributes } = data;
+  const { attributes = {} } = data;
   const { privacyLink, socials } = attributes;
 
   return {
     privacyLink,
-    socials: socials.map((link) => linkImageAdapter(link)),
+    socials: socials?.map((link) => linkImageAdapter(link)) ?? [],
   };
 };
 

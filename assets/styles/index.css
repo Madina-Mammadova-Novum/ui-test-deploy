@@ -17,6 +17,21 @@
     @apply overflow-x-clip;
   }
 
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin: 24px 0px;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #828c9c7a;
+    border-radius: 10px;
+  }
+
   h1 {
     @apply font-bold text-[26px] 3sm:text-[30px];
   }

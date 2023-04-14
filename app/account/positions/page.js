@@ -13,8 +13,8 @@ export function generateMetadata() {
 
 export default function AccountPostions() {
   return (
-    <AccountWrapper title="My positions" containerClass="grow px-5">
-      <AccountPositions containerClass="flex flex-col gap-2" />
+    <AccountWrapper containerClass="px-5">
+      <AccountPositions />
     </AccountWrapper>
   );
 }
