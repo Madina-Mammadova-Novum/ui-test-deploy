@@ -10,7 +10,7 @@ import { NextLink, Title } from '@/elements';
 import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
-const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, socialLinks }) => {
+const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule }) => {
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
@@ -70,7 +70,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
                 </Title>
                 <div className="flex flex-row md:flex-col gap-[30px] md:gap-5">
                   <p>{schedule}</p>
-                  {socialLinks && <SocialNetworks socialLinks={socialLinks} />}
+                  <SocialNetworks />
                 </div>
               </div>
             </div>

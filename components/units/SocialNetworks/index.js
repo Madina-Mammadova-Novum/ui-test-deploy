@@ -1,15 +1,28 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 
 import delve from 'dlv';
-import PropTypes from 'prop-types';
 
-import { linkImagePropTypes } from '@/utils/types';
-
+import { linkImageAdapter } from '@/adapters/global';
 import { HoverableIcon, NextImage, NextLink } from '@/elements';
+import { getSingleType } from '@/services/singleType';
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
 
-const SocialNetworks = ({ socialLinks }) => {
+const SocialNetworks = () => {
+  const [socialLinks, setSocialLinks] = useState([]);
+  const fetchData = async () => {
+    const { socials } = await getSingleType('social-network', 'en');
+    const socialLinksArray = socials ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
+    setSocialLinks(socialLinksArray);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (!socialLinks.length) return null;
   return (
     <div className="flex gap-x-2.5">
       {socialLinks.map((socialLink) => {
@@ -31,10 +44,6 @@ const SocialNetworks = ({ socialLinks }) => {
       })}
     </div>
   );
-};
-
-SocialNetworks.propTypes = {
-  socialLinks: PropTypes.arrayOf(linkImagePropTypes),
 };
 
 export default SocialNetworks;
