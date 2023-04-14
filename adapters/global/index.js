@@ -182,7 +182,7 @@ export const footerAdapter = ({ data }) => {
 
   return {
     privacyLink,
-    socials: socials.map((link) => linkImageAdapter(link)),
+    socials: socials?.map((link) => linkImageAdapter(link)) ?? [],
   };
 };
 
