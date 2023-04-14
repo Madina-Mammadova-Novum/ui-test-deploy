@@ -6,8 +6,8 @@ import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 
 const PageHeader = async () => {
-  const { buttons } = await getSingleType('header', 'en');
-  const navigation = await getNavigation('main-navigation', 'en');
+  const { navigation: navigationSlug, buttons } = await getSingleType('header', 'en');
+  const navigation = await getNavigation(navigationSlug, 'en');
   return (
     <header className="absolute w-full z-10">
       <div className="container mx-auto  px-[54px] max-w-[1258px] ">
