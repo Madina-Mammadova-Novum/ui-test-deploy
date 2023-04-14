@@ -34,7 +34,7 @@ const ProfileMenu = ({ image }) => {
       {showProfileMenu && (
         <>
           <div className="fixed top-0 right-0 bottom-0 left-0" aria-hidden onClick={closeMenu} />
-          <div className="absolute -bottom-1 translate-y-full translate-x-[-15%] bg-white p-2.5 shadow-xmd rounded-md min-w-[213px]">
+          <div className="absolute -bottom-1 -right-0.5 z-50 translate-y-full bg-white p-2.5 shadow-xmd rounded-md min-w-[213px]">
             <NextLink href={ROUTES.ACCOUNT_INFO}>
               <div className="flex items-center text-xsm font-semibold px-2.5 py-1.5 hover:bg-purple-light rounded-md">
                 <AccountInfoSVG className="mr-2.5" /> Account information

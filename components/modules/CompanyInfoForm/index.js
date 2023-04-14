@@ -72,7 +72,7 @@ const CompanyInfoForm = () => {
           subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
           data={noteList}
         />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[320px] overflow-y-scroll">
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>

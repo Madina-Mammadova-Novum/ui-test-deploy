@@ -5,7 +5,7 @@ import { FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
-import { PasswordInput, Title } from '@/elements';
+import { Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
 import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
@@ -15,17 +15,11 @@ const PasswordInfoForm = () => {
   const schema = yup.object({ ...updatePasswordSchema() });
 
   const state = {
-    currentPassword: '12345678',
     password: '',
     confirmPassword: '',
   };
 
   const methods = useHookFormParams({ state, schema });
-
-  const {
-    register,
-    formState: { errors },
-  } = methods;
 
   const onSubmit = async (data) => {
     const { message } = await updatePassword({ data });
@@ -41,14 +35,6 @@ const PasswordInfoForm = () => {
         <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Change Your Password
         </Title>
-        <PasswordInput
-          {...register('currentPassword')}
-          label="Current password"
-          placeholder="Enter your password"
-          error={errors.currentPassword?.message}
-          disabled
-        />
-        <hr />
         <PasswordValidation />
       </FormManager>
     </FormProvider>

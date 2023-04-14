@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { AsyncDropdown, Label } from '@/elements';
+import { FormDropdown, Label } from '@/elements';
 import { getPorts } from '@/services/port';
 import { convertDataToOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
@@ -36,7 +36,7 @@ const PortDetailsForm = ({ portName }) => {
         <Label className="text-xs-sm">Tanker name</Label>
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
-      <AsyncDropdown name="port" label="Port search" options={portOptions} onChange={handlePortChange} />
+      <FormDropdown async name="port" label="Port search" options={portOptions} onChange={handlePortChange} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Dropdown, Input, Title } from '@/elements';
+import { FormDropdown, Input, Title } from '@/elements';
 import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -21,24 +21,26 @@ const CommercialOfferTerms = () => {
   };
 
   return (
-    <div className="pb-5">
+    <>
       <Title level="3">Commercial offer terms</Title>
-      <Dropdown
-        label="cargo type"
-        defaultValue="Crude Oil"
-        disabled
-        customStyles="max-w-[296px] mt-3"
-        name="cargoType"
-        options={testOption}
-      />
+      <div className="flex items-center mt-3">
+        <FormDropdown
+          label="cargo type"
+          defaultValue="Crude Oil"
+          disabled
+          customStyles={{ className: 'w-1/2 pr-6' }}
+          name="cargoType"
+          options={testOption}
+        />
+      </div>
       {[1, 2].map((_, index) => (
         <div className="flex items-center mt-3 gap-x-5">
-          <Dropdown
+          <FormDropdown
             label={`product #${index + 1}`}
             defaultValue="Light Crude Oil"
             name={`products[${index}].product`}
             disabled
-            customStyles="w-[296px]"
+            customStyles={{ className: 'w-1/2' }}
             options={testOption}
           />
           <Input
@@ -59,11 +61,11 @@ const CommercialOfferTerms = () => {
           />
         </div>
       ))}
-      <div className="flex gap-x-5 items-center mt-3">
-        <Dropdown
+      <div className="flex w-1/2 gap-x-5 items-center mt-3 pr-5">
+        <FormDropdown
           label="Freight"
           name="freight"
-          customStyles="max-w-[138px]"
+          customStyles={{ className: 'w-1/2' }}
           options={testOption}
           onChange={(option) => handleChange('freight', option)}
         />
@@ -72,7 +74,7 @@ const CommercialOfferTerms = () => {
           label="Value"
           name="value"
           placeholder="WS"
-          customStyles="max-w-[138px]"
+          customStyles="w-1/2"
           error={errors.value?.message}
           disabled={isSubmitting}
         />
@@ -83,19 +85,19 @@ const CommercialOfferTerms = () => {
         label="Demurrage rate"
         name="demurrageRate"
         placeholder="Daily payment"
-        customStyles="max-w-[296px] mt-3"
+        customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
         disabled={isSubmitting}
       />
 
-      <div className="flex gap-x-5">
+      <div className="flex">
         <Input
           {...register('layTime')}
           label="lay time"
           name="layTime"
           helperText="The maximum laytime is 100 hours"
           placeholder="Daily payment"
-          customStyles="w-full max-w-[296px] mt-3 "
+          customStyles="w-1/2 mt-3 pr-5"
           error={errors.layTime?.message}
           disabled={isSubmitting}
         />
@@ -105,26 +107,28 @@ const CommercialOfferTerms = () => {
           name="nor"
           placeholder="Daily payment"
           disabled
-          customStyles="w-full max-w-[296px] mt-3"
+          customStyles="w-1/2 mt-3"
         />
       </div>
 
-      <Dropdown
-        label="undisputed demurrage payment terms"
-        name="undisputedDemurrage"
-        customStyles="mt-3"
-        options={testOption}
-        onChange={(option) => handleChange('undisputedDemurrage', option)}
-      />
+      <div className="pt-4">
+        <FormDropdown
+          label="undisputed demurrage payment terms"
+          name="undisputedDemurrage"
+          customStyles="mt-3"
+          options={testOption}
+          onChange={(option) => handleChange('undisputedDemurrage', option)}
+        />
 
-      <Dropdown
-        label="payemnt terms"
-        name="paymentTerms"
-        customStyles="mt-3"
-        options={testOption}
-        onChange={(option) => handleChange('paymentTerms', option)}
-      />
-    </div>
+        <FormDropdown
+          label="payemnt terms"
+          name="paymentTerms"
+          customStyles="mt-3"
+          options={testOption}
+          onChange={(option) => handleChange('paymentTerms', option)}
+        />
+      </div>
+    </>
   );
 };
 

@@ -17,7 +17,10 @@ const LoginPage = () => {
   return (
     <AuthWrapper title="Log in" containerClass="w-3/4">
       <LoginForm />
-      <NextLink href={ROUTES.FORGOT_PASSWORD} className="text-blue underline text-xsm">
+      <NextLink
+        href={ROUTES.FORGOT_PASSWORD}
+        className="inline-flex justify-center items-center w-full pt-2.5 text-blue underline text-xsm"
+      >
         Forgot your password
       </NextLink>
     </AuthWrapper>

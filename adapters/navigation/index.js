@@ -25,3 +25,8 @@ export const navigationAdapter = ({ data }) => {
     return navigationItemAdapter({ data: item });
   });
 };
+
+export const navigationPagesAdapter = (item) => ({
+  label: item,
+  value: item,
+});

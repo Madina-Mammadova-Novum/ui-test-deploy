@@ -1,74 +1,68 @@
 'use client';
 
-import { useState } from 'react';
-import { Controller } from 'react-hook-form';
-import Select from 'react-select';
+import { useCallback, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { InputErrorMessage } from '@/elements';
-import OptionRow from '@/elements/Dropdown/OptionRow';
-import OptionsList from '@/elements/Dropdown/OptionsList';
-import { dropdownStyles, dropdownTheme } from '@/elements/Dropdown/styles';
-import { getValueWithPath } from '@/utils/helpers';
+import { SimpleDropdown } from './SimpleDropdown';
 
-const Dropdown = ({ name, label, options, onChange, disabled, customStyles }) => {
+import { dropdownOptionTypes } from '@/lib/types';
+
+import { Label } from '@/elements';
+import { dropdownStyles } from '@/elements/Dropdown/styles';
+
+const Dropdown = ({ name, label, options, onChange, disabled, customStyles, asyncCall = false, ...rest }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleChange = (option) => {
-    setSelectedOption(option);
-    onChange(option);
-  };
+  const { dropdownWidth, className } = customStyles;
 
-  const renderOption = ({ countryFlag, label: labelValue }) => (
-    <OptionRow countryFlag={countryFlag} value={labelValue} />
+  const handleChange = useCallback(
+    (option) => {
+      setSelectedOption(option);
+      onChange(option);
+    },
+    [onChange]
   );
 
   return (
-    <Controller
-      name={name}
-      render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
-        const error = getValueWithPath(errors, name)?.value;
-
-        return (
-          <div className={`relative bottom-1 ${customStyles}`}>
-            <label htmlFor={name} className="text-[12px] text-gray font-semibold uppercase">
-              {label}
-            </label>
-            <Select
-              ref={ref}
-              id={name}
-              {...field}
-              options={options}
-              components={{ Option: OptionsList }}
-              onChange={handleChange}
-              closeMenuOnSelect
-              formatOptionLabel={renderOption}
-              styles={dropdownStyles(selectedOption, error)}
-              theme={dropdownTheme}
-              isDisabled={disabled || isSubmitting}
-            />
-            {error && <InputErrorMessage message={error?.message} />}
-          </div>
-        );
-      }}
-    />
+    <div className={`relative ${className}`}>
+      <Label htmlFor={name} className="text-xs-sm">
+        {label}
+      </Label>
+      <SimpleDropdown
+        {...rest}
+        id={name}
+        options={options}
+        onChange={handleChange}
+        styles={dropdownStyles(selectedOption, null, dropdownWidth)}
+        isDisabled={disabled}
+        asyncCall={asyncCall}
+      />
+    </div>
   );
 };
 
 Dropdown.defaultProps = {
   label: null,
+  asyncCall: false,
   disabled: false,
-  customStyles: '',
+  customStyles: {
+    dropdownWidth: '',
+    className: '',
+  },
 };
 
 Dropdown.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  customStyles: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  asyncCall: PropTypes.bool,
+  options: PropTypes.arrayOf(dropdownOptionTypes).isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  customStyles: PropTypes.shape({
+    dropdownWidth: PropTypes.string,
+    className: PropTypes.string,
+  }),
 };
 
 export default Dropdown;

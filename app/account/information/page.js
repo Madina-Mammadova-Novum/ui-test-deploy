@@ -13,8 +13,8 @@ export function generateMetadata() {
 
 export default function AccountInformation() {
   return (
-    <AccountWrapper title="Account information" containerClass="grow px-5">
-      <AccountDetails containerClass="flex justify-start items-start flex-col gap-2.5" />
+    <AccountWrapper containerClass="px-5">
+      <AccountDetails />
     </AccountWrapper>
   );
 }
