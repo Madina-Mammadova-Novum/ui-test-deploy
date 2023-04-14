@@ -46,12 +46,12 @@ export const linkAdapter = (link) => {
   const linkOptions = delve(link, 'linkOptions');
   const label = delve(link, 'label');
   const path = delve(link, 'path');
-  if(path === undefined) return null;
+  if (path === undefined) return null;
   let type = 'default';
   let target = null;
   let isExternal = false;
   let rel = null;
-  if(linkOptions !== undefined) {
+  if (linkOptions !== undefined) {
     type = linkOptions?.style !== null && linkOptions?.style !== undefined ? linkOptions.style : 'default';
     target = linkOptions?.target !== null && linkOptions?.target !== undefined ? linkOptions.target : null;
     isExternal =
