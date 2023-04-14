@@ -14,18 +14,12 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
+        {title && (<div>{title}</div>)}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
-        <div className="rounded-[10px] p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker">
+        <div className="rounded-[10px] p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker relative">
           <div className="pr-5 flex flex-col">
-            <div>
-              {title && (
-                <Title level={2} className="mb-5">
-                  {title}
-                </Title>
-              )}
               <ContactUsForm />
-            </div>
           </div>
           <div className="pl-5">
             <iframe
@@ -81,6 +75,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
               </div>
             </div>
           </div>
+          <div className="rounded-[10px]  h-[calc(100%_-_188px)] w-full absolute shadow-xmd bottom-0 -z-10" />
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
+import classnames from "classnames";
 import PropTypes from 'prop-types';
 
 const TextArea = ({
@@ -17,9 +18,10 @@ const TextArea = ({
   const handleChange = useCallback(({ value }) => onChange(value), [onChange]);
 
   return (
-    <div className={`${disabled && 'opacity-50 pointer-events-none'} ${customStyles}`}>
+    <div
+         className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
       {label && (
-        <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase">
+        <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase mb-0.5">
           {label}
         </label>
       )}
