@@ -7,11 +7,10 @@ cache:
 build-staging:
   stage: build
   only:
-    - stage
+    - develop
   tags:
     - staging
   script:
-    # ~/builds/sdfsd/sdfsdfsd
     - yarn install
     - cp .env.staging .env
     - yarn turbo-build

@@ -10,11 +10,10 @@ import { getSingleType } from '@/services/singleType';
 import { FooterNavBlock, SocialNetworks } from '@/units';
 
 const PageFooter = async () => {
-  const { navigation: navigationSlug } = await getSingleType('footer', 'en');
   const contactInfo = await getSingleType('contact-information', 'en');
   const { address, phones, emails, link } = contactInfo;
   const mapLink = linkAdapter(link);
-  const navigation = await getNavigation(navigationSlug, 'en');
+  const navigation = await getNavigation('footer-navigation', 'en');
   const currentYear = new Date().getFullYear();
 
   return (
