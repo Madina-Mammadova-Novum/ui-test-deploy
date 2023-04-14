@@ -177,7 +177,7 @@ export const forgotPasswordContentAdapter = ({ data }) => {
 
 export const footerAdapter = ({ data }) => {
   if (data === null) return null;
-  const { attributes } = data;
+  const { attributes = {} } = data;
   const { privacyLink, socials } = attributes;
 
   return {
