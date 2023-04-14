@@ -217,7 +217,7 @@ export const disablePlusMinusSymbols = (e) => {
   if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
-export const options = (values) => values.map((value) => ({ label: value, value }));
+export const options = (values) => values?.map((value) => ({ label: value, value }));
 
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
   if (data === null || data === undefined) return [];

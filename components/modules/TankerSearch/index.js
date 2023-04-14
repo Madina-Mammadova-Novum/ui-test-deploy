@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Loading, Title } from '@/elements';
+import { Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
 import { SearchForm } from '@/units';
@@ -11,8 +11,10 @@ import { errorToast, successToast } from '@/utils/hooks';
 
 const TankerSearch = () => {
   const [tankerStore, setTankerStore] = useState({
-    freeParam: options(['Ballast leg']),
-    direction: options(['Ascendingg', 'Descending']),
+    params: options(['Ballast leg']),
+    directions: options(['Ascendingg', 'Descending']),
+    currentDirection: '',
+    currentParam: '',
     request: false,
     loading: false,
     searchResult: [],
@@ -43,7 +45,7 @@ const TankerSearch = () => {
     }
   };
 
-  const { request, loading, freeParam, direction, searchResult } = tankerStore;
+  const { request, loading, params, directions, searchResult } = tankerStore;
 
   return (
     <section>
@@ -55,12 +57,14 @@ const TankerSearch = () => {
         <TankerSearchResults
           data={searchResult}
           request={request}
-          params={freeParam}
-          direction={direction}
+          params={params}
+          directions={directions}
           onChange={handleChangeState}
         />
       ) : (
-        <Loading />
+        <p className="inline-flex pt-5 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
+          Searching <Loader className="h-4 w-4" />
+        </p>
       )}
     </section>
   );
