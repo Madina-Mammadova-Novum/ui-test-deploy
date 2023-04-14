@@ -14,12 +14,12 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
-        {title && (<div>{title}</div>)}
+        {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <div className="rounded-[10px] p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker relative">
           <div className="pr-5 flex flex-col">
-              <ContactUsForm />
+            <ContactUsForm />
           </div>
           <div className="pl-5">
             <iframe

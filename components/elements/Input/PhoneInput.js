@@ -25,7 +25,9 @@ const PhoneInput = ({ name, label }) => {
               enableSearch
               enableAreaCodes
               disabled={isSubmitting}
-              inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${error ? '!border-red' : '!border-gray-darker'}`}
+              inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
+                error ? '!border-red' : '!border-gray-darker'
+              }`}
               buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${error ? '!border-red' : '!border-gray-darker'}`}
             />
             {error && <InputErrorMessage message={error?.message} />}
