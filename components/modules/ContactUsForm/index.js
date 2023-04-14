@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { Button, FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
 import { contactInfoSchema } from '@/lib/schemas';
-import { getValueWithPath } from "@/utils/helpers";
+import { getValueWithPath } from '@/utils/helpers';
 
 const schema = yup.object({
   ...contactInfoSchema(),
@@ -39,7 +39,10 @@ const ContactUsForm = () => {
     reset();
     setIsSubmitted(false);
   };
-  const testOption = [{ label: 'testLabel', value: 'testValue' }, { label: 'testLabel2', value: 'testValue2' }];
+  const testOption = [
+    { label: 'testLabel', value: 'testValue' },
+    { label: 'testLabel2', value: 'testValue2' },
+  ];
 
   const handleChange = (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -108,7 +111,7 @@ const ContactUsForm = () => {
             onChange={(option) => handleChange('subject', option)}
             error={errors.subject?.message}
           />
-          <TextArea name="message" label="Message" placeholder="Type your message here" inputStyles="h-20"/>
+          <TextArea name="message" label="Message" placeholder="Type your message here" inputStyles="h-20" />
         </div>
       </FormManager>
     </FormProvider>
