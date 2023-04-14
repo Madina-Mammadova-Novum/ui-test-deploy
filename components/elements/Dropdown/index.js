@@ -36,7 +36,7 @@ const Dropdown = ({ name, label, options, onChange, disabled, customStyles, asyn
         onChange={handleChange}
         styles={dropdownStyles(selectedOption, null, dropdownWidth)}
         isDisabled={disabled}
-        asyncCall={asyncCall}
+        asyncCall={asyncCall ?? false}
       />
     </div>
   );

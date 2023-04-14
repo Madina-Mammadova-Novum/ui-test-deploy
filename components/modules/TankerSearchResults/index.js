@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import { dropdownOptionTypes } from '@/lib/types';
+
 import { Dropdown, NotFound, TextRow, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
 import { ExpandableRowHeader, ToggleRows } from '@/units';
 
-const TankerSearchResults = ({ request, params, direction, data, onChange }) => {
+const TankerSearchResults = ({ request, params, directions, data, onChange }) => {
   const [expandExactResults, setExpandExactResults] = useState(false);
   const [expandPartialResults, setExpandPartialResults] = useState(false);
 
@@ -29,14 +31,14 @@ const TankerSearchResults = ({ request, params, direction, data, onChange }) => 
           label="Sort tankers by:"
           options={params}
           defaultValue={params[0]}
-          onChange={(option) => onChange('freeParam', option)}
+          onChange={(option) => onChange('currentParam', option)}
           customStyles={dropdownStyles}
         />
 
         <Dropdown
-          options={direction}
-          defaultValue={direction[0]}
-          onChange={(option) => onChange('direction', option)}
+          options={directions}
+          defaultValue={directions[0]}
+          onChange={(option) => onChange('currentDirection', option)}
           customStyles={dropdownStyles}
         />
       </div>
@@ -93,8 +95,8 @@ TankerSearchResults.propTypes = {
     partialResults: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   request: PropTypes.bool.isRequired,
-  params: PropTypes.arrayOf(PropTypes.shape({})),
-  direction: PropTypes.arrayOf(PropTypes.shape({})),
+  params: PropTypes.arrayOf(dropdownOptionTypes),
+  directions: PropTypes.arrayOf(dropdownOptionTypes),
   onChange: PropTypes.func,
 };
 

@@ -41,7 +41,6 @@ export const SimpleDropdown = ({ asyncCall, options, ...rest }) => {
       options={options}
       components={{ Option: OptionsList }}
       formatOptionLabel={printOptions}
-      isLoading={!options?.length}
       theme={dropdownTheme}
       closeMenuOnSelect
     />
