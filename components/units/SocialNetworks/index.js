@@ -10,7 +10,7 @@ import { getSingleType } from '@/services/singleType';
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
 
-const SocialNetworks = async () => {
+const SocialNetworks = () => {
   const [socialLinks, setSocialLinks] = useState([]);
   const fetchData = async () => {
     const { socials } = await getSingleType('social-network', 'en');

@@ -3,7 +3,7 @@ import React from 'react';
 import { NextLink } from '@/elements';
 import { SocialNetworks } from '@/units';
 
-const AccountFooter = async () => {
+const AccountFooter = () => {
   return (
     <footer className="shadow-xmd flex items-center px-5 justify-between py-2.5">
       <SocialNetworks />
