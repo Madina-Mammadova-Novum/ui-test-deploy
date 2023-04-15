@@ -23,13 +23,11 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, exp
       </div>
       <div
         ref={contentRef}
-        className="overflow-hidden transition-height duration-200"
+        className="overflow-y-hidden transition-height duration-200"
         style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
       >
-        <div className="px-6">
-          <Divider />
-          {children}
-        </div>
+        <Divider />
+        <div className="py-5">{children}</div>
         {footerComponent}
       </div>
     </div>

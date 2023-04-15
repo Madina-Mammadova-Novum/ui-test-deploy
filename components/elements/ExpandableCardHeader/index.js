@@ -15,9 +15,11 @@ const ExpandableCardHeader = ({ toggle, headerData }) => {
       <DragSVG className="fill-gray mr-3.5" />
       <div className="flex items-center w-full gap-x-2.5">
         {headerData.map(printHeaderRow)}
-        <TableArrowSVG
-          className={classNames('fill-black transition duration-200', toggle && 'rotate-180 !fill-blue')}
-        />
+        <div className="hover:bg-gray-darker p-2 rounded-md">
+          <TableArrowSVG
+            className={classNames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
+          />
+        </div>
       </div>
     </div>
   );

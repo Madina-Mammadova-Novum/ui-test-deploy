@@ -38,7 +38,7 @@ const AccountPositions = () => {
 
   const { userPositions, sortOptions, sortValue } = userStore;
 
-  const dropdownStyles = { dropdownWidth: 150, className: 'flex items-center gap-x-5' };
+  const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
   return (
     <section className="flex flex-col gap-y-5">
