@@ -35,7 +35,6 @@ export async function resetPassword({ data }) {
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
   const response = await postData(`auth/sing-up?type=owner`, body);
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
   return response;
 }
 

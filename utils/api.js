@@ -5,10 +5,17 @@ import { getStrapiURL } from '@/utils/index';
 
 export const errorHandler = (res, status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
+  let errorsMessages = null;
+  let errorMessage = null;
+  if (typeof statusMessage === 'object') {
+    errorsMessages = statusMessage.errors;
+    errorMessage = statusMessage.title;
+  }
 
   return res.status(status).send({
-    message: statusMessage,
-    errors,
+    message: errorMessage !== null ? errorMessage : statusMessage,
+    errors: errorsMessages !== null ? errorsMessages : errors,
+    status,
   });
 };
 
@@ -76,6 +83,7 @@ export const apiHandler = async (options, req, res) => {
       return errorHandler(res, response.status, result);
     }
 
+    console.log({ response });
     /* Set Authorization token */
     if (result?.token) {
       const cookie = serialize('auth_token', `${result.token}`, {
