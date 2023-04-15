@@ -20,7 +20,7 @@ const PhoneInput = ({ name, label }) => {
             <p className="block text-gray text-[12px] font-semibold uppercase text-left mb-0.5">{label}</p>
             <Phone
               {...field}
-              ref={ref}
+              inputProps={ref}
               id={name}
               enableSearch
               enableAreaCodes
