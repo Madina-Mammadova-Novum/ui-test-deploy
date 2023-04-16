@@ -34,9 +34,9 @@ const AccountPositions = () => {
 
   const handleChange = (option) => handleChangeState('sortValue', option);
 
-  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
-
   const { userPositions, sortOptions, sortValue } = userStore;
+
+  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 

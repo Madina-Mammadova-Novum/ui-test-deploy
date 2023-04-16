@@ -4,11 +4,11 @@ import { Tooltip } from '@/elements';
 
 const TableHeaderCell = ({ text, type, helperData, icon }) => {
   return (
-    <th scope="col" name={type} className="py-1.5 whitespace-nowrap">
+    <th scope="col" name={type} className="py-1.5 relative whitespace-nowrap">
       <p className="flex items-center px-4 gap-x-1.5">
         <span>{text}</span>
         {helperData && (
-          <Tooltip variant="manual" data={helperData}>
+          <Tooltip className="-left-[20vh] lg:-left-[14vh]" variant="manual" data={helperData}>
             {icon}
           </Tooltip>
         )}

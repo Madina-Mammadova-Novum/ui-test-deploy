@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import CloseIcon from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
-const ManualTooltip = ({ title, description, children, inView, onEnter, onClose }) => {
+const ManualTooltip = ({ title, className, description, children, inView, onEnter, onClose }) => {
   return (
-    <div className="group relative transition-all">
+    <div className="group transition-all">
       <span onMouseEnter={onEnter} className="text-gray cursor-help font-bold text-xxs">
         {children}
       </span>
       {inView && (
-        <div className="bg-white transition-all max-w-xs overflow-visible flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-lg absolute -left-[25vh] top-7 transform -translate-x-0">
+        <div
+          className={`absolute top-8 ${className} bg-white transition-all max-w-xs overflow-visible flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-base`}
+        >
           <div className="flex justify-between items-center min-w-[280px]">
             {title && <span className="capitalize font-semibold text-xsm">{title}</span>}
             <Button
@@ -33,6 +35,8 @@ ManualTooltip.propTypes = {
   inView: PropTypes.bool.isRequired,
   onEnter: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  containerClass: PropTypes.string,
 };
 
 export default ManualTooltip;

@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { NextImage } from '@/elements';
+import { NextImage, Tooltip } from '@/elements';
 import { TYPE } from '@/lib/constants';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { type, value, marked, name, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
+  const { type, value, marked, helperData, name, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
 
   const printModal = useMemo(() => {
     switch (type) {
@@ -28,22 +28,34 @@ const TableCell = ({ cellProps }) => {
     }
   }, [name, toggle?.name, type]);
 
+  const printValue = useMemo(() => {
+    return helperData ? (
+      <Tooltip variant="hover" className="-top-12 -left-28 lg:-left-16" data={{ description: helperData }}>
+        <span className={`${disabled && 'text-gray'}`}>{value}</span>
+      </Tooltip>
+    ) : (
+      <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
+    );
+  }, [disabled, helperData, value]);
+
   return (
     <td
       name={type}
       className={`${
         disabled ? 'bg-gray-light' : 'bg-white'
-      } py-1.5 px-4 whitespace-nowrap w-min border-l-0 border-r border-b overflow-hidden border-t-0 border-purple-light`}
+      } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
-      <div className="flex w-full justify-between items-center text-xsm font-normal">
+      <div className="flex justify-between items-center text-xsm">
         {value && (
           <div className="flex gap-x-5">
             {countryFlag && (
               <NextImage width={20} height={15} customStyles="h-4" src={countryFlag} alt={`${countryFlag} flag`} />
             )}
-            <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
+            {printValue}
             {marked && (
-              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 text-black rounded-md">{marked}</span>
+              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mr-2 text-black rounded-md">
+                {marked}
+              </span>
             )}
           </div>
         )}
@@ -70,6 +82,7 @@ TableCell.propTypes = {
     countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
     type: PropTypes.string,
     value: PropTypes.string,
+    helperData: PropTypes.string,
     name: PropTypes.string,
     editIcon: PropTypes.node,
     badge: PropTypes.string,

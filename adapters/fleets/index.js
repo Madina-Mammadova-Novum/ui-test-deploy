@@ -44,6 +44,7 @@ export const fleetsRowDataAdapter = ({ data }) => {
     },
     port: {
       value: port ?? NO_DATA_MESSAGE.PORT,
+      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: {
         isEdit: !inActive,
         icon: <EditIcon />,
@@ -73,6 +74,7 @@ export const fleetsRowDataAdapter = ({ data }) => {
         isEdit: !inActive,
         icon: <EditIcon />,
       },
+      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       disabled: inActive,
     },
   };
@@ -115,6 +117,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       name: tankerName.value,
       type: TYPE.PORT,
       value: port.value,
+      helperData: port.helperData,
       editable: port.editable?.isEdit,
       editIcon: port.editable?.icon,
       disabled: port.disabled,
@@ -125,6 +128,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       name: tankerName.value,
       marked: date.marked,
       value: date.value,
+      helperData: date.helperData,
       editable: date.editable?.isEdit,
       editIcon: date.editable?.icon,
       disabled: date.disabled,

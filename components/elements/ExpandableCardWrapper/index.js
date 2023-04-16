@@ -27,7 +27,7 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, exp
         style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
       >
         <Divider />
-        <div className="py-5">{children}</div>
+        <div className="p-5 overflow-x-auto">{children}</div>
         {footerComponent}
       </div>
     </div>
