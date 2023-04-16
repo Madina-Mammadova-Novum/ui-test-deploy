@@ -1,13 +1,18 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
 
+import { SCREENS } from '@/lib/constants';
+import { useMediaQuery } from '@/utils/hooks';
+
 const Sidebar = ({ data, containerStyles }) => {
+  const lgScreen = useMediaQuery(SCREENS.LG);
+
   const [sidebarState, setSidebarState] = useState({
     opened: false,
     resized: false,
@@ -23,6 +28,11 @@ const Sidebar = ({ data, containerStyles }) => {
   };
 
   const handleResize = useCallback(() => handleChange('resized', !resized), [resized]);
+
+  useEffect(() => {
+    if (lgScreen && !resized) handleChange('resized', true);
+    if (!lgScreen && resized) handleChange('resized', false);
+  }, [handleResize, lgScreen, resized]);
 
   return (
     <aside
