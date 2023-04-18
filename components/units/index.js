@@ -11,11 +11,13 @@ import ComplexPagination from '@/units/ComplexPagination';
 import COTTabContent from '@/units/COTTabContent';
 import Countdown from '@/units/Countdown';
 import DateDetailsForm from '@/units/DateDetailsForm';
+import DeactivateTankerForm from '@/units/DeactivateTankerForm';
 import EditDateForm from '@/units/EditDateForm';
 import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
@@ -29,6 +31,7 @@ import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
+import SocialNetworks from '@/units/SocialNetworks';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
@@ -66,6 +69,7 @@ export {
   VerifficationUserAccount,
   AccordionHeader,
   Accordion,
+  FooterNavBlock,
   TabsAsLinks,
   Countdown,
   OfferDeclineForm,
@@ -80,4 +84,6 @@ export {
   PortDetailsForm,
   AccordionCTA,
   IconWrapper,
+  DeactivateTankerForm,
+  SocialNetworks,
 };

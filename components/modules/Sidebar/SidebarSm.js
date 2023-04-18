@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo-sm.svg';
-import { Accordion, Button, NextLink } from '@/elements';
+import { Button, NextLink } from '@/elements';
 
 const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
-  const printMenu = (item) => (
-    <Accordion variant="collapsed" opened={opened} active={active} onChange={onChange} key={item?.id} data={item} />
-  );
+  console.log({ data, opened, onChange, active });
+  // const printMenu = (item) => (
+  //   <Accordion variant="collapsed" opened={opened} active={active} onChange={onChange} key={item?.id} data={item} />
+  // );
+  // todo: "Accordion" need to rewrite this solution not worked. Current solution is to complicated also we have another Accordion component - that also not correct
 
   return (
     <>
@@ -34,7 +36,7 @@ const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
             },
           }}
         />
-        {data?.map(printMenu)}
+        {/* {data?.map(printMenu)} */}
       </div>
     </>
   );

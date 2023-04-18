@@ -1,16 +1,12 @@
-import FacebookSVG from '@/assets/images/facebook.svg';
-import LinkedinSVG from '@/assets/images/linkedin.svg';
-import TwitterSVG from '@/assets/images/twitter.svg';
-import { HoverableIcon, NextLink } from '@/elements';
+import React from 'react';
+
+import { NextLink } from '@/elements';
+import { SocialNetworks } from '@/units';
 
 const AccountFooter = () => {
   return (
     <footer className="shadow-xmd flex items-center px-5 justify-between py-2.5">
-      <div className="flex gap-x-2.5">
-        <HoverableIcon className="border border-gray-darker rounded-md" icon={<LinkedinSVG />} />
-        <HoverableIcon className="border border-gray-darker rounded-md" icon={<TwitterSVG />} />
-        <HoverableIcon className="border border-gray-darker rounded-md" icon={<FacebookSVG />} />
-      </div>
+      <SocialNetworks />
 
       <div className="flex gap-x-5 text-black">
         <NextLink href="#" className="underline">

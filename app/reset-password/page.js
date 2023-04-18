@@ -21,7 +21,10 @@ const ResetPasswordPage = () => {
       containerClass="w-3/4"
     >
       <ResetPasswordForm />
-      <NextLink href={ROUTES.LOGIN} className="inline-flex w-full justify-center text-blue text-xsm pt-2.5">
+      <NextLink
+        href={ROUTES.LOGIN}
+        className="inline-flex justify-center items-center w-full pt-2.5 text-blue text-xsm"
+      >
         Return to Log in
       </NextLink>
     </AuthWrapper>

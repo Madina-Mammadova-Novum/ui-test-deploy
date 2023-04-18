@@ -1,52 +1,72 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import { Loading } from '@/elements';
+import { Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
 import { SearchForm } from '@/units';
+import { options } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const TankerSearch = () => {
-  const [sort, setSort] = useState({
-    freeParam: 'Ballast leg',
-    direction: 'Ascending',
+  const [tankerStore, setTankerStore] = useState({
+    params: options(['Ballast leg']),
+    directions: options(['Ascendingg', 'Descending']),
+    currentDirection: '',
+    currentParam: '',
+    request: false,
+    loading: false,
+    searchResult: [],
   });
-  const [requestOptions, setRequestOptions] = useState({ request: false, loading: false });
-  const [searchResult, setSearchResult] = useState([]);
+
+  /* Change handler by key-value for userStore */
+  const handleChangeState = (key, value) => {
+    setTankerStore((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
 
   const handleSearch = async (formData) => {
-    setRequestOptions((prevState) => ({ ...prevState, loading: true }));
+    handleChangeState('loading', true);
     const { error, data } = await searchVessels({ data: formData });
-    setRequestOptions((prevState) => ({ ...prevState, loading: false }));
+    handleChangeState('loading', false);
     if (data) {
-      setSearchResult(data.results);
-      setRequestOptions((prevState) => ({ ...prevState, request: true }));
+      handleChangeState('searchResult', data?.results);
+      handleChangeState('request', true);
       successToast(data.message);
     }
     if (error) {
       const { message, errors, description } = error;
-      setRequestOptions((prevState) => ({ ...prevState, request: false }));
+      handleChangeState('request', false);
       console.error(errors);
       errorToast(message, description);
     }
   };
 
+  const { request, loading, params, directions, searchResult } = tankerStore;
+
   return (
-    <>
+    <section>
+      <Title level={1} className="py-5">
+        Search
+      </Title>
       <SearchForm onSubmit={handleSearch} />
-      {!requestOptions.loading ? (
+      {!loading ? (
         <TankerSearchResults
-          request={requestOptions.request}
-          setSort={setSort}
-          sort={sort}
-          searchResult={searchResult}
+          data={searchResult}
+          request={request}
+          params={params}
+          directions={directions}
+          onChange={handleChangeState}
         />
       ) : (
-        <Loading />
+        <p className="inline-flex pt-5 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
+          Searching <Loader className="h-4 w-4" />
+        </p>
       )}
-    </>
+    </section>
   );
 };
 

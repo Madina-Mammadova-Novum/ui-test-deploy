@@ -2,9 +2,12 @@ import React from 'react';
 
 import Logo from '@/assets/images/logo.svg';
 import { LinkAsButton, NavButton, NextLink } from '@/elements';
-import { ROUTES } from '@/lib';
+import { getNavigation } from '@/services/navigation';
+import { getSingleType } from '@/services/singleType';
 
-const PageHeader = () => {
+const PageHeader = async () => {
+  const { navigation: navigationSlug, buttons } = await getSingleType('header', 'en');
+  const navigation = await getNavigation(navigationSlug, 'en');
   return (
     <header className="absolute w-full z-10">
       <div className="container mx-auto  px-[54px] max-w-[1258px] ">
@@ -13,45 +16,38 @@ const PageHeader = () => {
             <Logo className="fill-white" />
           </NextLink>
           <nav className="flex items-center gap-x-10">
-            <ul className="flex gap-x-5 items-center">
-              <li>
-                <NavButton href="/" isActive>
-                  Home
-                </NavButton>
-              </li>
-              <li>
-                <NavButton href="/"> About Us</NavButton>
-              </li>
-              <li>
-                <NavButton href="/"> Contact us</NavButton>
-              </li>
-            </ul>
-            <ul className="flex gap-x-2.5">
-              <li>
-                <LinkAsButton
-                  href={ROUTES.LOGIN}
-                  buttonProps={{
-                    variant: 'tertiary',
-                    size: 'large',
-                  }}
-                  customStyles="max-w-[115px] mx-auto"
-                >
-                  Log in
-                </LinkAsButton>
-              </li>
-              <li>
-                <LinkAsButton
-                  href={ROUTES.SIGNUP}
-                  buttonProps={{
-                    variant: 'primary',
-                    size: 'large',
-                  }}
-                  customStyles="max-w-[115px] mx-auto"
-                >
-                  Registration
-                </LinkAsButton>
-              </li>
-            </ul>
+            {navigation.length > 0 && (
+              <ul className="flex gap-x-5 items-center">
+                {navigation.map(({ path, title }) => {
+                  return (
+                    <li key={path}>
+                      <NavButton path={path}>{title}</NavButton>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {buttons.length > 0 && (
+              <ul className="flex gap-x-2.5">
+                {buttons.map(({ path, label, linkOptions }) => {
+                  return (
+                    <li key={path}>
+                      <LinkAsButton
+                        href={path}
+                        target={linkOptions ? linkOptions.target : null}
+                        buttonProps={{
+                          variant: linkOptions ? linkOptions.style : 'tertiary',
+                          size: 'large',
+                        }}
+                        customStyles="max-w-[115px] mx-auto"
+                      >
+                        {label}
+                      </LinkAsButton>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </nav>
         </div>
       </div>

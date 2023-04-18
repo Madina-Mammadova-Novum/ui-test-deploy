@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types'
+
+import PropTypes from 'prop-types';
+
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
@@ -49,7 +51,7 @@ const PreFixtureExpandedContent = ({ underNegotiation }) => {
 };
 
 PreFixtureExpandedContent.propTypes = {
-  underNegotiation: PropTypes.bool.isRequired
-}
+  underNegotiation: PropTypes.bool.isRequired,
+};
 
 export default PreFixtureExpandedContent;

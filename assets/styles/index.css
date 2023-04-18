@@ -17,6 +17,21 @@
     @apply overflow-x-clip;
   }
 
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin: 24px 0px;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #828c9c7a;
+    border-radius: 10px;
+  }
+
   h1 {
     @apply font-bold text-[26px] 3sm:text-[30px];
   }
@@ -255,7 +270,7 @@
 }
 
 .react-tel-input .flag-dropdown .selected-flag {
-  @apply p-0;
+  @apply p-0 rounded-l-md;
 }
 
 .react-tel-input .selected-flag {
@@ -294,20 +309,32 @@ input[type='password'] {
 }
 
 .my_position-table tr {
-  @apply h-9;
+  @apply h-9 flex justify-between w-full;
+}
+
+.my_position-table tr > th:first-child {
+  @apply w-auto pr-5;
 }
 
 .my_position-table tr th {
-  @apply pl-5 whitespace-nowrap;
+  @apply pl-5 whitespace-nowrap w-full flex justify-start items-center;
 }
 
 .my_position-table tr td {
-  @apply border-l-0 border-r border-b border-t-0 border-b-gray-darker;
+  @apply pl-5 w-full  flex justify-start items-center border-l-0 border-r border-b border-t-0 border-b-gray-darker;
 }
 
 .my_position-table tr td div {
-  @apply flex box-border pl-5;
+  @apply box-border;
 }
+
+.my_position-table tr > td:first-child {
+  @apply w-auto pr-5;
+}
+
+/* .my_position-table td[name='TANKER_STATUS'] {
+  @apply w-[500px];
+} */
 
 .Toastify__toast {
   @apply !shadow-none p-0 !bg-transparent !mb-0;

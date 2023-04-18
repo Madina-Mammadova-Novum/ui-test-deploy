@@ -4,12 +4,12 @@ import AccordionXl from '@/elements/Accordion/AccordionXl';
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
 // import Badge from '@/elements/Badge';
-import AsyncDropdown from '@/elements/AsyncDropdown';
 import Button from '@/elements/Button';
 import DatePicker from '@/elements/DatePicker';
 import DateTimeRow from '@/elements/DateTimeRow';
 import Divider from '@/elements/Divider';
 import Dropdown from '@/elements/Dropdown';
+import FormDropdown from '@/elements/Dropdown/FormDropdown';
 // import Dropzone from '@/elements/Dropzone';
 // import ExpandableRow from '@/elements/ExpandableRow';
 // import File from '@/elements/File';
@@ -85,8 +85,8 @@ export {
   // Toggle,
   DatePicker,
   // RangeDatePicker,
-  AsyncDropdown,
   Dropdown,
+  FormDropdown,
   LinkAsButton,
   NextImage,
   Modal,

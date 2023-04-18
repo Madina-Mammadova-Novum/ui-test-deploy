@@ -18,7 +18,7 @@ export default async function Home({ params }) {
   const data = await getEntityData(params);
   const pageData = delve(data, 'data');
   const blocks = delve(pageData, 'blocks');
-  const { content } = pageData;
+  const content = delve(pageData, 'content');
 
   return (
     <main>
@@ -31,7 +31,7 @@ export default async function Home({ params }) {
             height={352}
             width={1440}
           />
-          <div className="heading-wrapper text-white">{content && parse(content)}</div>
+          {content && <div className="heading-wrapper text-white">{parse(content)}</div>}
         </div>
       </section>
       <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div>

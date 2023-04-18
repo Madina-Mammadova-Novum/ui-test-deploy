@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { TrashIcon } from '@/assets/icons';
 import PlusSVG from '@/assets/images/plusCircle.svg';
-import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
+import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
 import { convertDataToOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
@@ -132,12 +132,13 @@ const CargoesSlotsDetailsForm = () => {
               disabled={isSubmitting}
               type="number"
             />
-            <AsyncDropdown
+            <FormDropdown
               name={`${fieldName}.port`}
               label="Load port"
               errorMsg={error?.port?.message}
               options={cargoesPortsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
+              async
             />
             <DatePicker
               name={`${fieldName}.date`}

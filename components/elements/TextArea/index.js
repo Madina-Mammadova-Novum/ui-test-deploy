@@ -1,5 +1,6 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const TextArea = ({
@@ -11,15 +12,16 @@ const TextArea = ({
   disabled,
   placeholder,
   customStyles,
+  inputStyles,
   onChange,
   ...rest
 }) => {
   const handleChange = useCallback(({ value }) => onChange(value), [onChange]);
 
   return (
-    <div className={`${disabled && 'opacity-50 pointer-events-none'} ${customStyles}`}>
+    <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
       {label && (
-        <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase">
+        <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase mb-0.5">
           {label}
         </label>
       )}
@@ -32,7 +34,10 @@ const TextArea = ({
         onChange={({ target }) => handleChange(target)}
         {...register(name)}
         {...rest}
-        className="border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue"
+        className={classnames(
+          'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue',
+          inputStyles
+        )}
       />
     </div>
   );
@@ -57,6 +62,7 @@ TextArea.propTypes = {
   type: PropTypes.string,
   placeholder: PropTypes.string,
   customStyles: PropTypes.string,
+  inputStyles: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
 };

@@ -1,3 +1,6 @@
+import EditIcon from '@/assets/images/edit.svg';
+import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
+import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
@@ -33,27 +36,42 @@ export const fleetsRowDataAdapter = ({ data }) => {
     id,
     imo: {
       value: imo ?? NO_DATA_MESSAGE.IMO,
-      editable: false,
+      editable: {
+        isEdit: false,
+        icon: null,
+      },
       disabled: inActive,
     },
     port: {
       value: port ?? NO_DATA_MESSAGE.PORT,
-      editable: port !== null,
+      editable: {
+        isEdit: !inActive,
+        icon: <EditIcon />,
+      },
       disabled: inActive,
     },
     tankerName: {
       value: title ?? NO_DATA_MESSAGE.DEFAULT,
-      editable: false,
+      editable: {
+        isEdit: false,
+        icon: null,
+      },
       disabled: inActive,
     },
     tankerStatus: {
       value: status ?? false,
-      editable: false,
+      editable: {
+        isEdit: !inActive,
+        icon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
+      },
       disabled: inActive,
     },
     date: {
       value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-      editable: date !== null,
+      editable: {
+        isEdit: !inActive,
+        icon: <EditIcon />,
+      },
       disabled: inActive,
     },
   };
@@ -79,7 +97,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       id,
       value: tankerName.value,
       type: TYPE.TANKER_NAME,
-      editable: tankerName.editable,
+      editable: tankerName.editable?.isEdit,
+      editIcon: tankerName.editable?.icon,
       disabled: tankerName.disabled,
       fontStyle: {
         semibold: true,
@@ -90,7 +109,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       id,
       value: imo.value,
       type: TYPE.IMO,
-      editable: imo.editable,
+      editable: imo.editable?.isEdit,
+      editIcon: imo.editable?.icon,
       disabled: imo.disabled,
       fontStyle: {
         semibold: false,
@@ -102,7 +122,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       name: tankerName.value,
       type: TYPE.PORT,
       value: port.value,
-      editable: port.editable,
+      editable: port.editable?.isEdit,
+      editIcon: port.editable?.icon,
       disabled: port.disabled,
       fontStyle: {
         semibold: false,
@@ -114,7 +135,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       type: TYPE.DATE,
       name: tankerName.value,
       value: date.value,
-      editable: date.editable,
+      editable: date.editable?.isEdit,
+      editIcon: date.editable?.icon,
       disabled: date.disabled,
       fontStyle: {
         semibold: false,
@@ -125,9 +147,11 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       id,
       toggle: {
         value: tankerStatus.value,
+        name: tankerName.value,
       },
       type: TYPE.TANKER_STATUS,
-      editable: tankerStatus.editable,
+      editable: tankerStatus.editable?.isEdit,
+      editIcon: tankerStatus.editable?.icon,
       disabled: tankerStatus.disabled,
       fontStyle: {
         semibold: false,

@@ -2,34 +2,66 @@
 
 import { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
-
-import { Loader } from '@/elements';
+import { Dropdown, Loader, Title } from '@/elements';
+import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { getUserPositions } from '@/services';
-import { ExpandableCard } from '@/units';
+import { ComplexPagination, ExpandableCard } from '@/units';
 
-const AccountPositions = ({ containerClass }) => {
-  const [userPositions, setUserPositions] = useState(null);
+const AccountPositions = () => {
+  const [userStore, setUserStore] = useState({
+    userPositions: null,
+    sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
+    sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
+  });
 
+  /* Change handler by key-value for userStore */
+  const handleChangeState = (key, value) => {
+    setUserStore((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  /* fetching user positions data */
   const fetchData = async () => {
     const data = await getUserPositions();
-    setUserPositions(data);
+    handleChangeState('userPositions', data);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const printExpandable = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
+  const handleChange = (option) => handleChangeState('sortValue', option);
+
+  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
+
+  const { userPositions, sortOptions, sortValue } = userStore;
+
+  const dropdownStyles = { dropdownWidth: 150, className: 'flex items-center gap-x-5' };
 
   return (
-    <section className={containerClass}>{userPositions ? userPositions?.map(printExpandable) : <Loader />}</section>
+    <section className="flex flex-col gap-y-5">
+      {userPositions ? (
+        <>
+          <div className="flex justify-between items-center pt-5 w-full">
+            <Title level={1}>My positions</Title>
+            <Dropdown
+              label="Sort by open day:"
+              options={sortOptions}
+              defaultValue={sortValue}
+              customStyles={dropdownStyles}
+              onChange={handleChange}
+            />
+          </div>
+          {userPositions?.map(printExpandableCard)}
+          <ComplexPagination />
+        </>
+      ) : (
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      )}
+    </section>
   );
-};
-
-AccountPositions.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})),
-  containerClass: PropTypes.string,
 };
 
 export default AccountPositions;

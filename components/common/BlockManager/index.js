@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import {
   BlockHeroImage,
+  ContactUsBlock,
   CTABlock,
   CTASingleImageBlock,
   FAQBlock,
@@ -17,6 +18,7 @@ import {
 import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
+  'blocks.contact-us': ContactUsBlock,
   'blocks.cta': CTABlock,
   'blocks.cta-single-image': CTASingleImageBlock,
   'blocks.hero-image': BlockHeroImage,

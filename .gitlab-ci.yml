@@ -7,13 +7,14 @@ cache:
 build-staging:
   stage: build
   only:
-    - main
+    - develop
   tags:
     - staging
   script:
     - yarn install
     - cp .env.staging .env
-    - yarn build
+    - yarn turbo-build
+    - rm -rf /var/www/web/.next
     - rsync -a . /var/www/web
     - cd /var/www/web
     - pm2 restart ecosystem.config.js

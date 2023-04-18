@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
+import { Label, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
@@ -10,18 +11,17 @@ import { negotiatingHeaderData } from '@/utils/mock';
 
 const Negotiating = () => {
   const [toggle, setToggle] = useState(false);
-  const [pagination, setPagination] = useState({
-    offersPerPage: 5,
-    currentPage: 1,
-  });
-
   return (
-    <div>
-      <div className="flex items-center justify-end">
+    <section>
+      <div className="flex justify-between items-center py-5">
+        <div className="flex flex-col">
+          <Label className="text-xs-sm">Offer stage #1</Label>
+          <Title level={1}>Negotiating</Title>
+        </div>
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5 mt-5">
+      <div className="flex flex-col gap-y-2.5">
         {negotiatingHeaderData.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={rowHeader} />}
@@ -33,8 +33,8 @@ const Negotiating = () => {
         ))}
       </div>
 
-      <ComplexPagination pagination={pagination} setPagination={setPagination} />
-    </div>
+      <ComplexPagination />
+    </section>
   );
 };
 

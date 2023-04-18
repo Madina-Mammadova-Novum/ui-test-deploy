@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
-import { Accordion, Button, NextLink } from '@/elements';
+import { Button, NextLink } from '@/elements';
 
 const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
-  const printMenu = (item) => (
-    <Accordion variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
-  );
+  console.log({ data, opened, onChange });
+  // const printMenu = (item) => (
+  //   <Accordion variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
+  // );
+  // todo: "Accordion" need to rewrite this solution not worked. Current solution is to complicated also we have another Accordion component - that also not correct
 
   return (
     <>
@@ -34,7 +36,7 @@ const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
           onClick={onResize}
           customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
         />
-        {data?.map(printMenu)}
+        {/* {data?.map(printMenu)} */}
       </div>
     </>
   );

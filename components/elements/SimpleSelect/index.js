@@ -1,13 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 
-const SimpleSelect = ({ label, selectableItems, currentItem, onChange, className }) => {
+const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
   const [isOpened, setIsOpened] = useState(false);
+
+  const handleChange = (item) => {
+    onChange(item);
+  };
+
   return (
     <>
       {isOpened && (
@@ -17,7 +22,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange, className
         {label && <span className="text-[12px] font-semibold text-gray uppercase">{label}</span>}
         <div
           aria-hidden
-          className={`relative flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[68px] ${className}`}
+          className="relative bg-white capitalize flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[120px]"
           onClick={() => setIsOpened(true)}
         >
           <span className="box-border flex-1 text-center">{currentItem}</span>
@@ -29,8 +34,9 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange, className
                   className={`px-2.5 py-1.5 rounded-md hover:bg-purple-light whitespace-nowrap ${
                     currentItem === item && 'text-blue'
                   }`}
+                  key={item}
                   aria-hidden
-                  onClick={() => onChange(item)}
+                  onClick={() => handleChange(item)}
                 >
                   {item}
                 </div>

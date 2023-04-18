@@ -7,16 +7,11 @@ import { Button } from '@/elements';
 
 const ToggleRows = ({ onToggleClick, value }) => {
   return (
-    <div
-      aria-hidden
-      type="button"
-      className="flex gap-x-2.5 text-blue text-xsm pr-5 items-center"
-      onClick={onToggleClick}
-    >
+    <div aria-hidden type="button" className="flex text-blue text-xsm pr-5 items-center" onClick={onToggleClick}>
       <DoubleArrowSVG className={`transition duration-500 ${value && 'rotate-180'}`} />
       <Button
         buttonProps={{ text: `${value ? 'Collapse' : 'Expand'} all groups`, variant: 'primary', size: 'small' }}
-        customStyles="!bg-[transparent] px-0 py-0"
+        customStyles="!bg-[transparent] !px-0 !py-0"
       />
     </div>
   );
