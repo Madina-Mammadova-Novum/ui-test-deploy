@@ -57,7 +57,7 @@ function getRobots(string) {
 }
 
 export const metaData = (props) => {
-  const { data } = props || {}
+  const { data } = props || {};
   if (!data) return null; // todo: if data === null need to set default values
   const { title: pageTile, slug, seo } = data;
   if (seo === null) return null; // todo: if seo === null need to set default values

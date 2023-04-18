@@ -5,6 +5,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
+import { makeId } from '@/utils/helpers';
 
 const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
   const [isOpened, setIsOpened] = useState(false);
@@ -34,7 +35,7 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
                   className={`px-2.5 py-1.5 rounded-md hover:bg-purple-light whitespace-nowrap ${
                     currentItem === item && 'text-blue'
                   }`}
-                  key={item}
+                  key={makeId()}
                   aria-hidden
                   onClick={() => handleChange(item)}
                 >
