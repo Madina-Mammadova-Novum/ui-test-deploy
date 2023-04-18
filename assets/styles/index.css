@@ -117,6 +117,21 @@
     @apply w-full rounded-[10px];
   }
 
+  .content-wrapper ol {
+    @apply list-decimal pl-5;
+  }
+  .content-wrapper hr {
+    @apply border-gray-darker;
+  }
+
+  .content-wrapper table {
+    @apply border border-solid border-gray-darker;
+  }
+
+  .content-wrapper table td {
+    @apply border border-solid border-gray-darker p-1;
+  }
+
   .content-wrapper ul li::marker {
     color: #072d46;
   }
