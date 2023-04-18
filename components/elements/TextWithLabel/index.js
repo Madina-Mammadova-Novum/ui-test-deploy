@@ -11,8 +11,8 @@ const TextWithLabel = ({ image, text, label, customStyles }) => {
         customStyles
       )}
     >
-      <Label className="text-xs-sm whitespace-nowrap w-[100px] md:w-auto">{label}</Label>
-      <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap">
+      <Label className="text-xs-sm whitespace-nowrap min-w-[100px] md:w-auto">{label}</Label>
+      <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 md:ml-0">
         {image && <NextImage {...image} customStyles="inline" />}
         <span className={image && 'ml-1.5'}>{text}</span>
       </p>

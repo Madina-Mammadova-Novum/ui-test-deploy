@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import PropTypes from 'prop-types'
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
@@ -17,7 +17,7 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = () => {
+const PreFixtureExpandedContent = ({ underNegotiation }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const tabContent = () => {
@@ -25,7 +25,7 @@ const PreFixtureExpandedContent = () => {
       case 'documents':
         return <DocumentsContent />;
       default:
-        return <DetailsContent />;
+        return <DetailsContent underNegotiation={underNegotiation} />;
     }
   };
 
@@ -47,5 +47,9 @@ const PreFixtureExpandedContent = () => {
     </div>
   );
 };
+
+PreFixtureExpandedContent.propTypes = {
+  underNegotiation: PropTypes.bool.isRequired
+}
 
 export default PreFixtureExpandedContent;

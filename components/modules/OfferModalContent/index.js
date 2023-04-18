@@ -27,7 +27,7 @@ const tabs = [
 
 const OfferModalContent = ({ closeModal }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[0]);
+  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[1]);
   const [showScroll, setShowScroll] = useState(false);
 
   const tabContent = () => {
@@ -54,6 +54,7 @@ const OfferModalContent = ({ closeModal }) => {
             onChange={setResponseCountdown}
             currentItem={responseCountdown}
             selectableItems={COUNTDOWN_OPTIONS}
+            className="min-w-[100px]"
           />
         </div>
       </div>
@@ -72,7 +73,7 @@ const OfferModalContent = ({ closeModal }) => {
         {tabContent()}
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"

@@ -1,5 +1,5 @@
 import PartyTermsItem from './PartyTermsItem';
-
+import PropTypes from 'prop-types'
 import usFlag from '@/assets/images/flag.png';
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
 
@@ -10,7 +10,7 @@ const partyTermsMock = [
   },
 ];
 
-const DetailsContent = () => {
+const DetailsContent = ({ underNegotiation }) => {
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3sm:gap-y-0 3sm:flex-row 3sm:gap-x-2.5">
@@ -90,17 +90,23 @@ const DetailsContent = () => {
           </FieldsetContent>
         </FieldsetWrapper>
       </div>
-      <FieldsetWrapper>
-        <Title level={3}>Additional Charter Party Terms</Title>
+      {!underNegotiation && (
+        <FieldsetWrapper>
+          <Title level={3}>Additional Charter Party Terms</Title>
 
-        <FieldsetContent className="mt-3.5 flex gap-2.5">
-          {partyTermsMock.map(({ title, content }) => (
-            <PartyTermsItem title={title} content={content} />
-          ))}
-        </FieldsetContent>
-      </FieldsetWrapper>
+          <FieldsetContent className="mt-3.5 flex gap-2.5">
+            {partyTermsMock.map(({ title, content }) => (
+              <PartyTermsItem title={title} content={content} />
+            ))}
+          </FieldsetContent>
+        </FieldsetWrapper>
+      )}
     </div>
   );
 };
+
+DetailsContent.propTypes = {
+  underNegotiation: PropTypes.bool.isRequired
+}
 
 export default DetailsContent;

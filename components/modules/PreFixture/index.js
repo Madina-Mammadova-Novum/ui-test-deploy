@@ -29,7 +29,7 @@ const PreFixture = () => {
             footer={<PreFixtureExpandedFooter underNegotiation={index} />}
             expand={toggle}
           >
-            <PreFixtureExpandedContent />
+            <PreFixtureExpandedContent underNegotiation={index} />
           </ExpandableRow>
         ))}
       </div>
