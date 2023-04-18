@@ -28,7 +28,7 @@ const tabs = [
 const OfferModalContent = ({ closeModal }) => {
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
-    responseCountdown: COUNTDOWN_OPTIONS[0],
+    responseCountdown: COUNTDOWN_OPTIONS[1],
     showScroll: false,
   });
 
@@ -64,7 +64,12 @@ const OfferModalContent = ({ closeModal }) => {
           <p className="font-bold max-w-[240px]">
             Set a response countdown timer for the vessel owner to reply to this offer
           </p>
-          <Dropdown defaultValue={responseCountdown} options={COUNTDOWN_OPTIONS} onChange={handleChangeOption} />
+          <Dropdown
+            defaultValue={responseCountdown}
+            options={COUNTDOWN_OPTIONS}
+            onChange={handleChangeOption}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+          />
         </div>
       </div>
 
@@ -74,7 +79,7 @@ const OfferModalContent = ({ closeModal }) => {
         <div className="p-2.5">{tabContent}</div>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"
