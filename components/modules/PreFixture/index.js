@@ -24,15 +24,18 @@ const PreFixture = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">
-        {preFixtureHeaderData.map((headerData, index) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={headerData} />}
-            footer={<PreFixtureExpandedFooter underNegotiation={index} />}
-            expand={toggle}
-          >
-            <PreFixtureExpandedContent underNegotiation={index} />
-          </ExpandableRow>
-        ))}
+        {preFixtureHeaderData.map((headerData, index) => {
+          const underNegotiation = !!index
+          return (
+            <ExpandableRow
+              header={<ExpandableRowHeader headerData={headerData} />}
+              footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
+              expand={toggle}
+            >
+              <PreFixtureExpandedContent underNegotiation={underNegotiation} />
+            </ExpandableRow>
+          )}
+        )}
       </div>
 
       <ComplexPagination />
