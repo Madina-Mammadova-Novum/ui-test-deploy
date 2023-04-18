@@ -18,7 +18,7 @@ const ExpandableRowHeader = ({ toggle, headerData }) => {
             className={`w-full col-start-1 ${index <= 3 ? '3sm:col-start-1' : '3sm:col-start-2'}`}
             style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
           >
-            <TextWithLabel label={label} text={text} image={image} customStyles={!index && 'mr-auto'} />
+            <TextWithLabel label={label} text={text} coverImage={image} customStyles={!index && 'mr-auto'} />
           </div>
         ))}
       </div>

@@ -3,13 +3,18 @@ import PropTypes from 'prop-types';
 
 import { Label, NextImage } from '@/elements';
 
-const TextWithLabel = ({ image, text, label, customStyles }) => {
+const TextWithLabel = ({ coverImage, text, label, customStyles }) => {
   return (
-    <div className={classnames('font-semibold text-left min-w-[90px] flex flex-col', customStyles)}>
-      <Label className="text-xs-sm whitespace-nowrap w-[100px] md:w-auto">{label}</Label>
-      <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap">
-        {image && <NextImage {...image} customStyles="inline" />}
-        <span className={image && 'ml-1.5'}>{text}</span>
+    <div
+      className={classnames(
+        'font-semibold text-left min-w-[90px] flex items-center md:items-start md:flex-col',
+        customStyles
+      )}
+    >
+      <Label className="text-xs-sm whitespace-nowrap min-w-[100px] md:w-auto">{label}</Label>
+      <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 md:ml-0">
+        {coverImage && <NextImage {...coverImage} customStyles="inline" />}
+        <span className={coverImage && 'ml-1.5'}>{text}</span>
       </p>
     </div>
   );
@@ -17,14 +22,14 @@ const TextWithLabel = ({ image, text, label, customStyles }) => {
 
 TextWithLabel.defaultProps = {
   customStyles: '',
-  image: null,
+  coverImage: null,
 };
 
 TextWithLabel.propTypes = {
   text: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   customStyles: PropTypes.string,
-  image: PropTypes.node,
+  coverImage: PropTypes.node,
 };
 
 export default TextWithLabel;
