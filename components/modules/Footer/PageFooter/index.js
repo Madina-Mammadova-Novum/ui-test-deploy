@@ -4,7 +4,7 @@ import { linkAdapter } from '@/adapters/global';
 import { ExternalLinkAltIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
-import { NextLink, Title } from '@/elements';
+import { Copyright, NextLink, Title } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { FooterNavBlock, SocialNetworks } from '@/units';
@@ -15,7 +15,7 @@ const PageFooter = async () => {
   const { address, phones, emails, link } = contactInfo;
   const mapLink = linkAdapter(link);
   const navigation = await getNavigation(navigationSlug, 'en');
-  const currentYear = new Date().getFullYear();
+  const legalNavigation = await getNavigation('legal-navigation', 'en');
 
   return (
     <footer className="py-[30px] bg-white">
@@ -28,6 +28,9 @@ const PageFooter = async () => {
             navigation.map(({ title, items }) => {
               return <FooterNavBlock items={items} title={title} />;
             })}
+          {legalNavigation.length > 0 &&
+          <FooterNavBlock items={legalNavigation} title="Legal" />
+          }
           <div className="w-[166px]">
             <Title level={5} className="title-main text-gray mb-4">
               Address
@@ -79,7 +82,7 @@ const PageFooter = async () => {
           </div>
         </div>
         <div className="pt-5 text-xsm flex justify-between border-grey-darker border-t">
-          <p className="text-gray">Copyright © {currentYear} Ship.link. All rights reserved</p>
+          <Copyright/>
           <div className="flex items-center gap-x-2">
             <p className="text-gray text-xsm">Development by</p>
             <NextLink href="https://otakoyi.software/" target="_blank">
