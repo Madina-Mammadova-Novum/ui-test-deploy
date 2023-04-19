@@ -2,9 +2,7 @@
 
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
-
-import { dropdownOptionTypes } from '@/lib/types';
+import { TankerSearchResultPropTypes } from '@/lib/types';
 
 import { Dropdown, NotFound, TextRow, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
@@ -12,7 +10,7 @@ import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
 import { ExpandableRowHeader, ToggleRows } from '@/units';
 
-const TankerSearchResults = ({ request, params, directions, data, onChange }) => {
+const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
   const [expandExactResults, setExpandExactResults] = useState(false);
   const [expandPartialResults, setExpandPartialResults] = useState(false);
 
@@ -83,21 +81,6 @@ const TankerSearchResults = ({ request, params, directions, data, onChange }) =>
   );
 };
 
-TankerSearchResults.propTypes = {
-  params: [],
-  direction: [],
-  onChange: () => {},
-};
-
-TankerSearchResults.propTypes = {
-  data: PropTypes.shape({
-    exactResults: PropTypes.arrayOf(PropTypes.shape({})),
-    partialResults: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
-  request: PropTypes.bool.isRequired,
-  params: PropTypes.arrayOf(dropdownOptionTypes),
-  directions: PropTypes.arrayOf(dropdownOptionTypes),
-  onChange: PropTypes.func,
-};
+TankerSearchResults.propTypes = TankerSearchResultPropTypes;
 
 export default TankerSearchResults;

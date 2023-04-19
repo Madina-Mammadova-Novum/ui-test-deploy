@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { PreFixtureExpandedFooterPropTypes } from '@/lib/types';
 
 import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
 import { Button, Modal } from '@/elements';
@@ -11,6 +11,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
     opened: false,
     type: null,
   });
+
   const handleOpenModal = (type) => setModalOptions({ opened: true, type });
   const handleCloseModal = () => setModalOptions({ opened: false, type: null });
 
@@ -68,8 +69,6 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
   );
 };
 
-PreFixtureExpandedFooter.propTypes = {
-  underNegotiation: PropTypes.bool.isRequired,
-};
+PreFixtureExpandedFooter.propTypes = PreFixtureExpandedFooterPropTypes;
 
 export default PreFixtureExpandedFooter;

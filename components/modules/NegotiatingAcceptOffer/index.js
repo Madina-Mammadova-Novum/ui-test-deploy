@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
@@ -71,14 +71,6 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
   );
 };
 
-NegotiatingAcceptOffer.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-};
-
-NegotiatingAcceptOffer.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+NegotiatingAcceptOffer.propTypes = NegotiatingAcceptOfferPropTypes;
 
 export default NegotiatingAcceptOffer;

@@ -1,12 +1,14 @@
+'use client';
+
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { ExpandableRowHeaderPropTypes } from '@/lib/types';
 
 import DragSVG from '@/assets/images/drag.svg';
 import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
-import { noSSR } from '@/utils/helpers';
 
-const ExpandableRowHeader = ({ toggle, headerData }) => {
+const ExpandableRowHeader = ({ toggle = false, headerData = [] }) => {
   return (
     <div className="w-full h-[60px] flex items-center">
       <DragSVG className="fill-gray mr-3.5" />
@@ -22,14 +24,6 @@ const ExpandableRowHeader = ({ toggle, headerData }) => {
   );
 };
 
-ExpandableRowHeader.defaultProps = {
-  toggle: false,
-  headerData: [],
-};
+ExpandableRowHeader.propTypes = ExpandableRowHeaderPropTypes;
 
-ExpandableRowHeader.propTypes = {
-  toggle: PropTypes.bool,
-  headerData: PropTypes.arrayOf(PropTypes.shape({})),
-};
-
-export default noSSR(ExpandableRowHeader);
+export default ExpandableRowHeader;

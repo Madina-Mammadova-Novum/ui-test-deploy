@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ProfileMenuPropTypes } from '@/lib/types';
 
 import AccountInfoSVG from '@/assets/images/accountInfo.svg';
 import ArrowSVG from '@/assets/images/arrow.svg';
@@ -53,8 +53,6 @@ const ProfileMenu = ({ image }) => {
   );
 };
 
-ProfileMenu.propTypes = {
-  image: PropTypes.string.isRequired,
-};
+ProfileMenu.propTypes = ProfileMenuPropTypes;
 
 export default ProfileMenu;

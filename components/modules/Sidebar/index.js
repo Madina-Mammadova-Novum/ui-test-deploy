@@ -2,12 +2,12 @@
 
 import { useCallback, useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
 
-const Sidebar = ({ data, containerStyles }) => {
+import { SidebarPropTypes } from '@/lib/types';
+
+const Sidebar = ({ data, containerStyles = '' }) => {
   const [sidebarState, setSidebarState] = useState({
     opened: false,
     resized: false,
@@ -38,13 +38,6 @@ const Sidebar = ({ data, containerStyles }) => {
   );
 };
 
-Sidebar.defaultProps = {
-  containerStyles: '',
-};
-
-Sidebar.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  containerStyles: PropTypes.string,
-};
+Sidebar.propTypes = SidebarPropTypes;
 
 export default Sidebar;

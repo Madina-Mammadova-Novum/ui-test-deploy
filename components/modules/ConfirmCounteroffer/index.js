@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ConfirmCounterofferPropTypes } from '@/lib/types';
 
 import { Button, SimpleSelect } from '@/elements';
 import { CommentsContent } from '@/modules';
@@ -52,14 +52,6 @@ const ConfirmCounteroffer = ({ goBack, closeModal }) => {
   );
 };
 
-ConfirmCounteroffer.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-};
-
-ConfirmCounteroffer.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+ConfirmCounteroffer.propTypes = ConfirmCounterofferPropTypes;
 
 export default ConfirmCounteroffer;

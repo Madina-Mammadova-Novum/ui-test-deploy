@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { DeleteAccountFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Input, Title } from '@/elements';
@@ -56,8 +56,4 @@ const DeleteAccountForm = ({ title }) => {
   );
 };
 
-DeleteAccountForm.propTypes = {
-  title: PropTypes.string,
-};
-
-export default DeleteAccountForm;
+DeleteAccountForm.propTypes = DeleteAccountFormPropTypes;

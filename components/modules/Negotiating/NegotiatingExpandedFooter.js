@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
+import { NegotiatingExpandedFooterPropTypes } from '@/lib/types';
 
 import SearchSVG from '@/assets/images/search.svg';
 import { Button, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 import { ExpandableRowFooter } from '@/units';
 
-const NegotiatingExpandedFooter = ({ isCharterer }) => {
+const NegotiatingExpandedFooter = ({ isCharterer = false }) => {
   return isCharterer ? (
     <ExpandableRowFooter>
       <NextLink href={ROUTES.ACCOUNT_SEARCH}>
@@ -23,12 +23,6 @@ const NegotiatingExpandedFooter = ({ isCharterer }) => {
   ) : null;
 };
 
-NegotiatingExpandedFooter.defaultProps = {
-  isCharterer: false,
-};
-
-NegotiatingExpandedFooter.propTypes = {
-  isCharterer: PropTypes.bool,
-};
+NegotiatingExpandedFooter.propTypes = NegotiatingExpandedFooterPropTypes;
 
 export default NegotiatingExpandedFooter;

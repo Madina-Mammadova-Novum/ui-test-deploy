@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
+import { VoyageDetailsContentPropTypes } from '@/lib/types';
 
 import InfoSVG from '@/assets/images/info.svg';
 import { IconComponent, TextRow, Title } from '@/elements';
 
-const VoyageDetailsContent = ({ data }) => {
+const VoyageDetailsContent = ({ data = { dates: [], ports: [] } }) => {
   const { dates, ports } = data;
 
   return (
@@ -48,18 +48,6 @@ const VoyageDetailsContent = ({ data }) => {
   );
 };
 
-VoyageDetailsContent.defaultProps = {
-  data: {
-    dates: [],
-    ports: [],
-  },
-};
-
-VoyageDetailsContent.propTypes = {
-  data: PropTypes.shape({
-    dates: PropTypes.shape([]),
-    ports: PropTypes.shape([]),
-  }),
-};
+VoyageDetailsContent.propTypes = VoyageDetailsContentPropTypes;
 
 export default VoyageDetailsContent;

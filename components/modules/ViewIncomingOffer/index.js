@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ViewIncomingOfferPropTypes } from '@/lib/types';
 
 import { ConfirmCounteroffer, NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { OfferDeclineForm } from '@/units';
@@ -26,12 +26,6 @@ const ViewIncomingOffer = ({ closeModal }) => {
   }
 };
 
-ViewIncomingOffer.defaultProps = {
-  closeModal: () => {},
-};
-
-ViewIncomingOffer.propTypes = {
-  closeModal: PropTypes.func,
-};
+ViewIncomingOffer.propTypes = ViewIncomingOfferPropTypes;
 
 export default ViewIncomingOffer;
