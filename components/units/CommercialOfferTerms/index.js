@@ -105,7 +105,8 @@ const CommercialOfferTerms = () => {
           {...register('nor')}
           label="nor"
           name="nor"
-          placeholder="Daily payment"
+          placeholder="6+6 hours"
+          value="6+6 hours"
           disabled
           customStyles="w-1/2 mt-3"
         />

@@ -7,7 +7,7 @@ import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
 import { SearchForm } from '@/units';
 import { options } from '@/utils/helpers';
-import { errorToast, successToast } from '@/utils/hooks';
+import { errorToast } from '@/utils/hooks';
 
 const TankerSearch = () => {
   const [tankerStore, setTankerStore] = useState({
@@ -35,7 +35,6 @@ const TankerSearch = () => {
     if (data) {
       handleChangeState('searchResult', data?.results);
       handleChangeState('request', true);
-      successToast(data.message);
     }
     if (error) {
       const { message, errors, description } = error;
