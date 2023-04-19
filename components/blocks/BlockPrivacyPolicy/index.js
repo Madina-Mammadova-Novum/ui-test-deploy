@@ -1,6 +1,4 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import { BlockPrivacyPolicyPropTypes } from '@/lib/types';
 
 import { ContentElement } from '@/elements';
 
@@ -21,9 +19,6 @@ const BlockPrivacyPolicy = ({ title, content }) => {
   );
 };
 
-BlockPrivacyPolicy.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-};
+BlockPrivacyPolicy.propTypes = BlockPrivacyPolicyPropTypes;
 
 export default BlockPrivacyPolicy;

@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
-
-import PropTypes from 'prop-types';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // import { TestimonialCard } from '@/collections';
+import { BlockTestimonialsPropTypes } from '@/lib/types';
+
 import { Title } from '@/elements';
 
 const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
@@ -57,16 +56,6 @@ const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
   );
 };
 
-BlockTestimonials.defaultProps = {
-  title: '',
-  shortDescription: '',
-  testimonials: '',
-};
-
-BlockTestimonials.propTypes = {
-  title: PropTypes.string,
-  shortDescription: PropTypes.string,
-  testimonials: PropTypes.arrayOf({}),
-};
+BlockTestimonials.propTypes = BlockTestimonialsPropTypes;
 
 export default BlockTestimonials;

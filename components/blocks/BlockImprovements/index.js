@@ -2,11 +2,10 @@
 
 import React from 'react';
 
-import PropTypes from 'prop-types';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { valuesPropTypes } from '@/utils/types';
+import { BlockImprovementsPropTypes } from '@/lib/types';
 
 // import { ImprovementCard } from '@/collections';
 import { Title } from '@/elements';
@@ -70,13 +69,6 @@ const BlockImprovements = ({ title, values }) => {
   );
 };
 
-BlockImprovements.defaultProps = {
-  title: '',
-};
-
-BlockImprovements.propTypes = {
-  title: PropTypes.string,
-  values: PropTypes.arrayOf(valuesPropTypes).isRequired,
-};
+BlockImprovements.propTypes = BlockImprovementsPropTypes;
 
 export default BlockImprovements;

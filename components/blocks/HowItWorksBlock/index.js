@@ -1,9 +1,6 @@
-import React from 'react';
-
 import delve from 'dlv';
-import PropTypes from 'prop-types';
 
-import { mediaPropTypes, valuesPropTypes } from '@/utils/types';
+import { BlockHowItWorksPropTypes, BlockStepPropTypes } from '@/lib/types';
 
 import { NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -42,15 +39,8 @@ const Step = ({ item, index }) => {
   );
 };
 
-Step.propTypes = {
-  item: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    subTitle: PropTypes.string.isRequired,
-    shortDescription: PropTypes.string.isRequired,
-    coverImage: mediaPropTypes,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-};
+Step.propTypes = BlockStepPropTypes;
+
 const BlockHowItWorks = ({ title, shortDescription, subTitle, values }) => {
   return (
     <section id="how-it-works" className="mb-28 sm:mb-44 2lg:mb-64">
@@ -71,11 +61,6 @@ const BlockHowItWorks = ({ title, shortDescription, subTitle, values }) => {
   );
 };
 
-BlockHowItWorks.propTypes = {
-  title: PropTypes.string.isRequired,
-  shortDescription: PropTypes.string.isRequired,
-  subTitle: PropTypes.string.isRequired,
-  values: valuesPropTypes.isRequired,
-};
+BlockHowItWorks.propTypes = BlockHowItWorksPropTypes;
 
 export default BlockHowItWorks;

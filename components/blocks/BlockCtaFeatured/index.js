@@ -1,12 +1,9 @@
-import React from 'react';
-
 import delve from 'dlv';
 import Image from 'next/image';
-import PropTypes from 'prop-types';
 
 import { BlockShortDescription, BlockTitle, NextLink } from 'components/elements';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { BlockCtaFeaturedPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
@@ -58,11 +55,6 @@ const BlockCtaFeatured = ({ title, shortDescription, button, images }) => {
   );
 };
 
-BlockCtaFeatured.propTypes = {
-  title: PropTypes.string.isRequired,
-  shortDescription: PropTypes.string.isRequired,
-  button: linkPropTypes.isRequired,
-  images: PropTypes.arrayOf(PropTypes.shape(mediaPropTypes)).isRequired,
-};
+BlockCtaFeatured.propTypes = BlockCtaFeaturedPropTypes;
 
 export default BlockCtaFeatured;

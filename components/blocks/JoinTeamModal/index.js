@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { JoinTeamModalPropTypes } from '@/lib/types';
 
 import { CloseDialog } from '@/assets';
 import { Input, PhoneField, TextArea } from '@/elements';
@@ -172,8 +172,6 @@ const JoinTeamModal = ({ closeModal }) => {
   );
 };
 
-JoinTeamModal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-};
+JoinTeamModal.propTypes = JoinTeamModalPropTypes;
 
 export default JoinTeamModal;

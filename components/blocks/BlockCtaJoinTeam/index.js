@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import delve from 'dlv';
 import Image from 'next/image';
-import PropTypes from 'prop-types';
 
-import { buttonPropTypes, mediaPropTypes } from '@/utils/types';
+import { BlockJoinTeamPropTypes } from '@/lib/types';
 
 import JoinTeamModal from '@/blocks/JoinTeamModal';
 import Button from '@/elements/Button';
@@ -54,11 +53,6 @@ const BlockJoinTeam = ({ title, shortDescription, button, coverImage }) => {
   );
 };
 
-BlockJoinTeam.propTypes = {
-  title: PropTypes.string.isRequired,
-  shortDescription: PropTypes.string.isRequired,
-  button: PropTypes.shape(buttonPropTypes).isRequired,
-  coverImage: PropTypes.shape(mediaPropTypes).isRequired,
-};
+BlockJoinTeam.propTypes = BlockJoinTeamPropTypes;
 
 export default BlockJoinTeam;

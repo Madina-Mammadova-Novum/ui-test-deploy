@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import delve from 'dlv';
 import Image from 'next/image';
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 
-import { linkImagePropTypes, mediaPropTypes } from '@/utils/types';
+import { FooterNavigationPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
@@ -62,18 +61,6 @@ const FooterNavigation = ({ footerNavigation }) => {
   );
 };
 
-FooterNavigation.defaultProps = {
-  footerNavigation: {
-    coverImage: '',
-    links: [],
-  },
-};
-
-FooterNavigation.propTypes = {
-  footerNavigation: PropTypes.shape({
-    coverImage: mediaPropTypes,
-    links: PropTypes.arrayOf(linkImagePropTypes),
-  }),
-};
+FooterNavigation.propTypes = FooterNavigationPropTypes;
 
 export default FooterNavigation;

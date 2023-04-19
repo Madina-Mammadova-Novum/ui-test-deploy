@@ -1,10 +1,7 @@
-import React from 'react';
-
 import delve from 'dlv';
 import Image from 'next/image';
-import PropTypes from 'prop-types';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { CtaImagesPropTypes } from '@/lib/types';
 
 import { NextLink } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -49,13 +46,6 @@ const CtaImages = ({ items }) => {
   );
 };
 
-CtaImages.propTypes = {
-  items: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.string.isRequired,
-    coverImage: PropTypes.shape(mediaPropTypes),
-    button: linkPropTypes,
-  }).isRequired,
-};
+CtaImages.propTypes = CtaImagesPropTypes;
 
 export default CtaImages;

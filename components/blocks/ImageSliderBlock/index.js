@@ -1,18 +1,16 @@
 'use client';
 
-import React from 'react';
-
 import delve from 'dlv';
-import PropTypes from 'prop-types';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { mediaPropTypes } from '@/utils/types';
+import { ImageSliderBlockPropTypes } from '@/lib/types';
 
 import { NextImage } from '@/elements';
 import { getStrapiMedia } from '@/utils';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const ImageSliderBlock = ({ gallery }) => {
   return (
@@ -47,11 +45,6 @@ const ImageSliderBlock = ({ gallery }) => {
   );
 };
 
-ImageSliderBlock.propTypes = {
-  gallery: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    coverImage: PropTypes.shape(mediaPropTypes),
-  }),
-};
+ImageSliderBlock.propTypes = ImageSliderBlockPropTypes;
 
 export default ImageSliderBlock;

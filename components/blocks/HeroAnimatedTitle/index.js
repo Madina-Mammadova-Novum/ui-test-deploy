@@ -2,9 +2,8 @@ import React from 'react';
 
 import delve from 'dlv';
 import Image from 'next/image';
-import PropTypes from 'prop-types';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { HeroAnimatedTitlePropTypes } from '@/lib/types';
 
 // import { DermTestedCta } from '@/assets';
 import {
@@ -57,23 +56,6 @@ const HeroAnimatedTitle = ({ title, shortDescription, coverImage, button, changa
   );
 };
 
-HeroAnimatedTitle.defaultProps = {
-  title: '',
-  shortDescription: '',
-  button: {},
-  changableTitles: [],
-  coverImage: {},
-};
-
-HeroAnimatedTitle.propTypes = {
-  title: PropTypes.string,
-  shortDescription: PropTypes.string,
-  button: linkPropTypes,
-  changableTitles: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.string.isRequired,
-  }),
-  coverImage: mediaPropTypes,
-};
+HeroAnimatedTitle.propTypes = HeroAnimatedTitlePropTypes;
 
 export default HeroAnimatedTitle;

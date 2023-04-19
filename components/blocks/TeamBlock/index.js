@@ -1,10 +1,7 @@
-import React from 'react';
-
 import delve from 'dlv';
 import parse from 'html-react-parser';
-import PropTypes from 'prop-types';
 
-import { authorPropTypes } from '@/lib/types';
+import { TeamBlockPropTypes } from '@/lib/types';
 
 import { HoverableIcon, NextImage, NextLink, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -80,11 +77,6 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   );
 };
 
-TeamBlock.propTypes = {
-  title: PropTypes.string,
-  subTitle: PropTypes.string,
-  shortDescription: PropTypes.string,
-  members: PropTypes.arrayOf(authorPropTypes),
-};
+TeamBlock.propTypes = TeamBlockPropTypes;
 
 export default TeamBlock;

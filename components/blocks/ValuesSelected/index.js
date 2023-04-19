@@ -1,8 +1,4 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
-
-import { valuesPropTypes } from '@/utils/types';
+import { ValuesSelectedPropTypes } from '@/lib/types';
 
 import { BenefitCard } from '@/collections';
 import { BlockShortDescription, BlockTitle } from '@/elements';
@@ -51,16 +47,6 @@ const ValuesSelected = ({ title, shortDescription, values }) => {
   );
 };
 
-ValuesSelected.defaultProps = {
-  title: '',
-  shortDescription: '',
-  values: [],
-};
-
-ValuesSelected.propTypes = {
-  title: PropTypes.string,
-  shortDescription: PropTypes.string,
-  values: valuesPropTypes,
-};
+ValuesSelected.propTypes = ValuesSelectedPropTypes;
 
 export default ValuesSelected;
