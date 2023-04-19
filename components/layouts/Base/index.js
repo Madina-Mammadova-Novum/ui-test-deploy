@@ -1,11 +1,10 @@
-import React from 'react';
+import { BaseLayoutPropTypes } from '@/lib/types';
 
-import PropTypes from 'prop-types';
-
-import '@/styles/index.css';
 import { ClientSidePackages } from '@/common';
 
-const BaseLayout = ({ children, className }) => {
+import '@/styles/index.css';
+
+const BaseLayout = ({ children, className = '' }) => {
   return (
     <html lang="en">
       {/*
@@ -21,13 +20,6 @@ const BaseLayout = ({ children, className }) => {
   );
 };
 
-BaseLayout.defaultProps = {
-  className: '',
-};
-
-BaseLayout.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-};
+BaseLayout.propTypes = BaseLayoutPropTypes;
 
 export default BaseLayout;

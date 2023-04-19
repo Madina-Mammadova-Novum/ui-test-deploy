@@ -1,8 +1,4 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
-
-import { navBarPropTypes } from '@/lib/types';
+import { AuthBasePropTypes } from '@/lib/types';
 
 import cover from '@/assets/images/cover.jpg';
 import { NextImage } from '@/elements';
@@ -23,9 +19,6 @@ const AuthLayout = ({ navigation, children }) => {
   );
 };
 
-AuthLayout.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  navigation: PropTypes.shape(navBarPropTypes).isRequired,
-};
+AuthLayout.propTypes = AuthBasePropTypes;
 
 export default AuthLayout;
