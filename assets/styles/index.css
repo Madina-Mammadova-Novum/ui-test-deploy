@@ -110,11 +110,26 @@
   }
 
   .content-wrapper img {
-    @apply rounded-[10px] h-full;
+    @apply rounded-base h-full;
   }
 
   .content-wrapper iframe {
-    @apply w-full rounded-[10px];
+    @apply w-full rounded-base;
+  }
+
+  .content-wrapper ol {
+    @apply list-decimal pl-5;
+  }
+  .content-wrapper hr {
+    @apply border-gray-darker;
+  }
+
+  .content-wrapper table {
+    @apply border border-solid border-gray-darker;
+  }
+
+  .content-wrapper table td {
+    @apply border border-solid border-gray-darker p-1;
   }
 
   .content-wrapper ul li::marker {
@@ -244,11 +259,11 @@
 /* Phone Field Rewrites */
 
 .react-tel-input .form-control.phone-field {
-  @apply h-[42px] w-full text-black rounded-[10px] border pl-[68px] font-kumbh-sans outline-none;
+  @apply h-[42px] w-full text-black rounded-base border pl-[68px] font-kumbh-sans outline-none;
 }
 
 .react-tel-input .flag-dropdown.country-field {
-  @apply text-black rounded-[10px] border border-none h-[28px] top-[7px] left-[1px] bg-white pl-3;
+  @apply text-black rounded-base border border-none h-[28px] top-[7px] left-[1px] bg-white pl-3;
 }
 
 .react-tel-input .country-list .country {
