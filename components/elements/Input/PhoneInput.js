@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
 import { Controller } from 'react-hook-form';
 import Phone from 'react-phone-input-2';
 
-import PropTypes from 'prop-types';
 import 'react-phone-input-2/lib/style.css';
+
+import { PhoneInputPropTypes } from '@/lib/types';
 
 import { InputErrorMessage } from '@/elements';
 
@@ -38,9 +38,6 @@ const PhoneInput = ({ name, label }) => {
   );
 };
 
-PhoneInput.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-};
+PhoneInput.propTypes = PhoneInputPropTypes;
 
 export default PhoneInput;

@@ -2,19 +2,26 @@
 
 import { cloneElement, useEffect, useRef, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ExpandableCardWrapperPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 
-const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, expandAll, className }) => {
+const ExpandableCardWrapper = ({
+  headerComponent,
+  footerComponent,
+  children,
+  className = '',
+  expandAll = { value: false },
+}) => {
   const contentRef = useRef(null);
-
   const [toggle, setToggle] = useState(false);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
 
+  const { value } = expandAll;
+
   useEffect(() => {
-    setToggle(expandAll.value);
-  }, [expandAll]);
+    setToggle(value);
+  }, [value]);
 
   return (
     <div className={`rounded-base shadow-xmd box-border ${className}`}>
@@ -36,20 +43,6 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, exp
   );
 };
 
-ExpandableCardWrapper.defaultProps = {
-  className: '',
-  expandAll: {
-    value: false,
-  },
-};
-
-ExpandableCardWrapper.propTypes = {
-  headerComponent: PropTypes.node.isRequired,
-  footerComponent: PropTypes.node,
-  expandAll: PropTypes.shape({
-    value: PropTypes.string,
-  }),
-  className: PropTypes.string,
-};
+ExpandableCardWrapper.propTypes = ExpandableCardWrapperPropTypes;
 
 export default ExpandableCardWrapper;

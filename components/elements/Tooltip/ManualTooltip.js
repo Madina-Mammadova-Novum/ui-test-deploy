@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { TooltipParamsPropTypes } from '@/lib/types';
 
 import CloseIcon from '@/assets/images/close.svg';
 import { Button } from '@/elements';
@@ -26,13 +26,6 @@ const ManualTooltip = ({ title, description, children, inView, onEnter, onClose 
   );
 };
 
-ManualTooltip.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  tooltipText: PropTypes.string.isRequired,
-  inView: PropTypes.bool.isRequired,
-  onEnter: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
+ManualTooltip.propTypes = TooltipParamsPropTypes.isRequired;
 
 export default ManualTooltip;

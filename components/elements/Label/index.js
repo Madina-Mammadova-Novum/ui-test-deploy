@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { LabelPropTypes } from '@/lib/types';
 
 const Label = ({ children, className, name = '' }) => {
   return (
@@ -8,9 +8,6 @@ const Label = ({ children, className, name = '' }) => {
   );
 };
 
-Label.propTypes = {
-  className: PropTypes.string,
-  name: PropTypes.string,
-};
+Label.propTypes = LabelPropTypes;
 
 export default Label;

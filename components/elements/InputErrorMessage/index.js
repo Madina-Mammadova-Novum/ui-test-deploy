@@ -1,13 +1,7 @@
-import React from 'react';
+import { InputErrorMessagePropTypes } from '@/lib/types';
 
-import PropTypes from 'prop-types';
+const InputErrorMessage = ({ message }) => <p className="text-xs-sm text-red">{message}</p>;
 
-const InputErrorMessage = ({ message }) => {
-  return <p className="text-[12px] text-red">{message}</p>;
-};
-
-InputErrorMessage.propTypes = {
-  message: PropTypes.string,
-};
+InputErrorMessage.propTypes = InputErrorMessagePropTypes;
 
 export default InputErrorMessage;

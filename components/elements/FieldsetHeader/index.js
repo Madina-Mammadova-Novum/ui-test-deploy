@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { FieldsetHeaderPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
 
@@ -13,9 +13,6 @@ const FieldsetHeader = ({ title, children }) => {
   );
 };
 
-FieldsetHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node,
-};
+FieldsetHeader.propTypes = FieldsetHeaderPropTypes;
 
 export default FieldsetHeader;

@@ -1,11 +1,11 @@
 'use client';
 
-import PropTypes from 'prop-types';
+import { TablePropTypes } from '@/lib/types';
 
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
-const Table = ({ headerData, rows }) => {
+const Table = ({ headerData = [], rows = [] }) => {
   return (
     <div className="overflow-auto">
       <div
@@ -21,16 +21,6 @@ const Table = ({ headerData, rows }) => {
   );
 };
 
-Table.defaultProps = {
-  headerData: [],
-  rows: [],
-  handleActionClick: () => {},
-};
-
-Table.propTypes = {
-  headerData: PropTypes.shape([]),
-  rows: PropTypes.shape([]),
-  handleActionClick: PropTypes.func,
-};
+Table.propTypes = TablePropTypes;
 
 export default Table;

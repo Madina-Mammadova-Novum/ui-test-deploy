@@ -2,13 +2,11 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
-
-import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
+import { FormManagerPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 
-const FormManager = ({ children, submitAction, submitButton, className }) => {
+const FormManager = ({ children, submitAction, submitButton, className = '' }) => {
   const {
     handleSubmit,
     formState: { isSubmitting },
@@ -32,20 +30,6 @@ const FormManager = ({ children, submitAction, submitButton, className }) => {
   );
 };
 
-FormManager.defaultProps = {
-  className: '',
-};
-
-FormManager.propTypes = {
-  submitButton: {
-    text: PropTypes.string,
-    icon: PropTypes.node,
-    disabled: PropTypes.bool,
-    variant: buttonVariantsPropTypes,
-    size: buttonSizesPropTypes,
-  }.isRequired,
-  submitAction: PropTypes.func.isRequired,
-  className: PropTypes.string,
-};
+FormManager.propTypes = FormManagerPropTypes;
 
 export default FormManager;

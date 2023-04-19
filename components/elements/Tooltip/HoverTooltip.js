@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { TooltipParamsPropTypes } from '@/lib/types';
 
 const HoverTooltip = ({ title, description, children, inView, onEnter, onClose }) => {
   return (
@@ -16,13 +16,6 @@ const HoverTooltip = ({ title, description, children, inView, onEnter, onClose }
   );
 };
 
-HoverTooltip.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  tooltipText: PropTypes.string.isRequired,
-  inView: PropTypes.bool.isRequired,
-  onEnter: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
+HoverTooltip.propTypes = TooltipParamsPropTypes.isRequired;
 
 export default HoverTooltip;

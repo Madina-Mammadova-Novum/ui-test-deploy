@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react';
 import { Controller } from 'react-hook-form';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { RadioInputPropTypes } from '@/lib/types';
 
 import { Input, InputErrorMessage } from '@/elements';
 
-const RadioInput = ({ customStyles, labelStyles, onChange, checked, children, name }) => {
+const RadioInput = ({ onChange, children, customStyles = '', labelStyles = '', checked = false, name = null }) => {
   return (
     <Controller
       name={name}
@@ -38,22 +38,6 @@ const RadioInput = ({ customStyles, labelStyles, onChange, checked, children, na
   );
 };
 
-RadioInput.defaultProps = {
-  customStyles: '',
-  labelStyles: '',
-  label: '',
-  name: null,
-  checked: false,
-};
-
-RadioInput.propTypes = {
-  customStyles: PropTypes.string,
-  labelStyles: PropTypes.string,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  register: PropTypes.func,
-  checked: PropTypes.bool,
-};
+RadioInput.propTypes = RadioInputPropTypes;
 
 export default RadioInput;

@@ -3,15 +3,23 @@
 import { useCallback, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
-
 import { SimpleDropdown } from './SimpleDropdown';
+
+import { DropdownPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
 import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
-const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, customStyles }) => {
+const FormDropdown = ({
+  options,
+  onChange,
+  name,
+  label = '',
+  disabled = false,
+  asyncCall = false,
+  customStyles = {},
+}) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const { dropdownWidth, className } = customStyles;
@@ -53,21 +61,6 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
   );
 };
 
-FormDropdown.defaultProps = {
-  label: null,
-  disabled: false,
-  asyncCall: false,
-  customStyles: '',
-};
-
-FormDropdown.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string,
-  customStyles: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-  asyncCall: PropTypes.bool,
-};
+FormDropdown.propTypes = DropdownPropTypes;
 
 export default FormDropdown;

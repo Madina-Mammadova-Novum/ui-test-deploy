@@ -1,6 +1,4 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import { BlocksTypes } from '@/lib/types';
 
 import {
   BlockHeroImage,
@@ -33,7 +31,7 @@ const BLOCK_COMPONENTS = {
   'blocks.faq-by-category-block': FAQBlock,
 };
 
-const BlockManager = ({ blocks }) => {
+const BlockManager = ({ blocks = null }) => {
   if (!blocks) return null;
 
   return blocks.map((block) => {
@@ -44,20 +42,8 @@ const BlockManager = ({ blocks }) => {
   });
 };
 
-BlockManager.defaultProps = {
-  blocks: null,
-};
-
 BlockManager.propTypes = {
-  blocks: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      __component: PropTypes.string.isRequired,
-      title: PropTypes.string,
-      subTitle: PropTypes.string,
-      shortDescription: PropTypes.string,
-    })
-  ),
+  blocks: BlocksTypes,
 };
 
 export default BlockManager;
