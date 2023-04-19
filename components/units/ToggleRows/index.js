@@ -1,11 +1,11 @@
 'use client';
 
-import PropTypes from 'prop-types';
+import { ToggleRowsPropTypes } from '@/lib/types';
 
 import DoubleArrowSVG from '@/assets/images/doubleArrow.svg';
 import { Button } from '@/elements';
 
-const ToggleRows = ({ onToggleClick, value }) => {
+const ToggleRows = ({ onToggleClick, value = false }) => {
   return (
     <div aria-hidden type="button" className="flex text-blue text-xsm pr-5 items-center" onClick={onToggleClick}>
       <DoubleArrowSVG className={`transition duration-500 ${value && 'rotate-180'}`} />
@@ -17,14 +17,6 @@ const ToggleRows = ({ onToggleClick, value }) => {
   );
 };
 
-ToggleRows.defaultProps = {
-  onToggleClick: () => {},
-  value: false,
-};
-
-ToggleRows.propTypes = {
-  onToggleClick: PropTypes.func,
-  value: PropTypes.bool,
-};
+ToggleRows.propTypes = ToggleRowsPropTypes;
 
 export default ToggleRows;

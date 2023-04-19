@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { AccountPersonalDetailsPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
 import { PersonalDetailsForm } from '@/modules';
@@ -35,24 +35,6 @@ const AccountPersonalDetails = ({ user = {} }) => {
   );
 };
 
-AccountPersonalDetails.defaultProps = {
-  user: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    primaryPhone: '',
-    secondaryPhone: '',
-  },
-};
-
-AccountPersonalDetails.propTypes = {
-  user: PropTypes.shape({
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    email: PropTypes.string,
-    primaryPhone: PropTypes.string,
-    secondaryPhone: PropTypes.string,
-  }),
-};
+AccountPersonalDetails.propTypes = AccountPersonalDetailsPropTypes;
 
 export default AccountPersonalDetails;

@@ -1,7 +1,8 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-const Tabs = ({ tabs, customStyles, activeTab, onClick }) => {
+import { TabsPropTypes } from '@/lib/types';
+
+const Tabs = ({ tabs, customStyles = '', activeTab, onClick }) => {
   return (
     <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
       {tabs.map(({ value, label }) => (
@@ -21,15 +22,6 @@ const Tabs = ({ tabs, customStyles, activeTab, onClick }) => {
   );
 };
 
-Tabs.defaultProps = {
-  customStyles: '',
-};
-
-Tabs.propTypes = {
-  tabs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  activeTab: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  customStyles: PropTypes.string,
-};
+Tabs.propTypes = TabsPropTypes;
 
 export default Tabs;

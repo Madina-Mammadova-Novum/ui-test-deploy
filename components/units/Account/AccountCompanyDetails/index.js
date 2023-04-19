@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { AccountCompanyDetailsPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
 import Divider from '@/elements/Divider';
@@ -47,28 +47,6 @@ const AccountCompanyDetails = ({ company = {} }) => {
   );
 };
 
-AccountCompanyDetails.propTypes = {
-  company: PropTypes.shape({
-    name: PropTypes.string,
-    years: PropTypes.string,
-    totalTankers: PropTypes.string,
-    registration: PropTypes.shape({
-      addressLine1: PropTypes.string,
-      addressLine2: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      postal: PropTypes.string,
-      country: PropTypes.string,
-    }),
-    correspondence: PropTypes.shape({
-      addressLine1: PropTypes.string,
-      addressLine2: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      postal: PropTypes.string,
-      country: PropTypes.string,
-    }),
-  }),
-};
+AccountCompanyDetails.propTypes = AccountCompanyDetailsPropTypes;
 
 export default AccountCompanyDetails;

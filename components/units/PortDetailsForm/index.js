@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { PortDetailsFormPropTypes } from '@/lib/types';
 
 import { FormDropdown, Label } from '@/elements';
 import { getPorts } from '@/services/port';
 import { convertDataToOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const PortDetailsForm = ({ portName }) => {
+const PortDetailsForm = ({ portName = '' }) => {
   const { setValue, clearErrors } = useHookForm();
 
   const [portOptions, setPortOptions] = useState([]);
@@ -41,8 +41,6 @@ const PortDetailsForm = ({ portName }) => {
   );
 };
 
-PortDetailsForm.propTypes = {
-  portName: PropTypes.string,
-};
+PortDetailsForm.propTypes = PortDetailsFormPropTypes;
 
 export default PortDetailsForm;

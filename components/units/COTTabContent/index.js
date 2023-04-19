@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { COTTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
 
-const COTTabContent = ({ data }) => {
+const COTTabContent = ({ data = {} }) => {
   return (
     <div className="text-xsm">
       <Title level={3}>Commercial Offer Terms</Title>
@@ -36,35 +36,6 @@ const COTTabContent = ({ data }) => {
   );
 };
 
-COTTabContent.defaultProps = {
-  data: {
-    cargo: [],
-    products: [],
-    details: [],
-  },
-};
-
-COTTabContent.propTypes = {
-  data: PropTypes.shape({
-    cargo: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string,
-        label: PropTypes.string,
-      })
-    ),
-    products: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string,
-        label: PropTypes.string,
-      })
-    ),
-    details: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string,
-        label: PropTypes.string,
-      })
-    ),
-  }),
-};
+COTTabContent.propTypes = COTTabContentPropTypes;
 
 export default COTTabContent;

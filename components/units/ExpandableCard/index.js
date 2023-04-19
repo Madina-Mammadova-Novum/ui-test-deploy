@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { ExpandableCardPropTypes } from '@/lib/types';
 
 import { fleetsHeaderDataAdapter, fleetsRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, ExpandableCardWrapper, Table } from '@/elements';
@@ -15,14 +15,6 @@ const ExpandableCard = ({ data, className }) => {
   );
 };
 
-ExpandableCard.propTypes = {
-  className: PropTypes.string,
-  data: PropTypes.shape({
-    title: PropTypes.string,
-    activeTankers: PropTypes.string,
-    inActiveTankers: PropTypes.string,
-    tankers: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-};
+ExpandableCard.propTypes = ExpandableCardPropTypes;
 
 export default ExpandableCard;

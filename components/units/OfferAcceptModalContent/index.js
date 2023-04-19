@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { OfferModalContentPropTypes } from '@/lib/types';
 
 import { Button, Title } from '@/elements';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
@@ -64,14 +64,6 @@ const OfferAcceptModalContent = ({ closeModal }) => {
   );
 };
 
-OfferAcceptModalContent.defaultProps = {
-  setStep: () => {},
-  closeModal: () => {},
-};
-
-OfferAcceptModalContent.propTypes = {
-  setStep: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+OfferAcceptModalContent.propTypes = OfferModalContentPropTypes;
 
 export default OfferAcceptModalContent;

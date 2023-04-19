@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ComplexPaginationPropTypes } from '@/lib/types';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { Dropdown } from '@/elements';
@@ -56,11 +56,6 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
   );
 };
 
-ComplexPagination.propTypes = {
-  page: PropTypes.number,
-  perPage: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.number, value: PropTypes.number })),
-  totalPages: PropTypes.number,
-  dataPerPage: PropTypes.arrayOf(PropTypes.number),
-};
+ComplexPagination.propTypes = ComplexPaginationPropTypes;
 
 export default ComplexPagination;
