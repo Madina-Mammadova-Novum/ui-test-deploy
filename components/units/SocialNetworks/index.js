@@ -33,7 +33,7 @@ const SocialNetworks = () => {
               icon={
                 <NextImage
                   alt={delve(socialLink, 'title')}
-                  src={getStrapiMedia(delve(socialLink, 'image.format.original.url'), '')}
+                  src={getStrapiMedia(delve(socialLink, 'coverImage.format.original.url'), '')}
                   height={20}
                   width={20}
                 />

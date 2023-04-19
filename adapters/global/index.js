@@ -74,10 +74,9 @@ export const linkImageAdapter = (link) => {
   const { coverImage } = link;
   return {
     ...linkAdapter(link),
-    image: imageAdapter(coverImage), // todo: change image to coverImage
+    coverImage: imageAdapter(coverImage),
   };
 };
-
 export const ctaFeaturedAdapter = ({ data }) => {
   if (data === null) return null;
   const { attributes } = data;
