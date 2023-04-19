@@ -28,9 +28,7 @@ const PageFooter = async () => {
             navigation.map(({ title, items }) => {
               return <FooterNavBlock items={items} title={title} />;
             })}
-          {legalNavigation.length > 0 &&
-          <FooterNavBlock items={legalNavigation} title="Legal" />
-          }
+          {legalNavigation.length > 0 && <FooterNavBlock items={legalNavigation} title="Legal" />}
           <div className="w-[166px]">
             <Title level={5} className="title-main text-gray mb-4">
               Address
@@ -82,7 +80,7 @@ const PageFooter = async () => {
           </div>
         </div>
         <div className="pt-5 text-xsm flex justify-between border-grey-darker border-t">
-          <Copyright/>
+          <Copyright />
           <div className="flex items-center gap-x-2">
             <p className="text-gray text-xsm">Development by</p>
             <NextLink href="https://otakoyi.software/" target="_blank">

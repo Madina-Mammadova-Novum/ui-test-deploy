@@ -4,7 +4,7 @@ import AccordionXl from '@/elements/Accordion/AccordionXl';
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
 import Button from '@/elements/Button';
-import Copyright from "@/elements/Copyright";
+import Copyright from '@/elements/Copyright';
 // import Badge from '@/elements/Badge';
 import DatePicker from '@/elements/DatePicker';
 import DateTimeRow from '@/elements/DateTimeRow';
