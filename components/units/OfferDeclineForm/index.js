@@ -6,7 +6,7 @@ import * as yup from 'yup';
 
 import OfferDeclineFields from './OfferDeclineFields';
 
-import { OfferDeclineFormPropTypes } from '@/lib/types';
+import { OfferDeclinePropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { useHookFormParams } from '@/utils/hooks';
@@ -32,6 +32,6 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '' }) => {
   );
 };
 
-OfferDeclineForm.propTypes = OfferDeclineFormPropTypes;
+OfferDeclineForm.propTypes = OfferDeclinePropTypes;
 
 export default OfferDeclineForm;

@@ -57,3 +57,5 @@ const DeleteAccountForm = ({ title }) => {
 };
 
 DeleteAccountForm.propTypes = DeleteAccountFormPropTypes;
+
+export default DeleteAccountForm;
