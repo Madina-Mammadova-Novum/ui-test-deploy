@@ -9,7 +9,7 @@ import { FAQBlockPropTypes } from '@/lib/types';
 import { Accordion, AccordionCTA, TabsAsLinks } from '@/units';
 
 const FAQBlock = ({ title, subTitle, shortDescription, items, categories, category, cta }) => {
-  const [open, setOpen] = useState(1);
+  const [open, setOpen] = useState(null);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -29,7 +29,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <TabsAsLinks tabs={tabs} activeTab={category.id} />
-        <div className="rounded-[10px] pt-1.5 px-5 pb-5 bg-white shadow-xmd divide-y divide-gray-darker mt-1">
+        <div className="relative rounded-base pt-1.5 px-5 pb-5 bg-white divide-y divide-gray-darker mt-1">
           {items &&
             items.map(({ id, answer, question }) => (
               <Accordion
@@ -48,6 +48,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
           <div className="text-black pt-5">
             {cta && <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />}
           </div>
+          <div className="rounded-base  h-[calc(100%_-_135px)] w-full absolute shadow-xmd bottom-0 left-0 -z-10" />
         </div>
       </div>
     </section>
