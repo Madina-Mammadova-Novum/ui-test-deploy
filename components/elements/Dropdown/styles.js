@@ -13,6 +13,7 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
     background: selectedOption && '#E7ECF8',
     borderRadius: '6px',
     border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#E7ECF8' : '#E53636'} `,
+    cursor: 'pointer',
   }),
   container: (base) => ({
     ...base,
@@ -45,6 +46,15 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
     ...base,
     display: 'none',
   }),
+  placeholder: (base) => {
+    return {
+      ...base,
+      color: '#828C9C',
+      fontSize: '14px',
+      fontWeight: 500,
+      // todo: add font-family after adding correct one to the project
+    }
+  }
 });
 
 export const dropdownTheme = (theme) => ({
