@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Select from 'react-select';
 
 import AsyncSelect from 'react-select/async';
@@ -11,7 +13,7 @@ import OptionsList from '@/elements/Dropdown/OptionsList';
 import { dropdownTheme } from '@/elements/Dropdown/styles';
 import { filterDataByLowerCase } from '@/utils/helpers';
 
-export const SimpleDropdown = ({ asyncCall = false, options, ...rest }) => {
+export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
   const printOptions = ({ countryFlag, label: labelValue }) => (
     <OptionRow countryFlag={countryFlag} value={labelValue} />
   );
