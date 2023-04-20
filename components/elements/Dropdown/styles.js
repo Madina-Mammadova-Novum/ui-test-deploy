@@ -53,15 +53,15 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
       fontSize: '14px',
       fontWeight: 500,
       // todo: add font-family after adding correct one to the project
-    }
-  }
+    };
+  },
 });
 
 export const dropdownTheme = (theme) => ({
   ...theme,
   colors: {
     ...theme.colors,
-    primary25: 'transpasrent',
+    primary25: 'transparent',
     primary: 'transparent',
   },
 });

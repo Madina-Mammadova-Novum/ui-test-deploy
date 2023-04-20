@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 import { Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
@@ -50,9 +50,11 @@ const TankerSearch = ({ title }) => {
 
   return (
     <section>
-      {title && <Title level={1} className="py-5">
-        {title}
-      </Title>}
+      {title && (
+        <Title level={1} className="py-5">
+          {title}
+        </Title>
+      )}
       <SearchForm onSubmit={handleSearch} />
       {!loading ? (
         <TankerSearchResults
@@ -72,7 +74,7 @@ const TankerSearch = ({ title }) => {
 };
 
 TankerSearch.propTypes = {
-  title: PropTypes.string
-}
+  title: PropTypes.string,
+};
 
 export default TankerSearch;

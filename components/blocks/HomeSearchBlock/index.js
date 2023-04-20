@@ -4,11 +4,10 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { TankerSearch } from "@/modules";
-import { Tabs } from "@/units";
+import { TankerSearch } from '@/modules';
+import { Tabs } from '@/units';
 
 const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
-
   const tabs = [
     {
       value: 'Search',
@@ -18,7 +17,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
       value: 'Tools',
       label: 'Tools',
     },
-  ]
+  ];
 
   const [activeTab, setActiveTab] = useState('Search');
 
@@ -33,9 +32,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
         // todo: add Tools component when it is done
         return <div className="text-white">Soon...</div>;
       default:
-        return (
-            <TankerSearch/>
-        );
+        return <TankerSearch />;
     }
   };
 
@@ -45,7 +42,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
       {subTitle && <div>{subTitle}</div>}
       {shortDescription && <div>{shortDescription}</div>}
       <div className="container mx-auto px-[54px] max-w-[1258px] -mt-[175px]">
-        <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1"/>
+        <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
         {handleViewType(activeTab)}
       </div>
     </section>
