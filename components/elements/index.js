@@ -3,8 +3,9 @@ import AccordionSm from '@/elements/Accordion/AccordionSm';
 import AccordionXl from '@/elements/Accordion/AccordionXl';
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
-// import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
+import Copyright from '@/elements/Copyright';
+// import Badge from '@/elements/Badge';
 import DatePicker from '@/elements/DatePicker';
 import DateTimeRow from '@/elements/DateTimeRow';
 import Divider from '@/elements/Divider';
@@ -66,6 +67,7 @@ export {
   Input,
   PhoneInput,
   Portal,
+  Copyright,
   InputErrorMessage,
   TextArea,
   Button,
