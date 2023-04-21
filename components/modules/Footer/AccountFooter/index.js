@@ -16,7 +16,7 @@ const AccountFooter = async () => {
   return (
     <footer className="shadow-xmd flex items-center px-5 justify-between py-2 text-[12px]">
       <SocialNetworks />
-      <div className="flex gap-x-5 text-black">{legalNavigation.length > 0 && legalNavigation.map(printLink)}</div>
+      {legalNavigation.length > 0 && <div className="flex gap-x-5 text-black"> {legalNavigation.map(printLink)}</div>}
       <Copyright />
     </footer>
   );
