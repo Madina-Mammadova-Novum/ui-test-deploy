@@ -13,6 +13,7 @@ import {
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
+  termsAndConditionsSchema,
 } from '@/lib/schemas';
 import { chartererRegistration } from '@/services';
 import {
@@ -33,8 +34,9 @@ const ChartererRegistrationForm = () => {
     ...personalDetailsSchema(),
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
-    ...companyAddressesSchema(sameAddress),
     ...cargoesSlotsDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
+    ...termsAndConditionsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
