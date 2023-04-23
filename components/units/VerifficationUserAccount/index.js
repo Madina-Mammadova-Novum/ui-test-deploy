@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { Loader, NextLink } from '@/elements';
-import { postVeriff } from '@/services';
+import { postVeriffData } from '@/services';
 import { checkObjectValues } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
@@ -28,7 +28,7 @@ const VerifficationUserAccount = () => {
     if (message) errorToast(message);
 
     if (data) {
-      const { link, error } = await postVeriff({ data });
+      const { link, error } = await postVeriffData({ data });
       if (error) errorToast(error);
       if (link) setVeriffUrl(link);
     }

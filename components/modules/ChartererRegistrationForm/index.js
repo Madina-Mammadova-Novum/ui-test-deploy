@@ -14,7 +14,7 @@ import {
   passwordValidationSchema,
   personalDetailsSchema,
 } from '@/lib/schemas';
-import { chartererRegistration } from '@/services';
+import { chartererSignUp } from '@/services';
 import {
   CargoesSlotsDetails,
   CompanyAddresses,
@@ -47,7 +47,7 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { message, error } = await chartererRegistration({ data: formData });
+    const { message, error } = await chartererSignUp({ data: formData });
 
     if (message) {
       successToast(message);
