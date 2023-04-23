@@ -143,6 +143,21 @@ export async function getUserPositions() {
   return positionsAdapter({ data });
 }
 
+export async function getUserFixtures() {
+  const { data } = await getData(`account/fixture`);
+  return data;
+}
+
+export async function getUserPreFixtures() {
+  const { data } = await getData(`account/pre-fixture`);
+  return data;
+}
+
+export async function getUserNegotiating() {
+  const { data } = await getData(`account/negotiating`);
+  return data;
+}
+
 export async function getUserDetails() {
   const { data } = await getData(`account/user-info`);
   return userDetailsAdapter({ data });
