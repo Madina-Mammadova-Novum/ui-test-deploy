@@ -33,7 +33,7 @@
   }
 
   h1 {
-    @apply font-bold text-[26px] 3sm:text-[30px];
+    @apply font-bold text-[26px] 3md:text-[30px];
   }
 
   h2 {
@@ -145,7 +145,7 @@
   .swiper.swiperTestimonial .swiper-wrapper,
   .swiper.swiperTeam .swiper-wrapper,
   .swiper.swiperImprovements .swiper-wrapper {
-    @apply !pb-11 mt-10 lg:mt-14 2lg:mt-16;
+    @apply !pb-11 mt-10 lg:mt-14 2xl:mt-16;
   }
   .swiper.swiperIngredients .swiper-wrapper {
     @apply !pb-8 md:!pb-0;

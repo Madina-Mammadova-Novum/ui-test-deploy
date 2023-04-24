@@ -2,21 +2,19 @@ import PropTypes from 'prop-types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo-sm.svg';
-import { Button, NextLink } from '@/elements';
+import { Button, NavTree, NextLink } from '@/elements';
 
 const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
-  console.log({ data, opened, onChange, active });
-  // const printMenu = (item) => (
-  //   <Accordion variant="collapsed" opened={opened} active={active} onChange={onChange} key={item?.id} data={item} />
-  // );
-  // todo: "Accordion" need to rewrite this solution not worked. Current solution is to complicated also we have another Accordion component - that also not correct
+  const printMenu = (item) => (
+    <NavTree variant="collapsed" opened={opened} active={active} onChange={onChange} key={item?.id} data={item} />
+  );
 
   return (
     <>
       <NextLink href="/">
         <Logo className="relative right-1.5 fill-white" />
       </NextLink>
-      <div className="mt-4 flex flex-col items-center justify-center gap-1.5 relative">
+      <ul className="mt-4 flex flex-col items-center justify-center gap-1.5 relative">
         <Button
           onClick={onResize}
           customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
@@ -36,8 +34,8 @@ const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
             },
           }}
         />
-        {/* {data?.map(printMenu)} */}
-      </div>
+        {data?.map(printMenu)}
+      </ul>
     </>
   );
 };

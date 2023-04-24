@@ -6,7 +6,7 @@ import { ContentElement } from '@/elements';
 
 const BlockPrivacyPolicy = ({ title, content }) => {
   return (
-    <section className="mb-28 sm:mb-44 2lg:mb-64">
+    <section className="mb-28 sm:mb-44 2xl:mb-64">
       <div className="flex flex-col items-center">
         <div className="max-w-[846px] w-full">
           {title && <h1 className="text-4xl text-black font-bold mb-8 md:text-6xl">{title}</h1>}

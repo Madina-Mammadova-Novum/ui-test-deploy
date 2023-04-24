@@ -15,10 +15,15 @@ const Sidebar = ({ data, containerStyles }) => {
 
   const [sidebarState, setSidebarState] = useState({
     opened: false,
-    resized: false,
+    resized: lgScreen ?? false,
   });
 
   const { opened, resized } = sidebarState;
+
+  useEffect(() => {
+    if (lgScreen) handleChange('resized', true);
+    else handleChange('resized', false);
+  }, [lgScreen]);
 
   const handleChange = (key, val) => {
     setSidebarState((prevState) => ({
@@ -28,11 +33,6 @@ const Sidebar = ({ data, containerStyles }) => {
   };
 
   const handleResize = useCallback(() => handleChange('resized', !resized), [resized]);
-
-  useEffect(() => {
-    if (lgScreen && !resized) handleChange('resized', true);
-    if (!lgScreen && resized) handleChange('resized', false);
-  }, [handleResize, lgScreen, resized]);
 
   return (
     <aside

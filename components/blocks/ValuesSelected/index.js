@@ -32,7 +32,7 @@ const renderValues = (values) => {
   switch (values[0]?.value?.valueType?.code) {
     case 'benefit':
       return (
-        <div className="flex flex-col flex-nowrap gap-y-3 lg:flex-row lg:gap-x-5 2lg:gap-x-6 mt-10 lg:mt-14 2lg:mt-16">
+        <div className="flex flex-col flex-nowrap gap-y-3 lg:flex-row lg:gap-x-5 2xl:gap-x-6 mt-10 lg:mt-14 2xl:mt-16">
           {values.map(renderValue)}
         </div>
       );
@@ -43,7 +43,7 @@ const renderValues = (values) => {
 
 const ValuesSelected = ({ title, shortDescription, values }) => {
   return (
-    <section className="mb-28 sm:mb-44 2lg:mb-64">
+    <section className="mb-28 sm:mb-44 2xl:mb-64">
       {title && <BlockTitle title={title} />}
       {shortDescription && <BlockShortDescription shortDescription={shortDescription} />}
       {values && renderValues(values)}
