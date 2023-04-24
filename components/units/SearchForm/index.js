@@ -21,7 +21,7 @@ const SearchForm = ({ onSubmit }) => {
     <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
       <FormProvider {...methods}>
         <FormManager
-          submitAction={(formData) => onSubmit(formData, methods)}
+          submitAction={(formData) => onSubmit(formData)}
           submitButton={{
             text: 'Show results',
             variant: 'secondary',

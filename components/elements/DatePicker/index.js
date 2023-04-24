@@ -13,13 +13,14 @@ import { transformDate } from '@/utils/date';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
-const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
+const DatePicker = ({ name, label, onChange, inputClass, error, closeOnSelect, ...rest }) => {
   const [date, setDate] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDate = (pickedDate) => {
     setDate(pickedDate);
-    onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
+    onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
+    if (closeOnSelect) setShowPicker(false);
   };
 
   return (
@@ -58,6 +59,7 @@ DatePicker.defaultProps = {
   label: '',
   inputClass: 'min-w-[296px]',
   error: null,
+  closeOnSelect: true,
   register: () => {},
   setValue: () => {},
   onChange: () => {},
@@ -71,6 +73,7 @@ DatePicker.propTypes = {
   register: PropTypes.func,
   onChange: PropTypes.func,
   error: PropTypes.string,
+  closeOnSelect: PropTypes.bool,
 };
 
 export default DatePicker;

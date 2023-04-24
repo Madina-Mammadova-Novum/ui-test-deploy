@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
-import { getValueWithPath } from '@/utils/helpers';
+import { getCargoTypes } from '@/services/cargoTypes';
+import { getPorts } from '@/services/port';
+import { getProducts } from '@/services/product';
+import { getTerminals } from '@/services/terminal';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = () => {
@@ -18,20 +22,40 @@ const SearchFormFields = () => {
   } = useHookForm();
 
   const [productState, setProductState] = useState([1]);
+  const [ports, setPorts] = useState([]);
+  const [cargoTypes, setCargoTypes] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [terminals, setTreminals] = useState({
+    loadPortTerminals: [],
+    dischargePortTerminals: [],
+  });
 
   const productsLimitExceeded = productState.length >= 3;
 
-  const handleChange = (key, value) => {
+  const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
     if (error) {
       clearErrors(key);
     }
     setValue(key, value);
+
+    if (['loadPort', 'dischargePort'].includes(key)) {
+      const relatedTerminals = await getTerminals(value.value);
+      setTreminals((prevState) => ({
+        ...prevState,
+        [`${key}Terminals`]: convertDataToOptions(relatedTerminals, 'id', 'name'),
+      }));
+    }
+
+    if (key === 'cargoType') {
+      const relatedProducts = await getProducts(value.value);
+      setProducts(convertDataToOptions(relatedProducts, 'id', 'name'));
+    }
   };
 
   const handleAddProduct = () => {
-    const availableProductIds = [1, 2, 3]
-    setProductState((prevState) => [...prevState, availableProductIds.filter(el => !prevState.includes(el))[0]]);
+    const availableProductIds = [1, 2, 3];
+    setProductState((prevState) => [...prevState, availableProductIds.filter((el) => !prevState.includes(el))[0]]);
   };
 
   const handleRemoveProduct = (id) => {
@@ -40,7 +64,20 @@ const SearchFormFields = () => {
     clearErrors(`products[${id}]`);
   };
 
-  const testOption = [{ label: 'testLabel', value: 'testValue' }];
+  const fetchPorts = async () => {
+    const data = await getPorts();
+    setPorts(convertDataToOptions(data, 'id', 'name'));
+  };
+
+  const fetchCargoTypes = async () => {
+    const data = await getCargoTypes();
+    setCargoTypes(convertDataToOptions(data, 'id', 'name'));
+  };
+
+  useEffect(() => {
+    fetchPorts();
+    fetchCargoTypes();
+  }, []);
 
   return (
     <div className="flex">
@@ -62,7 +99,7 @@ const SearchFormFields = () => {
         <div className="flex flex-col 3sm:flex-row gap-x-5">
           <FormDropdown
             name="loadPort"
-            options={testOption}
+            options={ports}
             id="loadPort"
             label="load port"
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
@@ -70,7 +107,8 @@ const SearchFormFields = () => {
           />
           <FormDropdown
             name="loadTerminal"
-            options={testOption}
+            options={terminals.loadPortTerminals}
+            disabled={!terminals.loadPortTerminals.length}
             label="load terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
@@ -79,14 +117,15 @@ const SearchFormFields = () => {
         <div className="flex flex-col 3sm:flex-row gap-x-5">
           <FormDropdown
             name="dischargePort"
-            options={testOption}
+            options={ports}
             label="discharge port"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
           />
           <FormDropdown
             name="dischargeTerminal"
-            options={testOption}
+            options={terminals.dischargePortTerminals}
+            disabled={!terminals.dischargePortTerminals.length}
             label="dischargee terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargeTerminal', option)}
@@ -99,7 +138,7 @@ const SearchFormFields = () => {
           label="cargo type"
           name="cargoType"
           id="cargoType"
-          options={testOption}
+          options={cargoTypes}
           onChange={(option) => handleChange('cargoType', option)}
         />
         {productState.map((productId, index) => (
@@ -108,7 +147,8 @@ const SearchFormFields = () => {
               <FormDropdown
                 onChange={(option) => handleChange(`products[${productId}].product`, option)}
                 name={`products[${productId}].product`}
-                options={testOption}
+                options={products}
+                disabled={!products.length}
                 label={`product #${index + 1}`}
                 customStyles={{ className: 'w-full 3sm:w-1/2' }}
               />
