@@ -150,6 +150,9 @@
   .heading-wrapper p {
     @apply text-xsm text-white max-w-[800px] mx-auto;
   }
+  .heading-wrapper h6 {
+    @apply text-xsm text-white font-medium;
+  }
 
   /* Swiper */
 
