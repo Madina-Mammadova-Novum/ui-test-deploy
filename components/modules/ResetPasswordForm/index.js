@@ -20,7 +20,7 @@ const ResetPasswordForm = () => {
 
   const onSubmit = async (data) => {
     const { message } = await resetPassword({ data });
-    successToast(message, 'Some description');
+    successToast(message);
     methods.reset();
   };
 

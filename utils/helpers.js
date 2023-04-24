@@ -239,3 +239,13 @@ export const removeByIndex = (data, index) => {
 export const filterDataByLowerCase = (inputValue, data) => {
   return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
+
+export const resetObjectFields = (initialObject) => {
+  Object.keys(initialObject).forEach((key) => {
+    if (Array.isArray(initialObject[key])) {
+      initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+    } else {
+      initialObject[key] = null;
+    }
+  });
+};

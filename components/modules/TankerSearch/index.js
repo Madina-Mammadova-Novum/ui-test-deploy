@@ -12,7 +12,7 @@ import { errorToast } from '@/utils/hooks';
 const TankerSearch = () => {
   const [tankerStore, setTankerStore] = useState({
     params: options(['Ballast leg']),
-    directions: options(['Ascendingg', 'Descending']),
+    directions: options(['Ascending', 'Descending']),
     currentDirection: '',
     currentParam: '',
     request: false,
