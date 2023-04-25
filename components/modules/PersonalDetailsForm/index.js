@@ -17,7 +17,6 @@ const state = {
   lastName: 'Doe',
   email: 'john_doe@shiplink.com',
   primaryPhoneNumber: '971457753981',
-  secondaryPhoneNumber: '',
 };
 
 const PersonalDetailsForm = () => {

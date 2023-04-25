@@ -76,11 +76,13 @@ export function updatePasswordAdapter({ data }) {
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email } = data;
+  const { firstName, lastName, email, primaryPhoneNumber, secondaryPhoneNumber } = data;
   return {
     firstName,
     lastName,
     email,
+    primaryPhoneNumber,
+    secondaryPhoneNumber: secondaryPhoneNumber || null,
   };
 }
 
