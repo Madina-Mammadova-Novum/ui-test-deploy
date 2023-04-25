@@ -33,7 +33,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        'kumbh-sans': ['Kumbh Sans', 'sans-serif'],
+        'inter-sans': ['Inter', 'sans-serif'],
       },
       fontSize: {
         xxs: [

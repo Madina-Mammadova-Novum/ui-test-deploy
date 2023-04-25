@@ -39,7 +39,7 @@ const ViewFailedOffer = () => {
   return (
     <div className="w-[610px]">
       <ModalHeader>View Failed Offer</ModalHeader>
-      <div className="bg-red-light rounded-[10px] py-3 px-5 mt-5">
+      <div className="bg-red-light rounded-base py-3 px-5 mt-5">
         <div className="text-xsm font-semibold">
           <span>Failed reason:</span>
           <span className="text-red ml-1.5">Offer Declined by me</span>

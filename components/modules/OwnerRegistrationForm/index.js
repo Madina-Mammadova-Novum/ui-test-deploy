@@ -13,6 +13,7 @@ import {
   passwordValidationSchema,
   personalDetailsSchema,
   tankerSlotsDetailsSchema,
+  termsAndConditionsSchema,
 } from '@/lib/schemas';
 import { ownerSignUp } from '@/services/user';
 import {
@@ -35,6 +36,7 @@ const OwnerRegistrationForm = () => {
     ...companyDetailsSchema(),
     ...tankerSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
+    ...termsAndConditionsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
@@ -47,12 +49,10 @@ const OwnerRegistrationForm = () => {
 
   const onSubmit = async (formData) => {
     const { data, error } = await ownerSignUp({ data: formData });
-
     if (data) {
       successToast('Check your email for validating the account');
       methods.reset();
     }
-
     if (error) {
       errorToast(error.message, error.description);
       console.error(error.errors);

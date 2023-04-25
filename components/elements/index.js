@@ -1,15 +1,13 @@
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
-// import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
+import Copyright from '@/elements/Copyright';
+// import Badge from '@/elements/Badge';
 import DatePicker from '@/elements/DatePicker';
 import DateTimeRow from '@/elements/DateTimeRow';
 import Divider from '@/elements/Divider';
 import Dropdown from '@/elements/Dropdown';
 import FormDropdown from '@/elements/Dropdown/FormDropdown';
-// import Dropzone from '@/elements/Dropzone';
-// import ExpandableRow from '@/elements/ExpandableRow';
-// import File from '@/elements/File';
 import ExpandableCardHeader from '@/elements/ExpandableCardHeader';
 import ExpandableCardWrapper from '@/elements/ExpandableCardWrapper';
 import FieldsetContent from '@/elements/FieldsetContent';
@@ -24,7 +22,6 @@ import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import RadioInput from '@/elements/Input/RadioInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
-// import Modal from '@/elements/Modal';
 import Label from '@/elements/Label';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
@@ -34,20 +31,11 @@ import NavButton from '@/elements/NavButton';
 import NavTree from '@/elements/NavTree';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
-// import Pagination from '@/elements/Pagination';
-// import RadioButton from '@/elements/RadioButton';
-// import RangeDatePicker from '@/elements/RangeDatePicker';
-// import Step from '@/elements/Step';
-// import Table from '@/elements/Table';
 import NotFound from '@/elements/NotFound';
 import Portal from '@/elements/Portal';
 import SimpleSelect from '@/elements/SimpleSelect';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
-// import Tooltip from '@/elements/Tooltip';
-// import Tabs from '@/elements/Tabs';
-// import TextArea from '@/elements/TextArea';
-// import Toggle from '@/elements/Toggle';
 import TextRow from '@/elements/TextRow';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
@@ -64,37 +52,23 @@ export {
   Input,
   PhoneInput,
   Portal,
+  Copyright,
   InputErrorMessage,
   TextArea,
   Button,
   Alert,
-  // Search,
-  // Badge,
   CheckBoxInput,
-  // Dropzone,
-  // ExpandableRow,
-  // RadioButton,
-  // Table,
   TextWithLabel,
-  // Tooltip,
-  // Toggle,
   DatePicker,
-  // RangeDatePicker,
   Dropdown,
   FormDropdown,
   LinkAsButton,
   NextImage,
   Modal,
-  // File,
-  // Pagination,
   PasswordInput,
   Loader,
-  // SignupForm,
   HoverableIcon,
   NextLink,
-  // Step,
-  // OwnerForm,
-  // ChartererForm,
   SimpleSelect,
   Label,
   Divider,

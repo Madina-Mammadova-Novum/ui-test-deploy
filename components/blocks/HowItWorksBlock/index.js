@@ -51,6 +51,7 @@ Step.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
 };
+
 const BlockHowItWorks = ({ title, shortDescription, subTitle, values }) => {
   return (
     <section id="how-it-works" className="mb-28 sm:mb-44 2xl:mb-64">

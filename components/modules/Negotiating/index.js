@@ -1,17 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Label, Title } from '@/elements';
+import { Label, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
+import { getUserNegotiating } from '@/services';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { negotiatingHeaderData } from '@/utils/mock';
 
 const Negotiating = () => {
+  const [negotiatingData, setNegotiatingData] = useState(null);
   const [toggle, setToggle] = useState(false);
-  return (
+
+  const fetchData = async () => {
+    const data = await getUserNegotiating();
+    setNegotiatingData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return negotiatingData ? (
     <section>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
@@ -22,7 +33,7 @@ const Negotiating = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">
-        {negotiatingHeaderData.map((rowHeader) => (
+        {negotiatingData.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={rowHeader} />}
             footer={<NegotiatingExpandedFooter isCharterer />}
@@ -35,6 +46,8 @@ const Negotiating = () => {
 
       <ComplexPagination />
     </section>
+  ) : (
+    <Loader className="h-8 w-8 absolute top-1/2" />
   );
 };
 

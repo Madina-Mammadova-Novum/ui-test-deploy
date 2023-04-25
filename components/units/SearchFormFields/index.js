@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
-import { getFilledArray, getValueWithPath } from '@/utils/helpers';
+import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = () => {
@@ -17,7 +17,7 @@ const SearchFormFields = () => {
     unregister,
   } = useHookForm();
 
-  const [productState, setProductState] = useState([0]);
+  const [productState, setProductState] = useState([1]);
 
   const productsLimitExceeded = productState.length >= 3;
 
@@ -30,7 +30,8 @@ const SearchFormFields = () => {
   };
 
   const handleAddProduct = () => {
-    setProductState((prevState) => getFilledArray(prevState.length + 1));
+    const availableProductIds = [1, 2, 3];
+    setProductState((prevState) => [...prevState, availableProductIds.filter((el) => !prevState.includes(el))[0]]);
   };
 
   const handleRemoveProduct = (id) => {
@@ -101,18 +102,18 @@ const SearchFormFields = () => {
           options={testOption}
           onChange={(option) => handleChange('cargoType', option)}
         />
-        {productState.map((index) => (
-          <div key={`product_${index}`}>
+        {productState.map((productId, index) => (
+          <div key={`product_${productId}`}>
             <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
               <FormDropdown
-                onChange={(option) => handleChange(`products[${index}].product`, option)}
-                name={`products[${index}].product`}
+                onChange={(option) => handleChange(`products[${productId}].product`, option)}
+                name={`products[${productId}].product`}
                 options={testOption}
                 label={`product #${index + 1}`}
                 customStyles={{ className: 'w-full 3md:w-1/2' }}
               />
               <Input
-                {...register(`products[${index}].density`)}
+                {...register(`products[${productId}].density`)}
                 label="density"
                 placeholder="mt/m³"
                 customStyles="w-full 3md:w-2/5"
@@ -120,7 +121,7 @@ const SearchFormFields = () => {
                 disabled={isSubmitting}
               />
               <Input
-                {...register(`products[${index}].quantity`)}
+                {...register(`products[${productId}].quantity`)}
                 label="Quantity"
                 placeholder="tons"
                 customStyles="w-[45%] 3md:w-2/5"
@@ -128,7 +129,7 @@ const SearchFormFields = () => {
                 disabled={isSubmitting}
               />
               <Input
-                {...register(`products[${index}].tolerance`)}
+                {...register(`products[${productId}].tolerance`)}
                 label="Tolerance"
                 type="number"
                 placeholder="%"
@@ -137,11 +138,11 @@ const SearchFormFields = () => {
                 disabled={isSubmitting}
               />
             </div>
-            {!!index && (
+            {productState.length > 1 && (
               <Button
                 buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
                 customStyles="ml-auto !p-0"
-                onClick={() => handleRemoveProduct(index)}
+                onClick={() => handleRemoveProduct(productId)}
               />
             )}
           </div>

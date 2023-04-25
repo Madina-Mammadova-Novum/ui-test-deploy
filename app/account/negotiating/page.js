@@ -11,7 +11,7 @@ export async function generateMetadata() {
   });
 }
 
-const PreFixturePage = () => {
+const NegotiatingPage = () => {
   return (
     <AccountWrapper containerClass="px-5">
       <Negotiating />
@@ -19,4 +19,4 @@ const PreFixturePage = () => {
   );
 };
 
-export default PreFixturePage;
+export default NegotiatingPage;

@@ -27,7 +27,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
               return (
                 <div
                   key={makeId()}
-                  className="flex items-center flex-col mt-[60px] text-black shadow px-[30px] pb-[30px] bg-white rounded-[10px]"
+                  className="flex items-center flex-col mt-[60px] text-black shadow px-[30px] pb-[30px] bg-white rounded-base"
                 >
                   {coverImage && (
                     <NextImage
@@ -58,7 +58,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
                               icon={
                                 <NextImage
                                   alt={delve(link, 'title')}
-                                  src={getStrapiMedia(delve(link, 'image.format.original.url'), '')}
+                                  src={getStrapiMedia(delve(link, 'coverImage.format.original.url'), '')}
                                   height={20}
                                   width={20}
                                 />
