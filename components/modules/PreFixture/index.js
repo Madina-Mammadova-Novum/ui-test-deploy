@@ -34,7 +34,7 @@ const PreFixture = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">
-        {preFixtureHeaderData.map((headerData, underNegotiation) => (
+        {preFixtureData.map((headerData, underNegotiation) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={headerData} />}
             footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
