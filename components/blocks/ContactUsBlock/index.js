@@ -1,6 +1,8 @@
 'use client';
 
-import { ContactUsBlockPropTypes } from '@/lib/types';
+import PropTypes from 'prop-types';
+
+import { linkImagePropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
 import { ContactUsForm } from '@/modules';
@@ -78,6 +80,15 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
   );
 };
 
-ContactUsBlock.propTypes = ContactUsBlockPropTypes;
+ContactUsBlock.propTypes = {
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  shortDescription: PropTypes.string,
+  phones: PropTypes.arrayOf(PropTypes.string),
+  emails: PropTypes.arrayOf(PropTypes.string),
+  address: PropTypes.string,
+  schedule: PropTypes.string,
+  socialLinks: PropTypes.arrayOf(linkImagePropTypes),
+};
 
 export default ContactUsBlock;

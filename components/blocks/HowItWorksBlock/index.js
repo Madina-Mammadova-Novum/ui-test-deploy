@@ -1,6 +1,7 @@
 import delve from 'dlv';
+import PropTypes from 'prop-types';
 
-import { BlockHowItWorksPropTypes, BlockStepPropTypes } from '@/lib/types';
+import { BlockStepPropTypes, valuesPropTypes } from '@/lib/types';
 
 import { NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -61,6 +62,11 @@ const BlockHowItWorks = ({ title, shortDescription, subTitle, values }) => {
   );
 };
 
-BlockHowItWorks.propTypes = BlockHowItWorksPropTypes;
+BlockHowItWorks.propTypes = {
+  title: PropTypes.string.isRequired,
+  shortDescription: PropTypes.string.isRequired,
+  subTitle: PropTypes.string.isRequired,
+  values: valuesPropTypes.isRequired,
+};
 
 export default BlockHowItWorks;

@@ -1,6 +1,7 @@
 import delve from 'dlv';
+import PropTypes from 'prop-types';
 
-import { CTASingleImageBlockPropTypes } from '@/lib/types';
+import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
 import { LinkAsButton, NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -47,6 +48,11 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
   );
 };
 
-CTASingleImageBlock.propTypes = CTASingleImageBlockPropTypes;
+CTASingleImageBlock.propTypes = {
+  title: PropTypes.string,
+  shortDescription: PropTypes.string,
+  button: linkPropTypes,
+  coverImage: mediaPropTypes,
+};
 
 export default CTASingleImageBlock;

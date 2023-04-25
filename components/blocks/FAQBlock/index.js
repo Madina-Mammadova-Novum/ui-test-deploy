@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 import parse from 'html-react-parser';
+import PropTypes from 'prop-types';
 
-import { FAQBlockPropTypes } from '@/lib/types';
+import { categoryPropTypes, ctaPropTypes } from '@/lib/types';
 
 import { Accordion, AccordionCTA, TabsAsLinks } from '@/units';
 
@@ -55,6 +56,20 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
   );
 };
 
-FAQBlock.propTypes = FAQBlockPropTypes;
+FAQBlock.propTypes = {
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  shortDescription: PropTypes.string,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      answer: PropTypes.string.isRequired,
+      question: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  categories: PropTypes.arrayOf(categoryPropTypes),
+  category: categoryPropTypes,
+  cta: ctaPropTypes,
+};
 
 export default FAQBlock;

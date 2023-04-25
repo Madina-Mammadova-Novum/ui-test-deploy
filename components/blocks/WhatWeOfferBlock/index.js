@@ -1,6 +1,7 @@
 import delve from 'dlv';
+import PropTypes from 'prop-types';
 
-import { OfferPropTypes, WhatWeOfferBlockPropTypes } from '@/lib/types';
+import { mediaPropTypes, valuesPropTypes } from '@/lib/types';
 
 import { NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -33,7 +34,14 @@ const Offer = ({ item, index }) => {
   );
 };
 
-Offer.propTypes = OfferPropTypes;
+Offer.propTypes = {
+  item: PropTypes.shape({
+    title: PropTypes.string,
+    coverImage: mediaPropTypes,
+    shortDescription: PropTypes.string,
+  }),
+  index: PropTypes.number.isRequired,
+};
 
 const WhatWeOfferBlock = ({ title, values }) => {
   return (
@@ -54,6 +62,9 @@ const WhatWeOfferBlock = ({ title, values }) => {
   );
 };
 
-WhatWeOfferBlock.propTypes = WhatWeOfferBlockPropTypes;
+WhatWeOfferBlock.propTypes = {
+  title: PropTypes.string,
+  values: valuesPropTypes,
+};
 
 export default WhatWeOfferBlock;

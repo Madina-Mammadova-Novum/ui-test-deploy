@@ -3,16 +3,17 @@
 import { useState } from 'react';
 
 import delve from 'dlv';
+import PropTypes from 'prop-types';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-
-import { ProductFeaturesBlockPropTypes } from '@/lib/types';
+import { ctaListPropTypes, mediaPropTypes } from '@/lib/types';
 
 import Item from '@/blocks/ProductFeaturesBlock/Item';
 import { NextImage, Title } from '@/elements';
 import { Accordion, Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   const [open, setOpen] = useState(0);
@@ -86,6 +87,10 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   );
 };
 
-ProductFeaturesBlock.propTypes = ProductFeaturesBlockPropTypes;
+ProductFeaturesBlock.propTypes = {
+  title: PropTypes.string,
+  coverImage: mediaPropTypes,
+  ctaList: PropTypes.arrayOf(ctaListPropTypes),
+};
 
 export default ProductFeaturesBlock;

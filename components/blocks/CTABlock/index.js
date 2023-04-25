@@ -1,6 +1,5 @@
 import delve from 'dlv';
-
-import { CTABlockPropTypes } from '@/lib/types';
+import PropTypes from 'prop-types';
 
 import { NextLink } from '@/elements';
 import { makeId } from '@/utils/helpers';
@@ -67,6 +66,15 @@ const CTABlock = ({ title, shortDescription, buttons }) => {
   );
 };
 
-CTABlock.propTypes = CTABlockPropTypes;
+CTABlock.propTypes = {
+  title: PropTypes.string,
+  shortDescription: PropTypes.string,
+  buttons: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      path: PropTypes.string,
+    })
+  ),
+};
 
 export default CTABlock;

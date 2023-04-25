@@ -1,7 +1,8 @@
 import delve from 'dlv';
 import Image from 'next/image';
+import PropTypes from 'prop-types';
 
-import { BlockHeroImagePropTypes } from '@/lib/types';
+import { mediaPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -33,6 +34,10 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
   );
 };
 
-BlockHeroImage.propTypes = BlockHeroImagePropTypes;
+BlockHeroImage.propTypes = {
+  title: PropTypes.string,
+  shortDescription: PropTypes.string,
+  coverImage: PropTypes.shape(mediaPropTypes).isRequired,
+};
 
 export default BlockHeroImage;

@@ -13,7 +13,6 @@ import {
   TeamBlock,
   WhatWeOfferBlock,
 } from '@/blocks';
-import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
   'blocks.contact-us': ContactUsBlock,
@@ -34,16 +33,15 @@ const BLOCK_COMPONENTS = {
 const BlockManager = ({ blocks = null }) => {
   if (!blocks) return null;
 
-  return blocks.map((block) => {
+  return blocks.map((block, idx) => {
     const Block = BLOCK_COMPONENTS[block.__component];
     if (!Block) return null;
 
-    return <Block key={makeId()} {...block} />;
+    // eslint-disable-next-line react/no-array-index-key
+    return <Block key={idx} {...block} />;
   });
 };
 
-BlockManager.propTypes = {
-  blocks: BlocksTypes,
-};
+BlockManager.propTypes = BlocksTypes;
 
 export default BlockManager;
