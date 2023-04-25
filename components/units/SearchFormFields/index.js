@@ -30,8 +30,8 @@ const SearchFormFields = () => {
   };
 
   const handleAddProduct = () => {
-    const availableProductIds = [1, 2, 3]
-    setProductState((prevState) => [...prevState, availableProductIds.filter(el => !prevState.includes(el))[0]]);
+    const availableProductIds = [1, 2, 3];
+    setProductState((prevState) => [...prevState, availableProductIds.filter((el) => !prevState.includes(el))[0]]);
   };
 
   const handleRemoveProduct = (id) => {

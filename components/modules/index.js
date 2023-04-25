@@ -1,8 +1,3 @@
-// import AddressDetails from '@/modules/AddressDetails';
-// import CompanyAddresses from '@/modules/CompanyAddresses';
-// import CompanyDetails from '@/modules/CompanyDetails';
-// import FleetRowHeader from '@/modules/FleetRowHeader';
-
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
 import AccountWrapper from '@/modules/AccountWrapper';
@@ -25,14 +20,11 @@ import Navbar from '@/modules/Navbar';
 import Negotiating from '@/modules/Negotiating';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import Notification from '@/modules/Notification';
-// import PersonalDetails from '@/modules/PersonalDetails';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PreFixture from '@/modules/PreFixture';
 import ProfileMenu from '@/modules/ProfileMenu';
-// import RadioWithText from '@/modules/RadioWithText';
-// import Seo from '@/modules/Seo';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import SendCounteroffer from '@/modules/SendCounteroffer';
 import Sidebar from '@/modules/Sidebar';
@@ -44,9 +36,6 @@ import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
-// import SlotsDetails from '@/modules/SlotsDetails';
-// import TermsAndConditions from '@/modules/Terms&Conditions';
-// import Upload from '@/modules/Upload';
 
 export {
   AccountWrapper,
@@ -56,21 +45,11 @@ export {
   ContactUsForm,
   DeleteAccountForm,
   DeactivateAccountForm,
-  // RadioWithText,
-  // FleetRowHeader,
-  // CompanyAddresses,
   Sidebar,
   Navbar,
-  // Upload,
   Signup,
   Notification,
   ProfileMenu,
-  // PersonalDetails,
-  // CompanyDetails,
-  // SlotsDetails,
-  // AddressDetails,
-  // TermsAndConditions,
-  // Seo,
   PageHeader,
   AccountHeader,
   PageFooter,

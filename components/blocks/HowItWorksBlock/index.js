@@ -15,7 +15,7 @@ const Step = ({ item, index }) => {
           {index + 1}
         </div>
       </div>
-      <div className=" w-full col-span-10 bg-secondary-light pt-1 pb-5 px-1 rounded-[10px] sm:col-span-11 sm:flex sm:py-1 sm:pl-1 sm:pr-4 lg:col-span-10 md:max-w-[631px] 2lg:max-w-[848px]">
+      <div className=" w-full col-span-10 bg-secondary-light pt-1 pb-5 px-1 rounded-base sm:col-span-11 sm:flex sm:py-1 sm:pl-1 sm:pr-4 lg:col-span-10 md:max-w-[631px] 2lg:max-w-[848px]">
         {item.coverImage && (
           <div className="h-[192px] rounded-lg overflow-hidden sm:min-w-[256px] sm:min-h-[208px] md:min-w-[288px] 2lg:min-w-[320px] 2lg:min-h-[280px]">
             <NextImage

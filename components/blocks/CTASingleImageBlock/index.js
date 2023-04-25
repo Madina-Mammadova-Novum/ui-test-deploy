@@ -21,7 +21,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
           />
         </div>
       )}
-      <div className="bg-white rounded-[10px] max-w-[500px] mx-auto py-8">
+      <div className="bg-white rounded-base max-w-[500px] mx-auto py-8">
         {title && (
           <Title level="1" className="text-black text-center mb-2.5">
             {title}

@@ -70,11 +70,11 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
               })}
           </div>
           {coverImage && (
-            <div className="w-[566px] h-[366px] shrink-0 rounded-[10px] flex-1">
+            <div className="w-[566px] h-[366px] shrink-0 rounded-base flex-1">
               <NextImage
                 src={getStrapiMedia(delve(coverImage, 'format.original.url'), '?format=webp')}
                 alt={delve(coverImage, 'alternativeText')}
-                className="h-full w-full object-cover object-center rounded-[10px]"
+                className="h-full w-full object-cover object-center rounded-base"
                 quality={75}
                 height={350}
                 width={380}

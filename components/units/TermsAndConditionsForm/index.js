@@ -1,25 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CheckBoxInput, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 
 const TermsAndConditions = () => {
-  const { setValue } = useFormContext();
-  const [agreedRules, setAgreedRules] = useState(false);
+  const { setValue, watch, clearErrors } = useFormContext();
+
+  const termsAndCondition = watch('agreedRules', false);
+
+  useEffect(() => {
+    setValue('agreedRules', termsAndCondition);
+  }, []);
+
   const handleChange = (event) => {
+    clearErrors('agreedRules');
     const { checked } = event.target;
+
     setValue('agreedRules', checked);
-    setAgreedRules(checked);
   };
 
   return (
     <div className="col-span-2 row-auto">
       <CheckBoxInput
         name="agreedRules"
-        checked={agreedRules}
+        checked={termsAndCondition}
         onChange={handleChange}
         labelStyles="text-black inline-flex gap-1 text-xsm"
       >
