@@ -40,4 +40,4 @@ next-env.d.ts
 .turbo
 /public/robots.txt
 /public/sitemap.xml
-/public/sitemap-0.xml
+/public/sitemap*.xml
