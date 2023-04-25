@@ -15,22 +15,25 @@ const CheckBoxInput = ({ customStyles, labelStyles, onChange, checked, children,
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = errors[name];
         return (
-          <div className="flex gap-2.5 items-center">
-            <Input
-              {...field}
-              ref={ref}
-              type="checkbox"
-              disabled={isSubmitting}
-              onChange={onChange}
-              checked={checked}
-              className={classnames('w-5 h-5', customStyles)}
-            />
-            {children && (
-              <label htmlFor={name} className={labelStyles}>
-                {children}
-              </label>
-            )}
-            {error ?? <InputErrorMessage>{error?.message}</InputErrorMessage>}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2.5">
+              <Input
+                {...field}
+                ref={ref}
+                type="checkbox"
+                disabled={isSubmitting}
+                onChange={onChange}
+                checked={checked}
+                error={!!error}
+                className={classnames('w-5 h-5', customStyles)}
+              />
+              {children && (
+                <label htmlFor={name} className={labelStyles}>
+                  {children}
+                </label>
+              )}
+            </div>
+            {error && <InputErrorMessage message={error?.message} />}
           </div>
         );
       }}

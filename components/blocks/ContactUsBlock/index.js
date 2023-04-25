@@ -17,7 +17,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
-        <div className="rounded-[10px] p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker relative">
+        <div className="rounded-base p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker relative">
           <div className="pr-5 flex flex-col">
             <ContactUsForm />
           </div>
@@ -30,7 +30,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="rounded-[10px] w-full h-[400px]"
+              className="rounded-base w-full h-[400px]"
             />
             <div className="flex flex-wrap gap-x-[30px] mt-5">
               <div className="w-[150px]">
@@ -75,7 +75,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
               </div>
             </div>
           </div>
-          <div className="rounded-[10px]  h-[calc(100%_-_188px)] w-full absolute shadow-xmd bottom-0 -z-10" />
+          <div className="rounded-base  h-[calc(100%_-_188px)] w-full absolute shadow-xmd bottom-0 -z-10" />
         </div>
       </div>
     </section>

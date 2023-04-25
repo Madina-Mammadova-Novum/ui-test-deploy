@@ -18,7 +18,7 @@ const SearchForm = ({ onSubmit }) => {
   const methods = useHookFormParams({ schema });
 
   return (
-    <div className="bg-white rounded-md border-2 border-solid border-gray-darker p-5 w-full">
+    <div className="bg-white rounded-base shadow-xmd p-5 w-full">
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData)}
