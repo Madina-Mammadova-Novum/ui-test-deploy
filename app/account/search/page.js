@@ -14,7 +14,7 @@ export function generateMetadata() {
 const VesselsSearch = () => {
   return (
     <AccountWrapper containerClass="grow px-5">
-      <TankerSearch />
+      <TankerSearch title="Search" />
     </AccountWrapper>
   );
 };

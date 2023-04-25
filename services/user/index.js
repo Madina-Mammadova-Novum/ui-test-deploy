@@ -35,71 +35,22 @@ export async function resetPassword({ data }) {
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
   const response = await postData(`auth/sing-up?type=owner`, body);
-  return response;
+  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/sign-up?type=charterer`, JSON.stringify(body));
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
-  return response;
-}
-
-/* Temporary owner-signup-api solution */
-
-export async function ownerRegistration({ data }) {
-  const body = ownerSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-
+  const response = await postData(`auth/sign-up?type=charterer`, body);
   return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
 }
 
-/* Temporary charterer-signup-api solution */
-
-export async function chartererRegistration({ data }) {
-  const body = chartererSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
-}
-
-/* Temporary user-confirm-email solution */
-
-export async function postVeriff({ data }) {
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/auth/confirmemail`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(data),
-  });
-
+export async function postVeriffData({ data }) {
+  const response = await postData(`auth/veriffication`, data);
   const result = await response.json();
 
   if (!response.ok) return { error: 'something went wrong' };
 
   return { link: result?.redirectUrl };
-}
-
-export async function postVeriffData({ data }) {
-  const response = await postData(`auth/veriffication`, data);
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
-  return response;
 }
 
 export async function login({ data }) {
@@ -141,6 +92,21 @@ export async function updateCompany({ data }) {
 export async function getUserPositions() {
   const { data } = await getData(`account/my-positions`);
   return positionsAdapter({ data });
+}
+
+export async function getUserFixtures() {
+  const { data } = await getData(`account/fixture`);
+  return data;
+}
+
+export async function getUserPreFixtures() {
+  const { data } = await getData(`account/pre-fixture`);
+  return data;
+}
+
+export async function getUserNegotiating() {
+  const { data } = await getData(`account/negotiating`);
+  return data;
 }
 
 export async function getUserDetails() {
