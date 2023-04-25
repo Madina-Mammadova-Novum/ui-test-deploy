@@ -4,13 +4,13 @@ import { useMemo, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import AccordionHeader from '../AccordionHeader';
+import NavTreeHeader from '../NavTreeHeader';
+import NavTreeSubBody from '../NavTreeSubBody';
 
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
 import { Button } from '@/elements';
-import AccordionNestedLink from '@/elements/Accordion/AccordionNestedLink';
 
-const AccordionSM = ({ data, active }) => {
+const NavTreeSm = ({ data, active }) => {
   const [showLinks, setShowLinks] = useState(false);
 
   const hasNestedLinks = Boolean(data?.items?.length);
@@ -32,8 +32,10 @@ const AccordionSM = ({ data, active }) => {
     }
   }, [data?.variant, active]);
 
+  const printSubTree = (link) => <NavTreeSubBody key={link.id} data={link} collapsed />;
+
   return (
-    <AccordionHeader
+    <NavTreeHeader
       href={data?.path}
       onClick={() => setShowLinks(!showLinks)}
       isSubMenu={hasNestedLinks}
@@ -53,16 +55,14 @@ const AccordionSM = ({ data, active }) => {
       )}
       {showLinks && (
         <div className="absolute w-auto h-auto pr-2 py-2 left-[50px] top-5 bg-black">
-          {data?.items?.map((link) => (
-            <AccordionNestedLink key={link.id} data={link} collapsed />
-          ))}
+          {data?.items?.length > 0 && data?.items?.map(printSubTree)}
         </div>
       )}
-    </AccordionHeader>
+    </NavTreeHeader>
   );
 };
 
-AccordionSM.propTypes = {
+NavTreeSm.propTypes = {
   active: PropTypes.bool,
   onChange: PropTypes.func,
   data: PropTypes.shape({
@@ -74,4 +74,4 @@ AccordionSM.propTypes = {
   }).isRequired,
 };
 
-export default AccordionSM;
+export default NavTreeSm;

@@ -45,7 +45,7 @@ const SearchFormFields = () => {
   return (
     <div className="flex">
       <div className="w-full flex flex-col gap-y-4 pr-5 mr-5 border-r">
-        <div className="flex flex-col 3sm:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5">
           <DatePicker
             label="laycan start"
             inputClass="w-full"
@@ -59,7 +59,7 @@ const SearchFormFields = () => {
             error={errors.laycanEnd?.message}
           />
         </div>
-        <div className="flex flex-col 3sm:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5">
           <FormDropdown
             name="loadPort"
             options={testOption}
@@ -76,7 +76,7 @@ const SearchFormFields = () => {
             onChange={(option) => handleChange('loadTerminal', option)}
           />
         </div>
-        <div className="flex flex-col 3sm:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5">
           <FormDropdown
             name="dischargePort"
             options={testOption}
@@ -104,28 +104,28 @@ const SearchFormFields = () => {
         />
         {productState.map((productId, index) => (
           <div key={`product_${productId}`}>
-            <div className="flex flex-wrap 3sm:flex-nowrap justify-between gap-x-5 gap-y-1">
+            <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
               <FormDropdown
                 onChange={(option) => handleChange(`products[${productId}].product`, option)}
                 name={`products[${productId}].product`}
                 options={testOption}
                 label={`product #${index + 1}`}
-                customStyles={{ className: 'w-full 3sm:w-1/2' }}
+                customStyles={{ className: 'w-full 3md:w-1/2' }}
               />
               <Input
                 {...register(`products[${productId}].density`)}
                 label="density"
                 placeholder="mt/m³"
-                customStyles="w-full 3sm:w-2/5"
-                error={errors.products ? errors.products[productId]?.density?.message : null}
+                customStyles="w-full 3md:w-2/5"
+                error={errors.products ? errors.products[index]?.density?.message : null}
                 disabled={isSubmitting}
               />
               <Input
                 {...register(`products[${productId}].quantity`)}
                 label="Quantity"
                 placeholder="tons"
-                customStyles="w-[45%] 3sm:w-2/5"
-                error={errors.products ? errors.products[productId]?.quantity?.message : null}
+                customStyles="w-[45%] 3md:w-2/5"
+                error={errors.products ? errors.products[index]?.quantity?.message : null}
                 disabled={isSubmitting}
               />
               <Input
@@ -133,8 +133,8 @@ const SearchFormFields = () => {
                 label="Tolerance"
                 type="number"
                 placeholder="%"
-                customStyles="w-[45%] 3sm:w-1/5"
-                error={errors.products ? errors.products[productId]?.tolerance?.message : null}
+                customStyles="w-[45%] 3md:w-1/5"
+                error={errors.products ? errors.products[index]?.tolerance?.message : null}
                 disabled={isSubmitting}
               />
             </div>
