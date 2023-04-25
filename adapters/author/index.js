@@ -26,7 +26,7 @@ export const authorAdapter = ({ data }) => {
     title,
     firstName,
     lastName,
-    fullName: `${firstName} ${lastName}`,
+    fullName: `${firstName || ''} ${lastName || ''}`,
     content,
     phoneNumber,
     tags,

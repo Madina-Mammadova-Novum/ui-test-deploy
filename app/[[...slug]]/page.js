@@ -47,6 +47,7 @@ export default async function Home({ params }) {
             customStyles="absolute inset-0 -z-10 h-full w-full object-cover object-center"
             height={352}
             width={1440}
+            quality={100}
           />
           {content && <div className="heading-wrapper text-white">{parse(content)}</div>}
         </div>
