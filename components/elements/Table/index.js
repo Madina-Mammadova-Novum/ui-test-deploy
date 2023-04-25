@@ -6,17 +6,21 @@ import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
 const Table = ({ headerData, rows }) => {
-  return (
+  const printTableRow = (rowData, index) => <TableRow rowData={rowData} indexCell={index + 1} />;
+
+  return headerData.length > 0 ? (
     <div className="w-full border border-purple-light rounded-base relative overflow-hidden">
       <table className="min-w-full border-collapse table-fixed">
-        <thead className="bg-purple-light uppercase text-black font-semibold text-xs-sm">
-          {headerData.length && <TableHeader headerData={headerData} />}
-        </thead>
-        <tbody className="border-purple-light">
-          {rows.length && rows.map((rowData, index) => <TableRow rowData={rowData} indexCell={index + 1} />)}
-        </tbody>
+        {headerData.length && (
+          <thead className="bg-purple-light uppercase text-black font-semibold text-xs-sm">
+            <TableHeader headerData={headerData} />
+          </thead>
+        )}
+        {rows.length && <tbody className="border-purple-light">{rows.map(printTableRow)}</tbody>}
       </table>
     </div>
+  ) : (
+    <p className="text-sm font-semibold text-black uppercase">No data provided</p>
   );
 };
 

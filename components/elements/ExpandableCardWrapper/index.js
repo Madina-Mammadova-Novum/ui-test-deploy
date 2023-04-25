@@ -7,14 +7,16 @@ import PropTypes from 'prop-types';
 import { Divider } from '@/elements';
 
 const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, expandAll, className }) => {
+  const [toggle, setToggle] = useState(false);
   const contentRef = useRef(null);
 
-  const [toggle, setToggle] = useState(false);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
 
   useEffect(() => {
     setToggle(expandAll.value);
   }, [expandAll]);
+
+  const expandedHeight = toggle ? `${contentRef?.current?.scrollHeight}px` : '0px';
 
   return (
     <div className={`rounded-base shadow-xmd box-border ${className}`}>
@@ -24,7 +26,7 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, exp
       <div
         ref={contentRef}
         className="overflow-y-hidden transition-height duration-200"
-        style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
+        style={{ height: expandedHeight }}
       >
         <Divider />
         <div className="p-5 overflow-x-auto">{children}</div>

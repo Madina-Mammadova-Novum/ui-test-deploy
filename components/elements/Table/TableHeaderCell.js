@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 
 import { Tooltip } from '@/elements';
 
-const TableHeaderCell = ({ text, type, helperData, icon }) => {
+const TableHeaderCell = ({ text, type, helperData, icon, ...rest }) => {
+  const { width } = rest;
   return (
-    <th scope="col" name={type} className="py-1.5 relative whitespace-nowrap">
+    <th scope="col" name={type} className="py-1.5 relative whitespace-nowrap" style={{ width }}>
       <p className="flex items-center px-4 gap-x-1.5">
         <span>{text}</span>
         {helperData && (

@@ -320,30 +320,6 @@ input[type='password'] {
   height: inherit;
 }
 
-table > thead > tr th[name='INDEX'] {
-  @apply w-10;
-}
-
-table > thead > tr th[name='IMO'] {
-  @apply w-20;
-}
-
-table > thead > tr th[name='TANKER_NAME'] {
-  @apply w-72;
-}
-
-table > thead > tr th[name='OPEN_PORT'] {
-  @apply w-72;
-}
-
-table > thead > tr th[name='OPEN_DATE'] {
-  @apply w-72;
-}
-
-table > thead > tr th[name='TANKER_STATUS'] {
-  @apply w-24;
-}
-
 table > tbody > tr td[name='TANKER_NAME'] > div {
   @apply font-semibold;
 }
