@@ -11,7 +11,6 @@ import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
 
 const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
-
   const printSocialLink = (link) => (
     <NextLink key={makeId()} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
@@ -42,7 +41,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
           className="h-[120px] w-[120px] object-cover object-center rounded-full mb-2.5 -mt-[60px]"
         />
       )}
-      {fullName && (
+      {fullName.trim() && (
         <Title level="2" className="mb-1">
           {fullName}
         </Title>
@@ -67,7 +66,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
         )}
         {subTitle && subTitle}
         {shortDescription && shortDescription}
-        {members ? <div className="grid grid-cols-3 gap-5">{members.map(printMember)}</div> : null}
+        {members.length ? <div className="grid grid-cols-3 gap-5">{members.map(printMember)}</div> : null}
       </div>
     </section>
   );
