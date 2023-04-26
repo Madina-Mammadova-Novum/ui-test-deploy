@@ -15,7 +15,7 @@ const ExpandableRowHeader = ({ toggle, headerData }) => {
       <div className="grid sm:grid-cols-1 3sm:grid-cols-2 md:flex md:flex-row md:items-center w-full gap-x-2.5">
         {headerData.map(({ label, content: { text, image } }, index) => (
           <div
-            className={`w-full col-start-1 ${index <= 3 ? '3sm:col-start-1' : '3sm:col-start-2'}`}
+            className={`w-full col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`}
             style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
           >
             <TextWithLabel label={label} text={text} coverImage={image} customStyles={!index && 'mr-auto'} />

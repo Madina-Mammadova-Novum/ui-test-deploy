@@ -37,12 +37,12 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
                 variant: 'tertiary',
                 size: 'large',
               }}
-              customStyles="w-full whitespace-nowrap 3sm:grow"
+              customStyles="w-full whitespace-nowrap 3md:grow"
               disabled
             />
           )}
         </div>
-        <div className="grid grid-cols-1 3sm:flex gap-x-2.5 gap-y-2.5">
+        <div className="grid grid-cols-1 3md:flex gap-x-2.5 gap-y-2.5">
           <div className="w-full">
             <Button
               onClick={() => handleOpenModal('decline_offer')}

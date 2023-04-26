@@ -1,32 +1,36 @@
 import PropTypes from 'prop-types';
 
-import { NextLink } from '@/elements';
+import { Divider, NextLink } from '@/elements';
 import { useSidebarActiveColor } from '@/utils/hooks';
 
-const AccordionNestedLink = ({ data, collapsed = false }) => {
+const NavTreeSubBody = ({ data, collapsed = false }) => {
+  const { label, path, title } = data;
+
   const { isActive } = useSidebarActiveColor(data.path);
 
   return (
-    <div
+    <li
       className={`${
         isActive ? 'bg-blue text-white' : 'hover:bg-blue-dark'
       } flex flex-col text-gray my-2 px-5 py-1 rounded-xl relative`}
     >
-      <span className={`uppercase font-bold ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{data?.label}</span>
-      <NextLink href={data?.path ?? '/'} className="text-xs text-white font-semibold">
-        {data?.title}
+      {label && (
+        <span className={`uppercase font-bold ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{label}</span>
+      )}
+      <NextLink href={path ?? '/'} className="text-xs text-white font-semibold">
+        {title ?? 'No Data'}
       </NextLink>
 
       {!collapsed && (
         <div className="absolute -top-7 -left-3 w-px h-14 rotate-180 bg-blue-dark">
-          <hr className="absolute w-2.5 h-px border-none right-0 bg-blue-dark" />
+          <Divider className="absolute w-2.5 h-px border-none right-0 !bg-blue-dark" />
         </div>
       )}
-    </div>
+    </li>
   );
 };
 
-AccordionNestedLink.propTypes = {
+NavTreeSubBody.propTypes = {
   data: PropTypes.shape({
     label: PropTypes.string,
     path: PropTypes.string,
@@ -35,4 +39,4 @@ AccordionNestedLink.propTypes = {
   collapsed: PropTypes.bool,
 };
 
-export default AccordionNestedLink;
+export default NavTreeSubBody;

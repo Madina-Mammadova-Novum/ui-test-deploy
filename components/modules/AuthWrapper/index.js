@@ -4,7 +4,7 @@ import { Title } from '@/elements';
 
 const AuthWrapper = ({ title, subtitle, children, containerClass }) => {
   return (
-    <div className={`grid-start-1 3sm:col-start-2 m-auto pt-2.5 ${containerClass}`}>
+    <div className={`grid-start-1 3md:col-start-2 m-auto pt-2.5 ${containerClass}`}>
       <Title level="2">{title}</Title>
       {subtitle && <p className="pt-5 text-xsm text-black max-w-[296px]">{subtitle}</p>}
       {children}

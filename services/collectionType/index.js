@@ -42,7 +42,7 @@ export function getEndpoint(slug, locale, apiID, preview = false) {
     &filters[slug][$eq]=${slug}
     &populate[blocks][populate]=*,gallery,members.author,cta.buttons,categories,
     coverImage,button,buttons,ctaList,ctaList.cta,cta,ctaList.cta.buttons,
-    category,members.author.coverImage,members.author.socialLinks,members.author.socialLinks.coverImage
+    category,members.author.coverImage,members.author.socialLinks,members.author.socialLinks.coverImage,members.author.authorPosition
     &populate[seo]=metaSocial`.replace(/\s+|\n/g, '');
 }
 
