@@ -96,9 +96,9 @@ const SearchFormFields = () => {
 
   useEffect(() => {
     (async () => {
-      const data = await Promise.all([getPorts(), getCargoTypes()])
-      setPorts(convertDataToOptions(data[0], 'id', 'name'))
-      setCargoTypes(convertDataToOptions(data[1], 'id', 'name'))
+      const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()])
+      setPorts(convertDataToOptions(portsData, 'id', 'name'))
+      setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'))
     })()
   }, []);
 
