@@ -1,12 +1,25 @@
 'use client';
 
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CheckBoxInput, NextLink } from '@/elements';
-import { ROUTES } from '@/lib';
+import { getNavigation } from '@/services/navigation';
 
 const TermsAndConditions = () => {
+  const [legalLinks, setLegalLinks] = useState([]);
+  const fetchData = async () => {
+    const legalNavigation = await getNavigation('legal-navigation', 'en');
+    const legalLinksArray = legalNavigation ? legalNavigation.map((legalLink) => legalLink) : [];
+    setLegalLinks(legalLinksArray);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const policyLink = legalLinks[0];
+  const termsLink = legalLinks[1];
+
   const { setValue, watch, clearErrors } = useFormContext();
 
   const termsAndCondition = watch('agreedRules', false);
@@ -32,13 +45,19 @@ const TermsAndConditions = () => {
       >
         <p>
           I agree with all
-          <NextLink href={ROUTES.PRIVACY_POLICY} className="text-blue underline px-1.5">
-            Privacy Policy
-          </NextLink>
-          <span>and</span>
-          <NextLink href={ROUTES.TERMS_AND_CONDITIONS} className="text-blue underline px-1.5">
-            Terms of Use
-          </NextLink>
+          {legalLinks.length > 1 ? (
+            <>
+              <NextLink href={policyLink.path} className="text-blue underline px-1.5">
+                {policyLink.title}
+              </NextLink>
+              <span>and</span>
+              <NextLink href={termsLink.path} className="text-blue underline px-1.5">
+                {termsLink.title}
+              </NextLink>
+            </>
+          ) : (
+            ' Privacy Policy and Terms of Use'
+          )}
         </p>
       </CheckBoxInput>
     </div>

@@ -144,6 +144,11 @@
     @apply !my-4 py-[5px] pl-4 font-semibold border-l-2 border-blue;
   }
 
+  .content-wrapper a,
+  .content-wrapper a span {
+    @apply text-blue;
+  }
+
   .heading-wrapper h1 {
     @apply text-white mb-2.5;
   }
@@ -380,4 +385,14 @@ input[type='password'] {
 
 .react-tel-input .country-list {
   @apply !w-[262px];
+}
+
+/*legal pages*/
+
+.legal-styles .content-wrapper {
+  @apply rounded-base p-5 bg-white relative -mt-[168px] mb-[100px] shadow-xmd;
+}
+
+.legal-styles .container {
+  @apply max-w-[1258px] px-[54px];
 }
