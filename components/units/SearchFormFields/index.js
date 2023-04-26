@@ -11,7 +11,7 @@ import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
-import { cargoTypeKey } from '@/lib/constants';
+import { CARGO_TYPE_KEY } from '@/lib/constants';
 
 const SearchFormFields = () => {
   const {
@@ -70,7 +70,7 @@ const SearchFormFields = () => {
       }));
     }
 
-    if (key === cargoTypeKey) {
+    if (key === CARGO_TYPE_KEY) {
       setProducts(prevState => ({
         ...prevState,
         loading: true,
