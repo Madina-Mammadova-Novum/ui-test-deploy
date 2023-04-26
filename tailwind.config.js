@@ -35,6 +35,9 @@ module.exports = {
       fontFamily: {
         'inter-sans': ['Inter', 'sans-serif'],
       },
+      width: {
+        table: '100rem',
+      },
       fontSize: {
         xxs: [
           '0.625rem',

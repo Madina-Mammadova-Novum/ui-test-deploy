@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { NextImage } from '@/elements';
+import { NextImage, Tooltip } from '@/elements';
 import { TYPE } from '@/lib/constants';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { type, value, name, fontStyle, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
+  const { type, value, marked, helperData, name, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
 
   const printModal = useMemo(() => {
     switch (type) {
@@ -28,40 +28,51 @@ const TableCell = ({ cellProps }) => {
     }
   }, [name, toggle?.name, type]);
 
+  const printValue = useMemo(() => {
+    return helperData ? (
+      <Tooltip variant="hover" className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
+        <span className={`${disabled && 'text-gray'}`}>{value}</span>
+      </Tooltip>
+    ) : (
+      <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
+    );
+  }, [disabled, helperData, value]);
+
   return (
-    <td name={type} className={`${disabled ? 'bg-gray-light' : 'bg-white'}`}>
-      {value && (
-        <div
-          className={`flex items-center ${!toggle ? 'w-full' : 'w-auto'} text-xsm text-${fontStyle?.color ?? 'black'} ${
-            fontStyle?.semibold ? 'font-semibold' : 'font-normal'
-          } `}
-        >
-          {countryFlag && (
-            <NextImage
-              width={20}
-              height={15}
-              customStyles="max-h-[15px] mr-1.5"
-              src={countryFlag}
-              alt={`${countryFlag} flag`}
-            />
-          )}
+    <td
+      name={type}
+      className={`${
+        disabled ? 'bg-gray-light' : 'bg-white'
+      } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
+    >
+      <div className="flex justify-between items-center text-xsm">
+        {value && (
+          <div className="flex gap-x-5">
+            {countryFlag && (
+              <NextImage width={20} height={15} customStyles="h-4" src={countryFlag} alt={`${countryFlag} flag`} />
+            )}
+            {printValue}
+            {marked && (
+              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mr-2 text-black rounded-md">
+                {marked}
+              </span>
+            )}
+          </div>
+        )}
 
-          <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
-        </div>
-      )}
-
-      {editable && (
-        <ModalWindow
-          buttonProps={{
-            icon: { before: editIcon },
-            variant: 'tertiary',
-            size: 'small',
-            className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5 mr-5' : '!p-0',
-          }}
-        >
-          {printModal}
-        </ModalWindow>
-      )}
+        {editable && (
+          <ModalWindow
+            buttonProps={{
+              icon: { before: editIcon },
+              variant: 'tertiary',
+              size: 'small',
+              className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
+            }}
+          >
+            {printModal}
+          </ModalWindow>
+        )}
+      </div>
     </td>
   );
 };
@@ -71,16 +82,14 @@ TableCell.propTypes = {
     countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
     type: PropTypes.string,
     value: PropTypes.string,
+    helperData: PropTypes.string,
     name: PropTypes.string,
-    fontStyle: PropTypes.shape({
-      semibold: PropTypes.bool,
-      color: PropTypes.string,
-    }),
     editIcon: PropTypes.node,
     badge: PropTypes.string,
     toggle: PropTypes.bool,
     editable: PropTypes.bool,
     disabled: PropTypes.bool,
+    marked: PropTypes.string,
     id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
   }).isRequired,
 };
