@@ -199,63 +199,63 @@ export const searchRowHeaders = {
 export const unauthorizedSearchExpandedData = {
   vesselOwnerData: [
     {
-      title: "Years in Operation",
-      description: "Hidden info",
+      title: 'Years in Operation',
+      description: 'Hidden info',
     },
     {
-      title: "Number of Tankers",
-      description: "Hidden info",
+      title: 'Number of Tankers',
+      description: 'Hidden info',
     },
     {
-      title: "Estimated average tanker DWT",
-      description: "Hidden info",
+      title: 'Estimated average tanker DWT',
+      description: 'Hidden info',
     },
   ],
   tankerData: [
     {
-      title: "Ship age",
-      description: "≤ 5",
+      title: 'Ship age',
+      description: '≤ 5',
     },
     {
-      title: "Cubic capacity 98%",
-      description: "25,*** m³",
+      title: 'Cubic capacity 98%',
+      description: '25,*** m³',
     },
     {
-      title: "Number of Segregations",
-      description: "Hidden info",
+      title: 'Number of Segregations',
+      description: 'Hidden info',
     },
     {
-      title: "LOA",
-      description: "Hidden info",
+      title: 'LOA',
+      description: 'Hidden info',
     },
     {
-      title: "Beam",
-      description: "Hidden info",
+      title: 'Beam',
+      description: 'Hidden info',
     },
     {
-      title: "Type of Hull",
-      description: "Hidden info",
+      title: 'Type of Hull',
+      description: 'Hidden info',
     },
   ],
   countryData: [
     {
-      title: "Country of Registered Owner",
-      description: "Hidden info"
+      title: 'Country of Registered Owner',
+      description: 'Hidden info',
     },
     {
-      title: "Country of Disponent Owner",
-      description: "Hidden info"
+      title: 'Country of Disponent Owner',
+      description: 'Hidden info',
     },
     {
-      title: "Country of Technical Operator",
-      description: "Hidden info"
+      title: 'Country of Technical Operator',
+      description: 'Hidden info',
     },
     {
-      title: "Country of Commercial Operator",
-      description: "Hidden info"
+      title: 'Country of Commercial Operator',
+      description: 'Hidden info',
     },
-  ]
-}
+  ],
+};
 
 export const incomingOfferCommentsData = [
   {

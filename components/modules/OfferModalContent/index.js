@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { Button, Dropdown, Title } from '@/elements';
 import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
-import { OfferForm, Tabs, CommercialOfferTerms } from '@/units';
+import { CommercialOfferTerms, OfferForm, Tabs } from '@/units';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -77,9 +77,7 @@ const OfferModalContent = ({ closeModal }) => {
 
       <div className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}>
         <div className="p-2.5">
-          <OfferForm>
-            {tabContent}
-          </OfferForm>
+          <OfferForm>{tabContent}</OfferForm>
         </div>
       </div>
 
