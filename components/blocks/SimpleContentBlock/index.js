@@ -14,7 +14,7 @@ const SimpleContentBlock = ({ title, content }) => {
             {title}
           </Title>
         )}
-        <div className="content-wrapper space-y-2.5 text-xsm text-black">{parse(content)}</div>
+        {content && <div className="content-wrapper space-y-2.5 text-xsm text-black">{parse(content)}</div>}
       </div>
     </section>
   );
