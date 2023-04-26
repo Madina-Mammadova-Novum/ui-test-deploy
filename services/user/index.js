@@ -14,12 +14,8 @@ import { getData, postData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/forgot-password`, body);
-  return {
-    message,
-  };
+  const response = await postData(`auth/forgot-password`, body);
+  return response;
 }
 
 export async function resetPassword({ data }) {

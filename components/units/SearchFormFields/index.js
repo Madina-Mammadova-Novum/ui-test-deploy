@@ -11,6 +11,7 @@ import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
+import { cargoTypeKey } from '@/lib/constants';
 
 const SearchFormFields = () => {
   const {
@@ -24,10 +25,19 @@ const SearchFormFields = () => {
   const [productState, setProductState] = useState([1]);
   const [ports, setPorts] = useState([]);
   const [cargoTypes, setCargoTypes] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState({
+    loading: false,
+    data: [],
+  });
   const [terminals, setTreminals] = useState({
-    loadPortTerminals: [],
-    dischargePortTerminals: [],
+    loadPortTerminals: {
+      loading: false,
+      data: [],
+    },
+    dischargePortTerminals: {
+      loading: false,
+      data: [],
+    },
   });
 
   const productsLimitExceeded = productState.length >= 3;
@@ -42,16 +52,34 @@ const SearchFormFields = () => {
     setValue(key, value);
 
     if (portKeys.includes(key)) {
+      setTreminals((prevState) => ({
+        ...prevState,
+        [`${key}Terminals`]: {
+          loading: true,
+          data: prevState[`${key}Terminals`].data
+        },
+      }));
+
       const relatedTerminals = await getTerminals(value.value);
       setTreminals((prevState) => ({
         ...prevState,
-        [`${key}Terminals`]: convertDataToOptions(relatedTerminals, 'id', 'name'),
+        [`${key}Terminals`]: {
+          loading: false,
+          data: convertDataToOptions(relatedTerminals, 'id', 'name')
+        },
       }));
     }
 
-    if (key === 'cargoType') {
+    if (key === cargoTypeKey) {
+      setProducts(prevState => ({
+        ...prevState,
+        loading: true,
+      }))
       const relatedProducts = await getProducts(value.value);
-      setProducts(convertDataToOptions(relatedProducts, 'id', 'name'));
+      setProducts({
+        loading: false,
+        data: convertDataToOptions(relatedProducts, 'id', 'name')
+      });
     }
   };
 
@@ -102,8 +130,9 @@ const SearchFormFields = () => {
           />
           <FormDropdown
             name="loadTerminal"
-            options={terminals.loadPortTerminals}
-            disabled={!terminals.loadPortTerminals.length}
+            asyncCall={terminals.loadPortTerminals.loading}
+            options={terminals.loadPortTerminals.data}
+            disabled={!terminals.loadPortTerminals.data.length}
             label="load terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
@@ -119,8 +148,9 @@ const SearchFormFields = () => {
           />
           <FormDropdown
             name="dischargeTerminal"
-            options={terminals.dischargePortTerminals}
-            disabled={!terminals.dischargePortTerminals.length}
+            asyncCall={terminals.dischargePortTerminals.loading}
+            options={terminals.dischargePortTerminals.data}
+            disabled={!terminals.dischargePortTerminals.data.length}
             label="dischargee terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargeTerminal', option)}
@@ -142,8 +172,9 @@ const SearchFormFields = () => {
               <FormDropdown
                 onChange={(option) => handleChange(`products[${productId}].product`, option)}
                 name={`products[${productId}].product`}
-                options={products}
-                disabled={!products.length}
+                asyncCall={products.loading}
+                options={products.data}
+                disabled={!products.data.length}
                 label={`product #${index + 1}`}
                 customStyles={{ className: 'w-full 3sm:w-1/2' }}
               />

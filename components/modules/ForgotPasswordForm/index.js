@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { Input } from '@/elements';
 import { forgotPassword } from '@/services/user';
-import { successToast } from '@/utils/hooks';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const schema = yup
   .object({
@@ -26,10 +26,15 @@ const ForgotPasswordForm = () => {
     register,
     formState: { isSubmitting, errors },
   } = methods;
-  const onSubmit = async (data) => {
-    const { message } = await forgotPassword({ data });
-    successToast(message, "You'll receive an email, if you are registered on our system");
-    reset();
+  const onSubmit = async (formData) => {
+    const { data, error } = await forgotPassword({ data: formData });
+    if(data.status === 200) {
+      successToast("Password reset sent!", "You'll receive an email, if you are registered on our system");
+      reset();
+    }
+    if (error) {
+      errorToast(error.message, error.description);
+    }
   };
 
   return (
