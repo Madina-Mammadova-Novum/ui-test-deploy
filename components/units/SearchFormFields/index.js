@@ -117,7 +117,7 @@ const SearchFormFields = () => {
                 label="density"
                 placeholder="mt/m³"
                 customStyles="w-full 3md:w-2/5"
-                error={errors.products ? errors.products[index]?.density?.message : null}
+                error={errors.products ? errors.products[productId]?.density?.message : null}
                 disabled={isSubmitting}
               />
               <Input
@@ -125,7 +125,7 @@ const SearchFormFields = () => {
                 label="Quantity"
                 placeholder="tons"
                 customStyles="w-[45%] 3md:w-2/5"
-                error={errors.products ? errors.products[index]?.quantity?.message : null}
+                error={errors.products ? errors.products[productId]?.quantity?.message : null}
                 disabled={isSubmitting}
               />
               <Input
@@ -134,7 +134,7 @@ const SearchFormFields = () => {
                 type="number"
                 placeholder="%"
                 customStyles="w-[45%] 3md:w-1/5"
-                error={errors.products ? errors.products[index]?.tolerance?.message : null}
+                error={errors.products ? errors.products[productId]?.tolerance?.message : null}
                 disabled={isSubmitting}
               />
             </div>

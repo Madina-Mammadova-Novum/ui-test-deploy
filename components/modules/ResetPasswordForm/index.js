@@ -9,7 +9,7 @@ import { FormManager } from '@/common';
 import { passwordValidationSchema } from '@/lib/schemas';
 import { resetPassword } from '@/services/user';
 import { PasswordValidation } from '@/units';
-import { successToast } from '@/utils/hooks';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const schema = yup.object(passwordValidationSchema()).required();
 
@@ -18,10 +18,15 @@ const ResetPasswordForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data) => {
-    const { message } = await resetPassword({ data });
-    successToast(message);
-    methods.reset();
+  const onSubmit = async (formData) => {
+    const { data, error } = await resetPassword({ data: formData });
+    if (data.status === 200) {
+      successToast('You have successfully changed your password');
+      methods.reset();
+    }
+    if (error) {
+      errorToast(error.message, error.description);
+    }
   };
 
   return (

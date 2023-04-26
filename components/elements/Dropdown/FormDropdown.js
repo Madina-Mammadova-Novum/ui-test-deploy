@@ -26,6 +26,7 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
+        const hasValue = { ...field }.value?.value;
         return (
           <div className={`relative bottom-1 ${className}`}>
             <Label htmlFor={name} className="text-xs-sm">
@@ -37,7 +38,7 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
               id={name}
               options={options}
               onChange={handleChange}
-              styles={dropdownStyles({ ...field }.value?.value, error, dropdownWidth)}
+              styles={dropdownStyles(hasValue, error, dropdownWidth)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
             />
