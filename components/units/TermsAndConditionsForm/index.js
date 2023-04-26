@@ -10,13 +10,11 @@ const TermsAndConditions = () => {
   const [legalLinks, setLegalLinks] = useState([]);
   const fetchData = async () => {
     const legalNavigation = await getNavigation('legal-navigation', 'en');
-    const legalLinksArray = legalNavigation ? legalNavigation.map((legalLink) => legalLink) : [];
-    setLegalLinks(legalLinksArray);
+    setLegalLinks(legalNavigation);
   };
   useEffect(() => {
     fetchData();
   }, []);
-
   const policyLink = legalLinks[0];
   const termsLink = legalLinks[1];
 
