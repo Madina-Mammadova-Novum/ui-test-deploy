@@ -1,7 +1,7 @@
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import { BlockStepPropTypes, valuesPropTypes } from '@/lib/types';
+import { mediaPropTypes, valuesPropTypes } from '@/lib/types';
 
 import { NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -15,9 +15,9 @@ const Step = ({ item, index }) => {
           {index + 1}
         </div>
       </div>
-      <div className=" w-full col-span-10 bg-secondary-light pt-1 pb-5 px-1 rounded-base sm:col-span-11 sm:flex sm:py-1 sm:pl-1 sm:pr-4 lg:col-span-10 md:max-w-[631px] 2lg:max-w-[848px]">
+      <div className=" w-full col-span-10 bg-secondary-light pt-1 pb-5 px-1 rounded-[10px] sm:col-span-11 sm:flex sm:py-1 sm:pl-1 sm:pr-4 lg:col-span-10 md:max-w-[631px] 2xl:max-w-[848px]">
         {item.coverImage && (
-          <div className="h-[192px] rounded-lg overflow-hidden sm:min-w-[256px] sm:min-h-[208px] md:min-w-[288px] 2lg:min-w-[320px] 2lg:min-h-[280px]">
+          <div className="h-[192px] rounded-lg overflow-hidden sm:min-w-[256px] sm:min-h-[208px] md:min-w-[288px] 2xl:min-w-[320px] 2xl:min-h-[280px]">
             <NextImage
               src={getStrapiMedia(delve(item.coverImage, 'format.original.url'), '?format=webp')}
               alt={delve(item.coverImage, 'alternativeText')}
@@ -30,7 +30,7 @@ const Step = ({ item, index }) => {
         )}
         <div className="pt-5 px-4 sm:flex sm:flex-col sm:justify-center">
           {item.title && (
-            <h3 className="text-black text-base leading-6 font-bold mb-1 sm:mb-3 2lg:text-xl">{item.title}</h3>
+            <h3 className="text-black text-base leading-6 font-bold mb-1 sm:mb-3 2xl:text-xl">{item.title}</h3>
           )}
           {item.shortDescription && <p className="text-gray text-sm leading-5">{item.shortDescription}</p>}
           {item.subTitle && <p className="text-gray text-sm leading-5">{item.subTitle}</p>}
@@ -40,12 +40,20 @@ const Step = ({ item, index }) => {
   );
 };
 
-Step.propTypes = BlockStepPropTypes;
+Step.propTypes = {
+  item: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    subTitle: PropTypes.string.isRequired,
+    shortDescription: PropTypes.string.isRequired,
+    coverImage: mediaPropTypes,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+};
 
 const BlockHowItWorks = ({ title, shortDescription, subTitle, values }) => {
   return (
-    <section id="how-it-works" className="mb-28 sm:mb-44 2lg:mb-64">
-      <div className="relative flex flex-col md:flex-row md:justify-between lg:mt-14 2lg:mt-16">
+    <section id="how-it-works" className="mb-28 sm:mb-44 2xl:mb-64">
+      <div className="relative flex flex-col md:flex-row md:justify-between lg:mt-14 2xl:mt-16">
         <div className="md:sticky md:top-0 md:self-start md:min-w-[521px]">
           {title && <Title level="1">{title}</Title>}
           {shortDescription && shortDescription}

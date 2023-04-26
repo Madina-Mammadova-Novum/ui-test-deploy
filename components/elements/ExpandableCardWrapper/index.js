@@ -23,6 +23,8 @@ const ExpandableCardWrapper = ({
     setToggle(value);
   }, [value]);
 
+  const expandedHeight = toggle ? `${contentRef?.current?.scrollHeight}px` : '0px';
+
   return (
     <div className={`rounded-base shadow-xmd box-border ${className}`}>
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
@@ -30,13 +32,11 @@ const ExpandableCardWrapper = ({
       </div>
       <div
         ref={contentRef}
-        className="overflow-hidden transition-height duration-200"
-        style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
+        className="overflow-y-hidden transition-height duration-200"
+        style={{ height: expandedHeight }}
       >
-        <div className="px-6">
-          <Divider />
-          {children}
-        </div>
+        <Divider />
+        <div className="p-5 overflow-x-auto">{children}</div>
         {footerComponent}
       </div>
     </div>

@@ -12,17 +12,16 @@ import { Notes, PersonalDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object({ ...personalDetailsSchema() });
-
 const state = {
   firstName: 'John',
   lastName: 'Doe',
-  email: ' john_doe@shiplink.com',
+  email: 'john_doe@shiplink.com',
   primaryPhoneNumber: '971457753981',
-  secondaryPhoneNumber: '',
 };
 
 const PersonalDetailsForm = () => {
+  const schema = yup.object({ ...personalDetailsSchema() });
+
   const methods = useHookFormParams({ state, schema });
 
   const onSubmit = async (data) => {

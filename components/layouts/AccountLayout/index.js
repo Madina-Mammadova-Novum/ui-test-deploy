@@ -74,7 +74,7 @@ const AccountLayout = ({ children }) => {
 
   // todo: https://github.com/shadcn/taxonomy - example
   return (
-    <BaseLayout className="bg-gray-light flex min-h-screen max-w-screen-2lg">
+    <BaseLayout className="bg-gray-light flex min-h-screen max-w-screen-2xl">
       <Sidebar data={sidebarData} containerStyles="z-50" />
       <div className="flex flex-col grow">
         <AccountHeader />

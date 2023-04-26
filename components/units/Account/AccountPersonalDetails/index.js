@@ -20,13 +20,13 @@ const AccountPersonalDetails = ({ user = {} }) => {
           <PersonalDetailsForm />
         </ModalWindow>
       </FieldsetHeader>
-      <FieldsetContentWrapper className="grid grid-cols-1 3sm:grid-cols-2 pt-2.5">
+      <FieldsetContentWrapper className="grid grid-cols-1 3md:grid-cols-2 pt-2.5">
         <FieldsetContent className="col-start-1">
           <TextRow title="First Name">{firstName || '—'}</TextRow>
           <TextRow title="Last Name">{lastName || '—'}</TextRow>
           <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
-        <FieldsetContent className="col-start-1 3sm:col-start-2">
+        <FieldsetContent className="col-start-1 3md:col-start-2">
           <TextRow title="Primary phone number">{primaryPhone || '—'}</TextRow>
           <TextRow title="Secondary phone number">{secondaryPhone || '—'}</TextRow>
         </FieldsetContent>

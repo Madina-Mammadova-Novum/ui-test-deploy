@@ -34,11 +34,11 @@ const AccountPositions = () => {
 
   const handleChange = (option) => handleChangeState('sortValue', option);
 
-  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
-
   const { userPositions, sortOptions, sortValue } = userStore;
 
-  const dropdownStyles = { dropdownWidth: 150, className: 'flex items-center gap-x-5' };
+  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
+
+  const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
   return (
     <section className="flex flex-col gap-y-5">

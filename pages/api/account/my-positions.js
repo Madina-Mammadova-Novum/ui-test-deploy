@@ -28,6 +28,7 @@ export default async function handler(req, res) {
             title: 'Opal Fortune',
             imo: '9131034',
             port: 'Dumyat (Damietta)',
+            marked: 'Rolled',
             date: new Date(),
             status: true,
           },

@@ -1,6 +1,3 @@
-import Accordion from '@/elements/Accordion';
-import AccordionSm from '@/elements/Accordion/AccordionSm';
-import AccordionXl from '@/elements/Accordion/AccordionXl';
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
 import Button from '@/elements/Button';
@@ -30,6 +27,7 @@ import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
 import Modal from '@/elements/Modal';
 import NavButton from '@/elements/NavButton';
+import NavTree from '@/elements/NavTree';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
 import NotFound from '@/elements/NotFound';
@@ -57,9 +55,6 @@ export {
   InputErrorMessage,
   TextArea,
   Button,
-  Accordion,
-  AccordionSm,
-  AccordionXl,
   Alert,
   CheckBoxInput,
   TextWithLabel,
@@ -87,4 +82,5 @@ export {
   DateTimeRow,
   RadioInput,
   NavButton,
+  NavTree,
 };

@@ -5,19 +5,22 @@ import { TablePropTypes } from '@/lib/types';
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
-const Table = ({ headerData = [], rows = [] }) => {
-  return (
-    <div className="overflow-auto">
-      <div
-        className="border !border-purple-light rounded-base overflow-hidden font-semibold"
-        style={{ marginTop: '12px', marginBottom: '21px' }}
-      >
-        <table className="my_position-table w-full border-collapse">
-          {headerData.length && <TableHeader className="!bg-purple-light text-black" headerData={headerData} />}
-          {rows.length && rows.map((rowData, index) => <TableRow rowData={rowData} indexCell={index + 1} />)}
-        </table>
-      </div>
+const Table = ({ headerData, rows }) => {
+  const printTableRow = (rowData, index) => <TableRow rowData={rowData} indexCell={index + 1} />;
+
+  return headerData.length > 0 ? (
+    <div className="w-full border border-purple-light rounded-base relative overflow-hidden">
+      <table className="min-w-full border-collapse table-fixed">
+        {headerData.length && (
+          <thead className="bg-purple-light uppercase text-black font-semibold text-xs-sm">
+            <TableHeader headerData={headerData} />
+          </thead>
+        )}
+        {rows.length && <tbody className="border-purple-light">{rows.map(printTableRow)}</tbody>}
+      </table>
     </div>
+  ) : (
+    <p className="text-sm font-semibold text-black uppercase">No data provided</p>
   );
 };
 
