@@ -28,7 +28,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data }) => {
   if (data === null) return null;
 
-  const { date, id, imo, port, status, title } = data;
+  const { date, id, marked, imo, port, status, title } = data;
 
   const inActive = port === null || date === null;
 
@@ -44,6 +44,7 @@ export const fleetsRowDataAdapter = ({ data }) => {
     },
     port: {
       value: port ?? NO_DATA_MESSAGE.PORT,
+      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: {
         isEdit: !inActive,
         icon: <EditIcon />,
@@ -68,10 +69,12 @@ export const fleetsRowDataAdapter = ({ data }) => {
     },
     date: {
       value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      marked,
       editable: {
         isEdit: !inActive,
         icon: <EditIcon />,
       },
+      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       disabled: inActive,
     },
   };
@@ -100,10 +103,6 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       editable: tankerName.editable?.isEdit,
       editIcon: tankerName.editable?.icon,
       disabled: tankerName.disabled,
-      fontStyle: {
-        semibold: true,
-        color: 'black',
-      },
     },
     {
       id,
@@ -112,36 +111,27 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       editable: imo.editable?.isEdit,
       editIcon: imo.editable?.icon,
       disabled: imo.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
     },
     {
       id,
       name: tankerName.value,
       type: TYPE.PORT,
       value: port.value,
+      helperData: port.helperData,
       editable: port.editable?.isEdit,
       editIcon: port.editable?.icon,
       disabled: port.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
     },
     {
       id,
       type: TYPE.DATE,
       name: tankerName.value,
+      marked: date.marked,
       value: date.value,
+      helperData: date.helperData,
       editable: date.editable?.isEdit,
       editIcon: date.editable?.icon,
       disabled: date.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
     },
     {
       id,
@@ -153,10 +143,6 @@ export const fleetTableCellAdapter = ({ data, index }) => {
       editable: tankerStatus.editable?.isEdit,
       editIcon: tankerStatus.editable?.icon,
       disabled: tankerStatus.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
     },
   ];
 };

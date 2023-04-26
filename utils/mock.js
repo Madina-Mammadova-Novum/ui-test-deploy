@@ -3,21 +3,33 @@ import usFlag from '@/assets/images/flag.png';
 export const fleetsHeader = [
   {
     text: '#',
+    type: 'INDEX',
+    width: 40,
   },
   {
     text: 'tanker name',
+    type: 'TANKER_NAME',
+    width: 234,
   },
   {
     text: 'imo',
+    type: 'IMO',
+    width: 78,
   },
   {
     text: 'open port',
+    type: 'OPEN_PORT',
+    width: 234,
   },
   {
     text: 'open date',
+    type: 'OPEN_DATE',
+    width: 234,
   },
   {
     text: 'tanker status',
+    type: 'TANKER_STATUS',
+    width: 125,
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path

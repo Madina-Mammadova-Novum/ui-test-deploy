@@ -211,7 +211,7 @@ export function loginAdapter({ data }) {
 
 export function tankerInfoAdapter({ data }) {
   if (data === null) return null;
-  const { id, title, imo, port, date, status } = data;
+  const { id, title, imo, port, date, status, marked } = data;
   return {
     id,
     title,
@@ -219,6 +219,7 @@ export function tankerInfoAdapter({ data }) {
     port,
     date,
     status,
+    marked,
   };
 }
 
