@@ -7,14 +7,13 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
 import { sendOffer } from '@/services/offer';
-import { CommercialOfferTerms } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...offerSchema(),
 });
 
-const OfferForm = () => {
+const OfferForm = ({ children }) => {
   const methods = useHookFormParams({ schema });
 
   const handleSubmit = async (formData) => {
@@ -42,7 +41,7 @@ const OfferForm = () => {
           className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
         }}
       >
-        <CommercialOfferTerms />
+        {children}
       </FormManager>
     </FormProvider>
   );
