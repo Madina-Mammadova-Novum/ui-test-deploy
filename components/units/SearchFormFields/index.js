@@ -34,12 +34,14 @@ const SearchFormFields = () => {
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+    const portKeys = ['loadPort', 'dischargePort'];
+
     if (error) {
       clearErrors(key);
     }
     setValue(key, value);
 
-    if (['loadPort', 'dischargePort'].includes(key)) {
+    if (portKeys.includes(key)) {
       const relatedTerminals = await getTerminals(value.value);
       setTreminals((prevState) => ({
         ...prevState,
@@ -64,19 +66,12 @@ const SearchFormFields = () => {
     clearErrors(`products[${id}]`);
   };
 
-  const fetchPorts = async () => {
-    const data = await getPorts();
-    setPorts(convertDataToOptions(data, 'id', 'name'));
-  };
-
-  const fetchCargoTypes = async () => {
-    const data = await getCargoTypes();
-    setCargoTypes(convertDataToOptions(data, 'id', 'name'));
-  };
-
   useEffect(() => {
-    fetchPorts();
-    fetchCargoTypes();
+    (async () => {
+      const data = await Promise.all([getPorts(), getCargoTypes()])
+      setPorts(convertDataToOptions(data[0], 'id', 'name'))
+      setCargoTypes(convertDataToOptions(data[1], 'id', 'name'))
+    })()
   }, []);
 
   return (
