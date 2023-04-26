@@ -2,21 +2,19 @@ import PropTypes from 'prop-types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
-import { Button, NextLink } from '@/elements';
+import { Button, NavTree, NextLink } from '@/elements';
 
 const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
-  console.log({ data, opened, onChange });
-  // const printMenu = (item) => (
-  //   <Accordion variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
-  // );
-  // todo: "Accordion" need to rewrite this solution not worked. Current solution is to complicated also we have another Accordion component - that also not correct
+  const printMenu = (item) => (
+    <NavTree variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
+  );
 
   return (
     <>
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <div className="flex flex-col gap-1.5 relative">
+      <ul className="flex flex-col gap-1.5 relative">
         <Button
           buttonProps={{
             icon: {
@@ -36,8 +34,8 @@ const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
           onClick={onResize}
           customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
         />
-        {/* {data?.map(printMenu)} */}
-      </div>
+        {data?.map(printMenu)}
+      </ul>
     </>
   );
 };

@@ -35,7 +35,7 @@ const ImageSliderBlock = ({ gallery }) => {
                   height={450}
                   alt={delve(coverImage, 'alternativeText')}
                   src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
-                  className="h-[450px] w-full object-cover object-center rounded-[10px]"
+                  className="h-[450px] w-full object-cover object-center rounded-base"
                   quality={100}
                 />
               </SwiperSlide>

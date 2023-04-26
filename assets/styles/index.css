@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,7 +10,7 @@
   }
 
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth font-inter-sans;
   }
 
   body {
@@ -33,7 +33,7 @@
   }
 
   h1 {
-    @apply font-bold text-[26px] 3sm:text-[30px];
+    @apply font-bold text-[26px] 3md:text-[30px];
   }
 
   h2 {
@@ -150,6 +150,9 @@
   .heading-wrapper p {
     @apply text-xsm text-white max-w-[800px] mx-auto;
   }
+  .heading-wrapper h6 {
+    @apply text-xsm text-white font-medium;
+  }
 
   /* Swiper */
 
@@ -160,7 +163,7 @@
   .swiper.swiperTestimonial .swiper-wrapper,
   .swiper.swiperTeam .swiper-wrapper,
   .swiper.swiperImprovements .swiper-wrapper {
-    @apply !pb-11 mt-10 lg:mt-14 2lg:mt-16;
+    @apply !pb-11 mt-10 lg:mt-14 2xl:mt-16;
   }
   .swiper.swiperIngredients .swiper-wrapper {
     @apply !pb-8 md:!pb-0;
@@ -259,7 +262,7 @@
 /* Phone Field Rewrites */
 
 .react-tel-input .form-control.phone-field {
-  @apply h-[42px] w-full text-black rounded-base border pl-[68px] font-kumbh-sans outline-none;
+  @apply h-[42px] w-full text-black rounded-base border pl-[68px] font-inter-sans outline-none;
 }
 
 .react-tel-input .flag-dropdown.country-field {

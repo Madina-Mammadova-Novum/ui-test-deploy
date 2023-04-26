@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
-import AccordionBody from '@/elements/Accordion/AccordionBody';
-import AccordionHeader from '@/elements/Accordion/AccordionHeader';
-import AccordionTitle from '@/elements/Accordion/AccordionTitle';
+import NavTreeHeader from '../NavTreeHeader';
+import NavTreeTitle from '../NavTreeTitle';
 
-const AccordionXl = ({ data, active, opened, onChange }) => {
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
+
+const NavTreeXl = ({ data, active, opened, onChange }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
@@ -28,30 +28,27 @@ const AccordionXl = ({ data, active, opened, onChange }) => {
   }, [data?.variant, active]);
 
   return (
-    <>
-      <AccordionHeader
-        href={data.path}
-        onClick={() => onChange('opened', !opened)}
-        isSubMenu={hasNestedLinks}
-        className="flex items-center transition-all"
-      >
-        {data.title && (
-          <AccordionTitle
-            icon={printIcon}
-            title={data.title}
-            isActive={active}
-            isOpened={opened}
-            hasNestedLinks={hasNestedLinks}
-          />
-        )}
-      </AccordionHeader>
-
-      <AccordionBody list={data?.items} toggle={opened} />
-    </>
+    <NavTreeHeader
+      href={data.path}
+      onClick={() => onChange('opened', !opened)}
+      isSubMenu={hasNestedLinks}
+      className="flex items-center transition-all"
+    >
+      {data.title && (
+        <NavTreeTitle
+          icon={printIcon}
+          title={data.title}
+          isActive={active}
+          isOpened={opened}
+          links={data?.items}
+          hasNestedLinks={hasNestedLinks}
+        />
+      )}
+    </NavTreeHeader>
   );
 };
 
-AccordionXl.propTypes = {
+NavTreeXl.propTypes = {
   active: PropTypes.string,
   opened: PropTypes.bool,
   onChange: PropTypes.func,
@@ -64,4 +61,4 @@ AccordionXl.propTypes = {
   }).isRequired,
 };
 
-export default AccordionXl;
+export default NavTreeXl;

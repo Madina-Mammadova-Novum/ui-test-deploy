@@ -22,7 +22,8 @@
     "clear-all": "rm -rf .next node_modules out",
     "restart": "rm -rf .next node_modules out && yarn install && yarn develop",
     "rebuild": "rm -rf .next node_modules out && yarn install && yarn build",
-    "turbo-build": "turbo build"
+    "turbo-build": "turbo build",
+    "postbuild": "next-sitemap"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
@@ -73,6 +74,7 @@
     "next": "^13.2.4",
     "next-i18next": "^13.1.4",
     "next-redux-wrapper": "^8.1.0",
+    "next-sitemap": "^4.0.7",
     "node": "^16.17.0",
     "pluralize": "^8.0.0",
     "prop-types": "^15.8.1",

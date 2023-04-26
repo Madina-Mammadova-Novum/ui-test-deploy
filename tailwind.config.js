@@ -23,17 +23,17 @@ module.exports = {
     },
     screens: {
       xs: '375px',
-      '2xs': '480px',
-      sm: '768px',
-      '2sm': '980px',
-      '3sm': '1024px',
-      md: '1280px',
-      lg: '1440px',
-      '2lg': '1920px',
+      sm: '480px',
+      md: '768px',
+      '2md': '980px',
+      '3md': '1024px',
+      lg: '1280px',
+      xl: '1440px',
+      '2xl': '1920px',
     },
     extend: {
       fontFamily: {
-        'kumbh-sans': ['Kumbh Sans', 'sans-serif'],
+        'inter-sans': ['Inter', 'sans-serif'],
       },
       fontSize: {
         xxs: [
