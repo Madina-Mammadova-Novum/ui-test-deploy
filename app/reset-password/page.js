@@ -18,7 +18,7 @@ const ResetPasswordPage = () => {
     <AuthWrapper
       title="Reset your password"
       subtitle="Pick and set a new password for your account and you’re good to go!"
-      containerClass="w-3/4"
+      containerClass="w-3/4 -translate-y-14 min-w-[450px]"
     >
       <ResetPasswordForm />
       <NextLink
