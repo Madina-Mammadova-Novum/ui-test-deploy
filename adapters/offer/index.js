@@ -1,4 +1,4 @@
-import { productsAdapter } from '@/adapters';
+import { postProductsAdapter } from '@/adapters';
 
 export function sendOfferAdapter({ data }) {
   const placeholder = 'placeholder';
@@ -14,6 +14,6 @@ export function sendOfferAdapter({ data }) {
     paymentTerms: paymentTerms.value,
     undisputedDemurrage: undisputedDemurrage.value,
     value,
-    products: productsAdapter({ data: products }),
+    products: postProductsAdapter({ data: products }),
   };
 }

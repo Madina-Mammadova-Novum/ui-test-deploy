@@ -20,6 +20,7 @@
       "@/lib/*": ["lib/*"],
       "@/modules": ["components/modules/index"],
       "@/modules/*": ["components/modules/*"],
+      "@/pages/*": ["pages/*"],
       "@/providers": ["providers/index"],
       "@/providers/*": ["providers/*"],
       "@/services": ["services/index"],

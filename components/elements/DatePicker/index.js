@@ -20,7 +20,8 @@ const DatePicker = ({ name = '', label = '', onChange, inputClass = 'min-w-[296p
 
   const handleDate = (pickedDate) => {
     setDate(pickedDate);
-    onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
+    onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
+    if (closeOnSelect) setShowPicker(false);
   };
 
   return (
