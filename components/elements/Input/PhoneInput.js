@@ -7,7 +7,7 @@ import Phone from 'react-phone-input-2';
 import PropTypes from 'prop-types';
 import 'react-phone-input-2/lib/style.css';
 
-import { InputErrorMessage } from '@/elements';
+import { InputErrorMessage, Label } from '@/elements';
 
 const PhoneInput = ({ name, label }) => {
   return (
@@ -17,7 +17,9 @@ const PhoneInput = ({ name, label }) => {
         const error = errors[name];
         return (
           <div className="w-full">
-            <p className="block text-gray text-[12px] font-semibold uppercase text-left mb-0.5">{label}</p>
+            <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
+              {label}
+            </Label>
             <Phone
               {...field}
               inputProps={ref}
