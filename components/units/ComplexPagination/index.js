@@ -34,7 +34,7 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
   const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
 
   return (
-    <div className="flex justify-between my-5">
+    <div className="flex items-start 3sm:items-center justify-between my-5 relative h-20 3sm:h-auto">
       <Dropdown
         label="offers per page:"
         placeholder="5"
@@ -43,7 +43,9 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
         onChange={handlePerPageChange}
         customStyles={dropdownStyles}
       />
-      <PaginationComponent currentPage={currentPage} pageCount={pages.length} onPageChange={handlePageChange} />
+      <div className="flex items-center absolute bottom-0 left-[50%] translate-x-[-50%] 3sm:translate-x-[unset] 3sm:position-unset">
+        <PaginationComponent currentPage={currentPage} pageCount={pages.length} onPageChange={handlePageChange} />
+      </div>
       <Dropdown
         label="Go to page:"
         placeholder="1"

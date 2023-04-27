@@ -24,12 +24,8 @@ export async function forgotPassword({ data }) {
 
 export async function resetPassword({ data }) {
   const body = resetPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/reset-password`, body);
-  return {
-    message,
-  };
+  const response = await postData(`auth/reset-password`, body);
+  return response;
 }
 
 export async function ownerSignUp({ data }) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { SimpleDropdown } from './SimpleDropdown';
@@ -26,7 +26,6 @@ const FormDropdown = ({
 
   const handleChange = useCallback(
     (option) => {
-      setSelectedOption(option);
       onChange(option);
     },
     [onChange]
@@ -37,7 +36,7 @@ const FormDropdown = ({
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
-
+        const hasValue = { ...field }.value?.value;
         return (
           <div className={`relative bottom-1 ${className}`}>
             <Label htmlFor={name} className="text-xs-sm">
@@ -49,7 +48,7 @@ const FormDropdown = ({
               id={name}
               options={options}
               onChange={handleChange}
-              styles={dropdownStyles(selectedOption, error, dropdownWidth)}
+              styles={dropdownStyles(hasValue, error, dropdownWidth)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
             />

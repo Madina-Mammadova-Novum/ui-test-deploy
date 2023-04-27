@@ -75,7 +75,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
                 src={getStrapiMedia(delve(coverImage, 'format.original.url'), '?format=webp')}
                 alt={delve(coverImage, 'alternativeText')}
                 className="h-full w-full object-cover object-center rounded-base"
-                quality={75}
+                quality={100}
                 height={350}
                 width={380}
               />
