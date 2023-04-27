@@ -8,6 +8,7 @@ import { metaData } from '@/adapters/metaData';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
+import Custom404 from '@/pages/404';
 import { getEntityData } from '@/services/collectionType';
 
 export async function generateMetadata({ params }) {
@@ -34,6 +35,10 @@ export default async function Home({ params }) {
   const pageData = delve(data, 'data');
   const blocks = delve(pageData, 'blocks');
   const content = delve(pageData, 'content');
+
+  if (pageData === null) {
+    return <Custom404 />;
+  }
 
   return (
     <main className={classnames(legal && 'legal-styles')}>
