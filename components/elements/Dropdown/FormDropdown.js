@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Controller } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
@@ -12,13 +12,10 @@ import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
 const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, customStyles }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
   const { dropdownWidth, className } = customStyles;
 
   const handleChange = useCallback(
     (option) => {
-      setSelectedOption(option);
       onChange(option);
     },
     [onChange]
@@ -29,7 +26,7 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
-
+        const hasValue = { ...field }.value?.value;
         return (
           <div className={`relative bottom-1 ${className}`}>
             <Label htmlFor={name} className="text-xs-sm">
@@ -41,7 +38,7 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
               id={name}
               options={options}
               onChange={handleChange}
-              styles={dropdownStyles(selectedOption, error, dropdownWidth)}
+              styles={dropdownStyles(hasValue, error, dropdownWidth)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
             />
