@@ -182,15 +182,15 @@ export const getButtonClassNames = (variant, size) => {
     if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker';
     if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-dark';
     if (variant === 'tertiary')
-      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-grey hover:border-black';
+      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white text-red h-10 px-5 py-2.5 rounded-md border border-red-medium hover:border-red';
   }
   if (size === 'medium') {
     if (variant === 'primary')
-      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-red';
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker';
     if (variant === 'secondary')
-      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-grey hover:border-black';
+      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
@@ -238,4 +238,14 @@ export const removeByIndex = (data, index) => {
 
 export const filterDataByLowerCase = (inputValue, data) => {
   return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+};
+
+export const resetObjectFields = (initialObject) => {
+  Object.keys(initialObject).forEach((key) => {
+    if (Array.isArray(initialObject[key])) {
+      initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+    } else {
+      initialObject[key] = null;
+    }
+  });
 };

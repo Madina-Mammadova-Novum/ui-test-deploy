@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, cloneElement } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -12,9 +12,11 @@ const ModalWindow = ({ children, buttonProps }) => {
   const [opened, setOpened] = useState(false);
 
   const { text, variant, size, icon, className, disabled } = buttonProps;
-
+  
   const handleOpenModal = () => setOpened(true);
   const handleCloseModal = () => setOpened(false);
+  
+  const childrenWithProps = cloneElement(children, { closeModal: handleCloseModal });
 
   return (
     <>
@@ -25,7 +27,7 @@ const ModalWindow = ({ children, buttonProps }) => {
         onClick={handleOpenModal}
       />
       <Modal opened={opened} onClose={handleCloseModal}>
-        {children}
+        {childrenWithProps}
       </Modal>
     </>
   );

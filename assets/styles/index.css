@@ -214,6 +214,10 @@
   .range_date-hidden .rdrMonths {
     @apply hidden;
   }
+
+  .position-unset {
+    position: unset;
+  }
 }
 
 /* Swiper Concern Gallery  */

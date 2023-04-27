@@ -6,8 +6,10 @@ import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
+import { Button } from '@/elements';
 import { searchForTankerSchema } from '@/lib/schemas';
 import { SearchFormFields } from '@/units';
+import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -17,8 +19,15 @@ const schema = yup.object({
 const SearchForm = ({ onSubmit }) => {
   const methods = useHookFormParams({ schema });
 
+  const handleResetFields = () => {
+    methods.reset((formValues) => {
+      resetObjectFields(formValues);
+      return formValues;
+    });
+  };
+
   return (
-    <div className="bg-white rounded-base shadow-xmd p-5 w-full">
+    <div className="bg-white rounded-base shadow-xmd p-5 w-full relative">
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData, methods)}
@@ -30,6 +39,12 @@ const SearchForm = ({ onSubmit }) => {
           }}
         >
           <SearchFormFields />
+          <div className="absolute bottom-5 right-40">
+            <Button
+              buttonProps={{ text: 'Reset all', variant: 'primary', size: 'small' }}
+              onClick={handleResetFields}
+            />
+          </div>
         </FormManager>
       </FormProvider>
     </div>

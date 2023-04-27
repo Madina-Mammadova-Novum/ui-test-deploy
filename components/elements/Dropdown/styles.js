@@ -52,7 +52,7 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
       color: '#828C9C',
       fontSize: '14px',
       fontWeight: 500,
-      // todo: add font-family after adding correct one to the project
+      fontFamily: ['Inter', 'sans-serif'],
     };
   },
 });
