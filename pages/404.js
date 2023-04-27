@@ -1,7 +1,5 @@
 'use client';
 
-import '@/assets/styles/index.css';
-
 import crash from '@/assets/images/crash.jpg';
 import { LinkAsButton, NextImage, Title } from '@/elements';
 
