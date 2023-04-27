@@ -20,23 +20,33 @@ const TermsAndConditions = () => {
     fetchData();
   }, []);
 
-  const printLinks = legalLinks.map(({ path, title }, index) => {
-    if (index === legalLinks.length - 1) {
+  const printLinks = legalLinks.map(({ path, title }) => (
+    <NextLink key={path} href={path} className="text-blue underline px-1.5">
+      {title}
+    </NextLink>
+  ));
+
+  const printLinksCombined = printLinks.reduceRight((acc, link, index) => {
+    if (index === printLinks.length - 1) {
+      return link;
+    }
+    if (index === printLinks.length - 2) {
       return (
         <>
-          <span>and </span>
-          <NextLink href={path} className="text-blue underline px-1.5">
-            {title}
-          </NextLink>
+          {link}
+          <span> and </span>
+          {acc}
         </>
       );
     }
     return (
-      <NextLink href={path} className="text-blue underline px-1.5">
-        {title}
-      </NextLink>
+      <>
+        {link}
+        <span>, </span>
+        {acc}
+      </>
     );
-  });
+  }, null);
 
   const { setValue, watch, clearErrors } = useFormContext();
 
@@ -63,7 +73,7 @@ const TermsAndConditions = () => {
       >
         <p>
           I agree with all
-          {printLinks}
+          {printLinksCombined}
         </p>
       </CheckBoxInput>
     </div>
