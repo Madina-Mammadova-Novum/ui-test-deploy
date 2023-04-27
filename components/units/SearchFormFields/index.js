@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
-import { getValueWithPath } from '@/utils/helpers';
+import { getCargoTypes } from '@/services/cargoTypes';
+import { getPorts } from '@/services/port';
+import { getProducts } from '@/services/product';
+import { getTerminals } from '@/services/terminal';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
+import { CARGO_TYPE_KEY } from '@/lib/constants';
 
 const SearchFormFields = () => {
   const {
@@ -18,15 +23,64 @@ const SearchFormFields = () => {
   } = useHookForm();
 
   const [productState, setProductState] = useState([1]);
+  const [ports, setPorts] = useState([]);
+  const [cargoTypes, setCargoTypes] = useState([]);
+  const [products, setProducts] = useState({
+    loading: false,
+    data: [],
+  });
+  const [terminals, setTreminals] = useState({
+    loadPortTerminals: {
+      loading: false,
+      data: [],
+    },
+    dischargePortTerminals: {
+      loading: false,
+      data: [],
+    },
+  });
 
   const productsLimitExceeded = productState.length >= 3;
 
-  const handleChange = (key, value) => {
+  const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+    const portKeys = ['loadPort', 'dischargePort'];
+
     if (error) {
       clearErrors(key);
     }
     setValue(key, value);
+
+    if (portKeys.includes(key)) {
+      setTreminals((prevState) => ({
+        ...prevState,
+        [`${key}Terminals`]: {
+          loading: true,
+          data: prevState[`${key}Terminals`].data
+        },
+      }));
+
+      const relatedTerminals = await getTerminals(value.value);
+      setTreminals((prevState) => ({
+        ...prevState,
+        [`${key}Terminals`]: {
+          loading: false,
+          data: convertDataToOptions(relatedTerminals, 'id', 'name')
+        },
+      }));
+    }
+
+    if (key === CARGO_TYPE_KEY) {
+      setProducts(prevState => ({
+        ...prevState,
+        loading: true,
+      }))
+      const relatedProducts = await getProducts(value.value);
+      setProducts({
+        loading: false,
+        data: convertDataToOptions(relatedProducts, 'id', 'name')
+      });
+    }
   };
 
   const handleAddProduct = () => {
@@ -40,7 +94,13 @@ const SearchFormFields = () => {
     clearErrors(`products[${id}]`);
   };
 
-  const testOption = [{ label: 'testLabel', value: 'testValue' }];
+  useEffect(() => {
+    (async () => {
+      const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()])
+      setPorts(convertDataToOptions(portsData, 'id', 'name'))
+      setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'))
+    })()
+  }, []);
 
   return (
     <div className="flex">
@@ -62,7 +122,7 @@ const SearchFormFields = () => {
         <div className="flex flex-col 3md:flex-row gap-x-5">
           <FormDropdown
             name="loadPort"
-            options={testOption}
+            options={ports}
             id="loadPort"
             label="load port"
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
@@ -70,7 +130,9 @@ const SearchFormFields = () => {
           />
           <FormDropdown
             name="loadTerminal"
-            options={testOption}
+            asyncCall={terminals.loadPortTerminals.loading}
+            options={terminals.loadPortTerminals.data}
+            disabled={!terminals.loadPortTerminals.data.length}
             label="load terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
@@ -79,14 +141,16 @@ const SearchFormFields = () => {
         <div className="flex flex-col 3md:flex-row gap-x-5">
           <FormDropdown
             name="dischargePort"
-            options={testOption}
+            options={ports}
             label="discharge port"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
           />
           <FormDropdown
             name="dischargeTerminal"
-            options={testOption}
+            asyncCall={terminals.dischargePortTerminals.loading}
+            options={terminals.dischargePortTerminals.data}
+            disabled={!terminals.dischargePortTerminals.data.length}
             label="dischargee terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargeTerminal', option)}
@@ -99,7 +163,7 @@ const SearchFormFields = () => {
           label="cargo type"
           name="cargoType"
           id="cargoType"
-          options={testOption}
+          options={cargoTypes}
           onChange={(option) => handleChange('cargoType', option)}
         />
         {productState.map((productId, index) => (
@@ -108,7 +172,9 @@ const SearchFormFields = () => {
               <FormDropdown
                 onChange={(option) => handleChange(`products[${productId}].product`, option)}
                 name={`products[${productId}].product`}
-                options={testOption}
+                asyncCall={products.loading}
+                options={products.data}
+                disabled={!products.data.length}
                 label={`product #${index + 1}`}
                 customStyles={{ className: 'w-full 3md:w-1/2' }}
               />
