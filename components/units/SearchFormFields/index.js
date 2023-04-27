@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
+import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
 import { getPorts } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
-import { CARGO_TYPE_KEY } from '@/lib/constants';
 
 const SearchFormFields = () => {
   const {
@@ -56,7 +56,7 @@ const SearchFormFields = () => {
         ...prevState,
         [`${key}Terminals`]: {
           loading: true,
-          data: prevState[`${key}Terminals`].data
+          data: prevState[`${key}Terminals`].data,
         },
       }));
 
@@ -65,20 +65,20 @@ const SearchFormFields = () => {
         ...prevState,
         [`${key}Terminals`]: {
           loading: false,
-          data: convertDataToOptions(relatedTerminals, 'id', 'name')
+          data: convertDataToOptions(relatedTerminals, 'id', 'name'),
         },
       }));
     }
 
     if (key === CARGO_TYPE_KEY) {
-      setProducts(prevState => ({
+      setProducts((prevState) => ({
         ...prevState,
         loading: true,
-      }))
+      }));
       const relatedProducts = await getProducts(value.value);
       setProducts({
         loading: false,
-        data: convertDataToOptions(relatedProducts, 'id', 'name')
+        data: convertDataToOptions(relatedProducts, 'id', 'name'),
       });
     }
   };
@@ -96,10 +96,10 @@ const SearchFormFields = () => {
 
   useEffect(() => {
     (async () => {
-      const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()])
-      setPorts(convertDataToOptions(portsData, 'id', 'name'))
-      setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'))
-    })()
+      const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
+      setPorts(convertDataToOptions(portsData, 'id', 'name'));
+      setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
+    })();
   }, []);
 
   return (

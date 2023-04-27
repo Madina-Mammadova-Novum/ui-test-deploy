@@ -39,22 +39,22 @@ const TankerSearch = ({ title }) => {
     // FOR_TESTING_PURPOSES | Remove once backend is fixed
     handleChangeState('searchResult', searchRowHeaders);
     handleChangeState('request', true);
-    /////////////////
+    /// //////////////
 
     if (data) {
       handleChangeState('searchResult', data?.results);
       handleChangeState('request', true);
     }
     if (error) {
-      const { 
-        message, 
-        // errors, 
-        description 
+      const {
+        message,
+        // errors,
+        description,
       } = error;
 
       // FOR_TESTING_PURPOSES | Uncomment once backend is fixed
       // handleChangeState('request', false);
-      ///////////////
+      /// ////////////
 
       errorToast(message, description);
     }

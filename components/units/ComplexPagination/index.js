@@ -51,7 +51,7 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
         placeholder="1"
         defaultValue={pages[currentPage - 1]}
         options={pages}
-        value={pages[currentPage-1]}
+        value={pages[currentPage - 1]}
         onChange={handleSelectedPageChange}
         customStyles={dropdownStyles}
       />
