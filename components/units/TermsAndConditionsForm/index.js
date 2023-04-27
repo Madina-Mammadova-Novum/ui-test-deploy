@@ -1,12 +1,53 @@
 'use client';
 
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CheckBoxInput, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
+import { getNavigation } from '@/services/navigation';
 
 const TermsAndConditions = () => {
+  const [legalLinks, setLegalLinks] = useState([]);
+  const fetchData = async () => {
+    const legalNavigation = await getNavigation('legal-navigation', 'en');
+    const legalIncluded = legalNavigation.filter((link) => {
+      return link.path !== ROUTES.LEGAL_EXCLUDED;
+    });
+    setLegalLinks(legalIncluded);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const printLinks = legalLinks.map(({ path, title }) => (
+    <NextLink key={path} href={path} className="text-blue underline px-1.5">
+      {title}
+    </NextLink>
+  ));
+
+  const printLinksCombined = printLinks.reduceRight((acc, link, index) => {
+    if (index === printLinks.length - 1) {
+      return link;
+    }
+    if (index === printLinks.length - 2) {
+      return (
+        <>
+          {link}
+          <span> and </span>
+          {acc}
+        </>
+      );
+    }
+    return (
+      <>
+        {link}
+        <span>, </span>
+        {acc}
+      </>
+    );
+  }, null);
+
   const { setValue, watch, clearErrors } = useFormContext();
 
   const termsAndCondition = watch('agreedRules', false);
@@ -32,13 +73,7 @@ const TermsAndConditions = () => {
       >
         <p>
           I agree with all
-          <NextLink href={ROUTES.PRIVACY_POLICY} className="text-blue underline px-1.5">
-            Privacy Policy
-          </NextLink>
-          <span>and</span>
-          <NextLink href={ROUTES.TERMS_AND_CONDITIONS} className="text-blue underline px-1.5">
-            Terms of Use
-          </NextLink>
+          {printLinksCombined}
         </p>
       </CheckBoxInput>
     </div>
