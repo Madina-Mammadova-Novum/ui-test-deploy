@@ -4,19 +4,39 @@ import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CheckBoxInput, NextLink } from '@/elements';
+import { ROUTES } from '@/lib';
 import { getNavigation } from '@/services/navigation';
 
 const TermsAndConditions = () => {
   const [legalLinks, setLegalLinks] = useState([]);
   const fetchData = async () => {
     const legalNavigation = await getNavigation('legal-navigation', 'en');
-    setLegalLinks(legalNavigation);
+    const legalIncluded = legalNavigation.filter((link) => {
+      return link.path !== ROUTES.LEGAL_EXCLUDED;
+    });
+    setLegalLinks(legalIncluded);
   };
   useEffect(() => {
     fetchData();
   }, []);
-  const policyLink = legalLinks[0];
-  const termsLink = legalLinks[1];
+
+  const printLinks = legalLinks.map(({ path, title }, index) => {
+    if (index === legalLinks.length - 1) {
+      return (
+        <>
+          <span>and </span>
+          <NextLink href={path} className="text-blue underline px-1.5">
+            {title}
+          </NextLink>
+        </>
+      );
+    }
+    return (
+      <NextLink href={path} className="text-blue underline px-1.5">
+        {title}
+      </NextLink>
+    );
+  });
 
   const { setValue, watch, clearErrors } = useFormContext();
 
@@ -43,19 +63,7 @@ const TermsAndConditions = () => {
       >
         <p>
           I agree with all
-          {legalLinks.length > 1 ? (
-            <>
-              <NextLink href={policyLink.path} className="text-blue underline px-1.5">
-                {policyLink.title}
-              </NextLink>
-              <span>and</span>
-              <NextLink href={termsLink.path} className="text-blue underline px-1.5">
-                {termsLink.title}
-              </NextLink>
-            </>
-          ) : (
-            ' Privacy Policy and Terms of Use'
-          )}
+          {printLinks}
         </p>
       </CheckBoxInput>
     </div>
