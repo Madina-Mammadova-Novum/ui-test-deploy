@@ -1,10 +1,11 @@
 import { serialize } from 'cookie';
 
 import { responseAdapter } from '@/adapters/response';
+import { SYSTEM_ERROR } from '@/lib/constants';
 import { getStrapiURL } from '@/utils/index';
 
 export const errorHandler = (res, status, message, errors = []) => {
-  const statusMessage = message === undefined || message === null ? 'Something went wrong' : message;
+  const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
   let errorsMessages = null;
   let errorMessage = null;
   if (typeof statusMessage === 'object') {

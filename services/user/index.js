@@ -10,6 +10,7 @@ import {
   updatePasswordAdapter,
   userDetailsAdapter,
 } from '@/adapters/user';
+import { SYSTEM_ERROR } from '@/lib/constants';
 import { getData, postData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -27,20 +28,20 @@ export async function resetPassword({ data }) {
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
   const response = await postData(`auth/sing-up?type=owner`, body);
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
+  return !response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
   const response = await postData(`auth/sign-up?type=charterer`, body);
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
+  return !response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
 }
 
 export async function postVeriffData({ data }) {
   const response = await postData(`auth/veriffication`, data);
   const result = await response.json();
 
-  if (!response.ok) return { error: 'something went wrong' };
+  if (!response.ok) return { error: SYSTEM_ERROR };
 
   return { link: result?.redirectUrl };
 }

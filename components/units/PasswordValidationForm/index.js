@@ -67,7 +67,7 @@ const PasswordValidation = ({ title, customStyles }) => {
   return (
     <div className={classnames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex gap-5">
+      <div className="flex gap-5 min-w-[450px]">
         <div className="w-full">
           <PasswordInput
             {...register('password')}
