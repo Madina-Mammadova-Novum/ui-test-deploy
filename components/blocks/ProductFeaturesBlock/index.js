@@ -31,6 +31,32 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
+  const printCtaBlockItem = (item) => {
+    return (
+      <Accordion
+        key={`id-${item.id}`}
+        open={open === item.title}
+        onClick={() => handleOpen(item.title)}
+        items={[
+          {
+            headerContent: item.title,
+            bodyContent: <Item text={item.text} buttons={item.buttons} />,
+          },
+        ]}
+      />
+    );
+  };
+
+  const printCtaBlock = (ctaBlock) => {
+    return (
+      currentTab === ctaBlock.title && (
+        <div key={ctaBlock.title} className="mt-1 divide-y divide-gray-darker">
+          {ctaBlock.cta.map(printCtaBlockItem)}
+        </div>
+      )
+    );
+  };
+
   return (
     <section>
       <div className="container mx-auto px-[54px] max-w-[1258px]">
@@ -44,30 +70,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
             {ctaList && (
               <Tabs activeTab={currentTab} onClick={({ target }) => setCurrentTab(target.value)} tabs={tabs} />
             )}
-            {ctaList &&
-              ctaList.map((ctaBlock) => {
-                return (
-                  currentTab === ctaBlock.title && (
-                    <div key={ctaBlock.title} className="mt-2 divide-y divide-gray-darker">
-                      {ctaBlock.cta.map((item) => {
-                        return (
-                          <Accordion
-                            key={`id-${item.id}`}
-                            open={open === item.title}
-                            onClick={() => handleOpen(item.title)}
-                            items={[
-                              {
-                                headerContent: item.title,
-                                bodyContent: <Item text={item.text} buttons={item.buttons} />,
-                              },
-                            ]}
-                          />
-                        );
-                      })}
-                    </div>
-                  )
-                );
-              })}
+            {ctaList && ctaList.map(printCtaBlock)}
           </div>
           {coverImage && (
             <div className="w-[566px] h-[366px] shrink-0 rounded-base flex-1">
