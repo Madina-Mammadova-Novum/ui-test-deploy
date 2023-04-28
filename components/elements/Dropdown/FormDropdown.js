@@ -20,8 +20,6 @@ const FormDropdown = ({
   asyncCall = false,
   customStyles = {},
 }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
   const { dropdownWidth, className } = customStyles;
 
   const handleChange = useCallback(

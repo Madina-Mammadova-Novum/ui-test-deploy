@@ -1,6 +1,6 @@
 import { BaseLayoutPropTypes } from '@/lib/types';
 
-import { ClientSidePackages } from '@/common';
+import { ClientSidePackages, TailwindIndicator } from '@/common';
 
 import '@/styles/index.css';
 
@@ -15,6 +15,7 @@ const BaseLayout = ({ children, className = '' }) => {
       <body className={className}>
         {children}
         <ClientSidePackages />
+        <TailwindIndicator />
       </body>
     </html>
   );

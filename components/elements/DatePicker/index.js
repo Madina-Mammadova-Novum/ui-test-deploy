@@ -14,7 +14,15 @@ import { transformDate } from '@/utils/date';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
-const DatePicker = ({ name = '', label = '', onChange, inputClass = 'min-w-[296px]', error, ...rest }) => {
+const DatePicker = ({
+  name = '',
+  label = '',
+  onChange,
+  inputClass = 'min-w-[296px]',
+  error,
+  closeOnSelect = true,
+  ...rest
+}) => {
   const [date, setDate] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
