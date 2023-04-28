@@ -4,7 +4,7 @@ import React from 'react';
 
 import delve from 'dlv';
 import PropTypes from 'prop-types';
-import { Pagination } from 'swiper';
+import { Autoplay, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -21,15 +21,19 @@ const ImageSliderBlock = ({ gallery }) => {
         <Swiper
           slidesPerView="1"
           spaceBetween={20}
+          loop
           pagination={{
             clickable: true,
           }}
-          modules={[Pagination]}
+          autoplay={{
+            delay: 2000,
+          }}
+          modules={[Pagination, Autoplay]}
           className="swiperAboutUs -mt-[175px]"
         >
           {gallery.map((coverImage) => {
             return (
-              <SwiperSlide className="">
+              <SwiperSlide>
                 <NextImage
                   width={800}
                   height={450}
