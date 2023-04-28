@@ -81,7 +81,7 @@
   /* CKEditor 5 Styles */
 
   .content-wrapper ul {
-    @apply list-inside list-disc;
+    @apply pl-5 list-disc;
   }
 
   .content-wrapper h1 {
