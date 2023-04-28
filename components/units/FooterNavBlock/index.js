@@ -1,6 +1,4 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import { FooterNavBlockPropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
 import { makeId } from '@/utils/helpers';
@@ -26,13 +24,6 @@ const FooterNavBlock = ({ title, items }) => {
   );
 };
 
-FooterNavBlock.propTypes = {
-  title: PropTypes.string,
-  items: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.string.isRequired,
-    path: PropTypes.string,
-  }),
-};
+FooterNavBlock.propTypes = FooterNavBlockPropTypes;
 
 export default FooterNavBlock;

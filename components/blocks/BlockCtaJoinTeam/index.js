@@ -6,7 +6,7 @@ import delve from 'dlv';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-import { buttonPropTypes, mediaPropTypes } from '@/utils/types';
+import { buttonPropTypes, mediaPropTypes } from '@/lib/types';
 
 import JoinTeamModal from '@/blocks/JoinTeamModal';
 import Button from '@/elements/Button';

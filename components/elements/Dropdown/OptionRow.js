@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { OptionRowPropTypes } from '@/lib/types';
 
 import { NextImage } from '@/elements';
 
-const OptionRow = ({ countryFlag, value }) => {
+const OptionRow = ({ value, countryFlag = null }) => {
   return (
     <div className="box-border">
       <div className="flex hover:bg-purple-light rounded-md text-xsm font-medium items-center box-border whitespace-nowrap">
@@ -15,13 +15,6 @@ const OptionRow = ({ countryFlag, value }) => {
   );
 };
 
-OptionRow.defaultProps = {
-  countryFlag: null,
-};
-
-OptionRow.propTypes = {
-  countryFlag: PropTypes.oneOf([PropTypes.node, PropTypes.string]),
-  value: PropTypes.string.isRequired,
-};
+OptionRow.propTypes = OptionRowPropTypes;
 
 export default OptionRow;

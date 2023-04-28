@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
+import { DateDetailsFormPropTypes } from '@/lib/types';
 
 import { DatePicker, Label } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const DateDetailsForm = ({ portName }) => {
+const DateDetailsForm = ({ portName = '' }) => {
   const {
     setValue,
     clearErrors,
@@ -26,8 +26,6 @@ const DateDetailsForm = ({ portName }) => {
   );
 };
 
-DateDetailsForm.propTypes = {
-  portName: PropTypes.string,
-};
+DateDetailsForm.propTypes = DateDetailsFormPropTypes;
 
 export default DateDetailsForm;

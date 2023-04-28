@@ -2,11 +2,9 @@
 
 import { cloneElement, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ModalWindowPropTypes } from '@/lib/types';
 
 import { Button, Modal } from '@/elements';
-import { SIZES } from '@/lib';
-import { STYLES } from '@/lib/constants';
 
 const ModalWindow = ({ children, buttonProps }) => {
   const [opened, setOpened] = useState(false);
@@ -33,16 +31,6 @@ const ModalWindow = ({ children, buttonProps }) => {
   );
 };
 
-ModalWindow.propTypes = {
-  children: PropTypes.node.isRequired,
-  buttonProps: PropTypes.shape({
-    className: PropTypes.string,
-    icon: PropTypes.node,
-    text: PropTypes.string,
-    variant: PropTypes.oneOf(STYLES),
-    size: PropTypes.oneOf(SIZES.BUTTONS),
-    disabled: PropTypes.bool,
-  }).isRequired,
-};
+ModalWindow.propTypes = ModalWindowPropTypes;
 
 export default ModalWindow;

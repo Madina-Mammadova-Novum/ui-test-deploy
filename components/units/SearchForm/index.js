@@ -2,8 +2,9 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { SearchFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
@@ -51,8 +52,6 @@ const SearchForm = ({ onSubmit }) => {
   );
 };
 
-SearchForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
+SearchForm.propTypes = SearchFormPropTypes;
 
 export default SearchForm;

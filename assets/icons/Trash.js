@@ -1,4 +1,4 @@
-import { iconPropTypes } from '@/utils/types';
+import { iconPropTypes } from '@/lib/types';
 
 import { useColor } from '@/utils/hooks';
 

@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { TableHeaderPropTypes } from '@/lib/types';
 
 import TableHeaderCell from '@/elements/Table/TableHeaderCell';
 
@@ -17,9 +17,6 @@ const TableHeader = ({ headerData }) => {
   return <tr>{headerData?.map(printHeaderCell)}</tr>;
 };
 
-TableHeader.propTypes = {
-  headerData: PropTypes.shape([]).isRequired,
-  className: PropTypes.string,
-};
+TableHeader.propTypes = TableHeaderPropTypes;
 
 export default TableHeader;

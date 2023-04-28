@@ -1,9 +1,10 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { TextWithLabelPropTypes } from '@/lib/types';
 
 import { Label, NextImage } from '@/elements';
 
-const TextWithLabel = ({ coverImage, text, label, customStyles }) => {
+const TextWithLabel = ({ text, label, customStyles = '', coverImage = null }) => {
   return (
     <div
       className={classnames(
@@ -20,16 +21,6 @@ const TextWithLabel = ({ coverImage, text, label, customStyles }) => {
   );
 };
 
-TextWithLabel.defaultProps = {
-  customStyles: '',
-  coverImage: null,
-};
-
-TextWithLabel.propTypes = {
-  text: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-  coverImage: PropTypes.node,
-};
+TextWithLabel.propTypes = TextWithLabelPropTypes;
 
 export default TextWithLabel;

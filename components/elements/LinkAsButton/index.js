@@ -1,12 +1,19 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-import { buttonSizesPropTypes, buttonVariantsPropTypes, linkTargetPropTypes } from '@/lib/types';
+import { LinkAsButtonPropTypes } from '@/lib/types';
 
 import { NextLink } from '@/elements';
 import { getButtonClassNames } from '@/utils/helpers';
 
-const LinkAsButton = ({ buttonProps: { variant, size }, children, href, customStyles, disabled, target, ...rest }) => {
+const LinkAsButton = ({
+  buttonProps: { variant, size },
+  children,
+  href,
+  customStyles,
+  disabled = false,
+  target = null,
+  ...rest
+}) => {
   const buttonClassNames = getButtonClassNames(variant, size);
   return (
     <NextLink
@@ -25,21 +32,6 @@ const LinkAsButton = ({ buttonProps: { variant, size }, children, href, customSt
   );
 };
 
-LinkAsButton.defaultProps = {
-  target: null,
-  disabled: false,
-};
-
-LinkAsButton.propTypes = {
-  buttonProps: PropTypes.shape({
-    variant: buttonVariantsPropTypes.isRequired,
-    size: buttonSizesPropTypes.isRequired,
-  }).isRequired,
-  children: PropTypes.node.isRequired,
-  href: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-  disabled: PropTypes.bool,
-  target: linkTargetPropTypes,
-};
+LinkAsButton.propTypes = LinkAsButtonPropTypes;
 
 export default LinkAsButton;

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import delve from 'dlv';
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';

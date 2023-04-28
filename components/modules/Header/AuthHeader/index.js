@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
-
-import { navBarPropTypes } from '@/lib/types';
+import { AuthBasePropTypes } from '@/lib/types';
 
 import { Navbar } from '@/modules';
 
@@ -13,8 +11,6 @@ const AuthHeader = ({ navigation }) => {
   );
 };
 
-AuthHeader.propTypes = {
-  navigation: PropTypes.shape(navBarPropTypes).isRequired,
-};
+AuthHeader.propTypes = AuthBasePropTypes;
 
 export default AuthHeader;

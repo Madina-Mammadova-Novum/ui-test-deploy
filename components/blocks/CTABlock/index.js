@@ -1,5 +1,3 @@
-import React from 'react';
-
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
@@ -66,12 +64,6 @@ const CTABlock = ({ title, shortDescription, buttons }) => {
       </div>
     </div>
   );
-};
-
-CTABlock.defaultProps = {
-  title: '',
-  shortDescription: '',
-  buttons: [],
 };
 
 CTABlock.propTypes = {

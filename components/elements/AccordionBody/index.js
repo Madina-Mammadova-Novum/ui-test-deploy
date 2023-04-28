@@ -1,7 +1,6 @@
-import React from 'react';
-
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { AccordionBodyPropTypes } from '@/lib/types';
 
 const AccordionBody = ({ children, isFullWidth }) => {
   return (
@@ -11,9 +10,6 @@ const AccordionBody = ({ children, isFullWidth }) => {
   );
 };
 
-AccordionBody.propTypes = {
-  children: PropTypes.string,
-  isFullWidth: PropTypes.bool,
-};
+AccordionBody.propTypes = AccordionBodyPropTypes;
 
 export default AccordionBody;

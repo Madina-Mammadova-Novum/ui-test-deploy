@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import PropTypes from 'prop-types';
+import { TableCellPropTypes } from '@/lib/types';
 
 import { NextImage, Tooltip } from '@/elements';
 import { TYPE } from '@/lib/constants';
@@ -77,21 +77,6 @@ const TableCell = ({ cellProps }) => {
   );
 };
 
-TableCell.propTypes = {
-  cellProps: PropTypes.shape({
-    countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
-    type: PropTypes.string,
-    value: PropTypes.string,
-    helperData: PropTypes.string,
-    name: PropTypes.string,
-    editIcon: PropTypes.node,
-    badge: PropTypes.string,
-    toggle: PropTypes.bool,
-    editable: PropTypes.bool,
-    disabled: PropTypes.bool,
-    marked: PropTypes.string,
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-  }).isRequired,
-};
+TableCell.propTypes = TableCellPropTypes;
 
 export default TableCell;

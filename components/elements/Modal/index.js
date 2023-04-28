@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { ModalPropTypes } from '@/lib/types';
 
 import { Portal } from '@/elements';
 import { ModalWrapper } from '@/modules';
@@ -13,9 +13,6 @@ const Modal = ({ opened, onClose, children }) => {
   );
 };
 
-Modal.propTypes = {
-  opened: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
+Modal.propTypes = ModalPropTypes;
 
 export default Modal;

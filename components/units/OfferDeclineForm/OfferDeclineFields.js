@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 import ModalHeader from '../ModalHeader';
+
+import { OfferDeclinePropTypes } from '@/lib/types';
 
 import { Button, RadioInput, TextArea, Title } from '@/elements';
 import { Countdown } from '@/units';
@@ -37,7 +37,7 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineFields = ({ closeModal, title, goBack }) => {
+const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
   const [showTextField, setShowTextField] = useState(false);
   const handleCheck = (id) => {
@@ -87,16 +87,6 @@ const OfferDeclineFields = ({ closeModal, title, goBack }) => {
   );
 };
 
-OfferDeclineFields.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-  title: '',
-};
-
-OfferDeclineFields.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-  title: PropTypes.string,
-};
+OfferDeclineFields.propTypes = OfferDeclinePropTypes;
 
 export default OfferDeclineFields;

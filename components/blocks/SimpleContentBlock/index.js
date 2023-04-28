@@ -1,5 +1,3 @@
-import React from 'react';
-
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 
@@ -18,11 +16,6 @@ const SimpleContentBlock = ({ title, content }) => {
       </div>
     </section>
   );
-};
-
-SimpleContentBlock.defaultProps = {
-  title: '',
-  content: '',
 };
 
 SimpleContentBlock.propTypes = {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';

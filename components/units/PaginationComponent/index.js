@@ -2,11 +2,11 @@
 
 import ReactPaginate from 'react-paginate';
 
-import PropTypes from 'prop-types';
+import { PaginationComponentPropTypes } from '@/lib/types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 
-const PaginationComponent = ({ currentPage, pageCount, onPageChange, containerStyles }) => {
+const PaginationComponent = ({ currentPage, pageCount, onPageChange, containerStyles = '' }) => {
   return (
     <ReactPaginate
       forcePage={currentPage - 1}
@@ -29,15 +29,6 @@ const PaginationComponent = ({ currentPage, pageCount, onPageChange, containerSt
   );
 };
 
-PaginationComponent.defaultProps = {
-  containerStyles: '',
-};
-
-PaginationComponent.propTypes = {
-  currentPage: PropTypes.number.isRequired,
-  pageCount: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  containerStyles: PropTypes.string,
-};
+PaginationComponent.propTypes = PaginationComponentPropTypes;
 
 export default PaginationComponent;

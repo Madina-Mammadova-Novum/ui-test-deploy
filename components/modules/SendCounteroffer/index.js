@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { SendCounterOfferPropTypes } from '@/lib/types';
 
 import { Button, SimpleSelect } from '@/elements';
 import { CommentsContent } from '@/modules';
@@ -87,14 +87,6 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
   );
 };
 
-SendCounteroffer.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-};
-
-SendCounteroffer.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+SendCounteroffer.propTypes = SendCounterOfferPropTypes;
 
 export default SendCounteroffer;

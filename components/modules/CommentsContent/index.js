@@ -1,11 +1,11 @@
 'use client';
 
-import PropTypes from 'prop-types';
+import { CommentsContentPropTypes } from '@/lib/types';
 
 import { TextArea, Title } from '@/elements';
 import { Comment } from '@/units';
 
-const CommentsContent = ({ data, areaDisabled }) => {
+const CommentsContent = ({ data = [], areaDisabled = false }) => {
   return (
     <div>
       <Title level="3">Comments</Title>
@@ -31,14 +31,6 @@ const CommentsContent = ({ data, areaDisabled }) => {
   );
 };
 
-CommentsContent.defaultProps = {
-  data: [],
-  areaDisabled: false,
-};
-
-CommentsContent.propTypes = {
-  data: PropTypes.shape([]),
-  areaDisabled: PropTypes.bool,
-};
+CommentsContent.propTypes = CommentsContentPropTypes;
 
 export default CommentsContent;

@@ -2,13 +2,12 @@
 
 import classnames from 'classnames';
 import { usePathname } from 'next/navigation';
-import PropTypes from 'prop-types';
 
-import { linkTargetPropTypes } from '@/lib/types';
+import { NavButtonPropTypes } from '@/lib/types';
 
 import { NextLink } from '@/elements';
 
-const NavButton = ({ children, path, customStyles, disabled, target, ...rest }) => {
+const NavButton = ({ children, path, customStyles, disabled = false, target = null, ...rest }) => {
   const pathname = usePathname();
   const isActive = pathname === path;
 
@@ -29,17 +28,6 @@ const NavButton = ({ children, path, customStyles, disabled, target, ...rest }) 
   );
 };
 
-NavButton.defaultProps = {
-  target: null,
-  disabled: false,
-};
-
-NavButton.propTypes = {
-  children: PropTypes.node.isRequired,
-  path: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-  disabled: PropTypes.bool,
-  target: linkTargetPropTypes,
-};
+NavButton.propTypes = NavButtonPropTypes;
 
 export default NavButton;

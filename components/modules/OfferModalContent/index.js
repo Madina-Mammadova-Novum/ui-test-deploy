@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { OfferModalContentPropTypes } from '@/lib/types';
 
 import { Button, Dropdown, Title } from '@/elements';
 import { COUNTDOWN_OPTIONS } from '@/lib/constants';
@@ -93,14 +93,6 @@ const OfferModalContent = ({ closeModal }) => {
   );
 };
 
-OfferModalContent.defaultProps = {
-  setStep: () => {},
-  closeModal: () => {},
-};
-
-OfferModalContent.propTypes = {
-  setStep: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+OfferModalContent.propTypes = OfferModalContentPropTypes;
 
 export default OfferModalContent;

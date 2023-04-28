@@ -1,10 +1,8 @@
-import React from 'react';
-
 import delve from 'dlv';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-import { mediaPropTypes } from '@/utils/types';
+import { mediaPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -34,11 +32,6 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
       </div>
     </section>
   );
-};
-
-BlockHeroImage.defaultProps = {
-  title: '',
-  shortDescription: '',
 };
 
 BlockHeroImage.propTypes = {

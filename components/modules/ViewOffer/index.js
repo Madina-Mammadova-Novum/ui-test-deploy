@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ViewOfferPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
@@ -91,14 +91,6 @@ const ViewOffer = ({ setStep, closeModal }) => {
   );
 };
 
-ViewOffer.defaultProps = {
-  setStep: () => {},
-  closeModal: () => {},
-};
-
-ViewOffer.propTypes = {
-  setStep: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+ViewOffer.propTypes = ViewOfferPropTypes;
 
 export default ViewOffer;

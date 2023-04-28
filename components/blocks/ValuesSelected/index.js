@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { valuesPropTypes } from '@/utils/types';
+import { valuesPropTypes } from '@/lib/types';
 
 import { BenefitCard } from '@/collections';
 import { BlockShortDescription, BlockTitle } from '@/elements';

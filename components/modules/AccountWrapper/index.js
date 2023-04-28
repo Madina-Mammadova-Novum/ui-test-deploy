@@ -1,15 +1,9 @@
-import PropTypes from 'prop-types';
+import { AccountWrapperPropTypes } from '@/lib/types';
 
-const AccountWrapper = ({ children, containerClass }) => {
+const AccountWrapper = ({ children, containerClass = 'w-full' }) => {
   return <div className={containerClass}>{children}</div>;
 };
 
-AccountWrapper.defaultProps = {
-  containerClass: 'w-full',
-};
-
-AccountWrapper.propTypes = {
-  containerClass: PropTypes.string,
-};
+AccountWrapper.propTypes = AccountWrapperPropTypes;
 
 export default AccountWrapper;

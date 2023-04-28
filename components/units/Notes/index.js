@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import PropTypes from 'prop-types';
+import { NotesPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
 
@@ -37,10 +37,5 @@ const Notes = ({ title, subtitle, data }) => {
   );
 };
 
-Notes.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.shape({})),
-};
-
+Notes.propTypes = NotesPropTypes;
 export default Notes;

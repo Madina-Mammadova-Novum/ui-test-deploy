@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-
-import { mediaPropTypes } from '@/utils/types';
+import { ctaListPropTypes, mediaPropTypes } from '@/lib/types';
 
 import Item from '@/blocks/ProductFeaturesBlock/Item';
 import { NextImage, Title } from '@/elements';
 import { Accordion, Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   const [open, setOpen] = useState(0);
@@ -90,21 +90,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 ProductFeaturesBlock.propTypes = {
   title: PropTypes.string,
   coverImage: mediaPropTypes,
-  ctaList: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.string,
-    cta: PropTypes.arrayOf({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      title: PropTypes.string,
-      text: PropTypes.string,
-      buttons: PropTypes.arrayOf(
-        PropTypes.shape({
-          label: PropTypes.string,
-          path: PropTypes.string,
-        })
-      ),
-    }),
-  }),
+  ctaList: PropTypes.arrayOf(ctaListPropTypes),
 };
 
 export default ProductFeaturesBlock;

@@ -1,11 +1,12 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import DragSVG from '@/assets/images/drag.svg';
 import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
 
-const ExpandableCardHeader = ({ toggle, headerData }) => {
+const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
   const printHeaderRow = (data, index) => (
     <TextWithLabel label={data?.label} text={data?.text} customStyles={!index && 'mr-auto'} />
   );
@@ -25,14 +26,6 @@ const ExpandableCardHeader = ({ toggle, headerData }) => {
   );
 };
 
-ExpandableCardHeader.defaultProps = {
-  toggle: false,
-  headerData: [],
-};
-
-ExpandableCardHeader.propTypes = {
-  toggle: PropTypes.bool,
-  headerData: PropTypes.arrayOf(PropTypes.shape({})),
-};
+ExpandableCardHeader.propTypes = ExpandableCardHeaderPropTypes;
 
 export default ExpandableCardHeader;

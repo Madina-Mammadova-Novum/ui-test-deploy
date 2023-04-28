@@ -4,7 +4,7 @@ import delve from 'dlv';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
 // import { DermTestedCta } from '@/assets';
 import {

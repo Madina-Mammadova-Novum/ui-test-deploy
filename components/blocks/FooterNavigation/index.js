@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-import { linkImagePropTypes, mediaPropTypes } from '@/utils/types';
+import { linkImagePropTypes, mediaPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
