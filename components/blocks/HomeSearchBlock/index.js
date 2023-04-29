@@ -30,7 +30,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     switch (typeOfView) {
       case 'Tools':
         // todo: add Tools component when it is done
-        return <div className="text-white">Soon...</div>;
+        return <div className="text-white h-32">Soon...</div>;
       default:
         return <TankerSearch />;
     }
