@@ -11,6 +11,7 @@ build-staging:
   tags:
     - staging
   script:
+    - export NODE_OPTIONS=--max_old_space_size=4096
     - yarn install
     - cp .env.staging .env
     - yarn build
