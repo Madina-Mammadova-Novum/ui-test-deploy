@@ -58,7 +58,7 @@ const AccountPositions = () => {
           <ComplexPagination />
         </>
       ) : (
-        <Loader className="h-8 w-8 absolute top-1/2" />
+        <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />
       )}
     </section>
   );
