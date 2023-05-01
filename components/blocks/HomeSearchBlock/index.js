@@ -26,13 +26,16 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     setActiveTab(value);
   };
 
+  // todo: temporarily until authorization functionality is completed
+  const isUserAuthorized = false;
+
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
         // todo: add Tools component when it is done
         return <div className="text-white h-32">Soon...</div>;
       default:
-        return <TankerSearch />;
+        return <TankerSearch isUserAuthorized={isUserAuthorized} />;
     }
   };
 
