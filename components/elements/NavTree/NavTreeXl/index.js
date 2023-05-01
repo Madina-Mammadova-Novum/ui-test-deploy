@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
@@ -6,8 +7,12 @@ import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
 
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
+import { handleOpen } from '@/store/entities/user/slice';
+import { getSidebarSelector } from '@/store/selectors';
 
-const NavTreeXl = ({ data, active, opened, onChange }) => {
+const NavTreeXl = ({ data, active }) => {
+  const dispatch = useDispatch();
+  const { opened } = useSelector(getSidebarSelector);
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
@@ -30,7 +35,7 @@ const NavTreeXl = ({ data, active, opened, onChange }) => {
   return (
     <NavTreeHeader
       href={data.path}
-      onClick={() => onChange('opened', !opened)}
+      onClick={() => dispatch(handleOpen(!opened))}
       isSubMenu={hasNestedLinks}
       className="flex items-center transition-all"
     >

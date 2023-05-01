@@ -1,3 +1,4 @@
+import AccountContainer from '@/modules/AccountContainer';
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
 import AccountWrapper from '@/modules/AccountWrapper';
@@ -38,6 +39,7 @@ import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 
 export {
+  AccountContainer,
   AccountWrapper,
   AccountPositions,
   AccountDetails,
