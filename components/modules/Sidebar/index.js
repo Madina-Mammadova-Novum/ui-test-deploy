@@ -3,6 +3,7 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { usePathname, useSearchParams } from 'next/navigation';
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
 
@@ -15,6 +16,12 @@ import { useMediaQuery } from '@/utils/hooks';
 
 const Sidebar = ({ data, containerStyles }) => {
   const dispatch = useDispatch();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const url = pathname + searchParams.toString();
+  const currentPage = data.filter((item) => item.path === url)[0];
+
   const { collapsed } = useSelector(getSidebarSelector);
 
   const lgScreen = useMediaQuery(SCREENS.LG);
@@ -24,9 +31,9 @@ const Sidebar = ({ data, containerStyles }) => {
   const handleResize = () => setCollapse(!collapsed);
 
   useEffect(() => {
-    if (lgScreen) setCollapse(true);
+    if (lgScreen || (lgScreen && url !== currentPage?.path)) setCollapse(true);
     else setCollapse(false);
-  }, [lgScreen, setCollapse]);
+  }, [currentPage?.path, data, lgScreen, setCollapse, url]);
 
   return (
     <aside
