@@ -5,7 +5,6 @@ import delve from 'dlv';
 import parse from 'html-react-parser';
 
 import { metaData } from '@/adapters/metaData';
-import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
 import Custom404 from '@/pages/404';
@@ -47,7 +46,7 @@ export default async function Home({ params }) {
       <section className="relative pt-[115px] pb-[195px]">
         <div className="container mx-auto px-[54px] max-w-[1258px]">
           <NextImage
-            src={waves}
+            src="/images/waves.jpg"
             alt="waves"
             customStyles="absolute inset-0 -z-10 h-full w-full object-cover object-center"
             height={352}
