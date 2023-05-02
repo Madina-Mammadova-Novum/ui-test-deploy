@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
+import TickInCircleSVG from '@/assets/images/tickInCircle.svg';
 import { FormManager } from '@/common';
 import { Button, FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
 import { contactInfoSchema } from '@/lib/schemas';
@@ -54,8 +55,8 @@ const ContactUsForm = () => {
 
   return isSubmitted ? (
     <div className="flex flex-col text-center items-center m-auto">
-      <Title level={2} className="mb-2.5">
-        Thank you!
+      <Title level={2} className="mb-2.5 flex items-center gap-2">
+        <TickInCircleSVG className="fill-black" width="20" height="20" viewBox="0 0 18 18" /> Thank you!
       </Title>
       <p className="text-xsm mb-4 max-w-[240px]">
         Your message has been submitted. Someone from our team will contact you shortly.
@@ -111,7 +112,13 @@ const ContactUsForm = () => {
             onChange={(option) => handleChange('subject', option)}
             error={errors.subject?.message}
           />
-          <TextArea name="message" label="Message" placeholder="Type your message here" inputStyles="h-20" />
+          <TextArea
+            register={register}
+            name="message"
+            label="Message"
+            placeholder="Type your message here"
+            inputStyles="h-20"
+          />
         </div>
       </FormManager>
     </FormProvider>
