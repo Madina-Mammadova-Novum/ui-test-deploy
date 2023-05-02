@@ -201,14 +201,12 @@ export const useMounted = () => {
 };
 
 export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
-
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [perPage, setPerPage] = useState(itemsPerPage);
   const [option, setSelectedPage] = useState([]);
 
-  const [ascSort, setAscSort] = useState(sortValue === SORT_OPTIONS.asc)
+  const [ascSort, setAscSort] = useState(sortValue === SORT_OPTIONS.asc);
   const prevItemsPerPageRef = useRef(perPage);
-
 
   useEffect(() => {
     if (perPage !== prevItemsPerPageRef.current) {
@@ -220,17 +218,18 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const itemsFrom = (currentPage - 1) * perPage;
   const items = data?.slice(itemsFrom, itemsFrom + perPage);
   // We checking if type presented only after that we can sort
-  const sortedItems = items[0]?.type ? items.toSorted((a, b) => {
-    if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
-      return 1
-    }
+  const sortedItems = items[0]?.type
+    ? items.toSorted((a, b) => {
+        if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
+          return 1;
+        }
 
-    if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
-      return -1
-    }
-    return 0
-
-  }) : items
+        if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
+          return -1;
+        }
+        return 0;
+      })
+    : items;
 
   useEffect(() => {
     setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter));
@@ -240,7 +239,6 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
     setCurrentPage(page.selected + 1);
   };
 
-
   const handleSelectedPageChange = ({ value }) => {
     setCurrentPage(value);
   };
@@ -249,8 +247,8 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   };
 
   const handleSortChange = ({ value }) => {
-    setAscSort(value === 'ascending')
-  }
+    setAscSort(value === 'ascending');
+  };
 
   return {
     numberOfPages,

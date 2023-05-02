@@ -59,8 +59,8 @@ const AccountPositions = () => {
   }, []);
 
   const handleChange = (option) => {
-    handleSortChange(option)
-    handleChangeState('sortValue', option)
+    handleSortChange(option);
+    handleChangeState('sortValue', option);
   };
   const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
