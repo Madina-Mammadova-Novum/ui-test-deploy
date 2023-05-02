@@ -2,12 +2,12 @@
 
 import { useMemo, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { OfferModalContentPropTypes } from '@/lib/types';
 
 import { Button, Dropdown, Title } from '@/elements';
 import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
-import { OfferForm, Tabs } from '@/units';
+import { CommercialOfferTerms, OfferForm, Tabs } from '@/units';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -51,7 +51,7 @@ const OfferModalContent = ({ closeModal }) => {
       case 'comments':
         return <CommentsContent data={incomingOfferCommentsData} />;
       default:
-        return <OfferForm />;
+        return <CommercialOfferTerms />;
     }
   }, [currentTab]);
 
@@ -76,7 +76,9 @@ const OfferModalContent = ({ closeModal }) => {
       <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
 
       <div className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}>
-        <div className="p-2.5">{tabContent}</div>
+        <div className="p-2.5">
+          <OfferForm>{tabContent}</OfferForm>
+        </div>
       </div>
 
       <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
@@ -91,14 +93,6 @@ const OfferModalContent = ({ closeModal }) => {
   );
 };
 
-OfferModalContent.defaultProps = {
-  setStep: () => {},
-  closeModal: () => {},
-};
-
-OfferModalContent.propTypes = {
-  setStep: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+OfferModalContent.propTypes = OfferModalContentPropTypes;
 
 export default OfferModalContent;

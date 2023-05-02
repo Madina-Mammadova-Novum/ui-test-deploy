@@ -10,26 +10,19 @@ import {
   updatePasswordAdapter,
   userDetailsAdapter,
 } from '@/adapters/user';
+import { SYSTEM_ERROR } from '@/lib/constants';
 import { getData, postData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/forgot-password`, body);
-  return {
-    message,
-  };
+  const response = await postData(`auth/forgot-password`, body);
+  return response;
 }
 
 export async function resetPassword({ data }) {
   const body = resetPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/reset-password`, body);
-  return {
-    message,
-  };
+  const response = await postData(`auth/reset-password`, body);
+  return response;
 }
 
 export async function ownerSignUp({ data }) {
@@ -44,7 +37,7 @@ export async function ownerSignUp({ data }) {
   });
   /* const response = await postData(`auth/signup?type=owner`, body); */
   // TODO: postData for signup doesn't return actual response from backend
-  return response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
+  return response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
 }
 
 export async function chartererSignUp({ data }) {
@@ -59,7 +52,7 @@ export async function chartererSignUp({ data }) {
   });
   /* const response = await postData(`auth/signup?type=charterer`, body); */
   // TODO: postData for signup doesn't return actual response from backend
-  return response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
+  return response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
 }
 
 export async function postVeriffData({ data }) {
@@ -67,7 +60,7 @@ export async function postVeriffData({ data }) {
   if (link) {
     return { link };
   }
-  return { error: 'Something went wrong' };
+  return { error: SYSTEM_ERROR };
 }
 
 export async function login({ data }) {

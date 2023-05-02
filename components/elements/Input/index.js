@@ -1,7 +1,8 @@
 import React from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { InputPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
 
@@ -68,15 +69,6 @@ const Input = React.forwardRef(
   }
 );
 
-Input.propTypes = {
-  label: PropTypes.string,
-  type: PropTypes.string,
-  customStyles: PropTypes.string,
-  error: PropTypes.string,
-  helperText: PropTypes.string,
-  icon: PropTypes.node,
-  disabled: PropTypes.bool,
-  name: PropTypes.string.isRequired,
-};
+Input.propTypes = InputPropTypes;
 
 export default Input;

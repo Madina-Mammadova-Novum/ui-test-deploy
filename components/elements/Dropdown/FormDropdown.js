@@ -1,24 +1,29 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Controller } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
-
 import { SimpleDropdown } from './SimpleDropdown';
+
+import { DropdownPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
 import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
-const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, customStyles }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
+const FormDropdown = ({
+  options,
+  onChange,
+  name,
+  label = '',
+  disabled = false,
+  asyncCall = false,
+  customStyles = {},
+}) => {
   const { dropdownWidth, className } = customStyles;
 
   const handleChange = useCallback(
     (option) => {
-      setSelectedOption(option);
       onChange(option);
     },
     [onChange]
@@ -29,7 +34,7 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
-
+        const hasValue = { ...field }.value?.value;
         return (
           <div className={`relative bottom-1 ${className}`}>
             <Label htmlFor={name} className="text-xs-sm">
@@ -41,7 +46,7 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
               id={name}
               options={options}
               onChange={handleChange}
-              styles={dropdownStyles(selectedOption, error, dropdownWidth)}
+              styles={dropdownStyles(hasValue, error, dropdownWidth)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
             />
@@ -53,21 +58,6 @@ const FormDropdown = ({ asyncCall, name, label, options, onChange, disabled, cus
   );
 };
 
-FormDropdown.defaultProps = {
-  label: null,
-  disabled: false,
-  asyncCall: false,
-  customStyles: '',
-};
-
-FormDropdown.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string,
-  customStyles: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-  asyncCall: PropTypes.bool,
-};
+FormDropdown.propTypes = DropdownPropTypes;
 
 export default FormDropdown;

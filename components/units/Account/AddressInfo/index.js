@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { AddressInfoPropTypes } from '@/lib/types';
 
 import { TextRow } from '@/elements';
 
@@ -18,15 +18,6 @@ const AddressInfo = ({ address = {} }) => {
   );
 };
 
-AddressInfo.propTypes = {
-  address: PropTypes.shape({
-    addressLine1: PropTypes.string,
-    addressLine2: PropTypes.string,
-    state: PropTypes.string,
-    city: PropTypes.string,
-    postal: PropTypes.string,
-    country: PropTypes.string,
-  }).isRequired,
-};
+AddressInfo.propTypes = AddressInfoPropTypes;
 
 export default AddressInfo;

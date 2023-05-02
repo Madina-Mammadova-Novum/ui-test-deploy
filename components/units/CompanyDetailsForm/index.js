@@ -50,6 +50,4 @@ const CompanyDetails = () => {
   );
 };
 
-CompanyDetails.propTypes = {};
-
 export default CompanyDetails;

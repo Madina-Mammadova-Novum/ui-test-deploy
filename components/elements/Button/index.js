@@ -1,9 +1,6 @@
-import React from 'react';
-
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-import { buttonSizesPropTypes, buttonVariantsPropTypes } from '@/lib/types';
+import { ButtonPropTypes } from '@/lib/types';
 
 import { IconWrapper } from '@/units';
 import { getButtonClassNames } from '@/utils/helpers';
@@ -11,8 +8,8 @@ import { getButtonClassNames } from '@/utils/helpers';
 const Button = ({
   buttonProps: { icon = {}, iconContainerStyles, helperText, text, variant, size },
   customStyles,
-  disabled,
-  type,
+  disabled = false,
+  type = 'button',
   onClick,
   ...rest
 }) => {
@@ -42,29 +39,6 @@ const Button = ({
   );
 };
 
-Button.defaultProps = {
-  customStyles: '',
-  disabled: false,
-  type: 'button',
-  onClick: () => {},
-};
-
-Button.propTypes = {
-  buttonProps: {
-    text: PropTypes.string,
-    helperText: PropTypes.string,
-    iconContainerStyles: PropTypes.string,
-    icon: {
-      before: PropTypes.node,
-      after: PropTypes.node,
-    },
-    variant: buttonVariantsPropTypes.isRequired,
-    size: buttonSizesPropTypes.isRequired,
-  }.isRequired,
-  type: PropTypes.string,
-  customStyles: PropTypes.string,
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-};
+Button.propTypes = ButtonPropTypes;
 
 export default Button;

@@ -1,18 +1,17 @@
 'use client';
 
-import React from 'react';
-
 import delve from 'dlv';
 import PropTypes from 'prop-types';
-import { Pagination } from 'swiper';
+import { Autoplay, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { mediaPropTypes } from '@/utils/types';
+import { galleryPropTypes } from '@/lib/types';
 
 import { NextImage } from '@/elements';
 import { getStrapiMedia } from '@/utils';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const ImageSliderBlock = ({ gallery }) => {
   return (
@@ -21,15 +20,19 @@ const ImageSliderBlock = ({ gallery }) => {
         <Swiper
           slidesPerView="1"
           spaceBetween={20}
+          loop
           pagination={{
             clickable: true,
           }}
-          modules={[Pagination]}
+          autoplay={{
+            delay: 2000,
+          }}
+          modules={[Pagination, Autoplay]}
           className="swiperAboutUs -mt-[175px]"
         >
           {gallery.map((coverImage) => {
             return (
-              <SwiperSlide className="">
+              <SwiperSlide>
                 <NextImage
                   width={800}
                   height={450}
@@ -48,10 +51,7 @@ const ImageSliderBlock = ({ gallery }) => {
 };
 
 ImageSliderBlock.propTypes = {
-  gallery: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    coverImage: PropTypes.shape(mediaPropTypes),
-  }),
+  gallery: PropTypes.arrayOf(galleryPropTypes),
 };
 
 export default ImageSliderBlock;

@@ -1,9 +1,7 @@
-import React from 'react';
-
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import { mediaPropTypes, valuesPropTypes } from '@/utils/types';
+import { mediaPropTypes, valuesPropTypes } from '@/lib/types';
 
 import { NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';

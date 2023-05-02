@@ -1,9 +1,7 @@
-import React from 'react';
-
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
 import { LinkAsButton, NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -19,7 +17,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
             alt={delve(coverImage, 'alternativeText')}
             src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
             className="h-full w-full object-cover object-center"
-            quality={75}
+            quality={100}
           />
         </div>
       )}
@@ -48,13 +46,6 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
       </div>
     </section>
   );
-};
-
-CTASingleImageBlock.defaultProps = {
-  title: '',
-  shortDescription: '',
-  button: {},
-  coverImage: {},
 };
 
 CTASingleImageBlock.propTypes = {

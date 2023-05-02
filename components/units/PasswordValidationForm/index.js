@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { PasswordValidationPropTypes } from '@/lib/types';
 
 import TickInCircleSVG from '@/assets/images/tickInCircle.svg';
 import { PasswordInput, Title } from '@/elements';
@@ -37,7 +38,7 @@ const initialState = [
   },
 ];
 
-const PasswordValidation = ({ title, customStyles }) => {
+const PasswordValidation = ({ title = '', customStyles = '' }) => {
   const [validation, setValidation] = useState(initialState);
   const {
     register,
@@ -67,7 +68,7 @@ const PasswordValidation = ({ title, customStyles }) => {
   return (
     <div className={classnames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex gap-5">
+      <div className="flex gap-5 min-w-[450px]">
         <div className="w-full">
           <PasswordInput
             {...register('password')}
@@ -104,16 +105,6 @@ const PasswordValidation = ({ title, customStyles }) => {
   );
 };
 
-PasswordValidation.defaultProps = {
-  customStyles: '',
-  submitCount: 0,
-  title: '',
-};
-
-PasswordValidation.propTypes = {
-  title: PropTypes.string,
-  customStyles: PropTypes.string,
-  submitCount: PropTypes.number,
-};
+PasswordValidation.propTypes = PasswordValidationPropTypes;
 
 export default PasswordValidation;

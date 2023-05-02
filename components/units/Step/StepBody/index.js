@@ -1,15 +1,9 @@
-import PropTypes from 'prop-types';
+import { StepBodyPropTypes } from '@/lib/types';
 
-const StepBody = ({ children, className }) => {
+const StepBody = ({ children, className = '' }) => {
   return <div className={className}>{children}</div>;
 };
 
-StepBody.defaultProps = {
-  className: '',
-};
-
-StepBody.propTypes = {
-  className: PropTypes.string,
-};
+StepBody.propTypes = StepBodyPropTypes;
 
 export default StepBody;

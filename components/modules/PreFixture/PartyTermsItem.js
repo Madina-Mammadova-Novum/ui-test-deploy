@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { PartyTermsItemPropTypes } from '@/lib/types';
 
 import { Button, Modal, Title } from '@/elements';
 
-const PartyTermsItem = ({ title, content }) => {
+const PartyTermsItem = ({ title, content = 'No Content Provided' }) => {
   const [opened, setOpened] = useState(false);
   const handleCloseModal = () => setOpened(false);
   const handleOpenModal = () => setOpened(true);
+
   return (
     <>
       <Button
@@ -25,13 +26,6 @@ const PartyTermsItem = ({ title, content }) => {
   );
 };
 
-PartyTermsItem.propTypes = {
-  content: 'No Content Provided',
-};
-
-PartyTermsItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string,
-};
+PartyTermsItem.propTypes = PartyTermsItemPropTypes;
 
 export default PartyTermsItem;

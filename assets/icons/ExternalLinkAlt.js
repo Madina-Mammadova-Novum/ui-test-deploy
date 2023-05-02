@@ -1,4 +1,4 @@
-import { iconPropTypes } from '@/utils/types';
+import { iconPropTypes } from '@/lib/types';
 
 const ExternalLinkAltIcon = ({ width, height, className }) => {
   return (
@@ -23,6 +23,6 @@ ExternalLinkAltIcon.defaultProps = {
   height: 24,
 };
 
-ExternalLinkAltIcon.propTypes = { ...iconPropTypes };
+ExternalLinkAltIcon.propTypes = iconPropTypes;
 
 export default ExternalLinkAltIcon;

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { valuesPropTypes } from '@/utils/types';
+import { valuesPropTypes } from '@/lib/types';
 
 // import { ImprovementCard } from '@/collections';
 import { Title } from '@/elements';

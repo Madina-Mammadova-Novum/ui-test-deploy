@@ -5,6 +5,7 @@ import delve from 'dlv';
 import parse from 'html-react-parser';
 
 import { metaData } from '@/adapters/metaData';
+import Custom404 from '@/app/404';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
@@ -34,6 +35,10 @@ export default async function Home({ params }) {
   const pageData = delve(data, 'data');
   const blocks = delve(pageData, 'blocks');
   const content = delve(pageData, 'content');
+
+  if (pageData === null) {
+    return <Custom404 />;
+  }
 
   return (
     <main className={classnames(legal && 'legal-styles')}>

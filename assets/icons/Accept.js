@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { iconPropTypes } from '@/utils/types';
+import { iconPropTypes } from '@/lib/types';
 
 import { useColor } from '@/utils/hooks';
 
@@ -22,6 +22,6 @@ Accept.defaultProps = {
   height: 20,
 };
 
-Accept.propTypes = { ...iconPropTypes };
+Accept.propTypes = iconPropTypes;
 
 export default Accept;

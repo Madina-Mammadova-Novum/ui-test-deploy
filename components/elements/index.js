@@ -25,7 +25,6 @@ import InputErrorMessage from '@/elements/InputErrorMessage';
 import Label from '@/elements/Label';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
-import Loading from '@/elements/Loading';
 import Modal from '@/elements/Modal';
 import NavButton from '@/elements/NavButton';
 import NavTree from '@/elements/NavTree';
@@ -79,7 +78,6 @@ export {
   FieldsetContentWrapper,
   FieldsetContent,
   IconComponent,
-  Loading,
   NotFound,
   DateTimeRow,
   RadioInput,

@@ -1,10 +1,8 @@
 'use client';
 
-import React from 'react';
-
 import PropTypes from 'prop-types';
 
-import { linkImagePropTypes } from '@/utils/types';
+import { linkImagePropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
 import { ContactUsForm } from '@/modules';

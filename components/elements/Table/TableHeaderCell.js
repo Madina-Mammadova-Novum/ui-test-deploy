@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { TableHeaderCellPropTypes } from '@/lib/types';
 
 import { Tooltip } from '@/elements';
 
@@ -18,14 +18,6 @@ const TableHeaderCell = ({ text, type, helperData, icon, ...rest }) => {
   );
 };
 
-TableHeaderCell.propTypes = {
-  text: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  icon: PropTypes.node,
-  helperData: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }),
-};
+TableHeaderCell.propTypes = TableHeaderCellPropTypes;
 
 export default TableHeaderCell;

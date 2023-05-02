@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
+import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import InfoSVG from '@/assets/images/info.svg';
 import { IconComponent, TextRow, Title } from '@/elements';
 
-const VoyageDetailsTabContent = ({ data }) => {
+const VoyageDetailsTabContent = ({ data = {} }) => {
   return (
     <div>
       <div className="flex justify-between">
@@ -46,18 +46,6 @@ const VoyageDetailsTabContent = ({ data }) => {
   );
 };
 
-VoyageDetailsTabContent.defaultProps = {
-  data: {
-    dates: [],
-    ports: [],
-  },
-};
-
-VoyageDetailsTabContent.propTypes = {
-  data: PropTypes.shape({
-    dates: PropTypes.shape([]),
-    ports: PropTypes.shape([]),
-  }),
-};
+VoyageDetailsTabContent.propTypes = VoyageDetailsTabContentPropTypes;
 
 export default VoyageDetailsTabContent;

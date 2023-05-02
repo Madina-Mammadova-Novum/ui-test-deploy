@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Calendar } from 'react-date-range';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { DatePickePropTypes } from '@/lib/types';
 
 import CalendarSVG from '@/assets/images/calendar.svg';
 import { Input } from '@/elements';
@@ -13,13 +14,22 @@ import { transformDate } from '@/utils/date';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
-const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
+const DatePicker = ({
+  name = '',
+  label = '',
+  onChange,
+  inputClass = 'min-w-[296px]',
+  error,
+  closeOnSelect = true,
+  ...rest
+}) => {
   const [date, setDate] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDate = (pickedDate) => {
     setDate(pickedDate);
-    onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
+    onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
+    if (closeOnSelect) setShowPicker(false);
   };
 
   return (
@@ -53,24 +63,6 @@ const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
   );
 };
 
-DatePicker.defaultProps = {
-  name: '',
-  label: '',
-  inputClass: 'min-w-[296px]',
-  error: null,
-  register: () => {},
-  setValue: () => {},
-  onChange: () => {},
-};
-
-DatePicker.propTypes = {
-  inputClass: PropTypes.string,
-  name: PropTypes.string,
-  label: PropTypes.string,
-  setValue: PropTypes.func,
-  register: PropTypes.func,
-  onChange: PropTypes.func,
-  error: PropTypes.string,
-};
+DatePicker.propTypes = DatePickePropTypes;
 
 export default DatePicker;

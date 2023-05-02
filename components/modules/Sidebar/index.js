@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
+
+import { SidebarPropTypes } from '@/lib/types';
 
 import { SCREENS } from '@/lib/constants';
 import { useMediaQuery } from '@/utils/hooks';
@@ -48,13 +48,6 @@ const Sidebar = ({ data, containerStyles }) => {
   );
 };
 
-Sidebar.defaultProps = {
-  containerStyles: '',
-};
-
-Sidebar.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  containerStyles: PropTypes.string,
-};
+Sidebar.propTypes = SidebarPropTypes;
 
 export default Sidebar;

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-
 import PartyTermsItem from './PartyTermsItem';
+
+import { DetailsContentPropTypes } from '@/lib/types';
 
 import usFlag from '@/assets/images/flag.png';
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
@@ -107,8 +107,6 @@ const DetailsContent = ({ underNegotiation }) => {
   );
 };
 
-DetailsContent.propTypes = {
-  underNegotiation: PropTypes.bool.isRequired,
-};
+DetailsContent.propTypes = DetailsContentPropTypes;
 
 export default DetailsContent;

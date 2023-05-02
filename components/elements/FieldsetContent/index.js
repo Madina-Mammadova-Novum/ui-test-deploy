@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { FieldsetContentPropTypes } from '@/lib/types';
 
 const FieldsetContent = ({ label, children, className }) => {
   return (
@@ -9,10 +9,6 @@ const FieldsetContent = ({ label, children, className }) => {
   );
 };
 
-FieldsetContent.propTypes = {
-  label: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-};
+FieldsetContent.propTypes = FieldsetContentPropTypes;
 
 export default FieldsetContent;

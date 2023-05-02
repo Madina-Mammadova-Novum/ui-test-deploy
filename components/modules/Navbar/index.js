@@ -28,10 +28,6 @@ const Navbar = ({ placeholder, cta, path }) => {
   );
 };
 
-Navbar.defaultProps = {
-  contrasted: false,
-};
-
 Navbar.propTypes = navBarPropTypes;
 
 export default Navbar;

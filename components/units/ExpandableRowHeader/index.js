@@ -1,17 +1,19 @@
+'use client';
+
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { ExpandableRowHeaderPropTypes } from '@/lib/types';
 
 import DragSVG from '@/assets/images/drag.svg';
 import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
-import { noSSR } from '@/utils/helpers';
 import { useMediaQuery } from '@/utils/hooks';
 
-const ExpandableRowHeader = ({ toggle, headerData }) => {
+const ExpandableRowHeader = ({ toggle = false, headerData = [] }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
   return (
-    <div className="w-full h-auto md:h-[60px] flex items-center py-3 md:py-0">
-      <DragSVG className="fill-gray mr-3.5 mt-2.5 md:mt-0 self-start md:self-auto" />
+    <div className="w-full h-auto md:h-[60px] flex items-center gap-x-2.5 py-3 md:py-0">
+      <DragSVG className="fill-gray mt-2.5 md:mt-0 self-start md:self-auto" />
       <div className="grid sm:grid-cols-1 3md:grid-cols-2 md:flex md:flex-row md:items-center w-full gap-x-2.5">
         {headerData.map(({ label, content: { text, image } }, index) => (
           <div
@@ -32,14 +34,6 @@ const ExpandableRowHeader = ({ toggle, headerData }) => {
   );
 };
 
-ExpandableRowHeader.defaultProps = {
-  toggle: false,
-  headerData: [],
-};
+ExpandableRowHeader.propTypes = ExpandableRowHeaderPropTypes;
 
-ExpandableRowHeader.propTypes = {
-  toggle: PropTypes.bool,
-  headerData: PropTypes.arrayOf(PropTypes.shape({})),
-};
-
-export default noSSR(ExpandableRowHeader);
+export default ExpandableRowHeader;

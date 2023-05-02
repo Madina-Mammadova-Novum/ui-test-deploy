@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import PropTypes from 'prop-types';
+import { ModalPropTypes } from '@/lib/types';
 
 import { CloseIcon } from '@/assets/icons';
 import { Button } from '@/elements';
@@ -34,9 +34,6 @@ const ModalWrapper = ({ opened, onClose, children }) => {
   );
 };
 
-ModalWrapper.propTypes = {
-  opened: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
+ModalWrapper.propTypes = ModalPropTypes;
 
 export default ModalWrapper;

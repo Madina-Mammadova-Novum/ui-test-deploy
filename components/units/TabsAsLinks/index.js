@@ -1,9 +1,10 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { TabAsLinkPropTypes } from '@/lib/types';
 
 import { NextLink } from '@/elements';
 
-const TabsAsLinks = ({ tabs, customStyles, activeTab }) => {
+const TabsAsLinks = ({ tabs, customStyles = '', activeTab }) => {
   return (
     <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
       {tabs.map(({ value, label, path }) => (
@@ -22,19 +23,6 @@ const TabsAsLinks = ({ tabs, customStyles, activeTab }) => {
   );
 };
 
-TabsAsLinks.defaultProps = {
-  customStyles: '',
-};
-
-TabsAsLinks.propTypes = {
-  tabs: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  activeTab: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-};
+TabsAsLinks.propTypes = TabAsLinkPropTypes;
 
 export default TabsAsLinks;

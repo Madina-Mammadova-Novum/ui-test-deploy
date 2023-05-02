@@ -1,17 +1,17 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { TextAreaPropTypes } from '@/lib/types';
 
 const TextArea = ({
   label,
   name,
   register,
-  required,
-  type,
-  disabled,
-  placeholder,
-  customStyles,
+  type = 'text',
+  disabled = false,
+  placeholder = '',
+  customStyles = '',
   inputStyles,
   onChange,
   ...rest
@@ -21,7 +21,7 @@ const TextArea = ({
   return (
     <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
       {label && (
-        <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase mb-0.5">
+        <label htmlFor={name} className="block text-gray text-xs-sm font-semibold uppercase mb-0.5">
           {label}
         </label>
       )}
@@ -43,28 +43,6 @@ const TextArea = ({
   );
 };
 
-TextArea.defaultProps = {
-  label: '',
-  type: 'text',
-  placeholder: '',
-  customStyles: '',
-  required: false,
-  disabled: false,
-  onChange: () => {},
-  register: () => {},
-};
-
-TextArea.propTypes = {
-  name: PropTypes.string.isRequired,
-  register: PropTypes.func,
-  required: PropTypes.bool,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  placeholder: PropTypes.string,
-  customStyles: PropTypes.string,
-  inputStyles: PropTypes.string,
-  disabled: PropTypes.bool,
-  onChange: PropTypes.func,
-};
+TextArea.propTypes = TextAreaPropTypes;
 
 export default TextArea;

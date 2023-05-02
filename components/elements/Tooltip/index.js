@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { TooltipPropTypes } from '@/lib/types';
 
 import HoverTooltip from '@/elements/Tooltip/HoverTooltip';
 import ManualTooltip from '@/elements/Tooltip/ManualTooltip';
@@ -47,13 +47,6 @@ const Tooltip = ({ variant, className, children, data }) => {
   return printTooltip;
 };
 
-Tooltip.propTypes = {
-  variant: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  data: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.element,
-  }).isRequired,
-};
+Tooltip.propTypes = TooltipPropTypes;
 
 export default Tooltip;

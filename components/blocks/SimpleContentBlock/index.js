@@ -1,5 +1,3 @@
-import React from 'react';
-
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 
@@ -7,8 +5,8 @@ import { Title } from '@/elements';
 
 const SimpleContentBlock = ({ title, content }) => {
   return (
-    <section className="">
-      <div className="container mx-auto max-w-[960px]">
+    <section>
+      <div className="max-w-[960px] container mx-auto">
         {title && (
           <Title level="1" className="text-center text-black my-2.5">
             {title}
@@ -18,11 +16,6 @@ const SimpleContentBlock = ({ title, content }) => {
       </div>
     </section>
   );
-};
-
-SimpleContentBlock.defaultProps = {
-  title: '',
-  content: '',
 };
 
 SimpleContentBlock.propTypes = {

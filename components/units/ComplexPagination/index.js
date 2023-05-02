@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ComplexPaginationPropTypes } from '@/lib/types';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { Dropdown } from '@/elements';
@@ -34,7 +34,7 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
   const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
 
   return (
-    <div className="flex justify-between my-5">
+    <div className="flex items-start 3md:items-center justify-between my-5 relative h-20 3md:h-auto">
       <Dropdown
         label="offers per page:"
         placeholder="5"
@@ -43,12 +43,15 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
         onChange={handlePerPageChange}
         customStyles={dropdownStyles}
       />
-      <PaginationComponent currentPage={currentPage} pageCount={pages.length} onPageChange={handlePageChange} />
+      <div className="flex items-center absolute bottom-0 left-[50%] translate-x-[-50%] 3md:translate-x-[unset] 3md:position-unset">
+        <PaginationComponent currentPage={currentPage} pageCount={pages.length} onPageChange={handlePageChange} />
+      </div>
       <Dropdown
         label="Go to page:"
         placeholder="1"
         defaultValue={pages[currentPage - 1]}
         options={pages}
+        value={pages[currentPage - 1]}
         onChange={handleSelectedPageChange}
         customStyles={dropdownStyles}
       />
@@ -56,11 +59,6 @@ const ComplexPagination = ({ page, totalPages, dataPerPage }) => {
   );
 };
 
-ComplexPagination.propTypes = {
-  page: PropTypes.number,
-  perPage: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.number, value: PropTypes.number })),
-  totalPages: PropTypes.number,
-  dataPerPage: PropTypes.arrayOf(PropTypes.number),
-};
+ComplexPagination.propTypes = ComplexPaginationPropTypes;
 
 export default ComplexPagination;

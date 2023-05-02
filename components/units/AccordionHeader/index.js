@@ -1,7 +1,6 @@
-import React from 'react';
-
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { AccordionHeaderPropTypes } from '@/lib/types';
 
 import { MinusIcon, PlusIcon } from '@/assets/icons';
 import { Title } from '@/elements';
@@ -26,11 +25,6 @@ const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
   );
 };
 
-AccordionHeader.propTypes = {
-  children: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  isActive: PropTypes.bool,
-  isFullWidth: PropTypes.bool,
-};
+AccordionHeader.propTypes = AccordionHeaderPropTypes;
 
 export default AccordionHeader;

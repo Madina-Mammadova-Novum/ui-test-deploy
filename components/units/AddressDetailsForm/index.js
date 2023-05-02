@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
+import { AddressDetailsFormPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input } from '@/elements';
 import { getCities } from '@/services';
 import { convertDataToOptions } from '@/utils/helpers';
 
-const AddressDetails = ({ title, type, countries }) => {
+const AddressDetails = ({ title, type, countries = [] }) => {
   const [cities, setCities] = useState([]);
   const [disabled, setDisabled] = useState(true);
 
@@ -101,15 +101,6 @@ const AddressDetails = ({ title, type, countries }) => {
   );
 };
 
-AddressDetails.defaultProps = {
-  title: '',
-  countries: [{}],
-};
-
-AddressDetails.propTypes = {
-  title: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  countries: PropTypes.arrayOf(PropTypes.shape({})),
-};
+AddressDetails.propTypes = AddressDetailsFormPropTypes;
 
 export default AddressDetails;

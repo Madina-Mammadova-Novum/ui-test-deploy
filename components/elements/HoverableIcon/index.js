@@ -1,12 +1,9 @@
-import PropTypes from 'prop-types';
+import { HoverableIconPropTypes } from '@/lib/types';
 
 const HoverableIcon = ({ icon, className }) => {
   return <div className={`${className} p-1 hover:bg-purple-light cursor-pointer`}>{icon}</div>;
 };
 
-HoverableIcon.propTypes = {
-  icon: PropTypes.node.isRequired,
-  className: PropTypes.string,
-};
+HoverableIcon.propTypes = HoverableIconPropTypes;
 
 export default HoverableIcon;

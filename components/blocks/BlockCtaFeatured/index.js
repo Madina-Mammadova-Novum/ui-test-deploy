@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import { BlockShortDescription, BlockTitle, NextLink } from 'components/elements';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
