@@ -19,6 +19,7 @@ const SearchFormFields = () => {
     clearErrors,
     formState: { errors, isSubmitting },
     setValue,
+    getValues,
     unregister,
   } = useHookForm();
 
@@ -45,6 +46,12 @@ const SearchFormFields = () => {
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
     const portKeys = ['loadPort', 'dischargePort'];
+    const terminalKeys = {
+      loadPort: 'loadTerminal',
+      dischargePort: 'dischargeTerminal',
+    }
+
+    if(JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
     if (error) {
       clearErrors(key);
@@ -52,6 +59,7 @@ const SearchFormFields = () => {
     setValue(key, value);
 
     if (portKeys.includes(key)) {
+      setValue(terminalKeys[key], null)
       setTreminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
@@ -71,6 +79,7 @@ const SearchFormFields = () => {
     }
 
     if (key === CARGO_TYPE_KEY) {
+      productState.map((productId) => setValue(`products[${productId}].product`, null))
       setProducts((prevState) => ({
         ...prevState,
         loading: true,

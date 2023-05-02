@@ -77,8 +77,13 @@ export const apiHandler = async (options, req, res) => {
   if (checkRequestMethod(req, allowedMethods)) {
     const requestOptions = fetchOptions(requestMethod, req);
     const response = await fetch(endpoint, requestOptions);
+    let result;
 
-    const result = await response.json();
+    try {
+      result = await response.json();
+    } catch {
+      result = response;
+    }
 
     if (!response.ok) {
       return errorHandler(res, response.status, result);
