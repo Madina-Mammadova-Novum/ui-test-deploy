@@ -7,10 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { getUserPositions } from '@/services';
-import {
-  ComplexPagination,
-  ExpandableCard
-} from '@/units';
+import { ComplexPagination, ExpandableCard } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
@@ -34,28 +31,37 @@ const AccountPositions = () => {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } =
-    useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, userStore.userPositions);
+  const {
+    numberOfPages,
+    items,
+    currentPage,
+    handleSortChange,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage,
+    onChangeOffers,
+    perPage,
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, userPositions, sortValue.value);
 
   /* fetching user positions data */
 
   const fetchData = useCallback(async () => {
     try {
       const data = await getUserPositions();
-      setUserStore(data);
+      setUserStore({ ...userStore, userPositions: data });
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [userStore]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
-
-  const handleChange = (option) => handleChangeState('sortValue', option);
-
-
+  const handleChange = (option) => {
+    handleSortChange(option)
+    handleChangeState('sortValue', option)
+  };
   const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
@@ -74,13 +80,15 @@ const AccountPositions = () => {
             />
           </div>
           {items && items?.map(printExpandableCard)}
-          <ComplexPagination currentPage={currentPage}
+          <ComplexPagination
+            currentPage={currentPage}
             numberOfPages={numberOfPages}
             onPageChange={handlePageChange}
             onSelectedPageChange={handleSelectedPageChange}
             pages={selectedPage}
             onChangeOffers={onChangeOffers}
-            perPage={perPage} />
+            perPage={perPage}
+          />
         </>
       ) : (
         <Loader className="h-8 w-8 absolute top-1/2" />

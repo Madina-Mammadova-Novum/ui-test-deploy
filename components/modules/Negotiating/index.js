@@ -12,7 +12,7 @@ import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const Negotiating = () => {
-  const [negotiatingData, setNegotiatingData] = useState(null);
+  const [negotiatingData, setNegotiatingData] = useState([]);
   const [toggle, setToggle] = useState(false);
 
   const initialPagesStore = {
@@ -20,8 +20,16 @@ const Negotiating = () => {
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
 
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } =
-    useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, negotiatingData);
+  const {
+    numberOfPages,
+    items,
+    currentPage,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage,
+    onChangeOffers,
+    perPage,
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, negotiatingData);
 
   const fetchData = useCallback(async () => {
     try {
@@ -34,8 +42,7 @@ const Negotiating = () => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
-
+  }, []);
 
   return negotiatingData ? (
     <section>
@@ -48,24 +55,27 @@ const Negotiating = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">
-        {items && items.map((rowHeader) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={rowHeader} />}
-            footer={<NegotiatingExpandedFooter isCharterer />}
-            expand={toggle}
-          >
-            <NegotiatingExpandedContent />
-          </ExpandableRow>
-        ))}
+        {items &&
+          items.map((rowHeader) => (
+            <ExpandableRow
+              header={<ExpandableRowHeader headerData={rowHeader} />}
+              footer={<NegotiatingExpandedFooter isCharterer />}
+              expand={toggle}
+            >
+              <NegotiatingExpandedContent />
+            </ExpandableRow>
+          ))}
       </div>
 
-      <ComplexPagination currentPage={currentPage}
+      <ComplexPagination
+        currentPage={currentPage}
         numberOfPages={numberOfPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
         pages={selectedPage}
         onChangeOffers={onChangeOffers}
-        perPage={perPage} />
+        perPage={perPage}
+      />
     </section>
   ) : (
     <Loader className="h-8 w-8 absolute top-1/2" />

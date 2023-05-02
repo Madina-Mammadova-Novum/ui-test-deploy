@@ -12,7 +12,7 @@ import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const Fixture = () => {
-  const [fixtureData, setFixtureData] = useState(null);
+  const [fixtureData, setFixtureData] = useState([]);
   const [toggle, setToggle] = useState(false);
 
   const initialPagesStore = {
@@ -20,10 +20,16 @@ const Fixture = () => {
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
 
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } =
-    useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, fixtureData);
-
-
+  const {
+    numberOfPages,
+    items,
+    currentPage,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage,
+    onChangeOffers,
+    perPage,
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, fixtureData);
 
   const fetchData = useCallback(async () => {
     try {
@@ -37,7 +43,7 @@ const Fixture = () => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   return fixtureData ? (
     <section>
@@ -50,24 +56,27 @@ const Fixture = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">
-        {items && items.map((headerData) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={headerData} />}
-            footer={<FixtureExpandedFooter />}
-            expand={toggle}
-          >
-            Content
-          </ExpandableRow>
-        ))}
+        {items &&
+          items.map((headerData) => (
+            <ExpandableRow
+              header={<ExpandableRowHeader headerData={headerData} />}
+              footer={<FixtureExpandedFooter />}
+              expand={toggle}
+            >
+              Content
+            </ExpandableRow>
+          ))}
       </div>
 
-      <ComplexPagination currentPage={currentPage}
+      <ComplexPagination
+        currentPage={currentPage}
         numberOfPages={numberOfPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
         pages={selectedPage}
         onChangeOffers={onChangeOffers}
-        perPage={perPage} />
+        perPage={perPage}
+      />
     </section>
   ) : (
     <Loader className="h-8 w-8 absolute top-1/2" />

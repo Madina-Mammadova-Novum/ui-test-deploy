@@ -13,11 +13,7 @@ import { usePathname } from 'next/navigation';
 import { getFilledArray } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
-import {
-  NAVIGATION_PARAMS,
-
-  PALETTE
-} from '@/lib/constants';
+import { NAVIGATION_PARAMS, PALETTE, SORT_OPTIONS } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -204,14 +200,15 @@ export const useMounted = () => {
   return mounted.current;
 };
 
-export const useFilters = (itemsPerPage, initialPage, data) => {
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [perPage, setPerPage] = useState(itemsPerPage)
-  const [option, setSelectedPage] = useState(
-    []
-  );
+export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
 
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [perPage, setPerPage] = useState(itemsPerPage);
+  const [option, setSelectedPage] = useState([]);
+
+  const [ascSort, setAscSort] = useState(sortValue === SORT_OPTIONS.asc)
   const prevItemsPerPageRef = useRef(perPage);
+
 
   useEffect(() => {
     if (perPage !== prevItemsPerPageRef.current) {
@@ -222,37 +219,51 @@ export const useFilters = (itemsPerPage, initialPage, data) => {
   const numberOfPages = Math.ceil(data?.length / perPage);
   const itemsFrom = (currentPage - 1) * perPage;
   const items = data?.slice(itemsFrom, itemsFrom + perPage);
+  // We checking if type presented only after that we can sort
+  const sortedItems = items[0]?.type ? items.toSorted((a, b) => {
+    if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
+      return 1
+    }
+
+    if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
+      return -1
+    }
+    return 0
+
+  }) : items
 
   useEffect(() => {
-    setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter))
-  }, [data, numberOfPages])
+    setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter));
+  }, [data, numberOfPages]);
 
-  const handlePageChange = (page, type) => {
-    switch (type) {
-      case 'pagination':
-        setCurrentPage(page.selected + 1)
-        break;
-      case 'drop-down':
-        setCurrentPage(page.value)
-        break;
-      default:
-        setCurrentPage(1)
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page.selected + 1);
   };
 
-  const handleSelectedPageChange = (value) => {
-    setCurrentPage(value.value)
+
+  const handleSelectedPageChange = ({ value }) => {
+    setCurrentPage(value);
+  };
+  const onChangeOffers = ({ value }) => {
+    setPerPage(value);
+  };
+
+  const handleSortChange = ({ value }) => {
+    setAscSort(value === 'ascending')
   }
 
-  const onChangeOffers = (e) => {
-    setPerPage(e.value)
-  }
-
-  return { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, selectedPage: option, onChangeOffers, perPage };
+  return {
+    numberOfPages,
+    items: sortedItems,
+    currentPage,
+    handleSortChange,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage: option,
+    onChangeOffers,
+    perPage,
+  };
 };
-
-
-
 export const useSidebarActiveColor = (path) => {
   const pathname = usePathname();
 

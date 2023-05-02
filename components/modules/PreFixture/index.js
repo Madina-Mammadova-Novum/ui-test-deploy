@@ -21,8 +21,16 @@ const PreFixture = () => {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } =
-    useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, preFixtureData);
+  const {
+    numberOfPages,
+    items,
+    currentPage,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage,
+    onChangeOffers,
+    perPage,
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, preFixtureData);
 
   const fetchData = useCallback(async () => {
     try {
@@ -37,10 +45,9 @@ const PreFixture = () => {
   useEffect(() => {
     // setIsLoading(true);
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   return (
-
     <section>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
@@ -51,15 +58,16 @@ const PreFixture = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">
-        {items && items.map((headerData, underNegotiation) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={headerData} />}
-            footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
-            expand={toggle}
-          >
-            <PreFixtureExpandedContent underNegotiation={underNegotiation} />
-          </ExpandableRow>
-        ))}
+        {items &&
+          items.map((headerData, underNegotiation) => (
+            <ExpandableRow
+              header={<ExpandableRowHeader headerData={headerData} />}
+              footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
+              expand={toggle}
+            >
+              <PreFixtureExpandedContent underNegotiation={underNegotiation} />
+            </ExpandableRow>
+          ))}
       </div>
 
       <ComplexPagination
@@ -71,8 +79,6 @@ const PreFixture = () => {
         onChangeOffers={onChangeOffers}
         perPage={perPage}
       />
-
-
     </section>
   );
 };
