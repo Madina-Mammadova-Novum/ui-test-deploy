@@ -1,13 +1,12 @@
 'use client';
 
-import crash from '@/assets/images/crash.jpg';
 import { LinkAsButton, NextImage, Title } from '@/elements';
 
 export default function Custom404() {
   return (
     <section className="relative min-h-screen">
       <NextImage
-        src={crash}
+        src="/images/crash.jpg"
         alt="error"
         customStyles="absolute inset-0 -z-10 h-full w-full object-cover"
         height={750}

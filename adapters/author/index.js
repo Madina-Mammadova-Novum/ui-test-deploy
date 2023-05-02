@@ -18,6 +18,7 @@ export const authorAdapter = ({ data }) => {
     contactLink,
     socialLinks,
     authorPosition,
+    publishedAt,
   } = attributes;
   const links = socialLinks ? socialLinks.map((link) => linkImageAdapter(link)) : [];
 
@@ -36,6 +37,7 @@ export const authorAdapter = ({ data }) => {
     contactLink,
     socialLinks: links || null,
     position: authorPosition ? authorPositionAdapter(authorPosition) : null,
+    publishedAt,
   };
 };
 
