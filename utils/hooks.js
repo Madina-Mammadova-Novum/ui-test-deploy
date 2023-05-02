@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -8,7 +10,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import delve from 'dlv';
 import { usePathname } from 'next/navigation';
 
-import { PALETTE } from '@/lib/constants';
+import { getFilledArray } from './helpers';
+
+import { navigationPagesAdapter } from '@/adapters/navigation';
+import {
+  NAVIGATION_PARAMS,
+
+  PALETTE
+} from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -194,6 +203,55 @@ export const useMounted = () => {
 
   return mounted.current;
 };
+
+export const useFilters = (itemsPerPage, initialPage, data) => {
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [perPage, setPerPage] = useState(itemsPerPage)
+  const [option, setSelectedPage] = useState(
+    []
+  );
+
+  const prevItemsPerPageRef = useRef(perPage);
+
+  useEffect(() => {
+    if (perPage !== prevItemsPerPageRef.current) {
+      setCurrentPage(1);
+    }
+  }, [perPage]);
+
+  const numberOfPages = Math.ceil(data?.length / perPage);
+  const itemsFrom = (currentPage - 1) * perPage;
+  const items = data?.slice(itemsFrom, itemsFrom + perPage);
+
+  useEffect(() => {
+    setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter))
+  }, [data, numberOfPages])
+
+  const handlePageChange = (page, type) => {
+    switch (type) {
+      case 'pagination':
+        setCurrentPage(page.selected + 1)
+        break;
+      case 'drop-down':
+        setCurrentPage(page.value)
+        break;
+      default:
+        setCurrentPage(1)
+    }
+  };
+
+  const handleSelectedPageChange = (value) => {
+    setCurrentPage(value.value)
+  }
+
+  const onChangeOffers = (e) => {
+    setPerPage(e.value)
+  }
+
+  return { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, selectedPage: option, onChangeOffers, perPage };
+};
+
+
 
 export const useSidebarActiveColor = (path) => {
   const pathname = usePathname();
