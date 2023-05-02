@@ -27,31 +27,13 @@ export async function resetPassword({ data }) {
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
-  /* const response = await postData(`auth/signup?type=owner`, body); */
-  // TODO: postData for signup doesn't return actual response from backend
+  const response = await postData(`auth/signup?type=owner`, body);
   return response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
-  /* const response = await postData(`auth/signup?type=charterer`, body); */
-  // TODO: postData for signup doesn't return actual response from backend
+  const response = await postData(`auth/signup?type=charterer`, body);
   return response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
 }
 
