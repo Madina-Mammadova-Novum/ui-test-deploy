@@ -12,7 +12,6 @@ export function generateMetadata() {
 }
 
 const VesselsSearch = () => {
-  // todo: temporarily until authorization functionality is completed
 
   return (
     <AccountWrapper containerClass="grow px-5">

@@ -26,8 +26,6 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     setActiveTab(value);
   };
 
-  // todo: temporarily until authorization functionality is completed
-
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
