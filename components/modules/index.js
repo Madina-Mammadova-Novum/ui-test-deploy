@@ -19,7 +19,7 @@ import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
 import Negotiating from '@/modules/Negotiating';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
-import NotFound from "@/modules/NotFound";
+import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
@@ -80,5 +80,5 @@ export {
   ViewCounteroffer,
   ViewFailedOffer,
   ViewOffer,
-  NotFound
+  NotFound,
 };
