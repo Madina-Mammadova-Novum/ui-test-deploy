@@ -1,14 +1,14 @@
-import { TankerExpandedFooterPropTypes } from '@/lib/types';
-
 import { LinkAsButton } from '@/elements';
 import { ROUTES } from '@/lib';
 import OfferModalContent from '@/modules/OfferModalContent';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
+import { useAuth } from '@/utils/hooks';
 
-const TankerExpandedFooter = ({ isUserAuthorized }) => {
+const TankerExpandedFooter = () => {
+  const { isAuthorized } = useAuth();
   return (
     <ExpandableRowFooter>
-      {isUserAuthorized ? (
+      {isAuthorized ? (
         <ModalWindow buttonProps={{ variant: 'primary', size: 'large', text: 'Send offer', className: 'ml-auto' }}>
           <OfferModalContent />
         </ModalWindow>
@@ -24,7 +24,5 @@ const TankerExpandedFooter = ({ isUserAuthorized }) => {
     </ExpandableRowFooter>
   );
 };
-
-TankerExpandedFooter.propTypes = TankerExpandedFooterPropTypes;
 
 export default TankerExpandedFooter;

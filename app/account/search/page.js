@@ -13,11 +13,10 @@ export function generateMetadata() {
 
 const VesselsSearch = () => {
   // todo: temporarily until authorization functionality is completed
-  const isUserAuthorized = true;
 
   return (
     <AccountWrapper containerClass="grow px-5">
-      <TankerSearch title="Search" isUserAuthorized={isUserAuthorized} />
+      <TankerSearch title="Search" />
     </AccountWrapper>
   );
 };

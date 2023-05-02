@@ -10,7 +10,7 @@ import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
 import { ExpandableRowHeader, ToggleRows } from '@/units';
 
-const TankerSearchResults = ({ request, params = [], directions = [], data, onChange, isUserAuthorized }) => {
+const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
   const [expandExactResults, setExpandExactResults] = useState(false);
   const [expandPartialResults, setExpandPartialResults] = useState(false);
 
@@ -49,7 +49,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={rowHeader} />}
-            footer={<TankerExpandedFooter isUserAuthorized={isUserAuthorized} />}
+            footer={<TankerExpandedFooter />}
             expand={expandExactResults}
           >
             <ExpandedContent />

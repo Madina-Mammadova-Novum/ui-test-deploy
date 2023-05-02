@@ -12,7 +12,7 @@ import { options } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 import { searchRowHeaders } from '@/utils/mock';
 
-const TankerSearch = ({ title, isUserAuthorized }) => {
+const TankerSearch = ({ title }) => {
   const [tankerStore, setTankerStore] = useState({
     params: options(['Ballast leg']),
     directions: options(['Ascending', 'Descending']),
@@ -77,7 +77,6 @@ const TankerSearch = ({ title, isUserAuthorized }) => {
           params={params}
           directions={directions}
           onChange={handleChangeState}
-          isUserAuthorized={isUserAuthorized}
         />
       ) : (
         <p className="inline-flex pt-5 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
@@ -90,7 +89,6 @@ const TankerSearch = ({ title, isUserAuthorized }) => {
 
 TankerSearch.propTypes = {
   title: PropTypes.string,
-  isUserAuthorized: PropTypes.bool,
 };
 
 export default TankerSearch;
