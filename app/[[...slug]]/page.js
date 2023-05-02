@@ -3,9 +3,9 @@ import React from 'react';
 import classnames from 'classnames';
 import delve from 'dlv';
 import parse from 'html-react-parser';
+import { notFound } from 'next/navigation';
 
 import { metaData } from '@/adapters/metaData';
-import Custom404 from '@/app/404';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
@@ -37,7 +37,7 @@ export default async function Home({ params }) {
   const content = delve(pageData, 'content');
 
   if (pageData === null) {
-    return <Custom404 />;
+    notFound();
   }
 
   return (
