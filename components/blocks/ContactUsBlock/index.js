@@ -21,8 +21,8 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
           </div>
           <div className="pl-5">
             <iframe
-              title="map"
-              src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d95271.13436975016!2d30.457874967403615!3d50.490820156839895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgoogle%20maps!5e0!3m2!1sen!2sua!4v1681135861029!5m2!1sen!2sua"
+              title="1981 Broadway, New York, NY 10023, US"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.40641506922!2d-73.9826815!3d40.7750785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2588aabf0a4cf%3A0x55d5730645a7b36d!2zMTk4MSBCcm9hZHdheSwgTmV3IFlvcmssIE5ZIDEwMDIzLCDQodCo0JA!5e0!3m2!1sru!2sua!4v1683062196548!5m2!1sru!2sua"
               width="536"
               height="400"
               allowFullScreen=""
