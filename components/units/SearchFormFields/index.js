@@ -49,9 +49,9 @@ const SearchFormFields = () => {
     const terminalKeys = {
       loadPort: 'loadTerminal',
       dischargePort: 'dischargeTerminal',
-    }
+    };
 
-    if(JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+    if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
     if (error) {
       clearErrors(key);
@@ -59,7 +59,7 @@ const SearchFormFields = () => {
     setValue(key, value);
 
     if (portKeys.includes(key)) {
-      setValue(terminalKeys[key], null)
+      setValue(terminalKeys[key], null);
       setTreminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
@@ -79,7 +79,7 @@ const SearchFormFields = () => {
     }
 
     if (key === CARGO_TYPE_KEY) {
-      productState.map((productId) => setValue(`products[${productId}].product`, null))
+      productState.map((productId) => setValue(`products[${productId}].product`, null));
       setProducts((prevState) => ({
         ...prevState,
         loading: true,
@@ -87,7 +87,10 @@ const SearchFormFields = () => {
       const relatedProducts = await getProducts(value.value);
       setProducts({
         loading: false,
-        data: convertDataToOptions(relatedProducts, 'id', 'name'),
+        data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
+          ...product,
+          density: relatedProducts.find(({ id }) => id === product.value).density,
+        })),
       });
     }
   };
@@ -175,53 +178,61 @@ const SearchFormFields = () => {
           options={cargoTypes}
           onChange={(option) => handleChange('cargoType', option)}
         />
-        {productState.map((productId, index) => (
-          <div key={`product_${productId}`}>
-            <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
-              <FormDropdown
-                onChange={(option) => handleChange(`products[${productId}].product`, option)}
-                name={`products[${productId}].product`}
-                asyncCall={products.loading}
-                options={products.data}
-                disabled={!products.data.length}
-                label={`product #${index + 1}`}
-                customStyles={{ className: 'w-full 3md:w-1/2' }}
-              />
-              <Input
-                {...register(`products[${productId}].density`)}
-                label="density"
-                placeholder="mt/m³"
-                customStyles="w-full 3md:w-2/5"
-                error={errors.products ? errors.products[productId]?.density?.message : null}
-                disabled={isSubmitting}
-              />
-              <Input
-                {...register(`products[${productId}].quantity`)}
-                label="Quantity"
-                placeholder="tons"
-                customStyles="w-[45%] 3md:w-2/5"
-                error={errors.products ? errors.products[productId]?.quantity?.message : null}
-                disabled={isSubmitting}
-              />
-              <Input
-                {...register(`products[${productId}].tolerance`)}
-                label="Tolerance"
-                type="number"
-                placeholder="%"
-                customStyles="w-[45%] 3md:w-1/5"
-                error={errors.products ? errors.products[productId]?.tolerance?.message : null}
-                disabled={isSubmitting}
-              />
+        {productState.map((productId, index) => {
+          const { density = {} } = getValues(`products[${productId}].product`) || {};
+          return (
+            <div key={`product_${productId}`}>
+              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
+                <FormDropdown
+                  onChange={(option) => handleChange(`products[${productId}].product`, option)}
+                  name={`products[${productId}].product`}
+                  asyncCall={products.loading}
+                  options={products.data}
+                  disabled={!products.data.length}
+                  label={`product #${index + 1}`}
+                  customStyles={{ className: 'w-full 3md:w-1/2' }}
+                />
+                <Input
+                  {...register(`products[${productId}].density`)}
+                  label="density"
+                  type="number"
+                  placeholder="mt/m³"
+                  customStyles="w-full 3md:w-2/5"
+                  error={errors.products ? errors.products[productId]?.density?.message : null}
+                  disabled={isSubmitting}
+                  min={String(density.min)}
+                  max={String(density.max)}
+                  step="any"
+                />
+                <Input
+                  {...register(`products[${productId}].quantity`)}
+                  label="Quantity"
+                  type="number"
+                  placeholder="tons"
+                  customStyles="w-[45%] 3md:w-2/5"
+                  error={errors.products ? errors.products[productId]?.quantity?.message : null}
+                  disabled={isSubmitting}
+                />
+                <Input
+                  {...register(`products[${productId}].tolerance`)}
+                  label="Tolerance"
+                  type="number"
+                  placeholder="%"
+                  customStyles="w-[45%] 3md:w-1/5"
+                  error={errors.products ? errors.products[productId]?.tolerance?.message : null}
+                  disabled={isSubmitting}
+                />
+              </div>
+              {productState.length > 1 && (
+                <Button
+                  buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
+                  customStyles="ml-auto !p-0"
+                  onClick={() => handleRemoveProduct(productId)}
+                />
+              )}
             </div>
-            {productState.length > 1 && (
-              <Button
-                buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
-                customStyles="ml-auto !p-0"
-                onClick={() => handleRemoveProduct(productId)}
-              />
-            )}
-          </div>
-        ))}
+          );
+        })}
         <Button
           disabled={productsLimitExceeded}
           buttonProps={{
