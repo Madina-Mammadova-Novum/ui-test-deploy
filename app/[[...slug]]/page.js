@@ -5,10 +5,10 @@ import delve from 'dlv';
 import parse from 'html-react-parser';
 
 import { metaData } from '@/adapters/metaData';
+import Custom404 from '@/app/404';
 import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
-import Custom404 from '@/pages/404';
 import { getEntityData } from '@/services/collectionType';
 
 export async function generateMetadata({ params }) {
