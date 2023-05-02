@@ -25,7 +25,7 @@ const Sidebar = ({ data, containerStyles }) => {
 
   useEffect(() => {
     if (lgScreen) setCollapse(true);
-    setCollapse(false);
+    else setCollapse(false);
   }, [lgScreen, setCollapse]);
 
   return (

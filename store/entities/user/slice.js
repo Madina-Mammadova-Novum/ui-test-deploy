@@ -1,11 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { loadState } from '@/lib/localStorage';
+
+const { user } = loadState('persist:user');
+
+const sidebarSize = JSON.parse(user)?.params?.sidebarCollapsed;
+
 const initialState = {
   token: null,
   isLoggedIn: false,
   personalDetails: {},
   params: {
-    sidebarCollapsed: false,
+    sidebarCollapsed: sidebarSize ?? false,
     sidebarSubMenuOpened: false,
   },
 };
