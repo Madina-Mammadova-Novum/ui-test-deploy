@@ -18,10 +18,11 @@ export const postProductsAdapter = ({ data }) => {
 };
 
 export const getProductAdapter = ({ data }) => {
-  const { id, name } = data;
+  const { id, name, density } = data;
   return {
     id,
     name,
+    density,
   };
 };
 

@@ -7,9 +7,9 @@ export const updateWhatWeOfferBlock = async (block) => {
   if (response === null) return null;
   const { title, values } = response;
 
-  const valuesData = await Promise.all(values.map(({ value }) => getValue(valueAdapter(value).id))).then((valueItems) =>
-    valueItems.filter((item) => item !== null)
-  );
+  const valuesData = await Promise.all(
+    values.filter(({ value }) => value.data !== null).map(({ value }) => getValue(valueAdapter(value).id))
+  ).then((valueItems) => valueItems.filter((item) => item !== null));
   return {
     ...block,
     title,
