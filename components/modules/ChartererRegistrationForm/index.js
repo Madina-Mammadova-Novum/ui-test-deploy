@@ -25,6 +25,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
+import { resetObjectFields } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = () => {
@@ -53,7 +54,10 @@ const ChartererRegistrationForm = () => {
 
     if (message) {
       successToast(message);
-      methods.reset();
+      methods.reset((formValues) => {
+        resetObjectFields(formValues);
+        return formValues;
+      });
     }
 
     if (error) errorToast(error);

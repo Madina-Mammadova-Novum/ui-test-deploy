@@ -31,7 +31,10 @@ const Input = React.forwardRef(
         )}
       >
         {label && (
-          <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase text-left mb-0.5">
+          <label
+            htmlFor={name}
+            className="block text-gray text-xs-sm whitespace-nowrap font-semibold uppercase text-left mb-0.5"
+          >
             {label}
           </label>
         )}
@@ -64,7 +67,7 @@ const Input = React.forwardRef(
           {icon && <span className="ml-2.5">{icon}</span>}
         </div>
         {error && <InputErrorMessage message={error} />}
-        {helperText && <p className="text-[12px]">{helperText}</p>}
+        {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
       </div>
     );
   }

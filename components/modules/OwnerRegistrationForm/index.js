@@ -26,6 +26,7 @@ import {
   TermsAndConditions,
 } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+import { resetObjectFields } from '@/utils/helpers';
 
 const OwnerRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
@@ -51,7 +52,10 @@ const OwnerRegistrationForm = () => {
     const { data, error } = await ownerSignUp({ data: formData });
     if (data) {
       successToast('Check your email for validating the account');
-      methods.reset();
+      methods.reset((formValues) => {
+        resetObjectFields(formValues);
+        return formValues;
+      });
     }
     if (error) {
       errorToast(error.message, error.description);
