@@ -36,6 +36,7 @@ import SocialNetworks from '@/units/SocialNetworks';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
+import TabsVertical from "@/units/TabsVertical";
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
@@ -88,4 +89,5 @@ export {
   DeactivateTankerForm,
   SocialNetworks,
   LegalNavigation,
+  TabsVertical,
 };
