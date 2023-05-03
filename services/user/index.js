@@ -28,13 +28,23 @@ export async function resetPassword({ data }) {
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
   const response = await postData(`auth/signup?type=owner`, body);
-  return response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
+  return {
+    data: {
+      status: response.status,
+      alert: response.ok ? 'Check your email for validating the account' : SYSTEM_ERROR,
+    },
+  };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
   const response = await postData(`auth/signup?type=charterer`, body);
-  return response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
+  return {
+    data: {
+      status: response.status,
+      alert: response.ok ? 'Check your email for validating the account' : SYSTEM_ERROR,
+    },
+  };
 }
 
 export async function postVeriffData({ data }) {
