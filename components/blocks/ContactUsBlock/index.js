@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { linkImagePropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
+import Map from '@/elements/Map';
+import { CONTACT_US_MAP_OPTIONS } from '@/lib/constants';
 import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
@@ -20,16 +22,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
             <ContactUsForm />
           </div>
           <div className="pl-5">
-            <iframe
-              title="1981 Broadway, New York, NY 10023, US"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.40641506922!2d-73.9826815!3d40.7750785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2588aabf0a4cf%3A0x55d5730645a7b36d!2zMTk4MSBCcm9hZHdheSwgTmV3IFlvcmssIE5ZIDEwMDIzLCDQodCo0JA!5e0!3m2!1sru!2sua!4v1683062196548!5m2!1sru!2sua"
-              width="536"
-              height="400"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="rounded-base w-full h-[400px]"
-            />
+            <Map path={CONTACT_US_MAP_OPTIONS.url} title={CONTACT_US_MAP_OPTIONS.title} />
             <div className="flex flex-wrap gap-x-[30px] mt-5">
               <div className="w-[150px]">
                 <Title level={4} className="mb-2">
