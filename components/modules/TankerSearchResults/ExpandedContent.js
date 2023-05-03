@@ -7,7 +7,7 @@ const ExpandedContent = () => {
     <div className="mt-3 mb-5">
       <Title level={3}>Tanker Information</Title>
 
-      <div className="md:flex text-xsm mt-2.5 gap-x-20">
+      <div className="lg:flex text-xsm mt-2.5 gap-x-20">
         {vesselOwnerData.length && (
           <div>
             <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
@@ -19,7 +19,7 @@ const ExpandedContent = () => {
           </div>
         )}
 
-        <div className="mt-2.5 md:mt-0">
+        <div className="mt-2.5 lg:mt-0">
           <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
             About the Tanker
           </Title>
