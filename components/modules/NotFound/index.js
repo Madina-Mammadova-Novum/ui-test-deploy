@@ -2,7 +2,7 @@
 
 import { LinkAsButton, NextImage, Title } from '@/elements';
 
-export default function Custom404() {
+export default function NotFound() {
   return (
     <section className="relative min-h-screen">
       <NextImage
