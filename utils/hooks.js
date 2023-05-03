@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { use, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -218,22 +218,23 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const itemsFrom = (currentPage - 1) * perPage;
   const items = data?.slice(itemsFrom, itemsFrom + perPage);
   // We checking if type presented only after that we can sort
-  const sortedItems = items[0]?.type
+  const sortedItems = items?.[0]?.type
     ? items.toSorted((a, b) => {
-        if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
-          return 1;
-        }
+      if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
+        return 1;
+      }
 
-        if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
-          return -1;
-        }
-        return 0;
-      })
+      if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
+        return -1;
+      }
+      return 0;
+    })
     : items;
 
   useEffect(() => {
     setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter));
   }, [data, numberOfPages]);
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page.selected + 1);
@@ -248,6 +249,7 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
 
   const handleSortChange = ({ value }) => {
     setAscSort(value === 'ascending');
+
   };
 
   return {
@@ -262,6 +264,32 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
     perPage,
   };
 };
+
+
+export const useFetch = (fetchFunction) => {
+  const [data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetchFunction();
+        setData(response);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    }
+    fetchData();
+  }, [fetchFunction]);
+
+  return [data, isLoading];
+}
+
+
+
+
 export const useSidebarActiveColor = (path) => {
   const pathname = usePathname();
 

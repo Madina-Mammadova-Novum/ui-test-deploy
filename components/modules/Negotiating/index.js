@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
@@ -9,11 +9,15 @@ import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpande
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
 import { getUserNegotiating } from '@/services';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { useFilters } from '@/utils/hooks';
+import { useFetch, useFilters } from '@/utils/hooks';
+
+
 
 const Negotiating = () => {
-  const [negotiatingData, setNegotiatingData] = useState([]);
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(false)
+  const [data, isLoading] = useFetch(getUserNegotiating);
+
+
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -29,22 +33,25 @@ const Negotiating = () => {
     selectedPage,
     onChangeOffers,
     perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, negotiatingData);
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await getUserNegotiating();
-      setNegotiatingData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const printExpandableRow = (rowHeader) => (
+    <ExpandableRow
+      header={<ExpandableRowHeader headerData={rowHeader} />}
+      footer={<NegotiatingExpandedFooter isCharterer />}
+      expand={toggle}
+    >
+      <NegotiatingExpandedContent />
+    </ExpandableRow>
+  );
 
-  return negotiatingData ? (
+  if (isLoading) {
+    return <Loader className="h-8 w-8 absolute top-1/2" />
+  }
+
+  return (
+
     <section>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
@@ -56,15 +63,7 @@ const Negotiating = () => {
 
       <div className="flex flex-col gap-y-2.5">
         {items &&
-          items.map((rowHeader) => (
-            <ExpandableRow
-              header={<ExpandableRowHeader headerData={rowHeader} />}
-              footer={<NegotiatingExpandedFooter isCharterer />}
-              expand={toggle}
-            >
-              <NegotiatingExpandedContent />
-            </ExpandableRow>
-          ))}
+          items.map(printExpandableRow)}
       </div>
 
       <ComplexPagination
@@ -77,9 +76,6 @@ const Negotiating = () => {
         perPage={perPage}
       />
     </section>
-  ) : (
-    <Loader className="h-8 w-8 absolute top-1/2" />
-  );
-};
-
+  )
+}
 export default Negotiating;

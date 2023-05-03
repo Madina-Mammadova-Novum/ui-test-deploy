@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import FixtureExpandedFooter from './FixtureExpandedFooter';
 
@@ -9,11 +9,14 @@ import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserFixtures } from '@/services';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { useFilters } from '@/utils/hooks';
+import { useFetch, useFilters } from '@/utils/hooks';
+
+
 
 const Fixture = () => {
-  const [fixtureData, setFixtureData] = useState([]);
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(false)
+  const [data, isLoading] = useFetch(getUserFixtures);
+
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -29,23 +32,27 @@ const Fixture = () => {
     selectedPage,
     onChangeOffers,
     perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, fixtureData);
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await getUserFixtures();
-      setFixtureData(data);
-      // setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  return fixtureData ? (
+  const printExpandableRow = (headerData) => (
+    <ExpandableRow
+      header={<ExpandableRowHeader headerData={headerData} />}
+      footer={<FixtureExpandedFooter />}
+      expand={toggle}
+    >
+      Content
+    </ExpandableRow>
+  );
+
+  if (isLoading) {
+    return <Loader className="h-8 w-8 absolute top-1/2" />
+  }
+
+
+  return (
+
     <section>
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
@@ -57,15 +64,7 @@ const Fixture = () => {
 
       <div className="flex flex-col gap-y-2.5">
         {items &&
-          items.map((headerData) => (
-            <ExpandableRow
-              header={<ExpandableRowHeader headerData={headerData} />}
-              footer={<FixtureExpandedFooter />}
-              expand={toggle}
-            >
-              Content
-            </ExpandableRow>
-          ))}
+          items.map(printExpandableRow)}
       </div>
 
       <ComplexPagination
@@ -78,9 +77,6 @@ const Fixture = () => {
         perPage={perPage}
       />
     </section>
-  ) : (
-    <Loader className="h-8 w-8 absolute top-1/2" />
-  );
+  )
 };
-
 export default Fixture;

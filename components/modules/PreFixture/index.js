@@ -1,21 +1,27 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
-import { Label, Title } from '@/elements';
+import { Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserPreFixtures } from '@/services';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { useFilters } from '@/utils/hooks';
+import { useFetch, useFilters } from '@/utils/hooks';
+
+
+
 
 const PreFixture = () => {
-  const [preFixtureData, setPreFixtureData] = useState([]);
-  const [toggle, setToggle] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [toggle, setToggle] = useState(false)
+  const [data, isLoading] = useFetch(getUserPreFixtures);
+
+
+
+
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -30,22 +36,22 @@ const PreFixture = () => {
     selectedPage,
     onChangeOffers,
     perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, preFixtureData);
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await getUserPreFixtures();
-      setPreFixtureData(data);
-      // setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
-  useEffect(() => {
-    // setIsLoading(true);
-    fetchData();
-  }, []);
+  const printExpandableRow = (headerData, underNegotiation) => (
+    <ExpandableRow
+      header={<ExpandableRowHeader headerData={headerData} />}
+      footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
+      expand={toggle}
+    >
+      <PreFixtureExpandedContent underNegotiation={underNegotiation} />
+    </ExpandableRow>
+  );
+
+  if (isLoading) {
+    return <Loader className="h-8 w-8 absolute top-1/2" />
+  }
 
   return (
     <section>
@@ -59,15 +65,7 @@ const PreFixture = () => {
 
       <div className="flex flex-col gap-y-2.5">
         {items &&
-          items.map((headerData, underNegotiation) => (
-            <ExpandableRow
-              header={<ExpandableRowHeader headerData={headerData} />}
-              footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
-              expand={toggle}
-            >
-              <PreFixtureExpandedContent underNegotiation={underNegotiation} />
-            </ExpandableRow>
-          ))}
+          items.map(printExpandableRow)}
       </div>
 
       <ComplexPagination
@@ -80,7 +78,8 @@ const PreFixture = () => {
         perPage={perPage}
       />
     </section>
-  );
-};
+  )
+}
+
 
 export default PreFixture;
