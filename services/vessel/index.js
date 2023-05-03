@@ -7,7 +7,7 @@ export async function searchVessels({ data }) {
 
   const response = await postData(`vessels/search`, body);
 
-  // FOR_TESTING_PURPOSES | Remove once backend has data
+  // todo: Remove once backend has data
   if (!response?.data?.length) {
     response.data = searchRowHeaders;
   }
