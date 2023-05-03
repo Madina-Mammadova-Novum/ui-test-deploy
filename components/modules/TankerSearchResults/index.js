@@ -42,7 +42,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
       </div>
 
       <div className="mt-5 flex justify-between">
-        <TextRow title="Exact Matches (arrival within laycan)">{`${3} results`}</TextRow>
+        <TextRow title="Exact Matches (arrival within laycan)">{`${2} results`}</TextRow>
         <ToggleRows onToggleClick={() => setExpandExactResults((prevValue) => !prevValue)} value={expandExactResults} />
       </div>
       <div className="flex flex-col gap-y-2.5 mt-3">

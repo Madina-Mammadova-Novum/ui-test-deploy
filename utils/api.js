@@ -77,8 +77,13 @@ export const apiHandler = async (options, req, res) => {
   if (checkRequestMethod(req, allowedMethods)) {
     const requestOptions = fetchOptions(requestMethod, req);
     const response = await fetch(endpoint, requestOptions);
+    let result;
 
-    const result = await response.json();
+    try {
+      result = await response.json();
+    } catch {
+      result = response;
+    }
 
     if (!response.ok) {
       return errorHandler(res, response.status, result);
@@ -93,7 +98,8 @@ export const apiHandler = async (options, req, res) => {
       });
       res.setHeader('Set-Cookie', cookie);
     }
-    return res.status(200).json(responseAdapter(result));
+
+    return res.status(200).json(responseAdapter(result, result.status));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };

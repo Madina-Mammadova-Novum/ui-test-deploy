@@ -10,6 +10,7 @@ const Input = React.forwardRef(
   (
     {
       customStyles = '',
+      inputStyles = '',
       disabled = false,
       error = null,
       helperText = null,
@@ -55,7 +56,7 @@ const Input = React.forwardRef(
           <input
             ref={ref}
             id={name}
-            className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
+            className={`outline-none w-full h-5 text-xsm flex items-center bg-transparent ${inputStyles}`}
             type={type}
             name={name}
             {...rest}
