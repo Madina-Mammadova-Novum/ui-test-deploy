@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
-
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
 
+import { NavTreeXlPropTypes } from '@/lib/types';
+
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
-import { handleOpen } from '@/store/entities/user/slice';
+import { handleToggle } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
 
 const NavTreeXl = ({ data, active }) => {
@@ -35,7 +35,7 @@ const NavTreeXl = ({ data, active }) => {
   return (
     <NavTreeHeader
       href={data.path}
-      onClick={() => dispatch(handleOpen(!opened))}
+      onClick={() => dispatch(handleToggle(!opened))}
       isSubMenu={hasNestedLinks}
       className="flex items-center transition-all"
     >
@@ -53,17 +53,6 @@ const NavTreeXl = ({ data, active }) => {
   );
 };
 
-NavTreeXl.propTypes = {
-  active: PropTypes.string,
-  opened: PropTypes.bool,
-  onChange: PropTypes.func,
-  data: PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-    title: PropTypes.string,
-    path: PropTypes.string,
-    variant: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
-};
+NavTreeXl.propTypes = NavTreeXlPropTypes;
 
 export default NavTreeXl;

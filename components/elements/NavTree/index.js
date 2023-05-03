@@ -2,10 +2,10 @@
 
 import { useMemo } from 'react';
 
-import PropTypes from 'prop-types';
-
 import NavTreeSm from './NavTreeSm';
 import NavTreeXl from './NavTreeXl';
+
+import { NavTreePropTypes } from '@/lib/types';
 
 import { useSidebarActiveColor } from '@/utils/hooks';
 
@@ -24,13 +24,6 @@ const NavTree = ({ data, variant }) => {
   return printNavTree;
 };
 
-NavTree.propTypes = {
-  variant: PropTypes.string,
-  data: PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-    title: PropTypes.string,
-    path: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
-};
+NavTree.propTypes = NavTreePropTypes;
+
 export default NavTree;

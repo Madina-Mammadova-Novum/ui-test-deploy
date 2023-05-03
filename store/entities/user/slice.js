@@ -1,11 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// import { loadState } from '@/lib/localStorage';
-
-// const localState = loadState('persist:user');
-
-// const sidebarSize = JSON.parse(localState?.user)?.params?.sidebarCollapsed;
-
 const initialState = {
   token: null,
   isLoggedIn: false,
@@ -23,12 +17,12 @@ const userSlice = createSlice({
     handleCollapse: (state, { payload }) => {
       state.params.sidebarCollapsed = payload;
     },
-    handleOpen: (state, { payload }) => {
+    handleToggle: (state, { payload }) => {
       state.params.sidebarSubMenuOpened = payload;
     },
   },
 });
 
-export const { handleCollapse, handleOpen } = userSlice.actions;
+export const { handleCollapse, handleToggle } = userSlice.actions;
 
 export default userSlice.reducer;

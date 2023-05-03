@@ -4,6 +4,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { usePathname, useSearchParams } from 'next/navigation';
+
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
 
