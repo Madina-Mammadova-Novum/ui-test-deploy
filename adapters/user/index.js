@@ -164,7 +164,7 @@ export function ownerSignUpAdapter({ data }) {
 
 const cargoesAdapter = ({ data }) => {
   return data?.map((item) => ({
-    vesselIMO: item?.imo,
+    vesselIMO: `IMO${item?.imo}`,
     loadPortId: item?.port?.value,
     billOfLadingDate: new Date(item?.date).toISOString(),
   }));
