@@ -249,3 +249,10 @@ export const resetObjectFields = (initialObject, resetType = null) => {
     }
   });
 };
+
+export const resetForm = (methods) => {
+  methods.reset((formValues) => {
+    resetObjectFields(formValues);
+    return formValues;
+  });
+};

@@ -25,7 +25,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
-import { resetObjectFields } from '@/utils/helpers';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = () => {
@@ -53,7 +53,7 @@ const ChartererRegistrationForm = () => {
     const { data } = await chartererSignUp({ data: formData });
     if (data.status === 200) {
       successToast(data.alert);
-      methods.reset();
+      resetForm(methods);
     }
     if (data.status !== 200) {
       errorToast(data.alert);

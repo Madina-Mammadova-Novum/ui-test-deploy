@@ -25,8 +25,8 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
-import { resetObjectFields } from '@/utils/helpers';
 
 const OwnerRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
@@ -52,7 +52,7 @@ const OwnerRegistrationForm = () => {
     const { data } = await ownerSignUp({ data: formData });
     if (data.status === 200) {
       successToast(data.alert);
-      methods.reset();
+      resetForm(methods);
     }
     if (data.status !== 200) {
       errorToast(data.alert);
