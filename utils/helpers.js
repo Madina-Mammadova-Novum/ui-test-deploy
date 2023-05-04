@@ -240,12 +240,19 @@ export const filterDataByLowerCase = (inputValue, data) => {
   return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
-export const resetObjectFields = (initialObject) => {
+export const resetObjectFields = (initialObject, resetType = null) => {
   Object.keys(initialObject).forEach((key) => {
     if (Array.isArray(initialObject[key])) {
       initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
     } else {
-      initialObject[key] = null;
+      initialObject[key] = resetType;
     }
+  });
+};
+
+export const resetForm = (methods) => {
+  methods.reset((formValues) => {
+    resetObjectFields(formValues);
+    return formValues;
   });
 };
