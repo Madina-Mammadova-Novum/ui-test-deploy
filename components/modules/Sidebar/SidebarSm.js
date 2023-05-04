@@ -1,13 +1,11 @@
-import PropTypes from 'prop-types';
+import { SidebarSmPropTypes } from '@/lib/types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo-sm.svg';
 import { Button, NavTree, NextLink } from '@/elements';
 
-const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
-  const printMenu = (item) => (
-    <NavTree variant="collapsed" opened={opened} active={active} onChange={onChange} key={item?.id} data={item} />
-  );
+const SidebarSm = ({ data, isResized, onResize }) => {
+  const printMenu = (item) => <NavTree variant="collapsed" key={item?.id} data={item} />;
 
   return (
     <>
@@ -40,15 +38,6 @@ const SidebarSm = ({ data, isResized, onResize, opened, active, onChange }) => {
   );
 };
 
-SidebarSm.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  active: PropTypes.string.isRequired,
-  opened: PropTypes.bool.isRequired,
-  searchVal: PropTypes.string.isRequired,
-  isResized: PropTypes.bool.isRequired,
-  onResize: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+SidebarSm.propTypes = SidebarSmPropTypes;
 
 export default SidebarSm;
