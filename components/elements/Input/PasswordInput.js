@@ -11,7 +11,7 @@ const PasswordInput = React.forwardRef(({ ...rest }, ref) => {
   // todo: controller
   return (
     <div className="relative">
-      <Input {...rest} ref={ref} type={showPassword ? 'text' : 'password'} min={8} />
+      <Input {...rest} ref={ref} type={showPassword ? 'text' : 'password'} min={8} inputStyles="!w-[calc(100%-30px)]" />
       <button
         type="button"
         onClick={() => setShowPassword((prevValue) => !prevValue)}

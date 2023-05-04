@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { NavTreeSubBodyPropTypes } from '@/lib/types';
 
 import { Divider, NextLink } from '@/elements';
 import { useSidebarActiveColor } from '@/utils/hooks';
@@ -30,13 +30,6 @@ const NavTreeSubBody = ({ data, collapsed = false }) => {
   );
 };
 
-NavTreeSubBody.propTypes = {
-  data: PropTypes.shape({
-    label: PropTypes.string,
-    path: PropTypes.string,
-    title: PropTypes.string,
-  }).isRequired,
-  collapsed: PropTypes.bool,
-};
+NavTreeSubBody.propTypes = NavTreeSubBodyPropTypes;
 
 export default NavTreeSubBody;

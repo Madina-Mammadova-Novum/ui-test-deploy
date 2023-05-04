@@ -9,7 +9,7 @@ export function getSingleTypeEndpoint(apiID, locale) {
     ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions,
     buttons,buttons.linkOptions,
     phones,emails,link,link.linkOptions,
-    socials,socials.coverImage,socials.linkOptions
+    socials,socials.coverImage,socials.linkOptions,embedMap
     `.replace(/\s+|\n/g, '');
 }
 

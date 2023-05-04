@@ -1,7 +1,5 @@
 'use client';
 
-
-
 import PropTypes from 'prop-types';
 
 import { ComplexPaginationPropTypes } from '@/lib/types';
@@ -19,7 +17,6 @@ const ComplexPagination = ({
   pages,
   onSelectedPageChange,
 }) => {
-
   const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
   return (
     <div className="flex items-start 3md:items-center justify-between my-5 relative h-20 3md:h-auto">
@@ -33,9 +30,7 @@ const ComplexPagination = ({
       />
 
       <div className="flex items-center absolute bottom-0 left-[50%] translate-x-[-50%] 3sm:translate-x-[unset] 3sm:position-unset">
-        <PaginationComponent
-          currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange}
-        />
+        <PaginationComponent currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange} />
       </div>
       <Dropdown
         label="Go to page:"
@@ -57,7 +52,7 @@ ComplexPagination.propTypes = {
   onSelectedPageChange: PropTypes.func,
   onChangeOffers: PropTypes.func,
   perPage: PropTypes.number,
-  pages: PropTypes.arrayOf(PropTypes.number).isRequired
+  pages: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default ComplexPagination;

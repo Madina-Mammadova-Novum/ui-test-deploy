@@ -77,14 +77,18 @@ export const apiHandler = async (options, req, res) => {
   if (checkRequestMethod(req, allowedMethods)) {
     const requestOptions = fetchOptions(requestMethod, req);
     const response = await fetch(endpoint, requestOptions);
+    let result;
 
-    const result = await response.json();
+    try {
+      result = await response.json();
+    } catch {
+      result = response;
+    }
 
     if (!response.ok) {
       return errorHandler(res, response.status, result);
     }
 
-    console.log({ response });
     /* Set Authorization token */
     if (result?.token) {
       const cookie = serialize('auth_token', `${result.token}`, {
@@ -93,15 +97,28 @@ export const apiHandler = async (options, req, res) => {
       });
       res.setHeader('Set-Cookie', cookie);
     }
-    return res.status(200).json(responseAdapter(result));
+
+    return res.status(200).json(responseAdapter(result, result.status));
   }
   return errorHandler(res, 405, 'Method not allowed.');
 };
 
-export const postHandler = (path, req, res) => {
+export const postHandler = (path, provider, req, res) => {
+  let apiURL = '';
+  switch (provider) {
+    case 'backend': {
+      apiURL = getApiURL(path);
+      break;
+    }
+    default: {
+      apiURL = getStrapiURL(path);
+      break;
+    }
+  }
+
   return apiHandler(
     {
-      endpoint: getApiURL(path),
+      endpoint: apiURL,
       requestMethod: 'POST',
       allowedMethods: ['OPTIONS', 'POST'],
     },

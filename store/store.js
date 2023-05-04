@@ -8,8 +8,9 @@ import storage from 'redux-persist/lib/storage';
 import { reducer } from '@/store/reducers';
 
 const persistConfig = {
-  key: 'root',
+  key: 'user',
   storage,
+  whitelist: ['user'],
   version: 1,
 };
 

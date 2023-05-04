@@ -6,11 +6,10 @@ import { linkImagePropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
 import Map from '@/elements/Map';
-import { CONTACT_US_MAP_OPTIONS } from '@/lib/constants';
 import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
-const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule }) => {
+const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, embedMap }) => {
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
@@ -22,7 +21,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
             <ContactUsForm />
           </div>
           <div className="pl-5">
-            <Map path={CONTACT_US_MAP_OPTIONS.url} title={CONTACT_US_MAP_OPTIONS.title} />
+            <Map embedMap={embedMap} title={address} />
             <div className="flex flex-wrap gap-x-[30px] mt-5">
               <div className="w-[150px]">
                 <Title level={4} className="mb-2">
@@ -74,6 +73,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
 };
 
 ContactUsBlock.propTypes = {
+  embedMap: PropTypes.string,
   title: PropTypes.string,
   subTitle: PropTypes.string,
   shortDescription: PropTypes.string,
