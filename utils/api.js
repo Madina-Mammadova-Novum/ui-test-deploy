@@ -89,7 +89,6 @@ export const apiHandler = async (options, req, res) => {
       return errorHandler(res, response.status, result);
     }
 
-    console.log({ response });
     /* Set Authorization token */
     if (result?.token) {
       const cookie = serialize('auth_token', `${result.token}`, {
@@ -104,10 +103,22 @@ export const apiHandler = async (options, req, res) => {
   return errorHandler(res, 405, 'Method not allowed.');
 };
 
-export const postHandler = (path, req, res) => {
+export const postHandler = (path, provider, req, res) => {
+  let apiURL = '';
+  switch (provider) {
+    case 'backend': {
+      apiURL = getApiURL(path);
+      break;
+    }
+    default: {
+      apiURL = getStrapiURL(path);
+      break;
+    }
+  }
+
   return apiHandler(
     {
-      endpoint: getApiURL(path),
+      endpoint: apiURL,
       requestMethod: 'POST',
       allowedMethods: ['OPTIONS', 'POST'],
     },
