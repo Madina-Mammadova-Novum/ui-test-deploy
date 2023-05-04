@@ -12,6 +12,7 @@ export function generateMetadata() {
 }
 
 const VesselsSearch = () => {
+
   return (
     <AccountWrapper containerClass="grow px-5">
       <TankerSearch title="Search" />

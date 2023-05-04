@@ -4,12 +4,13 @@ import classnames from 'classnames';
 
 import { InputPropTypes } from '@/lib/types';
 
-import { InputErrorMessage } from '@/elements';
+import { InputErrorMessage, Label } from '@/elements';
 
 const Input = React.forwardRef(
   (
     {
       customStyles = '',
+      inputStyles = '',
       disabled = false,
       error = null,
       helperText = null,
@@ -30,9 +31,9 @@ const Input = React.forwardRef(
         )}
       >
         {label && (
-          <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase text-left mb-0.5">
+          <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
             {label}
-          </label>
+          </Label>
         )}
         <div
           className={classnames(
@@ -55,7 +56,7 @@ const Input = React.forwardRef(
           <input
             ref={ref}
             id={name}
-            className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
+            className={`outline-none w-full h-5 text-xsm flex items-center bg-transparent ${inputStyles}`}
             type={type}
             name={name}
             {...rest}

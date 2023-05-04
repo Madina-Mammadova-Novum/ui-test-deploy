@@ -297,3 +297,12 @@ export const useSidebarActiveColor = (path) => {
 
   return { isActive: false };
 };
+
+export const useAuth = () => {
+  const pathname = usePathname();
+  return {
+    isAuthorized: pathname.length > 1,
+    user: {},
+    token: '',
+  };
+};

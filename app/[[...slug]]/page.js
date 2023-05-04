@@ -3,10 +3,9 @@ import React from 'react';
 import classnames from 'classnames';
 import delve from 'dlv';
 import parse from 'html-react-parser';
+import { notFound } from 'next/navigation';
 
 import { metaData } from '@/adapters/metaData';
-import Custom404 from '@/app/404';
-import waves from '@/assets/images/waves.jpg';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
 import { getEntityData } from '@/services/collectionType';
@@ -37,7 +36,7 @@ export default async function Home({ params }) {
   const content = delve(pageData, 'content');
 
   if (pageData === null) {
-    return <Custom404 />;
+    notFound();
   }
 
   return (
@@ -47,7 +46,7 @@ export default async function Home({ params }) {
       <section className="relative pt-[115px] pb-[195px]">
         <div className="container mx-auto px-[54px] max-w-[1258px]">
           <NextImage
-            src={waves}
+            src="/images/waves.jpg"
             alt="waves"
             customStyles="absolute inset-0 -z-10 h-full w-full object-cover object-center"
             height={352}
