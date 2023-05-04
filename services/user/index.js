@@ -27,7 +27,17 @@ export async function resetPassword({ data }) {
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await postData(`auth/signup?type=owner`, body);
+  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+  // TODO: temp-solution very neede for demo.
+
   return {
     data: {
       status: response.status,
@@ -38,7 +48,18 @@ export async function ownerSignUp({ data }) {
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/signup?type=charterer`, body);
+
+  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+  // TODO: temp-solution very neede for demo.
+
   return {
     data: {
       status: response.status,
@@ -49,9 +70,11 @@ export async function chartererSignUp({ data }) {
 
 export async function postVeriffData({ data }) {
   const { data: link } = await postData(`auth/veriffication`, data);
+
   if (link) {
-    return { link };
+    return { link: link?.redirectUrl };
   }
+
   return { error: SYSTEM_ERROR };
 }
 
