@@ -49,14 +49,14 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { message, error } = await chartererSignUp({ data: formData });
-
-    if (message) {
-      successToast(message);
+    const { data } = await chartererSignUp({ data: formData });
+    if (data.status === 200) {
+      successToast(data.alert);
       methods.reset();
     }
-
-    if (error) errorToast(error);
+    if (data.status !== 200) {
+      errorToast(data.alert);
+    }
   };
 
   return (
