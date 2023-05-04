@@ -64,7 +64,7 @@ const Input = React.forwardRef(
           {icon && <span className="ml-2.5">{icon}</span>}
         </div>
         {error && <InputErrorMessage message={error} />}
-        {helperText && <p className="text-[12px]">{helperText}</p>}
+        {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
       </div>
     );
   }

@@ -29,9 +29,9 @@ const VerifficationUserAccount = () => {
 
     if (data) {
       const { link, error } = await postVeriffData({ data });
-
       if (error) errorToast(error);
-      setVeriffUrl(link?.redirectUrl);
+
+      setVeriffUrl(link);
     }
   };
 

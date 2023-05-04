@@ -13,7 +13,7 @@ const PaginationComponent = ({ currentPage, pageCount, onPageChange, containerSt
       pageRangeDisplayed={5}
       marginPagesDisplayed={2}
       pageCount={pageCount}
-      onPageChange={(e) => onPageChange(e, 'pagination')}
+      onPageChange={onPageChange}
       pageLinkClassName="w-7 h-7 flex items-center justify-center"
       containerClassName={`flex justify-center items-center gap-1 list-none ${containerStyles}`}
       activeLinkClassName="font-medium shadow-xmd text-xsm text-blue border border-blue rounded-md"

@@ -60,10 +60,12 @@ const TankerSlotsDetails = () => {
   };
 
   const handleApplySlot = () => {
+    clearErrors('applySlots');
     handleChangeState('tankers', getFilledArray(slots));
   };
 
   const handleAddSlot = () => {
+    clearErrors('applySlots');
     handleChangeState('tankers', [...tankers, ...getFilledArray(1)]);
   };
 
@@ -80,17 +82,18 @@ const TankerSlotsDetails = () => {
           type="number"
           value={slots}
           label="Number of tankers"
-          placeholder="Tankers"
+          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} cargoes.`}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
-          error={errors.numberOfTankers?.message}
+          error={errors.numberOfTankers?.message || errors.applySlots?.message}
+          helperText="You will be able to add more cargoes after the verification."
           disabled={isSubmitting}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-4"
-          buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
+          customStyles="absolute top-[16px] right-1 my-1 !py-4 z-10"
+          buttonProps={{ text: 'Apply', variant: !errors.numberOfTankers ? 'primary' : 'delete', size: 'medium' }}
           onClick={handleApplySlot}
           disabled={slots <= 0 || isSubmitting}
         />

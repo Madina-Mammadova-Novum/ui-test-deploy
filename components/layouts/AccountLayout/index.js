@@ -1,6 +1,7 @@
+import { StoreManager } from '@/common';
 import { BaseLayout } from '@/layouts';
 import { ROUTES } from '@/lib';
-import { AccountFooter, AccountHeader, Sidebar } from '@/modules';
+import { AccountContainer, AccountFooter, AccountHeader, Sidebar } from '@/modules';
 import { makeId } from '@/utils/helpers';
 
 const AccountLayout = ({ children }) => {
@@ -76,12 +77,16 @@ const AccountLayout = ({ children }) => {
 
   return (
     <BaseLayout className="bg-gray-light flex min-h-screen max-w-screen-2xl">
-      <Sidebar data={sidebarData} containerStyles="z-50 absolute top-0 left-0 h-screen" />
-      <div className="flex flex-col grow">
-        <AccountHeader />
-        <main className="grow ml-14 lg:ml-64">{children}</main>
-        <AccountFooter />
-      </div>
+      <StoreManager>
+        <Sidebar data={sidebarData} containerStyles="z-50 fixed top-0 left-0 h-screen" />
+        <div className="flex flex-col grow">
+          <AccountHeader />
+          <main className="grow">
+            <AccountContainer>{children}</AccountContainer>
+          </main>
+          <AccountFooter />
+        </div>
+      </StoreManager>
     </BaseLayout>
   );
 };

@@ -9,24 +9,22 @@ import NavTreeXl from './NavTreeXl';
 
 import { useSidebarActiveColor } from '@/utils/hooks';
 
-const NavTree = ({ data, variant, opened, onChange }) => {
+const NavTree = ({ data, variant }) => {
   const { isActive } = useSidebarActiveColor(data.path);
 
   const printNavTree = useMemo(() => {
     switch (variant) {
       case 'collapsed':
-        return <NavTreeSm data={data} active={isActive} onChange={onChange} />;
+        return <NavTreeSm data={data} active={isActive} />;
       default:
-        return <NavTreeXl opened={opened} data={data} active={isActive} onChange={onChange} />;
+        return <NavTreeXl data={data} active={isActive} />;
     }
-  }, [isActive, data, onChange, opened, variant]);
+  }, [isActive, data, variant]);
 
   return printNavTree;
 };
 
 NavTree.propTypes = {
-  opened: PropTypes.bool,
-  onChange: PropTypes.func,
   variant: PropTypes.string,
   data: PropTypes.shape({
     id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
@@ -35,4 +33,5 @@ NavTree.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
 };
+
 export default NavTree;
