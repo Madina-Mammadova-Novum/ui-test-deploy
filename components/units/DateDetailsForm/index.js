@@ -21,7 +21,13 @@ const DateDetailsForm = ({ portName = '' }) => {
         <Label className="text-xs-sm">Tanker name</Label>
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
-      <DatePicker name="date" onChange={handleDateChange} error={errors?.date?.message} label="open date" />
+      <DatePicker
+        name="date"
+        calendarClass="!w-[356px] items-center"
+        onChange={handleDateChange}
+        error={errors?.date?.message}
+        label="open date"
+      />
     </>
   );
 };

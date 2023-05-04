@@ -8,17 +8,15 @@ import { getUserPositions } from '@/services';
 import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
-
 const AccountPositions = () => {
   const [toggle, setToggle] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [userStore, setUserStore] = useState({
     userPositions: [],
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
   });
-  const [isLoading, setIsLoading] = useState(true);
-
 
   /* Change handler by key-value for userStore */
 
@@ -30,10 +28,12 @@ const AccountPositions = () => {
   };
 
   const { userPositions, sortOptions, sortValue } = userStore;
+
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
+
   const {
     numberOfPages,
     items,
@@ -57,7 +57,7 @@ const AccountPositions = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -68,17 +68,15 @@ const AccountPositions = () => {
     handleChangeState('sortValue', option);
   };
 
-
   const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} expandAll={{ value: toggle }} />;
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
   if (isLoading) {
-    return <Loader className="h-8 w-8 absolute top-1/2" />
+    return <Loader className="h-8 w-8 absolute top-1/2" />;
   }
 
   return (
-
     <section className="flex flex-col gap-y-5">
       <div className="flex justify-between items-center pt-5 w-full">
         <Title level={1}>My positions</Title>
@@ -104,7 +102,7 @@ const AccountPositions = () => {
         perPage={perPage}
       />
     </section>
-  )
-}
+  );
+};
 
 export default AccountPositions;
