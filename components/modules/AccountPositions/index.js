@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react';
 import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { getUserPositions } from '@/services';
-import { ComplexPagination, ExpandableCard } from '@/units';
+import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 
 const AccountPositions = () => {
+  const [toggle, setToggle] = useState(false);
+
   const [userStore, setUserStore] = useState({
     userPositions: null,
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
@@ -36,7 +38,7 @@ const AccountPositions = () => {
 
   const { userPositions, sortOptions, sortValue } = userStore;
 
-  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} />;
+  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} expandAll={{ value: toggle }} />;
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
@@ -46,14 +48,18 @@ const AccountPositions = () => {
         <>
           <div className="flex justify-between items-center pt-5 w-full">
             <Title level={1}>My positions</Title>
-            <Dropdown
-              label="Sort by open day:"
-              options={sortOptions}
-              defaultValue={sortValue}
-              customStyles={dropdownStyles}
-              onChange={handleChange}
-            />
+            <div className="flex gap-x-5">
+              <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+              <Dropdown
+                label="Sort by open day:"
+                options={sortOptions}
+                defaultValue={sortValue}
+                customStyles={dropdownStyles}
+                onChange={handleChange}
+              />
+            </div>
           </div>
+
           {userPositions?.map(printExpandableCard)}
           <ComplexPagination />
         </>
