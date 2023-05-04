@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeSubBody from '../NavTreeSubBody';
-
-import { NavTreeSmPropTypes } from '@/lib/types';
 
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
 import { Button } from '@/elements';
@@ -62,6 +62,16 @@ const NavTreeSm = ({ data, active }) => {
   );
 };
 
-NavTreeSm.propTypes = NavTreeSmPropTypes;
+NavTreeSm.propTypes = {
+  active: PropTypes.bool,
+  onChange: PropTypes.func,
+  data: PropTypes.shape({
+    id: PropTypes.string,
+    title: PropTypes.string,
+    path: PropTypes.string,
+    variant: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+};
 
 export default NavTreeSm;

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import PropTypes from 'prop-types';
+
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
-
-import { NavTreeXlPropTypes } from '@/lib/types';
 
 import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
 import { handleToggle } from '@/store/entities/user/slice';
@@ -53,6 +53,17 @@ const NavTreeXl = ({ data, active }) => {
   );
 };
 
-NavTreeXl.propTypes = NavTreeXlPropTypes;
+NavTreeXl.propTypes = {
+  active: PropTypes.string,
+  opened: PropTypes.bool,
+  onChange: PropTypes.func,
+  data: PropTypes.shape({
+    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    path: PropTypes.string,
+    variant: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+};
 
 export default NavTreeXl;
