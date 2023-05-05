@@ -14,7 +14,7 @@ import { makeId } from '@/utils/helpers';
 
 const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   const printSocialLink = (link) => (
-    <NextLink key={makeId()} href={delve(link, 'path')} title={delve(link, 'title')}>
+    <NextLink key={link} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
         className="border border-gray-darker rounded-md"
         icon={
