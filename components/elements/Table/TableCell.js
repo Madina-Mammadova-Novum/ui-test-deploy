@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
+import ReactCountryFlag from 'react-country-flag';
 
 import { TableCellPropTypes } from '@/lib/types';
 
-import { NextImage, Tooltip } from '@/elements';
+import { Tooltip } from '@/elements';
 import { TYPE } from '@/lib/constants';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
@@ -48,9 +49,7 @@ const TableCell = ({ cellProps }) => {
       <div className="flex justify-between items-center text-xsm">
         {value && (
           <div className="flex gap-x-5">
-            {countryFlag && (
-              <NextImage width={20} height={15} customStyles="h-4" src={countryFlag} alt={`${countryFlag} flag`} />
-            )}
+            {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
             {printValue}
             {marked && (
               <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mr-2 text-black rounded-md">
