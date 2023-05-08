@@ -30,7 +30,7 @@ const SearchFormFields = () => {
     loading: false,
     data: [],
   });
-  const [terminals, setTreminals] = useState({
+  const [terminals, setTerminals] = useState({
     loadPortTerminals: {
       loading: false,
       data: [],
@@ -60,7 +60,7 @@ const SearchFormFields = () => {
 
     if (portKeys.includes(key)) {
       setValue(terminalKeys[key], null);
-      setTreminals((prevState) => ({
+      setTerminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
           loading: true,
@@ -69,7 +69,7 @@ const SearchFormFields = () => {
       }));
 
       const relatedTerminals = await getTerminals(value.value);
-      setTreminals((prevState) => ({
+      setTerminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
           loading: false,
@@ -109,13 +109,12 @@ const SearchFormFields = () => {
   useEffect(() => {
     (async () => {
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
-      const printPorts = portsData?.map(({ name, code, country }) => {
+      setPorts(portsData?.map(({ label, countryFlag }) => {
         return {
-          label: `${name}${code ? `, ${code}` : ``}`,
-          countryFlag: country?.countryCode || null,
+          label,
+          countryFlag,
         };
-      });
-      setPorts(printPorts);
+      }));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
     })();
   }, []);
