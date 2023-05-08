@@ -10,13 +10,13 @@ import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
   const [toggle, setToggle] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [userStore, setUserStore] = useState({
     userPositions: [],
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
   });
-  const [isLoading, setIsLoading] = useState(true);
 
   /* Change handler by key-value for userStore */
 
@@ -28,10 +28,12 @@ const AccountPositions = () => {
   };
 
   const { userPositions, sortOptions, sortValue } = userStore;
+
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
+
   const {
     numberOfPages,
     items,
