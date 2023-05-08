@@ -219,22 +219,21 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const items = data?.slice(itemsFrom, itemsFrom + perPage);
   // We checking if type presented only after that we can sort
   const sortedItems = items?.[0]?.type
-    ? items.toSorted((a, b) => {
-      if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
-        return 1;
-      }
+    ? items.sort((a, b) => {
+        if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
+          return 1;
+        }
 
-      if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
-        return -1;
-      }
-      return 0;
-    })
+        if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
+          return -1;
+        }
+        return 0;
+      })
     : items;
 
   useEffect(() => {
     setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter));
   }, [data, numberOfPages]);
-
 
   const handlePageChange = (page) => {
     setCurrentPage(page.selected + 1);
@@ -249,7 +248,6 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
 
   const handleSortChange = ({ value }) => {
     setAscSort(value === 'ascending');
-
   };
 
   return {
@@ -264,7 +262,6 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
     perPage,
   };
 };
-
 
 export const useFetch = (fetchFunction) => {
   const [data, setData] = useState();
@@ -285,10 +282,7 @@ export const useFetch = (fetchFunction) => {
   }, [fetchFunction]);
 
   return [data, isLoading];
-}
-
-
-
+};
 
 export const useSidebarActiveColor = (path) => {
   const pathname = usePathname();
