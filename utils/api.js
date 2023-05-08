@@ -4,6 +4,21 @@ import { responseAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
 import { getStrapiURL } from '@/utils/index';
 
+export const errorHandler2 = (status, message, errors = []) => {
+  const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
+  let errorsMessages = null;
+  let errorMessage = null;
+  if (typeof statusMessage === 'object') {
+    errorsMessages = statusMessage.errors;
+    errorMessage = statusMessage.title;
+  }
+  return {
+    message: errorMessage !== null ? errorMessage : statusMessage,
+    errors: errorsMessages !== null ? errorsMessages : errors,
+    status,
+  };
+};
+
 export const errorHandler = (res, status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
   let errorsMessages = null;
@@ -36,6 +51,27 @@ export const getCookieFromReq = (req, cookieKey) => {
   const cookie = req.headers?.cookie?.split(';')?.find((c) => c.trim().startsWith(`${cookieKey}=`));
   if (!cookie) return undefined;
   return cookie.split('=')[1];
+};
+
+const fetchOptions2 = (requestMethod, body = null) => {
+  const method = requestMethod.toUpperCase();
+  const options = {
+    method, // *GET, POST, PUT, DELETE, etc.
+    // mode: "cors", // no-cors, *cors, same-origin
+    // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    // redirect: "follow", // manual, *follow, error
+    // referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    // body: JSON.stringify(data), // body data type must match "Content-Type" header
+  };
+  if (['POST', 'PUT', 'PATCH'].includes(method)) {
+    options.body = JSON.stringify(body);
+  }
+  return options;
 };
 
 const fetchOptions = (requestMethod, req) => {
@@ -72,10 +108,33 @@ export function getIdentityApiURL(path, apiVersion = null) {
   return `${process.env.IDENTITY_API_URL}${pathString}`;
 }
 
+export const apiHandler2 = async (options) => {
+  const { endpoint, requestMethod } = options;
+  const requestOptions = fetchOptions2(requestMethod);
+
+  try {
+    const response = await fetch(endpoint, requestOptions);
+    const { status, ok, statusText } = response;
+
+    const result = ok ? await response.json() : null;
+    const error = ok ? null : errorHandler2(status, statusText);
+
+    return {
+      status,
+      ...(result ? responseAdapter(result) : {}),
+      error,
+    };
+  } catch (error) {
+    console.error(error);
+    return errorHandler2(500, 'External server error');
+  }
+};
+
 export const apiHandler = async (options, req, res) => {
   const { endpoint, requestMethod, allowedMethods } = options;
   if (checkRequestMethod(req, allowedMethods)) {
     const requestOptions = fetchOptions(requestMethod, req);
+
     const response = await fetch(endpoint, requestOptions);
     let result;
 
@@ -127,7 +186,13 @@ export const postHandler = (path, provider, req, res) => {
   );
 };
 
-export const getHandler = (path, provider, req, res) => {
+/**
+ *
+ * @param path
+ * @param provider
+ * @returns {Promise<{data?: *, error: null|{message: null|string|*, errors: null|*[], status: *}, status: number}|{message: null|string|*, errors: null|*[], status: *}|undefined>}
+ */
+export const getHandler = (path, provider) => {
   let apiURL = '';
   switch (provider) {
     case 'backend': {
@@ -139,15 +204,10 @@ export const getHandler = (path, provider, req, res) => {
       break;
     }
   }
-  return apiHandler(
-    {
-      endpoint: apiURL,
-      requestMethod: 'GET',
-      allowedMethods: ['OPTIONS', 'GET'],
-    },
-    req,
-    res
-  );
+  return apiHandler2({
+    endpoint: apiURL,
+    requestMethod: 'GET',
+  });
 };
 
 export const patchHandler = (path, req, res) => {
