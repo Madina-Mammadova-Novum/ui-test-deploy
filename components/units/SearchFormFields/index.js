@@ -109,12 +109,14 @@ const SearchFormFields = () => {
   useEffect(() => {
     (async () => {
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
-      setPorts(portsData?.map(({ label, countryFlag }) => {
-        return {
-          label,
-          countryFlag,
-        };
-      }));
+      setPorts(
+        portsData?.map(({ label, countryFlag }) => {
+          return {
+            label,
+            countryFlag,
+          };
+        })
+      );
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
     })();
   }, []);
