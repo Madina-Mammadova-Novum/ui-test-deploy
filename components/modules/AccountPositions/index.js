@@ -17,6 +17,7 @@ const AccountPositions = () => {
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   /* Change handler by key-value for userStore */
 
