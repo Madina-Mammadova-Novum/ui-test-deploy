@@ -15,7 +15,7 @@ const PasswordInput = React.forwardRef(({ ...rest }, ref) => {
       <button
         type="button"
         onClick={() => setShowPassword((prevValue) => !prevValue)}
-        className="w-6 h-6 absolute right-4 top-7"
+        className="w-6 h-6 absolute right-4 top-1/3"
       >
         {showPassword ? <PasswordHiddenSVG /> : <ShowPasswordSVG />}
       </button>

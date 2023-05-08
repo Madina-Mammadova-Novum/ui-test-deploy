@@ -3,7 +3,7 @@ import ReactCountryFlag from 'react-country-flag';
 
 import { TableCellPropTypes } from '@/lib/types';
 
-import { Tooltip } from '@/elements';
+import { HoverTooltip } from '@/elements';
 import { TYPE } from '@/lib/constants';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
@@ -31,9 +31,9 @@ const TableCell = ({ cellProps }) => {
 
   const printValue = useMemo(() => {
     return helperData ? (
-      <Tooltip variant="hover" className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
+      <HoverTooltip className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
-      </Tooltip>
+      </HoverTooltip>
     ) : (
       <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
     );
