@@ -12,16 +12,9 @@ import { getUserPreFixtures } from '@/services';
 import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
-
-
-
 const PreFixture = () => {
-  const [toggle, setToggle] = useState(false)
+  const [toggle, setToggle] = useState(false);
   const [data, isLoading] = useFetch(getUserPreFixtures);
-
-
-
-
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -38,7 +31,6 @@ const PreFixture = () => {
     perPage,
   } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
-
   const printExpandableRow = (headerData, underNegotiation) => (
     <ExpandableRow
       header={<ExpandableRowHeader headerData={headerData} />}
@@ -50,7 +42,7 @@ const PreFixture = () => {
   );
 
   if (isLoading) {
-    return <Loader className="h-8 w-8 absolute top-1/2" />
+    return <Loader className="h-8 w-8 absolute top-1/2" />;
   }
 
   return (
@@ -63,10 +55,7 @@ const PreFixture = () => {
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5">
-        {items &&
-          items.map(printExpandableRow)}
-      </div>
+      <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
 
       <ComplexPagination
         currentPage={currentPage}
@@ -78,8 +67,7 @@ const PreFixture = () => {
         perPage={perPage}
       />
     </section>
-  )
-}
-
+  );
+};
 
 export default PreFixture;
