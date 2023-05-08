@@ -1,13 +1,11 @@
-import PropTypes from 'prop-types';
+import { SidebarXlPropTypes } from '@/lib/types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
 import { Button, NavTree, NextLink } from '@/elements';
 
-const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
-  const printMenu = (item) => (
-    <NavTree variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
-  );
+const SidebarXl = ({ data, isResized, onResize }) => {
+  const printMenu = (item) => <NavTree variant="opened" key={item?.id} data={item} />;
 
   return (
     <>
@@ -40,14 +38,6 @@ const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
   );
 };
 
-SidebarXl.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  opened: PropTypes.bool.isRequired,
-  searchVal: PropTypes.string.isRequired,
-  isResized: PropTypes.bool.isRequired,
-  onResize: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+SidebarXl.propTypes = SidebarXlPropTypes;
 
 export default SidebarXl;

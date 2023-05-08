@@ -27,23 +27,55 @@ export async function resetPassword({ data }) {
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await postData(`auth/sing-up?type=owner`, body);
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
+  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+  // TODO: temp-solution very neede for demo.
+
+  return {
+    data: {
+      status: response.status,
+      alert: response.ok ? 'Check your email for validating the account' : SYSTEM_ERROR,
+    },
+  };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/sign-up?type=charterer`, body);
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
+
+  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+  // TODO: temp-solution very neede for demo.
+
+  return {
+    data: {
+      status: response.status,
+      alert: response.ok ? 'Check your email for validating the account' : SYSTEM_ERROR,
+    },
+  };
 }
 
 export async function postVeriffData({ data }) {
-  const response = await postData(`auth/veriffication`, data);
-  const result = await response.json();
+  const { data: link } = await postData(`auth/veriffication`, data);
 
-  if (!response.ok) return { error: SYSTEM_ERROR };
+  if (link) {
+    return { link: link?.redirectUrl };
+  }
 
-  return { link: result?.redirectUrl };
+  return { error: SYSTEM_ERROR };
 }
 
 export async function login({ data }) {
