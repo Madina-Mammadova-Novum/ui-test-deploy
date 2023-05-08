@@ -19,13 +19,13 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ underNegotiation }) => {
+const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const tabContent = () => {
     switch (currentTab) {
       case 'documents':
-        return <DocumentsContent />;
+        return <DocumentsContent rowsData={rowsData} />;
       default:
         return <DetailsContent underNegotiation={underNegotiation} />;
     }
@@ -38,11 +38,11 @@ const PreFixtureExpandedContent = ({ underNegotiation }) => {
           activeTab={currentTab}
           tabs={tabs}
           onClick={({ target }) => setCurrentTab(target.value)}
-          customStyles="mx-auto mt-5 mb-10 md:mb-3"
+          customStyles="mx-auto mt-5 mb-10 lg:mb-3"
         />
         <Button
           buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase text-[10px] font-bold absolute left-1/2 md:left-[unset] -translate-x-1/2 md:translate-x-[unset] md:right-0 bottom-[10%] md:bottom-[unset] md:top-[50%] md:translate-y-[-75%] whitespace-nowrap"
+          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase text-[10px] font-bold absolute left-1/2 lg:left-[unset] -translate-x-1/2 lg:translate-x-[unset] lg:right-0 bottom-[10%] lg:bottom-[unset] lg:top-[50%] lg:translate-y-[-75%] whitespace-nowrap"
         />
       </div>
       {tabContent()}

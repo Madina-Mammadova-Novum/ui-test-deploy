@@ -91,9 +91,11 @@ export const fleetTableCellAdapter = ({ data, index }) => {
 
   const { tankerName = {}, imo = {}, port = {}, tankerStatus = {}, date = {}, id } = data;
 
+  if (!imo.value) return [];
+
   return [
     {
-      value: index,
+      value: imo.value ? index : null,
       disabled: tankerName.disabled,
     },
     {
