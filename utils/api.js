@@ -40,7 +40,7 @@ export const unprocessableEntity = (res) => {
 };
 
 export const bodyObject = ({ body }) => {
-  return JSON.parse(body);
+  return body;
 };
 
 export const checkRequestMethod = ({ method }, allowedMethods) => {
@@ -109,8 +109,8 @@ export function getIdentityApiURL(path, apiVersion = null) {
 }
 
 export const apiHandler2 = async (options) => {
-  const { endpoint, requestMethod } = options;
-  const requestOptions = fetchOptions2(requestMethod);
+  const { endpoint, requestMethod, body } = options;
+  const requestOptions = fetchOptions2(requestMethod, body);
 
   try {
     const response = await fetch(endpoint, requestOptions);
@@ -162,7 +162,7 @@ export const apiHandler = async (options, req, res) => {
   return errorHandler(res, 405, 'Method not allowed.');
 };
 
-export const postHandler = (path, provider, req, res) => {
+export const postHandler = (path, body, provider) => {
   let apiURL = '';
   switch (provider) {
     case 'backend': {
@@ -175,15 +175,11 @@ export const postHandler = (path, provider, req, res) => {
     }
   }
 
-  return apiHandler(
-    {
-      endpoint: apiURL,
-      requestMethod: 'POST',
-      allowedMethods: ['OPTIONS', 'POST'],
-    },
-    req,
-    res
-  );
+  return apiHandler2({
+    endpoint: apiURL,
+    requestMethod: 'POST',
+    body,
+  });
 };
 
 /**
