@@ -5,7 +5,7 @@ import { LegalNavigation, SocialNetworks } from '@/units';
 
 const AccountFooter = async () => {
   return (
-    <footer className="shadow-xmd flex items-center px-5 justify-between py-2 text-[12px]">
+    <footer className="shadow-xmd flex items-center px-5 justify-between py-2 text-xs-sm">
       <SocialNetworks />
       <LegalNavigation />
       <Copyright />

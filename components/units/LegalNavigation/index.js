@@ -9,7 +9,7 @@ const LegalNavigation = () => {
   const [legalNavigation, setLegalNavigation] = useState([]);
 
   const printLink = ({ path, title }) => (
-    <NextLink key={path} href={path} className="underline">
+    <NextLink key={path} href={path} target="_blank" className="underline">
       {title}
     </NextLink>
   );
