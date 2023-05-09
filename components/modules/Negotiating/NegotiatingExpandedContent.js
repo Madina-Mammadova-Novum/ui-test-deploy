@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 
+import {
+  failedTabRowsDataAdapter,
+  incomingTabRowsDataAdapter,
+  sentCounteroffersTabRowsDataAdapter,
+} from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { Tabs } from '@/units';
 import {
   negotiatingCounterofferTableHeader,
-  negotiatingCounterofferTableRows,
   negotiatingFailedTableHeader,
-  negotiatingFailedTableRows,
   negotiatingIncomingTableHeader,
-  negotiatingIncomingTableRows,
 } from '@/utils/mock';
+import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
 const tabs = [
   {
@@ -27,7 +30,7 @@ const tabs = [
   },
 ];
 
-const NegotiatingExpandedContent = () => {
+const NegotiatingExpandedContent = ({ data }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [modal, setModal] = useState(null);
 
@@ -40,7 +43,7 @@ const NegotiatingExpandedContent = () => {
         return (
           <Table
             headerData={negotiatingCounterofferTableHeader}
-            rows={negotiatingCounterofferTableRows}
+            rows={sentCounteroffersTabRowsDataAdapter({ data: data.sentCounteroffers })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -48,7 +51,7 @@ const NegotiatingExpandedContent = () => {
         return (
           <Table
             headerData={negotiatingFailedTableHeader}
-            rows={negotiatingFailedTableRows}
+            rows={failedTabRowsDataAdapter({ data: data.failedOffers })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -56,7 +59,7 @@ const NegotiatingExpandedContent = () => {
         return (
           <Table
             headerData={negotiatingIncomingTableHeader}
-            rows={negotiatingIncomingTableRows}
+            rows={incomingTabRowsDataAdapter({ data: data.incomingOffers })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -90,5 +93,7 @@ const NegotiatingExpandedContent = () => {
     </div>
   );
 };
+
+NegotiatingExpandedContent.propTypes = negotiatingExpandedContentPropTypes
 
 export default NegotiatingExpandedContent;

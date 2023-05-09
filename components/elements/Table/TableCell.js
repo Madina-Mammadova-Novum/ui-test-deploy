@@ -3,19 +3,36 @@ import { useMemo } from 'react';
 import { TableCellPropTypes } from '@/lib/types';
 
 import { NextImage, Tooltip } from '@/elements';
-import { TYPE } from '@/lib/constants';
-import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
+import { ACTIONS } from '@/lib/constants';
+import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
+import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { type, value, marked, helperData, name, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
+  const {
+    type,
+    value,
+    marked,
+    helperData,
+    name,
+    disabled,
+    toggle,
+    editable,
+    editIcon,
+    countryFlag,
+    icon,
+    action,
+    actionText,
+    actionVariant = 'tertiary',
+    actionSize = 'medium',
+  } = cellProps;
 
   const printModal = useMemo(() => {
-    switch (type) {
-      case TYPE.PORT:
+    switch (action) {
+      case ACTIONS.PORT:
         return <EditPortForm title="edit open port" portName={name} />;
-      case TYPE.DATE:
+      case ACTIONS.DATE:
         return <EditDateForm title="edit open date" portName={name} />;
-      case TYPE.TANKER_STATUS:
+      case ACTIONS.TANKER_STATUS:
         return (
           <DeactivateTankerForm
             title="Deactivate your Tanker"
@@ -23,10 +40,16 @@ const TableCell = ({ cellProps }) => {
             description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
           />
         );
+      case ACTIONS.VIEW_OFFER:
+        return <ViewIncomingOffer />;
+      case ACTIONS.VIEW_COUNTEROFFER:
+        return <ViewCounteroffer />;
+      case ACTIONS.VIEW_FAILED_OFFER:
+        return <ViewFailedOffer />;
       default:
         return null;
     }
-  }, [name, toggle?.name, type]);
+  }, [name, toggle?.name, action]);
 
   const printValue = useMemo(() => {
     return helperData ? (
@@ -34,7 +57,7 @@ const TableCell = ({ cellProps }) => {
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
       </Tooltip>
     ) : (
-      <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
+      <span className={`${disabled ? 'text-gray' : 'text-inherit'}`}>{value}</span>
     );
   }, [disabled, helperData, value]);
 
@@ -47,13 +70,14 @@ const TableCell = ({ cellProps }) => {
     >
       <div className="flex justify-between items-center text-xsm">
         {value && (
-          <div className="flex gap-x-5">
+          <div className="flex gap-x-1 text-inherit">
+            {icon && <IconWrapper iconData={{ icon }} />}
             {countryFlag && (
               <NextImage width={20} height={15} customStyles="h-4" src={countryFlag} alt={`${countryFlag} flag`} />
             )}
             {printValue}
             {marked && (
-              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mr-2 text-black rounded-md">
+              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
                 {marked}
               </span>
             )}
@@ -64,8 +88,9 @@ const TableCell = ({ cellProps }) => {
           <ModalWindow
             buttonProps={{
               icon: { before: editIcon },
-              variant: 'tertiary',
-              size: 'small',
+              variant: actionVariant,
+              size: actionSize,
+              text: actionText,
               className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
             }}
           >

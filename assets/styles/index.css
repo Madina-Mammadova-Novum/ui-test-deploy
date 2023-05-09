@@ -23,7 +23,6 @@
 
   ::-webkit-scrollbar-track {
     background-color: transparent;
-    margin: 24px 0px;
     border-radius: 10px;
   }
 
@@ -347,8 +346,14 @@ input[type='password'] {
   height: inherit;
 }
 
-table > tbody > tr td[name='TANKER_NAME'] > div {
+table > tbody > tr td[name='SEMIBOLD'] > div {
   @apply font-semibold;
+}
+table > tbody > tr td[name='SEMIBOLD_BLUE'] > div {
+  @apply font-semibold !text-blue;
+}
+table > tbody > tr td[name='RED'] > div {
+  @apply !text-red;
 }
 
 .Toastify__toast {
