@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
@@ -34,7 +34,7 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
 
   const handleSubmit = (formData) => console.log(formData);
 
-  const tabContent = () => {
+  const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
         return <VoyageDetailsTabContent data={voyageDetailData} />;
@@ -43,7 +43,7 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
       default:
         return <CommentsContent data={incomingOfferCommentsData} />;
     }
-  };
+  }, [currentTab]);
 
   return (
     <div className="w-[610px]">
@@ -73,7 +73,7 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
               className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
             }}
           >
-            {tabContent()}
+            {tabContent}
           </FormManager>
         </FormProvider>
       </div>
