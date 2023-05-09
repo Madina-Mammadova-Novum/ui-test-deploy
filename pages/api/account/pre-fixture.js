@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     data: [
       [
         {
-          label: 'cargo i123123123123123123d',
+          label: 'cargo id',
           content: {
             text: 'TY7621',
           },

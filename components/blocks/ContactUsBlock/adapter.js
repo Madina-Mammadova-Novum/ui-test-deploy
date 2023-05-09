@@ -8,6 +8,6 @@ export const updateContactUsBlock = async (block) => {
     emails: emails ? emails.map(({ Email }) => Email) : [],
     address,
     schedule,
-    embedMap
+    embedMap,
   };
 };

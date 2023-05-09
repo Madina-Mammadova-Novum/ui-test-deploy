@@ -8,117 +8,49 @@ export default async function handler(req, res) {
   await sleep(2000);
   res.status(200).json({
     data: [
-      [
-        {
-          label: 'tanker name',
-          content: {
-            text: 'Harvey Deep Sea',
-            image: null,
+      {
+        id: 8,
+        type: 'ascending',
+        tankerName: 'Harvey Deep Sea',
+        imo: '9131034',
+        fleetName: 'Fleet Base West',
+        openDate: 'Dec 21, 2021',
+        openPort: 'Botas Natural Gas Terminal, ESBCN',
+        incomingOffers: [
+          {
+            id: 1,
+            incomingOfferCargoId: 'QW1122',
+            laycanStart: 'Dec 18, 2021',
+            laycanEnd: 'Dec 19, 2021',
+            loadPort: 'Barcelona, ESBCN',
+            status: 'New offer',
+            dateReceived: 'Dec 19, 2021',
+            countdown: '1d 1h 50m',
           },
-        },
-        {
-          label: 'imo',
-          content: {
-            text: '9131034',
-            image: null,
+        ],
+        sentCounteroffers: [
+          {
+            id: 1,
+            sentOfferCargoId: 'QW1122',
+            laycanStart: 'Dec 18, 2021',
+            laycanEnd: 'Dec 19, 2021',
+            loadPort: 'Barcelona, ESBCN',
+            dateSent: 'Dec 19, 2021',
+            countdown: '1d 1h 50m',
           },
-        },
-        {
-          label: 'fleet name',
-          content: {
-            text: 'Fleet Base West',
-            image: null,
+        ],
+        failedOffers: [
+          {
+            id: 1,
+            failedOfferCargoId: 'QW1122',
+            laycanStart: 'Dec 18, 2021',
+            laycanEnd: 'Dec 19, 2021',
+            loadPort: 'Barcelona, ESBCN',
+            dateFailed: 'Dec 19, 2021',
+            reason: 'Offer timed out',
           },
-        },
-        {
-          label: 'open date',
-          content: {
-            text: 'Dec 21, 2021',
-            image: null,
-          },
-        },
-        {
-          label: 'open port',
-          content: {
-            text: 'Botas Natural Gas Terminal, ESBCN',
-            image: null,
-          },
-        },
-      ],
-      [
-        {
-          label: 'tanker name',
-          content: {
-            text: 'Harvey Deep Sea',
-            image: null,
-          },
-        },
-        {
-          label: 'imo',
-          content: {
-            text: '9131034',
-            image: null,
-          },
-        },
-        {
-          label: 'fleet name',
-          content: {
-            text: 'Fleet Base West',
-            image: null,
-          },
-        },
-        {
-          label: 'open date',
-          content: {
-            text: 'Dec 21, 2021',
-            image: null,
-          },
-        },
-        {
-          label: 'open port',
-          content: {
-            text: 'Botas Natural Gas Terminal, ESBCN',
-            image: null,
-          },
-        },
-      ],
-      [
-        {
-          label: 'tanker name',
-          content: {
-            text: 'Harvey Deep Sea',
-            image: null,
-          },
-        },
-        {
-          label: 'imo',
-          content: {
-            text: '9131034',
-            image: null,
-          },
-        },
-        {
-          label: 'fleet name',
-          content: {
-            text: 'Fleet Base West',
-            image: null,
-          },
-        },
-        {
-          label: 'open date',
-          content: {
-            text: 'Dec 21, 2021',
-            image: null,
-          },
-        },
-        {
-          label: 'open port',
-          content: {
-            text: 'Botas Natural Gas Terminal, ESBCN',
-            image: null,
-          },
-        },
-      ],
+        ],
+      },
     ],
   });
 }
