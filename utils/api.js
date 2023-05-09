@@ -1,6 +1,28 @@
 import { responseAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { getStrapiURL } from '@/utils/index';
+import { getApiURL, getIdentityApiURL, getStrapiURL } from '@/utils/index';
+
+export const endpointPath = (path, provider) => {
+  let apiURL = '';
+  switch (provider) {
+    case 'identify': {
+      apiURL = getIdentityApiURL(path);
+      break;
+    }
+    case 'backend': {
+      apiURL = getApiURL(path);
+      break;
+    }
+    case 'strapi': {
+      apiURL = getStrapiURL(path);
+      break;
+    }
+    default: {
+      apiURL = null;
+    }
+  }
+  return apiURL;
+};
 
 export const externalErrorHandler = (status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
@@ -35,28 +57,15 @@ const externalFetchOptions = (requestMethod, body = null) => {
   return options;
 };
 
-export function getApiURL(path) {
-  return `${process.env.BACKEND_API_URL}/${path}`;
-}
-
-export function getIdentityApiURL(path, apiVersion = null) {
-  let pathString = `/${path}`;
-  if (apiVersion !== null) {
-    pathString = `/${apiVersion}${pathString}`;
-  }
-  return `${process.env.IDENTITY_API_URL}${pathString}`;
-}
-
 export const externalApiHandler = async (options) => {
   const { endpoint, requestMethod, body } = options;
   const requestOptions = externalFetchOptions(requestMethod, body);
-
   try {
     const response = await fetch(endpoint, requestOptions);
     const { status, ok, statusText } = response;
     let responseBody = await response.text();
     if (responseBody !== '') {
-      responseBody = JSON.stringify(responseBody);
+      responseBody = JSON.parse(responseBody);
     }
     const result = ok ? responseBody : null;
     const error = ok ? null : externalErrorHandler(status, statusText, [responseBody]);
@@ -72,24 +81,8 @@ export const externalApiHandler = async (options) => {
 };
 
 export const postHandler = (path, body, provider) => {
-  let apiURL = '';
-  switch (provider) {
-    case 'identify': {
-      apiURL = getIdentityApiURL(path);
-      break;
-    }
-    case 'backend': {
-      apiURL = getApiURL(path);
-      break;
-    }
-    default: {
-      apiURL = getStrapiURL(path);
-      break;
-    }
-  }
-
   return externalApiHandler({
-    endpoint: apiURL,
+    endpoint: endpointPath(path, provider),
     requestMethod: 'POST',
     body,
   });
@@ -99,26 +92,11 @@ export const postHandler = (path, body, provider) => {
  *
  * @param path
  * @param provider
- * @returns {Promise<{data?: *, error: null|{message: null|string|*, errors: null|*[], status: *}, status: number}|{message: null|string|*, errors: null|*[], status: *}|undefined>}
+ * @returns {Promise<{data?: *, error: null|{message: null|string|*, errors: null|*[]}, status: *}|{message: null|string|*, errors: null|*[]}|undefined>}
  */
 export const getHandler = (path, provider) => {
-  let apiURL = '';
-  switch (provider) {
-    case 'identify': {
-      apiURL = getIdentityApiURL(path);
-      break;
-    }
-    case 'backend': {
-      apiURL = getApiURL(path);
-      break;
-    }
-    default: {
-      apiURL = getStrapiURL(path);
-      break;
-    }
-  }
   return externalApiHandler({
-    endpoint: apiURL,
+    endpoint: endpointPath(path, provider),
     requestMethod: 'GET',
   });
 };

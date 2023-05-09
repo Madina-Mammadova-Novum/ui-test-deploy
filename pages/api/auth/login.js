@@ -9,7 +9,6 @@ export default async function handler(req, res) {
   await sleep(2000);
   try {
     const { email, password } = bodyObject(req);
-    console.log({ email, password });
     if (!email || !password) {
       return res.status(422).json({ error: { message: 'Please provide the required fields email and password' } });
     }
