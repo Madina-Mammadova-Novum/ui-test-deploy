@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { FormProvider } from 'react-hook-form';
 
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
 
+import { FormManager } from '@/common';
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { useHookFormParams } from '@/utils/hooks';
 import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -27,8 +30,11 @@ const tabs = [
 const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const methods = useHookFormParams({ schema: {} });
 
-  const tabContent = () => {
+  const handleSubmit = (formData) => console.log(formData);
+
+  const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
         return <VoyageDetailsTabContent data={voyageDetailData} />;
@@ -37,7 +43,7 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
       default:
         return <CommentsContent data={incomingOfferCommentsData} />;
     }
-  };
+  }, [currentTab]);
 
   return (
     <div className="w-[610px]">
@@ -56,16 +62,32 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
         className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
-        {tabContent()}
+        <FormProvider {...methods}>
+          <FormManager
+            submitAction={handleSubmit}
+            className="!gap-0"
+            submitButton={{
+              text: 'Accept the offer',
+              variant: 'primary',
+              size: 'large',
+              className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
+            }}
+          >
+            {tabContent}
+          </FormManager>
+        </FormProvider>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }} />
+        <Button
+          buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
+          customStyles="opacity-0"
+        />
       </div>
     </div>
   );

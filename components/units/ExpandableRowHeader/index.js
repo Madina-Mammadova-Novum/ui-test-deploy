@@ -1,5 +1,7 @@
 'use client';
 
+import ReactCountryFlag from 'react-country-flag';
+
 import classNames from 'classnames';
 
 import { ExpandableRowHeaderPropTypes } from '@/lib/types';
@@ -20,7 +22,12 @@ const ExpandableRowHeader = ({ toggle = false, headerData = [] }) => {
             className={`w-full col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`}
             style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
           >
-            <TextWithLabel label={label} text={text} coverImage={image} customStyles={!index && 'mr-auto'} />
+            <TextWithLabel
+              label={label}
+              text={text}
+              coverImage={<ReactCountryFlag countryCode={image} svg className="!w-5 !h-4 inline" />}
+              customStyles={!index && 'mr-auto'}
+            />
           </div>
         ))}
       </div>

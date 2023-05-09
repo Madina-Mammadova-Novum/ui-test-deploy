@@ -1,7 +1,7 @@
 import EditIcon from '@/assets/images/edit.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
-import { NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
@@ -91,6 +91,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
 
   const { tankerName = {}, imo = {}, port = {}, tankerStatus = {}, date = {}, id } = data;
 
+  if (!imo.value) return [];
+
   return [
     {
       value: index,
@@ -99,7 +101,8 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     {
       id,
       value: tankerName.value,
-      type: TYPE.TANKER_NAME,
+      action: ACTIONS.TANKER_NAME,
+      type: TYPE.SEMIBOLD,
       editable: tankerName.editable?.isEdit,
       editIcon: tankerName.editable?.icon,
       disabled: tankerName.disabled,
@@ -107,7 +110,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     {
       id,
       value: imo.value,
-      type: TYPE.IMO,
+      action: ACTIONS.IMO,
       editable: imo.editable?.isEdit,
       editIcon: imo.editable?.icon,
       disabled: imo.disabled,
@@ -115,7 +118,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     {
       id,
       name: tankerName.value,
-      type: TYPE.PORT,
+      action: ACTIONS.PORT,
       value: port.value,
       helperData: port.helperData,
       editable: port.editable?.isEdit,
@@ -124,7 +127,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
     },
     {
       id,
-      type: TYPE.DATE,
+      action: ACTIONS.DATE,
       name: tankerName.value,
       marked: date.marked,
       value: date.value,
@@ -139,7 +142,7 @@ export const fleetTableCellAdapter = ({ data, index }) => {
         value: tankerStatus.value,
         name: tankerName.value,
       },
-      type: TYPE.TANKER_STATUS,
+      action: ACTIONS.TANKER_STATUS,
       editable: tankerStatus.editable?.isEdit,
       editIcon: tankerStatus.editable?.icon,
       disabled: tankerStatus.disabled,
