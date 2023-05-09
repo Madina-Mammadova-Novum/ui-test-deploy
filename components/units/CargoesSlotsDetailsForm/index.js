@@ -7,7 +7,7 @@ import PlusSVG from '@/assets/images/plusCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
-import { convertDataToOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
+import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
@@ -77,8 +77,7 @@ const CargoesSlotsDetailsForm = () => {
 
   const fetchPorts = async () => {
     const data = await getPorts();
-    const options = convertDataToOptions(data, 'id', 'name');
-
+    const options = countriesOptions(data);
     handleChangeState('cargoesPortsOptions', options);
   };
 
