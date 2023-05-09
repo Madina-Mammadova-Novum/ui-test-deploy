@@ -15,6 +15,7 @@ import FieldsetContentWrapper from '@/elements/FieldsetContentWrapper';
 import FieldsetHeader from '@/elements/FieldsetHeader';
 import FieldsetWrapper from '@/elements/FieldsetWrapper';
 import HoverableIcon from '@/elements/HoverableIcon';
+import HoverTooltip from '@/elements/HoverTooltip';
 import IconComponent from '@/elements/IconComponent';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
@@ -25,6 +26,7 @@ import InputErrorMessage from '@/elements/InputErrorMessage';
 import Label from '@/elements/Label';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
+import ManualTooltip from '@/elements/ManualTooltip';
 import Modal from '@/elements/Modal';
 import NavButton from '@/elements/NavButton';
 import NavTree from '@/elements/NavTree';
@@ -39,12 +41,12 @@ import TextRow from '@/elements/TextRow';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
 import Toggle from '@/elements/Toggle';
-import Tooltip from '@/elements/Tooltip';
 
 export {
   AccordionBody,
   Table,
-  Tooltip,
+  HoverTooltip,
+  ManualTooltip,
   Toggle,
   Title,
   TextRow,
