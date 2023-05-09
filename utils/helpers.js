@@ -256,3 +256,9 @@ export const resetForm = (methods) => {
     return formValues;
   });
 };
+
+export const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
