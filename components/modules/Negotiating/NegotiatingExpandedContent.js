@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { negotiatingExpandedContentPropTypes } from '@/lib/types';
+
 import {
   failedTabRowsDataAdapter,
   incomingTabRowsDataAdapter,
@@ -13,7 +15,6 @@ import {
   negotiatingFailedTableHeader,
   negotiatingIncomingTableHeader,
 } from '@/utils/mock';
-import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
 const tabs = [
   {
@@ -94,6 +95,6 @@ const NegotiatingExpandedContent = ({ data }) => {
   );
 };
 
-NegotiatingExpandedContent.propTypes = negotiatingExpandedContentPropTypes
+NegotiatingExpandedContent.propTypes = negotiatingExpandedContentPropTypes;
 
 export default NegotiatingExpandedContent;
