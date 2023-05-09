@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import { linkImagePropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
+import Map from '@/elements/Map';
 import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
-const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule }) => {
+const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, embedMap }) => {
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto px-[54px] max-w-[1258px]">
@@ -20,16 +21,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
             <ContactUsForm />
           </div>
           <div className="pl-5">
-            <iframe
-              title="map"
-              src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d95271.13436975016!2d30.457874967403615!3d50.490820156839895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgoogle%20maps!5e0!3m2!1sen!2sua!4v1681135861029!5m2!1sen!2sua"
-              width="536"
-              height="400"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="rounded-base w-full h-[400px]"
-            />
+            <Map embedMap={embedMap} title={address} />
             <div className="flex flex-wrap gap-x-[30px] mt-5">
               <div className="w-[150px]">
                 <Title level={4} className="mb-2">
@@ -81,6 +73,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
 };
 
 ContactUsBlock.propTypes = {
+  embedMap: PropTypes.string,
   title: PropTypes.string,
   subTitle: PropTypes.string,
   shortDescription: PropTypes.string,

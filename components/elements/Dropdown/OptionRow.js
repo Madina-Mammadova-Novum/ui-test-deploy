@@ -1,15 +1,13 @@
-import { OptionRowPropTypes } from '@/lib/types';
+import ReactCountryFlag from 'react-country-flag';
 
-import { NextImage } from '@/elements';
+import { OptionRowPropTypes } from '@/lib/types';
 
 const OptionRow = ({ value, countryFlag = null }) => {
   return (
     <div className="box-border">
       <div className="flex hover:bg-purple-light rounded-md text-xsm font-medium items-center box-border whitespace-nowrap">
-        {countryFlag && (
-          <NextImage width={20} height={15} src={countryFlag} customStyles="max-h-[15px]" alt={`${countryFlag} flag`} />
-        )}
-        <span className={countryFlag && 'ml-1.5'}>{value}</span>
+        {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
+        <span>{value}</span>
       </div>
     </div>
   );
