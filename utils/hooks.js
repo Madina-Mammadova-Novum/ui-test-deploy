@@ -219,7 +219,7 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const items = data?.slice(itemsFrom, itemsFrom + perPage);
   // We checking if type presented only after that we can sort
   const sortedItems = items?.[0]?.type
-    ? items.sort((a, b) => {
+    ? items.toSorted((a, b) => {
         if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
           return 1;
         }
