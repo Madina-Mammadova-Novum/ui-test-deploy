@@ -6,16 +6,13 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
-import { emailSchema, passwordSchema } from '@/lib/schemas';
+import { loginSchema } from '@/lib/schemas';
 import { login } from '@/services';
 import { useHookFormParams } from '@/utils/hooks';
 
-const schema = yup
-  .object({
-    email: emailSchema().required(),
-    password: passwordSchema().required(),
-  })
-  .required();
+const schema = yup.object().shape({
+  ...loginSchema(),
+});
 
 const LoginForm = () => {
   const methods = useHookFormParams({ schema });
