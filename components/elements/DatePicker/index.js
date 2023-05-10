@@ -53,11 +53,11 @@ const DatePicker = ({
           />
         </div>
         <div
-          className={classnames('relative w-full top-0 left-0 hidden z-10', {
+          className={classnames('absolute w-full bottom-3 translate-y-full left-0 hidden z-10', {
             '!block': showPicker,
           })}
         >
-          <Calendar className={calendarClass} date={date} onChange={handleDate} />
+          <Calendar className={`${calendarClass} rounded-lg`} date={date} onChange={handleDate} />
         </div>
       </div>
     </>

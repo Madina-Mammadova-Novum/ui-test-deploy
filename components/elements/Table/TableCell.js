@@ -85,6 +85,7 @@ const TableCell = ({ cellProps }) => {
 
         {editable && (
           <ModalWindow
+            containerClass="overflow-y-[unset]"
             buttonProps={{
               icon: { before: editIcon },
               variant: actionVariant,
