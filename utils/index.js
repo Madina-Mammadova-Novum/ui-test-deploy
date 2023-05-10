@@ -140,3 +140,15 @@ export function toastFunc(type, title, description = '') {
     return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
   });
 }
+
+export function getApiURL(path) {
+  return `${process.env.BACKEND_API_URL}/${path}`;
+}
+
+export function getIdentityApiURL(path, apiVersion = null) {
+  let pathString = `/${path}`;
+  if (apiVersion !== null) {
+    pathString = `/${apiVersion}${pathString}`;
+  }
+  return `${process.env.IDENTITY_API_URL}${pathString}`;
+}

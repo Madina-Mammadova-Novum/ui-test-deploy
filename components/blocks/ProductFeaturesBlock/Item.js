@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { ctaPropTypes } from '@/lib/types';
+import PropTypes from 'prop-types';
+
+import { buttonsPropTypes } from '@/lib/types';
 
 import { LinkAsButton } from '@/elements';
 
@@ -21,6 +23,9 @@ const Item = ({ text, buttons }) => {
   );
 };
 
-Item.propTypes = ctaPropTypes;
+Item.propTypes = {
+  text: PropTypes.string,
+  buttons: buttonsPropTypes,
+};
 
 export default Item;
