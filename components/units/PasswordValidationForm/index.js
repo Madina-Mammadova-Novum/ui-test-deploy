@@ -42,6 +42,7 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
   const [validation, setValidation] = useState(initialState);
   const {
     clearErrors,
+    setValue,
     formState: { isSubmitSuccessful, isSubmitting },
   } = useHookForm();
 
@@ -51,7 +52,7 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
 
   const passwordValidation = (event) => {
     clearErrors(['password', 'confirmPassword']);
-    const { value } = event.target;
+    const { value, name } = event.target;
     setValidation((conditions) =>
       conditions.map((validationObject) => {
         return {
@@ -60,6 +61,8 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
         };
       })
     );
+
+    if (validation) setValue(name, value);
   };
 
   return (
@@ -80,6 +83,7 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
             placeholder="Enter your password"
             disabled={isSubmitting}
             customStyles="mt-4"
+            onChange={passwordValidation}
           />
         </div>
         <div className="pl-0 md:pl-5">
