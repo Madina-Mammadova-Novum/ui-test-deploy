@@ -133,7 +133,7 @@ const CargoesSlotsDetailsForm = () => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-x-5" key={item}>
+          <div className="grid relative grid-cols-1 lg:grid-cols-3 justify-center items-center gap-x-5" key={item}>
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
@@ -151,6 +151,7 @@ const CargoesSlotsDetailsForm = () => {
               async
             />
             <DatePicker
+              calendarClass="absolute -left-2.5"
               name={`${fieldName}.date`}
               inputClass="w-full"
               label="Bill of lading date"

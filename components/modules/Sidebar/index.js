@@ -33,8 +33,8 @@ const Sidebar = ({ data, containerStyles }) => {
 
   useEffect(() => {
     if (lgScreen || (lgScreen && url !== currentPage?.path)) setCollapse(true);
-    else setCollapse(false);
-  }, [currentPage?.path, data, lgScreen, setCollapse, url]);
+    setCollapse(collapsed);
+  }, [collapsed, currentPage?.path, data, lgScreen, setCollapse, url]);
 
   return (
     <aside
