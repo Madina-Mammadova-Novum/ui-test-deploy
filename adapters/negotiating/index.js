@@ -74,10 +74,8 @@ export const incomingTabRowsDataAdapter = ({ data }) => {
   return data.map((rowData, index) => incomingTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-
 export const incomingTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
-  
 
   const { incomingOfferCargoId, laycanStart, laycanEnd, loadPort, status, dateReceived, countdown, id } = data;
 
@@ -125,10 +123,10 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       actionSize: 'medium',
       editable: true,
     },
-  ]
+  ];
 };
 
-//////////////////////////////////////
+/// ///////////////////////////////////
 
 export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];

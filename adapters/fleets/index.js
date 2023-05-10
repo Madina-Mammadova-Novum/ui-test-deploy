@@ -42,7 +42,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       value: title ?? NO_DATA_MESSAGE.DEFAULT,
       action: ACTIONS.TANKER_NAME,
       type: TYPE.SEMIBOLD,
-      disabled: inActive
+      disabled: inActive,
     },
     {
       id,
@@ -90,4 +90,3 @@ export const fleetsRowsDataAdapter = ({ data }) => {
 
   return data.map((rowData, index) => fleetsRowDataAdapter({ data: rowData, index: index + 1 }));
 };
-
