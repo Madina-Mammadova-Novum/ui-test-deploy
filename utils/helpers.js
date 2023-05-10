@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
 
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+
 /**
  * createMarkup
  * @param content
@@ -218,6 +220,8 @@ export const disablePlusMinusSymbols = (e) => {
 };
 
 export const options = (values) => values?.map((value) => ({ label: value, value }));
+
+export const countriesOptions = (data) => countryOptionsAdapter(data);
 
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
   if (data === null || data === undefined) return [];
