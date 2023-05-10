@@ -6,7 +6,7 @@ import { ModalWindowPropTypes } from '@/lib/types';
 
 import { Button, Modal } from '@/elements';
 
-const ModalWindow = ({ children, buttonProps }) => {
+const ModalWindow = ({ children, buttonProps, containerClass }) => {
   const [opened, setOpened] = useState(false);
 
   const { text, variant, size, icon, className, disabled } = buttonProps;
@@ -24,7 +24,7 @@ const ModalWindow = ({ children, buttonProps }) => {
         customStyles={className}
         onClick={handleOpenModal}
       />
-      <Modal opened={opened} onClose={handleCloseModal}>
+      <Modal containerClass={containerClass} opened={opened} onClose={handleCloseModal}>
         {childrenWithProps}
       </Modal>
     </>
