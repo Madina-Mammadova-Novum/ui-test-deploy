@@ -88,6 +88,22 @@ export const postHandler = (path, body, provider) => {
   });
 };
 
+export const putHandler = (path, body, provider) => {
+  return externalApiHandler({
+    endpoint: endpointPath(path, provider),
+    requestMethod: 'PUT',
+    body,
+  });
+};
+
+export const patchHandler = (path, body, provider) => {
+  return externalApiHandler({
+    endpoint: endpointPath(path, provider),
+    requestMethod: 'PATCH',
+    body,
+  });
+};
+
 /**
  *
  * @param path

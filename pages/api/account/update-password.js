@@ -2,6 +2,7 @@ import { sleep } from '@/utils/helpers';
 
 export default async function handler(req, res) {
   await sleep(2000);
+  // todo: PUT request here
   try {
     return res.status(200).json({
       message: 'Your password has been sent successfully',
