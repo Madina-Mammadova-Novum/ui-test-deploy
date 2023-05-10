@@ -10,7 +10,6 @@ import { getPorts } from '@/services/port';
 import { useHookForm } from '@/utils/hooks';
 
 const PortDetailsForm = ({ portName = '' }) => {
-  // const [containerHeight, setContainerHeight] = useState(120);
   const { setValue, clearErrors } = useHookForm();
 
   const [portOptions, setPortOptions] = useState([]);
@@ -27,7 +26,6 @@ const PortDetailsForm = ({ portName = '' }) => {
   }, []);
 
   const handlePortChange = (options) => {
-    // setContainerHeight(ref.current.scrollHeight);
     clearErrors('port');
     setValue('port', options);
   };
