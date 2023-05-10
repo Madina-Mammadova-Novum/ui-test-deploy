@@ -11,7 +11,8 @@ const TermsAndConditions = () => {
   const [legalLinks, setLegalLinks] = useState([]);
   const fetchData = async () => {
     const legalNavigation = await getNavigation('legal-navigation', 'en');
-    const legalIncluded = legalNavigation.filter((link) => {
+    const { data } = legalNavigation;
+    const legalIncluded = data.filter((link) => {
       return link.path !== ROUTES.LEGAL_EXCLUDED;
     });
     setLegalLinks(legalIncluded);
