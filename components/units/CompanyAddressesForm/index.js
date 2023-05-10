@@ -6,7 +6,7 @@ import { CheckBoxInput } from '@/elements';
 import { ADDRESS } from '@/lib/constants';
 import { getCountries } from '@/services';
 import { AddressDetails } from '@/units';
-import { convertDataToOptions } from '@/utils/helpers';
+import { countriesOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresses = () => {
@@ -22,8 +22,7 @@ const CompanyAddresses = () => {
 
   const fetchCountries = async () => {
     const data = await getCountries();
-    const options = convertDataToOptions(data, 'countryId', 'countryName');
-
+    const options = countriesOptions(data);
     setCountries(options);
   };
 

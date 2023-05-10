@@ -3,7 +3,6 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
-  positionsAdapter,
   resetPasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
@@ -27,45 +26,14 @@ export async function resetPassword({ data }) {
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
-
-  // TODO: temp-solution very neede for demo.
-
-  return {
-    data: {
-      status: response.status,
-      alert: response.ok ? 'Check your email for validating the account' : SYSTEM_ERROR,
-    },
-  };
+  const response = await postData(`auth/signup?type=owner`, body);
+  return response;
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
-
-  // TODO: temp-solution very neede for demo.
-
-  return {
-    data: {
-      status: response.status,
-      alert: response.ok ? 'Check your email for validating the account' : SYSTEM_ERROR,
-    },
-  };
+  const response = await postData(`auth/signup?type=charterer`, body);
+  return response;
 }
 
 export async function postVeriffData({ data }) {
@@ -80,7 +48,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await postData(`auth/login`, JSON.stringify(body));
+  const response = await postData(`auth/login`, body);
   return response;
 }
 
@@ -116,7 +84,7 @@ export async function updateCompany({ data }) {
 
 export async function getUserPositions() {
   const { data } = await getData(`account/my-positions`);
-  return positionsAdapter({ data });
+  return data;
 }
 
 export async function getUserFixtures() {
