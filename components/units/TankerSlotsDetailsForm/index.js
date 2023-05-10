@@ -82,7 +82,7 @@ const TankerSlotsDetails = () => {
           type="number"
           value={slots}
           label="Number of tankers"
-          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} cargoes.`}
+          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} tankers.`}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}

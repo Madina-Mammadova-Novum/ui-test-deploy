@@ -53,7 +53,7 @@ const DatePicker = ({
           />
         </div>
         <div
-          className={classnames('relative w-full -top-4 left-0 hidden z-10', {
+          className={classnames('relative w-full top-0 left-0 hidden z-10', {
             '!block': showPicker,
           })}
         >
