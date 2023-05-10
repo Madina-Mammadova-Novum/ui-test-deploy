@@ -5,7 +5,7 @@ import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
-  if (data === null) return null;
+  if (!data) return null;
 
   const { title, activeTankers, inActiveTankers } = data;
 
@@ -25,127 +25,69 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
   ];
 };
 
-export const fleetsRowDataAdapter = ({ data }) => {
-  if (data === null) return null;
+export const fleetsRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
 
   const { date, id, marked, imo, port, status, title } = data;
 
   const inActive = port === null || date === null;
 
-  return {
-    id,
-    imo: {
-      value: imo ?? NO_DATA_MESSAGE.IMO,
-      editable: {
-        isEdit: false,
-        icon: null,
-      },
-      disabled: inActive,
-    },
-    port: {
-      value: port ?? NO_DATA_MESSAGE.PORT,
-      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
-      editable: {
-        isEdit: !inActive,
-        icon: <EditIcon />,
-      },
-      disabled: inActive,
-    },
-    tankerName: {
-      value: title ?? NO_DATA_MESSAGE.DEFAULT,
-      editable: {
-        isEdit: false,
-        icon: null,
-      },
-      disabled: inActive,
-    },
-    tankerStatus: {
-      value: status ?? false,
-      editable: {
-        isEdit: !inActive,
-        icon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
-      },
-      disabled: inActive,
-    },
-    date: {
-      value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-      marked,
-      editable: {
-        isEdit: !inActive,
-        icon: <EditIcon />,
-      },
-      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
-      disabled: inActive,
-    },
-  };
-};
-
-export const fleetsRowsDataAdapter = ({ data }) => {
-  if (data === null || data === undefined) return [];
-
-  return data.map((rowData) => fleetsRowDataAdapter({ data: rowData }));
-};
-
-export const fleetTableCellAdapter = ({ data, index }) => {
-  if (data === null || data === undefined) return [];
-
-  const { tankerName = {}, imo = {}, port = {}, tankerStatus = {}, date = {}, id } = data;
-
-  if (!imo.value) return [];
-
   return [
     {
       value: index,
-      disabled: tankerName.disabled,
+      disabled: inActive,
     },
     {
       id,
-      value: tankerName.value,
+      value: title ?? NO_DATA_MESSAGE.DEFAULT,
       action: ACTIONS.TANKER_NAME,
       type: TYPE.SEMIBOLD,
-      editable: tankerName.editable?.isEdit,
-      editIcon: tankerName.editable?.icon,
-      disabled: tankerName.disabled,
+      disabled: inActive
     },
     {
       id,
-      value: imo.value,
+      value: imo ?? NO_DATA_MESSAGE.IMO,
       action: ACTIONS.IMO,
-      editable: imo.editable?.isEdit,
-      editIcon: imo.editable?.icon,
-      disabled: imo.disabled,
+      disabled: inActive,
     },
     {
       id,
-      name: tankerName.value,
+      name: title,
       action: ACTIONS.PORT,
-      value: port.value,
-      helperData: port.helperData,
-      editable: port.editable?.isEdit,
-      editIcon: port.editable?.icon,
-      disabled: port.disabled,
+      value: port || NO_DATA_MESSAGE.PORT,
+      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
+      editable: !inActive,
+      editIcon: <EditIcon />,
+      disabled: inActive,
     },
     {
       id,
       action: ACTIONS.DATE,
-      name: tankerName.value,
-      marked: date.marked,
-      value: date.value,
-      helperData: date.helperData,
-      editable: date.editable?.isEdit,
-      editIcon: date.editable?.icon,
-      disabled: date.disabled,
+      name: title,
+      marked,
+      value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
+      editable: !inActive,
+      editIcon: <EditIcon />,
+      disabled: inActive,
     },
     {
       id,
       toggle: {
-        value: tankerStatus.value,
-        name: tankerName.value,
+        value: status || false,
+        name: title,
       },
       action: ACTIONS.TANKER_STATUS,
-      editable: tankerStatus.editable?.isEdit,
-      editIcon: tankerStatus.editable?.icon,
-      disabled: tankerStatus.disabled,
+      editable: !inActive,
+      editIcon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
+      disabled: inActive,
     },
   ];
 };
+
+export const fleetsRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => fleetsRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+

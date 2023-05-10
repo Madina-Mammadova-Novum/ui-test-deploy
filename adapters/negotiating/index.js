@@ -3,7 +3,7 @@ import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
-  if (data === null) return null;
+  if (!data) return null;
 
   const { tankerName, imo, fleetName, openDate, openPort } = data;
 
@@ -32,7 +32,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
 };
 
 export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
-  if (data === null) return null;
+  if (!data) return null;
 
   const { cargoId, imo, quantity, loadPort, laycanStart, laycanEnd, creationDate } = data;
 
@@ -69,57 +69,17 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
 };
 
 export const incomingTabRowsDataAdapter = ({ data }) => {
-  if (data === null || data === undefined) return [];
+  if (!data) return [];
 
-  return data.map((rowData) => incomingTabRowDataAdapter({ data: rowData }));
+  return data.map((rowData, index) => incomingTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const incomingTabRowDataAdapter = ({ data }) => {
-  if (data === null) return null;
+
+export const incomingTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+  
 
   const { incomingOfferCargoId, laycanStart, laycanEnd, loadPort, status, dateReceived, countdown, id } = data;
-
-  return {
-    id,
-    incomingOfferCargoId: {
-      value: incomingOfferCargoId ?? NO_DATA_MESSAGE.IMO,
-    },
-    laycanStart: {
-      value: laycanStart ?? NO_DATA_MESSAGE.PORT,
-    },
-    laycanEnd: {
-      value: laycanEnd ?? NO_DATA_MESSAGE.DEFAULT,
-    },
-    loadPort: {
-      value: loadPort ?? false,
-    },
-    status: {
-      value: status ?? false,
-    },
-    dateReceived: {
-      value: dateReceived ? transformDate(dateReceived, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-    },
-    countdown: {
-      value: countdown || '-',
-    },
-  };
-};
-
-export const incomingTabCellAdapter = ({ data, index }) => {
-  if (data === null || data === undefined) return [];
-
-  const {
-    incomingOfferCargoId = {},
-    laycanStart = {},
-    laycanEnd = {},
-    loadPort = {},
-    status = {},
-    dateReceived = {},
-    countdown = {},
-    id,
-  } = data;
-
-  if (!incomingOfferCargoId.value) return [];
 
   return [
     {
@@ -127,33 +87,33 @@ export const incomingTabCellAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: incomingOfferCargoId.value,
+      value: incomingOfferCargoId,
       type: TYPE.SEMIBOLD_BLUE,
     },
     {
       id,
-      value: laycanStart.value,
+      value: laycanStart,
     },
     {
       id,
-      value: laycanEnd.value,
+      value: laycanEnd,
     },
     {
       id,
-      value: loadPort.value,
+      value: loadPort,
     },
     {
       id,
-      value: status.value,
+      value: status,
       type: TYPE.SEMIBOLD,
     },
     {
       id,
-      value: dateReceived.value,
+      value: dateReceived ? transformDate(dateReceived, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: countdown.value,
+      value: countdown,
       type: TYPE.RED,
       icon: <ClockIcon className="fill-red" />,
     },
@@ -165,59 +125,21 @@ export const incomingTabCellAdapter = ({ data, index }) => {
       actionSize: 'medium',
       editable: true,
     },
-  ];
+  ]
 };
 
-/// ///////////////////////////////////
+//////////////////////////////////////
 
 export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
-  if (data === null || data === undefined) return [];
+  if (!data) return [];
 
-  return data.map((rowData) => sentCounteroffersTabRowDataAdapter({ data: rowData }));
+  return data.map((rowData, index) => sentCounteroffersTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const sentCounteroffersTabRowDataAdapter = ({ data }) => {
-  if (data === null) return null;
+export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
 
   const { sentOfferCargoId, laycanStart, laycanEnd, loadPort, dateSent, countdown, id } = data;
-
-  return {
-    id,
-    sentOfferCargoId: {
-      value: sentOfferCargoId ?? NO_DATA_MESSAGE.IMO,
-    },
-    laycanStart: {
-      value: laycanStart ?? NO_DATA_MESSAGE.PORT,
-    },
-    laycanEnd: {
-      value: laycanEnd ?? NO_DATA_MESSAGE.DEFAULT,
-    },
-    loadPort: {
-      value: loadPort ?? false,
-    },
-    dateSent: {
-      value: dateSent ? transformDate(dateSent, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-    },
-    countdown: {
-      value: countdown || '-',
-    },
-  };
-};
-
-export const sentCounterofferTabCellAdapter = ({ data, index }) => {
-  if (data === null || data === undefined) return [];
-
-  const {
-    sentOfferCargoId = {},
-    laycanStart = {},
-    laycanEnd = {},
-    loadPort = {},
-    dateSent = {},
-    countdown = {},
-    id,
-  } = data;
-
-  if (!sentOfferCargoId.value) return [];
 
   return [
     {
@@ -225,28 +147,28 @@ export const sentCounterofferTabCellAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: sentOfferCargoId.value,
+      value: sentOfferCargoId,
       type: TYPE.SEMIBOLD_BLUE,
     },
     {
       id,
-      value: laycanStart.value,
+      value: laycanStart,
     },
     {
       id,
-      value: laycanEnd.value,
+      value: laycanEnd,
     },
     {
       id,
-      value: loadPort.value,
+      value: loadPort,
     },
     {
       id,
-      value: dateSent.value,
+      value: dateSent ? transformDate(dateSent, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: countdown.value,
+      value: countdown,
       type: TYPE.RED,
       icon: <ClockIcon className="fill-red" />,
     },
@@ -264,53 +186,15 @@ export const sentCounterofferTabCellAdapter = ({ data, index }) => {
 /// ///////////////////////////////////
 
 export const failedTabRowsDataAdapter = ({ data }) => {
-  if (data === null || data === undefined) return [];
+  if (!data) return [];
 
-  return data.map((rowData) => failedTabRowDataAdapter({ data: rowData }));
+  return data.map((rowData, index) => failedTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const failedTabRowDataAdapter = ({ data }) => {
-  if (data === null) return null;
+export const failedTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
 
   const { failedOfferCargoId, laycanStart, laycanEnd, loadPort, dateFailed, reason, id } = data;
-
-  return {
-    id,
-    failedOfferCargoId: {
-      value: failedOfferCargoId ?? NO_DATA_MESSAGE.IMO,
-    },
-    laycanStart: {
-      value: laycanStart ?? NO_DATA_MESSAGE.PORT,
-    },
-    laycanEnd: {
-      value: laycanEnd ?? NO_DATA_MESSAGE.DEFAULT,
-    },
-    loadPort: {
-      value: loadPort ?? false,
-    },
-    dateFailed: {
-      value: dateFailed ? transformDate(dateFailed, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-    },
-    reason: {
-      value: reason || '-',
-    },
-  };
-};
-
-export const failedTabCellAdapter = ({ data, index }) => {
-  if (data === null || data === undefined) return [];
-
-  const {
-    failedOfferCargoId = {},
-    laycanStart = {},
-    laycanEnd = {},
-    loadPort = {},
-    dateFailed = {},
-    reason = {},
-    id,
-  } = data;
-
-  if (!failedOfferCargoId.value) return [];
 
   return [
     {
@@ -318,28 +202,28 @@ export const failedTabCellAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: failedOfferCargoId.value,
+      value: failedOfferCargoId,
       type: TYPE.SEMIBOLD_BLUE,
     },
     {
       id,
-      value: laycanStart.value,
+      value: laycanStart,
     },
     {
       id,
-      value: laycanEnd.value,
+      value: laycanEnd,
     },
     {
       id,
-      value: loadPort.value,
+      value: loadPort,
     },
     {
       id,
-      value: dateFailed.value,
+      value: dateFailed ? transformDate(dateFailed, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: reason.value,
+      value: reason,
       type: TYPE.SEMIBOLD,
     },
     {

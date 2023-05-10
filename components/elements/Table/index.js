@@ -6,7 +6,7 @@ import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
 const Table = ({ headerData, rows }) => {
-  const printTableRow = (rowData, index) => <TableRow rowData={rowData} indexCell={index + 1} />;
+  const printTableRow = (rowData) => <TableRow rowData={rowData} />;
 
   return headerData.length > 0 ? (
     <div className="table-scroll-wrapper">
