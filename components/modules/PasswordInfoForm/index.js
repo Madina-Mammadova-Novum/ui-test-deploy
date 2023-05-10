@@ -27,9 +27,16 @@ const PasswordInfoForm = () => {
   };
 
   const {
-    register,
+    clearErrors,
+    setValue,
     formState: { errors, isSubmitting },
   } = methods;
+
+  const handleCurrentPassword = (event) => {
+    clearErrors('currentPassword');
+    const { value } = event.target;
+    setValue('currentPassword', value);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -42,11 +49,12 @@ const PasswordInfoForm = () => {
         </Title>
         <div className="w-2/3">
           <PasswordInput
-            {...register('currentPassword')}
+            name="currentPassword"
             label="Current password"
             placeholder="Enter your current password"
             error={errors.currentPassword?.message}
             disabled={isSubmitting}
+            onChange={handleCurrentPassword}
           />
         </div>
         <Divider />

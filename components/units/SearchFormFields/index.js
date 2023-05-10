@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
@@ -30,7 +31,7 @@ const SearchFormFields = () => {
     loading: false,
     data: [],
   });
-  const [terminals, setTreminals] = useState({
+  const [terminals, setTerminals] = useState({
     loadPortTerminals: {
       loading: false,
       data: [],
@@ -60,7 +61,7 @@ const SearchFormFields = () => {
 
     if (portKeys.includes(key)) {
       setValue(terminalKeys[key], null);
-      setTreminals((prevState) => ({
+      setTerminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
           loading: true,
@@ -69,7 +70,7 @@ const SearchFormFields = () => {
       }));
 
       const relatedTerminals = await getTerminals(value.value);
-      setTreminals((prevState) => ({
+      setTerminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
           loading: false,
@@ -109,7 +110,7 @@ const SearchFormFields = () => {
   useEffect(() => {
     (async () => {
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
-      setPorts(convertDataToOptions(portsData, 'id', 'name'));
+      setPorts(countryOptionsAdapter(portsData));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
     })();
   }, []);

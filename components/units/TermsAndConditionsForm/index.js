@@ -11,7 +11,8 @@ const TermsAndConditions = () => {
   const [legalLinks, setLegalLinks] = useState([]);
   const fetchData = async () => {
     const legalNavigation = await getNavigation('legal-navigation', 'en');
-    const legalIncluded = legalNavigation.filter((link) => {
+    const { data } = legalNavigation;
+    const legalIncluded = data.filter((link) => {
       return link.path !== ROUTES.LEGAL_EXCLUDED;
     });
     setLegalLinks(legalIncluded);
@@ -21,7 +22,7 @@ const TermsAndConditions = () => {
   }, []);
 
   const printLinks = legalLinks.map(({ path, title }) => (
-    <NextLink key={path} href={path} className="text-blue underline px-1.5">
+    <NextLink key={path} href={path} target="_blank" className="text-blue underline px-1.5">
       {title}
     </NextLink>
   ));

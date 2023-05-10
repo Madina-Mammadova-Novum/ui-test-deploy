@@ -1,7 +1,10 @@
 import { getFAQs } from '@/services/faq';
 
 export const updateFAQBlock = async (block) => {
-  block.items = await getFAQs();
+  const a = await getFAQs();
+  console.log({ a });
+
+  block.items = [];
   block.categories = block.items
     .map(({ category }) => category)
     .filter((obj, index, self) => {

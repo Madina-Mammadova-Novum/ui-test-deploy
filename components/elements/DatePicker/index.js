@@ -20,6 +20,7 @@ const DatePicker = ({
   onChange,
   inputClass = 'min-w-[296px]',
   error,
+  calendarClass,
   closeOnSelect = true,
   ...rest
 }) => {
@@ -52,11 +53,11 @@ const DatePicker = ({
           />
         </div>
         <div
-          className={classnames('absolute bottom-0 translate-y-[95%] left-0 hidden z-10', {
+          className={classnames('relative w-full top-0 left-0 hidden z-10', {
             '!block': showPicker,
           })}
         >
-          <Calendar date={date} onChange={handleDate} />
+          <Calendar className={calendarClass} date={date} onChange={handleDate} />
         </div>
       </div>
     </>

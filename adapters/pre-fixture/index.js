@@ -1,5 +1,5 @@
 import CommentIcon from '@/assets/images/comment.svg';
-import { NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 export const prefixtureHeaderDataAdapter = ({ data }) => {
@@ -54,12 +54,12 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: docId,
-      type: TYPE.TANKER_NAME,
+      type: TYPE.SEMIBOLD,
     },
     {
       id,
       value: title,
-      type: TYPE.IMO,
+      type: TYPE.SEMIBOLD,
     },
     {
       id,
@@ -68,23 +68,27 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      type: TYPE.DATE,
       value: docName,
     },
     {
       id,
-      type: TYPE.DATE,
       value: extension,
     },
     {
       id,
-      type: TYPE.DATE,
       value: size,
     },
     {
       id,
-      type: TYPE.DATE,
       value: dateAdded ? transformDate(dateAdded, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      action: ACTIONS.DOWNLOAD,
+      actionText: 'Download',
+      actionVariant: 'primary',
+      actionSize: 'medium',
+      editable: true,
     },
   ];
 };

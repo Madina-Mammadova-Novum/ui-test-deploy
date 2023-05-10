@@ -36,7 +36,7 @@ const ExpandableCardWrapper = ({
         style={{ height: expandedHeight }}
       >
         <Divider />
-        <div className="p-5 overflow-x-auto">{children}</div>
+        <div className="table-scroll pt-5">{children}</div>
         {footerComponent}
       </div>
     </div>

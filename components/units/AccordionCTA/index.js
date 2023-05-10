@@ -1,8 +1,11 @@
 import React from 'react';
 
-import { ctaPropTypes } from '@/lib/types';
+import PropTypes from 'prop-types';
+
+import { buttonsPropTypes } from '@/lib/types';
 
 import { LinkAsButton, Title } from '@/elements';
+import { makeId } from '@/utils/helpers';
 
 const AccordionCTA = ({ title, buttons, shortDescription }) => {
   return (
@@ -13,7 +16,7 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
         {buttons &&
           buttons.map(({ path, label }) => {
             return (
-              <LinkAsButton href={path} buttonProps={{ variant: 'primary', size: 'medium' }}>
+              <LinkAsButton key={makeId()} href={path} buttonProps={{ variant: 'primary', size: 'medium' }}>
                 {label}
               </LinkAsButton>
             );
@@ -23,6 +26,10 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
   );
 };
 
-AccordionCTA.propTypes = ctaPropTypes;
+AccordionCTA.propTypes = {
+  title: PropTypes.string,
+  shortDescription: PropTypes.string,
+  buttons: buttonsPropTypes,
+};
 
 export default AccordionCTA;

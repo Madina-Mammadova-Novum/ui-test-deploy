@@ -41,12 +41,10 @@ const initialState = [
 const PasswordValidation = ({ title = '', customStyles = '' }) => {
   const [validation, setValidation] = useState(initialState);
   const {
-    register,
     clearErrors,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    setValue,
+    formState: { isSubmitSuccessful, isSubmitting },
   } = useHookForm();
-
-  const { password: passwordError, confirmPassword: confirmPasswordError } = errors;
 
   useEffect(() => {
     if (isSubmitSuccessful) setValidation(initialState);
@@ -54,7 +52,7 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
 
   const passwordValidation = (event) => {
     clearErrors(['password', 'confirmPassword']);
-    const { value } = event.target;
+    const { value, name } = event.target;
     setValidation((conditions) =>
       conditions.map((validationObject) => {
         return {
@@ -63,28 +61,29 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
         };
       })
     );
+
+    if (validation) setValue(name, value);
   };
 
   return (
     <div className={classnames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex gap-5 min-w-[450px]">
-        <div className="w-full">
+      <div className="flex items-start gap-x-5 min-w-[450px]">
+        <div className="w-full flex flex-col gap-y-5 justify-between">
           <PasswordInput
-            {...register('password')}
+            name="password"
             label="Chose password"
             placeholder="Enter your password"
-            error={passwordError?.message}
             disabled={isSubmitting}
             onChange={passwordValidation}
           />
           <PasswordInput
-            {...register('confirmPassword')}
+            name="confirmPassword"
             label="Confirm password"
             placeholder="Enter your password"
-            error={confirmPasswordError?.message}
             disabled={isSubmitting}
             customStyles="mt-4"
+            onChange={passwordValidation}
           />
         </div>
         <div className="pl-0 md:pl-5">

@@ -7,7 +7,7 @@ import PlusSVG from '@/assets/images/plusCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
-import { convertDataToOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
+import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
@@ -77,8 +77,7 @@ const CargoesSlotsDetailsForm = () => {
 
   const fetchPorts = async () => {
     const data = await getPorts();
-    const options = convertDataToOptions(data, 'id', 'name');
-
+    const options = countriesOptions(data);
     handleChangeState('cargoesPortsOptions', options);
   };
 
@@ -118,7 +117,7 @@ const CargoesSlotsDetailsForm = () => {
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[17px] right-1 my-1 !py-4 z-10"
+          customStyles="absolute top-[17px] right-1 my-1 !py-4"
           buttonProps={{
             text: 'Apply',
             variant: !errors.numberOfCargoes ? 'primary' : 'delete',
@@ -134,7 +133,7 @@ const CargoesSlotsDetailsForm = () => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-x-5" key={item}>
+          <div className="grid relative grid-cols-1 lg:grid-cols-3 justify-center items-center gap-x-5" key={item}>
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
@@ -152,6 +151,7 @@ const CargoesSlotsDetailsForm = () => {
               async
             />
             <DatePicker
+              calendarClass="absolute -left-2.5"
               name={`${fieldName}.date`}
               inputClass="w-full"
               label="Bill of lading date"
