@@ -19,12 +19,12 @@ export default async function handler(req, res) {
         laycanEnd: 'Dec 30, 2021',
         creationDate: 'Jan 2, 2022',
         countdown: '15min',
-        tankersInfo: [
+        documentsInfo: [
           {
             id: 1,
-            dockId: 'XP1234-003',
+            docId: 'XP1234-003',
             title: 'Q88 questionnaire',
-            comment: '',
+            comment: 'Some comment',
             docName: 'Document',
             extension: '.doc',
             size: '102.56 MB',

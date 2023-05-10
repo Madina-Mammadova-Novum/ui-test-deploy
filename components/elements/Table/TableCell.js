@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { TableCellPropTypes } from '@/lib/types';
 
 import { NextImage, Tooltip } from '@/elements';
-import { TYPE } from '@/lib/constants';
+import { NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
@@ -24,7 +24,7 @@ const TableCell = ({ cellProps }) => {
           />
         );
       default:
-        return null;
+        return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
     }
   }, [name, toggle?.name, type]);
 

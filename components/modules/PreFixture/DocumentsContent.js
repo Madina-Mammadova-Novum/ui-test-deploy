@@ -1,5 +1,6 @@
-import { Table } from '@/elements';
 import { documentsContentPropTypes } from '@/lib/types';
+
+import { Table } from '@/elements';
 import { prefixtureHeader } from '@/utils/mock';
 
 const DocumentsContent = ({ rowsData = [] }) => {

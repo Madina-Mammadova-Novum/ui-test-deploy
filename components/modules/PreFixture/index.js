@@ -43,7 +43,7 @@ const PreFixture = () => {
           >
             <PreFixtureExpandedContent
               underNegotiation={underNegotiation}
-              rowsData={prefixtureRowsDataAdapter({ data: headerData.tankersInfo })}
+              rowsData={prefixtureRowsDataAdapter({ data: headerData.documentsInfo })}
             />
           </ExpandableRow>
         ))}
