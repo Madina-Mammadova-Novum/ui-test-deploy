@@ -59,7 +59,7 @@ const PreFixture = () => {
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{items.map(printExpandableRow)}</div>
+      <div className="flex flex-col gap-y-2.5">{items?.length && items.map(printExpandableRow)}</div>
 
       <ComplexPagination
         currentPage={currentPage}
