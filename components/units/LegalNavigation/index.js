@@ -14,7 +14,9 @@ const LegalNavigation = () => {
     </NextLink>
   );
   const fetchData = async () => {
-    const data = await getNavigation('legal-navigation', 'en');
+    const response = await getNavigation('legal-navigation', 'en');
+    const { data } = response;
+
     setLegalNavigation(data);
   };
 

@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 
 import { PortDetailsFormPropTypes } from '@/lib/types';
 
+import { countryOptionsAdapter } from "@/adapters/countryOption";
 import { FormDropdown, Label } from '@/elements';
 import { getPorts } from '@/services/port';
-import { convertDataToOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const PortDetailsForm = ({ portName = '' }) => {
@@ -16,7 +16,7 @@ const PortDetailsForm = ({ portName = '' }) => {
 
   const fetchPorts = async () => {
     const data = await getPorts();
-    const options = convertDataToOptions(data, 'id', 'name');
+    const options = countryOptionsAdapter(data);
 
     setPortOptions(options);
   };
