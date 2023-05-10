@@ -73,10 +73,8 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      toggle: {
-        value: status || false,
-        name: title,
-      },
+      name: title,
+      value: status ? null : <ToggleInactiveIcon />,
       action: ACTIONS.TANKER_STATUS,
       editable: !inActive,
       editIcon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
@@ -84,7 +82,6 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
   ];
 };
-
 
 export const fleetsRowsDataAdapter = ({ data }) => {
   if (!data) return [];

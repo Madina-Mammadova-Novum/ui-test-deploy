@@ -4,7 +4,7 @@ import ReactCountryFlag from 'react-country-flag';
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip } from '@/elements';
-import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
+import { ACTIONS } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
 
@@ -16,7 +16,6 @@ const TableCell = ({ cellProps }) => {
     helperData,
     name,
     disabled,
-    toggle,
     editable,
     editIcon,
     countryFlag,
@@ -37,7 +36,7 @@ const TableCell = ({ cellProps }) => {
         return (
           <DeactivateTankerForm
             title="Deactivate your Tanker"
-            portName={toggle?.name}
+            portName={name}
             description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
           />
         );
@@ -48,9 +47,9 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.VIEW_FAILED_OFFER:
         return <ViewFailedOffer />;
       default:
-        return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
+        return null;
     }
-  }, [name, toggle?.name, action]);
+  }, [name, action]);
 
   const printValue = useMemo(() => {
     return helperData ? (
@@ -91,7 +90,7 @@ const TableCell = ({ cellProps }) => {
               variant: actionVariant,
               size: actionSize,
               text: actionText,
-              className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
+              className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
             }}
           >
             {printModal}
