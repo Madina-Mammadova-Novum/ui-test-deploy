@@ -19,6 +19,8 @@ const LoginForm = () => {
 
   const {
     register,
+    setValue,
+    clearErrors,
     reset,
     formState: { errors, isSubmitting },
   } = methods;
@@ -26,6 +28,12 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     await login({ data });
     reset();
+  };
+
+  const handlePassword = (event) => {
+    clearErrors('password');
+    const { value } = event.target;
+    setValue('password', value);
   };
 
   return (
@@ -48,10 +56,11 @@ const LoginForm = () => {
           error={errors?.email?.message}
         />
         <PasswordInput
-          {...register('password')}
+          name="password"
           label="Password"
           placeholder="Enter your password"
           disabled={isSubmitting}
+          onChange={handlePassword}
           error={errors?.password?.message}
         />
       </FormManager>
