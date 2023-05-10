@@ -86,7 +86,7 @@ const TankerSlotsDetails = () => {
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
-          helperText="You will be able to add more cargoes after the verification."
+          helperText="You will be able to add more tankers after the verification."
           disabled={isSubmitting}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
