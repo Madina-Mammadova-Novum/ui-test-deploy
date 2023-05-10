@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
@@ -65,7 +65,7 @@ const NegotiatingExpandedContent = ({ data }) => {
           />
         );
     }
-  }, [currentTab])
+  }, [currentTab]);
 
   const modalContent = () => {
     switch (modal) {
@@ -86,7 +86,7 @@ const NegotiatingExpandedContent = ({ data }) => {
         customStyles="my-3 mx-auto"
       />
 
-      <div className='mb-3'>{tabContent}</div>
+      <div className="mb-3">{tabContent}</div>
 
       <Modal opened={modal} onClose={handleCloseModal}>
         {modalContent()}
