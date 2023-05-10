@@ -7,11 +7,13 @@ import { TooltipParamsPropTypes } from '@/lib/types';
 import CloseIcon from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
-const ManualTooltip = ({ title, className, description, children }) => {
+const ManualTooltip = ({ data, className, children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleEnter = () => setShowTooltip(true);
   const handleClose = () => setShowTooltip(false);
+
+  const { title, description } = data;
 
   return (
     <div className="group transition-all">
