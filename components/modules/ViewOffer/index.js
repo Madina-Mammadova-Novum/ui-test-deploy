@@ -48,7 +48,7 @@ const ViewOffer = ({ setStep, closeModal }) => {
         <div className="pl-4 border-l h-min">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button
-            customStyles="text-[10px] font-bold !px-2.5 !py-1 uppercase leading-none"
+            customStyles="!text-[10px] font-bold !px-1 uppercase leading-none"
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
           />
         </div>
@@ -68,7 +68,7 @@ const ViewOffer = ({ setStep, closeModal }) => {
         {tabContent()}
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap">
         <Button
           onClick={closeModal}
           customStyles="mr-auto"

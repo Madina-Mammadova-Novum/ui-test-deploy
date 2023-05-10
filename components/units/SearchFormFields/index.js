@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { TrashIcon } from '@/assets/icons';
 import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
@@ -109,14 +110,7 @@ const SearchFormFields = () => {
   useEffect(() => {
     (async () => {
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
-      setPorts(
-        portsData?.map(({ label, countryFlag }) => {
-          return {
-            label,
-            countryFlag,
-          };
-        })
-      );
+      setPorts(countryOptionsAdapter(portsData));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
     })();
   }, []);

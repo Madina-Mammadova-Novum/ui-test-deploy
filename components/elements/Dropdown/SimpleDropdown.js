@@ -3,16 +3,17 @@
 import React from 'react';
 import Select from 'react-select';
 
+import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 
-import { SimpleDropdownPropTypes } from '@/lib/types';
+import { dropdownOptionTypes } from '@/lib/types';
 
 import OptionRow from '@/elements/Dropdown/OptionRow';
 import OptionsList from '@/elements/Dropdown/OptionsList';
 import { dropdownTheme } from '@/elements/Dropdown/styles';
 import { filterDataByLowerCase } from '@/utils/helpers';
 
-export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
+export const SimpleDropdown = ({ asyncCall = false, options, ...rest }) => {
   const printOptions = ({ countryFlag, label: labelValue }) => (
     <OptionRow countryFlag={countryFlag} value={labelValue} />
   );
@@ -47,4 +48,8 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
   );
 };
 
-SimpleDropdown.propTypes = SimpleDropdownPropTypes;
+SimpleDropdown.propTypes = {
+  asyncCall: PropTypes.bool,
+  options: PropTypes.arrayOf(dropdownOptionTypes),
+  loadOptions: PropTypes.arrayOf(dropdownOptionTypes),
+};

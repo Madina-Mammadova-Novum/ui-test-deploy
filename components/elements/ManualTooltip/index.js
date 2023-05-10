@@ -1,15 +1,26 @@
+'use client';
+
+import { useState } from 'react';
+
 import { TooltipParamsPropTypes } from '@/lib/types';
 
 import CloseIcon from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
-const ManualTooltip = ({ title, className, description, children, inView, onEnter, onClose }) => {
+const ManualTooltip = ({ data, className, children }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleEnter = () => setShowTooltip(true);
+  const handleClose = () => setShowTooltip(false);
+
+  const { title, description } = data;
+
   return (
     <div className="group transition-all">
-      <span onMouseEnter={onEnter} className="text-gray cursor-help font-bold text-xxs">
+      <span onMouseEnter={handleEnter} className="text-gray cursor-help font-bold text-xxs">
         {children}
       </span>
-      {inView && (
+      {showTooltip && (
         <div
           className={`absolute top-8 ${className} bg-white transition-all max-w-xs overflow-visible flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-base`}
         >
@@ -18,7 +29,7 @@ const ManualTooltip = ({ title, className, description, children, inView, onEnte
             <Button
               buttonProps={{ icon: { before: <CloseIcon /> } }}
               customStyles="!pl-0 !pr-0 hover:bg-gray-darker !py-0"
-              onClick={onClose}
+              onClick={handleClose}
             />
           </div>
           <p className="text-xs-sm font-normal text-left whitespace-pre-wrap normal-case">{description}</p>
