@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { PortDetailsFormPropTypes } from '@/lib/types';
 
-import { countryOptionsAdapter } from "@/adapters/countryOption";
+import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { FormDropdown, Label } from '@/elements';
 import { getPorts } from '@/services/port';
 import { useHookForm } from '@/utils/hooks';

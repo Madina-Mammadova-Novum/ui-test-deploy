@@ -4,7 +4,7 @@ import ReactCountryFlag from 'react-country-flag';
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip } from '@/elements';
-import { NO_DATA_MESSAGE, ACTIONS } from '@/lib/constants';
+import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
 
