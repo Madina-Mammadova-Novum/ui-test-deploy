@@ -10,11 +10,11 @@ import { loginSchema } from '@/lib/schemas';
 import { login } from '@/services';
 import { useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object().shape({
-  ...loginSchema(),
-});
-
 const LoginForm = () => {
+  const schema = yup.object().shape({
+    ...loginSchema(),
+  });
+
   const methods = useHookFormParams({ schema });
 
   const {
