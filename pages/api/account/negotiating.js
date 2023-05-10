@@ -27,6 +27,16 @@ export default async function handler(req, res) {
             dateReceived: 'Dec 19, 2021',
             countdown: '1d 1h 50m',
           },
+          {
+            id: 10,
+            incomingOfferCargoId: 'QW1122',
+            laycanStart: 'Dec 18, 2021',
+            laycanEnd: 'Dec 19, 2021',
+            loadPort: 'Barcelona, ESBCN',
+            status: 'New offer',
+            dateReceived: 'Dec 19, 2021',
+            countdown: '1d 1h 50m',
+          },
         ],
         sentCounteroffers: [
           {
@@ -38,10 +48,28 @@ export default async function handler(req, res) {
             dateSent: 'Dec 19, 2021',
             countdown: '1d 1h 50m',
           },
+          {
+            id: 4,
+            sentOfferCargoId: 'QW1122',
+            laycanStart: 'Dec 18, 2021',
+            laycanEnd: 'Dec 19, 2021',
+            loadPort: 'Barcelona, ESBCN',
+            dateSent: 'Dec 19, 2021',
+            countdown: '1d 1h 50m',
+          },
         ],
         failedOffers: [
           {
-            id: 1,
+            id: 3,
+            failedOfferCargoId: 'QW1122',
+            laycanStart: 'Dec 18, 2021',
+            laycanEnd: 'Dec 19, 2021',
+            loadPort: 'Barcelona, ESBCN',
+            dateFailed: 'Dec 19, 2021',
+            reason: 'Offer timed out',
+          },
+          {
+            id: 7,
             failedOfferCargoId: 'QW1122',
             laycanStart: 'Dec 18, 2021',
             laycanEnd: 'Dec 19, 2021',
