@@ -65,7 +65,7 @@ const NegotiatingExpandedContent = ({ data }) => {
           />
         );
     }
-  }, [currentTab]);
+  }, [currentTab, data.failedOffers, data.incomingOffers, data.sentCounteroffers]);
 
   const modalContent = () => {
     switch (modal) {
