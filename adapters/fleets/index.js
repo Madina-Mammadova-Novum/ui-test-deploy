@@ -85,6 +85,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
   ];
 };
 
+
 export const fleetsRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 

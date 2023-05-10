@@ -5,11 +5,12 @@ import { useState } from 'react';
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
-import { Label, Loader, Title } from '@/elements';
+import { prefixtureHeaderDataAdapter, prefixtureRowsDataAdapter } from '@/adapters';
+import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserPreFixtures } from '@/services';
-import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
+import { ComplexPagination, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const PreFixture = () => {
@@ -33,11 +34,14 @@ const PreFixture = () => {
 
   const printExpandableRow = (headerData, underNegotiation) => (
     <ExpandableRow
-      header={<ExpandableRowHeader headerData={headerData} />}
+      header={<ExpandableCardHeader headerData={prefixtureHeaderDataAdapter({ data: headerData })} />}
       footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
       expand={toggle}
     >
-      <PreFixtureExpandedContent underNegotiation={underNegotiation} />
+      <PreFixtureExpandedContent
+        underNegotiation={underNegotiation}
+        rowsData={prefixtureRowsDataAdapter({ data: headerData.documentsInfo })}
+      />
     </ExpandableRow>
   );
 
@@ -55,7 +59,7 @@ const PreFixture = () => {
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
+      <div className="flex flex-col gap-y-2.5">{items?.length && items.map(printExpandableRow)}</div>
 
       <ComplexPagination
         currentPage={currentPage}
