@@ -1,3 +1,5 @@
+import { ROOT_SLUG } from '@/lib/constants';
+
 export const navigationItemAdapter = ({ data }) => {
   if (data === null) return null;
   const { order, id, title, type, path, externalPath, collapsed, related, items } = data;
@@ -6,7 +8,7 @@ export const navigationItemAdapter = ({ data }) => {
     id,
     title,
     type,
-    path: path === '/home' ? '/' : path,
+    path: path === `/${ROOT_SLUG}` ? '/' : path,
     externalPath,
     collapsed,
     related: related

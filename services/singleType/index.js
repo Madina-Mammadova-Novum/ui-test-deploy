@@ -1,4 +1,3 @@
-import { singleTypeAdapter } from '@/adapters/singleType';
 import { getData } from '@/utils/dataFetching';
 
 export function getSingleTypeEndpoint(apiID, locale) {
@@ -9,11 +8,11 @@ export function getSingleTypeEndpoint(apiID, locale) {
     ctaSingleImage.coverImage,ctaSingleImage.button,ctaSingleImage.button.linkOptions,
     buttons,buttons.linkOptions,
     phones,emails,link,link.linkOptions,
-    socials,socials.coverImage,socials.linkOptions
+    socials,socials.coverImage,socials.linkOptions,embedMap
     `.replace(/\s+|\n/g, '');
 }
 
 export const getSingleType = async (apiID, locale) => {
   const response = await getData(`single-type?s=${apiID}&l=${locale}`);
-  return singleTypeAdapter(response);
+  return response;
 };

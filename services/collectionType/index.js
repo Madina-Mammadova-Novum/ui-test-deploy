@@ -1,7 +1,7 @@
 import pluralize from 'pluralize';
 
-import { entityDataAdapter } from '@/adapters/entityData';
 import { COLLECTIONS_TYPES } from '@/lib';
+import { ROOT_COLLECTION_TYPE, ROOT_SLUG } from '@/lib/constants';
 import { getData } from '@/utils/dataFetching';
 
 export function getCollectionType(slug) {
@@ -22,15 +22,15 @@ export function getCollectionType(slug) {
         };
       }
       return {
-        collectionType: 'page',
+        collectionType: ROOT_COLLECTION_TYPE,
         slug: [prefix, ...slug].join('/'),
         locale,
       };
     }
   }
   return {
-    collectionType: 'page',
-    slug: ['home'].join('/'),
+    collectionType: ROOT_COLLECTION_TYPE,
+    slug: [ROOT_SLUG].join('/'),
     locale: 'en', // defaultLocale form next-i18next.config.js
   };
 }
@@ -51,13 +51,5 @@ export async function getEntityData(params, preview = false) {
   const { slug: pathArray } = params;
   const { collectionType, slug, locale } = getCollectionType(pathArray);
   const response = await getData(`collection-type?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
-  const { data, meta } = response;
-  if (data === undefined) return null;
-  return {
-    slug,
-    locale,
-    collectionType,
-    data: data.length > 0 ? await entityDataAdapter({ data: data[0] }) : null,
-    meta,
-  };
+  return response;
 }
