@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';

@@ -13,7 +13,8 @@ import { makeId } from '@/utils/helpers';
 const SocialNetworks = () => {
   const [socialLinks, setSocialLinks] = useState([]);
   const fetchData = async () => {
-    const { socials } = await getSingleType('social-network', 'en');
+    const response = await getSingleType('social-network', 'en');
+    const socials = delve(response, 'data.socials');
     const socialLinksArray = socials ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
     setSocialLinks(socialLinksArray);
   };
