@@ -12,13 +12,12 @@ import { dateSchema } from '@/lib/schemas';
 import { DateDetailsForm } from '@/units';
 import { useHookFormParams } from '@/utils/hooks';
 
-const EditDateForm = ({ title, portName }) => {
+const EditDateForm = ({ closeModal, title, portName }) => {
   const schema = yup.object().shape({
     ...dateSchema(),
   });
 
   const methods = useHookFormParams({ schema });
-
   const onSubmit = async (formData) => {
     return { formData };
   };
@@ -26,9 +25,11 @@ const EditDateForm = ({ title, portName }) => {
   return (
     <FormProvider {...methods}>
       <FormManager
+        specialStyle
         className="w-[356px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
+        onClose={closeModal}
       >
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}

@@ -225,7 +225,7 @@ export const countriesOptions = (data) => countryOptionsAdapter(data);
 
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
   if (data === null || data === undefined) return [];
-  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
+  return data?.map(({ [keyValue]: value, [keyLabel]: label }) => {
     if (value === null || value === undefined) throw new Error('value cannot be empty');
     if (label === null || label === undefined) throw new Error('label cannot be empty');
 
