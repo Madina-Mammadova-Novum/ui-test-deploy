@@ -30,6 +30,7 @@ import PaginationComponent from '@/units/PaginationComponent';
 import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
+import ReactivateTankerForm from '@/units/ReactivateTankerForm';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
 import SocialNetworks from '@/units/SocialNetworks';
@@ -87,5 +88,6 @@ export {
   IconWrapper,
   DeactivateTankerForm,
   SocialNetworks,
+  ReactivateTankerForm,
   LegalNavigation,
 };
