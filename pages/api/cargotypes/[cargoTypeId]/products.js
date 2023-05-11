@@ -1,14 +1,14 @@
 import { getProductsAdapter } from '@/adapters';
-import { getHandler } from '@/utils/api';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/dataFetching';
 
 export default async function handler(req, res) {
-  try {
-    const { cargoTypeId } = req.query;
-    const response = await getHandler(`v1/cargotypes/${cargoTypeId}/products`, 'backend', req, res);
-    const responseData = getProductsAdapter(response);
-    return res.status(response.status).json(responseData);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: { message: 'Internal server error' } });
-  }
+  const { cargoTypeId } = req.query;
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`v1/cargotypes/${cargoTypeId}/products`),
+    dataAdapter: getProductsAdapter,
+    requestMethod: 'GET',
+  });
 }

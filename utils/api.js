@@ -58,10 +58,10 @@ const externalFetchOptions = (requestMethod, body = null) => {
 };
 
 export const externalApiHandler = async (options) => {
-  const { endpoint, requestMethod, body } = options;
-  const requestOptions = externalFetchOptions(requestMethod, body);
   try {
-    const response = await fetch(endpoint, requestOptions);
+    const { path, requestMethod, body } = options;
+    const requestOptions = externalFetchOptions(requestMethod, body);
+    const response = await fetch(path, requestOptions);
     const { status, ok, statusText } = response;
     let responseBody = await response.text();
     if (responseBody !== '') {

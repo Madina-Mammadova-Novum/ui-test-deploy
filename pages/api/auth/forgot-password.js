@@ -1,21 +1,18 @@
-import { bodyObject, postHandler } from '@/utils/api';
+import { forgotPasswordResponseAdapter } from '@/adapters/user';
+import { getApiURL } from '@/utils';
+import { bodyObject } from '@/utils/api';
+import { errorHandler, responseHandler } from '@/utils/dataFetching';
 
 export default async function handler(req, res) {
-  try {
-    const { email } = bodyObject(req);
-    if (!email) {
-      return res.status(422).json({ error: { message: 'Please provide the required fields email' } });
-    }
-    const response = await postHandler(`auth/forgotpassword`, req.body, 'backend');
-    if (response.status === 500) {
-      const { error } = response;
-      error.message = 'External server error';
-      return res.status(response.status).json({ error });
-    }
-    // todo: add data adapter for response
-    return res.status(response.status).json(response);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: { message: 'Internal server error' } });
+  const { email } = bodyObject(req);
+  if (!email) {
+    return errorHandler(res, 422, 'Please provide the required fields email');
   }
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`auth/forgotpassword`),
+    dataAdapter: forgotPasswordResponseAdapter,
+    requestMethod: 'POST',
+  });
 }

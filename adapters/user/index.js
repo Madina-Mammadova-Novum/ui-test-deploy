@@ -57,6 +57,13 @@ export function forgotPasswordAdapter({ data }) {
   };
 }
 
+export function forgotPasswordResponseAdapter({ data }) {
+  if (data === null) return null;
+  return {
+    data,
+  };
+}
+
 export function resetPasswordAdapter({ data }) {
   if (data === null) return null;
   const { password, confirmPassword } = data;
@@ -240,4 +247,18 @@ export function positionAdapter({ data }) {
 export function positionsAdapter({ data }) {
   if (data === null || data === undefined) return null;
   return data.map((item) => positionAdapter({ data: item }));
+}
+
+export function signupResponseAdapter({ data }) {
+  if (data === null) return null;
+  return {
+    data,
+  };
+}
+
+export function confirmEmailResponseAdapter({ data }) {
+  if (data === null) return null;
+  return {
+    data,
+  };
 }

@@ -1,4 +1,5 @@
 import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
+import { externalApiHandler } from '@/utils/api';
 
 export function getApiPublicURL(path) {
   return `${process.env.NEXT_PUBLIC_API_URL}/api/${path}`;
@@ -66,3 +67,30 @@ export function postData(path, data) {
     data,
   });
 }
+
+export const errorHandler = (res, status, message, errors = []) => {
+  const error = {
+    message: message || 'Unknown error',
+    errors,
+    status,
+  };
+  return res.status(status).json({ error, data: null });
+};
+
+export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod }) => {
+  try {
+    const response = await externalApiHandler({ path, requestMethod, body: req.body });
+    if (response.status === 500) {
+      const {
+        error: { errors },
+      } = response;
+      return errorHandler(res, response.status, 'External server error', errors);
+    }
+    const responseData = await dataAdapter(response);
+    if (!responseData) return errorHandler(res, 404, 'Not Found');
+    return res.status(200).json({ ...response, data: responseData, error: null });
+  } catch (error) {
+    console.error(error);
+    return errorHandler(res, 500, 'Internal server error');
+  }
+};
