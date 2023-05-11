@@ -3,109 +3,52 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
-  positionsAdapter,
   resetPasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
   userDetailsAdapter,
 } from '@/adapters/user';
+import { SYSTEM_ERROR } from '@/lib/constants';
 import { getData, postData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/forgot-password`, body);
-  return {
-    message,
-  };
+  const response = await postData(`auth/forgot-password`, body);
+  return response;
 }
 
 export async function resetPassword({ data }) {
   const body = resetPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/reset-password`, body);
-  return {
-    message,
-  };
+  const response = await postData(`auth/reset-password`, body);
+  return response;
 }
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await postData(`auth/sing-up?type=owner`, body);
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+  const response = await postData(`auth/signup?type=owner`, body);
   return response;
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/sign-up?type=charterer`, JSON.stringify(body));
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+  const response = await postData(`auth/signup?type=charterer`, body);
   return response;
-}
-
-/* Temporary owner-signup-api solution */
-
-export async function ownerRegistration({ data }) {
-  const body = ownerSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
-}
-
-/* Temporary charterer-signup-api solution */
-
-export async function chartererRegistration({ data }) {
-  const body = chartererSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
-}
-
-/* Temporary user-confirm-email solution */
-
-export async function postVeriff({ data }) {
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/auth/confirmemail`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(data),
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) return { error: 'something went wrong' };
-
-  return { link: result?.redirectUrl };
 }
 
 export async function postVeriffData({ data }) {
-  const response = await postData(`auth/veriffication`, data);
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
-  return response;
+  const { data: link } = await postData(`auth/veriffication`, data);
+
+  if (link) {
+    return { link: link?.redirectUrl };
+  }
+
+  return { error: SYSTEM_ERROR };
 }
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await postData(`auth/login`, JSON.stringify(body));
+  const response = await postData(`auth/login`, body);
   return response;
 }
 
@@ -141,7 +84,22 @@ export async function updateCompany({ data }) {
 
 export async function getUserPositions() {
   const { data } = await getData(`account/my-positions`);
-  return positionsAdapter({ data });
+  return data;
+}
+
+export async function getUserFixtures() {
+  const { data } = await getData(`account/fixture`);
+  return data;
+}
+
+export async function getUserPreFixtures() {
+  const { data } = await getData(`account/pre-fixture`);
+  return data;
+}
+
+export async function getUserNegotiating() {
+  const { data } = await getData(`account/negotiating`);
+  return data;
 }
 
 export async function getUserDetails() {

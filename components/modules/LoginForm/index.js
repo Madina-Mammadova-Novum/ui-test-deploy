@@ -6,30 +6,34 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
-import { emailSchema, passwordSchema } from '@/lib/schemas';
+import { loginSchema } from '@/lib/schemas';
 import { login } from '@/services';
-import { successToast, useHookFormParams } from '@/utils/hooks';
-
-const schema = yup
-  .object({
-    email: emailSchema().required(),
-    password: passwordSchema().required(),
-  })
-  .required();
+import { useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
+  const schema = yup.object().shape({
+    ...loginSchema(),
+  });
+
   const methods = useHookFormParams({ schema });
 
   const {
     register,
+    setValue,
+    clearErrors,
     reset,
     formState: { errors, isSubmitting },
   } = methods;
 
   const onSubmit = async (data) => {
-    const { message } = await login({ data });
-    successToast(message, 'Some description');
+    await login({ data });
     reset();
+  };
+
+  const handlePassword = (event) => {
+    clearErrors('password');
+    const { value } = event.target;
+    setValue('password', value);
   };
 
   return (
@@ -52,10 +56,11 @@ const LoginForm = () => {
           error={errors?.email?.message}
         />
         <PasswordInput
-          {...register('password')}
+          name="password"
           label="Password"
           placeholder="Enter your password"
           disabled={isSubmitting}
+          onChange={handlePassword}
           error={errors?.password?.message}
         />
       </FormManager>

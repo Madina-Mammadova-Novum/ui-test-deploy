@@ -4,7 +4,7 @@ import delve from 'dlv';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
 import { NextLink } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -14,7 +14,7 @@ const CtaImages = ({ items }) => {
   if (!items) return null;
 
   return (
-    <section className="mb-28 sm:mb-44 2lg:mb-64">
+    <section className="mb-28 sm:mb-44 2xl:mb-64">
       <div className="flex flex-col items-center gap-y-3 lg:flex-row lg:gap-x-5">
         {items.map(({ title, coverImage, button }) => {
           return (
@@ -32,14 +32,14 @@ const CtaImages = ({ items }) => {
                   quality={75}
                 />
               </div>
-              <h4 className="absolute top-5 left-5 text-white text-base font-bold sm:top-7 sm:left-7 sm:text-4xl 2lg:top-10 2lg:left-10 2lg:text-5xl">
+              <h4 className="absolute top-5 left-5 text-white text-base font-bold sm:top-7 sm:left-7 sm:text-4xl 2xl:top-10 2xl:left-10 2xl:text-5xl">
                 {title}
               </h4>
               <NextLink
                 label={button.label}
                 href={button.path}
                 type={button.linkOptions.style}
-                customStyles="!absolute bottom-5 left-5 sm:top-[102px] sm:left-7 2lg:left-10 2lg:top-[130px]"
+                customStyles="!absolute bottom-5 left-5 sm:top-[102px] sm:left-7 2xl:left-10 2xl:top-[130px]"
               />
             </div>
           );

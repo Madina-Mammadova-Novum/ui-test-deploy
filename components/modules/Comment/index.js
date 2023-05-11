@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import { CommentPropTypes } from '@/lib/types';
 
-const Comment = ({ title, date, time }) => {
+const Comment = ({ title = '', date = '', time = '' }) => {
   return (
     <>
       <h6 className="text-xsm font-semibold mt-2.5">{title}</h6>
@@ -11,16 +11,6 @@ const Comment = ({ title, date, time }) => {
   );
 };
 
-Comment.defaultProps = {
-  title: '',
-  date: '',
-  time: '',
-};
-
-Comment.propTypes = {
-  title: PropTypes.string,
-  date: PropTypes.string,
-  time: PropTypes.string,
-};
+Comment.propTypes = CommentPropTypes;
 
 export default Comment;

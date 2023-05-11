@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { iconPropTypes } from '@/utils/types';
+import { iconPropTypes } from '@/lib/types';
 
 import { useColor } from '@/utils/hooks';
 

@@ -2,52 +2,47 @@
 
 import { cloneElement, useEffect, useRef, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ExpandableCardWrapperPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 
-const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, expandAll }) => {
+const ExpandableCardWrapper = ({
+  headerComponent,
+  footerComponent,
+  children,
+  className = '',
+  expandAll = { value: false },
+}) => {
   const contentRef = useRef(null);
-
   const [toggle, setToggle] = useState(false);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
 
+  const { value } = expandAll;
+
   useEffect(() => {
-    setToggle(expandAll.value);
-  }, [expandAll]);
+    setToggle(value);
+  }, [value]);
+
+  const expandedHeight = toggle ? `${contentRef?.current?.scrollHeight}px` : '0px';
 
   return (
-    <div className="rounded-base shadow-xmd box-border">
+    <div className={`rounded-base shadow-xmd box-border ${className}`}>
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerComponentWithProps}
       </div>
       <div
         ref={contentRef}
-        className="overflow-hidden transition-height duration-200"
-        style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
+        className="overflow-y-hidden transition-height duration-200"
+        style={{ height: expandedHeight }}
       >
-        <div className="px-6">
-          <Divider />
-          {children}
-        </div>
+        <Divider />
+        <div className="table-scroll pt-5">{children}</div>
         {footerComponent}
       </div>
     </div>
   );
 };
 
-ExpandableCardWrapper.defaultProps = {
-  expandAll: {
-    value: false,
-  },
-};
-
-ExpandableCardWrapper.propTypes = {
-  headerComponent: PropTypes.node.isRequired,
-  footerComponent: PropTypes.node,
-  expandAll: PropTypes.shape({
-    value: PropTypes.string,
-  }),
-};
+ExpandableCardWrapper.propTypes = ExpandableCardWrapperPropTypes;
 
 export default ExpandableCardWrapper;

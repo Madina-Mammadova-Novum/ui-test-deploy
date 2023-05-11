@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import PropTypes from 'prop-types';
-
 import { ROLES } from '@/lib/constants';
 import { ChartererRegistrationForm, OwnerRegistrationForm } from '@/modules';
 import { Step, Tabs } from '@/units';
@@ -34,14 +32,6 @@ const Signup = () => {
       {handleFormType(role)}
     </>
   );
-};
-
-Signup.defaultProps = {
-  containerClass: '',
-};
-
-Signup.propTypes = {
-  containerClass: PropTypes.string,
 };
 
 export default Signup;

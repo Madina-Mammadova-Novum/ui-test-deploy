@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { SendCounterOfferPropTypes } from '@/lib/types';
 
 import { Button, SimpleSelect } from '@/elements';
 import { CommentsContent } from '@/modules';
-import { Countdown, ModalHeader, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
+import { CommercialOfferTerms, Countdown, ModalHeader, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -36,7 +36,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
       case 'comments':
         return <CommentsContent data={incomingOfferCommentsData} />;
       default:
-        return <OfferForm />;
+        return <CommercialOfferTerms />;
     }
   };
 
@@ -69,7 +69,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
         className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
-        {tabContent()}
+        <OfferForm>{tabContent()}</OfferForm>
       </div>
 
       <div className="flex text-xsm gap-x-2.5 mt-4">
@@ -87,14 +87,6 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
   );
 };
 
-SendCounteroffer.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-};
-
-SendCounteroffer.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+SendCounteroffer.propTypes = SendCounterOfferPropTypes;
 
 export default SendCounteroffer;

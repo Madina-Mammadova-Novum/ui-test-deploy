@@ -1,35 +1,22 @@
 'use client';
 
-import PropTypes from 'prop-types';
+import { ToggleRowsPropTypes } from '@/lib/types';
 
 import DoubleArrowSVG from '@/assets/images/doubleArrow.svg';
 import { Button } from '@/elements';
 
-const ToggleRows = ({ onToggleClick, value }) => {
+const ToggleRows = ({ onToggleClick, value = false }) => {
   return (
-    <div
-      aria-hidden
-      type="button"
-      className="flex gap-x-2.5 text-blue text-xsm pr-5 items-center"
-      onClick={onToggleClick}
-    >
+    <div aria-hidden type="button" className="flex text-blue text-xsm pr-5 items-center" onClick={onToggleClick}>
       <DoubleArrowSVG className={`transition duration-500 ${value && 'rotate-180'}`} />
       <Button
         buttonProps={{ text: `${value ? 'Collapse' : 'Expand'} all groups`, variant: 'primary', size: 'small' }}
-        customStyles="!bg-[transparent] px-0 py-0"
+        customStyles="!bg-[transparent] !px-0 !py-0"
       />
     </div>
   );
 };
 
-ToggleRows.defaultProps = {
-  onToggleClick: () => {},
-  value: false,
-};
-
-ToggleRows.propTypes = {
-  onToggleClick: PropTypes.func,
-  value: PropTypes.bool,
-};
+ToggleRows.propTypes = ToggleRowsPropTypes;
 
 export default ToggleRows;

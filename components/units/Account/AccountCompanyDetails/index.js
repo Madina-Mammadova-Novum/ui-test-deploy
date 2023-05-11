@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { AccountCompanyDetailsPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
 import Divider from '@/elements/Divider';
@@ -30,14 +30,14 @@ const AccountCompanyDetails = ({ company = {} }) => {
 
         <Divider className="my-4" />
 
-        <div className="grid grid-cols-1 3sm:grid-cols-2 gap-y-5">
+        <div className="grid grid-cols-1 3md:grid-cols-2 gap-y-5">
           {registration && (
             <FieldsetContent className="col-start-1" label="Registration address">
               <AddressInfo address={registration} />
             </FieldsetContent>
           )}
           {correspondence && (
-            <FieldsetContent className="col-start-1 3sm:col-start-2" label="Correspondence address">
+            <FieldsetContent className="col-start-1 3md:col-start-2" label="Correspondence address">
               <AddressInfo address={correspondence} />
             </FieldsetContent>
           )}
@@ -47,28 +47,6 @@ const AccountCompanyDetails = ({ company = {} }) => {
   );
 };
 
-AccountCompanyDetails.propTypes = {
-  company: PropTypes.shape({
-    name: PropTypes.string,
-    years: PropTypes.string,
-    totalTankers: PropTypes.string,
-    registration: PropTypes.shape({
-      addressLine1: PropTypes.string,
-      addressLine2: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      postal: PropTypes.string,
-      country: PropTypes.string,
-    }),
-    correspondence: PropTypes.shape({
-      addressLine1: PropTypes.string,
-      addressLine2: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      postal: PropTypes.string,
-      country: PropTypes.string,
-    }),
-  }),
-};
+AccountCompanyDetails.propTypes = AccountCompanyDetailsPropTypes;
 
 export default AccountCompanyDetails;

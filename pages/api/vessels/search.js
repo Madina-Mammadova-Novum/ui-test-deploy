@@ -1,14 +1,17 @@
-import { searchRowHeaders } from '@/utils/mock';
+import { postHandler } from '@/utils/api';
 
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
 export default async function handler(req, res) {
-  await sleep(2000);
-  res.status(200).json({
-    message: 'Successful search',
-    results: searchRowHeaders,
-  });
+  try {
+    const response = await postHandler(`v1/vessels/search`, req.body, 'backend');
+    if (response.status === 500) {
+      const { error } = response;
+      error.message = 'External server error';
+      return res.status(response.status).json({ error });
+    }
+    // todo: don't see service for this endpoint
+    return res.status(response.status).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: { message: 'Internal server error' } });
+  }
 }

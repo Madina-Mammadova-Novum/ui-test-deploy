@@ -1,37 +1,49 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
 import { TrashIcon } from '@/assets/icons';
+import PlusSVG from '@/assets/images/plusCircle.svg';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { disableDefaultBehaviour, disablePlusMinusSymbols } from '@/utils/helpers';
+import { getFilledArray, removeByIndex } from '@/utils/helpers';
+import { useHookForm } from '@/utils/hooks';
 
 const TankerSlotsDetails = () => {
-  const [slots, setSlots] = useState(0);
-  const [indexes, setIndexes] = useState([]);
-  const tankersInputRef = useRef(null);
-
   const {
     register,
     setValue,
     clearErrors,
     formState: { errors, isSubmitting },
-  } = useFormContext();
+  } = useHookForm();
+
+  const [slotsState, setSlotsState] = useState({
+    slots: 0,
+    tankers: [],
+  });
+
+  const handleChangeState = (key, value) =>
+    setSlotsState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+
+  const { slots, tankers } = slotsState;
 
   useEffect(() => {
-    const numberOfTankers = indexes.length > 0 ? indexes.length : '';
+    const numberOfTankers = tankers.length > 0 ? tankers.length : '';
     setValue('numberOfTankers', numberOfTankers);
-    setSlots(numberOfTankers);
-  }, [indexes, setValue]);
+    handleChangeState('slots', numberOfTankers);
+  }, [setValue, tankers.length]);
 
   useEffect(() => {
-    if (tankersInputRef.current) {
-      tankersInputRef.current.addEventListener('wheel', disableDefaultBehaviour);
-      tankersInputRef.current.addEventListener('keydown', disablePlusMinusSymbols);
-    }
-  }, [tankersInputRef]);
+    const numberOfCargoes = tankers.length > 0 ? tankers.length : '';
+
+    setValue('numberOfTankers', numberOfCargoes);
+    setValue('applySlots', Boolean(numberOfCargoes));
+
+    handleChangeState('slots', numberOfCargoes);
+  }, [tankers, setValue]);
 
   const handleSlotsCount = (event) => {
     clearErrors('numberOfTankers');
@@ -41,23 +53,25 @@ const TankerSlotsDetails = () => {
     if (numberOfTankers <= 0) {
       numberOfTankers = '';
       setValue('applySlots', false);
-      setIndexes([]);
+      handleChangeState('tankers', []);
     }
     setValue('numberOfTankers', numberOfTankers);
-    setSlots(numberOfTankers);
+    handleChangeState('slots', numberOfTankers);
   };
 
-  const handleApply = () => {
-    const slotsIndexes = [];
-    for (let i = 0; i < slots; i += 1) {
-      slotsIndexes.push(i);
-    }
-    setIndexes(slotsIndexes);
-    setValue('applySlots', slotsIndexes.length > 0);
+  const handleApplySlot = () => {
+    clearErrors('applySlots');
+    handleChangeState('tankers', getFilledArray(slots));
+  };
+
+  const handleAddSlot = () => {
+    clearErrors('applySlots');
+    handleChangeState('tankers', [...tankers, ...getFilledArray(1)]);
   };
 
   const handleRemoveSlot = (index) => {
-    setIndexes((prevIndexes) => [...prevIndexes.filter((item) => item !== index)]);
+    setValue('tankers', removeByIndex(tankers, index));
+    handleChangeState('tankers', removeByIndex(tankers, index));
   };
 
   return (
@@ -67,24 +81,24 @@ const TankerSlotsDetails = () => {
           {...register('numberOfTankers')}
           type="number"
           value={slots}
-          ref={tankersInputRef}
           label="Number of tankers"
-          placeholder="Tankers"
+          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} tankers.`}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
-          error={errors.numberOfTankers?.message}
+          error={errors.numberOfTankers?.message || errors.applySlots?.message}
+          helperText="You will be able to add more vessels after the verification."
           disabled={isSubmitting}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-4"
-          buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
-          onClick={handleApply}
+          customStyles="absolute top-[16px] right-1 my-1 !py-4"
+          buttonProps={{ text: 'Apply', variant: !errors.numberOfTankers ? 'primary' : 'delete', size: 'medium' }}
+          onClick={handleApplySlot}
           disabled={slots <= 0 || isSubmitting}
         />
       </div>
-      {indexes.map((_, index) => {
+      {tankers.map((_, index) => {
         const fieldName = `imo[${index}]`;
         const error = errors.imo ? errors.imo[index] : null;
         return (
@@ -107,6 +121,23 @@ const TankerSlotsDetails = () => {
           </div>
         );
       })}
+      {tankers.length > 0 && (
+        <div className="flex justify-between">
+          <Button
+            buttonProps={{
+              text: 'Add more tankers',
+              helperText: `(max ${SETTINGS.MAX_NUMBER_OF_TANKERS} tankers)`,
+              variant: 'tertiary',
+              size: 'small',
+              icon: { before: <PlusSVG /> },
+            }}
+            type="button"
+            customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
+            disabled={tankers?.length >= SETTINGS.MAX_NUMBER_OF_TANKERS}
+            onClick={handleAddSlot}
+          />
+        </div>
+      )}
     </div>
   );
 };

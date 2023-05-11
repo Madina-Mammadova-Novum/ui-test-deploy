@@ -2,10 +2,11 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import OfferDeclineFields from './OfferDeclineFields';
+
+import { OfferDeclinePropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { useHookFormParams } from '@/utils/hooks';
@@ -14,7 +15,7 @@ const schema = yup.object({});
 
 const defaultState = {};
 
-const OfferDeclineForm = ({ closeModal, title, goBack }) => {
+const OfferDeclineForm = ({ closeModal, goBack, title = '' }) => {
   const methods = useHookFormParams({ state: defaultState, schema });
 
   const handleSubmit = (data) => console.log(data);
@@ -31,16 +32,6 @@ const OfferDeclineForm = ({ closeModal, title, goBack }) => {
   );
 };
 
-OfferDeclineForm.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-  title: '',
-};
-
-OfferDeclineForm.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-  title: PropTypes.string,
-};
+OfferDeclineForm.propTypes = OfferDeclinePropTypes;
 
 export default OfferDeclineForm;

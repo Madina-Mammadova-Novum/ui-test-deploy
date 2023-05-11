@@ -2,45 +2,51 @@
 
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { TankerSearchResultPropTypes } from '@/lib/types';
 
-import { NotFound, SimpleSelect, TextRow, Title } from '@/elements';
+import { Dropdown, NotFound, TextRow, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
 import { ExpandableRowHeader, ToggleRows } from '@/units';
 
-const TankerSearchResults = ({ request, setSort, sort, searchResult }) => {
+const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
   const [expandExactResults, setExpandExactResults] = useState(false);
   const [expandPartialResults, setExpandPartialResults] = useState(false);
 
   if (!request) return null;
 
-  return searchResult?.exactResults?.length || searchResult?.partialResults?.length ? (
+  const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
+
+  return data?.exactResults?.length || data?.partialResults?.length ? (
     <>
       <div className="mt-8 flex">
-        <Title level="2" className="mr-auto">
+        <Title level={2} className="mr-auto">
           Search results
         </Title>
-        <SimpleSelect
+
+        <Dropdown
           label="Sort tankers by:"
-          selectableItems={['Ballast leg']}
-          currentItem={sort.freeParam}
-          onChange={(param) => setSort((prevSortParams) => ({ ...prevSortParams, freeParam: param }))}
+          options={params}
+          defaultValue={params[0]}
+          onChange={(option) => onChange('currentParam', option)}
+          customStyles={dropdownStyles}
         />
-        <SimpleSelect
-          selectableItems={['Ascending', 'Descending']}
-          currentItem={sort.direction}
-          onChange={(param) => setSort((prevSortParams) => ({ ...prevSortParams, direction: param }))}
+
+        <Dropdown
+          options={directions}
+          defaultValue={directions[0]}
+          onChange={(option) => onChange('currentDirection', option)}
+          customStyles={dropdownStyles}
         />
       </div>
 
       <div className="mt-5 flex justify-between">
-        <TextRow title="Exact Matches (arrival within laycan)">{`${3} results`}</TextRow>
+        <TextRow title="Exact Matches (arrival within laycan)">{`${2} results`}</TextRow>
         <ToggleRows onToggleClick={() => setExpandExactResults((prevValue) => !prevValue)} value={expandExactResults} />
       </div>
       <div className="flex flex-col gap-y-2.5 mt-3">
-        {searchResult.exactResults.map((rowHeader) => (
+        {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={rowHeader} />}
             footer={<TankerExpandedFooter />}
@@ -55,11 +61,11 @@ const TankerSearchResults = ({ request, setSort, sort, searchResult }) => {
         <TextRow title="Partial matches (arrival outside of laycan)">{`${1} result`}</TextRow>
         <ToggleRows
           onToggleClick={() => setExpandPartialResults((prevValue) => !prevValue)}
-          value={expandPartialResults.value}
+          value={expandPartialResults?.value}
         />
       </div>
       <div className="flex flex-col gap-y-2.5 mt-3">
-        {searchResult.partialResults.map((rowHeader) => (
+        {data?.partialResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableRowHeader headerData={rowHeader} />}
             footer={<TankerExpandedFooter />}
@@ -75,29 +81,6 @@ const TankerSearchResults = ({ request, setSort, sort, searchResult }) => {
   );
 };
 
-TankerSearchResults.propTypes = {
-  setSort: () => {},
-  sort: {
-    freeParam: '',
-    direction: '',
-  },
-  searchResult: {
-    exactResults: [],
-    partialResults: [],
-  },
-};
-
-TankerSearchResults.propTypes = {
-  setSort: PropTypes.func,
-  request: PropTypes.bool.isRequired,
-  sort: PropTypes.shape({
-    freeParam: PropTypes.string,
-    direction: PropTypes.string,
-  }),
-  searchResult: PropTypes.shape({
-    exactResults: PropTypes.shape([]),
-    partialResults: PropTypes.shape([]),
-  }),
-};
+TankerSearchResults.propTypes = TankerSearchResultPropTypes;
 
 export default TankerSearchResults;

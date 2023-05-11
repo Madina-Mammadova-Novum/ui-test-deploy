@@ -13,8 +13,9 @@ import {
   companyDetailsSchema,
   passwordValidationSchema,
   personalDetailsSchema,
+  termsAndConditionsSchema,
 } from '@/lib/schemas';
-import { chartererRegistration } from '@/services';
+import { chartererSignUp } from '@/services';
 import {
   CargoesSlotsDetails,
   CompanyAddresses,
@@ -24,6 +25,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = () => {
@@ -33,8 +35,9 @@ const ChartererRegistrationForm = () => {
     ...personalDetailsSchema(),
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
-    ...companyAddressesSchema(sameAddress),
     ...cargoesSlotsDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
+    ...termsAndConditionsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
@@ -47,14 +50,14 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { message, error } = await chartererRegistration({ data: formData });
-
-    if (message) {
-      successToast(message);
-      methods.reset();
+    const { data } = await chartererSignUp({ data: formData });
+    if (data.status === 200) {
+      successToast(data.alert);
+      resetForm(methods);
     }
-
-    if (error) errorToast(error);
+    if (data.status !== 200) {
+      errorToast(data.alert);
+    }
   };
 
   return (

@@ -1,34 +1,58 @@
+'use client';
+
 import PropTypes from 'prop-types';
 
-import { SimpleSelect } from '@/elements';
+import { ComplexPaginationPropTypes } from '@/lib/types';
+
+import { Dropdown } from '@/elements';
+import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { PaginationComponent } from '@/units';
 
-const ComplexPagination = ({ pagination, setPagination }) => {
+const ComplexPagination = ({
+  currentPage,
+  numberOfPages,
+  onPageChange,
+  onChangeOffers,
+  perPage,
+  pages,
+  onSelectedPageChange,
+}) => {
+  const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
   return (
-    <div className="flex justify-between mt-5">
-      <SimpleSelect
-        onChange={(item) => setPagination((prevState) => ({ ...prevState, offersPerPage: item }))}
-        currentItem={pagination.offersPerPage}
-        selectableItems={[5, 10, 15]}
+    <div className="flex items-start 3md:items-center justify-between my-5 relative h-20 3md:h-auto">
+      <Dropdown
+        value={{ label: perPage, value: perPage }}
         label="offers per page:"
+        placeholder="5"
+        options={NAVIGATION_PARAMS.DATA_PER_PAGE}
+        onChange={onChangeOffers}
+        customStyles={dropdownStyles}
       />
-      <PaginationComponent pageCount={9} currentPage={1} />
-      <SimpleSelect
-        onChange={(item) => setPagination((prevState) => ({ ...prevState, currentPage: item }))}
-        currentItem={pagination.currentPage}
-        selectableItems={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
+
+      <div className="flex items-center absolute bottom-0 left-[50%] translate-x-[-50%] 3sm:translate-x-[unset] 3sm:position-unset">
+        <PaginationComponent currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange} />
+      </div>
+      <Dropdown
         label="Go to page:"
+        placeholder="1"
+        value={{ label: currentPage, value: currentPage }}
+        options={pages}
+        onChange={onSelectedPageChange}
+        customStyles={dropdownStyles}
       />
     </div>
   );
 };
 
+ComplexPagination.propTypes = ComplexPaginationPropTypes;
 ComplexPagination.propTypes = {
-  pagination: PropTypes.shape({
-    offersPerPage: PropTypes.number,
-    currentPage: PropTypes.number,
-  }).isRequired,
-  setPagination: PropTypes.func.isRequired,
+  currentPage: PropTypes.number,
+  numberOfPages: PropTypes.number,
+  onPageChange: PropTypes.func,
+  onSelectedPageChange: PropTypes.func,
+  onChangeOffers: PropTypes.func,
+  perPage: PropTypes.number,
+  pages: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default ComplexPagination;

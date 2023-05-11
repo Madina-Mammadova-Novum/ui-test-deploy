@@ -1,30 +1,23 @@
-import PropTypes from 'prop-types';
+import { TableHeaderCellPropTypes } from '@/lib/types';
 
-import { Tooltip } from '@/elements';
+import { ManualTooltip } from '@/elements';
 
-const TableHeaderCell = ({ text, helperData, icon, className }) => {
+const TableHeaderCell = ({ text, type, helperData, icon, ...rest }) => {
+  const { width } = rest;
   return (
-    <th className={className}>
-      <p className="flex items-center gap-x-2">
+    <th scope="col" name={type} className="py-1.5 relative whitespace-nowrap" style={{ width }}>
+      <p className="flex items-center px-4 gap-x-1.5">
         <span>{text}</span>
         {helperData && (
-          <Tooltip variant="manual" data={helperData}>
+          <ManualTooltip className="-left-[20vh] lg:-left-[14vh]" data={helperData}>
             {icon}
-          </Tooltip>
+          </ManualTooltip>
         )}
       </p>
     </th>
   );
 };
 
-TableHeaderCell.propTypes = {
-  text: PropTypes.string.isRequired,
-  helperData: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }),
-  icon: PropTypes.node,
-  className: PropTypes.string,
-};
+TableHeaderCell.propTypes = TableHeaderCellPropTypes;
 
 export default TableHeaderCell;

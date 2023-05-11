@@ -17,7 +17,9 @@ import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
+import LegalNavigation from '@/units/LegalNavigation';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import Notes from '@/units/Notes';
@@ -30,6 +32,7 @@ import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
+import SocialNetworks from '@/units/SocialNetworks';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
@@ -67,6 +70,7 @@ export {
   VerifficationUserAccount,
   AccordionHeader,
   Accordion,
+  FooterNavBlock,
   TabsAsLinks,
   Countdown,
   OfferDeclineForm,
@@ -82,4 +86,6 @@ export {
   AccordionCTA,
   IconWrapper,
   DeactivateTankerForm,
+  SocialNetworks,
+  LegalNavigation,
 };

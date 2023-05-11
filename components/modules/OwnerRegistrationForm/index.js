@@ -13,8 +13,9 @@ import {
   passwordValidationSchema,
   personalDetailsSchema,
   tankerSlotsDetailsSchema,
+  termsAndConditionsSchema,
 } from '@/lib/schemas';
-import { ownerRegistration } from '@/services/user';
+import { ownerSignUp } from '@/services/user';
 import {
   CompanyAddresses,
   CompanyDetails,
@@ -24,6 +25,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = () => {
@@ -35,6 +37,7 @@ const OwnerRegistrationForm = () => {
     ...companyDetailsSchema(),
     ...tankerSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
+    ...termsAndConditionsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
@@ -46,14 +49,14 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { message, error } = await ownerRegistration({ data: formData });
-
-    if (message) {
-      successToast(message);
-      methods.reset();
+    const { data } = await ownerSignUp({ data: formData });
+    if (data.status === 200) {
+      successToast(data.alert);
+      resetForm(methods);
     }
-
-    if (error) errorToast(error);
+    if (data.status !== 200) {
+      errorToast(data.alert);
+    }
   };
 
   return (

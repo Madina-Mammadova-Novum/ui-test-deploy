@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
+import { negotiatingExpandedContentPropTypes } from '@/lib/types';
+
+import {
+  failedTabRowsDataAdapter,
+  incomingTabRowsDataAdapter,
+  sentCounteroffersTabRowsDataAdapter,
+} from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { Tabs } from '@/units';
 import {
   negotiatingCounterofferTableHeader,
-  negotiatingCounterofferTableRows,
   negotiatingFailedTableHeader,
-  negotiatingFailedTableRows,
   negotiatingIncomingTableHeader,
-  negotiatingIncomingTableRows,
 } from '@/utils/mock';
 
 const tabs = [
@@ -27,20 +31,20 @@ const tabs = [
   },
 ];
 
-const NegotiatingExpandedContent = () => {
+const NegotiatingExpandedContent = ({ data }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [modal, setModal] = useState(null);
 
   const handleCloseModal = () => setModal(null);
   const handleOpenModal = ({ id }) => setModal(id);
 
-  const tabContent = () => {
+  const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'counteroffers':
         return (
           <Table
             headerData={negotiatingCounterofferTableHeader}
-            rows={negotiatingCounterofferTableRows}
+            rows={sentCounteroffersTabRowsDataAdapter({ data: data.sentCounteroffers })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -48,7 +52,7 @@ const NegotiatingExpandedContent = () => {
         return (
           <Table
             headerData={negotiatingFailedTableHeader}
-            rows={negotiatingFailedTableRows}
+            rows={failedTabRowsDataAdapter({ data: data.failedOffers })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -56,12 +60,12 @@ const NegotiatingExpandedContent = () => {
         return (
           <Table
             headerData={negotiatingIncomingTableHeader}
-            rows={negotiatingIncomingTableRows}
+            rows={incomingTabRowsDataAdapter({ data: data.incomingOffers })}
             handleActionClick={handleOpenModal}
           />
         );
     }
-  };
+  }, [currentTab, data.failedOffers, data.incomingOffers, data.sentCounteroffers]);
 
   const modalContent = () => {
     switch (modal) {
@@ -82,7 +86,7 @@ const NegotiatingExpandedContent = () => {
         customStyles="my-3 mx-auto"
       />
 
-      {tabContent()}
+      <div className="mb-3">{tabContent}</div>
 
       <Modal opened={modal} onClose={handleCloseModal}>
         {modalContent()}
@@ -90,5 +94,7 @@ const NegotiatingExpandedContent = () => {
     </div>
   );
 };
+
+NegotiatingExpandedContent.propTypes = negotiatingExpandedContentPropTypes;
 
 export default NegotiatingExpandedContent;

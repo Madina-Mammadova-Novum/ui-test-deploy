@@ -1,12 +1,12 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import { BlocksTypes } from '@/lib/types';
 
 import {
   BlockHeroImage,
+  ContactUsBlock,
   CTABlock,
   CTASingleImageBlock,
   FAQBlock,
+  HomeSearchBlock,
   HowItWorksBlock,
   ImageSliderBlock,
   ProductFeaturesBlock,
@@ -14,12 +14,13 @@ import {
   TeamBlock,
   WhatWeOfferBlock,
 } from '@/blocks';
-import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
+  'blocks.contact-us': ContactUsBlock,
   'blocks.cta': CTABlock,
   'blocks.cta-single-image': CTASingleImageBlock,
   'blocks.hero-image': BlockHeroImage,
+  'blocks.search-block': HomeSearchBlock,
   'blocks.simple-content': SimpleContentBlock,
   'blocks.single-what-we-offer': WhatWeOfferBlock,
   'blocks.image-slider': ImageSliderBlock,
@@ -31,31 +32,18 @@ const BLOCK_COMPONENTS = {
   'blocks.faq-by-category-block': FAQBlock,
 };
 
-const BlockManager = ({ blocks }) => {
+const BlockManager = ({ blocks = null }) => {
   if (!blocks) return null;
 
-  return blocks.map((block) => {
+  return blocks.map((block, idx) => {
     const Block = BLOCK_COMPONENTS[block.__component];
     if (!Block) return null;
 
-    return <Block key={makeId()} {...block} />;
+    // eslint-disable-next-line react/no-array-index-key
+    return <Block key={idx} {...block} />;
   });
 };
 
-BlockManager.defaultProps = {
-  blocks: null,
-};
-
-BlockManager.propTypes = {
-  blocks: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      __component: PropTypes.string.isRequired,
-      title: PropTypes.string,
-      subTitle: PropTypes.string,
-      shortDescription: PropTypes.string,
-    })
-  ),
-};
+BlockManager.propTypes = BlocksTypes;
 
 export default BlockManager;

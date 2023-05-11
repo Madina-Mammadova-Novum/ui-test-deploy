@@ -1,13 +1,7 @@
-import React from 'react';
+import { DividerPropTypes } from '@/lib/types';
 
-import PropTypes from 'prop-types';
+const Divider = ({ className }) => <hr className={`${className} h-px bg-gray-darker`} />;
 
-const Divider = ({ className }) => {
-  return <hr className={`${className} h-px bg-gray-darker`} />;
-};
-
-Divider.propTypes = {
-  className: PropTypes.string,
-};
+Divider.propTypes = DividerPropTypes;
 
 export default Divider;

@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { OfferModalContentPropTypes } from '@/lib/types';
 
-import { Button, SimpleSelect, Title } from '@/elements';
+import { Button, Dropdown, Title } from '@/elements';
 import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
-import { OfferForm, Tabs } from '@/units';
+import { CommercialOfferTerms, OfferForm, Tabs } from '@/units';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -26,20 +26,34 @@ const tabs = [
 ];
 
 const OfferModalContent = ({ closeModal }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[0]);
-  const [showScroll, setShowScroll] = useState(false);
+  const [modalStore, setModalStore] = useState({
+    currentTab: tabs[0].value,
+    responseCountdown: COUNTDOWN_OPTIONS[1],
+    showScroll: false,
+  });
 
-  const tabContent = () => {
+  const handleChangeState = (key, value) => {
+    setModalStore((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  const handleChangeOption = (option) => handleChangeState('responseCountdown', option);
+  const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
+
+  const { currentTab, responseCountdown, showScroll } = modalStore;
+
+  const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
         return <VoyageDetailsContent data={voyageDetailData} />;
       case 'comments':
         return <CommentsContent data={incomingOfferCommentsData} />;
       default:
-        return <OfferForm />;
+        return <CommercialOfferTerms />;
     }
-  };
+  }, [currentTab]);
 
   return (
     <div className="w-[610px]">
@@ -50,29 +64,24 @@ const OfferModalContent = ({ closeModal }) => {
           <p className="font-bold max-w-[240px]">
             Set a response countdown timer for the vessel owner to reply to this offer
           </p>
-          <SimpleSelect
-            onChange={setResponseCountdown}
-            currentItem={responseCountdown}
-            selectableItems={COUNTDOWN_OPTIONS}
+          <Dropdown
+            defaultValue={responseCountdown}
+            options={COUNTDOWN_OPTIONS}
+            onChange={handleChangeOption}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
         </div>
       </div>
 
-      <Tabs
-        customStyles="mx-auto mt-5 mb-3"
-        tabs={tabs}
-        activeTab={currentTab}
-        onClick={({ target }) => setCurrentTab(target.value)}
-      />
+      <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
 
-      <div
-        ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
-      >
-        {tabContent()}
+      <div className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}>
+        <div className="p-2.5">
+          <OfferForm>{tabContent}</OfferForm>
+        </div>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"
@@ -84,14 +93,6 @@ const OfferModalContent = ({ closeModal }) => {
   );
 };
 
-OfferModalContent.defaultProps = {
-  setStep: () => {},
-  closeModal: () => {},
-};
-
-OfferModalContent.propTypes = {
-  setStep: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+OfferModalContent.propTypes = OfferModalContentPropTypes;
 
 export default OfferModalContent;

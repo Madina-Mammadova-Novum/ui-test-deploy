@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
-
-import { Button, Modal } from '@/elements';
+import { LinkAsButton } from '@/elements';
+import { ROUTES } from '@/lib';
 import OfferModalContent from '@/modules/OfferModalContent';
-import { ExpandableRowFooter } from '@/units';
+import { ExpandableRowFooter, ModalWindow } from '@/units';
+import { useAuth } from '@/utils/hooks';
 
 const TankerExpandedFooter = () => {
-  const [opened, setOpened] = useState(false);
-
-  const handleOpenModal = () => setOpened(true);
-  const handleCloseModal = () => setOpened(false);
-
+  const { isAuthorized } = useAuth();
   return (
     <ExpandableRowFooter>
-      <Button
-        buttonProps={{ variant: 'primary', size: 'large', text: 'Send offer' }}
-        customStyles="ml-auto"
-        onClick={handleOpenModal}
-      />
-      <Modal opened={opened} onClose={handleCloseModal}>
-        <OfferModalContent closeModal={handleCloseModal} />
-      </Modal>
+      {isAuthorized ? (
+        <ModalWindow buttonProps={{ variant: 'primary', size: 'large', text: 'Send offer', className: 'ml-auto' }}>
+          <OfferModalContent />
+        </ModalWindow>
+      ) : (
+        <LinkAsButton
+          href={ROUTES.SIGNUP}
+          buttonProps={{ variant: 'primary', size: 'large' }}
+          customStyles="ml-auto w-fit"
+        >
+          Register to Send offer
+        </LinkAsButton>
+      )}
     </ExpandableRowFooter>
   );
 };

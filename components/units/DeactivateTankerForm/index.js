@@ -2,7 +2,7 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
+import { DeactivateTankerFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Label, Title } from '@/elements';
@@ -35,10 +35,6 @@ const DeactivateTankerForm = ({ title, description, portName }) => {
   );
 };
 
-DeactivateTankerForm.propTypes = {
-  title: PropTypes.string.isRequired,
-  portName: PropTypes.string,
-  description: PropTypes.string,
-};
+DeactivateTankerForm.propTypes = DeactivateTankerFormPropTypes;
 
 export default DeactivateTankerForm;

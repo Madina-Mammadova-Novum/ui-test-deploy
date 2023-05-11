@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
+import { DateDetailsFormPropTypes } from '@/lib/types';
 
 import { DatePicker, Label } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const DateDetailsForm = ({ portName }) => {
+const DateDetailsForm = ({ portName = '' }) => {
   const {
     setValue,
     clearErrors,
@@ -21,13 +21,17 @@ const DateDetailsForm = ({ portName }) => {
         <Label className="text-xs-sm">Tanker name</Label>
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
-      <DatePicker name="date" onChange={handleDateChange} error={errors?.date?.message} label="open date" />
+      <DatePicker
+        name="date"
+        calendarClass="!w-[356px] items-center"
+        onChange={handleDateChange}
+        error={errors?.date?.message}
+        label="open date"
+      />
     </>
   );
 };
 
-DateDetailsForm.propTypes = {
-  portName: PropTypes.string,
-};
+DateDetailsForm.propTypes = DateDetailsFormPropTypes;
 
 export default DateDetailsForm;

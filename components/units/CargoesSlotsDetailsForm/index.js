@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 
 import { TrashIcon } from '@/assets/icons';
 import PlusSVG from '@/assets/images/plusCircle.svg';
-import { AsyncDropdown, Button, DatePicker, Input } from '@/elements';
+import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
-import { convertDataToOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
+import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = () => {
@@ -15,7 +15,7 @@ const CargoesSlotsDetailsForm = () => {
     register,
     setValue,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useHookForm();
 
   const [cargoesState, setCargoesState] = useState({
@@ -62,6 +62,7 @@ const CargoesSlotsDetailsForm = () => {
   };
 
   const handleApplySlot = () => {
+    clearErrors('applySlots');
     handleChangeState('cargoes', getFilledArray(cargoesCount));
   };
 
@@ -76,8 +77,7 @@ const CargoesSlotsDetailsForm = () => {
 
   const fetchPorts = async () => {
     const data = await getPorts();
-    const options = convertDataToOptions(data, 'id', 'name');
-
+    const options = countriesOptions(data);
     handleChangeState('cargoesPortsOptions', options);
   };
 
@@ -93,26 +93,36 @@ const CargoesSlotsDetailsForm = () => {
     setValue('applySlots', Boolean(numberOfCargoes));
 
     handleChangeState('cargoesCount', numberOfCargoes);
-  }, [cargoes, setValue]);
+
+    if (isSubmitSuccessful) {
+      handleChangeState('cargoesCount', 0);
+      handleChangeState('cargoes', []);
+    }
+  }, [cargoes, isSubmitSuccessful, setValue]);
 
   return (
     <div className="grid gap-5">
-      <div className="w-full !relative">
+      <div className="w-full relative">
         <Input
           label="How many cargoes have you chartered during the last 6 months?"
-          placeholder="Cargoes"
+          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes.`}
           disabled={isSubmitting}
           value={cargoesCount}
           type="number"
           customStyles="z-10 w-full"
           onChange={handleCargoesCount}
-          error={errors.numberOfCargoes?.message}
+          error={errors.numberOfCargoes?.message || errors.applySlots?.message}
+          helperText="You will be able to add more cargoes after the verification."
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[18px] right-1 my-1 !py-4 z-10"
-          buttonProps={{ text: 'Apply', variant: 'primary', size: 'medium' }}
+          customStyles="absolute top-[17px] right-1 my-1 !py-4"
+          buttonProps={{
+            text: 'Apply',
+            variant: !errors.numberOfCargoes ? 'primary' : 'delete',
+            size: 'medium',
+          }}
           onClick={handleApplySlot}
           disabled={cargoesCount <= 0 || isSubmitting}
         />
@@ -123,7 +133,7 @@ const CargoesSlotsDetailsForm = () => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-3 justify-center items-center gap-x-5" key={item}>
+          <div className="grid relative grid-cols-1 lg:grid-cols-3 justify-center items-center gap-x-5" key={item}>
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
@@ -132,14 +142,16 @@ const CargoesSlotsDetailsForm = () => {
               disabled={isSubmitting}
               type="number"
             />
-            <AsyncDropdown
+            <FormDropdown
               name={`${fieldName}.port`}
               label="Load port"
               errorMsg={error?.port?.message}
               options={cargoesPortsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
+              async
             />
             <DatePicker
+              calendarClass="absolute -left-2.5"
               name={`${fieldName}.date`}
               inputClass="w-full"
               label="Bill of lading date"

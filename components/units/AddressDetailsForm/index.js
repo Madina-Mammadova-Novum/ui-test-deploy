@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
+import { AddressDetailsFormPropTypes } from '@/lib/types';
 
-import { AsyncDropdown, Input } from '@/elements';
+import { FormDropdown, Input } from '@/elements';
 import { getCities } from '@/services';
 import { convertDataToOptions } from '@/utils/helpers';
 
-const AddressDetails = ({ title, type, countries }) => {
+const AddressDetails = ({ title, type, countries = [] }) => {
   const [cities, setCities] = useState([]);
   const [disabled, setDisabled] = useState(true);
 
@@ -42,6 +42,7 @@ const AddressDetails = ({ title, type, countries }) => {
   };
 
   const handleCityChange = (option) => {
+    clearErrors(`${type}CityId`);
     setValue(`${type}CityId`, option);
   };
 
@@ -49,14 +50,21 @@ const AddressDetails = ({ title, type, countries }) => {
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
-        <div className="grid grid-cols-0 md:grid-cols-2 gap-5">
-          <AsyncDropdown name={`${type}CountryId`} label="Country" options={countries} onChange={handleCountryChange} />
-          <AsyncDropdown
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <FormDropdown
+            name={`${type}CountryId`}
+            label="Country"
+            options={countries}
+            onChange={handleCountryChange}
+            async
+          />
+          <FormDropdown
             label="City"
             name={`${type}CityId`}
             options={cities}
             onChange={handleCityChange}
             disabled={disabled}
+            async
           />
           <Input
             {...register(`${type}State`)}
@@ -93,15 +101,6 @@ const AddressDetails = ({ title, type, countries }) => {
   );
 };
 
-AddressDetails.defaultProps = {
-  title: '',
-  countries: [{}],
-};
-
-AddressDetails.propTypes = {
-  title: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  countries: PropTypes.arrayOf(PropTypes.shape({})),
-};
+AddressDetails.propTypes = AddressDetailsFormPropTypes;
 
 export default AddressDetails;

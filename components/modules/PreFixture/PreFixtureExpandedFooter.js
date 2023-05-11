@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { PreFixtureExpandedFooterPropTypes } from '@/lib/types';
 
 import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
 import { Button, Modal } from '@/elements';
@@ -11,6 +11,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
     opened: false,
     type: null,
   });
+
   const handleOpenModal = (type) => setModalOptions({ opened: true, type });
   const handleCloseModal = () => setModalOptions({ opened: false, type: null });
 
@@ -27,7 +28,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
 
   return (
     <ExpandableRowFooter>
-      <div className="flex flex-col md:flex-row gap-x-5 gap-y-2.5 justify-between">
+      <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between">
         <div className="w-full grow">
           {!!underNegotiation && (
             <Button
@@ -37,12 +38,12 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
                 variant: 'tertiary',
                 size: 'large',
               }}
-              customStyles="w-full whitespace-nowrap 3sm:grow"
+              customStyles="w-full whitespace-nowrap 3md:grow"
               disabled
             />
           )}
         </div>
-        <div className="grid grid-cols-1 3sm:flex gap-x-2.5 gap-y-2.5">
+        <div className="grid grid-cols-1 3md:flex gap-x-2.5 gap-y-2.5">
           <div className="w-full">
             <Button
               onClick={() => handleOpenModal('decline_offer')}
@@ -68,8 +69,6 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
   );
 };
 
-PreFixtureExpandedFooter.propTypes = {
-  underNegotiation: PropTypes.bool.isRequired,
-};
+PreFixtureExpandedFooter.propTypes = PreFixtureExpandedFooterPropTypes;
 
 export default PreFixtureExpandedFooter;

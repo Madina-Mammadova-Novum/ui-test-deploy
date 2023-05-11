@@ -10,7 +10,7 @@ export function fetchOptions(requestMethod, data = null) {
   const options = {
     method, // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
-    // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     // credentials: "same-origin", // include, *same-origin, omit
     headers: {
       'Content-Type': 'application/json',
@@ -29,7 +29,6 @@ export function fetchOptions(requestMethod, data = null) {
 
 export async function apiHandler(options) {
   const { url, requestMethod, data } = options;
-  console.log({ url });
   try {
     const requestOptions = fetchOptions(requestMethod, data);
 

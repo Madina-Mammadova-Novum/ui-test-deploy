@@ -2,8 +2,9 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { EditPortFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
@@ -38,9 +39,6 @@ const EditPortForm = ({ title, portName }) => {
   );
 };
 
-EditPortForm.propTypes = {
-  title: PropTypes.string.isRequired,
-  portName: PropTypes.string,
-};
+EditPortForm.propTypes = EditPortFormPropTypes;
 
 export default EditPortForm;

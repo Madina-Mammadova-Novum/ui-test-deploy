@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { iconPropTypes } from '@/utils/types';
+import { iconPropTypes } from '@/lib/types';
 
 import { useActiveColors } from '@/utils/hooks';
 

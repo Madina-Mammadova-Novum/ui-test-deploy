@@ -1,17 +1,17 @@
 import { postHandler } from '@/utils/api';
 
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 export default async function handler(req, res) {
-  if (req.body?.debug) {
-    await sleep(2000);
-    return res.status(200).json({
-      message: 'You successfully verifficate your account',
-    });
+  try {
+    const response = await postHandler('auth/confirmemail', req.body, 'backend');
+    if (response.status === 500) {
+      const { error } = response;
+      error.message = 'External server error';
+      return res.status(response.status).json({ error });
+    }
+    // todo: add data adapter for response
+    return res.status(response.status).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: { message: 'Internal server error' } });
   }
-  return postHandler('auth/confirmemail', req, res);
 }

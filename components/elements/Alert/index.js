@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { AlertPropTypes } from '@/lib/types';
 
 import { AcceptIcon, CloseIcon, InfoIcon } from '@/assets/icons';
 
-const Alert = ({ variant, title, description, handleClose }) => {
+const Alert = ({ variant = '', title, description, handleClose }) => {
   let alert;
   switch (variant) {
     case 'success': {
@@ -43,8 +43,8 @@ const Alert = ({ variant, title, description, handleClose }) => {
       <div className="flex items-center gap-2.5">
         {icon}
         <div className="flex flex-col">
-          <p className="text-black font-semibold text-xsm">{title}</p>
-          <p className="text-black font-normal text-xs-sm">{description}</p>
+          {title && <p className="text-black font-semibold text-xsm">{title}</p>}
+          {description && <p className="text-black font-normal text-xs-sm">{description}</p>}
         </div>
       </div>
       <button type="button" onClick={handleClose}>
@@ -54,18 +54,6 @@ const Alert = ({ variant, title, description, handleClose }) => {
   );
 };
 
-Alert.defaultProps = {
-  variant: '',
-  title: '',
-  description: '',
-  handleClose: () => {},
-};
-
-Alert.propTypes = {
-  variant: PropTypes.string,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  handleClose: PropTypes.func,
-};
+Alert.propTypes = AlertPropTypes;
 
 export default Alert;

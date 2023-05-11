@@ -2,8 +2,9 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { DeactivateAccountFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Input, Title } from '@/elements';
@@ -54,8 +55,6 @@ const DeactivateAccountForm = ({ title }) => {
   );
 };
 
-DeactivateAccountForm.propTypes = {
-  title: PropTypes.string,
-};
+DeactivateAccountForm.propTypes = DeactivateAccountFormPropTypes;
 
 export default DeactivateAccountForm;

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { AccordionPropTypes } from '@/lib/types';
 
 import { AccordionBody } from '@/elements';
 import { AccordionHeader } from '@/units';
@@ -14,7 +15,7 @@ const Accordion = ({ items, isFullWidth, open, onClick, icon }) => {
   return items.map(({ headerContent, bodyContent }) => (
     <div
       className={classnames(
-        open && !isFullWidth && 'relative border-none rounded-[10px] pt-[10px] bg-white shadow-xmd',
+        open && !isFullWidth && 'relative !border-transparent rounded-base bg-white shadow-xmd -mb-2',
         'text-black pb-2.5'
       )}
     >
@@ -33,17 +34,6 @@ const Accordion = ({ items, isFullWidth, open, onClick, icon }) => {
   ));
 };
 
-Accordion.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      headerContent: PropTypes.string,
-      bodyContent: PropTypes.node,
-    })
-  ).isRequired,
-  isFullWidth: PropTypes.bool,
-  open: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  icon: PropTypes.node,
-};
+Accordion.propTypes = AccordionPropTypes;
 
 export default Accordion;

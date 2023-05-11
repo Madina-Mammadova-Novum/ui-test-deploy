@@ -1,42 +1,77 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
+import { prefixtureHeaderDataAdapter, prefixtureRowsDataAdapter } from '@/adapters';
+import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
+import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
-import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { preFixtureHeaderData } from '@/utils/mock';
+import { getUserPreFixtures } from '@/services';
+import { ComplexPagination, ToggleRows } from '@/units';
+import { useFetch, useFilters } from '@/utils/hooks';
 
 const PreFixture = () => {
   const [toggle, setToggle] = useState(false);
-  const [pagination, setPagination] = useState({
-    offersPerPage: 5,
-    currentPage: 1,
-  });
+  const [data, isLoading] = useFetch(getUserPreFixtures);
 
-  return preFixtureHeaderData.length ? (
-    <div>
-      <div className="flex items-center justify-end">
+  const initialPagesStore = {
+    currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
+    perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
+  };
+  const {
+    numberOfPages,
+    items,
+    currentPage,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage,
+    onChangeOffers,
+    perPage,
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
+
+  const printExpandableRow = (headerData, underNegotiation) => (
+    <ExpandableRow
+      header={<ExpandableCardHeader headerData={prefixtureHeaderDataAdapter({ data: headerData })} />}
+      footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
+      expand={toggle}
+    >
+      <PreFixtureExpandedContent
+        underNegotiation={underNegotiation}
+        rowsData={prefixtureRowsDataAdapter({ data: headerData.documentsInfo })}
+      />
+    </ExpandableRow>
+  );
+
+  if (isLoading) {
+    return <Loader className="h-8 w-8 absolute top-1/2" />;
+  }
+
+  return (
+    <section>
+      <div className="flex justify-between items-center py-5">
+        <div className="flex flex-col">
+          <Label className="text-xs-sm">Offer stage #2</Label>
+          <Title level={1}>Pre-fixture</Title>
+        </div>
         <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5 mt-5">
-        {preFixtureHeaderData.map((headerData, index) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={headerData} />}
-            footer={<PreFixtureExpandedFooter underNegotiation={index} />}
-            expand={toggle}
-          >
-            <PreFixtureExpandedContent />
-          </ExpandableRow>
-        ))}
-      </div>
+      <div className="flex flex-col gap-y-2.5">{items?.length && items.map(printExpandableRow)}</div>
 
-      <ComplexPagination pagination={pagination} setPagination={setPagination} />
-    </div>
-  ) : null;
+      <ComplexPagination
+        currentPage={currentPage}
+        numberOfPages={numberOfPages}
+        onPageChange={handlePageChange}
+        onSelectedPageChange={handleSelectedPageChange}
+        pages={selectedPage}
+        onChangeOffers={onChangeOffers}
+        perPage={perPage}
+      />
+    </section>
+  );
 };
 
 export default PreFixture;

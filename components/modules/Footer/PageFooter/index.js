@@ -1,126 +1,103 @@
-'use client';
+import React from 'react';
 
+import delve from 'dlv';
+
+import { linkAdapter } from '@/adapters/global';
 import { ExternalLinkAltIcon } from '@/assets/icons';
-import FacebookSVG from '@/assets/images/facebook.svg';
-import LinkedinSVG from '@/assets/images/linkedin.svg';
 import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
-import TwitterSVG from '@/assets/images/twitter.svg';
-import { HoverableIcon, LinkAsButton, NextLink, Title } from '@/elements';
+import { Copyright, NextLink, Title } from '@/elements';
+import { getNavigation } from '@/services/navigation';
+import { getSingleType } from '@/services/singleType';
+import { FooterNavBlock, SocialNetworks } from '@/units';
+import { makeId } from '@/utils/helpers';
 
-const PageFooter = () => {
+const PageFooter = async () => {
+  const footerData = await getSingleType('footer', 'en');
+  const navigationSlug = delve(footerData, 'data.navigation');
+  const navigationData = await getNavigation(navigationSlug, 'en');
+  const navigation = delve(navigationData, 'data');
+
+  const contactInfoData = await getSingleType('contact-information', 'en');
+  const address = delve(contactInfoData, 'data.address');
+  const phones = delve(contactInfoData, 'data.phones');
+  const emails = delve(contactInfoData, 'data.emails');
+  const link = delve(contactInfoData, 'data.link');
+  const mapLink = linkAdapter(link);
+
+  const legalNavigationData = await getNavigation('legal-navigation', 'en');
+  const legalNavigation = delve(legalNavigationData, 'data');
+
   return (
-    <footer className="py-[30px]">
+    <footer className="py-[30px] bg-white">
       <div className="container mx-auto  px-[54px] max-w-[1258px] ">
         <NextLink href="/">
           <Logo className="fill-black" />
         </NextLink>
         <div className="flex mt-[30px] gap-x-10">
-          <div className="w-40">
-            <Title level="5" className="title-main text-gray mb-4">
-              Company
-            </Title>
-            <ul className="space-y-2 text-black">
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  About Us
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Contact Us
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  FAQ
-                </NextLink>
-              </li>
-            </ul>
-          </div>
-          <div className="w-40">
-            <Title level="5" className="title-main text-gray mb-4">
-              LEGAL
-            </Title>
-            <ul className="space-y-2 text-black">
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Privacy Policy
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Terms of Use
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  Cookie Statement
-                </NextLink>
-              </li>
-            </ul>
-          </div>
-          <div className="w-40">
-            <Title level="5" className="title-main text-gray mb-4">
+          {navigation.length > 0 &&
+            navigation.map(({ title, items }) => {
+              return <FooterNavBlock key={makeId()} items={items} title={title} />;
+            })}
+          {legalNavigation.length > 0 && <FooterNavBlock items={legalNavigation} title="Legal" />}
+          <div className="w-[166px]">
+            <Title level={5} className="title-main text-gray mb-4">
               Address
             </Title>
             <ul className="space-y-2 text-black">
               <li>
-                <p className="text-xsm">1981 Broadway, New York, NY 10023, United States</p>
+                <p className="text-xsm">{address}</p>
               </li>
               <li>
-                {/* todo: create small-btn element */}
-                <LinkAsButton
-                  href="/"
-                  buttonProps={{
-                    variant: 'tertiary',
-                    size: 'small',
-                  }}
-                  customStyles="!py-0 !px-0 font-medium h-auto w-[fit-content] gap-x-1"
-                >
-                  View on Google Maps
-                  <ExternalLinkAltIcon />
-                </LinkAsButton>
+                {mapLink && (
+                  <NextLink
+                    label={mapLink.label}
+                    href={mapLink.path}
+                    target={mapLink.target}
+                    className="font-medium text-xsm flex gap-x-1 whitespace-nowrap"
+                  >
+                    {mapLink.label}
+                    <ExternalLinkAltIcon width={16} height={16} className="fill-black" />
+                  </NextLink>
+                )}
               </li>
             </ul>
           </div>
-          <div className="text-black ml-auto w-40">
-            <Title level="5" className="title-main text-gray mb-4">
+          <div className="ml-auto w-40">
+            <Title level={5} className="title-main text-gray mb-4">
               contacts
             </Title>
             <ul className="space-y-2 text-black">
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  + 1 212-444-3400
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  + 1 212-444-3400
-                </NextLink>
-              </li>
-              <li>
-                <NextLink href="#" className="text-xsm">
-                  hello@ship.link.com
-                </NextLink>
-              </li>
+              {phones &&
+                phones.map(({ Phone }) => (
+                  <li key={makeId()}>
+                    <NextLink href={`tel:${Phone}`} className="text-xsm">
+                      {Phone}
+                    </NextLink>
+                  </li>
+                ))}
+              {emails &&
+                emails.map(({ Email }) => (
+                  <li key={makeId()}>
+                    <NextLink href={`mailto:${Email}`} className="text-xsm">
+                      {Email}
+                    </NextLink>
+                  </li>
+                ))}
             </ul>
             <div className="flex gap-x-2.5 my-4">
-              <NextLink href="/">
-                <HoverableIcon className="border border-gray-darker rounded-md" icon={<LinkedinSVG />} />
-              </NextLink>
-              <NextLink href="/">
-                <HoverableIcon className="border border-gray-darker rounded-md" icon={<TwitterSVG />} />
-              </NextLink>
-              <NextLink href="/">
-                <HoverableIcon className="border border-gray-darker rounded-md" icon={<FacebookSVG />} />
-              </NextLink>
+              <SocialNetworks />
             </div>
           </div>
         </div>
-        <div className="pt-4 text-xsm flex justify-between text-gray border-grey-darker border-t">
-          <p>Copyright © 2021 Ship.link. All rights reserved</p>
-          <OtakoyiLogo />
+        <div className="pt-5 text-xsm flex justify-between border-grey-darker border-t">
+          <Copyright />
+          <div className="flex items-center gap-x-2">
+            <p className="text-gray text-xsm">Development by</p>
+            <NextLink href="https://otakoyi.software/" target="_blank">
+              <OtakoyiLogo />
+            </NextLink>
+          </div>
         </div>
       </div>
     </footer>

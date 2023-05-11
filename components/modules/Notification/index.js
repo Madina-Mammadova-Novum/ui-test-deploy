@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { NotificationPropTypes } from '@/lib/types';
 
 import NotificationSVG from '@/assets/images/notification.svg';
 import { HoverableIcon } from '@/elements';
@@ -14,8 +14,6 @@ const Notification = ({ numberOfNotifications }) => {
   );
 };
 
-Notification.propTypes = {
-  numberOfNotifications: PropTypes.number.isRequired,
-};
+Notification.propTypes = NotificationPropTypes;
 
 export default Notification;

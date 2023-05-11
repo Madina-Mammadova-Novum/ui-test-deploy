@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { Loader, NextLink } from '@/elements';
-import { postVeriff } from '@/services';
+import { postVeriffData } from '@/services';
 import { checkObjectValues } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
@@ -28,12 +28,11 @@ const VerifficationUserAccount = () => {
     if (message) errorToast(message);
 
     if (data) {
-      const { link, error } = await postVeriff({ data });
+      const { link, error } = await postVeriffData({ data });
       if (error) errorToast(error);
-      if (link) setVeriffUrl(link);
-    }
 
-    return null;
+      setVeriffUrl(link);
+    }
   };
 
   useEffect(() => {
@@ -48,10 +47,10 @@ const VerifficationUserAccount = () => {
           target="blank"
           className="px-5 py-2.5 rounded-md cursor-pointer bg-blue text-white hover:bg-blue-darker"
         >
-          Verifficate
+          Verify
         </NextLink>
       ) : (
-        <div className="px-5 py-2.5 rounded-md flex justify-center items-center gap-x-4 bg-black  opacity-50">
+        <div className="px-5 py-2.5 whitespace-nowrap rounded-md flex justify-center items-center gap-x-4 bg-black  opacity-50">
           <p className="text-white">Please wait...</p>
           <Loader className="w-4 h-4" />
         </div>

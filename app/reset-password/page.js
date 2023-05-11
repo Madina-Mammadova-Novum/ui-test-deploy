@@ -18,12 +18,12 @@ const ResetPasswordPage = () => {
     <AuthWrapper
       title="Reset your password"
       subtitle="Pick and set a new password for your account and you’re good to go!"
-      containerClass="w-3/4"
+      containerClass="w-3/4 -translate-y-14 min-w-[450px]"
     >
       <ResetPasswordForm />
       <NextLink
         href={ROUTES.LOGIN}
-        className="inline-flex w-full justify-center text-blue text-xsm pt-2.5 w-[calc(100%-183px)] md:w-[calc(100%-203px)]"
+        className="inline-flex justify-center items-center w-full pt-2.5 text-blue text-xsm"
       >
         Return to Log in
       </NextLink>

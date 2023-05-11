@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 import ModalHeader from '../ModalHeader';
 
+import { OfferDeclinePropTypes } from '@/lib/types';
+
 import { Button, RadioInput, TextArea, Title } from '@/elements';
 import { Countdown } from '@/units';
+import { useHookForm } from '@/utils/hooks';
 
 const reasonsOfDecline = [
   {
@@ -37,9 +38,10 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineFields = ({ closeModal, title, goBack }) => {
+const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
   const [showTextField, setShowTextField] = useState(false);
+  const { register } = useHookForm();
   const handleCheck = (id) => {
     setReasons((prevState) =>
       prevState.map((reason) => (reason.id === id ? { ...reason, checked: true } : { ...reason, checked: false }))
@@ -69,10 +71,16 @@ const OfferDeclineFields = ({ closeModal, title, goBack }) => {
         </div>
       ))}
       {showTextField && (
-        <TextArea name="comment" label="your reason" placeholder="Type your reason here ..." customStyles="mt-2.5" />
+        <TextArea
+          name="comment"
+          label="your reason"
+          placeholder="Type your reason here ..."
+          customStyles="mt-2.5"
+          register={register}
+        />
       )}
 
-      <div className="flex gap-x-2.5 mt-5">
+      <div className="flex gap-x-2.5 mt-5 justify-between">
         <Button
           onClick={closeModal}
           customStyles="w-full h-min"
@@ -87,16 +95,6 @@ const OfferDeclineFields = ({ closeModal, title, goBack }) => {
   );
 };
 
-OfferDeclineFields.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-  title: '',
-};
-
-OfferDeclineFields.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-  title: PropTypes.string,
-};
+OfferDeclineFields.propTypes = OfferDeclinePropTypes;
 
 export default OfferDeclineFields;

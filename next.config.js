@@ -1,17 +1,20 @@
 const { i18n } = require('./next-i18next.config');
 
+const regex = /^(?:https?:\/\/)?([^:/\n]+)/i;
+const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     appDir: true,
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   images: {
     unoptimized: false, // true for `yarn export`
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/webp'],
     minimumCacheTTL: 60,
-    domains: ['localhost', 'shiplink.oyihost.com'],
+    domains: [domain],
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],
   },

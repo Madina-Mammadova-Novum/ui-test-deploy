@@ -4,6 +4,7 @@
     "paths": {
       "@/adapters": ["adapters/index"],
       "@/adapters/*": ["adapters/*"],
+      "@/app/*": ["app/*"],
       "@/assets": ["assets/index"],
       "@/assets/*": ["assets/*"],
       "@/blocks": ["components/blocks/index"],

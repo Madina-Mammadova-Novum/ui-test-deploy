@@ -6,17 +6,17 @@ import PropTypes from 'prop-types';
 
 import { BlockShortDescription, BlockTitle, NextLink } from 'components/elements';
 
-import { linkPropTypes, mediaPropTypes } from '@/utils/types';
+import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
 
 const BlockCtaFeatured = ({ title, shortDescription, button, images }) => {
   return (
-    <section className="relative mb-28 sm:mb-44 2lg:mb-64">
+    <section className="relative mb-28 sm:mb-44 2xl:mb-64">
       <div className="grid grid-cols-1 gap-y-10 md:grid-cols-3 md:gap-x-6">
         <div className="col-span-1">
-          {title && <BlockTitle title={title} customStyles="lg:text-4xl 2lg:text-5xl" />}
+          {title && <BlockTitle title={title} customStyles="lg:text-4xl 2xl:text-5xl" />}
           {shortDescription && (
             <BlockShortDescription
               shortDescription={shortDescription}

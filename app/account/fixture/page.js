@@ -13,11 +13,9 @@ export function generateMetadata() {
 
 const FixturePage = () => {
   return (
-    <section className="grow px-5">
-      <AccountWrapper title="Fixture" suptitle="Offer stage #4" containerClass="w-full">
-        <Fixture />
-      </AccountWrapper>
-    </section>
+    <AccountWrapper containerClass="px-5">
+      <Fixture />
+    </AccountWrapper>
   );
 };
 

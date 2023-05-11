@@ -3,21 +3,33 @@ import usFlag from '@/assets/images/flag.png';
 export const fleetsHeader = [
   {
     text: '#',
+    type: 'INDEX',
+    width: 40,
   },
   {
     text: 'tanker name',
+    type: 'TANKER_NAME',
+    width: 234,
   },
   {
     text: 'imo',
+    type: 'IMO',
+    width: 78,
   },
   {
     text: 'open port',
+    type: 'OPEN_PORT',
+    width: 234,
   },
   {
     text: 'open date',
+    type: 'OPEN_DATE',
+    width: 234,
   },
   {
     text: 'tanker status',
+    type: 'TANKER_STATUS',
+    width: 125,
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -34,18 +46,51 @@ export const fleetsHeader = [
   },
 ];
 
-export const dropdownOptions = [
+export const prefixtureHeader = [
   {
-    countryFlag: usFlag,
-    value: 'Agioi Theodoroi, GRAGT',
+    text: '#',
+    type: 'INDEX',
+    width: 40,
   },
   {
-    countryFlag: usFlag,
-    value: 'Akrotiri, CYAKT',
+    text: 'Doc id',
+    type: 'DOC_ID',
+    width: 134,
   },
   {
-    countryFlag: usFlag,
-    value: 'Castellon de la Plana, ESCAS',
+    text: 'Title',
+    type: 'TITLE',
+    width: 171,
+  },
+  {
+    text: 'Comment',
+    type: 'COMMENT',
+    width: 105,
+  },
+  {
+    text: 'Doc name',
+    type: 'DOC_NAME',
+    width: 166,
+  },
+  {
+    text: 'Extension',
+    type: 'EXTENSION',
+    width: 110,
+  },
+  {
+    text: 'Size',
+    type: 'SIZE',
+    width: 112,
+  },
+  {
+    text: 'Date added',
+    type: 'DATE_ADDED',
+    width: 130,
+  },
+  {
+    text: '',
+    type: 'DOWNLOAD',
+    width: 127,
   },
 ];
 
@@ -199,112 +244,66 @@ export const searchRowHeaders = {
   ],
 };
 
-export const preFixtureHeaderData = [
-  [
+export const unauthorizedSearchExpandedData = {
+  vesselOwnerData: [
     {
-      label: 'cargo id',
-      content: {
-        text: 'TY7621',
-      },
+      title: 'Years in Operation',
+      description: 'Hidden info',
     },
     {
-      label: 'tanker name',
-      content: {
-        text: 'Harvey Deep Sea',
-        image: usFlag,
-      },
+      title: 'Number of Tankers',
+      description: 'Hidden info',
     },
     {
-      label: 'cargo type',
-      content: {
-        text: 'Gas (Liquified)',
-      },
-    },
-    {
-      label: 'quantity',
-      content: {
-        text: '24,118 tons',
-      },
-    },
-    {
-      label: 'load port',
-      content: {
-        text: 'Botas Natural Gas T... ESBCN',
-        image: usFlag,
-      },
-    },
-    {
-      label: 'laycan start',
-      content: {
-        text: 'Dec 21, 2021',
-      },
-    },
-    {
-      label: 'laycan end',
-      content: {
-        text: 'Dec 30, 2021',
-      },
-    },
-    {
-      label: 'countdown',
-      content: {
-        text: '15min',
-      },
+      title: 'Estimated average tanker DWT',
+      description: 'Hidden info',
     },
   ],
-  [
+  tankerData: [
     {
-      label: 'cargo id',
-      content: {
-        text: 'TY7621',
-      },
+      title: 'Ship age',
+      description: '≤ 5',
     },
     {
-      label: 'tanker name',
-      content: {
-        text: 'Harvey Deep Sea',
-        image: usFlag,
-      },
+      title: 'Cubic capacity 98%',
+      description: '25,*** m³',
     },
     {
-      label: 'cargo type',
-      content: {
-        text: 'Gas (Liquified)',
-      },
+      title: 'Number of Segregations',
+      description: 'Hidden info',
     },
     {
-      label: 'quantity',
-      content: {
-        text: '24,118 tons',
-      },
+      title: 'LOA',
+      description: 'Hidden info',
     },
     {
-      label: 'load port',
-      content: {
-        text: 'Botas Natural Gas T... ESBCN',
-        image: usFlag,
-      },
+      title: 'Beam',
+      description: 'Hidden info',
     },
     {
-      label: 'laycan start',
-      content: {
-        text: 'Dec 21, 2021',
-      },
-    },
-    {
-      label: 'laycan end',
-      content: {
-        text: 'Dec 30, 2021',
-      },
-    },
-    {
-      label: 'countdown',
-      content: {
-        text: '15min',
-      },
+      title: 'Type of Hull',
+      description: 'Hidden info',
     },
   ],
-];
+  countryData: [
+    {
+      title: 'Country of Registered Owner',
+      description: 'Hidden info',
+    },
+    {
+      title: 'Country of Disponent Owner',
+      description: 'Hidden info',
+    },
+    {
+      title: 'Country of Technical Operator',
+      description: 'Hidden info',
+    },
+    {
+      title: 'Country of Commercial Operator',
+      description: 'Hidden info',
+    },
+  ],
+};
 
 export const incomingOfferCommentsData = [
   {
@@ -425,122 +424,6 @@ export const COTData = {
     },
   ],
 };
-
-/// //// Negotiating
-
-export const negotiatingHeaderData = [
-  [
-    {
-      label: 'tanker name',
-      content: {
-        text: 'Harvey Deep Sea',
-        image: null,
-      },
-    },
-    {
-      label: 'imo',
-      content: {
-        text: '9131034',
-        image: null,
-      },
-    },
-    {
-      label: 'fleet name',
-      content: {
-        text: 'Fleet Base West',
-        image: null,
-      },
-    },
-    {
-      label: 'open date',
-      content: {
-        text: 'Dec 21, 2021',
-        image: null,
-      },
-    },
-    {
-      label: 'open port',
-      content: {
-        text: 'Botas Natural Gas Terminal, ESBCN',
-        image: null,
-      },
-    },
-  ],
-  [
-    {
-      label: 'tanker name',
-      content: {
-        text: 'Harvey Deep Sea',
-        image: null,
-      },
-    },
-    {
-      label: 'imo',
-      content: {
-        text: '9131034',
-        image: null,
-      },
-    },
-    {
-      label: 'fleet name',
-      content: {
-        text: 'Fleet Base West',
-        image: null,
-      },
-    },
-    {
-      label: 'open date',
-      content: {
-        text: 'Dec 21, 2021',
-        image: null,
-      },
-    },
-    {
-      label: 'open port',
-      content: {
-        text: 'Botas Natural Gas Terminal, ESBCN',
-        image: null,
-      },
-    },
-  ],
-  [
-    {
-      label: 'tanker name',
-      content: {
-        text: 'Harvey Deep Sea',
-        image: null,
-      },
-    },
-    {
-      label: 'imo',
-      content: {
-        text: '9131034',
-        image: null,
-      },
-    },
-    {
-      label: 'fleet name',
-      content: {
-        text: 'Fleet Base West',
-        image: null,
-      },
-    },
-    {
-      label: 'open date',
-      content: {
-        text: 'Dec 21, 2021',
-        image: null,
-      },
-    },
-    {
-      label: 'open port',
-      content: {
-        text: 'Botas Natural Gas Terminal, ESBCN',
-        image: null,
-      },
-    },
-  ],
-];
 
 export const negotiatingIncomingTableHeader = [
   {

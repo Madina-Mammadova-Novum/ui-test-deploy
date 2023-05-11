@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import { TextRowPropTypes } from '@/lib/types';
 
-const TextRow = ({ title, children }) => {
+const TextRow = ({ title = '', children }) => {
   return (
     <div className="text-xsm text-black">
       <span className="font-normal whitespace-nowrap">{title}:</span>
@@ -9,12 +9,6 @@ const TextRow = ({ title, children }) => {
   );
 };
 
-TextRow.defaultProps = {
-  title: '',
-};
-
-TextRow.propTypes = {
-  title: PropTypes.string,
-};
+TextRow.propTypes = TextRowPropTypes;
 
 export default TextRow;

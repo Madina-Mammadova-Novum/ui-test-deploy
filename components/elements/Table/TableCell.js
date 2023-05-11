@@ -1,88 +1,106 @@
 import { useMemo } from 'react';
+import ReactCountryFlag from 'react-country-flag';
 
-import PropTypes from 'prop-types';
+import { TableCellPropTypes } from '@/lib/types';
 
-import { NextImage } from '@/elements';
-import { TYPE } from '@/lib/constants';
-import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
+import { HoverTooltip } from '@/elements';
+import { ACTIONS } from '@/lib/constants';
+import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
+import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { type, value, name, fontStyle, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
+  const {
+    type,
+    value,
+    marked,
+    helperData,
+    name,
+    disabled,
+    editable,
+    editIcon,
+    countryFlag,
+    icon,
+    action,
+    actionText,
+    actionVariant = 'tertiary',
+    actionSize = 'medium',
+  } = cellProps;
 
   const printModal = useMemo(() => {
-    switch (type) {
-      case TYPE.PORT:
+    switch (action) {
+      case ACTIONS.PORT:
         return <EditPortForm title="edit open port" portName={name} />;
-      case TYPE.DATE:
+      case ACTIONS.DATE:
         return <EditDateForm title="edit open date" portName={name} />;
-      case TYPE.TANKER_STATUS:
+      case ACTIONS.TANKER_STATUS:
         return (
           <DeactivateTankerForm
             title="Deactivate your Tanker"
-            portName={toggle?.name}
+            portName={name}
             description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
           />
         );
+      case ACTIONS.VIEW_OFFER:
+        return <ViewIncomingOffer />;
+      case ACTIONS.VIEW_COUNTEROFFER:
+        return <ViewCounteroffer />;
+      case ACTIONS.VIEW_FAILED_OFFER:
+        return <ViewFailedOffer />;
       default:
         return null;
     }
-  }, [name, toggle?.name, type]);
+  }, [name, action]);
+
+  const printValue = useMemo(() => {
+    return helperData ? (
+      <HoverTooltip className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
+        <span className={`${disabled && 'text-gray'}`}>{value}</span>
+      </HoverTooltip>
+    ) : (
+      <span className={`${disabled ? 'text-gray' : 'text-inherit'}`}>{value}</span>
+    );
+  }, [disabled, helperData, value]);
 
   return (
-    <td name={type} className={`${disabled ? 'bg-gray-light' : 'bg-white'}`}>
-      {value && (
-        <div
-          className={`flex items-center ${!toggle ? 'w-full' : 'w-auto'} text-xsm text-${fontStyle?.color ?? 'black'} ${
-            fontStyle?.semibold ? 'font-semibold' : 'font-normal'
-          } `}
-        >
-          {countryFlag && (
-            <NextImage
-              width={20}
-              height={15}
-              customStyles="max-h-[15px] mr-1.5"
-              src={countryFlag}
-              alt={`${countryFlag} flag`}
-            />
-          )}
+    <td
+      name={type}
+      className={`${
+        disabled ? 'bg-gray-light' : 'bg-white'
+      } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
+    >
+      <div className="flex justify-between items-center text-xsm">
+        {value && (
+          <div className="flex gap-x-1 text-inherit">
+            {icon && <IconWrapper iconData={{ icon }} />}
+            {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
+            {printValue}
+            {marked && (
+              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
+                {marked}
+              </span>
+            )}
+          </div>
+        )}
 
-          <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
-        </div>
-      )}
-
-      {editable && (
-        <ModalWindow
-          buttonProps={{
-            icon: { before: editIcon },
-            variant: 'tertiary',
-            size: 'small',
-            className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5 mr-5' : '!p-0',
-          }}
-        >
-          {printModal}
-        </ModalWindow>
-      )}
+        {editable && (
+          <ModalWindow
+            containerClass="overflow-y-[unset]"
+            buttonProps={{
+              icon: { before: editIcon },
+              variant: actionVariant,
+              size: actionSize,
+              text: actionText,
+              className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
+            }}
+          >
+            {printModal}
+          </ModalWindow>
+        )}
+      </div>
     </td>
   );
 };
 
-TableCell.propTypes = {
-  cellProps: PropTypes.shape({
-    countryFlag: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
-    type: PropTypes.string,
-    value: PropTypes.string,
-    name: PropTypes.string,
-    fontStyle: PropTypes.shape({
-      semibold: PropTypes.bool,
-      color: PropTypes.string,
-    }),
-    editIcon: PropTypes.node,
-    badge: PropTypes.string,
-    toggle: PropTypes.bool,
-    editable: PropTypes.bool,
-    disabled: PropTypes.bool,
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-  }).isRequired,
-};
+TableCell.propTypes = TableCellPropTypes;
 
 export default TableCell;

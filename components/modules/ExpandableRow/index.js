@@ -1,11 +1,12 @@
 'use client';
 
-import React, { cloneElement, useEffect, useRef, useState } from 'react';
+import { cloneElement, useEffect, useRef, useState } from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-const ExpandableRow = ({ header, footer, children, expand }) => {
+import { ExpandableRowPropTypes } from '@/lib/types';
+
+const ExpandableRow = ({ header, footer, children, expand = false }) => {
   const [toggle, setToggle] = useState(false);
   const contentRef = useRef(null);
   const headerWithProps = cloneElement(header, { toggle });
@@ -15,7 +16,7 @@ const ExpandableRow = ({ header, footer, children, expand }) => {
   }, [expand]);
 
   return (
-    <div className="rounded-[10px] shadow-xmd box-border bg-white">
+    <div className="rounded-base shadow-xmd box-border bg-white">
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerWithProps}
       </div>
@@ -33,15 +34,6 @@ const ExpandableRow = ({ header, footer, children, expand }) => {
   );
 };
 
-ExpandableRow.defaultProps = {
-  expand: false,
-};
-
-ExpandableRow.propTypes = {
-  header: PropTypes.node.isRequired,
-  footer: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired,
-  expand: PropTypes.bool,
-};
+ExpandableRow.propTypes = ExpandableRowPropTypes;
 
 export default ExpandableRow;

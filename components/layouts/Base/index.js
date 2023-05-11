@@ -1,11 +1,10 @@
-import React from 'react';
+import { BaseLayoutPropTypes } from '@/lib/types';
 
-import PropTypes from 'prop-types';
+import { ClientSidePackages, TailwindIndicator } from '@/common';
 
 import '@/styles/index.css';
-import { ClientSidePackages } from '@/common';
 
-const BaseLayout = ({ children, className }) => {
+const BaseLayout = ({ children, className = '' }) => {
   return (
     <html lang="en">
       {/*
@@ -16,18 +15,12 @@ const BaseLayout = ({ children, className }) => {
       <body className={className}>
         {children}
         <ClientSidePackages />
+        <TailwindIndicator />
       </body>
     </html>
   );
 };
 
-BaseLayout.defaultProps = {
-  className: '',
-};
-
-BaseLayout.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-};
+BaseLayout.propTypes = BaseLayoutPropTypes;
 
 export default BaseLayout;

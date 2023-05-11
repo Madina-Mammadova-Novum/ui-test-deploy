@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
 
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+
 /**
  * createMarkup
  * @param content
@@ -142,7 +144,7 @@ export function hasNestedArrays(data) {
 }
 
 export function getFilledArray(length) {
-  return Array.from({ length }).map((_, index) => index);
+  return Array.from({ length }).map((_, index) => index + 1);
 }
 
 export function getValueWithPath(object, path, defaultValue) {
@@ -182,15 +184,15 @@ export const getButtonClassNames = (variant, size) => {
     if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker';
     if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-dark';
     if (variant === 'tertiary')
-      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-grey hover:border-black';
+      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white text-red h-10 px-5 py-2.5 rounded-md border border-red-medium hover:border-red';
   }
   if (size === 'medium') {
     if (variant === 'primary')
-      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-red';
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker';
     if (variant === 'secondary')
-      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-grey hover:border-black';
+      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
@@ -217,9 +219,12 @@ export const disablePlusMinusSymbols = (e) => {
   if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
+export const options = (values) => values?.map((value) => ({ label: value, value }));
+
+export const countriesOptions = (data) => countryOptionsAdapter(data);
+
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
   if (data === null || data === undefined) return [];
-
   return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
     if (value === null || value === undefined) throw new Error('value cannot be empty');
     if (label === null || label === undefined) throw new Error('label cannot be empty');
@@ -232,4 +237,31 @@ export const removeByIndex = (data, index) => {
   if (data === null || data === undefined) return null;
 
   return data.filter((_, idx) => idx !== index);
+};
+
+export const filterDataByLowerCase = (inputValue, data) => {
+  return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+};
+
+export const resetObjectFields = (initialObject, resetType = null) => {
+  Object.keys(initialObject).forEach((key) => {
+    if (Array.isArray(initialObject[key])) {
+      initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+    } else {
+      initialObject[key] = resetType;
+    }
+  });
+};
+
+export const resetForm = (methods) => {
+  methods.reset((formValues) => {
+    resetObjectFields(formValues);
+    return formValues;
+  });
+};
+
+export const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 };

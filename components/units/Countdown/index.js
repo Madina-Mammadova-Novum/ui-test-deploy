@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { CountdownPropTypes } from '@/lib/types';
 
 import ClockSVG from '@/assets/images/clock.svg';
 
-const Countdown = ({ time, customStyles }) => {
+const Countdown = ({ time, customStyles = '' }) => {
   return (
     <div className={`px-4 py-1 border-l-2 border-l-blue ${customStyles}`}>
       <span className="uppercase font-semibold">countdown</span>
@@ -14,13 +14,6 @@ const Countdown = ({ time, customStyles }) => {
   );
 };
 
-Countdown.defaultProps = {
-  customStyles: '',
-};
-
-Countdown.propTypes = {
-  time: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-};
+Countdown.propTypes = CountdownPropTypes;
 
 export default Countdown;

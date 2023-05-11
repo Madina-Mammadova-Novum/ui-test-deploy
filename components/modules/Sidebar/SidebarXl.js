@@ -1,20 +1,18 @@
-import PropTypes from 'prop-types';
+import { SidebarXlPropTypes } from '@/lib/types';
 
 import { ArrowIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
-import { Accordion, Button, NextLink } from '@/elements';
+import { Button, NavTree, NextLink } from '@/elements';
 
-const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
-  const printMenu = (item) => (
-    <Accordion variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
-  );
+const SidebarXl = ({ data, isResized, onResize }) => {
+  const printMenu = (item) => <NavTree variant="opened" key={item?.id} data={item} />;
 
   return (
     <>
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <div className="flex flex-col gap-1.5 relative">
+      <ul className="flex flex-col gap-1.5 relative">
         <Button
           buttonProps={{
             icon: {
@@ -35,19 +33,11 @@ const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
           customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
         />
         {data?.map(printMenu)}
-      </div>
+      </ul>
     </>
   );
 };
 
-SidebarXl.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  opened: PropTypes.bool.isRequired,
-  searchVal: PropTypes.string.isRequired,
-  isResized: PropTypes.bool.isRequired,
-  onResize: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+SidebarXl.propTypes = SidebarXlPropTypes;
 
 export default SidebarXl;
