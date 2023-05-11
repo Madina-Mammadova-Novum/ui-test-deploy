@@ -9,7 +9,7 @@ build-staging:
   only:
     - stage
   tags:
-    - stage
+    - staging
   script:
     - export NODE_OPTIONS=--max_old_space_size=4096
     - yarn install
