@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { cloneElement, useState } from 'react';
 
 import { TooltipParamsPropTypes } from '@/lib/types';
 
@@ -15,16 +15,18 @@ const ManualTooltip = ({ data, className, children }) => {
 
   const { title, description } = data;
 
+  const childrenWithProps = cloneElement(children, { className: showTooltip ? 'fill-blue' : 'fill-black' });
+
   return (
     <div className="group transition-all">
       <span onMouseEnter={handleEnter} className="text-gray cursor-help font-bold text-xxs">
-        {children}
+        {childrenWithProps}
       </span>
       {showTooltip && (
         <div
           className={`absolute top-8 ${className} bg-white transition-all max-w-xs overflow-visible flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-base`}
         >
-          <div className="flex justify-between items-center min-w-[280px]">
+          <div className="flex justify-between items-center min-w-[240px]">
             {title && <span className="capitalize font-semibold text-xsm">{title}</span>}
             <Button
               buttonProps={{ icon: { before: <CloseIcon /> } }}

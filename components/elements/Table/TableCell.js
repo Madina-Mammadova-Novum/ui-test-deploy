@@ -4,7 +4,7 @@ import ReactCountryFlag from 'react-country-flag';
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip } from '@/elements';
-import { ACTIONS } from '@/lib/constants';
+import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
 
@@ -46,8 +46,10 @@ const TableCell = ({ cellProps }) => {
         return <ViewCounteroffer />;
       case ACTIONS.VIEW_FAILED_OFFER:
         return <ViewFailedOffer />;
+      case ACTIONS.CHARTERER_INFORMATION:
+        return <div>{actionText}</div>;
       default:
-        return null;
+        return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
     }
   }, [name, action]);
 
@@ -90,7 +92,7 @@ const TableCell = ({ cellProps }) => {
               variant: actionVariant,
               size: actionSize,
               text: actionText,
-              className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
+              className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0',
             }}
           >
             {printModal}
