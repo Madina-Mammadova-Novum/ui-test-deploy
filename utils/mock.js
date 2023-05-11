@@ -1,5 +1,7 @@
+import React from 'react'
 import usFlag from '@/assets/images/flag.png';
 import TooltipIcon from '@/assets/images/infoCircle.svg';
+import CargoIdTooltip from '@/units/CargoIdTooltip';
 
 export const fleetsHeader = [
   {
@@ -429,14 +431,7 @@ export const negotiatingIncomingTableHeader = [
     icon: <TooltipIcon />,
     helperData: {
       title: 'Cargo ID',
-      description: (
-        <>
-          <p>Cargo ID is a combination of some cargo info, tanker info, and charterer info.</p>
-          <p style={{ marginTop: '10px' }}>
-            The real name of the tanker is hidden until the <span style={{ fontWeight: 700 }}>On subs phase</span>.
-          </p>
-        </>
-      ),
+      description: <CargoIdTooltip />,
     },
   },
   {
@@ -546,14 +541,7 @@ export const negotiatingCounterofferTableHeader = [
     icon: <TooltipIcon />,
     helperData: {
       title: 'Cargo ID',
-      description: (
-        <>
-          <p>Cargo ID is a combination of some cargo info, tanker info, and charterer info.</p>
-          <p style={{ marginTop: '10px' }}>
-            The real name of the tanker is hidden until the <span style={{ fontWeight: 700 }}>On subs phase</span>.
-          </p>
-        </>
-      ),
+      description: <CargoIdTooltip />,
     },
   },
   {
@@ -650,14 +638,7 @@ export const negotiatingFailedTableHeader = [
     icon: <TooltipIcon />,
     helperData: {
       title: 'Cargo ID',
-      description: (
-        <>
-          <p>Cargo ID is a combination of some cargo info, tanker info, and charterer info.</p>
-          <p style={{ marginTop: '10px' }}>
-            The real name of the tanker is hidden until the <span style={{ fontWeight: 700 }}>On subs phase</span>.
-          </p>
-        </>
-      ),
+      description: <CargoIdTooltip />,
     },
   },
   {
