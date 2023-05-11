@@ -1,5 +1,7 @@
 import React from 'react';
 
+import delve from 'dlv';
+
 import { linkAdapter } from '@/adapters/global';
 import { ExternalLinkAltIcon } from '@/assets/icons';
 import Logo from '@/assets/images/logo.svg';
@@ -8,14 +10,23 @@ import { Copyright, NextLink, Title } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { FooterNavBlock, SocialNetworks } from '@/units';
+import { makeId } from '@/utils/helpers';
 
 const PageFooter = async () => {
-  const { navigation: navigationSlug } = await getSingleType('footer', 'en');
-  const contactInfo = await getSingleType('contact-information', 'en');
-  const { address, phones, emails, link } = contactInfo;
+  const footerData = await getSingleType('footer', 'en');
+  const navigationSlug = delve(footerData, 'data.navigation');
+  const navigationData = await getNavigation(navigationSlug, 'en');
+  const navigation = delve(navigationData, 'data');
+
+  const contactInfoData = await getSingleType('contact-information', 'en');
+  const address = delve(contactInfoData, 'data.address');
+  const phones = delve(contactInfoData, 'data.phones');
+  const emails = delve(contactInfoData, 'data.emails');
+  const link = delve(contactInfoData, 'data.link');
   const mapLink = linkAdapter(link);
-  const navigation = await getNavigation(navigationSlug, 'en');
-  const legalNavigation = await getNavigation('legal-navigation', 'en');
+
+  const legalNavigationData = await getNavigation('legal-navigation', 'en');
+  const legalNavigation = delve(legalNavigationData, 'data');
 
   return (
     <footer className="py-[30px] bg-white">
@@ -26,7 +37,7 @@ const PageFooter = async () => {
         <div className="flex mt-[30px] gap-x-10">
           {navigation.length > 0 &&
             navigation.map(({ title, items }) => {
-              return <FooterNavBlock items={items} title={title} />;
+              return <FooterNavBlock key={makeId()} items={items} title={title} />;
             })}
           {legalNavigation.length > 0 && <FooterNavBlock items={legalNavigation} title="Legal" />}
           <div className="w-[166px]">
@@ -59,7 +70,7 @@ const PageFooter = async () => {
             <ul className="space-y-2 text-black">
               {phones &&
                 phones.map(({ Phone }) => (
-                  <li>
+                  <li key={makeId()}>
                     <NextLink href={`tel:${Phone}`} className="text-xsm">
                       {Phone}
                     </NextLink>
@@ -67,7 +78,7 @@ const PageFooter = async () => {
                 ))}
               {emails &&
                 emails.map(({ Email }) => (
-                  <li>
+                  <li key={makeId()}>
                     <NextLink href={`mailto:${Email}`} className="text-xsm">
                       {Email}
                     </NextLink>

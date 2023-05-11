@@ -3,7 +3,6 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
-  positionsAdapter,
   resetPasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
@@ -27,28 +26,29 @@ export async function resetPassword({ data }) {
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await postData(`auth/sing-up?type=owner`, body);
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
+  const response = await postData(`auth/signup?type=owner`, body);
+  return response;
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/sign-up?type=charterer`, body);
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: SYSTEM_ERROR };
+  const response = await postData(`auth/signup?type=charterer`, body);
+  return response;
 }
 
 export async function postVeriffData({ data }) {
-  const response = await postData(`auth/veriffication`, data);
-  const result = await response.json();
+  const { data: link } = await postData(`auth/veriffication`, data);
 
-  if (!response.ok) return { error: SYSTEM_ERROR };
+  if (link) {
+    return { link: link?.redirectUrl };
+  }
 
-  return { link: result?.redirectUrl };
+  return { error: SYSTEM_ERROR };
 }
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await postData(`auth/login`, JSON.stringify(body));
+  const response = await postData(`auth/login`, body);
   return response;
 }
 
@@ -84,7 +84,7 @@ export async function updateCompany({ data }) {
 
 export async function getUserPositions() {
   const { data } = await getData(`account/my-positions`);
-  return positionsAdapter({ data });
+  return data;
 }
 
 export async function getUserFixtures() {

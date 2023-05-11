@@ -46,6 +46,54 @@ export const fleetsHeader = [
   },
 ];
 
+export const prefixtureHeader = [
+  {
+    text: '#',
+    type: 'INDEX',
+    width: 40,
+  },
+  {
+    text: 'Doc id',
+    type: 'DOC_ID',
+    width: 134,
+  },
+  {
+    text: 'Title',
+    type: 'TITLE',
+    width: 171,
+  },
+  {
+    text: 'Comment',
+    type: 'COMMENT',
+    width: 105,
+  },
+  {
+    text: 'Doc name',
+    type: 'DOC_NAME',
+    width: 166,
+  },
+  {
+    text: 'Extension',
+    type: 'EXTENSION',
+    width: 110,
+  },
+  {
+    text: 'Size',
+    type: 'SIZE',
+    width: 112,
+  },
+  {
+    text: 'Date added',
+    type: 'DATE_ADDED',
+    width: 130,
+  },
+  {
+    text: '',
+    type: 'DOWNLOAD',
+    width: 127,
+  },
+];
+
 export const tabs = [
   {
     value: 'value-1',

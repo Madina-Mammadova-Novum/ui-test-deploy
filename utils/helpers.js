@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
 
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+
 /**
  * createMarkup
  * @param content
@@ -219,9 +221,10 @@ export const disablePlusMinusSymbols = (e) => {
 
 export const options = (values) => values?.map((value) => ({ label: value, value }));
 
+export const countriesOptions = (data) => countryOptionsAdapter(data);
+
 export const convertDataToOptions = (data, keyValue, keyLabel) => {
   if (data === null || data === undefined) return [];
-
   return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
     if (value === null || value === undefined) throw new Error('value cannot be empty');
     if (label === null || label === undefined) throw new Error('label cannot be empty');
@@ -240,12 +243,25 @@ export const filterDataByLowerCase = (inputValue, data) => {
   return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
-export const resetObjectFields = (initialObject) => {
+export const resetObjectFields = (initialObject, resetType = null) => {
   Object.keys(initialObject).forEach((key) => {
     if (Array.isArray(initialObject[key])) {
       initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
     } else {
-      initialObject[key] = null;
+      initialObject[key] = resetType;
     }
+  });
+};
+
+export const resetForm = (methods) => {
+  methods.reset((formValues) => {
+    resetObjectFields(formValues);
+    return formValues;
+  });
+};
+
+export const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
   });
 };

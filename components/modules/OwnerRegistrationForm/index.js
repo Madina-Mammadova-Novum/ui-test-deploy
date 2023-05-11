@@ -25,6 +25,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = () => {
@@ -48,14 +49,13 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await ownerSignUp({ data: formData });
-    if (data) {
-      successToast('Check your email for validating the account');
-      methods.reset();
+    const { data } = await ownerSignUp({ data: formData });
+    if (data.status === 200) {
+      successToast(data.alert);
+      resetForm(methods);
     }
-    if (error) {
-      errorToast(error.message, error.description);
-      console.error(error.errors);
+    if (data.status !== 200) {
+      errorToast(data.alert);
     }
   };
 

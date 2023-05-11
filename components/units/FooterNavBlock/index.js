@@ -1,11 +1,10 @@
 import { FooterNavBlockPropTypes } from '@/lib/types';
 
 import { NextLink, Title } from '@/elements';
-import { makeId } from '@/utils/helpers';
 
 const FooterNavBlock = ({ title, items }) => {
   return (
-    <div className="w-40" key={makeId()}>
+    <div className="w-40">
       <Title level={5} className="title-main text-gray mb-4">
         {title}
       </Title>

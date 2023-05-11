@@ -1,40 +1,63 @@
 import { useMemo } from 'react';
+import ReactCountryFlag from 'react-country-flag';
 
 import { TableCellPropTypes } from '@/lib/types';
 
-import { NextImage, Tooltip } from '@/elements';
-import { TYPE } from '@/lib/constants';
-import { DeactivateTankerForm, EditDateForm, EditPortForm, ModalWindow } from '@/units';
+import { HoverTooltip } from '@/elements';
+import { ACTIONS } from '@/lib/constants';
+import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
+import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const { type, value, marked, helperData, name, disabled, toggle, editable, editIcon, countryFlag } = cellProps;
+  const {
+    type,
+    value,
+    marked,
+    helperData,
+    name,
+    disabled,
+    editable,
+    editIcon,
+    countryFlag,
+    icon,
+    action,
+    actionText,
+    actionVariant = 'tertiary',
+    actionSize = 'medium',
+  } = cellProps;
 
   const printModal = useMemo(() => {
-    switch (type) {
-      case TYPE.PORT:
+    switch (action) {
+      case ACTIONS.PORT:
         return <EditPortForm title="edit open port" portName={name} />;
-      case TYPE.DATE:
+      case ACTIONS.DATE:
         return <EditDateForm title="edit open date" portName={name} />;
-      case TYPE.TANKER_STATUS:
+      case ACTIONS.TANKER_STATUS:
         return (
           <DeactivateTankerForm
             title="Deactivate your Tanker"
-            portName={toggle?.name}
+            portName={name}
             description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
           />
         );
+      case ACTIONS.VIEW_OFFER:
+        return <ViewIncomingOffer />;
+      case ACTIONS.VIEW_COUNTEROFFER:
+        return <ViewCounteroffer />;
+      case ACTIONS.VIEW_FAILED_OFFER:
+        return <ViewFailedOffer />;
       default:
         return null;
     }
-  }, [name, toggle?.name, type]);
+  }, [name, action]);
 
   const printValue = useMemo(() => {
     return helperData ? (
-      <Tooltip variant="hover" className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
+      <HoverTooltip className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
-      </Tooltip>
+      </HoverTooltip>
     ) : (
-      <span className={`${disabled ? 'text-gray' : 'text-black'}`}>{value}</span>
+      <span className={`${disabled ? 'text-gray' : 'text-inherit'}`}>{value}</span>
     );
   }, [disabled, helperData, value]);
 
@@ -47,13 +70,12 @@ const TableCell = ({ cellProps }) => {
     >
       <div className="flex justify-between items-center text-xsm">
         {value && (
-          <div className="flex gap-x-5">
-            {countryFlag && (
-              <NextImage width={20} height={15} customStyles="h-4" src={countryFlag} alt={`${countryFlag} flag`} />
-            )}
+          <div className="flex gap-x-1 text-inherit">
+            {icon && <IconWrapper iconData={{ icon }} />}
+            {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
             {printValue}
             {marked && (
-              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mr-2 text-black rounded-md">
+              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
                 {marked}
               </span>
             )}
@@ -62,11 +84,13 @@ const TableCell = ({ cellProps }) => {
 
         {editable && (
           <ModalWindow
+            containerClass="overflow-y-[unset]"
             buttonProps={{
               icon: { before: editIcon },
-              variant: 'tertiary',
-              size: 'small',
-              className: !toggle ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
+              variant: actionVariant,
+              size: actionSize,
+              text: actionText,
+              className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0 mt-1.5',
             }}
           >
             {printModal}
