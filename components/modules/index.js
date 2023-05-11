@@ -22,6 +22,7 @@ import Negotiating from '@/modules/Negotiating';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
+import OnSubs from '@/modules/OnSubs';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
@@ -38,7 +39,6 @@ import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
-import OnSubs from '@/modules/OnSubs';
 
 export {
   AccountContainer,
