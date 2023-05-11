@@ -106,3 +106,8 @@ export async function getUserDetails() {
   const { data } = await getData(`account/user-info`);
   return userDetailsAdapter({ data });
 }
+
+export async function getUserOnSubs() {
+  const { data } = await getData(`account/on-subs`);
+  return data;
+}

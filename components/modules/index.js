@@ -38,6 +38,7 @@ import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
+import OnSubs from '@/modules/OnSubs';
 
 export {
   AccountContainer,
@@ -83,4 +84,5 @@ export {
   ViewFailedOffer,
   ViewOffer,
   NotFound,
+  OnSubs,
 };
