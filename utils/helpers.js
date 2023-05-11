@@ -265,3 +265,9 @@ export const sleep = (ms) => {
     setTimeout(resolve, ms);
   });
 };
+
+export const isEmpty = (value) => {
+  if (value === undefined || value === null) return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  return typeof value === 'object' && Object.keys(value).length === 0;
+};

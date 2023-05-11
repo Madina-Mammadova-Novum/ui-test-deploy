@@ -14,5 +14,7 @@ export function getSingleTypeEndpoint(apiID, locale) {
 
 export const getSingleType = async (apiID, locale) => {
   const response = await getData(`single-type?s=${apiID}&l=${locale}`);
-  return response;
+  return {
+    ...response,
+  };
 };

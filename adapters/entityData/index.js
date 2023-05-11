@@ -39,9 +39,7 @@ export const entitiesDataAdapter = async ({ data }) => {
 export const entityDataResponseAdapter = async (response, locale, collectionType) => {
   const { data, error } = response;
   if (error) return entityDataError(error);
-
   if (Array.isArray(data) && data.length === 0) return null;
-
   const responseData = Array.isArray(data) && data.length > 0 ? data[0] : data;
   const entityData = responseData ? await entityDataAdapter({ data: responseData }) : null;
   return {
