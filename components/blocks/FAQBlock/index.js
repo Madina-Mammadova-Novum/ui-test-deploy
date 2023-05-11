@@ -45,10 +45,13 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
                   },
                 ]}
               />
-            ))}
+            ))
+          }
+          {cta &&
           <div className="text-black pt-5">
-            {cta && <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />}
+            <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons}/>
           </div>
+          }
           <div className="rounded-base  h-[calc(100%_-_135px)] w-full absolute shadow-xmd bottom-0 left-0 -z-10" />
         </div>
       </div>

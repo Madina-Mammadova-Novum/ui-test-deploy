@@ -1,4 +1,7 @@
+import React from "react";
+
 import { metaData } from '@/adapters/metaData';
+// import { BlockManager } from "@/common";
 import { AccountWrapper, FAQBlock } from '@/modules';
 
 export function generateMetadata() {
@@ -12,9 +15,20 @@ export function generateMetadata() {
 }
 
 const Faq = () => {
+  // const blocks = [
+  //   {
+  //     "id": 4,
+  //     "__component": "blocks.faq-block",
+  //     "title": null,
+  //     "shortDescription": null,
+  //     "subTitle": null
+  //   },
+  // ]
   return (
     <AccountWrapper containerClass="grow px-5">
-      <FAQBlock/>
+      {/* <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div> */}
+       <FAQBlock/>
+
     </AccountWrapper>
   );
 };
