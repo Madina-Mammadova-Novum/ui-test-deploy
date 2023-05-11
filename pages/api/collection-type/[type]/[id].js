@@ -7,8 +7,8 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getStrapiURL(`/${type}/${id}?populate=*,coverImage,socialLinks.coverImage`),
-    dataAdapter: entityDataResponseAdapter,
+    path: getStrapiURL(`/${type}/${id}?populate=deep`),
+    dataAdapter: entityDataResponseAdapter, // todo: the need to dynamically connect an adapter for each type of collection
     requestMethod: 'GET',
   });
 }
