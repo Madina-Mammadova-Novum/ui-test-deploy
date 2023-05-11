@@ -3,6 +3,7 @@ import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
+import CargoIdTooltip from '@/units/CargoIdTooltip';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
@@ -41,7 +42,6 @@ import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
-import CargoIdTooltip from '@/units/CargoIdTooltip';
 
 export * from '@/units/Account';
 
@@ -89,5 +89,5 @@ export {
   DeactivateTankerForm,
   SocialNetworks,
   LegalNavigation,
-  CargoIdTooltip
+  CargoIdTooltip,
 };

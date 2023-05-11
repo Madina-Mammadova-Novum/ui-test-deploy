@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+
 import usFlag from '@/assets/images/flag.png';
 import TooltipIcon from '@/assets/images/infoCircle.svg';
 import CargoIdTooltip from '@/units/CargoIdTooltip';
