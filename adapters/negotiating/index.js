@@ -77,7 +77,7 @@ export const incomingTabRowsDataAdapter = ({ data }) => {
 export const incomingTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { incomingOfferCargoId, laycanStart, laycanEnd, loadPort, status, dateReceived, countdown, id } = data;
+  const { cargoId, laycanStart, laycanEnd, loadPort, status, dateReceived, countdown, id } = data;
 
   return [
     {
@@ -85,8 +85,12 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: incomingOfferCargoId,
       type: TYPE.SEMIBOLD_BLUE,
+      action: ACTIONS.CHARTERER_INFORMATION,
+      actionText: cargoId,
+      actionVariant: 'primary',
+      actionSize: 'small',
+      editable: true,
     },
     {
       id,
@@ -137,7 +141,7 @@ export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
 export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { sentOfferCargoId, laycanStart, laycanEnd, loadPort, dateSent, countdown, id } = data;
+  const { cargoId, laycanStart, laycanEnd, loadPort, dateSent, countdown, id } = data;
 
   return [
     {
@@ -145,8 +149,12 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: sentOfferCargoId,
       type: TYPE.SEMIBOLD_BLUE,
+      action: ACTIONS.CHARTERER_INFORMATION,
+      actionText: cargoId,
+      actionVariant: 'primary',
+      actionSize: 'small',
+      editable: true,
     },
     {
       id,
@@ -192,7 +200,7 @@ export const failedTabRowsDataAdapter = ({ data }) => {
 export const failedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { failedOfferCargoId, laycanStart, laycanEnd, loadPort, dateFailed, reason, id } = data;
+  const { cargoId, laycanStart, laycanEnd, loadPort, dateFailed, reason, id } = data;
 
   return [
     {
@@ -200,8 +208,12 @@ export const failedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: failedOfferCargoId,
       type: TYPE.SEMIBOLD_BLUE,
+      action: ACTIONS.CHARTERER_INFORMATION,
+      actionText: cargoId,
+      actionVariant: 'primary',
+      actionSize: 'small',
+      editable: true,
     },
     {
       id,

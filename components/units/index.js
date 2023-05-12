@@ -3,6 +3,7 @@ import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
+import CargoIdTooltip from '@/units/CargoIdTooltip';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
@@ -88,4 +89,5 @@ export {
   DeactivateTankerForm,
   SocialNetworks,
   LegalNavigation,
+  CargoIdTooltip,
 };

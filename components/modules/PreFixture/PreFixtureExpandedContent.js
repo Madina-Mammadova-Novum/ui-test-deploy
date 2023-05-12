@@ -42,7 +42,7 @@ const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
         />
         <Button
           buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase text-[10px] font-bold absolute left-1/2 lg:left-[unset] -translate-x-1/2 lg:translate-x-[unset] lg:right-0 bottom-[10%] lg:bottom-[unset] lg:top-[50%] lg:translate-y-[-75%] whitespace-nowrap"
+          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute left-1/2 lg:left-[unset] -translate-x-1/2 lg:translate-x-[unset] lg:right-0 bottom-[10%] lg:bottom-[unset] lg:top-[50%] lg:translate-y-[-75%] whitespace-nowrap"
         />
       </div>
       {tabContent()}

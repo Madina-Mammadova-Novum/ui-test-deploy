@@ -10,14 +10,14 @@ const Table = ({ headerData, rows }) => {
 
   return headerData.length > 0 ? (
     <div className="table-scroll-wrapper">
-      <div className="w-full border border-purple-light rounded-base relative overflow-hidden">
+      <div className="w-full relative border bg-purple-light rounded-t-lg">
         <table className="min-w-full border-collapse table-fixed">
           {headerData.length && (
-            <thead className="bg-purple-light uppercase text-black font-semibold text-xs-sm">
+            <thead className="uppercase text-black font-semibold text-xs-sm">
               <TableHeader headerData={headerData} />
             </thead>
           )}
-          {rows.length && <tbody className="border-purple-light">{rows.map(printTableRow)}</tbody>}
+          {rows.length && <tbody>{rows.map(printTableRow)}</tbody>}
         </table>
       </div>
     </div>

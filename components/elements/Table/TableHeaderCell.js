@@ -9,7 +9,7 @@ const TableHeaderCell = ({ text, type, helperData, icon, ...rest }) => {
       <p className="flex items-center px-4 gap-x-1.5">
         <span>{text}</span>
         {helperData && (
-          <ManualTooltip className="-left-[20vh] lg:-left-[14vh]" data={helperData}>
+          <ManualTooltip className={helperData.className} data={helperData}>
             {icon}
           </ManualTooltip>
         )}

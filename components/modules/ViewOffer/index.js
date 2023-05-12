@@ -45,10 +45,10 @@ const ViewOffer = ({ setStep, closeModal }) => {
 
       <div className="flex text-[12px] items-center mt-5">
         <Countdown time="1d 1h 50m" />
-        <div className="pl-4 border-l h-min">
+        <div className="pl-4 border-l h-min flex flex-col items-start">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button
-            customStyles="!text-[10px] font-bold !px-1 uppercase leading-none"
+            customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
           />
         </div>
