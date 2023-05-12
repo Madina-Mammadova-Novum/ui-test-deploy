@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 import { metaData } from '@/adapters/metaData';
 // import { BlockManager } from "@/common";
-import { AccountWrapper, FAQBlock } from '@/modules';
+import { AccountWrapper, FAQByType } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -27,8 +27,7 @@ const Faq = () => {
   return (
     <AccountWrapper containerClass="grow px-5">
       {/* <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div> */}
-       <FAQBlock/>
-
+      <FAQByType />
     </AccountWrapper>
   );
 };

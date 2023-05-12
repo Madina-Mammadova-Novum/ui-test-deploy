@@ -28,7 +28,6 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
       value: ctaBlock.title,
     };
   });
-
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const printCtaBlockItem = (item) => {

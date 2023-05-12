@@ -21,9 +21,7 @@ export const faqsAdapter = ({ data }) => {
   });
 };
 
-export const faqsAccountAdapter = ( data, categoryId ) => {
+export const faqsByTypeAdapter = (data, categoryId) => {
   if (data === null) return [];
-  return data
-    .filter(({ category, questionType }) => category.id === categoryId && questionType !== null)
-
-}
+  return data.filter(({ category, questionType }) => category.id === categoryId && questionType !== null);
+};
