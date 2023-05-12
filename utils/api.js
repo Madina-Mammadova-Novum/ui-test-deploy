@@ -2,7 +2,6 @@ import delve from 'dlv';
 
 import { responseAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { isEmpty } from '@/utils/helpers';
 
 /**
 
@@ -110,15 +109,17 @@ export const errorHandler = (res, status, message, errors = []) => {
  */
 export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod }) => {
   try {
-    const { status, data, meta } = await apiHandler({ path, requestMethod, body: req.body });
-    if (status === 500) {
-      const { errors } = data.error;
-      return errorHandler(res, status, 'External server error', errors);
+    const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body });
+    if (error) {
+      const { message, errors } = error;
+      const errorMessage = status === 500 ? 'External server error' : message;
+      return errorHandler(res, status, errorMessage, errors);
     }
-    const responseData = await dataAdapter({ data });
+    const { data: responseData } = await dataAdapter({ data });
+    console.log({ responseData });
     if (!responseData) return errorHandler(res, 404, 'Not Found');
     const { data: responseDataAdapted } = responseAdapter(responseData);
-    return res.status(200).json({ status, data: responseDataAdapted, meta: isEmpty(meta) ? null : meta, error: null });
+    return res.status(200).json({ status, data: responseDataAdapted, error: null, ...rest });
   } catch (error) {
     console.error(error);
     return errorHandler(res, 500, error.message);
