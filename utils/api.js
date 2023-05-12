@@ -114,7 +114,7 @@ export const responseHandler = async ({ req, res, path, dataAdapter, requestMeth
     }
     const responseData = await dataAdapter({ data });
     const { data: responseDataAdapted } = responseAdapter(responseData);
-    return res.status(200).json({ status, data: responseDataAdapted, error, ...rest });
+    return res.status(status).json({ status, data: responseDataAdapted, error, ...rest });
   } catch (error) {
     console.error(error);
     return errorHandler(res, 500, error.message, [error]);
