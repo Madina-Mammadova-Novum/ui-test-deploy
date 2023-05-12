@@ -2,7 +2,6 @@ import delve from 'dlv';
 
 import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { isEmpty } from '@/utils/helpers';
 
 /**
 
@@ -70,7 +69,6 @@ export const apiHandler = async (options) => {
     }
     const result = ok ? responseBody : null;
     const error = ok ? null : requestErrorHandler(status, statusText, [responseBody]);
-
     return {
       status,
       ...responseAdapter(result),
@@ -83,7 +81,7 @@ export const apiHandler = async (options) => {
 };
 
 /**
-Handles the error response from the API and sends it as a JSON response
+  Handles the error response from the API and sends it as a JSON response
   @function errorHandler
   @param {object} res - The response object
   @param {number} status - The status code for the response
@@ -91,7 +89,6 @@ Handles the error response from the API and sends it as a JSON response
   @param {Array} errors - An array of error messages
   @returns {object} - A JSON response with the error message, error messages, status, data, and meta properties
  */
-
 export const errorHandler = (res, status, message, errors = []) => {
   const error = {
     message: message || SYSTEM_ERROR,
@@ -101,24 +98,24 @@ export const errorHandler = (res, status, message, errors = []) => {
 };
 
 /**
-  Handles the response from the API and sends it as a JSON response
-  @function responseHandler
-  @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
-  @returns {object} - A JSON response with the status, data, meta, and error properties
+ Handles the response from the API and sends it as a JSON response
+ @function responseHandler
+ @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
+ @returns {object} - A JSON response with the status, data, meta, and error properties
  */
-
 export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod }) => {
   try {
-    const { status, data, error, meta } = await apiHandler({ path, requestMethod, body: req.body });
+    const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body });
     if (error) {
-      return errorHandler(res, status, error.message, error.errors);
+      const { message, errors } = error;
+      const errorMessage = status === 500 ? 'External server error' : message;
+      return errorHandler(res, status, errorMessage, errors);
     }
     const responseData = await dataAdapter({ data });
-    if (!responseData) return errorHandler(res, 404, 'Not Found');
     const { data: responseDataAdapted } = responseAdapter(responseData);
-    return res.status(200).json({ status, data: responseDataAdapted, meta: isEmpty(meta) ? null : meta, error: null });
+    return res.status(status).json({ status, data: responseDataAdapted, error, ...rest });
   } catch (error) {
     console.error(error);
-    return errorHandler(res, 500, error.message);
+    return errorHandler(res, 500, error.message, [error]);
   }
 };
