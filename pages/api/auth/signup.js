@@ -1,6 +1,6 @@
 import { signupResponseAdapter } from '@/adapters/user';
 import { getApiURL } from '@/utils';
-import { responseHandler } from '@/utils/dataFetching';
+import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
   const { type } = req.query;

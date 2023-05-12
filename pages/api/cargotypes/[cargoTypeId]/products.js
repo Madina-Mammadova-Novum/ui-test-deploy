@@ -1,6 +1,6 @@
 import { getProductsAdapter } from '@/adapters';
 import { getApiURL } from '@/utils';
-import { responseHandler } from '@/utils/dataFetching';
+import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
   const { cargoTypeId } = req.query;

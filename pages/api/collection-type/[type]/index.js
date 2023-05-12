@@ -1,6 +1,6 @@
 import { entitiesDataResponseAdapter } from '@/adapters/entityData';
 import { getStrapiURL } from '@/utils';
-import { responseHandler } from '@/utils/dataFetching';
+import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
   const { type } = req.query;

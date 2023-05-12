@@ -141,6 +141,10 @@ export function toastFunc(type, title, description = '') {
   });
 }
 
+export function getApiPublicURL(path) {
+  return `${process.env.NEXT_PUBLIC_API_URL}/api/${path}`;
+}
+
 export function getApiURL(path) {
   return `${process.env.BACKEND_API_URL}/${path}`;
 }

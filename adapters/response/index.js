@@ -1,27 +1,11 @@
-import { SYSTEM_ERROR } from '@/lib/constants';
-
 export const responseAdapter = (data) => {
-  if (data === null) return null;
-  if ('data' in data) return data;
-  return { data };
-};
-
-export const responseErrorAdapter = (data) => {
-  if (data === null) return null;
-  const { message = SYSTEM_ERROR, errors } = data;
-  const errorsObject = errors?.$ === undefined ? errors : errors.$;
-  const descriptionArray = [];
-  if (errorsObject) {
-    Object.keys(errorsObject).forEach((key) => {
-      descriptionArray.push(errorsObject[key].join('\n'));
-    });
+  if (!data) {
+    return { data: null };
   }
-  const description = descriptionArray.join('\n');
-  return {
-    error: {
-      message,
-      description,
-      errors: descriptionArray,
-    },
-  };
+  if ('data' in data) {
+    return {
+      data: data.data,
+    };
+  }
+  return { data };
 };

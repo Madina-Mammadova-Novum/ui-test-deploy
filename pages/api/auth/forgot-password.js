@@ -1,10 +1,11 @@
+import delve from 'dlv';
+
 import { forgotPasswordResponseAdapter } from '@/adapters/user';
 import { getApiURL } from '@/utils';
-import { bodyObject } from '@/utils/api';
-import { errorHandler, responseHandler } from '@/utils/dataFetching';
+import { errorHandler, responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
-  const { email } = bodyObject(req);
+  const email = delve(req, 'body.email');
   if (!email) {
     return errorHandler(res, 422, 'Please provide the required fields email');
   }
