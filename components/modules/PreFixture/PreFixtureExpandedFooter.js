@@ -28,7 +28,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
 
   return (
     <ExpandableRowFooter>
-      <div className="flex flex-col md:flex-row gap-x-5 gap-y-2.5 justify-between">
+      <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between">
         <div className="w-full grow">
           {!!underNegotiation && (
             <Button

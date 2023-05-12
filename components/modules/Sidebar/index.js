@@ -26,15 +26,24 @@ const Sidebar = ({ data, containerStyles }) => {
   const { collapsed } = useSelector(getSidebarSelector);
 
   const lgScreen = useMediaQuery(SCREENS.LG);
+  const mdScreen = useMediaQuery(SCREENS.MD);
+  const smScreen = useMediaQuery(SCREENS.SM);
+
+  const isNotXLView = lgScreen || mdScreen || smScreen;
 
   const setCollapse = useCallback((value) => dispatch(handleCollapse(value)), [dispatch]);
 
   const handleResize = () => setCollapse(!collapsed);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (lgScreen || (lgScreen && url !== currentPage?.path)) setCollapse(true);
-    else setCollapse(false);
-  }, [currentPage?.path, data, lgScreen, setCollapse, url]);
+    if (isNotXLView && url !== currentPage?.path && collapsed) setCollapse(true);
+    if (isNotXLView && !collapsed) {
+      return () => {
+        setCollapse(true);
+      };
+    }
+  }, [collapsed, currentPage?.path, setCollapse, url, isNotXLView]);
 
   return (
     <aside

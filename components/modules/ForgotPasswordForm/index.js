@@ -1,25 +1,21 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input } from '@/elements';
+import { forgotPasswordSchema } from '@/lib/schemas';
 import { forgotPassword } from '@/services/user';
-import { errorToast, successToast } from '@/utils/hooks';
-
-const schema = yup
-  .object({
-    email: yup.string().required().email(),
-  })
-  .required();
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ForgotPasswordForm = () => {
-  const methods = useForm({
-    resolver: yupResolver(schema),
+  const schema = yup.object().shape({
+    ...forgotPasswordSchema(),
   });
+
+  const methods = useHookFormParams({ schema });
 
   const {
     reset,

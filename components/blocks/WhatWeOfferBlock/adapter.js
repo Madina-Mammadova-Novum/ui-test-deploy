@@ -13,10 +13,12 @@ export const updateWhatWeOfferBlock = async (block) => {
       .filter(({ value }) => {
         return delve(value, 'data.id');
       })
-      .map(({ value }) => {
+      .map(async ({ value }) => {
         const id = delve(value, 'data.id');
-        const valueData = getValue(id);
-        return valueData;
+        const { data: valueData } = await getValue(id);
+        return {
+          ...valueData,
+        };
       })
   ).then((valueItems) => valueItems.filter((item) => item !== null));
   return {

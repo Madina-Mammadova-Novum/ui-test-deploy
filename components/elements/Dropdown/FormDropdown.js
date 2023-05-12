@@ -35,6 +35,7 @@ const FormDropdown = ({
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
         const hasValue = { ...field }.value?.value;
+
         return (
           <div className={`relative bottom-1 ${className}`}>
             <Label htmlFor={name} className="text-xs-sm">

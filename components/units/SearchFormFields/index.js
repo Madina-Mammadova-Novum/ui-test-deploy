@@ -85,7 +85,7 @@ const SearchFormFields = () => {
         ...prevState,
         loading: true,
       }));
-      const relatedProducts = await getProducts(value.value);
+      const { data: relatedProducts } = await getProducts(value.value);
       setProducts({
         loading: false,
         data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
