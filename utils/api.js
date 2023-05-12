@@ -1,6 +1,6 @@
 import delve from 'dlv';
 
-import { responseAdapter } from '@/adapters/response';
+import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
 
 /**
@@ -14,15 +14,13 @@ import { SYSTEM_ERROR } from '@/lib/constants';
  */
 export const requestErrorHandler = (status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
-  let errorsMessages = null;
   let errorMessage = null;
   if (typeof statusMessage === 'object') {
-    errorsMessages = statusMessage.errors;
     errorMessage = statusMessage.title;
   }
   return {
     message: errorMessage !== null ? errorMessage : statusMessage,
-    errors: errorsMessages !== null ? errorsMessages : errors,
+    errors: responseErrorAdapter(errors),
   };
 };
 
@@ -78,19 +76,18 @@ export const apiHandler = async (options) => {
     };
   } catch (error) {
     console.error(error);
-    return requestErrorHandler(500, 'External server error');
+    return requestErrorHandler(500, 'External server error', [error]);
   }
 };
 
 /**
-
- Handles the error response from the API and sends it as a JSON response
- @function errorHandler
- @param {object} res - The response object
- @param {number} status - The status code for the response
- @param {string} message - The error message
- @param {Array} errors - An array of error messages
- @returns {object} - A JSON response with the error message, error messages, status, data, and meta properties
+Handles the error response from the API and sends it as a JSON response
+  @function errorHandler
+  @param {object} res - The response object
+  @param {number} status - The status code for the response
+  @param {string} message - The error message
+  @param {Array} errors - An array of error messages
+  @returns {object} - A JSON response with the error message, error messages, status, data, and meta properties
  */
 export const errorHandler = (res, status, message, errors = []) => {
   const error = {
@@ -115,13 +112,11 @@ export const responseHandler = async ({ req, res, path, dataAdapter, requestMeth
       const errorMessage = status === 500 ? 'External server error' : message;
       return errorHandler(res, status, errorMessage, errors);
     }
-    const { data: responseData } = await dataAdapter({ data });
-    console.log({ responseData });
-    if (!responseData) return errorHandler(res, 404, 'Not Found');
+    const responseData = await dataAdapter({ data });
     const { data: responseDataAdapted } = responseAdapter(responseData);
-    return res.status(200).json({ status, data: responseDataAdapted, error: null, ...rest });
+    return res.status(200).json({ status, data: responseDataAdapted, error, ...rest });
   } catch (error) {
     console.error(error);
-    return errorHandler(res, 500, error.message);
+    return errorHandler(res, 500, error.message, [error]);
   }
 };

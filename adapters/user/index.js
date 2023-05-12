@@ -254,7 +254,7 @@ export function positionsAdapter({ data }) {
 }
 
 export function signupResponseAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   return {
     data,
   };
