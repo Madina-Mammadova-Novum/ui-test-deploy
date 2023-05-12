@@ -1,17 +1,13 @@
-import { postHandler } from '@/utils/api';
+import { portsAdapter } from '@/adapters';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/dataFetching';
 
 export default async function handler(req, res) {
-  try {
-    const response = await postHandler(`v1/vessels/search`, req.body, 'backend');
-    if (response.status === 500) {
-      const { error } = response;
-      error.message = 'External server error';
-      return res.status(response.status).json({ error });
-    }
-    // todo: don't see service for this endpoint
-    return res.status(response.status).json(response);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: { message: 'Internal server error' } });
-  }
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`v1/vessels/search`),
+    dataAdapter: portsAdapter,
+    requestMethod: 'POST',
+  });
 }

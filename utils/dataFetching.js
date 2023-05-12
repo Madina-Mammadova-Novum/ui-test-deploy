@@ -1,4 +1,6 @@
 import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
+import { externalApiHandler } from '@/utils/api';
+import { isEmpty } from '@/utils/helpers';
 
 export function getApiPublicURL(path) {
   return `${process.env.NEXT_PUBLIC_API_URL}/api/${path}`;
@@ -66,3 +68,37 @@ export function postData(path, data) {
     data,
   });
 }
+
+export function putData(path, data) {
+  return apiHandler({
+    url: getApiPublicURL(path),
+    requestMethod: 'PUT',
+    data,
+  });
+}
+
+export const errorHandler = (res, status, message, errors = []) => {
+  const error = {
+    message: message || 'Unknown error',
+    errors,
+    status,
+  };
+  return res.status(status).json({ error, data: null });
+};
+
+export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod }) => {
+  try {
+    const { status, data, meta } = await externalApiHandler({ path, requestMethod, body: req.body });
+    if (status === 500) {
+      const { errors } = data.error;
+      return errorHandler(res, status, 'External server error', errors);
+    }
+    const responseData = await dataAdapter({ data });
+    if (!responseData) return errorHandler(res, 404, 'Not Found');
+    const { data: responseDataAdapted } = responseAdapter(responseData);
+    return res.status(200).json({ status, data: responseDataAdapted, meta: isEmpty(meta) ? null : meta, error: null });
+  } catch (error) {
+    console.error(error);
+    return errorHandler(res, 500, error.message);
+  }
+};

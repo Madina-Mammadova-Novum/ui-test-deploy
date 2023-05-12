@@ -1,17 +1,9 @@
 import { SYSTEM_ERROR } from '@/lib/constants';
 
-export const responseAdapter = (data, status) => {
+export const responseAdapter = (data) => {
   if (data === null) return null;
-  if ('data' in data) {
-    if (status) data.data.status = status;
-    else data.data.status = 200;
-
-    return data;
-  }
-  return {
-    data,
-    status: status || 200,
-  };
+  if ('data' in data) return data;
+  return { data };
 };
 
 export const responseErrorAdapter = (data) => {

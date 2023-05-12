@@ -1,28 +1,5 @@
 import { responseAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { getApiURL, getIdentityApiURL, getStrapiURL } from '@/utils/index';
-
-export const endpointPath = (path, provider) => {
-  let apiURL = '';
-  switch (provider) {
-    case 'identify': {
-      apiURL = getIdentityApiURL(path);
-      break;
-    }
-    case 'backend': {
-      apiURL = getApiURL(path);
-      break;
-    }
-    case 'strapi': {
-      apiURL = getStrapiURL(path);
-      break;
-    }
-    default: {
-      apiURL = null;
-    }
-  }
-  return apiURL;
-};
 
 export const externalErrorHandler = (status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
@@ -58,10 +35,10 @@ const externalFetchOptions = (requestMethod, body = null) => {
 };
 
 export const externalApiHandler = async (options) => {
-  const { endpoint, requestMethod, body } = options;
-  const requestOptions = externalFetchOptions(requestMethod, body);
   try {
-    const response = await fetch(endpoint, requestOptions);
+    const { path, requestMethod, body } = options;
+    const requestOptions = externalFetchOptions(requestMethod, body);
+    const response = await fetch(path, requestOptions);
     const { status, ok, statusText } = response;
     let responseBody = await response.text();
     if (responseBody !== '') {
@@ -78,41 +55,4 @@ export const externalApiHandler = async (options) => {
     console.error(error);
     return externalErrorHandler(500, 'External server error');
   }
-};
-
-export const postHandler = (path, body, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'POST',
-    body,
-  });
-};
-
-export const putHandler = (path, body, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'PUT',
-    body,
-  });
-};
-
-export const patchHandler = (path, body, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'PATCH',
-    body,
-  });
-};
-
-/**
- *
- * @param path
- * @param provider
- * @returns {Promise<{data?: *, error: null|{message: null|string|*, errors: null|*[]}, status: *}|{message: null|string|*, errors: null|*[]}|undefined>}
- */
-export const getHandler = (path, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'GET',
-  });
 };
