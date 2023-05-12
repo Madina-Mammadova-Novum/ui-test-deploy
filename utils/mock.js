@@ -32,7 +32,7 @@ export const fleetsHeader = [
   },
   {
     text: 'tanker status',
-    type: 'TANKER_STATUS',
+    type: 'TANKER_DEACTIVATE',
     width: 125,
     icon: <TooltipIcon />,
     helperData: {

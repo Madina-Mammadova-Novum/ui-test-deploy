@@ -6,7 +6,14 @@ import { TableCellPropTypes } from '@/lib/types';
 import { HoverTooltip } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { DeactivateTankerForm, EditDateForm, EditPortForm, IconWrapper, ModalWindow } from '@/units';
+import {
+  DeactivateTankerForm,
+  EditDateForm,
+  EditPortForm,
+  IconWrapper,
+  ModalWindow,
+  ReactivateTankerForm,
+} from '@/units';
 
 const TableCell = ({ cellProps }) => {
   const {
@@ -32,7 +39,7 @@ const TableCell = ({ cellProps }) => {
         return <EditPortForm title="edit open port" portName={name} />;
       case ACTIONS.DATE:
         return <EditDateForm title="edit open date" portName={name} />;
-      case ACTIONS.TANKER_STATUS:
+      case ACTIONS.TANKER_DEACTIVATE:
         return (
           <DeactivateTankerForm
             title="Deactivate your Tanker"
@@ -40,6 +47,8 @@ const TableCell = ({ cellProps }) => {
             description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
           />
         );
+      case ACTIONS.TANKER_REACTIVATE:
+        return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;
       case ACTIONS.VIEW_OFFER:
         return <ViewIncomingOffer />;
       case ACTIONS.VIEW_COUNTEROFFER:
@@ -70,7 +79,7 @@ const TableCell = ({ cellProps }) => {
         disabled ? 'bg-gray-light' : 'bg-white'
       } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
-      <div className="flex justify-between items-center text-xsm">
+      <div className={`flex ${typeof value === 'boolean' ? 'justify-start' : 'justify-between'} items-center text-xsm`}>
         {value && (
           <div className="flex gap-x-1 text-inherit">
             {icon && <IconWrapper iconData={{ icon }} />}
