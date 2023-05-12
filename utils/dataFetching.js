@@ -1,5 +1,5 @@
 import { apiHandler } from '@/utils/api';
-import { getApiPublicURL } from "@/utils/index";
+import { getApiPublicURL } from '@/utils/index';
 
 export function getData(path) {
   return apiHandler({
@@ -7,7 +7,7 @@ export function getData(path) {
     requestMethod: 'GET',
     options: {
       cache: 'no-cache',
-    }
+    },
   });
 }
 
@@ -26,5 +26,3 @@ export function putData(path, body) {
     body,
   });
 }
-
-

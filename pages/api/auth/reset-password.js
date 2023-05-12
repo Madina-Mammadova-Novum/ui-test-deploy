@@ -1,4 +1,4 @@
-import delve from "dlv";
+import delve from 'dlv';
 
 function sleep(ms) {
   return new Promise((resolve) => {

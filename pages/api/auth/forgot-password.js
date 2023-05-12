@@ -1,7 +1,8 @@
+import delve from 'dlv';
+
 import { forgotPasswordResponseAdapter } from '@/adapters/user';
 import { getApiURL } from '@/utils';
 import { errorHandler, responseHandler } from '@/utils/api';
-import delve from "dlv";
 
 export default async function handler(req, res) {
   const email = delve(req, 'body.email');

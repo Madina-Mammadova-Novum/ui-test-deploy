@@ -4,7 +4,7 @@ export const responseAdapter = (data) => {
   }
   if ('data' in data) {
     return {
-      data: data.data
+      data: data.data,
     };
   }
   return { data };

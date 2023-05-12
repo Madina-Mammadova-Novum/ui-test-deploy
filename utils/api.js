@@ -1,8 +1,8 @@
-import delve from "dlv";
+import delve from 'dlv';
 
 import { responseAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { isEmpty } from "@/utils/helpers";
+import { isEmpty } from '@/utils/helpers';
 
 export const requestErrorHandler = (status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
@@ -27,7 +27,7 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      ...headers
+      ...headers,
     },
   };
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
