@@ -1,9 +1,10 @@
 import ReactCountryFlag from 'react-country-flag';
 
-import { TextRow, Title } from '@/elements';
 import { ChartererInformationContentPropTypes } from '@/lib/types';
 
-const ChartererInformationContent = ({ title="" }) => {
+import { TextRow, Title } from '@/elements';
+
+const ChartererInformationContent = ({ title = '' }) => {
   return (
     <>
       {title && (

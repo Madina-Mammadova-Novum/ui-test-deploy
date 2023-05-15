@@ -4,17 +4,18 @@ import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
+import { CounterofferFormPropTypes } from '@/lib/types';
+
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
-import { CounterofferFormPropTypes } from '@/lib/types';
 
 const schema = yup.object({
   ...offerSchema(),
 });
 
-const CounterofferForm = ({ children, allowSubmit=false }) => {
+const CounterofferForm = ({ children, allowSubmit = false }) => {
   const methods = useHookFormParams({ schema });
 
   const handleSubmit = async (formData) => {
