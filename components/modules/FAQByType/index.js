@@ -7,37 +7,39 @@ import PropTypes from 'prop-types';
 
 import { faqsByTypeAdapter } from '@/adapters/faqs';
 import { Title } from '@/elements';
-import { ROLES } from '@/lib/constants';
 import { getFAQs } from '@/services/faq';
 import { Accordion, TabsVertical } from '@/units';
 
 const FAQByType = () => {
   const [faqList, setFaqList] = useState([]);
+  const [currentTab, setCurrentTab] = useState('');
 
-  const categoryId = ROLES.CHARTERER ? 1 : 2;
+  // todo: set up categories for each role once they are ready
+  const categoryId = 1;
 
   useEffect(() => {
     (async () => {
       const data = await getFAQs();
       setFaqList(faqsByTypeAdapter(data, categoryId));
     })();
-  }, []);
+  }, [categoryId]);
 
-  const questionTypes = faqList
+  useEffect(() => {
+    setCurrentTab(faqList[0]?.questionType.title);
+  }, [faqList]);
+
+  const tabs = faqList
     .map(({ questionType }) => questionType)
     .filter((obj, index, self) => {
       return index === self.findIndex((o) => o.id === obj.id);
+    })
+    .map(({ title }) => {
+      return {
+        label: title,
+        value: title,
+      };
     });
 
-  const tabs = questionTypes.map(({ title }) => {
-    return {
-      label: title,
-      value: title,
-    };
-  });
-
-  // todo: set initial state
-  const [currentTab, setCurrentTab] = useState( '');
   const handleActiveTab = ({ target }) => {
     const { value } = target;
     setCurrentTab(value);
@@ -66,16 +68,17 @@ const FAQByType = () => {
       )
     );
   };
-
   return (
     <div>
       <Title className="py-5" level={1}>
         FAQ
       </Title>
-      <div className="shadow-xmd rounded-base bg-white flex gap-20 px-5">
-        <TabsVertical activeTab={currentTab} onClick={handleActiveTab} tabs={tabs} customStyles="py-5" />
-        {faqList && <div className="divide-y divide-gray-darker grow">{faqList.map(printQuestionsByType)}</div>}
-      </div>
+      {faqList.length > 0 && (
+        <div className="shadow-xmd rounded-base bg-white flex gap-20 px-5">
+          <TabsVertical activeTab={currentTab} onClick={handleActiveTab} tabs={tabs} customStyles="py-5" />
+          <div className="divide-y divide-gray-darker grow">{faqList.map(printQuestionsByType)}</div>
+        </div>
+      )}
     </div>
   );
 };
