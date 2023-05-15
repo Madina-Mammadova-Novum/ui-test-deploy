@@ -6,7 +6,7 @@ import * as yup from 'yup';
 
 import { EditPortFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { portsSchema } from '@/lib/schemas';
 import { PortDetailsForm } from '@/units';
@@ -25,7 +25,7 @@ const EditPortForm = ({ closeModal, title, portName }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
         className="w-[356px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
@@ -36,7 +36,7 @@ const EditPortForm = ({ closeModal, title, portName }) => {
           {title}
         </Title>
         <PortDetailsForm portName={portName} />
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };

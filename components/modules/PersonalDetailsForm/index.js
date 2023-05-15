@@ -6,7 +6,7 @@ import * as yup from 'yup';
 
 import { PersonalDetailsFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { personalDetailsSchema } from '@/lib/schemas';
 import { updateInfo } from '@/services';
@@ -41,7 +41,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
         onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{ text: 'Edit personal details', variant: 'primary', size: 'large' }}
@@ -55,7 +55,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
           data={noteList}
         />
         <PersonalDetails />
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };

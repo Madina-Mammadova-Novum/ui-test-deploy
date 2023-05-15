@@ -6,7 +6,7 @@ import * as yup from 'yup';
 
 import { DeleteAccountFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { Input, Title } from '@/elements';
 import { Notes } from '@/units';
 import { useHookFormParams } from '@/utils/hooks';
@@ -17,7 +17,7 @@ const state = {
 
 const schema = yup.object({ password: yup.string().required('Required field') });
 
-const DeleteAccountForm = ({ title }) => {
+const DeleteAccountForm = ({ title, closeModal }) => {
   const methods = useHookFormParams({ state, schema });
 
   const {
@@ -31,7 +31,8 @@ const DeleteAccountForm = ({ title }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        onClose={closeModal}
         className="max-w-sm"
         submitAction={onSubmit}
         submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
@@ -51,7 +52,7 @@ const DeleteAccountForm = ({ title }) => {
           If you send a request to delete your account, but then change your mind, it will be impossible to suspend the
           process of considering your request.
         </p>
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };

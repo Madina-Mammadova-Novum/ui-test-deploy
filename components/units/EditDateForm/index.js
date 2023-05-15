@@ -6,7 +6,7 @@ import * as yup from 'yup';
 
 import { EditDateFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
 import { DateDetailsForm } from '@/units';
@@ -24,7 +24,7 @@ const EditDateForm = ({ closeModal, title, portName }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
         specialStyle
         className="w-[356px]"
         submitAction={onSubmit}
@@ -35,7 +35,7 @@ const EditDateForm = ({ closeModal, title, portName }) => {
           {title}
         </Title>
         <DateDetailsForm portName={portName} />
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
