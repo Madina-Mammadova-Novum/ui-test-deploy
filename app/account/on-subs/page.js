@@ -11,7 +11,7 @@ export async function generateMetadata() {
   });
 }
 
-const NegotiatingPage = () => {
+const OnSubsPage = () => {
   return (
     <AccountWrapper containerClass="px-5">
       <OnSubs />
@@ -19,4 +19,4 @@ const NegotiatingPage = () => {
   );
 };
 
-export default NegotiatingPage;
+export default OnSubsPage;

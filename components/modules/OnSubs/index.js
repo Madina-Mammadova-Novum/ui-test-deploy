@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import OnSubsExpandedContent from './OnSubsExpandedContent';
+import OnSubsExpandedFooter from './OnSubsExpandedFooter';
+
 import { ownerOnSubsHeaderDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
@@ -33,8 +36,12 @@ const OnSubs = () => {
     const rowHeader = ownerOnSubsHeaderDataAdapter({ data: rowData });
 
     return (
-      <ExpandableRow header={<ExpandableCardHeader headerData={rowHeader} />} expand={toggle}>
-        Data
+      <ExpandableRow
+        header={<ExpandableCardHeader headerData={rowHeader} />}
+        expand={toggle}
+        footer={<OnSubsExpandedFooter underRecap />}
+      >
+        <OnSubsExpandedContent />
       </ExpandableRow>
     );
   };
