@@ -200,7 +200,7 @@ export const useMounted = () => {
   return mounted.current;
 };
 
-export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
+export const useFilters = (itemsPerPage, initialPage, { data }, sortValue) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [perPage, setPerPage] = useState(itemsPerPage);
   const [option, setSelectedPage] = useState([]);

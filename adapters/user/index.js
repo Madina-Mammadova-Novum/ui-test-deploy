@@ -1,5 +1,3 @@
-import delve from 'dlv';
-
 import { isEmpty } from '@/utils/helpers';
 
 export function userDetailsAdapter({ data }) {
@@ -254,15 +252,17 @@ export function positionsAdapter({ data }) {
 }
 
 export function signupResponseAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   return {
-    data,
+    data: {
+      message: 'Check your account for verify',
+    },
   };
 }
 
 export function confirmEmailResponseAdapter({ data }) {
   if (data === null) return null;
-  const redirectUrl = delve(data, 'data.link.redirectUrl');
-  if (isEmpty(redirectUrl)) return null;
-  return { redirectUrl };
+  if (isEmpty(data)) return null;
+
+  return { data };
 }
