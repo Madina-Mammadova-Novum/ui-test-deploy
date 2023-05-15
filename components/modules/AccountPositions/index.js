@@ -51,7 +51,7 @@ const AccountPositions = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const data = await getUserPositions();
+      const { data } = await getUserPositions();
       setUserStore({ ...userStore, userPositions: data });
       setIsLoading(false);
     } catch (error) {

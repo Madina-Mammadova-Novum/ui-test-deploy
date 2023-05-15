@@ -1,35 +1,34 @@
 import { SYSTEM_ERROR } from '@/lib/constants';
+import { isEmpty } from '@/utils/helpers';
 
-export const responseAdapter = (data, status) => {
-  if (data === null) return null;
+export const responseAdapter = (data) => {
+  if (data === undefined || data === null || data === '') return { data: null };
   if ('data' in data) {
-    if (status) data.data.status = status;
-    else data.data.status = 200;
-
     return data;
   }
-  return {
-    data,
-    status: status || 200,
-  };
+  return { data };
 };
 
-export const responseErrorAdapter = (data) => {
-  if (data === null) return null;
-  const { message = SYSTEM_ERROR, errors } = data;
-  const errorsObject = errors?.$ === undefined ? errors : errors.$;
-  const descriptionArray = [];
-  if (errorsObject) {
-    Object.keys(errorsObject).forEach((key) => {
-      descriptionArray.push(errorsObject[key].join('\n'));
-    });
+const errorAdapter = (error) => {
+  if (error === undefined || error === null || error === '') return [];
+  if (typeof error === 'object' && error !== null) {
+    const errors = Object.values(error);
+    if (errors.length > 0) {
+      return errors.reduce((acc, curr) => acc.concat(curr), []).filter((err) => err.length > 0);
+    }
   }
-  const description = descriptionArray.join('\n');
-  return {
-    error: {
-      message,
-      description,
-      errors: descriptionArray,
-    },
-  };
+  return [error];
+};
+
+export const responseErrorAdapter = (errors = []) => {
+  if (isEmpty(errors)) return [SYSTEM_ERROR];
+
+  if (Array.isArray(errors) && errors.length > 0) {
+    return errors
+      .map((error) => errorAdapter(error))
+      .reduce((acc, curr) => acc.concat(curr), [])
+      .filter((error) => error.length > 0);
+  }
+  // TODO: condition if errors are object
+  return ['Error: as object'];
 };

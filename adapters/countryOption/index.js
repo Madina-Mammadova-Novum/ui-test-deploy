@@ -10,7 +10,7 @@ export const countryOptionAdapter = (data) => {
   };
 };
 
-export const countryOptionsAdapter = (data) => {
+export const countryOptionsAdapter = ({ data }) => {
   if (data === null) return [];
   return data.map((option) => {
     return countryOptionAdapter(option);

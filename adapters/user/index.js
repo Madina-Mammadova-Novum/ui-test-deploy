@@ -1,3 +1,5 @@
+import { isEmpty } from '@/utils/helpers';
+
 export function userDetailsAdapter({ data }) {
   if (data === null) return null;
 
@@ -54,6 +56,13 @@ export function forgotPasswordAdapter({ data }) {
   const { email } = data;
   return {
     email,
+  };
+}
+
+export function forgotPasswordResponseAdapter({ data }) {
+  if (data === null) return null;
+  return {
+    data,
   };
 }
 
@@ -240,4 +249,20 @@ export function positionAdapter({ data }) {
 export function positionsAdapter({ data }) {
   if (data === null || data === undefined) return null;
   return data.map((item) => positionAdapter({ data: item }));
+}
+
+export function signupResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data: {
+      message: 'Check your account for verify',
+    },
+  };
+}
+
+export function confirmEmailResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
 }

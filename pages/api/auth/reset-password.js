@@ -1,4 +1,4 @@
-import { bodyObject } from '@/utils/api';
+import delve from 'dlv';
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -8,7 +8,7 @@ function sleep(ms) {
 export default async function handler(req, res) {
   await sleep(2000);
   try {
-    const { password } = bodyObject(req);
+    const password = delve(req, 'body.password');
     if (!password) {
       // todo: add additional condition
       return res.status(422).json({ error: { message: 'Please provide the required fields password' } });
