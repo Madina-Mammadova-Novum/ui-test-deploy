@@ -240,7 +240,7 @@ const SearchFormFields = () => {
             text: 'Add more Products',
             variant: 'primary',
             size: 'small',
-            icon: { before: <PlusInCircleSVG className="fill-blue group-hover:fill-blue-darker"/> },
+            icon: { before: <PlusInCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}

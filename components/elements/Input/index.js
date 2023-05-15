@@ -56,10 +56,13 @@ const Input = React.forwardRef(
           <input
             ref={ref}
             id={name}
-            className={classnames({
-              'px-4 py-[9px] rounded-md':
-                type !== 'checkbox',
-            },'outline-none w-full h-[38px] text-xsm flex items-center bg-transparent', inputStyles)}
+            className={classnames(
+              {
+                'px-4 py-[9px] rounded-md': type !== 'checkbox',
+              },
+              'outline-none w-full h-[38px] text-xsm flex items-center bg-transparent',
+              inputStyles
+            )}
             type={type}
             name={name}
             {...rest}
