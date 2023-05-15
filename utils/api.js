@@ -38,8 +38,8 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
     method, // *GET, POST, PUT, DELETE, etc.
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/x-www-form-urlencoded',
       ...headers,
     },
   };

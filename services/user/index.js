@@ -8,7 +8,7 @@ import {
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
-import { getData, loginData, postData, putData } from '@/utils/dataFetching';
+import { getData, postAuthData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
@@ -51,7 +51,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await loginData(`auth/login`, body);
+  const response = await postAuthData(`auth/login`, body);
   return {
     ...response,
   };

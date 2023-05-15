@@ -213,15 +213,8 @@ export function loginAdapter({ data }) {
   if (data === null) return null;
   const { email, password } = data;
   return {
-    email,
+    username: email,
     password,
-  };
-}
-
-export function loginResponseAdapter({ data }) {
-  if (data === null) return null;
-  return {
-    data,
   };
 }
 
@@ -272,4 +265,20 @@ export function confirmEmailResponseAdapter({ data }) {
   if (isEmpty(data)) return null;
 
   return { data };
+}
+
+export function loginResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return {
+    data: {
+      access_token:
+        'eyJhbGciOiJSUzI1NiIsImtpZCI6IkNDQzNERDkyM0EwMTE5MDVCQzMwRTNCMjBFODk1QTREIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODQxNjgzOTUsImV4cCI6MTY4NDE3MTk5NSwiaXNzIjoiaHR0cHM6Ly9zaGlwbGluay1pZC5henVyZXdlYnNpdGVzLm5ldCIsImF1ZCI6WyJzaGlwbGluay13ZWJhcGkiLCJodHRwczovL3NoaXBsaW5rLWlkLmF6dXJld2Vic2l0ZXMubmV0L3Jlc291cmNlcyJdLCJjbGllbnRfaWQiOiJzaGlwbGluay1hcGkiLCJzdWIiOiI5ZjBkNDNiOS1lYWFmLTRjYTktYTVlYy02MGJkOGY0YjY5MWEiLCJhdXRoX3RpbWUiOjE2ODQxNjgzOTUsImlkcCI6ImxvY2FsIiwianRpIjoiN0Y4QTA3ODFGQTAxQ0EwRTY5MjU3OERGQUVBOEM5QTEiLCJpYXQiOjE2ODQxNjgzOTUsInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJyb2xlcyIsInNoaXBsaW5rd2ViYXBpIiwib2ZmbGluZV9hY2Nlc3MiXSwiYW1yIjpbInB3ZCJdfQ.hzKD8QXaEa0Xr49ftYELclVh8Mq-mJIAJUtlLiz5jhxu-Qtnp8YOuQGeujpJTpsjIKgVSxz3i8HzKpwIwhbJoREkMoi7AeToeCmOzgLjkyBggSGfE1eEu-uojAspwHwi-j6ForgdzWQZ7De7cIooKmNR5AChB1V4MMFC8EoDZ_F2HvdEDnOrVXszNJw7J9XtutNXOFmoQ4z-_dVgX79CR8SD7aVRb4jYpPupPFSyJVYzmBvG7QK1zQ3ywOwH550HNoorXK3ab7MzwPI3stsJPC1SWAMSO5rx7Wlzdy6qoL2uodzTnX-v5KUYUl6NoStpT928BShm1MTyFDYiOpdLZA',
+      expires_in: 3600,
+      token_type: 'Bearer',
+      refresh_token: '0553982576772E69073BF4EDA897A093F981D9627D76D5D77E2F71131FAC5C35',
+      scope: 'offline_access openid profile roles shiplinkwebapi',
+    },
+  };
 }
