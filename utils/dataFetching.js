@@ -1,5 +1,5 @@
 import { apiHandler } from '@/utils/api';
-import { getApiPublicURL } from '@/utils/index';
+import { getApiPublicURL, getIdentityApiURL } from '@/utils/index';
 
 /**
 
@@ -51,5 +51,17 @@ export function putData(path, body) {
     path: getApiPublicURL(path),
     requestMethod: 'PUT',
     body,
+  });
+}
+
+export function loginData(path) {
+  return apiHandler({
+    path: getIdentityApiURL(path),
+    requestMethod: 'POST',
+    options: {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    },
   });
 }
