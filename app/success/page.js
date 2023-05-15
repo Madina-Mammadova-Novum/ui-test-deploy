@@ -1,6 +1,5 @@
 import { metaData } from '@/adapters/metaData';
 import { LinkAsButton, NextLink } from '@/elements';
-import { ROUTES } from '@/lib';
 import { AuthWrapper } from '@/modules';
 
 export function generateMetadata() {
@@ -36,8 +35,8 @@ const SuccessfulVerifPage = () => {
         </p>
       </div>
       <p className="my-5 text-xsm">Thank you for choosing our platform!</p>
-      <LinkAsButton href={ROUTES.LOGIN} buttonProps={{ size: 'large', variant: 'primary' }}>
-        Log in
+      <LinkAsButton href="/" buttonProps={{ size: 'large', variant: 'primary' }}>
+        Return to Homepage
       </LinkAsButton>
     </AuthWrapper>
   );
