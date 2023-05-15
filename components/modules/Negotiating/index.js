@@ -15,6 +15,7 @@ import { useAuth, useFetch, useFilters } from '@/utils/hooks';
 const Negotiating = () => {
   const [toggle, setToggle] = useState(false);
   const [data, isLoading] = useFetch(getUserNegotiating);
+
   const { user } = useAuth();
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,

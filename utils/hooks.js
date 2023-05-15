@@ -198,7 +198,7 @@ export const useMounted = () => {
   return mounted.current;
 };
 
-export const useFilters = (itemsPerPage, initialPage, { data }, sortValue) => {
+export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [perPage, setPerPage] = useState(itemsPerPage);
   const [option, setSelectedPage] = useState([]);
@@ -268,8 +268,8 @@ export const useFetch = (fetchFunction) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetchFunction();
-        setData(response);
+        const { data: content } = await fetchFunction();
+        setData(content);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
