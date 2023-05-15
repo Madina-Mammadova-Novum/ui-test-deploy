@@ -15,12 +15,12 @@ import { useAuth, useFetch, useFilters } from '@/utils/hooks';
 const Negotiating = () => {
   const [toggle, setToggle] = useState(false);
   const [data, isLoading] = useFetch(getUserNegotiating);
+
   const { user } = useAuth();
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
-
   const {
     numberOfPages,
     items,

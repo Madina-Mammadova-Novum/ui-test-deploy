@@ -7,6 +7,7 @@ import { HoverTooltip } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import {
+  ChartererInformationContent,
   DeactivateTankerForm,
   EditDateForm,
   EditPortForm,
@@ -56,7 +57,7 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.VIEW_FAILED_OFFER:
         return <ViewFailedOffer />;
       case ACTIONS.CHARTERER_INFORMATION:
-        return <div>{actionText}</div>;
+        return <ChartererInformationContent title="Charterer information" />;
       default:
         return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
     }

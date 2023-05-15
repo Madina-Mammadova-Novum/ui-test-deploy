@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
-
 'use client';
 
-import { use, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -13,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import { getFilledArray } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
-import { NAVIGATION_PARAMS, PALETTE, SORT_OPTIONS } from '@/lib/constants';
+import { PALETTE, SORT_OPTIONS } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -200,7 +198,7 @@ export const useMounted = () => {
   return mounted.current;
 };
 
-export const useFilters = (itemsPerPage, initialPage, { data }, sortValue) => {
+export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [perPage, setPerPage] = useState(itemsPerPage);
   const [option, setSelectedPage] = useState([]);
@@ -270,8 +268,8 @@ export const useFetch = (fetchFunction) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetchFunction();
-        setData(response);
+        const { data: content } = await fetchFunction();
+        setData(content);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
