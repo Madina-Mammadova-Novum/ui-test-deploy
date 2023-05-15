@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
@@ -30,7 +30,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
 
-  const tabContent = () => {
+  const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
         return <VoyageDetailsTabContent data={voyageDetailData} />;
@@ -39,7 +39,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
       default:
         return <CommercialOfferTerms />;
     }
-  };
+  }, [currentTab]);
 
   return (
     <div className="w-[610px]">
@@ -74,7 +74,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
               ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
               className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
             >
-              {tabContent()}
+              {tabContent}
             </div>
           </>
         ) : (
