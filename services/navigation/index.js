@@ -1,6 +1,8 @@
 import { getData } from '@/utils/dataFetching';
 
 export const getNavigation = async (navigation, locale) => {
-  const data = await getData(`navigation/${navigation}?locale=${locale}`);
-  return data;
+  const response = await getData(`navigation/${navigation}?locale=${locale}`);
+  return {
+    ...response,
+  };
 };

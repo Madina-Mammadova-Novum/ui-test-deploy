@@ -27,7 +27,7 @@ const ExpandableRow = ({ header, footer, children, expand = false }) => {
         })}
         style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
       >
-        <div className="px-6">{children}</div>
+        <div className="px-6 table-scroll">{children}</div>
         {footer}
       </div>
     </div>

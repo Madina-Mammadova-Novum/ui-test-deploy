@@ -160,7 +160,7 @@ const CargoesSlotsDetailsForm = () => {
             />
             <Button
               type="button"
-              customStyles="absolute -right-8 top-8 !p-0"
+              customStyles="absolute top-full mt-2 lg:mt-0 right-0 lg:-right-8 lg:top-8 !p-0"
               buttonProps={{ icon: { before: <TrashIcon /> }, variant: 'tertiary', size: 'small' }}
               onClick={() => handleRemoveSlot(index)}
               disabled={isSubmitting}
