@@ -49,6 +49,7 @@ const DeactivateAccountForm = ({ title }) => {
         </div>
 
         <p className="font-bold text-black">Please enter your password to deactivate account</p>
+        {/* todo: here need to use password type of input */}
         <Input {...register('password')} type="password" label="password" error={errors.password?.message} />
       </FormManager>
     </FormProvider>
