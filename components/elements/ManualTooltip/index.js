@@ -15,7 +15,9 @@ const ManualTooltip = ({ data, className, children }) => {
 
   const { title, description } = data;
 
-  const childrenWithProps = cloneElement(children, { className: showTooltip ? 'fill-blue' : 'fill-black' });
+  const childrenWithProps = cloneElement(children, {
+    className: `${children.props.className} ${showTooltip ? 'fill-blue' : 'fill-black'}`,
+  });
 
   return (
     <div className="group transition-all">
@@ -24,9 +26,9 @@ const ManualTooltip = ({ data, className, children }) => {
       </span>
       {showTooltip && (
         <div
-          className={`absolute top-8 ${className} bg-white transition-all max-w-xs overflow-visible flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-base`}
+          className={`absolute top-8 ${className} min-w-[240px] bg-white transition-all max-w-xs overflow-visible flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-5 rounded-base`}
         >
-          <div className="flex justify-between items-center min-w-[240px]">
+          <div className={`flex justify-between items-center ${!title && '!justify-end'}`}>
             {title && <span className="capitalize font-semibold text-xsm">{title}</span>}
             <Button
               buttonProps={{ icon: { before: <CloseIcon /> } }}

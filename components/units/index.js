@@ -4,6 +4,7 @@ import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoIdTooltip from '@/units/CargoIdTooltip';
+import ChartererInformationContent from '@/units/ChartererInformationContent';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
@@ -11,6 +12,7 @@ import CompanyDetails from '@/units/CompanyDetailsForm';
 import ComplexPagination from '@/units/ComplexPagination';
 import COTTabContent from '@/units/COTTabContent';
 import Countdown from '@/units/Countdown';
+import CounterofferForm from '@/units/CounterofferForm';
 import DateDetailsForm from '@/units/DateDetailsForm';
 import DeactivateTankerForm from '@/units/DeactivateTankerForm';
 import EditDateForm from '@/units/EditDateForm';
@@ -92,4 +94,6 @@ export {
   ReactivateTankerForm,
   LegalNavigation,
   CargoIdTooltip,
+  CounterofferForm,
+  ChartererInformationContent,
 };
