@@ -8,3 +8,11 @@ export async function sendOffer({ data }) {
     ...response,
   };
 }
+
+export async function sendCounteroffer({ data }) {
+  const body = sendOfferAdapter({ data });
+  const response = await postData(`counteroffer/send`, JSON.stringify(body));
+  return {
+    ...response,
+  };
+}

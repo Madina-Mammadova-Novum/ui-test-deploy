@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
 import { Button, SimpleSelect } from '@/elements';
-import { CommentsContent } from '@/modules';
-import { CommercialOfferTerms, Countdown, ModalHeader, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
+import { CommentsContent, ConfirmCounteroffer } from '@/modules';
+import { CommercialOfferTerms, Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -28,6 +28,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [responseCountdown, setResponseCountdown] = useState('20 min');
   const [showScroll, setShowScroll] = useState(false);
+  const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
 
   const tabContent = () => {
     switch (currentTab) {
@@ -42,7 +43,9 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
 
   return (
     <div className="w-[610px]">
-      <ModalHeader goBack={() => goBack('view_offer')}>Send Counteroffer</ModalHeader>
+      <ModalHeader goBack={() => (confirmCounteroffer ? setConfirmCounteroffer(false) : goBack('view_offer'))}>
+        {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
+      </ModalHeader>
 
       <div className="flex text-[12px] items-center mt-5">
         <Countdown time="1h 50m" />
@@ -57,20 +60,27 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
           />
         </div>
       </div>
+      <CounterofferForm allowSubmit={confirmCounteroffer}>
+        {!confirmCounteroffer ? (
+          <>
+            <Tabs
+              customStyles="mx-auto mt-5 mb-3"
+              tabs={tabs}
+              activeTab={currentTab}
+              onClick={({ target }) => setCurrentTab(target.value)}
+            />
 
-      <Tabs
-        customStyles="mx-auto mt-5 mb-3"
-        tabs={tabs}
-        activeTab={currentTab}
-        onClick={({ target }) => setCurrentTab(target.value)}
-      />
-
-      <div
-        ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
-      >
-        <OfferForm>{tabContent()}</OfferForm>
-      </div>
+            <div
+              ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
+              className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+            >
+              {tabContent()}
+            </div>
+          </>
+        ) : (
+          <ConfirmCounteroffer closeModal={closeModal} />
+        )}
+      </CounterofferForm>
 
       <div className="flex text-xsm gap-x-2.5 mt-4">
         <Button
@@ -78,10 +88,12 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button
-          onClick={() => goBack('offer_counteroffer_confirm')}
-          buttonProps={{ text: 'Confirm changes', variant: 'primary', size: 'large' }}
-        />
+        {!confirmCounteroffer && (
+          <Button
+            onClick={() => setConfirmCounteroffer(true)}
+            buttonProps={{ text: 'Confirm changes', variant: 'primary', size: 'large' }}
+          />
+        )}
       </div>
     </div>
   );
