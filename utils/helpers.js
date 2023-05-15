@@ -181,16 +181,16 @@ export const disableDefaultBehaviour = (e) => e.preventDefault();
 export const getButtonClassNames = (variant, size) => {
   // todo: need to connect constants for variants and sizes values
   if (size === 'large') {
-    if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker';
-    if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-dark';
+    if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 hover:bg-blue-darker';
+    if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 hover:bg-blue-dark';
     if (variant === 'tertiary')
-      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-gray hover:border-black';
+      return 'bg-white text-black h-10 px-5 py-2.5 border border-gray hover:border-black';
     if (variant === 'delete')
-      return 'bg-white text-red h-10 px-5 py-2.5 rounded-md border border-red-medium hover:border-red';
+      return 'bg-white text-red h-10 px-5 py-2.5 border border-red-medium hover:border-red';
   }
   if (size === 'medium') {
     if (variant === 'primary')
-      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker';
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker hover:text-blue-darker';
     if (variant === 'secondary')
       return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
     if (variant === 'delete')

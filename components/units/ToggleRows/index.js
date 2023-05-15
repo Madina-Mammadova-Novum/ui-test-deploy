@@ -7,13 +7,14 @@ import { Button } from '@/elements';
 
 const ToggleRows = ({ onToggleClick, value = false }) => {
   return (
-    <div aria-hidden type="button" className="flex text-blue text-xsm pr-5 items-center" onClick={onToggleClick}>
-      <DoubleArrowSVG className={`transition duration-500 ${value && 'rotate-180'}`} />
       <Button
-        buttonProps={{ text: `${value ? 'Collapse' : 'Expand'} all groups`, variant: 'primary', size: 'small' }}
-        customStyles="!bg-[transparent] !px-0 !py-0"
+        buttonProps={{
+          text: `${value ? 'Collapse' : 'Expand'} all groups`, variant: 'primary', size: 'small',
+          icon: { before:   <DoubleArrowSVG className={`fill-blue group-hover:fill-blue-darker transition duration-500 ${value && 'rotate-180'}`} /> },
+        }}
+        customStyles="!px-0 !py-0 !bg-[transparent]"
+        onClick={onToggleClick}
       />
-    </div>
   );
 };
 

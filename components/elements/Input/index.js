@@ -38,7 +38,7 @@ const Input = React.forwardRef(
         <div
           className={classnames(
             {
-              'flex w-full min-h-10 border box-border rounded-md px-4 py-[9px] hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
+              'flex w-full min-h-10 border box-border rounded-md hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
                 type !== 'checkbox',
             },
             {
@@ -56,12 +56,15 @@ const Input = React.forwardRef(
           <input
             ref={ref}
             id={name}
-            className={`outline-none w-full h-5 text-xsm flex items-center bg-transparent ${inputStyles}`}
+            className={classnames({
+              'px-4 py-[9px] rounded-md':
+                type !== 'checkbox',
+            },'outline-none w-full h-[38px] text-xsm flex items-center bg-transparent', inputStyles)}
             type={type}
             name={name}
             {...rest}
           />
-          {icon && <span className="ml-2.5">{icon}</span>}
+          {icon && <span className="ml-2.5 mr-4 my-auto">{icon}</span>}
         </div>
         {error && <InputErrorMessage message={error} />}
         {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
