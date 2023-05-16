@@ -1,12 +1,13 @@
 import AuthLayout from '@/layouts/AuthLayout';
+import { ROUTES } from '@/lib';
 
 export default async function RootLayout(props) {
   const { children } = props;
   const navigation = {
-    placeholder: '',
+    placeholder: 'Already have an account?',
     contrasted: true,
-    cta: 'Return to Home page',
-    path: '/',
+    cta: 'Log in',
+    path: ROUTES.LOGIN,
   };
   return <AuthLayout navigation={navigation}>{children}</AuthLayout>;
 }
