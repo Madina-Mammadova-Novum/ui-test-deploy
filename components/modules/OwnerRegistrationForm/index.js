@@ -49,13 +49,12 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data } = await ownerSignUp({ data: formData });
-    if (data.status === 200) {
-      successToast(data.alert);
+    const { data, error } = await ownerSignUp({ data: formData });
+    if (data) {
+      successToast(data.message);
       resetForm(methods);
-    }
-    if (data.status !== 200) {
-      errorToast(data.alert);
+    } else if (error) {
+      errorToast(error.message, error.errors.join('\n'));
     }
   };
 

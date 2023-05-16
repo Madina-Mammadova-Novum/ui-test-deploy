@@ -85,7 +85,7 @@ const SearchFormFields = () => {
         ...prevState,
         loading: true,
       }));
-      const relatedProducts = await getProducts(value.value);
+      const { data: relatedProducts } = await getProducts(value.value);
       setProducts({
         loading: false,
         data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
@@ -240,7 +240,7 @@ const SearchFormFields = () => {
             text: 'Add more Products',
             variant: 'primary',
             size: 'small',
-            icon: { before: <PlusInCircleSVG /> },
+            icon: { before: <PlusInCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}

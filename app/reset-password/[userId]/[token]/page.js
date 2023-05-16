@@ -1,3 +1,5 @@
+import { ResetPasswordPagePropTypes } from '@/lib/types';
+
 import { metaData } from '@/adapters/metaData';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
@@ -13,14 +15,14 @@ export function generateMetadata() {
   });
 }
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage = ({ params }) => {
   return (
     <AuthWrapper
       title="Reset your password"
       subtitle="Pick and set a new password for your account and you’re good to go!"
       containerClass="w-3/4 -translate-y-14 min-w-[450px]"
     >
-      <ResetPasswordForm />
+      <ResetPasswordForm params={params} />
       <NextLink
         href={ROUTES.LOGIN}
         className="inline-flex justify-center items-center w-full pt-2.5 text-blue text-xsm"
@@ -30,5 +32,7 @@ const ResetPasswordPage = () => {
     </AuthWrapper>
   );
 };
+
+ResetPasswordPage.propTypes = ResetPasswordPagePropTypes;
 
 export default ResetPasswordPage;

@@ -82,17 +82,17 @@ const TankerSlotsDetails = () => {
           type="number"
           value={slots}
           label="Number of tankers"
-          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} cargoes.`}
+          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} tankers.`}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
-          helperText="You will be able to add more cargoes after the verification."
+          helperText="You will be able to add more vessels after the verification."
           disabled={isSubmitting}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[16px] right-1 my-1 !py-4"
+          customStyles="absolute top-[17px] right-1 my-1 !py-4"
           buttonProps={{ text: 'Apply', variant: !errors.numberOfTankers ? 'primary' : 'delete', size: 'medium' }}
           onClick={handleApplySlot}
           disabled={slots <= 0 || isSubmitting}

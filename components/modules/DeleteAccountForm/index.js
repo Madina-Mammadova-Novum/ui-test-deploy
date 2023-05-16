@@ -47,6 +47,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
           />
         </div>
         <p className="font-bold text-black">Please enter your password to deactivate account</p>
+        {/* todo: here need to use password type of input */}
         <Input {...register('password')} type="password" label="password" error={errors.password?.message} />
         <p className="text-red font-semibold text-xsm">
           If you send a request to delete your account, but then change your mind, it will be impossible to suspend the

@@ -17,7 +17,7 @@ const Button = ({
   const { before, after } = icon;
   const buttonClassNames = getButtonClassNames(variant, size);
   return (
-    <div className={`flex flex-col justify-center items-center ${customStylesFromWrap}`}>
+    <div className={`flex flex-col justify-center items-center group ${customStylesFromWrap}`}>
       <button
         className={classnames(
           'text-xsm px-3.5 py-2.5 rounded-md flex items-center justify-center',

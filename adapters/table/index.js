@@ -1,13 +1,8 @@
 import { fleetTableCellAdapter } from '../fleets';
-import { failedTabCellAdapter, incomingTabCellAdapter, sentCounterofferTabCellAdapter } from '../negotiating';
+import { prefixtureTableCellAdapter } from '../pre-fixture';
 
 export const tableRowsAdapter = ({ data, index }) => {
   if (data === null || data === undefined) return [];
 
-  return [
-    ...fleetTableCellAdapter({ data, index }),
-    ...incomingTabCellAdapter({ data, index }),
-    ...sentCounterofferTabCellAdapter({ data, index }),
-    ...failedTabCellAdapter({ data, index }),
-  ];
+  return [...fleetTableCellAdapter({ data, index }), ...prefixtureTableCellAdapter({ data, index })];
 };

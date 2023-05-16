@@ -1,68 +1,67 @@
-import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
+import { apiHandler } from '@/utils/api';
+import { getApiPublicURL, getIdentityApiURL } from '@/utils/index';
 
-export function getApiPublicURL(path) {
-  return `${process.env.NEXT_PUBLIC_API_URL}/api/${path}`;
-}
+/**
 
-// eslint-disable-next-line consistent-return
-export function fetchOptions(requestMethod, data = null) {
-  const method = requestMethod.toUpperCase();
-  const options = {
-    method, // *GET, POST, PUT, DELETE, etc.
-    // mode: "cors", // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    // redirect: "follow", // manual, *follow, error
-    // referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    // body: JSON.stringify(data), // body data type must match "Content-Type" header
-  };
-
-  if (['POST', 'PUT', 'PATCH'].includes(method)) {
-    options.body = JSON.stringify(data);
-  }
-  return options;
-}
-
-export async function apiHandler(options) {
-  const { url, requestMethod, data } = options;
-  try {
-    const requestOptions = fetchOptions(requestMethod, data);
-
-    const response = await fetch(url, requestOptions);
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
-
-    const result = await response.json();
-    // Recommendation: handle errors
-
-    if (!response.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      return responseErrorAdapter(result);
-    }
-    return responseAdapter(result);
-  } catch (error) {
-    return responseErrorAdapter({
-      message: error?.message,
-      errors: error,
-    });
-  }
-}
-
+ Fetches data from the API using the GET method.
+ @function getData
+ @param {string} path - The path to the NextJS API Router endpoint.
+ @returns {Promise} A promise that resolves with the response from the API.
+ @throws {Error} - Will throw an error if the API request fails.
+ */
 export function getData(path) {
+  // Sends an API request using the GET method with the provided path and options
   return apiHandler({
-    url: getApiPublicURL(path),
+    path: getApiPublicURL(path),
     requestMethod: 'GET',
+    options: {
+      cache: 'no-cache',
+    },
   });
 }
 
-export function postData(path, data) {
+/**
+
+ Sends a POST request to the API with the specified path and body.
+ @function postData
+ @param {string} path - The path to the NextJS API Router endpoint.
+ @param {Object} body - The request body.
+ @returns {Promise} A promise that resolves with the response from the API.
+ @throws {Error} - Will throw an error if the API request fails.
+ */
+export function postData(path, body) {
   return apiHandler({
-    url: getApiPublicURL(path),
+    path: getApiPublicURL(path),
     requestMethod: 'POST',
-    data,
+    body,
+  });
+}
+
+/**
+
+ Sends a PUT request to the API with the specified path and body.
+ @function putData
+ @param {string} path - The path to the NextJS API Router endpoint.
+ @param {Object} body - The request body.
+ @returns {Promise} A promise that resolves with the response from the API.
+ @throws {Error} - Will throw an error if the API request fails.
+ */
+export function putData(path, body) {
+  return apiHandler({
+    path: getApiPublicURL(path),
+    requestMethod: 'PUT',
+    body,
+  });
+}
+
+export function loginData(path) {
+  return apiHandler({
+    path: getIdentityApiURL(path),
+    requestMethod: 'POST',
+    options: {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    },
   });
 }

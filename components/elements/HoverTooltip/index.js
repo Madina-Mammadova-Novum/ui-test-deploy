@@ -4,11 +4,13 @@ import { useState } from 'react';
 
 import { TooltipParamsPropTypes } from '@/lib/types';
 
-const HoverTooltip = ({ title, description, className, children }) => {
+const HoverTooltip = ({ data, className, children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleEnter = () => setShowTooltip(true);
   const handleClose = () => setShowTooltip(false);
+
+  const { title, description } = data;
 
   return (
     <div className="group relative transition-all">

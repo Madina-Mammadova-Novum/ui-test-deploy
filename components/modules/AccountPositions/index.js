@@ -51,7 +51,7 @@ const AccountPositions = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const data = await getUserPositions();
+      const { data } = await getUserPositions();
       setUserStore({ ...userStore, userPositions: data });
       setIsLoading(false);
     } catch (error) {
@@ -68,7 +68,9 @@ const AccountPositions = () => {
     handleChangeState('sortValue', option);
   };
 
-  const printExpandableCard = (fleet) => <ExpandableCard key={fleet.id} data={fleet} expandAll={{ value: toggle }} />;
+  const printExpandableCard = (fleet) => (
+    <ExpandableCard className="px-5" key={fleet.id} data={fleet} expandAll={{ value: toggle }} />
+  );
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 

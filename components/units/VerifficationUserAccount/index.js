@@ -28,15 +28,15 @@ const VerifficationUserAccount = () => {
     if (message) errorToast(message);
 
     if (data) {
-      const { link, error } = await postVeriffData({ data });
+      const { data: link, error } = await postVeriffData({ data });
+      setVeriffUrl(link?.redirectUrl);
       if (error) errorToast(error);
-
-      setVeriffUrl(link);
     }
   };
 
   useEffect(() => {
     fetchVeriffUrl();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
