@@ -6,7 +6,7 @@ import { getData } from '@/utils/dataFetching';
 
 export function getCollectionType(slug) {
   if (slug !== undefined) {
-    const locale = slug.shift(); // defaultLocale form next-i18next.config.js
+    const locale = 'en'; // defaultLocale without using next-i18next.config.js
     if (slug.length > 0) {
       const prefix = slug.shift();
       const collectionType = Object.keys(COLLECTIONS_TYPES)
