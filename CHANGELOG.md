@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.2.1...v0.3.0) (2023-05-15)
+
+
+### Bug Fixes
+
+* removed-auth-file ([c14c2e3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c14c2e333822e95d0db47fc3d87f167f9140a4c0))
+
 ### [0.2.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.2.0...v0.2.1) (2023-05-15)
 
 
