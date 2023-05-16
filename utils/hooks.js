@@ -151,6 +151,16 @@ export const useToast = (title, description = '') => {
   return toastFunc('default', title, description);
 };
 
+export const redirectAfterToast = (message, url) => {
+  return new Promise((resolve) => {
+    successToast(message);
+    setTimeout(() => {
+      window.location.href = url;
+      resolve();
+    }, 1000);
+  });
+};
+
 export const useHookForm = () => {
   const methods = useFormContext();
 

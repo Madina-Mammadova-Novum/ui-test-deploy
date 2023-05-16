@@ -29,8 +29,13 @@ export async function resetPassword({ data }) {
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
   const response = await postData(`auth/signup?type=owner`, body);
+
   return {
     ...response,
+    data: {
+      message:
+        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+    },
   };
 }
 
@@ -39,6 +44,10 @@ export async function chartererSignUp({ data }) {
   const response = await postData(`auth/signup?type=charterer`, body);
   return {
     ...response,
+    data: {
+      message:
+        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+    },
   };
 }
 
