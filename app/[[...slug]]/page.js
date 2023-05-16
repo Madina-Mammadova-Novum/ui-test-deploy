@@ -25,7 +25,7 @@ export default async function Home({ params }) {
   */
   const { slug } = params;
   let legal = false;
-  if (slug.length >= 2 && slug[1] === 'legal') {
+  if (slug?.length >= 2 && slug[1] === 'legal') {
     slug.splice(1, 1); // remove 'legal' from the array
     legal = true;
   }
