@@ -1,7 +1,8 @@
+import { ResetPasswordPagePropTypes } from '@/lib/types';
+
 import { metaData } from '@/adapters/metaData';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
-import { ResetPasswordPagePropTypes } from '@/lib/types';
 import { AuthWrapper, ResetPasswordForm } from '@/modules';
 
 export function generateMetadata() {
