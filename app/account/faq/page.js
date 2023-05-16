@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { metaData } from '@/adapters/metaData';
-// import { BlockManager } from "@/common";
 import { AccountWrapper, FAQByType } from '@/modules';
 
 export function generateMetadata() {
