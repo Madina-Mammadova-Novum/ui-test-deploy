@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 'use client';
 
 import { FormProvider } from 'react-hook-form';

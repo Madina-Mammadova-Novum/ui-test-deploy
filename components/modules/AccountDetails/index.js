@@ -1,10 +1,6 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 'use client';
 
 import { useEffect, useState } from 'react';
-
-import { useSession } from 'next-auth/react';
 
 import { Loader, Title } from '@/elements';
 import { getUserDetails } from '@/services';
@@ -18,8 +14,6 @@ import {
 
 const AccountDetails = () => {
   const [accountData, setAccountData] = useState(null);
-  const { data: session } = useSession();
-  console.log('session: ', session);
 
   const fetchData = async () => {
     const data = await getUserDetails();

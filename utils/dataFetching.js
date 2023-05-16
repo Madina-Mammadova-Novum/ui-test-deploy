@@ -1,5 +1,5 @@
 import { apiHandler } from '@/utils/api';
-import { getApiPublicURL, getIdentityApiURL } from '@/utils/index';
+import { getApiPublicURL } from '@/utils/index';
 
 /**
 
@@ -37,20 +37,6 @@ export function postData(path, body) {
   });
 }
 
-export function postAuthData(path, body) {
-  return apiHandler({
-    path: getApiPublicURL(path),
-    requestMethod: 'POST',
-    body,
-    options: {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/x-www-form-urlencoded',
-      },
-    },
-  });
-}
-
 /**
 
 Sends a PUT request to the API with the specified path and body.
@@ -65,17 +51,5 @@ export function putData(path, body) {
     path: getApiPublicURL(path),
     requestMethod: 'PUT',
     body,
-  });
-}
-
-export function loginData(path) {
-  return apiHandler({
-    path: getIdentityApiURL(path),
-    requestMethod: 'POST',
-    options: {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    },
   });
 }

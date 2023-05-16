@@ -38,13 +38,13 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
     method, // *GET, POST, PUT, DELETE, etc.
     ...options,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
       ...headers,
     },
   };
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
-    fetchOptions.body = JSON.stringify(body);
+    fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
   }
   return fetchOptions;
 };
