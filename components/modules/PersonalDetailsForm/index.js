@@ -4,7 +4,9 @@ import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
+import { PersonalDetailsFormPropTypes } from '@/lib/types';
+
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { personalDetailsSchema } from '@/lib/schemas';
 import { updateInfo } from '@/services';
@@ -19,11 +21,11 @@ const state = {
   primaryPhoneNumber: '971457753981',
 };
 
-const PersonalDetailsForm = () => {
+const PersonalDetailsForm = ({ closeModal }) => {
+
   const schema = yup.object({ ...personalDetailsSchema() });
 
   const methods = useHookFormParams({ state, schema });
-
   const onSubmit = async (data) => {
     const { message } = await updateInfo({ data });
     successToast(message, 'You will be notified soon. The rest of the changes have been edited');
@@ -39,7 +41,8 @@ const PersonalDetailsForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{ text: 'Edit personal details', variant: 'primary', size: 'large' }}
       >
@@ -52,9 +55,11 @@ const PersonalDetailsForm = () => {
           data={noteList}
         />
         <PersonalDetails />
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
+
+PersonalDetailsForm.propTypes = PersonalDetailsFormPropTypes
 
 export default PersonalDetailsForm;

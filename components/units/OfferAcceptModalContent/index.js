@@ -52,7 +52,7 @@ const OfferAcceptModalContent = ({ closeModal }) => {
         {tabContent()}
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex justify-end text-xsm gap-x-2.5 mt-4">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"

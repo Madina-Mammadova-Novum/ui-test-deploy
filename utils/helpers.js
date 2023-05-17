@@ -190,7 +190,7 @@ export const getButtonClassNames = (variant, size) => {
   }
   if (size === 'medium') {
     if (variant === 'primary')
-      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker';
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker hover:text-blue-darker';
     if (variant === 'secondary')
       return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
@@ -244,18 +244,22 @@ export const filterDataByLowerCase = (inputValue, data) => {
 };
 
 export const resetObjectFields = (initialObject, resetType = null) => {
-  Object.keys(initialObject).forEach((key) => {
-    if (Array.isArray(initialObject[key])) {
-      initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
-    } else {
-      initialObject[key] = resetType;
-    }
-  });
+  if (typeof initialObject !== 'string') {
+    Object.keys(initialObject).forEach((key) => {
+      if (Array.isArray(initialObject[key])) {
+        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+      } else {
+        initialObject[key] = resetType;
+      }
+    });
+  }
+  // eslint-disable-next-line no-return-assign, no-param-reassign
+  return (initialObject = resetType);
 };
 
-export const resetForm = (methods) => {
+export const resetForm = (methods, type) => {
   methods.reset((formValues) => {
-    resetObjectFields(formValues);
+    resetObjectFields(formValues, type);
     return formValues;
   });
 };

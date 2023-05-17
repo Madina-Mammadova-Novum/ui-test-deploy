@@ -4,14 +4,16 @@ import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
+import { PasswordInfoFormPropTypes } from '@/lib/types';
+
+import { ModalFormManager } from '@/common';
 import { Divider, PasswordInput, Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
 import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
-const PasswordInfoForm = () => {
+const PasswordInfoForm = ({ closeModal }) => {
   const schema = yup.object({ ...updatePasswordSchema() });
 
   const state = {
@@ -40,8 +42,9 @@ const PasswordInfoForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
         submitAction={onSubmit}
+        onClose={closeModal}
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
         <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
@@ -59,9 +62,12 @@ const PasswordInfoForm = () => {
         </div>
         <Divider />
         <PasswordValidation />
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
+
+PasswordInfoForm.propTypes = PasswordInfoFormPropTypes
+
 
 export default PasswordInfoForm;

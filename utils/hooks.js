@@ -7,10 +7,13 @@ import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import delve from 'dlv';
 import { usePathname } from 'next/navigation';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useSession } from 'next-auth/react';
 
 import { getFilledArray } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
+import axiosInstance from '@/lib/api';
 import { PALETTE, SORT_OPTIONS } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
@@ -146,6 +149,16 @@ export const useInfoToast = (title, description = '') => {
 
 export const useToast = (title, description = '') => {
   return toastFunc('default', title, description);
+};
+
+export const redirectAfterToast = (message, url) => {
+  return new Promise((resolve) => {
+    successToast(message);
+    setTimeout(() => {
+      window.location.href = url;
+      resolve();
+    }, 1000);
+  });
 };
 
 export const useHookForm = () => {
@@ -297,4 +310,22 @@ export const useAuth = () => {
     user: {},
     token: '',
   };
+};
+
+export const useAxiosAuth = () => {
+  const { data } = useSession();
+
+  useEffect(() => {
+    const requestInterceptor = axiosInstance.interceptors.request.use((config) => {
+      if (!config.headers.Authorization) {
+        config.headers.Authorization = `Bearer ${data?.user?.access_token}`;
+      }
+      return config;
+    });
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+    };
+  }, [data]);
+
+  return axiosInstance;
 };

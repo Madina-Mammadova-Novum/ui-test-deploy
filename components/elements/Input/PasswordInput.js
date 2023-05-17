@@ -25,7 +25,7 @@ const PasswordInput = ({ name = '', label = '', placeholder = '', onChange }) =>
             ref={ref}
             type={showPassword ? 'text' : 'password'}
             min={8}
-            inputStyles="!w-[calc(100%-30px)]"
+            inputStyles="!pr-12"
             error={errors[name]?.message}
           />
           <button
