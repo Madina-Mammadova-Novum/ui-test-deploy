@@ -2,12 +2,13 @@
 
 import { FormProvider } from 'react-hook-form';
 
+import { signIn } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
+import { ROUTES } from '@/lib';
 import { loginSchema } from '@/lib/schemas';
-import { login } from '@/services';
 import { useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
@@ -26,7 +27,12 @@ const LoginForm = () => {
   } = methods;
 
   const onSubmit = async (data) => {
-    await login({ data });
+    await signIn('credentials', {
+      email: data?.email,
+      password: data?.password,
+      redirect: true,
+      callbackUrl: ROUTES.ACCOUNT_INFO,
+    });
     reset();
   };
 

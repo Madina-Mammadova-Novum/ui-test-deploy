@@ -181,10 +181,12 @@ export const disableDefaultBehaviour = (e) => e.preventDefault();
 export const getButtonClassNames = (variant, size) => {
   // todo: need to connect constants for variants and sizes values
   if (size === 'large') {
-    if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 hover:bg-blue-darker';
-    if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 hover:bg-blue-dark';
-    if (variant === 'tertiary') return 'bg-white text-black h-10 px-5 py-2.5 border border-gray hover:border-black';
-    if (variant === 'delete') return 'bg-white text-red h-10 px-5 py-2.5 border border-red-medium hover:border-red';
+    if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker';
+    if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-dark';
+    if (variant === 'tertiary')
+      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-gray hover:border-black';
+    if (variant === 'delete')
+      return 'bg-white text-red h-10 px-5 py-2.5 rounded-md border border-red-medium hover:border-red';
   }
   if (size === 'medium') {
     if (variant === 'primary')
@@ -242,18 +244,22 @@ export const filterDataByLowerCase = (inputValue, data) => {
 };
 
 export const resetObjectFields = (initialObject, resetType = null) => {
-  Object.keys(initialObject).forEach((key) => {
-    if (Array.isArray(initialObject[key])) {
-      initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
-    } else {
-      initialObject[key] = resetType;
-    }
-  });
+  if (typeof initialObject !== 'string') {
+    Object.keys(initialObject).forEach((key) => {
+      if (Array.isArray(initialObject[key])) {
+        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+      } else {
+        initialObject[key] = resetType;
+      }
+    });
+  }
+  // eslint-disable-next-line no-return-assign, no-param-reassign
+  return (initialObject = resetType);
 };
 
-export const resetForm = (methods) => {
+export const resetForm = (methods, type) => {
   methods.reset((formValues) => {
-    resetObjectFields(formValues);
+    resetObjectFields(formValues, type);
     return formValues;
   });
 };

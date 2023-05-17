@@ -20,6 +20,8 @@
       "@/lib": ["lib/index"],
       "@/lib/*": ["lib/*"],
       "@/modules": ["components/modules/index"],
+      "@/models": ["models/index"],
+      "@/models/*": ["models/*"],
       "@/modules/*": ["components/modules/*"],
       "@/providers": ["providers/index"],
       "@/providers/*": ["providers/*"],
