@@ -5,7 +5,9 @@ import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
+import { CompanyInfoFormPropTypes } from '@/lib/types';
+
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyAddressesSchema, companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
@@ -22,7 +24,7 @@ const state = {
   AddressOptional: '',
 };
 
-const CompanyInfoForm = () => {
+const CompanyInfoForm = ({ closeModal }) => {
   const [sameAddress, setSameAddress] = useState(false);
 
   const schema = yup.object({
@@ -60,7 +62,8 @@ const CompanyInfoForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
       >
@@ -80,9 +83,11 @@ const CompanyInfoForm = () => {
           <TankerSlotsDetails />
           <CompanyAddresses />
         </div>
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
+
+CompanyInfoForm.propTypes = CompanyInfoFormPropTypes
 
 export default CompanyInfoForm;
