@@ -45,7 +45,7 @@ const ViewFailedOffer = () => {
           <span className="text-red ml-1.5">Offer Declined by me</span>
         </div>
         <div className="text-[12px] mt-1.5">
-          <span className="font-bold">Failed reason:</span>
+          <span className="font-bold">I indicated:</span>
           <span className="ml-1.5">Lorem ipsum is placeholder text commonly used in the graphic</span>
         </div>
       </div>

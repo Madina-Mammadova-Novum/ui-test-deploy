@@ -38,10 +38,10 @@ const CounterofferForm = ({ children, allowSubmit = false }) => {
         className="!gap-0"
         submitButton={
           allowSubmit && {
-            text: 'Send offer',
+            text: 'Confirm Changes and Send',
             variant: 'primary',
             size: 'large',
-            className: 'absolute bottom-8 left-36 text-xsm !w-max z-[1]',
+            className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
           }
         }
       >
