@@ -44,7 +44,7 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
     },
   };
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
-    fetchOptions.body = JSON.stringify(body);
+    fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
   }
   return fetchOptions;
 };

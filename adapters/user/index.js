@@ -226,13 +226,6 @@ export function loginAdapter({ data }) {
   };
 }
 
-export function loginResponseAdapter({ data }) {
-  if (data === null) return null;
-  return {
-    data,
-  };
-}
-
 export function tankerInfoAdapter({ data }) {
   if (data === null) return null;
   const { id, title, imo, port, date, status, marked } = data;
@@ -276,6 +269,13 @@ export function signupResponseAdapter({ data }) {
 }
 
 export function confirmEmailResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function loginResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 

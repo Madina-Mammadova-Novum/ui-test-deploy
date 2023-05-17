@@ -8,7 +8,7 @@ import {
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
-import { getData, loginData, postData, putData } from '@/utils/dataFetching';
+import { getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
@@ -29,8 +29,13 @@ export async function resetPassword({ data }) {
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
   const response = await postData(`auth/signup?type=owner`, body);
+
   return {
     ...response,
+    data: {
+      message:
+        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+    },
   };
 }
 
@@ -39,6 +44,10 @@ export async function chartererSignUp({ data }) {
   const response = await postData(`auth/signup?type=charterer`, body);
   return {
     ...response,
+    data: {
+      message:
+        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+    },
   };
 }
 
@@ -51,7 +60,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await loginData(`auth/login`, body);
+  const response = await postData(`auth/login`, body);
   return {
     ...response,
   };
