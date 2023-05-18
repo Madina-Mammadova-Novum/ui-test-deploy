@@ -16,7 +16,7 @@ export const faqAdapter = ({ data }) => {
 
 export const faqsAdapter = ({ data }) => {
   if (data === null) return [];
-  return data.map((faq) => {
+  return data.filter(({ attributes } ) => attributes.category.data !== null).map((faq) => {
     return faqAdapter({ data: faq });
   });
 };
