@@ -13,10 +13,7 @@ const VoyageDetailsContent = ({ data = { dates: [], ports: [] } }) => {
         <Title level="3">Voyage details</Title>
         <div className="flex relative">
           <span className="mr-1.5">Tanker Information</span>
-          <ManualTooltip
-            className="!right-0 min-w-[470px] !p-2.5"
-            data={{ description: <TankerInformationContent /> }}
-          >
+          <ManualTooltip className="!right-0 min-w-[470px] !p-2.5" data={{ description: <TankerInformationContent /> }}>
             <InfoSVG className="!w-3.5" />
           </ManualTooltip>
         </div>

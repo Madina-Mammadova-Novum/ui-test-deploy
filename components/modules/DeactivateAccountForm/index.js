@@ -56,7 +56,6 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
         </ModalFormManager>
       </FormProvider>
     </div>
-
   );
 };
 

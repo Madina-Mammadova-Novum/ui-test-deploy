@@ -314,7 +314,7 @@ export const tankerInformationTooltipData = [
   {
     title: 'Flag',
     description: 'Turkey',
-    countryCode: 'us'
+    countryCode: 'us',
   },
   {
     title: 'DWT',
@@ -355,24 +355,24 @@ export const tankerInformationTooltipData = [
   {
     title: 'Country of Registered Owner',
     description: 'Turkey',
-    countryCode: 'us'
+    countryCode: 'us',
   },
   {
     title: 'Country of Disponent Owner',
     description: 'The Netherlands',
-    countryCode: 'us'
+    countryCode: 'us',
   },
   {
     title: 'Country of Technical Operator',
     description: 'The Netherlands',
-    countryCode: 'us'
+    countryCode: 'us',
   },
   {
     title: 'Country of Commercial Operator',
     description: 'Turkey',
-    countryCode: 'us'
+    countryCode: 'us',
   },
-]
+];
 export const incomingOfferCommentsData = [
   {
     title:

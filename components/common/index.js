@@ -1,5 +1,3 @@
-
-
 import ModalFormManager from './ModalFormManager';
 
 import BlockManager from '@/common/BlockManager';
