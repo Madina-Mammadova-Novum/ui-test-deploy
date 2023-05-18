@@ -1,3 +1,5 @@
+import { AuthManager } from '@/common';
+
 export const metadata = {
   title: {
     default: 'Shiplink',
@@ -5,7 +7,6 @@ export const metadata = {
   },
 };
 
-export default function RootLayout(props) {
-  const { children } = props;
-  return children;
+export default function RootLayout({ children }) {
+  return <AuthManager>{children}</AuthManager>;
 }

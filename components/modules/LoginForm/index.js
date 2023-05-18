@@ -7,7 +7,6 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
-import { ROUTES } from '@/lib';
 import { loginSchema } from '@/lib/schemas';
 import { useHookFormParams } from '@/utils/hooks';
 
@@ -27,12 +26,12 @@ const LoginForm = () => {
   } = methods;
 
   const onSubmit = async (data) => {
-    await signIn('credentials', {
+    const res = await signIn('credentials', {
       email: data?.email,
       password: data?.password,
-      redirect: true,
-      callbackUrl: ROUTES.ACCOUNT_INFO,
+      redirect: false,
     });
+    console.log('res: ', res);
     reset();
   };
 
