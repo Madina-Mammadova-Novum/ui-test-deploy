@@ -61,7 +61,7 @@ const CommercialOfferTerms = () => {
           />
         </div>
       ))}
-      <div className="flex w-1/2 gap-x-5 items-center mt-3 pr-5">
+      <div className="flex w-1/2 gap-x-5 items-start mt-3 pr-5">
         <FormDropdown
           label="Freight"
           name="freight"

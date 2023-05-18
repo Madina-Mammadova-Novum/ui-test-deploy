@@ -46,6 +46,7 @@ import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
+import TankerInformationContent from '@/units/TankerInformationContent';
 
 export * from '@/units/Account';
 
@@ -98,4 +99,5 @@ export {
   CargoIdTooltip,
   CounterofferForm,
   ChartererInformationContent,
+  TankerInformationContent,
 };
