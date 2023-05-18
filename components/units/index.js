@@ -41,6 +41,7 @@ import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
 import TabsVertical from '@/units/TabsVertical';
+import TankerInformationContent from '@/units/TankerInformationContent';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
@@ -98,4 +99,5 @@ export {
   CargoIdTooltip,
   CounterofferForm,
   ChartererInformationContent,
+  TankerInformationContent,
 };

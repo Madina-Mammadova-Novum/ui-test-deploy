@@ -67,7 +67,6 @@ const PasswordInfoForm = ({ closeModal }) => {
   );
 };
 
-PasswordInfoForm.propTypes = PasswordInfoFormPropTypes
-
+PasswordInfoForm.propTypes = PasswordInfoFormPropTypes;
 
 export default PasswordInfoForm;

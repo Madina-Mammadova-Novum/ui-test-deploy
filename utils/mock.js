@@ -302,7 +302,77 @@ export const unauthorizedSearchExpandedData = {
     },
   ],
 };
-
+export const tankerInformationTooltipData = [
+  {
+    title: 'Tanker name',
+    description: 'Hidden info',
+  },
+  {
+    title: 'IMO',
+    description: 'Hidden info',
+  },
+  {
+    title: 'Flag',
+    description: 'Turkey',
+    countryCode: 'us',
+  },
+  {
+    title: 'DWT',
+    description: '140,*** tons',
+  },
+  {
+    title: 'Estimated Arrival',
+    description: 'Dec 11, 2021',
+  },
+  {
+    title: 'Ballast Leg',
+    description: 'Short',
+  },
+  {
+    title: 'Ship Age',
+    description: '≤ 5 years',
+  },
+  {
+    title: 'Cubic Capacity 98%',
+    description: '25,*** m³',
+  },
+  {
+    title: 'Number of Segregations',
+    description: '5',
+  },
+  {
+    title: 'LOA',
+    description: '100 m',
+  },
+  {
+    title: 'Beam',
+    description: '23 m',
+  },
+  {
+    title: 'Type of Hull',
+    description: 'Double Hull',
+  },
+  {
+    title: 'Country of Registered Owner',
+    description: 'Turkey',
+    countryCode: 'us',
+  },
+  {
+    title: 'Country of Disponent Owner',
+    description: 'The Netherlands',
+    countryCode: 'us',
+  },
+  {
+    title: 'Country of Technical Operator',
+    description: 'The Netherlands',
+    countryCode: 'us',
+  },
+  {
+    title: 'Country of Commercial Operator',
+    description: 'Turkey',
+    countryCode: 'us',
+  },
+];
 export const incomingOfferCommentsData = [
   {
     title:

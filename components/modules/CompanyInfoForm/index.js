@@ -88,6 +88,6 @@ const CompanyInfoForm = ({ closeModal }) => {
   );
 };
 
-CompanyInfoForm.propTypes = CompanyInfoFormPropTypes
+CompanyInfoForm.propTypes = CompanyInfoFormPropTypes;
 
 export default CompanyInfoForm;

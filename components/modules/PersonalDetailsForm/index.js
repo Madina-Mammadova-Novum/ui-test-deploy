@@ -22,7 +22,6 @@ const state = {
 };
 
 const PersonalDetailsForm = ({ closeModal }) => {
-
   const schema = yup.object({ ...personalDetailsSchema() });
 
   const methods = useHookFormParams({ state, schema });
@@ -60,6 +59,6 @@ const PersonalDetailsForm = ({ closeModal }) => {
   );
 };
 
-PersonalDetailsForm.propTypes = PersonalDetailsFormPropTypes
+PersonalDetailsForm.propTypes = PersonalDetailsFormPropTypes;
 
 export default PersonalDetailsForm;
