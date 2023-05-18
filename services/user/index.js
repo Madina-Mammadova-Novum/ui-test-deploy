@@ -61,6 +61,7 @@ export async function postVeriffData({ data }) {
 export async function login({ data }) {
   const body = loginAdapter({ data });
   const response = await postData(`auth/login`, body);
+
   return {
     ...response,
   };

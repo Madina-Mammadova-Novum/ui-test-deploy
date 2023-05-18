@@ -2,7 +2,6 @@
 
 import { Provider } from 'react-redux';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { SessionProvider } from 'next-auth/react';
 import { PersistGate } from 'redux-persist/integration/react';
 

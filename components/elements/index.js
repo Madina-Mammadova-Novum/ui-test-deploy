@@ -26,6 +26,7 @@ import InputErrorMessage from '@/elements/InputErrorMessage';
 import Label from '@/elements/Label';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
+import LoginButton from '@/elements/LoginButton';
 import ManualTooltip from '@/elements/ManualTooltip';
 import Modal from '@/elements/Modal';
 import NavButton from '@/elements/NavButton';
@@ -85,4 +86,5 @@ export {
   RadioInput,
   NavButton,
   NavTree,
+  LoginButton,
 };

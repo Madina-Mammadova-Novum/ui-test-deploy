@@ -275,9 +275,9 @@ export function confirmEmailResponseAdapter({ data }) {
   return { data };
 }
 
-export function loginResponseAdapter({ data }) {
+export function loginResponseAdapter(data) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 
-  return { data };
+  return data;
 }

@@ -275,3 +275,15 @@ export const isEmpty = (value) => {
   if (Array.isArray(value) && value.length === 0) return true;
   return typeof value === 'object' && Object.keys(value).length === 0;
 };
+
+export const transformInvalidLoginMessage = (msg) => {
+  return msg
+    ?.split('_')
+    .map((word, index) => {
+      if (index === 0) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+};
