@@ -43,6 +43,7 @@ module.exports = {
       },
       width: {
         table: '100rem',
+        form: '692px',
       },
       fontSize: {
         xxs: [
