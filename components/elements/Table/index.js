@@ -5,7 +5,7 @@ import { TablePropTypes } from '@/lib/types';
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
-const Table = ({ headerData, rows }) => {
+const Table = ({ headerData, rows, noDataMessage = '' }) => {
   const printTableRow = (rowData) => <TableRow rowData={rowData} />;
 
   return headerData.length > 0 ? (
@@ -17,8 +17,11 @@ const Table = ({ headerData, rows }) => {
               <TableHeader headerData={headerData} />
             </thead>
           )}
-          {rows.length && <tbody className="border-purple-light">{rows.map(printTableRow)}</tbody>}
+          {!!rows.length && <tbody className="border-purple-light">{rows.map(printTableRow)}</tbody>}
         </table>
+        {!rows.length && noDataMessage && (
+          <div className="py-5 bg-gray-light text-center text-xsm text-gray">{noDataMessage}</div>
+        )}
       </div>
     </div>
   ) : (

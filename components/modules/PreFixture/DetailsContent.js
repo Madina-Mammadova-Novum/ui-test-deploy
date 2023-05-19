@@ -1,9 +1,8 @@
-import PartyTermsItem from './PartyTermsItem';
-
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import usFlag from '@/assets/images/flag.png';
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
+import { PartyItem } from '@/units';
 
 const partyTermsMock = [
   {
@@ -98,7 +97,7 @@ const DetailsContent = ({ underNegotiation }) => {
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
             {partyTermsMock.map(({ title, content }) => (
-              <PartyTermsItem title={title} content={content} />
+              <PartyItem buttonText={title} modalTitle="All Additional Information" content={content} />
             ))}
           </FieldsetContent>
         </FieldsetWrapper>

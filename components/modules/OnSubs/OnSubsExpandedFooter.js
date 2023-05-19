@@ -1,33 +1,15 @@
-import { useState } from 'react';
+import FailTheSubsModalContent from './FailTheSubsModalContent';
 
-import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
-import { Button, Modal } from '@/elements';
-import { ExpandableRowFooter } from '@/units';
 import { OnSubsExpandedFooterPropTypes } from '@/lib/types';
 
+import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
+import { Button } from '@/elements';
+import { ExpandableRowFooter, ModalWindow } from '@/units';
+
 const OnSubsExpandedFooter = ({ underRecap = false }) => {
-  const [modalOptions, setModalOptions] = useState({
-    opened: false,
-    type: null,
-  });
-
-  const handleOpenModal = (type) => setModalOptions({ opened: true, type });
-  const handleCloseModal = () => setModalOptions({ opened: false, type: null });
-
-  const modalContent = () => {
-    switch (modalOptions.type) {
-      case 'fail_subs':
-        return <div>Fail subs</div>;
-      case 'lift_subs':
-        return <div>Lift subs</div>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <ExpandableRowFooter>
-      <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between">
+      <div className="flex gap-x-5 justify-between">
         <div className="w-full grow">
           {!!underRecap && (
             <Button
@@ -42,18 +24,22 @@ const OnSubsExpandedFooter = ({ underRecap = false }) => {
             />
           )}
         </div>
-        <div className="grid grid-cols-1 3md:flex gap-x-2.5 gap-y-2.5">
+        <div className="flex gap-x-2.5 gap-y-2.5">
           <div className="w-full">
-            <Button
-              onClick={() => handleOpenModal('fail_subs')}
-              buttonProps={{ text: 'Fail the Subs', variant: 'delete', size: 'large' }}
-              customStyles="w-full whitespace-nowrap"
-              disabled={underRecap}
-            />
+            <ModalWindow
+              buttonProps={{
+                variant: 'delete',
+                size: 'large',
+                text: 'Fail the Subs',
+                className: 'w-max',
+              }}
+              containerClass="w-[356px]"
+            >
+              <FailTheSubsModalContent />
+            </ModalWindow>
           </div>
           <div className="w-full">
             <Button
-              onClick={() => handleOpenModal('lift_subs')}
               buttonProps={{ text: 'Lift the Subs', variant: 'primary', size: 'large' }}
               customStyles="w-full whitespace-nowrap"
               disabled={underRecap}
@@ -61,9 +47,6 @@ const OnSubsExpandedFooter = ({ underRecap = false }) => {
           </div>
         </div>
       </div>
-      <Modal opened={modalOptions.opened} onClose={handleCloseModal}>
-        {modalContent()}
-      </Modal>
     </ExpandableRowFooter>
   );
 };

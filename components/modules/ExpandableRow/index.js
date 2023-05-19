@@ -1,14 +1,11 @@
 'use client';
 
-import { cloneElement, useEffect, useRef, useState } from 'react';
-
-import classnames from 'classnames';
+import { cloneElement, useEffect, useState } from 'react';
 
 import { ExpandableRowPropTypes } from '@/lib/types';
 
 const ExpandableRow = ({ header, footer, children, expand = false }) => {
   const [toggle, setToggle] = useState(false);
-  const contentRef = useRef(null);
   const headerWithProps = cloneElement(header, { toggle });
 
   useEffect(() => {
@@ -21,14 +18,14 @@ const ExpandableRow = ({ header, footer, children, expand = false }) => {
         {headerWithProps}
       </div>
       <div
-        ref={contentRef}
-        className={classnames('overflow-hidden transition-height duration-500', {
-          'border-t border-gray-darker': toggle,
-        })}
-        style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
+        className={`transition-[grid-template-rows] duration-500 grid grid-rows-[0fr] overflow-hidden ${
+          toggle && 'grid-rows-[1fr] border-t border-gray-darker'
+        }`}
       >
-        <div className="px-6">{children}</div>
-        {footer}
+        <div className="min-h-0">
+          <div className="px-6">{children}</div>
+          {footer}
+        </div>
       </div>
     </div>
   );

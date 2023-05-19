@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
 
+import DetailsContent from './DetailsContent';
+import DocumentsContent from './DocumentsContent';
+
 import { Tabs } from '@/units';
 
 const tabs = [
@@ -19,9 +22,9 @@ const OnSubsExpandedContent = () => {
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
-        return <div>Documents</div>;
+        return <DocumentsContent />;
       default:
-        return <div>Details</div>;
+        return <DetailsContent />;
     }
   }, [currentTab]);
 

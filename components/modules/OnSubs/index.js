@@ -32,14 +32,14 @@ const OnSubs = () => {
     perPage,
   } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, underRecap) => {
     const rowHeader = ownerOnSubsHeaderDataAdapter({ data: rowData });
 
     return (
       <ExpandableRow
         header={<ExpandableCardHeader headerData={rowHeader} />}
         expand={toggle}
-        footer={<OnSubsExpandedFooter underRecap />}
+        footer={<OnSubsExpandedFooter underRecap={underRecap} />}
       >
         <OnSubsExpandedContent />
       </ExpandableRow>
