@@ -128,6 +128,6 @@ export async function getUserDetails() {
 export async function getUserOnSubs() {
   const response = await getData(`account/on-subs`);
   return {
-    ...response
+    ...response,
   };
 }
