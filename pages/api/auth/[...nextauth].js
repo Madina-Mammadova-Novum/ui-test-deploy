@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import jwt from 'jsonwebtoken';
 import NextAuth from 'next-auth/next';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -35,8 +37,8 @@ export default async function auth(req, res) {
       async jwt({ token, user }) {
         return { ...token, ...user };
       },
-      async session({ session, token }) {
-        session.user = token;
+      async session({ session, token: { data } }) {
+        session.user = { ...data, ...jwt.decode(data?.access_token) };
         return session;
       },
     },

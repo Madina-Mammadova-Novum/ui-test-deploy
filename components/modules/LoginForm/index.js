@@ -2,7 +2,7 @@
 
 import { FormProvider } from 'react-hook-form';
 
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -14,6 +14,9 @@ const LoginForm = () => {
   const schema = yup.object().shape({
     ...loginSchema(),
   });
+
+  const { data: session } = useSession();
+  console.log('session: ', session);
 
   const methods = useHookFormParams({ schema });
 
