@@ -1,9 +1,10 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import jwt from 'jsonwebtoken';
 import NextAuth from 'next-auth/next';
 import Credentials from 'next-auth/providers/credentials';
 
-import { login } from '@/services';
+import { userSessionAdapter, userTokenAdapter } from '@/adapters/user';
+import { ROUTES } from '@/lib';
+import LoginModel from '@/models/loginModel';
+import { signIn } from '@/services';
 
 export default async function auth(req, res) {
   const providers = [
@@ -16,9 +17,13 @@ export default async function auth(req, res) {
         password: {},
       },
       async authorize(credentials) {
-        const response = await login({ data: credentials });
-        // TODO: response doesn't sync with apiHandler
-        if (response) return response;
+        const body = new LoginModel(credentials).setFormData();
+        // const response = await login({ data: credentials });
+        // TODO: error response doesn't sync with apiHandler
+        const response = await signIn(body);
+        const user = await response.json();
+
+        if (response.ok && user) return user;
 
         return null;
       },
@@ -31,15 +36,16 @@ export default async function auth(req, res) {
       strategy: 'jwt',
     },
     pages: {
-      signIn: '/login',
+      signIn: ROUTES.LOGIN,
     },
     callbacks: {
       async jwt({ token, user }) {
-        return { ...token, ...user };
+        const result = await userTokenAdapter({ token, user });
+        return result;
       },
-      async session({ session, token: { data } }) {
-        session.user = { ...data, ...jwt.decode(data?.access_token) };
-        return session;
+      async session({ session, token }) {
+        const result = await userSessionAdapter({ session, token });
+        return result;
       },
     },
   });

@@ -61,9 +61,22 @@ export async function postVeriffData({ data }) {
 export async function login({ data }) {
   const body = loginAdapter({ data });
   const response = await postData(`auth/login`, body);
+  // TODO: error response doesn't sync with apiHandler
   return {
     ...response,
   };
+}
+
+/* Temporary solution */
+
+export async function signIn(body) {
+  const response = await fetch('https://shiplink-id.azurewebsites.net/connect/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body,
+  });
+
+  return response;
 }
 
 export async function updatePassword({ data }) {

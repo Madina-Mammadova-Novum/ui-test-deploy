@@ -1,3 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import jwt from 'jsonwebtoken';
+
 import { isEmpty } from '@/utils/helpers';
 
 export function userDetailsAdapter({ data }) {
@@ -280,4 +283,33 @@ export function loginResponseAdapter(data) {
   if (isEmpty(data)) return null;
 
   return data;
+}
+
+export function signInAdapter({ data }) {
+  if (!data) return null;
+
+  const { email, password, url } = data;
+
+  return {
+    email,
+    password,
+    redirect: false,
+    callbackUrl: url,
+  };
+}
+
+export function userTokenAdapter({ token, user }) {
+  if (!token || token === undefined || token === '') return null;
+
+  return { ...token, ...user };
+}
+
+export function userSessionAdapter({ session, token }) {
+  if (token === null) throw new Error('Oops something went wrong');
+
+  if (token?.access_token) {
+    session.user = { ...token, ...jwt.decode(token?.access_token) };
+  }
+
+  return session;
 }
