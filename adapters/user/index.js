@@ -1,3 +1,5 @@
+import { isEmpty } from '@/utils/helpers';
+
 export function userDetailsAdapter({ data }) {
   if (data === null) return null;
 
@@ -50,19 +52,34 @@ export function userDetailsAdapter({ data }) {
 }
 
 export function forgotPasswordAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   const { email } = data;
   return {
     email,
   };
 }
 
-export function resetPasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password, confirmPassword } = data;
+export function forgotPasswordResponseAdapter({ data }) {
+  if (!data) return null;
   return {
-    password,
-    confirmPassword,
+    data,
+  };
+}
+
+export function resetPasswordAdapter({ data }) {
+  if (!data) return null;
+  const { password, userId, token } = data;
+  return {
+    newPassword: password,
+    userId,
+    token,
+  };
+}
+
+export function resetPasswordResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data,
   };
 }
 
@@ -240,4 +257,27 @@ export function positionAdapter({ data }) {
 export function positionsAdapter({ data }) {
   if (data === null || data === undefined) return null;
   return data.map((item) => positionAdapter({ data: item }));
+}
+
+export function signupResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data: {
+      message: 'Check your account for verify',
+    },
+  };
+}
+
+export function confirmEmailResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function loginResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
 }

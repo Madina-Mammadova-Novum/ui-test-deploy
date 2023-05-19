@@ -26,7 +26,7 @@ import {
   TermsAndConditions,
 } from '@/units';
 import { resetForm } from '@/utils/helpers';
-import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
@@ -50,13 +50,12 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data } = await chartererSignUp({ data: formData });
-    if (data.status === 200) {
-      successToast(data.alert);
-      resetForm(methods);
-    }
-    if (data.status !== 200) {
-      errorToast(data.alert);
+    const { data, error } = await chartererSignUp({ data: formData });
+    if (data) {
+      resetForm(methods, '');
+      redirectAfterToast(data.message, '/');
+    } else if (error) {
+      errorToast(error.message, error.errors.join('\n'));
     }
   };
 

@@ -6,7 +6,7 @@ import { getData } from '@/utils/dataFetching';
 
 export function getCollectionType(slug) {
   if (slug !== undefined) {
-    const locale = slug.shift(); // defaultLocale form next-i18next.config.js
+    const locale = 'en'; // defaultLocale without using next-i18next.config.js
     if (slug.length > 0) {
       const prefix = slug.shift();
       const collectionType = Object.keys(COLLECTIONS_TYPES)
@@ -40,16 +40,14 @@ export function getEndpoint(slug, locale, apiID, preview = false) {
   return `/${pluralize(apiID)}?${previewParams}
     &locale=${locale}
     &filters[slug][$eq]=${slug}
-    &populate[blocks][populate]=*,gallery,members.author,cta.buttons,categories,
-    coverImage,button,buttons,ctaList,ctaList.cta,cta,ctaList.cta.buttons,
-    category,members.author.coverImage,
-    members.author.socialLinks,members.author.socialLinks.coverImage,members.author.authorPosition
-    &populate[seo]=metaSocial`.replace(/\s+|\n/g, '');
+    &populate=deep`.replace(/\s+|\n/g, '');
 }
 
 export async function getEntityData(params, preview = false) {
   const { slug: pathArray } = params;
   const { collectionType, slug, locale } = getCollectionType(pathArray);
   const response = await getData(`collection-type?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
-  return response;
+  return {
+    ...response,
+  };
 }

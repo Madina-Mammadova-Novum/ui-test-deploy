@@ -1,15 +1,16 @@
-import { Button, Title } from '@/elements';
 import { FailTheSubsModalContentPropTypes } from '@/lib/types';
+
+import { Button, Title } from '@/elements';
 
 const FailTheSubsModalContent = ({ closeModal }) => {
   return (
     <div>
       <Title level={2}>Do you want to fail the Subs?</Title>
-      <div className="flex mt-7">
+      <div className="flex gap-x-2.5 mt-7">
         <div className="w-full">
           <Button
             onClick={closeModal}
-            buttonProps={{ text: 'Cancel', variant: 'tertiaty', size: 'large' }}
+            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
             customStyles="w-full whitespace-nowrap"
           />
         </div>

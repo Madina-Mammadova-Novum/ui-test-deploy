@@ -11,6 +11,7 @@ import ContactUsForm from '@/modules/ContactUsForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
+import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
@@ -49,6 +50,7 @@ export {
   ContactUsForm,
   DeleteAccountForm,
   DeactivateAccountForm,
+  FAQByType,
   Sidebar,
   Navbar,
   Signup,

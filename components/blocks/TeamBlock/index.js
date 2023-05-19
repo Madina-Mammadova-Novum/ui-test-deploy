@@ -31,7 +31,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
 
   const printMember = ({ fullName, content, position, coverImage, socialLinks }) => (
     <SwiperSlide key={makeId()} className="px-2.5 h-auto flex">
-      <div className="flex grow items-center flex-col mt-[60px] text-black shadow-2xmd px-[30px] pb-[30px] bg-white rounded-base">
+      <div className="flex grow items-center flex-col mt-[60px] text-black shadow-2xmd px-[30px] pb-[30px] max-w-full bg-white rounded-base">
         {coverImage && (
           <NextImage
             alt={delve(coverImage, 'alternativeText')}
@@ -42,7 +42,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
           />
         )}
         {fullName.trim() && (
-          <Title level="2" className="mb-1">
+          <Title level="2" className="mb-1 max-w-full break-words">
             {fullName}
           </Title>
         )}

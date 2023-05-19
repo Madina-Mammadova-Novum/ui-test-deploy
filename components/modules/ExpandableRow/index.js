@@ -22,10 +22,15 @@ const ExpandableRow = ({ header, footer, children, expand = false }) => {
           toggle && 'grid-rows-[1fr] border-t border-gray-darker'
         }`}
       >
+{/* <<<<<<< HEAD */}
         <div className="min-h-0">
-          <div className="px-6">{children}</div>
+          <div className="px-6 table-scroll">{children}</div>
           {footer}
         </div>
+{/* =======
+        <div className="px-6 table-scroll">{children}</div>
+        {footer}
+>>>>>>> 48e87567941281d27c068f24b6be754e65ea3ca0 */}
       </div>
     </div>
   );

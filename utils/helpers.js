@@ -190,7 +190,7 @@ export const getButtonClassNames = (variant, size) => {
   }
   if (size === 'medium') {
     if (variant === 'primary')
-      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker';
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker hover:text-blue-darker';
     if (variant === 'secondary')
       return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
@@ -223,14 +223,14 @@ export const options = (values) => values?.map((value) => ({ label: value, value
 
 export const countriesOptions = (data) => countryOptionsAdapter(data);
 
-export const convertDataToOptions = (data, keyValue, keyLabel) => {
-  if (data === null || data === undefined) return [];
-  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
-    if (value === null || value === undefined) throw new Error('value cannot be empty');
-    if (label === null || label === undefined) throw new Error('label cannot be empty');
+export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
+  if (!data?.length) return [];
 
-    return { value, label };
-  });
+  return data
+    .filter(({ [keyValue]: value, [keyLabel]: label }) => value && label)
+    .map(({ [keyValue]: value, [keyLabel]: label }) => {
+      return { value, label };
+    });
 };
 
 export const removeByIndex = (data, index) => {
@@ -244,18 +244,22 @@ export const filterDataByLowerCase = (inputValue, data) => {
 };
 
 export const resetObjectFields = (initialObject, resetType = null) => {
-  Object.keys(initialObject).forEach((key) => {
-    if (Array.isArray(initialObject[key])) {
-      initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
-    } else {
-      initialObject[key] = resetType;
-    }
-  });
+  if (typeof initialObject !== 'string') {
+    Object.keys(initialObject).forEach((key) => {
+      if (Array.isArray(initialObject[key])) {
+        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+      } else {
+        initialObject[key] = resetType;
+      }
+    });
+  }
+  // eslint-disable-next-line no-return-assign, no-param-reassign
+  return (initialObject = resetType);
 };
 
-export const resetForm = (methods) => {
+export const resetForm = (methods, type) => {
   methods.reset((formValues) => {
-    resetObjectFields(formValues);
+    resetObjectFields(formValues, type);
     return formValues;
   });
 };
@@ -264,4 +268,10 @@ export const sleep = (ms) => {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+};
+
+export const isEmpty = (value) => {
+  if (value === undefined || value === null) return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  return typeof value === 'object' && Object.keys(value).length === 0;
 };

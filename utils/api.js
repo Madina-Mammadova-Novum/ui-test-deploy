@@ -1,118 +1,121 @@
-import { responseAdapter } from '@/adapters/response';
+import delve from 'dlv';
+
+import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { getApiURL, getIdentityApiURL, getStrapiURL } from '@/utils/index';
 
-export const endpointPath = (path, provider) => {
-  let apiURL = '';
-  switch (provider) {
-    case 'identify': {
-      apiURL = getIdentityApiURL(path);
-      break;
-    }
-    case 'backend': {
-      apiURL = getApiURL(path);
-      break;
-    }
-    case 'strapi': {
-      apiURL = getStrapiURL(path);
-      break;
-    }
-    default: {
-      apiURL = null;
-    }
-  }
-  return apiURL;
-};
+/**
 
-export const externalErrorHandler = (status, message, errors = []) => {
+ Handles errors returned by the API request
+ @function requestErrorHandler
+ @param {number} status - The status code of the error
+ @param {string|object} message - The error message or an object with the error messages and title
+ @param {Array} errors - An array of error messages
+ @returns {object} - An object with the error message and error messages
+ */
+export const requestErrorHandler = (status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
-  let errorsMessages = null;
   let errorMessage = null;
   if (typeof statusMessage === 'object') {
-    errorsMessages = statusMessage.errors;
     errorMessage = statusMessage.title;
   }
   return {
     message: errorMessage !== null ? errorMessage : statusMessage,
-    errors: errorsMessages !== null ? errorsMessages : errors,
+    errors: responseErrorAdapter(errors),
   };
 };
 
-export const bodyObject = ({ body }) => {
-  return body;
-};
+/**
 
-const externalFetchOptions = (requestMethod, body = null) => {
+ Creates the options for the API request
+ @function requestOptions
+ @param {object} props - An object containing requestMethod, body and options properties
+ @returns {object} - The options object for the API request
+ */
+const requestOptions = ({ requestMethod, body = null, options }) => {
   const method = requestMethod.toUpperCase();
-  const options = {
+  const headers = delve(options, 'headers');
+  const fetchOptions = {
     method, // *GET, POST, PUT, DELETE, etc.
+    ...options,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      ...headers,
     },
   };
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
-    options.body = JSON.stringify(body);
+    fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
   }
-  return options;
+  return fetchOptions;
 };
 
-export const externalApiHandler = async (options) => {
-  const { endpoint, requestMethod, body } = options;
-  const requestOptions = externalFetchOptions(requestMethod, body);
+/**
+
+ Handles the API request
+ @function apiHandler
+ @param {object} options - An object containing path, requestMethod, body and options properties
+ @returns {object} - An object with status, data, error, and other response properties
+ */
+export const apiHandler = async (options) => {
   try {
-    const response = await fetch(endpoint, requestOptions);
-    const { status, ok, statusText } = response;
+    const path = delve(options, 'path');
+    const response = await fetch(path, requestOptions(options));
+    const status = delve(response, 'status');
+    const ok = delve(response, 'ok');
+    const statusText = delve(response, 'statusText');
     let responseBody = await response.text();
     if (responseBody !== '') {
       responseBody = JSON.parse(responseBody);
     }
     const result = ok ? responseBody : null;
-    const error = ok ? null : externalErrorHandler(status, statusText, [responseBody]);
+    const error = ok ? null : requestErrorHandler(status, statusText, [responseBody]);
     return {
       status,
-      ...(result ? responseAdapter(result) : {}),
+      ...responseAdapter(result),
       error,
     };
   } catch (error) {
     console.error(error);
-    return externalErrorHandler(500, 'External server error');
+    return requestErrorHandler(500, 'External server error', [error]);
   }
 };
 
-export const postHandler = (path, body, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'POST',
-    body,
-  });
-};
-
-export const putHandler = (path, body, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'PUT',
-    body,
-  });
-};
-
-export const patchHandler = (path, body, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'PATCH',
-    body,
-  });
+/**
+  Handles the error response from the API and sends it as a JSON response
+  @function errorHandler
+  @param {object} res - The response object
+  @param {number} status - The status code for the response
+  @param {string} message - The error message
+  @param {Array} errors - An array of error messages
+  @returns {object} - A JSON response with the error message, error messages, status, data, and meta properties
+ */
+export const errorHandler = (res, status, message, errors = []) => {
+  const error = {
+    message: message || SYSTEM_ERROR,
+    errors,
+  };
+  return res.status(status).json({ error, data: null, meta: null, status });
 };
 
 /**
- *
- * @param path
- * @param provider
- * @returns {Promise<{data?: *, error: null|{message: null|string|*, errors: null|*[]}, status: *}|{message: null|string|*, errors: null|*[]}|undefined>}
+ Handles the response from the API and sends it as a JSON response
+ @function responseHandler
+ @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
+ @returns {object} - A JSON response with the status, data, meta, and error properties
  */
-export const getHandler = (path, provider) => {
-  return externalApiHandler({
-    endpoint: endpointPath(path, provider),
-    requestMethod: 'GET',
-  });
+export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod, options = null }) => {
+  try {
+    const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body, options });
+    if (error) {
+      const { message, errors } = error;
+      const errorMessage = status === 500 ? 'External server error' : message;
+      return errorHandler(res, status, errorMessage, errors);
+    }
+    const responseData = await dataAdapter({ data });
+    const { data: responseDataAdapted } = responseAdapter(responseData);
+    return res.status(status).json({ status, data: responseDataAdapted, error, ...rest });
+  } catch (error) {
+    console.error(error);
+    return errorHandler(res, 500, error.message, [error]);
+  }
 };

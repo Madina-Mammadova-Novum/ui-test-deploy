@@ -36,12 +36,10 @@ export const entitiesDataAdapter = async ({ data }) => {
   return entitiesData;
 };
 
-export const entityDataResponseAdapter = async (response, locale, collectionType, preview) => {
-  const { data, error, meta } = response;
+export const entityDataResponseAdapter = async (response, locale, collectionType) => {
+  const { data, error } = response;
   if (error) return entityDataError(error);
-
   if (Array.isArray(data) && data.length === 0) return null;
-
   const responseData = Array.isArray(data) && data.length > 0 ? data[0] : data;
   const entityData = responseData ? await entityDataAdapter({ data: responseData }) : null;
   return {
@@ -49,23 +47,13 @@ export const entityDataResponseAdapter = async (response, locale, collectionType
       ...entityData,
       locale: locale || 'en',
       collectionType: collectionType || ROOT_COLLECTION_TYPE,
-      meta: meta || null,
-      preview: preview || false,
     },
   };
 };
 
-export const entitiesDataResponseAdapter = async (response, locale, collectionType, preview) => {
-  const { data, error, meta } = response;
+export const entitiesDataResponseAdapter = async (response) => {
+  const { data, error } = response;
   if (error) return entityDataError(error);
-  const items = data.length > 0 ? await entitiesDataAdapter({ data }) : [];
-  return {
-    data: {
-      items,
-      locale: locale || 'en',
-      collectionType: collectionType || ROOT_COLLECTION_TYPE,
-      meta: meta || null,
-      preview: preview || false,
-    },
-  };
+  // todo: need to create correct data adaptation
+  return data;
 };
