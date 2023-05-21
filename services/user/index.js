@@ -1,5 +1,6 @@
 import {
   chartererSignUpAdapter,
+  decodedTokenAdapter,
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
@@ -8,6 +9,8 @@ import {
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
+import LoginModel from '@/models/loginModel';
+import RefreshTokenModel from '@/models/refreshTokenModal';
 import { getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -69,7 +72,9 @@ export async function login({ data }) {
 
 /* Temporary solution */
 
-export async function signIn(body) {
+export async function signIn(credentials) {
+  const body = new LoginModel(credentials).setFormData();
+
   const response = await fetch('https://shiplink-id.azurewebsites.net/connect/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -77,6 +82,36 @@ export async function signIn(body) {
   });
 
   return response;
+}
+
+export async function refreshAccessToken(token) {
+  const body = new RefreshTokenModel(token).setFormData();
+
+  try {
+    const response = await fetch('https://shiplink-id.azurewebsites.net/connect/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body,
+    });
+
+    const refreshedTokens = await response.json();
+
+    if (!response.ok) {
+      throw refreshedTokens;
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + decodedTokenAdapter(refreshedTokens?.access_token)?.exp * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refresh_token,
+    };
+  } catch (error) {
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
 }
 
 export async function updatePassword({ data }) {

@@ -27,6 +27,7 @@ import Label from '@/elements/Label';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
 import LoginButton from '@/elements/LoginButton';
+import LogoutButton from '@/elements/LogoutButton';
 import ManualTooltip from '@/elements/ManualTooltip';
 import Modal from '@/elements/Modal';
 import NavButton from '@/elements/NavButton';
@@ -87,4 +88,5 @@ export {
   NavButton,
   NavTree,
   LoginButton,
+  LogoutButton,
 };

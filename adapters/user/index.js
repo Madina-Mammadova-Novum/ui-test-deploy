@@ -298,18 +298,32 @@ export function signInAdapter({ data }) {
   };
 }
 
-export function userTokenAdapter({ token, user }) {
-  if (!token || token === undefined || token === '') return null;
+export function decodedTokenAdapter(token) {
+  if (!token) return null;
 
-  return { ...token, ...user };
+  const decodedData = jwt.decode(token);
+  return decodedData;
+}
+
+export function userTokenAdapter({ user }) {
+  if (user?.access_token) {
+    return { user: decodedTokenAdapter(user?.access_token) };
+  }
+
+  return { ...user };
 }
 
 export function userSessionAdapter({ session, token }) {
   if (token === null) throw new Error('Oops something went wrong');
 
   if (token?.access_token) {
-    session.user = { ...token, ...jwt.decode(token?.access_token) };
+    session.user = { ...token, ...decodedTokenAdapter(token?.access_token) };
   }
 
   return session;
+}
+
+export function tokenMiddlewareAdapter({ token }) {
+  if (token === null || token === '') return false;
+  return true;
 }

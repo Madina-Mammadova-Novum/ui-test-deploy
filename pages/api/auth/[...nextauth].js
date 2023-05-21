@@ -1,26 +1,23 @@
 import NextAuth from 'next-auth/next';
 import Credentials from 'next-auth/providers/credentials';
 
-import { userSessionAdapter, userTokenAdapter } from '@/adapters/user';
+import { decodedTokenAdapter, userSessionAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import LoginModel from '@/models/loginModel';
-import { signIn } from '@/services';
+import { refreshAccessToken, signIn } from '@/services';
 
 export default async function auth(req, res) {
   const providers = [
     Credentials({
-      name: 'credentials',
-      id: 'credentials',
+      name: 'Credentials',
       type: 'credentials',
       credentials: {
         emal: {},
         password: {},
       },
       async authorize(credentials) {
-        const body = new LoginModel(credentials).setFormData();
         // const response = await login({ data: credentials });
         // TODO: error response doesn't sync with apiHandler
-        const response = await signIn(body);
+        const response = await signIn(credentials);
         const user = await response.json();
 
         if (response.ok && user) return user;
@@ -33,14 +30,32 @@ export default async function auth(req, res) {
   const AuthResponse = await NextAuth(req, res, {
     providers,
     session: {
-      strategy: 'jwt',
+      jwt: true,
+      maxAge: 30 * 24 * 60 * 60,
+      updateAge: 24 * 60 * 60,
     },
     pages: {
       signIn: ROUTES.LOGIN,
     },
     callbacks: {
-      async jwt({ token, user }) {
-        const result = await userTokenAdapter({ token, user });
+      async jwt({ token, user, account }) {
+        if (account && user) {
+          const decodedData = decodedTokenAdapter(user?.access_token);
+
+          return {
+            accessToken: user.access_token,
+            accessTokenExpires: Date.now() + decodedData?.exp * 1000,
+            refreshToken: user.refresh_token,
+            ...decodedData,
+          };
+        }
+
+        if (Date.now() < token?.accessTokenExpires) {
+          return token;
+        }
+
+        const result = await refreshAccessToken(token?.refresh_token);
+
         return result;
       },
       async session({ session, token }) {

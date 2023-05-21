@@ -7,7 +7,7 @@ import { ProfileMenuPropTypes } from '@/lib/types';
 import AccountInfoSVG from '@/assets/images/accountInfo.svg';
 import ArrowSVG from '@/assets/images/arrow.svg';
 import LogoutSVG from '@/assets/images/logout.svg';
-import { NextImage, NextLink } from '@/elements';
+import { LogoutButton, NextImage, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 
 const ProfileMenu = ({ image }) => {
@@ -17,6 +17,7 @@ const ProfileMenu = ({ image }) => {
     e.stopPropagation();
     setShowProfileMenu(false);
   };
+
   return (
     <div
       className="ml-3.5 flex items-center cursor-pointer relative"
@@ -41,11 +42,14 @@ const ProfileMenu = ({ image }) => {
               </div>
             </NextLink>
             <hr className="my-1" />
-            <NextLink href="#">
-              <div className="flex items-center text-xsm font-semibold px-2.5 py-1.5 hover:bg-purple-light rounded-md text-gray">
-                <LogoutSVG className="mr-2.5" /> Log out
-              </div>
-            </NextLink>
+
+            <div className="flex items-center text-xsm font-semibold px-2.5 hover:bg-purple-light rounded-md text-gray">
+              <LogoutButton
+                text="Log out"
+                icon={<LogoutSVG />}
+                className="!w-full !bg-transparent text-gray !border-none !p-0"
+              />
+            </div>
           </div>
         </>
       )}
