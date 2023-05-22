@@ -69,8 +69,6 @@ export async function login({ data }) {
   };
 }
 
-/* Temporary solution */
-
 export async function refreshAccessToken(token) {
   const body = refreshedTokenAdapter({ token });
 
