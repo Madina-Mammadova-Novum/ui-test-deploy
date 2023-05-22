@@ -20,6 +20,7 @@ import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import UploadForm from '@/units/FileUpload';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import LegalNavigation from '@/units/LegalNavigation';
@@ -30,6 +31,7 @@ import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
 import OfferForm from '@/units/OfferForm';
 import PaginationComponent from '@/units/PaginationComponent';
+import PartyItem from '@/units/PartyItem';
 import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
@@ -41,6 +43,7 @@ import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
 import TabsVertical from '@/units/TabsVertical';
+import TankerInformationContent from '@/units/TankerInformationContent';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
@@ -94,8 +97,11 @@ export {
   SocialNetworks,
   ReactivateTankerForm,
   LegalNavigation,
+  PartyItem,
+  UploadForm,
   TabsVertical,
   CargoIdTooltip,
   CounterofferForm,
   ChartererInformationContent,
+  TankerInformationContent,
 };

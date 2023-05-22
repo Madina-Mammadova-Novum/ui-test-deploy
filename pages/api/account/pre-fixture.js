@@ -29,6 +29,30 @@ export default async function handler(req, res) {
             },
           ],
         },
+        {
+          id: 2,
+          type: 'ascending',
+          cargoId: 'GG7777',
+          cargoType: 'Gas (Liquified)',
+          quantity: '24,118 tons',
+          loadPort: 'Barcelona, ESBCN',
+          laycanStart: 'Dec 21, 2021',
+          laycanEnd: 'Dec 30, 2021',
+          creationDate: 'Jan 2, 2022',
+          countdown: '15min',
+          documentsInfo: [
+            {
+              id: 2,
+              docId: 'XP1234-003',
+              title: 'Q88 questionnaire',
+              comment: 'Some comment',
+              docName: 'Document',
+              extension: '.doc',
+              size: '102.56 MB',
+              dateAdded: new Date(),
+            },
+          ],
+        },
       ],
     });
   } catch (error) {

@@ -32,11 +32,11 @@ const Navbar = ({ placeholder, cta, path }) => {
   }, [cta, path]);
 
   return (
-    <nav className="grid grid-cols-2 gap-20 py-1 flex-grow z-50 h-14 bg-white 3md:bg-transparent">
-      <NextLink href="/">
+    <nav className="flex justify-between flex-grow z-50 h-14 bg-white 3md:bg-transparent">
+      <NextLink href="/" className="py-1">
         <Logo className="3md:fill-white fill-black" />
       </NextLink>
-      <ul className="flex h-full items-center gap-5 w-full justify-end bg-white z-50">
+      <ul className="flex h-full items-center gap-5 3md:w-form justify-end bg-white z-50 py-1 ">
         <li className="text-xsm text-black font-normal">
           <p>{placeholder}</p>
         </li>

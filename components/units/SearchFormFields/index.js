@@ -27,6 +27,7 @@ const SearchFormFields = () => {
   const [productState, setProductState] = useState([1]);
   const [ports, setPorts] = useState([]);
   const [cargoTypes, setCargoTypes] = useState([]);
+  const [selected, setSelected] = useState(false);
   const [products, setProducts] = useState({
     loading: false,
     data: [],
@@ -85,12 +86,12 @@ const SearchFormFields = () => {
         ...prevState,
         loading: true,
       }));
-      const { data: relatedProducts } = await getProducts(value.value);
+      const relatedProducts = await getProducts(value.value);
       setProducts({
         loading: false,
         data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
           ...product,
-          density: relatedProducts.find(({ id }) => id === product.value).density,
+          density: relatedProducts.data.find(({ id }) => id === product.value).density,
         })),
       });
     }
@@ -185,7 +186,10 @@ const SearchFormFields = () => {
             <div key={`product_${productId}`}>
               <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
                 <FormDropdown
-                  onChange={(option) => handleChange(`products[${productId}].product`, option)}
+                  onChange={(option) => {
+                    setSelected(!selected);
+                    handleChange(`products[${productId}].product`, option);
+                  }}
                   name={`products[${productId}].product`}
                   asyncCall={products.loading}
                   options={products.data}
@@ -199,6 +203,7 @@ const SearchFormFields = () => {
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
+                  helperText={density.min && `${density.min} - ${density.max}`}
                   error={errors.products ? errors.products[productId]?.density?.message : null}
                   disabled={isSubmitting}
                   min={String(density.min)}

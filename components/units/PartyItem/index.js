@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 
 import { PartyTermsItemPropTypes } from '@/lib/types';
 
 import { Button, Modal, Title } from '@/elements';
 
-const PartyTermsItem = ({ title, content = 'No Content Provided' }) => {
+const PartyItem = ({ buttonText, modalTitle, content = 'No Content Provided' }) => {
   const [opened, setOpened] = useState(false);
   const handleCloseModal = () => setOpened(false);
   const handleOpenModal = () => setOpened(true);
@@ -13,12 +15,12 @@ const PartyTermsItem = ({ title, content = 'No Content Provided' }) => {
     <>
       <Button
         onClick={handleOpenModal}
-        buttonProps={{ text: title, variant: 'primary', size: 'small' }}
+        buttonProps={{ text: buttonText, variant: 'primary', size: 'small' }}
         customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 text-xsm font-medium"
       />
       <Modal opened={opened} onClose={handleCloseModal}>
         <div className="w-[672px]">
-          <Title component="h2">All Additional Information</Title>
+          <Title component="h2">{modalTitle}</Title>
           {content}
         </div>
       </Modal>
@@ -26,6 +28,6 @@ const PartyTermsItem = ({ title, content = 'No Content Provided' }) => {
   );
 };
 
-PartyTermsItem.propTypes = PartyTermsItemPropTypes;
+PartyItem.propTypes = PartyTermsItemPropTypes;
 
-export default PartyTermsItem;
+export default PartyItem;
