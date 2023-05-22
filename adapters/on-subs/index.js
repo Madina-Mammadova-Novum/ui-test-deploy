@@ -1,6 +1,5 @@
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
-
   const { cargoId, tankerName, cargoType, quantiity, loadPort, laycanStart, laycanEnd, countdown } = data;
 
   return [
