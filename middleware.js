@@ -6,16 +6,16 @@ import { ROUTES } from '@/lib';
 
 export default withAuth(
   function middleware(req) {
-    const token = req.nextauth.token?.access_token;
+    const token = req.nextauth.token?.accessToken;
 
-    if (req.nextUrl.pathname.startsWith('/account') && Boolean(token)) {
+    if (req.nextUrl.pathname.startsWith('/account') && !token) {
       return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
     }
   },
   {
     callbacks: {
       authorized: ({ token }) => {
-        if (token === null || token === '') return false;
+        if (!token?.accessToken) return false;
         return true;
       },
     },

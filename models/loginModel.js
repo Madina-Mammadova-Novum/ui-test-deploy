@@ -13,3 +13,5 @@ export default class LoginModel {
     return this.formData.toString();
   }
 }
+
+export const setLogin = ({ email, password }) => new LoginModel({ email, password }).setFormData();

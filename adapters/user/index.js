@@ -221,12 +221,25 @@ export function chartererSignUpAdapter({ data }) {
 }
 
 export function loginAdapter({ data }) {
-  if (data === null) return null;
-  const { email, password } = data;
+  if (!data) return null;
+
   return {
-    email,
-    password,
+    ...data,
   };
+}
+
+export function loginResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function refreshTokenResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
 }
 
 export function tankerInfoAdapter({ data }) {
@@ -278,14 +291,7 @@ export function confirmEmailResponseAdapter({ data }) {
   return { data };
 }
 
-export function loginResponseAdapter(data) {
-  if (data === null) return null;
-  if (isEmpty(data)) return null;
-
-  return data;
-}
-
-export function signInAdapter({ data }) {
+export function signInAdapter(data) {
   if (!data) return null;
 
   const { email, password, url } = data;
@@ -298,6 +304,12 @@ export function signInAdapter({ data }) {
   };
 }
 
+export function refreshedTokenAdapter({ token }) {
+  if (!token) return null;
+
+  return { token };
+}
+
 export function decodedTokenAdapter(token) {
   if (!token) return null;
 
@@ -306,18 +318,35 @@ export function decodedTokenAdapter(token) {
 }
 
 export function userTokenAdapter({ user }) {
+  if (!user) return {};
+
   if (user?.access_token) {
-    return { user: decodedTokenAdapter(user?.access_token) };
+    const decodedData = decodedTokenAdapter(user?.access_token);
+
+    return {
+      accessToken: user.access_token,
+      accessTokenExpires: Math.floor(Date.now() / 1000 + decodedData.exp),
+      refreshToken: user.refresh_token,
+    };
   }
 
   return { ...user };
 }
 
+export function userRefreshedTokenAdapter({ data }) {
+  if (!data) return null;
+
+  return {
+    ...userTokenAdapter({ user: data }),
+    tokenId: data.id_token,
+  };
+}
+
 export function userSessionAdapter({ session, token }) {
   if (token === null) throw new Error('Oops something went wrong');
 
-  if (token?.access_token) {
-    session.user = { ...token, ...decodedTokenAdapter(token?.access_token) };
+  if (token?.accessToken) {
+    session.user = { ...token, ...decodedTokenAdapter(token?.accessToken) };
   }
 
   return session;

@@ -1,7 +1,7 @@
 import LoginModel from '@/models/loginModel';
-import refreshTokenModal from '@/models/refreshTokenModal';
+import RefreshTokenModel from '@/models/refreshTokenModel';
 
 export default {
   LoginModel,
-  refreshTokenModal,
+  RefreshTokenModel,
 };

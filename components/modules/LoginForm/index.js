@@ -33,11 +33,12 @@ const LoginForm = () => {
   } = methods;
 
   const onSubmit = async (credentials) => {
-    const res = await signIn('credentials', signInAdapter({ data: { ...credentials, url: ROUTES.ACCOUNT_INFO } }));
+    setError(null);
 
-    if (res?.ok) {
-      setError(null);
-      router.push(res.url);
+    const response = await signIn('credentials', signInAdapter({ ...credentials, url: ROUTES.ACCOUNT_INFO }));
+
+    if (response?.ok) {
+      router.push(response?.url);
     } else {
       setError('Invalid email or password');
     }

@@ -25,6 +25,7 @@ export const responseErrorAdapter = (errors = []) => {
 
   if (Array.isArray(errors) && errors.length > 0) {
     return errors
+      .filter((error) => error !== null)
       .map((error) => errorAdapter(error))
       .reduce((acc, curr) => acc.concat(curr), [])
       .filter((error) => error.length > 0);

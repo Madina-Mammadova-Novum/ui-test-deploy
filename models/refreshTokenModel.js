@@ -12,3 +12,5 @@ export default class RefreshTokenModel {
     return this.formData.toString();
   }
 }
+
+export const setRefreshToken = (token) => new RefreshTokenModel(token).setFormData();

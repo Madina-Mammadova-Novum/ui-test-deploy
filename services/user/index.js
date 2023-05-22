@@ -1,16 +1,15 @@
 import {
   chartererSignUpAdapter,
-  decodedTokenAdapter,
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
+  refreshedTokenAdapter,
   resetPasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
+  userRefreshedTokenAdapter,
 } from '@/adapters/user';
-import LoginModel from '@/models/loginModel';
-import RefreshTokenModel from '@/models/refreshTokenModal';
 import { getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -64,7 +63,7 @@ export async function postVeriffData({ data }) {
 export async function login({ data }) {
   const body = loginAdapter({ data });
   const response = await postData(`auth/login`, body);
-  // TODO: error response doesn't sync with apiHandler
+
   return {
     ...response,
   };
@@ -72,46 +71,17 @@ export async function login({ data }) {
 
 /* Temporary solution */
 
-export async function signIn(credentials) {
-  const body = new LoginModel(credentials).setFormData();
-
-  const response = await fetch('https://shiplink-id.azurewebsites.net/connect/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body,
-  });
-
-  return response;
-}
-
 export async function refreshAccessToken(token) {
-  const body = new RefreshTokenModel(token).setFormData();
+  const body = refreshedTokenAdapter({ token });
 
-  try {
-    const response = await fetch('https://shiplink-id.azurewebsites.net/connect/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body,
-    });
+  const { data } = await postData(`auth/refreshToken`, body);
 
-    const refreshedTokens = await response.json();
+  if (data) return userRefreshedTokenAdapter({ data, token });
 
-    if (!response.ok) {
-      throw refreshedTokens;
-    }
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + decodedTokenAdapter(refreshedTokens?.access_token)?.exp * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refresh_token,
-    };
-  } catch (error) {
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-    };
-  }
+  return {
+    token,
+    error: 'RefreshAccessTokenError',
+  };
 }
 
 export async function updatePassword({ data }) {
