@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import Dropzone from './Dropzone';
 import File from './File';
 
-import { ArrowIcon } from '@/assets/Icons';
+import { ArrowIcon } from '@/assets/icons';
 import { Button, Input, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
 // import { options } from '@/utils/formOptions';
@@ -21,7 +21,6 @@ const UploadForm = () => {
   const contentRef = useRef(null);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
-  /// /////////
   const fileUpdateAdapter = (file) => ({
     id: makeId(),
     preview: URL.createObjectURL(file),
@@ -38,7 +37,6 @@ const UploadForm = () => {
     reader.readAsDataURL(file);
     reader.onloadend = () => cb();
   };
-  /// ///////
 
   const {
     register,
@@ -48,7 +46,7 @@ const UploadForm = () => {
     reset,
     formState: { errors, isDirty },
   } = useForm();
-  // } = useForm(options?.upload);
+
   const handleToggle = () => setToggle((prev) => !prev);
   const resetDropzone = useCallback(() => {
     setValue('files', []);
