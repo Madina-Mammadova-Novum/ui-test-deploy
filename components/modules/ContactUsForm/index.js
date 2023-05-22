@@ -113,11 +113,12 @@ const ContactUsForm = () => {
             error={errors.subject?.message}
           />
           <TextArea
-            register={register}
+            {...register('message')}
             name="message"
             label="Message"
             placeholder="Type your message here"
             inputStyles="h-20"
+            error={errors.message?.message}
           />
         </div>
       </FormManager>

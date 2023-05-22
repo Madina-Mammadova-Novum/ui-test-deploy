@@ -2,6 +2,93 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.0...v0.3.1) (2023-05-17)
+
+### Features
+
+- added service for login ([299c736](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/299c7360b254528351172f7f6b2e3ffd5fa83eac))
+- faq page intermediate results ([e88c6cd](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e88c6cd5ff4e3923042e8065a90ddfe69b8d21a5))
+- faq-account pages intermediate results ([1e15e29](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1e15e298be4b7be9ce3c5220cb107f19eb1cfaa9))
+- faq-pages added initial tab value ([201df16](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/201df1686e6149443a14efea145c077dae45a5bc))
+- forgot/reset password flows ([dcd2920](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/dcd2920c057bfc57132e2cbe697e77a7d68a0974))
+- login endpoint and few todos ([8119a6e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/8119a6e247496f4f1050d44974f8a7b259d85d4b))
+- login-flow ([56e2808](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/56e28085a3e31582dcc30a5cf8fd120ae5d9a919))
+
+### Bug Fixes
+
+- added default locale ([86a8dab](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/86a8dabf66560270506c9a4d52b0a359c5638502))
+- added modal form manager ([3f91982](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3f9198238d2a7f5e0da54ff0d6e7185126f13376))
+- changed response, ui fix ([1264f0a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1264f0a98d02652728eb181049cf529c14800fc2))
+- form-buttons ([27f6630](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/27f663094371337ec51fae05fb0b93dda7ba7507))
+- home page error ([45718a5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/45718a5ab042e33b5a407d126da508e34d77ef35))
+- login-access-token handling ([7bb1918](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/7bb19187e194e9fba65fca00a4289af0ab00a0a6))
+- login-flow with signup-flow ([8180301](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/81803012027d85987d0361779feb33051877dbef))
+- merge conflict ([e503478](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e503478c0bd466430b96228bd039e6511a52b584))
+- password-input padding, buttons-rounded ([9344d37](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9344d3728396c867bdbdf7167eea46422f4938f1))
+- pathes in successs-page ([b70989b](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b70989b810e94e65fbfbb65cc4d089d86f4f3726))
+- small ui-fixes ([073c4cc](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/073c4cc1fc925150579e9d822aa9cbe62a340010))
+
+### Refactors
+
+- delete commented code ([1375eff](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1375effc09a7f85f01798087924798e77c2fe23e))
+- delete commented code ([9a32fba](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9a32fba4c0f6aa6a4a9db9933f898a3926f34a6c))
+- esslint-prettify ([4febbd8](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4febbd883c8a44d27cb9dfa75776f4cb61be197b))
+- faq-account-page ([c9acc77](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c9acc7749fa3a344c9959c233c50eb55e602af6f))
+- removed i18n ([8177018](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/817701840c6867fa371fb542c3be1bef700d5521))
+
+## [0.3.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.2.1...v0.3.0) (2023-05-15)
+
+### Bug Fixes
+
+- removed-auth-file ([c14c2e3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c14c2e333822e95d0db47fc3d87f167f9140a4c0))
+
+### [0.2.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.2.0...v0.2.1) (2023-05-15)
+
+### Features
+
+- added success-verification page ([412812b](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/412812bd135c30e5cae58efe9d77586ac0ca31d7))
+- added-reactivate-modal ([40cd77c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/40cd77ca1b523a65b45922fb2b3598e5baa0a799))
+- **api-handler:** removed unused functions from api handler ([b2826fe](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b2826fe73455aa54f95e0445166e99f47451ae6c))
+- tooltip improvement, expandable row adaptation, negotiating tooltips ([72e0292](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/72e0292f99988fdbf3ad450f6b3fb07650792194))
+- tooltips, charterer modals, counteroffer modal flow ([c6e13e6](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c6e13e6ffab13ac259d7564cf9ede2570634db71))
+
+### Bug Fixes
+
+- api-handler-response ([d48757b](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d48757b6a81dbf113538e7255471708950f5c5db))
+- build-issues ([d6f910f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d6f910fdc41e9fe7c545821723757e4fc5b4c398))
+- charterer-signup cargoes-delete-icon position ([2939a35](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/2939a35f2741b8949722b2a9d10a254a6d4bf516))
+- hook linter updates ([9a40f5b](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9a40f5b620c7fb27cde0c425e9e035aa793acfed))
+- remove console log from search form fields ([6e1f18a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/6e1f18ac1a622bcc3eaa3e7511ead941b45bb074))
+- scroll-fix ([b929c4b](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b929c4b7dbb3b9af3931026a5db3d81c4e4b145b))
+
+### CI
+
+- changed deploy branch for staging environment ([3b9cf5d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3b9cf5d1822ee93c477879a3edfb05e4dbf80ac0))
+- fix tags for stage environment ([291e5ee](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/291e5ee896358d6d4580270f395dd0eb199a3203))
+
+### Code styling
+
+- **api-handler:** reduced everything to a single api handler and optimised data fetching ([fbb119d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fbb119d4addfd3375a37c4a7f28d2c9e3b9b8061))
+- changelog file ([8b70f55](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/8b70f556d2026b6667573b99dfbd259a603ce83f))
+
+### Documentation
+
+- **api-handler:** documentation in jsdocs format for api and data fetching ([d9e0d85](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d9e0d85776b38450b3fbdb9dd5ffd8dacb8294b4))
+
+### Refactors
+
+- api handler with response handler ([31aeb3a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/31aeb3a967188e8c4a1c4b1940308c284a67ac7c))
+- api handlers and services have been unified to a single standard ([fc1f7c5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fc1f7c57c1cb176b22e01ea05ff16a399b96f702))
+- **api-handler:** dynamic status for a successful response ([4237d1a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4237d1ad0019c8e44152f8d9c8256e93c0b9ba08))
+- **api-handler:** reduced everything to a single api handler and optimised data fetching ([5c2119b](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5c2119beefbf1cc7a8d08051a0a794a7305ac0c1))
+- **api-handler:** response adapter ([35eefc1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/35eefc1b13607d289257435b68103015fcd3b63b))
+- **api-handler:** response error adapter and small fix ([26b227d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/26b227d3936bc03f65c6734bb469923a35c95d95))
+- changed attribute for api with deep populate value ([416f909](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/416f9096caa8a8f948a9360e59a9b73d00a288e4))
+- code style ([d35f7b3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d35f7b33d52efb1492fb28a0989bf7c5cbe9ccb7))
+- code style ([8f0cf86](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/8f0cf8635b798c8ce3e5be4e890cb5b2bc27a99e))
+- counteroffer tabs ([e663143](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e66314399fff06b6e3c063c1abc8b271e74579d8))
+- moved content to separate component ([238af7e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/238af7ed9e47fe0e417f8b6b1dd0c47d8f833084))
+
 ## 0.2.0 (2023-05-11)
 
 ### ⚠ BREAKING CHANGES

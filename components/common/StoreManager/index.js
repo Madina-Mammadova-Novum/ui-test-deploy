@@ -2,6 +2,8 @@
 
 import { Provider } from 'react-redux';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { SessionProvider } from 'next-auth/react';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import { accountStore, persistore } from '@/store/store';
@@ -10,7 +12,7 @@ export default function StoreManager({ children }) {
   return (
     <Provider store={accountStore}>
       <PersistGate loading={null} persistor={persistore}>
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </PersistGate>
     </Provider>
   );

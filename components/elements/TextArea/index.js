@@ -2,18 +2,20 @@ import { useCallback } from 'react';
 
 import classnames from 'classnames';
 
+import InputErrorMessage from '../InputErrorMessage';
+
 import { TextAreaPropTypes } from '@/lib/types';
 
 const TextArea = ({
   label,
   name,
-  register,
   type = 'text',
   disabled = false,
   placeholder = '',
   customStyles = '',
   inputStyles,
   onChange,
+  error,
   ...rest
 }) => {
   const handleChange = useCallback(({ value }) => onChange(value), [onChange]);
@@ -32,13 +34,16 @@ const TextArea = ({
         disabled={disabled}
         placeholder={placeholder}
         onChange={({ target }) => handleChange(target)}
-        {...register(name)}
         {...rest}
         className={classnames(
           'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue',
-          inputStyles
+          inputStyles,
+          {
+            '!border-red': error,
+          }
         )}
       />
+      {error && <InputErrorMessage message={error} />}
     </div>
   );
 };

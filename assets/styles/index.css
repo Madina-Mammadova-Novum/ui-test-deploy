@@ -394,7 +394,7 @@ table > tbody > tr td[name='RED'] > div {
 }
 .table-scroll {
   overflow-x: auto;
-  max-width: 1616px;
+  max-width: 150px;
   min-width: 100%;
   margin-bottom: 8px;
 }

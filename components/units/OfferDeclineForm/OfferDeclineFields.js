@@ -80,16 +80,20 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
         />
       )}
 
-      <div className="flex gap-x-2.5 mt-5 justify-between">
-        <Button
-          onClick={closeModal}
-          customStyles="w-full h-min"
-          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-        />
-        <Button
-          customStyles="whitespace-nowrap"
-          buttonProps={{ text: 'Send the Decline', variant: 'delete', size: 'large' }}
-        />
+      <div className="grid grid-cols-2 gap-x-2.5 mt-5">
+        <div>
+          <Button
+            onClick={closeModal}
+            customStyles="w-full"
+            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
+          />
+        </div>
+        <div>
+          <Button
+            customStyles="whitespace-nowrap w-full"
+            buttonProps={{ text: 'Send the Decline', variant: 'delete', size: 'large' }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -52,7 +52,7 @@ export function userDetailsAdapter({ data }) {
 }
 
 export function forgotPasswordAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   const { email } = data;
   return {
     email,
@@ -60,18 +60,26 @@ export function forgotPasswordAdapter({ data }) {
 }
 
 export function forgotPasswordResponseAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   return {
     data,
   };
 }
 
 export function resetPasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password, confirmPassword } = data;
+  if (!data) return null;
+  const { password, userId, token } = data;
   return {
-    password,
-    confirmPassword,
+    newPassword: password,
+    userId,
+    token,
+  };
+}
+
+export function resetPasswordResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data,
   };
 }
 
@@ -261,6 +269,13 @@ export function signupResponseAdapter({ data }) {
 }
 
 export function confirmEmailResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function loginResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 

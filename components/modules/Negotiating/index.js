@@ -21,7 +21,6 @@ const Negotiating = () => {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
-
   const {
     numberOfPages,
     items,

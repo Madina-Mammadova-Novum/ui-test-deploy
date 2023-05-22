@@ -1,16 +1,22 @@
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import InfoSVG from '@/assets/images/info.svg';
-import { IconComponent, TextRow, Title } from '@/elements';
+import { IconComponent, ManualTooltip, TextRow, Title } from '@/elements';
+import { ChartererInformationContent } from '@/units';
 
 const VoyageDetailsTabContent = ({ data = {} }) => {
   return (
     <div>
       <div className="flex justify-between">
         <Title level={3}>Voyage details</Title>
-        <div className="flex ">
+        <div className="flex relative">
           <span className="mr-1.5">Charterer Information</span>
-          <InfoSVG className="fill-black w-3.5" />
+          <ManualTooltip
+            className="!right-0 min-w-[260px] !p-2.5"
+            data={{ description: <ChartererInformationContent /> }}
+          >
+            <InfoSVG className="!w-3.5" />
+          </ManualTooltip>
         </div>
       </div>
 

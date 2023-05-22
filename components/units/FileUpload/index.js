@@ -46,7 +46,7 @@ const UploadForm = () => {
     reset,
     formState: { errors, isDirty },
   } = useForm();
-  // } = useForm(options?.upload);
+
   const handleToggle = () => setToggle((prev) => !prev);
   const resetDropzone = useCallback(() => {
     setValue('files', []);

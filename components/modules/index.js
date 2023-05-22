@@ -11,6 +11,7 @@ import ContactUsForm from '@/modules/ContactUsForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
+import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
@@ -22,6 +23,7 @@ import Negotiating from '@/modules/Negotiating';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
+import OnSubs from '@/modules/OnSubs';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
@@ -48,6 +50,7 @@ export {
   ContactUsForm,
   DeleteAccountForm,
   DeactivateAccountForm,
+  FAQByType,
   Sidebar,
   Navbar,
   Signup,
@@ -83,4 +86,5 @@ export {
   ViewFailedOffer,
   ViewOffer,
   NotFound,
+  OnSubs,
 };

@@ -5,27 +5,37 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
+import { ResetPasswordFormPropTypes } from '@/lib/types';
+
 import { FormManager } from '@/common';
 import { passwordValidationSchema } from '@/lib/schemas';
 import { resetPassword } from '@/services/user';
 import { PasswordValidation } from '@/units';
+import { resetObjectFields } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const schema = yup.object(passwordValidationSchema()).required();
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = ({ params }) => {
   const methods = useForm({
     resolver: yupResolver(schema),
   });
 
+  const handleResetFields = () => {
+    methods.reset((formValues) => {
+      resetObjectFields(formValues, '');
+      return formValues;
+    });
+  };
+
   const onSubmit = async (formData) => {
-    const { data, error } = await resetPassword({ data: formData });
-    if (data.status === 200) {
+    const { status, message } = await resetPassword({ data: { ...formData, ...params } });
+    if (status === 200) {
       successToast('You have successfully changed your password');
-      methods.reset();
+      handleResetFields();
     }
-    if (error) {
-      errorToast(error.message, error.description);
+    if (message) {
+      errorToast(message);
     }
   };
 
@@ -44,5 +54,7 @@ const ResetPasswordForm = () => {
     </FormProvider>
   );
 };
+
+ResetPasswordForm.propTypes = ResetPasswordFormPropTypes;
 
 export default ResetPasswordForm;

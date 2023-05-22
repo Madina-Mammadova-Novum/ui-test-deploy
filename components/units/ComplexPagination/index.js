@@ -1,7 +1,5 @@
 'use client';
 
-import PropTypes from 'prop-types';
-
 import { ComplexPaginationPropTypes } from '@/lib/types';
 
 import { Dropdown } from '@/elements';
@@ -27,6 +25,7 @@ const ComplexPagination = ({
         options={NAVIGATION_PARAMS.DATA_PER_PAGE}
         onChange={onChangeOffers}
         customStyles={dropdownStyles}
+        menuPlacement="auto"
       />
 
       <div className="flex items-center absolute bottom-0 left-[50%] translate-x-[-50%] 3sm:translate-x-[unset] 3sm:position-unset">
@@ -39,20 +38,12 @@ const ComplexPagination = ({
         options={pages}
         onChange={onSelectedPageChange}
         customStyles={dropdownStyles}
+        menuPlacement="auto"
       />
     </div>
   );
 };
 
 ComplexPagination.propTypes = ComplexPaginationPropTypes;
-ComplexPagination.propTypes = {
-  currentPage: PropTypes.number,
-  numberOfPages: PropTypes.number,
-  onPageChange: PropTypes.func,
-  onSelectedPageChange: PropTypes.func,
-  onChangeOffers: PropTypes.func,
-  perPage: PropTypes.number,
-  pages: PropTypes.arrayOf(PropTypes.number).isRequired,
-};
 
 export default ComplexPagination;
