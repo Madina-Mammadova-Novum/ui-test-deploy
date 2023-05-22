@@ -124,3 +124,10 @@ export async function getUserDetails() {
     ...response,
   };
 }
+
+export async function getUserOnSubs() {
+  const response = await getData(`account/on-subs`);
+  return {
+    ...response,
+  };
+}

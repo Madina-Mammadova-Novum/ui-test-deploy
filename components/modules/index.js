@@ -23,6 +23,7 @@ import Negotiating from '@/modules/Negotiating';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
+import OnSubs from '@/modules/OnSubs';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
@@ -85,4 +86,5 @@ export {
   ViewFailedOffer,
   ViewOffer,
   NotFound,
+  OnSubs,
 };
