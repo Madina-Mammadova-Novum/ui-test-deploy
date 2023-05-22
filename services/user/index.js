@@ -3,10 +3,12 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
+  refreshedTokenAdapter,
   resetPasswordAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
+  userRefreshedTokenAdapter,
 } from '@/adapters/user';
 import { getData, postData, putData } from '@/utils/dataFetching';
 
@@ -61,8 +63,22 @@ export async function postVeriffData({ data }) {
 export async function login({ data }) {
   const body = loginAdapter({ data });
   const response = await postData(`auth/login`, body);
+
   return {
     ...response,
+  };
+}
+
+export async function refreshAccessToken(token) {
+  const body = refreshedTokenAdapter({ token });
+
+  const { data } = await postData(`auth/refreshToken`, body);
+
+  if (data) return userRefreshedTokenAdapter({ data, token });
+
+  return {
+    token,
+    error: 'RefreshAccessTokenError',
   };
 }
 

@@ -3,7 +3,8 @@ import React from 'react';
 import delve from 'dlv';
 
 import Logo from '@/assets/images/logo.svg';
-import { LinkAsButton, NavButton, NextLink } from '@/elements';
+import { LinkAsButton, LoginButton, NavButton, NextLink } from '@/elements';
+import { ROUTES } from '@/lib';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 
@@ -35,6 +36,12 @@ const PageHeader = async () => {
             {buttons.length > 0 && (
               <ul className="flex gap-x-2.5">
                 {buttons.map(({ path, label, linkOptions }) => {
+                  if (path === ROUTES.LOGIN)
+                    return (
+                      <li key={path}>
+                        <LoginButton className="max-w-[115px] mx-auto" text={label} variant={linkOptions?.style} />
+                      </li>
+                    );
                   return (
                     <li key={path}>
                       <LinkAsButton

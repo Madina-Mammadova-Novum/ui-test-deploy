@@ -1,21 +1,27 @@
 'use client';
 
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as yup from 'yup';
 
+import { signInAdapter } from '@/adapters/user';
 import { FormManager } from '@/common';
-import { Input, PasswordInput } from '@/elements';
+import { Input, PasswordInput, Title } from '@/elements';
 import { ROUTES } from '@/lib';
 import { loginSchema } from '@/lib/schemas';
 import { useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
+  const [error, setError] = useState(null);
+
   const schema = yup.object().shape({
     ...loginSchema(),
   });
 
+  const router = useRouter();
   const methods = useHookFormParams({ schema });
 
   const {
@@ -26,13 +32,17 @@ const LoginForm = () => {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = async (data) => {
-    await signIn('credentials', {
-      email: data?.email,
-      password: data?.password,
-      redirect: true,
-      callbackUrl: ROUTES.ACCOUNT_INFO,
-    });
+  const onSubmit = async (credentials) => {
+    setError(null);
+
+    const response = await signIn('credentials', signInAdapter({ ...credentials, url: ROUTES.ACCOUNT_INFO }));
+
+    if (response?.ok) {
+      router.push(response?.url);
+    } else {
+      setError('Invalid email or password');
+    }
+
     reset();
   };
 
@@ -53,6 +63,11 @@ const LoginForm = () => {
         className="pt-5"
         submitAction={onSubmit}
       >
+        {error && (
+          <Title level="3" className="text-red font-bold normal-case text-lg">
+            {error}
+          </Title>
+        )}
         <Input
           {...register('email')}
           label="Email"

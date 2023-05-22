@@ -1,8 +1,8 @@
 import { TitlePropTypes } from '@/lib/types';
 
 const titleStyles = {
-  "date-styles": 'text-[14px] text-gray ',
-  "offer-styles": 'uppercase font-semibold',
+  'date-styles': 'text-[14px] text-gray ',
+  'offer-styles': 'uppercase font-semibold',
 };
 
 const Title = ({ level, children, customStyle, className = '', ...rest }) => {
