@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { FileIcon } from '@/assets/Icons';
+import { FileIcon } from '@/assets/icons';
 import { Input } from '@/elements';
 
 const Dropzone = memo(({ areaParams, inputParams, error, children }) => {

@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { CloseIcon } from '@/assets/Icons';
+import { CloseIcon } from '@/assets/icons';
 
 const File = memo(({ title, onClick }) => {
   return (
