@@ -11,7 +11,7 @@ const AccountDeleteDetails = () => {
         className: '!py-0 !mr-7',
       }}
     >
-      <DeleteAccountForm />
+      <DeleteAccountForm title="Delete your account" />
     </ModalWindow>
   );
 };
