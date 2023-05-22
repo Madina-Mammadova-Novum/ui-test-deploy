@@ -14,7 +14,7 @@ export function generateMetadata() {
 
 const SuccessfulVerifPage = () => {
   return (
-    <AuthWrapper title="Identity Verification Successful!" containerClass="w-3/4 -translate-y-14 min-w-[450px] pt-20">
+    <AuthWrapper title="Identity Verification Successful!" containerClass="md:px-28 min-w-[450px]">
       <div className="grid gap-2 my-5 text-xsm">
         <p>
           Congratulations! You have successfully passed our identity verification procedure. We take the security of our
