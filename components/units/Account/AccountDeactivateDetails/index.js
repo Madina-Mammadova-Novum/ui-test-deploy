@@ -11,7 +11,7 @@ const AccountDeactivateDetails = () => {
         className: '!py-0',
       }}
     >
-      <DeactivateAccountForm />
+      <DeactivateAccountForm title="Deactivation of your account" />
     </ModalWindow>
   );
 };
