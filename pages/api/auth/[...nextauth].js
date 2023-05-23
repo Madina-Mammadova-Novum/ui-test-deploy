@@ -24,6 +24,7 @@ export default async function auth(req, res) {
 
   const AuthResponse = await NextAuth(req, res, {
     providers,
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
       jwt: true,
       maxAge: 3600, // 1 hour in seconds
