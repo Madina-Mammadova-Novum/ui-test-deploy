@@ -888,7 +888,7 @@ export const fixtureHeader = [
     type: 'STATUS',
     width: 130,
   },
-]
+];
 export const providedEmails = [
   '001.igg.biz',
   '027168.com',

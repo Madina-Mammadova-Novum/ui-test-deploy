@@ -3,8 +3,9 @@ import { useMemo, useState } from 'react';
 import FixtureDetailsContent from './FixtureDetailsContent';
 import FixtureDocumentsContent from './FixtureDocumentsContent';
 
-import { Tabs } from '@/units';
 import { FixtureExpandedContentPropTypes } from '@/lib/types';
+
+import { Tabs } from '@/units';
 
 const tabs = [
   {
