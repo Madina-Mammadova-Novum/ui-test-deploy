@@ -36,6 +36,7 @@ const LoginForm = () => {
     setError(null);
 
     const response = await signIn('credentials', signInAdapter({ ...credentials, url: ROUTES.ACCOUNT_INFO }));
+    console.log('response: ', response);
 
     if (response?.ok) {
       router.push(response?.url);
