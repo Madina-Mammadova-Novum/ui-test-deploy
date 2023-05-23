@@ -4,13 +4,12 @@ import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
 
 /**
-
- Handles errors returned by the API request
- @function requestErrorHandler
- @param {number} status - The status code of the error
- @param {string|object} message - The error message or an object with the error messages and title
- @param {Array} errors - An array of error messages
- @returns {object} - An object with the error message and error messages
+  Handles errors returned by the API request
+  @function requestErrorHandler
+  @param {number} status - The status code of the error
+  @param {string|object} message - The error message or an object with the error messages and title
+  @param {Array} errors - An array of error messages
+  @returns {object} - An object with the error message and error messages
  */
 export const requestErrorHandler = (status, message, errors = []) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
@@ -26,10 +25,10 @@ export const requestErrorHandler = (status, message, errors = []) => {
 
 /**
 
- Creates the options for the API request
- @function requestOptions
- @param {object} props - An object containing requestMethod, body and options properties
- @returns {object} - The options object for the API request
+  Creates the options for the API request
+  @function requestOptions
+  @param {object} props - An object containing requestMethod, body and options properties
+  @returns {object} - The options object for the API request
  */
 const requestOptions = ({ requestMethod, body = null, options }) => {
   const method = requestMethod.toUpperCase();
@@ -51,10 +50,10 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
 
 /**
 
- Handles the API request
- @function apiHandler
- @param {object} options - An object containing path, requestMethod, body and options properties
- @returns {object} - An object with status, data, error, and other response properties
+  Handles the API request
+  @function apiHandler
+  @param {object} options - An object containing path, requestMethod, body and options properties
+  @returns {object} - An object with status, data, error, and other response properties
  */
 export const apiHandler = async (options) => {
   try {
@@ -98,10 +97,10 @@ export const errorHandler = (res, status, message, errors = []) => {
 };
 
 /**
- Handles the response from the API and sends it as a JSON response
- @function responseHandler
- @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
- @returns {object} - A JSON response with the status, data, meta, and error properties
+  Handles the response from the API and sends it as a JSON response
+  @function responseHandler
+  @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
+  @returns {object} - A JSON response with the status, data, meta, and error properties
  */
 export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod, options = null }) => {
   try {

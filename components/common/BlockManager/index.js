@@ -7,12 +7,12 @@ import {
   CTASingleImageBlock,
   FAQBlock,
   HomeSearchBlock,
-  HowItWorksBlock,
   ImageSliderBlock,
   ProductFeaturesBlock,
   SimpleContentBlock,
   TeamBlock,
   WhatWeOfferBlock,
+  WhyWeAreBetterBlock,
 } from '@/blocks';
 
 const BLOCK_COMPONENTS = {
@@ -25,7 +25,7 @@ const BLOCK_COMPONENTS = {
   'blocks.single-what-we-offer': WhatWeOfferBlock,
   'blocks.image-slider': ImageSliderBlock,
   'blocks.team': TeamBlock,
-  'blocks.single-how-it-works': HowItWorksBlock,
+  'blocks.single-why-we-are-better': WhyWeAreBetterBlock,
   'blocks.product-features': ProductFeaturesBlock,
   'blocks.lets-talk-block': CTASingleImageBlock,
   'blocks.faq-block': FAQBlock,

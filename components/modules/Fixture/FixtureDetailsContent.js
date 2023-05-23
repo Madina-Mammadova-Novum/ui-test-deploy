@@ -1,14 +1,14 @@
 import ReactCountryFlag from 'react-country-flag';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-// import { PartyItem } from '@/units';
+import { PartyItem } from '@/units';
 
-// const partyTermsMock = [
-//   {
-//     title: 'Charter party form',
-//     content: 'Charter party form',
-//   },
-// ];
+const partyTermsMock = [
+  {
+    title: 'Charter party form',
+    content: 'Charter party form',
+  },
+];
 
 const FixtureDetailsContent = () => {
   return (
@@ -148,9 +148,9 @@ const FixtureDetailsContent = () => {
           <Title level={3}>Additional Charter Party Terms</Title>
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {/* {partyTermsMock.map(({ title, content }) => (
+            {partyTermsMock.map(({ title, content }) => (
               <PartyItem buttonText={title} modalTitle="Tanker Voyage Charter Party" content={content} />
-            ))} */}
+            ))}
           </FieldsetContent>
         </FieldsetWrapper>
       </div>

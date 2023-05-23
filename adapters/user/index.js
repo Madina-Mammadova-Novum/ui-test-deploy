@@ -1,3 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import jwt from 'jsonwebtoken';
+
 import { isEmpty } from '@/utils/helpers';
 
 export function userDetailsAdapter({ data }) {
@@ -218,12 +221,25 @@ export function chartererSignUpAdapter({ data }) {
 }
 
 export function loginAdapter({ data }) {
-  if (data === null) return null;
-  const { email, password } = data;
+  if (!data) return null;
+
   return {
-    email,
-    password,
+    ...data,
   };
+}
+
+export function loginResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function refreshTokenResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
 }
 
 export function tankerInfoAdapter({ data }) {
@@ -275,9 +291,68 @@ export function confirmEmailResponseAdapter({ data }) {
   return { data };
 }
 
-export function loginResponseAdapter({ data }) {
-  if (data === null) return null;
-  if (isEmpty(data)) return null;
+export function signInAdapter(data) {
+  if (!data) return null;
 
-  return { data };
+  const { email, password, url } = data;
+
+  return {
+    email,
+    password,
+    redirect: false,
+    callbackUrl: url,
+  };
+}
+
+export function refreshedTokenAdapter({ token }) {
+  if (!token) return null;
+
+  return { token };
+}
+
+export function decodedTokenAdapter(token) {
+  if (!token) return null;
+
+  const decodedData = jwt.decode(token);
+  return decodedData;
+}
+
+export function userTokenAdapter({ user }) {
+  if (!user) return {};
+
+  if (user?.access_token) {
+    const decodedData = decodedTokenAdapter(user?.access_token);
+
+    return {
+      accessToken: user.access_token,
+      accessTokenExpires: Math.floor(Date.now() / 1000 + decodedData.exp),
+      refreshToken: user.refresh_token,
+    };
+  }
+
+  return { ...user };
+}
+
+export function userRefreshedTokenAdapter({ data }) {
+  if (!data) return null;
+
+  return {
+    ...userTokenAdapter({ user: data }),
+    tokenId: data.id_token,
+  };
+}
+
+export function userSessionAdapter({ session, token }) {
+  if (token === null) throw new Error('Oops something went wrong');
+
+  if (token?.accessToken) {
+    session.user = { ...token, ...decodedTokenAdapter(token?.accessToken) };
+  }
+
+  return session;
+}
+
+export function tokenMiddlewareAdapter({ token }) {
+  if (token === null || token === '') return false;
+  return true;
 }

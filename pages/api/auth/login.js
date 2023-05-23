@@ -1,6 +1,7 @@
 import delve from 'dlv';
 
 import { loginResponseAdapter } from '@/adapters/user'; // identityHandler,
+import { setLogin } from '@/models/loginModel';
 import { getIdentityApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 
@@ -12,14 +13,7 @@ export default async function handler(req, res) {
     return res.status(422).json({ error: { message: 'Please provide the required fields email and password' } });
   }
 
-  const fd = new URLSearchParams();
-  fd.append('grant_type', process.env.IDENTITY_API_GRANT_TYPE);
-  fd.append('client_id', process.env.IDENTITY_API_CLIENT_ID);
-  fd.append('client_secret', process.env.IDENTITY_API_CLIENT_SECRET);
-  fd.append('username', email);
-  fd.append('password', password);
-
-  req.body = fd.toString();
+  req.body = setLogin({ email, password });
 
   return responseHandler({
     req,
