@@ -52,7 +52,6 @@ export default async function auth(req, res) {
         return result;
       },
     },
-    useSecureCookies: process.env.NODE_ENV === 'production',
   });
 
   return AuthResponse;
