@@ -2,15 +2,19 @@ import CommentIcon from '@/assets/images/comment.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
-export const prefixtureHeaderDataAdapter = ({ data }) => {
+export const fixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { cargoId, cargoType, quantity, loadPort, laycanStart, laycanEnd, creationDate, countdown } = data;
+  const { cargoId, tankerName, cargoType, quantity, loadPort, laycanStart, laycanEnd, fixtureDate } = data;
 
   return [
     {
       label: 'Cargo id',
       text: cargoId || '',
+    },
+    {
+      label: 'Tanker name',
+      text: tankerName || '',
     },
     {
       label: 'Cargo type',
@@ -33,19 +37,15 @@ export const prefixtureHeaderDataAdapter = ({ data }) => {
       text: laycanEnd || '',
     },
     {
-      label: 'Creation date',
-      text: creationDate || '',
-    },
-    {
-      label: 'Countdown',
-      text: countdown || '',
+      label: 'Fixture date',
+      text: fixtureDate || '',
     },
   ];
 };
 
-export const prefixtureRowDataAdapter = ({ data, index }) => {
+export const fixtureRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
-  const { id, docId, title, comment, docName, extension, size, dateAdded } = data;
+  const { id, docId, title, comment, docName, extension, size, dateAdded, status } = data;
 
   return [
     {
@@ -59,7 +59,6 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: title,
-      type: TYPE.SEMIBOLD,
     },
     {
       id,
@@ -88,11 +87,22 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      value: status,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
       actions: [
         {
           action: ACTIONS.DOWNLOAD,
           actionText: 'Download',
           actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+        {
+          action: ACTIONS.DELETE,
+          actionText: 'Delete',
+          actionVariant: 'delete',
           actionSize: 'medium',
         },
       ],
@@ -101,8 +111,8 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const prefixtureRowsDataAdapter = ({ data }) => {
+export const fixtureRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => prefixtureRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => fixtureRowDataAdapter({ data: rowData, index: index + 1 }));
 };

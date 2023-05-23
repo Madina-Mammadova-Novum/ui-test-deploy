@@ -86,10 +86,14 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
-      action: ACTIONS.CHARTERER_INFORMATION,
-      actionText: cargoId,
-      actionVariant: 'primary',
-      actionSize: 'small',
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: cargoId,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
       editable: true,
     },
     {
@@ -121,10 +125,14 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      action: ACTIONS.VIEW_OFFER,
-      actionText: 'View offer',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.VIEW_OFFER,
+          actionText: 'View offer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];
@@ -150,10 +158,14 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
-      action: ACTIONS.CHARTERER_INFORMATION,
-      actionText: cargoId,
-      actionVariant: 'primary',
-      actionSize: 'small',
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: cargoId,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
       editable: true,
     },
     {
@@ -180,10 +192,14 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      action: ACTIONS.VIEW_COUNTEROFFER,
-      actionText: 'View counteroffer',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.VIEW_COUNTEROFFER,
+          actionText: 'View counteroffer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];
@@ -209,10 +225,14 @@ export const failedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
-      action: ACTIONS.CHARTERER_INFORMATION,
-      actionText: cargoId,
-      actionVariant: 'primary',
-      actionSize: 'small',
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: cargoId,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
       editable: true,
     },
     {
@@ -238,10 +258,14 @@ export const failedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      action: ACTIONS.VIEW_FAILED_OFFER,
-      actionText: 'View failed offer',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.VIEW_FAILED_OFFER,
+          actionText: 'View failed offer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];
