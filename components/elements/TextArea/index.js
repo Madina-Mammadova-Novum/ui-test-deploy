@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 
-
 import classnames from 'classnames';
 
 import InputErrorMessage from '../InputErrorMessage';
@@ -8,18 +7,19 @@ import InputErrorMessage from '../InputErrorMessage';
 import { TextAreaPropTypes } from '@/lib/types';
 
 const TextArea = React.forwardRef(
-  ({
-    label,
-    name,
-    type = 'text',
-    disabled = false,
-    placeholder = '',
-    customStyles = '',
-    inputStyles,
-    onChange,
-    error = null,
-    ...rest
-  },
+  (
+    {
+      label,
+      name,
+      type = 'text',
+      disabled = false,
+      placeholder = '',
+      customStyles = '',
+      inputStyles,
+      onChange,
+      error = null,
+      ...rest
+    },
     ref
   ) => {
     const handleChange = useCallback(({ value }) => onChange(value), [onChange]);
@@ -32,8 +32,7 @@ const TextArea = React.forwardRef(
           </label>
         )}
         <textarea
-          ref={ref
-          }
+          ref={ref}
           id={name}
           type={type}
           name={name}
@@ -52,7 +51,8 @@ const TextArea = React.forwardRef(
         {error && <InputErrorMessage message={error} />}
       </div>
     );
-  });
+  }
+);
 
 TextArea.propTypes = TextAreaPropTypes;
 
