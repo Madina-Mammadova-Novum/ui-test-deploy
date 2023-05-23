@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-import { useSession } from 'next-auth/react';
-
 import { Loader, Title } from '@/elements';
 import { getUserDetails } from '@/services';
 import {
@@ -17,8 +15,6 @@ import {
 const AccountDetails = () => {
   const [accountData, setAccountData] = useState(null);
 
-  const { data: session } = useSession();
-
   const fetchData = async () => {
     const data = await getUserDetails();
     setAccountData(data);
@@ -27,10 +23,6 @@ const AccountDetails = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
 
   return (
     <section className="flex justify-start items-start flex-col gap-2.5">
