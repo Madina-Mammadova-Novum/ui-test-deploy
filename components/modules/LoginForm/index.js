@@ -1,27 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { signInAdapter } from '@/adapters/user';
 import { FormManager } from '@/common';
-import { Input, PasswordInput, Title } from '@/elements';
-import { ROUTES } from '@/lib';
+import { Input, PasswordInput } from '@/elements';
 import { loginSchema } from '@/lib/schemas';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
-  const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
 
   const schema = yup.object().shape({
     ...loginSchema(),
   });
 
-  const router = useRouter();
   const methods = useHookFormParams({ schema });
 
   const {
@@ -32,19 +31,18 @@ const LoginForm = () => {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = async (credentials) => {
-    setError(null);
-
-    const response = await signIn('credentials', signInAdapter({ ...credentials, url: ROUTES.ACCOUNT_INFO }));
-    console.log('response: ', response);
-
-    if (response?.ok) {
-      router.push(response?.url);
-    } else {
-      setError('Invalid email or password');
+  useEffect(() => {
+    if (error === 'CredentialsSignin') {
+      errorToast('Invalid email or password');
     }
+  }, [error]);
 
-    reset();
+  const onSubmit = async (data) => {
+    await signIn('credentials', signInAdapter({ data }));
+
+    return () => {
+      reset();
+    };
   };
 
   const handlePassword = (event) => {
@@ -64,11 +62,6 @@ const LoginForm = () => {
         className="pt-5"
         submitAction={onSubmit}
       >
-        {error && (
-          <Title level="3" className="text-red font-bold normal-case text-lg">
-            {error}
-          </Title>
-        )}
         <Input
           {...register('email')}
           label="Email"

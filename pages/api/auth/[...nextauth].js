@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth/next';
 import Credentials from 'next-auth/providers/credentials';
 
-import { userSessionAdapter, userTokenAdapter } from '@/adapters/user';
+import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import { login, refreshAccessToken } from '@/services';
+import { login } from '@/services';
 
 export default async function auth(req, res) {
   const providers = [
@@ -26,31 +26,23 @@ export default async function auth(req, res) {
     providers,
     secret: process.env.NEXTAUTH_SECRET,
     session: {
-      jwt: true,
-      maxAge: 3600, // 1 hour in seconds
-      updateAge: 0,
+      strategy: 'jwt',
+    },
+    callbacks: {
+      jwt: async ({ token, user }) => {
+        if (user) return tokenAdapter({ data: user });
+
+        if (Date.now() < token.accessTokenExpires) return token;
+
+        return null;
+      },
+      session: async ({ session, token }) => {
+        return Promise.resolve(sessionAdapter({ session, token }));
+      },
     },
     pages: {
       signIn: ROUTES.LOGIN,
-    },
-    callbacks: {
-      async jwt({ token, user }) {
-        if (user) return userTokenAdapter({ user });
-
-        if (Date.now() < token.accessTokenExpires * 1000) {
-          // If the access token has not expired yet, return it
-          return token;
-        }
-
-        const result = await refreshAccessToken(token?.refreshToken);
-
-        return result;
-      },
-      async session({ session, token }) {
-        const result = await userSessionAdapter({ session, token });
-
-        return result;
-      },
+      signOut: '/',
     },
   });
 
