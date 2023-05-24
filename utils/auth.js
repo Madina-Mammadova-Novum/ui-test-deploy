@@ -1,7 +1,7 @@
 import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
-import { login } from '@/services';
+import { login, refreshAccessToken } from '@/services';
 
 export const AUTHCONFIG = {
   providers: [
@@ -21,8 +21,11 @@ export const AUTHCONFIG = {
   ],
   jwt: async ({ token, user }) => {
     if (user) return tokenAdapter({ data: user });
-
+    console.log({ token });
     if (Date.now() < token.accessTokenExpires) return token;
+
+    const data = await refreshAccessToken(token.refreshAccessToken);
+    console.log('data: ', data);
 
     return null;
   },
