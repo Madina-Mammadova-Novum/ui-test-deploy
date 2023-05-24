@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Loader, Title } from '@/elements';
-import { getUserDetails } from '@/services';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
+import { getUserDataSelector } from '@/store/selectors';
 import {
   AccountCompanyDetails,
   AccountDeactivateDetails,
@@ -13,15 +15,11 @@ import {
 } from '@/units';
 
 const AccountDetails = () => {
-  const [accountData, setAccountData] = useState(null);
-
-  const fetchData = async () => {
-    const data = await getUserDetails();
-    setAccountData(data);
-  };
+  const dispatch = useDispatch();
+  const { loading, data } = useSelector(getUserDataSelector);
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchUserProfileData());
   }, []);
 
   return (
@@ -29,18 +27,17 @@ const AccountDetails = () => {
       <Title level={1} className="py-5">
         Account information
       </Title>
-      {accountData ? (
+      {loading && <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />}
+      {data && !loading && (
         <>
-          <AccountPersonalDetails user={accountData?.personalDetails} />
-          <AccountCompanyDetails company={accountData?.companyDetails} />
-          <AccountPasswordDetails user={accountData?.accountDetails} />
+          <AccountPersonalDetails user={data?.personalDetails} />
+          <AccountCompanyDetails company={data?.companyDetails} />
+          <AccountPasswordDetails />
           <div className="pt-2.5 pb-5">
             <AccountDeactivateDetails />
             <AccountDeleteDetails />
           </div>
         </>
-      ) : (
-        <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />
       )}
     </section>
   );

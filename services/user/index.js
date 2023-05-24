@@ -127,8 +127,17 @@ export async function getUserNegotiating() {
   };
 }
 
-export async function getUserDetails() {
-  const response = await getData(`account/user-info`);
+export async function getUserProfile() {
+  const response = await getData(`account/user-profile`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getUserCompany() {
+  const response = await getData(`account/user-company`);
+
   return {
     ...response,
   };

@@ -16,9 +16,8 @@ const AccountContainer = ({ children }) => {
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
-    return await update({
-      ...refreshedData,
-    });
+
+    return await update({ ...refreshedData });
   }, [session, update]);
 
   useEffect(() => {
