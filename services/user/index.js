@@ -3,8 +3,8 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
-  refreshTokenAdapter,
   resetPasswordAdapter,
+  tokenAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
@@ -68,13 +68,11 @@ export async function login({ data }) {
   };
 }
 
-export async function refreshAccessToken(token) {
-  const body = refreshTokenAdapter({ data: token });
-  const response = await postData(`auth/refreshToken`, body);
+export async function refreshAccessToken({ token }) {
+  const response = await postData(`auth/refreshToken`, { token });
 
-  return {
-    ...response,
-  };
+  if (response?.data) return tokenAdapter({ data: response?.data });
+  return { ...response };
 }
 
 export async function updatePassword({ data }) {

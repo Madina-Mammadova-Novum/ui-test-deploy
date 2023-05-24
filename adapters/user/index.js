@@ -334,7 +334,7 @@ export function tokenAdapter({ data }) {
 }
 
 export function sessionAdapter({ session, token }) {
-  if (token === null) throw new Error('Oops something went wrong');
+  if (!token) throw new Error('UNATHORIZED');
 
   if (token?.accessToken) {
     const decodedData = decodedTokenAdapter(token.accessToken);
