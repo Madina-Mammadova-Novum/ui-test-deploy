@@ -1,9 +1,18 @@
 import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
-import { login, refreshAccessToken } from '@/services';
+import { ROUTES } from '@/lib';
+import { login } from '@/services';
 
 export const AUTHCONFIG = {
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: true,
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: ROUTES.LOGIN,
+  },
   providers: [
     Credentials({
       name: 'Credentials',
@@ -19,21 +28,15 @@ export const AUTHCONFIG = {
       },
     }),
   ],
-  jwt: async ({ token, user }) => {
-    if (user) return tokenAdapter({ data: user });
+  callbacks: {
+    jwt: async ({ token, session, user, trigger }) => {
+      if (user) return tokenAdapter({ data: user });
+      if (trigger === 'update') return tokenAdapter({ data: session });
 
-    if (Date.now() < token.accessTokenExpires) return token;
-
-    return null;
-  },
-  session: async ({ session, token }) => {
-    setTimeout(async () => {
-      const data = await refreshAccessToken(token);
-      console.log('data: ', data);
-      console.log('refreshed:', sessionAdapter({ session, token: data }));
-      return sessionAdapter({ session, token: data });
-    }, 1000);
-
-    return sessionAdapter({ session, token });
+      return Promise.resolve(token);
+    },
+    session: async ({ session, token }) => {
+      return Promise.resolve(sessionAdapter({ session, token }));
+    },
   },
 };
