@@ -1,4 +1,4 @@
-export default class RefreshTokenModel {
+class RefreshTokenModel {
   constructor(token) {
     this.token = token;
     this.formData = new URLSearchParams();
