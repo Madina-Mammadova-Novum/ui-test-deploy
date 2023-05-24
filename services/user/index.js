@@ -68,13 +68,13 @@ export async function login({ data }) {
   };
 }
 
-export async function refreshAccessToken(token) {
-  const body = refreshTokenAdapter({ data: token });
-  const response = await postData(`auth/refreshToken`, body);
+export async function refreshAccessToken({ token }) {
+  const body = refreshTokenAdapter({ token });
+  const { data: refreshedToken } = await postData(`auth/refreshToken`, body);
 
-  return {
-    ...response,
-  };
+  if (refreshedToken) return refreshedToken;
+
+  return token;
 }
 
 export async function updatePassword({ data }) {

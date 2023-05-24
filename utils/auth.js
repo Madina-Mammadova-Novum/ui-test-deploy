@@ -21,15 +21,19 @@ export const AUTHCONFIG = {
   ],
   jwt: async ({ token, user }) => {
     if (user) return tokenAdapter({ data: user });
-    console.log({ token });
-    if (Date.now() < token.accessTokenExpires) return token;
 
-    const data = await refreshAccessToken(token.refreshAccessToken);
-    console.log('data: ', data);
+    if (Date.now() < token.accessTokenExpires) return token;
 
     return null;
   },
   session: async ({ session, token }) => {
+    setTimeout(async () => {
+      const data = await refreshAccessToken(token);
+      console.log('data: ', data);
+      console.log('refreshed:', sessionAdapter({ session, token: data }));
+      return sessionAdapter({ session, token: data });
+    }, 1000);
+
     return sessionAdapter({ session, token });
   },
 };
