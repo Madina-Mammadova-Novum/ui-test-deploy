@@ -5,52 +5,73 @@ import { ROUTES } from '@/lib';
 import { isEmpty } from '@/utils/helpers';
 
 export function userDetailsAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
 
-  const {
-    firstName,
-    lastName,
-    email,
-    primaryPhone,
-    secondaryPhone,
-    currentPassword,
-    companyName,
-    yearsInOperation,
-    numberOfTankers,
-    registrAddress,
-    correspondAddress,
-  } = data;
+  const { personalDetails, companyDetails } = data;
+
+  return {
+    ...userPersonalDetailsAdapter({ data: personalDetails }),
+    ...userCompanyDetailsAdapter({ data: companyDetails }),
+  };
+}
+
+function userPersonalDetailsAdapter({ data }) {
+  if (!data) return null;
+
+  const { name, surname, email, phone, secondaryPhone } = data;
+
   return {
     personalDetails: {
-      firstName,
-      lastName,
-      email,
-      primaryPhone,
+      firstName: name,
+      lastName: surname,
+      primaryPhone: phone,
       secondaryPhone,
+      email,
     },
+  };
+}
+
+function userCompanyDetailsAdapter({ data }) {
+  if (!data) return null;
+  const {
+    name,
+    yearsInOperation,
+    numberOfVessels,
+    registrationCountry,
+    registrationAddress,
+    registrationAddress2,
+    registrationCityId,
+    registrationProvince,
+    registrationPostalCode,
+    correspondenceAddress,
+    correspondenceAddress2,
+    correspondenceCountry,
+    correspondenceCityId,
+    correspondenceProvince,
+    correspondencePostalCode,
+  } = data;
+
+  return {
     companyDetails: {
-      name: companyName ?? '',
+      name: name ?? '',
       years: yearsInOperation ?? '',
-      totalTankers: numberOfTankers ?? '',
+      totalTankers: numberOfVessels ?? '',
       registration: {
-        addressLine1: registrAddress?.primaryLine ?? '',
-        addressLine2: registrAddress?.secondaryLine ?? '',
-        city: registrAddress?.city ?? '',
-        state: registrAddress?.state ?? '',
-        postal: registrAddress?.zip ?? '',
-        country: registrAddress?.country ?? '',
+        addressLine1: registrationAddress ?? '',
+        addressLine2: registrationAddress2 ?? '',
+        city: registrationCityId ?? '',
+        state: registrationProvince ?? '',
+        postal: registrationPostalCode ?? '',
+        country: registrationCountry ?? '',
       },
       correspondence: {
-        addressLine1: correspondAddress?.primaryLine ?? '',
-        addressLine2: correspondAddress?.secondaryLine ?? '',
-        city: correspondAddress?.city ?? '',
-        state: correspondAddress?.state ?? '',
-        postal: correspondAddress?.zip ?? '',
-        country: correspondAddress?.country ?? '',
+        addressLine1: correspondenceAddress ?? '',
+        addressLine2: correspondenceAddress2 ?? '',
+        city: correspondenceCityId ?? '',
+        state: correspondenceProvince ?? '',
+        postal: correspondencePostalCode ?? '',
+        country: correspondenceCountry ?? '',
       },
-    },
-    accountDetails: {
-      currentPassword,
     },
   };
 }
@@ -324,7 +345,6 @@ export function tokenAdapter({ data }) {
   if (data?.access_token) {
     return {
       accessToken: data.access_token,
-      accessTokenExpires: Date.now() + data.expires_in * 1000,
       refreshToken: data.refresh_token,
       tokenId: data?.id_token ?? null,
     };
@@ -339,11 +359,17 @@ export function sessionAdapter({ session, token }) {
   if (token?.accessToken) {
     const decodedData = decodedTokenAdapter(token.accessToken);
     session.user = { ...decodedData };
-    session.expires = token.accessTokenExpires;
+    session.expires = decodedData.exp * 1000;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
     session.tokenId = token.tokenId;
   }
 
   return session;
+}
+
+export function accountPeronalDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
 }
