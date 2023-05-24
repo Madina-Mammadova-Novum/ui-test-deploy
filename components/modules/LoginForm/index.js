@@ -38,7 +38,11 @@ const LoginForm = () => {
   }, [error]);
 
   const onSubmit = async (data) => {
-    await signIn('credentials', signInAdapter({ data }));
+    try {
+      await signIn('credentials', signInAdapter({ data }));
+    } catch (err) {
+      console.log(err);
+    }
 
     return () => {
       reset();
