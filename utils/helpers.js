@@ -287,3 +287,5 @@ export const transformInvalidLoginMessage = (msg) => {
     })
     .join(' ');
 };
+
+export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
