@@ -157,7 +157,7 @@ export const redirectAfterToast = (message, url) => {
     setTimeout(() => {
       window.location.href = url;
       resolve();
-    }, 1000);
+    }, 3000);
   });
 };
 
