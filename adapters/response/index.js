@@ -13,8 +13,12 @@ const errorAdapter = (error) => {
   if (error === undefined || error === null || error === '') return [];
   if (typeof error === 'object' && error !== null) {
     const errors = Object.values(error);
+
     if (errors.length > 0) {
-      return errors.reduce((acc, curr) => acc.concat(curr), []).filter((err) => err.length > 0);
+      if (errors?.message) {
+        return errors;
+      }
+      return errors.reduce((acc, curr) => acc.concat(curr), []).filter((err) => err?.length > 0);
     }
   }
   return [error];

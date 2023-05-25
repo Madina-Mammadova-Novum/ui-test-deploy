@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { providedEmails } from '@/utils/mock';
 
 /**
  * createMarkup
@@ -289,3 +290,10 @@ export const transformInvalidLoginMessage = (msg) => {
 };
 
 export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
+
+export const checkEmailPrefix = (value) => {
+  const emailParts = value.split('@');
+  const emailDomain = emailParts[1];
+
+  return !providedEmails.some((prefix) => emailDomain.startsWith(prefix));
+};

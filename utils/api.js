@@ -11,12 +11,15 @@ import { SYSTEM_ERROR } from '@/lib/constants';
   @param {Array} errors - An array of error messages
   @returns {object} - An object with the error message and error messages
  */
-export const requestErrorHandler = (status, message, errors = []) => {
+export const requestErrorHandler = (status, message, errors) => {
+  if (errors?.error) return errors.error;
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
+
   let errorMessage = null;
   if (typeof statusMessage === 'object') {
     errorMessage = statusMessage.title;
   }
+
   return {
     message: errorMessage !== null ? errorMessage : statusMessage,
     errors: responseErrorAdapter(errors),
@@ -67,15 +70,14 @@ export const apiHandler = async (options) => {
       responseBody = JSON.parse(responseBody);
     }
     const result = ok ? responseBody : null;
-    const error = ok ? null : requestErrorHandler(status, statusText, [responseBody]);
+    const error = ok ? null : requestErrorHandler(status, statusText, responseBody);
     return {
       status,
       ...responseAdapter(result),
       error,
     };
   } catch (error) {
-    console.error(error);
-    return requestErrorHandler(500, 'External server error', [error]);
+    return requestErrorHandler(500, 'External server error', error);
   }
 };
 
@@ -105,9 +107,10 @@ export const errorHandler = (res, status, message, errors = []) => {
 export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod, options = null }) => {
   try {
     const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body, options });
+
     if (error) {
       const { message, errors } = error;
-      const errorMessage = status === 500 ? 'External server error' : message;
+      const errorMessage = status === 500 ? 'External server error' : message ?? error;
       return errorHandler(res, status, errorMessage, errors);
     }
     const responseData = await dataAdapter({ data });
