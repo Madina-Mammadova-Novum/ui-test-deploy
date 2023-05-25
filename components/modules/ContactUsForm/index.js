@@ -30,7 +30,6 @@ const ContactUsForm = () => {
     setValue,
     clearErrors,
   } = methods;
-
   const onSubmit = async (data) => {
     setIsSubmitted(true);
     return data;
@@ -114,12 +113,13 @@ const ContactUsForm = () => {
           />
           <TextArea
             {...register('message')}
-            name="message"
             label="Message"
             placeholder="Type your message here"
             inputStyles="h-20"
             error={errors.message?.message}
+            onChange={(option) => handleChange('message', option)}
           />
+          <div />
         </div>
       </FormManager>
     </FormProvider>
