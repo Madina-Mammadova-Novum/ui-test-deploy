@@ -2,12 +2,17 @@
 
 import { useMemo, useState } from 'react';
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeSubBody from '../NavTreeSubBody';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
+import AnchorSVG from '@/assets/images/anchor.svg';
+import BrowserSVG from '@/assets/images/browser.svg';
+import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
+import QuestionCircleSVG from '@/assets/images/questionCircle.svg';
+import SearchSVG from '@/assets/images/search.svg';
 import { Button } from '@/elements';
 
 const NavTreeSm = ({ data, active }) => {
@@ -16,17 +21,19 @@ const NavTreeSm = ({ data, active }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
+    const iconClassName = classnames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
+
     switch (data?.variant) {
       case 'search':
-        return <SearchIcon isActive={active} width="20px" height="20px" />;
+        return <SearchSVG className={iconClassName} viewBox="0 0 24 24" />;
       case 'positions':
-        return <PositionIcon isActive={active} width="20px" height="20px" />;
+        return <BrowserSVG className={iconClassName} viewBox="0 0 24 24" />;
       case 'offers':
-        return <OfferIcon isActive={active} width="20px" height="20px" />;
+        return <FileInfoAltSVG className={iconClassName} viewBox="0 0 24 24" />;
       case 'fleets':
-        return <AnchorIcon isActive={active} width="20px" height="20px" />;
+        return <AnchorSVG className={iconClassName} viewBox="0 0 24 24" />;
       case 'faq':
-        return <FaqIcon isActive={active} width="20px" height="20px" />;
+        return <QuestionCircleSVG className={iconClassName} viewBox="0 0 24 24" />;
       default:
         return null;
     }

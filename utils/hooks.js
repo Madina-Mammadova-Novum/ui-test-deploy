@@ -5,13 +5,12 @@ import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import delve from 'dlv';
 import { usePathname } from 'next/navigation';
 
 import { getFilledArray } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
-import { PALETTE, SORT_OPTIONS } from '@/lib/constants';
+import { SORT_OPTIONS } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -101,32 +100,6 @@ export function useDebounce(value, delay) {
 
   return debouncedValue;
 }
-
-export const useColor = () => {
-  const white = delve(PALETTE, 'COLORS.WHITE.DEFAULT');
-  const black = delve(PALETTE, 'COLORS.BLACK.DEFAULT');
-  const grey = delve(PALETTE, 'COLORS.GREY.DEFAULT');
-  const red = delve(PALETTE, 'COLORS.RED.DEFAULT');
-  const yellow = delve(PALETTE, 'COLORS.YELLOW.DEFAULT');
-  const green = delve(PALETTE, 'COLORS.GREEN.DEFAULT');
-  const blue = delve(PALETTE, 'COLORS.BLUE.DEFAULT');
-
-  return {
-    white,
-    black,
-    grey,
-    red,
-    yellow,
-    green,
-    blue,
-  };
-};
-
-export const useActiveColors = (isAcitve) => {
-  const { white, grey } = useColor();
-
-  return isAcitve ? white : grey;
-};
 
 export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);

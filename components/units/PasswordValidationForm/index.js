@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { PasswordValidationPropTypes } from '@/lib/types';
 
-import TickInCircleSVG from '@/assets/images/tickInCircle.svg';
+import TickInCircleSVG from '@/assets/images/checkCircle.svg';
 import { PasswordInput, Title } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
@@ -93,7 +93,10 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
               <li className={classnames('flex items-center', index && 'mt-1.5')}>
-                <TickInCircleSVG fill={isValidated ? 'green' : 'black'} />
+                <TickInCircleSVG
+                  className={`${isValidated ? 'fill-green' : 'fill-black'} w-5 h-5`}
+                  viewBox="0 0 24 24"
+                />
                 <span className="ml-1.5">{text}</span>
               </li>
             ))}

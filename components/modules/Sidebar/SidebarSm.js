@@ -1,6 +1,6 @@
 import { SidebarSmPropTypes } from '@/lib/types';
 
-import { ArrowIcon } from '@/assets/icons';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 import Logo from '@/assets/images/logo-sm.svg';
 import { Button, NavTree, NextLink } from '@/elements';
 
@@ -15,18 +15,16 @@ const SidebarSm = ({ data, isResized, onResize }) => {
       <ul className="mt-4 flex flex-col items-center justify-center gap-1.5 relative">
         <Button
           onClick={onResize}
-          customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
+          customStyles="!rounded !relative flex self-end !bg-blue-dark !p-2 !w-7 !h-7"
           buttonProps={{
             variant: 'tertiary',
             size: 'small',
             icon: {
               before: (
-                <ArrowIcon
-                  className={`transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 ${
+                <AngleDownSVG
+                  className={`fill-white transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 ${
                     isResized && '-rotate-90'
                   }`}
-                  width="14px"
-                  height="14px"
                 />
               ),
             },

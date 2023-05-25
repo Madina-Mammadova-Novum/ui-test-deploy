@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import ArrowSVG from '@/assets/images/arrow.svg';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 import { makeId } from '@/utils/helpers';
 
 const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
@@ -23,11 +23,11 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
         {label && <span className="text-[12px] font-semibold text-gray uppercase">{label}</span>}
         <div
           aria-hidden
-          className="relative bg-white capitalize flex items-center px-4 py-1.5 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[120px]"
+          className="relative bg-white capitalize flex items-center px-2.5 py-1 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[120px]"
           onClick={() => setIsOpened(true)}
         >
           <span className="box-border flex-1 text-center">{currentItem}</span>
-          <ArrowSVG className={`w-2.5 ml-2 transition duration-500 ${isOpened && 'rotate-180 fill-blue'}`} />
+          <AngleDownSVG className={`fill-black transition duration-500 ${isOpened && 'rotate-180 fill-blue'}`} />
           {isOpened && (
             <div className="absolute -bottom-0.5 left-0 translate-y-[100%] px-2.5 py-2 rounded-md bg-white shadow-xmd w-full overflow-y-auto max-h-[112px] z-[1]">
               {selectableItems.map((item) => (

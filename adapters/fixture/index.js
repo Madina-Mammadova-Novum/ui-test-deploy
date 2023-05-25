@@ -1,4 +1,4 @@
-import CommentIcon from '@/assets/images/comment.svg';
+import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 

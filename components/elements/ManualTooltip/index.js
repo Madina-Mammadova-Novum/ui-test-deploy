@@ -4,7 +4,7 @@ import { cloneElement, useState } from 'react';
 
 import { TooltipParamsPropTypes } from '@/lib/types';
 
-import CloseIcon from '@/assets/images/close.svg';
+import CloseSVG from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
 const ManualTooltip = ({ data, className, children }) => {
@@ -31,7 +31,7 @@ const ManualTooltip = ({ data, className, children }) => {
           <div className={`flex justify-between items-center ${!title && '!justify-end'}`}>
             {title && <span className="capitalize font-semibold text-xsm">{title}</span>}
             <Button
-              buttonProps={{ icon: { before: <CloseIcon /> } }}
+              buttonProps={{ icon: { before: <CloseSVG /> } }}
               customStyles="!pl-0 !pr-0 hover:bg-gray-darker !py-0"
               onClick={handleClose}
             />
