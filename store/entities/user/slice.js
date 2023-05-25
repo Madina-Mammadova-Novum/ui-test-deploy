@@ -1,9 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { fetchUserProfileData } from './actions';
+
 const initialState = {
-  token: null,
-  isLoggedIn: false,
-  personalDetails: {},
+  loading: true,
+  error: null,
+  data: {
+    personalDetails: {},
+    companyDetails: {},
+    accountDetails: {},
+  },
   params: {
     sidebarCollapsed: false,
     sidebarSubMenuOpened: false,
@@ -20,6 +26,19 @@ const userSlice = createSlice({
     handleToggle: (state, { payload }) => {
       state.params.sidebarSubMenuOpened = payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUserProfileData.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchUserProfileData.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload?.data;
+    });
+    builder.addCase(fetchUserProfileData.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload?.error;
+    });
   },
 });
 

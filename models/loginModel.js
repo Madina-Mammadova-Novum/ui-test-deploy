@@ -1,4 +1,4 @@
-export default class LoginModel {
+class LoginModel {
   constructor(credentials) {
     this.credentials = credentials;
     this.formData = new URLSearchParams();

@@ -3,12 +3,11 @@ import {
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
-  refreshedTokenAdapter,
   resetPasswordAdapter,
+  tokenAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
-  userRefreshedTokenAdapter,
 } from '@/adapters/user';
 import { getData, postData, putData } from '@/utils/dataFetching';
 
@@ -69,17 +68,11 @@ export async function login({ data }) {
   };
 }
 
-export async function refreshAccessToken(token) {
-  const body = refreshedTokenAdapter({ token });
+export async function refreshAccessToken({ token }) {
+  const response = await postData(`auth/refreshToken`, { token });
 
-  const { data } = await postData(`auth/refreshToken`, body);
-
-  if (data) return userRefreshedTokenAdapter({ data, token });
-
-  return {
-    token,
-    error: 'RefreshAccessTokenError',
-  };
+  if (response?.data) return tokenAdapter({ data: response?.data });
+  return { ...response };
 }
 
 export async function updatePassword({ data }) {
@@ -134,8 +127,17 @@ export async function getUserNegotiating() {
   };
 }
 
-export async function getUserDetails() {
-  const response = await getData(`account/user-info`);
+export async function getUserProfile() {
+  const response = await getData(`account/user-profile`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getUserCompany() {
+  const response = await getData(`account/user-company`);
+
   return {
     ...response,
   };

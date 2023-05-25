@@ -65,11 +65,13 @@ This regular expression uses positive lookaheads to assert that each of the requ
 ## Icons Usage
 
 To add a new icon:
+
 1. Add svg icon to the `assets/images` (in the wrapper 24x24px - as in the design)
 2. Name the file as it is named in design, with camelCase (minus-circle-alt => minusCircleAlt)
 3. Change fill to `“current”` in this file to make it possible reusability of this icon with different colours.
 
 To use icon:
+
 1. Import it as “FileNameSVG” (MinusCircleAltSVG)
 2. Determine color by adding classname (`“fill-white”`)
 3. Default size is 24x24px. If you need another size (16x16px)- add classnames (`“w-4 h-4”`) and add `viewBox=“0 0 24 24”`
