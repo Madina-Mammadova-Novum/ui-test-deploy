@@ -2,7 +2,21 @@
 import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
+import { ROLES } from '@/lib/constants';
 import { isEmpty } from '@/utils/helpers';
+
+export function userRoleAdapter({ data }) {
+  if (!data) return null;
+
+  switch (data) {
+    case 'VesselOwner':
+      return ROLES.OWNER;
+    case 'Charterer':
+      return ROLES.CHARTERER;
+    default:
+      return '';
+  }
+}
 
 export function userDetailsAdapter({ data }) {
   if (!data) return null;
@@ -343,10 +357,11 @@ export function tokenAdapter({ data }) {
   if (!data) return null;
 
   if (data?.access_token) {
+    const { role } = decodedTokenAdapter(data.access_token);
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      tokenId: data?.id_token ?? null,
+      role: userRoleAdapter({ data: role }),
     };
   }
 
@@ -356,13 +371,13 @@ export function tokenAdapter({ data }) {
 export function sessionAdapter({ session, token }) {
   if (!token) throw new Error('UNATHORIZED');
 
-  if (token?.accessToken) {
-    const decodedData = decodedTokenAdapter(token.accessToken);
-    session.user = { ...decodedData };
-    session.expires = decodedData.exp * 1000;
+  if (token.accessToken) {
+    const { exp, ...rest } = decodedTokenAdapter(token.accessToken);
+    session.user = { ...rest };
+    session.expires = exp * 1000;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
-    session.tokenId = token.tokenId;
+    session.role = token.role;
   }
 
   return session;

@@ -6,11 +6,13 @@ import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import { getFilledArray } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
-import { SORT_OPTIONS } from '@/lib/constants';
+import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
+import { ROLES, SORT_OPTIONS } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -280,4 +282,19 @@ export const useAuth = () => {
     user: {},
     token: '',
   };
+};
+
+export const useRoleNavigation = () => {
+  const { data: session } = useSession();
+
+  if (!session?.role) return { data: [] };
+
+  switch (session?.role) {
+    case ROLES.OWNER:
+      return { data: ownerSidebarAdapter({ role: session?.role }) };
+    case ROLES.CHARTERER:
+      return { data: chartererSidebarAdapter({ role: session?.role }) };
+    default:
+      return { data: [] };
+  }
 };

@@ -4,10 +4,12 @@ import { userDetailsAdapter } from '@/adapters/user';
 
 export const sidebarSelector = ({ user }) => user?.params;
 
-export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => ({
-  collapsed: state?.sidebarCollapsed,
-  opened: state?.sidebarSubMenuOpened,
-}));
+export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
+  return {
+    collapsed: state?.sidebarCollapsed,
+    opened: state?.sidebarSubMenuOpened,
+  };
+});
 
 export const userSelector = ({ user }) => user;
 

@@ -298,3 +298,7 @@ export const checkEmailPrefix = (value) => {
 
   return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
 };
+
+export const checkAuthRoute = (req, pathName) => {
+  return req.nextUrl.pathname.includes(pathName);
+};
