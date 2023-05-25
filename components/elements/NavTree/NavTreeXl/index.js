@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon, ToolsIcon } from '@/assets/icons';
 import { handleToggle } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
 
@@ -27,6 +27,8 @@ const NavTreeXl = ({ data, active }) => {
         return <AnchorIcon isActive={active} />;
       case 'faq':
         return <FaqIcon isActive={active} />;
+      case 'tools':
+        return <ToolsIcon isActive={active} />;
       default:
         return null;
     }

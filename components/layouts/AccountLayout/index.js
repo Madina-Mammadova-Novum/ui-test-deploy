@@ -66,6 +66,13 @@ const AccountLayout = ({ children }) => {
     },
     {
       id: makeId(),
+      title: 'Tools',
+      variant: 'tools',
+      path: ROUTES.ACCOUNT_TOOLS,
+      items: [],
+    },
+    {
+      id: makeId(),
       title: 'FAQ',
       variant: 'faq',
       path: ROUTES.FAQ,

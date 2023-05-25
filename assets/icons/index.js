@@ -1,4 +1,5 @@
 export { default as ArrowIcon } from './Arrow';
+export { default as ToolsIcon } from '@/assets/icons/Tools';
 export { default as AcceptIcon } from '@/assets/icons/Accept';
 export { default as AnchorIcon } from '@/assets/icons/Anchor';
 export { default as CloseIcon } from '@/assets/icons/Close';

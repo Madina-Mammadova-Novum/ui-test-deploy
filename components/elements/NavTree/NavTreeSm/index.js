@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeSubBody from '../NavTreeSubBody';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
+import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon, ToolsIcon } from '@/assets/icons';
 import { Button } from '@/elements';
 
 const NavTreeSm = ({ data, active }) => {
@@ -27,6 +27,8 @@ const NavTreeSm = ({ data, active }) => {
         return <AnchorIcon isActive={active} width="20px" height="20px" />;
       case 'faq':
         return <FaqIcon isActive={active} width="20px" height="20px" />;
+      case 'tools':
+        return <ToolsIcon isActive={active} width="20px" height="20px" />;
       default:
         return null;
     }
