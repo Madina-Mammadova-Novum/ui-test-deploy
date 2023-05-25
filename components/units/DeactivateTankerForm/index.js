@@ -20,7 +20,7 @@ const DeactivateTankerForm = ({ title, description, portName }) => {
       <FormManager
         className="max-w-[356px]"
         submitAction={onSubmit}
-        submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
+        submitButton={{ text: 'Deactivate tanker', variant: 'delete', size: 'large' }}
       >
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}
