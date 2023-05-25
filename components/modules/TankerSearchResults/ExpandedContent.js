@@ -1,5 +1,6 @@
-import { IconComponent, TextRow, Title } from '@/elements';
 import { ExpandedContentPropTypes } from '@/lib/types';
+
+import { IconComponent, TextRow, Title } from '@/elements';
 
 const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;

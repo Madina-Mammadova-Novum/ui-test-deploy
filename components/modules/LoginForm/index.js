@@ -37,7 +37,6 @@ const LoginForm = () => {
     }
   }, [error]);
 
-
   const onSubmit = async (data) => {
     try {
       await signIn('credentials', signInAdapter({ data }));
