@@ -290,7 +290,7 @@ export const transformInvalidLoginMessage = (msg) => {
 };
 
 export const checkEmailPrefix = (value) => {
-  if (value === '' || value === undefined) return true;
+  if (!value) return true;
 
   const emailParts = value?.split('@')[1];
 
