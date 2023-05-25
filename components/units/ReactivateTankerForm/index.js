@@ -84,10 +84,10 @@ const ReactivateTankerForm = ({ title, portName }) => {
           <Label className="text-xs-sm">Tanker name</Label>
           <p className="font-semibold text-black text-xsm">{portName}</p>
         </div>
-        <div>
+        <div className="grid gap-4 min-w-[296px]">
           <FormDropdown
             name="port"
-            label="Load port"
+            label="Port search"
             errorMsg={errors?.port?.message}
             options={ports}
             onChange={(option) => handleChangeValue({ option, key: 'port' })}
@@ -97,7 +97,7 @@ const ReactivateTankerForm = ({ title, portName }) => {
             calendarClass="absolute -left-2.5"
             name="date"
             inputClass="w-full"
-            label="Bill of lading date"
+            label="Open date"
             error={errors?.date?.message}
             onChange={(value) => handleChangeValue({ option: value, key: 'date' })}
           />
