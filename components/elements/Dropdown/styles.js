@@ -1,5 +1,5 @@
 export const dropdownStyles = (selectedOption, error, minWidth) => ({
-  option: (base, { isSelected } ) => ({
+  option: (base, { isSelected }) => ({
     ...base,
     '&:hover': {
       background: 'transparent',
