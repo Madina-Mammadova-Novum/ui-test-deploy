@@ -2,7 +2,7 @@ import FailTheSubsModalContent from './FailTheSubsModalContent';
 
 import { OnSubsExpandedFooterPropTypes } from '@/lib/types';
 
-import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
+import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button } from '@/elements';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 

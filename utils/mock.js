@@ -34,7 +34,7 @@ export const fleetsHeader = [
     text: 'tanker status',
     type: 'TANKER_DEACTIVATE',
     width: 125,
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'tanker status',
       description:
@@ -546,7 +546,7 @@ export const negotiatingIncomingTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'Cargo ID',
       description: <CargoIdTooltip />,
@@ -656,7 +656,7 @@ export const negotiatingCounterofferTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'Cargo ID',
       description: <CargoIdTooltip />,
@@ -753,7 +753,7 @@ export const negotiatingFailedTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'Cargo ID',
       description: <CargoIdTooltip />,

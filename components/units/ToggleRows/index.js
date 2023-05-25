@@ -2,7 +2,7 @@
 
 import { ToggleRowsPropTypes } from '@/lib/types';
 
-import DoubleArrowSVG from '@/assets/images/doubleArrow.svg';
+import DoubleArrowSVG from '@/assets/images/angleDouble.svg';
 import { Button } from '@/elements';
 
 const ToggleRows = ({ onToggleClick, value = false }) => {

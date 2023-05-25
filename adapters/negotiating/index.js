@@ -1,4 +1,4 @@
-import ClockIcon from '@/assets/images/clock.svg';
+import ClockSVG from '@/assets/images/clock.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
@@ -121,7 +121,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       id,
       value: countdown,
       type: TYPE.RED,
-      icon: <ClockIcon className="fill-red" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
     {
       id,
@@ -188,7 +188,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: countdown,
       type: TYPE.RED,
-      icon: <ClockIcon className="fill-red" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
     {
       id,

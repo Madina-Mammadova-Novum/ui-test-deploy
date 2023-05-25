@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import { ProfileMenuPropTypes } from '@/lib/types';
 
-import AccountInfoSVG from '@/assets/images/accountInfo.svg';
-import ArrowSVG from '@/assets/images/arrow.svg';
-import LogoutSVG from '@/assets/images/logout.svg';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
+import ExitSVG from '@/assets/images/exit.svg';
+import UserCircleSVG from '@/assets/images/userCircle.svg';
 import { LogoutButton, NextImage, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 
@@ -29,7 +29,7 @@ const ProfileMenu = ({ image }) => {
       </div>
       <div className="flex items-center mx-2.5">
         <span className="text-black font-semibold text-xsm">John Doe</span>
-        <ArrowSVG className={`w-2.5 ml-6 transition duration-500 ${showProfileMenu && 'fill-blue rotate-180'}`} />
+        <AngleDownSVG className={`w-2.5 ml-6 transition duration-500 ${showProfileMenu && 'fill-blue rotate-180'}`} />
       </div>
 
       {showProfileMenu && (
@@ -38,7 +38,7 @@ const ProfileMenu = ({ image }) => {
           <div className="absolute -bottom-1 -right-0.5 z-50 translate-y-full bg-white p-2.5 shadow-xmd rounded-md min-w-[213px]">
             <NextLink href={ROUTES.ACCOUNT_INFO}>
               <div className="flex items-center text-xsm font-semibold px-2.5 py-1.5 hover:bg-purple-light rounded-md">
-                <AccountInfoSVG className="mr-2.5" /> Account information
+                <UserCircleSVG className="mr-2.5" /> Account information
               </div>
             </NextLink>
             <hr className="my-1" />
@@ -46,7 +46,7 @@ const ProfileMenu = ({ image }) => {
             <div className="flex items-center text-xsm font-semibold px-2.5 hover:bg-purple-light rounded-md text-gray">
               <LogoutButton
                 text="Log out"
-                icon={<LogoutSVG />}
+                icon={<ExitSVG />}
                 className="!w-full !bg-transparent text-gray !border-none !p-0"
               />
             </div>

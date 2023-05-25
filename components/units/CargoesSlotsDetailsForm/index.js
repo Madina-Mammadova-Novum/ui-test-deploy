@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { TrashIcon } from '@/assets/icons';
 import PlusSVG from '@/assets/images/plusCircle.svg';
+import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getPorts } from '@/services/port';
@@ -160,8 +160,12 @@ const CargoesSlotsDetailsForm = () => {
             />
             <Button
               type="button"
-              customStyles="absolute top-full mt-2 lg:mt-0 right-0 lg:-right-8 lg:top-8 !p-0"
-              buttonProps={{ icon: { before: <TrashIcon /> }, variant: 'tertiary', size: 'small' }}
+              customStyles="absolute top-full mt-2 lg:mt-0 right-0 lg:-right-8 lg:top-7 !p-0"
+              buttonProps={{
+                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                variant: 'tertiary',
+                size: 'small',
+              }}
               onClick={() => handleRemoveSlot(index)}
               disabled={isSubmitting}
             />

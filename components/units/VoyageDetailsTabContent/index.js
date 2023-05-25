@@ -1,6 +1,8 @@
+import React from 'react';
+
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
-import InfoSVG from '@/assets/images/info.svg';
+import InfoSVG from '@/assets/images/infoCircle.svg';
 import { IconComponent, ManualTooltip, TextRow, Title } from '@/elements';
 import { ChartererInformationContent } from '@/units';
 
@@ -15,7 +17,7 @@ const VoyageDetailsTabContent = ({ data = {} }) => {
             className="!right-0 min-w-[260px] !p-2.5"
             data={{ description: <ChartererInformationContent /> }}
           >
-            <InfoSVG className="!w-3.5" />
+            <InfoSVG className="w-4" viewBox="0 0 24 24" />
           </ManualTooltip>
         </div>
       </div>
