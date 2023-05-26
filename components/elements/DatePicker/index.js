@@ -32,9 +32,8 @@ const DatePicker = ({
     onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
     if (closeOnSelect) setShowPicker(false);
   };
-
   return (
-    <>
+    <div className={`${showPicker && 'h-[370px]'}`}>
       <div
         aria-hidden="true"
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
@@ -60,7 +59,7 @@ const DatePicker = ({
           <Calendar className={`${calendarClass} rounded-lg`} date={date} onChange={handleDate} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
