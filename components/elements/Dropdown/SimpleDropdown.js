@@ -1,19 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
 
-import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 
-import { dropdownOptionTypes } from '@/lib/types';
+import Loader from '../Loader';
+
+import { SimpleDropdownPropTypes } from '@/lib/types';
 
 import OptionRow from '@/elements/Dropdown/OptionRow';
 import OptionsList from '@/elements/Dropdown/OptionsList';
 import { dropdownTheme } from '@/elements/Dropdown/styles';
 import { filterDataByLowerCase } from '@/utils/helpers';
 
-export const SimpleDropdown = ({ asyncCall = false, options, ...rest }) => {
+const LoadingIndicator = () => (
+  <div className="spinner-border text-primary" role="status">
+    <Loader />
+  </div>
+);
+
+export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
+  const [open, setOpen] = useState(false);
+
   const printOptions = ({ countryFlag, label: labelValue }) => (
     <OptionRow countryFlag={countryFlag} value={labelValue} />
   );
@@ -27,7 +36,7 @@ export const SimpleDropdown = ({ asyncCall = false, options, ...rest }) => {
         cacheOptions
         defaultOptions={options}
         loadOptions={loadOptions}
-        components={{ Option: OptionsList }}
+        components={{ Option: OptionsList, LoadingIndicator }}
         formatOptionLabel={printOptions}
         isLoading={!options?.length}
         theme={dropdownTheme}
@@ -37,19 +46,22 @@ export const SimpleDropdown = ({ asyncCall = false, options, ...rest }) => {
   }
 
   return (
-    <Select
-      {...rest}
-      options={options}
-      components={{ Option: OptionsList }}
-      formatOptionLabel={printOptions}
-      theme={dropdownTheme}
-      closeMenuOnSelect
-    />
+
+    <div className={`${open && 'h-[350px]'}`}>
+      <Select
+        {...rest}
+        isLoading={!options?.length}
+        options={options}
+        components={{ Option: OptionsList, LoadingIndicator }}
+        formatOptionLabel={printOptions}
+        theme={dropdownTheme}
+        closeMenuOnSelect
+        menuIsOpen={open}
+        onMenuOpen={() => setOpen(true)}
+        onMenuClose={() => setOpen(false)}
+      />
+    </div>
   );
 };
 
-SimpleDropdown.propTypes = {
-  asyncCall: PropTypes.bool,
-  options: PropTypes.arrayOf(dropdownOptionTypes),
-  loadOptions: PropTypes.arrayOf(dropdownOptionTypes),
-};
+SimpleDropdown.propTypes = SimpleDropdownPropTypes;
