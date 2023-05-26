@@ -15,7 +15,13 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
       className={`col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'} ${!index && 'w-full'}`}
       style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
     >
-      <TextWithLabel label={data?.label} text={data?.text} coverImage={data?.coverImage} customStyles={!index && 'mr-auto'} />
+      <TextWithLabel
+        label={data?.label}
+        text={data?.text}
+        coverImage={data?.coverImage}
+        customStyles={!index && 'mr-auto'}
+        textStyles={data?.textStyles}
+      />
     </div>
   );
 
