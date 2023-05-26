@@ -90,7 +90,7 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
         </div>
         <div>
           <Button
-            customStyles="whitespace-nowrap w-full"
+            customStyles="whitespace-nowrap w-full hidden"
             buttonProps={{ text: 'Send the Decline', variant: 'delete', size: 'large' }}
           />
         </div>

@@ -9,8 +9,9 @@ import { FormManager } from '@/common';
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
+import { acceptOffer } from '@/services/offer';
 
 const tabs = [
   {
@@ -32,7 +33,18 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
   const [showScroll, setShowScroll] = useState(false);
   const methods = useHookFormParams({ schema: {} });
 
-  const handleSubmit = (formData) => console.log(formData);
+  const handleSubmit = async (formData) => {
+    const { error, data } = await acceptOffer({ data: formData });
+
+    if (data) {
+      const { message } = data;
+      successToast(message);
+    }
+    if (error) {
+      const { message, description } = error;
+      errorToast(message, description);
+    }
+  };
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
@@ -70,7 +82,7 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
               text: 'Accept the offer',
               variant: 'primary',
               size: 'large',
-              className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
+              className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1] !w-40',
             }}
           >
             {tabContent}
