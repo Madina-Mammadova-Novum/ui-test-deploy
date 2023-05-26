@@ -1,4 +1,4 @@
-import { declineOfferAdapter, sendOfferAdapter, acceptOfferAdapter } from '@/adapters/offer';
+import { acceptOfferAdapter, declineOfferAdapter, sendOfferAdapter } from '@/adapters/offer';
 import { postData } from '@/utils/dataFetching';
 
 export async function sendOffer({ data }) {

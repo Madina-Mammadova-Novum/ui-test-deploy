@@ -21,11 +21,11 @@ export function sendOfferAdapter({ data }) {
 export function declineOfferAdapter({ data }) {
   if (!data) return null;
 
-  return data
+  return data;
 }
 
 export function acceptOfferAdapter({ data }) {
   if (!data) return null;
 
-  return data
+  return data;
 }

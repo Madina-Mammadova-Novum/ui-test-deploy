@@ -8,10 +8,10 @@ import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
+import { acceptOffer } from '@/services/offer';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
-import { acceptOffer } from '@/services/offer';
 
 const tabs = [
   {

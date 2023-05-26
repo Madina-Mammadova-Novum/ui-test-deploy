@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Calendar } from 'react-date-range';
+import { Controller } from 'react-hook-form';
 
 import classnames from 'classnames';
 
@@ -13,7 +14,6 @@ import { transformDate } from '@/utils/date';
 
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { Controller } from 'react-hook-form';
 
 const DatePicker = ({
   name = '',
@@ -42,7 +42,7 @@ const DatePicker = ({
       <Controller
         name={name}
         render={({ field }) => {
-          const value = field.value || new Date()
+          const value = field.value || new Date();
           return (
             <div className="single_date relative cursor-pointer w-full">
               <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
@@ -61,10 +61,14 @@ const DatePicker = ({
                   '!block': showPicker,
                 })}
               >
-                <Calendar className={`${calendarClass} rounded-lg`} date={field.value ? new Date(field.value) : null} onChange={handleDate} />
+                <Calendar
+                  className={`${calendarClass} rounded-lg`}
+                  date={field.value ? new Date(field.value) : null}
+                  onChange={handleDate}
+                />
               </div>
             </div>
-          )
+          );
         }}
       />
     </>
