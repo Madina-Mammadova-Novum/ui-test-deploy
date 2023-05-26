@@ -46,7 +46,6 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
   }
 
   return (
-
     <div className={`${open && 'h-[350px]'}`}>
       <Select
         {...rest}
