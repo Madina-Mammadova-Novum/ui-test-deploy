@@ -91,6 +91,7 @@ export const prefixtureHeader = [
     width: 127,
   },
 ];
+
 export const onSubsHeader = [
   {
     text: '#',
@@ -349,6 +350,7 @@ export const unauthorizedSearchExpandedData = {
     },
   ],
 };
+
 export const tankerInformationTooltipData = [
   {
     title: 'Tanker name',
@@ -420,6 +422,7 @@ export const tankerInformationTooltipData = [
     countryCode: 'us',
   },
 ];
+
 export const incomingOfferCommentsData = [
   {
     title:
@@ -889,6 +892,7 @@ export const fixtureHeader = [
     width: 130,
   },
 ];
+
 export const providedEmails = [
   '001.igg.biz',
   '027168.com',
