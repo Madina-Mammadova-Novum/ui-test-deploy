@@ -41,10 +41,12 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         />
       </div>
 
-      <div className="mt-5 flex justify-between">
-        <TextRow title="Exact Matches (arrival within laycan)">{`${2} results`}</TextRow>
-        <ToggleRows onToggleClick={() => setExpandExactResults((prevValue) => !prevValue)} value={expandExactResults} />
-      </div>
+      {data?.exactResults.length && (
+        <div className="mt-5 flex justify-between">
+          <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${data?.exactResults.length > 1 ? 'results' : 'result'}`}</TextRow>
+          <ToggleRows onToggleClick={() => setExpandExactResults((prevValue) => !prevValue)} value={expandExactResults} />
+        </div>
+      )}
       <div className="flex flex-col gap-y-2.5 mt-3">
         {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
@@ -57,13 +59,15 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         ))}
       </div>
 
-      <div className="mt-5 flex justify-between">
-        <TextRow title="Partial matches (arrival outside of laycan)">{`${1} result`}</TextRow>
-        <ToggleRows
-          onToggleClick={() => setExpandPartialResults((prevValue) => !prevValue)}
-          value={expandPartialResults?.value}
-        />
-      </div>
+      {data?.partialResults.length && (
+        <div className="mt-5 flex justify-between">
+          <TextRow title="Partial matches (arrival outside of laycan)">{`${data?.partialResults.length} ${data?.partialResults.length > 1 ? 'results' : 'result'}`}</TextRow>
+          <ToggleRows
+            onToggleClick={() => setExpandPartialResults((prevValue) => !prevValue)}
+            value={expandPartialResults?.value}
+          />
+        </div>
+      )}
       <div className="flex flex-col gap-y-2.5 mt-3">
         {data?.partialResults.map((rowHeader) => (
           <ExpandableRow
