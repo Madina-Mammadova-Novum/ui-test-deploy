@@ -123,12 +123,14 @@ const SearchFormFields = () => {
           <DatePicker
             label="laycan start"
             inputClass="w-full"
+            name="laycanStart"
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
           />
           <DatePicker
             label="laycan end"
             inputClass="w-full"
+            name="laycanEnd"
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
           />
