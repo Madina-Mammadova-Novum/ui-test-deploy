@@ -4,8 +4,8 @@ import classNames from 'classnames';
 
 import { ExpandableRowHeaderPropTypes } from '@/lib/types';
 
+import TableArrowSVG from '@/assets/images/arrow.svg';
 import DragSVG from '@/assets/images/drag.svg';
-import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
 
 const ExpandableRowHeader = ({ toggle = false, headerData = [] }) => {

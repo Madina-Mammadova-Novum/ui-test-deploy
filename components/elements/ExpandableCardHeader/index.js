@@ -2,8 +2,8 @@ import classNames from 'classnames';
 
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
+import TableArrowSVG from '@/assets/images/arrow.svg';
 import DragSVG from '@/assets/images/drag.svg';
-import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
 import { useMediaQuery } from '@/utils/hooks';
 

@@ -6,7 +6,11 @@ import PropTypes from 'prop-types';
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
 
-import { AnchorIcon, FaqIcon, OfferIcon, PositionIcon, SearchIcon } from '@/assets/icons';
+import AnchorSVG from '@/assets/images/anchor.svg';
+import BrowserSVG from '@/assets/images/browser.svg';
+import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
+import QuestionCircleSVG from '@/assets/images/questionCircle.svg';
+import SearchSVG from '@/assets/images/search.svg';
 import { handleToggle } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
 
@@ -16,17 +20,19 @@ const NavTreeXl = ({ data, active }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
+    const currentColor = active ? 'fill-white' : 'fill-gray';
+
     switch (data?.variant) {
       case 'search':
-        return <SearchIcon isActive={active} />;
+        return <SearchSVG className={currentColor} />;
       case 'positions':
-        return <PositionIcon isActive={active} />;
+        return <BrowserSVG className={currentColor} />;
       case 'offers':
-        return <OfferIcon isActive={active} />;
+        return <FileInfoAltSVG className={currentColor} />;
       case 'fleets':
-        return <AnchorIcon isActive={active} />;
+        return <AnchorSVG className={currentColor} />;
       case 'faq':
-        return <FaqIcon isActive={active} />;
+        return <QuestionCircleSVG className={currentColor} />;
       default:
         return null;
     }

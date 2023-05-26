@@ -7,7 +7,7 @@ const Countdown = ({ time, customStyles = '' }) => {
     <div className={`px-4 py-1 border-l-2 border-l-blue ${customStyles}`}>
       <span className="uppercase font-semibold">Countdown</span>
       <div className="flex">
-        <ClockSVG className="fill-red" />
+        <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />
         <span className="ml-1.5 text-xsm text-red">{time}</span>
       </div>
     </div>

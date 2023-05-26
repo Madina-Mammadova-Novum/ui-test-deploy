@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import Dropzone from './Dropzone';
 import File from './File';
 
-import { ArrowIcon } from '@/assets/icons';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 import { Button, Input, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
 // import { options } from '@/utils/formOptions';
@@ -127,8 +127,12 @@ const UploadForm = () => {
     >
       <div className="flex justify-between">
         <h5 className="text-sm text-black font-semibold">Upload a new file</h5>
-        <button type="button" className="flex items-center gap-2 text-blue font-medium text-xsm" onClick={handleToggle}>
-          {printTextCta} <ArrowIcon fill="blue" className={`${toggle && 'rotate-180'}`} />
+        <button
+          type="button"
+          className={`flex items-center gap-1 text-black ${toggle && 'text-blue'} font-medium text-xsm`}
+          onClick={handleToggle}
+        >
+          {printTextCta} <AngleDownSVG className={`fill-black ${toggle && 'rotate-180 fill-blue'}`} />
         </button>
       </div>
 

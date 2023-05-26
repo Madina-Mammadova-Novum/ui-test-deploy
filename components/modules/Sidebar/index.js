@@ -13,16 +13,14 @@ import { SidebarPropTypes } from '@/lib/types';
 import { SCREENS } from '@/lib/constants';
 import { handleCollapse } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
-import { useMediaQuery } from '@/utils/hooks';
+import { useMediaQuery, useRoleNavigation } from '@/utils/hooks';
 
-const Sidebar = ({ data, containerStyles }) => {
+const Sidebar = ({ containerStyles }) => {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const url = pathname + searchParams.toString();
-  const currentPage = data.filter((item) => item.path === url)[0];
-
+  const { data } = useRoleNavigation();
   const { collapsed } = useSelector(getSidebarSelector);
 
   const lgScreen = useMediaQuery(SCREENS.LG);
@@ -31,9 +29,10 @@ const Sidebar = ({ data, containerStyles }) => {
 
   const isNotXLView = lgScreen || mdScreen || smScreen;
 
-  const setCollapse = useCallback((value) => dispatch(handleCollapse(value)), [dispatch]);
+  const url = pathname + searchParams.toString();
+  const currentPage = data?.filter((item) => item.path === url)[0];
 
-  const handleResize = () => setCollapse(!collapsed);
+  const setCollapse = useCallback((value) => dispatch(handleCollapse(value)), [dispatch]);
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
@@ -51,9 +50,9 @@ const Sidebar = ({ data, containerStyles }) => {
       ${collapsed ? 'w-16' : 'w-64'}`}
     >
       {collapsed ? (
-        <SidebarSm data={data} isResized={collapsed} onResize={handleResize} />
+        <SidebarSm data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       ) : (
-        <SidebarXl data={data} isResized={collapsed} onResize={handleResize} />
+        <SidebarXl data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       )}
     </aside>
   );

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { ModalPropTypes } from '@/lib/types';
 
-import { CloseIcon } from '@/assets/icons';
+import CloseSVG from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
 const ModalWrapper = ({ opened, onClose, containerClass = 'overflow-y-auto', sidebar, children }) => {
@@ -29,7 +29,7 @@ const ModalWrapper = ({ opened, onClose, containerClass = 'overflow-y-auto', sid
             type="button"
             onClick={onClose}
             className="absolute top-3 right-3"
-            buttonProps={{ icon: { before: <CloseIcon /> } }}
+            buttonProps={{ icon: { before: <CloseSVG /> } }}
           />
           {children}
         </div>

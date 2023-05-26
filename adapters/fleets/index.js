@@ -1,4 +1,4 @@
-import EditIcon from '@/assets/images/edit.svg';
+import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';

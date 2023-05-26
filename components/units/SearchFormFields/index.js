@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { TrashIcon } from '@/assets/icons';
-import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
+import PlusCircleSVG from '@/assets/images/plusCircle.svg';
+import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
@@ -233,7 +233,12 @@ const SearchFormFields = () => {
               </div>
               {productState.length > 1 && (
                 <Button
-                  buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
+                  buttonProps={{
+                    text: 'Delete',
+                    variant: 'tertiary',
+                    size: 'small',
+                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                  }}
                   customStyles="ml-auto !p-0"
                   onClick={() => handleRemoveProduct(productId)}
                 />
@@ -247,7 +252,7 @@ const SearchFormFields = () => {
             text: 'Add more Products',
             variant: 'primary',
             size: 'small',
-            icon: { before: <PlusInCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
+            icon: { before: <PlusCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}

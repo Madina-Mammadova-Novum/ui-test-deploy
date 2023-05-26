@@ -1,4 +1,4 @@
-import { portsAdapter } from '@/adapters';
+import { responseSearchVesselsAdapter } from '@/adapters/vessel';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     req,
     res,
     path: getApiURL(`v1/vessels/search`),
-    dataAdapter: portsAdapter,
+    dataAdapter: responseSearchVesselsAdapter,
     requestMethod: 'POST',
   });
 }

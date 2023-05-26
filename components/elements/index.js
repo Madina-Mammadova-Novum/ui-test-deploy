@@ -35,6 +35,7 @@ import NavTree from '@/elements/NavTree';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
 import NotFound from '@/elements/NotFound';
+import Placeholder from '@/elements/Placeholder';
 import Portal from '@/elements/Portal';
 import SimpleSelect from '@/elements/SimpleSelect';
 import Table from '@/elements/Table';
@@ -89,4 +90,5 @@ export {
   NavTree,
   LoginButton,
   LogoutButton,
+  Placeholder,
 };

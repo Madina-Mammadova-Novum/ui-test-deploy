@@ -289,9 +289,16 @@ export const transformInvalidLoginMessage = (msg) => {
     .join(' ');
 };
 
-export const checkEmailPrefix = (value) => {
-  const emailParts = value.split('@');
-  const emailDomain = emailParts[1];
+export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
 
-  return !providedEmails.some((prefix) => emailDomain.startsWith(prefix));
+export const checkEmailPrefix = (value) => {
+  if (!value) return true;
+
+  const emailParts = value?.split('@')[1];
+
+  return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
+};
+
+export const checkAuthRoute = (req, pathName) => {
+  return req.nextUrl.pathname.includes(pathName);
 };
