@@ -2,7 +2,7 @@ import classnames from 'classnames';
 
 import { TextWithLabelPropTypes } from '@/lib/types';
 
-import { Label, NextImage, Placeholder } from '@/elements';
+import { Label, Placeholder } from '@/elements';
 
 const TextWithLabel = ({ text, label, customStyles = '', coverImage = null }) => {
   return (
@@ -14,8 +14,8 @@ const TextWithLabel = ({ text, label, customStyles = '', coverImage = null }) =>
     >
       <Label className="text-xs-sm whitespace-nowrap min-w-[100px] md:w-auto">{label}</Label>
       <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0">
-        {coverImage && <NextImage {...coverImage} customStyles="inline" />}
-        {text ? <span className={coverImage && 'ml-1.5'}>{text}</span> : <Placeholder />}
+        {coverImage && coverImage}
+        {text ? <span className={coverImage && 'ml-0.5'}>{text}</span> : <Placeholder />}
       </p>
     </div>
   );

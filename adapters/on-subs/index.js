@@ -1,3 +1,5 @@
+import ClockSVG from "@/assets/images/clock.svg";
+
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const { cargoId, tankerName, cargoType, quantiity, loadPort, laycanStart, laycanEnd, countdown } = data;
@@ -34,6 +36,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       text: countdown ?? '',
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
   ];
 };
