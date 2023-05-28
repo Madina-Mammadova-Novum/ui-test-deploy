@@ -48,7 +48,7 @@ const TableCell = ({ cellProps }) => {
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
     },
-    [name, actions]
+    [name]
   );
 
   const printValue = useMemo(() => {

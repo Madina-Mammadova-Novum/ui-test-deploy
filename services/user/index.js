@@ -4,7 +4,6 @@ import {
   loginAdapter,
   ownerSignUpAdapter,
   resetPasswordAdapter,
-  tokenAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
@@ -71,7 +70,7 @@ export async function login({ data }) {
 export async function refreshAccessToken({ token }) {
   const response = await postData(`auth/refreshToken`, { token });
 
-  if (response?.data) return tokenAdapter({ data: response?.data });
+  if (response?.data) return response?.data;
   return { ...response };
 }
 

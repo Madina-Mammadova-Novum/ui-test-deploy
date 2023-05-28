@@ -10,6 +10,7 @@ const AccountPersonalDetails = ({ user = {} }) => {
     <FieldsetWrapper>
       <FieldsetHeader title="Personal Details">
         <ModalWindow
+          containerClass="w-[672px]"
           buttonProps={{
             text: 'Edit personal details',
             variant: 'primary',

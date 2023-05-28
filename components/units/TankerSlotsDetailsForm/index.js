@@ -99,7 +99,7 @@ const TankerSlotsDetails = () => {
         />
       </div>
       {tankers.map((_, index) => {
-        const fieldName = `imo[${index}]`;
+        const fieldName = `imos[${index}]`;
         const error = errors.imo ? errors.imo[index] : null;
         return (
           <div key={fieldName} className="relative">

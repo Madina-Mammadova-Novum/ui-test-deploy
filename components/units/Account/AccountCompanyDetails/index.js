@@ -6,11 +6,47 @@ import { CompanyInfoForm } from '@/modules';
 import { AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company = {} }) => {
-  const { name, years, totalTankers, registration, correspondence } = company;
+  const {
+    companyName,
+    companyYearsOfOperation,
+    totalTankers,
+    registrationAddress,
+    registrationAddress2,
+    registrationCityId,
+    registrationProvince,
+    registrationPostalCode,
+    registrationCountry,
+    correspondenceAddress,
+    correspondenceAddress2,
+    correspondenceCityId,
+    correspondenceProvince,
+    correspondenceCountry,
+    correspondencePostalCode,
+  } = company;
+
+  const registration = {
+    addressLine1: registrationAddress,
+    addressLine2: registrationAddress2,
+    city: registrationCityId,
+    state: registrationProvince,
+    country: registrationCountry,
+    postal: registrationPostalCode,
+  };
+
+  const correspondence = {
+    addressLine1: correspondenceAddress,
+    addressLine2: correspondenceAddress2,
+    city: correspondenceCityId,
+    state: correspondenceProvince,
+    country: correspondenceCountry,
+    postal: correspondencePostalCode,
+  };
+
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Company Details">
         <ModalWindow
+          containerClass="w-[672px]"
           buttonProps={{
             text: 'Edit company details',
             variant: 'primary',
@@ -23,8 +59,8 @@ const AccountCompanyDetails = ({ company = {} }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
-          {name && <TextRow title="Company name">{name}</TextRow>}
-          {years && <TextRow title="Years in operation">{years}</TextRow>}
+          {companyName && <TextRow title="Company name">{companyName}</TextRow>}
+          {companyYearsOfOperation && <TextRow title="Years in operation">{companyYearsOfOperation}</TextRow>}
           {totalTankers && <TextRow title="Number of tankers">{totalTankers}</TextRow>}
         </FieldsetContent>
 
