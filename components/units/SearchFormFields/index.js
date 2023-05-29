@@ -25,7 +25,7 @@ const SearchFormFields = () => {
   } = useHookForm();
 
   const [productState, setProductState] = useState([1]);
-  const [initialLoading, setInitialLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(false);
   const [ports, setPorts] = useState([]);
   const [cargoTypes, setCargoTypes] = useState([]);
   const [selected, setSelected] = useState(false);
@@ -111,11 +111,11 @@ const SearchFormFields = () => {
 
   useEffect(() => {
     (async () => {
-      setInitialLoading(true)
+      setInitialLoading(true);
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
       setPorts(countryOptionsAdapter(portsData));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
-      setInitialLoading(false)
+      setInitialLoading(false);
     })();
   }, []);
 

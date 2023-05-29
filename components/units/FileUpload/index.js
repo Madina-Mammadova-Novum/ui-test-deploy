@@ -185,7 +185,12 @@ const UploadForm = () => {
         <Button
           type="submit"
           customStyles="flex self-end"
-          buttonProps={{ text: 'Upload file', variant: 'secondary', size: 'large', icon: { before: <UploadSVG className="fill-white" /> } }}
+          buttonProps={{
+            text: 'Upload file',
+            variant: 'secondary',
+            size: 'large',
+            icon: { before: <UploadSVG className="fill-white" /> },
+          }}
           disabled={!isDirty}
         />
       </form>

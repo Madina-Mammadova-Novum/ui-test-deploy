@@ -105,9 +105,23 @@ export const errorHandler = (res, status, message, errors = []) => {
   @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
   @returns {object} - A JSON response with the status, data, meta, and error properties
  */
-export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod, options = null, customErrorHandling }) => {
+export const responseHandler = async ({
+  req,
+  res,
+  path,
+  dataAdapter,
+  requestMethod,
+  options = null,
+  customErrorHandling,
+}) => {
   try {
-    const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body, options, customErrorHandling });
+    const { status, data, error, ...rest } = await apiHandler({
+      path,
+      requestMethod,
+      body: req.body,
+      options,
+      customErrorHandling,
+    });
 
     if (error) {
       const { message, errors } = error;

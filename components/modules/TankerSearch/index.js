@@ -40,7 +40,9 @@ const TankerSearch = ({ title }) => {
       handleChangeState('request', true);
     }
     if (error) {
-      const { errors: { LaycanEnd } } = error;
+      const {
+        errors: { LaycanEnd },
+      } = error;
       handleChangeState('request', false);
       errorToast(LaycanEnd.join(''));
     }
