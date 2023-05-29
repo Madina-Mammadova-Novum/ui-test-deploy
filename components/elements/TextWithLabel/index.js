@@ -2,9 +2,9 @@ import classnames from 'classnames';
 
 import { TextWithLabelPropTypes } from '@/lib/types';
 
-import { Label, ManualTooltip, NextImage, Placeholder } from '@/elements';
+import { Label, ManualTooltip, Placeholder } from '@/elements';
 
-const TextWithLabel = ({ text, label, helperData, icon, customStyles = '', coverImage = null }) => {
+const TextWithLabel = ({ text, label, helperData, icon, customStyles = '', textStyles, coverImage = null }) => {
   return (
     <div
       className={classnames(
@@ -20,9 +20,9 @@ const TextWithLabel = ({ text, label, helperData, icon, customStyles = '', cover
           </ManualTooltip>
         )}
       </Label>
-      <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0">
-        {coverImage && <NextImage {...coverImage} customStyles="inline" />}
-        {text ? <span className={coverImage && 'ml-1.5'}>{text}</span> : <Placeholder />}
+      <p className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0">
+        {coverImage && coverImage}
+        {text ? <span className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</span> : <Placeholder />}
       </p>
     </div>
   );

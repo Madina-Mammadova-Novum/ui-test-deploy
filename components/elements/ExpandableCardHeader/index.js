@@ -18,9 +18,11 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
       <TextWithLabel
         label={data?.label}
         text={data?.text}
+        coverImage={data?.coverImage}
+        customStyles={!index && 'mr-auto'}
+        textStyles={data?.textStyles}
         helperData={data?.helperData}
         icon={data?.icon}
-        customStyles={!index && 'mr-auto'}
       />
     </div>
   );
