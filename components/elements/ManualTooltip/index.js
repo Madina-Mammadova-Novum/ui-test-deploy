@@ -16,7 +16,7 @@ const ManualTooltip = ({ data, className, children }) => {
   const { title, description } = data;
 
   const childrenWithProps = cloneElement(children, {
-    className: `${children.props.className} ${showTooltip ? 'fill-blue' : 'fill-black'}`,
+    className: `fill-black ${children.props.className} ${showTooltip && '!fill-blue'}`,
   });
 
   return (
