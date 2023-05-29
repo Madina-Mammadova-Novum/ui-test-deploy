@@ -27,6 +27,7 @@ import {
 } from '@/units';
 import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
+import { ROUTES } from '@/lib';
 
 const ChartererRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
@@ -50,14 +51,11 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { status, error } = await chartererSignUp({ data: formData });
+    const { status, error, data } = await chartererSignUp({ data: formData });
 
     if (status === 200) {
       resetForm(methods, '');
-      redirectAfterToast(
-        'To confirm registration, follow the link that was sent to the email address, you provided',
-        '/'
-      );
+      Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     }
     if (error) {
       errorToast(error.message, error.errors);

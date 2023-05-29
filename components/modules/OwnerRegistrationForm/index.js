@@ -27,6 +27,7 @@ import {
 } from '@/units';
 import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
+import { ROUTES } from '@/lib';
 
 const OwnerRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
@@ -49,12 +50,14 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await ownerSignUp({ data: formData });
-    if (data) {
+    const { status, error, data } = await ownerSignUp({ data: formData });
+
+    if (status === 200) {
       resetForm(methods, '');
-      redirectAfterToast(data.message, '/');
-    } else if (error) {
-      errorToast(error.message, error.errors.join('\n'));
+      Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
+    }
+    if (error) {
+      errorToast(error.message, error.errors);
     }
   };
 

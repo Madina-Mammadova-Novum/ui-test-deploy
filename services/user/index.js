@@ -35,17 +35,22 @@ export async function ownerSignUp({ data }) {
     ...response,
     data: {
       message:
-        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+        response.status === 200 &&
+        'To confirm registration, follow the link that was sent to the email address, you provided',
     },
   };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  console.log('body: ', body);
   const response = await postData(`auth/signup?type=charterer`, body);
   return {
     ...response,
+    data: {
+      message:
+        response.status === 200 &&
+        'To confirm registration, follow the link that was sent to the email address, you provided',
+    },
   };
 }
 
