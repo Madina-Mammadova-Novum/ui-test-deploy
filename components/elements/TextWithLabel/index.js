@@ -2,10 +2,9 @@ import classnames from 'classnames';
 
 import { TextWithLabelPropTypes } from '@/lib/types';
 
-  import { Label, ManualTooltip, Placeholder } from '@/elements';
+import { Label, ManualTooltip, Placeholder } from '@/elements';
 
 const TextWithLabel = ({ text, label, helperData, icon, customStyles = '', textStyles, coverImage = null }) => {
-
   return (
     <div
       className={classnames(
