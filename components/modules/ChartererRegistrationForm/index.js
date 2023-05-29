@@ -7,6 +7,7 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
+import { ROUTES } from '@/lib';
 import {
   cargoesSlotsDetailsSchema,
   companyAddressesSchema,
@@ -27,7 +28,6 @@ import {
 } from '@/units';
 import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
-import { ROUTES } from '@/lib';
 
 const ChartererRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
