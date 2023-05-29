@@ -34,6 +34,6 @@ export const responseErrorAdapter = (errors = []) => {
       .reduce((acc, curr) => acc.concat(curr), [])
       .filter((error) => error.length > 0);
   }
-  // TODO: condition if errors are object
-  return ['Error: as object'];
+
+  return errors;
 };

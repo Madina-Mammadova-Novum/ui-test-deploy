@@ -28,8 +28,8 @@ const AccountPersonalDetails = ({ user = {} }) => {
           <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
         <FieldsetContent className="col-start-1 3md:col-start-2">
-          <TextRow title="Primary phone number">{primaryPhone || '—'}</TextRow>
-          <TextRow title="Secondary phone number">{secondaryPhone || '—'}</TextRow>
+          <TextRow title="Primary phone number">{`+${primaryPhone}` || '—'}</TextRow>
+          <TextRow title="Secondary phone number">{`+${secondaryPhone}` || '—'}</TextRow>
         </FieldsetContent>
       </FieldsetContentWrapper>
     </FieldsetWrapper>

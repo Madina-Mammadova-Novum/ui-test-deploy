@@ -2,6 +2,7 @@ import delve from 'dlv';
 
 import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
+import { formatErrors } from '@/utils/helpers';
 
 /**
   Handles errors returned by the API request
@@ -16,8 +17,16 @@ export const requestErrorHandler = (status, message, errors) => {
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
 
   let errorMessage = null;
+
   if (typeof statusMessage === 'object') {
     errorMessage = statusMessage.title;
+  }
+
+  if (typeof errors === 'object') {
+    return {
+      message: errors.title || statusMessage,
+      errors: formatErrors(errors?.errors),
+    };
   }
 
   return {

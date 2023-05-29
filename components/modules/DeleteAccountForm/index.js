@@ -8,17 +8,14 @@ import { DeleteAccountFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
+import { deleteCompany } from '@/services';
 import { Notes } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
-
-const state = {
-  password: '',
-};
-
-const schema = yup.object({ password: yup.string().required('Required field') });
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeleteAccountForm = ({ title, closeModal }) => {
-  const methods = useHookFormParams({ state, schema });
+  const schema = yup.object({ password: yup.string().required('Required field') });
+
+  const methods = useHookFormParams({ schema });
 
   const {
     setValue,
@@ -32,8 +29,13 @@ const DeleteAccountForm = ({ title, closeModal }) => {
     setValue('password', value);
   };
 
-  const onSubmit = (data) => {
-    return data;
+  const onSubmit = async (formData) => {
+    const { status, error } = await deleteCompany({ data: formData });
+
+    if (status === 200) successToast(null, 'You have successfully sent a request to delete your account');
+    if (error) errorToast(error?.message);
+
+    return null;
   };
 
   return (

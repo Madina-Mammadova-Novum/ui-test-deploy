@@ -1,6 +1,7 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -10,24 +11,28 @@ import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { personalDetailsSchema } from '@/lib/schemas';
 import { updateInfo } from '@/services';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
+import { getUserDataSelector } from '@/store/selectors';
 import { Notes, PersonalDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
-import { successToast, useHookFormParams } from '@/utils/hooks';
-
-const state = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john_doe@shiplink.com',
-  primaryPhoneNumber: '971457753981',
-};
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsForm = ({ closeModal }) => {
   const schema = yup.object({ ...personalDetailsSchema() });
+  const dispatch = useDispatch();
+  const { data } = useSelector(getUserDataSelector);
 
-  const methods = useHookFormParams({ state, schema });
-  const onSubmit = async (data) => {
-    const { message } = await updateInfo({ data });
-    successToast(message, 'You will be notified soon. The rest of the changes have been edited');
+  const methods = useHookFormParams({ state: data?.personalDetails, schema });
+  const onSubmit = async (formData) => {
+    const { status, error } = await updateInfo({ data: formData });
+
+    if (status === 200) {
+      dispatch(fetchUserProfileData());
+      successToast(null, 'You will be notified soon. The rest of the changes have been edited');
+    }
+
+    if (error) errorToast(error?.message, error?.errors);
+    return null;
   };
 
   const noteList = [

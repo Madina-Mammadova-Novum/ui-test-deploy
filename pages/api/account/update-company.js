@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/owner/company/update`),
+    path: getApiURL(`v1/${session?.role}/company/update`),
     dataAdapter: accountCompanyUpdateDataResponseAdapter,
     requestMethod: 'PUT',
     options: { ...Authorization(session?.accessToken) },

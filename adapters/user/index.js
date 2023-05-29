@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { isEmpty } from '@/utils/helpers';
+import { formattedPhoneNumber, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -37,9 +37,10 @@ function userPersonalDetailsAdapter({ data }) {
     personalDetails: {
       firstName: name,
       lastName: surname,
-      primaryPhone: phone,
-      secondaryPhone,
+      fullName: `${name} ${surname}`,
       email,
+      primaryPhone: formattedPhoneNumber(phone),
+      secondaryPhone: formattedPhoneNumber(secondaryPhone),
     },
   };
 }
@@ -119,23 +120,31 @@ export function resetPasswordResponseAdapter({ data }) {
   };
 }
 
-export function updatePasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password } = data;
+export function updatePasswordResponseAdapter({ data }) {
+  if (!data) return null;
   return {
-    password,
+    data,
+  };
+}
+
+export function updatePasswordAdapter({ data }) {
+  if (!data) return null;
+  const { currentPassword, password } = data;
+  return {
+    oldPassword: currentPassword,
+    newPassword: password,
   };
 }
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email, primaryPhoneNumber, secondaryPhoneNumber } = data;
+  const { firstName, lastName, email, primaryPhone, secondaryPhone } = data;
   return {
-    firstName,
-    lastName,
+    name: firstName,
+    surname: lastName,
     email,
-    primaryPhoneNumber,
-    secondaryPhoneNumber: secondaryPhoneNumber || null,
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
   };
 }
 
@@ -183,6 +192,16 @@ export function updateCompanyAdapter({ data }) {
   };
 }
 
+export function deleteCompanyAdapter({ data }) {
+  if (!data) return null;
+
+  const { password } = data;
+
+  return {
+    password,
+  };
+}
+
 export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
@@ -191,8 +210,8 @@ export function ownerSignUpAdapter({ data }) {
     companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -203,8 +222,8 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
@@ -386,6 +405,12 @@ export function accountPeronalDataResponseAdapter({ data }) {
 }
 
 export function accountCompanyUpdateDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountDeleteDataResponseAdapter({ data }) {
   if (!data) return null;
 
   return { data };

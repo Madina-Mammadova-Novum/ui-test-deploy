@@ -1,5 +1,6 @@
 import {
   chartererSignUpAdapter,
+  deleteCompanyAdapter,
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
@@ -8,7 +9,7 @@ import {
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
-import { getData, postData, putData } from '@/utils/dataFetching';
+import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
@@ -76,7 +77,7 @@ export async function refreshAccessToken({ token }) {
 
 export async function updatePassword({ data }) {
   const body = updatePasswordAdapter({ data });
-  const response = await putData(`account/update-password`, body);
+  const response = await postData(`account/update-password`, body);
   return {
     ...response,
   };
@@ -85,6 +86,7 @@ export async function updatePassword({ data }) {
 export async function updateInfo({ data }) {
   const body = updateInfoAdapter({ data });
   const response = await putData(`account/update-info`, body);
+
   return {
     ...response,
   };
@@ -93,6 +95,14 @@ export async function updateInfo({ data }) {
 export async function updateCompany({ data }) {
   const body = updateCompanyAdapter({ data });
   const response = await putData(`account/update-company`, body);
+  return {
+    ...response,
+  };
+}
+
+export async function deleteCompany({ data }) {
+  const body = deleteCompanyAdapter({ data });
+  const response = await deleteData(`account/delete-company`, body);
   return {
     ...response,
   };

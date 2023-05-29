@@ -6,40 +6,22 @@ import { CompanyInfoForm } from '@/modules';
 import { AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company = {} }) => {
-  const {
-    companyName,
-    companyYearsOfOperation,
-    totalTankers,
-    registrationAddress,
-    registrationAddress2,
-    registrationCityId,
-    registrationProvince,
-    registrationPostalCode,
-    registrationCountry,
-    correspondenceAddress,
-    correspondenceAddress2,
-    correspondenceCityId,
-    correspondenceProvince,
-    correspondenceCountry,
-    correspondencePostalCode,
-  } = company;
-
   const registration = {
-    addressLine1: registrationAddress,
-    addressLine2: registrationAddress2,
-    city: registrationCityId,
-    state: registrationProvince,
-    country: registrationCountry,
-    postal: registrationPostalCode,
+    addressLine1: company?.registrationAddress,
+    addressLine2: company?.registrationAddress2,
+    city: company?.registrationCityId,
+    state: company?.registrationProvince,
+    country: company?.registrationCountry,
+    postal: company?.registrationPostalCode,
   };
 
   const correspondence = {
-    addressLine1: correspondenceAddress,
-    addressLine2: correspondenceAddress2,
-    city: correspondenceCityId,
-    state: correspondenceProvince,
-    country: correspondenceCountry,
-    postal: correspondencePostalCode,
+    addressLine1: company?.correspondenceAddress,
+    addressLine2: company?.correspondenceAddress2,
+    city: company?.correspondenceCityId,
+    state: company?.correspondenceProvince,
+    country: company?.correspondenceCountry,
+    postal: company?.correspondencePostalCode,
   };
 
   return (
@@ -59,9 +41,11 @@ const AccountCompanyDetails = ({ company = {} }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
-          {companyName && <TextRow title="Company name">{companyName}</TextRow>}
-          {companyYearsOfOperation && <TextRow title="Years in operation">{companyYearsOfOperation}</TextRow>}
-          {totalTankers && <TextRow title="Number of tankers">{totalTankers}</TextRow>}
+          {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
+          {company?.companyYearsOfOperation && (
+            <TextRow title="Years in operation">{company?.companyYearsOfOperation}</TextRow>
+          )}
+          {company?.totalTankers && <TextRow title="Number of tankers">{company?.totalTankers}</TextRow>}
         </FieldsetContent>
 
         <Divider className="my-4" />
