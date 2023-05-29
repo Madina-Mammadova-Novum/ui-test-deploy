@@ -16,7 +16,7 @@ import { filterDataByLowerCase } from '@/utils/helpers';
 
 const LoadingIndicator = () => (
   <div className="spinner-border text-primary" role="status">
-    <Loader />
+    <Loader className='w-5 h-5'/>
   </div>
 );
 
@@ -38,7 +38,7 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
         loadOptions={loadOptions}
         components={{ Option: OptionsList, LoadingIndicator }}
         formatOptionLabel={printOptions}
-        isLoading={!options?.length}
+        isLoading={asyncCall}
         theme={dropdownTheme}
         closeMenuOnSelect
       />
@@ -46,10 +46,10 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
   }
 
   return (
-    <div className={`${open && 'h-[350px]'}`}>
+    <div>
       <Select
         {...rest}
-        isLoading={!options?.length}
+        isLoading={asyncCall}
         options={options}
         components={{ Option: OptionsList, LoadingIndicator }}
         formatOptionLabel={printOptions}

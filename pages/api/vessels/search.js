@@ -9,5 +9,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/vessels/search`),
     dataAdapter: responseSearchVesselsAdapter,
     requestMethod: 'POST',
+    customErrorHandling: true,
   });
 }

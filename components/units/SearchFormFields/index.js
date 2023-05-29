@@ -25,6 +25,7 @@ const SearchFormFields = () => {
   } = useHookForm();
 
   const [productState, setProductState] = useState([1]);
+  const [initialLoading, setInitialLoading] = useState(false)
   const [ports, setPorts] = useState([]);
   const [cargoTypes, setCargoTypes] = useState([]);
   const [selected, setSelected] = useState(false);
@@ -110,9 +111,11 @@ const SearchFormFields = () => {
 
   useEffect(() => {
     (async () => {
+      setInitialLoading(true)
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
       setPorts(countryOptionsAdapter(portsData));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
+      setInitialLoading(false)
     })();
   }, []);
 
@@ -139,6 +142,8 @@ const SearchFormFields = () => {
           <FormDropdown
             name="loadPort"
             options={ports}
+            asyncCall={initialLoading}
+            disabled={!ports.length}
             id="loadPort"
             label="load port"
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
@@ -158,6 +163,8 @@ const SearchFormFields = () => {
           <FormDropdown
             name="dischargePort"
             options={ports}
+            asyncCall={initialLoading}
+            disabled={!ports.length}
             label="discharge port"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
@@ -180,6 +187,8 @@ const SearchFormFields = () => {
           name="cargoType"
           id="cargoType"
           options={cargoTypes}
+          disabled={!cargoTypes.length}
+          asyncCall={initialLoading}
           onChange={(option) => handleChange('cargoType', option)}
         />
         {productState.map((productId, index) => {
