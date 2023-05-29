@@ -1,3 +1,6 @@
+import TooltipIcon from '@/assets/images/infoCircle.svg';
+import CargoIdTooltip from '@/units/CargoIdTooltip';
+
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const { cargoId, tankerName, cargoType, quantiity, loadPort, laycanStart, laycanEnd, countdown } = data;
@@ -6,6 +9,11 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Cargo id',
       text: cargoId ?? '',
+      icon: <TooltipIcon className="w-4 h-4 fill-gray" viewBox="0 0 24 24" />,
+      helperData: {
+        title: 'Cargo ID',
+        description: <CargoIdTooltip />,
+      },
     },
     {
       label: 'Tanker name',
