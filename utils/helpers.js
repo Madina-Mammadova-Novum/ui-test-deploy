@@ -302,3 +302,13 @@ export const checkEmailPrefix = (value) => {
 export const checkAuthRoute = (req, pathName) => {
   return req.nextUrl.pathname.includes(pathName);
 };
+
+export const formatErrors = (errors) => {
+  const errorMessages = Object.entries(errors)?.map(([key, value]) => {
+    const errorMessage = value.join(' ');
+    return `${key}: ${errorMessage}`;
+  });
+  return errorMessages.join('\n');
+};
+
+export const formattedPhoneNumber = (phone) => phone?.replace('+', '');

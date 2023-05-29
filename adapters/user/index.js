@@ -1,9 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { isEmpty } from '@/utils/helpers';
+import { formattedPhoneNumber, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -38,9 +37,10 @@ function userPersonalDetailsAdapter({ data }) {
     personalDetails: {
       firstName: name,
       lastName: surname,
-      primaryPhone: phone,
-      secondaryPhone,
+      fullName: `${name} ${surname}`,
       email,
+      primaryPhone: formattedPhoneNumber(phone),
+      secondaryPhone: formattedPhoneNumber(secondaryPhone),
     },
   };
 }
@@ -49,17 +49,18 @@ function userCompanyDetailsAdapter({ data }) {
   if (!data) return null;
   const {
     name,
+    imos,
     yearsInOperation,
     numberOfVessels,
-    registrationCountry,
     registrationAddress,
     registrationAddress2,
+    registrationCountryId,
     registrationCityId,
     registrationProvince,
     registrationPostalCode,
     correspondenceAddress,
     correspondenceAddress2,
-    correspondenceCountry,
+    correspondenceCountryId,
     correspondenceCityId,
     correspondenceProvince,
     correspondencePostalCode,
@@ -67,25 +68,22 @@ function userCompanyDetailsAdapter({ data }) {
 
   return {
     companyDetails: {
-      name: name ?? '',
-      years: yearsInOperation ?? '',
-      totalTankers: numberOfVessels ?? '',
-      registration: {
-        addressLine1: registrationAddress ?? '',
-        addressLine2: registrationAddress2 ?? '',
-        city: registrationCityId ?? '',
-        state: registrationProvince ?? '',
-        postal: registrationPostalCode ?? '',
-        country: registrationCountry ?? '',
-      },
-      correspondence: {
-        addressLine1: correspondenceAddress ?? '',
-        addressLine2: correspondenceAddress2 ?? '',
-        city: correspondenceCityId ?? '',
-        state: correspondenceProvince ?? '',
-        postal: correspondencePostalCode ?? '',
-        country: correspondenceCountry ?? '',
-      },
+      companyName: name,
+      companyYearsOfOperation: yearsInOperation,
+      registrationAddress,
+      registrationAddress2,
+      registrationCityId,
+      registrationCountryId,
+      registrationPostalCode,
+      registrationProvince,
+      correspondenceAddress,
+      correspondenceAddress2,
+      correspondenceCityId,
+      correspondenceCountryId,
+      correspondencePostalCode,
+      correspondenceProvince,
+      totalTankers: numberOfVessels,
+      imos,
     },
   };
 }
@@ -122,23 +120,31 @@ export function resetPasswordResponseAdapter({ data }) {
   };
 }
 
-export function updatePasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password } = data;
+export function updatePasswordResponseAdapter({ data }) {
+  if (!data) return null;
   return {
-    password,
+    data,
+  };
+}
+
+export function updatePasswordAdapter({ data }) {
+  if (!data) return null;
+  const { currentPassword, password } = data;
+  return {
+    oldPassword: currentPassword,
+    newPassword: password,
   };
 }
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email, primaryPhoneNumber, secondaryPhoneNumber } = data;
+  const { firstName, lastName, email, primaryPhone, secondaryPhone } = data;
   return {
-    firstName,
-    lastName,
+    name: firstName,
+    surname: lastName,
     email,
-    primaryPhoneNumber,
-    secondaryPhoneNumber: secondaryPhoneNumber || null,
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
   };
 }
 
@@ -147,43 +153,52 @@ function companyAddressesAdapter({ data }) {
 
   const {
     sameAddresses,
-    registrationState,
+    registrationProvince,
     registrationPostalCode,
     registrationAddress,
-    registrationAddressOptional,
+    registrationAddress2,
     registrationCityId,
-    correspondenceState,
+    correspondenceProvince,
     correspondencePostalCode,
     correspondenceAddress,
-    correspondenceAddressOptional,
+    correspondenceAddress2,
     correspondenceCityId,
   } = data;
 
   return {
     registrationAddress,
-    registrationAddress2: registrationAddressOptional,
+    registrationAddress2,
     registrationCityId: registrationCityId.value,
-    registrationProvince: registrationState,
+    registrationProvince,
     registrationPostalCode,
     correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddress2 : registrationAddress2,
     correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
-    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondenceProvince: !sameAddresses ? correspondenceProvince : registrationProvince,
     correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
 }
 
 export function updateCompanyAdapter({ data }) {
   if (data === null) return null;
-  const { imo, numberOfTankers, companyNumberOfOperation, companyName } = data;
+  const { imos, numberOfTankers, companyYearsOfOperation, companyName } = data;
 
   return {
     companyName,
-    estimatedAverageTankerDWT: 1,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     ...companyAddressesAdapter({ data }),
-    imos: imo,
+    imos,
+  };
+}
+
+export function deleteCompanyAdapter({ data }) {
+  if (!data) return null;
+
+  const { password } = data;
+
+  return {
+    password,
   };
 }
 
@@ -192,11 +207,11 @@ export function ownerSignUpAdapter({ data }) {
   const {
     imo,
     numberOfTankers,
-    companyNumberOfOperation,
+    companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -207,11 +222,11 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
     estimatedAverageTankerDWT: 1,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     imos: imo,
     ...companyAddressesAdapter({ data }),
@@ -231,11 +246,11 @@ export function chartererSignUpAdapter({ data }) {
   const {
     cargoes,
     numberOfCargoes,
-    companyNumberOfOperation,
+    companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -246,10 +261,10 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     experiences: cargoesAdapter({ data: cargoes }),
     ...companyAddressesAdapter({ data }),
@@ -384,6 +399,18 @@ export function sessionAdapter({ session, token }) {
 }
 
 export function accountPeronalDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountCompanyUpdateDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountDeleteDataResponseAdapter({ data }) {
   if (!data) return null;
 
   return { data };

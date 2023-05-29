@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { ProfileMenuPropTypes } from '@/lib/types';
 
@@ -9,9 +10,13 @@ import ExitSVG from '@/assets/images/exit.svg';
 import UserCircleSVG from '@/assets/images/userCircle.svg';
 import { LogoutButton, NextImage, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
+import { getUserDataSelector } from '@/store/selectors';
 
 const ProfileMenu = ({ image }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const { data } = useSelector(getUserDataSelector);
+
+  const { personalDetails } = data;
 
   const closeMenu = (e) => {
     e.stopPropagation();
@@ -24,11 +29,13 @@ const ProfileMenu = ({ image }) => {
       aria-hidden
       onClick={() => setShowProfileMenu(true)}
     >
-      <div className="overflow-hidden h-10 w-10 rounded-[50%]">
-        <NextImage src={image} height={40} width={40} alt="some_alt" />
-      </div>
+      {image && (
+        <div className="overflow-hidden h-10 w-10 rounded-[50%]">
+          <NextImage src={image} height={40} width={40} alt="some_alt" />
+        </div>
+      )}
       <div className="flex items-center mx-2.5">
-        <span className="text-black font-semibold text-xsm">John Doe</span>
+        <span className="text-black font-semibold text-xsm">{personalDetails?.fullName}</span>
         <AngleDownSVG className={`w-2.5 ml-6 transition duration-500 ${showProfileMenu && 'fill-blue rotate-180'}`} />
       </div>
 

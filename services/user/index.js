@@ -1,15 +1,15 @@
 import {
   chartererSignUpAdapter,
+  deleteCompanyAdapter,
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
   resetPasswordAdapter,
-  tokenAdapter,
   updateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
-import { getData, postData, putData } from '@/utils/dataFetching';
+import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
@@ -35,7 +35,8 @@ export async function ownerSignUp({ data }) {
     ...response,
     data: {
       message:
-        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+        response.status === 200 &&
+        'To confirm registration, follow the link that was sent to the email address, you provided',
     },
   };
 }
@@ -47,7 +48,8 @@ export async function chartererSignUp({ data }) {
     ...response,
     data: {
       message:
-        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
+        response.status === 200 &&
+        'To confirm registration, follow the link that was sent to the email address, you provided',
     },
   };
 }
@@ -71,13 +73,13 @@ export async function login({ data }) {
 export async function refreshAccessToken({ token }) {
   const response = await postData(`auth/refreshToken`, { token });
 
-  if (response?.data) return tokenAdapter({ data: response?.data });
+  if (response?.data) return response?.data;
   return { ...response };
 }
 
 export async function updatePassword({ data }) {
   const body = updatePasswordAdapter({ data });
-  const response = await putData(`account/update-password`, body);
+  const response = await postData(`account/update-password`, body);
   return {
     ...response,
   };
@@ -86,6 +88,7 @@ export async function updatePassword({ data }) {
 export async function updateInfo({ data }) {
   const body = updateInfoAdapter({ data });
   const response = await putData(`account/update-info`, body);
+
   return {
     ...response,
   };
@@ -94,6 +97,14 @@ export async function updateInfo({ data }) {
 export async function updateCompany({ data }) {
   const body = updateCompanyAdapter({ data });
   const response = await putData(`account/update-company`, body);
+  return {
+    ...response,
+  };
+}
+
+export async function deleteCompany({ data }) {
+  const body = deleteCompanyAdapter({ data });
+  const response = await deleteData(`account/delete-company`, body);
   return {
     ...response,
   };

@@ -6,6 +6,7 @@ const initialState = {
   loading: true,
   error: null,
   data: {
+    token: {},
     personalDetails: {},
     companyDetails: {},
     accountDetails: {},
@@ -20,6 +21,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    handleToken: (state, { payload }) => {
+      state.data.token = payload;
+    },
     handleCollapse: (state, { payload }) => {
       state.params.sidebarCollapsed = payload;
     },
@@ -42,6 +46,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { handleCollapse, handleToggle } = userSlice.actions;
+export const { handleCollapse, handleToggle, handleToken } = userSlice.actions;
 
 export default userSlice.reducer;

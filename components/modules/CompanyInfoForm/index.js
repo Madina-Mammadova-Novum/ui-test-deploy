@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -11,21 +12,16 @@ import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyAddressesSchema, companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
+import { getUserDataSelector } from '@/store/selectors';
 import { CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
-import { successToast, useHookFormParams } from '@/utils/hooks';
-
-const state = {
-  companyName: 'Ship.link',
-  companyNumberOfOperation: '5',
-  cityId: ' New York',
-  State: 'NY',
-  PostalCode: '10012',
-  AddressOptional: '',
-};
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
+  const dispatch = useDispatch();
   const [sameAddress, setSameAddress] = useState(false);
+  const { data } = useSelector(getUserDataSelector);
 
   const schema = yup.object({
     ...companyDetailsSchema(),
@@ -33,7 +29,7 @@ const CompanyInfoForm = ({ closeModal }) => {
     ...companyAddressesSchema(sameAddress),
   });
 
-  const methods = useHookFormParams({ state, schema });
+  const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
@@ -42,9 +38,15 @@ const CompanyInfoForm = ({ closeModal }) => {
     setSameAddress(addressValue);
   }, [addressValue, methods]);
 
-  const onSubmit = async (data) => {
-    const { message } = await updateCompany({ data });
-    successToast(message, 'You will be notified soon. The rest of the changes have been edited');
+  const onSubmit = async (formData) => {
+    const { status, error } = await updateCompany({ data: formData });
+
+    if (status === 200) {
+      dispatch(fetchUserProfileData());
+      successToast(null, 'You will be notified soon. The rest of the changes have been edited');
+    }
+    if (error) errorToast(error?.message);
+    return null;
   };
 
   const noteList = [

@@ -21,7 +21,7 @@ const AccountContainer = ({ children }) => {
   }, [session, update]);
 
   useEffect(() => {
-    if (Date.now > session?.expires) updateSession();
+    if (Date.now() > session?.expires) updateSession();
   }, [session?.expires, updateSession]);
 
   return <div className={`flex flex-col grow ${collapsed ? 'ml-16' : 'ml-16 lg:ml-64'}`}>{children}</div>;

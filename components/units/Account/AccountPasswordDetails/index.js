@@ -7,6 +7,7 @@ const AccountPasswordDetails = () => {
     <FieldsetWrapper>
       <FieldsetHeader title="Password">
         <ModalWindow
+          containerClass="w-[672px]"
           buttonProps={{
             text: 'Change your password',
             variant: 'primary',

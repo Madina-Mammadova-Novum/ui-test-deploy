@@ -6,11 +6,29 @@ import { CompanyInfoForm } from '@/modules';
 import { AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company = {} }) => {
-  const { name, years, totalTankers, registration, correspondence } = company;
+  const registration = {
+    addressLine1: company?.registrationAddress,
+    addressLine2: company?.registrationAddress2,
+    city: company?.registrationCityId,
+    state: company?.registrationProvince,
+    country: company?.registrationCountry,
+    postal: company?.registrationPostalCode,
+  };
+
+  const correspondence = {
+    addressLine1: company?.correspondenceAddress,
+    addressLine2: company?.correspondenceAddress2,
+    city: company?.correspondenceCityId,
+    state: company?.correspondenceProvince,
+    country: company?.correspondenceCountry,
+    postal: company?.correspondencePostalCode,
+  };
+
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Company Details">
         <ModalWindow
+          containerClass="w-[672px]"
           buttonProps={{
             text: 'Edit company details',
             variant: 'primary',
@@ -23,9 +41,11 @@ const AccountCompanyDetails = ({ company = {} }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
-          {name && <TextRow title="Company name">{name}</TextRow>}
-          {years && <TextRow title="Years in operation">{years}</TextRow>}
-          {totalTankers && <TextRow title="Number of tankers">{totalTankers}</TextRow>}
+          {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
+          {company?.companyYearsOfOperation && (
+            <TextRow title="Years in operation">{company?.companyYearsOfOperation}</TextRow>
+          )}
+          {company?.totalTankers && <TextRow title="Number of tankers">{company?.totalTankers}</TextRow>}
         </FieldsetContent>
 
         <Divider className="my-4" />
