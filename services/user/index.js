@@ -42,13 +42,10 @@ export async function ownerSignUp({ data }) {
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
+  console.log('body: ', body);
   const response = await postData(`auth/signup?type=charterer`, body);
   return {
     ...response,
-    data: {
-      message:
-        !response.error && 'To confirm registration, follow the link that was sent to the email address, you provided',
-    },
   };
 }
 

@@ -50,12 +50,17 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await chartererSignUp({ data: formData });
-    if (data) {
+    const { status, error } = await chartererSignUp({ data: formData });
+
+    if (status === 200) {
       resetForm(methods, '');
-      redirectAfterToast(data.message, '/');
-    } else if (error) {
-      errorToast(error.message, error.errors.join('\n'));
+      redirectAfterToast(
+        'To confirm registration, follow the link that was sent to the email address, you provided',
+        '/'
+      );
+    }
+    if (error) {
+      errorToast(error.message, error.errors);
     }
   };
 
