@@ -5,10 +5,12 @@ import { LegalNavigation, SocialNetworks } from '@/units';
 
 const AccountFooter = async () => {
   return (
-    <footer className="shadow-xmd flex items-center px-5 justify-between py-2 text-xs-sm">
+    <footer className="shadow-xmd items-center px-5 justify-between py-2 text-xs-sm flex 3md:flex-nowrap flex-wrap gap-2.5 ">
       <SocialNetworks />
       <LegalNavigation />
-      <Copyright />
+      <div className="w-full text-center 3md:w-auto">
+        <Copyright />
+      </div>
     </footer>
   );
 };

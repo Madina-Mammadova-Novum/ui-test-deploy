@@ -12,7 +12,7 @@ const SidebarXl = ({ data, isResized, onResize }) => {
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <ul className="flex flex-col gap-2.5 relative">
+      <ul className="flex flex-col gap-2.5 relative overflow-auto">
         <Button
           buttonProps={{
             icon: {

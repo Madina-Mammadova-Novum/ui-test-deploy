@@ -7,7 +7,7 @@ import { ModalPropTypes } from '@/lib/types';
 import CloseSVG from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
-const ModalWrapper = ({ opened, onClose, containerClass = 'overflow-y-auto', sidebar, children }) => {
+const ModalWrapper = ({ opened, onClose, containerClass = 'overflow-y-auto max-h-[98vh]', sidebar, children }) => {
   useEffect(() => {
     if (opened) document.body.classList.add('overflow-hidden');
 
