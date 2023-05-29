@@ -21,6 +21,8 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
         coverImage={data?.coverImage}
         customStyles={!index && 'mr-auto'}
         textStyles={data?.textStyles}
+        helperData={data?.helperData}
+        icon={data?.icon}
       />
     </div>
   );
