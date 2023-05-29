@@ -9,6 +9,7 @@ import Dropzone from './Dropzone';
 import File from './File';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
+import UploadSVG from '@/assets/images/upload.svg';
 import { Button, Input, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
 // import { options } from '@/utils/formOptions';
@@ -99,12 +100,12 @@ const UploadForm = () => {
 
   const printHelpers = useMemo(() => {
     return (
-      <div className="flex flex-wrap gap-3 h-auto self-end w-full justify-between py-2 text-xs-sm">
-        <p className="flex gap-2 text-gray-darker">
-          Supports: <span className="text-gray">{formats}</span>
+      <div className="flex gap-3 h-auto self-end w-full justify-between py-2 text-xs-sm">
+        <p>
+          <span className="text-gray">Supports:</span> <span>{formats}</span>
         </p>
-        <p className="flex gap-2 text-gray-darker">
-          Max size: <span className="text-gray">10mb</span>
+        <p className="flex gap-2 text-gray whitespace-nowrap self-end">
+          Max size: <span>10MB</span>
         </p>
       </div>
     );
@@ -147,6 +148,8 @@ const UploadForm = () => {
             <Input
               type="text"
               name="title"
+              helperText="Max: 46 symbols"
+              maxlength="46"
               label="title"
               placeholder="Enter the file title"
               error={errors?.title?.message}
@@ -182,7 +185,12 @@ const UploadForm = () => {
         <Button
           type="submit"
           customStyles="flex self-end"
-          buttonProps={{ text: 'Upload', variant: 'secondary', size: 'large' }}
+          buttonProps={{
+            text: 'Upload file',
+            variant: 'secondary',
+            size: 'large',
+            icon: { before: <UploadSVG className="fill-white" /> },
+          }}
           disabled={!isDirty}
         />
       </form>

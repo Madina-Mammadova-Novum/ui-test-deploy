@@ -61,6 +61,7 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
 export const apiHandler = async (options) => {
   try {
     const path = delve(options, 'path');
+    const customErrorHandling = delve(options, 'customErrorHandling');
     const response = await fetch(path, requestOptions(options));
     const status = delve(response, 'status');
     const ok = delve(response, 'ok');
@@ -74,7 +75,7 @@ export const apiHandler = async (options) => {
     return {
       status,
       ...responseAdapter(result),
-      error,
+      error: customErrorHandling && !ok ? responseBody : error,
     };
   } catch (error) {
     return requestErrorHandler(500, 'External server error', error);
@@ -104,9 +105,23 @@ export const errorHandler = (res, status, message, errors = []) => {
   @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
   @returns {object} - A JSON response with the status, data, meta, and error properties
  */
-export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod, options = null }) => {
+export const responseHandler = async ({
+  req,
+  res,
+  path,
+  dataAdapter,
+  requestMethod,
+  options = null,
+  customErrorHandling,
+}) => {
   try {
-    const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body, options });
+    const { status, data, error, ...rest } = await apiHandler({
+      path,
+      requestMethod,
+      body: req.body,
+      options,
+      customErrorHandling,
+    });
 
     if (error) {
       const { message, errors } = error;
