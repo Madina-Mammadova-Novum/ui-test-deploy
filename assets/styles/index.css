@@ -19,6 +19,7 @@
 
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -29,6 +30,9 @@
   ::-webkit-scrollbar-thumb {
     background-color: #828c9c7a;
     border-radius: 10px;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
   }
   h1 {
     @apply font-bold text-[26px] 3md:text-[30px];
