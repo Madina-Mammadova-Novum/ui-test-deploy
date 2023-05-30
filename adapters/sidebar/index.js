@@ -118,7 +118,7 @@ export const chartererSidebarAdapter = ({ role }) => {
       id: makeId(),
       title: 'Tools',
       variant: 'tools',
-      path: ROUTES.TOOLS,
+      path: ROUTES.ACCOUNT_TOOLS,
       items: [],
     },
     {

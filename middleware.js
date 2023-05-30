@@ -9,7 +9,7 @@ export default withAuth(
   function middleware(req) {
     const { accessToken, role } = req.nextauth.token;
 
-    const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH) || checkAuthRoute(req, ROUTES.TOOLS);
+    const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH) || checkAuthRoute(req, ROUTES.ACCOUNT_TOOLS);
     const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.FLEETS);
 
     if (req.nextUrl.pathname.startsWith('/account') && !accessToken) {

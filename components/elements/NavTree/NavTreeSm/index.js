@@ -13,6 +13,7 @@ import BrowserSVG from '@/assets/images/browser.svg';
 import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
 import QuestionCircleSVG from '@/assets/images/questionCircle.svg';
 import SearchSVG from '@/assets/images/search.svg';
+import ToolsSVG from '@/assets/images/setting.svg'
 import { Button } from '@/elements';
 
 const NavTreeSm = ({ data, active }) => {
@@ -34,6 +35,8 @@ const NavTreeSm = ({ data, active }) => {
         return <AnchorSVG className={iconClassName} viewBox="0 0 24 24" />;
       case 'faq':
         return <QuestionCircleSVG className={iconClassName} viewBox="0 0 24 24" />;
+      case 'tools':
+        return <ToolsSVG className={iconClassName} viewBox="0 0 24 24" />
       default:
         return null;
     }
