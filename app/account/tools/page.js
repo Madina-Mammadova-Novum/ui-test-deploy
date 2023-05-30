@@ -14,7 +14,7 @@ export function generateMetadata() {
 export default function AccountTool() {
   return (
     <AccountWrapper containerClass="px-5">
-      <AccountTools />
+      <AccountTools title="Tools" />
     </AccountWrapper>
   );
 }

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { TankerSearch } from '@/modules';
+import { AccountTools, TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
 
 const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
@@ -29,8 +29,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
-        // todo: add Tools component when it is done
-        return <div className="text-white h-32">Soon...</div>;
+        return <AccountTools />;
       default:
         return <TankerSearch />;
     }
