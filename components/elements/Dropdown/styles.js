@@ -39,9 +39,11 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
   }),
   dropdownIndicator: (base, { selectProps: { menuIsOpen } }) => ({
     ...base,
-    color: menuIsOpen && '#199AF5',
     transform: menuIsOpen && 'rotate(180deg)',
     transition: 'all .5s ease',
+    svg: {
+      fill: menuIsOpen && '#199AF5',
+    },
   }),
   indicatorSeparator: (base) => ({
     ...base,
