@@ -1,4 +1,4 @@
-import ClockSVG from "@/assets/images/clock.svg";
+import ClockSVG from '@/assets/images/clock.svg';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import TooltipIcon from '@/assets/images/infoCircle.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
