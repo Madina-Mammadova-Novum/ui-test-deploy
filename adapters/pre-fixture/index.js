@@ -1,3 +1,4 @@
+import ClockSVG from "@/assets/images/clock.svg";
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import TooltipIcon from '@/assets/images/infoCircle.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
@@ -46,6 +47,8 @@ export const prefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       text: countdown || '',
+      textStyles: 'text-red',
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
   ];
 };
