@@ -2,19 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.4.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.2...v0.4.0) (2023-05-30)
+### [0.4.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.0...v0.4.1) (2023-05-30)
+
+
+### Features
+
+* add tools to the main page ([f406e06](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f406e068b3cd80fd58f03f6454976bb444f73f66))
 
 
 ### Bug Fixes
 
-* error formatter condition ([506f09c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/506f09c7ddc8eaeb79c22ac36611e9c18e634de6))
-* icons displaying ([5f9380f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5f9380fbb34812260cea23cc6b13e8e0ffb8e0e5))
-* made modals scrollable ([9c85d41](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9c85d413135a071a3fe251153bd4003ca26602a3))
+* personal-acc-adapter ([5ed013e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5ed013e92d9174a8001555521261c7d653c962b3))
+* sorted options ([25e193e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/25e193e7d3da38bf906e28ce2371cc8c79233359))
 
+## [0.4.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.2...v0.4.0) (2023-05-30)
+
+### Bug Fixes
+
+- error formatter condition ([506f09c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/506f09c7ddc8eaeb79c22ac36611e9c18e634de6))
+- icons displaying ([5f9380f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5f9380fbb34812260cea23cc6b13e8e0ffb8e0e5))
+- made modals scrollable ([9c85d41](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9c85d413135a071a3fe251153bd4003ca26602a3))
 
 ### Refactors
 
-* code style ([0f9e256](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/0f9e256d097513de0c64b2031f0fc8eed38739d7))
+- code style ([0f9e256](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/0f9e256d097513de0c64b2031f0fc8eed38739d7))
 
 ### [0.3.2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.1...v0.3.2) (2023-05-30)
 
