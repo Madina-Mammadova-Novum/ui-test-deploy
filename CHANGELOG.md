@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.0...v0.4.1) (2023-05-30)
+
+
+### Features
+
+* add tools to the main page ([f406e06](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f406e068b3cd80fd58f03f6454976bb444f73f66))
+
+
+### Bug Fixes
+
+* personal-acc-adapter ([5ed013e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5ed013e92d9174a8001555521261c7d653c962b3))
+* sorted options ([25e193e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/25e193e7d3da38bf906e28ce2371cc8c79233359))
+
 ## [0.4.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.2...v0.4.0) (2023-05-30)
 
 ### Bug Fixes
