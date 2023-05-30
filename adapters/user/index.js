@@ -18,18 +18,16 @@ export function userRoleAdapter({ data }) {
 }
 
 export function userDetailsAdapter({ data }) {
-  if (!data) return null;
-
-  const { personalDetails, companyDetails } = data;
+  if (!data) return {};
 
   return {
-    ...userPersonalDetailsAdapter({ data: personalDetails }),
-    ...userCompanyDetailsAdapter({ data: companyDetails }),
+    ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
+    ...userCompanyDetailsAdapter({ data: data?.companyDetails }),
   };
 }
 
 function userPersonalDetailsAdapter({ data }) {
-  if (!data) return null;
+  if (!data) return {};
 
   const { name, surname, email, phone, secondaryPhone } = data;
 
@@ -46,7 +44,7 @@ function userPersonalDetailsAdapter({ data }) {
 }
 
 function userCompanyDetailsAdapter({ data }) {
-  if (!data) return null;
+  if (!data) return {};
   const {
     name,
     imos,
