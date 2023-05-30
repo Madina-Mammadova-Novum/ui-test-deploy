@@ -3,6 +3,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
@@ -16,7 +17,7 @@ const schema = yup.object({
   ...toolsSchema(),
 });
 
-const AccountTools = () => {
+const AccountTools = ({ title }) => {
   const testOption = [
     { label: 'testLabel', value: 'testValue' },
     { label: 'testLabel2', value: 'testValue2' },
@@ -42,10 +43,12 @@ const AccountTools = () => {
 
   return (
     <section>
-      <div className=" pt-5">
-        <Title className="mb-5" level={1}>
-          Tools
-        </Title>
+      <div>
+        {title && (
+          <Title level={1} className="py-5">
+            {title}
+          </Title>
+        )}
         <div className="flex justify-between rounded-base bg-white divide-gray-darker p-5">
           <div className="w-[35%]">
             <div className="flex flex-col">
@@ -137,6 +140,10 @@ const AccountTools = () => {
       </div>
     </section>
   );
+};
+
+AccountTools.propTypes = {
+  title: PropTypes.string,
 };
 
 export default AccountTools;
