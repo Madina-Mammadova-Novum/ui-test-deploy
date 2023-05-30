@@ -1,7 +1,7 @@
 {
   "name": "shiplink-basic-project",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A NextJS application",
   "scripts": {
     "develop": "next dev",
@@ -71,6 +71,7 @@
     "eslint-config-next": "^13.0.6",
     "form-data": "^4.0.0",
     "html-react-parser": "^3.0.15",
+    "jsonwebtoken": "^9.0.0",
     "next": "^13.2.4",
     "next-auth": "^4.22.1",
     "next-redux-wrapper": "^8.1.0",

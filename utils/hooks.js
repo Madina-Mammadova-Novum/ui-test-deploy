@@ -5,16 +5,14 @@ import { useForm, useFormContext } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import delve from 'dlv';
 import { usePathname } from 'next/navigation';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useSession } from 'next-auth/react';
 
 import { getFilledArray } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
-import axiosInstance from '@/lib/api';
-import { PALETTE, SORT_OPTIONS } from '@/lib/constants';
+import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
+import { ROLES, SORT_OPTIONS } from '@/lib/constants';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -105,32 +103,6 @@ export function useDebounce(value, delay) {
   return debouncedValue;
 }
 
-export const useColor = () => {
-  const white = delve(PALETTE, 'COLORS.WHITE.DEFAULT');
-  const black = delve(PALETTE, 'COLORS.BLACK.DEFAULT');
-  const grey = delve(PALETTE, 'COLORS.GREY.DEFAULT');
-  const red = delve(PALETTE, 'COLORS.RED.DEFAULT');
-  const yellow = delve(PALETTE, 'COLORS.YELLOW.DEFAULT');
-  const green = delve(PALETTE, 'COLORS.GREEN.DEFAULT');
-  const blue = delve(PALETTE, 'COLORS.BLUE.DEFAULT');
-
-  return {
-    white,
-    black,
-    grey,
-    red,
-    yellow,
-    green,
-    blue,
-  };
-};
-
-export const useActiveColors = (isAcitve) => {
-  const { white, grey } = useColor();
-
-  return isAcitve ? white : grey;
-};
-
 export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
 };
@@ -157,7 +129,7 @@ export const redirectAfterToast = (message, url) => {
     setTimeout(() => {
       window.location.href = url;
       resolve();
-    }, 1000);
+    }, 3000);
   });
 };
 
@@ -312,20 +284,17 @@ export const useAuth = () => {
   };
 };
 
-export const useAxiosAuth = () => {
-  const { data } = useSession();
+export const useRoleNavigation = () => {
+  const { data: session } = useSession();
 
-  useEffect(() => {
-    const requestInterceptor = axiosInstance.interceptors.request.use((config) => {
-      if (!config.headers.Authorization) {
-        config.headers.Authorization = `Bearer ${data?.user?.access_token}`;
-      }
-      return config;
-    });
-    return () => {
-      axiosInstance.interceptors.request.eject(requestInterceptor);
-    };
-  }, [data]);
+  if (!session?.role) return { data: [] };
 
-  return axiosInstance;
+  switch (session?.role) {
+    case ROLES.OWNER:
+      return { data: ownerSidebarAdapter({ role: session?.role }) };
+    case ROLES.CHARTERER:
+      return { data: chartererSidebarAdapter({ role: session?.role }) };
+    default:
+      return { data: [] };
+  }
 };

@@ -2,22 +2,33 @@ import delve from 'dlv';
 
 import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
+import { formatErrors } from '@/utils/helpers';
 
 /**
-
- Handles errors returned by the API request
- @function requestErrorHandler
- @param {number} status - The status code of the error
- @param {string|object} message - The error message or an object with the error messages and title
- @param {Array} errors - An array of error messages
- @returns {object} - An object with the error message and error messages
+  Handles errors returned by the API request
+  @function requestErrorHandler
+  @param {number} status - The status code of the error
+  @param {string|object} message - The error message or an object with the error messages and title
+  @param {Array} errors - An array of error messages
+  @returns {object} - An object with the error message and error messages
  */
-export const requestErrorHandler = (status, message, errors = []) => {
+export const requestErrorHandler = (status, message, errors) => {
+  if (errors?.error) return errors.error;
   const statusMessage = message === undefined || message === null ? SYSTEM_ERROR : message;
+
   let errorMessage = null;
+
   if (typeof statusMessage === 'object') {
     errorMessage = statusMessage.title;
   }
+
+  if (typeof errors === 'object') {
+    return {
+      message: errors.title || statusMessage,
+      errors: formatErrors(errors?.errors),
+    };
+  }
+
   return {
     message: errorMessage !== null ? errorMessage : statusMessage,
     errors: responseErrorAdapter(errors),
@@ -26,10 +37,10 @@ export const requestErrorHandler = (status, message, errors = []) => {
 
 /**
 
- Creates the options for the API request
- @function requestOptions
- @param {object} props - An object containing requestMethod, body and options properties
- @returns {object} - The options object for the API request
+  Creates the options for the API request
+  @function requestOptions
+  @param {object} props - An object containing requestMethod, body and options properties
+  @returns {object} - The options object for the API request
  */
 const requestOptions = ({ requestMethod, body = null, options }) => {
   const method = requestMethod.toUpperCase();
@@ -51,14 +62,15 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
 
 /**
 
- Handles the API request
- @function apiHandler
- @param {object} options - An object containing path, requestMethod, body and options properties
- @returns {object} - An object with status, data, error, and other response properties
+  Handles the API request
+  @function apiHandler
+  @param {object} options - An object containing path, requestMethod, body and options properties
+  @returns {object} - An object with status, data, error, and other response properties
  */
 export const apiHandler = async (options) => {
   try {
     const path = delve(options, 'path');
+    const customErrorHandling = delve(options, 'customErrorHandling');
     const response = await fetch(path, requestOptions(options));
     const status = delve(response, 'status');
     const ok = delve(response, 'ok');
@@ -68,15 +80,14 @@ export const apiHandler = async (options) => {
       responseBody = JSON.parse(responseBody);
     }
     const result = ok ? responseBody : null;
-    const error = ok ? null : requestErrorHandler(status, statusText, [responseBody]);
+    const error = ok ? null : requestErrorHandler(status, statusText, responseBody);
     return {
       status,
       ...responseAdapter(result),
-      error,
+      error: customErrorHandling && !ok ? responseBody : error,
     };
   } catch (error) {
-    console.error(error);
-    return requestErrorHandler(500, 'External server error', [error]);
+    return requestErrorHandler(500, 'External server error', error);
   }
 };
 
@@ -98,17 +109,32 @@ export const errorHandler = (res, status, message, errors = []) => {
 };
 
 /**
- Handles the response from the API and sends it as a JSON response
- @function responseHandler
- @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
- @returns {object} - A JSON response with the status, data, meta, and error properties
+  Handles the response from the API and sends it as a JSON response
+  @function responseHandler
+  @param {object} props - An object containing req, res, path, dataAdapter, and requestMethod properties
+  @returns {object} - A JSON response with the status, data, meta, and error properties
  */
-export const responseHandler = async ({ req, res, path, dataAdapter, requestMethod, options = null }) => {
+export const responseHandler = async ({
+  req,
+  res,
+  path,
+  dataAdapter,
+  requestMethod,
+  options = null,
+  customErrorHandling,
+}) => {
   try {
-    const { status, data, error, ...rest } = await apiHandler({ path, requestMethod, body: req.body, options });
+    const { status, data, error, ...rest } = await apiHandler({
+      path,
+      requestMethod,
+      body: req.body,
+      options,
+      customErrorHandling,
+    });
+
     if (error) {
       const { message, errors } = error;
-      const errorMessage = status === 500 ? 'External server error' : message;
+      const errorMessage = status === 500 ? 'External server error' : message ?? error;
       return errorHandler(res, status, errorMessage, errors);
     }
     const responseData = await dataAdapter({ data });

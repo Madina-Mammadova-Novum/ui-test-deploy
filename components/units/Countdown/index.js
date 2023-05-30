@@ -5,10 +5,10 @@ import ClockSVG from '@/assets/images/clock.svg';
 const Countdown = ({ time, customStyles = '' }) => {
   return (
     <div className={`px-4 py-1 border-l-2 border-l-blue ${customStyles}`}>
-      <span className="uppercase font-semibold">countdown</span>
-      <div className="text-red flex">
-        <ClockSVG className="fill-red" />
-        <span className="ml-1.5 text-xsm">{time}</span>
+      <span className="uppercase font-semibold">Countdown</span>
+      <div className="flex">
+        <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />
+        <span className="ml-1.5 text-xsm text-red">{time}</span>
       </div>
     </div>
   );

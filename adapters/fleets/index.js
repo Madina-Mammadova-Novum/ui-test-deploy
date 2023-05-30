@@ -1,4 +1,4 @@
-import EditIcon from '@/assets/images/edit.svg';
+import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
@@ -40,44 +40,54 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: title ?? NO_DATA_MESSAGE.DEFAULT,
-      action: ACTIONS.TANKER_NAME,
       type: TYPE.SEMIBOLD,
       disabled: inActive,
     },
     {
       id,
       value: imo ?? NO_DATA_MESSAGE.IMO,
-      action: ACTIONS.IMO,
       disabled: inActive,
     },
     {
       id,
       name: title,
-      action: ACTIONS.PORT,
       value: port || NO_DATA_MESSAGE.PORT,
       helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: !inActive,
-      editIcon: <EditIcon />,
+      actions: [
+        {
+          action: ACTIONS.PORT,
+          editIcon: <EditIcon />,
+        },
+      ],
       disabled: inActive,
     },
     {
       id,
-      action: ACTIONS.DATE,
       name: title,
       marked,
       value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: !inActive,
-      editIcon: <EditIcon />,
+      actions: [
+        {
+          action: ACTIONS.DATE,
+          editIcon: <EditIcon />,
+        },
+      ],
       disabled: inActive,
     },
     {
       id,
       name: title,
       value: status,
-      action: status ? ACTIONS.TANKER_DEACTIVATE : ACTIONS.TANKER_REACTIVATE,
       editable: true,
-      editIcon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
+      actions: [
+        {
+          editIcon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
+          action: status ? ACTIONS.TANKER_DEACTIVATE : ACTIONS.TANKER_REACTIVATE,
+        },
+      ],
       disabled: !status,
     },
   ];

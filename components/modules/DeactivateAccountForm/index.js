@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { DeactivateAccountFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
-import { Input, Title } from '@/elements';
+import { PasswordInput, Title } from '@/elements';
 import { useHookFormParams } from '@/utils/hooks';
 
 const state = {
@@ -20,9 +20,16 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
   const methods = useHookFormParams({ state, schema });
 
   const {
-    register,
-    formState: { errors },
+    setValue,
+    formState: { errors, isSubmitting },
+    clearErrors,
   } = methods;
+
+  const handlePassword = (event) => {
+    clearErrors('password');
+    const { value } = event.target;
+    setValue('password', value);
+  };
 
   const onSubmit = (data) => {
     return data;
@@ -43,20 +50,26 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
               {title}
             </Title>
             <p className="text-xsm">
-              <span className="font-bold">
-                We will deactivate all your tankers and your account will become inactive.
+              <span className="font-semibold">
+                We will deactivate all your tankers and your account will become inactive.&nbsp;
               </span>
               But if you want to reactivate your account, then after logging in, we will automatically reactivate your
               account.
             </p>
           </div>
 
-          <p className="font-bold text-black">Please enter your password to deactivate account</p>
-          <Input {...register('password')} type="password" label="password" error={errors.password?.message} />
+          <p className="text-xsm font-semibold text-black">Please enter your password to deactivate account</p>
+          <PasswordInput
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
+            disabled={isSubmitting}
+            onChange={handlePassword}
+            error={errors.password?.message}
+          />
         </ModalFormManager>
       </FormProvider>
     </div>
-
   );
 };
 

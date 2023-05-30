@@ -82,12 +82,14 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
         )}
       </CounterofferForm>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
-        <Button
-          onClick={closeModal}
-          customStyles="ml-auto"
-          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-        />
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
+        <span className={confirmCounteroffer && 'mr-60'}>
+          <Button
+            onClick={closeModal}
+            customStyles="ml-auto"
+            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
+          />
+        </span>
         {!confirmCounteroffer && (
           <Button
             onClick={() => setConfirmCounteroffer(true)}

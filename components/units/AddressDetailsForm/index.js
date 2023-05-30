@@ -50,7 +50,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="grid grid-cols-2 gap-5">
           <FormDropdown
             name={`${type}CountryId`}
             label="Country"
@@ -67,10 +67,10 @@ const AddressDetails = ({ title, type, countries = [] }) => {
             async
           />
           <Input
-            {...register(`${type}State`)}
+            {...register(`${type}Province`)}
             label="State / Province / Region (optional)"
             placeholder="NY"
-            error={errors[`${type}State`]?.message}
+            error={errors[`${type}Province`]?.message}
             disabled={disabled || isSubmitting}
           />
           <Input
@@ -90,10 +90,10 @@ const AddressDetails = ({ title, type, countries = [] }) => {
           disabled={disabled || isSubmitting}
         />
         <Input
-          {...register(`${type}AddressOptional`)}
+          {...register(`${type}Address2`)}
           label="Address line #2 (optional)"
           placeholder="Apartment, suite, unit, building, floor, etc."
-          error={errors[`${type}AddressOptional`]?.message}
+          error={errors[`${type}Address2`]?.message}
           disabled={disabled || isSubmitting}
         />
       </div>

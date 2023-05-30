@@ -15,11 +15,11 @@ export function generateMetadata() {
 
 const LoginPage = () => {
   return (
-    <AuthWrapper title="Log in" containerClass="w-3/4">
+    <AuthWrapper title="Log in" containerClass="md:px-48 2xl:pl-0">
       <LoginForm />
       <NextLink
         href={ROUTES.FORGOT_PASSWORD}
-        className="inline-flex justify-center items-center w-full pt-2.5 text-blue underline text-xsm"
+        className="inline-flex justify-center items-center w-full pt-2.5 text-blue text-xsm"
       >
         Forgot your password
       </NextLink>

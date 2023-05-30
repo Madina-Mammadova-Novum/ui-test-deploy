@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { VoyageDetailsContentPropTypes } from '@/lib/types';
 
-import InfoSVG from '@/assets/images/info.svg';
-import { IconComponent, TextRow, Title } from '@/elements';
+import InfoSVG from '@/assets/images/infoCircle.svg';
+import { IconComponent, ManualTooltip, TextRow, Title } from '@/elements';
+import { TankerInformationContent } from '@/units';
 
 const VoyageDetailsContent = ({ data = { dates: [], ports: [] } }) => {
   const { dates, ports } = data;
@@ -10,9 +13,11 @@ const VoyageDetailsContent = ({ data = { dates: [], ports: [] } }) => {
     <div>
       <div className="flex justify-between">
         <Title level="3">Voyage details</Title>
-        <div className="flex ">
-          <span className="mr-1.5">Charterer Information</span>
-          <InfoSVG className="fill-black w-3.5" />
+        <div className="flex relative">
+          <span className="mr-1.5">Tanker Information</span>
+          <ManualTooltip className="!right-0 min-w-[470px] !p-2.5" data={{ description: <TankerInformationContent /> }}>
+            <InfoSVG className="w-4" viewBox="0 0 24 24" />
+          </ManualTooltip>
         </div>
       </div>
 

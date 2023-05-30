@@ -4,12 +4,12 @@ import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
 import { updateFAQBlock } from '@/blocks/FAQBlock/adapter';
 import { updateFAQByCategoryBlock } from '@/blocks/FAQByCategoryBlock/adapter';
-import { updateHowItWorksBlock } from '@/blocks/HowItWorksBlock/adapter';
 import { updateImageSliderBlock } from '@/blocks/ImageSliderBlock/adapter';
 import { updateLetsTalkBlock } from '@/blocks/LetsTalkBlock/adapter';
 import { updateProductFeaturesBlock } from '@/blocks/ProductFeaturesBlock/adapter';
 import { updateTeamBlock } from '@/blocks/TeamBlock/adapter';
 import { updateWhatWeOfferBlock } from '@/blocks/WhatWeOfferBlock/adapter';
+import { updateWhyWeAreBetterBlock } from '@/blocks/WhyWeAreBetterBlock/adapter';
 
 export const blocksDataAdapter = async (blocks) => {
   if (!blocks || blocks.length === 0) {
@@ -29,8 +29,8 @@ export const blocksDataAdapter = async (blocks) => {
           return updateBlockHeroImage(block);
         case 'blocks.image-slider':
           return updateImageSliderBlock(block);
-        case 'blocks.single-how-it-works':
-          return updateHowItWorksBlock(block);
+        case 'blocks.single-why-we-are-better':
+          return updateWhyWeAreBetterBlock(block);
         case 'blocks.single-what-we-offer':
           return updateWhatWeOfferBlock(block);
         case 'blocks.product-features':

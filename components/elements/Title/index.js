@@ -1,9 +1,14 @@
 import { TitlePropTypes } from '@/lib/types';
 
-const Title = ({ level, children, className = '', ...rest }) => {
+const titleStyles = {
+  'date-styles': 'text-[14px] text-gray ',
+  'offer-styles': 'uppercase font-semibold',
+};
+
+const Title = ({ level, children, customStyle, className = '', ...rest }) => {
   const Tag = `h${level}`;
   return (
-    <Tag className={className} {...rest}>
+    <Tag className={`${className} ${customStyle && titleStyles[customStyle]}`} {...rest}>
       {children}
     </Tag>
   );

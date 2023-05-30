@@ -2,7 +2,8 @@ import classnames from 'classnames';
 
 import { AccordionHeaderPropTypes } from '@/lib/types';
 
-import { MinusIcon, PlusIcon } from '@/assets/icons';
+import MinusSVG from '@/assets/images/minus.svg';
+import PlusSVG from '@/assets/images/plus.svg';
 import { Title } from '@/elements';
 
 const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
@@ -19,7 +20,7 @@ const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
         {children}
       </Title>
       <div className="shrink-0">
-        {isActive ? <MinusIcon width={24} height={24} /> : <PlusIcon width={24} height={24} />}
+        {isActive ? <MinusSVG className="fill-blue" /> : <PlusSVG className="fill-black" />}
       </div>
     </div>
   );

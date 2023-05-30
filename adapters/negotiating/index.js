@@ -1,4 +1,4 @@
-import ClockIcon from '@/assets/images/clock.svg';
+import ClockSVG from '@/assets/images/clock.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
@@ -86,10 +86,14 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
-      action: ACTIONS.CHARTERER_INFORMATION,
-      actionText: cargoId,
-      actionVariant: 'primary',
-      actionSize: 'small',
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: cargoId,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
       editable: true,
     },
     {
@@ -117,14 +121,18 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       id,
       value: countdown,
       type: TYPE.RED,
-      icon: <ClockIcon className="fill-red" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
     {
       id,
-      action: ACTIONS.VIEW_OFFER,
-      actionText: 'View offer',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.VIEW_OFFER,
+          actionText: 'View offer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];
@@ -150,10 +158,14 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
-      action: ACTIONS.CHARTERER_INFORMATION,
-      actionText: cargoId,
-      actionVariant: 'primary',
-      actionSize: 'small',
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: cargoId,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
       editable: true,
     },
     {
@@ -176,14 +188,18 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: countdown,
       type: TYPE.RED,
-      icon: <ClockIcon className="fill-red" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
     {
       id,
-      action: ACTIONS.VIEW_COUNTEROFFER,
-      actionText: 'View counteroffer',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.VIEW_COUNTEROFFER,
+          actionText: 'View counteroffer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];
@@ -209,10 +225,14 @@ export const failedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
-      action: ACTIONS.CHARTERER_INFORMATION,
-      actionText: cargoId,
-      actionVariant: 'primary',
-      actionSize: 'small',
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: cargoId,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
       editable: true,
     },
     {
@@ -238,10 +258,14 @@ export const failedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      action: ACTIONS.VIEW_FAILED_OFFER,
-      actionText: 'View failed offer',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.VIEW_FAILED_OFFER,
+          actionText: 'View failed offer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];

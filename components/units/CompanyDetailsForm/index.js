@@ -12,19 +12,23 @@ const CompanyDetails = () => {
     register,
     setValue,
     clearErrors,
+    getValues,
     formState: { errors, isSubmitting },
   } = useFormContext();
+
+  const { companyYearsOfOperation } = getValues();
 
   useEffect(() => {
     if (inputYearsRef.current) {
       inputYearsRef.current.addEventListener('wheel', disableDefaultBehaviour);
       inputYearsRef.current.addEventListener('keydown', disablePlusMinusSymbols);
+      inputYearsRef.current.value = companyYearsOfOperation;
     }
-  }, [inputYearsRef]);
+  }, [companyYearsOfOperation, inputYearsRef]);
 
   const handleNumberOfOperation = () => {
-    clearErrors('companyNumberOfOperation');
-    setValue('companyNumberOfOperation', inputYearsRef.current.value);
+    clearErrors('companyYearsOfOperation');
+    setValue('companyYearsOfOperation', inputYearsRef.current.value);
   };
 
   return (
@@ -37,14 +41,15 @@ const CompanyDetails = () => {
         disabled={isSubmitting}
       />
       <Input
+        ref={inputYearsRef}
         type="number"
-        name="companyNumberOfOperation"
+        name="companyYearsOfOperation"
         label="Years of operation"
         placeholder="Years"
-        ref={inputYearsRef}
+        value={inputYearsRef.current?.value ?? ''}
         onChange={handleNumberOfOperation}
         disabled={isSubmitting}
-        error={errors.companyNumberOfOperation?.message}
+        error={errors.companyYearsOfOperation?.message}
       />
     </div>
   );

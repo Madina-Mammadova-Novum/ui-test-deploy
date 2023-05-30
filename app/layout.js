@@ -1,4 +1,4 @@
-// import LayoutManager from '@/common/LayoutManager';
+import { AuthManager } from '@/common';
 
 export const metadata = {
   title: {
@@ -6,8 +6,7 @@ export const metadata = {
     template: '%s | Shiplink',
   },
 };
-export default function RootLayout(props) {
-  const { children } = props;
-  return children;
-  // return <LayoutManager>{children}</LayoutManager>;
+
+export default function RootLayout({ children }) {
+  return <AuthManager>{children}</AuthManager>;
 }

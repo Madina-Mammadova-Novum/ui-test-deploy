@@ -1,6 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import NextAuth from 'next-auth';
+import NextAuth from 'next-auth/next';
 
-import { authOptions } from '@/lib/auth';
+import { AUTHCONFIG } from '@/utils/auth';
 
-export default NextAuth(authOptions);
+export default NextAuth(AUTHCONFIG);

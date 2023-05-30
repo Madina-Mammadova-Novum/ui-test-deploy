@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { providedEmails } from '@/utils/mock';
 
 /**
  * createMarkup
@@ -275,3 +276,40 @@ export const isEmpty = (value) => {
   if (Array.isArray(value) && value.length === 0) return true;
   return typeof value === 'object' && Object.keys(value).length === 0;
 };
+
+export const transformInvalidLoginMessage = (msg) => {
+  return msg
+    ?.split('_')
+    .map((word, index) => {
+      if (index === 0) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+};
+
+export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
+
+export const checkEmailPrefix = (value) => {
+  if (!value) return true;
+
+  const emailParts = value?.split('@')[1];
+
+  return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
+};
+
+export const checkAuthRoute = (req, pathName) => {
+  return req.nextUrl.pathname.includes(pathName);
+};
+
+export const formatErrors = (errors) => {
+  if (!errors) return null;
+  const errorMessages = Object.entries(errors)?.map(([key, value]) => {
+    const errorMessage = value.join(' ');
+    return `${key}: ${errorMessage}`;
+  });
+  return errorMessages.join('\n');
+};
+
+export const formattedPhoneNumber = (phone) => phone?.replace('+', '');

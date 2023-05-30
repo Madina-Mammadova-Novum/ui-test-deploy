@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import { TrashIcon } from '@/assets/icons';
 import PlusSVG from '@/assets/images/plusCircle.svg';
+import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
 import { getFilledArray, removeByIndex } from '@/utils/helpers';
@@ -99,7 +99,7 @@ const TankerSlotsDetails = () => {
         />
       </div>
       {tankers.map((_, index) => {
-        const fieldName = `imo[${index}]`;
+        const fieldName = `imos[${index}]`;
         const error = errors.imo ? errors.imo[index] : null;
         return (
           <div key={fieldName} className="relative">
@@ -113,8 +113,12 @@ const TankerSlotsDetails = () => {
             />
             <Button
               type="button"
-              customStyles="absolute top-[30px] right-1.5 z-10 !p-0"
-              buttonProps={{ icon: { before: <TrashIcon /> }, variant: 'tertiary', size: 'small' }}
+              customStyles="absolute top-7 right-1.5 z-10 !p-0"
+              buttonProps={{
+                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                variant: 'tertiary',
+                size: 'small',
+              }}
               onClick={() => handleRemoveSlot(index)}
               disabled={isSubmitting}
             />

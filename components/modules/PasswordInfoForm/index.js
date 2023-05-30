@@ -11,21 +11,21 @@ import { Divider, PasswordInput, Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
 import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
-import { successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const PasswordInfoForm = ({ closeModal }) => {
   const schema = yup.object({ ...updatePasswordSchema() });
+  const methods = useHookFormParams({ schema });
 
-  const state = {
-    password: '',
-    confirmPassword: '',
-  };
+  const onSubmit = async (formData) => {
+    const { status, error } = await updatePassword({ data: formData });
 
-  const methods = useHookFormParams({ state, schema });
+    if (status === 200) {
+      successToast(null, 'Your new password has been sent successfully');
+    }
 
-  const onSubmit = async (data) => {
-    const { message } = await updatePassword({ data });
-    successToast(message);
+    if (error) errorToast(error?.message);
+    return null;
   };
 
   const {
@@ -67,7 +67,6 @@ const PasswordInfoForm = ({ closeModal }) => {
   );
 };
 
-PasswordInfoForm.propTypes = PasswordInfoFormPropTypes
-
+PasswordInfoForm.propTypes = PasswordInfoFormPropTypes;
 
 export default PasswordInfoForm;

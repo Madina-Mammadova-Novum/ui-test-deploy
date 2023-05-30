@@ -9,7 +9,7 @@ const PersonalDetails = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-5">
         <Input
           {...register('firstName')}
           label="First name"
@@ -35,18 +35,18 @@ const PersonalDetails = () => {
       </div>
       <div className="flex flex-col gap-5">
         <p className="text-black w- font-semibold b-l text-sm pt-5">Provide contact phone numbers to contact you</p>
-        <div className="grid gap-5 grid-cols-1 lg:grid-cols-2">
+        <div className="grid gap-5 grid-cols-2">
           <PhoneInput
-            {...register('primaryPhoneNumber')}
+            {...register('primaryPhone')}
             label="Primary phone number"
             disabled={isSubmitting}
-            error={errors.primaryPhoneNumber?.message}
+            error={errors.primaryPhone?.message}
           />
           <PhoneInput
-            {...register('secondaryPhoneNumber')}
+            {...register('secondaryPhone')}
             label="Secondary phone number (optional)"
             disabled={isSubmitting}
-            error={errors.secondaryPhoneNumber?.message}
+            error={errors.secondaryPhone?.message}
           />
         </div>
       </div>

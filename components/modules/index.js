@@ -1,6 +1,7 @@
 import AccountContainer from '@/modules/AccountContainer';
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
+import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
@@ -23,6 +24,7 @@ import Negotiating from '@/modules/Negotiating';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
+import OnSubs from '@/modules/OnSubs';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
@@ -58,6 +60,7 @@ export {
   PageHeader,
   AccountHeader,
   PageFooter,
+  AccountTools,
   AccountFooter,
   AuthHeader,
   AuthWrapper,
@@ -85,4 +88,5 @@ export {
   ViewFailedOffer,
   ViewOffer,
   NotFound,
+  OnSubs,
 };

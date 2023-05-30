@@ -1,28 +1,46 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { navBarPropTypes } from '@/lib/types';
 
 import Logo from '@/assets/images/logo.svg';
-import { NextLink } from '@/elements';
+import { LoginButton, NextLink } from '@/elements';
+import { ROUTES } from '@/lib';
 
 const Navbar = ({ placeholder, cta, path }) => {
-  return (
-    <nav className="grid grid-cols-2 gap-20 py-1 flex-grow z-50 h-14 bg-white 3md:bg-transparent">
-      <NextLink href="/">
-        <Logo className="3md:fill-white fill-black" />
-      </NextLink>
-      <ul className="flex h-full items-center gap-5 w-full justify-end bg-white z-50">
-        <li className="text-xsm text-black font-normal">
-          <p>{placeholder}</p>
-        </li>
-        <li>
+  const printLink = useMemo(() => {
+    switch (path) {
+      case ROUTES.LOGIN:
+        return (
+          <LoginButton
+            text={cta}
+            variant="secondary"
+            className="px-5 py-2.5 z-20 text-xsm font-medium whitespace-nowrap bg-black text-white rounded-md"
+          />
+        );
+      default:
+        return (
           <NextLink
             href={path}
             className="px-5 py-2.5 z-20 text-xsm font-medium whitespace-nowrap bg-black text-white rounded-md"
           >
             {cta}
           </NextLink>
+        );
+    }
+  }, [cta, path]);
+
+  return (
+    <nav className="flex justify-between flex-grow z-50 h-14 bg-white 3md:bg-transparent">
+      <NextLink href="/" className="py-1">
+        <Logo className="3md:fill-white fill-black" />
+      </NextLink>
+      <ul className="flex h-full items-center gap-5 3md:w-form justify-end bg-white z-50 py-1 ">
+        <li className="text-xsm text-black font-normal">
+          <p>{placeholder}</p>
         </li>
+        <li>{printLink}</li>
       </ul>
     </nav>
   );

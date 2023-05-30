@@ -1,5 +1,8 @@
-import CommentIcon from '@/assets/images/comment.svg';
+import ClockSVG from '@/assets/images/clock.svg';
+import CommentIcon from '@/assets/images/commentMessage.svg';
+import TooltipIcon from '@/assets/images/infoCircle.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import CargoIdTooltip from '@/units/CargoIdTooltip';
 import { transformDate } from '@/utils/date';
 
 export const prefixtureHeaderDataAdapter = ({ data }) => {
@@ -11,6 +14,11 @@ export const prefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Cargo id',
       text: cargoId || '',
+      icon: <TooltipIcon className="w-4 h-4 fill-gray" viewBox="0 0 24 24" />,
+      helperData: {
+        title: 'Cargo ID',
+        description: <CargoIdTooltip />,
+      },
     },
     {
       label: 'Cargo type',
@@ -39,6 +47,8 @@ export const prefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       text: countdown || '',
+      textStyles: 'text-red',
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
   ];
 };
@@ -64,7 +74,11 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
     {
       id,
       editable: true,
-      editIcon: comment ? <CommentIcon /> : '---',
+      actions: [
+        {
+          editIcon: comment ? <CommentIcon /> : '---',
+        },
+      ],
     },
     {
       id,
@@ -84,10 +98,14 @@ export const prefixtureRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      action: ACTIONS.DOWNLOAD,
-      actionText: 'Download',
-      actionVariant: 'primary',
-      actionSize: 'medium',
+      actions: [
+        {
+          action: ACTIONS.DOWNLOAD,
+          actionText: 'Download',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
       editable: true,
     },
   ];

@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { TrashIcon } from '@/assets/icons';
-import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
+import PlusCircleSVG from '@/assets/images/plusCircle.svg';
+import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
@@ -25,8 +25,10 @@ const SearchFormFields = () => {
   } = useHookForm();
 
   const [productState, setProductState] = useState([1]);
+  const [initialLoading, setInitialLoading] = useState(false);
   const [ports, setPorts] = useState([]);
   const [cargoTypes, setCargoTypes] = useState([]);
+  const [selected, setSelected] = useState(false);
   const [products, setProducts] = useState({
     loading: false,
     data: [],
@@ -85,12 +87,12 @@ const SearchFormFields = () => {
         ...prevState,
         loading: true,
       }));
-      const { data: relatedProducts } = await getProducts(value.value);
+      const relatedProducts = await getProducts(value.value);
       setProducts({
         loading: false,
         data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
           ...product,
-          density: relatedProducts.find(({ id }) => id === product.value).density,
+          density: relatedProducts.data.find(({ id }) => id === product.value).density,
         })),
       });
     }
@@ -109,9 +111,11 @@ const SearchFormFields = () => {
 
   useEffect(() => {
     (async () => {
+      setInitialLoading(true);
       const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
       setPorts(countryOptionsAdapter(portsData));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
+      setInitialLoading(false);
     })();
   }, []);
 
@@ -122,12 +126,14 @@ const SearchFormFields = () => {
           <DatePicker
             label="laycan start"
             inputClass="w-full"
+            name="laycanStart"
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
           />
           <DatePicker
             label="laycan end"
             inputClass="w-full"
+            name="laycanEnd"
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
           />
@@ -136,6 +142,8 @@ const SearchFormFields = () => {
           <FormDropdown
             name="loadPort"
             options={ports}
+            asyncCall={initialLoading}
+            disabled={!ports.length}
             id="loadPort"
             label="load port"
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
@@ -155,6 +163,8 @@ const SearchFormFields = () => {
           <FormDropdown
             name="dischargePort"
             options={ports}
+            asyncCall={initialLoading}
+            disabled={!ports.length}
             label="discharge port"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
@@ -177,6 +187,8 @@ const SearchFormFields = () => {
           name="cargoType"
           id="cargoType"
           options={cargoTypes}
+          disabled={!cargoTypes.length}
+          asyncCall={initialLoading}
           onChange={(option) => handleChange('cargoType', option)}
         />
         {productState.map((productId, index) => {
@@ -185,7 +197,10 @@ const SearchFormFields = () => {
             <div key={`product_${productId}`}>
               <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
                 <FormDropdown
-                  onChange={(option) => handleChange(`products[${productId}].product`, option)}
+                  onChange={(option) => {
+                    setSelected(!selected);
+                    handleChange(`products[${productId}].product`, option);
+                  }}
                   name={`products[${productId}].product`}
                   asyncCall={products.loading}
                   options={products.data}
@@ -199,6 +214,7 @@ const SearchFormFields = () => {
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
+                  helperText={density.min && `${density.min} - ${density.max}`}
                   error={errors.products ? errors.products[productId]?.density?.message : null}
                   disabled={isSubmitting}
                   min={String(density.min)}
@@ -226,7 +242,12 @@ const SearchFormFields = () => {
               </div>
               {productState.length > 1 && (
                 <Button
-                  buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
+                  buttonProps={{
+                    text: 'Delete',
+                    variant: 'tertiary',
+                    size: 'small',
+                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                  }}
                   customStyles="ml-auto !p-0"
                   onClick={() => handleRemoveProduct(productId)}
                 />
@@ -240,7 +261,7 @@ const SearchFormFields = () => {
             text: 'Add more Products',
             variant: 'primary',
             size: 'small',
-            icon: { before: <PlusInCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
+            icon: { before: <PlusCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}

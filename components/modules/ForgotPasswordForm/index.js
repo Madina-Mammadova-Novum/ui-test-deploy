@@ -29,7 +29,7 @@ const ForgotPasswordForm = () => {
       reset();
     }
     if (response.error) {
-      errorToast(response.error.message, response.error.description);
+      errorToast(response.error.message.Email.join(''));
     }
   };
 

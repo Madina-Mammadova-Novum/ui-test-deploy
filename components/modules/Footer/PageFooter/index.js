@@ -3,7 +3,7 @@ import React from 'react';
 import delve from 'dlv';
 
 import { linkAdapter } from '@/adapters/global';
-import { ExternalLinkAltIcon } from '@/assets/icons';
+import ExternalLinkAltSVG from '@/assets/images/externalLinkAlt.svg';
 import Logo from '@/assets/images/logo.svg';
 import OtakoyiLogo from '@/assets/images/otakoyi.svg';
 import { Copyright, NextLink, Title } from '@/elements';
@@ -57,7 +57,7 @@ const PageFooter = async () => {
                     className="font-medium text-xsm flex gap-x-1 whitespace-nowrap"
                   >
                     {mapLink.label}
-                    <ExternalLinkAltIcon width={16} height={16} className="fill-black" />
+                    <ExternalLinkAltSVG viewBox="0 0 24 24" className="fill-black w-4 h-4" />
                   </NextLink>
                 )}
               </li>

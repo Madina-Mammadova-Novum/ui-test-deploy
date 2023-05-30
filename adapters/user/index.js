@@ -1,52 +1,89 @@
-import { isEmpty } from '@/utils/helpers';
+import jwt from 'jsonwebtoken';
+
+import { ROUTES } from '@/lib';
+import { ROLES } from '@/lib/constants';
+import { formattedPhoneNumber, isEmpty } from '@/utils/helpers';
+
+export function userRoleAdapter({ data }) {
+  if (!data) return null;
+
+  switch (data) {
+    case 'VesselOwner':
+      return ROLES.OWNER;
+    case 'Charterer':
+      return ROLES.CHARTERER;
+    default:
+      return '';
+  }
+}
 
 export function userDetailsAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
 
-  const {
-    firstName,
-    lastName,
-    email,
-    primaryPhone,
-    secondaryPhone,
-    currentPassword,
-    companyName,
-    yearsInOperation,
-    numberOfTankers,
-    registrAddress,
-    correspondAddress,
-  } = data;
+  const { personalDetails, companyDetails } = data;
+
+  return {
+    ...userPersonalDetailsAdapter({ data: personalDetails }),
+    ...userCompanyDetailsAdapter({ data: companyDetails }),
+  };
+}
+
+function userPersonalDetailsAdapter({ data }) {
+  if (!data) return null;
+
+  const { name, surname, email, phone, secondaryPhone } = data;
+
   return {
     personalDetails: {
-      firstName,
-      lastName,
+      firstName: name,
+      lastName: surname,
+      fullName: `${name} ${surname}`,
       email,
-      primaryPhone,
-      secondaryPhone,
+      primaryPhone: formattedPhoneNumber(phone),
+      secondaryPhone: formattedPhoneNumber(secondaryPhone),
     },
+  };
+}
+
+function userCompanyDetailsAdapter({ data }) {
+  if (!data) return null;
+  const {
+    name,
+    imos,
+    yearsInOperation,
+    numberOfVessels,
+    registrationAddress,
+    registrationAddress2,
+    registrationCountryId,
+    registrationCityId,
+    registrationProvince,
+    registrationPostalCode,
+    correspondenceAddress,
+    correspondenceAddress2,
+    correspondenceCountryId,
+    correspondenceCityId,
+    correspondenceProvince,
+    correspondencePostalCode,
+  } = data;
+
+  return {
     companyDetails: {
-      name: companyName ?? '',
-      years: yearsInOperation ?? '',
-      totalTankers: numberOfTankers ?? '',
-      registration: {
-        addressLine1: registrAddress?.primaryLine ?? '',
-        addressLine2: registrAddress?.secondaryLine ?? '',
-        city: registrAddress?.city ?? '',
-        state: registrAddress?.state ?? '',
-        postal: registrAddress?.zip ?? '',
-        country: registrAddress?.country ?? '',
-      },
-      correspondence: {
-        addressLine1: correspondAddress?.primaryLine ?? '',
-        addressLine2: correspondAddress?.secondaryLine ?? '',
-        city: correspondAddress?.city ?? '',
-        state: correspondAddress?.state ?? '',
-        postal: correspondAddress?.zip ?? '',
-        country: correspondAddress?.country ?? '',
-      },
-    },
-    accountDetails: {
-      currentPassword,
+      companyName: name,
+      companyYearsOfOperation: yearsInOperation,
+      registrationAddress,
+      registrationAddress2,
+      registrationCityId,
+      registrationCountryId,
+      registrationPostalCode,
+      registrationProvince,
+      correspondenceAddress,
+      correspondenceAddress2,
+      correspondenceCityId,
+      correspondenceCountryId,
+      correspondencePostalCode,
+      correspondenceProvince,
+      totalTankers: numberOfVessels,
+      imos,
     },
   };
 }
@@ -83,23 +120,31 @@ export function resetPasswordResponseAdapter({ data }) {
   };
 }
 
-export function updatePasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password } = data;
+export function updatePasswordResponseAdapter({ data }) {
+  if (!data) return null;
   return {
-    password,
+    data,
+  };
+}
+
+export function updatePasswordAdapter({ data }) {
+  if (!data) return null;
+  const { currentPassword, password } = data;
+  return {
+    oldPassword: currentPassword,
+    newPassword: password,
   };
 }
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email, primaryPhoneNumber, secondaryPhoneNumber } = data;
+  const { firstName, lastName, email, primaryPhone, secondaryPhone } = data;
   return {
-    firstName,
-    lastName,
+    name: firstName,
+    surname: lastName,
     email,
-    primaryPhoneNumber,
-    secondaryPhoneNumber: secondaryPhoneNumber || null,
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
   };
 }
 
@@ -108,43 +153,52 @@ function companyAddressesAdapter({ data }) {
 
   const {
     sameAddresses,
-    registrationState,
+    registrationProvince,
     registrationPostalCode,
     registrationAddress,
-    registrationAddressOptional,
+    registrationAddress2,
     registrationCityId,
-    correspondenceState,
+    correspondenceProvince,
     correspondencePostalCode,
     correspondenceAddress,
-    correspondenceAddressOptional,
+    correspondenceAddress2,
     correspondenceCityId,
   } = data;
 
   return {
     registrationAddress,
-    registrationAddress2: registrationAddressOptional,
+    registrationAddress2,
     registrationCityId: registrationCityId.value,
-    registrationProvince: registrationState,
+    registrationProvince,
     registrationPostalCode,
     correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddress2 : registrationAddress2,
     correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
-    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondenceProvince: !sameAddresses ? correspondenceProvince : registrationProvince,
     correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
 }
 
 export function updateCompanyAdapter({ data }) {
   if (data === null) return null;
-  const { imo, numberOfTankers, companyNumberOfOperation, companyName } = data;
+  const { imos, numberOfTankers, companyYearsOfOperation, companyName } = data;
 
   return {
     companyName,
-    estimatedAverageTankerDWT: 1,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     ...companyAddressesAdapter({ data }),
-    imos: imo,
+    imos,
+  };
+}
+
+export function deleteCompanyAdapter({ data }) {
+  if (!data) return null;
+
+  const { password } = data;
+
+  return {
+    password,
   };
 }
 
@@ -153,11 +207,11 @@ export function ownerSignUpAdapter({ data }) {
   const {
     imo,
     numberOfTankers,
-    companyNumberOfOperation,
+    companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -168,11 +222,11 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
     estimatedAverageTankerDWT: 1,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     imos: imo,
     ...companyAddressesAdapter({ data }),
@@ -192,11 +246,11 @@ export function chartererSignUpAdapter({ data }) {
   const {
     cargoes,
     numberOfCargoes,
-    companyNumberOfOperation,
+    companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -207,10 +261,10 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     experiences: cargoesAdapter({ data: cargoes }),
     ...companyAddressesAdapter({ data }),
@@ -218,12 +272,31 @@ export function chartererSignUpAdapter({ data }) {
 }
 
 export function loginAdapter({ data }) {
-  if (data === null) return null;
-  const { email, password } = data;
+  if (!data) return null;
+
   return {
-    email,
-    password,
+    ...data,
   };
+}
+
+export function loginResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function refreshTokenAdapter({ data }) {
+  if (!data) return null;
+
+  return { token: data };
+}
+
+export function refreshTokenResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
 }
 
 export function tankerInfoAdapter({ data }) {
@@ -275,9 +348,70 @@ export function confirmEmailResponseAdapter({ data }) {
   return { data };
 }
 
-export function loginResponseAdapter({ data }) {
-  if (data === null) return null;
-  if (isEmpty(data)) return null;
+export function signInAdapter({ data }) {
+  if (!data) return null;
+
+  const { email, password } = data;
+
+  return {
+    email,
+    password,
+    redirect: true,
+    callbackUrl: ROUTES.ACCOUNT_INFO,
+  };
+}
+
+export function decodedTokenAdapter(token) {
+  if (!token) return null;
+
+  const decodedData = jwt.decode(token);
+  return decodedData;
+}
+
+export function tokenAdapter({ data }) {
+  if (!data) return null;
+
+  if (data?.access_token) {
+    const { role } = decodedTokenAdapter(data.access_token);
+    return {
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+      role: userRoleAdapter({ data: role }),
+    };
+  }
+
+  return { ...data };
+}
+
+export function sessionAdapter({ session, token }) {
+  if (!token) throw new Error('UNATHORIZED');
+
+  if (token.accessToken) {
+    const { exp, ...rest } = decodedTokenAdapter(token.accessToken);
+    session.user = { ...rest };
+    session.expires = exp * 1000;
+    session.accessToken = token.accessToken;
+    session.refreshToken = token.refreshToken;
+    session.role = token.role;
+  }
+
+  return session;
+}
+
+export function accountPeronalDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountCompanyUpdateDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountDeleteDataResponseAdapter({ data }) {
+  if (!data) return null;
 
   return { data };
 }

@@ -1,14 +1,20 @@
-import { sleep } from '@/utils/helpers';
+import { getServerSession } from 'next-auth';
+
+import { accountPeronalDataResponseAdapter } from '@/adapters/user';
+import { Authorization } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
+import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
-  await sleep(2000);
-  // todo: PUT request here
-  try {
-    return res.status(200).json({
-      message: 'Your request has been sent for review',
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: { message: 'Internal server error' } });
-  }
+  const session = await getServerSession(req, res, AUTHCONFIG);
+
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`v1/${session?.role}/profile/update`),
+    dataAdapter: accountPeronalDataResponseAdapter,
+    requestMethod: 'PUT',
+    options: { ...Authorization(session?.accessToken) },
+  });
 }

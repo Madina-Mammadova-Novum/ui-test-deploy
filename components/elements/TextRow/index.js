@@ -1,10 +1,13 @@
 import { TextRowPropTypes } from '@/lib/types';
 
-const TextRow = ({ title = '', children }) => {
+import { Placeholder } from '@/elements';
+import { isEmptyChildren } from '@/utils/helpers';
+
+const TextRow = ({ title = '', children, className = '' }) => {
   return (
-    <div className="text-xsm text-black">
-      <span className="font-normal">{title}:</span>
-      <span className="font-bold ml-1">{children}</span>
+    <div className={`text-xsm text-black ${className}`}>
+      <span className="font-normal mr-1">{title}:</span>
+      {isEmptyChildren(children) ? <span className="font-bold">{children}</span> : <Placeholder />}
     </div>
   );
 };

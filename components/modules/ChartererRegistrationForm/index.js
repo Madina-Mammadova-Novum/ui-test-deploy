@@ -7,6 +7,7 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
+import { ROUTES } from '@/lib';
 import {
   cargoesSlotsDetailsSchema,
   companyAddressesSchema,
@@ -50,12 +51,14 @@ const ChartererRegistrationForm = () => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await chartererSignUp({ data: formData });
-    if (data) {
+    const { status, error, data } = await chartererSignUp({ data: formData });
+
+    if (status === 200) {
       resetForm(methods, '');
-      redirectAfterToast(data.message, '/');
-    } else if (error) {
-      errorToast(error.message, error.errors.join('\n'));
+      Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
+    }
+    if (error) {
+      errorToast(error.message, error.errors);
     }
   };
 

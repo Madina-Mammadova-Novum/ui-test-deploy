@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { PreFixtureExpandedFooterPropTypes } from '@/lib/types';
 
-import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
+import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button, Modal } from '@/elements';
 import { ExpandableRowFooter, OfferAcceptModalContent, OfferDeclineForm } from '@/units';
 
@@ -43,7 +43,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
             />
           )}
         </div>
-        <div className="grid grid-cols-1 3md:flex gap-x-2.5 gap-y-2.5">
+        <div className="flex gap-x-2.5 gap-y-2.5">
           <div className="w-full">
             <Button
               onClick={() => handleOpenModal('decline_offer')}

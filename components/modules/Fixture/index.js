@@ -2,13 +2,15 @@
 
 import { useState } from 'react';
 
+import FixtureExpandedContent from './FixtureExpandedContent';
 import FixtureExpandedFooter from './FixtureExpandedFooter';
 
-import { Label, Loader, Title } from '@/elements';
+import { fixtureHeaderDataAdapter, fixtureRowsDataAdapter } from '@/adapters/fixture';
+import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserFixtures } from '@/services';
-import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
+import { ComplexPagination, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const Fixture = () => {
@@ -33,11 +35,11 @@ const Fixture = () => {
 
   const printExpandableRow = (headerData) => (
     <ExpandableRow
-      header={<ExpandableRowHeader headerData={headerData} />}
+      header={<ExpandableCardHeader headerData={fixtureHeaderDataAdapter({ data: headerData })} />}
       footer={<FixtureExpandedFooter />}
       expand={toggle}
     >
-      Content
+      <FixtureExpandedContent rowsData={fixtureRowsDataAdapter({ data: headerData.documentsInfo })} />
     </ExpandableRow>
   );
 

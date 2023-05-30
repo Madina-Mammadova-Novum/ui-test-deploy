@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 
 import { TableCellPropTypes } from '@/lib/types';
@@ -17,51 +17,39 @@ import {
 } from '@/units';
 
 const TableCell = ({ cellProps }) => {
-  const {
-    type,
-    value,
-    marked,
-    helperData,
-    name,
-    disabled,
-    editable,
-    editIcon,
-    countryFlag,
-    icon,
-    action,
-    actionText,
-    actionVariant = 'tertiary',
-    actionSize = 'medium',
-  } = cellProps;
+  const { type, value, marked, helperData, name, disabled, editable, countryFlag, icon, actions = [] } = cellProps;
 
-  const printModal = useMemo(() => {
-    switch (action) {
-      case ACTIONS.PORT:
-        return <EditPortForm title="edit open port" portName={name} />;
-      case ACTIONS.DATE:
-        return <EditDateForm title="edit open date" portName={name} />;
-      case ACTIONS.TANKER_DEACTIVATE:
-        return (
-          <DeactivateTankerForm
-            title="Deactivate your Tanker"
-            portName={name}
-            description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
-          />
-        );
-      case ACTIONS.TANKER_REACTIVATE:
-        return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;
-      case ACTIONS.VIEW_OFFER:
-        return <ViewIncomingOffer />;
-      case ACTIONS.VIEW_COUNTEROFFER:
-        return <ViewCounteroffer />;
-      case ACTIONS.VIEW_FAILED_OFFER:
-        return <ViewFailedOffer />;
-      case ACTIONS.CHARTERER_INFORMATION:
-        return <ChartererInformationContent title="Charterer information" />;
-      default:
-        return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
-    }
-  }, [name, action]);
+  const printModal = useCallback(
+    (action) => {
+      switch (action) {
+        case ACTIONS.PORT:
+          return <EditPortForm title="edit open port" portName={name} />;
+        case ACTIONS.DATE:
+          return <EditDateForm title="edit open date" portName={name} />;
+        case ACTIONS.TANKER_DEACTIVATE:
+          return (
+            <DeactivateTankerForm
+              title="Deactivate your Tanker"
+              portName={name}
+              description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
+            />
+          );
+        case ACTIONS.TANKER_REACTIVATE:
+          return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;
+        case ACTIONS.VIEW_OFFER:
+          return <ViewIncomingOffer />;
+        case ACTIONS.VIEW_COUNTEROFFER:
+          return <ViewCounteroffer />;
+        case ACTIONS.VIEW_FAILED_OFFER:
+          return <ViewFailedOffer />;
+        case ACTIONS.CHARTERER_INFORMATION:
+          return <ChartererInformationContent title="Charterer information" />;
+        default:
+          return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
+      }
+    },
+    [name]
+  );
 
   const printValue = useMemo(() => {
     return helperData ? (
@@ -94,20 +82,23 @@ const TableCell = ({ cellProps }) => {
           </div>
         )}
 
-        {editable && (
-          <ModalWindow
-            containerClass="overflow-y-[unset]"
-            buttonProps={{
-              icon: { before: editIcon },
-              variant: actionVariant,
-              size: actionSize,
-              text: actionText,
-              className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0',
-            }}
-          >
-            {printModal}
-          </ModalWindow>
-        )}
+        <div className="flex gap-x-2.5">
+          {editable &&
+            actions.map(({ action, actionVariant, actionSize, actionText, editIcon }) => (
+              <ModalWindow
+                containerClass="overflow-y-[unset]"
+                buttonProps={{
+                  icon: { before: editIcon },
+                  variant: actionVariant,
+                  size: actionSize,
+                  text: actionText,
+                  className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0',
+                }}
+              >
+                {printModal(action)}
+              </ModalWindow>
+            ))}
+        </div>
       </div>
     </td>
   );
