@@ -1,6 +1,6 @@
 import { SidebarXlPropTypes } from '@/lib/types';
 
-import { ArrowIcon } from '@/assets/icons';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 import Logo from '@/assets/images/logo.svg';
 import { Button, NavTree, NextLink } from '@/elements';
 
@@ -12,17 +12,15 @@ const SidebarXl = ({ data, isResized, onResize }) => {
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <ul className="flex flex-col gap-1.5 relative">
+      <ul className="flex flex-col gap-2.5 relative">
         <Button
           buttonProps={{
             icon: {
               before: (
-                <ArrowIcon
+                <AngleDownSVG
                   className={`${
                     !isResized && 'rotate-90'
-                  } transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
-                  width="14px"
-                  height="14px"
+                  } fill-white transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
                 />
               ),
             },
@@ -30,7 +28,7 @@ const SidebarXl = ({ data, isResized, onResize }) => {
             variant: 'tertiary',
           }}
           onClick={onResize}
-          customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
+          customStyles="!rounded !relative flex self-end !bg-blue-dark !p-2 !w-7 !h-7"
         />
         {data?.map(printMenu)}
       </ul>

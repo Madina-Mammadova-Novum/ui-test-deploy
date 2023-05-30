@@ -6,15 +6,15 @@ import ModalWrapper from '../ModalWrapper';
 
 import { NotificationPropTypes } from '@/lib/types';
 
-import AnnouncementsSVG from '@/assets/images/announcements.svg';
-import CounterOfferSVG from '@/assets/images/counteroffer.svg';
-import DealUpdatedSVG from '@/assets/images/dealUpdated.svg';
-import InspectorSVG from '@/assets/images/inspector.svg';
-import NewOfferSVG from '@/assets/images/newOffer.svg';
-import NotificationSVG from '@/assets/images/notification.svg';
-import OfferFailedSVG from '@/assets/images/offerFailed.svg';
-import CountDownReminderSVG from '@/assets/images/reminder.svg';
-import SystemUpdateSVG from '@/assets/images/systemUpdate.svg';
+import BagSVG from '@/assets/images/bag.svg';
+import BellSVG from '@/assets/images/bell.svg';
+import CountDownReminderSVG from '@/assets/images/clock.svg';
+import DocumentInfoSVG from '@/assets/images/documentInfo.svg';
+import MinusCircleSVG from '@/assets/images/minusCircle.svg';
+import MoneybagAltSVG from '@/assets/images/moneybagAlt.svg';
+import MusicNoteSVG from '@/assets/images/musicNote.svg';
+import SearchSVG from '@/assets/images/search.svg';
+import SettingSVG from '@/assets/images/setting.svg';
 import {
   Button,
   Divider,
@@ -111,7 +111,7 @@ const Notification = ({ numberOfNotifications }) => {
           icon: {
             before: (
               <div>
-                <HoverableIcon icon={<NotificationSVG />} />
+                <HoverableIcon icon={<BellSVG />} />
                 <div className="absolute -top-1 -right-2 w-5 h-5 rounded-[50%] bg-blue-500 text-[10px] font-bold text-white flex items-center justify-center">
                   {numberOfNotifications}
                 </div>
@@ -132,7 +132,11 @@ const Notification = ({ numberOfNotifications }) => {
               </div>
               <div className="mb-[16px]">
                 <div className="mb-[12px]">
-                  <Input type="text" placeholder="Search through notifications" icon={<InspectorSVG />} />
+                  <Input
+                    type="text"
+                    placeholder="Search through notifications"
+                    icon={<SearchSVG className="fill-gray" />}
+                  />
                 </div>
                 <div className="flex justify-between items-center ">
                   <Tabs tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
@@ -165,7 +169,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <NewOfferSVG />
+                    <BagSVG />
                     <Title customStyle="offer-styles">New Offer</Title>
                   </div>
                   <div>
@@ -195,7 +199,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <CounterOfferSVG />
+                    <MoneybagAltSVG />
                     <Title customStyle="offer-styles">counteroffer</Title>
                   </div>
                   <div>
@@ -227,7 +231,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <OfferFailedSVG />
+                    <MinusCircleSVG />
                     <Title customStyle="offer-styles">offer failed</Title>
                   </div>
                   <div>
@@ -245,7 +249,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <CountDownReminderSVG />
+                    <CountDownReminderSVG className="w-4 h-4 fill-black" viewBox="0 0 24 24" />
                     <Title customStyle="offer-styles">Countdown reminder</Title>
                   </div>
                   <div>
@@ -263,7 +267,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div>
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <DealUpdatedSVG />
+                    <DocumentInfoSVG />
                     <Title customStyle="offer-styles">deal updated</Title>
                   </div>
 
@@ -290,7 +294,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <AnnouncementsSVG />
+                    <MusicNoteSVG />
                     <Title customStyle="offer-styles">Announcements</Title>
                   </div>
                   <div>
@@ -309,7 +313,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <SystemUpdateSVG />
+                    <SettingSVG />
                     <Title customStyle="offer-styles">System update</Title>
                   </div>
                   <div>

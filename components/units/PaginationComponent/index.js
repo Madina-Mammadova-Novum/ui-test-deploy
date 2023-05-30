@@ -4,7 +4,7 @@ import ReactPaginate from 'react-paginate';
 
 import { PaginationComponentPropTypes } from '@/lib/types';
 
-import ArrowSVG from '@/assets/images/arrow.svg';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 
 const PaginationComponent = ({ currentPage, pageCount, onPageChange, containerStyles = '' }) => {
   return (
@@ -20,11 +20,9 @@ const PaginationComponent = ({ currentPage, pageCount, onPageChange, containerSt
       pageClassName="text-xsm font-medium text-black hover:text-blue w-7 h-7 cursor-pointer"
       breakLabel="..."
       nextLabel={
-        <ArrowSVG className={`-rotate-90 w-2.5 ${currentPage === pageCount ? 'fill-gray-darker' : 'fill-black'}`} />
+        <AngleDownSVG className={`-rotate-90 ${currentPage === pageCount ? 'fill-gray-darker' : 'fill-black'}`} />
       }
-      previousLabel={
-        <ArrowSVG className={`rotate-90 w-2.5 ${currentPage === 1 ? 'fill-gray-darker' : 'fill-black'}`} />
-      }
+      previousLabel={<AngleDownSVG className={`rotate-90 ${currentPage === 1 ? 'fill-gray-darker' : 'fill-black'}`} />}
     />
   );
 };

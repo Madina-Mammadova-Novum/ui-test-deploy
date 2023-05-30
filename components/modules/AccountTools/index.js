@@ -1,17 +1,14 @@
 'use client';
 
-
-
-
 import { FormProvider, useForm } from "react-hook-form";
-
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
 
-import { TrashIcon } from "@/assets/icons";
-import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
+
+import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import staticMap from '@/assets/images/staticMap.png';
+import TrashIcon from '@/assets/images/trashAlt.svg';
 import { Button, FormDropdown, Input, NextImage, Title } from "@/elements";
 import { toolsSchema } from "@/lib/schemas";
 import { getValueWithPath } from "@/utils/helpers";
@@ -87,7 +84,10 @@ const AccountTools = () => {
                             </FormProvider>
                             <div>
                                 <Button
-                                    buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
+                                    buttonProps={{
+                                        text: 'Delete', variant: 'tertiary', size: 'small',
+                                        icon: { after: <TrashIcon viewBox="0 0 24 24" className="fill-black w-5 h-5" /> }
+                                    }}
                                     customStyles="ml-auto !p-0"
                                 />
                                 <div className="flex justify-start items-start mb-[30px]">
@@ -96,7 +96,7 @@ const AccountTools = () => {
                                             text: 'Add more ports',
                                             variant: 'primary',
                                             size: 'small',
-                                            icon: { before: <PlusInCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
+                                            icon: { before: <PlusCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
                                             helperText: '(max 3 ports)',
                                         }}
                                     />

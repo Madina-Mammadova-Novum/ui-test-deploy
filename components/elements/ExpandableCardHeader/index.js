@@ -2,8 +2,8 @@ import classNames from 'classnames';
 
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
+import TableArrowSVG from '@/assets/images/arrow.svg';
 import DragSVG from '@/assets/images/drag.svg';
-import TableArrowSVG from '@/assets/images/tableArrow.svg';
 import { TextWithLabel } from '@/elements';
 import { useMediaQuery } from '@/utils/hooks';
 
@@ -15,7 +15,13 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
       className={`col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'} ${!index && 'w-full'}`}
       style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
     >
-      <TextWithLabel label={data?.label} text={data?.text} customStyles={!index && 'mr-auto'} />
+      <TextWithLabel
+        label={data?.label}
+        text={data?.text}
+        helperData={data?.helperData}
+        icon={data?.icon}
+        customStyles={!index && 'mr-auto'}
+      />
     </div>
   );
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { PreFixtureExpandedFooterPropTypes } from '@/lib/types';
 
-import CircleArrowsSVG from '@/assets/images/circleArrows.svg';
+import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button, Modal } from '@/elements';
 import { ExpandableRowFooter, OfferAcceptModalContent, OfferDeclineForm } from '@/units';
 

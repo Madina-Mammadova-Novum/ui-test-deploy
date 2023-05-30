@@ -48,7 +48,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
             {title}
           </Title>
           <Notes title="Please note!">
-            <div className="grid gap 1.5 text-xs-sm text-black">
+            <div className="grid gap-1.5 text-xs-sm text-black">
               <p>We delete all of your personal accounts from our database and the account cannot be restored.</p>
               <p>
                 You can register again with the same ships, user information, company information, etc. if you would
@@ -60,7 +60,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
             </p>
           </Notes>
         </div>
-        <p className="font-semibold text-black">Please enter your password to deactivate account</p>
+        <p className="font-semibold text-black">Please enter your password to delete account</p>
         <div className="w-72">
           <PasswordInput
             name="password"

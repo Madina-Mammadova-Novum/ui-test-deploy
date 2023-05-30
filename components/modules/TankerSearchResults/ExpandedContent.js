@@ -1,8 +1,9 @@
-import { IconComponent, TextRow, Title } from '@/elements';
-import { unauthorizedSearchExpandedData } from '@/utils/mock';
+import { ExpandedContentPropTypes } from '@/lib/types';
 
-const ExpandedContent = () => {
-  const { vesselOwnerData, tankerData, countryData } = unauthorizedSearchExpandedData;
+import { IconComponent, TextRow, Title } from '@/elements';
+
+const ExpandedContent = ({ data }) => {
+  const { vesselOwnerData, tankerData, countryData } = data;
   return (
     <div className="mt-3 mb-5">
       <Title level={3}>Tanker Information</Title>
@@ -48,5 +49,7 @@ const ExpandedContent = () => {
     </div>
   );
 };
+
+ExpandedContent.propTypes = ExpandedContentPropTypes;
 
 export default ExpandedContent;

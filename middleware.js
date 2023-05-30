@@ -2,14 +2,26 @@
 import { NextResponse } from 'next/server';
 import { withAuth } from 'next-auth/middleware';
 
-import { ROUTES } from '@/lib';
+import { ROLES, ROUTES } from '@/lib';
+import { checkAuthRoute } from '@/utils/helpers';
 
 export default withAuth(
   function middleware(req) {
-    const token = req.nextauth.token?.accessToken;
+    const { accessToken, role } = req.nextauth.token;
 
-    if (req.nextUrl.pathname.startsWith('/account') && !token) {
+    const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH) || checkAuthRoute(req, ROUTES.ACCOUNT_TOOLS);
+    const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.FLEETS);
+
+    if (req.nextUrl.pathname.startsWith('/account') && !accessToken) {
       return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
+    }
+
+    if (charetererRoutes && role !== ROLES.CHARTERER) {
+      return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
+    }
+
+    if (ownerRoutes && role !== ROLES.OWNER) {
+      return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
     }
   },
   {

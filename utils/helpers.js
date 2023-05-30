@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { providedEmails } from '@/utils/mock';
 
 /**
  * createMarkup
@@ -286,4 +287,18 @@ export const transformInvalidLoginMessage = (msg) => {
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
     .join(' ');
+};
+
+export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
+
+export const checkEmailPrefix = (value) => {
+  if (!value) return true;
+
+  const emailParts = value?.split('@')[1];
+
+  return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
+};
+
+export const checkAuthRoute = (req, pathName) => {
+  return req.nextUrl.pathname.includes(pathName);
 };

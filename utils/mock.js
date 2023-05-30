@@ -34,7 +34,7 @@ export const fleetsHeader = [
     text: 'tanker status',
     type: 'TANKER_DEACTIVATE',
     width: 125,
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'tanker status',
       description:
@@ -91,6 +91,7 @@ export const prefixtureHeader = [
     width: 127,
   },
 ];
+
 export const onSubsHeader = [
   {
     text: '#',
@@ -349,6 +350,7 @@ export const unauthorizedSearchExpandedData = {
     },
   ],
 };
+
 export const tankerInformationTooltipData = [
   {
     title: 'Tanker name',
@@ -420,6 +422,7 @@ export const tankerInformationTooltipData = [
     countryCode: 'us',
   },
 ];
+
 export const incomingOfferCommentsData = [
   {
     title:
@@ -546,7 +549,7 @@ export const negotiatingIncomingTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'Cargo ID',
       description: <CargoIdTooltip />,
@@ -656,7 +659,7 @@ export const negotiatingCounterofferTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'Cargo ID',
       description: <CargoIdTooltip />,
@@ -753,7 +756,7 @@ export const negotiatingFailedTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon />,
+    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
     helperData: {
       title: 'Cargo ID',
       description: <CargoIdTooltip />,
@@ -889,6 +892,7 @@ export const fixtureHeader = [
     width: 130,
   },
 ];
+
 export const providedEmails = [
   '001.igg.biz',
   '027168.com',

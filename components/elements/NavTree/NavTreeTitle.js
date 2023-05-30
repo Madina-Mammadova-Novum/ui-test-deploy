@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 
 import NavTreeBody from './NavTreeBody';
 
-import ArrowSVG from '@/assets/images/arrow.svg';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 
 const NavTreeTitle = ({ title, icon, isOpened, isActive, links, hasNestedLinks }) => {
   return (
     <>
       <div
-        className={`flex text-sm text-white font-semibold capitalize gap-3.5 w-full px-5 py-3 rounded-xl
+        className={`flex items-center text-sm text-white font-semibold capitalize gap-2.5 w-full px-5 py-2.5 rounded-xl
         ${isActive ? 'bg-blue' : 'hover:bg-blue-dark'} 
         ${isOpened && hasNestedLinks && 'bg-blue-dark'}`}
       >
@@ -18,7 +18,7 @@ const NavTreeTitle = ({ title, icon, isOpened, isActive, links, hasNestedLinks }
         ) : (
           <p className="flex w-full justify-between items-center">
             <span className="text-white">{title}</span>
-            <ArrowSVG className={`fill-white w-3 h-3 transition duration-200 ${isOpened && 'rotate-180'}`} />
+            <AngleDownSVG className={`fill-white transition duration-200 ${isOpened && 'rotate-180'}`} />
           </p>
         )}
       </div>

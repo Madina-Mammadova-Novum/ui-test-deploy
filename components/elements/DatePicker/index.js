@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Calendar } from 'react-date-range';
+import { Controller } from 'react-hook-form';
 
 import classnames from 'classnames';
 
@@ -24,15 +25,12 @@ const DatePicker = ({
   closeOnSelect = true,
   ...rest
 }) => {
-  const [date, setDate] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDate = (pickedDate) => {
-    setDate(pickedDate);
     onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
     if (closeOnSelect) setShowPicker(false);
   };
-
   return (
     <>
       <div
@@ -40,26 +38,38 @@ const DatePicker = ({
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
-      <div className="single_date relative cursor-pointer w-full">
-        <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
-          <Input
-            name={name}
-            customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
-            label={label}
-            value={transformDate(date, 'MMM dd, yyyy')}
-            icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
-            error={error}
-            {...rest}
-          />
-        </div>
-        <div
-          className={classnames('absolute w-full bottom-3 translate-y-full left-0 hidden z-10', {
-            '!block': showPicker,
-          })}
-        >
-          <Calendar className={`${calendarClass} rounded-lg`} date={date} onChange={handleDate} />
-        </div>
-      </div>
+      <Controller
+        name={name}
+        render={({ field }) => {
+          const value = field.value || new Date();
+          return (
+            <div className="single_date relative cursor-pointer w-full">
+              <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
+                <Input
+                  name={name}
+                  customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
+                  label={label}
+                  value={transformDate(value, 'MMM dd, yyyy')}
+                  icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
+                  error={error}
+                  {...rest}
+                />
+              </div>
+              <div
+                className={classnames('absolute w-full bottom-3 translate-y-full left-0 hidden z-10', {
+                  '!block': showPicker,
+                })}
+              >
+                <Calendar
+                  className={`${calendarClass} rounded-lg`}
+                  date={field.value ? new Date(field.value) : null}
+                  onChange={handleDate}
+                />
+              </div>
+            </div>
+          );
+        }}
+      />
     </>
   );
 };

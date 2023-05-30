@@ -1,55 +1,91 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import jwt from 'jsonwebtoken';
 
+import { ROUTES } from '@/lib';
+import { ROLES } from '@/lib/constants';
 import { isEmpty } from '@/utils/helpers';
 
-export function userDetailsAdapter({ data }) {
-  if (data === null) return null;
+export function userRoleAdapter({ data }) {
+  if (!data) return null;
 
-  const {
-    firstName,
-    lastName,
-    email,
-    primaryPhone,
-    secondaryPhone,
-    currentPassword,
-    companyName,
-    yearsInOperation,
-    numberOfTankers,
-    registrAddress,
-    correspondAddress,
-  } = data;
+  switch (data) {
+    case 'VesselOwner':
+      return ROLES.OWNER;
+    case 'Charterer':
+      return ROLES.CHARTERER;
+    default:
+      return '';
+  }
+}
+
+export function userDetailsAdapter({ data }) {
+  if (!data) return null;
+
+  const { personalDetails, companyDetails } = data;
+
+  return {
+    ...userPersonalDetailsAdapter({ data: personalDetails }),
+    ...userCompanyDetailsAdapter({ data: companyDetails }),
+  };
+}
+
+function userPersonalDetailsAdapter({ data }) {
+  if (!data) return null;
+
+  const { name, surname, email, phone, secondaryPhone } = data;
+
   return {
     personalDetails: {
-      firstName,
-      lastName,
-      email,
-      primaryPhone,
+      firstName: name,
+      lastName: surname,
+      primaryPhone: phone,
       secondaryPhone,
+      email,
     },
+  };
+}
+
+function userCompanyDetailsAdapter({ data }) {
+  if (!data) return null;
+  const {
+    name,
+    yearsInOperation,
+    numberOfVessels,
+    registrationCountry,
+    registrationAddress,
+    registrationAddress2,
+    registrationCityId,
+    registrationProvince,
+    registrationPostalCode,
+    correspondenceAddress,
+    correspondenceAddress2,
+    correspondenceCountry,
+    correspondenceCityId,
+    correspondenceProvince,
+    correspondencePostalCode,
+  } = data;
+
+  return {
     companyDetails: {
-      name: companyName ?? '',
+      name: name ?? '',
       years: yearsInOperation ?? '',
-      totalTankers: numberOfTankers ?? '',
+      totalTankers: numberOfVessels ?? '',
       registration: {
-        addressLine1: registrAddress?.primaryLine ?? '',
-        addressLine2: registrAddress?.secondaryLine ?? '',
-        city: registrAddress?.city ?? '',
-        state: registrAddress?.state ?? '',
-        postal: registrAddress?.zip ?? '',
-        country: registrAddress?.country ?? '',
+        addressLine1: registrationAddress ?? '',
+        addressLine2: registrationAddress2 ?? '',
+        city: registrationCityId ?? '',
+        state: registrationProvince ?? '',
+        postal: registrationPostalCode ?? '',
+        country: registrationCountry ?? '',
       },
       correspondence: {
-        addressLine1: correspondAddress?.primaryLine ?? '',
-        addressLine2: correspondAddress?.secondaryLine ?? '',
-        city: correspondAddress?.city ?? '',
-        state: correspondAddress?.state ?? '',
-        postal: correspondAddress?.zip ?? '',
-        country: correspondAddress?.country ?? '',
+        addressLine1: correspondenceAddress ?? '',
+        addressLine2: correspondenceAddress2 ?? '',
+        city: correspondenceCityId ?? '',
+        state: correspondenceProvince ?? '',
+        postal: correspondencePostalCode ?? '',
+        country: correspondenceCountry ?? '',
       },
-    },
-    accountDetails: {
-      currentPassword,
     },
   };
 }
@@ -235,6 +271,12 @@ export function loginResponseAdapter({ data }) {
   return { data };
 }
 
+export function refreshTokenAdapter({ data }) {
+  if (!data) return null;
+
+  return { token: data };
+}
+
 export function refreshTokenResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
@@ -291,23 +333,17 @@ export function confirmEmailResponseAdapter({ data }) {
   return { data };
 }
 
-export function signInAdapter(data) {
+export function signInAdapter({ data }) {
   if (!data) return null;
 
-  const { email, password, url } = data;
+  const { email, password } = data;
 
   return {
     email,
     password,
-    redirect: false,
-    callbackUrl: url,
+    redirect: true,
+    callbackUrl: ROUTES.ACCOUNT_INFO,
   };
-}
-
-export function refreshedTokenAdapter({ token }) {
-  if (!token) return null;
-
-  return { token };
 }
 
 export function decodedTokenAdapter(token) {
@@ -317,42 +353,38 @@ export function decodedTokenAdapter(token) {
   return decodedData;
 }
 
-export function userTokenAdapter({ user }) {
-  if (!user) return {};
+export function tokenAdapter({ data }) {
+  if (!data) return null;
 
-  if (user?.access_token) {
-    const decodedData = decodedTokenAdapter(user?.access_token);
-
+  if (data?.access_token) {
+    const { role } = decodedTokenAdapter(data.access_token);
     return {
-      accessToken: user.access_token,
-      accessTokenExpires: Math.floor(Date.now() / 1000 + decodedData.exp),
-      refreshToken: user.refresh_token,
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+      role: userRoleAdapter({ data: role }),
     };
   }
 
-  return { ...user };
+  return { ...data };
 }
 
-export function userRefreshedTokenAdapter({ data }) {
-  if (!data) return null;
+export function sessionAdapter({ session, token }) {
+  if (!token) throw new Error('UNATHORIZED');
 
-  return {
-    ...userTokenAdapter({ user: data }),
-    tokenId: data.id_token,
-  };
-}
-
-export function userSessionAdapter({ session, token }) {
-  if (token === null) throw new Error('Oops something went wrong');
-
-  if (token?.accessToken) {
-    session.user = { ...token, ...decodedTokenAdapter(token?.accessToken) };
+  if (token.accessToken) {
+    const { exp, ...rest } = decodedTokenAdapter(token.accessToken);
+    session.user = { ...rest };
+    session.expires = exp * 1000;
+    session.accessToken = token.accessToken;
+    session.refreshToken = token.refreshToken;
+    session.role = token.role;
   }
 
   return session;
 }
 
-export function tokenMiddlewareAdapter({ token }) {
-  if (token === null || token === '') return false;
-  return true;
+export function accountPeronalDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
 }

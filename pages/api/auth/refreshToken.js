@@ -7,13 +7,13 @@ import { getIdentityApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
-  const token = delve(req, 'body.token');
+  const refreshToken = delve(req, 'body.token');
 
-  if (!token) {
+  if (!refreshToken) {
     return res.redirect(422, ROUTES.LOGIN);
   }
 
-  req.body = setRefreshToken(token);
+  req.body = setRefreshToken(refreshToken);
 
   return responseHandler({
     req,
