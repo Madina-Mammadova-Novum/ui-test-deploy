@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.2...v0.4.0) (2023-05-30)
+
+
+### Bug Fixes
+
+* error formatter condition ([506f09c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/506f09c7ddc8eaeb79c22ac36611e9c18e634de6))
+* icons displaying ([5f9380f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5f9380fbb34812260cea23cc6b13e8e0ffb8e0e5))
+* made modals scrollable ([9c85d41](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9c85d413135a071a3fe251153bd4003ca26602a3))
+
+
+### Refactors
+
+* code style ([0f9e256](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/0f9e256d097513de0c64b2031f0fc8eed38739d7))
+
 ### [0.3.2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.1...v0.3.2) (2023-05-30)
 
 ### Features
