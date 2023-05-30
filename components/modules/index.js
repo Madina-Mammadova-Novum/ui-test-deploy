@@ -1,6 +1,7 @@
 import AccountContainer from '@/modules/AccountContainer';
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
+import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
@@ -59,6 +60,7 @@ export {
   PageHeader,
   AccountHeader,
   PageFooter,
+  AccountTools,
   AccountFooter,
   AuthHeader,
   AuthWrapper,
