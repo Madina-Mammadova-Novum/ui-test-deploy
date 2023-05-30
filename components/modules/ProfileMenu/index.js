@@ -36,7 +36,9 @@ const ProfileMenu = ({ image }) => {
       )}
       <div className="flex items-center mx-2.5">
         <span className="text-black font-semibold text-xsm">{personalDetails?.fullName}</span>
-        <AngleDownSVG className={`w-2.5 ml-6 transition duration-500 ${showProfileMenu && 'fill-blue rotate-180'}`} />
+        <AngleDownSVG
+          className={`fill-black ml-6 transition duration-500 ${showProfileMenu && 'fill-blue rotate-180'}`}
+        />
       </div>
 
       {showProfileMenu && (
