@@ -160,3 +160,10 @@ export async function getUserOnSubs() {
     ...response,
   };
 }
+
+export async function getUserFleets() {
+  const response = await getData(`account/fleets`);
+  return {
+    ...response,
+  };
+}

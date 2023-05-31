@@ -14,6 +14,7 @@ import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
+import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
@@ -89,4 +90,5 @@ export {
   ViewOffer,
   NotFound,
   OnSubs,
+  Fleets,
 };

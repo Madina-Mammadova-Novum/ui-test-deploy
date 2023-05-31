@@ -98,3 +98,89 @@ export const fleetsRowsDataAdapter = ({ data }) => {
 
   return data.map((rowData, index) => fleetsRowDataAdapter({ data: rowData, index: index + 1 }));
 };
+
+export const fleetsPageHeaderDataAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const { fleetName, numberOfTankers } = data;
+
+  return [
+    {
+      label: 'Fleet name',
+      text: fleetName ?? '',
+    },
+    {
+      label: 'Number of tankers',
+      text: numberOfTankers,
+    },
+  ];
+};
+
+export const fleetsPageRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const { id, name, imo, dwt, category, questionaire, status } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      value: name,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
+      value: imo,
+    },
+    {
+      id,
+      value: dwt,
+    },
+    {
+      id,
+      value: category,
+    },
+    {
+      id,
+      editable: !!questionaire,
+      actions: [
+        {
+          action: ACTIONS.VIEW_QUESTIONAIRE,
+          actionText: 'View',
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
+    },
+    {
+      id,
+      value: status,
+    },
+    {
+      id,
+      editable: true,
+      actions: [
+        {
+          action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+          actionText: 'Request to update info',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+        {
+          action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete',
+          actionVariant: 'delete',
+          actionSize: 'medium',
+        },
+      ],
+    },
+  ];
+};
+
+export const fleetsPageRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1 }));
+};
