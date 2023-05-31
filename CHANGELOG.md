@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.1...v0.4.2) (2023-05-30)
+
+
+### Bug Fixes
+
+* markup-deactivate-modal ([dbe2107](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/dbe21076074a79a0946bac5fd92048af38112fa6))
+* universal classname ([2eaed65](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/2eaed65334b428262109f8b9d544936782b053d0))
+
 ### [0.4.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.0...v0.4.1) (2023-05-30)
 
 ### Features

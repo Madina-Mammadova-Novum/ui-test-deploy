@@ -4,7 +4,7 @@ import { cloneElement, useEffect, useState } from 'react';
 
 import { ExpandableRowPropTypes } from '@/lib/types';
 
-const ExpandableRow = ({ header, footer, children, expand = false }) => {
+const ExpandableRow = ({ header, footer, children, expand = false, className = '' }) => {
   const [toggle, setToggle] = useState(false);
   const headerWithProps = cloneElement(header, { toggle });
 
@@ -19,11 +19,11 @@ const ExpandableRow = ({ header, footer, children, expand = false }) => {
       </div>
       <div
         className={`transition-[grid-template-rows] duration-500 grid grid-rows-[0fr] overflow-hidden ${
-          toggle && 'grid-rows-[1fr] border-t border-gray-darker'
+          toggle ? 'grid-rows-[1fr] border-t border-gray-darker' : ''
         }`}
       >
-        <div className="min-h-0">
-          <div className="px-6 table-scroll">{children}</div>
+        <div className="min-h-0 relative">
+          <div className={`px-6 table-scroll ${className}`}>{children}</div>
           {footer}
         </div>
       </div>

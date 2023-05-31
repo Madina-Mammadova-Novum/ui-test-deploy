@@ -12,9 +12,25 @@ import { getUserNegotiating } from '@/services';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { useAuth, useFetch, useFilters } from '@/utils/hooks';
 
+const tabs = [
+  {
+    value: 'incoming',
+    label: 'Incoming',
+  },
+  {
+    value: 'counteroffers',
+    label: 'Sent counteroffers',
+  },
+  {
+    value: 'failed',
+    label: 'Failed',
+  },
+];
+
 const Negotiating = () => {
   const [toggle, setToggle] = useState(false);
   const [data, isLoading] = useFetch(getUserNegotiating);
+  const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const { user } = useAuth();
   const initialPagesStore = {
@@ -39,11 +55,14 @@ const Negotiating = () => {
 
     return (
       <ExpandableRow
+        className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} />}
-        footer={<NegotiatingExpandedFooter isCharterer />}
+        footer={
+          <NegotiatingExpandedFooter isCharterer currentTab={currentTab} tabs={tabs} setCurrentTab={setCurrentTab} />
+        }
         expand={toggle}
       >
-        <NegotiatingExpandedContent data={rowData} />
+        <NegotiatingExpandedContent data={rowData} currentTab={currentTab} />
       </ExpandableRow>
     );
   };
