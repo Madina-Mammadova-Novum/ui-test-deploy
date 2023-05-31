@@ -205,7 +205,7 @@ export function deleteCompanyAdapter({ data }) {
 export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
-    imo,
+    imos,
     numberOfTankers,
     companyYearsOfOperation,
     companyName,
@@ -228,7 +228,7 @@ export function ownerSignUpAdapter({ data }) {
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
-    imos: imo,
+    imos: imos,
     ...companyAddressesAdapter({ data }),
   };
 }
