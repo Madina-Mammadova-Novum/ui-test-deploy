@@ -58,7 +58,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   return (
     <section>
-      <div className="container mx-auto px-[54px] max-w-[1258px]">
+      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
         {title && (
           <Title level="1" className="text-black mb-5">
             {title}
@@ -72,7 +72,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
             {ctaList && ctaList.map(printCtaBlock)}
           </div>
           {coverImage && (
-            <div className="w-[566px] h-[366px] shrink-0 rounded-base flex-1">
+            <div className="h-full max-h-[366px] rounded-base flex-1">
               <NextImage
                 src={getStrapiMedia(delve(coverImage, 'format.original.url'), '?format=webp')}
                 alt={delve(coverImage, 'alternativeText')}

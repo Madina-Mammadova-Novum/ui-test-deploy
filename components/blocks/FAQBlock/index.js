@@ -25,7 +25,7 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
 
   return (
     <section className="relative z-10 -mt-[175px]">
-      <div className="container mx-auto px-[54px] max-w-[1258px]">
+      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
