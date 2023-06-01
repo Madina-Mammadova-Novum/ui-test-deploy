@@ -5,6 +5,9 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
       background: 'transparent',
     },
     color: isSelected ? '#199AF5' : '#072D46',
+    svg: {
+      fill: isSelected ? '#199AF5' : '#072D46',
+    },
   }),
   control: (base, { menuIsOpen }) => ({
     ...base,
