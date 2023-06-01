@@ -49,8 +49,8 @@ const AccountTools = ({ title }) => {
             {title}
           </Title>
         )}
-        <div className="flex justify-between rounded-base bg-white divide-gray-darker p-5">
-          <div className="w-[35%]">
+        <div className="flex justify-between rounded-base bg-white divide-gray-darker gap-[30px] p-5 flex-row xlMax:flex-col">
+          <div className="w-[50%] xlMax:w-[100%]">
             <div className="flex flex-col">
               <FormProvider {...methods}>
                 <div className=" gap-[34px] flex flex-col">
@@ -133,8 +133,8 @@ const AccountTools = ({ title }) => {
               </div>
             </div>
           </div>
-          <div>
-            <NextImage className="w-[1000px]" src={staticMap} />
+          <div className='w-[50%] xlMax:w-[100%]'>
+            <NextImage className="w-[100%]" src={staticMap} />
           </div>
         </div>
       </div>
