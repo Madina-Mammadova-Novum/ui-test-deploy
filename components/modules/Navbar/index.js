@@ -32,7 +32,7 @@ const Navbar = ({ placeholder, cta, path }) => {
   }, [cta, path]);
 
   return (
-    <nav className="flex justify-between flex-grow z-50 h-14 bg-white 3md:bg-transparent">
+    <nav className="flex justify-between flex-grow z-50 h-14 bg-white md:bg-transparent">
       <NextLink href="/" className="py-1">
         <Logo className="3md:fill-white fill-black" />
       </NextLink>
