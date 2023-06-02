@@ -226,7 +226,7 @@ export function ownerSignUpAdapter({ data }) {
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
-    imos: imos,
+    imos,
     ...companyAddressesAdapter({ data }),
   };
 }

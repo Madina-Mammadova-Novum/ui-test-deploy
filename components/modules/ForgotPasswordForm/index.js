@@ -36,6 +36,7 @@ const ForgotPasswordForm = () => {
   return (
     <FormProvider {...methods}>
       <FormManager
+        className="pt-4"
         submitButton={{
           text: 'Get a new password',
           variant: 'primary',

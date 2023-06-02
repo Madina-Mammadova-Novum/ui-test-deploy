@@ -98,33 +98,35 @@ const TankerSlotsDetails = () => {
           disabled={slots <= 0 || isSubmitting}
         />
       </div>
-      {tankers.map((_, index) => {
-        const fieldName = `imos[${index}]`;
-        const error = errors.imo ? errors.imo[index] : null;
-        return (
-          <div key={fieldName} className="relative">
-            <Input
-              {...register(fieldName)}
-              label={`Imo #${index + 1}`}
-              placeholder="IMO number"
-              error={error?.message}
-              disabled={isSubmitting}
-              type="number"
-            />
-            <Button
-              type="button"
-              customStyles="absolute top-7 right-1.5 z-10 !p-0"
-              buttonProps={{
-                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
-                variant: 'tertiary',
-                size: 'small',
-              }}
-              onClick={() => handleRemoveSlot(index)}
-              disabled={isSubmitting}
-            />
-          </div>
-        );
-      })}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {tankers.map((_, index) => {
+          const fieldName = `imos[${index}]`;
+          const error = errors.imo ? errors.imo[index] : null;
+          return (
+            <div key={fieldName} className="relative">
+              <Input
+                {...register(fieldName)}
+                label={`Imo #${index + 1}`}
+                placeholder="Enter IMO"
+                error={error?.message}
+                disabled={isSubmitting}
+                type="number"
+              />
+              <Button
+                type="button"
+                customStyles="absolute top-7 right-1.5 z-10 !p-0"
+                buttonProps={{
+                  icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                  variant: 'tertiary',
+                  size: 'small',
+                }}
+                onClick={() => handleRemoveSlot(index)}
+                disabled={isSubmitting}
+              />
+            </div>
+          );
+        })}
+      </div>
       {tankers.length > 0 && (
         <div className="flex justify-between">
           <Button

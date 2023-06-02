@@ -18,7 +18,7 @@ const ForgotPasswordPage = () => {
     <AuthWrapper
       title="Forgot your password?"
       subtitle="Enter your email address and you will receive an email with password reset link"
-      containerClass="md:px-48 -translate-y-14"
+      containerClass="flex flex-col w-1/2 3md:w-1/3 3md:mx-40 lg:mx-20 xl:mx-32"
     >
       <ForgotPasswordForm />
       <NextLink href={ROUTES.LOGIN} className="inline-flex w-full justify-center text-blue text-xsm pt-2.5">
