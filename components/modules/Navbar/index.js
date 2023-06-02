@@ -36,8 +36,8 @@ const Navbar = ({ placeholder, cta, path }) => {
       <NextLink href="/" className="py-1">
         <Logo className="3md:fill-white fill-black" />
       </NextLink>
-      <ul className="flex h-full items-center gap-5 3md:w-form justify-end bg-white z-50 py-1 ">
-        <li className="text-xsm text-black font-normal">
+      <ul className="flex max-w-[46%] w-[calc(100%-732px)] lg:w-[calc(100%-772px)] items-center gap-5 justify-end bg-white z-50 py-1 ">
+        <li className="text-xsm text-black whitespace-nowrap font-normal">
           <p>{placeholder}</p>
         </li>
         <li>{printLink}</li>

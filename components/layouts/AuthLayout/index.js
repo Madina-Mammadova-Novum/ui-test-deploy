@@ -4,7 +4,7 @@ import { NextImage } from '@/elements';
 import { BaseLayout } from '@/layouts';
 import { AuthHeader } from '@/modules';
 
-const AuthLayout = ({ navigation, children }) => {
+const AuthLayout = ({ navigation, children, containerClass = '' }) => {
   return (
     <BaseLayout className="container mx-auto max-w-screen-2xl min-h-screen flex flex-col">
       <AuthHeader navigation={navigation} />
@@ -17,7 +17,7 @@ const AuthLayout = ({ navigation, children }) => {
           width={1000}
         />
       </div>
-      <section className="grid grid-cols-1 xl:grid-cols-2">{children}</section>
+      <section className={`my-auto ${containerClass}`}>{children}</section>
     </BaseLayout>
   );
 };

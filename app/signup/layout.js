@@ -9,5 +9,9 @@ export default async function RootLayout(props) {
     cta: 'Log in',
     path: ROUTES.LOGIN,
   };
-  return <AuthLayout navigation={navigation}>{children}</AuthLayout>;
+  return (
+    <AuthLayout navigation={navigation} containerClass="grid grid-cols-1 xl:grid-cols-2">
+      {children}
+    </AuthLayout>
+  );
 }
