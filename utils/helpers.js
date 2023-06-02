@@ -238,8 +238,9 @@ export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
 
 export const removeByIndex = (data, index) => {
   if (data === null || data === undefined) return null;
-
-  return data.filter((_, idx) => idx !== index);
+  return data.filter((_, idx) => {
+    return idx !== index;
+  });
 };
 
 export const filterDataByLowerCase = (inputValue, data) => {

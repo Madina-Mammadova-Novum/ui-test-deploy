@@ -8,7 +8,7 @@ const AuthLayout = ({ navigation, children, containerClass = '' }) => {
   return (
     <BaseLayout className="container mx-auto max-w-screen-2xl min-h-screen flex flex-col">
       <AuthHeader navigation={navigation} />
-      <div className="fixed left-0 top-0 -z-50 h-full w-image max-w-[46%] w-[calc(100%-732px)] lg:w-[calc(100%-772px)] hidden 3md:block">
+      <div className="fixed left-0 top-0 -z-50 h-full 3md:w-5/12 xl:w-[calc(100% - 668px)] hidden 3md:block">
         <NextImage
           src="/images/cover.jpg"
           alt="cover"

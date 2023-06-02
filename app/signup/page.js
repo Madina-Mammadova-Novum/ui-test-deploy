@@ -13,10 +13,7 @@ export function generateMetadata() {
 
 export default function SignUp() {
   return (
-    <AuthWrapper
-      title="Registration"
-      containerClass="w-3/4 3md:w-full ml-auto mr-auto 3md:ml-0 3md:mr-24 pt-5 col-start-1 3md:col-start-2"
-    >
+    <AuthWrapper title="Registration" containerClass="w-3/4 3md:w-full pt-5 col-start-1 3md:col-start-2">
       <Signup />
     </AuthWrapper>
   );
