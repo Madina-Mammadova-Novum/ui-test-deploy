@@ -3,8 +3,9 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { AccountToolsPropTypes } from '@/lib/types';
 
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import staticMap from '@/assets/images/staticMap.png';
@@ -142,8 +143,7 @@ const AccountTools = ({ title, homeStyles }) => {
   );
 };
 
-AccountTools.propTypes = {
-  title: PropTypes.string,
-};
+AccountTools.propTypes = AccountToolsPropTypes;
+
 
 export default AccountTools;
