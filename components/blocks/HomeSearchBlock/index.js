@@ -29,7 +29,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
-        return <AccountTools homeStyles />;
+        return <AccountTools className />;
       default:
         return <TankerSearch />;
     }

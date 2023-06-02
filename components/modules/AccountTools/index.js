@@ -18,7 +18,7 @@ const schema = yup.object({
   ...toolsSchema(),
 });
 
-const AccountTools = ({ title, homeStyles }) => {
+const AccountTools = ({ title, className }) => {
   const testOption = [
     { label: 'testLabel', value: 'testValue' },
     { label: 'testLabel2', value: 'testValue2' },
@@ -51,7 +51,7 @@ const AccountTools = ({ title, homeStyles }) => {
           </Title>
         )}
         <div className="flex justify-between rounded-base bg-white divide-gray-darker gap-[20px] p-5 flex-row xlMax:flex-col">
-          <div className={`w-[${homeStyles ? '40%' : '50%'}] xlMax:w-[100%]`}>
+          <div className={`w-[${className ? '40%' : '50%'}] xlMax:w-[100%]`}>
             <div className="flex flex-col">
               <FormProvider {...methods}>
                 <div className=" gap-[34px] flex flex-col">
@@ -134,8 +134,8 @@ const AccountTools = ({ title, homeStyles }) => {
               </div>
             </div>
           </div>
-          <div className={`w-[${homeStyles ? '60%' : '50%'}] xlMax:w-[100%]`}>
-            <NextImage className={`w-[100%] ${homeStyles && 'h-[100%]'}`} src={staticMap} />
+          <div className={`w-[${className ? '60%' : '50%'}] xlMax:w-[100%]`}>
+            <NextImage className={`w-[100%] ${className && 'h-[100%]'}`} src={staticMap} />
           </div>
         </div>
       </div>
