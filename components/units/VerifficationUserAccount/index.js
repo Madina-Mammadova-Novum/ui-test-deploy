@@ -39,22 +39,18 @@ const VerifficationUserAccount = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <div className="pt-5 w-1/3 mx-auto">
-      {!invalidUrl ? (
-        <NextLink
-          href={veriffUrl}
-          target="blank"
-          className="px-5 py-2.5 rounded-md cursor-pointer bg-blue text-white hover:bg-blue-darker"
-        >
-          Verify
-        </NextLink>
-      ) : (
-        <div className="px-5 py-2.5 whitespace-nowrap rounded-md flex justify-center items-center gap-x-4 bg-black  opacity-50">
-          <p className="text-white">Please wait...</p>
-          <Loader className="w-4 h-4" />
-        </div>
-      )}
+  return !invalidUrl ? (
+    <NextLink
+      href={veriffUrl}
+      target="blank"
+      className="px-5 py-2.5 rounded-md cursor-pointer bg-blue text-white hover:bg-blue-darker"
+    >
+      Verify
+    </NextLink>
+  ) : (
+    <div className="px-5 py-2.5 whitespace-nowrap rounded-md flex justify-center items-center gap-x-4 bg-black  opacity-50">
+      <p className="text-white">Please wait...</p>
+      <Loader className="w-4 h-4" />
     </div>
   );
 };
