@@ -200,6 +200,12 @@ export function deleteCompanyAdapter({ data }) {
   };
 }
 
+export function listOfImosAdapter({ data }) {
+  if (!data) return [];
+
+  return data.map(({ imo }) => imo);
+}
+
 export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
@@ -226,7 +232,7 @@ export function ownerSignUpAdapter({ data }) {
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
-    imos,
+    imos: listOfImosAdapter({ data: imos }),
     ...companyAddressesAdapter({ data }),
   };
 }
