@@ -11,8 +11,15 @@ const ModalWindow = ({ children, buttonProps, containerClass }) => {
 
   const { text, variant, size, icon, className, disabled } = buttonProps;
 
-  const handleOpenModal = () => setOpened(true);
-  const handleCloseModal = () => setOpened(false);
+  const handleOpenModal = (e) => {
+    e.stopPropagation();
+    setOpened(true);
+  };
+
+  const handleCloseModal = (e) => {
+    e.stopPropagation();
+    setOpened(false);
+  };
 
   const childrenWithProps = cloneElement(children, { closeModal: handleCloseModal });
 

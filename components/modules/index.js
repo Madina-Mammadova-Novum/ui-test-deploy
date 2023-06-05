@@ -3,6 +3,7 @@ import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
 import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
+import AddNewTanker from '@/modules/AddNewTanker';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import CommentsContent from '@/modules/CommentsContent';
@@ -91,4 +92,5 @@ export {
   NotFound,
   OnSubs,
   Fleets,
+  AddNewTanker,
 };

@@ -1,5 +1,6 @@
-import { Table } from '@/elements';
 import { FleetsExpandedContentPropTypes } from '@/lib/types';
+
+import { Table } from '@/elements';
 import { fleetsPageHeader } from '@/utils/mock';
 
 const FleetsExpandedContent = ({ rowsData = [] }) => {

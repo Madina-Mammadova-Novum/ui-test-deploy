@@ -9,11 +9,13 @@ import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules'
 import {
   ChartererInformationContent,
   DeactivateTankerForm,
+  DeleteTankerModal,
   EditDateForm,
   EditPortForm,
   IconWrapper,
   ModalWindow,
   ReactivateTankerForm,
+  UpdateTankerForm,
 } from '@/units';
 
 const TableCell = ({ cellProps }) => {
@@ -45,6 +47,10 @@ const TableCell = ({ cellProps }) => {
           return <ViewFailedOffer />;
         case ACTIONS.CHARTERER_INFORMATION:
           return <ChartererInformationContent title="Charterer information" />;
+        case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
+          return <UpdateTankerForm />;
+        case ACTIONS.DELETE_TANKER:
+          return <DeleteTankerModal />;
         default:
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }

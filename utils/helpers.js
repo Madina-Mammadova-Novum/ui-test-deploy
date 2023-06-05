@@ -194,6 +194,8 @@ export const getButtonClassNames = (variant, size) => {
       return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker hover:text-blue-darker';
     if (variant === 'secondary')
       return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
+    if (variant === 'tertiary')
+      return 'bg-white text-black h-7 px-2.5 rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
