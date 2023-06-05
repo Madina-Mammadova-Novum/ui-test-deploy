@@ -53,7 +53,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
             text: 'How it works',
             variant: 'primary',
             size: 'large',
-            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="fill-white w-5 h-5" /> },
+            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="fill-white w-5 h-5 -rotate-90" /> },
           }}
           customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
           onClick={handleClickScroll}
