@@ -6,8 +6,10 @@ import { OptionsListPropTypes } from '@/lib/types';
 const { Option } = components;
 
 const OptionsList = (props) => {
-  const { label, data } = props;
-  const { countryFlag, coverImage } = data;
+  const {
+    label,
+    data: { countryFlag, coverImage },
+  } = props;
   return (
     <Option {...props}>
       <li className="text-inherit bg-white overflow-x-clip flex flex-col">
