@@ -44,7 +44,7 @@ export default async function Home({ params }) {
       {' '}
       {/* todo: example to use legal variable */}
       <section className="relative pt-[115px] pb-[195px]">
-        <div className="container mx-auto px-[54px] max-w-[1258px]">
+        <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
           <NextImage
             src="/images/waves.jpg"
             alt="waves"
