@@ -20,7 +20,7 @@ const FormDropdown = ({
   asyncCall = false,
   customStyles = {},
 }) => {
-  const { dropdownWidth, className } = customStyles;
+  const { dropdownWidth, className = '' } = customStyles;
 
   const handleChange = useCallback(
     (option) => {

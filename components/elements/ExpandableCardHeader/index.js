@@ -10,9 +10,9 @@ import { useMediaQuery } from '@/utils/hooks';
 const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
 
-  const printHeaderRow = (data, index) => (
+  const printHeaderRow = (data, index = null) => (
     <div
-      className={`col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'} ${!index && 'w-full'}`}
+      className={`col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'} ${!index ? 'w-full' : ''}`}
       style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
     >
       <TextWithLabel
