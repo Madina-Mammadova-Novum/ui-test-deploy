@@ -1,24 +1,43 @@
 import React from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import InfoSVG from '@/assets/images/infoCircle.svg';
 import { IconComponent, ManualTooltip, TextRow, Title } from '@/elements';
-import { ChartererInformationContent } from '@/units';
+import { ROLES } from '@/lib';
+import { ChartererInformationContent, TankerInformationContent } from '@/units';
 
 const VoyageDetailsTabContent = ({ data = {} }) => {
+  const { data: { role } } = useSession()
+
   return (
     <div>
       <div className="flex justify-between">
         <Title level={3}>Voyage details</Title>
         <div className="flex relative">
-          <span className="mr-1.5">Charterer Information</span>
-          <ManualTooltip
-            className="!right-0 min-w-[260px] !p-2.5"
-            data={{ description: <ChartererInformationContent /> }}
-          >
-            <InfoSVG className="w-4" viewBox="0 0 24 24" />
-          </ManualTooltip>
+          {role === ROLES.OWNER ? (
+            <>
+              <span className="mr-1.5">Charterer Information</span>
+              <ManualTooltip
+                className="!right-0 min-w-[260px] !p-2.5"
+                data={{ description: <ChartererInformationContent /> }}
+              >
+                <InfoSVG className="w-4" viewBox="0 0 24 24" />
+              </ManualTooltip>
+            </>
+          ) : (
+            <>
+              <span className="mr-1.5">Tanker Information</span>
+              <ManualTooltip
+                className="!right-0 min-w-[260px] !p-2.5 w-[470px]"
+                data={{ description: <TankerInformationContent /> }}
+              >
+                <InfoSVG className="w-4" viewBox="0 0 24 24" />
+              </ManualTooltip>
+            </>
+          )}
         </div>
       </div>
 
