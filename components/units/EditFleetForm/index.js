@@ -1,6 +1,7 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -10,6 +11,7 @@ import { ModalFormManager } from '@/common';
 import { Input, Title } from '@/elements';
 import { editFleetSchema } from '@/lib/schemas';
 import { editFleet } from '@/services/fleets';
+import { refetchFleets } from '@/store/entities/fleets/slice';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -18,11 +20,13 @@ const schema = yup.object({
 
 const EditFleetForm = ({ closeModal, id }) => {
   const methods = useHookFormParams({ schema });
+  const dispatch = useDispatch();
   const onSubmit = async (formData) => {
-    const { status, error } = await editFleet({ data: formData, fleetId: id });
+    const { status, message, error } = await editFleet({ data: formData, fleetId: id });
 
     if (status === 200) {
-      successToast('Your have successfully edited the fleet');
+      dispatch(refetchFleets());
+      successToast(message);
       closeModal();
     }
     if (error) {

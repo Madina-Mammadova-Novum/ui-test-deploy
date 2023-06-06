@@ -19,3 +19,5 @@ export const getUserDataSelector = createDraftSafeSelector(userSelector, (state)
     data: userDetailsAdapter({ data: state.data }),
   };
 });
+
+export const fleetsSelector = ({ fleets }) => fleets;

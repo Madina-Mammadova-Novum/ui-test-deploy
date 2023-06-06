@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import FleetsExpandedContent from './FleetsExpandedContent';
 
@@ -10,12 +11,14 @@ import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserFleets } from '@/services';
+import { fleetsSelector } from '@/store/selectors';
 import { CreateFleetForm, ModalWindow, ToggleRows } from '@/units';
 import { useFetch } from '@/utils/hooks';
 
 const Fleets = () => {
   const [toggle, setToggle] = useState(false);
-  const [data, isLoading] = useFetch(getUserFleets);
+  const { refetch } = useSelector(fleetsSelector);
+  const [data, isLoading] = useFetch(getUserFleets, refetch);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });

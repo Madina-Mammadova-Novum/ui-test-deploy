@@ -3,13 +3,11 @@
 import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
-// import * as yup from 'yup';
-
 import { UpdateTankerFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { DatePicker, Dropdown, Input, TextWithLabel, Title } from '@/elements';
-import { AVAILABLE_FORMATS } from '@/lib/constants';
+import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { updateFormats } from '@/utils/helpers';
@@ -27,7 +25,7 @@ const UpdateTankerForm = ({ closeModal }) => {
           <span className="text-gray">Supports:</span> <span>{formats}</span>
         </p>
         <p className="flex gap-2 text-gray whitespace-nowrap self-end">
-          Max size: <span>10MB</span>
+          Max size: <span>{SETTINGS.FILE_SIZE_RESTRICTION}MB</span>
         </p>
       </div>
     );

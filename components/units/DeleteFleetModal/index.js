@@ -1,17 +1,22 @@
 'use client';
 
+import { useDispatch } from 'react-redux';
+
 import { DeleteFleetModalPropTypes } from '@/lib/types';
 
 import { Button, TextWithLabel, Title } from '@/elements';
 import { deleteFleet } from '@/services/fleets';
+import { refetchFleets } from '@/store/entities/fleets/slice';
 import { successToast } from '@/utils/hooks';
 
 const DeleteFleetModal = ({ closeModal, id }) => {
+  const dispatch = useDispatch();
   const handleDeleteFleet = async () => {
-    const { status, error } = await deleteFleet({ fleetId: id });
+    const { status, message, error } = await deleteFleet({ fleetId: id });
 
     if (status === 204) {
-      successToast('Your have successfully deleted the fleet');
+      dispatch(refetchFleets());
+      successToast(message);
       closeModal();
     }
 

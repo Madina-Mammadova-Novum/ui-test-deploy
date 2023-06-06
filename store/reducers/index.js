@@ -2,8 +2,9 @@
 
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { user } from '@/store/entities';
+import { fleets, user } from '@/store/entities';
 
 export const reducer = combineReducers({
   user,
+  fleets,
 });

@@ -199,7 +199,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
->>>>>>> 47fbd0f31847d86a0878b5c3d5d1a7277d848a3b
+> > > > > > > 47fbd0f31847d86a0878b5c3d5d1a7277d848a3b
+
 - error formatter condition ([506f09c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/506f09c7ddc8eaeb79c22ac36611e9c18e634de6))
 - icons displaying ([5f9380f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5f9380fbb34812260cea23cc6b13e8e0ffb8e0e5))
 - made modals scrollable ([9c85d41](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9c85d413135a071a3fe251153bd4003ca26602a3))
