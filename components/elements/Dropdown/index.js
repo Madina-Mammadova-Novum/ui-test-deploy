@@ -12,7 +12,7 @@ import { dropdownStyles } from '@/elements/Dropdown/styles';
 const Dropdown = ({
   options,
   onChange,
-  customStyles,
+  customStyles = {},
   name = '',
   label = '',
   disabled = false,

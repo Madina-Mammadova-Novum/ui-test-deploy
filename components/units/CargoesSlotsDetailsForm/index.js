@@ -181,7 +181,7 @@ const CargoesSlotsDetailsForm = () => {
               helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
               variant: 'tertiary',
               size: 'small',
-              icon: { before: <PlusSVG /> },
+              icon: { before: <PlusSVG className="fill-blue" /> },
             }}
             type="button"
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"

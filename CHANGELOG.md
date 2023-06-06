@@ -144,6 +144,8 @@ All notable changes to this project will be documented in this file. See [standa
 - eslint prettify ([da7f8c8](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/da7f8c83e93ce5819be8f87c2daea8b269f607e2))
 - eslint-prettify ([37d04c5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/37d04c59002706e0035bbbc6b5b6e24fb764f1d5))
 
+### Bug Fixes
+
 ### Refactors
 
 - api handler with response handler ([31aeb3a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/31aeb3a967188e8c4a1c4b1940308c284a67ac7c))
@@ -196,6 +198,8 @@ All notable changes to this project will be documented in this file. See [standa
 ## [0.4.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.3.2...v0.4.0) (2023-05-30)
 
 ### Bug Fixes
+
+> > > > > > > 47fbd0f31847d86a0878b5c3d5d1a7277d848a3b
 
 - error formatter condition ([506f09c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/506f09c7ddc8eaeb79c22ac36611e9c18e634de6))
 - icons displaying ([5f9380f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/5f9380fbb34812260cea23cc6b13e8e0ffb8e0e5))

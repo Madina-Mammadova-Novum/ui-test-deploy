@@ -10,7 +10,7 @@ export default withAuth(
     const { accessToken, role } = req.nextauth.token;
 
     const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH) || checkAuthRoute(req, ROUTES.ACCOUNT_TOOLS);
-    const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.FLEETS);
+    const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
 
     if (req.nextUrl.pathname.startsWith('/account') && !accessToken) {
       return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));

@@ -160,3 +160,14 @@ export async function getUserOnSubs() {
     ...response,
   };
 }
+
+export async function getUserFleets() {
+  const body = {
+    query: 'all',
+  };
+
+  const response = await getData(`account/fleets`, body);
+  return {
+    ...response,
+  };
+}

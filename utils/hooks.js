@@ -235,7 +235,7 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   };
 };
 
-export const useFetch = (fetchFunction) => {
+export const useFetch = (fetchFunction, trigger) => {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -251,7 +251,7 @@ export const useFetch = (fetchFunction) => {
       }
     }
     fetchData();
-  }, [fetchFunction]);
+  }, [fetchFunction, trigger]);
 
   return [data, isLoading];
 };
