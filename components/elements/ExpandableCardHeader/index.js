@@ -12,17 +12,17 @@ import { AddNewTanker } from '@/modules';
 import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
-const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [] }) => {
+const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], itemId }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
   const printModal = useCallback(
     (action) => {
       switch (action) {
         case ACTIONS.ADD_TANKER:
-          return <AddNewTanker />;
+          return <AddNewTanker id={itemId} />;
         case ACTIONS.EDIT_FLEET:
-          return <EditFleetForm />;
+          return <EditFleetForm id={itemId} />;
         case ACTIONS.DELETE_FLEET:
-          return <DeleteFleetModal />;
+          return <DeleteFleetModal id={itemId} />;
         default:
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }

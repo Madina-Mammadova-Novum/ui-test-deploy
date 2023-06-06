@@ -12,12 +12,12 @@ const ModalWindow = ({ children, buttonProps, containerClass }) => {
   const { text, variant, size, icon, className, disabled } = buttonProps;
 
   const handleOpenModal = (e) => {
-    e.stopPropagation();
+    e?.stopPropagation();
     setOpened(true);
   };
 
   const handleCloseModal = (e) => {
-    e.stopPropagation();
+    e?.stopPropagation();
     setOpened(false);
   };
 

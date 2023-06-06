@@ -25,6 +25,7 @@ const Fleets = () => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
+            itemId={rowData?.id}
             actions={[
               {
                 action: ACTIONS.ADD_TANKER,

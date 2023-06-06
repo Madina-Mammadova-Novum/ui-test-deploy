@@ -162,7 +162,11 @@ export async function getUserOnSubs() {
 }
 
 export async function getUserFleets() {
-  const response = await getData(`account/fleets`);
+  const body = {
+    query: 'all'
+  };
+
+  const response = await getData(`account/fleets`, body);
   return {
     ...response,
   };

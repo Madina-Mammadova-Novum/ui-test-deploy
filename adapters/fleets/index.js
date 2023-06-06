@@ -102,16 +102,16 @@ export const fleetsRowsDataAdapter = ({ data }) => {
 export const fleetsPageHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { fleetName, numberOfTankers } = data;
+  const { name, numberOfVessels } = data;
 
   return [
     {
       label: 'Fleet name',
-      text: fleetName ?? '',
+      text: name ?? '',
     },
     {
       label: 'Number of tankers',
-      text: numberOfTankers,
+      text: numberOfVessels || '0',
     },
   ];
 };
@@ -184,3 +184,23 @@ export const fleetsPageRowsDataAdapter = ({ data }) => {
 
   return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1 }));
 };
+
+export const requestFleetNameAdapter = ({ data }) => {
+  if(!data) return [];
+  const { fleetName } = data;
+
+  return {
+    name: fleetName
+  }
+}
+
+export const responseCreateFleetAdapter = ({ data }) => {
+  if(!data) return [];
+
+  return data
+}
+
+export const responseGetFleetsAdapter = ({ data }) => {
+  if(!data) return [];
+  return data
+}
