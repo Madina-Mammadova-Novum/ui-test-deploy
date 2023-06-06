@@ -33,7 +33,7 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [] }) => {
       <div className="grid md:grid-cols-1 3md:grid-cols-2 lg:flex lg:flex-row lg:items-center w-full gap-x-2.5">
         {headerData.map(printHeaderRow)}
       </div>
-      <div className="hover:bg-gray-darker p-2 rounded-md self-start lg:self-auto">
+      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto">
         <TableArrowSVG
           className={classNames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
         />
