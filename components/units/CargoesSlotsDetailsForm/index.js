@@ -137,7 +137,7 @@ const CargoesSlotsDetailsForm = () => {
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
-              placeholder="IMO number"
+              placeholder="Enter IMO"
               error={error?.imo?.message}
               disabled={isSubmitting}
               type="number"
