@@ -7,19 +7,18 @@ import { deleteFleet } from '@/services/fleets';
 import { successToast } from '@/utils/hooks';
 
 const DeleteFleetModal = ({ closeModal, id }) => {
-
   const handleDeleteFleet = async () => {
-    const { status, error } = await deleteFleet({ fleetId: id })
-    
-    if( status === 204) {
-      successToast('Your have successfully deleted the fleet')
-      closeModal()
+    const { status, error } = await deleteFleet({ fleetId: id });
+
+    if (status === 204) {
+      successToast('Your have successfully deleted the fleet');
+      closeModal();
     }
-    
-    if(error) {
-      console.log(error)
+
+    if (error) {
+      console.log(error);
     }
-  }
+  };
   return (
     <div className="flex flex-col gap-y-4 max-w-[292px]">
       <Title level="2">Delete Fleet</Title>

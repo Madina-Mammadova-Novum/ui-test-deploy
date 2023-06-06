@@ -8,24 +8,24 @@ import { EditFleetFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Input, Title } from '@/elements';
-import { successToast, useHookFormParams } from '@/utils/hooks';
 import { editFleetSchema } from '@/lib/schemas';
 import { editFleet } from '@/services/fleets';
+import { successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
-  ...editFleetSchema()
-})
+  ...editFleetSchema(),
+});
 
 const EditFleetForm = ({ closeModal, id }) => {
   const methods = useHookFormParams({ schema });
   const onSubmit = async (formData) => {
-    const { status, error } = await editFleet({ data: formData, fleetId: id })
-    
-    if(status === 200) {
+    const { status, error } = await editFleet({ data: formData, fleetId: id });
+
+    if (status === 200) {
       successToast('Your have successfully edited the fleet');
-      closeModal()
+      closeModal();
     }
-    if(error) {
+    if (error) {
       console.log(error);
     }
   };

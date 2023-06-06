@@ -186,21 +186,21 @@ export const fleetsPageRowsDataAdapter = ({ data }) => {
 };
 
 export const requestFleetNameAdapter = ({ data }) => {
-  if(!data) return [];
+  if (!data) return [];
   const { fleetName } = data;
 
   return {
-    name: fleetName
-  }
-}
+    name: fleetName,
+  };
+};
 
 export const responseCreateFleetAdapter = ({ data }) => {
-  if(!data) return [];
+  if (!data) return [];
 
-  return data
-}
+  return data;
+};
 
 export const responseGetFleetsAdapter = ({ data }) => {
-  if(!data) return [];
-  return data
-}
+  if (!data) return [];
+  return data;
+};
