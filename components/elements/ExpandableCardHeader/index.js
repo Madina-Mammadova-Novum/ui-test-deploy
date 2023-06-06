@@ -73,7 +73,7 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
           </div>
         )}
       </div>
-      <div className="hover:bg-gray-darker p-2 rounded-md self-start lg:self-auto">
+      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto">
         <TableArrowSVG
           className={classNames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
         />

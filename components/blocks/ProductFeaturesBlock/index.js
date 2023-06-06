@@ -58,7 +58,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   return (
     <section>
-      <div className="container mx-auto px-[54px] max-w-[1258px]">
+      <div className="container mx-auto px-[54px] max-w-[1258px] scroll-mt-16" id="how-it-works">
         {title && (
           <Title level="1" className="text-black mb-5">
             {title}

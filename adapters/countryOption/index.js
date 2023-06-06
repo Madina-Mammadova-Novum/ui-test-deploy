@@ -1,5 +1,5 @@
 export const countryOptionAdapter = (data) => {
-  if (data === null) return null;
+  if (!data) return {};
 
   const { id, countryId, label, countryFlag, countryName, countryCode } = data;
 
@@ -11,7 +11,8 @@ export const countryOptionAdapter = (data) => {
 };
 
 export const countryOptionsAdapter = ({ data }) => {
-  if (data === null) return [];
+  if (!data) return [];
+
   return data.map((option) => {
     return countryOptionAdapter(option);
   });

@@ -1,6 +1,8 @@
+/* eslint-disable no-nested-ternary */
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -238,8 +240,9 @@ export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
 
 export const removeByIndex = (data, index) => {
   if (data === null || data === undefined) return null;
-
-  return data.filter((_, idx) => idx !== index);
+  return data.filter((_, idx) => {
+    return idx !== index;
+  });
 };
 
 export const filterDataByLowerCase = (inputValue, data) => {
@@ -315,3 +318,10 @@ export const formatErrors = (errors) => {
 };
 
 export const formattedPhoneNumber = (phone) => phone?.replace('+', '');
+
+export const sortByType = (a, b, ascSort) => {
+  const sortOrder = ascSort ? 1 : -1;
+  const aType = a.type === SORT_OPTIONS.asc ? 1 : a.type === SORT_OPTIONS.dsc ? -1 : 0;
+  const bType = b.type === SORT_OPTIONS.asc ? 1 : b.type === SORT_OPTIONS.dsc ? -1 : 0;
+  return sortOrder * (aType - bType);
+};

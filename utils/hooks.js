@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
-import { getFilledArray } from './helpers';
+import { getFilledArray, sortByType } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
@@ -201,18 +201,7 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   const itemsFrom = (currentPage - 1) * perPage;
   const items = data?.slice(itemsFrom, itemsFrom + perPage);
   // We checking if type presented only after that we can sort
-  const sortedItems = items?.[0]?.type
-    ? items.toSorted((a, b) => {
-        if (ascSort && b.type === SORT_OPTIONS.dsc && a.type === SORT_OPTIONS.asc) {
-          return 1;
-        }
-
-        if (!ascSort && a.type === SORT_OPTIONS.dsc && b.type === SORT_OPTIONS.asc) {
-          return -1;
-        }
-        return 0;
-      })
-    : items;
+  const sortedItems = items?.[0]?.type ? items.sort((a, b) => sortByType(a, b, ascSort)) : items;
 
   useEffect(() => {
     setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter));

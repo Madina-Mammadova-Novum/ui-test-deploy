@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { TankerSearch } from '@/modules';
+import ArrowSVG from '@/assets/images/arrow.svg';
+import { Button } from '@/elements';
+import { AccountTools, TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
 
 const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
@@ -26,11 +28,15 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     setActiveTab(value);
   };
 
+  const handleClickScroll = () => {
+    const elementToScroll = document.getElementById('how-it-works');
+    elementToScroll?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
-        // todo: add Tools component when it is done
-        return <div className="text-white h-32">Soon...</div>;
+        return <AccountTools />;
       default:
         return <TankerSearch />;
     }
@@ -41,7 +47,17 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
       {title && <div>{title}</div>}
       {subTitle && <div>{subTitle}</div>}
       {shortDescription && <div>{shortDescription}</div>}
-      <div className="container mx-auto px-[54px] max-w-[1258px] -mt-[175px]">
+      <div className="container mx-auto px-[54px] max-w-[1258px] -mt-[205px]">
+        <Button
+          buttonProps={{
+            text: 'How it works',
+            variant: 'primary',
+            size: 'large',
+            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="fill-white w-5 h-5 -rotate-90" /> },
+          }}
+          customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
+          onClick={handleClickScroll}
+        />
         <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
         {handleViewType(activeTab)}
       </div>
