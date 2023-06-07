@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
@@ -30,9 +30,9 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
     [headerData]
   );
 
-  const printHeaderRow = (data, index = null) => (
+  const printHeaderRow = (data, index) => (
     <div
-      className={`col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'} ${!index ? 'w-full' : ''}`}
+      className={classnames('col-start-1', index <= 3 ? '3md:col-start-1' : '3md:col-start-2', !index && 'w-full')}
       style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
     >
       <TextWithLabel
@@ -75,7 +75,7 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
       </div>
       <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto">
         <TableArrowSVG
-          className={classNames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
+          className={classnames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
         />
       </div>
     </div>

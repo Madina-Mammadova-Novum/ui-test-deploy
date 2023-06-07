@@ -2,8 +2,6 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import classnames from 'classnames';
-
 import { FormManagerPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
@@ -13,7 +11,7 @@ const FormManager = ({ children, submitAction, submitButton, className = '' }) =
     handleSubmit,
     formState: { isSubmitting },
   } = useFormContext();
-  const { text, variant, size, disabled, className: buttonClassName } = submitButton;
+  const { text, variant, size, disabled, className: buttonClassName = '' } = submitButton;
 
   return (
     <form className={`${className} flex flex-col gap-5`} onSubmit={handleSubmit(submitAction)}>
@@ -26,7 +24,7 @@ const FormManager = ({ children, submitAction, submitButton, className = '' }) =
           size,
         }}
         disabled={disabled || isSubmitting}
-        customStyles={classnames(buttonClassName, 'w-full')}
+        customStyles={`${buttonClassName} w-full`}
       />
     </form>
   );
