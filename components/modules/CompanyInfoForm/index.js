@@ -29,7 +29,7 @@ const CompanyInfoForm = ({ closeModal }) => {
   const dispatch = useDispatch();
   const [sameAddress, setSameAddress] = useState(false);
   const { data } = useSelector(getUserDataSelector);
-  const { session } = useSession();
+  const { data: session } = useSession();
 
   const roleBasedSchemaValidation = () => {
     if (session?.role === ROLES.OWNER) {
