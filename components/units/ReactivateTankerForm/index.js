@@ -91,15 +91,17 @@ const ReactivateTankerForm = ({ title, portName }) => {
             errorMsg={errors?.port?.message}
             options={ports}
             onChange={(option) => handleChangeValue({ option, key: 'port' })}
+            customStyles={{ dropdownExpanded: true }}
             async
           />
           <DatePicker
-            calendarClass="absolute -left-2.5"
+            calendarClass="absolute top-5 left-0"
             name="date"
             inputClass="w-full"
             label="Open date"
             error={errors?.date?.message}
             onChange={(value) => handleChangeValue({ option: value, key: 'date' })}
+            expanded
           />
         </div>
       </FormManager>
