@@ -14,7 +14,7 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, setCurrentTab, current
         onClick={({ target }) => setCurrentTab(target.value)}
         activeTab={currentTab}
         tabs={tabs}
-        customStyles="my-3 mr-[-50%] mx-auto absolute left-[50%] top-[7%] translate-[50%] custom-container "
+        customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
       <NextLink href={ROUTES.ACCOUNT_SEARCH}>
         <Button

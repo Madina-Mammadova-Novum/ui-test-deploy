@@ -21,7 +21,7 @@ const ExpandableRow = ({ header, footer, children, expand = false, className = '
         className={`transition-[grid-template-rows] duration-500 grid grid-rows-[0fr] overflow-hidden ${toggle && 'grid-rows-[1fr] border-t border-gray-darker'
           }`}
       >
-        <div className="min-h-0 relative px-[20px]">
+        <div className="min-h-0 relative px-5">
           <div className={`table-scroll ${className}`}>{children}</div>
           {footer}
         </div>
