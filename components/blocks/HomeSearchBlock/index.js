@@ -29,7 +29,12 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
-        return <AccountTools className />;
+        return <AccountTools className='flex 
+        [&>*:first-child]:xlMax:w-full
+        [&>*:nth-child(2)]:xlMax:w-full 
+        [&>*:first-child]:w-1/4 
+        [&>*:nth-child(2)]:w-3/4 
+        justify-center' />;
       default:
         return <TankerSearch />;
     }

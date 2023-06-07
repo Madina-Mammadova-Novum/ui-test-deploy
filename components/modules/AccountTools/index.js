@@ -18,7 +18,7 @@ const schema = yup.object({
   ...toolsSchema(),
 });
 
-const AccountTools = ({ title, className }) => {
+const AccountTools = ({ title, className = '' }) => {
   const testOption = [
     { label: 'testLabel', value: 'testValue' },
     { label: 'testLabel2', value: 'testValue2' },
@@ -50,11 +50,11 @@ const AccountTools = ({ title, className }) => {
             {title}
           </Title>
         )}
-        <div className="flex justify-between rounded-base bg-white divide-gray-darker gap-[20px] p-5 flex-row xlMax:flex-col">
-          <div className={`w-[${className ? '40%' : '50%'}] xlMax:w-[100%]`}>
+        <div className={`${className}flex justify-between rounded-base bg-white divide-gray-darker gap-5 p-5 flex-row xlMax:flex-col`}>
+          <div className='w-1/2 xlMax:w-full'>
             <div className="flex flex-col">
               <FormProvider {...methods}>
-                <div className=" gap-[34px] flex flex-col">
+                <div className=" gap-y-4 flex flex-col">
                   <FormDropdown
                     defaultValue="Some category"
                     error={errors.calc?.message}
@@ -112,7 +112,7 @@ const AccountTools = ({ title, className }) => {
                     }}
                   />
                 </div>
-                <div className="mb-[20px]">
+                <div className="mb-5">
                   <Input label="cargo quantity" placeholder="Enter the cargo quantity" type="text" />
                 </div>
                 <div className="flex justify-start">
@@ -134,8 +134,8 @@ const AccountTools = ({ title, className }) => {
               </div>
             </div>
           </div>
-          <div className={`w-[${className ? '60%' : '50%'}] xlMax:w-[100%]`}>
-            <NextImage className={`w-[100%] ${className && 'h-[100%]'}`} src={staticMap} />
+          <div className='w-1/2 xlMax:w-full'>
+            <NextImage className='w-full h-full' src={staticMap} />
           </div>
         </div>
       </div>
