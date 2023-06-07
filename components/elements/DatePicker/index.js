@@ -21,7 +21,7 @@ const DatePicker = ({
   onChange,
   inputClass = 'min-w-[296px]',
   error,
-  calendarClass,
+  calendarClass = '',
   closeOnSelect = true,
   ...rest
 }) => {

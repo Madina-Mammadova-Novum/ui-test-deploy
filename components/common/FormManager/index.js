@@ -11,7 +11,7 @@ const FormManager = ({ children, submitAction, submitButton, className = '' }) =
     handleSubmit,
     formState: { isSubmitting },
   } = useFormContext();
-  const { text, variant, size, disabled, className: buttonClassName } = submitButton;
+  const { text, variant, size, disabled, className: buttonClassName = '' } = submitButton;
 
   return (
     <form className={`${className} flex flex-col gap-5`} onSubmit={handleSubmit(submitAction)}>
