@@ -6,7 +6,6 @@ const initialState = {
   loading: true,
   error: null,
   data: {
-    token: {},
     personalDetails: {},
     companyDetails: {},
     accountDetails: {},

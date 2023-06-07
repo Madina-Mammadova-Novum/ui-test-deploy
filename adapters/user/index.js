@@ -17,6 +17,12 @@ export function userRoleAdapter({ data }) {
   }
 }
 
+export function listOfImosAdapter({ data }) {
+  if (!data) return [];
+
+  return data.map(({ imo }) => imo);
+}
+
 export function userDetailsAdapter({ data }) {
   if (!data) return {};
 
@@ -177,7 +183,7 @@ function companyAddressesAdapter({ data }) {
   };
 }
 
-export function updateCompanyAdapter({ data }) {
+export function updateOwnerCompanyAdapter({ data }) {
   if (data === null) return null;
   const { imos, numberOfTankers, companyYearsOfOperation, companyName } = data;
 
@@ -186,8 +192,28 @@ export function updateCompanyAdapter({ data }) {
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     ...companyAddressesAdapter({ data }),
-    imos,
+    imos: listOfImosAdapter({ data: imos }),
   };
+}
+
+export function updateChartererCompanyAdapter({ data }) {
+  if (data === null) return null;
+  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName } = data;
+
+  return {
+    companyName,
+    yearsInOperation: companyYearsOfOperation,
+    estimatedNumberOfChartersPerYear: numberOfCargoes,
+    ...companyAddressesAdapter({ data }),
+    experiences: cargoesAdapter({ data: cargoes }),
+  };
+}
+
+export function roleBasedUpdateCompanyAdapter({ data, role }) {
+  if (!data) return null;
+
+  if (role === ROLES.OWNER) return updateOwnerCompanyAdapter({ data });
+  return updateChartererCompanyAdapter({ data });
 }
 
 export function deleteCompanyAdapter({ data }) {
@@ -198,12 +224,6 @@ export function deleteCompanyAdapter({ data }) {
   return {
     password,
   };
-}
-
-export function listOfImosAdapter({ data }) {
-  if (!data) return [];
-
-  return data.map(({ imo }) => imo);
 }
 
 export function ownerSignUpAdapter({ data }) {
