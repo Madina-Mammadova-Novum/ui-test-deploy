@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { SORT_OPTIONS } from '@/lib/constants';
+import { REGEX, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -300,6 +300,14 @@ export const checkEmailPrefix = (value) => {
   const emailParts = value?.split('@')[1];
 
   return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
+};
+
+export const checkPhoneValue = (value) => {
+  if (!value) {
+    return true;
+  }
+  const regex = REGEX.PHONE;
+  return regex.test(value);
 };
 
 export const checkAuthRoute = (req, pathName) => {
