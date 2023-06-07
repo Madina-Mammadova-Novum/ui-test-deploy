@@ -184,7 +184,7 @@ function companyAddressesAdapter({ data }) {
 }
 
 export function updateOwnerCompanyAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   const { imos, numberOfTankers, companyYearsOfOperation, companyName } = data;
 
   return {
@@ -197,7 +197,7 @@ export function updateOwnerCompanyAdapter({ data }) {
 }
 
 export function updateChartererCompanyAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName } = data;
 
   return {
