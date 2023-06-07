@@ -394,7 +394,7 @@ table > tbody > tr td[name='RED'] > div {
 }
 
 .legal-styles .container {
-  @apply max-w-[1258px] px-[54px];
+  @apply max-w-[1258px] px-6 3md:px-14;
 }
 .table-scroll {
   overflow-x: auto;

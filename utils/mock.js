@@ -892,6 +892,43 @@ export const fixtureHeader = [
     width: 130,
   },
 ];
+export const fleetsPageHeader = [
+  {
+    text: '#',
+    type: 'INDEX',
+    width: 40,
+  },
+  {
+    text: 'Tanker name',
+    type: 'DOC_ID',
+    width: 134,
+  },
+  {
+    text: 'Imo',
+    type: 'TITLE',
+    width: 171,
+  },
+  {
+    text: 'Dwt',
+    type: 'COMMENT',
+    width: 105,
+  },
+  {
+    text: 'Tanker category',
+    type: 'DOC_NAME',
+    width: 166,
+  },
+  {
+    text: 'Q88 questionaire',
+    type: 'EXTENSION',
+    width: 110,
+  },
+  {
+    text: 'Tanker status',
+    type: 'SIZE',
+    width: 112,
+  },
+];
 
 export const providedEmails = [
   '001.igg.biz',

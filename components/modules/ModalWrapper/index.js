@@ -24,6 +24,8 @@ const ModalWrapper = ({ opened, onClose, containerClass = 'overflow-y-auto max-h
           className={`fixed overflow-y-auto max-h-[98vh] ${
             sidebar ? 'right-0 h-screen w-[30%] ' : 'top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2'
           } bg-white ${sidebar ? 'p-0' : 'p-8'} ${sidebar ? 'rounded-none' : 'rounded-lg'} ${containerClass}`}
+          onClick={(e) => e.stopPropagation()}
+          aria-hidden
         >
           <Button
             type="button"

@@ -11,7 +11,7 @@ import File from './File';
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { Button, Input, TextArea } from '@/elements';
-import { AVAILABLE_FORMATS } from '@/lib/constants';
+import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 // import { options } from '@/utils/formOptions';
 import { makeId, updateFormats } from '@/utils/helpers';
 
@@ -105,7 +105,7 @@ const UploadForm = () => {
           <span className="text-gray">Supports:</span> <span>{formats}</span>
         </p>
         <p className="flex gap-2 text-gray whitespace-nowrap self-end">
-          Max size: <span>10MB</span>
+          Max size: <span>{SETTINGS.FILE_SIZE_RESTRICTION}MB</span>
         </p>
       </div>
     );

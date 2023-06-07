@@ -53,7 +53,7 @@ export const ownerSidebarAdapter = ({ role }) => {
       id: makeId(),
       title: 'Fleets',
       variant: 'fleets',
-      path: ROUTES.FLEETS,
+      path: ROUTES.ACCOUNT_FLEETS,
       items: [],
     },
     {
