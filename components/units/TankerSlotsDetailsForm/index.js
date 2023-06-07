@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { TankerSlotsPropTypes } from '@/lib/types';
+
 import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, Input } from '@/elements';
@@ -9,7 +11,7 @@ import { SETTINGS } from '@/lib/constants';
 import { getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const TankerSlotsDetails = () => {
+const TankerSlotsDetails = ({ helperText = null }) => {
   const {
     register,
     setValue,
@@ -80,7 +82,7 @@ const TankerSlotsDetails = () => {
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
-          helperText="You will be able to add more vessels after the verification."
+          helperText={helperText}
           disabled={isSubmitting}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
@@ -142,5 +144,7 @@ const TankerSlotsDetails = () => {
     </div>
   );
 };
+
+TankerSlotsDetails.propTypes = TankerSlotsPropTypes;
 
 export default TankerSlotsDetails;

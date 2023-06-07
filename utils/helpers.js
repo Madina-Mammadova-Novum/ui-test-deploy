@@ -317,7 +317,10 @@ export const formatErrors = (errors) => {
   return errorMessages.join('\n');
 };
 
-export const formattedPhoneNumber = (phone) => phone?.replace('+', '');
+export const formattedPhoneNumber = (phone) => {
+  if (typeof phone !== 'undefined' || phone !== '') return phone?.replace('+', '');
+  return null;
+};
 
 export const sortByType = (a, b, ascSort) => {
   const sortOrder = ascSort ? 1 : -1;
