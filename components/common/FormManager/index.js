@@ -2,6 +2,8 @@
 
 import { useFormContext } from 'react-hook-form';
 
+import classnames from 'classnames';
+
 import { FormManagerPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
@@ -24,7 +26,7 @@ const FormManager = ({ children, submitAction, submitButton, className = '' }) =
           size,
         }}
         disabled={disabled || isSubmitting}
-        customStyles={`${buttonClassName} w-full`}
+        customStyles={classnames(buttonClassName, 'w-full')}
       />
     </form>
   );

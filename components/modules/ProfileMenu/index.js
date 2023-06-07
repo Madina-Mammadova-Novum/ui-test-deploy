@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import classnames from "classnames";
+import classnames from 'classnames';
 
 import { ProfileMenuPropTypes } from '@/lib/types';
 

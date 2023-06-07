@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import classnames from "classnames";
+import classnames from 'classnames';
 
 import { ViewOfferPropTypes } from '@/lib/types';
 
@@ -65,7 +65,7 @@ const ViewOffer = ({ setStep, closeModal }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={(classnames('h-[320px] overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset'))}
+        className={classnames('h-[320px] overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset')}
       >
         {tabContent()}
       </div>

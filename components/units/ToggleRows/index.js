@@ -1,6 +1,6 @@
 'use client';
 
-import classnames from "classnames";
+import classnames from 'classnames';
 
 import { ToggleRowsPropTypes } from '@/lib/types';
 
@@ -17,7 +17,10 @@ const ToggleRows = ({ onToggleClick, value = false }) => {
         icon: {
           before: (
             <DoubleArrowSVG
-              className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500', value && 'rotate-180' )}
+              className={classnames(
+                'fill-blue group-hover:fill-blue-darker transition duration-500',
+                value && 'rotate-180'
+              )}
             />
           ),
         },

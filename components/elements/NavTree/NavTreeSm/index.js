@@ -55,7 +55,11 @@ const NavTreeSm = ({ data, active }) => {
         <div className="flex flex-col justify-center items-center">
           <Button
             buttonProps={{ icon: { before: printIcon }, variant: 'tertiary', size: 'small' }}
-            customStyles={classnames('flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2', active ? 'bg-blue' : 'hover:bg-blue-dark', showLinks && 'bg-blue-dark')}
+            customStyles={classnames(
+              'flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2',
+              active ? 'bg-blue' : 'hover:bg-blue-dark',
+              showLinks && 'bg-blue-dark'
+            )}
           />
 
           <span className="text-xxs font-bold text-white text-center">{data.title}</span>
