@@ -27,6 +27,7 @@ const DateDetailsForm = ({ portName = '' }) => {
         onChange={handleDateChange}
         error={errors?.date?.message}
         label="open date"
+        expanded
       />
     </>
   );

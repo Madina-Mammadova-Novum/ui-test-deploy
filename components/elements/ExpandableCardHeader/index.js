@@ -14,6 +14,7 @@ import { useMediaQuery } from '@/utils/hooks';
 
 const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], itemId }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
+
   const printModal = useCallback(
     (action) => {
       switch (action) {
@@ -27,7 +28,7 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
     },
-    [headerData]
+    [itemId]
   );
 
   const printHeaderRow = (data, index) => (
