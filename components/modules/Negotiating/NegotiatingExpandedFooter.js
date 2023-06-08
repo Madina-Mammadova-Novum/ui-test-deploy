@@ -6,6 +6,8 @@ import { ROUTES } from '@/lib';
 import { ExpandableRowFooter, Tabs } from '@/units';
 
 const NegotiatingExpandedFooter = ({ isCharterer = false, setCurrentTab, currentTab, tabs }) => {
+
+
   return isCharterer ? (
     <ExpandableRowFooter>
       <Tabs

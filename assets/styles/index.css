@@ -418,33 +418,37 @@ table > tbody > tr td[name='RED'] > div {
 }
 
 .custom-container {
-  top: 18px;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+        top: 18px;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%)
 }
+
 
 th:first-child,
 th:nth-child(2) {
-  background-color: #e7ecf8;
-  z-index: 5;
+background-color: #E7ECF8;
+z-index: 5;
+
 }
 
-tr > th:first-child,
-tr > td:first-child {
+tr > th:first-child, tr > td:first-child {
   position: sticky;
   left: -1px;
   z-index: 1;
 }
 
-tr > th:nth-child(2),
-tr > td:nth-child(2) {
+tr > th:nth-child(2) ,tr > td:nth-child(2)
+ {
   position: sticky;
   left: 39px;
+
 }
 
-.custom-table {
-  background-color: #f8fafb;
-  z-index: 5;
-  /* border: 1px solid red; */
+
+.custom-table
+{
+background-color: #F8FAFB;
+z-index: 5;
+/* border: 1px solid red; */
 }

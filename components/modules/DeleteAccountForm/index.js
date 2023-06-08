@@ -8,12 +8,15 @@ import { DeleteAccountFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
+import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
 import { Notes } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeleteAccountForm = ({ title, closeModal }) => {
-  const schema = yup.object({ password: yup.string().required('Required field') });
+  const schema = yup.object({
+    ...currentPasswordSchema(),
+  });
 
   const methods = useHookFormParams({ schema });
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { DeleteFleetModalPropTypes } from '@/lib/types';
@@ -10,9 +11,12 @@ import { refetchFleets } from '@/store/entities/fleets/slice';
 import { successToast } from '@/utils/hooks';
 
 const DeleteFleetModal = ({ closeModal, id }) => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const handleDeleteFleet = async () => {
+    setLoading(true);
     const { status, message, error } = await deleteFleet({ fleetId: id });
+    setLoading(false);
 
     if (status === 204) {
       dispatch(refetchFleets());
@@ -45,10 +49,11 @@ const DeleteFleetModal = ({ closeModal, id }) => {
         />
         <Button
           buttonProps={{
-            text: 'Delete fleet',
+            text: loading ? 'Please wait...' : 'Delete fleet',
             variant: 'delete',
             size: 'large',
           }}
+          disabled={loading}
           customStylesFromWrap="w-1/2"
           customStyles="w-full"
           onClick={handleDeleteFleet}

@@ -50,10 +50,8 @@ const AccountTools = ({ title, className = '' }) => {
             {title}
           </Title>
         )}
-        <div
-          className={`${className}flex justify-between rounded-base bg-white divide-gray-darker gap-5 p-5 flex-row xlMax:flex-col`}
-        >
-          <div className="w-1/2 xlMax:w-full">
+        <div className={`${className}flex justify-between rounded-base bg-white divide-gray-darker gap-5 p-5 flex-row xlMax:flex-col`}>
+          <div className='w-1/2 xlMax:w-full'>
             <div className="flex flex-col">
               <FormProvider {...methods}>
                 <div className=" gap-y-4 flex flex-col">
@@ -136,8 +134,8 @@ const AccountTools = ({ title, className = '' }) => {
               </div>
             </div>
           </div>
-          <div className="w-1/2 xlMax:w-full">
-            <NextImage className="w-full h-full" src={staticMap} />
+          <div className='w-1/2 xlMax:w-full'>
+            <NextImage className='w-full h-full' src={staticMap} />
           </div>
         </div>
       </div>
