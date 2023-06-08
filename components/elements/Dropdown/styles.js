@@ -4,6 +4,7 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     '&:hover': {
       background: 'transparent',
     },
+    padding: '2px 10px',
     color: isSelected ? '#199AF5' : '#072D46',
     svg: {
       fill: isSelected ? '#199AF5' : '#072D46',
@@ -42,6 +43,7 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     border: '1px solid #E7ECF8',
     borderRadius: '6px',
     marginTop: '5px',
+    padding: '0px',
     position: 'absolute',
     minHeight: 'auto',
     top: 40,
