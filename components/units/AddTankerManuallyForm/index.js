@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
+
 import * as yup from 'yup';
 
 import { AddTankerManuallyFormPropTypes } from '@/lib/types';
@@ -9,14 +10,14 @@ import { AddTankerManuallyFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Button, DatePicker, FormDropdown, Input, TextWithLabel, Title } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
+import { tankerDataSchema } from '@/lib/schemas';
 import { ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { getValueWithPath, updateFormats } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
-import { tankerDataSchema } from '@/lib/schemas';
 
 const schema = yup.object({
-  ...tankerDataSchema()
+  ...tankerDataSchema(),
 });
 
 const AddTankerManuallyForm = ({ closeModal, goBack }) => {
@@ -41,7 +42,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
       clearErrors(key);
     }
     setValue(key, value);
-  }
+  };
 
   const printHelpers = useMemo(() => {
     return (
@@ -94,22 +95,16 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
 
           <div className="grid grid-cols-1 gap-y-4">
             <div className="grid grid-cols-2 gap-y-4 gap-x-5">
-              <Input 
-                {...register(`tankerName`)} 
-                label="Tanker name" 
-                customStyles="w-full" 
+              <Input
+                {...register(`tankerName`)}
+                label="Tanker name"
+                customStyles="w-full"
                 error={errors.tankerName?.message}
               />
-              <Input 
-                {...register(`imo`)} 
-                label="IMO" 
-                disabled 
-                value="9581291" 
-                customStyles="w-full" 
-              />
-              <DatePicker 
-                label="Last Q88 update date" 
-                name="updateDate" 
+              <Input {...register(`imo`)} label="IMO" disabled value="9581291" customStyles="w-full" />
+              <DatePicker
+                label="Last Q88 update date"
+                name="updateDate"
                 onChange={(date) => handleChange('updateDate', date)}
                 error={errors.updateDate?.message}
               />
@@ -120,13 +115,38 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
                 customStyles={{ className: 'grid self-end' }}
                 onChange={(option) => handleChange('built', option)}
               />
-              <FormDropdown label="Port of registry" options={testOption} name="portOfRegistry" onChange={(option) => handleChange('portOfRegistry', option)} />
-              <FormDropdown label="Country" options={testOption} name="country" onChange={(option) => handleChange('country', option)} />
+              <FormDropdown
+                label="Port of registry"
+                options={testOption}
+                name="portOfRegistry"
+                onChange={(option) => handleChange('portOfRegistry', option)}
+              />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="country"
+                onChange={(option) => handleChange('country', option)}
+              />
             </div>
             <div className="grid grid-cols-3 gap-x-5 gap-y-4">
-              <FormDropdown label="Tanker type" options={testOption} name="tankerType" onChange={(option) => handleChange('tankerType', option)} />
-              <FormDropdown label="Tanker category #1" options={testOption} name="tankerCategory_1" onChange={(option) => handleChange('tankerCategory_1', option)} />
-              <FormDropdown label="Tanker category #2" options={testOption} name="tankerCategory_2" onChange={(option) => handleChange('tankerCategory_2', option)} />
+              <FormDropdown
+                label="Tanker type"
+                options={testOption}
+                name="tankerType"
+                onChange={(option) => handleChange('tankerType', option)}
+              />
+              <FormDropdown
+                label="Tanker category #1"
+                options={testOption}
+                name="tankerCategory_1"
+                onChange={(option) => handleChange('tankerCategory_1', option)}
+              />
+              <FormDropdown
+                label="Tanker category #2"
+                options={testOption}
+                name="tankerCategory_2"
+                onChange={(option) => handleChange('tankerCategory_2', option)}
+              />
               <FormDropdown
                 label="Hull type"
                 options={testOption}
@@ -136,49 +156,44 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
               />
             </div>
             <div className="grid grid-cols-4 gap-x-5 gap-y-4 items-start">
-              <Input 
-                {...register(`loa`)} 
-                label="LOA" 
-                customStyles="w-full" 
-                error={errors.loa?.message}
-              />
-              <Input 
-                {...register(`beam`)} 
-                label="Beam" 
-                customStyles="w-full" 
-                error={errors.beam?.message}
-              />
-              <Input 
-                {...register(`summerDWT`)} 
-                label="Summer DWT" 
+              <Input {...register(`loa`)} label="LOA" customStyles="w-full" error={errors.loa?.message} />
+              <Input {...register(`beam`)} label="Beam" customStyles="w-full" error={errors.beam?.message} />
+              <Input
+                {...register(`summerDWT`)}
+                label="Summer DWT"
                 customStyles="w-full"
                 error={errors.summerDWT?.message}
               />
-              <Input 
-                {...register(`summmerDraft`)} 
-                label="Summer draft" 
+              <Input
+                {...register(`summmerDraft`)}
+                label="Summer draft"
                 customStyles="w-full"
                 error={errors.summmerDraft?.message}
               />
-              <Input 
-                {...register(`normalBallastWDT`)} 
-                label="Normal ballast WDT" 
+              <Input
+                {...register(`normalBallastWDT`)}
+                label="Normal ballast WDT"
                 customStyles="w-full"
                 error={errors.normalBallastWDT?.message}
               />
-              <Input 
-                {...register(`normalBallastDraft`)} 
-                label="Normal ballast draft" 
+              <Input
+                {...register(`normalBallastDraft`)}
+                label="Normal ballast draft"
                 customStyles="w-full"
                 error={errors.normalBallastDraft?.message}
               />
-              <Input 
-                {...register(`cubicCapacity`)} 
-                label="cubic capacity 98%" 
+              <Input
+                {...register(`cubicCapacity`)}
+                label="cubic capacity 98%"
                 customStyles="w-full"
                 error={errors.cubicCapacity?.message}
               />
-              <FormDropdown label="IMO class" options={testOption} name="imoClass" onChange={(option) => handleChange('imoClass', option)} />
+              <FormDropdown
+                label="IMO class"
+                options={testOption}
+                name="imoClass"
+                onChange={(option) => handleChange('imoClass', option)}
+              />
               <FormDropdown
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
                 options={testOption}
@@ -188,34 +203,54 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
               />
             </div>
             <div className="grid grid-cols-2 gap-x-5 gap-y-4 items-start">
-              <Input 
-                {...register(`registeredOwner`)} 
-                label="Registered owner" 
-                customStyles="w-full" 
+              <Input
+                {...register(`registeredOwner`)}
+                label="Registered owner"
+                customStyles="w-full"
                 error={errors.registeredOwner?.message}
               />
-              <FormDropdown label="Country" options={testOption} name="registeredOwnerCountry" onChange={(option) => handleChange('registeredOwnerCountry', option)} />
-              <Input 
-                {...register(`technicalOperator`)} 
-                label="Technical operator" 
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="registeredOwnerCountry"
+                onChange={(option) => handleChange('registeredOwnerCountry', option)}
+              />
+              <Input
+                {...register(`technicalOperator`)}
+                label="Technical operator"
                 customStyles="w-full"
                 error={errors.technicalOperator?.message}
               />
-              <FormDropdown label="Country" options={testOption} name="technicalOperatorCountry" onChange={(option) => handleChange('technicalOperatorCountry', option)} />
-              <Input 
-                {...register(`commercialOperator`)} 
-                label="Commercial operator" 
-                customStyles="w-full" 
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="technicalOperatorCountry"
+                onChange={(option) => handleChange('technicalOperatorCountry', option)}
+              />
+              <Input
+                {...register(`commercialOperator`)}
+                label="Commercial operator"
+                customStyles="w-full"
                 error={errors.commercialOperator?.message}
               />
-              <FormDropdown label="Country" options={testOption} name="commercialOperatorCountry" onChange={(option) => handleChange('commercialOperatorCountry', option)} />
-              <Input 
-                {...register(`disponentOwner`)} 
-                label="Disponent owner" 
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="commercialOperatorCountry"
+                onChange={(option) => handleChange('commercialOperatorCountry', option)}
+              />
+              <Input
+                {...register(`disponentOwner`)}
+                label="Disponent owner"
                 customStyles="w-full"
                 error={errors.disponentOwner?.message}
               />
-              <FormDropdown label="Country" options={testOption} name="disponentOwnerCountry" onChange={(option) => handleChange('disponentOwnerCountry', option)} />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="disponentOwnerCountry"
+                onChange={(option) => handleChange('disponentOwnerCountry', option)}
+              />
             </div>
             <div>
               <Title level={4} className="mb-2.5">

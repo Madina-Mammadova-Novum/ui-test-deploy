@@ -8,12 +8,12 @@ import { AddTankerWithImoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Input, TextWithLabel } from '@/elements';
+import { tankersSchema } from '@/lib/schemas';
 import { ModalHeader } from '@/units';
 import { useHookFormParams } from '@/utils/hooks';
-import { tankersSchema } from '@/lib/schemas';
 
 const schema = yup.object({
-  ...tankersSchema()
+  ...tankersSchema(),
 });
 
 const AddTankerWithImoForm = ({ closeModal, handleNextStep }) => {
@@ -42,10 +42,10 @@ const AddTankerWithImoForm = ({ closeModal, handleNextStep }) => {
             Enter the IMO of the tanker, if it is in our Q88 database, then we will add it automatically, if not, then
             you will need to add it manually.
           </p>
-          <Input 
-            {...methods.register('imo')} 
-            label="IMO" 
-            placeholder="9581291" 
+          <Input
+            {...methods.register('imo')}
+            label="IMO"
+            placeholder="9581291"
             error={methods.formState.errors?.imo?.message}
           />
         </div>
