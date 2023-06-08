@@ -81,7 +81,8 @@ const CompanyInfoForm = ({ closeModal }) => {
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.OWNER) return <TankerSlotsDetails />;
-    return <CargoesSlotsDetails />;
+    if (session?.role === ROLES.CHARTERER) <CargoesSlotsDetails />;
+    return null;
   }, [session?.role]);
 
   return (

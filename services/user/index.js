@@ -116,6 +116,7 @@ export async function deleteCompany({ data }) {
 
 export async function getUserPositions() {
   const response = await getData(`account/my-positions`);
+
   return {
     ...response,
   };

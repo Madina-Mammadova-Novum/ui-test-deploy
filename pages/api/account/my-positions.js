@@ -1,7 +1,24 @@
+// import { getServerSession } from 'next-auth';
+
 import { positionsAdapter } from '@/adapters/user';
+// import { Authorization } from '@/lib/constants';
+// import { getApiURL } from '@/utils';
+// import { responseHandler } from '@/utils/api';
+// import { AUTHCONFIG } from '@/utils/auth';
 import { sleep } from '@/utils/helpers';
 
 export default async function handler(req, res) {
+  // const session = await getServerSession(req, res, AUTHCONFIG);
+
+  // return responseHandler({
+  //   req,
+  //   res,
+  //   path: getApiURL(`v1/owner/vessels/get`),
+  //   dataAdapter: positionsAdapter,
+  //   requestMethod: 'GET',
+  //   options: { ...Authorization(session?.accessToken) },
+  // });
+
   await sleep(2000);
   try {
     const data = {
