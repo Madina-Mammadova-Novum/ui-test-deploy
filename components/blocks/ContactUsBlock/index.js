@@ -10,9 +10,24 @@ import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
 const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, embedMap }) => {
+  const printPhone = (phone) => (
+    <li>
+      <NextLink href={`tel:${phone}`} className="text-xsm mt-1">
+        {phone}
+      </NextLink>
+    </li>
+  );
+
+  const printEmail = (email) => (
+    <li>
+      <NextLink href={`mailto:${email}`} className="text-xsm mt-1">
+        {email}
+      </NextLink>
+    </li>
+  );
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
-      <div className="container mx-auto px-[54px] max-w-[1258px]">
+      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
@@ -38,20 +53,8 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
                   Contacts
                 </Title>
                 <ul>
-                  {phones.map((phone) => (
-                    <li>
-                      <NextLink href={`tel:${phone}`} className="text-xsm mt-1">
-                        {phone}
-                      </NextLink>
-                    </li>
-                  ))}
-                  {emails.map((email) => (
-                    <li>
-                      <NextLink href={`mailto:${email}`} className="text-xsm mt-1">
-                        {email}
-                      </NextLink>
-                    </li>
-                  ))}
+                  {phones && phones.map(printPhone)}
+                  {emails && emails.map(printEmail)}
                 </ul>
               </div>
               <div className="w-[330px] md:w-[150px] text-xsm">

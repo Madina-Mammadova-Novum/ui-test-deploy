@@ -23,8 +23,8 @@ const LoadingIndicator = () => (
 export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
   const [open, setOpen] = useState(false);
 
-  const printOptions = ({ countryFlag, label: labelValue }) => (
-    <OptionRow countryFlag={countryFlag} value={labelValue} />
+  const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
+    <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} />
   );
 
   if (asyncCall) {

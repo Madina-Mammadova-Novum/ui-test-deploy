@@ -19,7 +19,6 @@
 
   ::-webkit-scrollbar {
     width: 8px;
-    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -30,9 +29,6 @@
   ::-webkit-scrollbar-thumb {
     background-color: #828c9c7a;
     border-radius: 10px;
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
   }
   h1 {
     @apply font-bold text-[26px] 3md:text-[30px];
@@ -394,7 +390,7 @@ table > tbody > tr td[name='RED'] > div {
 }
 
 .legal-styles .container {
-  @apply max-w-[1258px] px-[54px];
+  @apply max-w-[1258px] px-6 3md:px-14;
 }
 .table-scroll {
   overflow-x: auto;
@@ -419,4 +415,40 @@ table > tbody > tr td[name='RED'] > div {
 }
 .table-table::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+.custom-container {
+        top: 18px;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%)
+}
+
+
+th:first-child,
+th:nth-child(2) {
+background-color: #E7ECF8;
+z-index: 5;
+
+}
+
+tr > th:first-child, tr > td:first-child {
+  position: sticky;
+  left: -1px;
+  z-index: 1;
+}
+
+tr > th:nth-child(2) ,tr > td:nth-child(2)
+ {
+  position: sticky;
+  left: 39px;
+
+}
+
+
+.custom-table
+{
+background-color: #F8FAFB;
+z-index: 5;
+/* border: 1px solid red; */
 }

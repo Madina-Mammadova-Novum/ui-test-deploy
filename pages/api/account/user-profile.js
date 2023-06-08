@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/owner/profile/get`),
+    path: getApiURL(`v1/${session?.role}/profile/get`),
     dataAdapter: accountPeronalDataResponseAdapter,
     requestMethod: 'GET',
     options: { ...Authorization(session?.accessToken) },

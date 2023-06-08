@@ -3,8 +3,9 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { AccountToolsPropTypes } from '@/lib/types';
 
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import staticMap from '@/assets/images/staticMap.png';
@@ -17,7 +18,7 @@ const schema = yup.object({
   ...toolsSchema(),
 });
 
-const AccountTools = ({ title }) => {
+const AccountTools = ({ title, className = '' }) => {
   const testOption = [
     { label: 'testLabel', value: 'testValue' },
     { label: 'testLabel2', value: 'testValue2' },
@@ -49,11 +50,11 @@ const AccountTools = ({ title }) => {
             {title}
           </Title>
         )}
-        <div className="flex justify-between rounded-base bg-white divide-gray-darker p-5">
-          <div className="w-[35%]">
+        <div className={`${className}flex justify-between rounded-base bg-white divide-gray-darker gap-5 p-5 flex-row xlMax:flex-col`}>
+          <div className='w-1/2 xlMax:w-full'>
             <div className="flex flex-col">
               <FormProvider {...methods}>
-                <div className=" gap-[34px] flex flex-col">
+                <div className=" gap-y-4 flex flex-col">
                   <FormDropdown
                     defaultValue="Some category"
                     error={errors.calc?.message}
@@ -111,7 +112,7 @@ const AccountTools = ({ title }) => {
                     }}
                   />
                 </div>
-                <div className="mb-[20px]">
+                <div className="mb-5">
                   <Input label="cargo quantity" placeholder="Enter the cargo quantity" type="text" />
                 </div>
                 <div className="flex justify-start">
@@ -133,8 +134,8 @@ const AccountTools = ({ title }) => {
               </div>
             </div>
           </div>
-          <div>
-            <NextImage className="w-[1000px]" src={staticMap} />
+          <div className='w-1/2 xlMax:w-full'>
+            <NextImage className='w-full h-full' src={staticMap} />
           </div>
         </div>
       </div>
@@ -142,8 +143,7 @@ const AccountTools = ({ title }) => {
   );
 };
 
-AccountTools.propTypes = {
-  title: PropTypes.string,
-};
+AccountTools.propTypes = AccountToolsPropTypes;
+
 
 export default AccountTools;

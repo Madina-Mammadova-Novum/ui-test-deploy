@@ -30,11 +30,11 @@ const PageFooter = async () => {
 
   return (
     <footer className="py-[30px] bg-white">
-      <div className="container mx-auto  px-[54px] max-w-[1258px] ">
+      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px] ">
         <NextLink href="/">
           <Logo className="fill-black" />
         </NextLink>
-        <div className="flex mt-[30px] gap-x-10">
+        <div className="flex mt-[30px] gap-x-4 3md:gap-x-10">
           {navigation.length > 0 &&
             navigation.map(({ title, items }) => {
               return <FooterNavBlock key={makeId()} items={items} title={title} />;

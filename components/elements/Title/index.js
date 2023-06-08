@@ -5,7 +5,7 @@ const titleStyles = {
   'offer-styles': 'uppercase font-semibold',
 };
 
-const Title = ({ level, children, customStyle, className = '', ...rest }) => {
+const Title = ({ level, children, customStyle = '', className = '', ...rest }) => {
   const Tag = `h${level}`;
   return (
     <Tag className={`${className} ${customStyle && titleStyles[customStyle]}`} {...rest}>

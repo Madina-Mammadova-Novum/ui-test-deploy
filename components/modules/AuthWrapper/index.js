@@ -4,9 +4,9 @@ import { Title } from '@/elements';
 
 const AuthWrapper = ({ title, subtitle, children, containerClass = '' }) => {
   return (
-    <div className={`w-form pt-2.5 px-10 ${containerClass}`}>
+    <div className={`${containerClass}`}>
       <Title level="2">{title}</Title>
-      {subtitle && <p className="pt-5 text-xsm text-black max-w-[296px]">{subtitle}</p>}
+      {subtitle && <p className="pt-5 text-xsm text-black max-w-[301px]">{subtitle}</p>}
       {children}
     </div>
   );

@@ -1,10 +1,13 @@
-export const dropdownStyles = (selectedOption, error, minWidth) => ({
+export const dropdownStyles = (selectedOption, error, minWidth, expand = false) => ({
   option: (base, { isSelected }) => ({
     ...base,
     '&:hover': {
       background: 'transparent',
     },
     color: isSelected ? '#199AF5' : '#072D46',
+    svg: {
+      fill: isSelected ? '#199AF5' : '#072D46',
+    },
   }),
   control: (base, { menuIsOpen }) => ({
     ...base,
@@ -16,10 +19,13 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
     border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#E7ECF8' : '#E53636'} `,
     cursor: 'pointer',
   }),
-  container: (base) => ({
-    ...base,
-    minWidth: minWidth ?? 34,
-  }),
+  container: (base, { selectProps: { menuIsOpen, options } }) => {
+    return {
+      ...base,
+      height: menuIsOpen && expand && options?.length > 20 ? 340 : 'auto',
+      minWidth: minWidth ?? 34,
+    };
+  },
   valueContainer: (base) => ({
     ...base,
     background: 'transparent',
@@ -36,6 +42,9 @@ export const dropdownStyles = (selectedOption, error, minWidth) => ({
     border: '1px solid #E7ECF8',
     borderRadius: '6px',
     marginTop: '5px',
+    position: 'absolute',
+    minHeight: 'auto',
+    top: 40,
   }),
   dropdownIndicator: (base, { selectProps: { menuIsOpen } }) => ({
     ...base,

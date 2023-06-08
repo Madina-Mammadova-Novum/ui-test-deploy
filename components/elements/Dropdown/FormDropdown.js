@@ -20,7 +20,7 @@ const FormDropdown = ({
   asyncCall = false,
   customStyles = {},
 }) => {
-  const { dropdownWidth, className } = customStyles;
+  const { dropdownWidth, dropdownExpanded = false, className = '' } = customStyles;
 
   const handleChange = useCallback(
     (option) => {
@@ -37,7 +37,7 @@ const FormDropdown = ({
         const hasValue = { ...field }.value?.value;
 
         return (
-          <div className={`relative bottom-1 ${className}`}>
+          <div className={`relative ${className}`}>
             <Label htmlFor={name} className="text-xs-sm">
               {label}
             </Label>
@@ -47,7 +47,7 @@ const FormDropdown = ({
               id={name}
               options={options}
               onChange={handleChange}
-              styles={dropdownStyles(hasValue, error, dropdownWidth)}
+              styles={dropdownStyles(hasValue, error, dropdownWidth, dropdownExpanded)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
             />

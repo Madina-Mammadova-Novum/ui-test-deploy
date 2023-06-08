@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { CargoesSlotsPropTypes } from '@/lib/types';
 
 import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
@@ -10,7 +12,7 @@ import { getPorts } from '@/services/port';
 import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CargoesSlotsDetailsForm = () => {
+const CargoesSlotsDetailsForm = ({ helperText = null }) => {
   const {
     register,
     setValue,
@@ -112,7 +114,7 @@ const CargoesSlotsDetailsForm = () => {
           customStyles="z-10 w-full"
           onChange={handleCargoesCount}
           error={errors.numberOfCargoes?.message || errors.applySlots?.message}
-          helperText="You will be able to add more cargoes after the verification."
+          helperText={helperText}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
@@ -137,7 +139,7 @@ const CargoesSlotsDetailsForm = () => {
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
-              placeholder="IMO number"
+              placeholder="Enter IMO"
               error={error?.imo?.message}
               disabled={isSubmitting}
               type="number"
@@ -181,7 +183,7 @@ const CargoesSlotsDetailsForm = () => {
               helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
               variant: 'tertiary',
               size: 'small',
-              icon: { before: <PlusSVG /> },
+              icon: { before: <PlusSVG className="fill-blue" /> },
             }}
             type="button"
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
@@ -193,5 +195,7 @@ const CargoesSlotsDetailsForm = () => {
     </div>
   );
 };
+
+CargoesSlotsDetailsForm.propTypes = CargoesSlotsPropTypes;
 
 export default CargoesSlotsDetailsForm;
