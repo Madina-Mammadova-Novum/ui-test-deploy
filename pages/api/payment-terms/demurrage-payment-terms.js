@@ -1,9 +1,10 @@
+import { getServerSession } from 'next-auth';
+
 import { responsePaymentTermsAdapter } from '@/adapters/payment-terms';
+import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 import { AUTHCONFIG } from '@/utils/auth';
-import { getServerSession } from 'next-auth'
-import { Authorization } from '@/lib/constants';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);

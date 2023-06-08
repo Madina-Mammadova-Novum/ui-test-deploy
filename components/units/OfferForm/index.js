@@ -1,34 +1,40 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
 import { sendOffer } from '@/services/offer';
-import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
-import { useSelector } from 'react-redux';
 import { searchSelector } from '@/store/selectors';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...offerSchema(),
 });
 
 const OfferForm = ({ children }) => {
-  const { searchData: {
-    products = [],
-    cargoType
-  } } = useSelector(searchSelector)
-  const methods = useHookFormParams({ schema, state: {
-    cargoType,
-    ...products.filter(product => product).reduce((_, curr, index) => ({
-      [`products[${index}].product`]: curr.product,
-      [`products[${index}].density`]: curr.density,
-      [`products[${index}].quantity`]: curr.quantity
-      })
-  , {})
-  } });
+  const {
+    searchData: { products = [], cargoType },
+  } = useSelector(searchSelector);
+  const methods = useHookFormParams({
+    schema,
+    state: {
+      cargoType,
+      ...products
+        .filter((product) => product)
+        .reduce(
+          (_, curr, index) => ({
+            [`products[${index}].product`]: curr.product,
+            [`products[${index}].density`]: curr.density,
+            [`products[${index}].quantity`]: curr.quantity,
+          }),
+          {}
+        ),
+    },
+  });
 
   const handleSubmit = async (formData) => {
     const { error, data } = await sendOffer({ data: formData });

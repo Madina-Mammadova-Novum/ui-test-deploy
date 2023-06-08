@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
 import { Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
+import { setSearchData } from '@/store/entities/search/slice';
 import { SearchForm } from '@/units';
 import { options } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
-import { useDispatch } from 'react-redux';
-import { setSearchData } from '@/store/entities/search/slice';
 
 const TankerSearch = ({ title }) => {
   const [tankerStore, setTankerStore] = useState({
@@ -24,7 +24,7 @@ const TankerSearch = ({ title }) => {
     searchResult: [],
   });
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
@@ -40,7 +40,7 @@ const TankerSearch = ({ title }) => {
     handleChangeState('loading', false);
 
     if (data) {
-      dispatch(setSearchData(formData))
+      dispatch(setSearchData(formData));
       handleChangeState('searchResult', data);
       handleChangeState('request', true);
     }
