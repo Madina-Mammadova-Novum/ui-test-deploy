@@ -10,6 +10,8 @@ import { searchVessels } from '@/services/vessel';
 import { SearchForm } from '@/units';
 import { options } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
+import { useDispatch } from 'react-redux';
+import { setSearchData } from '@/store/entities/search/slice';
 
 const TankerSearch = ({ title }) => {
   const [tankerStore, setTankerStore] = useState({
@@ -21,6 +23,8 @@ const TankerSearch = ({ title }) => {
     loading: false,
     searchResult: [],
   });
+
+  const dispatch = useDispatch()
 
   /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
@@ -36,6 +40,7 @@ const TankerSearch = ({ title }) => {
     handleChangeState('loading', false);
 
     if (data) {
+      dispatch(setSearchData(formData))
       handleChangeState('searchResult', data);
       handleChangeState('request', true);
     }

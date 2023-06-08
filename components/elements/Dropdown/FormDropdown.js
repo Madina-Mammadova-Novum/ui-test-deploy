@@ -12,7 +12,7 @@ import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
 const FormDropdown = ({
-  options,
+  options = [],
   onChange,
   name,
   label = '',
