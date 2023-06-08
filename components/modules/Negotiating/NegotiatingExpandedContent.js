@@ -9,30 +9,13 @@ import {
 } from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { Tabs } from '@/units';
 import {
   negotiatingCounterofferTableHeader,
   negotiatingFailedTableHeader,
   negotiatingIncomingTableHeader,
 } from '@/utils/mock';
 
-const tabs = [
-  {
-    value: 'incoming',
-    label: 'Incoming',
-  },
-  {
-    value: 'counteroffers',
-    label: 'Sent counteroffers',
-  },
-  {
-    value: 'failed',
-    label: 'Failed',
-  },
-];
-
-const NegotiatingExpandedContent = ({ data }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+const NegotiatingExpandedContent = ({ data, currentTab }) => {
   const [modal, setModal] = useState(null);
 
   const handleCloseModal = () => setModal(null);
@@ -79,13 +62,6 @@ const NegotiatingExpandedContent = ({ data }) => {
   };
   return (
     <div>
-      <Tabs
-        onClick={({ target }) => setCurrentTab(target.value)}
-        activeTab={currentTab}
-        tabs={tabs}
-        customStyles="my-3 mx-auto"
-      />
-
       <div className="mb-3">{tabContent}</div>
 
       <Modal opened={modal} onClose={handleCloseModal}>
