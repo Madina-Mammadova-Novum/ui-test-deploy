@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import NavTreeBody from './NavTreeBody';
@@ -8,9 +9,11 @@ const NavTreeTitle = ({ title, icon, isOpened, isActive, links, hasNestedLinks }
   return (
     <>
       <div
-        className={`flex items-center text-sm text-white font-semibold capitalize gap-2.5 w-full px-5 py-2.5 rounded-xl
-        ${isActive ? 'bg-blue' : 'hover:bg-blue-dark'} 
-        ${isOpened && hasNestedLinks && 'bg-blue-dark'}`}
+        className={classnames(
+          'flex items-center text-sm text-white font-semibold capitalize gap-2.5 w-full px-5 py-2.5 rounded-xl',
+          isActive ? 'bg-blue' : 'hover:bg-blue-dark',
+          isOpened && hasNestedLinks && 'bg-blue-dark'
+        )}
       >
         {icon}
         {!hasNestedLinks ? (

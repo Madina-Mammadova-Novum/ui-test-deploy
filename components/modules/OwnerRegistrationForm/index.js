@@ -84,7 +84,7 @@ const OwnerRegistrationForm = () => {
         </Step>
         <Divider />
         <Step title="Step 4: How many tankers do you have?" containerClass="flex flex-col gap-5">
-          <TankerSlotsDetails />
+          <TankerSlotsDetails helperText="You will be able to add more vessels after the verification." />
         </Step>
         <Divider />
         <Step title="Step #5: Company Addresss" containerClass="flex flex-col gap-5">

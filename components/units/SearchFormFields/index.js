@@ -195,7 +195,7 @@ const SearchFormFields = () => {
           const { density = {} } = getValues(`products[${productId}].product`) || {};
           return (
             <div key={`product_${productId}`}>
-              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
+              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1 items-baseline">
                 <FormDropdown
                   onChange={(option) => {
                     setSelected(!selected);

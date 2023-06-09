@@ -16,7 +16,7 @@ import 'swiper/css/pagination';
 const ImageSliderBlock = ({ gallery }) => {
   return (
     <section>
-      <div className="container mx-auto max-w-[960px]">
+      <div className="mx-auto w-[800px] max-w-[calc(100vw_-_64px)]">
         <Swiper
           slidesPerView="1"
           spaceBetween={20}

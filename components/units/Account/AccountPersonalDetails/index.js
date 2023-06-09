@@ -6,6 +6,12 @@ import { ModalWindow } from '@/units';
 
 const AccountPersonalDetails = ({ user = {} }) => {
   const { firstName, lastName, email, primaryPhone, secondaryPhone } = user;
+
+  const printPhoneNumber = (phone) => {
+    if (!phone) return '—';
+    return `+${phone}`;
+  };
+
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Personal Details">
@@ -28,8 +34,8 @@ const AccountPersonalDetails = ({ user = {} }) => {
           <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
         <FieldsetContent className="col-start-1 3md:col-start-2">
-          <TextRow title="Primary phone number">{`+${primaryPhone}` || '—'}</TextRow>
-          <TextRow title="Secondary phone number">{`+${secondaryPhone}` || '—'}</TextRow>
+          <TextRow title="Primary phone number">{printPhoneNumber(primaryPhone)}</TextRow>
+          <TextRow title="Secondary phone number">{printPhoneNumber(secondaryPhone)}</TextRow>
         </FieldsetContent>
       </FieldsetContentWrapper>
     </FieldsetWrapper>

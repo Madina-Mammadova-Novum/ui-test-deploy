@@ -36,7 +36,14 @@ const PortDetailsForm = ({ portName = '' }) => {
         <Label className="text-xs-sm">Tanker name</Label>
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
-      <FormDropdown async name="port" label="Port search" options={portOptions} onChange={handlePortChange} />
+      <FormDropdown
+        async
+        name="port"
+        label="Port search"
+        options={portOptions}
+        onChange={handlePortChange}
+        customStyles={{ dropdownExpanded: true }}
+      />
     </div>
   );
 };

@@ -17,8 +17,8 @@ export async function searchVessels({ data }) {
   //       tolerance: 20
   //     }
   //   ],
-  //   laycanStart: "2023-05-24",
-  //   laycanEnd: "2023-05-25"
+  //   laycanStart: "2023-06-02",
+  //   laycanEnd: "2023-06-02"
   // }
   const response = await postData(`vessels/search`, body);
   // todo: Remove once backend has data

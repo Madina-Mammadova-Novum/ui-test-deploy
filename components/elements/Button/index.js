@@ -7,8 +7,8 @@ import { getButtonClassNames } from '@/utils/helpers';
 
 const Button = ({
   buttonProps: { icon = {}, iconContainerStyles, helperText, text, variant, size },
-  customStyles,
-  customStylesFromWrap,
+  customStyles = '',
+  customStylesFromWrap = '',
   disabled = false,
   type = 'button',
   onClick,

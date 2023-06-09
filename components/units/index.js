@@ -2,8 +2,9 @@ import Accordion from '@/units/Accordion';
 import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
+import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
+import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
-import CargoIdTooltip from '@/units/CargoIdTooltip';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
@@ -13,9 +14,13 @@ import ComplexPagination from '@/units/ComplexPagination';
 import COTTabContent from '@/units/COTTabContent';
 import Countdown from '@/units/Countdown';
 import CounterofferForm from '@/units/CounterofferForm';
+import CreateFleetForm from '@/units/CreateFleetForm';
 import DateDetailsForm from '@/units/DateDetailsForm';
 import DeactivateTankerForm from '@/units/DeactivateTankerForm';
+import DeleteFleetModal from '@/units/DeleteFleetModal';
+import DeleteTankerModal from '@/units/DeleteTankerModal';
 import EditDateForm from '@/units/EditDateForm';
+import EditFleetForm from '@/units/EditFleetForm';
 import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
@@ -47,6 +52,7 @@ import TankerInformationContent from '@/units/TankerInformationContent';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
+import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
 
@@ -100,8 +106,14 @@ export {
   PartyItem,
   UploadForm,
   TabsVertical,
-  CargoIdTooltip,
   CounterofferForm,
   ChartererInformationContent,
   TankerInformationContent,
+  CreateFleetForm,
+  EditFleetForm,
+  DeleteFleetModal,
+  UpdateTankerForm,
+  DeleteTankerModal,
+  AddTankerWithImoForm,
+  AddTankerManuallyForm,
 };

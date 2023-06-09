@@ -1,4 +1,5 @@
 import ClockSVG from '@/assets/images/clock.svg';
+import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
@@ -112,6 +113,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       id,
       value: status,
       type: TYPE.SEMIBOLD,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,
