@@ -5,6 +5,7 @@ import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
+import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
 import CargoIdTooltip from '@/units/CargoIdTooltip';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
 import Comment from '@/units/Comment';
@@ -72,6 +73,7 @@ export {
   CompanyAddresses,
   TermsAndConditions,
   CargoesSlotsDetails,
+  CargoesSlotsDetailsStatic,
   SearchForm,
   SearchFormFields,
   ToggleRows,

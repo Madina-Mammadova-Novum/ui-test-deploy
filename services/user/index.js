@@ -158,6 +158,14 @@ export async function getUserCompany() {
   };
 }
 
+export async function getChartererUserCargoes() {
+  const response = await getData(`account/user-profile-cargoes`);
+
+  return {
+    ...response,
+  };
+}
+
 export async function getUserOnSubs() {
   const response = await getData(`account/on-subs`);
   return {

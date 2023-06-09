@@ -336,3 +336,5 @@ export const sortByType = (a, b, ascSort) => {
   const bType = b.type === SORT_OPTIONS.asc ? 1 : b.type === SORT_OPTIONS.dsc ? -1 : 0;
   return sortOrder * (aType - bType);
 };
+
+export const imoFormatter = (str) => str?.replace(/IMO/g, '');

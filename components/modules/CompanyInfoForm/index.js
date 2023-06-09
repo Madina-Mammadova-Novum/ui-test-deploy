@@ -21,7 +21,7 @@ import {
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { CargoesSlotsDetails, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -81,8 +81,8 @@ const CompanyInfoForm = ({ closeModal }) => {
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.OWNER) return <TankerSlotsDetails />;
-    return <CargoesSlotsDetails />;
-  }, [session?.role]);
+    return <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />;
+  }, [data?.companyDetails.cargoes, session?.role]);
 
   return (
     <FormProvider {...methods}>

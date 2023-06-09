@@ -20,11 +20,13 @@ const DatePicker = ({
   label = '',
   onChange,
   error,
+  dateValue,
   inputClass = 'min-w-[296px]',
   calendarClass = '',
   containerClass = '',
   closeOnSelect = true,
   expanded = false,
+  disabled = false,
   ...rest
 }) => {
   const [showPicker, setShowPicker] = useState(false);
@@ -43,10 +45,14 @@ const DatePicker = ({
       <Controller
         name={name}
         render={({ field }) => {
-          const value = field.value || new Date();
+          const value = field.value || dateValue || new Date();
+
           return (
-            <div className="single_date relative cursor-pointer w-full">
-              <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
+            <div className={`single_date relative cursor-pointer w-full ${disabled && 'opacity-70'}`}>
+              <div
+                aria-hidden
+                onClick={() => (disabled ? setShowPicker(false) : setShowPicker((prevValue) => !prevValue))}
+              >
                 <Input
                   name={name}
                   customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
@@ -60,6 +66,7 @@ const DatePicker = ({
               <div
                 className={classnames('absolute w-full bottom-3 translate-y-full left-0 hidden z-10', {
                   '!block': showPicker,
+                  'opacity-30': disabled,
                 })}
               >
                 <Calendar

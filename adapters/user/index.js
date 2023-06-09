@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { formattedPhoneNumber, isEmpty } from '@/utils/helpers';
+import { formattedPhoneNumber, imoFormatter, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -68,7 +68,11 @@ function userCompanyDetailsAdapter({ data }) {
     correspondenceCityId,
     correspondenceProvince,
     correspondencePostalCode,
+    cargoesDetails,
   } = data;
+
+  const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
+  const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
 
   return {
     companyDetails: {
@@ -87,8 +91,56 @@ function userCompanyDetailsAdapter({ data }) {
       correspondencePostalCode,
       correspondenceProvince,
       totalTankers: numberOfVessels,
+      cargoes: formattedCargoes,
       imos,
     },
+  };
+}
+
+export function companyCargoesAdapter({ data }) {
+  if (!data) return [];
+
+  return {
+    countOfCargoes: data?.length,
+    listOfCargoes: data,
+  };
+}
+
+export function cargoesDetailsAdapter({ data }) {
+  if (Array.isArray(data)) {
+    return data?.map((cargoe) => cargoeAdapter({ data: cargoe }));
+  }
+
+  return { data };
+}
+
+export function cargoeAdapter({ data }) {
+  const { billOfLadingDate, loadPort, vesselImo } = data;
+
+  return {
+    date: billOfLadingDate,
+    port: portAdapter({ data: loadPort }),
+    imo: imoAdapter({ data: vesselImo }),
+  };
+}
+
+export function imoAdapter({ data }) {
+  if (!data) return null;
+
+  return imoFormatter(data);
+}
+
+export function portAdapter({ data }) {
+  if (!data) return {};
+
+  const { name, id, enabled, countryId, terminals } = data;
+
+  return {
+    id,
+    countryId,
+    portName: name,
+    disabled: !enabled,
+    terminals,
   };
 }
 
@@ -435,6 +487,12 @@ export function accountCompanyUpdateDataResponseAdapter({ data }) {
 }
 
 export function accountDeleteDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountCargoesDataResponseAdapter({ data }) {
   if (!data) return null;
 
   return { data };

@@ -7,8 +7,9 @@ const initialState = {
   error: null,
   data: {
     personalDetails: {},
-    companyDetails: {},
-    accountDetails: {},
+    companyDetails: {
+      cargoesDetails: {},
+    },
   },
   params: {
     sidebarCollapsed: false,
