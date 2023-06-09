@@ -71,13 +71,14 @@ const TableCell = ({ cellProps }) => {
   return (
     <td
       name={type}
-      className={`${disabled ? 'custom-table' : 'bg-white'
-        } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
+      className={`${
+        disabled ? 'custom-table' : 'bg-white'
+      } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
       <div className={`flex ${typeof value === 'boolean' ? 'justify-start' : 'justify-between'} items-center text-xsm`}>
         {emptyCell && <Placeholder />}
         {value && (
-          <div className="flex gap-x-1 text-inherit">
+          <div className="flex gap-x-1 text-inherit items-center">
             {icon && <IconWrapper iconData={{ icon }} />}
             {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
             {printValue}

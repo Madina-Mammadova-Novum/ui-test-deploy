@@ -30,7 +30,7 @@ export default async function handler(req, res) {
               laycanStart: 'Dec 18, 2021',
               laycanEnd: 'Dec 19, 2021',
               loadPort: 'Barcelona, ESBCN',
-              status: 'New offer',
+              status: 'Counteroffer',
               dateReceived: 'Dec 19, 2021',
               countdown: '1d 1h 50m',
             },
