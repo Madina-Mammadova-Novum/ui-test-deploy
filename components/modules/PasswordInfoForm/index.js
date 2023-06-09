@@ -61,6 +61,7 @@ const PasswordInfoForm = ({ closeModal }) => {
           />
         </div>
         <Divider />
+        <p className="text-black font-semibold text-sm">Enter a strong password according to our requirements</p>
         <PasswordValidation />
       </ModalFormManager>
     </FormProvider>
