@@ -6,9 +6,9 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
   const backgroundColor = useMemo(() => {
     switch (status) {
       case 'New offer':
-        return 'blue';
-      case 'Counteroffer':
         return 'yellow';
+      case 'Counteroffer':
+        return 'blue';
       default:
         return 'gray';
     }
