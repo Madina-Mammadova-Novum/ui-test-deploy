@@ -73,6 +73,7 @@ function userCompanyDetailsAdapter({ data }) {
 
   const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
   const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
+  const formattedImos = companyImosAdapter({ data: imos });
 
   return {
     companyDetails: {
@@ -92,8 +93,17 @@ function userCompanyDetailsAdapter({ data }) {
       correspondenceProvince,
       totalTankers: numberOfVessels,
       cargoes: formattedCargoes,
-      imos,
+      imos: formattedImos,
     },
+  };
+}
+
+export function companyImosAdapter({ data }) {
+  if (!data) return {};
+
+  return {
+    countOfTankers: data?.length,
+    listOfTankers: data,
   };
 }
 

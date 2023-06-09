@@ -21,7 +21,7 @@ import {
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -80,9 +80,9 @@ const CompanyInfoForm = ({ closeModal }) => {
   ];
 
   const printRoleBasedSection = useMemo(() => {
-    if (session?.role === ROLES.OWNER) return <TankerSlotsDetails />;
+    if (session?.role === ROLES.OWNER) return <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />;
     return <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />;
-  }, [data?.companyDetails.cargoes, session?.role]);
+  }, [data?.companyDetails.cargoes, data?.companyDetails?.imos, session?.role]);
 
   return (
     <FormProvider {...methods}>
@@ -99,7 +99,7 @@ const CompanyInfoForm = ({ closeModal }) => {
           subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
           data={noteList}
         />
-        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[320px] overflow-y-scroll">
+        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[480px] overflow-y-scroll">
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>
