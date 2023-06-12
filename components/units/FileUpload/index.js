@@ -27,6 +27,7 @@ const UploadForm = () => {
     preview: URL.createObjectURL(file),
     ...file,
   });
+
   const fileReaderAdapter = (file, cb) => {
     const reader = new window.FileReader();
     reader.onabort = () => {
