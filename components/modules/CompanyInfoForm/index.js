@@ -26,22 +26,22 @@ import { makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
-  const dispatch = useDispatch();
   const [sameAddress, setSameAddress] = useState(false);
+
   const { data } = useSelector(getUserDataSelector);
+
   const { data: session } = useSession();
+  const dispatch = useDispatch();
 
   const roleBasedSchemaValidation = () => {
     if (session?.role === ROLES.OWNER) {
       return yup.object({
         ...companyDetailsSchema(),
-        ...tankerSlotsDetailsSchema(),
         ...companyAddressesSchema(sameAddress),
       });
     }
     return yup.object({
       ...companyDetailsSchema(),
-      ...cargoesSlotsDetailsSchema(),
       ...companyAddressesSchema(sameAddress),
     });
   };
@@ -56,14 +56,15 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
+    console.log('formData: ', formData);
+    // const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
 
-    if (status === 200) {
-      dispatch(fetchUserProfileData());
-      successToast(null, response.message);
-    }
-    if (error) errorToast(error?.message);
-    return null;
+    // if (status === 200) {
+    //   dispatch(fetchUserProfileData());
+    //   successToast(null, response.message);
+    // }
+    // if (error) errorToast(error?.message);
+    // return null;
   };
 
   const noteList = [

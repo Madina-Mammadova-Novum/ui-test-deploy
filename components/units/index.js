@@ -6,7 +6,6 @@ import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
-import CargoIdTooltip from '@/units/CargoIdTooltip';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
@@ -111,7 +110,6 @@ export {
   PartyItem,
   UploadForm,
   TabsVertical,
-  CargoIdTooltip,
   CounterofferForm,
   ChartererInformationContent,
   TankerInformationContent,

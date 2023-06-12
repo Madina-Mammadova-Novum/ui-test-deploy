@@ -9,18 +9,18 @@ const AccountCompanyDetails = ({ company = {} }) => {
   const registration = {
     addressLine1: company?.registrationAddress,
     addressLine2: company?.registrationAddress2,
-    city: company?.registrationCityId,
+    city: company?.registrationCity?.label,
     state: company?.registrationProvince,
-    country: company?.registrationCountry,
+    country: company?.registrationCountry?.label,
     postal: company?.registrationPostalCode,
   };
 
   const correspondence = {
     addressLine1: company?.correspondenceAddress,
     addressLine2: company?.correspondenceAddress2,
-    city: company?.correspondenceCityId,
+    city: company?.correspondenceCity?.label,
     state: company?.correspondenceProvince,
-    country: company?.correspondenceCountry,
+    country: company?.correspondenceCountry?.label,
     postal: company?.correspondencePostalCode,
   };
 

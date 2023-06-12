@@ -78,7 +78,7 @@ const TableCell = ({ cellProps }) => {
       <div className={`flex ${typeof value === 'boolean' ? 'justify-start' : 'justify-between'} items-center text-xsm`}>
         {emptyCell && <Placeholder />}
         {value && (
-          <div className="flex gap-x-1 text-inherit">
+          <div className="flex gap-x-1 text-inherit items-center">
             {icon && <IconWrapper iconData={{ icon }} />}
             {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
             {printValue}

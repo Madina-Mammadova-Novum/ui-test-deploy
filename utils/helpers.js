@@ -338,3 +338,17 @@ export const sortByType = (a, b, ascSort) => {
 };
 
 export const imoFormatter = (str) => str?.replace(/IMO/g, '');
+
+export const isIdExist = ({ data }) => {
+  if (!data) return false;
+
+  return data.map(({ value }) => !!value);
+};
+
+export const findValueById = ({ data, id }) => {
+  if (!data) return [];
+
+  const result = data.find((obj) => obj.value === id);
+
+  return [result];
+};

@@ -51,6 +51,7 @@ function userPersonalDetailsAdapter({ data }) {
 
 function userCompanyDetailsAdapter({ data }) {
   if (!data) return {};
+
   const {
     name,
     imos,
@@ -58,14 +59,12 @@ function userCompanyDetailsAdapter({ data }) {
     numberOfVessels,
     registrationAddress,
     registrationAddress2,
-    registrationCountryId,
-    registrationCityId,
+    registrationCity,
     registrationProvince,
     registrationPostalCode,
     correspondenceAddress,
     correspondenceAddress2,
-    correspondenceCountryId,
-    correspondenceCityId,
+    correspondenceCity,
     correspondenceProvince,
     correspondencePostalCode,
     cargoesDetails,
@@ -81,20 +80,46 @@ function userCompanyDetailsAdapter({ data }) {
       companyYearsOfOperation: yearsInOperation,
       registrationAddress,
       registrationAddress2,
-      registrationCityId,
-      registrationCountryId,
+      registrationCity: cityAdapter({ data: registrationCity }),
+      registrationCountry: countryAdapter({ data: registrationCity?.country }),
       registrationPostalCode,
       registrationProvince,
       correspondenceAddress,
       correspondenceAddress2,
-      correspondenceCityId,
-      correspondenceCountryId,
+      correspondenceCity: cityAdapter({ data: correspondenceCity }),
+      correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
       correspondencePostalCode,
       correspondenceProvince,
       totalTankers: numberOfVessels,
       cargoes: formattedCargoes,
       imos: formattedImos,
     },
+  };
+}
+
+export function cityAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, name } = data;
+
+  return {
+    value: id,
+    label: name,
+  };
+}
+
+export function countryAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, name, codeISO3, codeISO2 } = data;
+
+  const commonCode = codeISO2 === null ? codeISO3 : codeISO2;
+  const code = commonCode === null ? name.substring(0, 3) : commonCode;
+
+  return {
+    value: id,
+    label: name,
+    countryFlag: code.toLowerCase(),
   };
 }
 
