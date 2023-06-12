@@ -135,7 +135,7 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-1 lg:grid-cols-3 justify-center items-center gap-x-5" key={item}>
+          <div className="grid relative grid-cols-3 justify-center items-end gap-x-5" key={item}>
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
@@ -162,7 +162,7 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
             />
             <Button
               type="button"
-              customStyles="absolute top-full mt-2 lg:mt-0 right-0 lg:-right-8 lg:top-7 !p-0"
+              customStyles="absolute top-full mt-2 lg:mt-0 right-0 lg:-right-8 lg:top-8 !p-0"
               buttonProps={{
                 icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
                 variant: 'tertiary',
