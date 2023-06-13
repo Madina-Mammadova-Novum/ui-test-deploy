@@ -1,5 +1,5 @@
 import { requestFleetNameAdapter } from '@/adapters';
-import { postData } from '@/utils/dataFetching';
+import { getData, postData } from '@/utils/dataFetching';
 
 export async function createFleet({ data }) {
   const body = requestFleetNameAdapter({ data });
@@ -22,6 +22,13 @@ export async function editFleet({ data, fleetId }) {
 export async function deleteFleet({ fleetId }) {
   const response = await postData(`fleets/delete/${fleetId}`);
   if (!response.error) response.message = 'You have successfully deleted the fleet';
+  return {
+    ...response,
+  };
+}
+
+export async function getFleetById({ fleetId }) {
+  const response = await getData(`fleets/info/${fleetId}`);
   return {
     ...response,
   };

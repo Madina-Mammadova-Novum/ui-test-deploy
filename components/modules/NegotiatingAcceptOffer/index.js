@@ -28,7 +28,7 @@ const tabs = [
   },
 ];
 
-const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
+const NegotiatingAcceptOffer = ({ goBack }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const methods = useHookFormParams({ schema: {} });
@@ -90,12 +90,7 @@ const NegotiatingAcceptOffer = ({ goBack, closeModal }) => {
         </FormProvider>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
-        <Button
-          onClick={closeModal}
-          customStyles="ml-auto"
-          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-        />
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end h-10">
         <Button
           buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
           customStyles="opacity-0"
