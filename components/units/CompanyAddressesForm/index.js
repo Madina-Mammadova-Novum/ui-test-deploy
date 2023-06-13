@@ -15,6 +15,8 @@ const CompanyAddresses = () => {
 
   const { sameAddresses } = getValues();
 
+  console.log(getValues());
+
   const handleSameAddress = (event) => {
     const { checked } = event.target;
     setValue('sameAddresses', checked);

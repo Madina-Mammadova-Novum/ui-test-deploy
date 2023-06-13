@@ -20,7 +20,7 @@ export function userRoleAdapter({ data }) {
 export function listOfImosAdapter({ data }) {
   if (!data) return [];
 
-  return data.map(({ imo }) => imo);
+  return data.map((imo) => imo);
 }
 
 export function userDetailsAdapter({ data }) {
@@ -71,6 +71,7 @@ function userCompanyDetailsAdapter({ data }) {
   } = data;
 
   const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
+
   const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
   const formattedImos = companyImosAdapter({ data: imos });
 
@@ -248,23 +249,23 @@ function companyAddressesAdapter({ data }) {
     registrationPostalCode,
     registrationAddress,
     registrationAddress2,
-    registrationCityId,
+    registrationCity,
     correspondenceProvince,
     correspondencePostalCode,
     correspondenceAddress,
     correspondenceAddress2,
-    correspondenceCityId,
+    correspondenceCity,
   } = data;
 
   return {
     registrationAddress,
     registrationAddress2,
-    registrationCityId: registrationCityId.value,
+    registrationCityId: registrationCity?.value,
     registrationProvince,
     registrationPostalCode,
     correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
     correspondenceAddress2: !sameAddresses ? correspondenceAddress2 : registrationAddress2,
-    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
+    correspondenceCityId: !sameAddresses ? correspondenceCity?.value : registrationCity?.value,
     correspondenceProvince: !sameAddresses ? correspondenceProvince : registrationProvince,
     correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
@@ -272,14 +273,14 @@ function companyAddressesAdapter({ data }) {
 
 export function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
-  const { imos, numberOfTankers, companyYearsOfOperation, companyName } = data;
+  const { imos, companyYearsOfOperation, companyName } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
-    numberOfVessels: numberOfTankers,
+    numberOfVessels: imos?.countOfTankers,
     ...companyAddressesAdapter({ data }),
-    imos: listOfImosAdapter({ data: imos }),
+    imos: listOfImosAdapter({ data: imos?.listOfTankers }),
   };
 }
 

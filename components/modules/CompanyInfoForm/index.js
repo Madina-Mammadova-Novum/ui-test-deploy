@@ -21,27 +21,18 @@ import { makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
-  const [sameAddress, setSameAddress] = useState(false);
-
+  const dispatch = useDispatch();
+  const { data: session } = useSession();
   const { data } = useSelector(getUserDataSelector);
 
-  const { data: session } = useSession();
-  const dispatch = useDispatch();
+  const [sameAddress, setSameAddress] = useState(false);
 
-  const roleBasedSchemaValidation = () => {
-    if (session?.role === ROLES.OWNER) {
-      return yup.object({
-        ...companyDetailsSchema(),
-        ...companyAddressesSchema(sameAddress),
-      });
-    }
-    return yup.object({
-      ...companyDetailsSchema(),
-      ...companyAddressesSchema(sameAddress),
-    });
-  };
+  const schema = yup.object({
+    ...companyDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
+  });
 
-  const methods = useHookFormParams({ state: data?.companyDetails, schema: roleBasedSchemaValidation() });
+  const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
 

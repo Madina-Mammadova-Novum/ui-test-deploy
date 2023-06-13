@@ -50,14 +50,14 @@ const AccountCompanyDetails = ({ company = {} }) => {
 
         <Divider className="my-4" />
 
-        <div className="grid grid-cols-1 3md:grid-cols-2 gap-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
           {registration && (
             <FieldsetContent className="col-start-1" label="Registration address">
               <AddressInfo address={registration} />
             </FieldsetContent>
           )}
           {correspondence && (
-            <FieldsetContent className="col-start-1 3md:col-start-2" label="Correspondence address">
+            <FieldsetContent className="col-start-1 md:col-start-2" label="Correspondence address">
               <AddressInfo address={correspondence} />
             </FieldsetContent>
           )}
