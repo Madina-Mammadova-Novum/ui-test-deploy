@@ -12,12 +12,7 @@ import { CompanyInfoFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { ROLES } from '@/lib';
-import {
-  cargoesSlotsDetailsSchema,
-  companyAddressesSchema,
-  companyDetailsSchema,
-  tankerSlotsDetailsSchema,
-} from '@/lib/schemas';
+import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
@@ -56,15 +51,14 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    console.log('formData: ', formData);
-    // const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
+    const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
 
-    // if (status === 200) {
-    //   dispatch(fetchUserProfileData());
-    //   successToast(null, response.message);
-    // }
-    // if (error) errorToast(error?.message);
-    // return null;
+    if (status === 200) {
+      dispatch(fetchUserProfileData());
+      successToast(null, response.message);
+    }
+    if (error) errorToast(error?.message);
+    return null;
   };
 
   const noteList = [
