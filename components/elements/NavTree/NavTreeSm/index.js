@@ -22,21 +22,21 @@ const NavTreeSm = ({ data, active }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
-    const iconClassName = classnames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
+    const customStyles = classnames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
 
     switch (data?.variant) {
       case 'search':
-        return <SearchSVG className={iconClassName} viewBox="0 0 24 24" />;
+        return <SearchSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'positions':
-        return <BrowserSVG className={iconClassName} viewBox="0 0 24 24" />;
+        return <BrowserSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'offers':
-        return <FileInfoAltSVG className={iconClassName} viewBox="0 0 24 24" />;
+        return <FileInfoAltSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'fleets':
-        return <AnchorSVG className={iconClassName} viewBox="0 0 24 24" />;
+        return <AnchorSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'faq':
-        return <QuestionCircleSVG className={iconClassName} viewBox="0 0 24 24" />;
+        return <QuestionCircleSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'tools':
-        return <ToolsSVG className={iconClassName} viewBox="0 0 24 24" />;
+        return <ToolsSVG className={customStyles} viewBox="0 0 24 24" />;
       default:
         return null;
     }
@@ -56,7 +56,7 @@ const NavTreeSm = ({ data, active }) => {
           <Button
             buttonProps={{ icon: { before: printIcon }, variant: 'tertiary', size: 'small' }}
             customStyles={classnames(
-              'flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2',
+              'flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2 mb-1',
               active ? 'bg-blue' : 'hover:bg-blue-dark',
               showLinks && 'bg-blue-dark'
             )}
