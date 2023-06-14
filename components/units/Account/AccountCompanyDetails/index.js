@@ -3,7 +3,7 @@ import { AccountCompanyDetailsPropTypes } from '@/lib/types';
 import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
 import Divider from '@/elements/Divider';
 import { CompanyInfoForm } from '@/modules';
-import { AddressInfo, ModalWindow } from '@/units';
+import { AccountAmountOfTankers, AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company = {} }) => {
   const registration = {
@@ -45,7 +45,9 @@ const AccountCompanyDetails = ({ company = {} }) => {
           {company?.companyYearsOfOperation && (
             <TextRow title="Years in operation">{company?.companyYearsOfOperation}</TextRow>
           )}
-          {company?.totalTankers && <TextRow title="Number of tankers">{company?.totalTankers}</TextRow>}
+          {company?.totalTankers && (
+            <AccountAmountOfTankers data={company?.cargoes?.listOfCargoes} total={company?.totalTankers} />
+          )}
         </FieldsetContent>
 
         <Divider className="my-4" />

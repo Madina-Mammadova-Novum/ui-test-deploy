@@ -56,7 +56,6 @@ function userCompanyDetailsAdapter({ data }) {
     name,
     imos,
     yearsInOperation,
-    numberOfVessels,
     registrationAddress,
     registrationAddress2,
     registrationCity,
@@ -91,7 +90,7 @@ function userCompanyDetailsAdapter({ data }) {
       correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
       correspondencePostalCode,
       correspondenceProvince,
-      totalTankers: numberOfVessels,
+      totalTankers: formattedCargoes.countOfCargoes || formattedImos.countOfTankers,
       cargoes: formattedCargoes,
       imos: formattedImos,
     },
@@ -279,8 +278,8 @@ export function updateOwnerCompanyAdapter({ data }) {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: imos?.countOfTankers,
-    ...companyAddressesAdapter({ data }),
     imos: listOfImosAdapter({ data: imos?.listOfTankers }),
+    ...companyAddressesAdapter({ data }),
   };
 }
 

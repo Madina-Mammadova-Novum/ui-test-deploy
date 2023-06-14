@@ -207,8 +207,6 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-/// ///////////////////////////////////
-
 export const failedTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
