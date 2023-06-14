@@ -135,7 +135,7 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="flex relative justify-center items-end" key={item}>
+          <div className="flex relative justify-center" key={item}>
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
