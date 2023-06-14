@@ -13,7 +13,12 @@ const ViewIncomingOffer = ({ closeModal }) => {
   switch (step) {
     case 'offer_decline':
       return (
-        <OfferDeclineForm title="Decline the Offer" closeModal={closeModal} goBack={() => setStep('view_offer')} />
+        <OfferDeclineForm
+          title="Decline the Offer"
+          closeModal={closeModal}
+          goBack={() => setStep('view_offer')}
+          showCancelButton={false}
+        />
       );
     case 'offer_counteroffer':
       return <SendCounteroffer closeModal={closeModal} goBack={setStep} />;
