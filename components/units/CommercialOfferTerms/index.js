@@ -54,7 +54,7 @@ const CommercialOfferTerms = () => {
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
       {products
-        .filter((product) => product)
+        ?.filter((product) => product)
         .map((_, index) => (
           <div className="flex items-baseline mt-3 gap-x-5">
             <FormDropdown

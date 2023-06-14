@@ -38,7 +38,7 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
+const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton = true }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
   const [showTextField, setShowTextField] = useState(false);
   const { register } = useHookForm();
@@ -80,11 +80,11 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
         />
       )}
 
-      <div className="grid grid-cols-2 gap-x-2.5 mt-5">
+      <div className="grid grid-cols-2 gap-x-2.5 mt-5 h-10">
         <div>
           <Button
             onClick={closeModal}
-            customStyles="w-full"
+            customStyles={`w-full ${!showCancelButton && 'hidden'}`}
             buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
           />
         </div>
