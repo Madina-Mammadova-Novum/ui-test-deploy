@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import NavTreeHeader from '../NavTreeHeader';
@@ -21,21 +22,21 @@ const NavTreeXl = ({ data, active }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
-    const currentColor = active ? 'fill-white' : 'fill-gray';
+    const customStyles = classnames(active ? 'fill-white' : 'fill-gray', 'shrink-0');
 
     switch (data?.variant) {
       case 'search':
-        return <SearchSVG className={currentColor} />;
+        return <SearchSVG className={customStyles} />;
       case 'positions':
-        return <BrowserSVG className={currentColor} />;
+        return <BrowserSVG className={customStyles} />;
       case 'offers':
-        return <FileInfoAltSVG className={currentColor} />;
+        return <FileInfoAltSVG className={customStyles} />;
       case 'fleets':
-        return <AnchorSVG className={currentColor} />;
+        return <AnchorSVG className={customStyles} />;
       case 'faq':
-        return <QuestionCircleSVG className={currentColor} />;
+        return <QuestionCircleSVG className={customStyles} />;
       case 'tools':
-        return <ToolsSVG className={`${currentColor} w-5 h-5`} />;
+        return <ToolsSVG className={customStyles} />;
       default:
         return null;
     }
