@@ -21,7 +21,7 @@ const PasswordInfoForm = ({ closeModal }) => {
     const { status, error } = await updatePassword({ data: formData });
 
     if (status === 200) {
-      successToast(null, 'Your new password has been sent successfully');
+      successToast('You have successfully changed your password');
     }
 
     if (error) errorToast(error?.message);
@@ -61,6 +61,7 @@ const PasswordInfoForm = ({ closeModal }) => {
           />
         </div>
         <Divider />
+        <p className="text-black font-semibold text-sm">Enter a strong password according to our requirements</p>
         <PasswordValidation />
       </ModalFormManager>
     </FormProvider>

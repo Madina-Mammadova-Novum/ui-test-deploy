@@ -43,7 +43,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
             />
           )}
         </div>
-        <div className="flex gap-x-2.5 gap-y-2.5">
+        <div className="flex flex-col gap-x-2.5 gap-y-2.5 3md:flex-row">
           <div className="w-full">
             <Button
               onClick={() => handleOpenModal('decline_offer')}

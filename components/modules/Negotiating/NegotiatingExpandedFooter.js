@@ -6,8 +6,6 @@ import { ROUTES } from '@/lib';
 import { ExpandableRowFooter, Tabs } from '@/units';
 
 const NegotiatingExpandedFooter = ({ isCharterer = false, setCurrentTab, currentTab, tabs }) => {
-
-
   return isCharterer ? (
     <ExpandableRowFooter>
       <Tabs
@@ -23,7 +21,7 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, setCurrentTab, current
             text: 'Search for Alternative Tankers',
             variant: 'secondary',
             size: 'large',
-            icon: { before: <SearchSVG className="w-4 fill-white" /> },
+            icon: { before: <SearchSVG className="w-4 h-4 fill-white" viewBox="0 0 24 24" /> },
           }}
         />
       </NextLink>

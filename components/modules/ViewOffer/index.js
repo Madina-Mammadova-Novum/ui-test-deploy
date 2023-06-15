@@ -26,7 +26,7 @@ const tabs = [
   },
 ];
 
-const ViewOffer = ({ setStep, closeModal }) => {
+const ViewOffer = ({ setStep }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
 
@@ -70,12 +70,7 @@ const ViewOffer = ({ setStep, closeModal }) => {
         {tabContent()}
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap">
-        <Button
-          onClick={closeModal}
-          customStyles="mr-auto"
-          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-        />
+      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap justify-end">
         <Button
           onClick={() => setStep('offer_decline')}
           buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}

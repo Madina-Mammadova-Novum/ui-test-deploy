@@ -2,7 +2,6 @@ import React from 'react';
 
 import usFlag from '@/assets/images/flag.png';
 import TooltipIcon from '@/assets/images/infoCircle.svg';
-import CargoIdTooltip from '@/units/CargoIdTooltip';
 
 export const fleetsHeader = [
   {
@@ -549,11 +548,6 @@ export const negotiatingIncomingTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'Cargo ID',
-      description: <CargoIdTooltip />,
-    },
   },
   {
     text: 'laycan start',
@@ -659,11 +653,6 @@ export const negotiatingCounterofferTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'Cargo ID',
-      description: <CargoIdTooltip />,
-    },
   },
   {
     text: 'laycan start',
@@ -756,11 +745,6 @@ export const negotiatingFailedTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'Cargo ID',
-      description: <CargoIdTooltip />,
-    },
   },
   {
     text: 'laycan start',

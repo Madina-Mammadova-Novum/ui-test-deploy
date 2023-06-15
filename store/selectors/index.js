@@ -21,3 +21,5 @@ export const getUserDataSelector = createDraftSafeSelector(userSelector, (state)
 });
 
 export const fleetsSelector = ({ fleets }) => fleets;
+
+export const searchSelector = ({ search }) => search;

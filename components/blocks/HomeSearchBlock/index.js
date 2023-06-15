@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
+import { StoreManager } from '@/common';
 import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
@@ -36,14 +37,22 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
   const handleViewType = (typeOfView) => {
     switch (typeOfView) {
       case 'Tools':
-        return <AccountTools className='flex 
+        return (
+          <AccountTools
+            className="flex 
         [&>*:first-child]:xlMax:w-full
         [&>*:nth-child(2)]:xlMax:w-full 
         [&>*:first-child]:w-1/4 
         [&>*:nth-child(2)]:w-3/4 
-        justify-center' />;
+        justify-center"
+          />
+        );
       default:
-        return <TankerSearch />;
+        return (
+          <StoreManager>
+            <TankerSearch />
+          </StoreManager>
+        );
     }
   };
 
