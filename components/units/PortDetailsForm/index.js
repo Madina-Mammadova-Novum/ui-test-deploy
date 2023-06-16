@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -13,6 +15,7 @@ const PortDetailsForm = ({ portName = '' }) => {
   const { setValue, clearErrors } = useHookForm();
 
   const [portOptions, setPortOptions] = useState([]);
+
 
   const fetchPorts = async () => {
     const data = await getPorts();
@@ -39,10 +42,10 @@ const PortDetailsForm = ({ portName = '' }) => {
       <FormDropdown
         async
         name="port"
-        label="Port search"
+        label="Open port"
         options={portOptions}
         onChange={handlePortChange}
-        customStyles={{ dropdownExpanded: true }}
+        customStyles={{ dropdownExpanded: true, hardHeight: true }}
       />
     </div>
   );

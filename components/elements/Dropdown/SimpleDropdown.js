@@ -20,7 +20,7 @@ const LoadingIndicator = () => (
   </div>
 );
 
-export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
+export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, ...rest }) => {
   const [open, setOpen] = useState(false);
 
   const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
@@ -46,7 +46,7 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
   }
 
   return (
-    <div>
+    <div style={{ height: hardHeight && open && options?.length ? '340px' : 'auto' }}>
       <Select
         {...rest}
         isLoading={asyncCall}

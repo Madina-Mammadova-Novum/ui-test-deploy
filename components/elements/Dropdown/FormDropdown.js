@@ -20,7 +20,7 @@ const FormDropdown = ({
   asyncCall = false,
   customStyles = {},
 }) => {
-  const { dropdownWidth, dropdownExpanded = false, className = '' } = customStyles;
+  const { dropdownWidth, dropdownExpanded = false, className = '', hardHeight } = customStyles;
 
   const handleChange = useCallback(
     (option) => {
@@ -50,6 +50,7 @@ const FormDropdown = ({
               styles={dropdownStyles(hasValue, error, dropdownWidth, dropdownExpanded)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
+              hardHeight={hardHeight}
             />
             {error && <InputErrorMessage message={error?.message} />}
           </div>

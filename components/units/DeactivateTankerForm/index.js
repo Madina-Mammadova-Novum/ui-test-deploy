@@ -4,11 +4,11 @@ import { FormProvider } from 'react-hook-form';
 
 import { DeactivateTankerFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { Label, Title } from '@/elements';
 import { useHookFormParams } from '@/utils/hooks';
 
-const DeactivateTankerForm = ({ title, description, portName }) => {
+const DeactivateTankerForm = ({ title, description, portName, closeModal }) => {
   const methods = useHookFormParams({});
 
   const onSubmit = async () => {
@@ -17,10 +17,12 @@ const DeactivateTankerForm = ({ title, description, portName }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
-        className="max-w-[356px]"
+      <ModalFormManager
+        className="w-[356px]"
         submitAction={onSubmit}
-        submitButton={{ text: 'Deactivate tanker', variant: 'delete', size: 'large' }}
+        submitButton={{ text: 'Deactivate tanker', variant: 'delete', size: 'large', disabled: false }}
+        onClose={closeModal}
+        specialStyle
       >
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}
@@ -30,7 +32,7 @@ const DeactivateTankerForm = ({ title, description, portName }) => {
           <p className="font-semibold text-black text-xsm">{portName}</p>
         </div>
         <p className="text-black text-xsm">{description}</p>
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
