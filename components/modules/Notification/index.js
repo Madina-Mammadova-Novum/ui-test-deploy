@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+
 import ModalWrapper from '../ModalWrapper';
 
 import { NotificationPropTypes } from '@/lib/types';
@@ -89,6 +90,8 @@ const tabs = [
 //   },
 // ];
 
+
+
 const Notification = ({ numberOfNotifications }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStore, setModalStore] = useState({
@@ -100,6 +103,90 @@ const Notification = ({ numberOfNotifications }) => {
       [key]: value,
     }));
   };
+
+
+  const options = [
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <BagSVG />
+          </div>
+          <span>New Offer</span>
+        </div>
+      </div>, value: 'newOffer'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <MoneybagAltSVG />
+          </div>
+          <span>Counteroffer</span>
+        </div>
+      </div>, value: 'counterOffer'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <MinusCircleSVG />
+          </div>
+          <span>Offer Failed</span>
+        </div>
+      </div>, value: 'failedOffer'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <BagSVG />
+          </div>
+          <span>Offer Accepted</span>
+        </div>
+      </div>, value: 'acceptedOffer'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <CountDownReminderSVG className="w-4 h-4 fill-black" viewBox="0 0 24 24" />
+          </div>
+          <span>Countdown Reminder</span>
+        </div>
+      </div>, value: 'countdownReminder'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <DocumentInfoSVG />
+          </div>
+          <span>Deal Updated</span>
+        </div>
+      </div>, value: 'dealUpdated'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <MusicNoteSVG />
+          </div>
+          <span>Announcements</span>
+        </div>
+      </div>, value: 'announcements'
+    },
+    {
+      label: <div className='flex justify-between  w-full'>
+        <div className='flex items-center'>
+          <div className='pr-1.5'>
+            <SettingSVG />
+          </div>
+          <span>System updated</span>
+        </div>
+      </div>, value: 'systemUpdated'
+    },
+  ];
 
   const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
   const { currentTab } = modalStore;
@@ -154,11 +241,16 @@ const Notification = ({ numberOfNotifications }) => {
             <Divider className="mb-[22px]" />
             <div>
               <Dropdown
+                typeSelect
+                placeholder="All notifications"
+                onChange={() => { }}
                 label="Filter By:"
                 customStyles={{
                   className: 'flex gap-x-5 items-center px-[30px] justify-start',
-                  dropdownWidth: 152,
+                  dropdownWidth: 158,
                 }}
+                options={options}
+
               />
               <Title customStyle="date-styles" className="flex justify-center p-[10px]">
                 Today

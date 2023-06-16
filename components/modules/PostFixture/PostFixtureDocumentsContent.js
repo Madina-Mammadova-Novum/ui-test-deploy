@@ -1,9 +1,9 @@
-import { FixtureDocumentsContentPropTypes } from '@/lib/types';
+import { PostFixtureDocumentsContentPropTypes } from '@/lib/types';
 
 import { Table } from '@/elements';
 import { fixtureHeader } from '@/utils/mock';
 
-const FixtureDocumentsContent = ({ rowsData = [] }) => {
+const PostFixtureDocumentsContent = ({ rowsData = [] }) => {
   return (
     <div className="mt-2.5 flex flex-col gap-y-2.5">
       <Table headerData={fixtureHeader} rows={rowsData} noDataMessage="You did not upload any documents yet" />
@@ -11,6 +11,6 @@ const FixtureDocumentsContent = ({ rowsData = [] }) => {
   );
 };
 
-FixtureDocumentsContent.propTypes = FixtureDocumentsContentPropTypes;
+PostFixtureDocumentsContent.propTypes = PostFixtureDocumentsContentPropTypes;
 
-export default FixtureDocumentsContent;
+export default PostFixtureDocumentsContent;

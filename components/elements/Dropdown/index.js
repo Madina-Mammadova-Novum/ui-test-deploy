@@ -10,6 +10,7 @@ import { Label } from '@/elements';
 import { dropdownStyles } from '@/elements/Dropdown/styles';
 
 const Dropdown = ({
+  typeSelect,
   options,
   onChange,
   customStyles = {},
@@ -43,6 +44,7 @@ const Dropdown = ({
         onChange={handleChange}
         styles={dropdownStyles(selectedOption, null, dropdownWidth)}
         isDisabled={disabled}
+        typeSelect={typeSelect}
         asyncCall={asyncCall}
       />
     </div>

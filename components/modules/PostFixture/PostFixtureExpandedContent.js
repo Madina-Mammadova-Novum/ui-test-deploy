@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 
-import DetailsContent from './DetailsContent';
-import DocumentsContent from './DocumentsContent';
+import PostFixtureDetailsContent from './PostFixtureDetailsContent';
+import PostFixtureDocumentsContent from './PostFixtureDocumentsContent';
+
+import { PostFixtureExpandedContentPropTypes } from '@/lib/types';
 
 import { Tabs } from '@/units';
 
@@ -16,15 +18,15 @@ const tabs = [
   },
 ];
 
-const OnSubsExpandedContent = () => {
+const PostFixtureExpandedContent = ({ rowsData }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
-        return <DocumentsContent />;
+        return <PostFixtureDocumentsContent rowsData={rowsData} />;
       default:
-        return <DetailsContent />;
+        return <PostFixtureDetailsContent />;
     }
   }, [currentTab]);
 
@@ -41,4 +43,6 @@ const OnSubsExpandedContent = () => {
   );
 };
 
-export default OnSubsExpandedContent;
+PostFixtureExpandedContent.propTypes = PostFixtureExpandedContentPropTypes;
+
+export default PostFixtureExpandedContent;
