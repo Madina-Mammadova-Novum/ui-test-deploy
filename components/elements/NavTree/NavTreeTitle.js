@@ -21,7 +21,7 @@ const NavTreeTitle = ({ title, icon, isOpened, isActive, links, hasNestedLinks }
         ) : (
           <p className="flex w-full justify-between items-center">
             <span className="text-white">{title}</span>
-            <AngleDownSVG className={`fill-white transition duration-200 ${isOpened && 'rotate-180'}`} />
+            <AngleDownSVG className={classnames('fill-white transition duration-200', isOpened && 'rotate-180')} />
           </p>
         )}
       </div>

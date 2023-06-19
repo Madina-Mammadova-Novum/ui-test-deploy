@@ -50,6 +50,7 @@ const DatePicker = ({
                 <Input
                   name={name}
                   customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
+                  inputStyles="pr-0"
                   label={label}
                   value={transformDate(value, 'MMM dd, yyyy')}
                   icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}

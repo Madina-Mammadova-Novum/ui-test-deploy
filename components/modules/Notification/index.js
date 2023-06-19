@@ -313,7 +313,7 @@ const Notification = ({ numberOfNotifications }) => {
               <div className="mb-[20px]">
                 <div className="flex items-center justify-between mb-[10px]">
                   <div className="flex items-center gap-x-1.5 text-[12px] ">
-                    <SettingSVG />
+                    <SettingSVG className="fill-black w-4 h-4" viewBox="0 0 24 24" />
                     <Title customStyle="offer-styles">System update</Title>
                   </div>
                   <div>
