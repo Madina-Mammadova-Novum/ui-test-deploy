@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
@@ -11,7 +13,6 @@ import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpanded
 import { getUserNegotiating } from '@/services';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
-import { useSession } from 'next-auth/react';
 
 const ownerTabs = [
   {
@@ -75,7 +76,12 @@ const Negotiating = () => {
         className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} />}
         footer={
-          <NegotiatingExpandedFooter isCharterer={!isOwner} currentTab={currentTab} tabs={tabs} setCurrentTab={setCurrentTab} />
+          <NegotiatingExpandedFooter
+            isCharterer={!isOwner}
+            currentTab={currentTab}
+            tabs={tabs}
+            setCurrentTab={setCurrentTab}
+          />
         }
         expand={toggle}
       >
