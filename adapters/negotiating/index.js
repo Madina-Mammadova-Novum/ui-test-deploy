@@ -140,6 +140,77 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
+export const sentOffersTabRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => sentOffersTabRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const sentOffersTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const { id, tankerName, openPort, openDate, dwt, status, dateSent, countdown } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD_BLUE,
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: tankerName,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
+      editable: true,
+    },
+    {
+      id,
+      value: openPort,
+    },
+    {
+      id,
+      value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      value: dwt,
+    },
+    {
+      id,
+      value: status,
+      type: TYPE.SEMIBOLD,
+      icon: <StatusIndicator status={status} />,
+    },
+    {
+      id,
+      value: dateSent ? transformDate(dateSent, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      value: countdown,
+      type: TYPE.RED,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+    },
+    {
+      id,
+      actions: [
+        {
+          action: ACTIONS.VIEW_SENT_OFFER,
+          actionText: 'View offer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
+      editable: true,
+    },
+  ];
+};
+
 /// ///////////////////////////////////
 
 export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
@@ -207,15 +278,80 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-/// ///////////////////////////////////
-
-export const failedTabRowsDataAdapter = ({ data }) => {
+export const counteroffersTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => failedTabRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => counteroffersTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const failedTabRowDataAdapter = ({ data, index }) => {
+export const counteroffersTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const { tankerName, openPort, openDate, dwt, dateReceived, countdown, id } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD_BLUE,
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: tankerName,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
+      editable: true,
+    },
+    {
+      id,
+      value: openPort,
+    },
+    {
+      id,
+      value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      value: dwt,
+    },
+    {
+      id,
+      value: dateReceived ? transformDate(dateReceived, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      value: countdown,
+      type: TYPE.RED,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+    },
+    {
+      id,
+      actions: [
+        {
+          action: ACTIONS.VIEW_CHARTERER_COUNTEROFFER,
+          actionText: 'View counteroffer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
+      editable: true,
+    },
+  ];
+};
+
+/// ///////////////////////////////////
+
+export const ownerFailedTabRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => ownerFailedTabRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { cargoId, laycanStart, laycanEnd, loadPort, dateFailed, reason, id } = data;
@@ -248,6 +384,70 @@ export const failedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: loadPort,
+    },
+    {
+      id,
+      value: dateFailed ? transformDate(dateFailed, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      value: reason,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
+      actions: [
+        {
+          action: ACTIONS.VIEW_FAILED_OFFER,
+          actionText: 'View failed offer',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+      ],
+      editable: true,
+    },
+  ];
+};
+
+export const chartererFailedTabRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => chartererFailedTabRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const { tankerName, openPort, openDate, dwt, dateFailed, reason, id } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD_BLUE,
+      actions: [
+        {
+          action: ACTIONS.CHARTERER_INFORMATION,
+          actionText: tankerName,
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
+      editable: true,
+    },
+    {
+      id,
+      value: openPort,
+    },
+    {
+      id,
+      value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+    },
+    {
+      id,
+      value: dwt,
     },
     {
       id,

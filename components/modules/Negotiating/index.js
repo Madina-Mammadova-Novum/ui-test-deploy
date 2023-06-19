@@ -10,9 +10,10 @@ import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpande
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
 import { getUserNegotiating } from '@/services';
 import { ComplexPagination, ToggleRows } from '@/units';
-import { useAuth, useFetch, useFilters } from '@/utils/hooks';
+import { useFetch, useFilters } from '@/utils/hooks';
+import { useSession } from 'next-auth/react';
 
-const tabs = [
+const ownerTabs = [
   {
     value: 'incoming',
     label: 'Incoming',
@@ -27,12 +28,28 @@ const tabs = [
   },
 ];
 
+const chartererTabs = [
+  {
+    value: 'incoming',
+    label: 'Sent offers',
+  },
+  {
+    value: 'counteroffers',
+    label: 'Counteroffers',
+  },
+  {
+    value: 'failed',
+    label: 'Failed',
+  },
+];
+
 const Negotiating = () => {
+  const { data: { role } = {} } = useSession();
+  const isOwner = role === 'owner';
+  const tabs = isOwner ? ownerTabs : chartererTabs;
   const [toggle, setToggle] = useState(false);
   const [data, isLoading] = useFetch(getUserNegotiating);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
-
-  const { user } = useAuth();
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
@@ -49,16 +66,16 @@ const Negotiating = () => {
   } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
   const printExpandableRow = (rowData) => {
-    const rowHeader = user.isCharterer
-      ? chartererNegotiatingHeaderDataAdapter({ data: rowData })
-      : ownerNegotiatingHeaderDataAdapter({ data: rowData });
+    const rowHeader = isOwner
+      ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
+      : chartererNegotiatingHeaderDataAdapter({ data: rowData });
 
     return (
       <ExpandableRow
         className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} />}
         footer={
-          <NegotiatingExpandedFooter isCharterer currentTab={currentTab} tabs={tabs} setCurrentTab={setCurrentTab} />
+          <NegotiatingExpandedFooter isCharterer={!isOwner} currentTab={currentTab} tabs={tabs} setCurrentTab={setCurrentTab} />
         }
         expand={toggle}
       >
