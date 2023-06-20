@@ -44,7 +44,6 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
       />
     );
   }
-
   return (
     <div>
       <Select
