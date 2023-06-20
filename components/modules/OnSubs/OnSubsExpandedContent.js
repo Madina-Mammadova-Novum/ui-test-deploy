@@ -29,7 +29,7 @@ const OnSubsExpandedContent = () => {
   }, [currentTab]);
 
   return (
-    <div className='pt-16'>
+    <div className="pt-16">
       <Tabs
         activeTab={currentTab}
         tabs={tabs}

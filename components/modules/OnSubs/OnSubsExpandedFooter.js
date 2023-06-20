@@ -10,11 +10,10 @@ const OnSubsExpandedFooter = ({ underRecap = false }) => {
   return (
     <ExpandableRowFooter>
       <div>
-        <div className='pb-2.5'>
+        <div className="pb-2.5">
           <UploadForm />
         </div>
         <div className="flex gap-x-5 justify-between">
-
           <div className="w-full grow">
             {!!underRecap && (
               <Button
@@ -54,7 +53,6 @@ const OnSubsExpandedFooter = ({ underRecap = false }) => {
           </div>
         </div>
       </div>
-
     </ExpandableRowFooter>
   );
 };
