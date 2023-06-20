@@ -1,19 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
 import { Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
+import { setSearchData } from '@/store/entities/search/slice';
 import { SearchForm } from '@/units';
 import { options } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const TankerSearch = ({ title }) => {
   const [tankerStore, setTankerStore] = useState({
-    params: options(['Ballast leg']),
+    params: options(['Ballast leg', 'Arrival']),
     directions: options(['Ascending', 'Descending']),
     currentDirection: '',
     currentParam: '',
@@ -21,6 +23,8 @@ const TankerSearch = ({ title }) => {
     loading: false,
     searchResult: [],
   });
+
+  const dispatch = useDispatch();
 
   /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
@@ -36,6 +40,7 @@ const TankerSearch = ({ title }) => {
     handleChangeState('loading', false);
 
     if (data) {
+      dispatch(setSearchData(formData));
       handleChangeState('searchResult', data);
       handleChangeState('request', true);
     }

@@ -20,7 +20,7 @@ const LoadingIndicator = () => (
   </div>
 );
 
-export const SimpleDropdown = ({ asyncCall = false, options, typeSelect = false, ref, ...rest }) => {
+export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
   const [open, setOpen] = useState(false);
 
   const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
@@ -55,7 +55,6 @@ export const SimpleDropdown = ({ asyncCall = false, options, typeSelect = false,
         theme={dropdownTheme}
         closeMenuOnSelect
         menuIsOpen={open}
-        isMulti={typeSelect}
         onMenuOpen={() => setOpen(true)}
         onMenuClose={() => setOpen(false)}
       />

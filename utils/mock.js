@@ -2,7 +2,6 @@ import React from 'react';
 
 import usFlag from '@/assets/images/flag.png';
 import TooltipIcon from '@/assets/images/infoCircle.svg';
-import CargoIdTooltip from '@/units/CargoIdTooltip';
 
 export const fleetsHeader = [
   {
@@ -549,11 +548,6 @@ export const negotiatingIncomingTableHeader = [
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'Cargo ID',
-      description: <CargoIdTooltip />,
-    },
   },
   {
     text: 'laycan start',
@@ -572,6 +566,35 @@ export const negotiatingIncomingTableHeader = [
   },
   {
     text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+export const negotiatingSentOffersTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'Name',
+  },
+  {
+    text: 'Open port',
+  },
+  {
+    text: 'Open date',
+  },
+  {
+    text: 'DWT',
+  },
+  {
+    text: 'Status',
+  },
+  {
+    text: 'Date sent',
+  },
+  {
+    text: 'Countdown',
   },
   {
     text: '',
@@ -653,17 +676,12 @@ export const negotiatingIncomingTableRows = [
   ],
 ];
 
-export const negotiatingCounterofferTableHeader = [
+export const ownerNegotiatingCounterofferTableHeader = [
   {
     text: '#',
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'Cargo ID',
-      description: <CargoIdTooltip />,
-    },
   },
   {
     text: 'laycan start',
@@ -676,6 +694,33 @@ export const negotiatingCounterofferTableHeader = [
   },
   {
     text: 'date sent',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const chartererNegotiatingCounterofferTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'Name',
+  },
+  {
+    text: 'Open port',
+  },
+  {
+    text: 'Open date',
+  },
+  {
+    text: 'DWT',
+  },
+  {
+    text: 'Date received',
   },
   {
     text: 'countdown',
@@ -750,17 +795,12 @@ export const negotiatingCounterofferTableRows = [
   ],
 ];
 
-export const negotiatingFailedTableHeader = [
+export const ownerNegotiatingFailedTableHeader = [
   {
     text: '#',
   },
   {
     text: 'cargo id',
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'Cargo ID',
-      description: <CargoIdTooltip />,
-    },
   },
   {
     text: 'laycan start',
@@ -773,6 +813,32 @@ export const negotiatingFailedTableHeader = [
   },
   {
     text: 'date failed',
+  },
+  {
+    text: 'reason',
+  },
+  {
+    text: '',
+  },
+];
+export const chartererNegotiatingFailedTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'Name',
+  },
+  {
+    text: 'Open port',
+  },
+  {
+    text: 'Open date',
+  },
+  {
+    text: 'DWT',
+  },
+  {
+    text: 'Date failed',
   },
   {
     text: 'reason',

@@ -12,7 +12,7 @@ import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
 const FormDropdown = ({
-  options,
+  options = [],
   onChange,
   name,
   label = '',
@@ -38,7 +38,7 @@ const FormDropdown = ({
 
         return (
           <div className={`relative ${className}`}>
-            <Label htmlFor={name} className="text-xs-sm">
+            <Label htmlFor={name} className="block text-xs-sm mb-0.5 whitespace-nowrap">
               {label}
             </Label>
             <SimpleDropdown

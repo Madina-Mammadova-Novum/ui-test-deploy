@@ -28,15 +28,15 @@ const FixtureExpandedContent = ({ rowsData }) => {
       default:
         return <FixtureDetailsContent />;
     }
-  }, [currentTab]);
+  }, [currentTab, rowsData]);
 
   return (
-    <div className='pt-16'>
+    <div className="pt-16">
       <Tabs
         activeTab={currentTab}
         tabs={tabs}
         onClick={({ target }) => setCurrentTab(target.value)}
-        customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
+        customStyles="custom-container my-3 mr-1/2 mx-auto absolute left-1/2 translate-(x/y)-1/2"
       />
       {tabContent}
     </div>

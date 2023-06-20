@@ -127,3 +127,86 @@ export function responseSearchVesselAdapter({ data }) {
     searchResultFlag,
   };
 }
+
+export function requestAddVesselByImoAdapter({ data }) {
+  if (!data) return null;
+
+  const { imo } = data;
+
+  return {
+    vesselId: imo,
+  };
+}
+
+export function responseAddVesselByImoAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+
+export function requestAddVesselManuallyAdapter({ data }) {
+  if (!data) return null;
+
+  const {
+    fleetId,
+    tankerName,
+    imo,
+    updateDate,
+    built,
+    portOfRegistry,
+    // country,
+    tankerType,
+    tankerCategoryOne,
+    tankerCategoryTwo,
+    hullType,
+    loa,
+    beam,
+    summerDWT,
+    summerDraft,
+    normalBallastDWT,
+    normalBallastDraft,
+    cubicCapacity,
+    imoClass,
+    grades,
+    registeredOwner,
+    // registeredOwnerCountry,
+    technicalOperator,
+    // technicalOperatorCountry,
+    commercialOperator,
+    // commercialOperatorCountry,
+    disponentOwner,
+    // disponentOwnerCountry
+  } = data;
+
+  return {
+    name: tankerName,
+    imo,
+    imoClass: imoClass.value,
+    updateDate,
+    built: built.value,
+    registryPortId: portOfRegistry.value,
+    vesselTypeId: tankerType.value,
+    vesselCategoyOneId: tankerCategoryOne.value,
+    vesselCategoryTwoId: tankerCategoryTwo.value,
+    hullType,
+    loa,
+    beam,
+    summerDwt: summerDWT,
+    summerDraft,
+    ballastDwt: normalBallastDWT,
+    ballastDraft: normalBallastDraft,
+    cubicCapacity,
+    segregationCount: grades.value,
+    registeredOwner,
+    technicalOperator,
+    commercialOperator,
+    disponentOwner,
+    fleetId,
+  };
+}
+
+export function responseAddVesselManuallyAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}

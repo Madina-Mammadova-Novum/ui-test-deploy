@@ -47,16 +47,16 @@ const ProfileMenu = ({ image }) => {
         <>
           <div className="fixed top-0 right-0 bottom-0 left-0" aria-hidden onClick={closeMenu} />
           <div className="absolute -bottom-1 -right-0.5 z-50 translate-y-full bg-white p-2.5 shadow-xmd rounded-md min-w-[213px]">
-            <NextLink href={ROUTES.ACCOUNT_INFO}>
+            <NextLink href={ROUTES.ACCOUNT_INFO} onClick={closeMenu}>
               <div className="flex items-center text-xsm font-semibold px-2.5 py-1.5 hover:bg-purple-light rounded-md">
-                <UserCircleSVG className="mr-2.5" /> Account information
+                <UserCircleSVG className="mr-2.5" /> My Account
               </div>
             </NextLink>
             <hr className="my-1" />
 
             <div className="flex items-center text-xsm font-semibold px-2.5 hover:bg-purple-light rounded-md text-gray">
               <LogoutButton
-                text="Log out"
+                text="Sign Out"
                 icon={<ExitSVG />}
                 className="!w-full !bg-transparent text-gray !border-none !p-0"
               />

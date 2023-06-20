@@ -3,20 +3,52 @@
 import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
+import * as yup from 'yup';
+
 import { AddTankerManuallyFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
-import { Button, DatePicker, Dropdown, Input, TextWithLabel, Title } from '@/elements';
+import { Button, DatePicker, FormDropdown, Input, TextWithLabel, Title } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
+import { tankerDataSchema } from '@/lib/schemas';
+import { addVesselManually } from '@/services/vessel';
 import { ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
-import { updateFormats } from '@/utils/helpers';
+import { getValueWithPath, updateFormats } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const AddTankerManuallyForm = ({ closeModal, goBack }) => {
-  const methods = useHookFormParams({ schema: {} });
-  const onSubmit = async (formData) => console.log(formData);
+const schema = yup.object({
+  ...tankerDataSchema(),
+});
+
+const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
+  const methods = useHookFormParams({ schema });
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
+  const {
+    register,
+    clearErrors,
+    formState: { errors },
+    setValue,
+    getValues,
+  } = methods;
+  const { name: fleetName } = fleetData;
+
+  const onSubmit = async (formData) => {
+    const { data, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
+    if (data) return;
+    if (error) console.log(error);
+  };
+
+  const handleChange = async (key, value) => {
+    const error = getValueWithPath(errors, key);
+
+    if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
+    if (error) {
+      clearErrors(key);
+    }
+    setValue(key, value);
+  };
 
   const printHelpers = useMemo(() => {
     return (
@@ -45,15 +77,11 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
       >
         <div className="w-[756px]">
           <ModalHeader goBack={goBack}>Add a New Tanker</ModalHeader>
-          <TextWithLabel
-            label="Fleet name"
-            text="Fleet Base West"
-            customStyles="!flex-col !items-start [&>p]:!ml-0 mt-5"
-          />
+          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0 mt-5" />
 
           <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
             <p>
-              Unfortunately, the IMO of the Tanker you specified <b>9581291</b> was not found in our system, please add
+              Unfortunately, the IMO of the Tanker you specified <b>{imo}</b> was not found in our system, please add
               all the required information manually.
             </p>
             <p className="flex mt-1.5">
@@ -69,54 +97,162 @@ const AddTankerManuallyForm = ({ closeModal, goBack }) => {
 
           <div className="grid grid-cols-1 gap-y-4">
             <div className="grid grid-cols-2 gap-y-4 gap-x-5">
-              <Input label="Tanker name" customStyles="w-full" />
-              <Input label="IMO" disabled value="9581291" customStyles="w-full" />
-              <DatePicker label="Last Q88 update date" onChange={() => {}} />
-              <Dropdown
+              <Input
+                {...register(`tankerName`)}
+                label="Tanker name"
+                customStyles="w-full"
+                error={errors.tankerName?.message}
+              />
+              <Input {...register(`imo`)} label="IMO" disabled value="9581291" customStyles="w-full" />
+              <DatePicker
+                label="Last Q88 update date"
+                name="updateDate"
+                onChange={(date) => handleChange('updateDate', date)}
+                error={errors.updateDate?.message}
+              />
+              <FormDropdown
                 label="Built"
+                name="built"
                 options={testOption}
                 customStyles={{ className: 'grid self-end' }}
-                onChange={() => {}}
+                onChange={(option) => handleChange('built', option)}
               />
-              <Dropdown label="Port of registry" options={testOption} onChange={() => {}} />
-              <Dropdown label="Country" options={testOption} onChange={() => {}} />
+              <FormDropdown
+                label="Port of registry"
+                options={testOption}
+                name="portOfRegistry"
+                onChange={(option) => handleChange('portOfRegistry', option)}
+              />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="country"
+                onChange={(option) => handleChange('country', option)}
+              />
             </div>
             <div className="grid grid-cols-3 gap-x-5 gap-y-4">
-              <Dropdown label="Tanker type" options={testOption} onChange={() => {}} />
-              <Dropdown label="Tanker category #1" options={testOption} onChange={() => {}} />
-              <Dropdown label="Tanker category #2" options={testOption} onChange={() => {}} />
-              <Dropdown
+              <FormDropdown
+                label="Tanker type"
+                options={testOption}
+                name="tankerType"
+                onChange={(option) => handleChange('tankerType', option)}
+              />
+              <FormDropdown
+                label="Tanker category #1"
+                options={testOption}
+                name="tankerCategoryOne"
+                onChange={(option) => handleChange('tankerCategoryOne', option)}
+              />
+              <FormDropdown
+                label="Tanker category #2"
+                options={testOption}
+                name="tankerCategoryTwo"
+                onChange={(option) => handleChange('tankerCategoryTwo', option)}
+              />
+              <FormDropdown
                 label="Hull type"
                 options={testOption}
-                onChange={() => {}}
+                name="hullType"
+                onChange={(option) => handleChange('hullType', option)}
                 customStyles={{ className: 'col-span-2' }}
               />
             </div>
-            <div className="grid grid-cols-4 gap-x-5 gap-y-4">
-              <Input label="LOA" customStyles="w-full" />
-              <Input label="Beam" customStyles="w-full" />
-              <Input label="Summer DWT" customStyles="w-full" />
-              <Input label="Summer draft" customStyles="w-full" />
-              <Input label="Normal ballast WDT" customStyles="w-full" />
-              <Input label="Normal ballast draft" customStyles="w-full" />
-              <Input label="cubic capacity 98%" customStyles="w-full" />
-              <Input label="IMO class" customStyles="w-full" />
-              <Dropdown
+            <div className="grid grid-cols-4 gap-x-5 gap-y-4 items-baseline">
+              <Input {...register(`loa`)} label="LOA" customStyles="w-full" error={errors.loa?.message} />
+              <Input {...register(`beam`)} label="Beam" customStyles="w-full" error={errors.beam?.message} />
+              <Input
+                {...register(`summerDWT`)}
+                label="Summer DWT"
+                customStyles="w-full"
+                error={errors.summerDWT?.message}
+              />
+              <Input
+                {...register(`summerDraft`)}
+                label="Summer draft"
+                customStyles="w-full"
+                error={errors.summmerDraft?.message}
+              />
+              <Input
+                {...register(`normalBallastDWT`)}
+                label="Normal ballast DWT"
+                customStyles="w-full"
+                error={errors.normalBallastDWT?.message}
+              />
+              <Input
+                {...register(`normalBallastDraft`)}
+                label="Normal ballast draft"
+                customStyles="w-full"
+                error={errors.normalBallastDraft?.message}
+              />
+              <Input
+                {...register(`cubicCapacity`)}
+                label="cubic capacity 98%"
+                customStyles="w-full"
+                error={errors.cubicCapacity?.message}
+              />
+              <FormDropdown
+                label="IMO class"
+                options={testOption}
+                name="imoClass"
+                onChange={(option) => handleChange('imoClass', option)}
+              />
+              <FormDropdown
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
                 options={testOption}
-                onChange={() => {}}
+                name="grades"
+                onChange={(option) => handleChange('grades', option)}
                 customStyles={{ className: 'col-span-4' }}
               />
             </div>
-            <div className="grid grid-cols-2 gap-x-5 gap-y-4 items-end">
-              <Input label="Registered owner" customStyles="w-full" />
-              <Dropdown label="Country" options={testOption} onChange={() => {}} />
-              <Input label="Technical operator" customStyles="w-full" />
-              <Dropdown label="Country" options={testOption} onChange={() => {}} />
-              <Input label="Commercial operator" customStyles="w-full" />
-              <Dropdown label="Country" options={testOption} onChange={() => {}} />
-              <Input label="Disponent owner" customStyles="w-full" />
-              <Dropdown label="Country" options={testOption} onChange={() => {}} />
+            <div className="grid grid-cols-2 gap-x-5 gap-y-4 items-baseline">
+              <Input
+                {...register(`registeredOwner`)}
+                label="Registered owner"
+                customStyles="w-full"
+                error={errors.registeredOwner?.message}
+              />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="registeredOwnerCountry"
+                onChange={(option) => handleChange('registeredOwnerCountry', option)}
+              />
+              <Input
+                {...register(`technicalOperator`)}
+                label="Technical operator"
+                customStyles="w-full"
+                error={errors.technicalOperator?.message}
+              />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="technicalOperatorCountry"
+                onChange={(option) => handleChange('technicalOperatorCountry', option)}
+              />
+              <Input
+                {...register(`commercialOperator`)}
+                label="Commercial operator"
+                customStyles="w-full"
+                error={errors.commercialOperator?.message}
+              />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="commercialOperatorCountry"
+                onChange={(option) => handleChange('commercialOperatorCountry', option)}
+              />
+              <Input
+                {...register(`disponentOwner`)}
+                label="Disponent owner"
+                customStyles="w-full"
+                error={errors.disponentOwner?.message}
+              />
+              <FormDropdown
+                label="Country"
+                options={testOption}
+                name="disponentOwnerCountry"
+                onChange={(option) => handleChange('disponentOwnerCountry', option)}
+              />
             </div>
             <div>
               <Title level={4} className="mb-2.5">
