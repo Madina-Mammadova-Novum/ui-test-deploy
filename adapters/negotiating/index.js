@@ -212,15 +212,15 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
 };
 
 export const offerTabDataByRole = ({ data, role }) => {
-  switch(role) {
+  switch (role) {
     case ROLES.OWNER:
-      return incomingTabRowsDataAdapter({ data })
+      return incomingTabRowsDataAdapter({ data });
     case ROLES.CHARTERER:
-      return sentOffersTabRowsDataAdapter({ data })
+      return sentOffersTabRowsDataAdapter({ data });
     default:
-      return []
+      return [];
   }
-}
+};
 
 /// ///////////////////////////////////
 
@@ -355,15 +355,15 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
 };
 
 export const counteroffersTabDataByRole = ({ data, role }) => {
-  switch(role) {
+  switch (role) {
     case ROLES.OWNER:
-      return sentCounteroffersTabRowsDataAdapter({ data })
+      return sentCounteroffersTabRowsDataAdapter({ data });
     case ROLES.CHARTERER:
-      return counteroffersTabRowsDataAdapter({ data })
+      return counteroffersTabRowsDataAdapter({ data });
     default:
-      return []
+      return [];
   }
-}
+};
 
 /// ///////////////////////////////////
 
@@ -496,12 +496,12 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
 };
 
 export const failedTabDataByRole = ({ data, role }) => {
-  switch(role) {
+  switch (role) {
     case ROLES.OWNER:
-      return ownerFailedTabRowsDataAdapter({ data })
+      return ownerFailedTabRowsDataAdapter({ data });
     case ROLES.CHARTERER:
-      return chartererFailedTabRowsDataAdapter({ data })
+      return chartererFailedTabRowsDataAdapter({ data });
     default:
-      return []
+      return [];
   }
-}
+};

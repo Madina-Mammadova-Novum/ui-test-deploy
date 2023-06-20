@@ -4,12 +4,9 @@ import { useSession } from 'next-auth/react';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
-import {
-  counteroffersTabDataByRole,
-  failedTabDataByRole,
-  offerTabDataByRole,
-} from '@/adapters/negotiating';
+import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
+import { ROLES } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import {
   chartererNegotiatingCounterofferTableHeader,
@@ -19,7 +16,6 @@ import {
   ownerNegotiatingCounterofferTableHeader,
   ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
-import { ROLES } from '@/lib/constants';
 
 const NegotiatingExpandedContent = ({ data, currentTab }) => {
   const [modal, setModal] = useState(null);
@@ -35,9 +31,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
         return (
           <Table
             headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
-            rows={
-              counteroffersTabDataByRole({ data: data.sentCounteroffers, role: session?.role })
-            }
+            rows={counteroffersTabDataByRole({ data: data.sentCounteroffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -45,9 +39,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
         return (
           <Table
             headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
-            rows={
-              failedTabDataByRole({ data: data.failedOffers, role: session?.role })
-            }
+            rows={failedTabDataByRole({ data: data.failedOffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
@@ -55,9 +47,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
         return (
           <Table
             headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
-            rows={
-              offerTabDataByRole({ data: data.incomingOffers, role: session?.role})
-            }
+            rows={offerTabDataByRole({ data: data.incomingOffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
