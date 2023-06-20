@@ -16,6 +16,7 @@ export default async function handler(req, res) {
           incomingOffers: [
             {
               id: 1,
+              tankerName: 'Tanker #1',
               cargoId: 'QW1122',
               laycanStart: 'Dec 18, 2021',
               laycanEnd: 'Dec 19, 2021',
@@ -38,6 +39,7 @@ export default async function handler(req, res) {
           sentCounteroffers: [
             {
               id: 1,
+              tankerName: 'Tanker #1',
               cargoId: 'QW1122',
               laycanStart: 'Dec 18, 2021',
               laycanEnd: 'Dec 19, 2021',
@@ -58,6 +60,7 @@ export default async function handler(req, res) {
           failedOffers: [
             {
               id: 3,
+              tankerName: 'Tanker #1',
               cargoId: 'QW1122',
               laycanStart: 'Dec 18, 2021',
               laycanEnd: 'Dec 19, 2021',

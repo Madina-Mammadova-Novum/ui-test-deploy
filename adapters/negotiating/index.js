@@ -1,6 +1,6 @@
 import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
-import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
@@ -211,6 +211,17 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
+export const offerTabDataByRole = ({ data, role }) => {
+  switch(role) {
+    case ROLES.OWNER:
+      return incomingTabRowsDataAdapter({ data })
+    case ROLES.CHARTERER:
+      return sentOffersTabRowsDataAdapter({ data })
+    default:
+      return []
+  }
+}
+
 /// ///////////////////////////////////
 
 export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
@@ -343,6 +354,17 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
+export const counteroffersTabDataByRole = ({ data, role }) => {
+  switch(role) {
+    case ROLES.OWNER:
+      return sentCounteroffersTabRowsDataAdapter({ data })
+    case ROLES.CHARTERER:
+      return counteroffersTabRowsDataAdapter({ data })
+    default:
+      return []
+  }
+}
+
 /// ///////////////////////////////////
 
 export const ownerFailedTabRowsDataAdapter = ({ data }) => {
@@ -472,3 +494,14 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
   ];
 };
+
+export const failedTabDataByRole = ({ data, role }) => {
+  switch(role) {
+    case ROLES.OWNER:
+      return ownerFailedTabRowsDataAdapter({ data })
+    case ROLES.CHARTERER:
+      return chartererFailedTabRowsDataAdapter({ data })
+    default:
+      return []
+  }
+}

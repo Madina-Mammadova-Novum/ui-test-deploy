@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
-import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { NAVIGATION_PARAMS, ROLES } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
@@ -45,8 +45,8 @@ const chartererTabs = [
 ];
 
 const Negotiating = () => {
-  const { data: { role } = {} } = useSession();
-  const isOwner = role === 'owner';
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
   const tabs = isOwner ? ownerTabs : chartererTabs;
   const [toggle, setToggle] = useState(false);
   const [data, isLoading] = useFetch(getUserNegotiating);

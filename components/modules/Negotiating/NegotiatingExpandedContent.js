@@ -5,12 +5,9 @@ import { useSession } from 'next-auth/react';
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
 import {
-  chartererFailedTabRowsDataAdapter,
-  counteroffersTabRowsDataAdapter,
-  incomingTabRowsDataAdapter,
-  ownerFailedTabRowsDataAdapter,
-  sentCounteroffersTabRowsDataAdapter,
-  sentOffersTabRowsDataAdapter,
+  counteroffersTabDataByRole,
+  failedTabDataByRole,
+  offerTabDataByRole,
 } from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
@@ -22,11 +19,12 @@ import {
   ownerNegotiatingCounterofferTableHeader,
   ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
+import { ROLES } from '@/lib/constants';
 
 const NegotiatingExpandedContent = ({ data, currentTab }) => {
   const [modal, setModal] = useState(null);
-  const { data: { role } = {} } = useSession();
-  const isOwner = role === 'owner';
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
 
   const handleCloseModal = () => setModal(null);
   const handleOpenModal = ({ id }) => setModal(id);
@@ -38,9 +36,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
           <Table
             headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
             rows={
-              isOwner
-                ? sentCounteroffersTabRowsDataAdapter({ data: data.sentCounteroffers })
-                : counteroffersTabRowsDataAdapter({ data: data.sentCounteroffers })
+              counteroffersTabDataByRole({ data: data.sentCounteroffers, role: session?.role })
             }
             handleActionClick={handleOpenModal}
           />
@@ -50,9 +46,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
           <Table
             headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
             rows={
-              isOwner
-                ? ownerFailedTabRowsDataAdapter({ data: data.failedOffers })
-                : chartererFailedTabRowsDataAdapter({ data: data.failedOffers })
+              failedTabDataByRole({ data: data.failedOffers, role: session?.role })
             }
             handleActionClick={handleOpenModal}
           />
@@ -62,9 +56,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
           <Table
             headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
             rows={
-              isOwner
-                ? incomingTabRowsDataAdapter({ data: data.incomingOffers })
-                : sentOffersTabRowsDataAdapter({ data: data.incomingOffers })
+              offerTabDataByRole({ data: data.incomingOffers, role: session?.role})
             }
             handleActionClick={handleOpenModal}
           />

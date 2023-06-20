@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 import { Dropdown } from '@/elements';
-import { COUNTDOWN_OPTIONS } from '@/lib/constants';
+import { COUNTDOWN_OPTIONS, ROLES } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
@@ -29,8 +29,8 @@ const ViewCounteroffer = () => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[1]);
-  const { data: { role } = {} } = useSession();
-  const isOwner = role === 'owner';
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
 
   const tabContent = () => {
     switch (currentTab) {
