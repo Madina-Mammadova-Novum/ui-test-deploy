@@ -34,7 +34,7 @@ const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
   return (
     <div>
       <div className="">
-        <div className='py-8 xlMax:h-20'>
+        <div className="py-8 xlMax:h-20">
           <Tabs
             activeTab={currentTab}
             tabs={tabs}
@@ -43,7 +43,7 @@ const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
           />
           <Button
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-            customStyles='
+            customStyles="
             border border-blue 
             hover:border-blue-darker 
             whitespace-nowrap
@@ -56,7 +56,7 @@ const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
             xlMax:top-14
             xlMax:left-[50%] 
             xlMax:transform
-            xlMax:-translate-x-1/2'
+            xlMax:-translate-x-1/2"
           />
         </div>
       </div>
