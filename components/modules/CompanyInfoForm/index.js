@@ -1,20 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { CompanyInfoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
-import { companyAddressesSchema, companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
+import { ROLES } from '@/lib';
+import {
+  cargoesSlotsDetailsSchema,
+  companyAddressesSchema,
+  companyDetailsSchema,
+  tankerSlotsDetailsSchema,
+} from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
+import { CargoesSlotsDetails, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
 import { makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -22,14 +29,24 @@ const CompanyInfoForm = ({ closeModal }) => {
   const dispatch = useDispatch();
   const [sameAddress, setSameAddress] = useState(false);
   const { data } = useSelector(getUserDataSelector);
+  const { data: session } = useSession();
 
-  const schema = yup.object({
-    ...companyDetailsSchema(),
-    ...tankerSlotsDetailsSchema(),
-    ...companyAddressesSchema(sameAddress),
-  });
+  const roleBasedSchemaValidation = () => {
+    if (session?.role === ROLES.OWNER) {
+      return yup.object({
+        ...companyDetailsSchema(),
+        ...tankerSlotsDetailsSchema(),
+        ...companyAddressesSchema(sameAddress),
+      });
+    }
+    return yup.object({
+      ...companyDetailsSchema(),
+      ...cargoesSlotsDetailsSchema(),
+      ...companyAddressesSchema(sameAddress),
+    });
+  };
 
-  const methods = useHookFormParams({ state: data?.companyDetails, schema });
+  const methods = useHookFormParams({ state: data?.companyDetails, schema: roleBasedSchemaValidation() });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
@@ -39,11 +56,11 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { status, error } = await updateCompany({ data: formData });
+    const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
 
     if (status === 200) {
       dispatch(fetchUserProfileData());
-      successToast(null, 'You will be notified soon. The rest of the changes have been edited');
+      successToast(null, response.message);
     }
     if (error) errorToast(error?.message);
     return null;
@@ -61,6 +78,11 @@ const CompanyInfoForm = ({ closeModal }) => {
       list: ['City', 'Country', 'Address line #1', 'Address line #2', 'Zip / Postal code', 'State / Province / Region'],
     },
   ];
+
+  const printRoleBasedSection = useMemo(() => {
+    if (session?.role === ROLES.OWNER) return <TankerSlotsDetails />;
+    return <CargoesSlotsDetails />;
+  }, [session?.role]);
 
   return (
     <FormProvider {...methods}>
@@ -82,7 +104,7 @@ const CompanyInfoForm = ({ closeModal }) => {
             Сompany information
           </Title>
           <CompanyDetails />
-          <TankerSlotsDetails />
+          {printRoleBasedSection}
           <CompanyAddresses />
         </div>
       </ModalFormManager>

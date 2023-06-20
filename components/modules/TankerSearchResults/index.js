@@ -41,7 +41,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         />
       </div>
 
-      {data?.exactResults.length && (
+      {!!data?.exactResults.length && (
         <div className="mt-5 flex justify-between">
           <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${
             data?.exactResults.length > 1 ? 'results' : 'result'
@@ -64,7 +64,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         ))}
       </div>
 
-      {data?.partialResults.length && (
+      {!!data?.partialResults.length && (
         <div className="mt-5 flex justify-between">
           <TextRow title="Partial matches (arrival outside of laycan)">{`${data?.partialResults.length} ${
             data?.partialResults.length > 1 ? 'results' : 'result'

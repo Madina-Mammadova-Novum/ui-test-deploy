@@ -5,7 +5,7 @@ import {
   loginAdapter,
   ownerSignUpAdapter,
   resetPasswordAdapter,
-  updateCompanyAdapter,
+  roleBasedUpdateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
@@ -94,11 +94,15 @@ export async function updateInfo({ data }) {
   };
 }
 
-export async function updateCompany({ data }) {
-  const body = updateCompanyAdapter({ data });
+export async function updateCompany({ data, role }) {
+  const body = roleBasedUpdateCompanyAdapter({ data, role });
   const response = await putData(`account/update-company`, body);
+
   return {
     ...response,
+    data: {
+      message: response.status === 200 && 'You will be notified soon. The rest of the changes have been edited',
+    },
   };
 }
 
@@ -156,6 +160,17 @@ export async function getUserCompany() {
 
 export async function getUserOnSubs() {
   const response = await getData(`account/on-subs`);
+  return {
+    ...response,
+  };
+}
+
+export async function getUserFleets() {
+  const body = {
+    query: 'all',
+  };
+
+  const response = await getData(`account/fleets`, body);
   return {
     ...response,
   };

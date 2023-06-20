@@ -89,7 +89,7 @@ const ChartererRegistrationForm = () => {
         </Step>
         <Divider />
         <Step title="Step #5: Recent Chartering Experience" containerClass="flex flex-col gap-5">
-          <CargoesSlotsDetails />
+          <CargoesSlotsDetails helperText="You will be able to add more cargoes after the verification." />
         </Step>
         <TermsAndConditions />
       </FormManager>

@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { CargoesSlotsPropTypes } from '@/lib/types';
 
 import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
@@ -10,7 +12,7 @@ import { getPorts } from '@/services/port';
 import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CargoesSlotsDetailsForm = () => {
+const CargoesSlotsDetailsForm = ({ helperText = null }) => {
   const {
     register,
     setValue,
@@ -112,7 +114,7 @@ const CargoesSlotsDetailsForm = () => {
           customStyles="z-10 w-full"
           onChange={handleCargoesCount}
           error={errors.numberOfCargoes?.message || errors.applySlots?.message}
-          helperText="You will be able to add more cargoes after the verification."
+          helperText={helperText}
         />
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
@@ -133,7 +135,7 @@ const CargoesSlotsDetailsForm = () => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="grid relative grid-cols-1 lg:grid-cols-3 justify-center items-center gap-x-5" key={item}>
+          <div className="flex relative justify-center" key={item}>
             <Input
               {...register(`${fieldName}.imo`)}
               label={`Imo #${index + 1}`}
@@ -148,19 +150,22 @@ const CargoesSlotsDetailsForm = () => {
               errorMsg={error?.port?.message}
               options={cargoesPortsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
+              customStyles={{
+                className: 'w-72 mx-5',
+              }}
               async
             />
             <DatePicker
-              calendarClass="absolute -left-2.5"
+              calendarClass="absolute right-0"
               name={`${fieldName}.date`}
-              inputClass="w-full"
+              inputClass="w-full min-w-[150px]"
               label="Bill of lading date"
               error={error?.date?.message}
               onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />
             <Button
               type="button"
-              customStyles="absolute top-full mt-2 lg:mt-0 right-0 lg:-right-8 lg:top-7 !p-0"
+              customStyles="absolute top-full mt-1 right-0 !p-0"
               buttonProps={{
                 icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
                 variant: 'tertiary',
@@ -181,7 +186,7 @@ const CargoesSlotsDetailsForm = () => {
               helperText: `(max ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes)`,
               variant: 'tertiary',
               size: 'small',
-              icon: { before: <PlusSVG /> },
+              icon: { before: <PlusSVG className="fill-blue" /> },
             }}
             type="button"
             customStyles="!py-0 !px-0 !text-xsm font-medium !text-blue"
@@ -193,5 +198,7 @@ const CargoesSlotsDetailsForm = () => {
     </div>
   );
 };
+
+CargoesSlotsDetailsForm.propTypes = CargoesSlotsPropTypes;
 
 export default CargoesSlotsDetailsForm;

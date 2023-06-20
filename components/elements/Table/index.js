@@ -9,9 +9,9 @@ const Table = ({ headerData, rows, noDataMessage = '' }) => {
   const printTableRow = (rowData) => <TableRow rowData={rowData} />;
 
   return headerData.length > 0 ? (
-    <div className="table-scroll-wrapper">
-      <div className="w-full relative border bg-purple-light rounded-t-lg">
-        <table className="min-w-full border-collapse table-fixed">
+    <div className="table-scroll-wrapper ">
+      <div className="w-full relative border bg-purple-light rounded-t-lg ">
+        <table className="min-w-full border-collapse table-fixed ">
           {headerData.length && (
             <thead className="uppercase text-black font-semibold text-xs-sm">
               <TableHeader headerData={headerData} />

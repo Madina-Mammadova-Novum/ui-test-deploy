@@ -80,7 +80,7 @@ const ContactUsForm = () => {
           Write to us
         </Title>
         <div className="grid gap-y-4">
-          <div className="grid grid-cols-2 gap-x-5 gap-y-4">
+          <div className="grid lg:grid-cols-2 gap-x-5 gap-y-4">
             <Input
               {...register('firstName')}
               label="First name"

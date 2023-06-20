@@ -2,6 +2,8 @@
 
 import { cloneElement, useState } from 'react';
 
+import classnames from 'classnames';
+
 import { TooltipParamsPropTypes } from '@/lib/types';
 
 import CloseSVG from '@/assets/images/close.svg';
@@ -16,7 +18,7 @@ const ManualTooltip = ({ data, className, children }) => {
   const { title, description } = data;
 
   const childrenWithProps = cloneElement(children, {
-    className: `fill-black ${children.props.className} ${showTooltip && '!fill-blue'}`,
+    className: classnames('fill-black', children.props.className, showTooltip && '!fill-blue'),
   });
 
   return (

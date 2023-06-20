@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { SORT_OPTIONS } from '@/lib/constants';
+import { REGEX, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -196,6 +196,8 @@ export const getButtonClassNames = (variant, size) => {
       return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker hover:text-blue-darker';
     if (variant === 'secondary')
       return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
+    if (variant === 'tertiary')
+      return 'bg-white text-black h-7 px-2.5 rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
@@ -302,6 +304,14 @@ export const checkEmailPrefix = (value) => {
   return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
 };
 
+export const checkPhoneValue = (value) => {
+  if (!value) {
+    return true;
+  }
+  const regex = REGEX.PHONE;
+  return regex.test(value);
+};
+
 export const checkAuthRoute = (req, pathName) => {
   return req.nextUrl.pathname.includes(pathName);
 };
@@ -315,7 +325,10 @@ export const formatErrors = (errors) => {
   return errorMessages.join('\n');
 };
 
-export const formattedPhoneNumber = (phone) => phone?.replace('+', '');
+export const formattedPhoneNumber = (phone) => {
+  if (typeof phone !== 'undefined' || phone !== '') return phone?.replace('+', '');
+  return null;
+};
 
 export const sortByType = (a, b, ascSort) => {
   const sortOrder = ascSort ? 1 : -1;

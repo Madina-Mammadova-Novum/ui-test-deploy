@@ -13,7 +13,7 @@ const OptionsList = (props) => {
   return (
     <Option {...props}>
       <li className="text-inherit bg-white overflow-x-clip flex flex-col">
-        <p className="text-inherit px-1.5 py-2.5 capitalize flex items-center rounded-md cursor-pointer text-xsm font-medium hover:bg-purple-light transition-all duration-75 ease-linear">
+        <p className="text-inherit px-2.5 py-1.5 capitalize flex items-center rounded-md cursor-pointer text-xsm font-medium hover:bg-purple-light transition-all duration-75 ease-linear">
           {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
           {coverImage && coverImage}
           {label}

@@ -3,6 +3,7 @@ import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
 import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
+import AddNewTanker from '@/modules/AddNewTanker';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import CommentsContent from '@/modules/CommentsContent';
@@ -14,6 +15,7 @@ import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import ExpandableRow from '@/modules/ExpandableRow';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
+import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
@@ -28,6 +30,7 @@ import OnSubs from '@/modules/OnSubs';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
+import PostFixture from '@/modules/PostFixture';
 import PreFixture from '@/modules/PreFixture';
 import ProfileMenu from '@/modules/ProfileMenu';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
@@ -78,6 +81,7 @@ export {
   CommentsContent,
   TankerSearchResults,
   PreFixture,
+  PostFixture,
   Fixture,
   Negotiating,
   ViewIncomingOffer,
@@ -89,4 +93,6 @@ export {
   ViewOffer,
   NotFound,
   OnSubs,
+  Fleets,
+  AddNewTanker,
 };

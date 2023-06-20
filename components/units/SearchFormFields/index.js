@@ -127,6 +127,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <DatePicker
             label="laycan start"
             inputClass="w-full"
+            containerClass="w-full"
             name="laycanStart"
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
@@ -134,6 +135,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <DatePicker
             label="laycan end"
             inputClass="w-full"
+            containerClass="w-full"
             name="laycanEnd"
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
@@ -196,7 +198,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           const { density = {} } = getValues(`products[${productId}].product`) || {};
           return (
             <div key={`product_${productId}`}>
-              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1">
+              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1 items-baseline">
                 <FormDropdown
                   onChange={(option) => {
                     setSelected(!selected);

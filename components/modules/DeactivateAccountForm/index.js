@@ -8,13 +8,16 @@ import { DeactivateAccountFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
+import { currentPasswordSchema } from '@/lib/schemas';
 import { useHookFormParams } from '@/utils/hooks';
 
 const state = {
   password: '',
 };
 
-const schema = yup.object({ password: yup.string().required('Required field') });
+const schema = yup.object({
+  ...currentPasswordSchema(),
+});
 
 const DeactivateAccountForm = ({ title, closeModal }) => {
   const methods = useHookFormParams({ state, schema });

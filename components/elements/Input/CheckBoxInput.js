@@ -8,12 +8,13 @@ import { CheckBoxInputPropTypes } from '@/lib/types';
 
 import { Input, InputErrorMessage } from '@/elements';
 
-const CheckBoxInput = ({ name = null, customStyles = '', labelStyles = '', checked = false, onChange, children }) => {
+const CheckBoxInput = ({ name = '', customStyles = '', labelStyles = '', checked = false, onChange, children }) => {
   return (
     <Controller
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = errors[name];
+
         return (
           <div className="flex flex-col">
             <div className="flex items-center gap-2.5">

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import classnames from 'classnames';
+
 import { ViewOfferPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
@@ -24,7 +26,7 @@ const tabs = [
   },
 ];
 
-const ViewOffer = ({ setStep, closeModal }) => {
+const ViewOffer = ({ setStep }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
 
@@ -63,17 +65,12 @@ const ViewOffer = ({ setStep, closeModal }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={classnames('h-[320px] overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset')}
       >
         {tabContent()}
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap">
-        <Button
-          onClick={closeModal}
-          customStyles="mr-auto"
-          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-        />
+      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap justify-end">
         <Button
           onClick={() => setStep('offer_decline')}
           buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}

@@ -12,7 +12,7 @@ import { dropdownStyles } from '@/elements/Dropdown/styles';
 import { getValueWithPath } from '@/utils/helpers';
 
 const FormDropdown = ({
-  options,
+  options = [],
   onChange,
   name,
   label = '',
@@ -20,7 +20,7 @@ const FormDropdown = ({
   asyncCall = false,
   customStyles = {},
 }) => {
-  const { dropdownWidth, className } = customStyles;
+  const { dropdownWidth, dropdownExpanded = false, className = '' } = customStyles;
 
   const handleChange = useCallback(
     (option) => {
@@ -37,8 +37,8 @@ const FormDropdown = ({
         const hasValue = { ...field }.value?.value;
 
         return (
-          <div className={`relative bottom-1 ${className}`}>
-            <Label htmlFor={name} className="text-xs-sm">
+          <div className={`relative ${className}`}>
+            <Label htmlFor={name} className="block text-xs-sm mb-0.5 whitespace-nowrap">
               {label}
             </Label>
             <SimpleDropdown
@@ -47,7 +47,7 @@ const FormDropdown = ({
               id={name}
               options={options}
               onChange={handleChange}
-              styles={dropdownStyles(hasValue, error, dropdownWidth)}
+              styles={dropdownStyles(hasValue, error, dropdownWidth, dropdownExpanded)}
               isDisabled={disabled || isSubmitting}
               asyncCall={asyncCall}
             />

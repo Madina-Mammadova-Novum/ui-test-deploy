@@ -1,39 +1,26 @@
 import React, { useMemo, useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
-import {
-  failedTabRowsDataAdapter,
-  incomingTabRowsDataAdapter,
-  sentCounteroffersTabRowsDataAdapter,
-} from '@/adapters/negotiating';
+import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
+import { ROLES } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { Tabs } from '@/units';
 import {
-  negotiatingCounterofferTableHeader,
-  negotiatingFailedTableHeader,
+  chartererNegotiatingCounterofferTableHeader,
+  chartererNegotiatingFailedTableHeader,
   negotiatingIncomingTableHeader,
+  negotiatingSentOffersTableHeader,
+  ownerNegotiatingCounterofferTableHeader,
+  ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
 
-const tabs = [
-  {
-    value: 'incoming',
-    label: 'Incoming',
-  },
-  {
-    value: 'counteroffers',
-    label: 'Sent counteroffers',
-  },
-  {
-    value: 'failed',
-    label: 'Failed',
-  },
-];
-
-const NegotiatingExpandedContent = ({ data }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+const NegotiatingExpandedContent = ({ data, currentTab }) => {
   const [modal, setModal] = useState(null);
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
 
   const handleCloseModal = () => setModal(null);
   const handleOpenModal = ({ id }) => setModal(id);
@@ -43,29 +30,29 @@ const NegotiatingExpandedContent = ({ data }) => {
       case 'counteroffers':
         return (
           <Table
-            headerData={negotiatingCounterofferTableHeader}
-            rows={sentCounteroffersTabRowsDataAdapter({ data: data.sentCounteroffers })}
+            headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
+            rows={counteroffersTabDataByRole({ data: data.sentCounteroffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
       case 'failed':
         return (
           <Table
-            headerData={negotiatingFailedTableHeader}
-            rows={failedTabRowsDataAdapter({ data: data.failedOffers })}
+            headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
+            rows={failedTabDataByRole({ data: data.failedOffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
       default:
         return (
           <Table
-            headerData={negotiatingIncomingTableHeader}
-            rows={incomingTabRowsDataAdapter({ data: data.incomingOffers })}
+            headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
+            rows={offerTabDataByRole({ data: data.incomingOffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
     }
-  }, [currentTab, data.failedOffers, data.incomingOffers, data.sentCounteroffers]);
+  }, [currentTab, data.failedOffers, data.incomingOffers, data.sentCounteroffers, isOwner, session?.role]);
 
   const modalContent = () => {
     switch (modal) {
@@ -79,13 +66,6 @@ const NegotiatingExpandedContent = ({ data }) => {
   };
   return (
     <div>
-      <Tabs
-        onClick={({ target }) => setCurrentTab(target.value)}
-        activeTab={currentTab}
-        tabs={tabs}
-        customStyles="my-3 mx-auto"
-      />
-
       <div className="mb-3">{tabContent}</div>
 
       <Modal opened={modal} onClose={handleCloseModal}>

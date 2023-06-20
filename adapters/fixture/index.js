@@ -1,7 +1,5 @@
 import CommentIcon from '@/assets/images/commentMessage.svg';
-import TooltipIcon from '@/assets/images/infoCircle.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
-import CargoIdTooltip from '@/units/CargoIdTooltip';
 import { transformDate } from '@/utils/date';
 
 export const fixtureHeaderDataAdapter = ({ data }) => {
@@ -13,11 +11,6 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Cargo id',
       text: cargoId || '',
-      icon: <TooltipIcon className="w-4 h-4 fill-gray" viewBox="0 0 24 24" />,
-      helperData: {
-        title: 'Cargo ID',
-        description: <CargoIdTooltip />,
-      },
     },
     {
       label: 'Tanker name',

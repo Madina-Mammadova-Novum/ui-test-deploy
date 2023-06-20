@@ -19,10 +19,12 @@ const DatePicker = ({
   name = '',
   label = '',
   onChange,
-  inputClass = 'min-w-[296px]',
   error,
-  calendarClass,
+  inputClass = 'min-w-[296px]',
+  calendarClass = '',
+  containerClass = '',
   closeOnSelect = true,
+  expanded = false,
   ...rest
 }) => {
   const [showPicker, setShowPicker] = useState(false);
@@ -32,7 +34,7 @@ const DatePicker = ({
     if (closeOnSelect) setShowPicker(false);
   };
   return (
-    <>
+    <div className={`${containerClass} ${expanded && showPicker ? 'h-[360px]' : 'h-auto'}`}>
       <div
         aria-hidden="true"
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
@@ -48,6 +50,7 @@ const DatePicker = ({
                 <Input
                   name={name}
                   customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
+                  inputStyles="pr-0"
                   label={label}
                   value={transformDate(value, 'MMM dd, yyyy')}
                   icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
@@ -70,7 +73,7 @@ const DatePicker = ({
           );
         }}
       />
-    </>
+    </div>
   );
 };
 

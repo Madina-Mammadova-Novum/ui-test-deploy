@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 
+import classnames from 'classnames';
+
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
 import { Button, SimpleSelect } from '@/elements';
@@ -72,7 +74,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
 
             <div
               ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-              className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+              className={classnames('h-[320px] overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset')}
             >
               {tabContent}
             </div>
@@ -82,14 +84,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
         )}
       </CounterofferForm>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
-        <span className={confirmCounteroffer && 'mr-60'}>
-          <Button
-            onClick={closeModal}
-            customStyles="ml-auto"
-            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-          />
-        </span>
+      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end h-10">
         {!confirmCounteroffer && (
           <Button
             onClick={() => setConfirmCounteroffer(true)}

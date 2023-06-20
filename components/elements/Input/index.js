@@ -38,7 +38,7 @@ const Input = React.forwardRef(
         <div
           className={classnames(
             {
-              'flex w-full min-h-10 border box-border rounded-md hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
+              'flex w-full min-h-10 border border-gray-darker box-border rounded-md hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
                 type !== 'checkbox',
             },
             {
