@@ -1,22 +1,26 @@
 import React, { useMemo, useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
-import {
-  failedTabRowsDataAdapter,
-  incomingTabRowsDataAdapter,
-  sentCounteroffersTabRowsDataAdapter,
-} from '@/adapters/negotiating';
+import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } from '@/adapters/negotiating';
 import { Modal, Table } from '@/elements';
+import { ROLES } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import {
-  negotiatingCounterofferTableHeader,
-  negotiatingFailedTableHeader,
+  chartererNegotiatingCounterofferTableHeader,
+  chartererNegotiatingFailedTableHeader,
   negotiatingIncomingTableHeader,
+  negotiatingSentOffersTableHeader,
+  ownerNegotiatingCounterofferTableHeader,
+  ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
 
 const NegotiatingExpandedContent = ({ data, currentTab }) => {
   const [modal, setModal] = useState(null);
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
 
   const handleCloseModal = () => setModal(null);
   const handleOpenModal = ({ id }) => setModal(id);
@@ -26,24 +30,24 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
       case 'counteroffers':
         return (
           <Table
-            headerData={negotiatingCounterofferTableHeader}
-            rows={sentCounteroffersTabRowsDataAdapter({ data: data.sentCounteroffers })}
+            headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
+            rows={counteroffersTabDataByRole({ data: data.sentCounteroffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
       case 'failed':
         return (
           <Table
-            headerData={negotiatingFailedTableHeader}
-            rows={failedTabRowsDataAdapter({ data: data.failedOffers })}
+            headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
+            rows={failedTabDataByRole({ data: data.failedOffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );
       default:
         return (
           <Table
-            headerData={negotiatingIncomingTableHeader}
-            rows={incomingTabRowsDataAdapter({ data: data.incomingOffers })}
+            headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
+            rows={offerTabDataByRole({ data: data.incomingOffers, role: session?.role })}
             handleActionClick={handleOpenModal}
           />
         );

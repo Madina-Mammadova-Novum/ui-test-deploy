@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
+import { Dropdown } from '@/elements';
+import { COUNTDOWN_OPTIONS, ROLES } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
@@ -24,6 +28,9 @@ const tabs = [
 const ViewCounteroffer = () => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[1]);
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
 
   const tabContent = () => {
     switch (currentTab) {
@@ -38,9 +45,26 @@ const ViewCounteroffer = () => {
 
   return (
     <div className="w-[610px]">
-      <ModalHeader>View Counteroffer</ModalHeader>
+      <ModalHeader>{isOwner ? 'View Counteroffer' : 'View Sent Offer'}</ModalHeader>
 
-      <Countdown time="1d 1h 50m" customStyles="mt-5" />
+      {isOwner ? (
+        <Countdown time="1d 1h 50m" customStyles="mt-5" />
+      ) : (
+        <div className="flex text-[12px] items-center mt-5">
+          <div className="pl-4 border-l-2 border-blue h-min flex items-center">
+            <p className="font-bold max-w-[240px]">
+              Set a response countdown timer for the vessel owner to reply to this offer
+            </p>
+            <Dropdown
+              disabled
+              defaultValue={responseCountdown}
+              options={COUNTDOWN_OPTIONS}
+              onChange={setResponseCountdown}
+              customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+            />
+          </div>
+        </div>
+      )}
 
       <Tabs
         tabs={tabs}
