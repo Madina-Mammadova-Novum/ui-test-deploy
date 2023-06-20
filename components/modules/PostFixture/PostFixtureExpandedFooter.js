@@ -1,7 +1,7 @@
 import { Button } from '@/elements';
 import { ExpandableRowFooter, UploadForm } from '@/units';
 
-const FixtureExpandedFooter = () => {
+const PostFixtureExpandedFooter = () => {
   return (
     <ExpandableRowFooter>
       <div>
@@ -19,4 +19,4 @@ const FixtureExpandedFooter = () => {
   );
 };
 
-export default FixtureExpandedFooter;
+export default PostFixtureExpandedFooter;

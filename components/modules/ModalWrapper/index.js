@@ -19,10 +19,11 @@ const ModalWrapper = ({ opened, onClose, containerClass, sidebar, children }) =>
   return (
     opened && (
       <>
-        <div className="fixed top-0 right-0 bottom-0 left-0 bg-[#000000] opacity-40" />
+        <div className="fixed top-0 right-0 bottom-0 left-0 bg-[#000000] opacity-40 z-10" />
         <div
-          className={`fixed overflow-y-auto ${sidebar ? 'right-0 h-screen w-[30%] ' : 'top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2'
-            } bg-white ${sidebar ? 'p-0' : 'p-8'} ${sidebar ? 'rounded-none' : 'rounded-lg'} ${containerClass}`}
+          className={`z-20 fixed overflow-y-auto max-h-[98vh] ${
+            sidebar ? 'right-0 h-screen w-[30%] ' : 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+          } bg-white ${sidebar ? 'p-0' : 'p-8'} ${sidebar ? 'rounded-none' : 'rounded-lg'} ${containerClass}`}
           onClick={(e) => e.stopPropagation()}
           aria-hidden
         >

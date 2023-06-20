@@ -6,7 +6,7 @@ import { ROUTES } from '@/lib';
 import { ExpandableRowFooter, Tabs } from '@/units';
 
 const NegotiatingExpandedFooter = ({ isCharterer = false, setCurrentTab, currentTab, tabs }) => {
-  return isCharterer ? (
+  return (
     <ExpandableRowFooter>
       <Tabs
         onClick={({ target }) => setCurrentTab(target.value)}
@@ -14,19 +14,21 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, setCurrentTab, current
         tabs={tabs}
         customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
-      <NextLink href={ROUTES.ACCOUNT_SEARCH}>
-        <Button
-          customStyles="text-xsm ml-auto"
-          buttonProps={{
-            text: 'Search for Alternative Tankers',
-            variant: 'secondary',
-            size: 'large',
-            icon: { before: <SearchSVG className="w-4 h-4 fill-white" viewBox="0 0 24 24" /> },
-          }}
-        />
-      </NextLink>
+      {isCharterer && (
+        <NextLink href={ROUTES.ACCOUNT_SEARCH}>
+          <Button
+            customStyles="text-xsm ml-auto"
+            buttonProps={{
+              text: 'Search for Alternative Tankers',
+              variant: 'secondary',
+              size: 'large',
+              icon: { before: <SearchSVG className="fill-white" viewBox="0 0 24 24" /> },
+            }}
+          />
+        </NextLink>
+      )}
     </ExpandableRowFooter>
-  ) : null;
+  );
 };
 
 NegotiatingExpandedFooter.propTypes = NegotiatingExpandedFooterPropTypes;

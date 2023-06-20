@@ -16,7 +16,6 @@ const PortDetailsForm = ({ portName = '' }) => {
 
   const [portOptions, setPortOptions] = useState([]);
 
-
   const fetchPorts = async () => {
     const data = await getPorts();
     const options = countryOptionsAdapter(data);
@@ -45,7 +44,7 @@ const PortDetailsForm = ({ portName = '' }) => {
         label="Open port"
         options={portOptions}
         onChange={handlePortChange}
-        customStyles={{ dropdownExpanded: true, hardHeight: true }}
+        customStyles={{ dropdownExpanded: true }}
       />
     </div>
   );

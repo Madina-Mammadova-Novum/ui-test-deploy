@@ -44,22 +44,19 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, ..
       />
     );
   }
-
   return (
-    <div style={{ height: hardHeight && open && options?.length ? '340px' : 'auto' }}>
-      <Select
-        {...rest}
-        isLoading={asyncCall}
-        options={options}
-        components={{ Option: OptionsList, LoadingIndicator }}
-        formatOptionLabel={printOptions}
-        theme={dropdownTheme}
-        closeMenuOnSelect
-        menuIsOpen={open}
-        onMenuOpen={() => setOpen(true)}
-        onMenuClose={() => setOpen(false)}
-      />
-    </div>
+    <Select
+      {...rest}
+      isLoading={asyncCall}
+      options={options}
+      components={{ Option: OptionsList, LoadingIndicator }}
+      formatOptionLabel={printOptions}
+      theme={dropdownTheme}
+      closeMenuOnSelect
+      menuIsOpen={open}
+      onMenuOpen={() => setOpen(true)}
+      onMenuClose={() => setOpen(false)}
+    />
   );
 };
 
