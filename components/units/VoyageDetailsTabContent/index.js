@@ -1,44 +1,34 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useSession } from 'next-auth/react';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
-import InfoSVG from '@/assets/images/infoCircle.svg';
-import { IconComponent, ManualTooltip, TextRow, Title } from '@/elements';
+import { IconComponent, TextRow, Title } from '@/elements';
 import { ROLES } from '@/lib';
-import { ChartererInformationContent, TankerInformationContent } from '@/units';
+import VoyageChartererTabContent from '@/units/VoyageDetailsTabContent/VoyageChartererTabContent';
+import VoyageOwnerTabContent from '@/units/VoyageDetailsTabContent/VoyageOwnerTabContent';
 
 const VoyageDetailsTabContent = ({ data = {} }) => {
-  const { data: { role } } = useSession()
+  const { data: session } = useSession();
+
+  const printRoleBasedSection = useMemo(() => {
+    if (session?.role === ROLES.OWNER) {
+      return <VoyageOwnerTabContent />;
+    }
+    if (session?.role === ROLES.CHARTERER) {
+      return <VoyageChartererTabContent />;
+    }
+    return null;
+  }, [session?.role]);
+
+  const printPairDates = (detail) => <TextRow title={detail.key}>{detail.label}</TextRow>;
 
   return (
     <div>
       <div className="flex justify-between">
         <Title level={3}>Voyage details</Title>
-        <div className="flex relative">
-          {role === ROLES.OWNER ? (
-            <>
-              <span className="mr-1.5">Charterer Information</span>
-              <ManualTooltip
-                className="!right-0 min-w-[260px] !p-2.5"
-                data={{ description: <ChartererInformationContent /> }}
-              >
-                <InfoSVG className="w-4" viewBox="0 0 24 24" />
-              </ManualTooltip>
-            </>
-          ) : (
-            <>
-              <span className="mr-1.5">Tanker Information</span>
-              <ManualTooltip
-                className="!right-0 min-w-[260px] !p-2.5 w-[470px]"
-                data={{ description: <TankerInformationContent /> }}
-              >
-                <InfoSVG className="w-4" viewBox="0 0 24 24" />
-              </ManualTooltip>
-            </>
-          )}
-        </div>
+        <div className="flex relative">{printRoleBasedSection}</div>
       </div>
 
       <div className="text-xsm mt-2.5">
@@ -46,11 +36,7 @@ const VoyageDetailsTabContent = ({ data = {} }) => {
           dates
         </Title>
         {data.dates.map((pair) => (
-          <div className="mt-2.5">
-            {pair.map((detail) => (
-              <TextRow title={detail.key}>{detail.label}</TextRow>
-            ))}
-          </div>
+          <div className="mt-2.5">{pair.map(printPairDates)}</div>
         ))}
 
         <hr className="my-4" />

@@ -1,49 +1,57 @@
-import { useSession } from "next-auth/react"
+'use client';
+
+import { useMemo } from 'react';
+
+import { useSession } from 'next-auth/react';
 
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import usFlag from '@/assets/images/flag.png';
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
-import { ROLES } from "@/lib";
+import { ROLES } from '@/lib';
+import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
+import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
 import { PartyItem } from '@/units';
 
-const partyTermsMock = [
-  {
-    title: 'Charter party form',
-    content: 'Charter party form',
-  },
-];
-
 const DetailsContent = ({ underNegotiation }) => {
-  const { data: { role } } = useSession()
+  const { data: session } = useSession();
 
+  const state = {
+    ownerData: {
+      years: '0-2',
+      ships: '6-10',
+      kt: '21-40',
+    },
+    chartererData: {
+      years: '3-5',
+      ships: '4-9',
+      kt: '121 - 200',
+      icon: usFlag,
+      state: 'United States',
+    },
+  };
+
+  const partyTermsMock = [
+    {
+      title: 'Charter party form',
+      content: 'Charter party form',
+    },
+  ];
+
+  const printRoleBasedSection = useMemo(() => {
+    if (session?.role === ROLES.CHARTERER) {
+      return <DetailsChartererContent title="Charterer Information" data={state.chartererData} />;
+    }
+    if (session?.role === ROLES.OWNER) {
+      return <DetailsOwnerContent title="Tanker Information" data={state.ownerData} />;
+    }
+    return null;
+  }, [session?.role, state?.chartererData, state.ownerData]);
 
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
-        {role === ROLES.OWNER ? (
-          <FieldsetWrapper>
-            <Title level={3}>Charterer Information</Title>
-            <FieldsetContent className="mt-2.5">
-              <TextRow title="Years of Operation">3-5 years</TextRow>
-              <TextRow title="Estimated Number of Charters per Year">4-9 charters</TextRow>
-              <TextRow title="Average Tonnage per Charter">121 - 200 kt</TextRow>
-              <TextRow title="Country of registration">
-                <IconComponent icon={usFlag} /> United States
-              </TextRow>
-            </FieldsetContent>
-          </FieldsetWrapper>
-        ) : (
-          <FieldsetWrapper>
-            <Title level={3}>Tanker Information</Title>
-            <FieldsetContent className="mt-2.5">
-              <TextRow title="Years of Operation">0-2</TextRow>
-              <TextRow title="Number of Tankers">6-10</TextRow>
-              <TextRow title="Estimated average tanker DWT">21-40 kt</TextRow>
-            </FieldsetContent>
-          </FieldsetWrapper>
-        )}
-
+        {printRoleBasedSection}
         <FieldsetWrapper>
           <Title level={3}>Cargo Details</Title>
 
