@@ -6,9 +6,11 @@ const initialState = {
   loading: true,
   error: null,
   data: {
+    role: null,
     personalDetails: {},
-    companyDetails: {},
-    accountDetails: {},
+    companyDetails: {
+      cargoesDetails: {},
+    },
   },
   params: {
     sidebarCollapsed: false,

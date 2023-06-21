@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { formattedPhoneNumber, isEmpty } from '@/utils/helpers';
+import { formattedPhoneNumber, imoFormatter, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -20,13 +20,14 @@ export function userRoleAdapter({ data }) {
 export function listOfImosAdapter({ data }) {
   if (!data) return [];
 
-  return data.map(({ imo }) => imo);
+  return data.map((imo) => imo);
 }
 
 export function userDetailsAdapter({ data }) {
   if (!data) return {};
 
   return {
+    role: data?.role,
     ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
     ...userCompanyDetailsAdapter({ data: data?.companyDetails }),
   };
@@ -51,24 +52,28 @@ function userPersonalDetailsAdapter({ data }) {
 
 function userCompanyDetailsAdapter({ data }) {
   if (!data) return {};
+
   const {
     name,
     imos,
     yearsInOperation,
-    numberOfVessels,
     registrationAddress,
     registrationAddress2,
-    registrationCountryId,
-    registrationCityId,
+    registrationCity,
     registrationProvince,
     registrationPostalCode,
     correspondenceAddress,
     correspondenceAddress2,
-    correspondenceCountryId,
-    correspondenceCityId,
+    correspondenceCity,
     correspondenceProvince,
     correspondencePostalCode,
+    cargoesDetails,
   } = data;
+
+  const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
+
+  const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
+  const formattedImos = companyImosAdapter({ data: imos });
 
   return {
     companyDetails: {
@@ -76,19 +81,102 @@ function userCompanyDetailsAdapter({ data }) {
       companyYearsOfOperation: yearsInOperation,
       registrationAddress,
       registrationAddress2,
-      registrationCityId,
-      registrationCountryId,
+      registrationCity: cityAdapter({ data: registrationCity }),
+      registrationCountry: countryAdapter({ data: registrationCity?.country }),
       registrationPostalCode,
       registrationProvince,
       correspondenceAddress,
       correspondenceAddress2,
-      correspondenceCityId,
-      correspondenceCountryId,
+      correspondenceCity: cityAdapter({ data: correspondenceCity }),
+      correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
       correspondencePostalCode,
       correspondenceProvince,
-      totalTankers: numberOfVessels,
-      imos,
+      totalTankers: formattedCargoes.countOfCargoes || formattedImos.countOfTankers,
+      cargoes: formattedCargoes,
+      imos: formattedImos,
     },
+  };
+}
+
+export function cityAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, name } = data;
+
+  return {
+    value: id,
+    label: name,
+  };
+}
+
+export function countryAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, name, codeISO3, codeISO2 } = data;
+
+  const commonCode = codeISO2 === null ? codeISO3 : codeISO2;
+  const code = commonCode === null ? name.substring(0, 3) : commonCode;
+
+  return {
+    value: id,
+    label: name,
+    countryFlag: code.toLowerCase(),
+  };
+}
+
+export function companyImosAdapter({ data }) {
+  if (!data) return {};
+
+  return {
+    countOfTankers: data?.length,
+    listOfTankers: data,
+  };
+}
+
+export function companyCargoesAdapter({ data }) {
+  if (!data) return [];
+
+  return {
+    countOfCargoes: data?.length,
+    listOfCargoes: data,
+  };
+}
+
+export function cargoesDetailsAdapter({ data }) {
+  if (Array.isArray(data)) {
+    return data?.map((cargoe) => cargoeAdapter({ data: cargoe }));
+  }
+
+  return { data };
+}
+
+export function cargoeAdapter({ data }) {
+  const { billOfLadingDate, loadPort, vesselImo } = data;
+
+  return {
+    date: billOfLadingDate,
+    port: portAdapter({ data: loadPort }),
+    imo: imoAdapter({ data: vesselImo }),
+  };
+}
+
+export function imoAdapter({ data }) {
+  if (!data) return null;
+
+  return imoFormatter(data);
+}
+
+export function portAdapter({ data }) {
+  if (!data) return {};
+
+  const { name, id, enabled, countryId, terminals } = data;
+
+  return {
+    id,
+    countryId,
+    portName: name,
+    disabled: !enabled,
+    terminals,
   };
 }
 
@@ -161,23 +249,23 @@ function companyAddressesAdapter({ data }) {
     registrationPostalCode,
     registrationAddress,
     registrationAddress2,
-    registrationCityId,
+    registrationCity,
     correspondenceProvince,
     correspondencePostalCode,
     correspondenceAddress,
     correspondenceAddress2,
-    correspondenceCityId,
+    correspondenceCity,
   } = data;
 
   return {
     registrationAddress,
     registrationAddress2,
-    registrationCityId: registrationCityId.value,
+    registrationCityId: registrationCity?.value,
     registrationProvince,
     registrationPostalCode,
     correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
     correspondenceAddress2: !sameAddresses ? correspondenceAddress2 : registrationAddress2,
-    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
+    correspondenceCityId: !sameAddresses ? correspondenceCity?.value : registrationCity?.value,
     correspondenceProvince: !sameAddresses ? correspondenceProvince : registrationProvince,
     correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
@@ -185,14 +273,14 @@ function companyAddressesAdapter({ data }) {
 
 export function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
-  const { imos, numberOfTankers, companyYearsOfOperation, companyName } = data;
+  const { imos, companyYearsOfOperation, companyName } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
-    numberOfVessels: numberOfTankers,
+    numberOfVessels: imos?.countOfTankers,
+    imos: listOfImosAdapter({ data: imos?.listOfTankers }),
     ...companyAddressesAdapter({ data }),
-    imos: listOfImosAdapter({ data: imos }),
   };
 }
 
@@ -435,6 +523,12 @@ export function accountCompanyUpdateDataResponseAdapter({ data }) {
 }
 
 export function accountDeleteDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountCargoesDataResponseAdapter({ data }) {
   if (!data) return null;
 
   return { data };

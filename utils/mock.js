@@ -996,6 +996,29 @@ export const fleetsPageHeader = [
   },
 ];
 
+export const recentActiveCargoesHeader = [
+  {
+    text: '#',
+    type: 'INDEX',
+    width: 40,
+  },
+  {
+    text: 'IMO',
+    type: 'TITLE',
+    width: 110,
+  },
+  {
+    text: 'LOAD PORT',
+    type: 'PORT',
+    width: 320,
+  },
+  {
+    text: 'OPEN DATE',
+    type: 'DATE',
+    width: 130,
+  },
+];
+
 export const providedEmails = [
   '001.igg.biz',
   '027168.com',

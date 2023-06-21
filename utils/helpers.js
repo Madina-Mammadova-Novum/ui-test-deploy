@@ -1,8 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import dynamic from 'next/dynamic';
+import { getSession } from 'next-auth/react';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, SORT_OPTIONS } from '@/lib/constants';
+import { REGEX, ROLES, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -335,4 +336,37 @@ export const sortByType = (a, b, ascSort) => {
   const aType = a.type === SORT_OPTIONS.asc ? 1 : a.type === SORT_OPTIONS.dsc ? -1 : 0;
   const bType = b.type === SORT_OPTIONS.asc ? 1 : b.type === SORT_OPTIONS.dsc ? -1 : 0;
   return sortOrder * (aType - bType);
+};
+
+export const imoFormatter = (str) => str?.replace(/IMO/g, '');
+
+export const isIdExist = ({ data }) => {
+  if (!data) return false;
+
+  return data.map(({ value }) => !!value);
+};
+
+export const findValueById = ({ data, id }) => {
+  if (!data) return [];
+
+  const result = data.find((obj) => obj.value === id);
+
+  return [result];
+};
+
+export const getSessionRole = async () => {
+  const session = await getSession();
+
+  return {
+    data: session?.role,
+  };
+};
+
+export const getRoleIdentity = ({ role }) => {
+  if (!role) return null;
+
+  return {
+    isOwner: role === ROLES.OWNER,
+    isCharterer: role === ROLES.CHARTERER,
+  };
 };

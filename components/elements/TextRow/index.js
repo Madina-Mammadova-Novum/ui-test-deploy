@@ -7,7 +7,11 @@ const TextRow = ({ title = '', children, className = '' }) => {
   return (
     <div className={`text-xsm text-black ${className}`}>
       <span className="font-normal mr-1">{title}:</span>
-      {isEmptyChildren(children) ? <span className="font-bold">{children}</span> : <Placeholder />}
+      {isEmptyChildren(children) ? (
+        <span className="font-bold inline-flex items-center whitespace-nowrap">{children}</span>
+      ) : (
+        <Placeholder />
+      )}
     </div>
   );
 };
