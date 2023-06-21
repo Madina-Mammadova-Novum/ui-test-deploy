@@ -28,7 +28,10 @@ const PersonalDetailsForm = ({ closeModal }) => {
 
     if (status === 200) {
       dispatch(fetchUserProfileData());
-      successToast(null, 'You will be notified soon. The rest of the changes have been edited');
+      successToast(
+        'Your request has been sent for review',
+        'You will be notified soon. The rest of the changes have been edited'
+      );
     }
 
     if (error) errorToast(error?.message, error?.errors);

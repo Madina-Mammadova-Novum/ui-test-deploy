@@ -14,7 +14,6 @@ export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (stat
 export const userSelector = ({ user }) => user;
 
 export const getUserDataSelector = createDraftSafeSelector(userSelector, (state) => {
-  
   return {
     ...state,
     data: userDetailsAdapter({ data: state.data }),

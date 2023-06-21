@@ -354,20 +354,19 @@ export const findValueById = ({ data, id }) => {
   return [result];
 };
 
-
 export const getSessionRole = async () => {
   const session = await getSession();
 
   return {
-    data: session?.role
+    data: session?.role,
   };
-}
+};
 
 export const getRoleIdentity = ({ role }) => {
-  if(!role) return null;
+  if (!role) return null;
 
   return {
     isOwner: role === ROLES.OWNER,
-    isCharterer: role === ROLES.CHARTERER
+    isCharterer: role === ROLES.CHARTERER,
   };
-}
+};

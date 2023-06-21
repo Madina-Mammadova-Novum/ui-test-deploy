@@ -23,13 +23,13 @@ const CompanyInfoForm = ({ closeModal }) => {
 
   const dispatch = useDispatch();
   const { data } = useSelector(getUserDataSelector);
-  const { isOwner, isCharterer } = getRoleIdentity({ role:data?.role })
+  const { isOwner, isCharterer } = getRoleIdentity({ role: data?.role });
 
   const schema = yup.object({
     ...companyDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
   });
-  
+
   const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);

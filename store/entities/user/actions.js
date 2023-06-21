@@ -8,13 +8,13 @@ import { getChartererUserCargoes, getUserCompany, getUserProfile } from '@/servi
 import { getSessionRole } from '@/utils/helpers';
 
 export const fetchUserProfileData = createAsyncThunk(ACCOUNT.GET_USER_PROFILE, async ({ charterer }) => {
-  const [{ data:role }, { data: personalDetails }, { data: companyDetails }, { data: cargoesDetails }] = await Promise.all([
-    getSessionRole(),
-    getUserProfile(),
-    getUserCompany(),
-    charterer ? getChartererUserCargoes() : Promise.resolve({ data: {} }),
-  ]);
-
+  const [{ data: role }, { data: personalDetails }, { data: companyDetails }, { data: cargoesDetails }] =
+    await Promise.all([
+      getSessionRole(),
+      getUserProfile(),
+      getUserCompany(),
+      charterer ? getChartererUserCargoes() : Promise.resolve({ data: {} }),
+    ]);
 
   return {
     data: {
