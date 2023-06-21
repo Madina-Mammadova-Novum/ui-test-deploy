@@ -1,37 +1,35 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { CompanyInfoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
-import { ROLES } from '@/lib';
 import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
-import { makeId } from '@/utils/helpers';
+import { getRoleIdentity, makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
-  const dispatch = useDispatch();
-  const { data: session } = useSession();
-  const { data } = useSelector(getUserDataSelector);
-
   const [sameAddress, setSameAddress] = useState(false);
+
+  const dispatch = useDispatch();
+  const { data } = useSelector(getUserDataSelector);
+  const { isOwner, isCharterer } = getRoleIdentity({ role:data?.role })
 
   const schema = yup.object({
     ...companyDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
   });
-
+  
   const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
@@ -42,7 +40,7 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
+    const { status, error, data: response } = await updateCompany({ data: formData, role: data?.role });
 
     if (status === 200) {
       dispatch(fetchUserProfileData());
@@ -65,11 +63,6 @@ const CompanyInfoForm = ({ closeModal }) => {
     },
   ];
 
-  const printRoleBasedSection = useMemo(() => {
-    if (session?.role === ROLES.OWNER) return <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />;
-    return <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />;
-  }, [data?.companyDetails.cargoes, data?.companyDetails?.imos, session?.role]);
-
   return (
     <FormProvider {...methods}>
       <ModalFormManager
@@ -90,8 +83,9 @@ const CompanyInfoForm = ({ closeModal }) => {
             Сompany information
           </Title>
           <CompanyDetails />
-          {printRoleBasedSection}
+          {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
           <CompanyAddresses />
+          {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
       </ModalFormManager>
     </FormProvider>

@@ -23,6 +23,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
     country: company?.correspondenceCountry?.label,
     postal: company?.correspondencePostalCode,
   };
+  
 
   return (
     <FieldsetWrapper>

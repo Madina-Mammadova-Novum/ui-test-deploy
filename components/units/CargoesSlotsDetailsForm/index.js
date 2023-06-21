@@ -20,8 +20,6 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useHookForm();
 
-  console.log(data);
-
   const [cargoesState, setCargoesState] = useState({
     cargoesCount: data?.countOfCargoes ?? 0,
     cargoes: data?.listOfCargoes ?? [],
