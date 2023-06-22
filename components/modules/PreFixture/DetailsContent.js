@@ -3,6 +3,8 @@ import { DetailsContentPropTypes } from '@/lib/types';
 import usFlag from '@/assets/images/flag.png';
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
 import { PartyItem } from '@/units';
+import { useSession } from 'next-auth/react';
+import { ROLES } from '@/lib/constants';
 
 const partyTermsMock = [
   {
@@ -12,11 +14,14 @@ const partyTermsMock = [
 ];
 
 const DetailsContent = ({ underNegotiation }) => {
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
+
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Charterer Information</Title>
+          <Title level={3}>{isOwner ? 'Charterer Information' : 'Tanker Information'}</Title>
           <FieldsetContent className="mt-2.5">
             <TextRow title="Years of Operation">3-5 years</TextRow>
             <TextRow title="Estimated Number of Charters per Year">4-9 charters</TextRow>

@@ -52,7 +52,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
           />
         );
     }
-  }, [currentTab, data.failedOffers, data.incomingOffers, data.sentCounteroffers]);
+  }, [currentTab, data.failedOffers, data.incomingOffers, data.sentCounteroffers, isOwner, session?.role]);
 
   const modalContent = () => {
     switch (modal) {

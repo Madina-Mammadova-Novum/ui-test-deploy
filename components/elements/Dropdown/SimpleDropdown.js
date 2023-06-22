@@ -20,7 +20,7 @@ const LoadingIndicator = () => (
   </div>
 );
 
-export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => {
+export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, ...rest }) => {
   const [open, setOpen] = useState(false);
 
   const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
@@ -45,20 +45,18 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, ...rest }) => 
     );
   }
   return (
-    <div>
-      <Select
-        {...rest}
-        isLoading={asyncCall}
-        options={options}
-        components={{ Option: OptionsList, LoadingIndicator }}
-        formatOptionLabel={printOptions}
-        theme={dropdownTheme}
-        closeMenuOnSelect
-        menuIsOpen={open}
-        onMenuOpen={() => setOpen(true)}
-        onMenuClose={() => setOpen(false)}
-      />
-    </div>
+    <Select
+      {...rest}
+      isLoading={asyncCall}
+      options={options}
+      components={{ Option: OptionsList, LoadingIndicator }}
+      formatOptionLabel={printOptions}
+      theme={dropdownTheme}
+      closeMenuOnSelect
+      menuIsOpen={open}
+      onMenuOpen={() => setOpen(true)}
+      onMenuClose={() => setOpen(false)}
+    />
   );
 };
 

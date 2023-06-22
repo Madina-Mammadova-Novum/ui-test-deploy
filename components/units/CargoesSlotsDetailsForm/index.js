@@ -12,7 +12,7 @@ import { getPorts } from '@/services/port';
 import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CargoesSlotsDetailsForm = ({ helperText = null }) => {
+const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
   const {
     register,
     setValue,
@@ -21,8 +21,8 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
   } = useHookForm();
 
   const [cargoesState, setCargoesState] = useState({
-    cargoesCount: 0,
-    cargoes: [],
+    cargoesCount: data?.countOfCargoes ?? 0,
+    cargoes: data?.listOfCargoes ?? [],
     cargoesPortsOptions: null,
   });
 
@@ -34,8 +34,8 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
       [key]: value,
     }));
 
-  const handleChangeValue = (data) => {
-    const { option, index, key } = data;
+  const handleChangeValue = (dataValue) => {
+    const { option, index, key } = dataValue;
 
     const fieldName = `cargoes[${index}].${key}`;
     const isError = errors?.cargoes?.[index];
@@ -78,8 +78,8 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
   };
 
   const fetchPorts = async () => {
-    const data = await getPorts();
-    const options = countriesOptions(data);
+    const ports = await getPorts();
+    const options = countriesOptions(ports);
     handleChangeState('cargoesPortsOptions', options);
   };
 
@@ -161,6 +161,7 @@ const CargoesSlotsDetailsForm = ({ helperText = null }) => {
               inputClass="w-full min-w-[150px]"
               label="Bill of lading date"
               error={error?.date?.message}
+              value={item?.date}
               onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />
             <Button

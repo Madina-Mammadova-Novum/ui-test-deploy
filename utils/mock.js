@@ -1003,6 +1003,29 @@ export const imoClassOptions = [
   { label: '1, 2', value: '1,2' },
   { label: '2, 3', value: '2,3' },
   { label: '1, 2, 3', value: '1,2,3' },
+]
+
+export const recentActiveCargoesHeader = [
+  {
+    text: '#',
+    type: 'INDEX',
+    width: 40,
+  },
+  {
+    text: 'IMO',
+    type: 'TITLE',
+    width: 110,
+  },
+  {
+    text: 'LOAD PORT',
+    type: 'PORT',
+    width: 320,
+  },
+  {
+    text: 'OPEN DATE',
+    type: 'DATE',
+    width: 130,
+  },
 ];
 
 export const providedEmails = [

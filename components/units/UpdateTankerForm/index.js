@@ -15,7 +15,13 @@ import { useHookFormParams } from '@/utils/hooks';
 
 const UpdateTankerForm = ({ closeModal }) => {
   const methods = useHookFormParams({ schema: {} });
-  const onSubmit = async (formData) => console.log(formData);
+  const onSubmit = async (formData) => {
+    return {
+      result: {
+        formData,
+      },
+    };
+  };
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
   const printHelpers = useMemo(() => {

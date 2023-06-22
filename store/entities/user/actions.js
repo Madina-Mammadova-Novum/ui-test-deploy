@@ -4,15 +4,26 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ACCOUNT } from '@/store/entities/user/types';
 
 /* Services */
-import { getUserCompany, getUserProfile } from '@/services';
+import { getChartererUserCargoes, getUserCompany, getUserProfile } from '@/services';
+import { getSessionRole } from '@/utils/helpers';
 
-export const fetchUserProfileData = createAsyncThunk(ACCOUNT.GET_USER_PROFILE, async () => {
-  const [{ data: personalDetails }, { data: companyDetails }] = await Promise.all([getUserProfile(), getUserCompany()]);
+export const fetchUserProfileData = createAsyncThunk(ACCOUNT.GET_USER_PROFILE, async ({ charterer }) => {
+  const [{ data: role }, { data: personalDetails }, { data: companyDetails }, { data: cargoesDetails }] =
+    await Promise.all([
+      getSessionRole(),
+      getUserProfile(),
+      getUserCompany(),
+      charterer ? getChartererUserCargoes() : Promise.resolve({ data: {} }),
+    ]);
 
   return {
     data: {
+      role,
       personalDetails,
-      companyDetails,
+      companyDetails: {
+        ...companyDetails,
+        cargoesDetails,
+      },
     },
   };
 });

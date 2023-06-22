@@ -222,8 +222,6 @@ export const offerTabDataByRole = ({ data, role }) => {
   }
 };
 
-/// ///////////////////////////////////
-
 export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
