@@ -40,10 +40,10 @@ const DetailsContent = ({ underNegotiation }) => {
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.CHARTERER) {
-      return <DetailsChartererContent title="Charterer Information" data={state.chartererData} />;
+      return <DetailsChartererContent title="Tanker Information" data={state.chartererData} />;
     }
     if (session?.role === ROLES.OWNER) {
-      return <DetailsOwnerContent title="Tanker Information" data={state.ownerData} />;
+      return <DetailsOwnerContent title="Charterer Information" data={state.ownerData} />;
     }
     return null;
   }, [session?.role, state?.chartererData, state.ownerData]);
