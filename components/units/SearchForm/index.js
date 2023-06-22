@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -18,13 +19,14 @@ const schema = yup.object({
 });
 
 const SearchForm = ({ onSubmit }) => {
+  const [productState, setProductState] = useState([1]);
   const methods = useHookFormParams({ schema });
-
   const handleResetFields = () => {
     methods.reset((formValues) => {
       resetObjectFields(formValues);
       return formValues;
     });
+    setProductState([1])
   };
 
   return (
@@ -39,7 +41,9 @@ const SearchForm = ({ onSubmit }) => {
             className: '!w-max ml-auto !text-white',
           }}
         >
-          <SearchFormFields />
+          <SearchFormFields
+            productState={productState}
+            setProductState={setProductState} />
           <div className="absolute bottom-5 right-40">
             <Button
               buttonProps={{ text: 'Reset all', variant: 'primary', size: 'small' }}

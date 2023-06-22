@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 
 import { Loader, Title } from '@/elements';
-import { ROLES } from '@/lib';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import {
@@ -16,15 +15,18 @@ import {
   AccountPasswordDetails,
   AccountPersonalDetails,
 } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
   const { data: session } = useSession();
   const { loading, data } = useSelector(getUserDataSelector);
 
+  const { isCharterer } = getRoleIdentity({ role: session?.role });
+
   useEffect(() => {
-    dispatch(fetchUserProfileData({ charterer: session?.role === ROLES.CHARTERER }));
-  }, [dispatch, session?.role]);
+    dispatch(fetchUserProfileData({ isCharterer }));
+  }, [dispatch, isCharterer]);
 
   return (
     <section className="flex justify-start items-start flex-col gap-2.5">
