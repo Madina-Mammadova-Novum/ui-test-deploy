@@ -96,7 +96,11 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
 
     if (key === 'tankerType') {
       handleTankerOptionsChange('tankerCategoryOne', { loading: true });
-      const { status, data: tankerCategoryOneData, error: categoryOneError } = await getVesselCategoryOne(getValues(key).value);
+      const {
+        status,
+        data: tankerCategoryOneData,
+        error: categoryOneError,
+      } = await getVesselCategoryOne(getValues(key).value);
       handleTankerOptionsChange('tankerCategoryOne', { loading: false });
       if (status === 200) {
         handleTankerOptionsChange('tankerCategoryOne', {
@@ -108,7 +112,11 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
 
     if (key === 'tankerCategoryOne') {
       handleTankerOptionsChange('tankerCategoryTwo', { loading: true });
-      const { status, data: tankerCategoryTwoData, error: categoryTwoError } = await getVesselCategoryTwo(getValues(key).value);
+      const {
+        status,
+        data: tankerCategoryTwoData,
+        error: categoryTwoError,
+      } = await getVesselCategoryTwo(getValues(key).value);
       handleTankerOptionsChange('tankerCategoryTwo', { loading: false });
       if (status === 200) {
         handleTankerOptionsChange('tankerCategoryTwo', {
