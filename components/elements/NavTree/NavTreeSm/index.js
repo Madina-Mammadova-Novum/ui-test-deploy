@@ -66,7 +66,7 @@ const NavTreeSm = ({ data, active }) => {
         </div>
       )}
       {showLinks && (
-        <div className="absolute w-auto h-auto pr-2 py-2 left-[50px] top-5 bg-black">
+        <div className="absolute w-auto h-auto pr-2 py-2 left-12 top-5 bg-black rounded-br-base rounded-tr-base">
           {data?.items?.length > 0 && data?.items?.map(printSubTree)}
         </div>
       )}

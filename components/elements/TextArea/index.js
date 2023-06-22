@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import classnames from 'classnames';
 
@@ -22,7 +22,7 @@ const TextArea = React.forwardRef(
     },
     ref
   ) => {
-    const handleChange = useCallback(({ value }) => onChange(value), [onChange]);
+    const handleChange = (value) => onChange(value);
 
     return (
       <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
@@ -38,7 +38,7 @@ const TextArea = React.forwardRef(
           name={name}
           disabled={disabled}
           placeholder={placeholder}
-          onChange={({ target }) => handleChange(target)}
+          onChange={({ target }) => handleChange(target.value)}
           {...rest}
           className={classnames(
             'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue',

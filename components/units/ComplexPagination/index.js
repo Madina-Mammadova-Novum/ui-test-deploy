@@ -14,13 +14,14 @@ const ComplexPagination = ({
   perPage,
   pages,
   onSelectedPageChange,
+  label = 'offers',
 }) => {
   const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
   return (
     <div className="flex items-start 3md:items-center justify-between my-5 relative h-20 3md:h-auto">
       <Dropdown
         value={{ label: perPage, value: perPage }}
-        label="offers per page:"
+        label={`${label} per page:`}
         placeholder="5"
         options={NAVIGATION_PARAMS.DATA_PER_PAGE}
         onChange={onChangeOffers}

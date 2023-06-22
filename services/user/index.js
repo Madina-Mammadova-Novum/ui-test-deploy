@@ -82,6 +82,9 @@ export async function updatePassword({ data }) {
   const response = await postData(`account/update-password`, body);
   return {
     ...response,
+    data: {
+      message: response.status === 200 && 'You have successfully changed your password',
+    },
   };
 }
 
