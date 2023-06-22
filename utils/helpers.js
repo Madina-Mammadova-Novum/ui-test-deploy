@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import dynamic from 'next/dynamic';
-import { getSession } from 'next-auth/react';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { REGEX, ROLES, SORT_OPTIONS } from '@/lib/constants';
@@ -354,16 +353,8 @@ export const findValueById = ({ data, id }) => {
   return [result];
 };
 
-export const getSessionRole = async () => {
-  const session = await getSession();
-
-  return {
-    data: session?.role,
-  };
-};
-
 export const getRoleIdentity = ({ role }) => {
-  if (!role) return null;
+  if (!role) return '';
 
   return {
     isOwner: role === ROLES.OWNER,

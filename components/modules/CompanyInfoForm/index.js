@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { CompanyInfoFormPropTypes } from '@/lib/types';
@@ -22,8 +23,9 @@ const CompanyInfoForm = ({ closeModal }) => {
   const [sameAddress, setSameAddress] = useState(false);
 
   const dispatch = useDispatch();
+  const { data: session } = useSession();
   const { data } = useSelector(getUserDataSelector);
-  const { isOwner, isCharterer } = getRoleIdentity({ role: data?.role });
+  const { isOwner, isCharterer } = getRoleIdentity({ role: session?.role });
 
   const schema = yup.object({
     ...companyDetailsSchema(),
