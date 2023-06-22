@@ -1,10 +1,11 @@
+import { useSession } from 'next-auth/react';
+
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import usFlag from '@/assets/images/flag.png';
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
-import { PartyItem } from '@/units';
-import { useSession } from 'next-auth/react';
 import { ROLES } from '@/lib/constants';
+import { PartyItem } from '@/units';
 
 const partyTermsMock = [
   {

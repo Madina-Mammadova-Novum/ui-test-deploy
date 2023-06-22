@@ -1003,7 +1003,7 @@ export const imoClassOptions = [
   { label: '1, 2', value: '1,2' },
   { label: '2, 3', value: '2,3' },
   { label: '1, 2, 3', value: '1,2,3' },
-]
+];
 
 export const recentActiveCargoesHeader = [
   {
