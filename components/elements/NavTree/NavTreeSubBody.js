@@ -12,7 +12,7 @@ const NavTreeSubBody = ({ data, collapsed = false }) => {
     <li
       className={`${
         isActive ? 'bg-blue text-white' : 'hover:bg-blue-dark'
-      } flex flex-col text-gray my-2 px-5 py-1.5 rounded-base relative`}
+      } flex flex-col text-gray my-2 px-5 py-1.5 rounded-base whitespace-nowrap relative`}
     >
       {label && (
         <span className={`uppercase font-bold ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{label}</span>

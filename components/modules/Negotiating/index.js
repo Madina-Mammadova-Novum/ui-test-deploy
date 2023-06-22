@@ -49,12 +49,15 @@ const Negotiating = () => {
   const isOwner = session?.role === ROLES.OWNER;
   const tabs = isOwner ? ownerTabs : chartererTabs;
   const [toggle, setToggle] = useState(false);
+
   const [data, isLoading] = useFetch(getUserNegotiating);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
+
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
+
   const {
     numberOfPages,
     items,

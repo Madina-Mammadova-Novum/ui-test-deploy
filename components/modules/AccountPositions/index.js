@@ -95,6 +95,7 @@ const AccountPositions = () => {
       </div>
       {items && items?.map(printExpandableCard)}
       <ComplexPagination
+        label="fleets"
         currentPage={currentPage}
         numberOfPages={numberOfPages}
         onPageChange={handlePageChange}

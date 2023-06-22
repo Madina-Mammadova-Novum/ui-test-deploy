@@ -15,7 +15,7 @@ import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes } from '@/units';
 import { getRoleIdentity, makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -25,7 +25,8 @@ const CompanyInfoForm = ({ closeModal }) => {
   const dispatch = useDispatch();
   const { data: session } = useSession();
   const { data } = useSelector(getUserDataSelector);
-  const { isOwner, isCharterer } = getRoleIdentity({ role: session?.role });
+
+  const { isCharterer } = getRoleIdentity({ role: session?.role });
 
   const schema = yup.object({
     ...companyDetailsSchema(),
@@ -85,7 +86,6 @@ const CompanyInfoForm = ({ closeModal }) => {
             Сompany information
           </Title>
           <CompanyDetails />
-          {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
           <CompanyAddresses />
           {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
