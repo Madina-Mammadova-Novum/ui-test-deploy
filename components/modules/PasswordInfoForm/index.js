@@ -17,22 +17,26 @@ const PasswordInfoForm = ({ closeModal }) => {
   const schema = yup.object({ ...updatePasswordSchema() });
   const methods = useHookFormParams({ schema });
 
-  const onSubmit = async (formData) => {
-    const { status, error } = await updatePassword({ data: formData });
-
-    if (status === 200) {
-      successToast(null, 'Your new password has been sent successfully');
-    }
-
-    if (error) errorToast(error?.message);
-    return null;
-  };
-
   const {
     clearErrors,
     setValue,
     formState: { errors, isSubmitting },
   } = methods;
+
+  const onSubmit = async (formData) => {
+    const { data, status, error } = await updatePassword({ data: formData });
+
+    if (status === 200) {
+      successToast(data.message);
+
+      setValue('password', '');
+      setValue('confirmPassword', '');
+      setValue('currentPassword', '');
+    }
+
+    if (error) errorToast(error?.message);
+    return true;
+  };
 
   const handleCurrentPassword = (event) => {
     clearErrors('currentPassword');

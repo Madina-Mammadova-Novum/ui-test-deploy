@@ -4,7 +4,9 @@ import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
+import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
+import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
@@ -50,6 +52,7 @@ import TabsAsLinks from '@/units/TabsAsLinks';
 import TabsVertical from '@/units/TabsVertical';
 import TankerInformationContent from '@/units/TankerInformationContent';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
+import TankerSlotsDetailsStatic from '@/units/TankerSlotsDetailsStatic';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
@@ -68,9 +71,11 @@ export {
   PersonalDetails,
   CompanyDetails,
   TankerSlotsDetails,
+  TankerSlotsDetailsStatic,
   CompanyAddresses,
   TermsAndConditions,
   CargoesSlotsDetails,
+  CargoesSlotsDetailsStatic,
   SearchForm,
   SearchFormFields,
   ToggleRows,
@@ -116,4 +121,5 @@ export {
   DeleteTankerModal,
   AddTankerWithImoForm,
   AddTankerManuallyForm,
+  CargoesInfoModal,
 };

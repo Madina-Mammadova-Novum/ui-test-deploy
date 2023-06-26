@@ -17,13 +17,14 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     },
     background: selectedOption && '#E7ECF8',
     borderRadius: '6px',
-    border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#E7ECF8' : '#E53636'} `,
+    border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#DADFEA' : '#E53636'} `,
     cursor: 'pointer',
+    minHeight: '40px',
   }),
   container: (base, { selectProps: { menuIsOpen, options } }) => {
     return {
       ...base,
-      height: menuIsOpen && expand && options?.length > 20 ? 340 : 'auto',
+      height: menuIsOpen && expand && options?.length > 1 ? 340 : 'auto',
       minWidth: minWidth ?? 34,
     };
   },

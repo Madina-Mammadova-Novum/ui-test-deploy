@@ -29,12 +29,12 @@ const OnSubsExpandedContent = () => {
   }, [currentTab]);
 
   return (
-    <div>
+    <div className="pt-16">
       <Tabs
         activeTab={currentTab}
         tabs={tabs}
         onClick={({ target }) => setCurrentTab(target.value)}
-        customStyles="mx-auto mt-5 mb-10 lg:mb-3"
+        customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
       />
       {tabContent}
     </div>

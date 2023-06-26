@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
@@ -14,7 +16,7 @@ import { getTerminals } from '@/services/terminal';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const SearchFormFields = () => {
+const SearchFormFields = ({ productState, setProductState }) => {
   const {
     register,
     clearErrors,
@@ -24,7 +26,6 @@ const SearchFormFields = () => {
     unregister,
   } = useHookForm();
 
-  const [productState, setProductState] = useState([1]);
   const [initialLoading, setInitialLoading] = useState(false);
   const [ports, setPorts] = useState([]);
   const [cargoTypes, setCargoTypes] = useState([]);
@@ -44,7 +45,7 @@ const SearchFormFields = () => {
     },
   });
 
-  const productsLimitExceeded = productState.length >= 3;
+  const productsLimitExceeded = productState?.length >= 3;
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -82,7 +83,7 @@ const SearchFormFields = () => {
     }
 
     if (key === CARGO_TYPE_KEY) {
-      productState.map((productId) => setValue(`products[${productId}].product`, null));
+      productState?.map((productId) => setValue(`products[${productId}].product`, null));
       setProducts((prevState) => ({
         ...prevState,
         loading: true,
@@ -126,6 +127,7 @@ const SearchFormFields = () => {
           <DatePicker
             label="laycan start"
             inputClass="w-full"
+            containerClass="w-full"
             name="laycanStart"
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
@@ -133,6 +135,7 @@ const SearchFormFields = () => {
           <DatePicker
             label="laycan end"
             inputClass="w-full"
+            containerClass="w-full"
             name="laycanEnd"
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
@@ -191,7 +194,7 @@ const SearchFormFields = () => {
           asyncCall={initialLoading}
           onChange={(option) => handleChange('cargoType', option)}
         />
-        {productState.map((productId, index) => {
+        {productState?.map((productId, index) => {
           const { density = {} } = getValues(`products[${productId}].product`) || {};
           return (
             <div key={`product_${productId}`}>
@@ -240,7 +243,7 @@ const SearchFormFields = () => {
                   disabled={isSubmitting}
                 />
               </div>
-              {productState.length > 1 && (
+              {productState?.length > 1 && (
                 <Button
                   buttonProps={{
                     text: 'Delete',
@@ -269,6 +272,11 @@ const SearchFormFields = () => {
       </div>
     </div>
   );
+};
+
+SearchFormFields.propTypes = {
+  productState: PropTypes.arrayOf(PropTypes.number).isRequired,
+  setProductState: PropTypes.func.isRequired,
 };
 
 export default SearchFormFields;

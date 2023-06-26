@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
-import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { NAVIGATION_PARAMS, ROLES } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
 import { getUserNegotiating } from '@/services';
 import { ComplexPagination, ToggleRows } from '@/units';
-import { useAuth, useFetch, useFilters } from '@/utils/hooks';
+import { useFetch, useFilters } from '@/utils/hooks';
 
-const tabs = [
+const ownerTabs = [
   {
     value: 'incoming',
     label: 'Incoming',
@@ -27,16 +29,35 @@ const tabs = [
   },
 ];
 
+const chartererTabs = [
+  {
+    value: 'incoming',
+    label: 'Sent offers',
+  },
+  {
+    value: 'counteroffers',
+    label: 'Counteroffers',
+  },
+  {
+    value: 'failed',
+    label: 'Failed',
+  },
+];
+
 const Negotiating = () => {
+  const { data: session } = useSession();
+  const isOwner = session?.role === ROLES.OWNER;
+  const tabs = isOwner ? ownerTabs : chartererTabs;
   const [toggle, setToggle] = useState(false);
+
   const [data, isLoading] = useFetch(getUserNegotiating);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
-  const { user } = useAuth();
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
+
   const {
     numberOfPages,
     items,
@@ -49,16 +70,21 @@ const Negotiating = () => {
   } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
   const printExpandableRow = (rowData) => {
-    const rowHeader = user.isCharterer
-      ? chartererNegotiatingHeaderDataAdapter({ data: rowData })
-      : ownerNegotiatingHeaderDataAdapter({ data: rowData });
+    const rowHeader = isOwner
+      ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
+      : chartererNegotiatingHeaderDataAdapter({ data: rowData });
 
     return (
       <ExpandableRow
         className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} />}
         footer={
-          <NegotiatingExpandedFooter isCharterer currentTab={currentTab} tabs={tabs} setCurrentTab={setCurrentTab} />
+          <NegotiatingExpandedFooter
+            isCharterer={!isOwner}
+            currentTab={currentTab}
+            tabs={tabs}
+            setCurrentTab={setCurrentTab}
+          />
         }
         expand={toggle}
       >

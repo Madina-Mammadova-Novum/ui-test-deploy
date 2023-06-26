@@ -287,3 +287,14 @@ export const useRoleNavigation = () => {
       return { data: [] };
   }
 };
+
+export const useFormUpdate = (name, index, initialValue) => {
+  const fieldName = `${name}[${index}]`;
+  const methods = useHookForm();
+
+  useEffect(() => {
+    methods.setValue(fieldName, initialValue);
+  }, [fieldName, initialValue, methods]);
+
+  return fieldName;
+};

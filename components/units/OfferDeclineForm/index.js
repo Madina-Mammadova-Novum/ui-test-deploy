@@ -16,8 +16,9 @@ const schema = yup.object({});
 
 const defaultState = {};
 
-const OfferDeclineForm = ({ closeModal, goBack, title = '' }) => {
+const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton }) => {
   const methods = useHookFormParams({ state: defaultState, schema });
+  const isEmpty = methods.watch('reason');
 
   const handleSubmit = async (formData) => {
     const { error, data } = await declineOffer({ data: formData });
@@ -35,16 +36,19 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '' }) => {
   return (
     <FormProvider {...methods}>
       <FormManager
-        submitAction={(formData) => handleSubmit(formData)}
+        submitAction={handleSubmit}
         submitButton={{
           text: 'Send the Decline',
           variant: 'delete',
           size: 'large',
-          className: 'absolute !max-w-[145px] whitespace-nowrap right-8 bottom-8 !px-2.5',
+          disabled: isEmpty === undefined || isEmpty === '',
+          className: `absolute cursor-pointer !max-w-[145px] whitespace-nowrap right-8 bottom-8 !px-2.5 ${
+            !showCancelButton && 'left-8 !max-w-[unset] !w-auto'
+          }`,
         }}
         className="!gap-0"
       >
-        <OfferDeclineFields closeModal={closeModal} title={title} goBack={goBack} />
+        <OfferDeclineFields closeModal={closeModal} title={title} goBack={goBack} showCancelButton={showCancelButton} />
       </FormManager>
     </FormProvider>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import ModalHeader from '../ModalHeader';
 
@@ -38,16 +38,38 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
+const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton = true }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
+  const [customReason, setCustomReason] = useState({ text: '' });
+
   const [showTextField, setShowTextField] = useState(false);
-  const { register } = useHookForm();
-  const handleCheck = (id) => {
-    setReasons((prevState) =>
-      prevState.map((reason) => (reason.id === id ? { ...reason, checked: true } : { ...reason, checked: false }))
-    );
-    setShowTextField(id === 5);
-  };
+
+  const { setValue } = useHookForm();
+
+  const handleCustomReason = (text) => setCustomReason({ text });
+
+  const handleCheck = useCallback(
+    (id) => {
+      setReasons((prevState) =>
+        prevState.map((reason) => (reason.id === id ? { ...reason, checked: true } : { ...reason, checked: false }))
+      );
+
+      setShowTextField(id === reasons[reasons.length - 1].id);
+
+      const chosenReason = reasons.find((reason) => reason.id === id);
+
+      if (chosenReason.id !== reasons[reasons.length - 1].id) {
+        setValue('reason', chosenReason.text);
+      }
+    },
+    [reasons, setValue]
+  );
+
+  useEffect(() => {
+    if (showTextField && customReason.text !== '') {
+      setValue('reason', customReason.text);
+    }
+  }, [customReason.text, setValue, showTextField]);
 
   return (
     <div className="w-[300px]">
@@ -59,32 +81,25 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack }) => {
 
       {reasons.map(({ id, text, checked }) => (
         <div className="mt-2.5">
-          <RadioInput
-            key={id}
-            name={`option${id}`}
-            checked={checked}
-            labelStyles="text-xsm"
-            onChange={() => handleCheck(id)}
-          >
+          <RadioInput key={id} name="reason" checked={checked} labelStyles="text-xsm" onChange={() => handleCheck(id)}>
             {text}
           </RadioInput>
         </div>
       ))}
       {showTextField && (
         <TextArea
-          name="comment"
+          onChange={(v) => handleCustomReason(v)}
           label="your reason"
           placeholder="Type your reason here ..."
           customStyles="mt-2.5"
-          register={register}
         />
       )}
 
-      <div className="grid grid-cols-2 gap-x-2.5 mt-5">
+      <div className="grid grid-cols-2 gap-x-2.5 mt-5 h-10">
         <div>
           <Button
             onClick={closeModal}
-            customStyles="w-full"
+            customStyles={`w-full ${!showCancelButton && 'hidden'}`}
             buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
           />
         </div>

@@ -54,7 +54,7 @@ const CommercialOfferTerms = () => {
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
       {products
-        .filter((product) => product)
+        ?.filter((product) => product)
         .map((_, index) => (
           <div className="flex items-baseline mt-3 gap-x-5">
             <FormDropdown
@@ -93,6 +93,7 @@ const CommercialOfferTerms = () => {
           {...register('value')}
           label="Value"
           name="value"
+          type="number"
           placeholder="WS"
           customStyles="w-1/2"
           error={errors.value?.message}
@@ -104,6 +105,7 @@ const CommercialOfferTerms = () => {
         {...register('demurrageRate')}
         label="Demurrage rate"
         name="demurrageRate"
+        type="number"
         placeholder="Daily payment"
         customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
@@ -115,6 +117,7 @@ const CommercialOfferTerms = () => {
           {...register('layTime')}
           label="lay time"
           name="layTime"
+          type="number"
           helperText="The maximum laytime is 100 hours"
           placeholder="Daily payment"
           customStyles="w-1/2 mt-3 pr-5"

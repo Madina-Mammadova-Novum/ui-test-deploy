@@ -571,6 +571,35 @@ export const negotiatingIncomingTableHeader = [
     text: '',
   },
 ];
+export const negotiatingSentOffersTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'Name',
+  },
+  {
+    text: 'Open port',
+  },
+  {
+    text: 'Open date',
+  },
+  {
+    text: 'DWT',
+  },
+  {
+    text: 'Status',
+  },
+  {
+    text: 'Date sent',
+  },
+  {
+    text: 'Countdown',
+  },
+  {
+    text: '',
+  },
+];
 
 export const negotiatingIncomingTableRows = [
   [
@@ -647,7 +676,7 @@ export const negotiatingIncomingTableRows = [
   ],
 ];
 
-export const negotiatingCounterofferTableHeader = [
+export const ownerNegotiatingCounterofferTableHeader = [
   {
     text: '#',
   },
@@ -665,6 +694,33 @@ export const negotiatingCounterofferTableHeader = [
   },
   {
     text: 'date sent',
+  },
+  {
+    text: 'countdown',
+  },
+  {
+    text: '',
+  },
+];
+
+export const chartererNegotiatingCounterofferTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'Name',
+  },
+  {
+    text: 'Open port',
+  },
+  {
+    text: 'Open date',
+  },
+  {
+    text: 'DWT',
+  },
+  {
+    text: 'Date received',
   },
   {
     text: 'countdown',
@@ -739,7 +795,7 @@ export const negotiatingCounterofferTableRows = [
   ],
 ];
 
-export const negotiatingFailedTableHeader = [
+export const ownerNegotiatingFailedTableHeader = [
   {
     text: '#',
   },
@@ -757,6 +813,32 @@ export const negotiatingFailedTableHeader = [
   },
   {
     text: 'date failed',
+  },
+  {
+    text: 'reason',
+  },
+  {
+    text: '',
+  },
+];
+export const chartererNegotiatingFailedTableHeader = [
+  {
+    text: '#',
+  },
+  {
+    text: 'Name',
+  },
+  {
+    text: 'Open port',
+  },
+  {
+    text: 'Open date',
+  },
+  {
+    text: 'DWT',
+  },
+  {
+    text: 'Date failed',
   },
   {
     text: 'reason',
@@ -911,6 +993,38 @@ export const fleetsPageHeader = [
     text: 'Tanker status',
     type: 'SIZE',
     width: 112,
+  },
+];
+
+export const imoClassOptions = [
+  { label: '1', value: '1' },
+  { label: '2', value: '2' },
+  { label: '3', value: '3' },
+  { label: '1, 2', value: '1,2' },
+  { label: '2, 3', value: '2,3' },
+  { label: '1, 2, 3', value: '1,2,3' },
+];
+
+export const recentActiveCargoesHeader = [
+  {
+    text: '#',
+    type: 'INDEX',
+    width: 40,
+  },
+  {
+    text: 'IMO',
+    type: 'TITLE',
+    width: 110,
+  },
+  {
+    text: 'LOAD PORT',
+    type: 'PORT',
+    width: 320,
+  },
+  {
+    text: 'OPEN DATE',
+    type: 'DATE',
+    width: 130,
   },
 ];
 

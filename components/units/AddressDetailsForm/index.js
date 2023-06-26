@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { AddressDetailsFormPropTypes } from '@/lib/types';
@@ -10,15 +10,16 @@ import { getCities } from '@/services';
 import { convertDataToOptions } from '@/utils/helpers';
 
 const AddressDetails = ({ title, type, countries = [] }) => {
-  const [cities, setCities] = useState([]);
-  const [disabled, setDisabled] = useState(true);
-
   const {
     register,
     setValue,
+    getValues,
     clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext();
+
+  const [cities, setCities] = useState([]);
+  const [disabled, setDisabled] = useState(true);
 
   const fetchCities = async (id) => {
     const data = await getCities(id);
@@ -27,13 +28,13 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   };
 
   const handleCountryChange = async (data) => {
-    clearErrors([`${type}CountryId`, `${type}CityId`]);
+    clearErrors([`${type}Country`, `${type}City`]);
 
     const { value: countryId } = data;
     const { options } = await fetchCities(countryId);
 
-    setValue(`${type}CountryId`, data);
-    setValue(`${type}CityId`, null);
+    setValue(`${type}Country`, data);
+    setValue(`${type}City`, null);
 
     if (options.length > 0) {
       setCities(options);
@@ -42,9 +43,15 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   };
 
   const handleCityChange = (option) => {
-    clearErrors(`${type}CityId`);
-    setValue(`${type}CityId`, option);
+    clearErrors(`${type}City`);
+    setValue(`${type}City`, option);
   };
+
+  useEffect(() => {
+    if (getValues(`${type}Country`) || getValues(`${type}City`)) {
+      setDisabled(false);
+    }
+  }, [getValues, type]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -52,7 +59,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
         <div className="grid grid-cols-2 gap-5">
           <FormDropdown
-            name={`${type}CountryId`}
+            name={`${type}Country`}
             label="Country"
             options={countries}
             onChange={handleCountryChange}
@@ -60,7 +67,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
           />
           <FormDropdown
             label="City"
-            name={`${type}CityId`}
+            name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
             disabled={disabled}
