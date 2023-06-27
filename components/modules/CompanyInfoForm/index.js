@@ -15,7 +15,7 @@ import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes } from '@/units';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
 import { getRoleIdentity, makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -26,7 +26,7 @@ const CompanyInfoForm = ({ closeModal }) => {
   const { data: session } = useSession();
   const { data } = useSelector(getUserDataSelector);
 
-  const { isCharterer } = getRoleIdentity({ role: session?.role });
+  const { isCharterer, isOwner } = getRoleIdentity({ role: session?.role });
 
   const schema = yup.object({
     ...companyDetailsSchema(),
@@ -57,12 +57,12 @@ const CompanyInfoForm = ({ closeModal }) => {
     {
       id: makeId(),
       label: 'Сompany information',
-      list: ['Company Name', 'Years of Operation', 'Number of Tankers', 'IMOs'],
+      list: ['Company Name', 'Years of Operation'],
     },
     {
       id: makeId(),
       label: 'Company Registration Address',
-      list: ['City', 'Country', 'Address line #1', 'Address line #2', 'Zip / Postal code', 'State / Province / Region'],
+      list: ['Address line #1', 'Address line #2', 'City', 'State / Province / Region', 'Zip / Postal code', 'Country'],
     },
   ];
 
@@ -86,6 +86,7 @@ const CompanyInfoForm = ({ closeModal }) => {
             Сompany information
           </Title>
           <CompanyDetails />
+          {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
           <CompanyAddresses />
           {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
