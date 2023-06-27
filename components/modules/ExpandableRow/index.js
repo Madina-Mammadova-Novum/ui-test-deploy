@@ -23,7 +23,7 @@ const ExpandableRow = ({ header, footer, children, expand = false, className = '
         }`}
       >
         <div className="min-h-0 relative px-5">
-          <div className={`table-scroll ${className}`}>{children}</div>
+          <div className={`${className}`}>{children}</div>
           {footer}
         </div>
       </div>

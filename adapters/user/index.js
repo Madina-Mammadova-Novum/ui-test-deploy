@@ -20,7 +20,7 @@ export function userRoleAdapter({ data }) {
 export function listOfImosAdapter({ data }) {
   if (!data) return [];
 
-  return data.map((imo) => imo);
+  return data.map(({ imo }) => imo);
 }
 
 export function userDetailsAdapter({ data }) {

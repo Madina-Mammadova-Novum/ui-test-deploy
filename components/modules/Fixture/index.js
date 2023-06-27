@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import FixtureExpandedContent from './FixtureExpandedContent';
-import FixtureExpandedFooter from './FixtureExpandedFooter';
 
 import { fixtureHeaderDataAdapter, fixtureRowsDataAdapter } from '@/adapters/fixture';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
@@ -36,7 +35,6 @@ const Fixture = () => {
   const printExpandableRow = (headerData) => (
     <ExpandableRow
       header={<ExpandableCardHeader headerData={fixtureHeaderDataAdapter({ data: headerData })} />}
-      footer={<FixtureExpandedFooter />}
       expand={toggle}
     >
       <FixtureExpandedContent rowsData={fixtureRowsDataAdapter({ data: headerData.documentsInfo })} />
