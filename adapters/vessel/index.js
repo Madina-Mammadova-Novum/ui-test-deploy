@@ -188,7 +188,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     vesselTypeId: tankerType.value,
     vesselCategoyOneId: tankerCategoryOne.value,
     vesselCategoryTwoId: tankerCategoryTwo.value,
-    hullType,
+    hullType: hullType.value,
     loa,
     beam,
     summerDwt: summerDWT,
