@@ -12,13 +12,13 @@ import { Button, DatePicker, FormDropdown, Input, TextWithLabel, Title } from '@
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { tankerDataSchema } from '@/lib/schemas';
 import { getCountries } from '@/services';
+import { getPorts } from '@/services/port';
 import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesselTypes } from '@/services/vessel';
 import { ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { convertDataToOptions, countriesOptions, getValueWithPath, updateFormats } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
-import { getPorts } from '@/services/port';
 
 const schema = yup.object({
   ...tankerDataSchema(),
@@ -68,7 +68,11 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
   useEffect(() => {
     (async () => {
       setInitialLoading(true);
-      const [tankerTypesResponse, countriesResponse, portsResponse] = await Promise.all([getVesselTypes(), getCountries(), getPorts()]);
+      const [tankerTypesResponse, countriesResponse, portsResponse] = await Promise.all([
+        getVesselTypes(),
+        getCountries(),
+        getPorts(),
+      ]);
       setInitialLoading(false);
       const { data: tankerTypesData = [], error: tankerTypesError } = tankerTypesResponse;
       const { data: countriesData = [], error: countriesError } = countriesResponse;
@@ -78,7 +82,8 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
       });
       setCountries(countriesOptions({ data: countriesData }));
       setPorts(countriesOptions({ data: portsData }));
-      if (tankerTypesError || countriesError || portsError) console.log(tankerTypesError || countriesError || portsError);
+      if (tankerTypesError || countriesError || portsError)
+        console.log(tankerTypesError || countriesError || portsError);
     })();
   }, []);
 
@@ -245,8 +250,22 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
               />
             </div>
             <div className="grid grid-cols-4 gap-x-5 gap-y-4 items-baseline">
-              <Input {...register(`loa`)} label="LOA" customStyles="w-full" type="number" placeholder="meters" error={errors.loa?.message} />
-              <Input {...register(`beam`)} label="Beam" customStyles="w-full" type="number" placeholder="meters" error={errors.beam?.message} />
+              <Input
+                {...register(`loa`)}
+                label="LOA"
+                customStyles="w-full"
+                type="number"
+                placeholder="meters"
+                error={errors.loa?.message}
+              />
+              <Input
+                {...register(`beam`)}
+                label="Beam"
+                customStyles="w-full"
+                type="number"
+                placeholder="meters"
+                error={errors.beam?.message}
+              />
               <Input
                 {...register(`summerDWT`)}
                 label="Summer DWT"
