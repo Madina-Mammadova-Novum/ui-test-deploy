@@ -434,7 +434,6 @@ tr > th:first-child,
 tr > td:first-child {
   position: sticky;
   left: -1px;
-  z-index: 1;
 }
 
 tr > th:nth-child(2),

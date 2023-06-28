@@ -33,17 +33,32 @@ const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
 
   return (
     <div>
-      <div className="relative">
-        <Tabs
-          activeTab={currentTab}
-          tabs={tabs}
-          onClick={({ target }) => setCurrentTab(target.value)}
-          customStyles="mx-auto mt-5 mb-10 lg:mb-3"
-        />
-        <Button
-          buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-          customStyles="border border-blue hover:border-blue-darker !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute left-1/2 lg:left-[unset] -translate-x-1/2 lg:translate-x-[unset] lg:right-0 bottom-[10%] lg:bottom-[unset] lg:top-[50%] lg:translate-y-[-75%] whitespace-nowrap"
-        />
+      <div className="">
+        <div className="py-8 xlMax:h-20">
+          <Tabs
+            activeTab={currentTab}
+            tabs={tabs}
+            onClick={({ target }) => setCurrentTab(target.value)}
+            customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
+          />
+          <Button
+            buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
+            customStyles="
+            border border-blue 
+            hover:border-blue-darker 
+            whitespace-nowrap
+            !px-2.5 !py-0.5 uppercase !text-[10px] 
+            font-bold 
+            absolute 
+            right-1
+            -translate-x-5 
+            xlMax:w-fit
+            xlMax:top-14
+            xlMax:left-[50%] 
+            xlMax:transform
+            xlMax:-translate-x-1/2"
+          />
+        </div>
       </div>
       {tabContent()}
     </div>

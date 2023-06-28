@@ -183,12 +183,12 @@ export function requestAddVesselManuallyAdapter({ data }) {
     imo,
     imoClass: imoClass.value,
     updateDate,
-    built: built.value,
+    built,
     registryPortId: portOfRegistry.value,
     vesselTypeId: tankerType.value,
     vesselCategoyOneId: tankerCategoryOne.value,
     vesselCategoryTwoId: tankerCategoryTwo.value,
-    hullType,
+    hullType: hullType.value,
     loa,
     beam,
     summerDwt: summerDWT,
@@ -196,7 +196,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     ballastDwt: normalBallastDWT,
     ballastDraft: normalBallastDraft,
     cubicCapacity,
-    segregationCount: grades.value,
+    segregationCount: grades,
     registeredOwner,
     technicalOperator,
     commercialOperator,
@@ -206,6 +206,23 @@ export function requestAddVesselManuallyAdapter({ data }) {
 }
 
 export function responseAddVesselManuallyAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+
+export function responseGetVesselTypesAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+
+export function responseGetVesselCategoryOneAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseGetVesselCategoryTwoAdapter({ data }) {
   if (!data) return null;
 
   return data;

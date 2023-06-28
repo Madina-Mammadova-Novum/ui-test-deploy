@@ -33,7 +33,7 @@ const AccountPersonalDetails = ({ user = {} }) => {
           <TextRow title="Last Name">{lastName || '—'}</TextRow>
           <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
-        <FieldsetContent className="col-start-1 3md:col-start-2">
+        <FieldsetContent className="col-start-1 3md:col-start-2 pt-5 3md:pt-0">
           <TextRow title="Primary phone number">{printPhoneNumber(primaryPhone)}</TextRow>
           <TextRow title="Secondary phone number">{printPhoneNumber(secondaryPhone)}</TextRow>
         </FieldsetContent>

@@ -19,6 +19,7 @@ const FormDropdown = ({
   disabled = false,
   asyncCall = false,
   customStyles = {},
+  ...rest
 }) => {
   const { dropdownWidth, dropdownExpanded = false, className = '' } = customStyles;
 
@@ -34,7 +35,7 @@ const FormDropdown = ({
       name={name}
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
-        const hasValue = { ...field }.value?.value;
+        const hasValue = { ...field }.value;
 
         return (
           <div className={`relative ${className}`}>
@@ -43,6 +44,7 @@ const FormDropdown = ({
             </Label>
             <SimpleDropdown
               {...field}
+              {...rest}
               ref={ref}
               id={name}
               options={options}

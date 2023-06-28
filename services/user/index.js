@@ -82,6 +82,9 @@ export async function updatePassword({ data }) {
   const response = await postData(`account/update-password`, body);
   return {
     ...response,
+    data: {
+      message: response.status === 200 && 'You have successfully changed your password',
+    },
   };
 }
 
@@ -153,6 +156,14 @@ export async function getUserProfile() {
 
 export async function getUserCompany() {
   const response = await getData(`account/user-company`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getChartererUserCargoes() {
+  const response = await getData(`account/user-profile-cargoes`);
 
   return {
     ...response,

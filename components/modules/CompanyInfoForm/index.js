@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,42 +11,29 @@ import { CompanyInfoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
-import { ROLES } from '@/lib';
-import {
-  cargoesSlotsDetailsSchema,
-  companyAddressesSchema,
-  companyDetailsSchema,
-  tankerSlotsDetailsSchema,
-} from '@/lib/schemas';
+import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { CargoesSlotsDetails, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
-import { makeId } from '@/utils/helpers';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes } from '@/units';
+import { getRoleIdentity, makeId } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
-  const dispatch = useDispatch();
   const [sameAddress, setSameAddress] = useState(false);
-  const { data } = useSelector(getUserDataSelector);
+
+  const dispatch = useDispatch();
   const { data: session } = useSession();
+  const { data } = useSelector(getUserDataSelector);
 
-  const roleBasedSchemaValidation = () => {
-    if (session?.role === ROLES.OWNER) {
-      return yup.object({
-        ...companyDetailsSchema(),
-        ...tankerSlotsDetailsSchema(),
-        ...companyAddressesSchema(sameAddress),
-      });
-    }
-    return yup.object({
-      ...companyDetailsSchema(),
-      ...cargoesSlotsDetailsSchema(),
-      ...companyAddressesSchema(sameAddress),
-    });
-  };
+  const { isCharterer } = getRoleIdentity({ role: session?.role });
 
-  const methods = useHookFormParams({ state: data?.companyDetails, schema: roleBasedSchemaValidation() });
+  const schema = yup.object({
+    ...companyDetailsSchema(),
+    ...companyAddressesSchema(sameAddress),
+  });
+
+  const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
@@ -56,7 +43,7 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { status, error, data: response } = await updateCompany({ data: formData, role: session?.role });
+    const { status, error, data: response } = await updateCompany({ data: formData, role: data?.role });
 
     if (status === 200) {
       dispatch(fetchUserProfileData());
@@ -79,12 +66,6 @@ const CompanyInfoForm = ({ closeModal }) => {
     },
   ];
 
-  const printRoleBasedSection = useMemo(() => {
-    if (session?.role === ROLES.OWNER) return <TankerSlotsDetails />;
-    if (session?.role === ROLES.CHARTERER) <CargoesSlotsDetails />;
-    return null;
-  }, [session?.role]);
-
   return (
     <FormProvider {...methods}>
       <ModalFormManager
@@ -100,13 +81,13 @@ const CompanyInfoForm = ({ closeModal }) => {
           subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
           data={noteList}
         />
-        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[320px] overflow-y-scroll">
+        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[480px] overflow-y-scroll">
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>
           <CompanyDetails />
-          {printRoleBasedSection}
           <CompanyAddresses />
+          {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
       </ModalFormManager>
     </FormProvider>

@@ -30,6 +30,7 @@ import OnSubs from '@/modules/OnSubs';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
+import PostFixture from '@/modules/PostFixture';
 import PreFixture from '@/modules/PreFixture';
 import ProfileMenu from '@/modules/ProfileMenu';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
@@ -80,6 +81,7 @@ export {
   CommentsContent,
   TankerSearchResults,
   PreFixture,
+  PostFixture,
   Fixture,
   Negotiating,
   ViewIncomingOffer,

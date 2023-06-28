@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.4...v0.4.5) (2023-06-26)
+
+
+### Features
+
+* change notification content ([c52269d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c52269d4ec50df1d1d4555ca50d827b47dbc0460))
+* fetching options for add tanker modal ([4caddf6](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4caddf6290d9c50c316ef2708960da278371d0b3))
+* negotiating page split by role ([955a942](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/955a942b3930e917938fad17a642917bbda33686))
+* removed cancel buttons from negotiating page, connected add tanker to backend ([4093a75](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4093a75f1f5ea96c11f3e172da9f7a87fe852fe6))
+* rename links, close menu after clicking the link ([cb031c0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/cb031c069dece113a5061394d647fb6b7c7377fa))
+
+
+### Bug Fixes
+
+* add sorting option ([0e50d1e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/0e50d1e45635085a678c557b875fb6fe0c089dbc))
+* bug-issue ([6d65de6](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/6d65de6ec64d63c912756721253f0c1ce1efbbb2))
+* bugs-issies ([76de517](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/76de517f397bd825927071787c39c5f88268b2ee))
+* build ([4a6bf6d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4a6bf6da13180791470e631341491e87a27ae60b))
+* build-issue ([8bf8a23](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/8bf8a2317fe791cba0aa313137b3551ee4467d6d))
+* build-issue ([e1421a0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e1421a0d631cc6174d1ab7d74fcf1c284a87e5f1))
+* build-issue ([2ced26e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/2ced26e6dbc206c2c1c907a7851e718ab9d129f1))
+* change notification content ([97dd5f2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/97dd5f2a4f0b8b25cf81e2816c85c5f15b110ad8))
+* charterer-cargoes ([1771180](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1771180da4601fb2e1904354483104c1e81fe7db))
+* charterer-cargoes-modal ([0382775](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/03827759745fa40e1f88b790020a2f4e41910171))
+* company-info countries-cities-data ([55286ad](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/55286adf8953c2a99e636cf7535ad5573a964f28))
+* imos according to the design ([3d7d65f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3d7d65f961a6feb554a283cc433a99a5d907ef8f))
+* linter errors ([e3723d2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e3723d20a3d77e36c144e7eb8d91fae36db85d20))
+* markup issues ([162d76c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/162d76c56a659af5dbebe5d881720ed07eadc1c0))
+* merge conflicts resolved ([974d246](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/974d2462503f07a8cc9cf467c41e4ba137ee9c34))
+* merge conflicts resolved ([f247b99](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f247b990fa9c4a8f0187a9091c96049868bccea2))
+* merge conflicts resolved ([085a85c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/085a85c29c3723c2477d21500f0cd476c60cd885))
+* negotiation-adaptation ([eda650f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/eda650f68257a6b469411a31dc8c8b746059343f))
+* product fields fix ([8865459](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/88654591db781819e3fa9e913cc0173effc3f22f))
+* prop-types-removed-prop ([f5ef624](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f5ef624ebf2157daeb9ff68907b1dcfd8d1be1eb))
+* refactored dropdown-options markup ([b4a3ed5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b4a3ed54f90ff42f2fa5433a83bdbeed40dce088))
+* refactoring vouyage-details-tab-content ([1e003cd](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1e003cd6a33c17d51a2a20b164bad3d1e481fe9e))
+* refactoring with resolved-conflicts ([c22bb02](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c22bb02f5726463006e7b40acefc1b80e53800c2))
+* resolved-conflict ([b49395c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b49395caf417fb1c8ed0c071bd20da67ec733b2d))
+* role-based-company-info-layout with countries for cargoes ([926693c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/926693c72d4a961a778cbcdc55125303e3742423))
+* search-fields markup ([d5db7dc](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d5db7dc8a27511bf7d3d058de9bf149a191dbc5e))
+* select styles ([9ecaa25](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9ecaa25e9941322fb8283be5ce890cc679b0ece4))
+* sidebar markup ([47e89dd](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/47e89dd1e46b3b54fe1c8e6ec80526080a5a8a19))
+* tankers-update ([fcce9cb](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fcce9cb20162e75984bc5ca3372e9c9173cfe423))
+* vo-company-update ([1364327](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/136432757f06f879aae6c267b3580e3610483895))
+
+
+### Refactors
+
+* code style ([cf41dca](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/cf41dca6934b03741c20f39c0dba6e5b31676fce))
+* code style ([b8cc78c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b8cc78ca5d9172027c87d0aabe37f6d4a50e4941))
+* code style ([08a3db4](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/08a3db4cfb24316e046b62124bd6ab98c2091050))
+* code style ([94fb9f1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/94fb9f13f66c12ce827e1318b1dbb583e92ce61f))
+* comments fixed ([17d616c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/17d616ca2a1e4553463acdf58f4ff4fad8458563))
+* icons ([7b2c2ac](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/7b2c2ac252003b1b6d830357431ac4aa77573873))
+
 ### [0.4.4](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.2...v0.4.4) (2023-06-09)
 
 ### Features
