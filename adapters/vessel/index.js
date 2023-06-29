@@ -227,3 +227,24 @@ export function responseGetVesselCategoryTwoAdapter({ data }) {
 
   return data;
 }
+
+export function userTankerAdapter({ data }) {
+  if (!data) return {};
+
+  const { vesselId, name, openPort, openDate, imo, status } = data;
+
+  return {
+    id: vesselId,
+    title: name,
+    port: openPort?.name,
+    date: openDate,
+    status: status === 'Active',
+    imo,
+  };
+}
+
+export function userTankersDetailsAdapter({ data }) {
+  if (!data) return [];
+
+  return data.map((tanker) => userTankerAdapter({ data: tanker }));
+}

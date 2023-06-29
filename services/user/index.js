@@ -1,3 +1,4 @@
+import { getFleetByIdAdapter } from '@/adapters';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -9,6 +10,7 @@ import {
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
+import { userTankersDetailsAdapter } from '@/adapters/vessel';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -123,6 +125,30 @@ export async function getUserPositions() {
   return {
     ...response,
   };
+}
+
+export async function getUserPositionById({ id }) {
+  const body = getFleetByIdAdapter({ id });
+  const response = await putData(`account/my-positions/vesselId`, body);
+
+  return {
+    ...response,
+  };
+}
+
+const fetchUserVesselById = async ({ id, ...rest }) => {
+  const { data: tankers } = await getUserPositionById({ id });
+
+  return {
+    ...rest,
+    tankers: userTankersDetailsAdapter({ data: tankers }),
+  };
+};
+
+export function* getVesselsById(data) {
+  if (!data) return [];
+
+  return yield Promise.all(data.map(fetchUserVesselById));
 }
 
 export async function getUserFixtures() {

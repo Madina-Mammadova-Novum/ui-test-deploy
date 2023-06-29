@@ -426,22 +426,26 @@ export function tankerInfoAdapter({ data }) {
 }
 
 export function positionAdapter({ data }) {
-  if (data === null) return null;
-  const { id, type, title, activeTankers, inActiveTankers, tankersInfo } = data;
+  if (!data) return null;
+
+  const { id, name, numberOfActiveVessels, numberOfInactiveVessels } = data;
 
   return {
     id,
-    type,
-    title,
-    activeTankers,
-    inActiveTankers,
-    tankers: tankersInfo.map((item) => tankerInfoAdapter({ data: item })),
+    title: name,
+    activeTankers: numberOfActiveVessels,
+    inActiveTankers: numberOfInactiveVessels,
   };
 }
 
 export function positionsAdapter({ data }) {
-  if (data === null || data === undefined) return null;
-  return data.map((item) => positionAdapter({ data: item }));
+  if (!data) return null;
+  return data?.map((vessels) => positionAdapter({ data: vessels }));
+}
+
+export function positionByIdAdapter({ data }) {
+  if (!data) return null;
+  return data;
 }
 
 export function signupResponseAdapter({ data }) {

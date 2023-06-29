@@ -28,4 +28,5 @@ export const accountStore = configureStore({
 });
 
 export const persistore = persistStore(accountStore);
+
 setupListeners(accountStore.dispatch);
