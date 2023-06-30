@@ -103,12 +103,6 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
             buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
           />
         </div>
-        <div>
-          <Button
-            customStyles="whitespace-nowrap w-full hidden"
-            buttonProps={{ text: 'Send the Decline', variant: 'delete', size: 'large' }}
-          />
-        </div>
       </div>
     </div>
   );

@@ -123,7 +123,7 @@ const UploadForm = () => {
 
   return (
     <div
-      className="box-border transition-all pt-5 pb-3 duration-500 overflow-hidden rounded-lg border border-solid border-grey-darker px-5 py-3"
+      className="relative box-border transition-all pt-5 pb-3 duration-500 overflow-hidden rounded-lg border border-solid border-grey-darker px-5 py-3"
       ref={contentRef}
       style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '64px' }}
     >

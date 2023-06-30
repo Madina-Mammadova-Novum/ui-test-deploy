@@ -1,7 +1,4 @@
-import React from 'react';
-
 import usFlag from '@/assets/images/flag.png';
-import TooltipIcon from '@/assets/images/infoCircle.svg';
 
 export const fleetsHeader = [
   {
@@ -33,13 +30,6 @@ export const fleetsHeader = [
     text: 'tanker status',
     type: 'TANKER_DEACTIVATE',
     width: 125,
-    icon: <TooltipIcon className="w-4 h-4" viewBox="0 0 24 24" />,
-    helperData: {
-      title: 'tanker status',
-      description:
-        'By deactivating your tanker you make it temporarily inaccessible for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions at any time',
-      className: '-translate-x-full',
-    },
   },
 ];
 
