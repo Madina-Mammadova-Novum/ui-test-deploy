@@ -1010,6 +1010,14 @@ export const toolsCalculatorOptions = [
   { label: 'Distance and Duration', value: 'distance' },
 ];
 
+export const hullTypeOptions = [
+  { label: 'Single hull', value: 'Single hull' },
+  { label: 'Single hull double bottom', value: 'Single hull double bottom' },
+  { label: 'Double hull', value: 'Double hull' },
+  { label: 'LNG Carrier Hull', value: 'LNG Carrier Hull' },
+  { label: 'Ice-Class Hull', value: 'Ice-Class Hull' },
+];
+
 export const recentActiveCargoesHeader = [
   {
     text: '#',
