@@ -26,7 +26,7 @@ const SearchForm = ({ onSubmit }) => {
       resetObjectFields(formValues);
       return formValues;
     });
-    setProductState([1])
+    setProductState([1]);
   };
 
   return (
@@ -41,9 +41,7 @@ const SearchForm = ({ onSubmit }) => {
             className: '!w-max ml-auto !text-white',
           }}
         >
-          <SearchFormFields
-            productState={productState}
-            setProductState={setProductState} />
+          <SearchFormFields productState={productState} setProductState={setProductState} />
           <div className="absolute bottom-5 right-40">
             <Button
               buttonProps={{ text: 'Reset all', variant: 'primary', size: 'small' }}

@@ -8,26 +8,25 @@ import * as yup from 'yup';
 
 import { AccountToolsPropTypes } from '@/lib/types';
 
+import { countryOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import staticMap from '@/assets/images/staticMap.png';
 import TrashIcon from '@/assets/images/trashAlt.svg';
+import { FormManager } from '@/common';
 import { Button, FormDropdown, Input, NextImage, TextWithLabel, Title } from '@/elements';
 import { toolsSchema } from '@/lib/schemas';
-import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
-import { FormManager } from '@/common';
-import { toolsCalculatorOptions } from '@/utils/mock';
 import { getPorts } from '@/services/port';
-import { countryOptionsAdapter } from '@/adapters/countryOption';
-
+import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
+import { toolsCalculatorOptions } from '@/utils/mock';
 
 const AccountTools = ({ title, className = '' }) => {
-  const [portState, setPortState] = useState([])
-  const [portOptions, setPortOptions] = useState([])
-  const [selectedCalculator, setSelectedCalculator] = useState(toolsCalculatorOptions[0])
-  const [initialLoading, setInitialLoading] = useState(false)
+  const [portState, setPortState] = useState([]);
+  const [portOptions, setPortOptions] = useState([]);
+  const [selectedCalculator, setSelectedCalculator] = useState(toolsCalculatorOptions[0]);
+  const [initialLoading, setInitialLoading] = useState(false);
 
   const portsLimitExceeded = portState?.length >= 3;
-  const isFreightCalculator = selectedCalculator.value === 'freight'
+  const isFreightCalculator = selectedCalculator.value === 'freight';
 
   const schema = yup.object({
     ...toolsSchema(isFreightCalculator),
@@ -36,32 +35,29 @@ const AccountTools = ({ title, className = '' }) => {
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      calculator: toolsCalculatorOptions[0]
-    }
+      calculator: toolsCalculatorOptions[0],
+    },
   });
-  
+
   const {
     formState: { errors },
     setValue,
     getValues,
     clearErrors,
     unregister,
-    register
+    register,
   } = methods;
-  
-
 
   useEffect(() => {
-    ( async () => {
-      setInitialLoading(true)
-      const { status, data, error } = await getPorts()
-      setInitialLoading(false)
+    (async () => {
+      setInitialLoading(true);
+      const { status, data, error } = await getPorts();
+      setInitialLoading(false);
 
-      if(status === 200) setPortOptions(countryOptionsAdapter({ data }))
-      if(error) console.log(error);
-    })()
-  }, [])
-
+      if (status === 200) setPortOptions(countryOptionsAdapter({ data }));
+      if (error) console.log(error);
+    })();
+  }, []);
 
   const handleChange = (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -71,13 +67,13 @@ const AccountTools = ({ title, className = '' }) => {
     if (error) {
       clearErrors(key);
     }
-    
+
     setValue(key, value);
 
-    if(key === 'calculator') {
-      setSelectedCalculator(value)
-      unregister('cargoQuantity')
-      unregister('speed')
+    if (key === 'calculator') {
+      setSelectedCalculator(value);
+      unregister('cargoQuantity');
+      unregister('speed');
     }
   };
 
@@ -97,14 +93,14 @@ const AccountTools = ({ title, className = '' }) => {
       resetObjectFields(formValues);
       return formValues;
     });
-    setPortState([])
-    unregister('additionalPorts')
-    setValue('calculator', toolsCalculatorOptions[0])
-    setSelectedCalculator(toolsCalculatorOptions[0])
+    setPortState([]);
+    unregister('additionalPorts');
+    setValue('calculator', toolsCalculatorOptions[0]);
+    setSelectedCalculator(toolsCalculatorOptions[0]);
   };
 
   const onSubmit = (formData) => {
-    console.log(formData)
+    console.log(formData);
   };
 
   return (
@@ -119,16 +115,16 @@ const AccountTools = ({ title, className = '' }) => {
           className={`${className} flex justify-between rounded-base bg-white divide-gray-darker gap-5 p-5 flex-row`}
         >
           <div className="w-full max-w-[296px] h-max relative">
-              <FormProvider {...methods}>
-                <FormManager
-                  submitAction={(formData) => onSubmit(formData)}
-                  submitButton={{
-                    text: 'Calculate',
-                    variant: 'secondary',
-                    size: 'large',
-                    className: '!w-max mr-auto !text-white',
-                  }}
-                >
+            <FormProvider {...methods}>
+              <FormManager
+                submitAction={(formData) => onSubmit(formData)}
+                submitButton={{
+                  text: 'Calculate',
+                  variant: 'secondary',
+                  size: 'large',
+                  className: '!w-max mr-auto !text-white',
+                }}
+              >
                 <div className=" gap-y-4 flex flex-col">
                   <FormDropdown
                     name="calculator"
@@ -152,28 +148,26 @@ const AccountTools = ({ title, className = '' }) => {
                     disabled={!portOptions.length}
                     label="To which port"
                   />
-                  {
-                    portState.map((portId) => (
-                      <div key={portId}>
-                        <FormDropdown
-                          name={`additionalPorts[${portId}].port`}
-                          onChange={(option) => handleChange(`additionalPorts[${portId}].port`, option)}
-                          options={portOptions}
-                          label="Additional port"
-                        />
-                        <Button
-                          buttonProps={{
-                            text: 'Delete',
-                            variant: 'tertiary',
-                            size: 'small',
-                            icon: { before: <TrashIcon viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
-                          }}
-                          customStyles="ml-auto !p-0 !pt-1 [&>span]:!px-0.5"
-                          onClick={() => handleRemovePort(portId)}
-                        />
-                      </div>
-                    ))
-                  }
+                  {portState.map((portId) => (
+                    <div key={portId}>
+                      <FormDropdown
+                        name={`additionalPorts[${portId}].port`}
+                        onChange={(option) => handleChange(`additionalPorts[${portId}].port`, option)}
+                        options={portOptions}
+                        label="Additional port"
+                      />
+                      <Button
+                        buttonProps={{
+                          text: 'Delete',
+                          variant: 'tertiary',
+                          size: 'small',
+                          icon: { before: <TrashIcon viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                        }}
+                        customStyles="ml-auto !p-0 !pt-1 [&>span]:!px-0.5"
+                        onClick={() => handleRemovePort(portId)}
+                      />
+                    </div>
+                  ))}
                   <Button
                     buttonProps={{
                       text: 'Add more ports',
@@ -187,49 +181,72 @@ const AccountTools = ({ title, className = '' }) => {
                     disabled={portsLimitExceeded}
                     onClick={handleAddPort}
                   />
-                  {
-                    isFreightCalculator ? (
-                      <Input {...register('cargoQuantity')} error={errors.cargoQuantity?.message} label="Cargo quantity" placeholder="tons" type="number" />
-                    ) : (
-                      <Input {...register('speed')} error={errors.speed?.message} label="Speed (Optional)" placeholder="Enter the speed" type="number" />
-                    )
-                  }
+                  {isFreightCalculator ? (
+                    <Input
+                      {...register('cargoQuantity')}
+                      error={errors.cargoQuantity?.message}
+                      label="Cargo quantity"
+                      placeholder="tons"
+                      type="number"
+                    />
+                  ) : (
+                    <Input
+                      {...register('speed')}
+                      error={errors.speed?.message}
+                      label="Speed (Optional)"
+                      placeholder="Enter the speed"
+                      type="number"
+                    />
+                  )}
                 </div>
-                </FormManager>
-              </FormProvider>
-                <Button
-                  buttonProps={{
-                    text: 'Reset all',
-                    variant: 'primary',
-                    size: 'small',
-                  }}
-                  customStylesFromWrap="absolute left-28 bottom-0"
-                  customStyles='!bg-[transparent]'
-                  onClick={handleResetFields}
-                />
+              </FormManager>
+            </FormProvider>
+            <Button
+              buttonProps={{
+                text: 'Reset all',
+                variant: 'primary',
+                size: 'small',
+              }}
+              customStylesFromWrap="absolute left-28 bottom-0"
+              customStyles="!bg-[transparent]"
+              onClick={handleResetFields}
+            />
           </div>
-          <div className='h-auto w-full relative'>
+          <div className="h-auto w-full relative">
             <NextImage className="w-full h-full object-cover" src={staticMap} />
 
-            <div className='absolute bg-white rounded-md p-5 w-[250px] bottom-2 left-2'>
-                <Title level={4}>Calculation results</Title>
-                <div className='flex gap-x-2.5 mt-2.5'>
-                  {
-                    isFreightCalculator ? (
-                      <>
-                        <TextWithLabel label="Total freight" text="" customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"/>
-                        <TextWithLabel label="Cost per ton" text="" customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"/>
-                      </>
-                    ) : (
-                      <>
-                        <TextWithLabel label="Distance" text="" customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"/>
-                        <TextWithLabel label="Duration" text="" customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"/>
-                      </>
-                    )
-                  }
-                </div>
+            <div className="absolute bg-white rounded-md p-5 w-[250px] bottom-2 left-2">
+              <Title level={4}>Calculation results</Title>
+              <div className="flex gap-x-2.5 mt-2.5">
+                {isFreightCalculator ? (
+                  <>
+                    <TextWithLabel
+                      label="Total freight"
+                      text=""
+                      customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+                    />
+                    <TextWithLabel
+                      label="Cost per ton"
+                      text=""
+                      customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TextWithLabel
+                      label="Distance"
+                      text=""
+                      customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+                    />
+                    <TextWithLabel
+                      label="Duration"
+                      text=""
+                      customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+                    />
+                  </>
+                )}
+              </div>
             </div>
-
           </div>
         </div>
       </div>
