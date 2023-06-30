@@ -8,7 +8,6 @@ import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
-
   return responseHandler({
     req,
     res,

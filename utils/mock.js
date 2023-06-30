@@ -1005,6 +1005,11 @@ export const imoClassOptions = [
   { label: '1, 2, 3', value: '1,2,3' },
 ];
 
+export const toolsCalculatorOptions = [
+  { label: 'Freight Estimation', value: 'freight' },
+  { label: 'Distance and Duration', value: 'distance' },
+]
+
 export const recentActiveCargoesHeader = [
   {
     text: '#',
