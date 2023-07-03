@@ -175,7 +175,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     commercialOperator,
     commercialOperatorCountry,
     disponentOwner,
-    disponentOwnerCountry
+    disponentOwnerCountry,
   } = data;
 
   return {
