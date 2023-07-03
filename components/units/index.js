@@ -58,6 +58,7 @@ import ToggleRows from '@/units/ToggleRows';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
+import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 
 export * from '@/units/Account';
 
@@ -122,4 +123,5 @@ export {
   AddTankerWithImoForm,
   AddTankerManuallyForm,
   CargoesInfoModal,
+  NegotiatingTankerInformation
 };
