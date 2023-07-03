@@ -246,5 +246,11 @@ export function userTankerAdapter({ data }) {
 export function userTankersDetailsAdapter({ data }) {
   if (!data) return [];
 
-  return data.map((tanker) => userTankerAdapter({ data: tanker }));
+  // if(Array.isArray(data) && data.length === 0) {
+  //   return
+  // }
+
+  return data.map((tanker) => {
+    return userTankerAdapter({ data: tanker });
+  });
 }

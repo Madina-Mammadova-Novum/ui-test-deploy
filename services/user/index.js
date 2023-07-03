@@ -146,8 +146,6 @@ const fetchUserVesselById = async ({ id, ...rest }) => {
 };
 
 export function* getVesselsById(data) {
-  if (!data) return [];
-
   return yield Promise.all(data.map(fetchUserVesselById));
 }
 
