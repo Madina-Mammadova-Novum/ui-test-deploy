@@ -14,8 +14,8 @@ import {
   EditPortForm,
   IconWrapper,
   ModalWindow,
-  ReactivateTankerForm,
   NegotiatingTankerInformation,
+  ReactivateTankerForm,
   UpdateTankerForm,
 } from '@/units';
 
@@ -53,7 +53,7 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.CHARTERER_INFORMATION:
           return <ChartererInformationContent title="Charterer information" />;
         case ACTIONS.TANKER_INFORMATION:
-          return <NegotiatingTankerInformation />
+          return <NegotiatingTankerInformation />;
         case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
           return <UpdateTankerForm />;
         case ACTIONS.DELETE_TANKER:

@@ -1,6 +1,6 @@
 import { DetailsOwnerContentPreFixtureContent } from '@/lib/types';
 
-import { FieldsetContent, FieldsetWrapper, TextRow, IconComponent, Title } from '@/elements';
+import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
 
 const DetailsOwnerContent = ({ data, title }) => {
   const { years, ships, kt, state, icon } = data;

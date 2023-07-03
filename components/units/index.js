@@ -33,6 +33,7 @@ import IconWrapper from '@/units/IconWrapper';
 import LegalNavigation from '@/units/LegalNavigation';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
+import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
@@ -58,7 +59,6 @@ import ToggleRows from '@/units/ToggleRows';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
-import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 
 export * from '@/units/Account';
 
@@ -123,5 +123,5 @@ export {
   AddTankerWithImoForm,
   AddTankerManuallyForm,
   CargoesInfoModal,
-  NegotiatingTankerInformation
+  NegotiatingTankerInformation,
 };
