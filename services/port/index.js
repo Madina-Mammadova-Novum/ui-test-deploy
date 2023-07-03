@@ -6,3 +6,10 @@ export const getPorts = async () => {
     ...response,
   };
 };
+
+export const getPortsForSearcForm = async () => {
+  const response = await getData(`ports/search-form-ports`);
+  return {
+    ...response,
+  };
+};
