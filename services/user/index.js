@@ -9,6 +9,7 @@ import {
   updateInfoAdapter,
   updatePasswordAdapter,
 } from '@/adapters/user';
+import { DEFAULT_FETCH_AMOUNT } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -178,10 +179,10 @@ export async function getUserOnSubs() {
 
 export async function getUserFleets() {
   const body = {
-    query: 'all',
+    pageSize: DEFAULT_FETCH_AMOUNT
   };
 
-  const response = await getData(`account/fleets`, body);
+  const response = await postData(`account/fleets`, body);
   return {
     ...response,
   };
