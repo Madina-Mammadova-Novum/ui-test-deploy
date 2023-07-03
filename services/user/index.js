@@ -179,7 +179,7 @@ export async function getUserOnSubs() {
 
 export async function getUserFleets() {
   const body = {
-    pageSize: DEFAULT_FETCH_AMOUNT
+    pageSize: DEFAULT_FETCH_AMOUNT,
   };
 
   const response = await postData(`account/fleets`, body);

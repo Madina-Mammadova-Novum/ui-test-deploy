@@ -108,7 +108,7 @@ const Fleets = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
-      <ComplexPagination 
+      <ComplexPagination
         label="fleets"
         currentPage={currentPage}
         numberOfPages={numberOfPages}
