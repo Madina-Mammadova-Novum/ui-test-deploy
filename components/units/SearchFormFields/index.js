@@ -10,7 +10,7 @@ import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
-import { getPorts } from '@/services/port';
+import { getPortsForSearcForm } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
@@ -113,7 +113,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   useEffect(() => {
     (async () => {
       setInitialLoading(true);
-      const [portsData, cargoTypesData] = await Promise.all([getPorts(), getCargoTypes()]);
+      const [portsData, cargoTypesData] = await Promise.all([getPortsForSearcForm(), getCargoTypes()]);
       setPorts(countryOptionsAdapter(portsData));
       setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
       setInitialLoading(false);

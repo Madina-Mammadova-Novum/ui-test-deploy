@@ -160,7 +160,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD_BLUE,
       actions: [
         {
-          action: ACTIONS.CHARTERER_INFORMATION,
+          action: ACTIONS.TANKER_INFORMATION,
           actionText: tankerName,
           actionVariant: 'primary',
           actionSize: 'small',
@@ -307,7 +307,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD_BLUE,
       actions: [
         {
-          action: ACTIONS.CHARTERER_INFORMATION,
+          action: ACTIONS.TANKER_INFORMATION,
           actionText: tankerName,
           actionVariant: 'primary',
           actionSize: 'small',
@@ -449,7 +449,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD_BLUE,
       actions: [
         {
-          action: ACTIONS.CHARTERER_INFORMATION,
+          action: ACTIONS.TANKER_INFORMATION,
           actionText: tankerName,
           actionVariant: 'primary',
           actionSize: 'small',

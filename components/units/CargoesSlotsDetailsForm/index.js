@@ -151,7 +151,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
               options={cargoesPortsOptions}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
               customStyles={{
-                className: 'w-72 mx-5',
+                className: 'w-96 3md:w-72 mx-2.5',
               }}
               async
             />
@@ -161,12 +161,11 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
               inputClass="w-full min-w-[150px]"
               label="Bill of lading date"
               error={error?.date?.message}
-              value={item?.date}
               onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />
             <Button
               type="button"
-              customStyles="absolute top-full mt-1 right-0 !p-0"
+              customStyles="absolute top-1/2 -right-8 !p-0"
               buttonProps={{
                 icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
                 variant: 'tertiary',
@@ -180,7 +179,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
       })}
 
       {cargoes.length > 0 && (
-        <div className="flex justify-between">
+        <div className="flex justify-between ">
           <Button
             buttonProps={{
               text: 'Add more cargoes',

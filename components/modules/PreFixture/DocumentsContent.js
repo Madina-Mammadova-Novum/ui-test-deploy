@@ -4,7 +4,11 @@ import { Table } from '@/elements';
 import { prefixtureHeader } from '@/utils/mock';
 
 const DocumentsContent = ({ rowsData = [] }) => {
-  return <Table headerData={prefixtureHeader} rows={rowsData} />;
+  return (
+    <div className="table-scroll pt-2.5">
+      <Table headerData={prefixtureHeader} rows={rowsData} />
+    </div>
+  );
 };
 
 DocumentsContent.propTypes = documentsContentPropTypes;

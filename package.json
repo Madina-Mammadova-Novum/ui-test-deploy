@@ -22,7 +22,7 @@
     "clear-all": "rm -rf .next node_modules out",
     "restart": "rm -rf .next node_modules out && yarn install && yarn develop",
     "rebuild": "rm -rf .next node_modules out && yarn install && yarn build",
-    "turbo-build": "turbo build",
+    "turbo-build": "turbo build --force",
     "postbuild": "next-sitemap"
   },
   "devDependencies": {

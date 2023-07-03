@@ -18,7 +18,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
   const modalContent = () => {
     switch (modalOptions.type) {
       case 'decline_offer':
-        return <OfferDeclineForm closeModal={handleCloseModal} title="Decline Pre-fixture Offer" />;
+        return <OfferDeclineForm title="Decline Pre-fixture Offer" showCancelButton closeModal={handleCloseModal} />;
       case 'accept_offer':
         return <OfferAcceptModalContent closeModal={handleCloseModal} />;
       default:

@@ -34,6 +34,5 @@ export const responseErrorAdapter = (errors = []) => {
       .reduce((acc, curr) => acc.concat(curr), [])
       .filter((error) => error.length > 0);
   }
-
   return errors;
 };
