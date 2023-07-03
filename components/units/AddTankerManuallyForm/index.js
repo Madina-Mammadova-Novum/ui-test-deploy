@@ -17,7 +17,7 @@ import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesse
 import { ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { convertDataToOptions, countriesOptions, getValueWithPath, updateFormats } from '@/utils/helpers';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
 const schema = yup.object({
@@ -88,9 +88,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
   }, []);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
-    if (data) return;
-    if (error) console.log(error);
+    const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
+    if (status === 200) successToast(message);
+    if (error && error?.message?.Imo) errorToast(error?.message?.Imo);
   };
 
   const handleChange = async (key, value) => {
