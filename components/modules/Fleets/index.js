@@ -8,21 +8,42 @@ import FleetsExpandedContent from './FleetsExpandedContent';
 import { fleetsPageHeaderDataAdapter, fleetsPageRowsDataAdapter } from '@/adapters';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
-import { ACTIONS } from '@/lib/constants';
+import { ACTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserFleets } from '@/services';
 import { fleetsSelector } from '@/store/selectors';
-import { CreateFleetForm, ModalWindow, ToggleRows } from '@/units';
-import { useFetch } from '@/utils/hooks';
+import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows } from '@/units';
+import { useFetch, useFilters } from '@/utils/hooks';
 
 const Fleets = () => {
   const [toggle, setToggle] = useState(false);
   const { refetch } = useSelector(fleetsSelector);
   const [data, isLoading] = useFetch(getUserFleets, refetch);
+  const [userStore] = useState({
+    sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
+    sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
+  });
+
+  const initialPagesStore = {
+    currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
+    perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
+  };
+
+  const { sortValue } = userStore;
+
+  const {
+    numberOfPages,
+    items,
+    currentPage,
+    handlePageChange,
+    handleSelectedPageChange,
+    selectedPage,
+    onChangeOffers,
+    perPage,
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data, sortValue.value);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
-
     return (
       <ExpandableRow
         header={
@@ -86,7 +107,17 @@ const Fleets = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{data && data.map(printExpandableRow)}</div>
+      <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
+      <ComplexPagination
+        label="fleets"
+        currentPage={currentPage}
+        numberOfPages={numberOfPages}
+        onPageChange={handlePageChange}
+        onSelectedPageChange={handleSelectedPageChange}
+        pages={selectedPage}
+        onChangeOffers={onChangeOffers}
+        perPage={perPage}
+      />
     </section>
   );
 };

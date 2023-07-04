@@ -25,6 +25,7 @@ export async function addVesselByImo({ data, fleetId }) {
 export async function addVesselManually({ data }) {
   const body = requestAddVesselManuallyAdapter({ data });
   const response = await postData(`vessels/add-manually`, body);
+  if (!response.error) response.message = 'Your have successfully added a new tanker';
   return {
     ...response,
   };

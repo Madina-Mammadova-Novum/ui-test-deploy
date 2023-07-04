@@ -169,13 +169,13 @@ export function requestAddVesselManuallyAdapter({ data }) {
     imoClass,
     grades,
     registeredOwner,
-    // registeredOwnerCountry,
+    registeredOwnerCountry,
     technicalOperator,
-    // technicalOperatorCountry,
+    technicalOperatorCountry,
     commercialOperator,
-    // commercialOperatorCountry,
+    commercialOperatorCountry,
     disponentOwner,
-    // disponentOwnerCountry
+    disponentOwnerCountry,
   } = data;
 
   return {
@@ -198,9 +198,13 @@ export function requestAddVesselManuallyAdapter({ data }) {
     cubicCapacity,
     segregationCount: grades,
     registeredOwner,
+    registeredOwnerCountryId: registeredOwnerCountry.value,
     technicalOperator,
+    technicalOperatorCountryId: technicalOperatorCountry.value,
     commercialOperator,
+    commercialOperatorCountryId: commercialOperatorCountry.value,
     disponentOwner,
+    disponentOwnerCountryId: disponentOwnerCountry.value,
     fleetId,
   };
 }
