@@ -448,6 +448,11 @@ export function positionByIdAdapter({ data }) {
   return data;
 }
 
+export function updateVesselPortAdapter({ data }) {
+  if (!data) return null;
+  return data;
+}
+
 export function signupResponseAdapter({ data }) {
   if (!data) return null;
   return {

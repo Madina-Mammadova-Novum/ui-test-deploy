@@ -9,18 +9,29 @@ import { EditPortFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { portsSchema } from '@/lib/schemas';
+import { updateVesselPortAndDate } from '@/services/vessel';
 import { PortDetailsForm } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditPortForm = ({ closeModal, title, portName }) => {
+const EditPortForm = ({ closeModal, title, modalState }) => {
   const schema = yup.object().shape({
     ...portsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
+  const { name, id, date } = modalState;
 
-  const onSubmit = async (formData) => {
-    return { formData };
+  const onSubmit = async ({ port }) => {
+    const result = {
+      id,
+      date,
+      portId: port?.value,
+    };
+
+    const { error, data } = await updateVesselPortAndDate(result);
+
+    if (data?.message) successToast(data.message);
+    if (error) errorToast(error.message, error.errors);
   };
 
   return (
@@ -35,7 +46,7 @@ const EditPortForm = ({ closeModal, title, portName }) => {
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <PortDetailsForm portName={portName} />
+        <PortDetailsForm portName={name} />
       </ModalFormManager>
     </FormProvider>
   );

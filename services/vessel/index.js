@@ -2,6 +2,7 @@ import {
   requestAddVesselByImoAdapter,
   requestAddVesselManuallyAdapter,
   requestSearchVesselAdapter,
+  updateVesselPortAndDataAdapter,
 } from '@/adapters/vessel';
 import { getData, postData } from '@/utils/dataFetching';
 
@@ -47,5 +48,18 @@ export async function getVesselCategoryTwo(categoryOneId) {
   const response = await getData(`vessels/category-two/${categoryOneId}`);
   return {
     ...response,
+  };
+}
+
+export async function updateVesselPortAndDate(data) {
+  const body = updateVesselPortAndDataAdapter({ data });
+
+  const response = await postData(`account/my-positions/update-vessel-port`, body);
+
+  return {
+    ...response,
+    data: {
+      message: response.status === 200 && 'Your request approved',
+    },
   };
 }

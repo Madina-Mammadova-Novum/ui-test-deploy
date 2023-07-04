@@ -236,8 +236,9 @@ export function userTankerAdapter({ data }) {
   return {
     id: vesselId,
     title: name,
-    port: openPort?.name,
     date: openDate,
+    port: openPort?.name,
+    portId: openPort?.id,
     status: status === 'Active',
     imo,
   };
@@ -246,11 +247,20 @@ export function userTankerAdapter({ data }) {
 export function userTankersDetailsAdapter({ data }) {
   if (!data) return [];
 
-  // if(Array.isArray(data) && data.length === 0) {
-  //   return
-  // }
-
   return data.map((tanker) => {
     return userTankerAdapter({ data: tanker });
   });
+}
+
+export function updateVesselPortAndDataAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, portId, date } = data;
+
+  return {
+    id,
+    portId,
+    opendate: new Date(date).toISOString(),
+    appearsInSearch: true,
+  };
 }

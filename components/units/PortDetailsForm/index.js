@@ -41,7 +41,7 @@ const PortDetailsForm = ({ portName = '' }) => {
       <FormDropdown
         async
         name="port"
-        label="Open port"
+        label="Port search"
         options={portOptions}
         onChange={handlePortChange}
         customStyles={{ dropdownExpanded: true }}

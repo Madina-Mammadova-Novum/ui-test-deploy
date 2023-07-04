@@ -35,6 +35,7 @@ const DatePicker = ({
     onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
     if (closeOnSelect) setShowPicker(false);
   };
+
   return (
     <div className={`${containerClass} ${expanded && showPicker ? 'h-[360px]' : 'h-auto'}`}>
       <div

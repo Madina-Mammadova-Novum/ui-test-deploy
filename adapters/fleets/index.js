@@ -32,7 +32,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { date, id, marked, imo, port, status, title } = data;
+  const { date, id, marked, imo, port, portId, status, title } = data;
 
   const inActive = port === null || date === null;
 
@@ -54,6 +54,9 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      date,
+      port,
+      portId,
       name: title,
       value: port || NO_DATA_MESSAGE.PORT,
       helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
@@ -68,8 +71,11 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      name: title,
+      date,
+      port,
+      portId,
       marked,
+      name: title,
       value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: !inActive,
