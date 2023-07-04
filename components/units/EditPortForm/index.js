@@ -31,7 +31,7 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
     const { error, data } = await updateVesselPortAndDate(result);
 
     if (data?.message) successToast(data.message);
-    if (error) errorToast(error.message, error.errors);
+    if (error) errorToast(error.message, error.errors[0]);
   };
 
   return (

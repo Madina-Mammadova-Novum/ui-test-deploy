@@ -4,7 +4,7 @@ import {
   requestSearchVesselAdapter,
   updateVesselPortAndDataAdapter,
 } from '@/adapters/vessel';
-import { getData, postData } from '@/utils/dataFetching';
+import { getData, postData, putData } from '@/utils/dataFetching';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
@@ -55,7 +55,7 @@ export async function getVesselCategoryTwo(categoryOneId) {
 export async function updateVesselPortAndDate(data) {
   const body = updateVesselPortAndDataAdapter({ data });
 
-  const response = await postData(`account/my-positions/update-vessel-port`, body);
+  const response = await putData(`account/my-positions/update-vessel-port`, body);
 
   return {
     ...response,

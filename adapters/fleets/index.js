@@ -33,6 +33,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { date, id, marked, imo, port, portId, status, title } = data;
+  console.log('id: ', id);
 
   const inActive = port === null || date === null;
 

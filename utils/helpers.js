@@ -319,11 +319,11 @@ export const checkAuthRoute = (req, pathName) => {
 export const formatErrors = (errors) => {
   if (!errors) return null;
   const errorMessages = Object.entries(errors)?.map(([key, value]) => {
-    const errorMessage = value.join(' ');
-    if (key === '_') return `${errorMessage}`;
-    return `${key}: ${errorMessage}`;
+    if (key === '_') return `${value?.join(' ')}`;
+
+    return `${key}: ${value}`;
   });
-  return errorMessages.join('\n');
+  return errorMessages;
 };
 
 export const formattedPhoneNumber = (phone) => {
