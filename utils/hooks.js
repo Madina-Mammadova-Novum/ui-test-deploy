@@ -222,6 +222,8 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
     setAscSort(value === 'ascending');
   };
 
+  if (!data) return [];
+
   return {
     numberOfPages,
     items: sortedItems,

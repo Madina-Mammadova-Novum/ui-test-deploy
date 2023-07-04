@@ -23,11 +23,15 @@ const ExpandableCardWrapper = ({
     setToggle(value);
   }, [value]);
 
+  const handleClick = () => {
+    setToggle((prevValue) => !prevValue);
+  };
+
   const expandedHeight = toggle ? `${contentRef?.current?.scrollHeight}px` : '0px';
 
   return (
     <div className={`rounded-base shadow-xmd box-border ${className}`}>
-      <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
+      <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => handleClick()}>
         {headerComponentWithProps}
       </div>
       <div

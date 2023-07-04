@@ -82,6 +82,7 @@ export const apiHandler = async (options) => {
 
     const result = ok ? responseBody : null;
     const error = ok ? null : requestErrorHandler(status, statusText, responseBody);
+
     return {
       status,
       ...responseAdapter(result),
