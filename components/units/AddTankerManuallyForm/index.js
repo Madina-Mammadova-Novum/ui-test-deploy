@@ -255,6 +255,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="LOA"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.loa?.message}
               />
@@ -263,6 +264,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Beam"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.beam?.message}
               />
@@ -271,6 +273,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Summer DWT"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="tons"
                 error={errors.summerDWT?.message}
               />
@@ -279,6 +282,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Summer draft"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.summerDraft?.message}
               />
@@ -287,6 +291,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Normal ballast DWT"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="tons"
                 error={errors.normalBallastDWT?.message}
               />
@@ -295,6 +300,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Normal ballast draft"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.normalBallastDraft?.message}
               />
@@ -303,6 +309,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="cubic capacity 98%"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="M"
                 error={errors.cubicCapacity?.message}
               />
