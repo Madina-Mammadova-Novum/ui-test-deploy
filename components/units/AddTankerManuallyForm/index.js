@@ -17,7 +17,7 @@ import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesse
 import { ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { convertDataToOptions, countriesOptions, getValueWithPath, updateFormats } from '@/utils/helpers';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
 const schema = yup.object({
@@ -88,9 +88,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
   }, []);
 
   const onSubmit = async (formData) => {
-    const { data, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
-    if (data) return;
-    if (error) console.log(error);
+    const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
+    if (status === 200) successToast(message);
+    if (error && error?.message?.Imo) errorToast(error?.message?.Imo);
   };
 
   const handleChange = async (key, value) => {
@@ -255,6 +255,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="LOA"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.loa?.message}
               />
@@ -263,6 +264,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Beam"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.beam?.message}
               />
@@ -271,6 +273,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Summer DWT"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="tons"
                 error={errors.summerDWT?.message}
               />
@@ -279,6 +282,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Summer draft"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.summerDraft?.message}
               />
@@ -287,6 +291,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Normal ballast DWT"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="tons"
                 error={errors.normalBallastDWT?.message}
               />
@@ -295,6 +300,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="Normal ballast draft"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="meters"
                 error={errors.normalBallastDraft?.message}
               />
@@ -303,6 +309,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, imo }) => {
                 label="cubic capacity 98%"
                 customStyles="w-full"
                 type="number"
+                step="any"
                 placeholder="M"
                 error={errors.cubicCapacity?.message}
               />
