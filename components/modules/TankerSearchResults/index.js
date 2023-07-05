@@ -56,7 +56,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
-            footer={<TankerExpandedFooter />}
+            footer={<TankerExpandedFooter tankerId={rowHeader.id} />}
             expand={expandExactResults}
           >
             <ExpandedContent data={rowHeader.expandedData} />

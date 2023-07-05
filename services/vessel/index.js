@@ -49,3 +49,10 @@ export async function getVesselCategoryTwo(categoryOneId) {
     ...response,
   };
 }
+
+export async function getVesselFreightFormats(vesselId) {
+  const response = await getData(`vessels/freight-formats/${vesselId}`);
+  return {
+    ...response,
+  };
+}

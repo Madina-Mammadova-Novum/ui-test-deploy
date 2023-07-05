@@ -25,7 +25,7 @@ const tabs = [
   },
 ];
 
-const OfferModalContent = ({ closeModal }) => {
+const OfferModalContent = ({ closeModal, tankerId }) => {
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
     responseCountdown: COUNTDOWN_OPTIONS[1],
@@ -51,7 +51,7 @@ const OfferModalContent = ({ closeModal }) => {
       case 'comments':
         return <CommentsContent data={incomingOfferCommentsData} />;
       default:
-        return <CommercialOfferTerms />;
+        return <CommercialOfferTerms tankerId={tankerId} />;
     }
   }, [currentTab]);
 

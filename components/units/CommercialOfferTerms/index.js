@@ -5,16 +5,17 @@ import { useSelector } from 'react-redux';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
+import { getVesselFreightFormats } from '@/services/vessel';
 import { searchSelector } from '@/store/selectors';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
+import { CommercialOfferTermsPropTypes } from '@/lib/types';
 
-const testOption = [{ label: 'testLabel', value: 'testValue' }];
-
-const CommercialOfferTerms = () => {
+const CommercialOfferTerms = ({ tankerId }) => {
   const [initialLoading, setInitialLoading] = useState(false);
   const [paymentTerms, setPaymentTerms] = useState([]);
   const [demurragePaymentTerms, setDemurragePaymentTerms] = useState([]);
+  const [freightFormats, setFreightFormats] = useState([]);
   const {
     register,
     clearErrors,
@@ -22,9 +23,9 @@ const CommercialOfferTerms = () => {
     setValue,
   } = useHookForm();
 
-  const {
-    searchData: { products },
-  } = useSelector(searchSelector);
+  const { searchData } = useSelector(searchSelector);
+  const { products } = searchData;
+  console.log(searchData, 'searchData');
 
   const handleChange = (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -37,12 +38,14 @@ const CommercialOfferTerms = () => {
   useEffect(() => {
     (async () => {
       setInitialLoading(true);
-      const [paymentTermsData, demurragePaymentTermsData] = await Promise.all([
+      const [paymentTermsData, demurragePaymentTermsData, freightFormatsData] = await Promise.all([
         getPaymentTerms(),
         getDemurragePaymentTerms(),
+        getVesselFreightFormats(tankerId),
       ]);
-      setPaymentTerms(convertDataToOptions(paymentTermsData?.data, 'id', 'name'));
-      setDemurragePaymentTerms(convertDataToOptions(demurragePaymentTermsData?.data, 'id', 'name'));
+      setPaymentTerms(convertDataToOptions(paymentTermsData, 'id', 'name'));
+      setDemurragePaymentTerms(convertDataToOptions(demurragePaymentTermsData, 'id', 'name'));
+      setFreightFormats(convertDataToOptions(freightFormatsData, 'id', 'value'));
       setInitialLoading(false);
     })();
   }, []);
@@ -86,7 +89,9 @@ const CommercialOfferTerms = () => {
           label="Freight"
           name="freight"
           customStyles={{ className: 'w-1/2' }}
-          options={testOption}
+          options={freightFormats}
+          disabled={initialLoading}
+          asyncCall={initialLoading}
           onChange={(option) => handleChange('freight', option)}
         />
         <Input
@@ -139,7 +144,6 @@ const CommercialOfferTerms = () => {
         <FormDropdown
           label="undisputed demurrage payment terms"
           name="undisputedDemurrage"
-          customStyles="mt-3"
           options={paymentTerms}
           disabled={initialLoading}
           asyncCall={initialLoading}
@@ -149,7 +153,7 @@ const CommercialOfferTerms = () => {
         <FormDropdown
           label="payemnt terms"
           name="paymentTerms"
-          customStyles="mt-3"
+          customStyles={{ className: 'mt-3' }}
           options={demurragePaymentTerms}
           disabled={initialLoading}
           asyncCall={initialLoading}
@@ -159,5 +163,7 @@ const CommercialOfferTerms = () => {
     </>
   );
 };
+
+CommercialOfferTerms.propTypes = CommercialOfferTermsPropTypes;
 
 export default CommercialOfferTerms;

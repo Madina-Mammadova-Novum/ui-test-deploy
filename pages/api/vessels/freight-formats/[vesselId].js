@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 
-import { responsePaymentTermsAdapter } from '@/adapters/payment-terms';
+import { responseGetVesselFreightFormatsAdapter } from '@/adapters/vessel';
 import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -8,14 +8,14 @@ import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
-  console.log(session?.accessToken, 'TOKEN');
-
+  const { vesselId } = req.query;
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/demurragepaymentterms`),
-    dataAdapter: responsePaymentTermsAdapter,
+    path: getApiURL(`v1/vessels/${vesselId}/freightformats`),
+    dataAdapter: responseGetVesselFreightFormatsAdapter,
     requestMethod: 'GET',
     options: { ...Authorization(session?.accessToken) },
+    customErrorHandling: true,
   });
 }
