@@ -1,4 +1,4 @@
-import { DetailsChartererPreFixtureContent } from '@/lib/types';
+import { DetailsChartererContentPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 
@@ -16,6 +16,6 @@ const DetailsChartererContent = ({ data, title }) => {
   );
 };
 
-DetailsChartererContent.propTypes = DetailsChartererPreFixtureContent;
+DetailsChartererContent.propTypes = DetailsChartererContentPropTypes;
 
 export default DetailsChartererContent;

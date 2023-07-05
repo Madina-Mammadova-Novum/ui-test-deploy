@@ -11,7 +11,7 @@ import { AddTankerManuallyForm, AddTankerWithImoForm } from '@/units';
 const AddNewTanker = ({ closeModal, id }) => {
   const [step, setStep] = useState('imo');
   const [fleetData, setFleetData] = useState({});
-  const [imo, setImo] = useState('');
+  const [q88, setQ88] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const AddNewTanker = ({ closeModal, id }) => {
             goBack={() => setStep('imo')}
             id={id}
             fleetData={fleetData}
-            imo={imo}
+            q88={q88}
           />
         );
       default:
@@ -44,9 +44,8 @@ const AddNewTanker = ({ closeModal, id }) => {
           <AddTankerWithImoForm
             closeModal={closeModal}
             handleNextStep={handleNextStep}
-            id={id}
             fleetData={fleetData}
-            setImo={setImo}
+            setQ88={setQ88}
           />
         );
     }
