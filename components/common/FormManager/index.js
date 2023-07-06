@@ -17,7 +17,7 @@ const FormManager = ({
 }) => {
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = useFormContext();
 
   const { text, variant, size, disabled, className: buttonClassName = '' } = submitButton;
@@ -37,8 +37,8 @@ const FormManager = ({
           text="Reset all"
           variant="tertiary"
           onClick={resetAction}
-          // customStyles={`${!isDirty ? '!text-gray' : '!text-blue'} whitespace-nowrap`}
-          // disabled={!isDirty}
+          customStyles={`${!isDirty ? '!text-gray' : '!text-blue'} whitespace-nowrap`}
+          disabled={!isDirty}
         />
       </div>
     ) : (
@@ -51,7 +51,7 @@ const FormManager = ({
         customStyles={`${buttonClassName} w-full whitespace-nowrap mt-5`}
       />
     );
-  }, [showReset, isSubmitting, text, variant, size, disabled, buttonClassName, resetAction]);
+  }, [showReset, text, variant, size, isSubmitting, disabled, buttonClassName, resetAction, isDirty]);
 
   return (
     <form className={className} onSubmit={handleSubmit(submitAction)}>
