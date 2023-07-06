@@ -27,6 +27,7 @@ const DatePicker = ({
   closeOnSelect = true,
   expanded = false,
   disabled = false,
+  dateVariant = 'MMM dd, yyyy',
   ...rest
 }) => {
   const [showPicker, setShowPicker] = useState(false);
@@ -59,7 +60,7 @@ const DatePicker = ({
                   customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
                   inputStyles="pr-0"
                   label={label}
-                  value={transformDate(value, 'MMM dd, yyyy')}
+                  value={transformDate(value, dateVariant)}
                   icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
                   error={error}
                   {...rest}

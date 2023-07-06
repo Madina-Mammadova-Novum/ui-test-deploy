@@ -28,6 +28,8 @@ import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
 import UploadForm from '@/units/FileUpload';
+import FilterByForm from '@/units/FilterByForm';
+import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import LegalNavigation from '@/units/LegalNavigation';
@@ -124,4 +126,6 @@ export {
   AddTankerManuallyForm,
   CargoesInfoModal,
   NegotiatingTankerInformation,
+  FilterByForm,
+  PostFixtureFilter,
 };
