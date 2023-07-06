@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 
 import PostFixtureDetailsContent from './PostFixtureDetailsContent';
@@ -28,7 +30,7 @@ const PostFixtureExpandedContent = ({ rowsData }) => {
       default:
         return <PostFixtureDetailsContent />;
     }
-  }, [currentTab]);
+  }, [currentTab, rowsData]);
 
   return (
     <div className="pt-16">

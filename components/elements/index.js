@@ -37,7 +37,9 @@ import NextLink from '@/elements/NextLink';
 import NotFound from '@/elements/NotFound';
 import Placeholder from '@/elements/Placeholder';
 import Portal from '@/elements/Portal';
+import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
+import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
 import TextRow from '@/elements/TextRow';
@@ -91,4 +93,6 @@ export {
   LoginButton,
   LogoutButton,
   Placeholder,
+  SubmitButton,
+  ResetButton,
 };

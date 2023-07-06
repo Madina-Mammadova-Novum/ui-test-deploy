@@ -39,7 +39,7 @@ const PortDetailsForm = ({ portName = '' }) => {
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
       <FormDropdown
-        async
+        asyncCall
         name="port"
         label="Port search"
         options={portOptions}
