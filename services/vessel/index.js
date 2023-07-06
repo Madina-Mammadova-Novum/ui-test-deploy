@@ -22,6 +22,13 @@ export async function addVesselByImo({ data, fleetId }) {
   };
 }
 
+export async function getQ88DataByImo({ imo }) {
+  const response = await getData(`vessels/get-q88/${imo}`);
+  return {
+    ...response,
+  };
+}
+
 export async function addVesselManually({ data }) {
   const body = requestAddVesselManuallyAdapter({ data });
   const response = await postData(`vessels/add-manually`, body);

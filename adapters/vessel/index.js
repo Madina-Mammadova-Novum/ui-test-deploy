@@ -231,6 +231,71 @@ export function responseGetVesselCategoryTwoAdapter({ data }) {
 
   return data;
 }
+export function responseGetVesselQ88Adapter({ data }) {
+  if (!data) return null;
+  const {
+    ballastDraft,
+    ballastDwt,
+    beam,
+    built,
+    cubicCapacity,
+    // flag,
+    hullType,
+    imo,
+    imoClass,
+    loa,
+    name,
+    // rawVesselType,
+    registryPort,
+    segregationCount,
+    summerDraft,
+    summerDwt,
+    updateDate,
+    vesselCategoryOne,
+    vesselCategoryTwo,
+    vesselTypeLevelOne,
+
+    country,
+    registeredOwner,
+    registeredOwnerCountry,
+    technicalOperator,
+    technicalOperatorCountry,
+    commercialOperator,
+    commercialOperatorCountry,
+    disponentOwner,
+    disponentOwnerCountry,
+  } = data;
+
+  return {
+    tankerName: name,
+    imo,
+    updateDate,
+    built,
+    portOfRegistry: registryPort && { label: registryPort, value: registryPort },
+    country,
+    tankerType: vesselTypeLevelOne && { label: vesselTypeLevelOne, value: vesselTypeLevelOne },
+    tankerCategoryOne: vesselCategoryOne && { label: vesselCategoryOne, value: vesselCategoryOne },
+    tankerCategoryTwo: vesselCategoryTwo && { label: vesselCategoryTwo, value: vesselCategoryTwo },
+    hullType: hullType && { label: hullType, value: hullType },
+    loa,
+    beam,
+    summerDWT: summerDwt,
+    summerDraft,
+    normalBallastDWT: ballastDwt,
+    normalBallastDraft: ballastDraft,
+    cubicCapacity,
+    imoClass: imoClass && { label: imoClass, value: imoClass },
+    grades: segregationCount,
+    registeredOwner,
+    registeredOwnerCountry,
+    technicalOperator,
+    technicalOperatorCountry,
+    commercialOperator,
+    commercialOperatorCountry,
+    disponentOwner,
+    disponentOwnerCountry,
+  };
+}
 
 export function userTankerAdapter({ data }) {
   if (!data) return {};

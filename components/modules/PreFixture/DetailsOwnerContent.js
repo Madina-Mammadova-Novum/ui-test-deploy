@@ -1,4 +1,4 @@
-import { DetailsOwnerContentPreFixtureContent } from '@/lib/types';
+import { DetailsOwnerContentPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
 
@@ -19,6 +19,6 @@ const DetailsOwnerContent = ({ data, title }) => {
   );
 };
 
-DetailsOwnerContent.propTypes = DetailsOwnerContentPreFixtureContent;
+DetailsOwnerContent.propTypes = DetailsOwnerContentPropTypes;
 
 export default DetailsOwnerContent;
