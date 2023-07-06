@@ -50,7 +50,7 @@ const PostFixture = ({ title }) => {
         </div>
       </div>
 
-      {items?.length > 0 && <PostFixtureResultContent data={items} toggle={toggle} />}
+      {!!items?.length && <PostFixtureResultContent data={items} toggle={toggle} />}
 
       <ComplexPagination
         currentPage={currentPage}
