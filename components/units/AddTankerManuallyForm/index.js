@@ -1,5 +1,5 @@
 'use client';
-
+/* eslint-disable prefer-destructuring */
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -26,6 +26,7 @@ const schema = yup.object({
 
 const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
   const [initialLoading, setInitialLoading] = useState(false);
+  const [q88State, setQ88State] = useState(q88);
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
       options: [],
@@ -44,7 +45,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
 
-  const methods = useHookFormParams({ schema, state: q88 });
+  const methods = useHookFormParams({ schema, state: q88State });
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
   const {
     register,
@@ -84,6 +85,47 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
       setPorts(countriesOptions({ data: portsData }));
       if (tankerTypesError || countriesError || portsError)
         console.log(tankerTypesError || countriesError || portsError);
+
+      if (Object.keys(q88State).length > 1) {
+        const validPrefilledOptions = {};
+        const validPortOfRegistryOption = portsData.find(({ name }) => name === q88.portOfRegistry.label);
+        const validTankerTypeOption = tankerTypesData.find(({ name }) => name === q88.tankerType.label);
+        validPrefilledOptions.portOfRegistry = countriesOptions({ data: [validPortOfRegistryOption] })[0];
+        validPrefilledOptions.tankerType = convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0];
+        setValue('portOfRegistry', countriesOptions({ data: [validPortOfRegistryOption] })[0]);
+        setValue('tankerType', convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0]);
+        if (q88State.tankerCategoryOne) {
+          const { data: categoryOne } = await getVesselCategoryOne(validPrefilledOptions.tankerType.value);
+          const validTankerCategoryOneOption = categoryOne.find(
+            ({ name }) => name === q88State.tankerCategoryOne.label
+          );
+          validPrefilledOptions.tankerCategoryOne = convertDataToOptions(
+            { data: [validTankerCategoryOneOption] },
+            'id',
+            'name'
+          )[0];
+          setValue(
+            'tankerCategoryOne',
+            convertDataToOptions({ data: [validTankerCategoryOneOption] }, 'id', 'name')[0]
+          );
+        }
+        if (q88State.tankerCategoryTwo) {
+          const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
+          const validTankerCategoryTwoOption = categoryTwo.find(
+            ({ name }) => name === q88State.tankerCategoryTwo.label
+          );
+          validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
+            { data: [validTankerCategoryTwoOption] },
+            'id',
+            'name'
+          )[0];
+          setValue(
+            'tankerCategoryTwo',
+            convertDataToOptions({ data: [validTankerCategoryTwoOption] }, 'id', 'name')[0]
+          );
+        }
+        setQ88State((prevState) => ({ ...prevState, ...validPrefilledOptions }));
+      }
     })();
   }, []);
 
@@ -162,8 +204,8 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
 
           <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
             <p>
-              Unfortunately, the IMO of the Tanker you specified <b>{q88.imo}</b> was not found in our system, please
-              add all the required information manually.
+              Unfortunately, the IMO of the Tanker you specified <b>{q88State.imo}</b> was not found in our system,
+              please add all the required information manually.
             </p>
             <p className="flex mt-1.5">
               If you make a mistake while entering the IMO of the tanker, please
@@ -185,12 +227,12 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 disabled={q88.tankerName}
                 error={errors.tankerName?.message}
               />
-              <Input {...register(`imo`)} label="IMO" disabled value={q88.imo} customStyles="w-full" />
+              <Input {...register(`imo`)} label="IMO" disabled value={q88State.imo} customStyles="w-full" />
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"
                 onChange={(date) => handleChange('updateDate', date)}
-                disabled={q88.updateDate}
+                disabled={q88State.updateDate}
                 error={errors.updateDate?.message}
               />
               <Input
@@ -199,14 +241,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Built"
                 placeholder="YYYY"
                 customStyles="w-full"
-                disabled={q88.built}
+                disabled={q88State.built}
                 error={errors.built?.message}
               />
               <FormDropdown
                 label="Port of registry"
                 options={ports}
                 asyncCall={initialLoading}
-                disabled={!ports.length || q88.portOfRegistry}
+                disabled={!ports.length || q88State.portOfRegistry}
                 name="portOfRegistry"
                 onChange={(option) => handleChange('portOfRegistry', option)}
               />
@@ -215,7 +257,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 options={countries}
                 name="country"
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88.country}
+                disabled={!countries.length || q88State.country}
                 onChange={(option) => handleChange('country', option)}
               />
             </div>
@@ -224,7 +266,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Tanker type"
                 options={tankerType.options}
                 asyncCall={initialLoading}
-                disabled={!tankerType.options.length || q88.tankerType}
+                disabled={!tankerType.options.length || q88State.tankerType}
                 name="tankerType"
                 onChange={(option) => handleChange('tankerType', option)}
               />
@@ -232,7 +274,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Tanker category #1"
                 options={tankerCategoryOne.options}
                 asyncCall={tankerCategoryOne.loading}
-                disabled={!tankerCategoryOne.options.length || q88.tankerCategoryOne}
+                disabled={!tankerCategoryOne.options.length || q88State.tankerCategoryOne}
                 name="tankerCategoryOne"
                 onChange={(option) => handleChange('tankerCategoryOne', option)}
               />
@@ -240,7 +282,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Tanker category #2"
                 options={tankerCategoryTwo.options}
                 asyncCall={tankerCategoryTwo.loading}
-                disabled={!tankerCategoryTwo.options.length || q88.tankerCategoryTwo}
+                disabled={!tankerCategoryTwo.options.length || q88State.tankerCategoryTwo}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
               />
@@ -249,7 +291,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 options={hullTypeOptions}
                 name="hullType"
                 onChange={(option) => handleChange('hullType', option)}
-                disabled={q88.hullType}
+                disabled={q88State.hullType}
                 customStyles={{ className: 'col-span-2' }}
               />
             </div>
@@ -261,7 +303,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="meters"
-                disabled={q88.loa}
+                disabled={q88State.loa}
                 error={errors.loa?.message}
               />
               <Input
@@ -271,7 +313,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="meters"
-                disabled={q88.beam}
+                disabled={q88State.beam}
                 error={errors.beam?.message}
               />
               <Input
@@ -281,7 +323,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="tons"
-                disabled={q88.summerDWT}
+                disabled={q88State.summerDWT}
                 error={errors.summerDWT?.message}
               />
               <Input
@@ -291,7 +333,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="meters"
-                disabled={q88.summerDraft}
+                disabled={q88State.summerDraft}
                 error={errors.summerDraft?.message}
               />
               <Input
@@ -301,7 +343,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="tons"
-                disabled={q88.normalBallastDWT}
+                disabled={q88State.normalBallastDWT}
                 error={errors.normalBallastDWT?.message}
               />
               <Input
@@ -311,7 +353,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="meters"
-                disabled={q88.normalBallastDraft}
+                disabled={q88State.normalBallastDraft}
                 error={errors.normalBallastDraft?.message}
               />
               <Input
@@ -321,14 +363,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 type="number"
                 step="any"
                 placeholder="M"
-                disabled={q88.cubicCapacity}
+                disabled={q88State.cubicCapacity}
                 error={errors.cubicCapacity?.message}
               />
               <FormDropdown
                 label="IMO class"
                 options={imoClassOptions}
                 name="imoClass"
-                disabled={q88.imoClass}
+                disabled={q88State.imoClass}
                 onChange={(option) => handleChange('imoClass', option)}
               />
               <Input
@@ -336,7 +378,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
                 type="number"
                 customStyles="col-span-4"
-                disabled={q88.grades}
+                disabled={q88State.grades}
                 error={errors.grades?.message}
               />
             </div>
@@ -345,14 +387,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 {...register(`registeredOwner`)}
                 label="Registered owner"
                 customStyles="w-full"
-                disabled={q88.registeredOwner}
+                disabled={q88State.registeredOwner}
                 error={errors.registeredOwner?.message}
               />
               <FormDropdown
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88.registeredOwnerCountry}
+                disabled={!countries.length || q88State.registeredOwnerCountry}
                 name="registeredOwnerCountry"
                 onChange={(option) => handleChange('registeredOwnerCountry', option)}
               />
@@ -360,14 +402,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 {...register(`technicalOperator`)}
                 label="Technical operator"
                 customStyles="w-full"
-                disabled={q88.technicalOperator}
+                disabled={q88State.technicalOperator}
                 error={errors.technicalOperator?.message}
               />
               <FormDropdown
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88.technicalOperatorCountry}
+                disabled={!countries.length || q88State.technicalOperatorCountry}
                 name="technicalOperatorCountry"
                 onChange={(option) => handleChange('technicalOperatorCountry', option)}
               />
@@ -375,14 +417,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 {...register(`commercialOperator`)}
                 label="Commercial operator"
                 customStyles="w-full"
-                disabled={q88.commercialOperator}
+                disabled={q88State.commercialOperator}
                 error={errors.commercialOperator?.message}
               />
               <FormDropdown
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88.commercialOperatorCountry}
+                disabled={!countries.length || q88State.commercialOperatorCountry}
                 name="commercialOperatorCountry"
                 onChange={(option) => handleChange('commercialOperatorCountry', option)}
               />
@@ -390,14 +432,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 {...register(`disponentOwner`)}
                 label="Disponent owner"
                 customStyles="w-full"
-                disabled={q88.disponentOwner}
+                disabled={q88State.disponentOwner}
                 error={errors.disponentOwner?.message}
               />
               <FormDropdown
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88.disponentOwnerCountry}
+                disabled={!countries.length || q88State.disponentOwnerCountry}
                 name="disponentOwnerCountry"
                 onChange={(option) => handleChange('disponentOwnerCountry', option)}
               />

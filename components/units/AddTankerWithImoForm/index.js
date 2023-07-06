@@ -24,12 +24,6 @@ const AddTankerWithImoForm = ({ closeModal, handleNextStep, fleetData, setQ88 })
     const { data } = await getQ88DataByImo({ imo: formData.imo });
     setQ88({ ...data, imo: formData.imo });
     handleNextStep();
-    // const { status, error } = await addVesselByImo({ data: formData, fleetId: id });
-    // if (status === 200) return;
-    // if (error) {
-    //   setImo(formData.imo);
-    //   handleNextStep();
-    // }
   };
 
   return (
