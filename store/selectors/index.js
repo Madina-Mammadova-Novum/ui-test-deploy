@@ -3,6 +3,10 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 import { userDetailsAdapter } from '@/adapters/user';
 
 export const sidebarSelector = ({ user }) => user?.params;
+export const userSelector = ({ user }) => user;
+export const vesselsSelector = ({ positions }) => positions;
+export const fleetsSelector = ({ fleets }) => fleets;
+export const searchSelector = ({ search }) => search;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
@@ -11,8 +15,6 @@ export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (stat
   };
 });
 
-export const userSelector = ({ user }) => user;
-
 export const getUserDataSelector = createDraftSafeSelector(userSelector, (state) => {
   return {
     ...state,
@@ -20,6 +22,10 @@ export const getUserDataSelector = createDraftSafeSelector(userSelector, (state)
   };
 });
 
-export const fleetsSelector = ({ fleets }) => fleets;
-
-export const searchSelector = ({ search }) => search;
+export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (state) => {
+  return {
+    loading: state?.loading,
+    error: state?.error,
+    vessels: state?.data?.vessels,
+  };
+});

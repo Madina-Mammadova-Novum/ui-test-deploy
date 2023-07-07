@@ -9,7 +9,7 @@ import { AddTankerWithImoFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Input, TextWithLabel } from '@/elements';
 import { tankersSchema } from '@/lib/schemas';
-import { addVesselByImo } from '@/services/vessel';
+import { getQ88DataByImo } from '@/services/vessel';
 import { ModalHeader } from '@/units';
 import { useHookFormParams } from '@/utils/hooks';
 
@@ -17,16 +17,13 @@ const schema = yup.object({
   ...tankersSchema(),
 });
 
-const AddTankerWithImoForm = ({ closeModal, handleNextStep, id, fleetData, setImo }) => {
+const AddTankerWithImoForm = ({ closeModal, handleNextStep, fleetData, setQ88 }) => {
   const methods = useHookFormParams({ schema });
   const { name: fleetName } = fleetData;
   const onSubmit = async (formData) => {
-    const { status, error } = await addVesselByImo({ data: formData, fleetId: id });
-    if (status === 200) return;
-    if (error) {
-      setImo(formData.imo);
-      handleNextStep();
-    }
+    const { data } = await getQ88DataByImo({ imo: formData.imo });
+    setQ88({ ...data, imo: formData.imo });
+    handleNextStep();
   };
 
   return (

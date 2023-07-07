@@ -21,7 +21,7 @@ const tabs = [
 const FixtureExpandedContent = ({ rowsData }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
-  const tabContent = useMemo(() => {
+  const printTabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
         return <FixtureDocumentsContent rowsData={rowsData} />;
@@ -38,7 +38,8 @@ const FixtureExpandedContent = ({ rowsData }) => {
         onClick={({ target }) => setCurrentTab(target.value)}
         customStyles="custom-container my-3 mr-1/2 mx-auto absolute left-1/2 translate-(x/y)-1/2"
       />
-      {tabContent}
+
+      {printTabContent}
     </div>
   );
 };

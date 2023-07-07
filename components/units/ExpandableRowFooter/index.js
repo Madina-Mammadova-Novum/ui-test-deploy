@@ -1,5 +1,5 @@
 const ExpandableRowFooter = ({ children }) => {
-  return <div className="py-3 border-t">{children}</div>;
+  return <div className="pb-3">{children}</div>;
 };
 
 export default ExpandableRowFooter;

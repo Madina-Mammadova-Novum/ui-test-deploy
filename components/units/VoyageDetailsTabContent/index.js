@@ -7,14 +7,13 @@ import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 import { IconComponent, TextRow, Title } from '@/elements';
 import { ROLES } from '@/lib';
 import VoyageChartererTabContent from '@/units/VoyageDetailsTabContent/VoyageChartererTabContent';
-import VoyageOwnerTabContent from '@/units/VoyageDetailsTabContent/VoyageOwnerTabContent';
 
 const VoyageDetailsTabContent = ({ data = {} }) => {
   const { data: session } = useSession();
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.OWNER) {
-      return <VoyageOwnerTabContent />;
+      return null;
     }
     if (session?.role === ROLES.CHARTERER) {
       return <VoyageChartererTabContent />;
@@ -44,6 +43,7 @@ const VoyageDetailsTabContent = ({ data = {} }) => {
         <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
           ports
         </Title>
+
         {data.ports.map((pair) => (
           <div className="mt-2.5">
             {pair.map((detail) => (

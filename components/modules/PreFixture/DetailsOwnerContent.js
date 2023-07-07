@@ -1,21 +1,24 @@
-import { DetailsOwnerContentPreFixtureContent } from '@/lib/types';
+import { DetailsOwnerContentPropTypes } from '@/lib/types';
 
-import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
+import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
 
 const DetailsOwnerContent = ({ data, title }) => {
-  const { years, ships, kt } = data;
+  const { years, ships, kt, state, icon } = data;
   return (
     <FieldsetWrapper>
       <Title level="3">{title}</Title>
       <FieldsetContent className="pt-2.5">
         <TextRow title="Years of Operation">{years} years</TextRow>
-        <TextRow title="Number of Tankers">{ships} tankers</TextRow>
-        <TextRow title="Estimated average tanker DWT">{kt} kt</TextRow>
+        <TextRow title="Estimated Number of Charters per Year">{ships} charters</TextRow>
+        <TextRow title="Average Tonnage per Charter">{kt} kt</TextRow>
+        <TextRow title="Country of registration">
+          <IconComponent icon={icon} /> {state}
+        </TextRow>
       </FieldsetContent>
     </FieldsetWrapper>
   );
 };
 
-DetailsOwnerContent.propTypes = DetailsOwnerContentPreFixtureContent;
+DetailsOwnerContent.propTypes = DetailsOwnerContentPropTypes;
 
 export default DetailsOwnerContent;

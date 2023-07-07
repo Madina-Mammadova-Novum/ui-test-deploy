@@ -25,7 +25,7 @@ export const requestErrorHandler = (status, message, errors) => {
   if (typeof errors === 'object') {
     return {
       message: errors.title || statusMessage,
-      errors: formatErrors(errors?.errors),
+      errors: formatErrors(errors?.errors ?? errors),
     };
   }
 
@@ -79,8 +79,10 @@ export const apiHandler = async (options) => {
     if (responseBody !== '') {
       responseBody = JSON.parse(responseBody);
     }
+
     const result = ok ? responseBody : null;
     const error = ok ? null : requestErrorHandler(status, statusText, responseBody);
+
     return {
       status,
       ...responseAdapter(result),

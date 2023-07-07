@@ -28,11 +28,14 @@ import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
 import UploadForm from '@/units/FileUpload';
+import FilterByForm from '@/units/FilterByForm';
+import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import LegalNavigation from '@/units/LegalNavigation';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
+import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
@@ -122,4 +125,7 @@ export {
   AddTankerWithImoForm,
   AddTankerManuallyForm,
   CargoesInfoModal,
+  NegotiatingTankerInformation,
+  FilterByForm,
+  PostFixtureFilter,
 };

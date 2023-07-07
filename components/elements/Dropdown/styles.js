@@ -45,9 +45,9 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     borderRadius: '6px',
     marginTop: '5px',
     padding: '0px',
-    position: 'absolute',
-    minHeight: 'auto',
-    top: 40,
+    // position: 'absolute',
+    // minHeight: 'auto',
+    // top: 40,
   }),
   dropdownIndicator: (base, { selectProps: { menuIsOpen } }) => ({
     ...base,

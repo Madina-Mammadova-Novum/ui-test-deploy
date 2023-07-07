@@ -66,8 +66,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
   };
   return (
     <div>
-      <div className="mb-3">{tabContent}</div>
-
+      <div className="mb-3 table-scroll">{tabContent}</div>
       <Modal opened={modal} onClose={handleCloseModal}>
         {modalContent()}
       </Modal>

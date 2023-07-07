@@ -3,6 +3,7 @@ import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { makeId } from '@/utils/helpers';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -11,14 +12,17 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 
   return [
     {
+      id: makeId(),
       label: 'fleet name',
       text: title ?? '',
     },
     {
+      id: makeId(),
       label: 'active',
       text: `${activeTankers ?? '0'} tankers`,
     },
     {
+      id: makeId(),
       label: 'inactive',
       text: `${inActiveTankers ?? '0'} tankers`,
     },
@@ -28,7 +32,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { date, id, marked, imo, port, status, title } = data;
+  const { date, id, marked, imo, port, portId, status, title } = data;
 
   const inActive = port === null || date === null;
 
@@ -50,6 +54,9 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      date,
+      port,
+      portId,
       name: title,
       value: port || NO_DATA_MESSAGE.PORT,
       helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
@@ -64,8 +71,11 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      name: title,
+      date,
+      port,
+      portId,
       marked,
+      name: title,
       value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: !inActive,
@@ -203,4 +213,21 @@ export const responseCreateFleetAdapter = ({ data }) => {
 export const responseGetFleetsAdapter = ({ data }) => {
   if (!data) return [];
   return data;
+};
+
+export const getFleetByIdAdapter = ({ id }) => {
+  if (!id) return null;
+
+  return { fleetId: id };
+};
+
+export const complexFleetDataAdapter = ({ fleet, fleetDetails }) => {
+  if (!fleet) return [];
+
+  return {
+    data: {
+      ...fleet,
+      tankers: fleetDetails?.data,
+    },
+  };
 };

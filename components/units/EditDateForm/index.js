@@ -9,17 +9,29 @@ import { EditDateFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
+import { updateVesselPortAndDate } from '@/services/vessel';
 import { DateDetailsForm } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditDateForm = ({ closeModal, title, portName }) => {
+const EditDateForm = ({ closeModal, title, modalState }) => {
   const schema = yup.object().shape({
     ...dateSchema(),
   });
 
+  const { id, portId, name } = modalState;
+
   const methods = useHookFormParams({ schema });
-  const onSubmit = async (formData) => {
-    return { formData };
+  const onSubmit = async ({ date }) => {
+    const result = {
+      id,
+      date,
+      portId,
+    };
+
+    const { error, data } = await updateVesselPortAndDate(result);
+
+    if (data?.message) successToast(data.message);
+    if (error) errorToast(error.message, error.errors[0]);
   };
 
   return (
@@ -34,7 +46,7 @@ const EditDateForm = ({ closeModal, title, portName }) => {
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <DateDetailsForm portName={portName} />
+        <DateDetailsForm portName={name} />
       </ModalFormManager>
     </FormProvider>
   );

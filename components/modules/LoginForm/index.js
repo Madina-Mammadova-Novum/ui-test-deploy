@@ -63,7 +63,7 @@ const LoginForm = () => {
           variant: 'primary',
           size: 'large',
         }}
-        className="pt-5"
+        className="pt-5 w"
         submitAction={onSubmit}
       >
         <Input
