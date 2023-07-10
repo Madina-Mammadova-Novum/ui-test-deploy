@@ -66,7 +66,11 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
 
   const handleSubmit = async (formData) => {
     const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
-    const { status, error, message: successMessage } = await sendOffer({
+    const {
+      status,
+      error,
+      message: successMessage,
+    } = await sendOffer({
       data: {
         ...formData,
         responseCountdown,
