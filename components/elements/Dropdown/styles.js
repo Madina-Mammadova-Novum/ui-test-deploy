@@ -24,7 +24,7 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
   container: (base, { selectProps: { menuIsOpen, options } }) => {
     return {
       ...base,
-      height: menuIsOpen && expand && options?.length > 1 ? 340 : 'auto',
+      height: menuIsOpen && expand && options?.length > 1 ? 280 : 'auto',
       minWidth: minWidth ?? 34,
     };
   },
@@ -45,9 +45,9 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     borderRadius: '6px',
     marginTop: '5px',
     padding: '0px',
-    // position: 'absolute',
-    // minHeight: 'auto',
-    // top: 40,
+    position: 'absolute',
+    minHeight: 'auto',
+    top: 40,
   }),
   dropdownIndicator: (base, { selectProps: { menuIsOpen } }) => ({
     ...base,

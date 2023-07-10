@@ -1,6 +1,6 @@
 import { BaseLayoutPropTypes } from '@/lib/types';
 
-import { ClientSidePackages, TailwindIndicator } from '@/common';
+import { ClientSidePackages, ExtraDataManager, StoreManager, TailwindIndicator } from '@/common';
 
 import '@/styles/index.css';
 
@@ -13,7 +13,9 @@ const BaseLayout = ({ children, className = '' }) => {
       */}
       <head />
       <body className={className}>
-        {children}
+        <StoreManager>
+          <ExtraDataManager>{children}</ExtraDataManager>
+        </StoreManager>
         <ClientSidePackages />
         <TailwindIndicator />
       </body>

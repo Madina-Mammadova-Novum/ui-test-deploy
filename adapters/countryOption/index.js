@@ -13,7 +13,5 @@ export const countryOptionAdapter = (data) => {
 export const countryOptionsAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((option) => {
-    return countryOptionAdapter(option);
-  });
+  return data?.map((option) => countryOptionAdapter(option));
 };

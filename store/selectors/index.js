@@ -7,6 +7,7 @@ export const userSelector = ({ user }) => user;
 export const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
+export const generalSelector = ({ general }) => general;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
@@ -19,6 +20,15 @@ export const getUserDataSelector = createDraftSafeSelector(userSelector, (state)
   return {
     ...state,
     data: userDetailsAdapter({ data: state.data }),
+  };
+});
+
+export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (state) => {
+  return {
+    loading: state?.loading,
+    error: state?.error,
+    countries: state?.data?.countries,
+    ports: state?.data?.ports,
   };
 });
 
