@@ -3,36 +3,56 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { CommercialOfferTermsPropTypes } from '@/lib/types';
+
 import { FormDropdown, Input, Title } from '@/elements';
+import { calculateFreightEstimation } from '@/services/calculator';
 import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
 import { getVesselFreightFormats } from '@/services/vessel';
 import { searchSelector } from '@/store/selectors';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
-import { CommercialOfferTermsPropTypes } from '@/lib/types';
 
 const CommercialOfferTerms = ({ tankerId }) => {
   const [initialLoading, setInitialLoading] = useState(false);
   const [paymentTerms, setPaymentTerms] = useState([]);
   const [demurragePaymentTerms, setDemurragePaymentTerms] = useState([]);
   const [freightFormats, setFreightFormats] = useState([]);
+  const [freightEstimation, setFreightEstimation] = useState({});
   const {
     register,
     clearErrors,
     formState: { errors, isSubmitting },
     setValue,
+    getValues,
   } = useHookForm();
 
   const { searchData } = useSelector(searchSelector);
-  const { products } = searchData;
-  console.log(searchData, 'searchData');
+  const { products, loadPort, dischargePort } = searchData;
 
-  const handleChange = (key, value) => {
+  const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+    if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
     if (error) {
       clearErrors(key);
     }
+
     setValue(key, value);
+
+    if (key === 'freight') {
+      const productsData = getValues('products');
+      const totalCargoQuantity = +productsData
+        .filter((product) => product)
+        .map(({ quantity }) => quantity)
+        .reduce((a, b) => +a + +b);
+      const { status, data } = await calculateFreightEstimation({
+        data: { loadPortId: loadPort.value, dischargePortId: dischargePort.value, totalCargoQuantity },
+      });
+      if (status === 200) {
+        setFreightEstimation({ ...data, min: +(data.total * 0.8).toFixed(0), max: +(data.total * 1.2).toFixed(0) });
+        setValue('totalAmount', data.total);
+      }
+    }
   };
 
   useEffect(() => {
@@ -58,32 +78,35 @@ const CommercialOfferTerms = ({ tankerId }) => {
       </div>
       {products
         ?.filter((product) => product)
-        .map((_, index) => (
-          <div className="flex items-baseline mt-3 gap-x-5">
-            <FormDropdown
-              label={`product #${index + 1}`}
-              name={`products[${index}].product`}
-              disabled
-              customStyles={{ className: 'w-1/2' }}
-            />
-            <Input
-              {...register(`products[${index}].density`)}
-              label="Density"
-              placeholder="mt/m³"
-              customStyles="max-w-[138px]"
-              error={errors.products ? errors.products[index]?.density?.message : null}
-              disabled={isSubmitting}
-            />
-            <Input
-              {...register(`products[${index}].quantity`)}
-              label="min quantity"
-              placeholder="tons"
-              customStyles="max-w-[138px]"
-              error={errors.products ? errors.products[index]?.quantity?.message : null}
-              disabled={isSubmitting}
-            />
-          </div>
-        ))}
+        .map((product, index) => {
+          setValue(`products[${index}].tolerance`, product.tolerance);
+          return (
+            <div className="flex items-baseline mt-3 gap-x-5">
+              <FormDropdown
+                label={`product #${index + 1}`}
+                name={`products[${index}].product`}
+                disabled
+                customStyles={{ className: 'w-1/2' }}
+              />
+              <Input
+                {...register(`products[${index}].density`)}
+                label="Density"
+                placeholder="mt/m³"
+                customStyles="max-w-[138px]"
+                error={errors.products ? errors.products[index]?.density?.message : null}
+                disabled={isSubmitting}
+              />
+              <Input
+                {...register(`products[${index}].quantity`)}
+                label="min quantity"
+                placeholder="tons"
+                customStyles="max-w-[138px]"
+                error={errors.products ? errors.products[index]?.quantity?.message : null}
+                disabled={isSubmitting}
+              />
+            </div>
+          );
+        })}
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
         <FormDropdown
           label="Freight"
@@ -101,8 +124,11 @@ const CommercialOfferTerms = ({ tankerId }) => {
           type="number"
           placeholder="WS"
           customStyles="w-1/2"
+          helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
           error={errors.value?.message}
           disabled={isSubmitting}
+          min={String(freightEstimation.min)}
+          max={String(freightEstimation.max)}
         />
       </div>
 

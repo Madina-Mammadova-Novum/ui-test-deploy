@@ -1,6 +1,7 @@
+import { TankerExpandedFooterPropTypes } from '@/lib/types';
+
 import { LinkAsButton } from '@/elements';
 import { ROUTES } from '@/lib';
-import { TankerExpandedFooterPropTypes } from '@/lib/types';
 import OfferModalContent from '@/modules/OfferModalContent';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 import { useAuth } from '@/utils/hooks';

@@ -9,7 +9,7 @@ import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState({ value: false });
   const [isLoading, setIsLoading] = useState(true);
 
   const [userStore, setUserStore] = useState({
@@ -69,7 +69,7 @@ const AccountPositions = () => {
   };
 
   const printExpandableCard = (fleet) => (
-    <ExpandableCard className="px-5" key={fleet.id} data={fleet} expandAll={{ value: toggle }} />
+    <ExpandableCard className="px-5" key={fleet.id} data={fleet} expandAll={toggle} />
   );
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
@@ -83,7 +83,7 @@ const AccountPositions = () => {
       <div className="flex justify-between items-center pt-5 w-full">
         <Title level={1}>My positions</Title>
         <div className="flex gap-x-5">
-          <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+          <ToggleRows onToggleClick={setToggle} />
           <Dropdown
             label="Sort by open day:"
             options={sortOptions}

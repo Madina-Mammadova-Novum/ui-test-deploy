@@ -1,13 +1,19 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
+
 import { Button, Dropdown, Title } from '@/elements';
-import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
+import { getCountdownTimer } from '@/services/countdownTimer';
+import { sendOffer } from '@/services/offer';
+import { searchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs } from '@/units';
+import { convertDataToOptions } from '@/utils/helpers';
+import { errorToast, successToast } from '@/utils/hooks';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
@@ -28,9 +34,13 @@ const tabs = [
 const OfferModalContent = ({ closeModal, tankerId }) => {
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
-    responseCountdown: COUNTDOWN_OPTIONS[1],
+    responseCountdown: null,
+    responseCountdownOptions: [],
     showScroll: false,
+    loading: false,
   });
+  const { searchData } = useSelector(searchSelector);
+  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchData;
 
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
@@ -42,7 +52,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
   const handleChangeOption = (option) => handleChangeState('responseCountdown', option);
   const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
 
-  const { currentTab, responseCountdown, showScroll } = modalStore;
+  const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
@@ -55,6 +65,41 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
     }
   }, [currentTab]);
 
+  const handleSubmit = async (formData) => {
+    const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
+    const { error, data } = await sendOffer({
+      data: {
+        ...formData,
+        responseCountdown,
+        tankerId,
+        laycanStart,
+        laycanEnd,
+        loadTerminal,
+        dischargeTerminal,
+        minOfferQuantity: totalMinQuantity,
+      },
+    });
+    if (data) {
+      successToast(data.message);
+    }
+    if (error) {
+      const { message, errors, description } = error;
+      console.error(errors);
+      errorToast(message.title, description);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      handleChangeState('loading', true);
+      const { data = [] } = await getCountdownTimer();
+      const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+      handleChangeState('responseCountdownOptions', convertedOptions);
+      handleChangeOption(convertedOptions[0]);
+      handleChangeState('loading', false);
+    })();
+  }, []);
+
   return (
     <div className="w-[610px]">
       <Title level="2">Send Offer</Title>
@@ -66,7 +111,9 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
           </p>
           <Dropdown
             defaultValue={responseCountdown}
-            options={COUNTDOWN_OPTIONS}
+            options={responseCountdownOptions}
+            asyncCall={loading}
+            disabled={!responseCountdownOptions.length}
             onChange={handleChangeOption}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
@@ -77,7 +124,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
 
       <div className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}>
         <div className="p-2.5">
-          <OfferForm>{tabContent}</OfferForm>
+          <OfferForm handleSubmit={handleSubmit}>{tabContent}</OfferForm>
         </div>
       </div>
 

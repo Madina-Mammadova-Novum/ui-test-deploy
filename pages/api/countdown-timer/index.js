@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 
-import { responsePaymentTermsAdapter } from '@/adapters/payment-terms';
+import { responseCountdownTimerAdapter } from '@/adapters/countdownTimer';
 import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -12,8 +12,8 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/demurragepaymentterms`),
-    dataAdapter: responsePaymentTermsAdapter,
+    path: getApiURL(`v1/countdowntimersettings`),
+    dataAdapter: responseCountdownTimerAdapter,
     requestMethod: 'GET',
     options: { ...Authorization(session?.accessToken) },
   });

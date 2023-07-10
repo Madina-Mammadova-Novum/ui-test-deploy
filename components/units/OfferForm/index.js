@@ -7,15 +7,15 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
-import { sendOffer } from '@/services/offer';
 import { searchSelector } from '@/store/selectors';
-import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+import { useHookFormParams } from '@/utils/hooks';
+import { OfferFormPropTypes } from '@/lib/types';
 
 const schema = yup.object({
   ...offerSchema(),
 });
 
-const OfferForm = ({ children }) => {
+const OfferForm = ({ children, handleSubmit = () => {} }) => {
   const {
     searchData: { products = [], cargoType },
   } = useSelector(searchSelector);
@@ -29,25 +29,13 @@ const OfferForm = ({ children }) => {
           (_, curr, index) => ({
             [`products[${index}].product`]: curr.product,
             [`products[${index}].density`]: curr.density,
-            [`products[${index}].quantity`]: curr.quantity,
+            [`products[${index}].tolerance`]: curr.tolerance,
+            [`products[${index}].quantity`]: curr.quantity * (1 - curr.tolerance / 100),
           }),
           {}
         ),
     },
   });
-
-  const handleSubmit = async (formData) => {
-    const { error, data } = await sendOffer({ data: formData });
-    if (data) {
-      successToast(data.message);
-      methods.reset();
-    }
-    if (error) {
-      const { message, errors, description } = error;
-      console.error(errors);
-      errorToast(message, description);
-    }
-  };
 
   return (
     <FormProvider {...methods}>
@@ -66,5 +54,7 @@ const OfferForm = ({ children }) => {
     </FormProvider>
   );
 };
+
+OfferForm.propTypes = OfferFormPropTypes;
 
 export default OfferForm;
