@@ -31,6 +31,9 @@ import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PostFixture from '@/modules/PostFixture';
+import PostFixtureExpandedContent from '@/modules/PostFixture/PostFixtureExpandedContent';
+import PostFixtureExpandedFooter from '@/modules/PostFixture/PostFixtureExpandedFooter';
+import PostFixtureResultContent from '@/modules/PostFixture/PostFixtureResultContent';
 import PreFixture from '@/modules/PreFixture';
 import ProfileMenu from '@/modules/ProfileMenu';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
@@ -82,6 +85,9 @@ export {
   TankerSearchResults,
   PreFixture,
   PostFixture,
+  PostFixtureExpandedContent,
+  PostFixtureResultContent,
+  PostFixtureExpandedFooter,
   Fixture,
   Negotiating,
   ViewIncomingOffer,

@@ -320,7 +320,6 @@ export const formatErrors = (errors) => {
   if (!errors) return null;
   const errorMessages = Object.entries(errors)?.map(([key, value]) => {
     const errorMessage = value.join(' ');
-    if (key === '_') return `${errorMessage}`;
     return `${key}: ${errorMessage}`;
   });
   return errorMessages.join('\n');

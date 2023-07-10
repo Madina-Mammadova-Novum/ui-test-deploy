@@ -2,8 +2,9 @@ import {
   requestAddVesselByImoAdapter,
   requestAddVesselManuallyAdapter,
   requestSearchVesselAdapter,
+  updateVesselPortAndDataAdapter,
 } from '@/adapters/vessel';
-import { getData, postData } from '@/utils/dataFetching';
+import { getData, postData, putData } from '@/utils/dataFetching';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
@@ -21,9 +22,17 @@ export async function addVesselByImo({ data, fleetId }) {
   };
 }
 
+export async function getQ88DataByImo({ imo }) {
+  const response = await getData(`vessels/get-q88/${imo}`);
+  return {
+    ...response,
+  };
+}
+
 export async function addVesselManually({ data }) {
   const body = requestAddVesselManuallyAdapter({ data });
   const response = await postData(`vessels/add-manually`, body);
+  if (!response.error) response.message = 'Your have successfully added a new tanker';
   return {
     ...response,
   };
@@ -54,5 +63,18 @@ export async function getVesselFreightFormats(vesselId) {
   const response = await getData(`vessels/freight-formats/${vesselId}`);
   return {
     ...response,
+  }
+}
+
+export async function updateVesselPortAndDate(data) {
+  const body = updateVesselPortAndDataAdapter({ data });
+
+  const response = await putData(`account/my-positions/update-vessel-port`, body);
+
+  return {
+    ...response,
+    data: {
+      message: response.status === 200 && 'Your request approved',
+    },
   };
 }

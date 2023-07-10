@@ -1,19 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
-import { getUserPositions } from '@/services';
+import { fetchUserVessels } from '@/store/entities/positions/actions';
+import { getUserVesselsSelector } from '@/store/selectors';
 import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
   const [toggle, setToggle] = useState({ value: false });
-  const [isLoading, setIsLoading] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const { vessels, loading } = useSelector(getUserVesselsSelector);
 
   const [userStore, setUserStore] = useState({
-    userPositions: [],
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
   });
@@ -27,7 +31,7 @@ const AccountPositions = () => {
     }));
   };
 
-  const { userPositions, sortOptions, sortValue } = userStore;
+  const { sortOptions, sortValue } = userStore;
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -44,23 +48,12 @@ const AccountPositions = () => {
     selectedPage,
     onChangeOffers,
     perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, userPositions, sortValue.value);
+  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, vessels, sortValue.value);
 
   /* fetching user positions data */
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const { data } = await getUserPositions();
-      setUserStore({ ...userStore, userPositions: data });
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    dispatch(fetchUserVessels());
   }, []);
 
   const handleChange = (option) => {
@@ -74,7 +67,7 @@ const AccountPositions = () => {
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
-  if (isLoading) {
+  if (loading) {
     return <Loader className="h-8 w-8 absolute top-1/2" />;
   }
 
