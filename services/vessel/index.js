@@ -63,7 +63,7 @@ export async function getVesselFreightFormats(vesselId) {
   const response = await getData(`vessels/freight-formats/${vesselId}`);
   return {
     ...response,
-  }
+  };
 }
 
 export async function updateVesselPortAndDate(data) {

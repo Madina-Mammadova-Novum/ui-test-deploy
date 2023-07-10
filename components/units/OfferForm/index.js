@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
+import { OfferFormPropTypes } from '@/lib/types';
+
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
 import { searchSelector } from '@/store/selectors';
 import { useHookFormParams } from '@/utils/hooks';
-import { OfferFormPropTypes } from '@/lib/types';
 
 const schema = yup.object({
   ...offerSchema(),

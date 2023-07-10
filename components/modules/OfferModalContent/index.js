@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
-
 import { Button, Dropdown, Title } from '@/elements';
 import { CommentsContent, VoyageDetailsContent } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
