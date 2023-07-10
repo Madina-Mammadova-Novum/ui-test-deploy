@@ -66,7 +66,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
 
   const handleSubmit = async (formData) => {
     const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
-    const { error, data } = await sendOffer({
+    const { status, error, message: successMessage } = await sendOffer({
       data: {
         ...formData,
         responseCountdown,
@@ -78,8 +78,9 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
         minOfferQuantity: totalMinQuantity,
       },
     });
-    if (data) {
-      successToast(data.message);
+    if (status === 200) {
+      successToast(successMessage);
+      closeModal();
     }
     if (error) {
       const { message, errors, description } = error;

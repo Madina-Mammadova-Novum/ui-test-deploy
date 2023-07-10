@@ -170,7 +170,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
         <FormDropdown
           label="undisputed demurrage payment terms"
           name="undisputedDemurrage"
-          options={paymentTerms}
+          options={demurragePaymentTerms}
           disabled={initialLoading}
           asyncCall={initialLoading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
@@ -180,7 +180,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
           label="payemnt terms"
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
-          options={demurragePaymentTerms}
+          options={paymentTerms}
           disabled={initialLoading}
           asyncCall={initialLoading}
           onChange={(option) => handleChange('paymentTerms', option)}
