@@ -1,24 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CommercialOfferTermsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { calculateFreightEstimation } from '@/services/calculator';
-import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
-import { getVesselFreightFormats } from '@/services/vessel';
-import { searchSelector } from '@/store/selectors';
-import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
+import { fetchOfferOptioins } from '@/store/entities/offer/actions';
+import { offerSelector, searchSelector } from '@/store/selectors';
+import { calculateIntDigit, calculateTotal, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CommercialOfferTerms = ({ tankerId }) => {
-  const [initialLoading, setInitialLoading] = useState(false);
-  const [paymentTerms, setPaymentTerms] = useState([]);
-  const [demurragePaymentTerms, setDemurragePaymentTerms] = useState([]);
-  const [freightFormats, setFreightFormats] = useState([]);
   const [freightEstimation, setFreightEstimation] = useState({});
+  const dispatch = useDispatch();
   const {
     register,
     clearErrors,
@@ -29,6 +25,14 @@ const CommercialOfferTerms = ({ tankerId }) => {
 
   const { searchData } = useSelector(searchSelector);
   const { products, loadPort, dischargePort } = searchData;
+  const {
+    data: { paymentTerms, demurragePaymentTerms, freightFormats },
+    loading: initialLoading,
+  } = useSelector(offerSelector);
+
+  useEffect(() => {
+    dispatch(fetchOfferOptioins(tankerId));
+  }, [dispatch, tankerId]);
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -41,34 +45,50 @@ const CommercialOfferTerms = ({ tankerId }) => {
 
     if (key === 'freight') {
       const productsData = getValues('products');
-      const totalCargoQuantity = +productsData
-        .filter((product) => product)
-        .map(({ quantity }) => quantity)
-        .reduce((a, b) => +a + +b);
+      const totalCargoQuantity = calculateTotal(productsData, 'quantity');
       const { status, data } = await calculateFreightEstimation({
         data: { loadPortId: loadPort.value, dischargePortId: dischargePort.value, totalCargoQuantity },
       });
       if (status === 200) {
-        setFreightEstimation({ ...data, min: +(data.total * 0.8).toFixed(0), max: +(data.total * 1.2).toFixed(0) });
+        setFreightEstimation({
+          ...data,
+          min: calculateIntDigit(data.total, 0.8),
+          max: calculateIntDigit(data.total, 1.2),
+        });
         setValue('totalAmount', data.total);
       }
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      setInitialLoading(true);
-      const [paymentTermsData, demurragePaymentTermsData, freightFormatsData] = await Promise.all([
-        getPaymentTerms(),
-        getDemurragePaymentTerms(),
-        getVesselFreightFormats(tankerId),
-      ]);
-      setPaymentTerms(convertDataToOptions(paymentTermsData, 'id', 'name'));
-      setDemurragePaymentTerms(convertDataToOptions(demurragePaymentTermsData, 'id', 'name'));
-      setFreightFormats(convertDataToOptions(freightFormatsData, 'id', 'value'));
-      setInitialLoading(false);
-    })();
-  }, []);
+  const printProduct = (product, index) => {
+    setValue(`products[${index}].tolerance`, product.tolerance);
+    return (
+      <div className="flex items-baseline mt-3 gap-x-5">
+        <FormDropdown
+          label={`product #${index + 1}`}
+          name={`products[${index}].product`}
+          disabled
+          customStyles={{ className: 'w-1/2' }}
+        />
+        <Input
+          {...register(`products[${index}].density`)}
+          label="Density"
+          placeholder="mt/m³"
+          customStyles="max-w-[138px]"
+          error={errors.products ? errors.products[index]?.density?.message : null}
+          disabled={isSubmitting}
+        />
+        <Input
+          {...register(`products[${index}].quantity`)}
+          label="min quantity"
+          placeholder="tons"
+          customStyles="max-w-[138px]"
+          error={errors.products ? errors.products[index]?.quantity?.message : null}
+          disabled={isSubmitting}
+        />
+      </div>
+    );
+  };
 
   return (
     <>
@@ -76,37 +96,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
       <div className="flex items-center mt-3">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
-      {products
-        ?.filter((product) => product)
-        .map((product, index) => {
-          setValue(`products[${index}].tolerance`, product.tolerance);
-          return (
-            <div className="flex items-baseline mt-3 gap-x-5">
-              <FormDropdown
-                label={`product #${index + 1}`}
-                name={`products[${index}].product`}
-                disabled
-                customStyles={{ className: 'w-1/2' }}
-              />
-              <Input
-                {...register(`products[${index}].density`)}
-                label="Density"
-                placeholder="mt/m³"
-                customStyles="max-w-[138px]"
-                error={errors.products ? errors.products[index]?.density?.message : null}
-                disabled={isSubmitting}
-              />
-              <Input
-                {...register(`products[${index}].quantity`)}
-                label="min quantity"
-                placeholder="tons"
-                customStyles="max-w-[138px]"
-                error={errors.products ? errors.products[index]?.quantity?.message : null}
-                disabled={isSubmitting}
-              />
-            </div>
-          );
-        })}
+      {products?.filter((product) => product).map(printProduct)}
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
         <FormDropdown
           label="Freight"
