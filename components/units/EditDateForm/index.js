@@ -18,17 +18,12 @@ const EditDateForm = ({ closeModal, title, modalState }) => {
     ...dateSchema(),
   });
 
-  const { id, portId, name } = modalState;
-
   const methods = useHookFormParams({ schema });
   const onSubmit = async ({ date }) => {
-    const result = {
-      id,
+    const { error, data } = await updateVesselPortAndDate({
+      ...modalState,
       date,
-      portId,
-    };
-
-    const { error, data } = await updateVesselPortAndDate(result);
+    });
 
     if (data?.message) successToast(data.message);
     if (error) errorToast(error.message, error.errors[0]);
@@ -46,7 +41,7 @@ const EditDateForm = ({ closeModal, title, modalState }) => {
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <DateDetailsForm portName={name} />
+        <DateDetailsForm portName={modalState?.name} />
       </ModalFormManager>
     </FormProvider>
   );

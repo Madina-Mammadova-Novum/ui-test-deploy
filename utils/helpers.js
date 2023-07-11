@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, ROLES, SORT_OPTIONS } from '@/lib/constants';
+import { REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -321,12 +321,13 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return null;
-  const errorMessages = Object.entries(errors)?.map(([key, value]) => {
-    const errorMessage = value.join(' ');
-    return `${key}: ${errorMessage}`;
-  });
-  return errorMessages.join('\n');
+  if (!errors) return [SYSTEM_ERROR];
+
+  return Object.entries(errors).map(([key, value]) => {
+    // eslint-disable-next-line no-param-reassign
+    if (key === '_') key = 'Exeption';
+    return `${key}: ${value}`;
+  })[0];
 };
 
 export const formattedPhoneNumber = (phone) => {

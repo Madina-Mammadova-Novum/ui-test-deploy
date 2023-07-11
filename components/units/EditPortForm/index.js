@@ -19,16 +19,12 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
   });
 
   const methods = useHookFormParams({ schema });
-  const { name, id, date } = modalState;
 
   const onSubmit = async ({ port }) => {
-    const result = {
-      id,
-      date,
+    const { error, data } = await updateVesselPortAndDate({
+      ...modalState,
       portId: port?.value,
-    };
-
-    const { error, data } = await updateVesselPortAndDate(result);
+    });
 
     if (data?.message) successToast(data.message);
     if (error) errorToast(error.message, error.errors[0]);
@@ -46,7 +42,7 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
         <Title level="h2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <PortDetailsForm portName={name} />
+        <PortDetailsForm portName={modalState?.name} />
       </ModalFormManager>
     </FormProvider>
   );

@@ -34,6 +34,7 @@ const TableCell = ({ cellProps }) => {
     countryFlag,
     icon,
     actions = [],
+    available,
   } = cellProps;
   const emptyCell = !value && !editable;
 
@@ -41,16 +42,12 @@ const TableCell = ({ cellProps }) => {
     (action) => {
       switch (action) {
         case ACTIONS.PORT:
-          return <EditPortForm title="edit open port" modalState={{ name, id, date }} />;
+          return <EditPortForm title="edit open port" modalState={{ name, id, date, available }} />;
         case ACTIONS.DATE:
-          return <EditDateForm title="edit open date" modalState={{ name, id, portId }} />;
+          return <EditDateForm title="edit open date" modalState={{ name, id, portId, available }} />;
         case ACTIONS.TANKER_DEACTIVATE:
           return (
-            <DeactivateTankerForm
-              title="Deactivate your Tanker"
-              portName={name}
-              description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
-            />
+            <DeactivateTankerForm title="Deactivate your Tanker" modalState={{ name, id, portId, date, available }} />
           );
         case ACTIONS.TANKER_REACTIVATE:
           return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;
@@ -76,7 +73,7 @@ const TableCell = ({ cellProps }) => {
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
     },
-    [name]
+    [available, date, id, name, portId]
   );
 
   const printValue = useMemo(() => {
