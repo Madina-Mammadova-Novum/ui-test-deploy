@@ -187,7 +187,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     registryPortId: portOfRegistry.value,
     vesselTypeId: tankerType.value,
     vesselCategoyOneId: tankerCategoryOne.value,
-    vesselCategoryTwoId: tankerCategoryTwo.value,
+    vesselCategoryTwoId: tankerCategoryTwo?.value,
     hullType: hullType.value,
     loa,
     beam,
