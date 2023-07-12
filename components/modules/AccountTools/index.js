@@ -186,7 +186,7 @@ const AccountTools = ({ title, className = '' }) => {
                       {...register('cargoQuantity')}
                       error={errors.cargoQuantity?.message}
                       label="Cargo quantity"
-                      placeholder="tons"
+                      placeholder="Enter the cargo quantity"
                       type="number"
                     />
                   ) : (

@@ -48,7 +48,7 @@ const Negotiating = () => {
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
   const tabs = isOwner ? ownerTabs : chartererTabs;
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState({ value: false });
 
   const [data, isLoading] = useFetch(getUserNegotiating);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
@@ -104,7 +104,7 @@ const Negotiating = () => {
           <Label className="text-xs-sm">Offer stage #1</Label>
           <Title level={1}>Negotiating</Title>
         </div>
-        <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+        <ToggleRows onToggleClick={setToggle} />
       </div>
 
       <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>

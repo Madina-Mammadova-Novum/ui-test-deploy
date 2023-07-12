@@ -18,12 +18,11 @@ const TextArea = React.forwardRef(
       inputStyles,
       onChange,
       error = null,
+      register,
       ...rest
     },
     ref
   ) => {
-    const handleChange = (value) => onChange(value);
-
     return (
       <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
         {label && (
@@ -36,9 +35,9 @@ const TextArea = React.forwardRef(
           id={name}
           type={type}
           name={name}
+          {...register(name)}
           disabled={disabled}
           placeholder={placeholder}
-          onChange={({ target }) => handleChange(target.value)}
           {...rest}
           className={classnames(
             'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue',

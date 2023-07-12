@@ -14,7 +14,7 @@ import { ComplexPagination, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState({ value: false });
   const [data, isLoading] = useFetch(getUserOnSubs);
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -57,7 +57,7 @@ const OnSubs = () => {
           <Label className="text-xs-sm">Offer stage #3</Label>
           <Title level={1}>On subs</Title>
         </div>
-        <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+        <ToggleRows onToggleClick={setToggle} />
       </div>
 
       <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>

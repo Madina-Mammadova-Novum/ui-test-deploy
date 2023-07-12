@@ -39,6 +39,7 @@ export function responseSearchVesselAdapter({ data }) {
   const {
     // name,
     // imo,
+    id,
     flag,
     summerDeadWeight,
     estimatedArrivalTime,
@@ -58,6 +59,7 @@ export function responseSearchVesselAdapter({ data }) {
   } = data;
 
   return {
+    id,
     tankerName: 'Hidden name',
     imo: 'Hidden number',
     flag,
@@ -227,6 +229,11 @@ export function responseGetVesselCategoryOneAdapter({ data }) {
   return data;
 }
 export function responseGetVesselCategoryTwoAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseGetVesselFreightFormatsAdapter({ data }) {
   if (!data) return null;
 
   return data;
