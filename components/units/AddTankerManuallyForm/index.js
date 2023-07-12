@@ -133,9 +133,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
   const onSubmit = async (formData) => {
     const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
     if (status === 200) {
-      successToast(message)
-      closeModal()
-    };
+      successToast(message);
+      closeModal();
+    }
     if (error && error?.message?.Imo) errorToast(error?.message?.Imo);
   };
 
