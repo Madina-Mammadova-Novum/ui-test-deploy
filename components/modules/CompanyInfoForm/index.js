@@ -85,7 +85,7 @@ const CompanyInfoForm = ({ closeModal }) => {
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>
-          <CompanyDetails />
+          <CompanyDetails notEditable />
           {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
           <CompanyAddresses />
           {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}

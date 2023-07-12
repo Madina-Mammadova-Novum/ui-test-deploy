@@ -19,7 +19,7 @@ const DeactivateTankerForm = ({ title, portName, modalState, closeModal }) => {
     });
 
     if (data?.message) successToast(data.message);
-    if (error) errorToast(error.message, error.errors[0]);
+    if (error) errorToast(error.message, error.errors);
   };
 
   return (
