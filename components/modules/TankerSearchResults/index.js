@@ -12,8 +12,8 @@ import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFo
 import { ToggleRows } from '@/units';
 
 const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
-  const [expandExactResults, setExpandExactResults] = useState(false);
-  const [expandPartialResults, setExpandPartialResults] = useState(false);
+  const [expandExactResults, setExpandExactResults] = useState({ value: false });
+  const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
   if (!request) return null;
 
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
@@ -46,17 +46,14 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
           <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${
             data?.exactResults.length > 1 ? 'results' : 'result'
           }`}</TextRow>
-          <ToggleRows
-            onToggleClick={() => setExpandExactResults((prevValue) => !prevValue)}
-            value={expandExactResults}
-          />
+          <ToggleRows onToggleClick={setExpandExactResults} />
         </div>
       )}
       <div className="flex flex-col gap-y-2.5 mt-3">
         {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
-            footer={<TankerExpandedFooter />}
+            footer={<TankerExpandedFooter tankerId={rowHeader.id} />}
             expand={expandExactResults}
           >
             <ExpandedContent data={rowHeader.expandedData} />
@@ -69,10 +66,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
           <TextRow title="Partial matches (arrival outside of laycan)">{`${data?.partialResults.length} ${
             data?.partialResults.length > 1 ? 'results' : 'result'
           }`}</TextRow>
-          <ToggleRows
-            onToggleClick={() => setExpandPartialResults((prevValue) => !prevValue)}
-            value={expandPartialResults?.value}
-          />
+          <ToggleRows onToggleClick={setExpandPartialResults} />
         </div>
       )}
       <div className="flex flex-col gap-y-2.5 mt-3">

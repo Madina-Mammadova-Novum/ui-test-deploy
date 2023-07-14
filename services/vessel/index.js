@@ -59,6 +59,13 @@ export async function getVesselCategoryTwo(categoryOneId) {
   };
 }
 
+export async function getVesselFreightFormats(vesselId) {
+  const response = await getData(`vessels/freight-formats/${vesselId}`);
+  return {
+    ...response,
+  };
+}
+
 export async function updateVesselPortAndDate(data) {
   const body = updateVesselPortAndDataAdapter({ data });
 

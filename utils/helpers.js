@@ -367,3 +367,11 @@ export const getRoleIdentity = ({ role }) => {
     isCharterer: role === ROLES.CHARTERER,
   };
 };
+
+export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).toFixed(0);
+
+export const calculateTotal = (array, key) =>
+  +array
+    .filter((item) => item)
+    .map(({ [key]: itemValue }) => itemValue)
+    .reduce((a, b) => +a + +b);

@@ -4,6 +4,7 @@ import { postData } from '@/utils/dataFetching';
 export async function sendOffer({ data }) {
   const body = sendOfferAdapter({ data });
   const response = await postData(`offer/send`, JSON.stringify(body));
+  if (response.status === 200) response.message = 'You have successfully submitted your offer';
   return {
     ...response,
   };

@@ -17,11 +17,9 @@ const ExpandableCardWrapper = ({
   const [toggle, setToggle] = useState(false);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
 
-  const { value } = expandAll;
-
   useEffect(() => {
-    setToggle(value);
-  }, [value]);
+    setToggle(expandAll.value);
+  }, [expandAll]);
 
   const handleClick = () => {
     setToggle((prevValue) => !prevValue);

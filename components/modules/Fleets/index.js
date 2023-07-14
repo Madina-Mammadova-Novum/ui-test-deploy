@@ -16,7 +16,7 @@ import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows } from '@/u
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const Fleets = () => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState({ value: false });
   const { refetch } = useSelector(fleetsSelector);
   const [data, isLoading] = useFetch(getUserFleets, refetch);
   const [userStore] = useState({
@@ -91,7 +91,7 @@ const Fleets = () => {
       <div className="flex justify-between items-center py-5">
         <Title level={1}>Fleets</Title>
         <div className="flex gap-x-5">
-          <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+          <ToggleRows onToggleClick={setToggle} />
           <ModalWindow
             buttonProps={{
               text: 'Create new fleet',

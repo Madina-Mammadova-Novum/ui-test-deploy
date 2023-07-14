@@ -4,12 +4,12 @@ import { cloneElement, useEffect, useState } from 'react';
 
 import { ExpandableRowPropTypes } from '@/lib/types';
 
-const ExpandableRow = ({ header, footer, children, expand = false, className = '' }) => {
+const ExpandableRow = ({ header, footer, children, expand = { value: false }, className = '' }) => {
   const [toggle, setToggle] = useState(false);
   const headerWithProps = cloneElement(header, { toggle });
 
   useEffect(() => {
-    setToggle(expand);
+    setToggle(expand.value);
   }, [expand]);
 
   return (
