@@ -90,16 +90,22 @@ const tabs = [
 // ];
 
 const Notification = ({ numberOfNotifications }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
+    isModalOpen: false,
   });
+
+  const { isModalOpen, currentTab } = modalStore;
+
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
       ...prevState,
       [key]: value,
     }));
   };
+
+  const handleOpen = () => handleChangeState('isModalOpen', !isModalOpen);
+  const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
 
   const options = [
     {
@@ -208,9 +214,6 @@ const Notification = ({ numberOfNotifications }) => {
     },
   ];
 
-  const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
-  const { currentTab } = modalStore;
-
   return (
     <div>
       <Button
@@ -228,11 +231,15 @@ const Notification = ({ numberOfNotifications }) => {
         }}
         type="button"
         className="relative"
-        onClick={() => setIsModalOpen(!isModalOpen)}
+        onClick={handleOpen}
       />
       {isModalOpen && (
         <div className="absolute top-0 right-0 z-50">
-          <ModalWrapper opened={isModalOpen} onClose={() => setIsModalOpen(false)} sidebar>
+          <ModalWrapper
+            opened={isModalOpen}
+            onClose={() => handleChangeState('isModalOpen', false)}
+            containerClass="absolute z-50 !max-h-screen !w-[550px] !-left-[277px] !-translate-y-0  !top-0 !rounded-none !p-0"
+          >
             <div className="px-7 pt-7">
               <div className="mb-4">
                 <FieldsetHeader title="Notifications" />

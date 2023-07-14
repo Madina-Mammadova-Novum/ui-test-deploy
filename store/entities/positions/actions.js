@@ -6,8 +6,8 @@ import { POSITIONS } from '@/store/entities/positions/types';
 /* Services */
 import { getUserPositions, getVesselsById } from '@/services';
 
-export const fetchUserVessels = createAsyncThunk(POSITIONS.GET_USER_POSITIONS, async () => {
-  const { data } = await getUserPositions();
+export const fetchUserVessels = createAsyncThunk(POSITIONS.GET_USER_POSITIONS, async ({ page, perPage, sortBy }) => {
+  const { data } = await getUserPositions({ page, perPage, sortBy });
 
   const generator = getVesselsById(data);
   const { value } = generator.next();
