@@ -12,6 +12,7 @@ import ConfirmCounteroffer from '@/modules/ConfirmCounteroffer';
 import ContactUsForm from '@/modules/ContactUsForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
+import DropzoneForm from '@/modules/DropzoneForm';
 import ExpandableRow from '@/modules/ExpandableRow';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
@@ -101,4 +102,5 @@ export {
   OnSubs,
   Fleets,
   AddNewTanker,
+  DropzoneForm,
 };

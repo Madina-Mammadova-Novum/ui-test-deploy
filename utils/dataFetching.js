@@ -37,6 +37,24 @@ export function postData(path, body) {
   });
 }
 
+export async function postFile(path, body) {
+  const formData = new FormData();
+  formData.append('file', body);
+
+  return apiHandler({
+    path: getApiPublicURL(path),
+    requestMethod: 'POST',
+    body: formData,
+    options: {
+      headers: {
+        Accept: 'text/plain',
+        'Content-Type': 'multipart/form-data',
+        'Content-Disposition': 'form-data',
+      },
+    },
+  });
+}
+
 /**
 
 Sends a PUT request to the API with the specified path and body.

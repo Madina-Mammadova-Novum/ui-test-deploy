@@ -28,6 +28,8 @@ import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
 import UploadForm from '@/units/FileUpload';
+import Dropzone from '@/units/FileUpload/Dropzone';
+import File from '@/units/FileUpload/File';
 import FilterByForm from '@/units/FilterByForm';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import FooterNavBlock from '@/units/FooterNavBlock';
@@ -128,4 +130,6 @@ export {
   NegotiatingTankerInformation,
   FilterByForm,
   PostFixtureFilter,
+  Dropzone,
+  File,
 };

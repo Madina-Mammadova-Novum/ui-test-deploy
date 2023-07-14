@@ -321,11 +321,12 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
+  console.log('errors: ', errors);
   if (!errors) return [SYSTEM_ERROR];
 
   return Object.entries(errors).map(([key, value]) => {
     // eslint-disable-next-line no-param-reassign
-    if (key === '_') key = 'Exeption';
+    if (key === '_' || key === '') key = 'Exeption';
     return `${key}: ${value}`;
   })[0];
 };

@@ -1,13 +1,14 @@
 import { DropZonePropTypes } from '@/lib/types';
 
 import FileUploadSVG from '@/assets/images/fileUpload.svg';
-import { Input } from '@/elements';
-import { useHookFormParams } from '@/utils/hooks';
+import { Input, InputErrorMessage } from '@/elements';
+import { useHookForm } from '@/utils/hooks';
 
 const Dropzone = ({ areaParams, inputParams, children }) => {
-  const methods = useHookFormParams({ schema: {} });
-
-  const { register, errors } = methods;
+  const {
+    register,
+    formState: { errors },
+  } = useHookForm();
 
   return (
     <div className="relative cursor-pointer w-full" {...areaParams()}>
@@ -16,14 +17,7 @@ const Dropzone = ({ areaParams, inputParams, children }) => {
         ${errors?.file ? 'border-red' : 'border-gray-darker hover:border-blue'}  
         `}
       >
-        <Input
-          {...register('file')}
-          type="file"
-          multiple
-          error={errors?.file?.message}
-          customStyles="hidden"
-          {...inputParams()}
-        />
+        <Input {...register('file')} type="file" multiple customStyles="hidden" {...inputParams()} />
         <div className="flex flex-col justify-center gap-1.5 items-center">
           <FileUploadSVG className="fill-gray" />
           <p className="text-center text-xsm text-gray font-normal">Drop your File&apos;s here, or Select</p>
@@ -31,6 +25,7 @@ const Dropzone = ({ areaParams, inputParams, children }) => {
         </div>
         {children}
       </div>
+      <div>{errors?.file && <InputErrorMessage message={errors?.file?.message} />}</div>
     </div>
   );
 };
