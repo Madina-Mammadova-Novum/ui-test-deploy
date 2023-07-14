@@ -54,6 +54,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
     formState: { errors },
     setValue,
     getValues,
+    watch,
   } = methods;
   const { name: fleetName } = fleetData;
 
@@ -398,7 +399,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.registeredOwnerCountry}
+                disabled={!countries.length || q88State.registeredOwnerCountry || !watch('registeredOwner')}
                 name="registeredOwnerCountry"
                 onChange={(option) => handleChange('registeredOwnerCountry', option)}
               />
@@ -413,7 +414,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.technicalOperatorCountry}
+                disabled={!countries.length || q88State.technicalOperatorCountry || !watch('technicalOperator')}
                 name="technicalOperatorCountry"
                 onChange={(option) => handleChange('technicalOperatorCountry', option)}
               />
@@ -428,7 +429,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.commercialOperatorCountry}
+                disabled={!countries.length || q88State.commercialOperatorCountry || !watch('commercialOperator')}
                 name="commercialOperatorCountry"
                 onChange={(option) => handleChange('commercialOperatorCountry', option)}
               />
@@ -443,7 +444,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.disponentOwnerCountry}
+                disabled={!countries.length || q88State.disponentOwnerCountry || !watch('disponentOwner')}
                 name="disponentOwnerCountry"
                 onChange={(option) => handleChange('disponentOwnerCountry', option)}
               />
