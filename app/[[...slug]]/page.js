@@ -42,17 +42,17 @@ export default async function Home({ params }) {
   return (
     <main className={classnames(legal && 'legal-styles')}>
       {/* todo: example to use legal variable */}
-      <section className="relative pt-[115px] pb-[195px]">
+      <section className="relative pt-[115px] pb-[195px] bg-gray-light">
         <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
           <NextImage
             src="/images/waves.jpg"
             alt="waves"
-            customStyles="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+            customStyles="absolute inset-0 z-0 h-full w-full object-cover object-center"
             height={352}
             width={1440}
             quality={100}
           />
-          {content && <div className="heading-wrapper text-white">{parse(content)}</div>}
+          {content && <div className="heading-wrapper relative z-10 text-white">{parse(content)}</div>}
         </div>
       </section>
       <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div>

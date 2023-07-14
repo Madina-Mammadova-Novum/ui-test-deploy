@@ -1,10 +1,10 @@
 import { BaseLayoutPropTypes } from '@/lib/types';
 
-import { ClientSidePackages, ExtraDataManager, StoreManager, TailwindIndicator } from '@/common';
+import Providers from '@/providers';
 
 import '@/styles/index.css';
 
-const BaseLayout = ({ children, className = '' }) => {
+const BaseLayout = ({ children }) => {
   return (
     <html lang="en">
       {/*
@@ -12,12 +12,8 @@ const BaseLayout = ({ children, className = '' }) => {
         head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className={className}>
-        <StoreManager>
-          <ExtraDataManager>{children}</ExtraDataManager>
-        </StoreManager>
-        <ClientSidePackages />
-        <TailwindIndicator />
+      <body>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

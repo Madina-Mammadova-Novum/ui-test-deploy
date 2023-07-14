@@ -27,10 +27,12 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     getGeneralData();
+  }, []);
 
+  useEffect(() => {
     if (Date.now() > session?.expires) {
-      updateSession();
       getGeneralData();
+      updateSession();
     }
   }, [getGeneralData, session?.expires, updateSession]);
 
