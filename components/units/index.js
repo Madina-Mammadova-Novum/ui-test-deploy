@@ -4,6 +4,7 @@ import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
+import AuthNavButtons from '@/units/AuthNavButtons';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
@@ -73,6 +74,7 @@ export {
   Tabs,
   Step,
   Notes,
+  AuthNavButtons,
   PersonalDetails,
   CompanyDetails,
   TankerSlotsDetails,

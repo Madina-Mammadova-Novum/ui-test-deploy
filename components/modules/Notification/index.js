@@ -238,7 +238,7 @@ const Notification = ({ numberOfNotifications }) => {
           <ModalWrapper
             opened={isModalOpen}
             onClose={() => handleChangeState('isModalOpen', false)}
-            containerClass="absolute z-50 !max-h-screen !w-[550px] !-left-[277px] !-translate-y-0  !top-0 !rounded-none !p-0"
+            containerClass="absolute z-50 !max-h-screen !w-[550px] !-left-[277px] !-translate-y-0 !top-0 !rounded-none !p-0"
           >
             <div className="px-7 pt-7">
               <div className="mb-4">
