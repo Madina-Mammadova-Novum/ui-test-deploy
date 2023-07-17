@@ -9,10 +9,5 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/file/upload`),
     dataAdapter: uploadResponseAdapter,
     requestMethod: 'POST',
-    options: {
-      headers: {
-        'Content-Type': `multipart/form-data; boundary=None;`,
-      },
-    },
   });
 }

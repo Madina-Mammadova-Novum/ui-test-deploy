@@ -112,7 +112,7 @@ const TableCell = ({ cellProps }) => {
           {editable &&
             actions.map(({ action, actionVariant, actionSize, actionText, editIcon }) => (
               <ModalWindow
-                containerClass="overflow-y-[unset]"
+                containerClass="overflow-y-[unset] z-50"
                 buttonProps={{
                   icon: { before: editIcon },
                   variant: actionVariant,

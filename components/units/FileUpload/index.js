@@ -25,7 +25,7 @@ const UploadForm = () => {
   const handleToggle = () => setToggle((prev) => !prev);
 
   const onSubmit = async (formData) => {
-    console.log('formData: ', formData);
+    return { formData };
   };
 
   const printTextCta = useMemo(() => {

@@ -42,15 +42,15 @@ const ExtraDataManager = ({ children }) => {
   useEffect(() => {
     if (Date.now() < session?.expires && session?.accessToken) {
       setUserData({ role: session?.role, isValid: true });
-    }
+    } else setUserData({ role: '', isValid: false });
   }, [session?.accessToken, session?.expires, session?.role, setUserData]);
 
   useEffect(() => {
-    if (Date.now() > session?.expires) {
+    if (session?.accessToken && Date.now() > session?.expires) {
       getGeneralData();
       updateSession();
     }
-  }, [getGeneralData, session?.expires, updateSession]);
+  }, [getGeneralData, session?.accessToken, session?.expires, updateSession]);
 
   return children;
 };

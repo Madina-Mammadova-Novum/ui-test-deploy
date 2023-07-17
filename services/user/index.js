@@ -1,4 +1,5 @@
 import { getFleetByIdAdapter } from '@/adapters';
+// import { accountNavigationAdapter } from '@/adapters/navigation';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -121,6 +122,7 @@ export async function deleteCompany({ data }) {
 }
 
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'ascending' }) {
+  // const body = accountNavigationAdapter({ data: page, perPage, sortBy });
   const response = await getData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`);
 
   return {

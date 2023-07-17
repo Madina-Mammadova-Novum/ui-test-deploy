@@ -26,7 +26,7 @@ const DropzoneForm = () => {
     setFiles([]);
   }, [setValue]);
 
-  const onDrop = (acceptedFiles, rejections) => {
+  const onDrop = async (acceptedFiles, rejections) => {
     if (rejections && rejections.length > 0) {
       setError('file', {
         type: 'manual',
@@ -35,7 +35,7 @@ const DropzoneForm = () => {
       resetDropzone();
     } else {
       setFiles(acceptedFiles.map(fileUpdateAdapter));
-      fileReaderAdapter(acceptedFiles[0], setValue('file', acceptedFiles[0], { shouldValidate: true }));
+      fileReaderAdapter(acceptedFiles[0], setValue);
     }
   };
 

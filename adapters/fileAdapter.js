@@ -7,38 +7,24 @@ export const fileUpdateAdapter = (file) => ({
   ...file,
 });
 
-export const fileReaderAdapter = (file, cb) => {
+export const fileReaderAdapter = (file, setValue) => {
   const reader = new window.FileReader();
-  reader.onabort = () => {
-    console.log('aborted');
-  };
-  reader.onerror = () => {
-    console.log('error');
-  };
+
   reader.onload = async () => {
-    const res = await uploadData({ data: file });
-    console.log('res: ', res);
+    const { data } = await uploadData({ data: file });
+    setValue('file', data);
   };
-  reader.onloadend = () => {
-    return cb;
-  };
+
   reader.readAsDataURL(file);
 };
-
-// const convertToBase64 = (file) => {
-//   return new Promise((resolve, reject) => {
-//     const fileReader = new window.FileReader();
-//     fileReader.readAsDataURL(file);
-
-//     fileReader.onload = () => resolve(fileReader.result);
-//     fileReader.onerror = (error) => reject(error);
-//   });
-// };
 
 export const uploadDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  return { file: data };
+  const formdata = new window.FormData();
+  formdata.append('file', data, `${data?.name}`);
+
+  return formdata;
 };
 
 export const uploadResponseAdapter = ({ data }) => {

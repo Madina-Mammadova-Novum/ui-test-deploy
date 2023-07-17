@@ -48,13 +48,24 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
   const fetchOptions = {
     method, // *GET, POST, PUT, DELETE, etc.
     ...options,
+    // TODO: Fix the headers blocker for file uploading
     headers: {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
+      'Content-Type': 'application/json',
       ...headers,
     },
   };
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
+    // temporary solution for file type
+    if (body?.type === 'text/plain') {
+      const formdata = new window.FormData();
+      formdata.append('file', body, `${body?.name}`);
+
+      fetchOptions.body = formdata;
+
+      return fetchOptions;
+    }
+
     fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
   }
   return fetchOptions;

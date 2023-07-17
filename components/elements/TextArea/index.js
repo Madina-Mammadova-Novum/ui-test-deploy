@@ -37,7 +37,6 @@ const TextArea = React.forwardRef(
           id={name}
           type={type}
           name={name}
-          {...register(name)}
           disabled={disabled}
           placeholder={placeholder}
           {...rest}
