@@ -9,23 +9,25 @@ import OfferDeclineFields from './OfferDeclineFields';
 import { OfferDeclinePropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
+import { declineOfferSchema } from '@/lib/schemas';
 import { declineOffer } from '@/services/offer';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object({});
+const schema = yup.object({
+  ...declineOfferSchema(),
+});
 
 const defaultState = {};
 
-const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton }) => {
+const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, itemId }) => {
   const methods = useHookFormParams({ state: defaultState, schema });
   const isEmpty = methods.watch('reason');
 
   const handleSubmit = async (formData) => {
-    const { error, data } = await declineOffer({ data: formData });
+    const { status, message: successMessage, error } = await declineOffer({ data: { ...formData, offerId: itemId } });
 
-    if (data) {
-      const { message } = data;
-      successToast(message);
+    if (status === 200) {
+      successToast(successMessage);
     }
     if (error) {
       const { message, description } = error;

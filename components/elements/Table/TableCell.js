@@ -57,7 +57,7 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.TANKER_REACTIVATE:
           return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;
         case ACTIONS.VIEW_OFFER:
-          return <ViewIncomingOffer />;
+          return <ViewIncomingOffer itemId={id} />;
         case ACTIONS.VIEW_COUNTEROFFER:
           return <ViewCounteroffer />;
         case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:

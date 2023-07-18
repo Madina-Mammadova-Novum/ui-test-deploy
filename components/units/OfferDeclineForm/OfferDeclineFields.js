@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import ModalHeader from '../ModalHeader';
 
@@ -40,13 +40,10 @@ const reasonsOfDecline = [
 
 const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton = true }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
-  const [customReason, setCustomReason] = useState({ text: '' });
 
   const [showTextField, setShowTextField] = useState(false);
 
-  const { setValue } = useHookForm();
-
-  const handleCustomReason = (text) => setCustomReason({ text });
+  const { setValue, register } = useHookForm();
 
   const handleCheck = useCallback(
     (id) => {
@@ -60,16 +57,12 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
 
       if (chosenReason.id !== reasons[reasons.length - 1].id) {
         setValue('reason', chosenReason.text);
+      } else {
+        setValue('reason', '');
       }
     },
     [reasons, setValue]
   );
-
-  useEffect(() => {
-    if (showTextField && customReason.text !== '') {
-      setValue('reason', customReason.text);
-    }
-  }, [customReason.text, setValue, showTextField]);
 
   return (
     <div className="w-[300px]">
@@ -88,10 +81,11 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
       ))}
       {showTextField && (
         <TextArea
-          onChange={(v) => handleCustomReason(v)}
           label="your reason"
           placeholder="Type your reason here ..."
           customStyles="mt-2.5"
+          register={register}
+          name="reason"
         />
       )}
 
