@@ -15,7 +15,7 @@ const AccountPositions = () => {
 
   const dispatch = useDispatch();
 
-  const { vessels, loading } = useSelector(getUserVesselsSelector);
+  const { vessels, totalPages, loading } = useSelector(getUserVesselsSelector);
 
   const [userStore, setUserStore] = useState({
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
@@ -23,6 +23,8 @@ const AccountPositions = () => {
     page: NAVIGATION_PARAMS.CURRENT_PAGE,
     pageSize: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   });
+
+  const { page, pageSize, sortOptions, sortValue } = userStore;
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
@@ -35,25 +37,14 @@ const AccountPositions = () => {
     }));
   };
 
-  const { page, pageSize, sortOptions, sortValue } = userStore;
-
-  const {
-    numberOfPages,
-    items,
-    currentPage,
-    handleSortChange,
-    handlePageChange,
-    handleSelectedPageChange,
-    selectedPage,
-    onChangeOffers,
-    perPage,
-  } = useFilters(pageSize, page, vessels, sortValue.value);
+  const { currentPage, handleSortChange, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
+    useFilters(pageSize, page, vessels, sortValue.value);
 
   /* fetching user positions data */
 
   useEffect(() => {
     dispatch(fetchUserVessels({ page: currentPage, perPage, sortBy: sortValue.value }));
-  }, [currentPage, dispatch, numberOfPages, perPage, sortValue]);
+  }, [currentPage, dispatch, perPage, sortValue]);
 
   const handleChange = (option) => {
     handleSortChange(option);
@@ -67,9 +58,9 @@ const AccountPositions = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2" />;
-    if (items) return items?.map(printExpandableCard);
+    if (vessels) return vessels?.map(printExpandableCard);
     return <Title level="3">No opened positions</Title>;
-  }, [items, loading, printExpandableCard]);
+  }, [loading, vessels, printExpandableCard]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">
@@ -90,10 +81,9 @@ const AccountPositions = () => {
       <ComplexPagination
         label="fleets"
         currentPage={currentPage}
-        numberOfPages={numberOfPages}
+        numberOfPages={totalPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
-        pages={selectedPage}
         onChangeOffers={onChangeOffers}
         perPage={perPage}
       />

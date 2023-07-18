@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   data: {
     vessels: [],
+    totalPages: 0,
   },
 };
 

@@ -26,7 +26,7 @@ const DropzoneForm = () => {
     setFiles([]);
   }, [setValue]);
 
-  const onDrop = async (acceptedFiles, rejections) => {
+  const onDrop = (acceptedFiles, rejections) => {
     if (rejections && rejections.length > 0) {
       setError('file', {
         type: 'manual',

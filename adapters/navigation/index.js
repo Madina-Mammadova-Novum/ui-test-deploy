@@ -39,8 +39,9 @@ export const accountNavigationAdapter = ({ data }) => {
   const { page, perPage, sortBy } = data;
 
   return {
-    skip: page,
-    pageSize: perPage,
+    skip: parseInt(page, 10),
+    pageSize: parseInt(perPage, 10),
     sortColumn: sortBy,
+    sortColumnDirection: sortBy,
   };
 };

@@ -38,5 +38,6 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
     loading: state?.loading,
     error: state?.error,
     vessels: state?.data?.vessels,
+    totalPages: state?.data?.totalPages,
   };
 });
