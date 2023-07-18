@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchUserVessels } from './actions';
 
+import { userTankersDetailsAdapter } from '@/adapters/vessel';
+
 const initialState = {
   loading: true,
   error: null,
@@ -14,6 +16,16 @@ const initialState = {
 const userSlice = createSlice({
   name: 'vessels',
   initialState,
+  reducers: {
+    updateTankersByFleetId: (state, action) => {
+      const { fleetId, tankers } = action.payload;
+      const updatedVessel = state.data.vessels.find((vessel) => vessel.fleetId === fleetId);
+
+      if (updatedVessel) {
+        updatedVessel.tankers = userTankersDetailsAdapter({ data: tankers });
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchUserVessels.pending, (state) => {
       state.loading = true;
@@ -28,5 +40,7 @@ const userSlice = createSlice({
     });
   },
 });
+
+export const { updateTankersByFleetId } = userSlice.actions;
 
 export default userSlice.reducer;

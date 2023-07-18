@@ -142,6 +142,7 @@ const fetchUserVesselById = async ({ id, ...rest }) => {
 
   return {
     ...rest,
+    fleetId: id,
     tankers: userTankersDetailsAdapter({ data: tankers }),
   };
 };

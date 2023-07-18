@@ -74,7 +74,7 @@ export async function updateVesselPortAndDate(data) {
   return {
     ...response,
     data: {
-      message: response.status === 200 && 'Your request approved',
+      message: response.status === 200 && 'Your request was approved',
     },
   };
 }

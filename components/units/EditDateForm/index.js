@@ -1,6 +1,7 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -9,21 +10,30 @@ import { EditDateFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
+import { getUserPositionById } from '@/services';
 import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const EditDateForm = ({ closeModal, title, modalState }) => {
+  const dispatch = useDispatch();
   const schema = yup.object().shape({
     ...dateSchema(),
   });
 
   const methods = useHookFormParams({ schema });
   const onSubmit = async ({ date }) => {
-    const { error, data } = await updateVesselPortAndDate({
+    const { error, data, status } = await updateVesselPortAndDate({
       ...modalState,
       date,
     });
+
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: modalState?.fleetId });
+
+      dispatch(updateTankersByFleetId({ fleetId: modalState.fleetId, tankers }));
+    }
 
     if (data?.message) successToast(data.message);
     if (error) errorToast(error.message, error.errors);

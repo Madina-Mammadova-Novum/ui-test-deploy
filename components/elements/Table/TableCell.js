@@ -35,19 +35,24 @@ const TableCell = ({ cellProps }) => {
     icon,
     actions = [],
     available,
+    fleetId,
   } = cellProps;
+
   const emptyCell = !value && !editable;
 
   const printModal = useCallback(
     (action) => {
       switch (action) {
         case ACTIONS.PORT:
-          return <EditPortForm title="edit open port" modalState={{ name, id, date, available }} />;
+          return <EditPortForm title="edit open port" modalState={{ name, id, date, available, fleetId }} />;
         case ACTIONS.DATE:
-          return <EditDateForm title="edit open date" modalState={{ name, id, portId, available }} />;
+          return <EditDateForm title="edit open date" modalState={{ name, id, portId, available, fleetId }} />;
         case ACTIONS.TANKER_DEACTIVATE:
           return (
-            <DeactivateTankerForm title="Deactivate your Tanker" modalState={{ name, id, portId, date, available }} />
+            <DeactivateTankerForm
+              title="Deactivate your Tanker"
+              modalState={{ name, id, portId, date, available, fleetId }}
+            />
           );
         case ACTIONS.TANKER_REACTIVATE:
           return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;

@@ -3,26 +3,25 @@ import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { makeId } from '@/utils/helpers';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { title, activeTankers, inActiveTankers } = data;
+  const { title, activeTankers, inActiveTankers, fleetId } = data;
 
   return [
     {
-      id: makeId(),
+      id: fleetId,
       label: 'fleet name',
       text: title ?? '',
     },
     {
-      id: makeId(),
+      id: fleetId,
       label: 'active',
       text: `${activeTankers ?? '0'} tankers`,
     },
     {
-      id: makeId(),
+      id: fleetId,
       label: 'inactive',
       text: `${inActiveTankers ?? '0'} tankers`,
     },
