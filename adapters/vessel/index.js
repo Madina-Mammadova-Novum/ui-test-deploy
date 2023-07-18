@@ -307,7 +307,7 @@ export function responseGetVesselQ88Adapter({ data }) {
 export function userTankerAdapter({ data }) {
   if (!data) return {};
 
-  const { vesselId, name, openPort, openDate, imo, status } = data;
+  const { vesselId, name, openPort, openDate, imo } = data;
 
   return {
     id: vesselId,
@@ -315,7 +315,7 @@ export function userTankerAdapter({ data }) {
     date: openDate,
     port: openPort?.name,
     portId: openPort?.id,
-    status: status === 'Active',
+    status: openPort?.appearsInSearch,
     imo,
   };
 }
@@ -331,12 +331,12 @@ export function userTankersDetailsAdapter({ data }) {
 export function updateVesselPortAndDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id, portId, date } = data;
+  const { id, portId, date, available } = data;
 
   return {
     id,
     portId,
     opendate: new Date(date).toISOString(),
-    appearsInSearch: true,
+    appearsInSearch: available,
   };
 }

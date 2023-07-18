@@ -1,17 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { CheckBoxInput } from '@/elements';
 import { ADDRESS } from '@/lib/constants';
-import { getCountries } from '@/services';
+import { getGeneralDataSelector } from '@/store/selectors';
 import { AddressDetails } from '@/units';
-import { countriesOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CompanyAddresses = () => {
+  const { countries } = useSelector(getGeneralDataSelector);
   const { setValue, getValues } = useHookForm();
-  const [countries, setCountries] = useState([]);
 
   const { sameAddresses } = getValues();
 
@@ -19,16 +18,6 @@ const CompanyAddresses = () => {
     const { checked } = event.target;
     setValue('sameAddresses', checked);
   };
-
-  const fetchCountries = async () => {
-    const data = await getCountries();
-    const options = countriesOptions(data);
-    setCountries(options);
-  };
-
-  useEffect(() => {
-    fetchCountries();
-  }, []);
 
   return (
     <div className="flex flex-col gap-5">

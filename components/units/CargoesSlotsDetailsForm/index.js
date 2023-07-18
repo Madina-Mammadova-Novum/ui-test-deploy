@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { CargoesSlotsPropTypes } from '@/lib/types';
 
@@ -8,7 +9,7 @@ import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { getPorts } from '@/services/port';
+import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -20,10 +21,12 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useHookForm();
 
+  const { ports } = useSelector(getGeneralDataSelector);
+
   const [cargoesState, setCargoesState] = useState({
     cargoesCount: data?.countOfCargoes ?? 0,
     cargoes: data?.listOfCargoes ?? [],
-    cargoesPortsOptions: null,
+    cargoesPortsOptions: countriesOptions(ports) ?? [],
   });
 
   const { cargoesCount, cargoesPortsOptions, cargoes } = cargoesState;
@@ -76,17 +79,6 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
     setValue('cargoes', removeByIndex(cargoes, index));
     handleChangeState('cargoes', removeByIndex(cargoes, index));
   };
-
-  const fetchPorts = async () => {
-    const ports = await getPorts();
-    const options = countriesOptions(ports);
-    handleChangeState('cargoesPortsOptions', options);
-  };
-
-  useEffect(() => {
-    fetchPorts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const numberOfCargoes = cargoes.length > 0 ? cargoes.length : '';

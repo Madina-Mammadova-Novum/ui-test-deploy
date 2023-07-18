@@ -2,8 +2,8 @@ import { TableRowPropTypes } from '@/lib/types';
 
 import TableCell from '@/elements/Table/TableCell';
 
-const TableRow = ({ rowData = [] }) => {
-  const printTableCell = (props) => <TableCell cellProps={props} />;
+const TableRow = ({ rowData = [], fleetId }) => {
+  const printTableCell = (props) => <TableCell cellProps={{ ...props, fleetId }} />;
 
   return <tr>{rowData.map(printTableCell)}</tr>;
 };

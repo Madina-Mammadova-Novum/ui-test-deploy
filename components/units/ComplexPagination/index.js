@@ -2,9 +2,11 @@
 
 import { ComplexPaginationPropTypes } from '@/lib/types';
 
+import { navigationPagesAdapter } from '@/adapters/navigation';
 import { Dropdown } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { PaginationComponent } from '@/units';
+import { getFilledArray } from '@/utils/helpers';
 
 const ComplexPagination = ({
   currentPage,
@@ -12,11 +14,12 @@ const ComplexPagination = ({
   onPageChange,
   onChangeOffers,
   perPage,
-  pages,
   onSelectedPageChange,
   label = 'offers',
 }) => {
   const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
+  const pages = getFilledArray(numberOfPages)?.map(navigationPagesAdapter);
+
   return (
     <div className="flex items-start 3md:items-center justify-between my-5 relative h-20 3md:h-auto">
       <Dropdown

@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -10,28 +11,30 @@ import { ReactivateTankerFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
-import { getPorts } from '@/services/port';
+import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const ReactivateTankerForm = ({ title, portName }) => {
+  const { ports } = useSelector(getGeneralDataSelector);
+
   const schema = yup.object().shape({
     ...reactivateTankerSchema(),
   });
 
   const methods = useHookFormParams({ schema });
 
-  const [tankerState, setTankerState] = useState({
-    ports: [],
-    port: null,
-    date: '',
-  });
-
   const {
     clearErrors,
     setValue,
     formState: { errors },
   } = methods;
+
+  const [tankerState, setTankerState] = useState({
+    listOfPorts: countriesOptions(ports) ?? [],
+    port: null,
+    date: '',
+  });
 
   const handleChangeState = (key, value) =>
     setTankerState((prevState) => ({
@@ -48,22 +51,11 @@ const ReactivateTankerForm = ({ title, portName }) => {
     handleChangeState(key, option);
   };
 
-  const fetchPorts = async () => {
-    const data = await getPorts();
-    const options = countriesOptions(data);
-    handleChangeState('ports', options);
-  };
-
   const onSubmit = async (data) => {
     return { data };
   };
 
-  useEffect(() => {
-    fetchPorts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const { ports, port } = tankerState;
+  const { listOfPorts, port } = tankerState;
 
   return (
     <FormProvider {...methods}>
@@ -89,7 +81,7 @@ const ReactivateTankerForm = ({ title, portName }) => {
             name="port"
             label="Port search"
             errorMsg={errors?.port?.message}
-            options={ports}
+            options={listOfPorts}
             onChange={(option) => handleChangeValue({ option, key: 'port' })}
             customStyles={{ dropdownExpanded: true }}
             async

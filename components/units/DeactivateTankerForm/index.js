@@ -6,13 +6,20 @@ import { DeactivateTankerFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Label, Title } from '@/elements';
-import { useHookFormParams } from '@/utils/hooks';
+import { updateVesselPortAndDate } from '@/services/vessel';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const DeactivateTankerForm = ({ title, description, portName, closeModal }) => {
+const DeactivateTankerForm = ({ title, portName, modalState, closeModal }) => {
   const methods = useHookFormParams({});
 
   const onSubmit = async () => {
-    return { deactivateUserTanker: true };
+    const { error, data } = await updateVesselPortAndDate({
+      ...modalState,
+      available: !modalState?.available,
+    });
+
+    if (data?.message) successToast(data.message);
+    if (error) errorToast(error.message, error.errors);
   };
 
   return (
@@ -31,7 +38,10 @@ const DeactivateTankerForm = ({ title, description, portName, closeModal }) => {
           <Label className="text-xs-sm">Tanker name</Label>
           <p className="font-semibold text-black text-xsm">{portName}</p>
         </div>
-        <p className="text-black text-xsm">{description}</p>
+        <p className="text-black text-xsm">
+          By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to
+          update its open position while inactive. You can reactivate the tanker and update its open positions any time.
+        </p>
       </ModalFormManager>
     </FormProvider>
   );

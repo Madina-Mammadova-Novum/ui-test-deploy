@@ -3,10 +3,12 @@
 import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { CompanyDetailsPropTypes } from '@/lib/types';
+
 import { Input } from '@/elements';
 import { disableDefaultBehaviour, disablePlusMinusSymbols } from '@/utils/helpers';
 
-const CompanyDetails = () => {
+const CompanyDetails = ({ notEditable }) => {
   const inputYearsRef = useRef(null);
   const {
     register,
@@ -48,11 +50,13 @@ const CompanyDetails = () => {
         placeholder="Years"
         value={inputYearsRef.current?.value ?? ''}
         onChange={handleNumberOfOperation}
-        disabled={isSubmitting}
+        disabled={isSubmitting || notEditable}
         error={errors.companyYearsOfOperation?.message}
       />
     </div>
   );
 };
+
+CompanyDetails.propTypes = CompanyDetailsPropTypes;
 
 export default CompanyDetails;

@@ -34,22 +34,24 @@ const TableCell = ({ cellProps }) => {
     countryFlag,
     icon,
     actions = [],
+    available,
+    fleetId,
   } = cellProps;
+
   const emptyCell = !value && !editable;
 
   const printModal = useCallback(
     (action) => {
       switch (action) {
         case ACTIONS.PORT:
-          return <EditPortForm title="edit open port" modalState={{ name, id, date }} />;
+          return <EditPortForm title="edit open port" modalState={{ name, id, date, available, fleetId }} />;
         case ACTIONS.DATE:
-          return <EditDateForm title="edit open date" modalState={{ name, id, portId }} />;
+          return <EditDateForm title="edit open date" modalState={{ name, id, portId, available, fleetId }} />;
         case ACTIONS.TANKER_DEACTIVATE:
           return (
             <DeactivateTankerForm
               title="Deactivate your Tanker"
-              portName={name}
-              description="By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to update its open position while inactive. You can reactivate the tanker and update its open positions any time."
+              modalState={{ name, id, portId, date, available, fleetId }}
             />
           );
         case ACTIONS.TANKER_REACTIVATE:
@@ -76,7 +78,7 @@ const TableCell = ({ cellProps }) => {
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
     },
-    [name]
+    [available, date, id, name, portId]
   );
 
   const printValue = useMemo(() => {
@@ -115,7 +117,7 @@ const TableCell = ({ cellProps }) => {
           {editable &&
             actions.map(({ action, actionVariant, actionSize, actionText, editIcon }) => (
               <ModalWindow
-                containerClass="overflow-y-[unset]"
+                containerClass="overflow-y-[unset] z-50"
                 buttonProps={{
                   icon: { before: editIcon },
                   variant: actionVariant,

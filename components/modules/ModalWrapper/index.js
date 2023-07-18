@@ -7,7 +7,7 @@ import { ModalPropTypes } from '@/lib/types';
 import CloseSVG from '@/assets/images/close.svg';
 import { Button } from '@/elements';
 
-const ModalWrapper = ({ opened, onClose, containerClass, sidebar, children }) => {
+const ModalWrapper = ({ opened, onClose, containerClass, children }) => {
   useEffect(() => {
     if (opened) document.body.classList.add('overflow-hidden');
 
@@ -21,9 +21,7 @@ const ModalWrapper = ({ opened, onClose, containerClass, sidebar, children }) =>
       <>
         <div className="fixed top-0 right-0 bottom-0 left-0 bg-[#000000] opacity-40 z-10" />
         <div
-          className={`z-50 fixed overflow-y-auto max-h-[98vh] ${
-            sidebar ? 'right-0 h-screen w-[30%] ' : 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-          } bg-white ${sidebar ? 'p-0' : 'p-8'} ${sidebar ? 'rounded-none' : 'rounded-lg'} ${containerClass}`}
+          className={`${containerClass} z-50 first-letter:z-50 fixed overflow-y-auto max-h-[98vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg`}
           onClick={(e) => e.stopPropagation()}
           aria-hidden
         >

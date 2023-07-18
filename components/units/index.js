@@ -4,6 +4,7 @@ import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
+import AuthNavButtons from '@/units/AuthNavButtons';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
@@ -28,6 +29,8 @@ import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
 import UploadForm from '@/units/FileUpload';
+import Dropzone from '@/units/FileUpload/Dropzone';
+import File from '@/units/FileUpload/File';
 import FilterByForm from '@/units/FilterByForm';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import FooterNavBlock from '@/units/FooterNavBlock';
@@ -71,6 +74,7 @@ export {
   Tabs,
   Step,
   Notes,
+  AuthNavButtons,
   PersonalDetails,
   CompanyDetails,
   TankerSlotsDetails,
@@ -128,4 +132,6 @@ export {
   NegotiatingTankerInformation,
   FilterByForm,
   PostFixtureFilter,
+  Dropzone,
+  File,
 };

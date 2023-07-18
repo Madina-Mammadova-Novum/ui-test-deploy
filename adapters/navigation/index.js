@@ -32,3 +32,16 @@ export const navigationPagesAdapter = (item) => ({
   label: item,
   value: item,
 });
+
+export const accountNavigationAdapter = ({ data }) => {
+  if (!data) return {};
+
+  const { page, perPage, sortBy } = data;
+
+  return {
+    skip: parseInt(page, 10),
+    pageSize: parseInt(perPage, 10),
+    sortColumn: sortBy,
+    sortColumnDirection: sortBy,
+  };
+};

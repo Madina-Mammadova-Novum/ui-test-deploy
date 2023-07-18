@@ -20,7 +20,7 @@ const FormManager = ({
     formState: { isSubmitting, isDirty },
   } = useFormContext();
 
-  const { text, variant, size, disabled, className: buttonClassName = '' } = submitButton;
+  const { text, variant, size, disabled, icon, className: buttonClassName = 'w-full' } = submitButton;
 
   const printCta = useMemo(() => {
     return showReset ? (
@@ -32,6 +32,7 @@ const FormManager = ({
           isSubmitting={isSubmitting}
           disabled={disabled || isSubmitting}
           customStyles={`${buttonClassName} whitespace-nowrap`}
+          icon={icon}
         />
         <ResetButton
           text="Reset all"
@@ -39,6 +40,7 @@ const FormManager = ({
           onClick={resetAction}
           customStyles={`${!isDirty ? '!text-gray' : '!text-blue'} whitespace-nowrap`}
           disabled={!isDirty}
+          icon={icon}
         />
       </div>
     ) : (
@@ -48,10 +50,11 @@ const FormManager = ({
         size={size}
         isSubmitting={isSubmitting}
         disabled={disabled || isSubmitting}
-        customStyles={`${buttonClassName} w-full whitespace-nowrap mt-5`}
+        customStyles={`${buttonClassName} whitespace-nowrap mt-5`}
+        icon={icon}
       />
     );
-  }, [showReset, text, variant, size, isSubmitting, disabled, buttonClassName, resetAction, isDirty]);
+  }, [showReset, text, variant, size, isSubmitting, disabled, buttonClassName, icon, resetAction, isDirty]);
 
   return (
     <form className={className} onSubmit={handleSubmit(submitAction)}>

@@ -37,6 +37,14 @@ export function postData(path, body) {
   });
 }
 
+export async function postFile(path, body) {
+  return apiHandler({
+    path: getApiPublicURL(path),
+    requestMethod: 'POST',
+    body,
+  });
+}
+
 /**
 
 Sends a PUT request to the API with the specified path and body.
