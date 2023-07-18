@@ -73,9 +73,9 @@ const Negotiating = () => {
     const rowHeader = isOwner
       ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
       : chartererNegotiatingHeaderDataAdapter({ data: rowData });
-
     return (
       <ExpandableRow
+        key={rowData.id}
         className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} />}
         footer={

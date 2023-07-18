@@ -3,10 +3,13 @@
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
+import * as yup from 'yup';
+
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
+import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
@@ -28,17 +31,20 @@ const tabs = [
   },
 ];
 
-const NegotiatingAcceptOffer = ({ goBack }) => {
+const schema = yup.object({
+  ...acceptOfferSchema(),
+});
+
+const NegotiatingAcceptOffer = ({ goBack, itemId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
-  const methods = useHookFormParams({ schema: {} });
+  const methods = useHookFormParams({ schema });
 
   const handleSubmit = async (formData) => {
-    const { error, data } = await acceptOffer({ data: formData });
+    const { status, message: successMessage, error } = await acceptOffer({ data: { ...formData, offerId: itemId } });
 
-    if (data) {
-      const { message } = data;
-      successToast(message);
+    if (status === 200) {
+      successToast(successMessage);
     }
     if (error) {
       const { message, description } = error;

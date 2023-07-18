@@ -7,9 +7,8 @@ import { ViewIncomingOfferPropTypes } from '@/lib/types';
 import { NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { OfferDeclineForm } from '@/units';
 
-const ViewIncomingOffer = ({ closeModal }) => {
+const ViewIncomingOffer = ({ closeModal, itemId }) => {
   const [step, setStep] = useState('view_offer');
-
   switch (step) {
     case 'offer_decline':
       return (
@@ -18,12 +17,13 @@ const ViewIncomingOffer = ({ closeModal }) => {
           closeModal={closeModal}
           goBack={() => setStep('view_offer')}
           showCancelButton={false}
+          itemId={itemId}
         />
       );
     case 'offer_counteroffer':
       return <SendCounteroffer closeModal={closeModal} goBack={setStep} />;
     case 'offer_accept':
-      return <NegotiatingAcceptOffer closeModal={closeModal} goBack={() => setStep('view_offer')} />;
+      return <NegotiatingAcceptOffer closeModal={closeModal} goBack={() => setStep('view_offer')} itemId={itemId} />;
     default:
       return <ViewOffer setStep={setStep} closeModal={closeModal} />;
   }

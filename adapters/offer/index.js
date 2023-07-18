@@ -50,12 +50,30 @@ export function responseSendOfferAdapter({ data }) {
 
 export function declineOfferAdapter({ data }) {
   if (!data) return null;
+  const { reason, offerId } = data;
 
+  return {
+    reason,
+    dealId: offerId,
+  };
+}
+
+export function responseDeclineOfferAdapter({ data }) {
+  if (!data) return null;
   return data;
 }
 
 export function acceptOfferAdapter({ data }) {
   if (!data) return null;
+  const { offerId, comment } = data;
 
+  return {
+    dealId: offerId,
+    comment,
+  };
+}
+
+export function responseAcceptOfferAdapter({ data }) {
+  if (!data) return null;
   return data;
 }

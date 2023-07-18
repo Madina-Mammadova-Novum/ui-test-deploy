@@ -165,7 +165,12 @@ export async function getUserPreFixtures() {
 }
 
 export async function getUserNegotiating() {
-  const response = await getData(`account/negotiating`);
+  const body = {
+    skip: 0,
+    pageSize: 1000,
+    stage: 'Negotiating',
+  };
+  const response = await postData(`account/negotiating`, body);
   return {
     ...response,
   };
