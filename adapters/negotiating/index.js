@@ -1,3 +1,5 @@
+import ReactCountryFlag from 'react-country-flag';
+
 import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
@@ -6,28 +8,29 @@ import { transformDate } from '@/utils/date';
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { tankerName, imo, fleetName, openDate, openPort } = data;
+  const { imo, openDate, openPort, details, company } = data;
 
   return [
     {
       label: 'tanker name',
-      text: tankerName ?? '',
+      text: details?.name,
     },
     {
       label: 'imo',
-      text: imo ?? '',
+      text: imo,
     },
     {
       label: 'fleet name',
-      text: fleetName ?? '',
+      text: company?.details?.name,
     },
     {
       label: 'open date',
-      text: openDate ?? '',
+      text: transformDate(openDate, 'MMM dd, yyyy'),
     },
     {
       label: 'open port',
-      text: openPort ?? '',
+      text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
+      countryCode: 'us',
     },
   ];
 };
@@ -78,7 +81,20 @@ export const incomingTabRowsDataAdapter = ({ data }) => {
 export const incomingTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { cargoId, laycanStart, laycanEnd, loadPort, status, dateReceived, countdown, id } = data;
+  const {
+    cargo: {
+      code: cargoId,
+      loadTerminal: {
+        port: { name: portName, locode: portLocode },
+      },
+    },
+    status,
+    laycanStart,
+    laycanEnd,
+    createdAt: dateReceived,
+    expiresAt: countdown,
+    id,
+  } = data;
 
   return [
     {
@@ -99,15 +115,16 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: laycanStart,
+      value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: laycanEnd,
+      value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: loadPort,
+      value: `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
@@ -374,7 +391,19 @@ export const ownerFailedTabRowsDataAdapter = ({ data }) => {
 export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { cargoId, laycanStart, laycanEnd, loadPort, dateFailed, reason, id } = data;
+  const {
+    cargo: {
+      code,
+      loadTerminal: {
+        port: { name: portName, locode: portLocode },
+      },
+    },
+    laycanStart,
+    laycanEnd,
+    failedAt,
+    reason,
+    id,
+  } = data;
 
   return [
     {
@@ -386,7 +415,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
-          actionText: cargoId,
+          actionText: code,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -395,19 +424,20 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: laycanStart,
+      value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: laycanEnd,
+      value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: loadPort,
+      value: `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
-      value: dateFailed ? transformDate(dateFailed, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      value: failedAt ? transformDate(failedAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
@@ -502,4 +532,24 @@ export const failedTabDataByRole = ({ data, role }) => {
     default:
       return [];
   }
+};
+
+export const responseNegotiatingAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const responseIncomingOffersAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const responseFailedOffersAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const responseSentCounteroffersAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
 };
