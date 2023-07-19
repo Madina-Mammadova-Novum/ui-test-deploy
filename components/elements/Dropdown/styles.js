@@ -19,12 +19,11 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     borderRadius: '6px',
     border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#DADFEA' : '#E53636'} `,
     cursor: 'pointer',
-    minHeight: '40px',
   }),
   container: (base, { selectProps: { menuIsOpen, options } }) => {
     return {
       ...base,
-      height: menuIsOpen && expand && options?.length > 1 ? 280 : 'auto',
+      minHeight: menuIsOpen && expand && options?.length > 1 && 300,
       minWidth: minWidth ?? 34,
     };
   },
@@ -37,7 +36,7 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     position: 'relative',
     left: '4px',
   }),
-  menu: (base) => ({
+  menu: (base, { selectProps: { menuIsOpen, options } }) => ({
     ...base,
     background: '#ffffff',
     boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
@@ -45,10 +44,14 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     borderRadius: '6px',
     marginTop: '5px',
     padding: '0px',
-    position: 'absolute',
-    minHeight: 'auto',
-    top: 40,
+    top: menuIsOpen && expand && options?.length > 1 && 40,
   }),
+  menuList: (base, { selectProps: { menuIsOpen, options } }) => {
+    return {
+      ...base,
+      minHeight: menuIsOpen && expand && options?.length > 1 && 314,
+    };
+  },
   dropdownIndicator: (base, { selectProps: { menuIsOpen } }) => ({
     ...base,
     transform: menuIsOpen && 'rotate(180deg)',

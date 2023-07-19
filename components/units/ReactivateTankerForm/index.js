@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -11,11 +11,16 @@ import { ReactivateTankerFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
+import { getUserPositionById } from '@/services';
+import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions } from '@/utils/helpers';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const ReactivateTankerForm = ({ title, portName }) => {
+const ReactivateTankerForm = ({ title, modalState }) => {
+  const dispatch = useDispatch();
+
   const { ports } = useSelector(getGeneralDataSelector);
 
   const schema = yup.object().shape({
@@ -51,8 +56,24 @@ const ReactivateTankerForm = ({ title, portName }) => {
     handleChangeState(key, option);
   };
 
-  const onSubmit = async (data) => {
-    return { data };
+  const onSubmit = async ({ port, date }) => {
+    const result = {
+      id: modalState.id,
+      available: true,
+      portId: port?.value,
+      date,
+    };
+
+    const { error, data, status } = await updateVesselPortAndDate(result);
+
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: modalState?.fleetId });
+
+      dispatch(updateTankersByFleetId({ fleetId: modalState.fleetId, tankers }));
+    }
+
+    if (data?.message) successToast(data.message);
+    if (error) errorToast(error.message, error.errors);
   };
 
   const { listOfPorts, port } = tankerState;
@@ -69,14 +90,14 @@ const ReactivateTankerForm = ({ title, portName }) => {
           disabled: port === null,
         }}
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <div>
+        <div className="py-5">
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{portName}</p>
+          <p className="font-semibold text-black text-xsm">{modalState?.name}</p>
         </div>
-        <div className="grid gap-4 min-w-[296px]">
+        <div className="grid gap-5 min-w-[296px]">
           <FormDropdown
             name="port"
             label="Port search"

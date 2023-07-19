@@ -15,17 +15,7 @@ import MoneybagAltSVG from '@/assets/images/moneybagAlt.svg';
 import MusicNoteSVG from '@/assets/images/musicNote.svg';
 import SearchSVG from '@/assets/images/search.svg';
 import SettingSVG from '@/assets/images/setting.svg';
-import {
-  Button,
-  Divider,
-  Dropdown,
-  FieldsetHeader,
-  HoverableIcon,
-  Input,
-  LinkAsButton,
-  TextRow,
-  Title,
-} from '@/elements';
+import { Button, Divider, Dropdown, FieldsetHeader, HoverableIcon, Input, LinkAsButton, TextRow } from '@/elements';
 import { Tabs } from '@/units';
 
 const tabs = [
@@ -38,56 +28,6 @@ const tabs = [
     value: 'read',
   },
 ];
-// Mock fields
-// const notifications = [
-//   {
-//     id: 1,
-//     icon: <NewOfferSVG />,
-//     title: 'New Offer',
-//     time: '2:00 pm',
-//     detailsLink: '/',
-//     detailsText: 'See details',
-
-//   },
-//   {
-//     id: 2,
-//     icon: <CounterOfferSVG />,
-//     title: 'counteroffer',
-//     time: '5:30 pm',
-//     detailsLink: '/',
-//     detailsText: 'See details',
-//   },
-//   {
-//     id: 3,
-//     icon: <OfferFailedSVG />,
-//     title: 'offer failed',
-//     time: '5:30 pm',
-//   },
-//   {
-//     id: 4,
-//     icon: <CountDownReminderSVG />,
-//     title: 'Countdown reminder',
-//     time: '5:30 pm',
-//   },
-//   {
-//     id: 5,
-//     icon: <DealUpdatedSVG />,
-//     title: 'deal updated',
-//     time: '5:30 pm',
-//   },
-//   {
-//     id: 6,
-//     icon: <AnnouncementsSVG />,
-//     title: 'Announcements',
-//     time: '5:30 pm',
-//   },
-//   {
-//     id: 7,
-//     icon: <SystemUpdateSVG />,
-//     title: 'System update',
-//     time: '5:30 pm',
-//   },
-// ];
 
 const Notification = ({ numberOfNotifications }) => {
   const [modalStore, setModalStore] = useState({
@@ -238,9 +178,9 @@ const Notification = ({ numberOfNotifications }) => {
           <ModalWrapper
             opened={isModalOpen}
             onClose={() => handleChangeState('isModalOpen', false)}
-            containerClass="absolute z-50 !max-h-screen !w-[550px] !-left-[277px] !-translate-y-0 !top-0 !rounded-none !p-0"
+            containerClass="absolute z-50 !max-h-screen !w-[550px] !-left-[275px] !-translate-y-0 !top-0 !rounded-none !p-0"
           >
-            <div className="px-7 pt-7">
+            <div className="px-[30px] pt-[30px]">
               <div className="mb-4">
                 <FieldsetHeader title="Notifications" />
               </div>
@@ -278,9 +218,7 @@ const Notification = ({ numberOfNotifications }) => {
                 options={options}
                 isMulti
               />
-              <Title customStyle="date-styles" className="flex justify-center p-2.5">
-                Today
-              </Title>
+              <p className="text-[14px] text-gray flex justify-center p-2.5">Today</p>
             </div>
             <div className="px-[30px]">
               <Divider className="mb-4" />
@@ -288,10 +226,10 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm">
                     <BagSVG />
-                    <Title customStyle="offer-styles">New Offer</Title>
+                    <p className="uppercase font-semibold">New Offer</p>
                   </div>
                   <div>
-                    <Title customStyle="date-styles">2:00 pm</Title>
+                    <p className="text-[14px] text-gray">2:00 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
@@ -318,18 +256,22 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm">
                     <MoneybagAltSVG />
-                    <Title customStyle="offer-styles">counteroffer</Title>
+                    <p className="uppercase font-semibold">counteroffer</p>
                   </div>
                   <div>
-                    <Title customStyle="date-styles">5:30 pm</Title>
+                    <p className="text-[14px] text-gray">5:30 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
-                  <Title>
-                    There is a counteroffer from a vessel owner for your cargo ID:{' '}
-                    <span className="font-bold">9581291</span>. You have <span className="font-bold">20 minutes</span>{' '}
-                    to send a response.
-                  </Title>
+                  <p className="inline-flex flex-col text-xsm">
+                    <span>
+                      There is a counteroffer from a vessel owner for your cargo ID:{' '}
+                      <span className="font-bold">9581291</span>.
+                    </span>
+                    <span>
+                      You have <span className="font-bold">20 minutes</span> to send a response.
+                    </span>
+                  </p>
                 </div>
                 <div className="flex justify-start">
                   <LinkAsButton
@@ -350,17 +292,17 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm ">
                     <MinusCircleSVG />
-                    <Title customStyle="offer-styles">offer failed</Title>
+                    <p className="uppercase font-semibold text-xsm">offer failed</p>
                   </div>
                   <div>
-                    <Title customStyle="date-styles">5:30 pm</Title>
+                    <p className="text-xsm text-gray">5:30 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
-                  <Title>
+                  <p className="text-xsm">
                     An offer you made for cargo ID: <span className="font-bold">9581291</span> has failed since the
                     deadline you set for vessel owner to reply has expired.
-                  </Title>
+                  </p>
                 </div>
               </div>
               <Divider className="mb-4" />
@@ -368,17 +310,17 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm">
                     <CountDownReminderSVG className="w-4 h-4 fill-black" viewBox="0 0 24 24" />
-                    <Title customStyle="offer-styles">Countdown reminder</Title>
+                    <p className="uppercase font-semibold text-xsm">Countdown reminder</p>
                   </div>
                   <div>
-                    <Title customStyle="date-styles">5:30 pm</Title>
+                    <p className="text-xsm text-gray">5:30 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
-                  <Title>
+                  <p>
                     An offer you made for cargo ID: <span className="font-bold">9581291</span> has failed since the
                     deadline you set for vessel owner to reply has expired.
-                  </Title>
+                  </p>
                 </div>
               </div>
               <Divider className="mb-4" />
@@ -386,26 +328,24 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm">
                     <DocumentInfoSVG />
-                    <Title customStyle="offer-styles">deal updated</Title>
+                    <p className="uppercase font-semibold text-xsm">deal updated</p>
                   </div>
 
                   <div>
-                    <Title customStyle="date-styles">5:30 pm</Title>
+                    <p className="text-xsm text-gray">5:30 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
-                  <Title>
+                  <p className="text-xsm">
                     A file nas been uploaded by the vessel owner for ID: <span className="font-bold">9581291</span>{' '}
                     deal.
-                  </Title>
+                  </p>
                 </div>
                 <div>
                   <Divider />
                 </div>
                 <div>
-                  <Title customStyle="date-styles" className="flex justify-center p-2.5">
-                    Yesterday
-                  </Title>
+                  <p className="flex justify-center p-2.5 text-xsm text-gray">Yesterday</p>
                 </div>
               </div>
               <Divider className="mb-4" />
@@ -413,18 +353,18 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm">
                     <MusicNoteSVG />
-                    <Title customStyle="offer-styles">Announcements</Title>
+                    <p className="uppercase font-semibold text-xsm">Announcements</p>
                   </div>
                   <div>
-                    <Title customStyle="date-styles">5:30 pm</Title>
+                    <p className="text-xsm text-gray">5:30 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
-                  <Title>
+                  <p className="text-xsm">
                     Congratulations! Your charter party for card ID: <span className="font-bold">9581291</span> has been
                     signed and the offer is moved from <span className="font-bold">On Subs</span> to{' '}
                     <span className="font-bold">Fixture stage</span>.
-                  </Title>
+                  </p>
                 </div>
               </div>
               <Divider className="mb-4" />
@@ -432,17 +372,17 @@ const Notification = ({ numberOfNotifications }) => {
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-x-1.5 text-xs-sm">
                     <SettingSVG className="fill-black w-4 h-4" viewBox="0 0 24 24" />
-                    <Title customStyle="offer-styles">System update</Title>
+                    <p className="uppercase font-semibold text-xsm">System update</p>
                   </div>
                   <div>
-                    <Title customStyle="date-styles">5:30 pm</Title>
+                    <p className="text-xsm text-gray">5:30 pm</p>
                   </div>
                 </div>
                 <div className="flex flex-col mb-2.5">
-                  <Title>
+                  <p className="text-xsm">
                     An offer you made for cargo ID: <span className="font-bold">9581291</span> has failed since the
                     deadline you set for vessel owner to reply has expired.
-                  </Title>
+                  </p>
                 </div>
               </div>
             </div>

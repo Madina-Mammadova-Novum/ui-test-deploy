@@ -55,7 +55,7 @@ const TableCell = ({ cellProps }) => {
             />
           );
         case ACTIONS.TANKER_REACTIVATE:
-          return <ReactivateTankerForm title="Reactivate your Tanker" portName={name} />;
+          return <ReactivateTankerForm title="Reactivate your Tanker" modalState={{ name, id, fleetId }} />;
         case ACTIONS.VIEW_OFFER:
           return <ViewIncomingOffer itemId={id} />;
         case ACTIONS.VIEW_COUNTEROFFER:
@@ -78,7 +78,7 @@ const TableCell = ({ cellProps }) => {
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
     },
-    [available, date, id, name, portId]
+    [available, date, fleetId, id, name, portId]
   );
 
   const printValue = useMemo(() => {
