@@ -49,7 +49,7 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
         onClose={closeModal}
         specialStyle
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
         <PortDetailsForm portName={modalState?.name} />

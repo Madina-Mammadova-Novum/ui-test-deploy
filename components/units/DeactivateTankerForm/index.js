@@ -31,7 +31,7 @@ const DeactivateTankerForm = ({ title, portName, modalState, closeModal }) => {
         onClose={closeModal}
         specialStyle
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
         <div>

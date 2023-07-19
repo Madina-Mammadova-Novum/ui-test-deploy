@@ -48,7 +48,7 @@ const EditDateForm = ({ closeModal, title, modalState }) => {
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
         onClose={closeModal}
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
         <DateDetailsForm portName={modalState?.name} />

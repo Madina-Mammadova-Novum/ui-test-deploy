@@ -31,7 +31,7 @@ const PortDetailsForm = ({ portName = '' }) => {
         label="Port search"
         options={countriesOptions(ports)}
         onChange={handlePortChange}
-        customStyles={{ dropdownExpanded: true, className: 'h-auto' }}
+        customStyles={{ dropdownExpanded: true }}
       />
     </div>
   );
