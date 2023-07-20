@@ -1,22 +1,37 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { DeactivateTankerFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Label, Title } from '@/elements';
+import { getUserPositionById } from '@/services';
 import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const DeactivateTankerForm = ({ title, portName, modalState, closeModal }) => {
+const DeactivateTankerForm = ({ title, portName, state, closeModal }) => {
+  const dispatch = useDispatch();
   const methods = useHookFormParams({});
 
   const onSubmit = async () => {
-    const { error, data } = await updateVesselPortAndDate({
-      ...modalState,
-      available: !modalState?.available,
+    const currentDate = new Date();
+    const nextDate = new Date();
+    nextDate.setDate(currentDate.getDate() + 1);
+
+    const { status, error, data } = await updateVesselPortAndDate({
+      ...state,
+      date: nextDate,
+      available: !state?.available,
     });
+
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
+
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+    }
 
     if (data?.message) successToast(data.message);
     if (error) errorToast(error.message, error.errors);

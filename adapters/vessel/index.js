@@ -315,6 +315,7 @@ export function userTankerAdapter({ data }) {
     date: openDate,
     port: openPort?.name,
     portId: openPort?.id,
+    countryId: openPort?.countryId,
     status: openPort?.appearsInSearch,
     imo,
   };

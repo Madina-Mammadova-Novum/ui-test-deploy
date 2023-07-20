@@ -18,7 +18,7 @@ import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const ReactivateTankerForm = ({ title, modalState }) => {
+const ReactivateTankerForm = ({ title, state }) => {
   const dispatch = useDispatch();
 
   const { ports } = useSelector(getGeneralDataSelector);
@@ -57,19 +57,18 @@ const ReactivateTankerForm = ({ title, modalState }) => {
   };
 
   const onSubmit = async ({ port, date }) => {
-    const result = {
-      id: modalState.id,
-      available: true,
+    const { error, data, status } = await updateVesselPortAndDate({
+      id: state.id,
+      action: state.action,
       portId: port?.value,
+      available: true,
       date,
-    };
-
-    const { error, data, status } = await updateVesselPortAndDate(result);
+    });
 
     if (status === 200) {
-      const { data: tankers } = await getUserPositionById({ id: modalState?.fleetId });
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
 
-      dispatch(updateTankersByFleetId({ fleetId: modalState.fleetId, tankers }));
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
     }
 
     if (data?.message) successToast(data.message);
@@ -95,7 +94,7 @@ const ReactivateTankerForm = ({ title, modalState }) => {
         </Title>
         <div className="py-5">
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{modalState?.name}</p>
+          <p className="font-semibold text-black text-xsm">{state?.name}</p>
         </div>
         <div className="grid gap-5 min-w-[296px]">
           <FormDropdown

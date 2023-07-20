@@ -16,7 +16,7 @@ import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditDateForm = ({ closeModal, title, modalState }) => {
+const EditDateForm = ({ state, title, closeModal }) => {
   const dispatch = useDispatch();
   const schema = yup.object().shape({
     ...dateSchema(),
@@ -25,14 +25,14 @@ const EditDateForm = ({ closeModal, title, modalState }) => {
   const methods = useHookFormParams({ schema });
   const onSubmit = async ({ date }) => {
     const { error, data, status } = await updateVesselPortAndDate({
-      ...modalState,
+      ...state,
       date,
     });
 
     if (status === 200) {
-      const { data: tankers } = await getUserPositionById({ id: modalState?.fleetId });
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
 
-      dispatch(updateTankersByFleetId({ fleetId: modalState.fleetId, tankers }));
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
     }
 
     if (data?.message) successToast(data.message);
@@ -51,7 +51,7 @@ const EditDateForm = ({ closeModal, title, modalState }) => {
         <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <DateDetailsForm portName={modalState?.name} />
+        <DateDetailsForm portName={state?.name} />
       </ModalFormManager>
     </FormProvider>
   );
