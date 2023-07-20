@@ -321,7 +321,6 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  console.log('errors: ', errors);
   if (!errors) return [SYSTEM_ERROR];
 
   return Object.entries(errors).map(([key, value]) => {
@@ -375,3 +374,12 @@ export const calculateTotal = (array, key) =>
     .filter((item) => item)
     .map(({ [key]: itemValue }) => itemValue)
     .reduce((a, b) => +a + +b);
+
+export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
+  return Math.ceil(recordsTotal / recordsFiltered);
+};
+
+export const setSkipedValue = (pageValue, perPageValue) => {
+  if (pageValue === 1) return 0;
+  return (pageValue - 1) * perPageValue;
+};

@@ -5,14 +5,25 @@ import { POSITIONS } from '@/store/entities/positions/types';
 
 /* Services */
 import { getUserPositions, getVesselsById } from '@/services';
+import { calculateAmountOfPages } from '@/utils/helpers';
 
-export const fetchUserVessels = createAsyncThunk(POSITIONS.GET_USER_POSITIONS, async ({ page, perPage, sortBy }) => {
-  const { data, recordsTotal } = await getUserPositions({ page, perPage, sortBy });
+export const fetchUserVessels = (() => {
+  let totalPages;
+  let currentPerPage;
 
-  const generator = getVesselsById(data);
-  const { value } = generator.next();
+  return createAsyncThunk(POSITIONS.GET_USER_POSITIONS, async ({ page, perPage, sortBy }) => {
+    if (typeof totalPages === 'undefined' || currentPerPage !== perPage) {
+      const { recordsTotal, recordsFiltered } = await getUserPositions({ page, perPage, sortBy });
+      totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
+      currentPerPage = perPage;
+    }
 
-  return {
-    data: { vessels: await value, totalPages: recordsTotal },
-  };
-});
+    const { data } = await getUserPositions({ page, perPage, sortBy });
+    const generator = getVesselsById(data);
+    const { value } = generator.next();
+
+    return {
+      data: { vessels: await value, totalPages },
+    };
+  });
+})();
