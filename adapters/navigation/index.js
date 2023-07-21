@@ -1,4 +1,5 @@
 import { ROOT_SLUG } from '@/lib/constants';
+import { setSkipedValue } from '@/utils/helpers';
 
 export const navigationItemAdapter = ({ data }) => {
   if (data === null) return null;
@@ -38,15 +39,10 @@ export const accountNavigationAdapter = ({ data }) => {
 
   const { page, perPage, sortBy } = data;
 
-  const setSkipedValue = (pageValue, perPageValue) => {
-    if (pageValue === 1) return 0;
-    return (pageValue - 1) * perPageValue;
-  };
-
   return {
     skip: setSkipedValue(page, perPage),
     pageSize: perPage,
-    sortColumn: sortBy,
+    sortColumn: 'Name',
     sortColumnDirection: sortBy,
   };
 };

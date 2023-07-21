@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
+import { ACTIONS, REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -321,7 +321,6 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  console.log('errors: ', errors);
   if (!errors) return [SYSTEM_ERROR];
 
   return Object.entries(errors).map(([key, value]) => {
@@ -375,3 +374,41 @@ export const calculateTotal = (array, key) =>
     .filter((item) => item)
     .map(({ [key]: itemValue }) => itemValue)
     .reduce((a, b) => +a + +b);
+
+export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
+  return Math.ceil(recordsTotal / recordsFiltered);
+};
+
+export const setSkipedValue = (pageValue, perPageValue) => {
+  if (pageValue === 1) return 0;
+  return (pageValue - 1) * perPageValue;
+};
+
+export const transformToCapitalize = (str) => {
+  return str
+    .split(' ')
+    .map((word) => word[0].toUpperCase() + word.substring(1))
+    .join(' ');
+};
+
+export const generateMessageByActionType = ({ action, status }) => {
+  if (status === 200) {
+    switch (action) {
+      case ACTIONS.DATE:
+        return 'You have successfully changed the date';
+      case ACTIONS.PORT:
+        return 'You have successfully changed the port';
+      case ACTIONS.TANKER_DEACTIVATE:
+        return 'You have successfully deactivated the tanker';
+      case ACTIONS.TANKER_REACTIVATE:
+        return 'You have successfully reopened the port and select a date';
+      default:
+        return null;
+    }
+  }
+  return null;
+};
+
+export const getCountryById = ({ id, data = [] }) => {
+  return data?.find((country) => country.countryId === id);
+};

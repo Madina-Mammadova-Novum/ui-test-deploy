@@ -41,7 +41,7 @@ const AuthNavButtons = ({ data = [] }) => {
   const printAuthButton = useMemo(() => {
     return (
       <LinkAsButton
-        href={ROUTES.ACCOUNT_POSITIONS}
+        href={ROUTES.ACCOUNT_NEGOTIATING}
         buttonProps={{ variant: 'secondary', size: 'large' }}
         customStyles="capitalize"
       >

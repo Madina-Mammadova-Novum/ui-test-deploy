@@ -16,7 +16,7 @@ import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { PortDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditPortForm = ({ closeModal, title, modalState }) => {
+const EditPortForm = ({ title, state, closeModal }) => {
   const dispatch = useDispatch();
   const schema = yup.object().shape({
     ...portsSchema(),
@@ -25,15 +25,11 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
   const methods = useHookFormParams({ schema });
 
   const onSubmit = async ({ port }) => {
-    const { error, data, status } = await updateVesselPortAndDate({
-      ...modalState,
-      portId: port?.value,
-    });
+    const { error, data, status } = await updateVesselPortAndDate({ ...state, portId: port?.value });
 
     if (status === 200) {
-      const { data: tankers } = await getUserPositionById({ id: modalState?.fleetId });
-
-      dispatch(updateTankersByFleetId({ fleetId: modalState.fleetId, tankers }));
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
     }
 
     if (data?.message) successToast(data.message);
@@ -52,7 +48,7 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
         <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <PortDetailsForm portName={modalState?.name} />
+        <PortDetailsForm portName={state?.name} />
       </ModalFormManager>
     </FormProvider>
   );

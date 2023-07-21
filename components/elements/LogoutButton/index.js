@@ -13,13 +13,10 @@ import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const dispatch = useDispatch();
 
-  const resetUserData = useCallback(
-    ({ role = '', isValid = false }) => {
-      dispatch(setRoleIdentity(role));
-      dispatch(setIsAuthenticated(isValid));
-    },
-    [dispatch]
-  );
+  const resetUserData = useCallback(() => {
+    dispatch(setRoleIdentity(null));
+    dispatch(setIsAuthenticated(false));
+  }, [dispatch]);
 
   const handleSignOut = useCallback(async () => {
     await signOut().then(() => resetUserData());

@@ -1,11 +1,15 @@
+'use client';
+
 import { useCallback, useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
+import { useSelector } from 'react-redux';
 
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip, Placeholder } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
+import { getGeneralDataSelector } from '@/store/selectors';
 import {
   ChartererInformationContent,
   DeactivateTankerForm,
@@ -18,8 +22,10 @@ import {
   ReactivateTankerForm,
   UpdateTankerForm,
 } from '@/units';
+import { getCountryById } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
+  const { countries } = useSelector(getGeneralDataSelector);
   const {
     id,
     type,
@@ -32,6 +38,7 @@ const TableCell = ({ cellProps }) => {
     disabled,
     editable,
     countryFlag,
+    countryId,
     icon,
     actions = [],
     available,
@@ -44,18 +51,30 @@ const TableCell = ({ cellProps }) => {
     (action) => {
       switch (action) {
         case ACTIONS.PORT:
-          return <EditPortForm title="edit open port" modalState={{ name, id, date, available, fleetId }} />;
+          return (
+            <EditPortForm title="edit open port" state={{ name, id, date, available, fleetId, action: ACTIONS.PORT }} />
+          );
         case ACTIONS.DATE:
-          return <EditDateForm title="edit open date" modalState={{ name, id, portId, available, fleetId }} />;
+          return (
+            <EditDateForm
+              title="edit open date"
+              state={{ name, id, portId, available, fleetId, action: ACTIONS.DATE }}
+            />
+          );
         case ACTIONS.TANKER_DEACTIVATE:
           return (
             <DeactivateTankerForm
               title="Deactivate your Tanker"
-              modalState={{ name, id, portId, date, available, fleetId }}
+              state={{ name, id, portId, date, available, fleetId, action: ACTIONS.TANKER_DEACTIVATE }}
             />
           );
         case ACTIONS.TANKER_REACTIVATE:
-          return <ReactivateTankerForm title="Reactivate your Tanker" modalState={{ name, id, fleetId }} />;
+          return (
+            <ReactivateTankerForm
+              title="Reactivate your Tanker"
+              state={{ name, id, fleetId, action: ACTIONS.TANKER_REACTIVATE }}
+            />
+          );
         case ACTIONS.VIEW_OFFER:
           return <ViewIncomingOffer itemId={id} />;
         case ACTIONS.VIEW_COUNTEROFFER:
@@ -91,19 +110,32 @@ const TableCell = ({ cellProps }) => {
     );
   }, [disabled, helperData, value]);
 
+  const printCountryFlag = useMemo(() => {
+    const country = getCountryById({ data: countries, id: countryId });
+    const availableCountryCode = countryFlag || country?.countryCode;
+
+    return (
+      availableCountryCode && <ReactCountryFlag countryCode={availableCountryCode} svg className="!w-5 !h-4 mr-1.5" />
+    );
+  }, [countries, countryFlag, countryId]);
+
   return (
     <td
       name={type}
       className={`${
         disabled ? 'custom-table' : 'bg-white'
-      } py-1.5 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
+      } py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
-      <div className={`flex ${typeof value === 'boolean' ? 'justify-start' : 'justify-between'} items-center text-xsm`}>
+      <div
+        className={`flex ${
+          typeof value === 'boolean' ? 'justify-start' : 'justify-between'
+        } normal-case items-center text-xsm`}
+      >
         {emptyCell && <Placeholder />}
         {value && (
           <div className="flex gap-x-1 text-inherit items-center">
             {icon && <IconWrapper iconData={{ icon }} />}
-            {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
+            {available && printCountryFlag}
             {printValue}
             {marked && (
               <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">

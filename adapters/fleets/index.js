@@ -3,6 +3,7 @@ import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { transformToCapitalize } from '@/utils/helpers';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -31,43 +32,42 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { date, id, marked, imo, port, portId, status, title } = data;
-
-  const inActive = port === null || date === null;
+  const { date, id, marked, imo, port, portId, status, title, countryId } = data;
 
   return [
     {
       value: index,
-      disabled: inActive,
+      disabled: !status,
     },
     {
       id,
-      value: title ?? NO_DATA_MESSAGE.DEFAULT,
+      value: transformToCapitalize(title) ?? NO_DATA_MESSAGE.DEFAULT,
       type: TYPE.SEMIBOLD,
-      disabled: inActive,
+      disabled: !status,
     },
     {
       id,
       value: imo ?? NO_DATA_MESSAGE.IMO,
-      disabled: inActive,
+      disabled: !status,
     },
     {
       id,
       date,
       port,
       portId,
+      countryId,
       available: status,
-      name: title,
-      value: port || NO_DATA_MESSAGE.PORT,
-      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
-      editable: !inActive,
+      name: status ? title : NO_DATA_MESSAGE.PORT,
+      value: status ? port : NO_DATA_MESSAGE.PORT,
+      helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
+      editable: status,
       actions: [
         {
           action: ACTIONS.PORT,
           editIcon: <EditIcon />,
         },
       ],
-      disabled: inActive,
+      disabled: !status,
     },
     {
       id,
@@ -77,16 +77,16 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       marked,
       available: status,
       name: title,
-      value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-      helperData: inActive && NO_DATA_MESSAGE.HELPER_FLEETS,
-      editable: !inActive,
+      value: status ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
+      editable: status,
       actions: [
         {
           action: ACTIONS.DATE,
           editIcon: <EditIcon />,
         },
       ],
-      disabled: inActive,
+      disabled: !status,
     },
     {
       id,
