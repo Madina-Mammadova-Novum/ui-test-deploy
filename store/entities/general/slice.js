@@ -6,7 +6,10 @@ const initialState = {
   loading: true,
   error: null,
   data: {
-    ports: [],
+    ports: {
+      searchPorts: [],
+      allPorts: [],
+    },
     countries: [],
   },
 };

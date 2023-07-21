@@ -4,10 +4,21 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ACTION } from '@/store/entities/general/types';
 
 /* Services */
-import { getCountries, getPorts } from '@/services';
+import { getCountries, getPorts, getPortsForSearcForm } from '@/services';
 
 export const fetchPorts = createAsyncThunk(ACTION.GET_PORTS, async () => {
-  const { data } = await getPorts();
+  const [{ data: allPorts }, { data: searchPorts }] = await Promise.all([getPorts(), getPortsForSearcForm()]);
+
+  return {
+    data: {
+      allPorts,
+      searchPorts,
+    },
+  };
+});
+
+export const fetchSearchPorts = createAsyncThunk(ACTION.GET_PORTS, async () => {
+  const { data } = await getPortsForSearcForm();
 
   return {
     data,

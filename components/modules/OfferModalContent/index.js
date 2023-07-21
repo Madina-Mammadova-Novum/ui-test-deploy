@@ -62,7 +62,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
       default:
         return <CommercialOfferTerms tankerId={tankerId} />;
     }
-  }, [currentTab]);
+  }, [currentTab, tankerId]);
 
   const handleSubmit = async (formData) => {
     const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);

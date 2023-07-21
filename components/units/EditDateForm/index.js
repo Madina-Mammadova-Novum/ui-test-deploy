@@ -33,6 +33,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
       const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
 
       dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      closeModal();
     }
 
     if (data?.message) successToast(data.message);

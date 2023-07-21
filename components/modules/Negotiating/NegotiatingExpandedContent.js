@@ -69,7 +69,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
           />
         );
     }
-  }, [currentTab, incomingOffers, isOwner, session?.role]);
+  }, [currentTab, failedOffers, incomingOffers, isOwner, sentCounteroffers, session?.role]);
 
   const modalContent = () => {
     switch (modal) {

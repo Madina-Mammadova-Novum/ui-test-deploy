@@ -7,7 +7,7 @@ import * as yup from 'yup';
 
 import { EditPortFormPropTypes } from '@/lib/types';
 
-import { ModalFormManager } from '@/common';
+import { FormManager } from '@/common';
 import { Title } from '@/elements';
 import { portsSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
@@ -30,6 +30,7 @@ const EditPortForm = ({ title, state, closeModal }) => {
     if (status === 200) {
       const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
       dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      closeModal();
     }
 
     if (data?.message) successToast(data.message);
@@ -38,18 +39,18 @@ const EditPortForm = ({ title, state, closeModal }) => {
 
   return (
     <FormProvider {...methods}>
-      <ModalFormManager
+      <FormManager
         className="w-[356px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
-        onClose={closeModal}
         specialStyle
+        onClose={closeModal}
       >
         <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
         <PortDetailsForm portName={state?.name} />
-      </ModalFormManager>
+      </FormManager>
     </FormProvider>
   );
 };

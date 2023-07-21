@@ -307,7 +307,7 @@ export function responseGetVesselQ88Adapter({ data }) {
 export function userTankerAdapter({ data }) {
   if (!data) return {};
 
-  const { vesselId, name, openPort, openDate, imo } = data;
+  const { vesselId, name, openPort, appearsInSearch, openDate, imo } = data;
 
   return {
     id: vesselId,
@@ -316,7 +316,7 @@ export function userTankerAdapter({ data }) {
     port: openPort?.name,
     portId: openPort?.id,
     countryId: openPort?.countryId,
-    status: openPort?.appearsInSearch,
+    status: appearsInSearch,
     imo,
   };
 }

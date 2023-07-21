@@ -8,7 +8,7 @@ import * as yup from 'yup';
 
 import { ReactivateTankerFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
@@ -18,7 +18,7 @@ import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const ReactivateTankerForm = ({ title, state }) => {
+const ReactivateTankerForm = ({ title, state, closeModal }) => {
   const dispatch = useDispatch();
 
   const { ports } = useSelector(getGeneralDataSelector);
@@ -36,7 +36,7 @@ const ReactivateTankerForm = ({ title, state }) => {
   } = methods;
 
   const [tankerState, setTankerState] = useState({
-    listOfPorts: countriesOptions(ports) ?? [],
+    listOfPorts: countriesOptions(ports?.searchPorts) ?? [],
     port: null,
     date: '',
   });
@@ -69,6 +69,7 @@ const ReactivateTankerForm = ({ title, state }) => {
       const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
 
       dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      closeModal();
     }
 
     if (data?.message) successToast(data.message);
@@ -79,7 +80,8 @@ const ReactivateTankerForm = ({ title, state }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        onClose={closeModal}
         className="max-w-[356px]"
         submitAction={onSubmit}
         submitButton={{
@@ -116,7 +118,7 @@ const ReactivateTankerForm = ({ title, state }) => {
             expanded
           />
         </div>
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
