@@ -219,7 +219,7 @@ export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
   };
 
   const handleSortChange = ({ value }) => {
-    setAscSort(value === 'ascending');
+    setAscSort(value === 'Asc');
   };
 
   if (!data) return [];

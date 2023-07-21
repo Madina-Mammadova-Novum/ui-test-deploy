@@ -54,6 +54,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
     formState: { errors },
     setValue,
     getValues,
+    watch,
   } = methods;
   const { name: fleetName } = fleetData;
 
@@ -132,7 +133,10 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
 
   const onSubmit = async (formData) => {
     const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
-    if (status === 200) successToast(message);
+    if (status === 200) {
+      successToast(message);
+      closeModal();
+    }
     if (error && error?.message?.Imo) errorToast(error?.message?.Imo);
   };
 
@@ -199,7 +203,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
         submitAction={onSubmit}
         submitButton={{ text: 'Add tanker', variant: 'primary', size: 'large' }}
       >
-        <div className="w-[756px]">
+        <div className="w-[640px] 3md:w-[756px]">
           <ModalHeader goBack={goBack}>Add a New Tanker</ModalHeader>
           <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0 mt-5" />
 
@@ -395,7 +399,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.registeredOwnerCountry}
+                disabled={!countries.length || q88State.registeredOwnerCountry || !watch('registeredOwner')}
                 name="registeredOwnerCountry"
                 onChange={(option) => handleChange('registeredOwnerCountry', option)}
               />
@@ -410,7 +414,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.technicalOperatorCountry}
+                disabled={!countries.length || q88State.technicalOperatorCountry || !watch('technicalOperator')}
                 name="technicalOperatorCountry"
                 onChange={(option) => handleChange('technicalOperatorCountry', option)}
               />
@@ -425,7 +429,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.commercialOperatorCountry}
+                disabled={!countries.length || q88State.commercialOperatorCountry || !watch('commercialOperator')}
                 name="commercialOperatorCountry"
                 onChange={(option) => handleChange('commercialOperatorCountry', option)}
               />
@@ -440,7 +444,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
                 label="Country"
                 options={countries}
                 asyncCall={initialLoading}
-                disabled={!countries.length || q88State.disponentOwnerCountry}
+                disabled={!countries.length || q88State.disponentOwnerCountry || !watch('disponentOwner')}
                 name="disponentOwnerCountry"
                 onChange={(option) => handleChange('disponentOwnerCountry', option)}
               />

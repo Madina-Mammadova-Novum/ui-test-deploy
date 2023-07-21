@@ -12,7 +12,7 @@ import { ComplexPagination, FilterByForm, PostFixtureFilter, ToggleRows } from '
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const PostFixture = ({ title }) => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState({ value: false });
   const [data, isLoading] = useFetch(getUserFixtures);
 
   const initialPagesStore = {
@@ -42,7 +42,7 @@ const PostFixture = ({ title }) => {
           <Label className="text-xs-sm">Offer stage #5</Label>
           <div className="flex justify-between">
             <Title level={1}>{title}</Title>
-            <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+            <ToggleRows onToggleClick={setToggle} />
           </div>
           <FilterByForm>
             <PostFixtureFilter />

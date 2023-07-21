@@ -5,8 +5,8 @@ import { TablePropTypes } from '@/lib/types';
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 
-const Table = ({ headerData, rows, noDataMessage = '' }) => {
-  const printTableRow = (rowData) => <TableRow rowData={rowData} />;
+const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
+  const printTableRow = (rowData) => <TableRow key={rowData?.id} fleetId={fleetId} rowData={rowData} />;
 
   return headerData.length > 0 ? (
     <div className="table-scroll-wrapper ">

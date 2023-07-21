@@ -39,6 +39,7 @@ export function responseSearchVesselAdapter({ data }) {
   const {
     // name,
     // imo,
+    id,
     flag,
     summerDeadWeight,
     estimatedArrivalTime,
@@ -58,6 +59,7 @@ export function responseSearchVesselAdapter({ data }) {
   } = data;
 
   return {
+    id,
     tankerName: 'Hidden name',
     imo: 'Hidden number',
     flag,
@@ -187,7 +189,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     registryPortId: portOfRegistry.value,
     vesselTypeId: tankerType.value,
     vesselCategoyOneId: tankerCategoryOne.value,
-    vesselCategoryTwoId: tankerCategoryTwo.value,
+    vesselCategoryTwoId: tankerCategoryTwo?.value,
     hullType: hullType.value,
     loa,
     beam,
@@ -227,6 +229,11 @@ export function responseGetVesselCategoryOneAdapter({ data }) {
   return data;
 }
 export function responseGetVesselCategoryTwoAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseGetVesselFreightFormatsAdapter({ data }) {
   if (!data) return null;
 
   return data;
@@ -300,7 +307,7 @@ export function responseGetVesselQ88Adapter({ data }) {
 export function userTankerAdapter({ data }) {
   if (!data) return {};
 
-  const { vesselId, name, openPort, openDate, imo, status } = data;
+  const { vesselId, name, openPort, appearsInSearch, openDate, imo } = data;
 
   return {
     id: vesselId,
@@ -308,7 +315,8 @@ export function userTankerAdapter({ data }) {
     date: openDate,
     port: openPort?.name,
     portId: openPort?.id,
-    status: status === 'Active',
+    countryId: openPort?.countryId,
+    status: appearsInSearch,
     imo,
   };
 }
@@ -324,12 +332,12 @@ export function userTankersDetailsAdapter({ data }) {
 export function updateVesselPortAndDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id, portId, date } = data;
+  const { id, portId, date, available } = data;
 
   return {
     id,
     portId,
     opendate: new Date(date).toISOString(),
-    appearsInSearch: true,
+    appearsInSearch: available,
   };
 }

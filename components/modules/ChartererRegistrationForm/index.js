@@ -74,21 +74,21 @@ const ChartererRegistrationForm = () => {
         }}
       >
         <Divider className="mt-5" />
-        <Step title="Step #2: Personal details" containerClass="flex flex-col gap-5">
+        <Step title="Step #2: Personal details" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <PersonalDetails />
           <p className="text-black font-semibold text-sm pt-5">Enter a strong password according to our requirements</p>
           <PasswordValidation />
         </Step>
         <Divider />
-        <Step title="Step #3: Choose who you are" containerClass="flex flex-col gap-5">
+        <Step title="Step #3: Choose who you are" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyDetails />
         </Step>
         <Divider />
-        <Step title="Step #4: Company Addresss" containerClass="flex flex-col gap-5">
+        <Step title="Step #4: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyAddresses />
         </Step>
         <Divider />
-        <Step title="Step #5: Recent Chartering Experience" containerClass="flex flex-col gap-5">
+        <Step title="Step #5: Recent Chartering Experience" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CargoesSlotsDetails helperText="You will be able to add more cargoes after the verification." />
         </Step>
         <TermsAndConditions />

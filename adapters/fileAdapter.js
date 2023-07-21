@@ -1,3 +1,4 @@
+import { uploadData } from '@/services/upload';
 import { makeId } from '@/utils/helpers';
 
 export const fileUpdateAdapter = (file) => ({
@@ -6,14 +7,28 @@ export const fileUpdateAdapter = (file) => ({
   ...file,
 });
 
-export const fileReaderAdapter = (file, cb) => {
+export const fileReaderAdapter = (file, setValue) => {
   const reader = new window.FileReader();
-  reader.onabort = () => {
-    throw new Error('aborted');
+
+  reader.onload = async () => {
+    const { data } = await uploadData({ data: file });
+    setValue('file', data);
   };
-  reader.onerror = () => {
-    throw new Error('error');
-  };
+
   reader.readAsDataURL(file);
-  reader.onloadend = () => cb();
+};
+
+export const uploadDataAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const formdata = new window.FormData();
+  formdata.append('file', data, `${data?.name}`);
+
+  return formdata;
+};
+
+export const uploadResponseAdapter = ({ data }) => {
+  if (!data) return null;
+
+  return data;
 };

@@ -1,37 +1,45 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
 import { ReactivateTankerFormPropTypes } from '@/lib/types';
 
-import { FormManager } from '@/common';
+import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
-import { getPorts } from '@/services/port';
+import { getUserPositionById } from '@/services';
+import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
+import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions } from '@/utils/helpers';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const ReactivateTankerForm = ({ title, portName }) => {
+const ReactivateTankerForm = ({ title, state, closeModal }) => {
+  const dispatch = useDispatch();
+
+  const { ports } = useSelector(getGeneralDataSelector);
+
   const schema = yup.object().shape({
     ...reactivateTankerSchema(),
   });
 
   const methods = useHookFormParams({ schema });
 
-  const [tankerState, setTankerState] = useState({
-    ports: [],
-    port: null,
-    date: '',
-  });
-
   const {
     clearErrors,
     setValue,
     formState: { errors },
   } = methods;
+
+  const [tankerState, setTankerState] = useState({
+    listOfPorts: countriesOptions(ports?.searchPorts) ?? [],
+    port: null,
+    date: '',
+  });
 
   const handleChangeState = (key, value) =>
     setTankerState((prevState) => ({
@@ -48,26 +56,32 @@ const ReactivateTankerForm = ({ title, portName }) => {
     handleChangeState(key, option);
   };
 
-  const fetchPorts = async () => {
-    const data = await getPorts();
-    const options = countriesOptions(data);
-    handleChangeState('ports', options);
+  const onSubmit = async ({ port, date }) => {
+    const { error, data, status } = await updateVesselPortAndDate({
+      id: state.id,
+      action: state.action,
+      portId: port?.value,
+      available: true,
+      date,
+    });
+
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
+
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      closeModal();
+    }
+
+    if (data?.message) successToast(data.message);
+    if (error) errorToast(error.message, error.errors);
   };
 
-  const onSubmit = async (data) => {
-    return { data };
-  };
-
-  useEffect(() => {
-    fetchPorts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const { ports, port } = tankerState;
+  const { listOfPorts, port } = tankerState;
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        onClose={closeModal}
         className="max-w-[356px]"
         submitAction={onSubmit}
         submitButton={{
@@ -77,19 +91,19 @@ const ReactivateTankerForm = ({ title, portName }) => {
           disabled: port === null,
         }}
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <div>
+        <div className="py-5">
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{portName}</p>
+          <p className="font-semibold text-black text-xsm">{state?.name}</p>
         </div>
-        <div className="grid gap-4 min-w-[296px]">
+        <div className="grid gap-5 min-w-[296px]">
           <FormDropdown
             name="port"
             label="Port search"
             errorMsg={errors?.port?.message}
-            options={ports}
+            options={listOfPorts}
             onChange={(option) => handleChangeValue({ option, key: 'port' })}
             customStyles={{ dropdownExpanded: true }}
             async
@@ -104,7 +118,7 @@ const ReactivateTankerForm = ({ title, portName }) => {
             expanded
           />
         </div>
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };

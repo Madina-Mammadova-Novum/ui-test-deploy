@@ -1,31 +1,79 @@
 import { postProductsAdapter } from '@/adapters';
 
 export function sendOfferAdapter({ data }) {
-  const placeholder = 'placeholder';
   if (!data) return null;
-  const { demurrageRate, freight, layTime, paymentTerms, products, undisputedDemurrage, value, cargoType, nor } = data;
-
-  return {
-    cargoType: placeholder || cargoType,
+  const {
+    laycanStart,
+    laycanEnd,
+    comment,
+    cargoType,
+    loadTerminal,
+    dischargeTerminal,
+    tankerId,
+    freight,
     demurrageRate,
-    freight: freight.value,
     layTime,
-    nor: placeholder || nor,
-    paymentTerms: paymentTerms.value,
-    undisputedDemurrage: undisputedDemurrage.value,
+    undisputedDemurrage,
+    paymentTerms,
+    products,
+    responseCountdown,
     value,
-    products: postProductsAdapter({ data: products }),
+    minOfferQuantity,
+    totalAmount,
+    // nor,
+  } = data;
+  return {
+    laycanStart,
+    laycanEnd,
+    comment,
+    cargoTypeId: cargoType.value,
+    loadTerminalId: loadTerminal.value,
+    dischargeTerminalId: dischargeTerminal.value,
+    vesselId: tankerId,
+    freightFormatId: freight.value,
+    mt: value,
+    totalAmount: +totalAmount.toFixed(0),
+    minOfferQuantity,
+    demurrageRate,
+    laytime: layTime,
+    demurragePaymentTermId: undisputedDemurrage.value,
+    paymentTermId: paymentTerms.value,
+    countDownTimerSettingId: responseCountdown.value,
+    cargoes: postProductsAdapter({ data: products }),
   };
+}
+
+export function responseSendOfferAdapter({ data }) {
+  if (!data) return null;
+  return data;
 }
 
 export function declineOfferAdapter({ data }) {
   if (!data) return null;
+  const { reason, offerId } = data;
 
+  return {
+    reason,
+    dealId: offerId,
+  };
+}
+
+export function responseDeclineOfferAdapter({ data }) {
+  if (!data) return null;
   return data;
 }
 
 export function acceptOfferAdapter({ data }) {
   if (!data) return null;
+  const { offerId, comment } = data;
 
+  return {
+    dealId: offerId,
+    comment,
+  };
+}
+
+export function responseAcceptOfferAdapter({ data }) {
+  if (!data) return null;
   return data;
 }

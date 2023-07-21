@@ -2,30 +2,18 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { PortDetailsFormPropTypes } from '@/lib/types';
 
-import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { FormDropdown, Label } from '@/elements';
-import { getPorts } from '@/services/port';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { countriesOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const PortDetailsForm = ({ portName = '' }) => {
+  const { ports } = useSelector(getGeneralDataSelector);
   const { setValue, clearErrors } = useHookForm();
-
-  const [portOptions, setPortOptions] = useState([]);
-
-  const fetchPorts = async () => {
-    const data = await getPorts();
-    const options = countryOptionsAdapter(data);
-
-    setPortOptions(options);
-  };
-
-  useEffect(() => {
-    fetchPorts();
-  }, []);
 
   const handlePortChange = (options) => {
     clearErrors('port');
@@ -39,10 +27,9 @@ const PortDetailsForm = ({ portName = '' }) => {
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
       <FormDropdown
-        asyncCall
         name="port"
         label="Port search"
-        options={portOptions}
+        options={countriesOptions(ports?.searchPorts)}
         onChange={handlePortChange}
         customStyles={{ dropdownExpanded: true }}
       />

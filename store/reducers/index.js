@@ -2,11 +2,13 @@
 
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { fleets, positions, search, user } from '@/store/entities';
+import { fleets, general, offer, positions, search, user } from '@/store/entities';
 
 export const reducer = combineReducers({
+  general,
   user,
   positions,
   fleets,
   search,
+  offer,
 });

@@ -1,12 +1,11 @@
 import { AuthBasePropTypes } from '@/lib/types';
 
 import { NextImage } from '@/elements';
-import { BaseLayout } from '@/layouts';
 import { AuthHeader } from '@/modules';
 
 const AuthLayout = ({ navigation, children, containerClass = '' }) => {
   return (
-    <BaseLayout className="container mx-auto max-w-screen-2xl min-h-screen flex flex-col">
+    <div className="container mx-auto max-w-screen-2xl min-h-screen flex flex-col">
       <AuthHeader navigation={navigation} />
       <div className="fixed left-0 top-0 -z-50 h-full 3md:w-5/12 xl:w-[calc(100% - 668px)] hidden 3md:block">
         <NextImage
@@ -18,7 +17,7 @@ const AuthLayout = ({ navigation, children, containerClass = '' }) => {
         />
       </div>
       <section className={`my-auto ${containerClass}`}>{children}</section>
-    </BaseLayout>
+    </div>
   );
 };
 

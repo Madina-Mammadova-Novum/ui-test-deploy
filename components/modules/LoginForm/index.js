@@ -62,8 +62,9 @@ const LoginForm = () => {
           text: 'Log in',
           variant: 'primary',
           size: 'large',
+          className: 'mt-0 w-full',
         }}
-        className="pt-5 w"
+        className="pt-5 flex flex-col gap-y-5"
         submitAction={onSubmit}
       >
         <Input

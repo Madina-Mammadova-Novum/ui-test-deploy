@@ -13,7 +13,7 @@ import { ComplexPagination, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const Fixture = () => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState({ value: false });
   const [data, isLoading] = useFetch(getUserFixtures);
 
   const initialPagesStore = {
@@ -52,7 +52,7 @@ const Fixture = () => {
           <Label className="text-xs-sm">Offer stage #4</Label>
           <Title level={1}>Fixture</Title>
         </div>
-        <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
+        <ToggleRows onToggleClick={setToggle} />
       </div>
 
       <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>

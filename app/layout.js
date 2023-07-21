@@ -1,4 +1,4 @@
-import { AuthManager } from '@/common';
+import { BaseLayout } from '@/layouts';
 
 export const metadata = {
   title: {
@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return <AuthManager>{children}</AuthManager>;
+  return <BaseLayout>{children}</BaseLayout>;
 }

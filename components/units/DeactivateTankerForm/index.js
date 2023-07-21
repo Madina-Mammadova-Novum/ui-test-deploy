@@ -1,18 +1,41 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { DeactivateTankerFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { Label, Title } from '@/elements';
-import { useHookFormParams } from '@/utils/hooks';
+import { getUserPositionById } from '@/services';
+import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const DeactivateTankerForm = ({ title, description, portName, closeModal }) => {
+const DeactivateTankerForm = ({ title, state, closeModal }) => {
+  const dispatch = useDispatch();
   const methods = useHookFormParams({});
 
   const onSubmit = async () => {
-    return { deactivateUserTanker: true };
+    const currentDate = new Date();
+    const nextDate = new Date();
+    nextDate.setDate(currentDate.getDate() + 1);
+
+    const { status, error, data } = await updateVesselPortAndDate({
+      ...state,
+      date: nextDate,
+      available: !state?.available,
+    });
+
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
+
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      closeModal();
+    }
+
+    if (data?.message) successToast(data.message);
+    if (error) errorToast(error.message, error.errors);
   };
 
   return (
@@ -24,14 +47,17 @@ const DeactivateTankerForm = ({ title, description, portName, closeModal }) => {
         onClose={closeModal}
         specialStyle
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
         <div>
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{portName}</p>
+          <p className="font-semibold text-black text-xsm">{state?.name}</p>
         </div>
-        <p className="text-black text-xsm">{description}</p>
+        <p className="text-black text-xsm">
+          By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to
+          update its open position while inactive. You can reactivate the tanker and update its open positions any time.
+        </p>
       </ModalFormManager>
     </FormProvider>
   );

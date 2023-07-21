@@ -20,7 +20,7 @@ const PartyItem = ({ buttonText, modalTitle, content = 'No Content Provided' }) 
       />
       <Modal opened={opened} onClose={handleCloseModal}>
         <div className="w-[672px]">
-          <Title component="h2">{modalTitle}</Title>
+          <Title component="2">{modalTitle}</Title>
           {content}
         </div>
       </Modal>

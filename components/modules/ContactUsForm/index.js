@@ -117,7 +117,6 @@ const ContactUsForm = () => {
             placeholder="Type your message here"
             inputStyles="h-20"
             error={errors.message?.message}
-            onChange={(option) => handleChange('message', option)}
           />
           <div />
         </div>
