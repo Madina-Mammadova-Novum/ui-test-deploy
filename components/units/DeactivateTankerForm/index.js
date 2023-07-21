@@ -12,7 +12,7 @@ import { updateVesselPortAndDate } from '@/services/vessel';
 import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const DeactivateTankerForm = ({ title, portName, state, closeModal }) => {
+const DeactivateTankerForm = ({ title, state, closeModal }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({});
 
@@ -31,6 +31,7 @@ const DeactivateTankerForm = ({ title, portName, state, closeModal }) => {
       const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
 
       dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      closeModal();
     }
 
     if (data?.message) successToast(data.message);
@@ -51,7 +52,7 @@ const DeactivateTankerForm = ({ title, portName, state, closeModal }) => {
         </Title>
         <div>
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{portName}</p>
+          <p className="font-semibold text-black text-xsm">{state?.name}</p>
         </div>
         <p className="text-black text-xsm">
           By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to
