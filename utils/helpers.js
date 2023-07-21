@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
@@ -369,3 +370,8 @@ export const calculateTotal = (array, key) =>
     .filter((item) => item)
     .map(({ [key]: itemValue }) => itemValue)
     .reduce((a, b) => +a + +b);
+
+export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
+  new Date(dateString).toLocaleString('en-US', settings);
+
+export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));

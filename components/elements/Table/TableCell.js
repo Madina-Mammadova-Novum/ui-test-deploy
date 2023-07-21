@@ -63,7 +63,7 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.VIEW_SENT_OFFER:
           return <ViewCounteroffer />;
         case ACTIONS.VIEW_FAILED_OFFER:
-          return <ViewFailedOffer />;
+          return <ViewFailedOffer itemId={id} />;
         case ACTIONS.CHARTERER_INFORMATION:
           return <ChartererInformationContent title="Charterer information" />;
         case ACTIONS.TANKER_INFORMATION:

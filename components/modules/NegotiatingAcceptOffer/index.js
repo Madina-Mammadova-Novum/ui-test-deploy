@@ -14,7 +14,6 @@ import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
-import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
   {
@@ -35,16 +34,18 @@ const schema = yup.object({
   ...acceptOfferSchema(),
 });
 
-const NegotiatingAcceptOffer = ({ goBack, itemId }) => {
+const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const methods = useHookFormParams({ schema });
+  const { comments, voyageDetails, commercialOfferTerms } = offerDetails;
 
   const handleSubmit = async (formData) => {
     const { status, message: successMessage, error } = await acceptOffer({ data: { ...formData, offerId: itemId } });
 
     if (status === 200) {
       successToast(successMessage);
+      closeModal();
     }
     if (error) {
       const { message, description } = error;
@@ -55,11 +56,11 @@ const NegotiatingAcceptOffer = ({ goBack, itemId }) => {
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
+        return <VoyageDetailsTabContent data={voyageDetails} />;
       case 'commercial_offer_terms':
-        return <COTTabContent data={COTData} />;
+        return <COTTabContent data={commercialOfferTerms} />;
       default:
-        return <CommentsContent data={incomingOfferCommentsData} />;
+        return <CommentsContent data={comments} areaDisabled />;
     }
   }, [currentTab]);
 

@@ -28,6 +28,7 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, it
 
     if (status === 200) {
       successToast(successMessage);
+      closeModal();
     }
     if (error) {
       const { message, description } = error;

@@ -76,7 +76,7 @@ export const apiHandler = async (options) => {
     const ok = delve(response, 'ok');
     const statusText = delve(response, 'statusText');
     let responseBody = await response.text();
-    if (responseBody !== '') {
+    if (responseBody) {
       responseBody = JSON.parse(responseBody);
     }
 

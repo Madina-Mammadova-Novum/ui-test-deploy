@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
+import ReactCountryFlag from 'react-country-flag';
 
 import { useSession } from 'next-auth/react';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
-import { IconComponent, TextRow, Title } from '@/elements';
+import { TextRow, Title } from '@/elements';
 import { ROLES } from '@/lib';
 import VoyageChartererTabContent from '@/units/VoyageDetailsTabContent/VoyageChartererTabContent';
 
@@ -34,7 +35,7 @@ const VoyageDetailsTabContent = ({ data = {} }) => {
         <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
           dates
         </Title>
-        {data.dates.map((pair) => (
+        {data?.dates?.map((pair) => (
           <div className="mt-2.5">{pair.map(printPairDates)}</div>
         ))}
 
@@ -44,11 +45,11 @@ const VoyageDetailsTabContent = ({ data = {} }) => {
           ports
         </Title>
 
-        {data.ports.map((pair) => (
+        {data?.ports?.map((pair) => (
           <div className="mt-2.5">
-            {pair.map((detail) => (
+            {pair?.map((detail) => (
               <TextRow title={detail.key}>
-                <IconComponent icon={detail.countryFlag} />
+                <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={detail.countryCode} />
                 {detail.label}
               </TextRow>
             ))}
