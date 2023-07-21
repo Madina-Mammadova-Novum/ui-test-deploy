@@ -28,6 +28,7 @@ export function userDetailsAdapter({ data }) {
 
   return {
     role: data?.role,
+    isAuthenticated: data?.isAuthenticated,
     ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
     ...userCompanyDetailsAdapter({ data: data?.companyDetails }),
   };

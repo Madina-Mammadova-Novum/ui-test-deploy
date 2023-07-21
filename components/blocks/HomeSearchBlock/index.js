@@ -5,7 +5,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
-import { StoreManager } from '@/common';
 import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
@@ -48,11 +47,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
           />
         );
       default:
-        return (
-          <StoreManager>
-            <TankerSearch />
-          </StoreManager>
-        );
+        return <TankerSearch />;
     }
   };
 

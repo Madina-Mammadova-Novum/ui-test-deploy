@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, ROLES, SORT_OPTIONS } from '@/lib/constants';
+import { ACTIONS, REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -227,7 +227,11 @@ export const disablePlusMinusSymbols = (e) => {
 
 export const options = (values) => values?.map((value) => ({ label: value, value }));
 
-export const countriesOptions = (data) => countryOptionsAdapter(data);
+export const countriesOptions = (data) => {
+  if (!data) return [];
+
+  return countryOptionsAdapter({ data });
+};
 
 export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
   if (!data?.length) return [];
@@ -318,12 +322,13 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return null;
-  const errorMessages = Object.entries(errors)?.map(([key, value]) => {
-    const errorMessage = value.join(' ');
-    return `${key}: ${errorMessage}`;
-  });
-  return errorMessages.join('\n');
+  if (!errors) return [SYSTEM_ERROR];
+
+  return Object.entries(errors).map(([key, value]) => {
+    // eslint-disable-next-line no-param-reassign
+    if (key === '_' || key === '') key = 'Exeption';
+    return `${key}: ${value}`;
+  })[0];
 };
 
 export const formattedPhoneNumber = (phone) => {
@@ -375,3 +380,41 @@ export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', mi
   new Date(dateString).toLocaleString('en-US', settings);
 
 export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
+
+export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
+  return Math.ceil(recordsTotal / recordsFiltered);
+};
+
+export const setSkipedValue = (pageValue, perPageValue) => {
+  if (pageValue === 1) return 0;
+  return (pageValue - 1) * perPageValue;
+};
+
+export const transformToCapitalize = (str) => {
+  return str
+    .split(' ')
+    .map((word) => word[0].toUpperCase() + word.substring(1))
+    .join(' ');
+};
+
+export const generateMessageByActionType = ({ action, status }) => {
+  if (status === 200) {
+    switch (action) {
+      case ACTIONS.DATE:
+        return 'You have successfully changed the date';
+      case ACTIONS.PORT:
+        return 'You have successfully changed the port';
+      case ACTIONS.TANKER_DEACTIVATE:
+        return 'You have successfully deactivated the tanker';
+      case ACTIONS.TANKER_REACTIVATE:
+        return 'You have successfully reopened the port and select a date';
+      default:
+        return null;
+    }
+  }
+  return null;
+};
+
+export const getCountryById = ({ id, data = [] }) => {
+  return data?.find((country) => country.countryId === id);
+};

@@ -73,21 +73,21 @@ const OwnerRegistrationForm = () => {
         submitAction={onSubmit}
       >
         <Divider className="mt-5" />
-        <Step title="Step #2: Personal details" containerClass="flex flex-col gap-5">
+        <Step title="Step #2: Personal details" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <PersonalDetails />
           <p className="text-black font-semibold text-sm pt-5">Enter a strong password according to our requirements</p>
           <PasswordValidation />
         </Step>
         <Divider />
-        <Step title="Step #3: Choose who you are" containerClass="flex flex-col gap-5">
+        <Step title="Step #3: Choose who you are" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyDetails />
         </Step>
         <Divider />
-        <Step title="Step 4: How many tankers do you have?" containerClass="flex flex-col gap-5">
+        <Step title="Step 4: How many tankers do you have?" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <TankerSlotsDetails helperText="You will be able to add more vessels after the verification." />
         </Step>
         <Divider />
-        <Step title="Step #5: Company Addresss" containerClass="flex flex-col gap-5">
+        <Step title="Step #5: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyAddresses />
         </Step>
         <TermsAndConditions />

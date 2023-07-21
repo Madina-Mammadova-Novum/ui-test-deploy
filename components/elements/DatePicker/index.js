@@ -38,7 +38,7 @@ const DatePicker = ({
   };
 
   return (
-    <div className={`${containerClass} ${expanded && showPicker ? 'h-[360px]' : 'h-auto'}`}>
+    <div className={`${containerClass} ${expanded && showPicker ? 'h-[330px]' : 'h-auto'}`}>
       <div
         aria-hidden="true"
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}

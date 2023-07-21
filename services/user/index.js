@@ -1,4 +1,5 @@
 import { getFleetByIdAdapter } from '@/adapters';
+import { accountNavigationAdapter } from '@/adapters/navigation';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -120,8 +121,10 @@ export async function deleteCompany({ data }) {
   };
 }
 
-export async function getUserPositions() {
-  const response = await getData(`account/my-positions`);
+export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
+  const body = accountNavigationAdapter({ data: { page, perPage, sortBy } });
+
+  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
 
   return {
     ...response,
@@ -142,6 +145,7 @@ const fetchUserVesselById = async ({ id, ...rest }) => {
 
   return {
     ...rest,
+    fleetId: id,
     tankers: userTankersDetailsAdapter({ data: tankers }),
   };
 };

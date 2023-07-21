@@ -1,6 +1,7 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -9,29 +10,33 @@ import { EditDateFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
+import { getUserPositionById } from '@/services';
 import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditDateForm = ({ closeModal, title, modalState }) => {
+const EditDateForm = ({ state, title, closeModal }) => {
+  const dispatch = useDispatch();
   const schema = yup.object().shape({
     ...dateSchema(),
   });
 
-  const { id, portId, name } = modalState;
-
   const methods = useHookFormParams({ schema });
   const onSubmit = async ({ date }) => {
-    const result = {
-      id,
+    const { error, data, status } = await updateVesselPortAndDate({
+      ...state,
       date,
-      portId,
-    };
+    });
 
-    const { error, data } = await updateVesselPortAndDate(result);
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
+
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+    }
 
     if (data?.message) successToast(data.message);
-    if (error) errorToast(error.message, error.errors[0]);
+    if (error) errorToast(error.message, error.errors);
   };
 
   return (
@@ -43,10 +48,10 @@ const EditDateForm = ({ closeModal, title, modalState }) => {
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
         onClose={closeModal}
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <DateDetailsForm portName={name} />
+        <DateDetailsForm portName={state?.name} />
       </ModalFormManager>
     </FormProvider>
   );

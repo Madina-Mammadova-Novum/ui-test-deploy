@@ -23,7 +23,7 @@
       "@/models": ["models/index"],
       "@/models/*": ["models/*"],
       "@/modules/*": ["components/modules/*"],
-      "@/providers": ["providers/index"],
+      "@/providers": ["components/providers/index"],
       "@/providers/*": ["providers/*"],
       "@/services": ["services/index"],
       "@/services/*": ["services/*"],

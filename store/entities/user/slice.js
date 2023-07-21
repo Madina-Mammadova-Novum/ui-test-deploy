@@ -6,6 +6,8 @@ const initialState = {
   loading: true,
   error: null,
   data: {
+    role: null,
+    isAuthenticated: false,
     personalDetails: {},
     companyDetails: {},
   },
@@ -19,6 +21,12 @@ const userSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
+    setRoleIdentity: (state, { payload }) => {
+      state.data.role = payload;
+    },
+    setIsAuthenticated: (state, { payload }) => {
+      state.data.isAuthenticated = payload;
+    },
     handleCollapse: (state, { payload }) => {
       state.params.sidebarCollapsed = payload;
     },
@@ -41,6 +49,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { handleCollapse, handleToggle, setRole } = userSlice.actions;
+export const { handleCollapse, handleToggle, setRoleIdentity, setIsAuthenticated } = userSlice.actions;
 
 export default userSlice.reducer;

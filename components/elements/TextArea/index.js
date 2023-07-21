@@ -2,9 +2,9 @@ import React from 'react';
 
 import classnames from 'classnames';
 
-import InputErrorMessage from '../InputErrorMessage';
-
 import { TextAreaPropTypes } from '@/lib/types';
+
+import { InputErrorMessage, Label } from '@/elements';
 
 const TextArea = React.forwardRef(
   (
@@ -14,6 +14,7 @@ const TextArea = React.forwardRef(
       type = 'text',
       disabled = false,
       placeholder = '',
+      helperText,
       customStyles = '',
       inputStyles,
       onChange,
@@ -26,16 +27,16 @@ const TextArea = React.forwardRef(
     return (
       <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
         {label && (
-          <label htmlFor={name} className="block text-gray text-xs-sm font-semibold uppercase mb-0.5">
+          <Label htmlFor={name} className="text-xs-sm">
             {label}
-          </label>
+          </Label>
         )}
         <textarea
+          {...rest}
           ref={ref}
           id={name}
           type={type}
           name={name}
-          {...register(name)}
           disabled={disabled}
           placeholder={placeholder}
           {...rest}
@@ -48,6 +49,7 @@ const TextArea = React.forwardRef(
           )}
         />
         {error && <InputErrorMessage message={error} />}
+        {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
       </div>
     );
   }

@@ -5,6 +5,7 @@ import {
   updateVesselPortAndDataAdapter,
 } from '@/adapters/vessel';
 import { getData, postData, putData } from '@/utils/dataFetching';
+import { generateMessageByActionType } from '@/utils/helpers';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
@@ -74,7 +75,7 @@ export async function updateVesselPortAndDate(data) {
   return {
     ...response,
     data: {
-      message: response.status === 200 && 'Your request approved',
+      message: generateMessageByActionType({ action: data?.action, status: response?.status }),
     },
   };
 }

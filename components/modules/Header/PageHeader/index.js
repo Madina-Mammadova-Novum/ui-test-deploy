@@ -1,12 +1,10 @@
-import React from 'react';
-
 import delve from 'dlv';
 
 import Logo from '@/assets/images/logo.svg';
-import { LinkAsButton, LoginButton, NavButton, NextLink } from '@/elements';
-import { ROUTES } from '@/lib';
+import { NavButton, NextLink } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
+import { AuthNavButtons } from '@/units';
 
 const PageHeader = async () => {
   const headerData = await getSingleType('header', 'en');
@@ -16,7 +14,7 @@ const PageHeader = async () => {
   const navigation = delve(navigationData, 'data');
   return (
     <header className="absolute w-full z-10">
-      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px] mx-auto">
+      <div className="container px-6 3md:px-14 max-w-[1258px] mx-auto">
         <div className="py-2.5 flex align-center justify-between border-white/10 border-b">
           <NextLink href="/">
             <Logo className="fill-white" />
@@ -33,33 +31,7 @@ const PageHeader = async () => {
                 })}
               </ul>
             )}
-            {buttons.length > 0 && (
-              <ul className="flex gap-x-2.5">
-                {buttons.map(({ path, label, linkOptions }) => {
-                  if (path === ROUTES.LOGIN)
-                    return (
-                      <li key={path}>
-                        <LoginButton className="max-w-[115px] mx-auto" text={label} variant={linkOptions?.style} />
-                      </li>
-                    );
-                  return (
-                    <li key={path}>
-                      <LinkAsButton
-                        href={path}
-                        target={linkOptions ? linkOptions.target : null}
-                        buttonProps={{
-                          variant: linkOptions ? linkOptions.style : 'tertiary',
-                          size: 'large',
-                        }}
-                        customStyles="max-w-[115px] mx-auto"
-                      >
-                        {label}
-                      </LinkAsButton>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            {buttons.length > 0 && <AuthNavButtons data={buttons} />}
           </nav>
         </div>
       </div>

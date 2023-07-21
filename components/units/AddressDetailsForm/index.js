@@ -7,7 +7,7 @@ import { AddressDetailsFormPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input } from '@/elements';
 import { getCities } from '@/services';
-import { convertDataToOptions } from '@/utils/helpers';
+import { convertDataToOptions, countriesOptions } from '@/utils/helpers';
 
 const AddressDetails = ({ title, type, countries = [] }) => {
   const {
@@ -53,6 +53,8 @@ const AddressDetails = ({ title, type, countries = [] }) => {
     }
   }, [getValues, type]);
 
+  const options = countriesOptions(countries);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5">
@@ -61,7 +63,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
           <FormDropdown
             name={`${type}Country`}
             label="Country"
-            options={countries}
+            options={options}
             onChange={handleCountryChange}
             async
           />

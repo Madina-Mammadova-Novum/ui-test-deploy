@@ -1,6 +1,7 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -9,29 +10,30 @@ import { EditPortFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { portsSchema } from '@/lib/schemas';
+import { getUserPositionById } from '@/services';
 import { updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { PortDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditPortForm = ({ closeModal, title, modalState }) => {
+const EditPortForm = ({ title, state, closeModal }) => {
+  const dispatch = useDispatch();
   const schema = yup.object().shape({
     ...portsSchema(),
   });
 
   const methods = useHookFormParams({ schema });
-  const { name, id, date } = modalState;
 
   const onSubmit = async ({ port }) => {
-    const result = {
-      id,
-      date,
-      portId: port?.value,
-    };
+    const { error, data, status } = await updateVesselPortAndDate({ ...state, portId: port?.value });
 
-    const { error, data } = await updateVesselPortAndDate(result);
+    if (status === 200) {
+      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
+      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+    }
 
     if (data?.message) successToast(data.message);
-    if (error) errorToast(error.message, error.errors[0]);
+    if (error) errorToast(error.message, error.errors);
   };
 
   return (
@@ -43,10 +45,10 @@ const EditPortForm = ({ closeModal, title, modalState }) => {
         onClose={closeModal}
         specialStyle
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <PortDetailsForm portName={name} />
+        <PortDetailsForm portName={state?.name} />
       </ModalFormManager>
     </FormProvider>
   );

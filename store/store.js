@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { devToolsEnhancer } from '@redux-devtools/extension';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
@@ -16,7 +15,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
-export const accountStore = configureStore({
+export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -27,6 +26,6 @@ export const accountStore = configureStore({
   devTools: process.env.NODE_ENV === 'development' && devToolsEnhancer(),
 });
 
-export const persistore = persistStore(accountStore);
+setupListeners(store.dispatch);
 
-setupListeners(accountStore.dispatch);
+export const persistore = persistStore(store);
