@@ -22,6 +22,7 @@ const ReactivateTankerForm = ({ title, state }) => {
   const dispatch = useDispatch();
 
   const { ports } = useSelector(getGeneralDataSelector);
+  console.log('ports: ', ports);
 
   const schema = yup.object().shape({
     ...reactivateTankerSchema(),
@@ -36,7 +37,7 @@ const ReactivateTankerForm = ({ title, state }) => {
   } = methods;
 
   const [tankerState, setTankerState] = useState({
-    listOfPorts: countriesOptions(ports) ?? [],
+    listOfPorts: countriesOptions(ports?.searchPorts) ?? [],
     port: null,
     date: '',
   });

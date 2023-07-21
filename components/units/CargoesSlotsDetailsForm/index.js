@@ -26,7 +26,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
   const [cargoesState, setCargoesState] = useState({
     cargoesCount: data?.countOfCargoes ?? 0,
     cargoes: data?.listOfCargoes ?? [],
-    cargoesPortsOptions: countriesOptions(ports) ?? [],
+    cargoesPortsOptions: countriesOptions(ports?.allPorts) ?? [],
   });
 
   const { cargoesCount, cargoesPortsOptions, cargoes } = cargoesState;

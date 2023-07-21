@@ -29,7 +29,7 @@ const PortDetailsForm = ({ portName = '' }) => {
       <FormDropdown
         name="port"
         label="Port search"
-        options={countriesOptions(ports)}
+        options={countriesOptions(ports?.searchPorts)}
         onChange={handlePortChange}
         customStyles={{ dropdownExpanded: true }}
       />
