@@ -14,8 +14,6 @@ const AuthNavButtons = ({ data = [] }) => {
     data: { isAuthenticated },
   } = useSelector(getUserDataSelector);
 
-  console.log('isAuthenticated: ', isAuthenticated);
-
   const printUnAuthButtons = ({ path, label, linkOptions }) => {
     if (path === ROUTES.LOGIN)
       return (
