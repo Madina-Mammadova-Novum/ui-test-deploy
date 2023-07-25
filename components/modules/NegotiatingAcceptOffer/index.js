@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -12,7 +13,9 @@ import { Button } from '@/elements';
 import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
+import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const tabs = [
@@ -38,18 +41,19 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const methods = useHookFormParams({ schema });
+  const dispatch = useDispatch();
   const { comments, voyageDetails, commercialOfferTerms } = offerDetails;
 
   const handleSubmit = async (formData) => {
-    const { status, message: successMessage, error } = await acceptOffer({ data: { ...formData, offerId: itemId } });
+    const { message: successMessage, error } = await acceptOffer({ data: { ...formData, offerId: itemId } });
 
-    if (status === 200) {
+    if (!error) {
       successToast(successMessage);
+      dispatch(refetchNegotiatingOffers());
       closeModal();
-    }
-    if (error) {
-      const { message, description } = error;
-      errorToast(message, description);
+    } else {
+      const { errors } = error;
+      errorToast(parseErrors(errors));
     }
   };
 

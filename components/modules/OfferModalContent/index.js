@@ -11,7 +11,7 @@ import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
 import { searchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs } from '@/units';
-import { convertDataToOptions } from '@/utils/helpers';
+import { convertDataToOptions, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
@@ -87,9 +87,8 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
       closeModal();
     }
     if (error) {
-      const { message, errors, description } = error;
-      console.error(errors);
-      errorToast(message.title, description);
+      const { errors } = error;
+      errorToast(parseErrors(errors));
     }
   };
 

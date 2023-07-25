@@ -9,11 +9,7 @@ import { CounterofferFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
-import {
-  // errorToast,
-  // successToast,
-  useHookFormParams,
-} from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...offerSchema(),
@@ -40,16 +36,15 @@ const CounterofferForm = ({ children, allowSubmit = false, data }) => {
   });
 
   const handleSubmit = async (formData) => {
-    const response = await sendCounteroffer({ data: { ...formData, offerId, responseCountdown } });
-    console.log(response);
-    // if (data) {
-    //   successToast(data.message);
-    // }
-    // if (error) {
-    //   const { message, errors, description } = error;
-    //   console.error(errors);
-    //   errorToast(message, description);
-    // }
+    const { data: responseData, error } = await sendCounteroffer({ data: { ...formData, offerId, responseCountdown } });
+    if (responseData) {
+      successToast(responseData.message);
+    }
+    if (error) {
+      const { message, errors, description } = error;
+      console.error(errors);
+      errorToast(message, description);
+    }
   };
 
   return (

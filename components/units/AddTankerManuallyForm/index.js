@@ -83,8 +83,8 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
       handleTankerOptionsChange('tankerType', {
         options: convertDataToOptions({ data: tankerTypesData }, 'id', 'name'),
       });
-      setCountries(countriesOptions({ data: countriesData }));
-      setPorts(countriesOptions({ data: portsData }));
+      setCountries(countriesOptions(countriesData));
+      setPorts(countriesOptions(portsData));
       if (tankerTypesError || countriesError || portsError)
         console.log(tankerTypesError || countriesError || portsError);
 
@@ -92,9 +92,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
         const validPrefilledOptions = {};
         const validPortOfRegistryOption = portsData.find(({ name }) => name === q88.portOfRegistry.label);
         const validTankerTypeOption = tankerTypesData.find(({ name }) => name === q88.tankerType.label);
-        validPrefilledOptions.portOfRegistry = countriesOptions({ data: [validPortOfRegistryOption] })[0];
+        validPrefilledOptions.portOfRegistry = countriesOptions([validPortOfRegistryOption])[0];
         validPrefilledOptions.tankerType = convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0];
-        setValue('portOfRegistry', countriesOptions({ data: [validPortOfRegistryOption] })[0]);
+        setValue('portOfRegistry', countriesOptions([validPortOfRegistryOption])[0]);
         setValue('tankerType', convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0]);
         if (q88State.tankerCategoryOne) {
           const { data: categoryOne } = await getVesselCategoryOne(validPrefilledOptions.tankerType.value);

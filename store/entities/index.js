@@ -4,4 +4,5 @@ export * from '@/store/entities/search';
 export * from '@/store/entities/positions';
 export * from '@/store/entities/general';
 export * from '@/store/entities/offer';
+export * from '@/store/entities/negotiating';
 export * from '@/store/selectors';

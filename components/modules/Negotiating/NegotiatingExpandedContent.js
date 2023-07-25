@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -9,6 +10,7 @@ import { Modal, Table } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { getFailedOffers, getIncomingOffers, getSentCounteroffers } from '@/services/offer';
+import { negotiatingSelector } from '@/store/selectors';
 import {
   chartererNegotiatingCounterofferTableHeader,
   chartererNegotiatingFailedTableHeader,
@@ -23,6 +25,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
   const [incomingOffers, setIncomingOffers] = useState([]);
   const [sentCounteroffers, setSentCounteroffers] = useState([]);
   const [failedOffers, setFailedOfffers] = useState([]);
+  const { refetchOffers } = useSelector(negotiatingSelector);
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
 
@@ -37,7 +40,7 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
       setSentCounteroffers(sentCounteroffersData);
       setFailedOfffers(failedOffersData);
     })();
-  }, []);
+  }, [refetchOffers]);
 
   const tabContent = useMemo(() => {
     switch (currentTab) {

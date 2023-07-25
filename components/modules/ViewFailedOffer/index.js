@@ -29,12 +29,7 @@ const ViewFailedOffer = ({ itemId }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
-  const {
-    comments,
-    voyageDetails,
-    commercialOfferTerms,
-    failedOfferData: { failureReason },
-  } = offerDetails;
+  const { comments, voyageDetails, commercialOfferTerms, failedOfferData: { failureReason } = {} } = offerDetails;
 
   useEffect(() => {
     (async () => {
