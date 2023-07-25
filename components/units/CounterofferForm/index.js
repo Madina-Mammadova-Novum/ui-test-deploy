@@ -15,14 +15,30 @@ const schema = yup.object({
   ...offerSchema(),
 });
 
-const CounterofferForm = ({ children, allowSubmit = false }) => {
-  const methods = useHookFormParams({ schema });
+const CounterofferForm = ({ children, allowSubmit = false, data }) => {
+  const { cargoType, products, offerId, responseCountdown } = data;
+  const methods = useHookFormParams({
+    schema,
+    state: {
+      cargoType,
+      ...products
+        .filter((product) => product)
+        .reduce(
+          (_, curr, index) => ({
+            [`products[${index}].product`]: curr.product,
+            [`products[${index}].density`]: curr.density,
+            [`products[${index}].tolerance`]: curr.tolerance,
+            [`products[${index}].quantity`]: curr.quantity,
+          }),
+          {}
+        ),
+    },
+  });
 
   const handleSubmit = async (formData) => {
-    const { error, data } = await sendCounteroffer({ data: formData });
-    if (data) {
-      successToast(data.message);
-      methods.reset();
+    const { data: responseData, error } = await sendCounteroffer({ data: { ...formData, offerId, responseCountdown } });
+    if (responseData) {
+      successToast(responseData.message);
     }
     if (error) {
       const { message, errors, description } = error;

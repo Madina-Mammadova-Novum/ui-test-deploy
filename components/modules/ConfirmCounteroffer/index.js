@@ -4,12 +4,17 @@ import { useState } from 'react';
 
 import { ConfirmCounterofferPropTypes } from '@/lib/types';
 
+import { confirmCounterofferDetailsAdapter } from '@/adapters/offer';
 import { CommentsContent } from '@/modules';
 import { COTTabContent, VoyageDetailsTabContent } from '@/units';
-import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
+import { useHookForm } from '@/utils/hooks';
 
-const ConfirmCounteroffer = () => {
+const ConfirmCounteroffer = ({ offerDetails }) => {
   const [showScroll, setShowScroll] = useState(false);
+  const { getValues } = useHookForm();
+  const { voyageDetails, comments } = offerDetails;
+  const { commercialOfferTerms } = confirmCounterofferDetailsAdapter({ data: getValues() });
+
   return (
     <div className="w-[610px]">
       <div
@@ -18,9 +23,9 @@ const ConfirmCounteroffer = () => {
           showScroll && 'shadow-vInset'
         }`}
       >
-        <COTTabContent data={COTData} />
-        <VoyageDetailsTabContent data={voyageDetailData} />
-        <CommentsContent data={incomingOfferCommentsData} areaDisabled />
+        <COTTabContent data={commercialOfferTerms} />
+        <VoyageDetailsTabContent data={voyageDetails} />
+        <CommentsContent data={comments} areaDisabled />
       </div>
     </div>
   );
