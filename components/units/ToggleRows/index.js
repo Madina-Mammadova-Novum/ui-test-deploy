@@ -9,7 +9,7 @@ import { Button } from '@/elements';
 
 const ToggleRows = ({ onToggleClick }) => {
   return (
-    <div className="flex">
+    <div className="flex text-xsm">
       <Button
         buttonProps={{
           text: `Expand all groups`,
@@ -23,7 +23,7 @@ const ToggleRows = ({ onToggleClick }) => {
             ),
           },
         }}
-        customStyles="!px-0 !py-0 !bg-[transparent]"
+        customStyles="!px-0 !py-0 !bg-[transparent] !text-xsm"
         onClick={() => onToggleClick({ value: true })}
       />
       <Button
@@ -39,7 +39,7 @@ const ToggleRows = ({ onToggleClick }) => {
             ),
           },
         }}
-        customStyles="!px-0 !py-0 !bg-[transparent] !rounded-none border-l border-gray-darker"
+        customStyles="!px-0 !py-0 !bg-[transparent] !rounded-none border-l border-gray-darker !text-xsm"
         onClick={() => onToggleClick({ value: false })}
       />
     </div>
