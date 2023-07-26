@@ -1,4 +1,3 @@
-
 import { UnassignedFleetExpandedContentPropTypes } from '@/lib/types';
 
 import { Table } from '@/elements';

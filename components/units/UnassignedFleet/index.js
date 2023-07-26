@@ -2,13 +2,13 @@
 
 import UnassignedFleetExpandedContent from './UnassignedFleetExpandedContent';
 
+import { UnassignedFleetPropTypes } from '@/lib/types';
+
 import { fleetsPageHeaderDataAdapter, unassignedFleetRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getUnassignedVessels } from '@/services/vessel';
 import { useFetch } from '@/utils/hooks';
-import { UnassignedFleetPropTypes } from '@/lib/types';
-
 
 const UnassignedFleet = ({ toggle }) => {
   const [data] = useFetch(getUnassignedVessels);
