@@ -51,7 +51,7 @@ export const ownerSidebarAdapter = ({ role }) => {
     },
     {
       id: makeId(),
-      title: 'Fleets',
+      title: 'Tanker List',
       variant: 'fleets',
       path: ROUTES.ACCOUNT_FLEETS,
       items: [],

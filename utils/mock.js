@@ -986,6 +986,49 @@ export const fleetsPageHeader = [
   },
 ];
 
+export const unassignedFleetHeader = [
+  {
+    text: '#',
+    type: 'INDEX',
+    width: 40,
+  },
+  {
+    text: 'Tanker name',
+    type: 'DOC_ID',
+    width: 134,
+  },
+  {
+    text: 'Imo',
+    type: 'TITLE',
+    width: 171,
+  },
+  {
+    text: 'Dwt',
+    type: 'COMMENT',
+    width: 105,
+  },
+  {
+    text: 'Tanker category',
+    type: 'DOC_NAME',
+    width: 166,
+  },
+  {
+    text: 'Q88 questionaire',
+    type: 'EXTENSION',
+    width: 110,
+  },
+  {
+    text: 'Assigned fleet',
+    type: 'SIZE',
+    width: 112,
+  },
+  {
+    text: 'Tanker status',
+    type: 'SIZE',
+    width: 112,
+  },
+];
+
 export const imoClassOptions = [
   { label: '1', value: '1' },
   { label: '2', value: '2' },

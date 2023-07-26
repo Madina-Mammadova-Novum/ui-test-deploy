@@ -1,6 +1,7 @@
 import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
+import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 import { transformToCapitalize } from '@/utils/helpers';
@@ -197,6 +198,88 @@ export const fleetsPageRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const unassignedFleetRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const { id, tankerName, imo, dwt, tankerCategory, q88Questionaire, tankerStatus } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      value: tankerName,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
+      value: imo,
+    },
+    {
+      id,
+      value: dwt,
+    },
+    {
+      id,
+      value: tankerCategory,
+    },
+    {
+      id,
+      editable: !!q88Questionaire,
+      actions: [
+        {
+          action: ACTIONS.VIEW_QUESTIONAIRE,
+          actionText: 'View',
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
+    },
+    {
+      id,
+      editable: true,
+      value: 'Unassigned',
+      type: TYPE.GREY,
+      actions: [
+        {
+          action: ACTIONS.ASSIGN_FLEET,
+          editIcon: <EditIcon />,
+        },
+      ],
+    },
+    {
+      id,
+      value: tankerStatus,
+      icon: <StatusIndicator status={tankerStatus} />,
+    },
+    {
+      id,
+      editable: true,
+      actions: [
+        {
+          action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+          actionText: 'Request to update info',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+        {
+          action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete',
+          actionVariant: 'delete',
+          actionSize: 'medium',
+        },
+      ],
+    },
+  ];
+};
+
+export const unassignedFleetRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => unassignedFleetRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
 export const requestFleetNameAdapter = ({ data }) => {
