@@ -34,7 +34,7 @@ const PersonalDetails = () => {
         />
       </div>
       <div className="flex flex-col gap-5">
-        <p className="text-black w- font-semibold b-l text-sm pt-5">Provide contact phone numbers to contact you</p>
+        <p className="text-black w- font-semibold b-l text-sm pt-5">Contact Information</p>
         <div className="grid gap-5 grid-cols-2">
           <PhoneInput
             {...register('primaryPhone')}

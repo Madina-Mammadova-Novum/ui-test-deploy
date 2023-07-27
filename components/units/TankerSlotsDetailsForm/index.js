@@ -11,11 +11,12 @@ import { SETTINGS } from '@/lib/constants';
 import { getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const TankerSlotsDetails = ({ helperText = null }) => {
+const TankerSlotsDetails = ({ applyHelper = false }) => {
   const {
     register,
     setValue,
     clearErrors,
+    watch,
     formState: { errors, isSubmitting },
   } = useHookForm();
 
@@ -23,6 +24,9 @@ const TankerSlotsDetails = ({ helperText = null }) => {
     tankersCount: 0,
     tankers: [],
   });
+
+  const [helperText, setHelperText] = useState('');
+  const isApplied = watch('applySlots');
 
   const handleChangeState = (key, value) =>
     setSlotsState((prevState) => ({
@@ -37,11 +41,19 @@ const TankerSlotsDetails = ({ helperText = null }) => {
 
     let numberOfTankers = Number(event.target.value);
     if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
+
     if (numberOfTankers <= 0) {
       numberOfTankers = '';
       setValue('applySlots', false);
       handleChangeState('tankers', []);
     }
+
+    if (event.target.value !== '' && applyHelper) {
+      setHelperText('Please click Apply');
+    } else {
+      setHelperText('');
+    }
+
     setValue('numberOfTankers', numberOfTankers);
     handleChangeState('tankersCount', numberOfTankers);
   };
@@ -67,8 +79,10 @@ const TankerSlotsDetails = ({ helperText = null }) => {
     setValue('numberOfTankers', numberOfTankers);
     setValue('applySlots', Boolean(numberOfTankers));
 
+    if (isApplied) setHelperText('');
+
     handleChangeState('tankersCount', numberOfTankers);
-  }, [tankers, setValue]);
+  }, [tankers, setValue, isApplied]);
 
   return (
     <div className="grid gap-5">
@@ -125,7 +139,7 @@ const TankerSlotsDetails = ({ helperText = null }) => {
         })}
       </div>
       {tankers.length > 0 && (
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-5">
           <Button
             buttonProps={{
               text: 'Add more tankers',
