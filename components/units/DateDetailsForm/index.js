@@ -1,3 +1,5 @@
+import { addDays } from 'date-fns';
+
 import { DateDetailsFormPropTypes } from '@/lib/types';
 
 import { DatePicker, Label } from '@/elements';
@@ -15,6 +17,8 @@ const DateDetailsForm = ({ portName = '' }) => {
     setValue('date', value);
   };
 
+  const nextDay = addDays(new Date(), 1);
+
   return (
     <>
       <div>
@@ -23,10 +27,11 @@ const DateDetailsForm = ({ portName = '' }) => {
       </div>
       <DatePicker
         name="date"
-        calendarClass="!w-[356px] items-center"
-        onChange={handleDateChange}
-        error={errors?.date?.message}
         label="open date"
+        minDate={nextDay}
+        error={errors?.date?.message}
+        onChange={handleDateChange}
+        calendarClass="!w-[356px] items-center"
         expanded
       />
     </>

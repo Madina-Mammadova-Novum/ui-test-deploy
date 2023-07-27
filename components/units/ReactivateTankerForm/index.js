@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { addDays } from 'date-fns';
 import * as yup from 'yup';
 
 import { ReactivateTankerFormPropTypes } from '@/lib/types';
@@ -39,6 +40,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     listOfPorts: countriesOptions(ports?.searchPorts) ?? [],
     port: null,
     date: '',
+    nextDay: addDays(new Date(), 1),
   });
 
   const handleChangeState = (key, value) =>
@@ -76,7 +78,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     if (error) errorToast(error.message, error.errors);
   };
 
-  const { listOfPorts, port } = tankerState;
+  const { listOfPorts, port, nextDay } = tankerState;
 
   return (
     <FormProvider {...methods}>
@@ -109,12 +111,13 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
             async
           />
           <DatePicker
-            calendarClass="absolute top-5 left-0"
+            minDate={nextDay}
             name="date"
             inputClass="w-full"
             label="Open date"
             error={errors?.date?.message}
             onChange={(value) => handleChangeValue({ option: value, key: 'date' })}
+            calendarClass="absolute top-5 left-0"
             expanded
           />
         </div>

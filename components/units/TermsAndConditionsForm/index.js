@@ -9,14 +9,17 @@ import { getNavigation } from '@/services/navigation';
 
 const TermsAndConditions = () => {
   const [legalLinks, setLegalLinks] = useState([]);
+
   const fetchData = async () => {
     const legalNavigation = await getNavigation('legal-navigation', 'en');
     const { data } = legalNavigation;
-    const legalIncluded = data.filter((link) => {
-      return link.path !== ROUTES.LEGAL_EXCLUDED;
-    });
-    setLegalLinks(legalIncluded);
+
+    if (data) {
+      const legalIncluded = data.filter(({ path }) => path !== ROUTES.LEGAL_EXCLUDED);
+      setLegalLinks(legalIncluded);
+    }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -55,7 +58,7 @@ const TermsAndConditions = () => {
 
   useEffect(() => {
     setValue('agreedRules', termsAndCondition);
-  }, []);
+  }, [setValue, termsAndCondition]);
 
   const handleChange = (event) => {
     clearErrors('agreedRules');
@@ -65,7 +68,7 @@ const TermsAndConditions = () => {
   };
 
   return (
-    <div className="col-span-2 row-auto">
+    <div className="col-span-2 row-auto mt-5">
       <CheckBoxInput
         name="agreedRules"
         checked={termsAndCondition}

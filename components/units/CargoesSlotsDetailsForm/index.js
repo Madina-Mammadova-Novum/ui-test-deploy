@@ -13,11 +13,12 @@ import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
+const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   const {
     register,
     setValue,
     clearErrors,
+    watch,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useHookForm();
 
@@ -28,6 +29,9 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
     cargoes: data?.listOfCargoes ?? [],
     cargoesPortsOptions: countriesOptions(ports?.allPorts) ?? [],
   });
+
+  const [helperText, setHelperText] = useState('');
+  const isApplied = watch('applySlots');
 
   const { cargoesCount, cargoesPortsOptions, cargoes } = cargoesState;
 
@@ -62,6 +66,12 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
       handleChangeState('cargoes', []);
     }
 
+    if (event.target.value && applyHelper) {
+      setHelperText('Please click Apply');
+    } else {
+      setHelperText('');
+    }
+
     setValue('numberOfCargoes', numberOfCargoes);
     handleChangeState('cargoesCount', numberOfCargoes);
   };
@@ -88,17 +98,19 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
 
     handleChangeState('cargoesCount', numberOfCargoes);
 
+    if (isApplied) setHelperText('');
+
     if (isSubmitSuccessful) {
       handleChangeState('cargoesCount', 0);
       handleChangeState('cargoes', []);
     }
-  }, [cargoes, isSubmitSuccessful, setValue]);
+  }, [cargoes, isApplied, isSubmitSuccessful, setValue]);
 
   return (
     <div className="grid gap-5">
       <div className="w-full relative">
         <Input
-          label="How many cargoes have you chartered during the last 6 months?"
+          label="Number of cargoes chartered in the last 6 months"
           placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes.`}
           disabled={isSubmitting}
           value={cargoesCount}
@@ -171,7 +183,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, helperText = null }) => {
       })}
 
       {cargoes.length > 0 && (
-        <div className="flex justify-between ">
+        <div className="flex justify-between mb-5">
           <Button
             buttonProps={{
               text: 'Add more cargoes',
