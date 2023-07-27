@@ -13,10 +13,11 @@ const TermsAndConditions = () => {
   const fetchData = async () => {
     const legalNavigation = await getNavigation('legal-navigation', 'en');
     const { data } = legalNavigation;
-    const legalIncluded = data.filter((link) => {
-      return link.path !== ROUTES.LEGAL_EXCLUDED;
-    });
-    setLegalLinks(legalIncluded);
+
+    if (data) {
+      const legalIncluded = data.filter(({ path }) => path !== ROUTES.LEGAL_EXCLUDED);
+      setLegalLinks(legalIncluded);
+    }
   };
 
   useEffect(() => {
