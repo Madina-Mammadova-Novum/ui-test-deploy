@@ -66,7 +66,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
       handleChangeState('cargoes', []);
     }
 
-    if (event.target.value !== '' && applyHelper) {
+    if (event.target.value && applyHelper) {
       setHelperText('Please click Apply');
     } else {
       setHelperText('');

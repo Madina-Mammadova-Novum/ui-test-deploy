@@ -48,7 +48,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
       handleChangeState('tankers', []);
     }
 
-    if (event.target.value !== '' && applyHelper) {
+    if (event.target.value && applyHelper) {
       setHelperText('Please click Apply');
     } else {
       setHelperText('');
