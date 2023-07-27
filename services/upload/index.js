@@ -1,4 +1,5 @@
 import { uploadDataAdapter } from '@/adapters/fileAdapter';
+import { formatErrors } from '@/utils/helpers';
 // import { postFile } from '@/utils/dataFetching';
 
 export async function uploadData({ data }) {
@@ -15,7 +16,24 @@ export async function uploadData({ data }) {
     body,
   });
 
-  if (res.status === 200) return { data: await res.text(), status: res.status, error: null };
+  const result = await res.json();
 
-  return { data: null, status: res.status, error: 'Failed' };
+  if (res.status === 200)
+    return {
+      data: await res.text(),
+      status: res.status,
+      errors: {
+        title: null,
+        message: null,
+      },
+    };
+
+  return {
+    data: null,
+    status: res.status,
+    errors: {
+      title: result?.title,
+      message: formatErrors(result?.errors),
+    },
+  };
 }

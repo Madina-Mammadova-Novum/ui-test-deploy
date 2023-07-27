@@ -18,7 +18,7 @@ const COTTabContent = ({ data = {} }) => {
         Products
       </Title>
       <div className="mt-2.5 flex">
-        {data.products.map((product) => (
+        {data.products?.map((product) => (
           <div className="w-full">
             {product.map(({ key, label }) => (
               <TextRow title={key}>{label}</TextRow>

@@ -7,6 +7,7 @@ export const userSelector = ({ user }) => user;
 export const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
+export const negotiatingSelector = ({ negotiating }) => negotiating;
 export const generalSelector = ({ general }) => general;
 export const offerSelector = ({ offer }) => offer;
 

@@ -1,4 +1,4 @@
-import { acceptOfferAdapter, declineOfferAdapter, sendOfferAdapter } from '@/adapters/offer';
+import { acceptOfferAdapter, declineOfferAdapter, sendCounterofferAdapter, sendOfferAdapter } from '@/adapters/offer';
 import { getData, postData } from '@/utils/dataFetching';
 
 export async function sendOffer({ data }) {
@@ -29,8 +29,9 @@ export async function acceptOffer({ data }) {
 }
 
 export async function sendCounteroffer({ data }) {
-  const body = sendOfferAdapter({ data });
+  const body = sendCounterofferAdapter({ data });
   const response = await postData(`counteroffer/send`, JSON.stringify(body));
+  if (!response.error) response.message = 'You have successfully sent a counteroffer';
   return {
     ...response,
   };
@@ -52,6 +53,13 @@ export async function getFailedOffers(tankerId) {
 
 export async function getSentCounteroffers(tankerId) {
   const response = await getData(`vessels/sent-counteroffers/${tankerId}`);
+  return {
+    ...response,
+  };
+}
+
+export async function getOfferDetails(offerId) {
+  const response = await getData(`offer/details/${offerId}`);
   return {
     ...response,
   };

@@ -9,7 +9,6 @@ import { ViewOfferPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
-import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
   {
@@ -26,18 +25,19 @@ const tabs = [
   },
 ];
 
-const ViewOffer = ({ setStep }) => {
+const ViewOffer = ({ setStep, data }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const { voyageDetails, commercialOfferTerms, comments } = data;
 
   const tabContent = () => {
     switch (currentTab) {
       case 'commercial_offer_terms':
-        return <COTTabContent data={COTData} />;
+        return <COTTabContent data={commercialOfferTerms} />;
       case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} areaDisabled />;
+        return <CommentsContent data={comments} areaDisabled />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
+        return <VoyageDetailsTabContent data={voyageDetails} />;
     }
   };
 
