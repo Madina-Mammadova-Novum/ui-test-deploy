@@ -6,15 +6,18 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
   const backgroundColor = useMemo(() => {
     switch (status) {
       case 'New offer':
-        return 'yellow';
+        return 'bg-yellow';
       case 'Counteroffer':
-        return 'blue';
+        return 'bg-blue';
+      case 'Active':
+        return 'bg-green';
+      case 'Inactive':
       default:
-        return 'gray';
+        return 'bg-gray';
     }
   }, [status]);
 
-  return <span className={`block w-2.5 h-2.5 rounded-full bg-${backgroundColor} ${customStyles}`} />;
+  return <span className={`block w-2.5 h-2.5 rounded-full ${backgroundColor} ${customStyles}`} />;
 };
 
 StatusIndicator.propTypes = StatusIndicatorPropTypes;

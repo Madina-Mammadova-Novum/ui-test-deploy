@@ -12,7 +12,7 @@ import { ACTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserFleets } from '@/services';
 import { fleetsSelector } from '@/store/selectors';
-import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows } from '@/units';
+import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, UnassignedFleet } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const Fleets = () => {
@@ -89,7 +89,7 @@ const Fleets = () => {
   return (
     <section>
       <div className="flex justify-between items-center py-5">
-        <Title level={1}>Fleets</Title>
+        <Title level={1}>Tanker list</Title>
         <div className="flex gap-x-5">
           <ToggleRows onToggleClick={setToggle} />
           <ModalWindow
@@ -107,7 +107,10 @@ const Fleets = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
+      <div className="flex flex-col gap-y-2.5">
+        <UnassignedFleet toggle={toggle} />
+        {items && items.map(printExpandableRow)}
+      </div>
       <ComplexPagination
         label="fleets"
         currentPage={currentPage}

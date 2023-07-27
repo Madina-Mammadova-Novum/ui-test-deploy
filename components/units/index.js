@@ -61,6 +61,7 @@ import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TankerSlotsDetailsStatic from '@/units/TankerSlotsDetailsStatic';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
+import UnassignedFleet from '@/units/UnassignedFleet';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
@@ -134,4 +135,5 @@ export {
   PostFixtureFilter,
   Dropzone,
   File,
+  UnassignedFleet,
 };

@@ -354,6 +354,9 @@ table > tbody > tr td[name='SEMIBOLD_BLUE'] > div {
 table > tbody > tr td[name='RED'] > div {
   @apply !text-red;
 }
+table > tbody > tr td[name='GREY'] > div {
+  @apply !text-gray;
+}
 
 .Toastify__toast {
   @apply !shadow-none p-0 !bg-transparent !mb-0;
