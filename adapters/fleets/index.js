@@ -203,7 +203,14 @@ export const fleetsPageRowsDataAdapter = ({ data }) => {
 export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, tankerName, imo, dwt, tankerCategory, q88Questionaire, tankerStatus } = data;
+  const {
+    id,
+    imo,
+    details: { summerDwt, name },
+    vesselSizeCategoryId,
+    q88QuestionnarieFile,
+    status,
+  } = data;
 
   return [
     {
@@ -211,7 +218,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: tankerName,
+      value: name,
       type: TYPE.SEMIBOLD,
     },
     {
@@ -220,15 +227,15 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dwt,
+      value: `${summerDwt} tons`,
     },
     {
       id,
-      value: tankerCategory,
+      value: vesselSizeCategoryId,
     },
     {
       id,
-      editable: !!q88Questionaire,
+      editable: !!q88QuestionnarieFile,
       actions: [
         {
           action: ACTIONS.VIEW_QUESTIONAIRE,
@@ -252,8 +259,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: tankerStatus,
-      icon: <StatusIndicator status={tankerStatus} />,
+      value: status,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,

@@ -222,6 +222,11 @@ export function responseGetVesselTypesAdapter({ data }) {
 
   return data;
 }
+export function responseGetUnassignedVesselsAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
 
 export function responseGetVesselCategoryOneAdapter({ data }) {
   if (!data) return null;

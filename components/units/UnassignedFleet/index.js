@@ -12,17 +12,18 @@ import { useFetch } from '@/utils/hooks';
 
 const UnassignedFleet = ({ toggle }) => {
   const [data] = useFetch(getUnassignedVessels);
-
   return (
     <ExpandableRow
       header={
         <ExpandableCardHeader
-          headerData={fleetsPageHeaderDataAdapter({ data: { ...data, name: 'Unassigned Fleet' } })}
+          headerData={fleetsPageHeaderDataAdapter({
+            data: { numberOfVessels: data?.length, name: 'Unassigned Fleet' },
+          })}
         />
       }
       expand={toggle}
     >
-      <UnassignedFleetExpandedContent rowsData={unassignedFleetRowsDataAdapter({ data: data?.vessels })} />
+      <UnassignedFleetExpandedContent rowsData={unassignedFleetRowsDataAdapter({ data })} />
     </ExpandableRow>
   );
 };

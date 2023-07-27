@@ -9,10 +9,11 @@ import { fleetsPageHeaderDataAdapter, fleetsPageRowsDataAdapter } from '@/adapte
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ACTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
-import { ExpandableRow } from '@/modules';
+import { AddNewTanker, ExpandableRow } from '@/modules';
 import { getUserFleets } from '@/services';
 import { fleetsSelector } from '@/store/selectors';
 import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, UnassignedFleet } from '@/units';
+import { convertDataToOptions } from '@/utils/helpers';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const Fleets = () => {
@@ -51,15 +52,15 @@ const Fleets = () => {
             headerData={rowHeader}
             itemId={rowData?.id}
             actions={[
-              {
-                action: ACTIONS.ADD_TANKER,
-                text: 'Add a New Tanker',
-                variant: 'primary',
-                size: 'small',
-                icon: {
-                  before: <PlusCircleSVG className="fill-blue" />,
-                },
-              },
+              // {
+              //   action: ACTIONS.ADD_TANKER,
+              //   text: 'Add a New Tanker',
+              //   variant: 'primary',
+              //   size: 'small',
+              //   icon: {
+              //     before: <PlusCircleSVG className="fill-blue" />,
+              //   },
+              // },
               {
                 action: ACTIONS.EDIT_FLEET,
                 text: 'Edit',
@@ -103,6 +104,18 @@ const Fleets = () => {
             }}
           >
             <CreateFleetForm />
+          </ModalWindow>
+          <ModalWindow
+            buttonProps={{
+              text: 'Add a New Tanker',
+              variant: 'primary',
+              size: 'large',
+              icon: {
+                before: <PlusCircleSVG className="fill-white" />,
+              },
+            }}
+          >
+            <AddNewTanker fleetOptions={convertDataToOptions({ data: items }, 'id', 'name')} />
           </ModalWindow>
         </div>
       </div>

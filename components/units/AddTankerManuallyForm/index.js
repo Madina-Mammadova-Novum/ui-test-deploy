@@ -9,13 +9,13 @@ import * as yup from 'yup';
 import { AddTankerManuallyFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
-import { Button, DatePicker, FormDropdown, Input, TextWithLabel, Title } from '@/elements';
+import { DatePicker, FormDropdown, Input, TextWithLabel, Title } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { tankerDataSchema } from '@/lib/schemas';
 import { getCountries } from '@/services';
 import { getPorts } from '@/services/port';
 import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesselTypes } from '@/services/vessel';
-import { ModalHeader } from '@/units';
+import { ImoNotFound, ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { convertDataToOptions, countriesOptions, getValueWithPath, updateFormats } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
@@ -25,7 +25,7 @@ const schema = yup.object({
   ...tankerDataSchema(),
 });
 
-const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
+const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const [initialLoading, setInitialLoading] = useState(false);
   const [q88State, setQ88State] = useState(q88);
   const [tankerOptions, setTankerOptions] = useState({
@@ -45,6 +45,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
   const [ports, setPorts] = useState([]);
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
+  const { label: fleetName, value: fleetId } = fleetData;
 
   const methods = useHookFormParams({ schema, state: q88State });
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
@@ -56,7 +57,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
     getValues,
     watch,
   } = methods;
-  const { name: fleetName } = fleetData;
 
   const handleTankerOptionsChange = (key, state) => {
     setTankerOptions((prevState) => ({
@@ -83,8 +83,8 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
       handleTankerOptionsChange('tankerType', {
         options: convertDataToOptions({ data: tankerTypesData }, 'id', 'name'),
       });
-      setCountries(countriesOptions({ data: countriesData }));
-      setPorts(countriesOptions({ data: portsData }));
+      setCountries(countriesOptions(countriesData));
+      setPorts(countriesOptions(portsData));
       if (tankerTypesError || countriesError || portsError)
         console.log(tankerTypesError || countriesError || portsError);
 
@@ -92,9 +92,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
         const validPrefilledOptions = {};
         const validPortOfRegistryOption = portsData.find(({ name }) => name === q88.portOfRegistry.label);
         const validTankerTypeOption = tankerTypesData.find(({ name }) => name === q88.tankerType.label);
-        validPrefilledOptions.portOfRegistry = countriesOptions({ data: [validPortOfRegistryOption] })[0];
+        validPrefilledOptions.portOfRegistry = countriesOptions([validPortOfRegistryOption])[0];
         validPrefilledOptions.tankerType = convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0];
-        setValue('portOfRegistry', countriesOptions({ data: [validPortOfRegistryOption] })[0]);
+        setValue('portOfRegistry', countriesOptions([validPortOfRegistryOption])[0]);
         setValue('tankerType', convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0]);
         if (q88State.tankerCategoryOne) {
           const { data: categoryOne } = await getVesselCategoryOne(validPrefilledOptions.tankerType.value);
@@ -132,7 +132,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
   }, []);
 
   const onSubmit = async (formData) => {
-    const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId: id } });
+    const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId } });
     if (status === 200) {
       successToast(message);
       closeModal();
@@ -205,23 +205,8 @@ const AddTankerManuallyForm = ({ closeModal, goBack, id, fleetData, q88 }) => {
       >
         <div className="w-[640px] 3md:w-[756px]">
           <ModalHeader goBack={goBack}>Add a New Tanker</ModalHeader>
-          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0 mt-5" />
-
-          <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
-            <p>
-              Unfortunately, the IMO of the Tanker you specified <b>{q88State.imo}</b> was not found in our system,
-              please add all the required information manually.
-            </p>
-            <p className="flex mt-1.5">
-              If you make a mistake while entering the IMO of the tanker, please
-              <Button
-                buttonProps={{ text: 'go back', variant: 'primary', size: 'small' }}
-                onClick={goBack}
-                customStyles="!p-0 !text-[12px] !bg-transparent"
-              />{' '}
-              and try again.
-            </p>
-          </div>
+          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0 my-5 " />
+          <ImoNotFound q88={q88State} goBack={goBack} />
 
           <div className="grid grid-cols-1 gap-y-4">
             <div className="grid grid-cols-2 gap-y-4 gap-x-5">

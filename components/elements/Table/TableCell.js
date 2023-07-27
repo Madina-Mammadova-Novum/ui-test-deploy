@@ -11,6 +11,7 @@ import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { getGeneralDataSelector } from '@/store/selectors';
 import {
+  AssignToFleet,
   ChartererInformationContent,
   DeactivateTankerForm,
   DeleteTankerModal,
@@ -93,6 +94,8 @@ const TableCell = ({ cellProps }) => {
           return <UpdateTankerForm />;
         case ACTIONS.DELETE_TANKER:
           return <DeleteTankerModal />;
+        case ACTIONS.ASSIGN_FLEET:
+          return <AssignToFleet tankerId={id} />;
         default:
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
