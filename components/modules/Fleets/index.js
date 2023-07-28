@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import FleetsExpandedContent from './FleetsExpandedContent';
 
@@ -10,20 +10,24 @@ import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ACTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
 import { AddNewTanker, ExpandableRow } from '@/modules';
-import { getUserFleets } from '@/services';
+import { fetchFleetsWithVessels } from '@/store/entities/fleets/actions';
 import { fleetsSelector } from '@/store/selectors';
 import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, UnassignedFleet } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
-import { useFetch, useFilters } from '@/utils/hooks';
+import { useFilters } from '@/utils/hooks';
 
 const Fleets = () => {
   const [toggle, setToggle] = useState({ value: false });
-  const { refetch } = useSelector(fleetsSelector);
-  const [data, isLoading] = useFetch(getUserFleets, refetch);
+  const { refetch, data, loading: isLoading } = useSelector(fleetsSelector);
   const [userStore] = useState({
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
   });
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchFleetsWithVessels());
+  }, [dispatch, refetch]);
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -52,15 +56,6 @@ const Fleets = () => {
             headerData={rowHeader}
             itemId={rowData?.id}
             actions={[
-              // {
-              //   action: ACTIONS.ADD_TANKER,
-              //   text: 'Add a New Tanker',
-              //   variant: 'primary',
-              //   size: 'small',
-              //   icon: {
-              //     before: <PlusCircleSVG className="fill-blue" />,
-              //   },
-              // },
               {
                 action: ACTIONS.EDIT_FLEET,
                 text: 'Edit',
@@ -78,7 +73,7 @@ const Fleets = () => {
         }
         expand={toggle}
       >
-        <FleetsExpandedContent rowsData={fleetsPageRowsDataAdapter({ data: rowData.tankers })} />
+        <FleetsExpandedContent rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels })} />
       </ExpandableRow>
     );
   };
@@ -115,7 +110,7 @@ const Fleets = () => {
               },
             }}
           >
-            <AddNewTanker fleetOptions={convertDataToOptions({ data: items }, 'id', 'name')} />
+            <AddNewTanker fleetOptions={convertDataToOptions({ data }, 'id', 'name')} />
           </ModalWindow>
         </div>
       </div>

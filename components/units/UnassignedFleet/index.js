@@ -1,5 +1,7 @@
 'use client';
 
+import { useSelector } from 'react-redux';
+
 import UnassignedFleetExpandedContent from './UnassignedFleetExpandedContent';
 
 import { UnassignedFleetPropTypes } from '@/lib/types';
@@ -8,16 +10,18 @@ import { fleetsPageHeaderDataAdapter, unassignedFleetRowsDataAdapter } from '@/a
 import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getUnassignedVessels } from '@/services/vessel';
+import { fleetsSelector } from '@/store/selectors';
 import { useFetch } from '@/utils/hooks';
 
 const UnassignedFleet = ({ toggle }) => {
-  const [data] = useFetch(getUnassignedVessels);
+  const { refetch } = useSelector(fleetsSelector);
+  const [data] = useFetch(getUnassignedVessels, refetch);
   return (
     <ExpandableRow
       header={
         <ExpandableCardHeader
           headerData={fleetsPageHeaderDataAdapter({
-            data: { numberOfVessels: data?.length, name: 'Unassigned Fleet' },
+            data: { vessels: data, name: 'Unassigned Fleet' },
           })}
         />
       }

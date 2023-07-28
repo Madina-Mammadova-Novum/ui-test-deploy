@@ -1,6 +1,7 @@
 import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
+import TrashIcon from '@/assets/images/trashAlt.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
@@ -117,7 +118,7 @@ export const fleetsRowsDataAdapter = ({ data }) => {
 export const fleetsPageHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { name, numberOfVessels } = data;
+  const { name, vessels = [] } = data;
 
   return [
     {
@@ -126,7 +127,7 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Number of tankers',
-      text: numberOfVessels || '0',
+      text: vessels.length || '0',
     },
   ];
 };
@@ -134,7 +135,13 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
 export const fleetsPageRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, name, imo, dwt, category, questionaire, status } = data;
+  const {
+    id,
+    details: { name, summerDwt, q88QuestionnarieFile },
+    imo,
+    status,
+    vesselSizeCategoryId,
+  } = data;
 
   return [
     {
@@ -151,15 +158,15 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dwt,
+      value: summerDwt && `${summerDwt} tons`,
     },
     {
       id,
-      value: category,
+      value: vesselSizeCategoryId,
     },
     {
       id,
-      editable: !!questionaire,
+      editable: !!q88QuestionnarieFile,
       actions: [
         {
           action: ACTIONS.VIEW_QUESTIONAIRE,
@@ -172,6 +179,7 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: status,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,
@@ -185,7 +193,7 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
         },
         {
           action: ACTIONS.DELETE_TANKER,
-          actionText: 'Delete',
+          editIcon: <TrashIcon viewBox="0 0 24 24" className="fill-red w-5 h-5" />,
           actionVariant: 'delete',
           actionSize: 'medium',
         },
@@ -250,6 +258,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       editable: true,
       value: 'Unassigned',
       type: TYPE.GREY,
+      name,
       actions: [
         {
           action: ACTIONS.ASSIGN_FLEET,

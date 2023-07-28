@@ -3,6 +3,7 @@
 /* eslint-disable prefer-destructuring */
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -15,6 +16,7 @@ import { tankerDataSchema } from '@/lib/schemas';
 import { getCountries } from '@/services';
 import { getPorts } from '@/services/port';
 import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesselTypes } from '@/services/vessel';
+import { refetchFleets } from '@/store/entities/fleets/slice';
 import { ImoNotFound, ModalHeader } from '@/units';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import { convertDataToOptions, countriesOptions, getValueWithPath, updateFormats } from '@/utils/helpers';
@@ -49,6 +51,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
 
   const methods = useHookFormParams({ schema, state: q88State });
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
+  const dispatch = useDispatch();
   const {
     register,
     clearErrors,
@@ -134,6 +137,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const onSubmit = async (formData) => {
     const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId } });
     if (status === 200) {
+      dispatch(refetchFleets());
       successToast(message);
       closeModal();
     }

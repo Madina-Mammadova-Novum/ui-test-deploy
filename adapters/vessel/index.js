@@ -130,13 +130,13 @@ export function responseSearchVesselAdapter({ data }) {
   };
 }
 
-export function requestAddVesselByImoAdapter({ data }) {
+export function requestAddVesselToFleetAdapter({ data }) {
   if (!data) return null;
 
-  const { imo } = data;
+  const { tankerId } = data;
 
   return {
-    vesselId: imo,
+    vesselId: tankerId,
   };
 }
 
@@ -223,6 +223,11 @@ export function responseGetVesselTypesAdapter({ data }) {
   return data;
 }
 export function responseGetUnassignedVesselsAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseGetVesselDetailsAdapter({ data }) {
   if (!data) return null;
 
   return data;

@@ -95,7 +95,7 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.DELETE_TANKER:
           return <DeleteTankerModal />;
         case ACTIONS.ASSIGN_FLEET:
-          return <AssignToFleet tankerId={id} />;
+          return <AssignToFleet tankerId={id} name={name} />;
         default:
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
