@@ -17,8 +17,6 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
   const printModal = useCallback(
     (action) => {
       switch (action) {
-        // case ACTIONS.ADD_TANKER:
-        //   return <AddNewTanker id={itemId} />;
         case ACTIONS.EDIT_FLEET:
           return <EditFleetForm id={itemId} />;
         case ACTIONS.DELETE_FLEET:

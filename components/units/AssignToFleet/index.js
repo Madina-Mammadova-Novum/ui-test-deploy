@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { AssignToFleetPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
-import { FormDropdown, TextWithLabel, Title } from '@/elements';
+import { FormDropdown, Loader, TextWithLabel, Title } from '@/elements';
 import { assignToFleetSchema } from '@/lib/schemas';
 import { getUserFleets } from '@/services';
 import { addVesselToFleet } from '@/services/vessel';
@@ -39,7 +39,13 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
     }
   };
 
-  if (isLoading) return <>Loading ... </>;
+  if (isLoading) {
+    return (
+      <div className="w-72 h-72">
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-[292px]">
@@ -51,6 +57,7 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
             size: 'large',
           }}
           submitAction={handleSubmit}
+          onClose={closeModal}
           specialStyle
         >
           <Title level={2}>Edit Assigned Fleet</Title>
