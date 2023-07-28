@@ -32,7 +32,7 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
             label="Your comment"
             placeholder="Type your message here"
             customStyles="!w-full"
-            register={register}
+            {...register('comment')}
           />
         </>
       )}

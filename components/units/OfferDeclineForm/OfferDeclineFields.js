@@ -81,11 +81,10 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
       ))}
       {showTextField && (
         <TextArea
+          {...register('reason')}
           label="your reason"
           placeholder="Type your reason here ..."
           customStyles="mt-2.5"
-          register={register}
-          name="reason"
         />
       )}
 
