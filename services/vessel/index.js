@@ -1,6 +1,6 @@
 import {
-  requestAddVesselByImoAdapter,
   requestAddVesselManuallyAdapter,
+  requestAddVesselToFleetAdapter,
   requestSearchVesselAdapter,
   updateVesselPortAndDataAdapter,
 } from '@/adapters/vessel';
@@ -15,8 +15,8 @@ export async function searchVessels({ data }) {
   };
 }
 
-export async function addVesselByImo({ data, fleetId }) {
-  const body = requestAddVesselByImoAdapter({ data });
+export async function addVesselToFleet({ data, fleetId }) {
+  const body = requestAddVesselToFleetAdapter({ data });
   const response = await postData(`vessels/add-by-imo/${fleetId}`, body);
   return {
     ...response,
@@ -82,6 +82,27 @@ export async function updateVesselPortAndDate(data) {
 
 export async function getUnassignedVessels() {
   const response = await getData(`vessels/get-unassigned`);
+  return {
+    ...response,
+  };
+}
+
+export async function getAssignedVessels({ id, ...rest }) {
+  const response = await getData(`vessels/get-assigned/${id}`);
+  const { data = [] } = response;
+  return {
+    id,
+    vessels: data,
+    ...rest,
+  };
+}
+
+export function* getFleetsVessels(data) {
+  return yield Promise.all(data.map(getAssignedVessels));
+}
+
+export async function getVesselDetails(tankerId) {
+  const response = await getData(`vessels/details/${tankerId}`);
   return {
     ...response,
   };

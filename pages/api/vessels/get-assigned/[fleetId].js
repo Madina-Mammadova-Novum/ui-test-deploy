@@ -8,10 +8,11 @@ import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
+  const { fleetId } = req.query;
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/owner/fleets/unassigned/vessels`),
+    path: getApiURL(`v1/owner/fleets/${fleetId}/vessels`),
     dataAdapter: responseGetUnassignedVesselsAdapter,
     requestMethod: 'GET',
     options: { ...Authorization(session?.accessToken) },
