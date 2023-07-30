@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import signalRService from '@/utils/signalr';
 
 const ExtraDataManager = ({ children }) => {
   const { data: session, update } = useSession();
@@ -37,7 +38,20 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     getGeneralData();
-  }, []);
+    signalRService.start();
+
+    signalRService.sendMessage({
+      query: '',
+      origin: '',
+      isOpened: true,
+      createdAt: '',
+      skip: 0,
+      take: 10,
+    });
+    return () => {
+      signalRService.stop();
+    };
+  }, [getGeneralData]);
 
   useEffect(() => {
     if (session?.accessToken) setUserData({ role: session?.role, isValid: true });
