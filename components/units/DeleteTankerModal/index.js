@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useDispatch, wawa } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { DeleteTankerModalPropTypes } from '@/lib/types';
 
