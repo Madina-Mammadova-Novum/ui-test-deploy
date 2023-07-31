@@ -24,7 +24,7 @@ const LegalNavigation = () => {
     fetchData();
   }, []);
 
-  if (!legalNavigation.length) return null;
+  if (!legalNavigation?.length) return null;
   return <div className="flex gap-x-5 text-black"> {legalNavigation.map(printLink)}</div>;
 };
 

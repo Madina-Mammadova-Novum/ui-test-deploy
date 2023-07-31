@@ -1,3 +1,3 @@
 export const NOTIFICATIONS = {
-  GET_NOTIFICATIONS: 'signalr/getNotifications',
+  GET_NOTIFICATIONS: 'notifications/getNotifications',
 };

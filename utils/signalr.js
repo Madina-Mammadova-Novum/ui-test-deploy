@@ -1,14 +1,18 @@
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
 import { getSession } from 'next-auth/react';
 
+import { getRtURL } from '.';
+import { successToast } from './hooks';
+
 import { store } from '@/store';
 import { setConnectionStatus } from '@/store/entities/notifications/slice';
 
-class SignalRService {
-  constructor(state) {
+class NotificationService {
+  constructor({ host, state }) {
     this.connection = null;
     this.isConnected = false;
     this.store = state;
+    this.host = host;
   }
 
   async start() {
@@ -22,7 +26,7 @@ class SignalRService {
 
     try {
       this.connection = new HubConnectionBuilder()
-        .withUrl(`${process.env.NEXT_PUBLIC_RT_URL}/hubs/NotificationHub`, connectionParams)
+        .withUrl(getRtURL(this.host), connectionParams)
         .withAutomaticReconnect()
         .build();
 
@@ -30,7 +34,8 @@ class SignalRService {
       this.isConnected = true;
       this.store.dispatch(setConnectionStatus(this.isConnected));
 
-      this.connection.on('ReceiveNotification', () => {
+      this.connection.on('ReceiveNotification', async (message) => {
+        successToast(message?.title);
         // TODO: setting recieved data to store
       });
     } catch (err) {
@@ -52,13 +57,13 @@ class SignalRService {
 
   async sendMessage(message) {
     try {
-      await this.connection.invoke('SendNotificationModel', message);
+      await this.connection.invoke('url/path', message); // TODO: implement chat logic by example
     } catch (err) {
       console.error(err);
     }
   }
 }
 
-const signalRService = new SignalRService(store);
+const notificationService = new NotificationService({ host: '/hubs/NotificationHub', state: store });
 
-export default signalRService;
+export default notificationService;

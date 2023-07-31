@@ -45,15 +45,14 @@ export const requestErrorHandler = (status, message, errors) => {
 const requestOptions = ({ requestMethod, body = null, options }) => {
   const method = requestMethod.toUpperCase();
   const headers = delve(options, 'headers');
+
   const fetchOptions = {
     method, // *GET, POST, PUT, DELETE, etc.
-    ...options,
-    // TODO: Fix the headers blocker for file uploading
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: '*/*',
       ...headers,
     },
+    ...options,
   };
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
     // temporary solution for file type
@@ -66,8 +65,14 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
       return fetchOptions;
     }
 
+    if (body?.type === 'formdata') {
+      fetchOptions.body = body?.data;
+      return fetchOptions;
+    }
+
     fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
   }
+
   return fetchOptions;
 };
 
@@ -87,6 +92,7 @@ export const apiHandler = async (options) => {
     const ok = delve(response, 'ok');
     const statusText = delve(response, 'statusText');
     let responseBody = await response.text();
+
     if (responseBody) {
       responseBody = JSON.parse(responseBody);
     }

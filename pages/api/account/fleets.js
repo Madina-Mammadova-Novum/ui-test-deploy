@@ -14,6 +14,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/owner/fleets/all`),
     dataAdapter: responseGetFleetsAdapter,
     requestMethod: 'POST',
-    options: { ...Authorization(session?.accessToken) },
+    options: { headers: { ...Authorization(session?.accessToken) } },
   });
 }

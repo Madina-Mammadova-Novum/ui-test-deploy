@@ -9,8 +9,9 @@ import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
-import signalRService from '@/utils/signalr';
+import notificationService from '@/utils/signalr';
 
 const ExtraDataManager = ({ children }) => {
   const { data: session, update } = useSession();
@@ -26,6 +27,7 @@ const ExtraDataManager = ({ children }) => {
   const getGeneralData = useCallback(() => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
+    dispatch(fetchNotifications());
   }, [dispatch]);
 
   const setUserData = useCallback(
@@ -37,19 +39,11 @@ const ExtraDataManager = ({ children }) => {
   );
 
   useEffect(() => {
+    notificationService.start();
     getGeneralData();
-    signalRService.start();
 
-    signalRService.sendMessage({
-      query: '',
-      origin: '',
-      isOpened: true,
-      createdAt: '',
-      skip: 0,
-      take: 10,
-    });
     return () => {
-      signalRService.stop();
+      notificationService.stop();
     };
   }, [getGeneralData]);
 
