@@ -248,6 +248,16 @@ export function responseGetVesselFreightFormatsAdapter({ data }) {
 
   return data;
 }
+export function responseDeleteVesselFromFleetAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseDeleteVesselAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
 export function responseGetVesselQ88Adapter({ data }) {
   if (!data) return null;
   const {
@@ -349,5 +359,25 @@ export function updateVesselPortAndDataAdapter({ data }) {
     portId,
     opendate: new Date(date).toISOString(),
     appearsInSearch: available,
+  };
+}
+
+export function removeVesselFromFleetAdapter({ data }) {
+  if (!data) return {};
+
+  const { id } = data;
+
+  return {
+    vesselId: id,
+  };
+}
+
+export function removeVesselAdapter({ data }) {
+  if (!data) return {};
+
+  const { id } = data;
+
+  return {
+    id,
   };
 }

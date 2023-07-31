@@ -30,7 +30,7 @@ export async function acceptOffer({ data }) {
 
 export async function sendCounteroffer({ data }) {
   const body = sendCounterofferAdapter({ data });
-  const response = await postData(`counteroffer/send`, JSON.stringify(body));
+  const response = await postData(`counteroffer/send`, body);
   if (!response.error) response.message = 'You have successfully sent a counteroffer';
   return {
     ...response,

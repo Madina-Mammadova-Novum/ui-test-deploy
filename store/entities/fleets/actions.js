@@ -5,7 +5,7 @@ import { FLEETS } from '@/store/entities/fleets/types';
 
 /* Services */
 import { getUserFleets } from '@/services';
-import { getFleetsVessels } from '@/services/vessel';
+import { getFleetsVessels, getUnassignedVessels } from '@/services/vessel';
 
 export const fetchFleetsWithVessels = (() => {
   return createAsyncThunk(FLEETS.GET_USER_FLEETS, async () => {
@@ -18,3 +18,11 @@ export const fetchFleetsWithVessels = (() => {
     };
   });
 })();
+
+export const fetchUnassignedFleetData = createAsyncThunk(FLEETS.GET_UNASSIGNED_FLEET_DATA, async () => {
+  const { data } = await getUnassignedVessels();
+
+  return {
+    data,
+  };
+});

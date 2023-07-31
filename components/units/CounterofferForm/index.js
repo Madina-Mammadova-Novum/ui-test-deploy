@@ -1,6 +1,7 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -9,13 +10,15 @@ import { CounterofferFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
+import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...offerSchema(),
 });
 
-const CounterofferForm = ({ children, allowSubmit = false, data }) => {
+const CounterofferForm = ({ children, allowSubmit = false, data, closeModal }) => {
+  const dispatch = useDispatch();
   const { cargoType, products, offerId, responseCountdown } = data;
   const methods = useHookFormParams({
     schema,
@@ -36,14 +39,15 @@ const CounterofferForm = ({ children, allowSubmit = false, data }) => {
   });
 
   const handleSubmit = async (formData) => {
-    const { data: responseData, error } = await sendCounteroffer({ data: { ...formData, offerId, responseCountdown } });
-    if (responseData) {
-      successToast(responseData.message);
-    }
-    if (error) {
-      const { message, errors, description } = error;
+    const { message, error } = await sendCounteroffer({ data: { ...formData, offerId, responseCountdown } });
+    if (!error) {
+      dispatch(refetchNegotiatingOffers());
+      successToast(message);
+      closeModal();
+    } else {
+      const { message: errorMessage, errors, description } = error;
       console.error(errors);
-      errorToast(message, description);
+      errorToast(errorMessage, description);
     }
   };
 

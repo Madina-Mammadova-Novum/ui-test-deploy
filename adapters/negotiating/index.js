@@ -4,6 +4,7 @@ import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { calculateCountdown } from '@/utils/helpers';
 
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -92,7 +93,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     laycanStart,
     laycanEnd,
     createdAt: dateReceived,
-    expiresAt: countdown,
+    expiresAt,
     id,
   } = data;
 
@@ -138,7 +139,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: countdown,
+      value: calculateCountdown(expiresAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
@@ -248,7 +249,19 @@ export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
 export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { cargoId, laycanStart, laycanEnd, loadPort, dateSent, countdown, id } = data;
+  const {
+    cargo: {
+      code,
+      loadTerminal: {
+        port: { name: portName, locode: portLocode },
+      },
+    },
+    laycanStart,
+    laycanEnd,
+    dateSent,
+    expiresAt,
+    id,
+  } = data;
 
   return [
     {
@@ -260,7 +273,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
-          actionText: cargoId,
+          actionText: code,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -269,15 +282,16 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: laycanStart,
+      value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: laycanEnd,
+      value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: loadPort,
+      value: `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
@@ -285,7 +299,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: countdown,
+      value: calculateCountdown(expiresAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },

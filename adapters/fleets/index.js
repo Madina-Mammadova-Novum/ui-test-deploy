@@ -184,6 +184,7 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
     {
       id,
       editable: true,
+      name,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
@@ -192,7 +193,7 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
           actionSize: 'medium',
         },
         {
-          action: ACTIONS.DELETE_TANKER,
+          action: ACTIONS.DELETE_TANKER_FROM_FLEET,
           editIcon: <TrashIcon viewBox="0 0 24 24" className="fill-red w-5 h-5" />,
           actionVariant: 'delete',
           actionSize: 'medium',
@@ -274,6 +275,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     {
       id,
       editable: true,
+      name,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,

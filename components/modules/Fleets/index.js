@@ -10,7 +10,7 @@ import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ACTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
 import { AddNewTanker, ExpandableRow } from '@/modules';
-import { fetchFleetsWithVessels } from '@/store/entities/fleets/actions';
+import { fetchFleetsWithVessels, fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { fleetsSelector } from '@/store/selectors';
 import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, UnassignedFleet } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
@@ -27,6 +27,7 @@ const Fleets = () => {
 
   useEffect(() => {
     dispatch(fetchFleetsWithVessels());
+    dispatch(fetchUnassignedFleetData());
   }, [dispatch, refetch]);
 
   const initialPagesStore = {
@@ -73,7 +74,7 @@ const Fleets = () => {
         }
         expand={toggle}
       >
-        <FleetsExpandedContent rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels })} />
+        <FleetsExpandedContent rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels })} fleetId={rowData.id} />
       </ExpandableRow>
     );
   };
