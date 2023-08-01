@@ -92,8 +92,10 @@ const TableCell = ({ cellProps }) => {
           return <NegotiatingTankerInformation />;
         case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
           return <UpdateTankerForm />;
+        case ACTIONS.DELETE_TANKER_FROM_FLEET:
+          return <DeleteTankerModal state={{ id, fleetId, name, action }} />;
         case ACTIONS.DELETE_TANKER:
-          return <DeleteTankerModal />;
+          return <DeleteTankerModal state={{ id, name, action }} />;
         case ACTIONS.ASSIGN_FLEET:
           return <AssignToFleet tankerId={id} name={name} />;
         default:

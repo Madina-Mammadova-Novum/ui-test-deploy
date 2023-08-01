@@ -418,3 +418,21 @@ export const generateMessageByActionType = ({ action, status }) => {
 export const getCountryById = ({ id, data = [] }) => {
   return data?.find((country) => country.countryId === id);
 };
+
+export const calculateCountdown = (expiresAt) => {
+  const milisecondsInSecond = 1000;
+  const milisecondsInMinute = 60 * milisecondsInSecond;
+  const milisecondsInHour = 60 * milisecondsInMinute;
+  const milisecondsInDay = 24 * milisecondsInHour;
+  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(new Date().toISOString()).getTime();
+  const sign = milisecondsUntilExpiration < 0 && '-';
+  const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
+
+  const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
+  const hours = Math.abs(Math[method]((milisecondsUntilExpiration % milisecondsInDay) / milisecondsInHour));
+  const minutes = Math.abs(
+    Math[method](((milisecondsUntilExpiration % milisecondsInDay) % milisecondsInHour) / milisecondsInMinute)
+  );
+
+  return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
+};

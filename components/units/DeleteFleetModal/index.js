@@ -7,7 +7,7 @@ import { DeleteFleetModalPropTypes } from '@/lib/types';
 
 import { Button, Loader, TextWithLabel, Title } from '@/elements';
 import { deleteFleet, getFleetById } from '@/services/fleets';
-import { refetchFleets } from '@/store/entities/fleets/slice';
+import { deleteFleetFromState } from '@/store/entities/fleets/slice';
 import { successToast } from '@/utils/hooks';
 
 const DeleteFleetModal = ({ closeModal, id }) => {
@@ -34,7 +34,7 @@ const DeleteFleetModal = ({ closeModal, id }) => {
     setLoading(false);
 
     if (status === 204) {
-      dispatch(refetchFleets());
+      dispatch(deleteFleetFromState(id));
       successToast(message);
       closeModal();
     }

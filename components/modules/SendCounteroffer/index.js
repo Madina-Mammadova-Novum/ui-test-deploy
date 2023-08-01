@@ -92,7 +92,11 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           />
         </div>
       </div>
-      <CounterofferForm allowSubmit={confirmCounteroffer} data={{ ...counterofferData, responseCountdown }}>
+      <CounterofferForm
+        allowSubmit={confirmCounteroffer}
+        data={{ ...counterofferData, responseCountdown }}
+        closeModal={closeModal}
+      >
         {!confirmCounteroffer ? (
           <>
             <Tabs

@@ -1,4 +1,6 @@
 import {
+  removeVesselAdapter,
+  removeVesselFromFleetAdapter,
   requestAddVesselManuallyAdapter,
   requestAddVesselToFleetAdapter,
   requestSearchVesselAdapter,
@@ -103,6 +105,23 @@ export function* getFleetsVessels(data) {
 
 export async function getVesselDetails(tankerId) {
   const response = await getData(`vessels/details/${tankerId}`);
+  return {
+    ...response,
+  };
+}
+
+export async function removeVesselFromFleet(data) {
+  const body = removeVesselFromFleetAdapter({ data });
+
+  const response = await postData(`vessels/delete-from-fleet`, body);
+  return {
+    ...response,
+  };
+}
+export async function removeVessel(data) {
+  const body = removeVesselAdapter({ data });
+
+  const response = await postData(`vessels/delete`, body);
   return {
     ...response,
   };

@@ -56,6 +56,7 @@ export function sendCounterofferAdapter({ data }) {
     demurrageRate,
     // responseCountdown,
     comment,
+    freight,
   } = data;
 
   return {
@@ -66,6 +67,7 @@ export function sendCounterofferAdapter({ data }) {
     freight: value,
     demurrageRate,
     comment,
+    freightFormatId: freight?.value,
   };
 }
 

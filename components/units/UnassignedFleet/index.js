@@ -9,13 +9,10 @@ import { UnassignedFleetPropTypes } from '@/lib/types';
 import { fleetsPageHeaderDataAdapter, unassignedFleetRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { getUnassignedVessels } from '@/services/vessel';
 import { fleetsSelector } from '@/store/selectors';
-import { useFetch } from '@/utils/hooks';
 
 const UnassignedFleet = ({ toggle }) => {
-  const { refetch } = useSelector(fleetsSelector);
-  const [data] = useFetch(getUnassignedVessels, refetch);
+  const { unassignedFleetData: data } = useSelector(fleetsSelector);
   return (
     <ExpandableRow
       header={

@@ -12,7 +12,7 @@ import { FormDropdown, Loader, TextWithLabel, Title } from '@/elements';
 import { assignToFleetSchema } from '@/lib/schemas';
 import { getUserFleets } from '@/services';
 import { addVesselToFleet } from '@/services/vessel';
-import { refetchFleets } from '@/store/entities/fleets/slice';
+import { addVesselToFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
 import { convertDataToOptions } from '@/utils/helpers';
 import { useFetch, useHookFormParams } from '@/utils/hooks';
 
@@ -34,7 +34,8 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
   const handleSubmit = async ({ fleet }) => {
     const { status } = await addVesselToFleet({ data: { tankerId }, fleetId: fleet.value });
     if (status === 200) {
-      dispatch(refetchFleets());
+      dispatch(addVesselToFleetsState({ fleetId: fleet.value, tankerId }));
+      dispatch(deleteVesselFromUnassignedFleetsState(tankerId));
       closeModal();
     }
   };
