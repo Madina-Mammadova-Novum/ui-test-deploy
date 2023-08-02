@@ -12,7 +12,7 @@ import {
   updatePasswordAdapter,
 } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { DEFAULT_FETCH_AMOUNT } from '@/lib/constants';
+import { DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -168,13 +168,33 @@ export async function getUserPreFixtures() {
   };
 }
 
-export async function getUserNegotiating() {
+export function getUserNegotiating(role) {
+  switch (role) {
+    case ROLES.OWNER: {
+      return getOwnerNegotiating;
+    }
+    case ROLES.CHARTERER: {
+      return getChartererNegotiating;
+    }
+    default: return () => {}
+      
+  }
+}
+
+export async function getOwnerNegotiating() {
   const body = {
     skip: 0,
     pageSize: 1000,
     stage: 'Negotiating',
   };
-  const response = await postData(`account/negotiating`, body);
+  const response = await postData(`account/negotiating/owner`, body);
+  return {
+    ...response,
+  };
+}
+
+export async function getChartererNegotiating() {
+  const response = await getData(`account/negotiating/charterer`);
   return {
     ...response,
   };

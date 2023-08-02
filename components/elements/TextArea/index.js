@@ -17,9 +17,7 @@ const TextArea = React.forwardRef(
       helperText,
       customStyles = '',
       inputStyles,
-      onChange,
       error = null,
-      register,
       ...rest
     },
     ref

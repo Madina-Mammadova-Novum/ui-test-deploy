@@ -9,8 +9,10 @@ import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } f
 import { Modal, Table } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
+import { getCargoCounteroffers, getCargoFailedOffers, getCargoSentOffers } from '@/services/cargo';
 import { getFailedOffers, getIncomingOffers, getSentCounteroffers } from '@/services/offer';
 import { negotiatingSelector } from '@/store/selectors';
+import { Tabs } from '@/units';
 import {
   chartererNegotiatingCounterofferTableHeader,
   chartererNegotiatingFailedTableHeader,
@@ -20,11 +22,13 @@ import {
   ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
 
-const NegotiatingExpandedContent = ({ data, currentTab }) => {
+const NegotiatingExpandedContent = ({ data, tabs }) => {
   const [modal, setModal] = useState(null);
   const [incomingOffers, setIncomingOffers] = useState([]);
   const [sentCounteroffers, setSentCounteroffers] = useState([]);
   const [failedOffers, setFailedOfffers] = useState([]);
+  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+
   const { refetchOffers } = useSelector(negotiatingSelector);
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
@@ -34,11 +38,22 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
 
   useEffect(() => {
     (async () => {
-      const [{ data: incomingOffersData }, { data: sentCounteroffersData }, { data: failedOffersData }] =
-        await Promise.all([getIncomingOffers(data.id), getSentCounteroffers(data.id), getFailedOffers(data.id)]);
-      setIncomingOffers(incomingOffersData);
-      setSentCounteroffers(sentCounteroffersData);
-      setFailedOfffers(failedOffersData);
+      if (isOwner) {
+        const [{ data: incomingOffersData }, { data: sentCounteroffersData }, { data: failedOffersData }] =
+          await Promise.all([getIncomingOffers(data.id), getSentCounteroffers(data.id), getFailedOffers(data.id)]);
+        setIncomingOffers(incomingOffersData);
+        setSentCounteroffers(sentCounteroffersData);
+        setFailedOfffers(failedOffersData);
+      } else {
+        const [{ data: sentOffersData }, { data: counteroffersData }, { data: failedOffersData }] = await Promise.all([
+          getCargoSentOffers(data.id),
+          getCargoCounteroffers(data.id),
+          getCargoFailedOffers(data.id),
+        ]);
+        setIncomingOffers(sentOffersData);
+        setSentCounteroffers(counteroffersData);
+        setFailedOfffers(failedOffersData);
+      }
     })();
   }, [refetchOffers]);
 
@@ -86,6 +101,12 @@ const NegotiatingExpandedContent = ({ data, currentTab }) => {
   };
   return (
     <div>
+      <Tabs
+        onClick={({ target }) => setCurrentTab(target.value)}
+        activeTab={currentTab}
+        tabs={tabs}
+        customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
+      />
       <div className="mb-3 table-scroll">{tabContent}</div>
       <Modal opened={modal} onClose={handleCloseModal}>
         {modalContent()}

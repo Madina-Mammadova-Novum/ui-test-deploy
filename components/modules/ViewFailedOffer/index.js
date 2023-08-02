@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { ViewFailedOfferPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
+import { Loader } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { COTTabContent, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
@@ -54,7 +55,12 @@ const ViewFailedOffer = ({ itemId }) => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="w-72 h-72">
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
 
   return (
     <div className="w-[610px]">

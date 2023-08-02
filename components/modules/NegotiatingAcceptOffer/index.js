@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
+import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
@@ -40,12 +41,16 @@ const schema = yup.object({
 const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const { data: session } = useSession();
   const methods = useHookFormParams({ schema });
   const dispatch = useDispatch();
   const { comments, voyageDetails, commercialOfferTerms } = offerDetails;
 
   const handleSubmit = async (formData) => {
-    const { message: successMessage, error } = await acceptOffer({ data: { ...formData, offerId: itemId } });
+    const { message: successMessage, error } = await acceptOffer({
+      data: { ...formData, offerId: itemId },
+      role: session?.role,
+    });
 
     if (!error) {
       successToast(successMessage);

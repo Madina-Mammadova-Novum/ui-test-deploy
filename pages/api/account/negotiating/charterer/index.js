@@ -1,0 +1,20 @@
+import { getServerSession } from 'next-auth';
+
+import { responseChartererNegotiatingAdapter } from '@/adapters/negotiating';
+import { Authorization } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
+import { AUTHCONFIG } from '@/utils/auth';
+
+export default async function handler(req, res) {
+  const session = await getServerSession(req, res, AUTHCONFIG);
+  console.log(session);
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`v1/charterer/cargoes`),
+    dataAdapter: responseChartererNegotiatingAdapter,
+    requestMethod: 'GET',
+    options: { ...Authorization(session?.accessToken) },
+  });
+}
