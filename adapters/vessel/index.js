@@ -381,3 +381,67 @@ export function removeVesselAdapter({ data }) {
     id,
   };
 }
+
+export function vesselDetailsAdapter({ data }) {
+  if (!data) return {};
+
+  const {
+    details: {
+      name,
+      q88UpdateDate,
+      built,
+      portOfRegistryId,
+      vesselTypeId,
+      vesselCategoryOneId,
+      vesselCategoryTwoId,
+      typeOfHull,
+      loa,
+      beam,
+      summerDwt,
+      summerDraft,
+      ballastDwt,
+      ballastDraft,
+      cubicCapacity,
+      imoClass,
+      segregationCount,
+      registeredOwner,
+      registeredOwnerCountryId,
+      technicalOperator,
+      technicalOperatorCountryId,
+      commercialOperator,
+      commercialOperatorCountryId,
+      disponentOwner,
+      disponentOwnerCountryId,
+    } = {},
+    imo,
+  } = data;
+
+  return {
+    tankerName: name,
+    imo,
+    updateDate: q88UpdateDate,
+    built,
+    portOfRegistry: { label: '', value: portOfRegistryId },
+    tankerType: { label: '', value: vesselTypeId },
+    tankerCategoryOne: { label: '', value: vesselCategoryOneId },
+    tankerCategoryTwo: { label: '', value: vesselCategoryTwoId },
+    hullType: { label: typeOfHull, value: typeOfHull },
+    loa,
+    beam,
+    summerDWT: summerDwt,
+    summerDraft,
+    normalBallastDWT: ballastDwt,
+    normalBallastDraft: ballastDraft,
+    cubicCapacity,
+    imoClass: { label: imoClass, value: imoClass },
+    grades: segregationCount,
+    registeredOwner,
+    registeredOwnerCountry: { label: '', value: registeredOwnerCountryId },
+    technicalOperator,
+    technicalOperatorCountry: { label: '', value: technicalOperatorCountryId },
+    commercialOperator,
+    commercialOperatorCountry: { label: '', value: commercialOperatorCountryId },
+    disponentOwner,
+    disponentOwnerCountry: { label: '', value: disponentOwnerCountryId },
+  };
+}
