@@ -418,3 +418,21 @@ export const generateMessageByActionType = ({ action, status }) => {
 export const getCountryById = ({ id, data = [] }) => {
   return data?.find((country) => country.countryId === id);
 };
+
+export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
+
+export const formattedBySpaces = ({ string }) => {
+  if (!string) return '';
+
+  return string.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
+export const getFormattedDays = () => {
+  const today = new Date().toISOString().split('T')[0];
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+
+  const yesterday = yesterdayDate.toISOString().split('T')[0];
+
+  return { today, yesterday };
+};

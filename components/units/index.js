@@ -40,6 +40,7 @@ import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
+import NotificationControls from '@/units/NotificationControls';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
 import OfferForm from '@/units/OfferForm';
@@ -136,4 +137,5 @@ export {
   Dropzone,
   File,
   UnassignedFleet,
+  NotificationControls,
 };

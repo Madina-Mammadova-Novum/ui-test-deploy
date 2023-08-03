@@ -24,6 +24,7 @@ import PhoneInput from '@/elements/Input/PhoneInput';
 import RadioInput from '@/elements/Input/RadioInput';
 import InputErrorMessage from '@/elements/InputErrorMessage';
 import Label from '@/elements/Label';
+import LabelAsOption from '@/elements/LabelAsOption';
 import LinkAsButton from '@/elements/LinkAsButton';
 import Loader from '@/elements/Loader';
 import LoginButton from '@/elements/LoginButton';
@@ -95,4 +96,5 @@ export {
   Placeholder,
   SubmitButton,
   ResetButton,
+  LabelAsOption,
 };

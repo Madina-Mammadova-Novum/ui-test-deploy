@@ -65,3 +65,18 @@ export function transformDate(dateString, dateFormat = 'yyyy-MM-dd') {
   console.error('0005 - Not valid date');
   return null;
 }
+
+export const transformTime = (date) => {
+  const fullDate = new Date(date);
+
+  let hours = fullDate.getHours();
+  let minutes = fullDate.getMinutes();
+  const amPm = hours >= 12 ? 'PM' : 'AM';
+
+  if (hours > 12) hours -= 12;
+  if (minutes < 10) minutes = `0${minutes}`;
+
+  return `${hours}:${minutes} ${amPm}`;
+};
+
+export const convertDate = (date) => new Date(date).toISOString().slice(0, 10);

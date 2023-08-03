@@ -3,17 +3,32 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { fetchNotifications } from './actions';
 
+import { options } from '@/utils/helpers';
+
 const initialState = {
   data: [],
-  isConnected: false,
   loading: false,
   error: null,
+  isConnected: false,
+  filterParams: {
+    searchValue: '',
+    sortedValue: '',
+    activeTab: 'Unread',
+    watched: false,
+    tabs: options(['Unread', 'Read']),
+  },
 };
 
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
+    setFilterParams: (state, action) => {
+      state.filterParams = {
+        ...state.filterParams,
+        ...action.payload,
+      };
+    },
     setConnectionStatus: (state, action) => {
       state.isConnected = action.payload;
     },
@@ -33,6 +48,6 @@ const notificationsSlice = createSlice({
   },
 });
 
-export const { setConnectionStatus } = notificationsSlice.actions;
+export const { setConnectionStatus, setFilterParams } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

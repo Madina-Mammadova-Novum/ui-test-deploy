@@ -5,6 +5,7 @@ import { getRtURL } from '.';
 import { successToast } from './hooks';
 
 import { store } from '@/store';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setConnectionStatus } from '@/store/entities/notifications/slice';
 
 class NotificationService {
@@ -36,7 +37,7 @@ class NotificationService {
 
       this.connection.on('ReceiveNotification', async (message) => {
         successToast(message?.title);
-        // TODO: setting recieved data to store
+        this.store.dispatch(fetchNotifications());
       });
     } catch (err) {
       console.error(err);
