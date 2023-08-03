@@ -7,15 +7,17 @@ const NotificationTabs = ({ tabs, activeTab, onChange, onClick, containerClass }
   return (
     <div className={containerClass}>
       <Tabs tabs={tabs} activeTab={activeTab} onClick={onChange} />
-      <Button
-        onClick={onClick}
-        customStyles="p-0 underline decoration-dashed"
-        buttonProps={{
-          size: 'small',
-          text: 'Mark all as read',
-          variant: 'primary',
-        }}
-      />
+      {activeTab === 'Unread' && (
+        <Button
+          onClick={onClick}
+          customStyles="p-0 underline decoration-dashed"
+          buttonProps={{
+            size: 'small',
+            text: 'Mark all as read',
+            variant: 'primary',
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NotificationControlsPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
+import { readAllNotifications } from '@/store/entities/notifications/actions';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import NotificationFilter from '@/units/NotificationControls/NotificationFilter';
@@ -31,6 +32,10 @@ const NotificationControls = ({ contianerClass }) => {
     dispatch(setFilterParams({ sortedValue: value }));
   };
 
+  const handleReadAll = () => {
+    dispatch(readAllNotifications());
+  };
+
   return (
     <div className={contianerClass}>
       <NotificationSearch value={searchValue} onChange={handleSearch} containerClass="px-8 pt-5" />
@@ -38,6 +43,7 @@ const NotificationControls = ({ contianerClass }) => {
         tabs={tabs}
         activeTab={activeTab}
         onChange={handleTab}
+        onClick={handleReadAll}
         containerClass="px-8 flex justify-between"
       />
       <Divider className="w-full" />

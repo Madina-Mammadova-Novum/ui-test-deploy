@@ -36,7 +36,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
 
   useEffect(() => {
     dispatch(fetchNegotiatingOffers({ isOwner, id: data.id }));
-  }, [refetchOffers]);
+  }, [data.id, dispatch, isOwner, refetchOffers]);
 
   const tabContent = useMemo(() => {
     switch (currentTab) {

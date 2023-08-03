@@ -4,7 +4,7 @@ import { notificationParamsAdapter } from '@/adapters/notifications';
 import { Authorization } from '@/lib/constants';
 import { setNotifications } from '@/models/notificationsModel';
 import { getRtURL } from '@/utils';
-// import { postData } from '@/utils/dataFetching';
+import { postData } from '@/utils/dataFetching';
 
 export const getNotifications = async ({ data }) => {
   const params = notificationParamsAdapter({ data });
@@ -23,5 +23,13 @@ export const getNotifications = async ({ data }) => {
   return {
     status: response.status,
     data: JSON.parse(result),
+  };
+};
+
+export const setReadAllNotifications = async () => {
+  const response = await postData('notifications/read-all');
+
+  return {
+    ...response,
   };
 };

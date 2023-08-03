@@ -8,40 +8,45 @@ import MoneybagAltSVG from '@/assets/images/moneybagAlt.svg';
 import MusicNoteSVG from '@/assets/images/musicNote.svg';
 import SettingSVG from '@/assets/images/setting.svg';
 import { Dropdown, LabelAsOption } from '@/elements';
+import { NOTIFICATION_FILTERS } from '@/lib/constants';
 
 const NotificationFilter = ({ containerClass, onChange }) => {
   const options = [
     {
+      label: <LabelAsOption text="All Notifications" />,
+      value: NOTIFICATION_FILTERS.all,
+    },
+    {
       label: <LabelAsOption icon={<BagSVG className="fill-black" />} text="New Offer" />,
-      value: 'newOffer',
+      value: NOTIFICATION_FILTERS.newOffer,
     },
     {
       label: <LabelAsOption icon={<MoneybagAltSVG className="fill-black" />} text="Counteroffer" />,
-      value: 'counterOffer',
+      value: NOTIFICATION_FILTERS.counterOffer,
     },
     {
       label: <LabelAsOption icon={<MinusCircleSVG className="fill-black" />} text="Offer Failed" />,
-      value: 'failedOffer',
+      value: NOTIFICATION_FILTERS.offerFailed,
     },
     {
       label: <LabelAsOption icon={<BagSVG className="fill-black" />} text="Offer Accepted" />,
-      value: 'acceptedOffer',
+      value: NOTIFICATION_FILTERS.offerAccepted,
     },
     {
       label: <LabelAsOption icon={<CountDownReminderSVG className="fill-black" />} text="Countdown Reminder" />,
-      value: 'countdownReminder',
+      value: NOTIFICATION_FILTERS.reminders,
     },
     {
       label: <LabelAsOption icon={<DocumentInfoSVG className="fill-black" />} text="Deal Updated" />,
-      value: 'dealUpdated',
+      value: NOTIFICATION_FILTERS.dealUpd,
     },
     {
       label: <LabelAsOption icon={<MusicNoteSVG className="fill-black" />} text="Announcements" />,
-      value: 'announcements',
+      value: NOTIFICATION_FILTERS.announcements,
     },
     {
       label: <LabelAsOption icon={<SettingSVG className="fill-black" />} text="System updates" />,
-      value: 'systemUpdates',
+      value: NOTIFICATION_FILTERS.systemUpd,
     },
   ];
 

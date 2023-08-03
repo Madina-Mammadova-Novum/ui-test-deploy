@@ -8,10 +8,10 @@ class NotificationsModel {
 
   setFormData() {
     this.formData.append('query', this.params.search);
-    this.formData.append('origin', '');
+    this.formData.append('origin', this.params.filteredBy);
     this.formData.append('isOpened', this.params.watched);
-    this.formData.append('skip', 0);
-    this.formData.append('take', 100);
+    this.formData.append('skip', this.params.skip);
+    this.formData.append('take', this.params.take);
     return this.formData;
   }
 }

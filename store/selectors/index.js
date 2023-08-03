@@ -40,7 +40,6 @@ export const getNotificationsDataSelector = createDraftSafeSelector(notification
   return {
     ...state,
     data: notificationsDataAdapter({ data: state?.data }),
-    total: state?.data?.length,
   };
 });
 

@@ -13,7 +13,7 @@ const NotificationCard = ({ data }) => {
     );
   };
 
-  return data.map(printNotificationCard);
+  return data?.map(printNotificationCard);
 };
 
 export default NotificationCard;

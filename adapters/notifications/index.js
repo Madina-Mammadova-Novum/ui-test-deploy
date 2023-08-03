@@ -56,8 +56,9 @@ export const notificationParamsAdapter = ({ data }) => {
 
   return {
     search: data?.searchValue,
-    filteredBy: '',
+    filteredBy: data?.sortedValue,
     watched: data?.watched,
-    perPage: data?.perPage,
+    skip: data?.skip,
+    take: data?.take,
   };
 };
