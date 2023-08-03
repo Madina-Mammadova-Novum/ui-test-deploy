@@ -54,7 +54,7 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
     },
     ...options,
   };
-  if (['POST', 'PUT', 'PATCH'].includes(method)) {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
     // temporary solution for file type
     if (body?.type === 'text/plain') {
       const formdata = new window.FormData();

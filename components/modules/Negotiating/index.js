@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useSession } from 'next-auth/react';
 
@@ -50,8 +50,7 @@ const Negotiating = () => {
   const tabs = isOwner ? ownerTabs : chartererTabs;
   const [toggle, setToggle] = useState({ value: false });
 
-  const [data, isLoading] = useFetch(getUserNegotiating);
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const [data, isLoading] = useFetch(getUserNegotiating(session?.role));
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -69,6 +68,21 @@ const Negotiating = () => {
     perPage,
   } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
 
+  const printComplexPagination = useMemo(
+    () => (
+      <ComplexPagination
+        currentPage={currentPage}
+        numberOfPages={numberOfPages}
+        onPageChange={handlePageChange}
+        onSelectedPageChange={handleSelectedPageChange}
+        pages={selectedPage}
+        onChangeOffers={onChangeOffers}
+        perPage={perPage}
+      />
+    ),
+    [data, currentPage, numberOfPages, perPage]
+  );
+
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
@@ -78,17 +92,10 @@ const Negotiating = () => {
         key={rowData.id}
         className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} />}
-        footer={
-          <NegotiatingExpandedFooter
-            isCharterer={!isOwner}
-            currentTab={currentTab}
-            tabs={tabs}
-            setCurrentTab={setCurrentTab}
-          />
-        }
+        footer={<NegotiatingExpandedFooter isCharterer={!isOwner} />}
         expand={toggle}
       >
-        <NegotiatingExpandedContent data={rowData} currentTab={currentTab} />
+        <NegotiatingExpandedContent data={rowData} tabs={tabs} />
       </ExpandableRow>
     );
   };
@@ -108,16 +115,7 @@ const Negotiating = () => {
       </div>
 
       <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
-
-      <ComplexPagination
-        currentPage={currentPage}
-        numberOfPages={numberOfPages}
-        onPageChange={handlePageChange}
-        onSelectedPageChange={handleSelectedPageChange}
-        pages={selectedPage}
-        onChangeOffers={onChangeOffers}
-        perPage={perPage}
-      />
+      {printComplexPagination}
     </section>
   );
 };

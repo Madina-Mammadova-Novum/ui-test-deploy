@@ -8,7 +8,6 @@ import TableArrowSVG from '@/assets/images/arrow.svg';
 import DragSVG from '@/assets/images/drag.svg';
 import { TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
-import { AddNewTanker } from '@/modules';
 import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
@@ -18,8 +17,6 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
   const printModal = useCallback(
     (action) => {
       switch (action) {
-        case ACTIONS.ADD_TANKER:
-          return <AddNewTanker id={itemId} />;
         case ACTIONS.EDIT_FLEET:
           return <EditFleetForm id={itemId} />;
         case ACTIONS.DELETE_FLEET:
@@ -57,7 +54,7 @@ const ExpandableCardHeader = ({ toggle = false, headerData = [], actions = [], i
           {headerData.map(printHeaderRow)}
         </div>
         {!!actions.length && (
-          <div className="flex gap-x-2.5 justify-end border-t border-t-grey lg:border-none pt-2 mt-3 lg:pt-0 lg:mt-0">
+          <div className="flex gap-x-2.5 justify-end border-t border-t-grey ml-5 lg:border-none pt-2 mt-3 lg:pt-0 lg:mt-0">
             {actions.map(({ action, text, variant, size, icon }) => (
               <ModalWindow
                 containerClass="overflow-y-[unset]"

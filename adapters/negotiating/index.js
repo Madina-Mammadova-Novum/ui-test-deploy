@@ -4,6 +4,7 @@ import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { calculateCountdown } from '@/utils/helpers';
 
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -38,36 +39,46 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
 export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { cargoId, imo, quantity, loadPort, laycanStart, laycanEnd, creationDate } = data;
+  const {
+    code,
+    cargoType,
+    minQuantity,
+    maxQuantity,
+    loadPort: { name: portName, locode: portLocode, country: { codeISO2 } = {} } = {},
+    laycanStart,
+    laycanEnd,
+    createdAt,
+  } = data;
 
   return [
     {
       label: 'Cargo id',
-      text: cargoId ?? '',
+      text: code,
     },
     {
       label: 'Cargo type',
-      text: imo ?? '',
+      text: cargoType,
     },
     {
       label: 'Quantity',
-      text: quantity ?? '',
+      text: `${minQuantity.toFixed(1)} - ${maxQuantity.toFixed(1)} tons`,
     },
     {
       label: 'Load port',
-      text: loadPort ?? '',
+      text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      countryCode: codeISO2,
     },
     {
       label: 'Laycan start',
-      text: laycanStart ?? '',
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
     },
     {
       label: 'Laycan end',
-      text: laycanEnd ?? '',
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
       label: 'Creation date',
-      text: creationDate ?? '',
+      text: transformDate(createdAt, 'MMM dd, yyyy'),
     },
   ];
 };
@@ -92,7 +103,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     laycanStart,
     laycanEnd,
     createdAt: dateReceived,
-    expiresAt: countdown,
+    expiresAt,
     id,
   } = data;
 
@@ -138,7 +149,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: countdown,
+      value: calculateCountdown(expiresAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
@@ -166,7 +177,13 @@ export const sentOffersTabRowsDataAdapter = ({ data }) => {
 export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, tankerName, openPort, openDate, dwt, status, dateSent, countdown } = data;
+  const {
+    id,
+    vessel: { details: { name, summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = {},
+    status,
+    createdAt,
+    expiresAt,
+  } = data;
 
   return [
     {
@@ -178,7 +195,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
-          actionText: tankerName,
+          actionText: name,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -187,7 +204,8 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: openPort,
+      value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
@@ -195,7 +213,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dwt,
+      value: summerDwt && `${summerDwt} tons`,
     },
     {
       id,
@@ -205,11 +223,11 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dateSent ? transformDate(dateSent, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: countdown,
+      value: calculateCountdown(expiresAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
@@ -248,7 +266,19 @@ export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
 export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { cargoId, laycanStart, laycanEnd, loadPort, dateSent, countdown, id } = data;
+  const {
+    cargo: {
+      code,
+      loadTerminal: {
+        port: { name: portName, locode: portLocode },
+      },
+    },
+    laycanStart,
+    laycanEnd,
+    dateSent,
+    expiresAt,
+    id,
+  } = data;
 
   return [
     {
@@ -260,7 +290,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
-          actionText: cargoId,
+          actionText: code,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -269,15 +299,16 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: laycanStart,
+      value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: laycanEnd,
+      value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: loadPort,
+      value: `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
@@ -285,7 +316,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: countdown,
+      value: calculateCountdown(expiresAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
@@ -313,7 +344,12 @@ export const counteroffersTabRowsDataAdapter = ({ data }) => {
 export const counteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { tankerName, openPort, openDate, dwt, dateReceived, countdown, id } = data;
+  const {
+    vessel: { details: { name, summerDwt } = {}, openDate, openPort: { name: portName, locode: portLocode } = {} } = {},
+    createdAt,
+    expiresAt,
+    id,
+  } = data;
 
   return [
     {
@@ -325,7 +361,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
-          actionText: tankerName,
+          actionText: name,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -334,7 +370,8 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: openPort,
+      value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
@@ -342,15 +379,15 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dwt,
+      value: `${summerDwt} tons`,
     },
     {
       id,
-      value: dateReceived ? transformDate(dateReceived, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
-      value: countdown,
+      value: calculateCountdown(expiresAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
     },
@@ -468,7 +505,12 @@ export const chartererFailedTabRowsDataAdapter = ({ data }) => {
 export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { tankerName, openPort, openDate, dwt, dateFailed, reason, id } = data;
+  const {
+    vessel: { details: { name, openPort: { name: portName, locode: portLocode } = {}, summerDwt } = {}, openDate } = {},
+    failedAt,
+    reason,
+    id,
+  } = data;
 
   return [
     {
@@ -480,7 +522,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
-          actionText: tankerName,
+          actionText: name,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -489,7 +531,8 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: openPort,
+      value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
     },
     {
       id,
@@ -497,11 +540,11 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dwt,
+      value: `${summerDwt} tons`,
     },
     {
       id,
-      value: dateFailed ? transformDate(dateFailed, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      value: failedAt ? transformDate(failedAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
@@ -534,7 +577,11 @@ export const failedTabDataByRole = ({ data, role }) => {
   }
 };
 
-export const responseNegotiatingAdapter = ({ data }) => {
+export const responseOwnerNegotiatingAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+export const responseChartererNegotiatingAdapter = ({ data }) => {
   if (!data) return [];
   return data;
 };

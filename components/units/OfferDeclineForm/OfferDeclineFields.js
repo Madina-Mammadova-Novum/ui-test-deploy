@@ -45,6 +45,8 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
 
   const { setValue, register } = useHookForm();
 
+  const handleChange = ({ target }) => setValue('reason', target.value);
+
   const handleCheck = useCallback(
     (id) => {
       setReasons((prevState) =>
@@ -81,10 +83,12 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
       ))}
       {showTextField && (
         <TextArea
-          {...register('reason')}
+          name="reason"
           label="your reason"
           placeholder="Type your reason here ..."
           customStyles="mt-2.5"
+          onChange={handleChange}
+          {...register('reason')}
         />
       )}
 

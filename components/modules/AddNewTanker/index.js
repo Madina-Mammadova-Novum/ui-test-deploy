@@ -1,29 +1,16 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { AddNewTankerPropTypes } from '@/lib/types';
 
-import { Loader } from '@/elements';
-import { getFleetById } from '@/services/fleets';
+import { unassignedFleetOption } from '@/lib/constants';
 import { AddTankerManuallyForm, AddTankerWithImoForm } from '@/units';
 
-const AddNewTanker = ({ closeModal, id }) => {
+const AddNewTanker = ({ closeModal, id, fleetOptions }) => {
   const [step, setStep] = useState('imo');
-  const [fleetData, setFleetData] = useState({});
+  const [selectedFleet, setSelectedFleet] = useState(unassignedFleetOption);
   const [q88, setQ88] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      const { status, data, error } = await getFleetById({ fleetId: id });
-      setLoading(false);
-      if (status === 200) setFleetData(data);
-      if (error) console.log(error);
-    })();
-
-    return () => setFleetData({});
-  }, []);
 
   const handleNextStep = () => setStep('tanker_form');
 
@@ -35,7 +22,7 @@ const AddNewTanker = ({ closeModal, id }) => {
             closeModal={closeModal}
             goBack={() => setStep('imo')}
             id={id}
-            fleetData={fleetData}
+            fleetData={selectedFleet}
             q88={q88}
           />
         );
@@ -44,20 +31,14 @@ const AddNewTanker = ({ closeModal, id }) => {
           <AddTankerWithImoForm
             closeModal={closeModal}
             handleNextStep={handleNextStep}
-            fleetData={fleetData}
+            fleetOptions={[unassignedFleetOption, ...fleetOptions]}
+            setSelectedFleet={setSelectedFleet}
+            selectedFleet={selectedFleet}
             setQ88={setQ88}
           />
         );
     }
-  }, [step, fleetData]);
-
-  if (loading) {
-    return (
-      <div className="w-80 h-80">
-        <Loader className="h-8 w-8 absolute top-1/2" />
-      </div>
-    );
-  }
+  }, [step]);
 
   return <div>{printModal}</div>;
 };
