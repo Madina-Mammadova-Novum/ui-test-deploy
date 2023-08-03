@@ -79,11 +79,11 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.VIEW_OFFER:
           return <ViewIncomingOffer itemId={id} />;
         case ACTIONS.VIEW_COUNTEROFFER:
-          return <ViewCounteroffer />;
+          return <ViewCounteroffer itemId={id} />;
         case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
-          return <ViewIncomingOffer />;
+          return <ViewIncomingOffer itemId={id} />;
         case ACTIONS.VIEW_SENT_OFFER:
-          return <ViewCounteroffer />;
+          return <ViewCounteroffer itemId={id} />;
         case ACTIONS.VIEW_FAILED_OFFER:
           return <ViewFailedOffer itemId={id} />;
         case ACTIONS.CHARTERER_INFORMATION:

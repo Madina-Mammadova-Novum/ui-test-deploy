@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { ViewIncomingOfferPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
+import { Loader } from '@/elements';
 import { NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { OfferDeclineForm } from '@/units';
@@ -26,7 +27,12 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
     })();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="w-72 h-72">
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
 
   switch (step) {
     case 'offer_decline':

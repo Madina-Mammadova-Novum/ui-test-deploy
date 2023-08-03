@@ -3,6 +3,7 @@
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
+import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { CounterofferFormPropTypes } from '@/lib/types';
@@ -18,6 +19,7 @@ const schema = yup.object({
 });
 
 const CounterofferForm = ({ children, allowSubmit = false, data, closeModal }) => {
+  const { data: session } = useSession();
   const dispatch = useDispatch();
   const { cargoType, products, offerId, responseCountdown } = data;
   const methods = useHookFormParams({
@@ -39,7 +41,10 @@ const CounterofferForm = ({ children, allowSubmit = false, data, closeModal }) =
   });
 
   const handleSubmit = async (formData) => {
-    const { message, error } = await sendCounteroffer({ data: { ...formData, offerId, responseCountdown } });
+    const { message, error } = await sendCounteroffer({
+      data: { ...formData, offerId, responseCountdown },
+      role: session?.role,
+    });
     if (!error) {
       dispatch(refetchNegotiatingOffers());
       successToast(message);
