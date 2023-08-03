@@ -176,8 +176,8 @@ export function getUserNegotiating(role) {
     case ROLES.CHARTERER: {
       return getChartererNegotiating;
     }
-    default: return () => {}
-      
+    default:
+      return () => {};
   }
 }
 

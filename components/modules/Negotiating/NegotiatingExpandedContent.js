@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -9,8 +9,7 @@ import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } f
 import { Modal, Table } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { getCargoCounteroffers, getCargoFailedOffers, getCargoSentOffers } from '@/services/cargo';
-import { getFailedOffers, getIncomingOffers, getSentCounteroffers } from '@/services/offer';
+import { fetchNegotiatingOffers } from '@/store/entities/negotiating/actions';
 import { negotiatingSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 import {
@@ -24,12 +23,11 @@ import {
 
 const NegotiatingExpandedContent = ({ data, tabs }) => {
   const [modal, setModal] = useState(null);
-  const [incomingOffers, setIncomingOffers] = useState([]);
-  const [sentCounteroffers, setSentCounteroffers] = useState([]);
-  const [failedOffers, setFailedOfffers] = useState([]);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
-  const { refetchOffers } = useSelector(negotiatingSelector);
+  const dispatch = useDispatch();
+  const { refetchOffers, negotiatingOffers } = useSelector(negotiatingSelector);
+  const { incoming, sent, failed } = negotiatingOffers;
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
 
@@ -37,24 +35,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
   const handleOpenModal = ({ id }) => setModal(id);
 
   useEffect(() => {
-    (async () => {
-      if (isOwner) {
-        const [{ data: incomingOffersData }, { data: sentCounteroffersData }, { data: failedOffersData }] =
-          await Promise.all([getIncomingOffers(data.id), getSentCounteroffers(data.id), getFailedOffers(data.id)]);
-        setIncomingOffers(incomingOffersData);
-        setSentCounteroffers(sentCounteroffersData);
-        setFailedOfffers(failedOffersData);
-      } else {
-        const [{ data: sentOffersData }, { data: counteroffersData }, { data: failedOffersData }] = await Promise.all([
-          getCargoSentOffers(data.id),
-          getCargoCounteroffers(data.id),
-          getCargoFailedOffers(data.id),
-        ]);
-        setIncomingOffers(sentOffersData);
-        setSentCounteroffers(counteroffersData);
-        setFailedOfffers(failedOffersData);
-      }
-    })();
+    dispatch(fetchNegotiatingOffers({ isOwner, id: data.id }));
   }, [refetchOffers]);
 
   const tabContent = useMemo(() => {
@@ -63,7 +44,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
         return (
           <Table
             headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
-            rows={counteroffersTabDataByRole({ data: sentCounteroffers, role: session?.role })}
+            rows={counteroffersTabDataByRole({ data: sent, role: session?.role })}
             handleActionClick={handleOpenModal}
             noDataMessage="No data provided"
           />
@@ -72,7 +53,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
         return (
           <Table
             headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
-            rows={failedTabDataByRole({ data: failedOffers, role: session?.role })}
+            rows={failedTabDataByRole({ data: failed, role: session?.role })}
             handleActionClick={handleOpenModal}
             noDataMessage="No data provided"
           />
@@ -81,13 +62,13 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
         return (
           <Table
             headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
-            rows={offerTabDataByRole({ data: incomingOffers, role: session?.role })}
+            rows={offerTabDataByRole({ data: incoming, role: session?.role })}
             handleActionClick={handleOpenModal}
             noDataMessage="No data provided"
           />
         );
     }
-  }, [currentTab, failedOffers, incomingOffers, isOwner, sentCounteroffers, session?.role]);
+  }, [currentTab, failed, incoming, isOwner, sent, session?.role]);
 
   const modalContent = () => {
     switch (modal) {
