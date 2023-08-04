@@ -16,11 +16,11 @@ export async function uploadData({ data }) {
     body,
   });
 
-  const result = await res.json();
+  const result = await res.text();
 
   if (res.status === 200)
     return {
-      data: await res.text(),
+      data: result,
       status: res.status,
       errors: {
         title: null,

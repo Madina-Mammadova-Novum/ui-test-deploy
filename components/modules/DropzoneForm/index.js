@@ -9,8 +9,9 @@ import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { Dropzone, File } from '@/units';
 import { updateFormats } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
+import { DropZonePropTypes } from '@/lib/types';
 
-const DropzoneForm = () => {
+const DropzoneForm = ({ showTextFields = true }) => {
   const {
     register,
     setValue,
@@ -79,19 +80,21 @@ const DropzoneForm = () => {
   }, [formats]);
 
   return (
-    <div className="flex flex-auto gap-5">
-      <div className="flex flex-col gap-8">
-        <Input
-          {...register('title')}
-          label="title"
-          maxlength={46}
-          helperText="Max: 46 symbols"
-          placeholder="Enter the file title"
-          error={errors?.title?.message}
-        />
+    <div className="flex flex-auto gap-5 !min-h-[160px]">
+      {showTextFields && (
+        <div className="flex flex-col gap-8">
+          <Input
+            {...register('title')}
+            label="title"
+            maxlength={46}
+            helperText="Max: 46 symbols"
+            placeholder="Enter the file title"
+            error={errors?.title?.message}
+          />
 
-        <TextArea {...register('comment')} label="comment (optional)" placeholder="Type your Message here …" />
-      </div>
+          <TextArea {...register('comment')} label="comment (optional)" placeholder="Type your Message here …" />
+        </div>
+      )}
       {!files.length ? (
         <Dropzone areaParams={getRootProps} inputParams={getInputProps}>
           {printHelpers}
@@ -106,6 +109,6 @@ const DropzoneForm = () => {
   );
 };
 
-DropzoneForm.propTypes = {};
+DropzoneForm.propTypes = DropZonePropTypes;
 
 export default DropzoneForm;

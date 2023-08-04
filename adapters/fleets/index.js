@@ -1,3 +1,4 @@
+import ClockSVG from '@/assets/images/clock.svg';
 import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
@@ -227,7 +228,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     status: requestStatus,
   } = data;
 
-  const updateRequested = requestStatus === 'Update Requested';
+  const additionRequested = requestStatus === 'Addition requested';
+  const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = apearsInSearch ? 'Active' : 'Inactive';
 
@@ -289,10 +291,11 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: updateRequested ? 'Update requested' : 'Request to update info',
+          actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
-          disabled: updateRequested,
+          disabled: vesselInProgress,
+          editIcon: additionRequested && <ClockSVG className="w-4 h-4 fill-blue ml-1" viewBox="0 0 24 24" />,
         },
         {
           action: ACTIONS.DELETE_TANKER,
