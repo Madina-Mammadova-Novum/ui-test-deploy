@@ -5,7 +5,7 @@ import { FLEETS } from '@/store/entities/fleets/types';
 
 /* Services */
 import { vesselDetailsAdapter } from '@/adapters/vessel';
-import { getCountries , getUserFleets } from '@/services';
+import { getCountries, getUserFleets } from '@/services';
 import { getPorts } from '@/services/port';
 import { getFleetsVessels, getUnassignedVessels, getVesselDetails, getVesselTypes } from '@/services/vessel';
 import { convertDataToOptions, countriesOptions } from '@/utils/helpers';

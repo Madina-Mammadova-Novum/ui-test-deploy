@@ -3,13 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import { DropZonePropTypes } from '@/lib/types';
+
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
 import { Input, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { Dropzone, File } from '@/units';
 import { updateFormats } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
-import { DropZonePropTypes } from '@/lib/types';
 
 const DropzoneForm = ({ showTextFields = true }) => {
   const {

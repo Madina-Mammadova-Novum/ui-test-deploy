@@ -14,8 +14,6 @@ import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Input, Loader, TextWithLabel, Title } from '@/elements';
 import { unassignedFleetOption } from '@/lib/constants';
 import { fileSchema, tankerDataSchema } from '@/lib/schemas';
-
-
 import DropzoneForm from '@/modules/DropzoneForm';
 import { getVesselCategoryOne, getVesselCategoryTwo, requestUpdateVessel } from '@/services/vessel';
 import { fetchPrefilledDataToUpdate } from '@/store/entities/fleets/actions';
