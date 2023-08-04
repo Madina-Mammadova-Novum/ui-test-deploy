@@ -27,7 +27,11 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
 
   const dispatch = useDispatch();
   const { refetchOffers, negotiatingOffers } = useSelector(negotiatingSelector);
-  const { incoming, sent, failed } = negotiatingOffers;
+  const {
+    incoming = [],
+    sent = [],
+    failed = [],
+  } = useMemo(() => negotiatingOffers[data.id] || {}, [negotiatingOffers[data.id]]);
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
 

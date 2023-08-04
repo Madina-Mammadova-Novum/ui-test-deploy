@@ -4,11 +4,7 @@ import { fetchNegotiatingOffers } from './actions';
 
 const initialState = {
   refetchOffers: false,
-  negotiatingOffers: {
-    incoming: [],
-    sent: [],
-    failed: [],
-  },
+  negotiatingOffers: {},
 };
 
 const negotiatingSlice = createSlice({
@@ -21,7 +17,7 @@ const negotiatingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchNegotiatingOffers.fulfilled, (state, action) => {
-      state.negotiatingOffers = action.payload?.data;
+      state.negotiatingOffers = { ...state.negotiatingOffers, ...action.payload?.data };
     });
   },
 });
