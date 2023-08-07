@@ -436,3 +436,25 @@ export const calculateCountdown = (expiresAt) => {
 
   return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
 };
+
+export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
+  const isNumericType = sortType === 'numeric';
+  const optionValue = isNumericType ? 1 : -1;
+  const transformValue = (value) => (isNumericType ? +value.match(/\d+/)[0] : value.toLowerCase());
+
+  if (sortDirection === 'asc') {
+    const ascSorted = array.sort((a, b) => {
+      if (transformValue(a[index].value) > transformValue(b[index].value)) return -optionValue;
+      if (transformValue(a[index].value) < transformValue(b[index].value)) return optionValue;
+      return 0;
+    });
+    return ascSorted;
+  } 
+    const descSorted = array.sort((a, b) => {
+      if (transformValue(a[index].value) > transformValue(b[index].value)) return optionValue;
+      if (transformValue(a[index].value) < transformValue(b[index].value)) return -optionValue;
+      return 0;
+    });
+    return descSorted;
+  
+};
