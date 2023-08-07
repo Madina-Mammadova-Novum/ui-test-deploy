@@ -73,7 +73,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         {data?.partialResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
-            footer={<TankerExpandedFooter />}
+            footer={<TankerExpandedFooter tankerId={rowHeader.id} />}
             expand={expandPartialResults}
           >
             <ExpandedContent data={rowHeader.expandedData} />
