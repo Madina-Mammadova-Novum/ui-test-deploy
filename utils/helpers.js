@@ -449,12 +449,11 @@ export const sortTable = (array, index, sortDirection, sortType = 'numeric') => 
       return 0;
     });
     return ascSorted;
-  } 
-    const descSorted = array.sort((a, b) => {
-      if (transformValue(a[index].value) > transformValue(b[index].value)) return optionValue;
-      if (transformValue(a[index].value) < transformValue(b[index].value)) return -optionValue;
-      return 0;
-    });
-    return descSorted;
-  
+  }
+  const descSorted = array.sort((a, b) => {
+    if (transformValue(a[index].value) > transformValue(b[index].value)) return optionValue;
+    if (transformValue(a[index].value) < transformValue(b[index].value)) return -optionValue;
+    return 0;
+  });
+  return descSorted;
 };
