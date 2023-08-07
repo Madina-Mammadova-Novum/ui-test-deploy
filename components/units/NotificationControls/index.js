@@ -1,24 +1,23 @@
 'use client';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { NotificationControlsPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 import { readAllNotifications } from '@/store/entities/notifications/actions';
 import { setFilterParams } from '@/store/entities/notifications/slice';
-import { getNotificationsDataSelector } from '@/store/selectors';
 import NotificationFilter from '@/units/NotificationControls/NotificationFilter';
 import NotificationSearch from '@/units/NotificationControls/NotificationSearch';
 import NotificationTabs from '@/units/NotificationControls/NotificationTabs';
+import { formattetTabValue, options } from '@/utils/helpers';
 
-const NotificationControls = ({ contianerClass }) => {
-  const { filterParams } = useSelector(getNotificationsDataSelector);
+const NotificationControls = ({ contianerClass, filterParams, unreadCount, readedCount }) => {
   const dispatch = useDispatch();
 
-  const { searchValue, tabs, activeTab } = filterParams;
+  const { searchValue, activeTab } = filterParams;
 
-  const convertValueToBool = (value) => value?.toLowerCase() === 'read';
+  const convertValueToBool = (value) => formattetTabValue(value) === 'read';
 
   const handleSearch = ({ target }) => {
     dispatch(setFilterParams({ searchValue: target.value }));
@@ -40,7 +39,7 @@ const NotificationControls = ({ contianerClass }) => {
     <div className={contianerClass}>
       <NotificationSearch value={searchValue} onChange={handleSearch} containerClass="px-8 pt-5" />
       <NotificationTabs
-        tabs={tabs}
+        tabs={options([`Unread (${unreadCount})`, `Read (${readedCount})`])}
         activeTab={activeTab}
         onChange={handleTab}
         onClick={handleReadAll}

@@ -7,9 +7,9 @@ import storage from 'redux-persist/lib/storage';
 import { reducer } from '@/store/reducers';
 
 const persistConfig = {
-  key: 'user',
+  key: 'root',
   storage,
-  whitelist: ['user'],
+  whitelist: ['user', 'general', 'notifications'],
   version: 1,
 };
 

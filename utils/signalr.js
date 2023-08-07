@@ -65,6 +65,6 @@ class NotificationService {
   }
 }
 
-const notificationService = new NotificationService({ host: '/hubs/NotificationHub', state: store });
+const notificationService = new NotificationService({ host: 'hubs/NotificationHub', state: store });
 
 export default notificationService;

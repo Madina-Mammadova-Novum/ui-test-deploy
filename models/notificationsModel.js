@@ -7,11 +7,11 @@ class NotificationsModel {
   }
 
   setFormData() {
-    this.formData.append('query', this.params.search);
-    this.formData.append('origin', this.params.filteredBy);
-    this.formData.append('isOpened', this.params.watched);
-    this.formData.append('skip', this.params.skip);
-    this.formData.append('take', this.params.take);
+    this.formData.append('query', this.params.search ?? '');
+    this.formData.append('origin', this.params.filteredBy ?? '');
+    this.formData.append('isOpened', this.params.watched ?? false);
+    this.formData.append('skip', this.params.skip ?? 0);
+    this.formData.append('take', this.params.take ?? 20);
     return this.formData;
   }
 }

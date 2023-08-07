@@ -1,19 +1,21 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { getNotificationsDataSelector } from '@/store/selectors';
 import notificationService from '@/utils/signalr';
 
 const ExtraDataManager = ({ children }) => {
-  const { data: session, update } = useSession();
-
   const dispatch = useDispatch();
+  const { data: session, update } = useSession();
+  const { filterParams } = useSelector(getNotificationsDataSelector);
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
@@ -35,22 +37,29 @@ const ExtraDataManager = ({ children }) => {
   );
 
   useEffect(() => {
-    notificationService.start();
     getGeneralData();
-
-    return () => {
-      notificationService.stop();
-    };
   }, [getGeneralData]);
 
   useEffect(() => {
     if (session?.accessToken) setUserData({ role: session?.role, isValid: true });
-    else setUserData({ role: null, isValid: false });
-  }, [session?.accessToken, session?.role, setUserData]);
+    if (Date.now() > session?.expires) updateSession();
+
+    return () => {
+      setUserData({ role: null, isValid: false });
+    };
+  }, [session?.accessToken, session?.expires, session?.role, setUserData, updateSession]);
 
   useEffect(() => {
-    if (Date.now() > session?.expires) updateSession();
-  }, [session?.expires, updateSession]);
+    if (session?.accessToken) {
+      notificationService.start();
+    } else {
+      notificationService.stop();
+    }
+  }, [session?.accessToken]);
+
+  useEffect(() => {
+    if (session?.accessToken) dispatch(fetchNotifications(filterParams));
+  }, [dispatch, filterParams, session?.accessToken]);
 
   return children;
 };

@@ -43,8 +43,10 @@ import ModalWindow from '@/units/ModalWindow';
 import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
 import NotificationCard from '@/units/NotificationCard';
+import NotificationContent from '@/units/NotificationContent';
 import NotificationControls from '@/units/NotificationControls';
 import NotificationList from '@/units/NotificationList';
+import NotificationPlaceholder from '@/units/NotificationPlaceholder';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
 import OfferForm from '@/units/OfferForm';
@@ -146,4 +148,6 @@ export {
   NotificationControls,
   ImoNotFound,
   AssignToFleet,
+  NotificationContent,
+  NotificationPlaceholder,
 };

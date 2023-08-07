@@ -7,10 +7,9 @@ import { getRtURL } from '@/utils';
 import { postData } from '@/utils/dataFetching';
 
 export const getNotifications = async ({ data }) => {
+  const session = await getSession();
   const params = notificationParamsAdapter({ data });
   // const response = await postData(`notifications`, { data: setNotifications(), type: 'formdata' });
-
-  const session = await getSession();
 
   const response = await fetch(getRtURL(`notifications/search`), {
     method: 'POST',

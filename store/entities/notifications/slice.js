@@ -3,23 +3,21 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { fetchNotifications } from './actions';
 
-import { options } from '@/utils/helpers';
-
 const initialState = {
-  data: [],
+  cachedRead: null,
+  cachedUnread: null,
   unread: 0,
   readed: 0,
   loading: false,
   error: null,
   isConnected: false,
   filterParams: {
+    activeTab: 'unread',
     searchValue: '',
     sortedValue: '',
     skip: 0,
     take: 20,
-    activeTab: 'Unread',
     watched: false,
-    tabs: options(['Unread', 'Read']),
   },
 };
 
@@ -39,6 +37,13 @@ const notificationsSlice = createSlice({
     setConnectionStatus: (state, action) => {
       state.isConnected = action.payload;
     },
+    resetFilterParams: (state) => {
+      state.filterParams = {
+        ...state.filterParams,
+        searchValue: '',
+        sortedValue: '',
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchNotifications.pending, (state) => {
@@ -46,7 +51,7 @@ const notificationsSlice = createSlice({
     });
     builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.data = payload?.data;
+      state.data = payload.data;
       state.readed = payload.readed;
       state.unread = payload.unread;
     });
@@ -57,6 +62,6 @@ const notificationsSlice = createSlice({
   },
 });
 
-export const { setConnectionStatus, setFilterParams, setUpdatedData } = notificationsSlice.actions;
+export const { setConnectionStatus, setFilterParams, setUpdatedData, resetFilterParams } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

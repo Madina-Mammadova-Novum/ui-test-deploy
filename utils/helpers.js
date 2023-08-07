@@ -454,3 +454,5 @@ export const calculateCountdown = (expiresAt) => {
 
   return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
 };
+
+export const formattetTabValue = (value) => value?.split(' ')[0]?.toLowerCase();

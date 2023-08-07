@@ -1,16 +1,34 @@
+'use client';
+
+import { useSelector } from 'react-redux';
+
 import { NotificationTabsPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
+import { getNotificationsDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 
-const NotificationTabs = ({ tabs, activeTab, onChange, onClick, containerClass }) => {
+const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
+  const { unread, readed, data } = useSelector(getNotificationsDataSelector);
+
+  const options = [
+    {
+      label: `Unread (${unread})`,
+      value: 'unread',
+    },
+    {
+      label: `Read (${readed})`,
+      value: 'read',
+    },
+  ];
+
   return (
     <div className={containerClass}>
-      <Tabs tabs={tabs} activeTab={activeTab} onClick={onChange} />
-      {activeTab === 'Unread' && (
+      <Tabs tabs={options} activeTab={activeTab} onClick={onChange} />
+      {activeTab === 'unread' && data[0]?.data?.length > 0 && (
         <Button
           onClick={onClick}
-          customStyles="p-0 underline decoration-dashed"
+          customStyles="!p-0 underline decoration-dashed"
           buttonProps={{
             size: 'small',
             text: 'Mark all as read',

@@ -55,10 +55,10 @@ export const notificationParamsAdapter = ({ data }) => {
   if (!data) return {};
 
   return {
-    search: data?.searchValue,
-    filteredBy: data?.sortedValue,
-    watched: data?.watched,
-    skip: data?.skip,
-    take: data?.take,
+    search: data?.searchValue ?? '',
+    filteredBy: data?.sortedValue ?? '',
+    watched: data?.watched ?? false,
+    skip: data?.skip ?? 0,
+    take: data?.take ?? 20,
   };
 };
