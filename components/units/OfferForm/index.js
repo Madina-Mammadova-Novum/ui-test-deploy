@@ -47,7 +47,7 @@ const OfferForm = ({ children, handleSubmit = () => {} }) => {
           text: 'Send offer',
           variant: 'primary',
           size: 'large',
-          className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
+          className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1] !w-32',
         }}
       >
         {children}

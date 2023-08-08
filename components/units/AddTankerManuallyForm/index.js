@@ -239,20 +239,20 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 error={errors.built?.message}
               />
               <FormDropdown
-                label="Port of registry"
-                options={ports}
-                asyncCall={initialLoading}
-                disabled={!ports.length || q88State.portOfRegistry}
-                name="portOfRegistry"
-                onChange={(option) => handleChange('portOfRegistry', option)}
-              />
-              <FormDropdown
                 label="Country"
                 options={countries}
                 name="country"
                 asyncCall={initialLoading}
                 disabled={!countries.length || q88State.country}
                 onChange={(option) => handleChange('country', option)}
+              />
+              <FormDropdown
+                label="Port of registry"
+                options={ports}
+                asyncCall={initialLoading}
+                disabled={!ports.length || q88State.portOfRegistry}
+                name="portOfRegistry"
+                onChange={(option) => handleChange('portOfRegistry', option)}
               />
             </div>
             <div className="grid grid-cols-3 gap-x-5 gap-y-4">
