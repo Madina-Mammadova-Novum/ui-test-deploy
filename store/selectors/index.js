@@ -39,7 +39,8 @@ export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (
 export const getNotificationsDataSelector = createDraftSafeSelector(notificationsSelector, (state) => {
   return {
     ...state,
-    data: notificationsDataAdapter({ data: state?.data }),
+    watchedData: notificationsDataAdapter({ data: state?.watchedData }),
+    unwatchedData: notificationsDataAdapter({ data: state?.unwatchedData }),
   };
 });
 

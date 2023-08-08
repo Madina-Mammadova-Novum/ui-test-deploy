@@ -37,7 +37,9 @@ class NotificationService {
 
       this.connection.on('ReceiveNotification', async (message) => {
         successToast(message?.title);
-        this.store.dispatch(fetchNotifications());
+        this.store.dispatch(
+          fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 20, watched: false })
+        );
       });
     } catch (err) {
       console.error(err);

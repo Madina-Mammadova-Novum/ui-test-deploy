@@ -10,7 +10,7 @@ import SettingSVG from '@/assets/images/setting.svg';
 import { Dropdown, LabelAsOption } from '@/elements';
 import { NOTIFICATION_FILTERS } from '@/lib/constants';
 
-const NotificationFilter = ({ containerClass, onChange }) => {
+const NotificationFilter = ({ containerClass, value, onChange }) => {
   const options = [
     {
       label: <LabelAsOption text="All Notifications" />,
@@ -57,6 +57,7 @@ const NotificationFilter = ({ containerClass, onChange }) => {
       <Dropdown
         label="Filter By:"
         placeholder="All notifications"
+        defaultValue={value}
         options={options}
         customStyles={dropdownStyles}
         onChange={onChange}

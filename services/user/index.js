@@ -75,7 +75,7 @@ export async function login({ data }) {
 }
 
 export async function refreshAccessToken({ token }) {
-  const response = await postData(`auth/refreshToken`, { token }, { headers: { ...ContentTypeJson() } });
+  const response = await postData(`auth/refreshToken`, { token });
 
   if (response?.data) return response?.data;
   return { ...response };

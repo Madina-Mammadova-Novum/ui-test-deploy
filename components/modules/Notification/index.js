@@ -9,19 +9,19 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
-import { resetFilterParams } from '@/store/entities/notifications/slice';
+import { resetNotifications } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
-import { NotificationContent, NotificationControls } from '@/units';
+import { NotificationContent, NotificationControl } from '@/units';
 
 const Notification = () => {
   const dispatch = useDispatch();
   const [isOpened, setIsOpened] = useState(false);
 
-  const { loading, read, unread, data, filterParams } = useSelector(getNotificationsDataSelector);
+  const { unread } = useSelector(getNotificationsDataSelector);
 
   const handleOpen = () => setIsOpened(!isOpened);
   const handleClose = () => {
-    dispatch(resetFilterParams());
+    dispatch(resetNotifications());
     setIsOpened(false);
   };
 
@@ -40,21 +40,12 @@ const Notification = () => {
             onClose={handleClose}
             containerClass="absolute z-50 !overflow-hidden !max-h-screen h-screen !w-[550px] !-left-[275px] !-translate-y-0 !top-0 !rounded-none !p-0"
           >
-            <div className="flex overflow-y-auto flex-col py-8 h-full">
+            <div className="flex !overflow-y-hidden flex-col py-8 h-full">
               <Title level="2" className="text-black px-8">
                 Notifications
               </Title>
-              <NotificationControls
-                unreadCount={unread}
-                readedCount={read}
-                filterParams={filterParams}
-                contianerClass="flex flex-col gap-y-5 h-[25vh]"
-              />
-              <NotificationContent
-                data={data}
-                isLoading={loading}
-                contianerClass="overflow-y-auto max-h-[calc(100vh-35vh)]"
-              />
+              <NotificationControl contianerClass="flex flex-col gap-y-5 h-[25vh]" />
+              <NotificationContent contianerClass="overflow-y-auto max-h-[calc(100vh-35vh)]" />
             </div>
           </ModalWrapper>
         </div>

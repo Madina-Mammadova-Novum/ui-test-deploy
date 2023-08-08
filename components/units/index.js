@@ -44,7 +44,7 @@ import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
 import NotificationCard from '@/units/NotificationCard';
 import NotificationContent from '@/units/NotificationContent';
-import NotificationControls from '@/units/NotificationControls';
+import NotificationControl from '@/units/NotificationControl';
 import NotificationList from '@/units/NotificationList';
 import NotificationPlaceholder from '@/units/NotificationPlaceholder';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
@@ -145,7 +145,7 @@ export {
   UnassignedFleet,
   NotificationList,
   NotificationCard,
-  NotificationControls,
+  NotificationControl,
   ImoNotFound,
   AssignToFleet,
   NotificationContent,
