@@ -44,6 +44,7 @@ const TableCell = ({ cellProps }) => {
     actions = [],
     available,
     fleetId,
+    fleetName,
   } = cellProps;
 
   const emptyCell = !value && !editable;
@@ -91,7 +92,7 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.TANKER_INFORMATION:
           return <NegotiatingTankerInformation />;
         case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
-          return <UpdateTankerForm />;
+          return <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} />;
         case ACTIONS.DELETE_TANKER_FROM_FLEET:
           return <DeleteTankerModal state={{ id, fleetId, name, action }} />;
         case ACTIONS.DELETE_TANKER:
@@ -152,7 +153,7 @@ const TableCell = ({ cellProps }) => {
 
         <div className="flex gap-x-2.5">
           {editable &&
-            actions.map(({ action, actionVariant, actionSize, actionText, editIcon }) => (
+            actions.map(({ action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled }) => (
               <ModalWindow
                 containerClass="overflow-y-[unset] z-50"
                 buttonProps={{
@@ -160,6 +161,7 @@ const TableCell = ({ cellProps }) => {
                   variant: actionVariant,
                   size: actionSize,
                   text: actionText,
+                  disabled: actionDisabled,
                   className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0',
                 }}
               >

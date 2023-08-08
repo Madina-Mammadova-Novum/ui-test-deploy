@@ -4,6 +4,7 @@ import {
   requestAddVesselManuallyAdapter,
   requestAddVesselToFleetAdapter,
   requestSearchVesselAdapter,
+  requestUpdateVesselAdapter,
   updateVesselPortAndDataAdapter,
 } from '@/adapters/vessel';
 import { getData, postData, putData } from '@/utils/dataFetching';
@@ -36,6 +37,18 @@ export async function addVesselManually({ data }) {
   const body = requestAddVesselManuallyAdapter({ data });
   const response = await postData(`vessels/add-manually`, body);
   if (!response.error) response.message = 'Your have successfully added a new tanker';
+  return {
+    ...response,
+  };
+}
+
+export async function requestUpdateVessel({ data }) {
+  const body = requestUpdateVesselAdapter({ data });
+  const response = await putData(`vessels/update`, body);
+  if (!response.error) {
+    response.message = 'Your have successfully applied to change information';
+    response.messageDescription = 'Please wait for an answer within 24 hours';
+  }
   return {
     ...response,
   };
