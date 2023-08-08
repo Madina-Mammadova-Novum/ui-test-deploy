@@ -54,7 +54,7 @@ export function sendCounterofferAdapter({ data }) {
     layTime,
     value,
     demurrageRate,
-    // responseCountdown,
+    responseCountdown,
     comment,
     freight,
   } = data;
@@ -68,6 +68,7 @@ export function sendCounterofferAdapter({ data }) {
     demurrageRate,
     comment,
     freightFormatId: freight?.value,
+    countDownTimerSettingId: responseCountdown?.value,
   };
 }
 
