@@ -130,13 +130,13 @@ export function responseSearchVesselAdapter({ data }) {
   };
 }
 
-export function requestAddVesselByImoAdapter({ data }) {
+export function requestAddVesselToFleetAdapter({ data }) {
   if (!data) return null;
 
-  const { imo } = data;
+  const { tankerId } = data;
 
   return {
-    vesselId: imo,
+    vesselId: tankerId,
   };
 }
 
@@ -222,6 +222,16 @@ export function responseGetVesselTypesAdapter({ data }) {
 
   return data;
 }
+export function responseGetUnassignedVesselsAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseGetVesselDetailsAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
 
 export function responseGetVesselCategoryOneAdapter({ data }) {
   if (!data) return null;
@@ -234,6 +244,16 @@ export function responseGetVesselCategoryTwoAdapter({ data }) {
   return data;
 }
 export function responseGetVesselFreightFormatsAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseDeleteVesselFromFleetAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+export function responseDeleteVesselAdapter({ data }) {
   if (!data) return null;
 
   return data;
@@ -339,5 +359,25 @@ export function updateVesselPortAndDataAdapter({ data }) {
     portId,
     opendate: new Date(date).toISOString(),
     appearsInSearch: available,
+  };
+}
+
+export function removeVesselFromFleetAdapter({ data }) {
+  if (!data) return {};
+
+  const { id } = data;
+
+  return {
+    vesselId: id,
+  };
+}
+
+export function removeVesselAdapter({ data }) {
+  if (!data) return {};
+
+  const { id } = data;
+
+  return {
+    id,
   };
 }

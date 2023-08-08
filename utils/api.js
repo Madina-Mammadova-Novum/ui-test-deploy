@@ -55,7 +55,7 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
       ...headers,
     },
   };
-  if (['POST', 'PUT', 'PATCH'].includes(method)) {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
     // temporary solution for file type
     if (body?.type === 'text/plain') {
       const formdata = new window.FormData();
@@ -87,7 +87,7 @@ export const apiHandler = async (options) => {
     const ok = delve(response, 'ok');
     const statusText = delve(response, 'statusText');
     let responseBody = await response.text();
-    if (responseBody !== '') {
+    if (responseBody) {
       responseBody = JSON.parse(responseBody);
     }
 

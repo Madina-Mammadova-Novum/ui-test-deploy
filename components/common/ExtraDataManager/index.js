@@ -40,17 +40,16 @@ const ExtraDataManager = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (Date.now() < session?.expires && session?.accessToken) {
-      setUserData({ role: session?.role, isValid: true });
-    } else setUserData({ role: '', isValid: false });
-  }, [session?.accessToken, session?.expires, session?.role, setUserData]);
+    if (session?.accessToken) setUserData({ role: session?.role, isValid: true });
+    else setUserData({ role: null, isValid: false });
+  }, [session?.accessToken, session?.role, setUserData]);
 
   useEffect(() => {
     if (Date.now() > session?.expires) {
       updateSession();
       getGeneralData();
     }
-  }, [getGeneralData, session?.accessToken, session?.expires, updateSession]);
+  }, [session?.expires, getGeneralData, updateSession]);
 
   return children;
 };

@@ -32,7 +32,7 @@ const Dropdown = ({
   );
 
   return (
-    <div className={`relative bottom-0.5 ${disabled && 'opacity-70'} ${className}`}>
+    <div className={`relative top-px ${disabled && 'opacity-70'} ${className}`}>
       <Label htmlFor={name} className="text-xs-sm">
         {label}
       </Label>

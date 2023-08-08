@@ -17,9 +17,7 @@ const TextArea = React.forwardRef(
       helperText,
       customStyles = '',
       inputStyles,
-      onChange,
       error = null,
-      register,
       ...rest
     },
     ref
@@ -39,7 +37,6 @@ const TextArea = React.forwardRef(
           name={name}
           disabled={disabled}
           placeholder={placeholder}
-          {...rest}
           className={classnames(
             'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue',
             inputStyles,

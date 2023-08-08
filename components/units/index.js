@@ -4,6 +4,7 @@ import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
+import AssignToFleet from '@/units/AssignToFleet';
 import AuthNavButtons from '@/units/AuthNavButtons';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
@@ -35,6 +36,7 @@ import FilterByForm from '@/units/FilterByForm';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
+import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
@@ -61,6 +63,7 @@ import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
 import TankerSlotsDetailsStatic from '@/units/TankerSlotsDetailsStatic';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
+import UnassignedFleet from '@/units/UnassignedFleet';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
@@ -134,4 +137,7 @@ export {
   PostFixtureFilter,
   Dropzone,
   File,
+  UnassignedFleet,
+  ImoNotFound,
+  AssignToFleet,
 };

@@ -46,7 +46,7 @@ const CompanyDetails = ({ notEditable }) => {
         ref={inputYearsRef}
         type="number"
         name="companyYearsOfOperation"
-        label="Years of operation"
+        label="Years in operation"
         placeholder="Years"
         value={inputYearsRef.current?.value ?? ''}
         onChange={handleNumberOfOperation}

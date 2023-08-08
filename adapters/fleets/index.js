@@ -1,6 +1,8 @@
 import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
+import TrashIcon from '@/assets/images/trashAlt.svg';
+import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 import { transformToCapitalize } from '@/utils/helpers';
@@ -116,7 +118,7 @@ export const fleetsRowsDataAdapter = ({ data }) => {
 export const fleetsPageHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { name, numberOfVessels } = data;
+  const { name, vessels = [] } = data;
 
   return [
     {
@@ -125,7 +127,7 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Number of tankers',
-      text: numberOfVessels || '0',
+      text: vessels.length || '0',
     },
   ];
 };
@@ -133,7 +135,13 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
 export const fleetsPageRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, name, imo, dwt, category, questionaire, status } = data;
+  const {
+    id,
+    details: { name, summerDwt, q88QuestionnarieFile },
+    imo,
+    status,
+    vesselSizeCategoryId,
+  } = data;
 
   return [
     {
@@ -150,15 +158,15 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: dwt,
+      value: summerDwt && `${summerDwt} tons`,
     },
     {
       id,
-      value: category,
+      value: vesselSizeCategoryId,
     },
     {
       id,
-      editable: !!questionaire,
+      editable: !!q88QuestionnarieFile,
       actions: [
         {
           action: ACTIONS.VIEW_QUESTIONAIRE,
@@ -171,10 +179,103 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: status,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,
       editable: true,
+      name,
+      actions: [
+        {
+          action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+          actionText: 'Request to update info',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+        },
+        {
+          action: ACTIONS.DELETE_TANKER_FROM_FLEET,
+          editIcon: <TrashIcon viewBox="0 0 24 24" className="fill-red w-5 h-5" />,
+          actionVariant: 'delete',
+          actionSize: 'medium',
+        },
+      ],
+    },
+  ];
+};
+
+export const fleetsPageRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const unassignedFleetRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const {
+    id,
+    imo,
+    details: { summerDwt, name },
+    vesselSizeCategoryId,
+    q88QuestionnarieFile,
+    status,
+  } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      value: name,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
+      value: imo,
+    },
+    {
+      id,
+      value: `${summerDwt} tons`,
+    },
+    {
+      id,
+      value: vesselSizeCategoryId,
+    },
+    {
+      id,
+      editable: !!q88QuestionnarieFile,
+      actions: [
+        {
+          action: ACTIONS.VIEW_QUESTIONAIRE,
+          actionText: 'View',
+          actionVariant: 'primary',
+          actionSize: 'small',
+        },
+      ],
+    },
+    {
+      id,
+      editable: true,
+      value: 'Unassigned',
+      type: TYPE.GREY,
+      name,
+      actions: [
+        {
+          action: ACTIONS.ASSIGN_FLEET,
+          editIcon: <EditIcon />,
+        },
+      ],
+    },
+    {
+      id,
+      value: status,
+      icon: <StatusIndicator status={status} />,
+    },
+    {
+      id,
+      editable: true,
+      name,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
@@ -193,10 +294,10 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const fleetsPageRowsDataAdapter = ({ data }) => {
+export const unassignedFleetRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => unassignedFleetRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
 export const requestFleetNameAdapter = ({ data }) => {

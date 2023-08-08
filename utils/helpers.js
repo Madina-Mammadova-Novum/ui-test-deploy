@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
@@ -375,6 +376,11 @@ export const calculateTotal = (array, key) =>
     .map(({ [key]: itemValue }) => itemValue)
     .reduce((a, b) => +a + +b);
 
+export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
+  new Date(dateString).toLocaleString('en-US', settings);
+
+export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
+
 export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
   return Math.ceil(recordsTotal / recordsFiltered);
 };
@@ -411,4 +417,22 @@ export const generateMessageByActionType = ({ action, status }) => {
 
 export const getCountryById = ({ id, data = [] }) => {
   return data?.find((country) => country.countryId === id);
+};
+
+export const calculateCountdown = (expiresAt) => {
+  const milisecondsInSecond = 1000;
+  const milisecondsInMinute = 60 * milisecondsInSecond;
+  const milisecondsInHour = 60 * milisecondsInMinute;
+  const milisecondsInDay = 24 * milisecondsInHour;
+  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(new Date().toISOString()).getTime();
+  const sign = milisecondsUntilExpiration < 0 && '-';
+  const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
+
+  const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
+  const hours = Math.abs(Math[method]((milisecondsUntilExpiration % milisecondsInDay) / milisecondsInHour));
+  const minutes = Math.abs(
+    Math[method](((milisecondsUntilExpiration % milisecondsInDay) % milisecondsInHour) / milisecondsInMinute)
+  );
+
+  return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
 };

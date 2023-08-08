@@ -1,7 +1,9 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
+import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import OfferDeclineFields from './OfferDeclineFields';
@@ -11,6 +13,8 @@ import { OfferDeclinePropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { declineOfferSchema } from '@/lib/schemas';
 import { declineOffer } from '@/services/offer';
+import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
+import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -20,18 +24,24 @@ const schema = yup.object({
 const defaultState = {};
 
 const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, itemId }) => {
+  const { data: session } = useSession();
   const methods = useHookFormParams({ state: defaultState, schema });
-  const isEmpty = methods.watch('reason');
+  const reason = methods.watch('reason');
+  const dispatch = useDispatch();
 
   const handleSubmit = async (formData) => {
-    const { status, message: successMessage, error } = await declineOffer({ data: { ...formData, offerId: itemId } });
+    const { message: successMessage, error } = await declineOffer({
+      data: { ...formData, offerId: itemId },
+      role: session?.role,
+    });
 
-    if (status === 200) {
+    if (!error) {
       successToast(successMessage);
-    }
-    if (error) {
-      const { message, description } = error;
-      errorToast(message, description);
+      dispatch(refetchNegotiatingOffers());
+      closeModal();
+    } else {
+      const { errors } = error;
+      errorToast(parseErrors(errors));
     }
   };
 
@@ -43,7 +53,7 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, it
           text: 'Send the Decline',
           variant: 'delete',
           size: 'large',
-          disabled: isEmpty === undefined || isEmpty === '',
+          disabled: !reason,
           className: `absolute cursor-pointer !max-w-[145px] whitespace-nowrap right-8 bottom-8 !px-2.5 ${
             !showCancelButton && 'left-8 !max-w-[unset] !w-auto'
           }`,

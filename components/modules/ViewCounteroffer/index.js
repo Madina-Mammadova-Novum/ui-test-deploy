@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSession } from 'next-auth/react';
 
-import { Dropdown } from '@/elements';
+import { ViewCounterofferPropTypes } from '@/lib/types';
+
+import { offerDetailsAdapter } from '@/adapters/offer';
+import { Dropdown, Loader } from '@/elements';
 import { COUNTDOWN_OPTIONS, ROLES } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
+import { getOfferDetails } from '@/services/offer';
 import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
-import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
   {
@@ -25,21 +28,44 @@ const tabs = [
   },
 ];
 
-const ViewCounteroffer = () => {
+const ViewCounteroffer = ({ itemId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[1]);
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
+  const [loading, setLoading] = useState(true);
+  const [offerDetails, setOfferDetails] = useState({});
+  const { comments, voyageDetails, commercialOfferTerms } = offerDetails;
+
+  useEffect(() => {
+    (async () => {
+      const { status, data, error } = await getOfferDetails(itemId);
+      if (status === 200) {
+        setOfferDetails(offerDetailsAdapter({ data }));
+      } else {
+        console.log(error);
+      }
+      setLoading(false);
+    })();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-72 h-72">
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
+  }
 
   const tabContent = () => {
     switch (currentTab) {
       case 'commercial_offer_terms':
-        return <COTTabContent data={COTData} />;
+        return <COTTabContent data={commercialOfferTerms} />;
       case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} areaDisabled />;
+        return <CommentsContent data={comments} areaDisabled />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
+        return <VoyageDetailsTabContent data={voyageDetails} />;
     }
   };
 
@@ -82,5 +108,7 @@ const ViewCounteroffer = () => {
     </div>
   );
 };
+
+ViewCounteroffer.propTypes = ViewCounterofferPropTypes;
 
 export default ViewCounteroffer;

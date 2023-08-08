@@ -1,15 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import classnames from 'classnames';
 
+import SendCounterofferFormFields from './SendCounterofferFormFields';
+
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
-import { Button, SimpleSelect } from '@/elements';
+import { Button, Dropdown } from '@/elements';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
-import { CommercialOfferTerms, Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
-import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
+import { getCountdownTimer } from '@/services/countdownTimer';
+import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { convertDataToOptions } from '@/utils/helpers';
 
 const tabs = [
   {
@@ -26,22 +29,46 @@ const tabs = [
   },
 ];
 
-const SendCounteroffer = ({ closeModal, goBack }) => {
+const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [responseCountdown, setResponseCountdown] = useState('20 min');
+  const [countdownState, setCountdownState] = useState({
+    responseCountdownOptions: [],
+    responseCountdown: {},
+    loading: false,
+  });
   const [showScroll, setShowScroll] = useState(false);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
+
+  const { counterofferData, voyageDetails, comments } = offerDetails;
+  const { responseCountdownOptions, responseCountdown, loading } = countdownState;
+
+  const handleCountdownStateChange = (key, value) =>
+    setCountdownState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
+        return <VoyageDetailsTabContent data={voyageDetails} />;
       case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} />;
+        return <CommentsContent data={comments} />;
       default:
-        return <CommercialOfferTerms />;
+        return <SendCounterofferFormFields data={counterofferData} />;
     }
   }, [currentTab]);
+
+  useEffect(() => {
+    (async () => {
+      handleCountdownStateChange('loading', true);
+      const { data = [] } = await getCountdownTimer();
+      const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+      handleCountdownStateChange('responseCountdownOptions', convertedOptions);
+      handleCountdownStateChange('responseCountdown', convertedOptions[0]);
+      handleCountdownStateChange('loading', false);
+    })();
+  }, []);
 
   return (
     <div className="w-[610px]">
@@ -55,14 +82,21 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
           <p className="font-bold max-w-[240px]">
             Set a response countdown timer for the vessel owner to reply to this offer
           </p>
-          <SimpleSelect
-            onChange={setResponseCountdown}
-            currentItem={responseCountdown}
-            selectableItems={['20 min', '40 min', '60 min']}
+          <Dropdown
+            defaultValue={responseCountdown}
+            options={responseCountdownOptions}
+            asyncCall={loading}
+            disabled={!responseCountdownOptions.length}
+            onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
         </div>
       </div>
-      <CounterofferForm allowSubmit={confirmCounteroffer}>
+      <CounterofferForm
+        allowSubmit={confirmCounteroffer}
+        data={{ ...counterofferData, responseCountdown }}
+        closeModal={closeModal}
+      >
         {!confirmCounteroffer ? (
           <>
             <Tabs
@@ -80,7 +114,7 @@ const SendCounteroffer = ({ closeModal, goBack }) => {
             </div>
           </>
         ) : (
-          <ConfirmCounteroffer closeModal={closeModal} />
+          <ConfirmCounteroffer closeModal={closeModal} offerDetails={offerDetails} />
         )}
       </CounterofferForm>
 

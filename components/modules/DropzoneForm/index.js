@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
@@ -35,7 +35,7 @@ const DropzoneForm = () => {
       resetDropzone();
     } else {
       setFiles(acceptedFiles.map(fileUpdateAdapter));
-      fileReaderAdapter(acceptedFiles[0], setValue);
+      fileReaderAdapter(acceptedFiles[0], setValue, setError);
     }
   };
 
@@ -58,6 +58,10 @@ const DropzoneForm = () => {
     multiple: false,
     accept: { files: AVAILABLE_FORMATS.DOCS },
   });
+
+  useEffect(() => {
+    if (errors?.file) resetDropzone();
+  }, [errors?.file, resetDropzone]);
 
   const printFile = (file) => <File key={file.id} title={file?.path} onClick={(e) => onRemove(e, file)} />;
 
