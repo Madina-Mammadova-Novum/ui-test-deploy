@@ -6,7 +6,7 @@ import { NotificationControlPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 import { readAllNotifications } from '@/store/entities/notifications/actions';
-import { resetNotifications, setFilterParams } from '@/store/entities/notifications/slice';
+import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import NotificationFilter from '@/units/NotificationControl/NotificationFilter';
 import NotificationSearch from '@/units/NotificationControl/NotificationSearch';
@@ -20,17 +20,16 @@ const NotificationControl = ({ contianerClass }) => {
 
   const convertValueToBool = (value) => formattetTabValue(value) === 'read';
 
-  const handleSearch = ({ target }) => {
-    dispatch(setFilterParams({ searchValue: target.value }));
+  const handleSearch = ({ target: { value } }) => {
+    dispatch(setFilterParams({ searchValue: value, skip: 0, take: 100 }));
   };
 
-  const handleTab = ({ target }) => {
-    dispatch(resetNotifications());
-    dispatch(setFilterParams({ activeTab: target.value, watched: convertValueToBool(target.value) }));
+  const handleTab = ({ target: { value } }) => {
+    dispatch(setFilterParams({ activeTab: value, watched: convertValueToBool(value), skip: 0, take: 50 }));
   };
 
   const handleFilter = ({ value }) => {
-    dispatch(setFilterParams({ sortedValue: value }));
+    dispatch(setFilterParams({ sortedValue: value, skip: 0, take: 100 }));
   };
 
   const handleReadAll = () => {
