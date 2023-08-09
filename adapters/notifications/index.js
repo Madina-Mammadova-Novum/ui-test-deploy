@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { convertDate, transformDate, transformTime } from '@/utils/date';
-import { getFormattedDays, makeId, sortFromCurrentToPast } from '@/utils/helpers';
+import { convertDate, transformDate } from '@/utils/date';
+import { extractTimeFromDate, getFormattedDays, makeId, sortFromCurrentToPast } from '@/utils/helpers';
 
 export const notificationsResponseAdapter = (data) => {
   if (!data) return [];
@@ -14,7 +14,7 @@ export const notificationAdapter = (data) => {
   return {
     id: data?.id,
     date: transformDate(data?.createdAt, 'MMM dd, yyyy'),
-    time: transformTime(data?.createdAt),
+    time: extractTimeFromDate(data?.createdAt),
     watched: data?.isOpened,
     title: data?.title,
     description: data?.description,
