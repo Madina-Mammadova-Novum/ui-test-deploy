@@ -19,8 +19,8 @@ const ExtraDataManager = ({ children }) => {
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
-    const result = await update({ ...refreshedData });
-    return result;
+
+    await update({ ...refreshedData });
   }, [session, update]);
 
   const getGeneralData = useCallback(() => {
@@ -28,32 +28,24 @@ const ExtraDataManager = ({ children }) => {
     dispatch(fetchCountries());
   }, [dispatch]);
 
-  const setUserData = useCallback(
-    ({ role = null, isValid = false }) => {
-      dispatch(setRoleIdentity(role));
-      dispatch(setIsAuthenticated(isValid));
-    },
-    [dispatch]
-  );
-
   useEffect(() => {
     getGeneralData();
-  }, [getGeneralData]);
 
-  useEffect(() => {
-    if (session?.accessToken) setUserData({ role: session?.role, isValid: true });
-    if (Date.now() > session?.expires) updateSession();
-    else setUserData({ role: null, isValid: false });
-  }, [session?.accessToken, session?.expires, session?.role, setUserData, updateSession]);
+    if (session.accessToken) {
+      notificationService.start();
+      dispatch(setRoleIdentity(session.role));
+      dispatch(setIsAuthenticated(true));
+      dispatch(fetchNotifications(filterParams));
 
-  useEffect(() => {
-    if (session?.accessToken) notificationService.start();
-    else notificationService.stop();
-  }, [session?.accessToken]);
+      if (Date.now() > session.expires) updateSession();
+    }
 
-  useEffect(() => {
-    dispatch(fetchNotifications(filterParams));
-  }, [dispatch, filterParams]);
+    return () => {
+      notificationService.stop();
+      dispatch(setIsAuthenticated(false));
+      dispatch(setRoleIdentity(null));
+    };
+  }, [session, updateSession, dispatch, filterParams, getGeneralData]);
 
   return children;
 };
