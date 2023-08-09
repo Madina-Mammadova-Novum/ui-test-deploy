@@ -27,8 +27,8 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token }) => {
-        if (!token?.accessToken) return false;
-        return true;
+        if (token?.accessToken) return true;
+        return false;
       },
     },
   }

@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/vesselcategoryones?VesselTypeId=${vesselTypeId}`),
     dataAdapter: responseGetVesselCategoryOneAdapter,
     requestMethod: 'GET',
-    options: { ...Authorization(session?.accessToken) },
+    options: { headers: { ...Authorization(session?.accessToken) } },
     customErrorHandling: true,
   });
 }

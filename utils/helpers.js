@@ -175,8 +175,8 @@ export function checkObjectValues({ data }) {
 
 export function formatDate(dateString) {
   const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-US', optionsDate);
   return formatter.format(date);
 }
 
@@ -225,7 +225,9 @@ export const disablePlusMinusSymbols = (e) => {
   if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
-export const options = (values) => values?.map((value) => ({ label: value, value }));
+export function options(values) {
+  return values?.map((value) => ({ label: value, value }));
+}
 
 export const countriesOptions = (data) => {
   if (!data) return [];
@@ -419,6 +421,24 @@ export const getCountryById = ({ id, data = [] }) => {
   return data?.find((country) => country.countryId === id);
 };
 
+export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
+
+export const formattedBySpaces = ({ string }) => {
+  if (!string) return '';
+
+  return string.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
+export const getFormattedDays = () => {
+  const today = new Date().toISOString().split('T')[0];
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+
+  const yesterday = yesterdayDate.toISOString().split('T')[0];
+
+  return { today, yesterday };
+};
+
 export const calculateCountdown = (expiresAt) => {
   const milisecondsInSecond = 1000;
   const milisecondsInMinute = 60 * milisecondsInSecond;
@@ -436,6 +456,8 @@ export const calculateCountdown = (expiresAt) => {
 
   return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
 };
+
+export const formattetTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
 
 export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
   const isNumericType = sortType === 'numeric';

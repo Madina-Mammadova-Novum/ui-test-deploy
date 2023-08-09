@@ -1,25 +1,26 @@
-/* eslint-disable no-return-await */
-
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { getNotificationsDataSelector } from '@/store/selectors';
+import notificationService from '@/utils/signalr';
 
 const ExtraDataManager = ({ children }) => {
-  const { data: session, update } = useSession();
-
   const dispatch = useDispatch();
+  const { data: session, update } = useSession();
+  const { filterParams } = useSelector(getNotificationsDataSelector);
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
-
-    return await update({ ...refreshedData });
+    const result = await update({ ...refreshedData });
+    return result;
   }, [session, update]);
 
   const getGeneralData = useCallback(() => {
@@ -37,19 +38,22 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     getGeneralData();
-  }, []);
+  }, [getGeneralData]);
 
   useEffect(() => {
     if (session?.accessToken) setUserData({ role: session?.role, isValid: true });
+    if (Date.now() > session?.expires) updateSession();
     else setUserData({ role: null, isValid: false });
-  }, [session?.accessToken, session?.role, setUserData]);
+  }, [session?.accessToken, session?.expires, session?.role, setUserData, updateSession]);
 
   useEffect(() => {
-    if (Date.now() > session?.expires) {
-      updateSession();
-      getGeneralData();
-    }
-  }, [session?.expires, getGeneralData, updateSession]);
+    if (session?.accessToken) notificationService.start();
+    else notificationService.stop();
+  }, [session?.accessToken]);
+
+  useEffect(() => {
+    dispatch(fetchNotifications(filterParams));
+  }, [dispatch, filterParams]);
 
   return children;
 };

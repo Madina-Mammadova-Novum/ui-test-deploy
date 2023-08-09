@@ -15,6 +15,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/${session?.role}/profile/update`),
     dataAdapter: accountPeronalDataResponseAdapter,
     requestMethod: 'PUT',
-    options: { ...Authorization(session?.accessToken) },
+    options: { headers: { ...Authorization(session?.accessToken) } },
   });
 }

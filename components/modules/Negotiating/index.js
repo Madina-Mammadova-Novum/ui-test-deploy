@@ -80,7 +80,7 @@ const Negotiating = () => {
         perPage={perPage}
       />
     ),
-    [data, currentPage, numberOfPages, perPage]
+    [currentPage, numberOfPages, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage]
   );
 
   const printExpandableRow = (rowData) => {

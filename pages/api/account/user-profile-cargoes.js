@@ -15,6 +15,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/${session?.role}/company/charteringexperiences`),
     dataAdapter: accountCargoesDataResponseAdapter,
     requestMethod: 'GET',
-    options: { ...Authorization(session?.accessToken) },
+    options: { headers: { ...Authorization(session?.accessToken) } },
   });
 }
