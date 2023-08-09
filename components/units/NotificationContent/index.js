@@ -23,8 +23,7 @@ const NotificationContent = () => {
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
     if (trigger && !loading) {
-      if (searchValue !== '' || sortedValue !== 'All') return;
-      if (take >= readed) return;
+      if (searchValue !== '' || sortedValue !== 'All' || take >= readed) return;
       dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take }));
     }
   };
