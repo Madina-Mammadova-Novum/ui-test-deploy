@@ -1,51 +1,47 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
-import { getNotificationsDataSelector } from '@/store/selectors';
 import notificationService from '@/utils/signalr';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
   const { data: session, update } = useSession();
-  const { filterParams } = useSelector(getNotificationsDataSelector);
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
 
     await update({ ...refreshedData });
-  }, [session, update]);
+  }, [session?.refreshToken, update]);
 
   const getGeneralData = useCallback(() => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
   }, [dispatch]);
 
+  const setUserData = useCallback(
+    ({ role = null, isValid = false }) => {
+      dispatch(setRoleIdentity(role));
+      dispatch(setIsAuthenticated(isValid));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     getGeneralData();
 
-    if (session.accessToken) {
+    if (session?.accessToken) {
       notificationService.start();
-      dispatch(setRoleIdentity(session.role));
-      dispatch(setIsAuthenticated(true));
-      dispatch(fetchNotifications(filterParams));
-
-      if (Date.now() > session.expires) updateSession();
+      setUserData({ role: session?.role, isValid: true });
+      if (Date.now() > session?.expires) updateSession();
     }
-
-    return () => {
-      notificationService.stop();
-      dispatch(setIsAuthenticated(false));
-      dispatch(setRoleIdentity(null));
-    };
-  }, [session, updateSession, dispatch, filterParams, getGeneralData]);
+  }, [session, dispatch, getGeneralData, setUserData, updateSession]);
 
   return children;
 };

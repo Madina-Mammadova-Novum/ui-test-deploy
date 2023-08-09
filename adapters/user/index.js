@@ -27,8 +27,6 @@ export function userDetailsAdapter({ data }) {
   if (!data) return {};
 
   return {
-    role: data?.role,
-    isAuthenticated: data?.isAuthenticated,
     ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
     ...userCompanyDetailsAdapter({ data: data?.companyDetails }),
   };

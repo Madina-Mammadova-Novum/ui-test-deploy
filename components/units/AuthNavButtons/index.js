@@ -10,9 +10,7 @@ import { ROUTES } from '@/lib';
 import { getUserDataSelector } from '@/store/selectors';
 
 const AuthNavButtons = ({ data = [] }) => {
-  const {
-    data: { isAuthenticated },
-  } = useSelector(getUserDataSelector);
+  const { isAuthenticated } = useSelector(getUserDataSelector);
 
   const printUnAuthButtons = ({ path, label, linkOptions }) => {
     if (path === ROUTES.LOGIN)

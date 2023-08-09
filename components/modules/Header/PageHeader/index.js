@@ -12,6 +12,7 @@ const PageHeader = async () => {
   const buttons = delve(headerData, 'data.buttons');
   const navigationData = await getNavigation(navigationSlug, 'en');
   const navigation = delve(navigationData, 'data');
+
   return (
     <header className="absolute w-full z-10">
       <div className="container px-6 3md:px-14 max-w-[1258px] mx-auto">
