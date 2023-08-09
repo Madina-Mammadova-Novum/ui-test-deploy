@@ -3,6 +3,8 @@ import ReactCountryFlag from 'react-country-flag';
 
 import { useSession } from 'next-auth/react';
 
+import VoyageOwnerTabContent from './VoyageOwnerTabContent';
+
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
@@ -14,7 +16,7 @@ const VoyageDetailsTabContent = ({ data = {} }) => {
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.OWNER) {
-      return null;
+      return <VoyageOwnerTabContent />;
     }
     if (session?.role === ROLES.CHARTERER) {
       return <VoyageChartererTabContent />;

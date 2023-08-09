@@ -17,7 +17,7 @@ import { fileSchema, tankerDataSchema } from '@/lib/schemas';
 import DropzoneForm from '@/modules/DropzoneForm';
 import { getVesselCategoryOne, getVesselCategoryTwo, requestUpdateVessel } from '@/services/vessel';
 import { fetchPrefilledDataToUpdate } from '@/store/entities/fleets/actions';
-import { refetchFleets } from '@/store/entities/fleets/slice';
+import { clearPrefilledState, refetchFleets } from '@/store/entities/fleets/slice';
 import { fleetsSelector } from '@/store/selectors';
 import { ModalHeader } from '@/units';
 import { convertDataToOptions, getValueWithPath, parseErrors } from '@/utils/helpers';
@@ -74,6 +74,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
 
   useEffect(() => {
     dispatch(fetchPrefilledDataToUpdate(itemId));
+    return () => dispatch(clearPrefilledState());
   }, []);
 
   useEffect(() => {

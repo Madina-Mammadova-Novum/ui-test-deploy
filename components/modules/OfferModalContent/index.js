@@ -131,7 +131,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
         </div>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
+      <div className="flex text-xsm gap-x-4 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"

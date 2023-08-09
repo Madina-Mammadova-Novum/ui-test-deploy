@@ -958,6 +958,8 @@ export const fleetsPageHeader = [
     text: 'Tanker name',
     type: 'DOC_ID',
     width: 134,
+    isSortable: true,
+    sortType: 'alphabetical',
   },
   {
     text: 'Imo',
@@ -968,11 +970,13 @@ export const fleetsPageHeader = [
     text: 'Dwt',
     type: 'COMMENT',
     width: 105,
+    isSortable: true,
   },
   {
     text: 'Tanker category',
     type: 'DOC_NAME',
     width: 166,
+    isSortable: true,
   },
   {
     text: 'Q88 questionaire',
@@ -983,6 +987,8 @@ export const fleetsPageHeader = [
     text: 'Tanker status',
     type: 'SIZE',
     width: 112,
+    isSortable: true,
+    sortType: 'alphabetical',
   },
 ];
 
@@ -996,6 +1002,8 @@ export const unassignedFleetHeader = [
     text: 'Tanker name',
     type: 'DOC_ID',
     width: 134,
+    isSortable: true,
+    sortType: 'alphabetical',
   },
   {
     text: 'Imo',
@@ -1006,11 +1014,13 @@ export const unassignedFleetHeader = [
     text: 'Dwt',
     type: 'COMMENT',
     width: 105,
+    isSortable: true,
   },
   {
     text: 'Tanker category',
     type: 'DOC_NAME',
     width: 166,
+    isSortable: true,
   },
   {
     text: 'Q88 questionaire',
@@ -1026,6 +1036,8 @@ export const unassignedFleetHeader = [
     text: 'Tanker status',
     type: 'SIZE',
     width: 112,
+    isSortable: true,
+    sortType: 'alphabetical',
   },
 ];
 

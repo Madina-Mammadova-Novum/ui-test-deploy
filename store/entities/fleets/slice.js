@@ -42,6 +42,9 @@ const fleetsSlice = createSlice({
         fleet.id === fleetId ? { ...fleet, vessels: [{ ...vessel, fleetId }, ...fleet.vessels] } : fleet
       );
     },
+    clearPrefilledState: (state) => {
+      state.prefilledUpdateVesselState = initialState.prefilledUpdateVesselState;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchFleetsWithVessels.pending, (state) => {
@@ -79,6 +82,7 @@ export const {
   deleteVesselFromFleetsState,
   deleteVesselFromUnassignedFleetsState,
   addVesselToFleetsState,
+  clearPrefilledState,
 } = fleetsSlice.actions;
 
 export default fleetsSlice.reducer;
