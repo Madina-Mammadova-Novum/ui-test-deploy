@@ -13,9 +13,11 @@ export const fetchNegotiatingOffers = createAsyncThunk(NEGOTIATING.GET_OFFERS, a
       await Promise.all([getIncomingOffers(id), getSentCounteroffers(id), getFailedOffers(id)]);
     return {
       data: {
-        incoming: incomingOffersData,
-        sent: sentCounteroffersData,
-        failed: failedOffersData,
+        [id]: {
+          incoming: incomingOffersData,
+          sent: sentCounteroffersData,
+          failed: failedOffersData,
+        },
       },
     };
   }
@@ -27,9 +29,11 @@ export const fetchNegotiatingOffers = createAsyncThunk(NEGOTIATING.GET_OFFERS, a
 
   return {
     data: {
-      incoming: sentOffersData,
-      sent: counteroffersData,
-      failed: failedOffersData,
+      [id]: {
+        incoming: sentOffersData,
+        sent: counteroffersData,
+        failed: failedOffersData,
+      },
     },
   };
 });

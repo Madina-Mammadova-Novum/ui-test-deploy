@@ -1,11 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchFleetsWithVessels, fetchUnassignedFleetData } from './actions';
+import { fetchFleetsWithVessels, fetchPrefilledDataToUpdate, fetchUnassignedFleetData } from './actions';
 
 const initialState = {
   loading: true,
   refetch: false,
   unassignedFleetData: [],
+  prefilledUpdateVesselState: {
+    loading: true,
+    data: {},
+    ports: [],
+    countries: [],
+    tankerTypes: [],
+  },
   data: [],
 };
 
@@ -50,6 +57,18 @@ const fleetsSlice = createSlice({
     });
     builder.addCase(fetchUnassignedFleetData.fulfilled, (state, action) => {
       state.unassignedFleetData = action.payload?.data;
+    });
+
+    builder.addCase(fetchPrefilledDataToUpdate.fulfilled, (state, action) => {
+      state.prefilledUpdateVesselState.loading = false;
+      state.prefilledUpdateVesselState.data = action.payload?.data;
+      state.prefilledUpdateVesselState.ports = action.payload?.ports;
+      state.prefilledUpdateVesselState.countries = action.payload?.countries;
+      state.prefilledUpdateVesselState.tankerTypes = action.payload?.tankerTypes;
+    });
+
+    builder.addCase(fetchPrefilledDataToUpdate.rejected, (state) => {
+      state.prefilledUpdateVesselState.loading = false;
     });
   },
 });

@@ -74,7 +74,10 @@ const Fleets = () => {
         }
         expand={toggle}
       >
-        <FleetsExpandedContent rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels })} fleetId={rowData.id} />
+        <FleetsExpandedContent
+          rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels, fleetName: rowData.name })}
+          fleetId={rowData.id}
+        />
       </ExpandableRow>
     );
   };
