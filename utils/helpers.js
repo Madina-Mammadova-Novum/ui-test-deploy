@@ -175,8 +175,8 @@ export function checkObjectValues({ data }) {
 
 export function formatDate(dateString) {
   const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-US', optionsDate);
   return formatter.format(date);
 }
 
@@ -225,7 +225,9 @@ export const disablePlusMinusSymbols = (e) => {
   if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
-export const options = (values) => values?.map((value) => ({ label: value, value }));
+export function options(values) {
+  return values?.map((value) => ({ label: value, value }));
+}
 
 export const countriesOptions = (data) => {
   if (!data) return [];
