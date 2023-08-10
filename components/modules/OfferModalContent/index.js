@@ -137,7 +137,10 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }} customStyles="opacity-[0]" />
+        <Button
+          buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }}
+          customStyles="opacity-[0] !w-32"
+        />
       </div>
     </div>
   );
