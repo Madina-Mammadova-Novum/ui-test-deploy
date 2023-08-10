@@ -128,7 +128,7 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Number of tankers',
-      text: vessels.length || '0',
+      text: vessels?.length || '0',
     },
   ];
 };
@@ -144,7 +144,9 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     apearsInSearch,
     status: requestStatus,
   } = data;
-  const updateRequested = requestStatus === 'Update Requested';
+  const additionRequested = requestStatus === 'Addition requested';
+  const vesselInProgress = requestStatus !== 'Confirmed';
+
   const status = apearsInSearch ? 'Active' : 'Inactive';
 
   return [
@@ -193,10 +195,11 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: updateRequested ? 'Update requested' : 'Request to update info',
+          actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
-          disabled: updateRequested,
+          disabled: vesselInProgress,
+          editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
         },
         {
           action: ACTIONS.DELETE_TANKER_FROM_FLEET,
@@ -295,7 +298,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
           actionVariant: 'primary',
           actionSize: 'medium',
           disabled: vesselInProgress,
-          editIcon: additionRequested && <ClockSVG className="w-4 h-4 fill-blue ml-1" viewBox="0 0 24 24" />,
+          editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
         },
         {
           action: ACTIONS.DELETE_TANKER,
