@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/owner/deals/failed?VesselId=${vesselId}`),
     dataAdapter: responseFailedOffersAdapter,
     requestMethod: 'GET',
-    options: { ...Authorization(session?.accessToken) },
+    options: { headers: { ...Authorization(session?.accessToken) } },
     customErrorHandling: true,
   });
 }

@@ -149,6 +149,10 @@ export function getApiURL(path) {
   return `${process.env.BACKEND_API_URL}/${path}`;
 }
 
+export function getRtURL(path) {
+  return `${process.env.NEXT_PUBLIC_RT_URL}/${path}`;
+}
+
 export function getIdentityApiURL(path, apiVersion = null) {
   let pathString = `/${path}`;
   if (apiVersion !== null) {

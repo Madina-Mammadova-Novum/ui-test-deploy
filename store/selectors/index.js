@@ -1,5 +1,6 @@
 import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
+import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
 
 export const sidebarSelector = ({ user }) => user?.params;
@@ -9,6 +10,7 @@ export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
 export const negotiatingSelector = ({ negotiating }) => negotiating;
 export const generalSelector = ({ general }) => general;
+export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
@@ -31,6 +33,14 @@ export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (
     error: state?.error,
     countries: state?.data?.countries,
     ports: state?.data?.ports,
+  };
+});
+
+export const getNotificationsDataSelector = createDraftSafeSelector(notificationsSelector, (state) => {
+  return {
+    ...state,
+    watchedData: notificationsDataAdapter({ data: state?.watchedData }),
+    unwatchedData: notificationsDataAdapter({ data: state?.unwatchedData }),
   };
 });
 

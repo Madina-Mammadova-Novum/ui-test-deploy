@@ -65,3 +65,5 @@ export function transformDate(dateString, dateFormat = 'yyyy-MM-dd') {
   console.error('0005 - Not valid date');
   return null;
 }
+
+export const convertDate = (date) => new Date(date).toISOString().slice(0, 10);

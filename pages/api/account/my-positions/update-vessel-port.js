@@ -15,6 +15,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/owner/vessels/updateopenportanddate`),
     dataAdapter: updateVesselPortAdapter,
     requestMethod: 'PUT',
-    options: { ...Authorization(session?.accessToken), ...ContentTypeJson() },
+    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
   });
 }

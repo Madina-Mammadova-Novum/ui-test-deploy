@@ -15,6 +15,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/owner/fleets/openpositions`),
     dataAdapter: positionByIdAdapter,
     requestMethod: 'POST',
-    options: { ...Authorization(session?.accessToken), ...ContentTypeJson() },
+    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
   });
 }

@@ -12,7 +12,7 @@ import {
   updatePasswordAdapter,
 } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
+import { ContentTypeJson, DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -67,7 +67,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await postData(`auth/login`, body);
+  const response = await postData(`auth/login`, body, { headers: { ...ContentTypeJson() } });
 
   return {
     ...response,
