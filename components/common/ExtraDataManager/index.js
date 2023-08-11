@@ -35,10 +35,7 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     getGeneralData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  useEffect(() => {
     if (session?.accessToken !== '') {
       notificationService.start();
       setUserData({ role: session?.role, isValid: true });
@@ -47,8 +44,10 @@ const ExtraDataManager = ({ children }) => {
       setUserData({ role: null, isValid: false });
     }
 
-    if (Date.now() > session?.expires) updateSession();
-  }, [session?.accessToken, session?.expires, session?.role, setUserData, updateSession]);
+    if (Date.now() > session?.expires) {
+      updateSession();
+    }
+  }, []);
 
   return children;
 };
