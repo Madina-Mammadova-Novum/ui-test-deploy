@@ -66,4 +66,4 @@ export function transformDate(dateString, dateFormat = 'yyyy-MM-dd') {
   return null;
 }
 
-export const convertDate = (date) => new Date(date).toISOString().slice(0, 10);
+export const convertDate = (date) => new Date(date)?.toISOString().slice(0, 10);

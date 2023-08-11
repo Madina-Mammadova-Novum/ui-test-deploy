@@ -508,8 +508,9 @@ export function sessionAdapter({ session, token }) {
 
   if (token.accessToken) {
     const { exp, ...rest } = decodedTokenAdapter(token.accessToken);
+
     session.user = { ...rest };
-    session.expires = exp * 3600;
+    session.expires = exp * 1000;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
     session.role = token.role;

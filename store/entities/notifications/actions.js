@@ -1,40 +1,50 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line import/no-cycle
-import { setUnwatchedData, setWatchedData, updateUnwatchedData, updateWatchedData } from './slice';
+import { setUnwatchedData, setWatchedData } from './slice';
 import { NOTIFICATIONS } from './types';
 
+import { notificationsDataAdapter } from '@/adapters/notifications';
 import { getNotifications, setReadAllNotifications } from '@/services/notifications';
 
-export const fetchNotifications = createAsyncThunk(
-  NOTIFICATIONS.GET_NOTIFICATIONS,
-  async (data, { getState, dispatch }) => {
+export const fetchReadedNotifications = createAsyncThunk(
+  NOTIFICATIONS.GET_READED_NOTIFICATIONS,
+  async (data, { dispatch }) => {
     const { data: result } = await getNotifications({ data });
 
+    dispatch(setWatchedData(notificationsDataAdapter({ data: result?.data })));
+
+    return { total: result?.readCount };
+  }
+);
+
+export const fetchUnreadedNotifications = createAsyncThunk(
+  NOTIFICATIONS.GET_UNREADED_NOTIFICATIONS,
+  async (data, { dispatch }) => {
+    const { data: result } = await getNotifications({ data });
+
+    dispatch(setUnwatchedData(notificationsDataAdapter({ data: result?.data })));
+
+    return { total: result?.unreadCount };
+  }
+);
+
+export const fetchAllNotifications = createAsyncThunk(
+  NOTIFICATIONS.GET_ALL_NOTIFICATIONS,
+  async (_, { dispatch, getState }) => {
     const {
-      notifications: {
-        watchedData,
-        unwatchedData,
-        filterParams: { searchValue, sortedValue, watched },
-      },
+      notifications: { filterParams },
     } = getState();
 
-    if (watched && watchedData.length > 0) {
-      dispatch(updateWatchedData(result?.data));
-      if (sortedValue !== '' || searchValue !== '') dispatch(setWatchedData(result?.data));
-    } else dispatch(setWatchedData(result?.data));
-
-    if (!watched && unwatchedData?.length > 0) {
-      dispatch(updateUnwatchedData(result?.data));
-      if (sortedValue !== '' || searchValue !== '') dispatch(setUnwatchedData(result?.data));
-    } else dispatch(setUnwatchedData(result?.data));
-
-    return { readed: result?.readCount, unread: result?.unreadCount };
+    await Promise.all([
+      dispatch(fetchReadedNotifications({ ...filterParams, watched: true })),
+      dispatch(fetchUnreadedNotifications({ ...filterParams, watched: false })),
+    ]);
   }
 );
 
 export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTIFICATIONS, async (_, { dispatch }) => {
   await setReadAllNotifications();
 
-  dispatch(fetchNotifications());
+  dispatch(fetchReadedNotifications());
 });

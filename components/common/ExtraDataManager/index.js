@@ -35,13 +35,20 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     getGeneralData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    if (session?.accessToken) {
+  useEffect(() => {
+    if (session?.accessToken !== '') {
       notificationService.start();
       setUserData({ role: session?.role, isValid: true });
-      if (Date.now() > session?.expires) updateSession();
+    } else {
+      notificationService.stop();
+      setUserData({ role: null, isValid: false });
     }
-  }, [session, dispatch, getGeneralData, setUserData, updateSession]);
+
+    if (Date.now() > session?.expires) updateSession();
+  }, [session?.accessToken, session?.expires, session?.role, setUserData, updateSession]);
 
   return children;
 };

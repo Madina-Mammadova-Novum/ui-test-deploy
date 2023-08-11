@@ -5,7 +5,7 @@ import { getRtURL } from '.';
 import { successToast } from './hooks';
 
 import { store } from '@/store';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
+// import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setConnectionStatus } from '@/store/entities/notifications/slice';
 
 class NotificationService {
@@ -37,9 +37,9 @@ class NotificationService {
 
       this.connection.on('ReceiveNotification', async (message) => {
         successToast(message?.title);
-        this.store.dispatch(
-          fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 20, watched: false })
-        );
+        // this.store.dispatch(
+        //   fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false })
+        // );
       });
     } catch (err) {
       console.error(err);

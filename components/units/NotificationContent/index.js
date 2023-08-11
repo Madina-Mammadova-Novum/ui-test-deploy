@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { NotificationContentPropTypes } from '@/lib/types';
@@ -9,15 +9,23 @@ import { Loader } from '@/elements';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationList, NotificationPlaceholder } from '@/units';
+import { isReadValue } from '@/utils/helpers';
 
 const NotificationContent = () => {
   const dispatch = useDispatch();
-  const { loading, unwatchedData, watchedData, filterParams, readed, unread } =
+  const { loading, unwatchedData, watchedData, filterParams, activeTab, readedCounter, unreadedCounter } =
     useSelector(getNotificationsDataSelector);
 
-  const { activeTab, take, searchValue, sortedValue, watched } = filterParams;
+  const [data, setData] = useState([]);
 
-  const data = activeTab === 'read' ? watchedData : unwatchedData;
+  const { take, searchValue, sortedValue } = filterParams;
+
+  const isWatchedTab = isReadValue(activeTab);
+
+  useEffect(() => {
+    if (isWatchedTab) setData(watchedData);
+    else setData(unwatchedData);
+  }, [isWatchedTab, unwatchedData, watchedData]);
 
   const handleScroll = ({ currentTarget }) => {
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
@@ -25,8 +33,8 @@ const NotificationContent = () => {
 
     if (trigger && !loading) {
       if (searchValue !== '' || sortedValue !== 'All') return;
-      if (watched && take >= readed) return;
-      if (!watched && take >= unread) return;
+      if (isWatchedTab && take >= readedCounter) return;
+      if (!isWatchedTab && take >= unreadedCounter) return;
 
       dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take }));
     }

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,7 +11,7 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
+import { fetchAllNotifications } from '@/store/entities/notifications/actions';
 import { resetNotifications } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -18,18 +20,18 @@ const Notification = () => {
   const dispatch = useDispatch();
 
   const [isOpened, setIsOpened] = useState(false);
-  const { unread, filterParams } = useSelector(getNotificationsDataSelector);
+  const { unreadCounter } = useSelector(getNotificationsDataSelector);
 
   useEffect(() => {
-    dispatch(fetchNotifications(filterParams));
-  }, [dispatch, filterParams]);
+    dispatch(fetchAllNotifications());
+
+    return () => {
+      dispatch(resetNotifications());
+    };
+  }, []);
 
   const handleOpen = () => setIsOpened(!isOpened);
-
-  const handleClose = () => {
-    dispatch(resetNotifications());
-    setIsOpened(false);
-  };
+  const handleClose = () => setIsOpened(false);
 
   return (
     <div>
@@ -37,7 +39,7 @@ const Notification = () => {
         type="button"
         className="relative"
         onClick={handleOpen}
-        buttonProps={{ icon: { before: <BellIcon counter={unread} /> } }}
+        buttonProps={{ icon: { before: <BellIcon counter={unreadCounter} /> } }}
       />
       {isOpened && (
         <div className="absolute top-0 right-0 z-50">
@@ -50,8 +52,8 @@ const Notification = () => {
               <Title level="2" className="text-black px-8">
                 Notifications
               </Title>
-              <NotificationControl contianerClass="flex flex-col gap-y-5 h-[25vh]" />
-              <NotificationContent contianerClass="overflow-y-auto max-h-[calc(100vh-35vh)]" />
+              <NotificationControl />
+              <NotificationContent />
             </div>
           </ModalWrapper>
         </div>
