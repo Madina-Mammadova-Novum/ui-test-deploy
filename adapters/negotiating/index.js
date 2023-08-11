@@ -158,7 +158,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.VIEW_OFFER,
-          actionText: 'View offer',
+          actionText: 'View',
           actionVariant: 'primary',
           actionSize: 'medium',
         },
@@ -236,7 +236,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.VIEW_SENT_OFFER,
-          actionText: 'View offer',
+          actionText: 'View',
           actionVariant: 'primary',
           actionSize: 'medium',
         },
@@ -325,7 +325,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.VIEW_COUNTEROFFER,
-          actionText: 'View counteroffer',
+          actionText: 'View',
           actionVariant: 'primary',
           actionSize: 'medium',
         },
@@ -396,7 +396,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.VIEW_CHARTERER_COUNTEROFFER,
-          actionText: 'View counteroffer',
+          actionText: 'View',
           actionVariant: 'primary',
           actionSize: 'medium',
         },
@@ -486,7 +486,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.VIEW_FAILED_OFFER,
-          actionText: 'View failed offer',
+          actionText: 'View',
           actionVariant: 'primary',
           actionSize: 'medium',
         },
@@ -556,7 +556,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.VIEW_FAILED_OFFER,
-          actionText: 'View failed offer',
+          actionText: 'View',
           actionVariant: 'primary',
           actionSize: 'medium',
         },
