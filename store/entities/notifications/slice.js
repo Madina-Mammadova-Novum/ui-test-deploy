@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchReadedNotifications, fetchUnreadedNotifications } from './actions';
+import { fetchMoreNotifications, fetchNotifications } from './actions';
 
 const initialState = {
   isConnected: false,
@@ -18,10 +18,11 @@ const initialState = {
   },
   filterParams: {
     searchValue: '',
-    sortedValue: '',
+    sortedValue: 'all',
     skip: 0,
     take: 50,
     watched: false,
+    triggered: false,
   },
 };
 
@@ -59,25 +60,25 @@ const notificationsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchReadedNotifications.pending, (state) => {
+      .addCase(fetchNotifications.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchReadedNotifications.fulfilled, (state, { payload }) => {
+      .addCase(fetchNotifications.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.watched.total = payload?.total;
+        state.watched.total = payload?.watchedCounter;
+        state.unwatched.total = payload?.unwatchedCounter;
       })
-      .addCase(fetchReadedNotifications.rejected, (state) => {
+      .addCase(fetchNotifications.rejected, (state) => {
         state.error = true;
       })
-      .addCase(fetchUnreadedNotifications.pending, (state) => {
+      .addCase(fetchMoreNotifications.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchUnreadedNotifications.fulfilled, (state, { payload }) => {
+      .addCase(fetchMoreNotifications.fulfilled, (state) => {
         state.loading = false;
-        state.unwatched.total = payload?.total;
       })
-      .addCase(fetchUnreadedNotifications.rejected, (state) => {
-        state.error = true;
+      .addCase(fetchMoreNotifications.rejected, (state) => {
+        state.loading = false;
       });
   },
 });

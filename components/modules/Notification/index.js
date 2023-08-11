@@ -24,14 +24,17 @@ const Notification = () => {
 
   useEffect(() => {
     dispatch(fetchAllNotifications());
-
-    return () => {
-      dispatch(resetNotifications());
-    };
   }, []);
 
-  const handleOpen = () => setIsOpened(!isOpened);
-  const handleClose = () => setIsOpened(false);
+  const handleOpen = () => {
+    dispatch(resetNotifications());
+    setIsOpened(!isOpened);
+  };
+
+  const handleClose = () => {
+    dispatch(resetNotifications());
+    setIsOpened(false);
+  };
 
   return (
     <div>

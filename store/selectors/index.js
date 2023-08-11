@@ -1,5 +1,6 @@
 import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
+import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
 
 export const sidebarSelector = ({ user }) => user?.params;
@@ -38,10 +39,12 @@ export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (
 export const getNotificationsDataSelector = createDraftSafeSelector(notificationsSelector, (state) => {
   return {
     ...state,
-    watchedData: state.watched.data,
-    unwatchedData: state.unwatched.data,
+    watchedData: notificationsDataAdapter({ data: state.watched.data }),
+    unwatchedData: notificationsDataAdapter({ data: state.unwatched.data }),
     readedCounter: state.watched.total,
     unreadCounter: state.unwatched.total,
+    noReadedMessages: state.watched.total === 0,
+    noUnreadedMessages: state.unwatched.total === 0,
   };
 });
 

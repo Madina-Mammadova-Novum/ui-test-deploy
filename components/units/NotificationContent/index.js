@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { NotificationContentPropTypes } from '@/lib/types';
 
 import { Loader } from '@/elements';
+import { fetchMoreNotifications, fetchNotifications } from '@/store/entities/notifications/actions';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationList, NotificationPlaceholder } from '@/units';
@@ -16,27 +17,35 @@ const NotificationContent = () => {
   const { loading, unwatchedData, watchedData, filterParams, activeTab, readedCounter, unreadedCounter } =
     useSelector(getNotificationsDataSelector);
 
-  const [data, setData] = useState([]);
-
-  const { take, searchValue, sortedValue } = filterParams;
+  const { take, triggered, searchValue, sortedValue } = filterParams;
 
   const isWatchedTab = isReadValue(activeTab);
+  const data = isWatchedTab ? watchedData : unwatchedData;
 
   useEffect(() => {
-    if (isWatchedTab) setData(watchedData);
-    else setData(unwatchedData);
-  }, [isWatchedTab, unwatchedData, watchedData]);
+    dispatch(fetchNotifications({ ...filterParams, skip: 0, take: 50, watched: isWatchedTab }));
+
+    if (triggered) {
+      if (searchValue === '' || sortedValue === 'all')
+        dispatch(fetchMoreNotifications({ ...filterParams, watched: isWatchedTab }));
+    }
+  }, [triggered, searchValue, sortedValue]);
 
   const handleScroll = ({ currentTarget }) => {
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
+    const watchDataCondition = watchedData.length > 0 && isWatchedTab && take <= readedCounter;
+    const unwatchedDataCondition = unwatchedData.length > 0 && !isWatchedTab && take <= unreadedCounter;
+
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
-    if (trigger && !loading) {
-      if (searchValue !== '' || sortedValue !== 'All') return;
-      if (isWatchedTab && take >= readedCounter) return;
-      if (!isWatchedTab && take >= unreadedCounter) return;
-
-      dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take }));
+    if (trigger) {
+      if (watchDataCondition || unwatchedDataCondition) {
+        if (!loading) {
+          dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take, triggered: true }));
+        } else {
+          dispatch(setFilterParams({ ...filterParams, triggered: false }));
+        }
+      }
     }
   };
 
