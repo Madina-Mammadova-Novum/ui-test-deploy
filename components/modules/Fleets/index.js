@@ -56,6 +56,7 @@ const Fleets = () => {
           <ExpandableCardHeader
             headerData={rowHeader}
             itemId={rowData?.id}
+            itemsContainerStyles="lg:grid-cols-2"
             actions={[
               {
                 action: ACTIONS.EDIT_FLEET,

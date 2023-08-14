@@ -122,7 +122,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
         {!confirmCounteroffer && (
           <Button
             onClick={() => setConfirmCounteroffer(true)}
-            buttonProps={{ text: 'Confirm changes', variant: 'primary', size: 'large' }}
+            buttonProps={{ text: 'Proceed', variant: 'primary', size: 'large' }}
           />
         )}
       </div>
