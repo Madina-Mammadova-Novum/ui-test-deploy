@@ -1,53 +1,59 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { NotificationControlPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 import { readAllNotifications } from '@/store/entities/notifications/actions';
-import { setFilterParams } from '@/store/entities/notifications/slice';
+import { resetNotifications, setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import NotificationFilter from '@/units/NotificationControl/NotificationFilter';
 import NotificationSearch from '@/units/NotificationControl/NotificationSearch';
 import NotificationTabs from '@/units/NotificationControl/NotificationTabs';
-import { formattetTabValue, options } from '@/utils/helpers';
+import { isReadValue } from '@/utils/helpers';
 
-const NotificationControl = ({ contianerClass }) => {
+const NotificationControl = () => {
   const dispatch = useDispatch();
+  const [disabled, setIsDisabled] = useState(false);
 
-  const { read, unread, filterParams } = useSelector(getNotificationsDataSelector);
+  const {
+    noUnreadedMessages,
+    noReadedMessages,
+    filterParams: { sortedValue, searchValue, activeTab },
+  } = useSelector(getNotificationsDataSelector);
 
-  const convertValueToBool = (value) => formattetTabValue(value) === 'read';
+  const isWatchedTab = isReadValue(activeTab);
 
-  const handleSearch = ({ target: { value } }) => {
-    dispatch(setFilterParams({ searchValue: value, skip: 0, take: 100 }));
-  };
+  useEffect(() => {
+    if ((isWatchedTab && noReadedMessages) || (!isWatchedTab && noUnreadedMessages)) setIsDisabled(true);
 
+    return () => {
+      setIsDisabled(false);
+    };
+  }, [isWatchedTab, noReadedMessages, noUnreadedMessages]);
+
+  const handleSearch = ({ target: { value } }) => dispatch(setFilterParams({ searchValue: value, skip: 0, take: 50 }));
+  const handleFilter = ({ value }) => dispatch(setFilterParams({ sortedValue: value, skip: 0, take: 50 }));
   const handleTab = ({ target: { value } }) => {
-    dispatch(setFilterParams({ activeTab: value, watched: convertValueToBool(value), skip: 0, take: 50 }));
+    dispatch(resetNotifications());
+    dispatch(setFilterParams({ activeTab: value, watched: isReadValue(value), skip: 0, take: 50 }));
   };
 
-  const handleFilter = ({ value }) => {
-    dispatch(setFilterParams({ sortedValue: value, skip: 0, take: 100 }));
-  };
-
-  const handleReadAll = () => {
-    dispatch(readAllNotifications());
-  };
+  const handleReadAll = () => dispatch(readAllNotifications());
 
   return (
-    <div className={contianerClass}>
-      <NotificationSearch value={filterParams?.searchValue} onChange={handleSearch} containerClass="px-8 pt-5" />
+    <div className="flex flex-col gap-y-5 h-[25vh]">
+      <NotificationSearch value={searchValue} onChange={handleSearch} containerClass="px-8 pt-5" disabled={disabled} />
       <NotificationTabs
-        tabs={options([`Unread (${unread})`, `Read (${read})`])}
-        activeTab={filterParams?.activeTab}
-        onChange={handleTab}
+        activeTab={activeTab}
         onClick={handleReadAll}
+        onChange={handleTab}
         containerClass="px-8 flex justify-between"
       />
       <Divider className="w-full" />
-      <NotificationFilter containerClass="px-8 pb-5" value={filterParams?.sortedValue} onChange={handleFilter} />
+      <NotificationFilter containerClass="px-8 pb-5" value={sortedValue} onChange={handleFilter} disabled={disabled} />
     </div>
   );
 };

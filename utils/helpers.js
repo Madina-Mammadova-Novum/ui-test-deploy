@@ -458,6 +458,7 @@ export const calculateCountdown = (expiresAt) => {
 };
 
 export const formattetTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
+export const isReadValue = (value) => value === 'read';
 
 export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
   const isNumericType = sortType === 'numeric';

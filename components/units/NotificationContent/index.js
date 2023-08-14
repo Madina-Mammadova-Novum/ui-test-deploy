@@ -12,18 +12,26 @@ import { NotificationList, NotificationPlaceholder } from '@/units';
 
 const NotificationContent = () => {
   const dispatch = useDispatch();
-  const { loading, unwatchedData, watchedData, filterParams, readed } = useSelector(getNotificationsDataSelector);
+  const { loading, unwatchedData, watchedData, filterParams, readedCounter, unreadCounter } =
+    useSelector(getNotificationsDataSelector);
 
-  const { activeTab, take, searchValue, sortedValue } = filterParams;
+  const { take, watched, searchValue, sortedValue } = filterParams;
 
-  const data = activeTab === 'read' ? watchedData : unwatchedData;
+  const data = useMemo(() => {
+    return watched ? watchedData : unwatchedData;
+  }, [watched, watchedData, unwatchedData]);
 
   const handleScroll = ({ currentTarget }) => {
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
+    const watchedCondtion = searchValue !== '' || sortedValue !== 'all' || take >= readedCounter;
+    const unwatchedCondtion = searchValue !== '' || sortedValue !== 'all' || take >= unreadCounter;
+
     if (trigger && !loading) {
-      if (searchValue !== '' || sortedValue !== 'All' || take >= readed) return;
+      if (watched && watchedCondtion) return;
+      if (!watched && unwatchedCondtion) return;
+
       dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take }));
     }
   };

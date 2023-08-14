@@ -41,6 +41,10 @@ export const getNotificationsDataSelector = createDraftSafeSelector(notification
     ...state,
     watchedData: notificationsDataAdapter({ data: state?.watchedData }),
     unwatchedData: notificationsDataAdapter({ data: state?.unwatchedData }),
+    readedCounter: state.readed,
+    unreadCounter: state.unread,
+    noReadedMessages: state.readed === 0,
+    noUnreadedMessages: state.unread === 0,
   };
 });
 

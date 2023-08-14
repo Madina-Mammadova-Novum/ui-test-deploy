@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
-import DragSVG from '@/assets/images/drag.svg';
 import { TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
@@ -60,7 +59,6 @@ const ExpandableCardHeader = ({
 
   return (
     <div className="w-full h-auto lg:h-[60px] flex items-center gap-x-2.5 py-3 lg:py-0">
-      <DragSVG className="fill-gray mt-2.5 lg:mt-0 self-start lg:self-auto" />
       <div className={`flex flex-col lg:flex-row flex-grow ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
           className={`grid md:grid-cols-1 3md:grid-cols-2 ${

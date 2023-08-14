@@ -75,7 +75,7 @@ const OwnerRegistrationForm = () => {
         <Divider className="mt-5" />
         <Step title="Step #2: User Details" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <PersonalDetails />
-          <p className="text-black font-semibold text-sm pt-5">Enter a password for account access.</p>
+          <p className="text-black font-semibold text-sm pt-5">Enter a password for account access</p>
           <PasswordValidation />
         </Step>
         <Divider className="mt-5" />

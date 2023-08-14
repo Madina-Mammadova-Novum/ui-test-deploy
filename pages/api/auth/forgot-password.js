@@ -1,6 +1,7 @@
 import delve from 'dlv';
 
 import { forgotPasswordResponseAdapter } from '@/adapters/user';
+import { ContentTypeJson } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { errorHandler, responseHandler } from '@/utils/api';
 
@@ -16,5 +17,6 @@ export default async function handler(req, res) {
     dataAdapter: forgotPasswordResponseAdapter,
     requestMethod: 'POST',
     customErrorHandling: true,
+    options: { headers: { ...ContentTypeJson() } },
   });
 }

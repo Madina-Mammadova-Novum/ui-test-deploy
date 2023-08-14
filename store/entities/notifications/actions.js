@@ -21,12 +21,12 @@ export const fetchNotifications = createAsyncThunk(
 
     if (watched && watchedData.length > 0) {
       dispatch(updateWatchedData(result?.data));
-      if (sortedValue !== '' || searchValue !== '') dispatch(setWatchedData(result?.data));
+      if (sortedValue !== '' || searchValue !== 'all') dispatch(setWatchedData(result?.data));
     } else dispatch(setWatchedData(result?.data));
 
     if (!watched && unwatchedData?.length > 0) {
       dispatch(updateUnwatchedData(result?.data));
-      if (sortedValue !== '' || searchValue !== '') dispatch(setUnwatchedData(result?.data));
+      if (sortedValue !== '' || searchValue !== 'all') dispatch(setUnwatchedData(result?.data));
     } else dispatch(setUnwatchedData(result?.data));
 
     return { readed: result?.readCount, unread: result?.unreadCount };

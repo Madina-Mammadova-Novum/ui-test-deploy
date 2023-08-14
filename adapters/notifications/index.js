@@ -55,7 +55,7 @@ export const notificationParamsAdapter = ({ data }) => {
   if (!data) return {};
 
   return {
-    search: data?.searchValue === 'All' ? '' : data?.searchValue || '',
+    search: data?.searchValue === 'all' ? '' : data?.searchValue || '',
     filteredBy: data?.sortedValue ?? '',
     watched: data?.watched ?? false,
     skip: data?.skip ?? 0,
