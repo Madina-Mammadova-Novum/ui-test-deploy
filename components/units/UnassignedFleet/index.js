@@ -20,6 +20,7 @@ const UnassignedFleet = ({ toggle }) => {
           headerData={fleetsPageHeaderDataAdapter({
             data: { vessels: data, name: 'Unassigned Fleet' },
           })}
+          itemsContainerStyles="lg:grid-cols-2"
         />
       }
       expand={toggle}

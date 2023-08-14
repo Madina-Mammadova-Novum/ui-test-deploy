@@ -8,10 +8,11 @@ import { AddTankerWithImoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { FormDropdown, Input } from '@/elements';
+import { EXISTING_VESSEL_ERROR } from '@/lib/constants';
 import { q88ImoCheckSchema } from '@/lib/schemas';
 import { getQ88DataByImo } from '@/services/vessel';
 import { ModalHeader } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...q88ImoCheckSchema(),
@@ -35,7 +36,12 @@ const AddTankerWithImoForm = ({
   };
 
   const onSubmit = async (formData) => {
-    const { data } = await getQ88DataByImo({ imo: formData.imo });
+    const { data, error = {} } = await getQ88DataByImo({ imo: formData.imo });
+    const { errors: { Imo = [] } = {} } = error;
+    if (Imo[0] === EXISTING_VESSEL_ERROR) {
+      errorToast(Imo);
+      return;
+    }
     setQ88({ ...data, imo: formData.imo });
     handleNextStep();
   };
