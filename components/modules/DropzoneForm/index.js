@@ -1,12 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { DropZonePropTypes } from '@/lib/types';
 
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
-import { Input, TextArea } from '@/elements';
+import { Input, Loader, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { Dropzone, File } from '@/units';
 import { updateFormats } from '@/utils/helpers';
@@ -21,6 +21,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
   } = useHookForm();
 
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
   const resetDropzone = useCallback(() => {
@@ -37,7 +38,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
       resetDropzone();
     } else {
       setFiles(acceptedFiles.map(fileUpdateAdapter));
-      fileReaderAdapter(acceptedFiles[0], setValue, setError);
+      fileReaderAdapter(acceptedFiles[0], setValue, setError, setLoading);
     }
   };
 
@@ -60,10 +61,6 @@ const DropzoneForm = ({ showTextFields = true }) => {
     multiple: false,
     accept: { files: AVAILABLE_FORMATS.DOCS },
   });
-
-  useEffect(() => {
-    if (errors?.file) resetDropzone();
-  }, [errors?.file, resetDropzone]);
 
   const printFile = (file) => <File key={file.id} title={file?.path} onClick={(e) => onRemove(e, file)} />;
 
@@ -102,6 +99,11 @@ const DropzoneForm = ({ showTextFields = true }) => {
         </Dropzone>
       ) : (
         <div className="flex flex-wrap w-full h-auto gap-x-3 gap-y-0 border-dashed border hover:border-blue border-gray-darker relative rounded-md pt-5 px-3">
+          {loading && (
+            <div className="absolute top-0 right-0 left-0 bottom-0 bg-gray-light opacity-50">
+              <Loader className="h-8 w-8 absolute top-[40%] left-[48%]" />
+            </div>
+          )}
           {files.map(printFile)}
           {printHelpers}
         </div>

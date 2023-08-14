@@ -410,7 +410,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
             </div>
             <div>
               <Title level={4} className="mb-2.5">
-                Upload your Q88 questionnaire file (optional)
+                Upload your Q88 questionnaire file
               </Title>
               <DropzoneForm showTextFields={false} />
             </div>
