@@ -27,8 +27,7 @@ const NotificationControl = () => {
   const isWatchedTab = isReadValue(activeTab);
 
   useEffect(() => {
-    if (isWatchedTab && noReadedMessages) setIsDisabled(true);
-    if (!isWatchedTab && noUnreadedMessages) setIsDisabled(true);
+    if ((isWatchedTab && noReadedMessages) || (!isWatchedTab && noUnreadedMessages)) setIsDisabled(true);
 
     return () => {
       setIsDisabled(false);
