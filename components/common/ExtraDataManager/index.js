@@ -61,7 +61,7 @@ const ExtraDataManager = ({ children }) => {
     if (Date.now() > session?.expires) {
       updateSession();
     }
-  }, []);
+  }, [session?.accessToken, session?.expires]);
 
   useEffect(() => {
     if (isAuthenticated) dispatch(fetchNotifications(filterParams));

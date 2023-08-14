@@ -45,8 +45,10 @@ const notificationsSlice = createSlice({
       };
     },
     resetNotifications: (state) => {
-      state.watchedData = initialState.watchedData;
-      state.unwatchedData = initialState.unwatchedData;
+      state.watchedData = [];
+      state.unwatchedData = [];
+    },
+    resetParams: (state) => {
       state.filterParams = initialState.filterParams;
     },
     setConnectionStatus: (state, action) => {
@@ -77,6 +79,7 @@ export const {
   resetNotifications,
   updateWatchedData,
   updateUnwatchedData,
+  resetParams,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

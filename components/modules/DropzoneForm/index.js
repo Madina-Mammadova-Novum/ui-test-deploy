@@ -32,7 +32,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
     if (rejections && rejections.length > 0) {
       setError('file', {
         type: 'manual',
-        message: rejections && rejections[0].errors[0].message,
+        message: rejections && 'This file size is not supported.',
       });
       resetDropzone();
     } else {
@@ -63,7 +63,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
 
   useEffect(() => {
     if (errors?.file) resetDropzone();
-  }, [errors?.file, resetDropzone]);
+  }, [errors?.file]);
 
   const printFile = (file) => <File key={file.id} title={file?.path} onClick={(e) => onRemove(e, file)} />;
 

@@ -2,11 +2,9 @@ import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
 import { getSession } from 'next-auth/react';
 
 import { getRtURL } from '.';
-import { successToast } from './hooks';
 
 import { store } from '@/store';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
-import { setConnectionStatus } from '@/store/entities/notifications/slice';
+import { setConnectionStatus, setFilterParams } from '@/store/entities/notifications/slice';
 
 class NotificationService {
   constructor({ host, state }) {
@@ -36,10 +34,8 @@ class NotificationService {
       this.store.dispatch(setConnectionStatus(this.isConnected));
 
       this.connection.on('ReceiveNotification', async (message) => {
-        successToast(message?.title);
-        this.store.dispatch(
-          fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false })
-        );
+        if (message?.title)
+          this.store.dispatch(setFilterParams({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
       });
     } catch (err) {
       console.error(err);
