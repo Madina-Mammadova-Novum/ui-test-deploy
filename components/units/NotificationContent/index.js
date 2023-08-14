@@ -1,51 +1,38 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { NotificationContentPropTypes } from '@/lib/types';
 
 import { Loader } from '@/elements';
-import { fetchMoreNotifications, fetchNotifications } from '@/store/entities/notifications/actions';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationList, NotificationPlaceholder } from '@/units';
-import { isReadValue } from '@/utils/helpers';
 
 const NotificationContent = () => {
   const dispatch = useDispatch();
-  const { loading, unwatchedData, watchedData, filterParams, activeTab, readedCounter, unreadedCounter } =
+  const { loading, unwatchedData, watchedData, filterParams, readedCounter, unreadCounter } =
     useSelector(getNotificationsDataSelector);
 
-  const { take, triggered, searchValue, sortedValue } = filterParams;
+  const { take, watched, searchValue, sortedValue } = filterParams;
 
-  const isWatchedTab = isReadValue(activeTab);
-  const data = isWatchedTab ? watchedData : unwatchedData;
-
-  useEffect(() => {
-    dispatch(fetchNotifications({ ...filterParams, skip: 0, take: 50, watched: isWatchedTab }));
-
-    if (triggered) {
-      if (searchValue === '' || sortedValue === 'all')
-        dispatch(fetchMoreNotifications({ ...filterParams, watched: isWatchedTab }));
-    }
-  }, [triggered, searchValue, sortedValue]);
+  const data = useMemo(() => {
+    return watched ? watchedData : unwatchedData;
+  }, [watched, watchedData, unwatchedData]);
 
   const handleScroll = ({ currentTarget }) => {
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
-    const watchDataCondition = watchedData.length > 0 && isWatchedTab && take <= readedCounter;
-    const unwatchedDataCondition = unwatchedData.length > 0 && !isWatchedTab && take <= unreadedCounter;
-
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
-    if (trigger) {
-      if (watchDataCondition || unwatchedDataCondition) {
-        if (!loading) {
-          dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take, triggered: true }));
-        } else {
-          dispatch(setFilterParams({ ...filterParams, triggered: false }));
-        }
-      }
+    const watchedCondtion = searchValue !== '' || sortedValue !== 'all' || take >= readedCounter;
+    const unwatchedCondtion = searchValue !== '' || sortedValue !== 'all' || take >= unreadCounter;
+
+    if (trigger && !loading) {
+      if (watched && watchedCondtion) return;
+      if (!watched && unwatchedCondtion) return;
+
+      dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take }));
     }
   };
 

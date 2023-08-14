@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -11,7 +9,6 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
-import { fetchAllNotifications } from '@/store/entities/notifications/actions';
 import { resetNotifications } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -22,19 +19,12 @@ const Notification = () => {
   const [isOpened, setIsOpened] = useState(false);
   const { unreadCounter } = useSelector(getNotificationsDataSelector);
 
+  const handleOpen = () => setIsOpened(!isOpened);
+  const handleClose = () => setIsOpened(false);
+
   useEffect(() => {
-    dispatch(fetchAllNotifications());
-  }, []);
-
-  const handleOpen = () => {
-    dispatch(resetNotifications());
-    setIsOpened(!isOpened);
-  };
-
-  const handleClose = () => {
-    dispatch(resetNotifications());
-    setIsOpened(false);
-  };
+    if (!isOpened) dispatch(resetNotifications());
+  }, [isOpened]);
 
   return (
     <div>

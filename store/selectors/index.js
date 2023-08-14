@@ -39,12 +39,12 @@ export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (
 export const getNotificationsDataSelector = createDraftSafeSelector(notificationsSelector, (state) => {
   return {
     ...state,
-    watchedData: notificationsDataAdapter({ data: state.watched.data }),
-    unwatchedData: notificationsDataAdapter({ data: state.unwatched.data }),
-    readedCounter: state.watched.total,
-    unreadCounter: state.unwatched.total,
-    noReadedMessages: state.watched.total === 0,
-    noUnreadedMessages: state.unwatched.total === 0,
+    watchedData: notificationsDataAdapter({ data: state?.watchedData }),
+    unwatchedData: notificationsDataAdapter({ data: state?.unwatchedData }),
+    readedCounter: state.readed,
+    unreadCounter: state.unread,
+    noReadedMessages: state.readed === 0,
+    noUnreadedMessages: state.unread === 0,
   };
 });
 

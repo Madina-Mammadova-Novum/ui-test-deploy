@@ -1,28 +1,24 @@
-/* eslint-disable import/no-cycle */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchMoreNotifications, fetchNotifications } from './actions';
+/* Actions */
+// eslint-disable-next-line import/no-cycle
+import { fetchNotifications } from './actions';
 
 const initialState = {
-  isConnected: false,
-  activeTab: 'unread',
+  unread: 0,
+  readed: 0,
+  watchedData: [],
+  unwatchedData: [],
   loading: false,
   error: null,
-  watched: {
-    total: 0,
-    data: [],
-  },
-  unwatched: {
-    total: 0,
-    data: [],
-  },
+  isConnected: false,
   filterParams: {
+    activeTab: 'unread',
     searchValue: '',
     sortedValue: 'all',
     skip: 0,
     take: 50,
     watched: false,
-    triggered: false,
   },
 };
 
@@ -30,17 +26,17 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    setWatchedData: (state, { payload }) => {
-      state.watched.data = payload;
+    setWatchedData: (state, action) => {
+      state.watchedData = [...action.payload];
     },
     updateWatchedData: (state, action) => {
-      state.watched.data = [...state.watched.data, ...action.payload];
+      state.watchedData = [...state.watchedData, ...action.payload];
     },
-    setUnwatchedData: (state, { payload }) => {
-      state.unwatched.data = payload;
+    setUnwatchedData: (state, action) => {
+      state.unwatchedData = [...action.payload];
     },
     updateUnwatchedData: (state, action) => {
-      state.unwatched.data = [...state.watched.data, ...action.payload];
+      state.unwatchedData = [...state.unwatchedData, ...action.payload];
     },
     setFilterParams: (state, action) => {
       state.filterParams = {
@@ -49,37 +45,27 @@ const notificationsSlice = createSlice({
       };
     },
     resetNotifications: (state) => {
+      state.watchedData = initialState.watchedData;
+      state.unwatchedData = initialState.unwatchedData;
       state.filterParams = initialState.filterParams;
     },
     setConnectionStatus: (state, action) => {
       state.isConnected = action.payload;
     },
-    setActiveTab: (state, action) => {
-      state.activeTab = action.payload;
-    },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchNotifications.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchNotifications.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.watched.total = payload?.watchedCounter;
-        state.unwatched.total = payload?.unwatchedCounter;
-      })
-      .addCase(fetchNotifications.rejected, (state) => {
-        state.error = true;
-      })
-      .addCase(fetchMoreNotifications.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchMoreNotifications.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(fetchMoreNotifications.rejected, (state) => {
-        state.loading = false;
-      });
+    builder.addCase(fetchNotifications.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.readed = payload.readed;
+      state.unread = payload.unread;
+    });
+    builder.addCase(fetchNotifications.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload?.error;
+    });
   },
 });
 
@@ -91,7 +77,6 @@ export const {
   resetNotifications,
   updateWatchedData,
   updateUnwatchedData,
-  setActiveTab,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

@@ -7,44 +7,34 @@ import { NOTIFICATIONS } from './types';
 import { getNotifications, setReadAllNotifications } from '@/services/notifications';
 
 export const fetchNotifications = createAsyncThunk(
-  NOTIFICATIONS.GET_READED_NOTIFICATIONS,
-  async (data, { dispatch }) => {
+  NOTIFICATIONS.GET_NOTIFICATIONS,
+  async (data, { getState, dispatch }) => {
     const { data: result } = await getNotifications({ data });
 
-    const setAction = data?.watched ? setWatchedData : setUnwatchedData;
+    const {
+      notifications: {
+        watchedData,
+        unwatchedData,
+        filterParams: { searchValue, sortedValue, watched },
+      },
+    } = getState();
 
-    dispatch(setAction(result?.data));
+    if (watched && watchedData.length > 0) {
+      dispatch(updateWatchedData(result?.data));
+      if (sortedValue !== '' || searchValue !== 'all') dispatch(setWatchedData(result?.data));
+    } else dispatch(setWatchedData(result?.data));
 
-    return { watchedCounter: result?.readCount, unwatchedCounter: result?.unreadCount };
+    if (!watched && unwatchedData?.length > 0) {
+      dispatch(updateUnwatchedData(result?.data));
+      if (sortedValue !== '' || searchValue !== 'all') dispatch(setUnwatchedData(result?.data));
+    } else dispatch(setUnwatchedData(result?.data));
+
+    return { readed: result?.readCount, unread: result?.unreadCount };
   }
 );
 
-export const fetchMoreNotifications = createAsyncThunk(
-  NOTIFICATIONS.GET_MORE_NOTIFICATIONS,
-  async (data, { dispatch }) => {
-    const { data: result } = await getNotifications({ data });
+export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTIFICATIONS, async (_, { dispatch }) => {
+  await setReadAllNotifications();
 
-    const updateAction = data?.watched ? updateWatchedData : updateUnwatchedData;
-
-    if (result?.data?.length > 0) dispatch(updateAction(result?.data));
-  }
-);
-
-export const fetchAllNotifications = createAsyncThunk(
-  NOTIFICATIONS.GET_ALL_NOTIFICATIONS,
-  async (_, { dispatch, getState }) => {
-    const { filterParams } = getState().notifications;
-
-    await Promise.all([
-      dispatch(fetchNotifications({ ...filterParams, watched: true })),
-      dispatch(fetchNotifications({ ...filterParams, watched: false })),
-    ]);
-  }
-);
-
-export const readAllNotifications = createAsyncThunk(
-  NOTIFICATIONS.SET_READ_ALL_NOTIFICATIONS,
-  async (_, { dispatch }) => {
-    await Promise.all([setReadAllNotifications(), dispatch(fetchAllNotifications())]);
-  }
-);
+  dispatch(fetchNotifications());
+});
