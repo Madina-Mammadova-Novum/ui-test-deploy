@@ -37,7 +37,7 @@ const AddTankerWithImoForm = ({
 
   const onSubmit = async (formData) => {
     const { data, error = {} } = await getQ88DataByImo({ imo: formData.imo });
-    const { errors: { Imo = [] } = {} } = error;
+    const { errors: { Imo = [] } = {} } = error || {};
     if (Imo[0] === EXISTING_VESSEL_ERROR) {
       errorToast(Imo);
       return;

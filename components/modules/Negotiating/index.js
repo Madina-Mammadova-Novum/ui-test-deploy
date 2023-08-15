@@ -25,7 +25,7 @@ const ownerTabs = [
   },
   {
     value: 'failed',
-    label: 'Declained',
+    label: 'Declined',
   },
 ];
 
@@ -36,11 +36,11 @@ const chartererTabs = [
   },
   {
     value: 'counteroffers',
-    label: 'Counteroffers',
+    label: 'Incoming',
   },
   {
     value: 'failed',
-    label: 'Declained',
+    label: 'Declined',
   },
 ];
 
