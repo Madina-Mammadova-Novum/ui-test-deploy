@@ -49,6 +49,7 @@ import NotificationList from '@/units/NotificationList';
 import NotificationPlaceholder from '@/units/NotificationPlaceholder';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
+import OfferDetails from '@/units/OfferDetails';
 import OfferForm from '@/units/OfferForm';
 import PaginationComponent from '@/units/PaginationComponent';
 import PartyItem from '@/units/PartyItem';
@@ -150,4 +151,5 @@ export {
   AssignToFleet,
   NotificationContent,
   NotificationPlaceholder,
+  OfferDetails,
 };

@@ -8,16 +8,12 @@ import { ViewOfferPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
-import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 
 const tabs = [
   {
-    value: 'voyage_details',
-    label: 'Voyage details',
-  },
-  {
-    value: 'commercial_offer_terms',
-    label: 'Commercial offer terms',
+    value: 'offer_details',
+    label: 'Offer details',
   },
   {
     value: 'comments',
@@ -32,12 +28,10 @@ const ViewOffer = ({ setStep, data }) => {
 
   const tabContent = () => {
     switch (currentTab) {
-      case 'commercial_offer_terms':
-        return <COTTabContent data={commercialOfferTerms} />;
       case 'comments':
         return <CommentsContent data={comments} areaDisabled />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetails} />;
+        return <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />;
     }
   };
 

@@ -15,7 +15,7 @@ import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
 import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
-import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -25,12 +25,8 @@ const tabs = [
     label: 'Message',
   },
   {
-    value: 'commercial_offer_terms',
-    label: 'Commercial offer terms',
-  },
-  {
-    value: 'voyage_details',
-    label: 'Voyage details',
+    value: 'offer_details',
+    label: 'Offer details',
   },
 ];
 
@@ -64,10 +60,8 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
-      case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetails} />;
-      case 'commercial_offer_terms':
-        return <COTTabContent data={commercialOfferTerms} />;
+      case 'offer_details':
+        return <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />;
       default:
         return <CommentsContent data={comments} areaDisabled />;
     }
