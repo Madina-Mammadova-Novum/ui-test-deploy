@@ -50,7 +50,7 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, it
       <FormManager
         submitAction={handleSubmit}
         submitButton={{
-          text: 'Send the Decline',
+          text: 'Proceed',
           variant: 'delete',
           size: 'large',
           disabled: !reason,
