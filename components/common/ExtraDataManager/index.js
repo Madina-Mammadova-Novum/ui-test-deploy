@@ -52,16 +52,16 @@ const ExtraDataManager = ({ children }) => {
   useEffect(() => {
     getGeneralData();
 
-    if (session?.accessToken) {
-      setUserParams();
-    } else {
-      resetUserParams();
-    }
+    if (session?.accessToken) setUserParams();
 
-    if (Date.now() > session?.expires) {
-      updateSession();
-    }
-  }, [session?.accessToken, session?.expires]);
+    return () => {
+      resetUserParams();
+    };
+  }, [session?.accessToken]);
+
+  useEffect(() => {
+    if (Date.now() > session?.expires) updateSession();
+  }, [session?.expires]);
 
   useEffect(() => {
     if (isAuthenticated) dispatch(fetchNotifications(filterParams));
