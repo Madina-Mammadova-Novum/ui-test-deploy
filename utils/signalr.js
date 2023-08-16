@@ -34,8 +34,9 @@ class NotificationService {
       this.store.dispatch(setConnectionStatus(this.isConnected));
 
       this.connection.on('ReceiveNotification', async (message) => {
-        if (message?.title)
+        if (message) {
           this.store.dispatch(setFilterParams({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
+        }
       });
     } catch (err) {
       console.error(err);
