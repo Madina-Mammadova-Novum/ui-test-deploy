@@ -8,16 +8,12 @@ import { offerDetailsAdapter } from '@/adapters/offer';
 import { Loader } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
-import { COTTabContent, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { ModalHeader, OfferDetails, Tabs } from '@/units';
 
 const tabs = [
   {
-    value: 'voyage_details',
-    label: 'Voyage details',
-  },
-  {
-    value: 'commercial_offer_terms',
-    label: 'Commercial offer terms',
+    value: 'offer_details',
+    label: 'Offer details',
   },
   {
     value: 'comments',
@@ -46,12 +42,10 @@ const ViewFailedOffer = ({ itemId }) => {
 
   const tabContent = () => {
     switch (currentTab) {
-      case 'commercial_offer_terms':
-        return <COTTabContent data={commercialOfferTerms} />;
       case 'comments':
         return <CommentsContent data={comments} areaDisabled />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetails} />;
+        return <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />;
     }
   };
 
