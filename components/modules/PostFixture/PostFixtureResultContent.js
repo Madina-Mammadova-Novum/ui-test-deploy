@@ -32,7 +32,12 @@ const PostFixtureResultContent = ({ data, toggle }) => {
 
   const printExpandableRow = (headerData) => (
     <ExpandableRow
-      header={<ExpandableCardHeader headerData={postFixtureHeaderDataAdapter({ data: headerData })} />}
+      header={
+        <ExpandableCardHeader
+          headerData={postFixtureHeaderDataAdapter({ data: headerData })}
+          gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr"
+        />
+      }
       footer={<PostFixtureExpandedFooter />}
       expand={toggle}
     >

@@ -16,6 +16,7 @@ const ExpandableCardHeader = ({
   actions = [],
   itemsContainerStyles = '',
   gridLayout = true,
+  gridStyles = '',
   itemId,
 }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
@@ -64,7 +65,7 @@ const ExpandableCardHeader = ({
           className={`grid md:grid-cols-1 3md:grid-cols-2 ${
             !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
           }`}
-          style={{ gridTemplateColumns: lg && `repeat(${headerData.length}, minmax(0, 1fr))` }}
+          style={{ gridTemplateColumns: lg && (gridStyles || `repeat(${headerData.length}, minmax(0, 1fr))`) }}
         >
           {headerData.map(printHeaderRow)}
         </div>

@@ -13,7 +13,7 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
   const [showScroll, setShowScroll] = useState(false);
   const { getValues } = useHookForm();
   const { voyageDetails, comments } = offerDetails;
-  const { commercialOfferTerms } = confirmCounterofferDetailsAdapter({ data: getValues() });
+  const { commercialOfferTerms, comment } = confirmCounterofferDetailsAdapter({ data: getValues() });
 
   return (
     <div className="w-[610px]">
@@ -25,7 +25,7 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
       >
         <COTTabContent data={commercialOfferTerms} />
         <VoyageDetailsTabContent data={voyageDetails} />
-        <CommentsContent data={comments} areaDisabled />
+        <CommentsContent data={[...comments, comment]} areaDisabled />
       </div>
     </div>
   );

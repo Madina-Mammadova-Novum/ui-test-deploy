@@ -62,8 +62,9 @@ export async function getSentCounteroffers(tankerId) {
   };
 }
 
-export async function getOfferDetails(offerId) {
-  const response = await getData(`offer/details/${offerId}`);
+export async function getOfferDetails(offerId, role) {
+  const path = role === ROLES.OWNER ? `offer/details/${offerId}` : `offer/charterer/details/${offerId}`;
+  const response = await getData(path);
   return {
     ...response,
   };

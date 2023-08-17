@@ -253,7 +253,7 @@ export function offerDetailsAdapter({ data }) {
 
 export function confirmCounterofferDetailsAdapter({ data }) {
   if (!data) return null;
-  const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms } = data;
+  const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms, comment } = data;
 
   return {
     commercialOfferTerms: {
@@ -299,6 +299,11 @@ export function confirmCounterofferDetailsAdapter({ data }) {
           label: paymentTerms?.label,
         },
       ],
+    },
+    comment: {
+      title: comment,
+      date: transformDate(new Date(), 'MMM dd, yyyy'),
+      time: extractTimeFromDate(new Date()),
     },
   };
 }
