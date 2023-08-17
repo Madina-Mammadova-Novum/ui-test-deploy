@@ -29,7 +29,7 @@ const ModalWrapper = ({ opened, onClose, containerClass, children }) => {
             type="button"
             onClick={onClose}
             className="absolute top-3 right-3"
-            buttonProps={{ icon: { before: <CloseSVG /> } }}
+            buttonProps={{ icon: { before: <CloseSVG className="fill-black" /> } }}
           />
           {children}
         </div>

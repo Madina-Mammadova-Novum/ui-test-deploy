@@ -10,6 +10,13 @@ import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
+import ChatControl from '@/units/ChatControl';
+import ChatConversation from '@/units/ChatConversation';
+import ChatList from '@/units/ChatList';
+import ChatModal from '@/units/ChatModal';
+import ChatLoadMoreCta from '@/units/ChatModal/ChatLoadMoreCta';
+import ChatModalHeader from '@/units/ChatModal/ChatModalHeader';
+import ChatSession from '@/units/ChatSession';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
@@ -152,4 +159,11 @@ export {
   NotificationContent,
   NotificationPlaceholder,
   OfferDetails,
+  ChatControl,
+  ChatList,
+  ChatSession,
+  ChatConversation,
+  ChatModal,
+  ChatModalHeader,
+  ChatLoadMoreCta,
 };
