@@ -36,7 +36,7 @@ const ViewCounteroffer = ({ itemId }) => {
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId);
+      const { status, data, error } = await getOfferDetails(itemId, session?.role);
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data }));
       } else {

@@ -34,7 +34,12 @@ const Fixture = () => {
 
   const printExpandableRow = (headerData) => (
     <ExpandableRow
-      header={<ExpandableCardHeader headerData={fixtureHeaderDataAdapter({ data: headerData })} />}
+      header={
+        <ExpandableCardHeader
+          headerData={fixtureHeaderDataAdapter({ data: headerData })}
+          gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr"
+        />
+      }
       expand={toggle}
     >
       <FixtureExpandedContent rowsData={fixtureRowsDataAdapter({ data: headerData.documentsInfo })} />

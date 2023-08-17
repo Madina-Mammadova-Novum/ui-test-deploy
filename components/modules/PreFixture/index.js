@@ -34,7 +34,12 @@ const PreFixture = () => {
 
   const printExpandableRow = (headerData, underNegotiation) => (
     <ExpandableRow
-      header={<ExpandableCardHeader headerData={prefixtureHeaderDataAdapter({ data: headerData })} />}
+      header={
+        <ExpandableCardHeader
+          headerData={prefixtureHeaderDataAdapter({ data: headerData })}
+          gridStyles="1fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr"
+        />
+      }
       footer={<PreFixtureExpandedFooter underNegotiation={underNegotiation} />}
       expand={toggle}
     >

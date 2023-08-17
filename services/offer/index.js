@@ -1,6 +1,7 @@
 import { acceptOfferAdapter, declineOfferAdapter, sendCounterofferAdapter, sendOfferAdapter } from '@/adapters/offer';
 import { ROLES } from '@/lib';
 import { getData, postData } from '@/utils/dataFetching';
+import { getRoleIdentity } from '@/utils/helpers';
 
 export async function sendOffer({ data }) {
   const body = sendOfferAdapter({ data });
@@ -62,8 +63,10 @@ export async function getSentCounteroffers(tankerId) {
   };
 }
 
-export async function getOfferDetails(offerId) {
-  const response = await getData(`offer/details/${offerId}`);
+export async function getOfferDetails(offerId, role) {
+  const { isOwner } = getRoleIdentity({ role });
+  const path = isOwner ? `offer/details/${offerId}` : `offer/charterer/details/${offerId}`;
+  const response = await getData(path);
   return {
     ...response,
   };

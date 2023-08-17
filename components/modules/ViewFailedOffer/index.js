@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { ViewFailedOfferPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
@@ -27,10 +29,11 @@ const ViewFailedOffer = ({ itemId }) => {
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
   const { comments, voyageDetails, commercialOfferTerms, failedOfferData: { failureReason } = {} } = offerDetails;
+  const { data: session } = useSession();
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId);
+      const { status, data, error } = await getOfferDetails(itemId, session?.role);
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data }));
       } else {
