@@ -12,6 +12,7 @@ export const negotiatingSelector = ({ negotiating }) => negotiating;
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
+export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
@@ -54,5 +55,12 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
     error: state?.error,
     vessels: state?.data?.vessels,
     totalPages: state?.data?.totalPages,
+  };
+});
+
+export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+  return {
+    search: state.filterParams.searchValue,
+    tab: state.filterParams.tabValue,
   };
 });

@@ -6,14 +6,14 @@ import { Divider } from '@/elements';
 import { ChatSession } from '@/units';
 
 const ChatList = ({ data }) => {
-  const printChatSession = (session) => (
+  const printChatSession = (session, index) => (
     <>
-      <Divider />
+      {index !== 0 && <Divider />}
       <ChatSession data={session} />
     </>
   );
 
-  return <div className="px-5">{data?.map(printChatSession)}</div>;
+  return <div className="p-5 h-[320px] overflow-y-scroll flex flex-col gap-y-4">{data?.map(printChatSession)}</div>;
 };
 
 ChatList.propTypes = ChatListPropTypes;

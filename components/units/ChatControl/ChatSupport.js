@@ -16,7 +16,7 @@ const ChatSupport = ({ title, description }) => {
           {description && <p className="text-xsm">{description}</p>}
         </div>
       </div>
-      <div className="flex flex-col items-center gap-y-1.5">
+      <div className="flex flex-col items-center gap-y-1.5 pr-2">
         <ConversationButton onClick={() => {}} />
       </div>
     </div>

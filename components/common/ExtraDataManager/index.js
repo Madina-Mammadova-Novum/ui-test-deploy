@@ -60,7 +60,7 @@ const ExtraDataManager = ({ children }) => {
   }, [session?.accessToken]);
 
   useEffect(() => {
-    if (Date.now() > session?.expires) updateSession();
+    if (Date.now() > session?.expires / 500) updateSession();
   }, [session?.expires]);
 
   useEffect(() => {

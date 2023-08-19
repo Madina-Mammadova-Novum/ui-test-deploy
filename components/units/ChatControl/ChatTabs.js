@@ -8,17 +8,17 @@ const ChatTabs = ({ activeTab, onClick, activeCounter, archivedCounter, containe
   const options = [
     {
       label: `Active (${activeCounter})`,
-      value: true,
+      value: 'active',
     },
     {
       label: `Archived (${archivedCounter})`,
-      value: false,
+      value: 'archived',
     },
   ];
 
   return (
     <div className={containerClass}>
-      <Tabs tabs={options} activeTab={options[0].value ?? activeTab} onClick={onClick} />
+      <Tabs tabs={options} activeTab={activeTab} onClick={onClick} />
     </div>
   );
 };
