@@ -12,6 +12,7 @@ import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
 import ChatControl from '@/units/ChatControl';
 import ChatConversation from '@/units/ChatConversation';
+import ChatDeactivate from '@/units/ChatDeactivate';
 import ChatList from '@/units/ChatList';
 import ChatModal from '@/units/ChatModal';
 import ChatLoadMoreCta from '@/units/ChatModal/ChatLoadMoreCta';
@@ -166,4 +167,5 @@ export {
   ChatModal,
   ChatModalHeader,
   ChatLoadMoreCta,
+  ChatDeactivate,
 };
