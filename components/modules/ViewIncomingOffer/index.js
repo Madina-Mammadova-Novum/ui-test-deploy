@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { ViewIncomingOfferPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
@@ -14,10 +16,11 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
   const [step, setStep] = useState('view_offer');
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
+  const { data: session } = useSession();
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId);
+      const { status, data, error } = await getOfferDetails(itemId, session?.role);
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data }));
       } else {

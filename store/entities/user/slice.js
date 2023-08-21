@@ -5,9 +5,9 @@ import { fetchUserProfileData } from './actions';
 const initialState = {
   loading: true,
   error: null,
+  role: null,
+  isAuthenticated: false,
   data: {
-    role: null,
-    isAuthenticated: false,
     personalDetails: {},
     companyDetails: {},
   },
@@ -22,10 +22,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setRoleIdentity: (state, { payload }) => {
-      state.data.role = payload;
+      state.role = payload;
     },
     setIsAuthenticated: (state, { payload }) => {
-      state.data.isAuthenticated = payload;
+      state.isAuthenticated = payload;
     },
     handleCollapse: (state, { payload }) => {
       state.params.sidebarCollapsed = payload;

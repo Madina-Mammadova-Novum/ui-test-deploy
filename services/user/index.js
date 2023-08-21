@@ -12,7 +12,7 @@ import {
   updatePasswordAdapter,
 } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
+import { ContentTypeJson, DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -67,7 +67,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await postData(`auth/login`, body);
+  const response = await postData(`auth/login`, body, { headers: { ...ContentTypeJson() } });
 
   return {
     ...response,
@@ -75,7 +75,7 @@ export async function login({ data }) {
 }
 
 export async function refreshAccessToken({ token }) {
-  const response = await postData(`auth/refreshToken`, { token });
+  const response = await postData(`auth/refreshToken`, { token }, { headers: { ...ContentTypeJson() } });
 
   if (response?.data) return response?.data;
   return { ...response };
@@ -83,7 +83,8 @@ export async function refreshAccessToken({ token }) {
 
 export async function updatePassword({ data }) {
   const body = updatePasswordAdapter({ data });
-  const response = await postData(`account/update-password`, body);
+  const response = await postData(`account/update-password`, body, { headers: { ...ContentTypeJson() } });
+
   return {
     ...response,
     data: {
@@ -94,7 +95,7 @@ export async function updatePassword({ data }) {
 
 export async function updateInfo({ data }) {
   const body = updateInfoAdapter({ data });
-  const response = await putData(`account/update-info`, body);
+  const response = await putData(`account/update-info`, body, { headers: { ...ContentTypeJson() } });
 
   return {
     ...response,
@@ -103,7 +104,7 @@ export async function updateInfo({ data }) {
 
 export async function updateCompany({ data, role }) {
   const body = roleBasedUpdateCompanyAdapter({ data, role });
-  const response = await putData(`account/update-company`, body);
+  const response = await putData(`account/update-company`, body, { headers: { ...ContentTypeJson() } });
 
   return {
     ...response,
@@ -115,7 +116,7 @@ export async function updateCompany({ data, role }) {
 
 export async function deleteCompany({ data }) {
   const body = deleteCompanyAdapter({ data });
-  const response = await deleteData(`account/delete-company`, body);
+  const response = await deleteData(`account/delete-company`, body, { headers: { ...ContentTypeJson() } });
   return {
     ...response,
   };
@@ -124,7 +125,9 @@ export async function deleteCompany({ data }) {
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
   const body = accountNavigationAdapter({ data: { page, perPage, sortBy } });
 
-  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
+  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body, {
+    headers: { ...ContentTypeJson() },
+  });
 
   return {
     ...response,
@@ -133,7 +136,7 @@ export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }
 
 export async function getUserPositionById({ id }) {
   const body = getFleetByIdAdapter({ id });
-  const response = await putData(`account/my-positions/vesselId`, body);
+  const response = await putData(`account/my-positions/vesselId`, body, { headers: { ...ContentTypeJson() } });
 
   return {
     ...response,
@@ -155,14 +158,14 @@ export function* getVesselsById(data) {
 }
 
 export async function getUserFixtures() {
-  const response = await getData(`account/fixture`);
+  const response = await getData(`account/fixture`, { headers: { ...ContentTypeJson() } });
   return {
     ...response,
   };
 }
 
 export async function getUserPreFixtures() {
-  const response = await getData(`account/pre-fixture`);
+  const response = await getData(`account/pre-fixture`, { headers: { ...ContentTypeJson() } });
   return {
     ...response,
   };

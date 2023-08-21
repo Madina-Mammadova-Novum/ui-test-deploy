@@ -1,3 +1,4 @@
+import ClockSVG from '@/assets/images/clock.svg';
 import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
@@ -127,21 +128,26 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Number of tankers',
-      text: vessels.length || '0',
+      text: vessels?.length || '0',
     },
   ];
 };
 
-export const fleetsPageRowDataAdapter = ({ data, index }) => {
+export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   if (!data) return null;
 
   const {
     id,
     details: { name, summerDwt, q88QuestionnarieFile },
     imo,
-    status,
     vesselSizeCategoryId,
+    apearsInSearch,
+    status: requestStatus,
   } = data;
+  const additionRequested = requestStatus === 'Addition requested';
+  const vesselInProgress = requestStatus !== 'Confirmed';
+
+  const status = apearsInSearch ? 'Active' : 'Inactive';
 
   return [
     {
@@ -185,12 +191,15 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
       id,
       editable: true,
       name,
+      fleetName,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: 'Request to update info',
+          actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
+          disabled: vesselInProgress,
+          editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
         },
         {
           action: ACTIONS.DELETE_TANKER_FROM_FLEET,
@@ -203,10 +212,10 @@ export const fleetsPageRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const fleetsPageRowsDataAdapter = ({ data }) => {
+export const fleetsPageRowsDataAdapter = ({ data, fleetName }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1, fleetName }));
 };
 
 export const unassignedFleetRowDataAdapter = ({ data, index }) => {
@@ -218,8 +227,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     details: { summerDwt, name },
     vesselSizeCategoryId,
     q88QuestionnarieFile,
-    status,
+    apearsInSearch,
+    status: requestStatus,
   } = data;
+
+  const additionRequested = requestStatus === 'Addition requested';
+  const vesselInProgress = requestStatus !== 'Confirmed';
+
+  const status = apearsInSearch ? 'Active' : 'Inactive';
 
   return [
     {
@@ -279,9 +294,11 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: 'Request to update info',
+          actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
+          disabled: vesselInProgress,
+          editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
         },
         {
           action: ACTIONS.DELETE_TANKER,

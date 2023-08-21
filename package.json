@@ -60,6 +60,7 @@
     "@heroicons/react": "^2.0.13",
     "@hookform/devtools": "^4.3.0",
     "@hookform/resolvers": "2.8.5",
+    "@microsoft/signalr": "^7.0.9",
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.2",
     "@svgr/webpack": "^6.5.1",

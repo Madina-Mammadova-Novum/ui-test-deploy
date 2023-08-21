@@ -56,6 +56,7 @@ const Fleets = () => {
           <ExpandableCardHeader
             headerData={rowHeader}
             itemId={rowData?.id}
+            itemsContainerStyles="lg:grid-cols-2"
             actions={[
               {
                 action: ACTIONS.EDIT_FLEET,
@@ -74,7 +75,10 @@ const Fleets = () => {
         }
         expand={toggle}
       >
-        <FleetsExpandedContent rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels })} fleetId={rowData.id} />
+        <FleetsExpandedContent
+          rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels, fleetName: rowData.name })}
+          fleetId={rowData.id}
+        />
       </ExpandableRow>
     );
   };
@@ -86,33 +90,37 @@ const Fleets = () => {
   return (
     <section>
       <div className="flex justify-between items-center py-5">
-        <Title level={1}>Tanker list</Title>
-        <div className="flex gap-x-5">
+        <Title level={1} className="self-baseline">
+          Tanker list
+        </Title>
+        <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
           <ToggleRows onToggleClick={setToggle} />
-          <ModalWindow
-            buttonProps={{
-              text: 'Create new fleet',
-              variant: 'primary',
-              size: 'large',
-              icon: {
-                before: <PlusCircleSVG className="fill-white" />,
-              },
-            }}
-          >
-            <CreateFleetForm />
-          </ModalWindow>
-          <ModalWindow
-            buttonProps={{
-              text: 'Add a New Tanker',
-              variant: 'primary',
-              size: 'large',
-              icon: {
-                before: <PlusCircleSVG className="fill-white" />,
-              },
-            }}
-          >
-            <AddNewTanker fleetOptions={convertDataToOptions({ data }, 'id', 'name')} />
-          </ModalWindow>
+          <div className="flex gap-x-5">
+            <ModalWindow
+              buttonProps={{
+                text: 'Create new fleet',
+                variant: 'primary',
+                size: 'large',
+                icon: {
+                  before: <PlusCircleSVG className="fill-white" />,
+                },
+              }}
+            >
+              <CreateFleetForm />
+            </ModalWindow>
+            <ModalWindow
+              buttonProps={{
+                text: 'Add a New Tanker',
+                variant: 'primary',
+                size: 'large',
+                icon: {
+                  before: <PlusCircleSVG className="fill-white" />,
+                },
+              }}
+            >
+              <AddNewTanker fleetOptions={convertDataToOptions({ data }, 'id', 'name')} />
+            </ModalWindow>
+          </div>
         </div>
       </div>
 

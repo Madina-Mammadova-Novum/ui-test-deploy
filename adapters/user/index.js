@@ -27,8 +27,6 @@ export function userDetailsAdapter({ data }) {
   if (!data) return {};
 
   return {
-    role: data?.role,
-    isAuthenticated: data?.isAuthenticated,
     ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
     ...userCompanyDetailsAdapter({ data: data?.companyDetails }),
   };
@@ -510,6 +508,7 @@ export function sessionAdapter({ session, token }) {
 
   if (token.accessToken) {
     const { exp, ...rest } = decodedTokenAdapter(token.accessToken);
+
     session.user = { ...rest };
     session.expires = exp * 1000;
     session.accessToken = token.accessToken;

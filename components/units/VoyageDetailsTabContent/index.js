@@ -1,34 +1,17 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import ReactCountryFlag from 'react-country-flag';
-
-import { useSession } from 'next-auth/react';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
-import { ROLES } from '@/lib';
-import VoyageChartererTabContent from '@/units/VoyageDetailsTabContent/VoyageChartererTabContent';
 
 const VoyageDetailsTabContent = ({ data = {} }) => {
-  const { data: session } = useSession();
-
-  const printRoleBasedSection = useMemo(() => {
-    if (session?.role === ROLES.OWNER) {
-      return null;
-    }
-    if (session?.role === ROLES.CHARTERER) {
-      return <VoyageChartererTabContent />;
-    }
-    return null;
-  }, [session?.role]);
-
   const printPairDates = (detail) => <TextRow title={detail.key}>{detail.label}</TextRow>;
 
   return (
     <div>
       <div className="flex justify-between">
         <Title level={3}>Voyage details</Title>
-        <div className="flex relative">{printRoleBasedSection}</div>
       </div>
 
       <div className="text-xsm mt-2.5">

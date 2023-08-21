@@ -42,8 +42,14 @@ import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
+import NotificationCard from '@/units/NotificationCard';
+import NotificationContent from '@/units/NotificationContent';
+import NotificationControl from '@/units/NotificationControl';
+import NotificationList from '@/units/NotificationList';
+import NotificationPlaceholder from '@/units/NotificationPlaceholder';
 import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
+import OfferDetails from '@/units/OfferDetails';
 import OfferForm from '@/units/OfferForm';
 import PaginationComponent from '@/units/PaginationComponent';
 import PartyItem from '@/units/PartyItem';
@@ -138,6 +144,12 @@ export {
   Dropzone,
   File,
   UnassignedFleet,
+  NotificationList,
+  NotificationCard,
+  NotificationControl,
   ImoNotFound,
   AssignToFleet,
+  NotificationContent,
+  NotificationPlaceholder,
+  OfferDetails,
 };

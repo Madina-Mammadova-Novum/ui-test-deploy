@@ -8,11 +8,13 @@ export const fileUpdateAdapter = (file) => ({
   ...file,
 });
 
-export const fileReaderAdapter = (file, setValue, setError) => {
+export const fileReaderAdapter = (file, setValue, setError, setLoading) => {
   const reader = new window.FileReader();
 
   reader.onload = async () => {
+    setLoading(true);
     const { data, status, errors } = await uploadData({ data: file });
+    setLoading(false);
     if (status === 200) setValue('file', data);
     else {
       setError('file', { type: 'manual', message: 'This file size is not supported.' });

@@ -131,13 +131,16 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
         </div>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end">
+      <div className="flex text-xsm gap-x-4 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }} customStyles="opacity-[0]" />
+        <Button
+          buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }}
+          customStyles="opacity-[0] !w-32"
+        />
       </div>
     </div>
   );

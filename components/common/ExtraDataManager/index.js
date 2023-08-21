@@ -1,26 +1,30 @@
-/* eslint-disable no-return-await */
-
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { getNotificationsDataSelector, getUserDataSelector } from '@/store/selectors';
+import notificationService from '@/utils/signalr';
 
 const ExtraDataManager = ({ children }) => {
+  const dispatch = useDispatch();
   const { data: session, update } = useSession();
 
-  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector(getUserDataSelector);
+
+  const { filterParams } = useSelector(getNotificationsDataSelector);
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
 
-    return await update({ ...refreshedData });
-  }, [session, update]);
+    await update({ ...refreshedData });
+  }, [session?.refreshToken, update]);
 
   const getGeneralData = useCallback(() => {
     dispatch(fetchPorts());
@@ -35,21 +39,33 @@ const ExtraDataManager = ({ children }) => {
     [dispatch]
   );
 
+  const setUserParams = () => {
+    notificationService.start();
+    setUserData({ role: session?.role, isValid: true });
+  };
+
+  const resetUserParams = useCallback(() => {
+    notificationService.stop();
+    setUserData({ role: null, isValid: false });
+  }, [dispatch]);
+
   useEffect(() => {
     getGeneralData();
-  }, []);
+
+    if (session?.accessToken) setUserParams();
+
+    return () => {
+      resetUserParams();
+    };
+  }, [session?.accessToken]);
 
   useEffect(() => {
-    if (session?.accessToken) setUserData({ role: session?.role, isValid: true });
-    else setUserData({ role: null, isValid: false });
-  }, [session?.accessToken, session?.role, setUserData]);
+    if (Date.now() > session?.expires) updateSession();
+  }, [session?.expires]);
 
   useEffect(() => {
-    if (Date.now() > session?.expires) {
-      updateSession();
-      getGeneralData();
-    }
-  }, [session?.expires, getGeneralData, updateSession]);
+    if (isAuthenticated) dispatch(fetchNotifications(filterParams));
+  }, [filterParams, isAuthenticated]);
 
   return children;
 };

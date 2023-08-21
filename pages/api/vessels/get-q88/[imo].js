@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 
 import { responseGetVesselQ88Adapter } from '@/adapters/vessel';
-import { Authorization } from '@/lib/constants';
+import { Authorization, ContentTypeJson } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 import { AUTHCONFIG } from '@/utils/auth';
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/owner/vessels/${imo}/q88`),
     dataAdapter: responseGetVesselQ88Adapter,
     requestMethod: 'GET',
-    options: { ...Authorization(session?.accessToken) },
+    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
     customErrorHandling: true,
   });
 }

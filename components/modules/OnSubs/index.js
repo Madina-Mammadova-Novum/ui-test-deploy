@@ -37,7 +37,7 @@ const OnSubs = () => {
 
     return (
       <ExpandableRow
-        header={<ExpandableCardHeader headerData={rowHeader} />}
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
         expand={toggle}
         footer={<OnSubsExpandedFooter underRecap={underRecap} />}
       >

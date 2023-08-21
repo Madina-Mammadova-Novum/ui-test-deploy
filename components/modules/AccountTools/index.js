@@ -95,6 +95,7 @@ const AccountTools = ({ title, className = '' }) => {
     });
     setPortState([]);
     unregister('additionalPorts');
+    setValue('cargoQuantity', null);
     setValue('calculator', toolsCalculatorOptions[0]);
     setSelectedCalculator(toolsCalculatorOptions[0]);
   };
@@ -139,6 +140,7 @@ const AccountTools = ({ title, className = '' }) => {
                     asyncCall={initialLoading}
                     disabled={!portOptions.length}
                     label="From which port"
+                    placeholder="Select port"
                   />
                   <FormDropdown
                     name="toPort"
@@ -147,6 +149,7 @@ const AccountTools = ({ title, className = '' }) => {
                     asyncCall={initialLoading}
                     disabled={!portOptions.length}
                     label="To which port"
+                    placeholder="Select port"
                   />
                   {portState.map((portId) => (
                     <div key={portId}>
@@ -155,6 +158,7 @@ const AccountTools = ({ title, className = '' }) => {
                         onChange={(option) => handleChange(`additionalPorts[${portId}].port`, option)}
                         options={portOptions}
                         label="Additional port"
+                        placeholder="Select port"
                       />
                       <Button
                         buttonProps={{

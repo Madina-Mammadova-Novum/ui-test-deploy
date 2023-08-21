@@ -21,26 +21,26 @@ const ownerTabs = [
   },
   {
     value: 'counteroffers',
-    label: 'Sent counteroffers',
+    label: 'Sent',
   },
   {
     value: 'failed',
-    label: 'Failed',
+    label: 'Declined',
   },
 ];
 
 const chartererTabs = [
   {
     value: 'incoming',
-    label: 'Sent offers',
+    label: 'Sent',
   },
   {
     value: 'counteroffers',
-    label: 'Counteroffers',
+    label: 'Incoming',
   },
   {
     value: 'failed',
-    label: 'Failed',
+    label: 'Declined',
   },
 ];
 
@@ -80,7 +80,7 @@ const Negotiating = () => {
         perPage={perPage}
       />
     ),
-    [data, currentPage, numberOfPages, perPage]
+    [currentPage, numberOfPages, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage]
   );
 
   const printExpandableRow = (rowData) => {
@@ -91,7 +91,7 @@ const Negotiating = () => {
       <ExpandableRow
         key={rowData.id}
         className="pt-[60px]"
-        header={<ExpandableCardHeader headerData={rowHeader} />}
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 2fr 2fr 1fr 1fr 1fr" />}
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} />}
         expand={toggle}
       >

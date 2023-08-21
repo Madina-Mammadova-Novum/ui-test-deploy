@@ -10,7 +10,7 @@ const ExpandableCard = ({ data, expandAll, className, onClick }) => {
 
   return (
     <ExpandableCardWrapper
-      headerComponent={<ExpandableCardHeader headerData={headerData} />}
+      headerComponent={<ExpandableCardHeader headerData={headerData} gridLayout={false} />}
       className={className}
       onClick={onClick}
       expandAll={expandAll}

@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable prefer-destructuring */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -11,20 +11,20 @@ import { AddTankerManuallyFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Input, TextWithLabel, Title } from '@/elements';
-import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
-import { tankerDataSchema } from '@/lib/schemas';
+import { fileSchema, tankerDataSchema } from '@/lib/schemas';
+import DropzoneForm from '@/modules/DropzoneForm';
 import { getCountries } from '@/services';
 import { getPorts } from '@/services/port';
 import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesselTypes } from '@/services/vessel';
 import { refetchFleets } from '@/store/entities/fleets/slice';
 import { ImoNotFound, ModalHeader } from '@/units';
-import Dropzone from '@/units/FileUpload/Dropzone';
-import { convertDataToOptions, countriesOptions, getValueWithPath, updateFormats } from '@/utils/helpers';
+import { convertDataToOptions, countriesOptions, getValueWithPath } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
 const schema = yup.object({
   ...tankerDataSchema(),
+  ...fileSchema(false),
 });
 
 const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
@@ -50,7 +50,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const { label: fleetName, value: fleetId } = fleetData;
 
   const methods = useHookFormParams({ schema, state: q88State });
-  const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
   const dispatch = useDispatch();
   const {
     register,
@@ -187,19 +186,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     }
   };
 
-  const printHelpers = useMemo(() => {
-    return (
-      <div className="flex gap-3 h-auto self-end w-full justify-between py-2 text-xs-sm">
-        <p>
-          <span className="text-gray">Supports:</span> <span>{formats}</span>
-        </p>
-        <p className="flex gap-2 text-gray whitespace-nowrap self-end">
-          Max size: <span>{SETTINGS.FILE_SIZE_RESTRICTION}MB</span>
-        </p>
-      </div>
-    );
-  }, [formats]);
-
   return (
     <FormProvider {...methods}>
       <ModalFormManager
@@ -239,20 +225,20 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 error={errors.built?.message}
               />
               <FormDropdown
-                label="Port of registry"
-                options={ports}
-                asyncCall={initialLoading}
-                disabled={!ports.length || q88State.portOfRegistry}
-                name="portOfRegistry"
-                onChange={(option) => handleChange('portOfRegistry', option)}
-              />
-              <FormDropdown
                 label="Country"
                 options={countries}
                 name="country"
                 asyncCall={initialLoading}
                 disabled={!countries.length || q88State.country}
                 onChange={(option) => handleChange('country', option)}
+              />
+              <FormDropdown
+                label="Port of registry"
+                options={ports}
+                asyncCall={initialLoading}
+                disabled={!ports.length || q88State.portOfRegistry}
+                name="portOfRegistry"
+                onChange={(option) => handleChange('portOfRegistry', option)}
               />
             </div>
             <div className="grid grid-cols-3 gap-x-5 gap-y-4">
@@ -442,9 +428,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Title level={4} className="mb-2.5">
                 Upload your Q88 questionnaire file (optional)
               </Title>
-              <Dropzone areaParams={() => ({})} inputParams={() => ({})}>
-                {printHelpers}
-              </Dropzone>
+              <DropzoneForm showTextFields={false} />
             </div>
           </div>
         </div>

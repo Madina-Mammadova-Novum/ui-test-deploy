@@ -1,11 +1,33 @@
 'use client';
 
+import { useLayoutEffect, useMemo, useState } from 'react';
+
 import { TablePropTypes } from '@/lib/types';
 
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
+import { sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
+  const initialOrder = useMemo(() => rows, []);
+  const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
+  const { data, sortDirection, sortBy } = sortedData;
+
+  useLayoutEffect(() => {
+    setSortedData((prevState) => ({ ...prevState, data: rows }));
+    return () => setSortedData({ data: [], sortDirection: null, sortBy: null });
+  }, [rows]);
+
+  const handleSort = (options) => {
+    const { index, sortDirection: newSortDirection, sortBy: newSortBy, sortType } = options;
+    if (newSortBy === sortBy && newSortDirection === sortDirection) {
+      setSortedData({ data: initialOrder, sortDirection: null, sortBy: null });
+      return;
+    }
+    const newSortedData = sortTable(rows, index, newSortDirection, sortType);
+    setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
+  };
+
   const printTableRow = (rowData) => <TableRow key={rowData?.id} fleetId={fleetId} rowData={rowData} />;
 
   return headerData.length > 0 ? (
@@ -14,12 +36,17 @@ const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
         <table className="min-w-full border-collapse table-fixed ">
           {headerData.length && (
             <thead className="uppercase text-black font-semibold text-xs-sm">
-              <TableHeader headerData={headerData} />
+              <TableHeader
+                headerData={headerData}
+                handleSort={handleSort}
+                sortDirection={sortDirection}
+                sortBy={sortBy}
+              />
             </thead>
           )}
-          {!!rows.length && <tbody>{rows.map(printTableRow)}</tbody>}
+          {!!data.length && <tbody>{data.map(printTableRow)}</tbody>}
         </table>
-        {!rows.length && noDataMessage && (
+        {!data.length && noDataMessage && (
           <div className="py-5 bg-gray-light text-center text-xsm text-gray">{noDataMessage}</div>
         )}
       </div>

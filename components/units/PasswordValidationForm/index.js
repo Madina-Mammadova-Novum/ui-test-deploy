@@ -73,14 +73,14 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
           <PasswordInput
             name="password"
             label="Chose password"
-            placeholder="Enter a new password"
+            placeholder="Enter your password"
             disabled={isSubmitting}
             onChange={passwordValidation}
           />
           <PasswordInput
             name="confirmPassword"
             label="Confirm password"
-            placeholder="Enter a new password"
+            placeholder="Enter your password"
             disabled={isSubmitting}
             customStyles="mt-4"
             onChange={passwordValidation}

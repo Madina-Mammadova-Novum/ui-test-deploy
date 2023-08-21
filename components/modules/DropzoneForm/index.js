@@ -1,16 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import { DropZonePropTypes } from '@/lib/types';
+
 import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
-import { Input, TextArea } from '@/elements';
+import { Input, Loader, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { Dropzone, File } from '@/units';
 import { updateFormats } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const DropzoneForm = () => {
+const DropzoneForm = ({ showTextFields = true }) => {
   const {
     register,
     setValue,
@@ -19,6 +21,7 @@ const DropzoneForm = () => {
   } = useHookForm();
 
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
   const resetDropzone = useCallback(() => {
@@ -30,12 +33,12 @@ const DropzoneForm = () => {
     if (rejections && rejections.length > 0) {
       setError('file', {
         type: 'manual',
-        message: rejections && rejections[0].errors[0].message,
+        message: rejections && 'This file size is not supported.',
       });
       resetDropzone();
     } else {
       setFiles(acceptedFiles.map(fileUpdateAdapter));
-      fileReaderAdapter(acceptedFiles[0], setValue, setError);
+      fileReaderAdapter(acceptedFiles[0], setValue, setError, setLoading);
     }
   };
 
@@ -59,10 +62,6 @@ const DropzoneForm = () => {
     accept: { files: AVAILABLE_FORMATS.DOCS },
   });
 
-  useEffect(() => {
-    if (errors?.file) resetDropzone();
-  }, [errors?.file, resetDropzone]);
-
   const printFile = (file) => <File key={file.id} title={file?.path} onClick={(e) => onRemove(e, file)} />;
 
   const printHelpers = useMemo(() => {
@@ -79,25 +78,32 @@ const DropzoneForm = () => {
   }, [formats]);
 
   return (
-    <div className="flex flex-auto gap-5">
-      <div className="flex flex-col gap-8">
-        <Input
-          {...register('title')}
-          label="title"
-          maxlength={46}
-          helperText="Max: 46 symbols"
-          placeholder="Enter the file title"
-          error={errors?.title?.message}
-        />
+    <div className="flex flex-auto gap-5 !min-h-[160px]">
+      {showTextFields && (
+        <div className="flex flex-col gap-8">
+          <Input
+            {...register('title')}
+            label="title"
+            maxlength={46}
+            helperText="Max: 46 symbols"
+            placeholder="Enter the file title"
+            error={errors?.title?.message}
+          />
 
-        <TextArea {...register('comment')} label="comment (optional)" placeholder="Type your Message here …" />
-      </div>
+          <TextArea {...register('comment')} label="comment (optional)" placeholder="Type your Message here …" />
+        </div>
+      )}
       {!files.length ? (
         <Dropzone areaParams={getRootProps} inputParams={getInputProps}>
           {printHelpers}
         </Dropzone>
       ) : (
         <div className="flex flex-wrap w-full h-auto gap-x-3 gap-y-0 border-dashed border hover:border-blue border-gray-darker relative rounded-md pt-5 px-3">
+          {loading && (
+            <div className="absolute top-0 right-0 left-0 bottom-0 bg-gray-light opacity-50">
+              <Loader className="h-8 w-8 absolute top-[40%] left-[48%]" />
+            </div>
+          )}
           {files.map(printFile)}
           {printHelpers}
         </div>
@@ -106,6 +112,6 @@ const DropzoneForm = () => {
   );
 };
 
-DropzoneForm.propTypes = {};
+DropzoneForm.propTypes = DropZonePropTypes;
 
 export default DropzoneForm;

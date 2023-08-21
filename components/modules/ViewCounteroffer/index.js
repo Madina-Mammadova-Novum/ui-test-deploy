@@ -11,16 +11,12 @@ import { Dropdown, Loader } from '@/elements';
 import { COUNTDOWN_OPTIONS, ROLES } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
-import { COTTabContent, Countdown, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 
 const tabs = [
   {
-    value: 'voyage_details',
-    label: 'Voyage details',
-  },
-  {
-    value: 'commercial_offer_terms',
-    label: 'Commercial offer terms',
+    value: 'offer_details',
+    label: 'Offer details',
   },
   {
     value: 'comments',
@@ -40,7 +36,7 @@ const ViewCounteroffer = ({ itemId }) => {
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId);
+      const { status, data, error } = await getOfferDetails(itemId, session?.role);
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data }));
       } else {
@@ -60,12 +56,10 @@ const ViewCounteroffer = ({ itemId }) => {
 
   const tabContent = () => {
     switch (currentTab) {
-      case 'commercial_offer_terms':
-        return <COTTabContent data={commercialOfferTerms} />;
       case 'comments':
         return <CommentsContent data={comments} areaDisabled />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetails} />;
+        return <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />;
     }
   };
 

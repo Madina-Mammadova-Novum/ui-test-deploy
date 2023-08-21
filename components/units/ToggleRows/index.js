@@ -18,7 +18,7 @@ const ToggleRows = ({ onToggleClick }) => {
           icon: {
             before: (
               <DoubleArrowSVG
-                className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500 rotate-180')}
+                className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500')}
               />
             ),
           },
@@ -34,7 +34,7 @@ const ToggleRows = ({ onToggleClick }) => {
           icon: {
             before: (
               <DoubleArrowSVG
-                className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500')}
+                className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500 rotate-180')}
               />
             ),
           },
