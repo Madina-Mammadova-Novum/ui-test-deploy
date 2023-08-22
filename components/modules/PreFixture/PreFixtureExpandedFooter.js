@@ -4,7 +4,7 @@ import { PreFixtureExpandedFooterPropTypes } from '@/lib/types';
 
 import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button, Modal } from '@/elements';
-import { ExpandableRowFooter, OfferAcceptModalContent, OfferDeclineForm } from '@/units';
+import { ExpandableRowFooter, OfferAcceptModalContent } from '@/units';
 
 const PreFixtureExpandedFooter = ({ underNegotiation }) => {
   const [modalOptions, setModalOptions] = useState({
@@ -17,8 +17,6 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
 
   const modalContent = () => {
     switch (modalOptions.type) {
-      case 'decline_offer':
-        return <OfferDeclineForm title="Decline Pre-fixture Offer" showCancelButton closeModal={handleCloseModal} />;
       case 'accept_offer':
         return <OfferAcceptModalContent closeModal={handleCloseModal} />;
       default:
@@ -44,14 +42,6 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
           )}
         </div>
         <div className="flex flex-col gap-x-2.5 gap-y-2.5 3md:flex-row">
-          <div className="w-full">
-            <Button
-              onClick={() => handleOpenModal('decline_offer')}
-              buttonProps={{ text: 'Decline Negotiations on the Subject Cargo', variant: 'delete', size: 'large' }}
-              customStyles="w-full whitespace-nowrap"
-              disabled={underNegotiation}
-            />
-          </div>
           <div className="w-full">
             <Button
               onClick={() => handleOpenModal('accept_offer')}

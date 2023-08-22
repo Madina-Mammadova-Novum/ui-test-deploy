@@ -7,6 +7,7 @@ module.exports = {
     './utils/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './lib/**/*.{js,ts,jsx,tsx}',
+    './adapters/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     fontSize: {

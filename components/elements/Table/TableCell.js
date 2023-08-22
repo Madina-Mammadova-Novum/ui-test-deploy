@@ -153,21 +153,25 @@ const TableCell = ({ cellProps }) => {
 
         <div className="flex gap-x-2.5">
           {editable &&
-            actions.map(({ action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled }) => (
-              <ModalWindow
-                containerClass="overflow-y-[unset] z-50"
-                buttonProps={{
-                  icon: { before: editIcon },
-                  variant: actionVariant,
-                  size: actionSize,
-                  text: actionText,
-                  disabled: actionDisabled,
-                  className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0',
-                }}
-              >
-                {printModal(action)}
-              </ModalWindow>
-            ))}
+            actions.map(
+              ({ action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles }) => (
+                <ModalWindow
+                  containerClass="overflow-y-[unset] z-50"
+                  buttonProps={{
+                    icon: { before: editIcon },
+                    variant: actionVariant,
+                    size: actionSize,
+                    text: actionText,
+                    disabled: actionDisabled,
+                    className: !editable
+                      ? `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}`
+                      : `!p-0 ${actionStyles}`,
+                  }}
+                >
+                  {printModal(action)}
+                </ModalWindow>
+              )
+            )}
         </div>
       </div>
     </td>

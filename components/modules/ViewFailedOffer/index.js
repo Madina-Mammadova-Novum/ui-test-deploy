@@ -28,7 +28,12 @@ const ViewFailedOffer = ({ itemId }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
-  const { comments, voyageDetails, commercialOfferTerms, failedOfferData: { failureReason } = {} } = offerDetails;
+  const {
+    comments,
+    voyageDetails,
+    commercialOfferTerms,
+    failedOfferData: { failureReason, declinedBy } = {},
+  } = offerDetails;
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -64,12 +69,12 @@ const ViewFailedOffer = ({ itemId }) => {
       <ModalHeader>View Failed Offer</ModalHeader>
       <div className="bg-red-light rounded-base py-3 px-5 mt-5">
         <div className="text-xsm font-semibold">
-          <span>Failed reason:</span>
-          <span className="text-red ml-1.5">{failureReason}</span>
+          <span>Declained by:</span>
+          <span className="text-red ml-1.5">{declinedBy || 'Unknown'}</span>
         </div>
         <div className="text-[12px] mt-1.5">
-          <span className="font-bold">I indicated:</span>
-          <span className="ml-1.5">Lorem ipsum is placeholder text commonly used in the graphic</span>
+          <span className="font-bold">Reason:</span>
+          <span className="ml-1.5">{failureReason}</span>
         </div>
       </div>
 
