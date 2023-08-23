@@ -13,20 +13,21 @@ import { fleetsSelector } from '@/store/selectors';
 
 const UnassignedFleet = ({ toggle }) => {
   const { unassignedFleetData: data } = useSelector(fleetsSelector);
+
+  const fleetData = { vessels: data, name: 'Unassigned Fleet' };
+
+  const formattedHeaderData = fleetsPageHeaderDataAdapter({ data: fleetData });
+  const formattedRowData = unassignedFleetRowsDataAdapter({ data });
+
   return (
-    <ExpandableRow
-      header={
-        <ExpandableCardHeader
-          headerData={fleetsPageHeaderDataAdapter({
-            data: { vessels: data, name: 'Unassigned Fleet' },
-          })}
-          itemsContainerStyles="lg:grid-cols-2"
-        />
-      }
-      expand={toggle}
-    >
-      <UnassignedFleetExpandedContent rowsData={unassignedFleetRowsDataAdapter({ data })} />
-    </ExpandableRow>
+    data.length > 0 && (
+      <ExpandableRow
+        expand={toggle}
+        header={<ExpandableCardHeader headerData={formattedHeaderData} itemsContainerStyles="lg:grid-cols-2" />}
+      >
+        <UnassignedFleetExpandedContent rowsData={formattedRowData} />
+      </ExpandableRow>
+    )
   );
 };
 

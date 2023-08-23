@@ -134,7 +134,7 @@ const TableCell = ({ cellProps }) => {
     >
       <div
         className={`flex ${
-          typeof value === 'boolean' ? 'justify-start' : 'justify-between'
+          typeof value === 'boolean' ? 'justify-start' : 'justify-between gap-x-3'
         } normal-case items-center text-xsm`}
       >
         {emptyCell && <Placeholder />}

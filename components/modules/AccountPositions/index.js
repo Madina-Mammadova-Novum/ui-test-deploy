@@ -7,7 +7,7 @@ import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { getUserVesselsSelector } from '@/store/selectors';
-import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
+import { ComplexPagination, ExpandableCard, ToggleRows, UnassignedFleet } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
@@ -79,7 +79,11 @@ const AccountPositions = () => {
           />
         </div>
       </div>
-      <div className="grow">{printContent}</div>
+
+      <div className="grow">
+        <UnassignedFleet toggle={toggle} />
+        {printContent}
+      </div>
       <ComplexPagination
         label="fleets"
         currentPage={currentPage}
