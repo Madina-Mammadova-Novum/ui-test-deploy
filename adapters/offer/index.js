@@ -134,6 +134,7 @@ export function offerDetailsAdapter({ data }) {
     id: offerId,
     isFailed,
     failureReason,
+    failedBy,
   } = data;
   return {
     voyageDetails: {
@@ -247,6 +248,7 @@ export function offerDetailsAdapter({ data }) {
     failedOfferData: {
       isFailed,
       failureReason,
+      declinedBy: failedBy,
     },
   };
 }
