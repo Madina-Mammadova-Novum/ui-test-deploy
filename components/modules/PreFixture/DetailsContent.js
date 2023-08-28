@@ -13,8 +13,18 @@ import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererConten
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
 import { PartyItem } from '@/units';
 
-const DetailsContent = ({ underNegotiation }) => {
+const DetailsContent = ({ data = {} }) => {
   const { data: session } = useSession();
+  const {
+    partyInformation = {},
+    cargoDetails = {},
+    commercialOfferTerms = {},
+    voyageDetails = {},
+    additionalCharterPartyTerms = [],
+  } = data;
+  const { cargoType, products = [] } = cargoDetails;
+  const { freight, demurrageRate, laytime, demurragePaymmentTerms, paymentTerms } = commercialOfferTerms;
+  const { laycanStart, laycanEnd, loadPort, loadTerminal, dischargePort, dischargeTerminal } = voyageDetails;
 
   const state = {
     ownerData: {
@@ -40,10 +50,10 @@ const DetailsContent = ({ underNegotiation }) => {
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.CHARTERER) {
-      return <DetailsChartererContent title="Tanker Information" data={state.chartererData} />;
+      return <DetailsChartererContent title="Tanker Information" data={partyInformation} />;
     }
     if (session?.role === ROLES.OWNER) {
-      return <DetailsOwnerContent title="Charterer Information" data={state.ownerData} />;
+      return <DetailsOwnerContent title="Charterer Information" data={partyInformation} />;
     }
     return null;
   }, [session?.role, state?.chartererData, state.ownerData]);
@@ -56,20 +66,17 @@ const DetailsContent = ({ underNegotiation }) => {
           <Title level={3}>Cargo Details</Title>
 
           <FieldsetContent className="mt-2.5">
-            <TextRow title="Cargo Type">Crude Oil</TextRow>
+            <TextRow title="Cargo Type">{cargoType}</TextRow>
           </FieldsetContent>
 
           <FieldsetContent label="Products" className="mt-4">
-            <div>
-              <TextRow title="Product #1">Light Crude Oil</TextRow>
-              <TextRow title="Density">0.764 mt/m³</TextRow>
-              <TextRow title="Min quantity">24,118 tons</TextRow>
-            </div>
-            <div className="mt-4">
-              <TextRow title="Product #2">Medium Crude Oil</TextRow>
-              <TextRow title="Density">0.803 mt/m³</TextRow>
-              <TextRow title="Min quantity">19,118 tons</TextRow>
-            </div>
+            {products.map(({ productName, density, minQuantity }, index) => (
+              <div key={productName} className={index && 'mt-4'}>
+                <TextRow title={`Product #${index + 1}`}>{productName}</TextRow>
+                <TextRow title="Density">{density} mt/m³</TextRow>
+                <TextRow title="Min quantity">{minQuantity} tons</TextRow>
+              </div>
+            ))}
           </FieldsetContent>
         </FieldsetWrapper>
       </div>
@@ -79,13 +86,11 @@ const DetailsContent = ({ underNegotiation }) => {
           <Title level={3}>Commercial Offer Terms</Title>
 
           <FieldsetContent className="mt-2.5">
-            <TextRow title="Freight">WS 110</TextRow>
-            <TextRow title="Demurrage rate">$17,000 per day</TextRow>
-            <TextRow title="Laytime + NOR">72 hrs + (6 + 6 hrs)</TextRow>
-            <TextRow title="Undisputed demurrage payment terms">
-              3 days undisputed demmurage to be paid along with freight
-            </TextRow>
-            <TextRow title="Payment term">Total freight amount to be paid before breaking bulk (BBB)</TextRow>
+            <TextRow title="Freight">{freight}</TextRow>
+            <TextRow title="Demurrage rate">{demurrageRate}</TextRow>
+            <TextRow title="Laytime + NOR">{laytime}</TextRow>
+            <TextRow title="Undisputed demurrage payment terms">{demurragePaymmentTerms}</TextRow>
+            <TextRow title="Payment term">{paymentTerms}</TextRow>
           </FieldsetContent>
         </FieldsetWrapper>
 
@@ -93,30 +98,30 @@ const DetailsContent = ({ underNegotiation }) => {
           <Title level={3}>Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
-            <TextRow title="Laycan start">Dec 18, 2021</TextRow>
-            <TextRow title="Laycan end">Dec 30, 2021</TextRow>
+            <TextRow title="Laycan start">{laycanStart}</TextRow>
+            <TextRow title="Laycan end">{laycanEnd}</TextRow>
           </FieldsetContent>
 
           <FieldsetContent label="Ports" className="mt-4">
             <div>
               <TextRow title="Load port">
                 <IconComponent icon={usFlag} />
-                Barcelona, ESBCN
+                {loadPort}
               </TextRow>
-              <TextRow title="Load terminal">Oil terminal #1</TextRow>
+              <TextRow title="Load terminal">{loadTerminal}</TextRow>
             </div>
 
             <div className="mt-2.5">
               <TextRow title="Discharge port">
                 <IconComponent icon={usFlag} />
-                Benghazi, LYBEN
+                {dischargePort}
               </TextRow>
-              <TextRow title="Discharge terminal">Oil terminal #4</TextRow>
+              <TextRow title="Discharge terminal">{dischargeTerminal}</TextRow>
             </div>
           </FieldsetContent>
         </FieldsetWrapper>
       </div>
-      {!underNegotiation && (
+      {!!additionalCharterPartyTerms.length && (
         <FieldsetWrapper>
           <Title level={3}>Additional Charter Party Terms</Title>
 

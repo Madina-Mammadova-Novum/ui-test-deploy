@@ -164,11 +164,31 @@ export async function getUserFixtures() {
   };
 }
 
-export async function getUserPreFixtures() {
-  const response = await getData(`account/pre-fixture`, { headers: { ...ContentTypeJson() } });
+export async function getOwnerPrefixture() {
+  const response = await getData(`account/pre-fixture/owner`);
   return {
     ...response,
   };
+}
+
+export async function getChartererPrefixture() {
+  const response = await getData(`account/pre-fixture/charterer`);
+  return {
+    ...response,
+  };
+}
+
+export function getUserPreFixtures(role) {
+  switch (role) {
+    case ROLES.OWNER: {
+      return getOwnerPrefixture;
+    }
+    case ROLES.CHARTERER: {
+      return getChartererPrefixture;
+    }
+    default:
+      return () => {};
+  }
 }
 
 export function getUserNegotiating(role) {
