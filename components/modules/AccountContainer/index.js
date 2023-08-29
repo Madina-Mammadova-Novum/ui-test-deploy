@@ -1,5 +1,3 @@
-/* eslint-disable no-return-await */
-
 'use client';
 
 import { useSelector } from 'react-redux';

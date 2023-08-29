@@ -450,3 +450,39 @@ tr > td:nth-child(2) {
   z-index: 5;
   /* border: 1px solid red; */
 }
+
+.tooltip {
+  position: relative;
+  /* backdrop-filter backdrop-blur-sm */
+}
+
+.tooltip .tooltip-box {
+  top: 5%;
+  right: -60%;
+  width: 290px;
+  @apply bg-white border border-gray-darker rounded-base absolute p-5 z-50;
+}
+
+.tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  z-index: 100;
+  transform: translateX(-50%) rotate(180deg);
+  border-width: 5.5px 5.5px 0px;
+  border-style: solid;
+  border-color: #dadfea transparent;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  z-index: 100;
+  transform: translateX(-50%) rotate(180deg);
+  border-width: 5px 5px 0px;
+  border-style: solid;
+  border-color: #fff transparent;
+}

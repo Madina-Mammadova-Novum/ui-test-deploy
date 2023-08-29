@@ -26,7 +26,7 @@ const AccountDetails = () => {
 
   useEffect(() => {
     dispatch(fetchUserProfileData({ isCharterer }));
-  }, [dispatch, isCharterer]);
+  }, [isCharterer]);
 
   return (
     <section className="flex justify-start items-start flex-col gap-2.5">
