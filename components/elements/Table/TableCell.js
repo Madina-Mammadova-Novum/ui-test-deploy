@@ -24,6 +24,7 @@ import {
   UpdateTankerForm,
 } from '@/units';
 import { getCountryById } from '@/utils/helpers';
+import NextLink from '../NextLink';
 
 const TableCell = ({ cellProps }) => {
   const { countries } = useSelector(getGeneralDataSelector);
@@ -45,9 +46,10 @@ const TableCell = ({ cellProps }) => {
     available,
     fleetId,
     fleetName,
+    link
   } = cellProps;
 
-  const emptyCell = !value && !editable;
+  const emptyCell = !value && !editable && !link;
 
   const printModal = useCallback(
     (action) => {
@@ -150,6 +152,8 @@ const TableCell = ({ cellProps }) => {
             )}
           </div>
         )}
+
+        {link && (<NextLink href={link} target="blank" className='bg-white p-0 text-blue hover:text-blue-darker'>View</NextLink>)}
 
         <div className="flex gap-x-2.5">
           {editable &&
