@@ -4,6 +4,8 @@ import { useCallback, useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
+import NextLink from '../NextLink';
+
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip, Placeholder } from '@/elements';
@@ -24,7 +26,6 @@ import {
   UpdateTankerForm,
 } from '@/units';
 import { getCountryById } from '@/utils/helpers';
-import NextLink from '../NextLink';
 
 const TableCell = ({ cellProps }) => {
   const { countries } = useSelector(getGeneralDataSelector);
@@ -46,7 +47,7 @@ const TableCell = ({ cellProps }) => {
     available,
     fleetId,
     fleetName,
-    link
+    link,
   } = cellProps;
 
   const emptyCell = !value && !editable && !link;
@@ -153,7 +154,11 @@ const TableCell = ({ cellProps }) => {
           </div>
         )}
 
-        {link && (<NextLink href={link} target="blank" className='bg-white p-0 text-blue hover:text-blue-darker'>View</NextLink>)}
+        {link && (
+          <NextLink href={link} target="blank" className="bg-white p-0 text-blue hover:text-blue-darker">
+            View
+          </NextLink>
+        )}
 
         <div className="flex gap-x-2.5">
           {editable &&

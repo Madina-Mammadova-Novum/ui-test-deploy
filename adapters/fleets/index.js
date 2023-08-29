@@ -173,7 +173,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
@@ -252,7 +252,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
