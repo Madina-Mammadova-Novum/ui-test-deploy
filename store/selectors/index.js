@@ -60,7 +60,12 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   return {
+    loading: state.loading,
     search: state.filterParams.searchValue,
     tab: state.filterParams.tabValue,
+    limit: state.filterParams.limit,
+    chats: state.data,
+    totalActive: state.data.active.length,
+    totalArchived: state.data.archived.length,
   };
 });

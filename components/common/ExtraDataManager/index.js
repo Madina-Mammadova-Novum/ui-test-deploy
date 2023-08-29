@@ -64,8 +64,10 @@ const ExtraDataManager = ({ children }) => {
   }, [session]);
 
   useEffect(() => {
-    if (isAuthenticated) dispatch(fetchNotifications(filterParams));
-  }, [filterParams, isAuthenticated]);
+    if (isAuthenticated) {
+      dispatch(fetchNotifications(filterParams));
+    }
+  }, [isAuthenticated, filterParams]);
 
   return children;
 };

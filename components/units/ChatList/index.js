@@ -13,7 +13,11 @@ const ChatList = ({ data }) => {
     </>
   );
 
-  return <div className="p-5 h-[320px] overflow-y-scroll flex flex-col gap-y-4">{data?.map(printChatSession)}</div>;
+  return (
+    <div className="p-5 h-[320px] overflow-y-scroll flex flex-col gap-y-4">
+      {data.length > 0 ? data?.map(printChatSession) : <p className="mx-auto font-semibold text-gray">No Data</p>}
+    </div>
+  );
 };
 
 ChatList.propTypes = ChatListPropTypes;

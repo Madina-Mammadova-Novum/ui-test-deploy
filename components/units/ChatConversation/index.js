@@ -1,29 +1,28 @@
 'use client';
 
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import СhatConversationHeader from './СhatConversationHeader';
 
+import { ChatConversationPropTypes } from '@/lib/types';
+
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
-import { makeId } from '@/utils/helpers';
+import { getChatSelector } from '@/store/selectors';
 
-const ChatConversation = () => {
+const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
+  const {
+    chats: { currentUser },
+  } = useSelector(getChatSelector);
+
   const [message, setMessage] = useState('');
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
 
-  const headerData = {
-    id: makeId(),
-    title: 'Harvey Deep Sea',
-    cargoId: 'QW1122',
-    isActive: true,
-    unreaded: 2,
-  };
-
   return (
     <div className="absolute bg-white border border-gray-light -left-96 top-0 h-auto w-[360px] rounded-base">
-      <СhatConversationHeader data={headerData} />
+      <СhatConversationHeader data={currentUser} onClose={onCloseSession} onCollapse={onCollapseSession} />
       <div className="flex flex-col min-h-[54vh] p-5">
         <div className="flex w-full grow items-end gap-x-2.5">
           <Input
@@ -43,5 +42,7 @@ const ChatConversation = () => {
     </div>
   );
 };
+
+ChatConversation.propTypes = ChatConversationPropTypes;
 
 export default ChatConversation;

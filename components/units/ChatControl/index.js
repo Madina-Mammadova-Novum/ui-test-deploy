@@ -1,28 +1,43 @@
 'use client';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { debounce } from 'lodash';
 
 import ChatSearch from './ChatSearch';
 import ChatSupport from './ChatSupport';
 import ChatTabs from './ChatTabs';
 
-import { setChatFilter } from '@/store/entities/chat/slice';
-import { getChatSelector } from '@/store/selectors';
+import { ChatControlPropTypes } from '@/lib/types';
 
-const ChatControl = () => {
+import { searchedData, setChatFilter } from '@/store/entities/chat/slice';
+
+const ChatControl = ({ tab, search, activeCounter, archivedCounter }) => {
   const dispatch = useDispatch();
-
-  const { search, tab } = useSelector(getChatSelector);
 
   const handleTab = ({ target: { value } }) => dispatch(setChatFilter({ tabValue: value }));
   const handleSearch = ({ target: { value } }) => dispatch(setChatFilter({ searchValue: value }));
 
+  useEffect(() => {
+    const debounceDispatch = debounce((value) => {
+      dispatch(searchedData(value));
+    }, 300);
+
+    if (search) debounceDispatch(search);
+
+    return () => {
+      debounceDispatch.cancel();
+    };
+  }, [search]);
+
   return (
     <div className="flex flex-col gap-y-3 px-5 pt-5 pb-3">
       <ChatTabs
-        activeCounter={0}
-        archivedCounter={0}
         activeTab={tab}
+        activeCounter={activeCounter}
+        archivedCounter={archivedCounter}
         onClick={handleTab}
         containerClass="flex justify-center"
       />
@@ -31,5 +46,7 @@ const ChatControl = () => {
     </div>
   );
 };
+
+ChatControl.propTypes = ChatControlPropTypes;
 
 export default ChatControl;

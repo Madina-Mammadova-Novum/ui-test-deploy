@@ -1,95 +1,58 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Divider } from '@/elements';
+import { ChatModalPropTypes } from '@/lib/types';
+
+import { Divider, Loader } from '@/elements';
+import { setChatFilter } from '@/store/entities/chat/slice';
+import { getChatSelector } from '@/store/selectors';
 import { ChatControl, ChatList, ChatLoadMoreCta, ChatModalHeader } from '@/units';
-import { makeId } from '@/utils/helpers';
 
 const ChatModal = ({ isOpened, onClose }) => {
-  const listData = [
-    {
-      id: makeId(),
-      title: 'Harvey Deep Sea',
-      cargoId: 'QW1122',
-      isActive: true,
-      unreaded: 2,
-      additional: {
-        port: 'Barcelona, ESBCN',
-        laycan: 'Dec 18, 2021 to Dec 30, 2021',
-        quantity: '24,118 tons',
-        products: [
-          {
-            id: makeId(),
-            name: 'Light Crude Oil',
-          },
-          {
-            id: makeId(),
-            name: 'Medium Crude Oil',
-          },
-        ],
-      },
-    },
-    {
-      id: makeId(),
-      title: 'Opal Fortune',
-      cargoId: 'QW1122',
-      isActive: false,
-      unreaded: null,
-      additional: {
-        port: 'Barcelona, ESBCN',
-        laycan: 'Dec 18, 2021 to Dec 30, 2021',
-        quantity: '24,118 tons',
-        products: [
-          {
-            id: makeId(),
-            name: 'Light Crude Oil',
-          },
-          {
-            id: makeId(),
-            name: 'Medium Crude Oil',
-          },
-        ],
-      },
-    },
-    {
-      id: makeId(),
-      title: 'Us Gov Vessel John Glenn',
-      cargoId: 'QW1122',
-      isActive: false,
-      unreaded: 3,
-      additional: {
-        port: 'Barcelona, ESBCN',
-        laycan: 'Dec 18, 2021 to Dec 30, 2021',
-        quantity: '24,118 tons',
-        products: [
-          {
-            id: makeId(),
-            name: 'Light Crude Oil',
-          },
-          {
-            id: makeId(),
-            name: 'Medium Crude Oil',
-          },
-        ],
-      },
-    },
-  ];
-  const printModalContent = useMemo(() => {
-    return (
+  const dispatch = useDispatch();
+  const [dataByTab, setDataByTab] = useState([]);
+
+  const {
+    tab,
+    limit,
+    search,
+    loading,
+    totalActive,
+    totalArchived,
+    chats: { active, archived, searched },
+  } = useSelector(getChatSelector);
+
+  useEffect(() => {
+    if (searched && search !== '') {
+      setDataByTab(searched);
+    } else if (tab === 'active') {
+      setDataByTab(active);
+    } else {
+      setDataByTab(archived);
+    }
+  }, [tab, searched, search, active, archived]);
+
+  const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
+
+  const printChatRooms = useMemo(() => {
+    return loading ? <Loader className="h-8 w-8 absolute top-1/2" /> : <ChatList data={dataByTab.slice(0, limit)} />;
+  }, [loading, dataByTab, active.length, limit]);
+
+  return (
+    isOpened && (
       <div className="absolute bg-white border border-gray-light right-24 bottom-6 h-auto w-[360px] rounded-base">
         <ChatModalHeader onClose={onClose} />
-        <ChatControl activeTab="Active" searchValue="" />
+        <ChatControl tab={tab} search={search} activeCounter={totalActive} archivedCounter={totalArchived} />
         <Divider />
-        <ChatList data={listData} />
-        <ChatLoadMoreCta getMore={false} />
+        <div className="relative min-h-[320px]">{printChatRooms}</div>
+        <ChatLoadMoreCta onClick={handleMore} disabled={active.length <= limit || loading} />
       </div>
-    );
-  }, [onClose]);
-
-  return isOpened && printModalContent;
+    )
+  );
 };
 
-ChatModal.propTypes = {};
+ChatModal.propTypes = ChatModalPropTypes;
 
 export default ChatModal;

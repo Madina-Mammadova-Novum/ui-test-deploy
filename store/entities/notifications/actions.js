@@ -19,15 +19,17 @@ export const fetchNotifications = createAsyncThunk(
       },
     } = getState();
 
-    if (watched && watchedData.length > 0) {
+    if (watched) {
       dispatch(updateWatchedData(result?.data));
-      if (sortedValue !== '' || searchValue !== 'all') dispatch(setWatchedData(result?.data));
-    } else dispatch(setWatchedData(result?.data));
-
-    if (!watched && unwatchedData?.length > 0) {
+      if (watchedData.length > 0 && (sortedValue !== '' || searchValue !== 'all')) {
+        dispatch(setWatchedData(result?.data));
+      }
+    } else {
       dispatch(updateUnwatchedData(result?.data));
-      if (sortedValue !== '' || searchValue !== 'all') dispatch(setUnwatchedData(result?.data));
-    } else dispatch(setUnwatchedData(result?.data));
+      if (unwatchedData?.length > 0 && (sortedValue !== '' || searchValue !== 'all')) {
+        dispatch(setUnwatchedData(result?.data));
+      }
+    }
 
     return { readed: result?.readCount, unread: result?.unreadCount };
   }

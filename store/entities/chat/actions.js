@@ -5,4 +5,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 /* Services */
 import { CHAT } from './types';
 
-export const fetchUserChat = createAsyncThunk(CHAT.INIT, async () => {});
+import { listOfChatsDataAdapter } from '@/adapters';
+import { getListOfChatSessions } from '@/services';
+
+export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async () => {
+  const { data } = await getListOfChatSessions();
+
+  return { data: listOfChatsDataAdapter({ data }) };
+});
