@@ -600,3 +600,43 @@ export const responseSentCounteroffersAdapter = ({ data }) => {
   if (!data) return [];
   return data;
 };
+
+export const prefilledSearchDataAdapter = ({ data }) => {
+  if (!data) return [];
+  const {
+    laycanStart,
+    laycanEnd,
+    searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType, id: cargoTypeId } = {},
+    products,
+  } = data;
+  const {
+    id: loadTerminalId,
+    name: loadTerminalName,
+    port: { id: loadPortId, name: loadPortName, locode: loadPortLocode } = {},
+  } = loadTerminal;
+  const {
+    id: dischargeTerminalId,
+    name: dischargeTerminalName,
+    port: { id: dischargePortId, name: dischargePortName, locode: dischargePortLocode } = {},
+  } = dischargeTerminal;
+  const prefilledProducts = products.reduce(
+    (_, curr, index) => ({
+      [`products[${index + 1}].product`]: { label: curr.productName, value: curr.id },
+      [`products[${index + 1}].density`]: curr.density,
+      [`products[${index + 1}].tolerance`]: curr.tolerance,
+      [`products[${index + 1}].quantity`]: curr.minQuantity,
+    }),
+    {}
+  );
+
+  return {
+    laycanStart,
+    laycanEnd,
+    loadPort: { label: `${loadPortName}, ${loadPortLocode}`, value: loadPortId },
+    loadTerminal: { label: loadTerminalName, value: loadTerminalId },
+    dischargePort: { label: `${dischargePortName}, ${dischargePortLocode}`, value: dischargePortId },
+    dischargeTerminal: { label: dischargeTerminalName, value: dischargeTerminalId },
+    cargoType: { label: cargoType, value: cargoTypeId },
+    ...prefilledProducts,
+  };
+};

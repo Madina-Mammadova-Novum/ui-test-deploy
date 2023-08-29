@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -10,6 +11,7 @@ import { SearchFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
 import { searchForTankerSchema } from '@/lib/schemas';
+import { searchSelector } from '@/store/selectors';
 import { SearchFormFields } from '@/units';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
@@ -20,7 +22,8 @@ const schema = yup.object({
 
 const SearchForm = ({ onSubmit }) => {
   const [productState, setProductState] = useState([1]);
-  const methods = useHookFormParams({ schema });
+  const { prefilledSearchData } = useSelector(searchSelector);
+  const methods = useHookFormParams({ schema, state: prefilledSearchData });
   const handleResetFields = () => {
     methods.reset((formValues) => {
       resetObjectFields(formValues);

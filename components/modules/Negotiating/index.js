@@ -92,7 +92,7 @@ const Negotiating = () => {
         key={rowData.id}
         className="pt-[60px]"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 2fr 2fr 1fr 1fr 1fr" />}
-        footer={<NegotiatingExpandedFooter isCharterer={!isOwner} />}
+        footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
         expand={toggle}
       >
         <NegotiatingExpandedContent data={rowData} tabs={tabs} />
