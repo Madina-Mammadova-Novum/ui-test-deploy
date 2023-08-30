@@ -8,10 +8,11 @@ import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
+  const { Skip, PageSize } = req?.query;
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/charterer/deals/prefixture`),
+    path: getApiURL(`v1/charterer/deals/prefixture?Skip=${Skip}&PageSize=${PageSize}`),
     dataAdapter: responseChartererPrefixtureAdapter,
     requestMethod: 'GET',
     options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },

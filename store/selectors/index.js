@@ -12,6 +12,7 @@ export const negotiatingSelector = ({ negotiating }) => negotiating;
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
+export const preFixtureSelector = ({ preFixture }) => preFixture;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {

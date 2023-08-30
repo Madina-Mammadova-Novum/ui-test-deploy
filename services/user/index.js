@@ -164,31 +164,18 @@ export async function getUserFixtures() {
   };
 }
 
-export async function getOwnerPrefixture() {
-  const response = await getData(`account/pre-fixture/owner`);
+export async function getOwnerPrefixture({ page, perPage }) {
+  const response = await postData(`account/pre-fixture/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
   return {
     ...response,
   };
 }
 
-export async function getChartererPrefixture() {
-  const response = await getData(`account/pre-fixture/charterer`);
+export async function getChartererPrefixture({ page, perPage }) {
+  const response = await postData(`account/pre-fixture/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
   return {
     ...response,
   };
-}
-
-export function getUserPreFixtures(role) {
-  switch (role) {
-    case ROLES.OWNER: {
-      return getOwnerPrefixture;
-    }
-    case ROLES.CHARTERER: {
-      return getChartererPrefixture;
-    }
-    default:
-      return () => {};
-  }
 }
 
 export function getUserNegotiating(role) {

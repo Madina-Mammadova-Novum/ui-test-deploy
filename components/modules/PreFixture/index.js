@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -15,31 +16,38 @@ import {
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
-import { getUserPreFixtures } from '@/services';
+import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
+import { preFixtureSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFetch, useFilters } from '@/utils/hooks';
+import { useFilters } from '@/utils/hooks';
 
 const PreFixture = () => {
   const { data: session } = useSession();
-  const { isOwner } = getRoleIdentity({ role: session?.role });
+  const role = useMemo(() => session?.role, [session?.role]);
+  const { isOwner } = getRoleIdentity({ role });
   const [toggle, setToggle] = useState({ value: false });
-  const [data, isLoading] = useFetch(getUserPreFixtures(session?.role));
+  const dispatch = useDispatch();
+  const {
+    data: { offers, totalPages },
+    loading,
+  } = useSelector(preFixtureSelector);
 
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
-  const {
-    numberOfPages,
-    items,
-    currentPage,
-    handlePageChange,
-    handleSelectedPageChange,
-    selectedPage,
-    onChangeOffers,
-    perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
+  const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
+    initialPagesStore.perPage,
+    initialPagesStore.currentPage,
+    offers
+  );
+
+  useEffect(() => {
+    if (role) {
+      dispatch(fetchPrefixtureOffers({ role: session?.role, page: currentPage, perPage }));
+    }
+  }, [role, currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -65,7 +73,7 @@ const PreFixture = () => {
     () => (
       <ComplexPagination
         currentPage={currentPage}
-        numberOfPages={numberOfPages}
+        numberOfPages={totalPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
         pages={selectedPage}
@@ -73,10 +81,10 @@ const PreFixture = () => {
         perPage={perPage}
       />
     ),
-    [currentPage, numberOfPages, selectedPage, perPage]
+    [currentPage, selectedPage, perPage]
   );
 
-  if (isLoading) {
+  if (loading) {
     return <Loader className="h-8 w-8 absolute top-1/2" />;
   }
 
@@ -90,7 +98,7 @@ const PreFixture = () => {
         <ToggleRows onToggleClick={setToggle} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{items?.length && items.map(printExpandableRow)}</div>
+      <div className="flex flex-col gap-y-2.5">{offers?.length && offers.map(printExpandableRow)}</div>
       {printComplexPagination}
     </section>
   );

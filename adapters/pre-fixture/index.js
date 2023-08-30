@@ -232,7 +232,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
 export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
   const {
-    vessel: { company: { details: { yearsInOperation } = {}, estimatedAverageTankerDWT, numberOfTankers } = {} } = {},
+    vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
     searchedCargo: { cargoType } = {},
     products = [],
     freight,
@@ -256,7 +256,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
   return {
     partyInformation: {
       operationYears: yearsInOperation,
-      numberOfTankers,
+      numberOfTankers: numberOfVessels,
       estimatedTankerDWT: estimatedAverageTankerDWT,
     },
     cargoDetails: {

@@ -26,28 +26,6 @@ const DetailsContent = ({ data = {} }) => {
   const { freight, demurrageRate, laytime, demurragePaymmentTerms, paymentTerms } = commercialOfferTerms;
   const { laycanStart, laycanEnd, loadPort, loadTerminal, dischargePort, dischargeTerminal } = voyageDetails;
 
-  const state = {
-    ownerData: {
-      years: '0-2',
-      ships: '6-10',
-      kt: '21-40',
-    },
-    chartererData: {
-      years: '3-5',
-      ships: '4-9',
-      kt: '121 - 200',
-      icon: usFlag,
-      state: 'United States',
-    },
-  };
-
-  const partyTermsMock = [
-    {
-      title: 'Charter party form',
-      content: 'Charter party form',
-    },
-  ];
-
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.CHARTERER) {
       return <DetailsChartererContent title="Tanker Information" data={partyInformation} />;
@@ -56,7 +34,7 @@ const DetailsContent = ({ data = {} }) => {
       return <DetailsOwnerContent title="Charterer Information" data={partyInformation} />;
     }
     return null;
-  }, [session?.role, state?.chartererData, state.ownerData]);
+  }, [session?.role]);
 
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
@@ -126,8 +104,8 @@ const DetailsContent = ({ data = {} }) => {
           <Title level={3}>Additional Charter Party Terms</Title>
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {partyTermsMock.map(({ title, content }) => (
-              <PartyItem buttonText={title} modalTitle="All Additional Information" content={content} />
+            {additionalCharterPartyTerms.map(({ title, body }) => (
+              <PartyItem buttonText={title} modalTitle="All Additional Information" body={body} />
             ))}
           </FieldsetContent>
         </FieldsetWrapper>
