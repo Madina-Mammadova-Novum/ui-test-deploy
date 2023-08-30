@@ -37,12 +37,12 @@ const ChatModal = ({ isOpened, onClose }) => {
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
   const printChatRooms = useMemo(() => {
-    return loading ? <Loader className="h-8 w-8 absolute top-1/2" /> : <ChatList data={dataByTab.slice(0, limit)} />;
+    return loading ? <Loader className="h-8 w-8 absolute top-1/2" /> : <ChatList data={dataByTab?.slice(0, limit)} />;
   }, [loading, dataByTab, active.length, limit]);
 
   return (
     isOpened && (
-      <div className="absolute bg-white border border-gray-light right-24 bottom-6 h-auto w-[360px] rounded-base">
+      <div className="fixed bg-white border border-gray-light right-24 bottom-6 h-auto w-[360px] z-50 rounded-base">
         <ChatModalHeader onClose={onClose} />
         <ChatControl tab={tab} search={search} activeCounter={totalActive} archivedCounter={totalArchived} />
         <Divider />

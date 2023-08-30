@@ -79,6 +79,8 @@ export const {
   resetNotifications,
   updateWatchedData,
   updateUnwatchedData,
+  getUnwatchedData,
+  getWatchedData,
   resetParams,
 } = notificationsSlice.actions;
 

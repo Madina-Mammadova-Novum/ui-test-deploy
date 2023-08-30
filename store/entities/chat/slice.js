@@ -51,6 +51,10 @@ const chatSlice = createSlice({
       state.loading = false;
       state.data.active = payload.data;
     });
+    builder.addCase(getListOfChats.rejected, (state) => {
+      state.loading = false;
+      state.error = 'Error';
+    });
   },
   [HYDRATE]: (state, action) => {
     return {

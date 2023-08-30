@@ -20,14 +20,12 @@ const UnassignedFleet = ({ toggle }) => {
   const formattedRowData = unassignedFleetRowsDataAdapter({ data });
 
   return (
-    data.length > 0 && (
-      <ExpandableRow
-        expand={toggle}
-        header={<ExpandableCardHeader headerData={formattedHeaderData} itemsContainerStyles="lg:grid-cols-2" />}
-      >
-        <UnassignedFleetExpandedContent rowsData={formattedRowData} />
-      </ExpandableRow>
-    )
+    <ExpandableRow
+      expand={toggle}
+      header={<ExpandableCardHeader headerData={formattedHeaderData} itemsContainerStyles="lg:grid-cols-2" />}
+    >
+      <UnassignedFleetExpandedContent rowsData={formattedRowData} />
+    </ExpandableRow>
   );
 };
 
