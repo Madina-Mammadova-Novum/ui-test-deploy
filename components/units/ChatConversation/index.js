@@ -21,9 +21,9 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   const handleMessage = ({ target: { value } }) => setMessage(value);
 
   return (
-    <div className="absolute bg-white border border-gray-light -left-96 top-0 h-auto w-[360px] rounded-base">
+    <div className="fixed bg-white border border-gray-light left-1/3 bottom-6 h-auto w-[360px] rounded-base">
       <СhatConversationHeader data={currentUser} onClose={onCloseSession} onCollapse={onCollapseSession} />
-      <div className="flex flex-col min-h-[54vh] p-5">
+      <div className="flex flex-col min-h-[47vh] p-5">
         <div className="flex w-full grow items-end gap-x-2.5">
           <Input
             type="text"

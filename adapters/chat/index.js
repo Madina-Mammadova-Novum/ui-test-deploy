@@ -23,9 +23,9 @@ function chatDealDataAdapter({ data }) {
 
   return {
     vessel: {
-      name: vessel?.details?.name.toLowerCase(),
-      imo: vessel?.imo.toLowerCase(),
-      type: searchedCargo?.cargoType.toLowerCase(),
+      name: vessel?.details?.name?.toLowerCase(),
+      imo: vessel?.imo?.toLowerCase(),
+      type: searchedCargo?.cargoType?.toLowerCase(),
       cargoId: searchedCargo?.code,
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
@@ -40,7 +40,7 @@ function chatDealDataAdapter({ data }) {
         code: searchedCargo?.loadTerminal?.port?.locode,
         countryId: searchedCargo?.loadTerminal?.port?.countryId,
       },
-      totalQuantity: searchedCargo?.totalQuantity.toLocaleString(),
+      totalQuantity: searchedCargo?.totalQuantity?.toLocaleString(),
       products: products?.map((product) => ({ id: product?.id, name: product?.productName })),
       laycanStart: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
