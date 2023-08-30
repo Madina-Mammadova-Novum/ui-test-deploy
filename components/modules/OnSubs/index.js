@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
 
@@ -11,10 +13,13 @@ import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getUserOnSubs } from '@/services';
 import { ComplexPagination, ToggleRows } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
 import { useFetch, useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
   const [toggle, setToggle] = useState({ value: false });
+  const { data: session } = useSession();
+  const { isOwner } = getRoleIdentity({ role: session?.role });
   const [data, isLoading] = useFetch(getUserOnSubs);
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
@@ -37,7 +42,12 @@ const OnSubs = () => {
 
     return (
       <ExpandableRow
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr'}
+          />
+        }
         expand={toggle}
         footer={<OnSubsExpandedFooter underRecap={underRecap} />}
       >
