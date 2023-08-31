@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { extractTimeFromDate } from '@/utils/helpers';
+import { extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -117,7 +117,7 @@ export function responseSendCounterofferAdapter({ data }) {
   return data;
 }
 
-export function offerDetailsAdapter({ data }) {
+export function offerDetailsAdapter({ data, role }) {
   if (!data) return null;
   const {
     laycanStart,
@@ -136,6 +136,7 @@ export function offerDetailsAdapter({ data }) {
     failureReason,
     failedBy,
   } = data;
+
   return {
     voyageDetails: {
       dates: [
@@ -248,7 +249,7 @@ export function offerDetailsAdapter({ data }) {
     failedOfferData: {
       isFailed,
       failureReason,
-      declinedBy: failedBy,
+      declinedBy: getAppropriateFailedBy({ failedBy, role }),
     },
   };
 }
