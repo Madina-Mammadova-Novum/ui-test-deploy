@@ -12,7 +12,10 @@ const initialState = {
     searched: [],
     active: [],
     archived: [],
-    currentUser: {},
+    currentUser: {
+      data: {},
+      messages: [],
+    },
   },
   filterParams: {
     searchValue: '',
@@ -31,7 +34,10 @@ const chatSlice = createSlice({
       });
     },
     setCurrentUser: (state, action) => {
-      state.data.currentUser = action.payload;
+      state.data.currentUser.data = action.payload;
+    },
+    setUserConversation: (state, { payload }) => {
+      state.data.currentUser.messages.push(payload);
     },
     setChatFilter: (state, action) => {
       state.filterParams = {
@@ -41,6 +47,9 @@ const chatSlice = createSlice({
     },
     resetChatFilter: (state) => {
       state.filterParams = initialState.filterParams;
+    },
+    resetCurrentUser: (state) => {
+      state.data.currentUser = initialState.data.currentUser;
     },
   },
   extraReducers: (builder) => {
@@ -64,6 +73,7 @@ const chatSlice = createSlice({
   },
 });
 
-export const { setChatFilter, setCurrentUser, resetChatFilter, searchedData } = chatSlice.actions;
+export const { setChatFilter, setCurrentUser, resetChatFilter, searchedData, setUserConversation, resetCurrentUser } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

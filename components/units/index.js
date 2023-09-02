@@ -15,6 +15,7 @@ import ChatConversation from '@/units/ChatConversation';
 import ChatConversationCard from '@/units/ChatConversationCard';
 import ChatDeactivate from '@/units/ChatDeactivate';
 import ChatList from '@/units/ChatList';
+import ChatMessage from '@/units/ChatMessage';
 import ChatModal from '@/units/ChatModal';
 import ChatLoadMoreCta from '@/units/ChatModal/ChatLoadMoreCta';
 import ChatModalHeader from '@/units/ChatModal/ChatModalHeader';
@@ -170,4 +171,5 @@ export {
   ChatLoadMoreCta,
   ChatDeactivate,
   ChatConversationCard,
+  ChatMessage,
 };

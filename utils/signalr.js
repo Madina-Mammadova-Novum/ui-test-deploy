@@ -1,7 +1,8 @@
-import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 import { getSession } from 'next-auth/react';
 
 import { getRtURL } from '.';
+import { getSocketConnectionsParams } from './helpers';
 
 import { store } from '@/store';
 import { setConnectionStatus, setFilterParams } from '@/store/entities/notifications/slice';
@@ -17,15 +18,9 @@ class NotificationService {
   async start() {
     const session = await getSession();
 
-    const connectionParams = {
-      accessTokenFactory: () => `${session?.accessToken}`,
-      skipNegotiation: true,
-      transport: HttpTransportType.WebSockets,
-    };
-
     try {
       this.connection = new HubConnectionBuilder()
-        .withUrl(getRtURL(this.host), connectionParams)
+        .withUrl(getRtURL(this.host), getSocketConnectionsParams(session?.accessToken))
         .withAutomaticReconnect()
         .build();
 
@@ -50,14 +45,6 @@ class NotificationService {
       await this.connection.stop();
       this.isConnected = false;
       this.store.dispatch(setConnectionStatus(this.isConnected));
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async sendMessage(message) {
-    try {
-      await this.connection.invoke('url/path', message); // TODO: implement chat logic by example
     } catch (err) {
       console.error(err);
     }

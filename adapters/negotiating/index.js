@@ -61,7 +61,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: `${minQuantity.toFixed(1)} - ${maxQuantity.toFixed(1)} tons`,
+      text: `${minQuantity?.toFixed(1)} - ${maxQuantity?.toFixed(1)} tons`,
     },
     {
       label: 'Load port',

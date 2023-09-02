@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+import { HttpTransportType } from '@microsoft/signalr';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
 
@@ -387,6 +388,12 @@ export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
   return Math.ceil(recordsTotal / recordsFiltered);
 };
 
+export const extractTime = (string) => {
+  const timePattern = /\d{2}:\d{2}/; // Matches the pattern HH:MM
+  const match = string.match(timePattern);
+  return match ? match[0] : null; // Return the matched time or null if no match found
+};
+
 export const setSkipedValue = (pageValue, perPageValue) => {
   if (pageValue === 1) return 0;
   return (pageValue - 1) * perPageValue;
@@ -479,3 +486,13 @@ export const sortTable = (array, index, sortDirection, sortType = 'numeric') => 
   });
   return descSorted;
 };
+
+export const getSocketConnectionsParams = (token) => {
+  return {
+    accessTokenFactory: () => `${token}`,
+    skipNegotiation: true,
+    transport: HttpTransportType.WebSockets,
+  };
+};
+
+export const clientIdentification = ({ senderId, clientId }) => (senderId === clientId ? ROLES.OWNER : ROLES.BROKER);
