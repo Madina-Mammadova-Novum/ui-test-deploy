@@ -4,6 +4,8 @@ import { useCallback, useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
+import NextLink from '../NextLink';
+
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip, Placeholder } from '@/elements';
@@ -45,9 +47,10 @@ const TableCell = ({ cellProps }) => {
     available,
     fleetId,
     fleetName,
+    link,
   } = cellProps;
 
-  const emptyCell = !value && !editable;
+  const emptyCell = !value && !editable && !link;
 
   const printModal = useCallback(
     (action) => {
@@ -134,7 +137,7 @@ const TableCell = ({ cellProps }) => {
     >
       <div
         className={`flex ${
-          typeof value === 'boolean' ? 'justify-start' : 'justify-between'
+          typeof value === 'boolean' ? 'justify-start' : 'justify-between gap-x-12'
         } normal-case items-center text-xsm`}
       >
         {emptyCell && <Placeholder />}
@@ -151,23 +154,33 @@ const TableCell = ({ cellProps }) => {
           </div>
         )}
 
+        {link && (
+          <NextLink href={link} target="blank" className="bg-white p-0 text-blue hover:text-blue-darker">
+            View
+          </NextLink>
+        )}
+
         <div className="flex gap-x-2.5">
           {editable &&
-            actions.map(({ action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled }) => (
-              <ModalWindow
-                containerClass="overflow-y-[unset] z-50"
-                buttonProps={{
-                  icon: { before: editIcon },
-                  variant: actionVariant,
-                  size: actionSize,
-                  text: actionText,
-                  disabled: actionDisabled,
-                  className: !editable ? 'hover:bg-gray-darker !py-1 !px-1.5' : '!p-0',
-                }}
-              >
-                {printModal(action)}
-              </ModalWindow>
-            ))}
+            actions.map(
+              ({ action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles }) => (
+                <ModalWindow
+                  containerClass="overflow-y-[unset] z-50"
+                  buttonProps={{
+                    icon: { before: editIcon },
+                    variant: actionVariant,
+                    size: actionSize,
+                    text: actionText,
+                    disabled: actionDisabled,
+                    className: !editable
+                      ? `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}`
+                      : `!p-0 ${actionStyles}`,
+                  }}
+                >
+                  {printModal(action)}
+                </ModalWindow>
+              )
+            )}
         </div>
       </div>
     </td>

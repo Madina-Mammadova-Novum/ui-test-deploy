@@ -29,6 +29,7 @@ const DatePicker = ({
   disabled = false,
   dateVariant = 'MMM dd, yyyy',
   minDate,
+  maxDate,
   ...rest
 }) => {
   const [showPicker, setShowPicker] = useState(false);
@@ -75,6 +76,7 @@ const DatePicker = ({
               >
                 <Calendar
                   minDate={minDate}
+                  maxDate={maxDate}
                   className={`${calendarClass} rounded-lg`}
                   date={field.value ? new Date(field.value) : null}
                   onChange={handleDate}

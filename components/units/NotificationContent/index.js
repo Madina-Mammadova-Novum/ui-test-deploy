@@ -32,7 +32,7 @@ const NotificationContent = () => {
       if (watched && watchedCondtion) return;
       if (!watched && unwatchedCondtion) return;
 
-      dispatch(setFilterParams({ ...filterParams, skip: take, take: take + take }));
+      dispatch(setFilterParams({ ...filterParams, skip: 0, take: take + take }));
     }
   };
 

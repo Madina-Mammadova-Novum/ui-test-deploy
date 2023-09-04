@@ -178,6 +178,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     commercialOperatorCountry,
     disponentOwner,
     disponentOwnerCountry,
+    file,
   } = data;
 
   return {
@@ -208,6 +209,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     disponentOwner,
     disponentOwnerCountryId: disponentOwnerCountry.value,
     fleetId,
+    q88QuestionnarieFile: file,
   };
 }
 export function requestUpdateVesselAdapter({ data }) {

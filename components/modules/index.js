@@ -6,6 +6,7 @@ import AccountWrapper from '@/modules/AccountWrapper';
 import AddNewTanker from '@/modules/AddNewTanker';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
+import Chat from '@/modules/Chat';
 import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import ConfirmCounteroffer from '@/modules/ConfirmCounteroffer';
@@ -103,4 +104,5 @@ export {
   Fleets,
   AddNewTanker,
   DropzoneForm,
+  Chat,
 };

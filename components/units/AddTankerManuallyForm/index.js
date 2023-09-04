@@ -211,6 +211,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"
+                maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
                 disabled={q88State.updateDate}
                 error={errors.updateDate?.message}

@@ -144,6 +144,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     apearsInSearch,
     status: requestStatus,
   } = data;
+
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
@@ -172,15 +173,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      editable: !!q88QuestionnarieFile,
-      actions: [
-        {
-          action: ACTIONS.VIEW_QUESTIONAIRE,
-          actionText: 'View',
-          actionVariant: 'primary',
-          actionSize: 'small',
-        },
-      ],
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
@@ -200,6 +193,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
           actionSize: 'medium',
           disabled: vesselInProgress,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
+          actionStyles: '!w-[165px]',
         },
         {
           action: ACTIONS.DELETE_TANKER_FROM_FLEET,
@@ -224,9 +218,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    details: { summerDwt, name },
+    details: { summerDwt, name, q88QuestionnarieFile },
     vesselSizeCategoryId,
-    q88QuestionnarieFile,
     apearsInSearch,
     status: requestStatus,
   } = data;
@@ -259,15 +252,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      editable: !!q88QuestionnarieFile,
-      actions: [
-        {
-          action: ACTIONS.VIEW_QUESTIONAIRE,
-          actionText: 'View',
-          actionVariant: 'primary',
-          actionSize: 'small',
-        },
-      ],
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
@@ -299,6 +284,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
           actionSize: 'medium',
           disabled: vesselInProgress,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
+          actionStyles: '!w-[165px]',
         },
         {
           action: ACTIONS.DELETE_TANKER,

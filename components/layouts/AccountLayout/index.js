@@ -1,4 +1,4 @@
-import { AccountContainer, AccountFooter, AccountHeader, Sidebar } from '@/modules';
+import { AccountContainer, AccountFooter, AccountHeader, Chat, Sidebar } from '@/modules';
 
 const AccountLayout = ({ children }) => {
   return (
@@ -7,6 +7,7 @@ const AccountLayout = ({ children }) => {
       <AccountHeader />
       <main className="grow">{children}</main>
       <AccountFooter />
+      <Chat />
     </AccountContainer>
   );
 };
