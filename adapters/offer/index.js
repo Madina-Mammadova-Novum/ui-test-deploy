@@ -57,6 +57,7 @@ export function sendCounterofferAdapter({ data }) {
     responseCountdown,
     comment,
     freight,
+    products,
   } = data;
 
   return {
@@ -69,6 +70,12 @@ export function sendCounterofferAdapter({ data }) {
     comment,
     freightFormatId: freight?.value,
     countDownTimerSettingId: responseCountdown?.value,
+    cargoes: products.map(({ density, product: { value: productId }, quantity, tolerance }) => ({
+      productId,
+      referenceDensity: density,
+      quantity,
+      tolerance,
+    })),
   };
 }
 
@@ -122,7 +129,7 @@ export function offerDetailsAdapter({ data, role }) {
   const {
     laycanStart,
     laycanEnd,
-    searchedCargo: { loadTerminal, dischargeTerminal, cargoType } = {},
+    searchedCargo: { loadTerminal, dischargeTerminal, cargoType: { name: cargoName, id: cargoId } = {} } = {},
     products,
     freight,
     demurrageRate,
@@ -183,7 +190,7 @@ export function offerDetailsAdapter({ data, role }) {
       cargo: [
         {
           key: 'Cargo Type',
-          label: cargoType,
+          label: cargoName,
         },
       ],
       products: products?.map(({ productName, density, minQuantity }, index) => [
@@ -236,8 +243,8 @@ export function offerDetailsAdapter({ data, role }) {
       loadPortId: loadTerminal?.port?.id,
       dischargePortId: dischargeTerminal?.port?.id,
       cargoType: {
-        label: cargoType,
-        value: 'NEEDS_DATA_FROM_BACKEND',
+        label: cargoName,
+        value: cargoId,
       },
       products: products?.map(({ productName, density, minQuantity, tolerance, id }) => ({
         product: { label: productName, value: id },
