@@ -606,7 +606,11 @@ export const prefilledSearchDataAdapter = ({ data }) => {
   const {
     laycanStart,
     laycanEnd,
-    searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType, id: cargoTypeId } = {},
+    searchedCargo: {
+      loadTerminal = {},
+      dischargeTerminal = {},
+      cargoType: { id: cargoId, name: cargoName } = {},
+    } = {},
     products,
   } = data;
   const {
@@ -636,7 +640,7 @@ export const prefilledSearchDataAdapter = ({ data }) => {
     loadTerminal: { label: loadTerminalName, value: loadTerminalId },
     dischargePort: { label: `${dischargePortName}, ${dischargePortLocode}`, value: dischargePortId },
     dischargeTerminal: { label: dischargeTerminalName, value: dischargeTerminalId },
-    cargoType: { label: cargoType, value: cargoTypeId },
+    cargoType: { label: cargoName, value: cargoId },
     ...prefilledProducts,
   };
 };
