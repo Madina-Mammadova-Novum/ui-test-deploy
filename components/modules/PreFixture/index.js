@@ -56,7 +56,7 @@ const PreFixture = () => {
     return (
       <ExpandableRow
         key={rowData.id}
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr" />}
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 2fr 1fr 1fr 1fr 1fr 1fr" />}
         footer={
           <PreFixtureExpandedFooter
             underNegotiation={!rowData?.additionalCharterPartyTerms?.length}

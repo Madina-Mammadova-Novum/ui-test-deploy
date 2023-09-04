@@ -11,7 +11,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   const {
     searchedCargo: {
       code,
-      cargoType,
+      cargoType: { name: cargoName } = {},
       totalQuantity,
       loadTerminal: { port: { name: portName, locode } = {} } = {},
     } = {},
@@ -32,7 +32,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Cargo type',
-      text: cargoType,
+      text: cargoName,
     },
     {
       label: 'Quantity',
@@ -63,7 +63,12 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
   const {
-    searchedCargo: { code, cargoType, totalQuantity, loadTerminal: { port: { name, locode } = {} } = {} } = {},
+    searchedCargo: {
+      code,
+      cargoType: { name: cargoName } = {},
+      totalQuantity,
+      loadTerminal: { port: { name, locode } = {} } = {},
+    } = {},
     laycanStart,
     laycanEnd,
     creationDate,
@@ -77,7 +82,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Cargo type',
-      text: cargoType,
+      text: cargoName,
     },
     {
       label: 'Quantity',
@@ -175,11 +180,7 @@ export const prefixtureRowsDataAdapter = ({ data }) => {
 export const prefixtureOwnerDetailsAdapter = (data) => {
   if (!data) return {};
   const {
-    operationYears,
-    chartersPerYear,
-    avgTonnage,
-    registrationCountry,
-    searchedCargo: { cargoType } = {},
+    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
     products = [],
     freight,
     freightFormat,
@@ -196,18 +197,27 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
         port: { name: dischargePortName, locode: dischargePortLocode } = {},
       } = {},
     } = {},
+    charterer: {
+      averageTonnagePerCharter,
+      estimatedNumberOfChartersPerYear,
+      yearsInOperation,
+      registrationCity: { country: { name: countryName, codeISO2: countryCode } = {} } = {},
+    } = {},
     additionalCharterPartyTerms,
   } = data;
 
   return {
     partyInformation: {
-      operationYears,
-      chartersPerYear,
-      avgTonnage,
-      registrationCountry,
+      operationYears: yearsInOperation,
+      chartersPerYear: estimatedNumberOfChartersPerYear || '0',
+      avgTonnage: averageTonnagePerCharter || '0',
+      registrationCountry: {
+        countryName,
+        countryCode,
+      },
     },
     cargoDetails: {
-      cargoType,
+      cargoType: cargoName,
       products,
     },
     commercialOfferTerms: {
@@ -233,7 +243,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
   const {
     vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
-    searchedCargo: { cargoType } = {},
+    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
     products = [],
     freight,
     freightFormat,
@@ -260,7 +270,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       estimatedTankerDWT: estimatedAverageTankerDWT,
     },
     cargoDetails: {
-      cargoType,
+      cargoType: cargoName,
       products,
     },
     commercialOfferTerms: {
