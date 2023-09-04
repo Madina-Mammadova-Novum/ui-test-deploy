@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { getUserVesselsSelector } from '@/store/selectors';
-import { ComplexPagination, ExpandableCard, ToggleRows, UnassignedFleet } from '@/units';
+import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
@@ -15,7 +16,7 @@ const AccountPositions = () => {
 
   const dispatch = useDispatch();
 
-  const { vessels, totalPages, loading } = useSelector(getUserVesselsSelector);
+  const { vessels, unassignedVessel, totalPages, loading } = useSelector(getUserVesselsSelector);
 
   const [userStore, setUserStore] = useState({
     sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
@@ -43,6 +44,10 @@ const AccountPositions = () => {
   /* fetching user positions data */
 
   useEffect(() => {
+    dispatch(fetchUnassignedFleetData());
+  }, []);
+
+  useEffect(() => {
     dispatch(fetchUserVessels({ page: currentPage, perPage, sortBy: sortValue.value }));
   }, [currentPage, dispatch, perPage, sortValue]);
 
@@ -57,14 +62,9 @@ const AccountPositions = () => {
   );
 
   const printContent = useMemo(() => {
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2" />;
-    if (vessels)
-      return (
-        <>
-          <UnassignedFleet toggle={toggle} />
-          {vessels?.map(printExpandableCard)}
-        </>
-      );
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (vessels) return vessels?.map(printExpandableCard);
+
     return <Title level="3">No opened positions</Title>;
   }, [loading, vessels, printExpandableCard]);
 
@@ -86,7 +86,15 @@ const AccountPositions = () => {
         </div>
       </div>
 
-      <div className="grow">{printContent}</div>
+      <div className="grow">
+        <ExpandableCard
+          data={unassignedVessel}
+          key={unassignedVessel.id}
+          className="px-5 my-5 bg-white"
+          expandAll={toggle}
+        />
+        {printContent}
+      </div>
 
       <ComplexPagination
         label="fleets"

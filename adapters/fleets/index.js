@@ -141,14 +141,14 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     details: { name, summerDwt, q88QuestionnarieFile },
     imo,
     vesselSizeCategoryId,
-    apearsInSearch,
+    appearsInSearch,
     status: requestStatus,
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
-  const status = apearsInSearch ? 'Active' : 'Inactive';
+  const status = appearsInSearch ? 'Active' : 'Inactive';
 
   return [
     {
@@ -220,14 +220,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     details: { summerDwt, name, q88QuestionnarieFile },
     vesselSizeCategoryId,
-    apearsInSearch,
+    appearsInSearch,
     status: requestStatus,
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
-  const status = apearsInSearch ? 'Active' : 'Inactive';
+  const status = appearsInSearch ? 'Active' : 'Inactive';
 
   return [
     {
