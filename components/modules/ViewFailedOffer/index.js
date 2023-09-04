@@ -40,7 +40,7 @@ const ViewFailedOffer = ({ itemId }) => {
     (async () => {
       const { status, data, error } = await getOfferDetails(itemId, session?.role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data }));
+        setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
       } else {
         console.log(error);
       }
@@ -70,7 +70,7 @@ const ViewFailedOffer = ({ itemId }) => {
       <div className="bg-red-light rounded-base py-3 px-5 mt-5">
         <div className="text-xsm font-semibold">
           <span>Declained by:</span>
-          <span className="text-red ml-1.5">{declinedBy || 'Unknown'}</span>
+          <span className="text-red ml-1.5">{declinedBy}</span>
         </div>
         <div className="text-[12px] mt-1.5">
           <span className="font-bold">Reason:</span>

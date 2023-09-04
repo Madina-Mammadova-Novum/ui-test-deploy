@@ -479,3 +479,11 @@ export const sortTable = (array, index, sortDirection, sortType = 'numeric') => 
   });
   return descSorted;
 };
+
+export const getAppropriateFailedBy = ({ failedBy, role }) => {
+  let failedByText = failedBy;
+  if (ROLES[String(failedBy).toUpperCase()]) {
+    failedByText = role === failedBy.toLowerCase() ? 'Me' : 'Counterparty';
+  }
+  return failedByText;
+};

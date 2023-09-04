@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { extractTimeFromDate } from '@/utils/helpers';
+import { extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -57,6 +57,7 @@ export function sendCounterofferAdapter({ data }) {
     responseCountdown,
     comment,
     freight,
+    products,
   } = data;
 
   return {
@@ -69,6 +70,12 @@ export function sendCounterofferAdapter({ data }) {
     comment,
     freightFormatId: freight?.value,
     countDownTimerSettingId: responseCountdown?.value,
+    cargoes: products.map(({ density, product: { value: productId }, quantity, tolerance }) => ({
+      productId,
+      referenceDensity: density,
+      quantity,
+      tolerance,
+    })),
   };
 }
 
@@ -117,12 +124,12 @@ export function responseSendCounterofferAdapter({ data }) {
   return data;
 }
 
-export function offerDetailsAdapter({ data }) {
+export function offerDetailsAdapter({ data, role }) {
   if (!data) return null;
   const {
     laycanStart,
     laycanEnd,
-    searchedCargo: { loadTerminal, dischargeTerminal, cargoType } = {},
+    searchedCargo: { loadTerminal, dischargeTerminal, cargoType: { name: cargoName, id: cargoId } = {} } = {},
     products,
     freight,
     demurrageRate,
@@ -136,6 +143,7 @@ export function offerDetailsAdapter({ data }) {
     failureReason,
     failedBy,
   } = data;
+
   return {
     voyageDetails: {
       dates: [
@@ -182,7 +190,7 @@ export function offerDetailsAdapter({ data }) {
       cargo: [
         {
           key: 'Cargo Type',
-          label: cargoType,
+          label: cargoName,
         },
       ],
       products: products?.map(({ productName, density, minQuantity }, index) => [
@@ -235,8 +243,8 @@ export function offerDetailsAdapter({ data }) {
       loadPortId: loadTerminal?.port?.id,
       dischargePortId: dischargeTerminal?.port?.id,
       cargoType: {
-        label: cargoType,
-        value: 'NEEDS_DATA_FROM_BACKEND',
+        label: cargoName,
+        value: cargoId,
       },
       products: products?.map(({ productName, density, minQuantity, tolerance, id }) => ({
         product: { label: productName, value: id },
@@ -248,7 +256,7 @@ export function offerDetailsAdapter({ data }) {
     failedOfferData: {
       isFailed,
       failureReason,
-      declinedBy: failedBy,
+      declinedBy: getAppropriateFailedBy({ failedBy, role }),
     },
   };
 }

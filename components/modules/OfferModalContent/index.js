@@ -87,8 +87,8 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
       closeModal();
     }
     if (error) {
-      const { errors } = error;
-      errorToast(parseErrors(errors));
+      const { errors, message } = error;
+      errorToast(parseErrors({ ...errors, ...message }));
     }
   };
 
