@@ -164,8 +164,15 @@ export async function getUserFixtures() {
   };
 }
 
-export async function getUserPreFixtures() {
-  const response = await getData(`account/pre-fixture`, { headers: { ...ContentTypeJson() } });
+export async function getOwnerPrefixture({ page, perPage }) {
+  const response = await postData(`account/pre-fixture/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
+  return {
+    ...response,
+  };
+}
+
+export async function getChartererPrefixture({ page, perPage }) {
+  const response = await postData(`account/pre-fixture/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
   return {
     ...response,
   };

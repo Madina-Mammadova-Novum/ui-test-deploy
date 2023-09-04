@@ -19,15 +19,15 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ underNegotiation, rowsData }) => {
+const PreFixtureExpandedContent = ({ underNegotiation, detailsData }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const tabContent = () => {
     switch (currentTab) {
       case 'documents':
-        return <DocumentsContent rowsData={rowsData} />;
+        return <DocumentsContent rowsData={[]} />;
       default:
-        return <DetailsContent underNegotiation={underNegotiation} />;
+        return <DetailsContent underNegotiation={underNegotiation} data={detailsData} />;
     }
   };
 

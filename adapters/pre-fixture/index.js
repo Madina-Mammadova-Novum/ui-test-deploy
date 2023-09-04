@@ -1,47 +1,114 @@
 import ClockSVG from '@/assets/images/clock.svg';
 import CommentIcon from '@/assets/images/commentMessage.svg';
+import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { calculateCountdown } from '@/utils/helpers';
 
-export const prefixtureHeaderDataAdapter = ({ data }) => {
+export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { cargoId, cargoType, quantity, loadPort, laycanStart, laycanEnd, creationDate, countdown } = data;
+  const {
+    searchedCargo: {
+      code,
+      cargoType: { name: cargoName } = {},
+      totalQuantity,
+      loadTerminal: { port: { name: portName, locode } = {} } = {},
+    } = {},
+    vessel: { details: { name: tankerName } = {} } = {},
+    laycanStart,
+    laycanEnd,
+    expiresAt,
+  } = data;
 
   return [
     {
       label: 'Cargo id',
-      text: cargoId || '',
+      text: code,
+    },
+    {
+      label: 'Tanker name',
+      text: tankerName,
     },
     {
       label: 'Cargo type',
-      text: cargoType || '',
+      text: cargoName,
     },
     {
       label: 'Quantity',
-      text: quantity || '',
+      text: `${totalQuantity} tons`,
     },
     {
       label: 'Load port',
-      text: loadPort || '',
+      text: portName && `${portName}${locode && `, ${locode}`}`,
     },
     {
       label: 'Laycan start',
-      text: laycanStart || '',
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
     },
     {
       label: 'Laycan end',
-      text: laycanEnd || '',
-    },
-    {
-      label: 'Creation date',
-      text: creationDate || '',
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
       label: 'Countdown',
-      text: countdown || '',
+      text: calculateCountdown(expiresAt),
       textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+    },
+  ];
+};
+
+export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const {
+    searchedCargo: {
+      code,
+      cargoType: { name: cargoName } = {},
+      totalQuantity,
+      loadTerminal: { port: { name, locode } = {} } = {},
+    } = {},
+    laycanStart,
+    laycanEnd,
+    creationDate,
+    expiresAt,
+  } = data;
+
+  return [
+    {
+      label: 'Cargo id',
+      text: code,
+    },
+    {
+      label: 'Cargo type',
+      text: cargoName,
+    },
+    {
+      label: 'Quantity',
+      text: `${totalQuantity} tons`,
+    },
+    {
+      label: 'Load port',
+      text: name && `${name}${locode && `, ${locode}`}`,
+    },
+    {
+      label: 'Laycan start',
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
+    },
+    {
+      label: 'Laycan end',
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+    },
+    {
+      label: 'Creation date',
+      text: transformDate(creationDate, 'MMM dd, yyyy'),
+    },
+    {
+      label: 'Countdown',
+      text: calculateCountdown(expiresAt),
+      textStyles: 'text-red',
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
   ];
 };
@@ -108,4 +175,152 @@ export const prefixtureRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => prefixtureRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const prefixtureOwnerDetailsAdapter = (data) => {
+  if (!data) return {};
+  const {
+    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
+    products = [],
+    freight,
+    freightFormat,
+    demurrageRate,
+    layTime,
+    demurragePaymentTerm,
+    paymentTerm,
+    searchedCargo: {
+      laycanStart,
+      laycanEnd,
+      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
+      dischargeTerminal: {
+        name: dischargeTerminalName,
+        port: { name: dischargePortName, locode: dischargePortLocode } = {},
+      } = {},
+    } = {},
+    charterer: {
+      averageTonnagePerCharter,
+      estimatedNumberOfChartersPerYear,
+      yearsInOperation,
+      registrationCity: { country: { name: countryName, codeISO2: countryCode } = {} } = {},
+    } = {},
+    additionalCharterPartyTerms,
+  } = data;
+
+  return {
+    partyInformation: {
+      operationYears: yearsInOperation,
+      chartersPerYear: estimatedNumberOfChartersPerYear || '0',
+      avgTonnage: averageTonnagePerCharter || '0',
+      registrationCountry: {
+        countryName,
+        countryCode,
+      },
+    },
+    cargoDetails: {
+      cargoType: cargoName,
+      products,
+    },
+    commercialOfferTerms: {
+      freight: `${freightFormat} ${freight}`,
+      demurrageRate: `$${demurrageRate} per day`,
+      laytime: `${layTime} hrs + (6 + 6 hrs)`,
+      demurragePaymmentTerms: demurragePaymentTerm,
+      paymentTerms: paymentTerm,
+    },
+    voyageDetails: {
+      laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
+      laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      loadTerminal: loadTerminalName,
+      dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
+      dischargeTerminal: dischargeTerminalName,
+    },
+    additionalCharterPartyTerms,
+  };
+};
+
+export const prefixtureChartererDetailsAdapter = (data) => {
+  if (!data) return {};
+  const {
+    vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
+    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
+    products = [],
+    freight,
+    freightFormat,
+    demurrageRate,
+    layTime,
+    demurragePaymentTerm,
+    paymentTerm,
+    searchedCargo: {
+      laycanStart,
+      laycanEnd,
+      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
+      dischargeTerminal: {
+        name: dischargeTerminalName,
+        port: { name: dischargePortName, locode: dischargePortLocode } = {},
+      } = {},
+    } = {},
+    additionalCharterPartyTerms,
+  } = data;
+
+  return {
+    partyInformation: {
+      operationYears: yearsInOperation,
+      numberOfTankers: numberOfVessels,
+      estimatedTankerDWT: estimatedAverageTankerDWT,
+    },
+    cargoDetails: {
+      cargoType: cargoName,
+      products,
+    },
+    commercialOfferTerms: {
+      freight: `${freightFormat} ${freight}`,
+      demurrageRate: `$${demurrageRate} per day`,
+      laytime: `${layTime} hrs + (6 + 6 hrs)`,
+      demurragePaymmentTerms: demurragePaymentTerm,
+      paymentTerms: paymentTerm,
+    },
+    voyageDetails: {
+      laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
+      laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      loadTerminal: loadTerminalName,
+      dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
+      dischargeTerminal: dischargeTerminalName,
+    },
+    additionalCharterPartyTerms,
+  };
+};
+
+export const prefixtureDetailsAdapter = ({ data, role }) => {
+  switch (role) {
+    case ROLES.OWNER:
+      return prefixtureOwnerDetailsAdapter(data);
+    case ROLES.CHARTERER:
+      return prefixtureChartererDetailsAdapter(data);
+    default:
+      return {};
+  }
+};
+
+export const responseOwnerPrefixtureAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const responseChartererPrefixtureAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const responseOwnerAcceptPrefixtureAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const requestAcceptPrefixtureAdapter = ({ data }) => {
+  if (!data) return [];
+  return {
+    dealId: data,
+  };
 };
