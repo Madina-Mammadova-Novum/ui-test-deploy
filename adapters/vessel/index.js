@@ -407,10 +407,10 @@ export function responseGetVesselQ88Adapter({ data }) {
 export function userTankerAdapter({ data }) {
   if (!data) return {};
 
-  const { vesselId, name, openPort, appearsInSearch, openDate, imo, details } = data;
+  const { vesselId, name, openPort, appearsInSearch, openDate, imo, id, details } = data;
 
   return {
-    id: vesselId ?? details?.id,
+    id: vesselId ?? id,
     title: name ?? details?.name,
     date: openDate,
     port: openPort?.name,
