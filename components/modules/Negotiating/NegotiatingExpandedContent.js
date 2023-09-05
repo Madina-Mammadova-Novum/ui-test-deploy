@@ -6,9 +6,8 @@ import { useSession } from 'next-auth/react';
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
 import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } from '@/adapters/negotiating';
-import { Modal, Table } from '@/elements';
+import { Table } from '@/elements';
 import { ROLES } from '@/lib/constants';
-import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { fetchNegotiatingOffers } from '@/store/entities/negotiating/actions';
 import { negotiatingSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
@@ -22,7 +21,6 @@ import {
 } from '@/utils/mock';
 
 const NegotiatingExpandedContent = ({ data, tabs }) => {
-  const [modal, setModal] = useState(null);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const dispatch = useDispatch();
@@ -35,9 +33,6 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
   const { data: session } = useSession();
   const isOwner = session?.role === ROLES.OWNER;
 
-  const handleCloseModal = () => setModal(null);
-  const handleOpenModal = ({ id }) => setModal(id);
-
   useEffect(() => {
     dispatch(fetchNegotiatingOffers({ isOwner, id: data.id }));
   }, [data.id, dispatch, isOwner, refetchOffers]);
@@ -49,7 +44,6 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
           <Table
             headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
             rows={counteroffersTabDataByRole({ data: sent, role: session?.role })}
-            handleActionClick={handleOpenModal}
             noDataMessage="No data provided"
           />
         );
@@ -58,7 +52,6 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
           <Table
             headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
             rows={failedTabDataByRole({ data: failed, role: session?.role })}
-            handleActionClick={handleOpenModal}
             noDataMessage="No data provided"
           />
         );
@@ -67,23 +60,12 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
           <Table
             headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
             rows={offerTabDataByRole({ data: incoming, role: session?.role })}
-            handleActionClick={handleOpenModal}
             noDataMessage="No data provided"
           />
         );
     }
   }, [currentTab, failed, incoming, isOwner, sent, session?.role]);
 
-  const modalContent = () => {
-    switch (modal) {
-      case 'view_counteroffer':
-        return <ViewCounteroffer />;
-      case 'view_failed_offer':
-        return <ViewFailedOffer />;
-      default:
-        return <ViewIncomingOffer closeModal={handleCloseModal} />;
-    }
-  };
   return (
     <div>
       <Tabs
@@ -93,9 +75,6 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
         customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
       <div className="mb-3 table-scroll">{tabContent}</div>
-      <Modal opened={modal} onClose={handleCloseModal}>
-        {modalContent()}
-      </Modal>
     </div>
   );
 };
