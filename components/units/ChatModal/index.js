@@ -42,7 +42,7 @@ const ChatModal = ({ isOpened, onClose }) => {
 
   return (
     isOpened && (
-      <div className="fixed bg-white border border-gray-light right-24 bottom-6 h-auto w-[360px] z-50 rounded-base">
+      <div className="fixed bg-white shadow-xmd border border-gray-light right-24 bottom-6 h-auto w-[360px] z-50 rounded-base">
         <ChatModalHeader onClose={onClose} />
         <ChatControl tab={tab} search={search} activeCounter={totalActive} archivedCounter={totalArchived} />
         <Divider />

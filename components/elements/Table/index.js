@@ -34,9 +34,9 @@ const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
   const printTableRow = (rowData) => <TableRow key={rowData?.id} fleetId={fleetId} rowData={rowData} />;
 
   return headerData.length > 0 ? (
-    <div className="table-scroll-wrapper ">
-      <div className="w-full relative border bg-purple-light rounded-t-lg ">
-        <table className="min-w-full border-collapse table-fixed ">
+    <div className="table-scroll-wrapper z-20">
+      <div className="w-full relative border bg-purple-light rounded-t-lg z-20">
+        <table className="min-w-full border-collapse table-fixed z-20">
           {headerData.length && (
             <thead className="uppercase text-black font-semibold text-xs-sm">
               <TableHeader

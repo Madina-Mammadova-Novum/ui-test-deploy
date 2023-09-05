@@ -76,6 +76,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
 
     return (
       <ModalWindow
+        containerClass="!border !border-gray-light shadow-xmd"
         buttonProps={{
           variant: 'primary',
           size: 'small',

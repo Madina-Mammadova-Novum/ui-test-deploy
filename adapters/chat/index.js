@@ -1,4 +1,5 @@
 import { transformDate } from '@/utils/date';
+import { clientIdentification, extractTime } from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
   if (!data) return null;
@@ -55,4 +56,17 @@ export function listOfChatsDataAdapter({ data }) {
     ...chatSessionDataAdapter({ data: chat }),
     ...chatDealDataAdapter({ data: deal }),
   }));
+}
+
+export async function messageResponseAdapter({ data, clientId }) {
+  if (!data) return {};
+
+  const { body, senderId, createdAt, id } = data;
+
+  return {
+    id,
+    sender: clientIdentification({ senderId, clientId }),
+    time: extractTime(createdAt),
+    message: body,
+  };
 }

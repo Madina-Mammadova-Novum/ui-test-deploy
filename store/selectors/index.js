@@ -2,10 +2,25 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
 import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
+import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
 export const sidebarSelector = ({ user }) => user?.params;
 export const userSelector = ({ user }) => user;
-export const vesselsSelector = ({ positions }) => positions;
+export const vesselsSelector = ({ positions, fleets }) => {
+  return {
+    ...positions,
+    data: {
+      ...positions.data,
+      unassigned: {
+        id: 1,
+        title: 'Unassigned Fleet',
+        activeTankers: fleets.unassignedFleetData.length,
+        inActiveTankers: 0,
+        tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
+      },
+    },
+  };
+};
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
 export const negotiatingSelector = ({ negotiating }) => negotiating;
@@ -55,6 +70,7 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
     loading: state?.loading,
     error: state?.error,
     vessels: state?.data?.vessels,
+    unassignedVessel: state?.data?.unassigned,
     totalPages: state?.data?.totalPages,
   };
 });

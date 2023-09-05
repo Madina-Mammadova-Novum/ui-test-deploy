@@ -280,6 +280,17 @@ export function requestUpdateVesselAdapter({ data }) {
   };
 }
 
+export function unassignedVesselsAdapter({ data }) {
+  if (!data) return {};
+
+  const { apearsInSearch, ...rest } = data;
+
+  return {
+    ...rest,
+    appearsInSearch: apearsInSearch,
+  };
+}
+
 export function responseAddVesselManuallyAdapter({ data }) {
   if (!data) return null;
 
@@ -294,7 +305,7 @@ export function responseGetVesselTypesAdapter({ data }) {
 export function responseGetUnassignedVesselsAdapter({ data }) {
   if (!data) return null;
 
-  return data;
+  return data.map((element) => unassignedVesselsAdapter({ data: element }));
 }
 export function responseGetVesselDetailsAdapter({ data }) {
   if (!data) return null;
@@ -396,11 +407,11 @@ export function responseGetVesselQ88Adapter({ data }) {
 export function userTankerAdapter({ data }) {
   if (!data) return {};
 
-  const { vesselId, name, openPort, appearsInSearch, openDate, imo } = data;
+  const { vesselId, name, openPort, appearsInSearch, openDate, imo, id, details } = data;
 
   return {
-    id: vesselId,
-    title: name,
+    id: vesselId ?? id,
+    title: name ?? details?.name,
     date: openDate,
     port: openPort?.name,
     portId: openPort?.id,

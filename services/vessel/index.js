@@ -97,6 +97,7 @@ export async function updateVesselPortAndDate(data) {
 
 export async function getUnassignedVessels() {
   const response = await getData(`vessels/get-unassigned`);
+
   return {
     ...response,
   };

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { ChatSessionPropTypes } from '@/lib/types';
 
 import { ArchiveButton, ConversationButton } from '@/elements';
-import { setCurrentUser } from '@/store/entities/chat/slice';
+import { resetCurrentUser, setCurrentUser } from '@/store/entities/chat/slice';
 import { ChatConversation, ChatConversationCard, ChatDeactivate } from '@/units';
 
 const ChatSession = ({ data }) => {
@@ -37,12 +37,7 @@ const ChatSession = ({ data }) => {
 
   const handleCloseConversation = () => {
     handleChangeState('setConversation', false);
-    dispatch(
-      setCurrentUser({
-        chatId: null,
-        vessel: { name: null, data: null, cargoId: null },
-      })
-    );
+    dispatch(resetCurrentUser());
   };
 
   const { setDeactivate, setConversation } = modalState;
