@@ -91,8 +91,13 @@ const Negotiating = () => {
       <ExpandableRow
         key={rowData.id}
         className="pt-[60px]"
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 2fr 2fr 1fr 1fr 1fr" />}
-        footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '2fr 1fr 1fr 1fr 2fr' : '1fr 1fr 2fr 2fr 1fr 1fr 1fr'}
+          />
+        }
+        footer={<NegotiatingExpandedFooter isCharterer={!isOwner} />}
         expand={toggle}
       >
         <NegotiatingExpandedContent data={rowData} tabs={tabs} />

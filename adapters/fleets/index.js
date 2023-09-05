@@ -173,15 +173,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      editable: !!q88QuestionnarieFile,
-      actions: [
-        {
-          action: ACTIONS.VIEW_QUESTIONAIRE,
-          actionText: 'View',
-          actionVariant: 'primary',
-          actionSize: 'small',
-        },
-      ],
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
@@ -260,15 +252,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      editable: !!q88QuestionnarieFile,
-      actions: [
-        {
-          action: ACTIONS.VIEW_QUESTIONAIRE,
-          actionText: 'View',
-          actionVariant: 'primary',
-          actionSize: 'small',
-        },
-      ],
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,

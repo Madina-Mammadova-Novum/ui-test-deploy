@@ -4,3 +4,4 @@ export * from '@/adapters/fleets';
 export * from '@/adapters/pre-fixture';
 export * from '@/adapters/on-subs';
 export * from '@/adapters/general';
+export * from '@/adapters/chat';

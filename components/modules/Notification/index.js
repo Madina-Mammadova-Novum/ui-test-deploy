@@ -25,7 +25,7 @@ const Notification = () => {
 
   useEffect(() => {
     if (!isOpened) dispatch(resetParams());
-  }, [isOpened, dispatch]);
+  }, [isOpened]);
 
   return (
     <div>

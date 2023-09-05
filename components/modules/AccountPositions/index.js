@@ -7,7 +7,7 @@ import { Dropdown, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { getUserVesselsSelector } from '@/store/selectors';
-import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
+import { ComplexPagination, ExpandableCard, ToggleRows, UnassignedFleet } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
@@ -52,13 +52,19 @@ const AccountPositions = () => {
   };
 
   const printExpandableCard = useCallback(
-    (fleet) => <ExpandableCard className="px-5 my-5" key={fleet.id} data={fleet} expandAll={toggle} />,
+    (fleet) => <ExpandableCard className="px-5 my-5 bg-white" key={fleet.id} data={fleet} expandAll={toggle} />,
     [toggle]
   );
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2" />;
-    if (vessels) return vessels?.map(printExpandableCard);
+    if (vessels)
+      return (
+        <>
+          <UnassignedFleet toggle={toggle} />
+          {vessels?.map(printExpandableCard)}
+        </>
+      );
     return <Title level="3">No opened positions</Title>;
   }, [loading, vessels, printExpandableCard]);
 
@@ -79,7 +85,9 @@ const AccountPositions = () => {
           />
         </div>
       </div>
+
       <div className="grow">{printContent}</div>
+
       <ComplexPagination
         label="fleets"
         currentPage={currentPage}

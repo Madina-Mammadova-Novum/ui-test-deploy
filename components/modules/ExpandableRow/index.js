@@ -18,7 +18,7 @@ const ExpandableRow = ({ header, footer, children, expand = { value: false }, cl
         {headerWithProps}
       </div>
       <div
-        className={`transition-[grid-template-rows] duration-500 grid grid-rows-[0fr] overflow-hidden ${
+        className={`transition-[grid-template-rows] duration-200 grid grid-rows-[0fr] overflow-hidden ${
           toggle && 'grid-rows-[1fr] border-t border-gray-darker'
         }`}
       >

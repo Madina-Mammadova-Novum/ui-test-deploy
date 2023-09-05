@@ -6,7 +6,7 @@ import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button, Modal } from '@/elements';
 import { ExpandableRowFooter, OfferAcceptModalContent } from '@/units';
 
-const PreFixtureExpandedFooter = ({ underNegotiation }) => {
+const PreFixtureExpandedFooter = ({ underNegotiation, offerId }) => {
   const [modalOptions, setModalOptions] = useState({
     opened: false,
     type: null,
@@ -18,7 +18,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
   const modalContent = () => {
     switch (modalOptions.type) {
       case 'accept_offer':
-        return <OfferAcceptModalContent closeModal={handleCloseModal} />;
+        return <OfferAcceptModalContent closeModal={handleCloseModal} offerId={offerId} />;
       default:
         return null;
     }
@@ -28,7 +28,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation }) => {
     <ExpandableRowFooter>
       <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between">
         <div className="w-full grow">
-          {!!underNegotiation && (
+          {underNegotiation && (
             <Button
               buttonProps={{
                 text: 'Under negotiation',

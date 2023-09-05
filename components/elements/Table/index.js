@@ -10,6 +10,7 @@ import { sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
   const initialOrder = useMemo(() => rows, []);
+
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
   const { data, sortDirection, sortBy } = sortedData;
 
@@ -20,10 +21,12 @@ const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
 
   const handleSort = (options) => {
     const { index, sortDirection: newSortDirection, sortBy: newSortBy, sortType } = options;
+
     if (newSortBy === sortBy && newSortDirection === sortDirection) {
       setSortedData({ data: initialOrder, sortDirection: null, sortBy: null });
       return;
     }
+
     const newSortedData = sortTable(rows, index, newSortDirection, sortType);
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };

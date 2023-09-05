@@ -1,3 +1,4 @@
+import { requestAcceptPrefixtureAdapter } from '@/adapters';
 import { acceptOfferAdapter, declineOfferAdapter, sendCounterofferAdapter, sendOfferAdapter } from '@/adapters/offer';
 import { ROLES } from '@/lib';
 import { getData, postData } from '@/utils/dataFetching';
@@ -67,6 +68,16 @@ export async function getOfferDetails(offerId, role) {
   const { isOwner } = getRoleIdentity({ role });
   const path = isOwner ? `offer/details/${offerId}` : `offer/charterer/details/${offerId}`;
   const response = await getData(path);
+  return {
+    ...response,
+  };
+}
+export async function acceptPrefixtureOffer(offerId, role) {
+  const body = requestAcceptPrefixtureAdapter({ data: offerId });
+  const { isOwner } = getRoleIdentity({ role });
+  const path = isOwner ? `account/pre-fixture/owner/accept` : `account/pre-fixture/charterer/accept`;
+  const response = await postData(path, body);
+  if (!response.error) response.message = 'Your have successfully confirmed Offer';
   return {
     ...response,
   };
