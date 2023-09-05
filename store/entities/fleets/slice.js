@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchFleetsWithVessels, fetchPrefilledDataToUpdate, fetchUnassignedFleetData } from './actions';
+// import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
 const initialState = {
   loading: true,
@@ -34,6 +35,12 @@ const fleetsSlice = createSlice({
     },
     deleteVesselFromUnassignedFleetsState: (state, action) => {
       state.unassignedFleetData = state.unassignedFleetData.filter(({ id }) => id !== action.payload);
+    },
+    updateUnassignedFleet: (state, action) => {
+      const { id, tankers } = action.payload;
+      const updatedTanker = state.unassignedFleetData.find((fleet) => fleet.id === id);
+
+      if (updatedTanker) state.unassignedFleetData = tankers;
     },
     addVesselToFleetsState: (state, action) => {
       const { fleetId, tankerId } = action?.payload;
@@ -83,6 +90,7 @@ export const {
   deleteVesselFromUnassignedFleetsState,
   addVesselToFleetsState,
   clearPrefilledState,
+  updateUnassignedFleet,
 } = fleetsSlice.actions;
 
 export default fleetsSlice.reducer;

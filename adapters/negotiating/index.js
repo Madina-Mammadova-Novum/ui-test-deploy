@@ -606,11 +606,7 @@ export const prefilledSearchDataAdapter = ({ data }) => {
   const {
     laycanStart,
     laycanEnd,
-    searchedCargo: {
-      loadTerminal = {},
-      dischargeTerminal = {},
-      cargoType: { id: cargoId, name: cargoName } = {},
-    } = {},
+    searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType: { id: cargoId, name: cargoName } = {} } = {},
     products,
   } = data;
   const {

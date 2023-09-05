@@ -2,7 +2,18 @@
 
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { chat, fleets, general, negotiating, notifications, offer, positions, search, user, preFixture } from '@/store/entities';
+import {
+  chat,
+  fleets,
+  general,
+  negotiating,
+  notifications,
+  offer,
+  positions,
+  preFixture,
+  search,
+  user,
+} from '@/store/entities';
 
 export const reducer = combineReducers({
   general,
