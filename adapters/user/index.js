@@ -434,6 +434,7 @@ export function positionAdapter({ data }) {
     title: name,
     activeTankers: numberOfActiveVessels,
     inActiveTankers: numberOfInactiveVessels,
+    type: 'assigned',
   };
 }
 

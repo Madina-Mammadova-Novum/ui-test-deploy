@@ -12,10 +12,10 @@ export const vesselsSelector = ({ positions, fleets }) => {
     data: {
       ...positions.data,
       unassigned: {
-        id: 1,
         title: 'Unassigned Fleet',
         activeTankers: fleets.unassignedFleetData.length,
         inActiveTankers: 0,
+        type: 'unassigned',
         tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
       },
     },

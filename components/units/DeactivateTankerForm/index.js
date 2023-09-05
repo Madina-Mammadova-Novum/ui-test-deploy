@@ -8,7 +8,8 @@ import { DeactivateTankerFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Label, Title } from '@/elements';
 import { getUserPositionById } from '@/services';
-import { updateVesselPortAndDate } from '@/services/vessel';
+import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
+import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
 import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -16,21 +17,28 @@ const DeactivateTankerForm = ({ title, state, closeModal }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({});
 
+  const { available, type, id, ...rest } = state;
+
   const onSubmit = async () => {
     const currentDate = new Date();
     const nextDate = new Date();
     nextDate.setDate(currentDate.getDate() + 1);
 
     const { status, error, data } = await updateVesselPortAndDate({
-      ...state,
+      id,
       date: nextDate,
-      available: !state?.available,
+      available: !available,
+      ...rest,
     });
 
     if (status === 200) {
-      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
-
-      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      if (type === 'assigned') {
+        const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
+        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, assignedTankers }));
+      } else if (type === 'unassigned') {
+        const { data: unassignedTankers } = await getUnassignedVessels();
+        dispatch(updateUnassignedFleet({ id, tankers: unassignedTankers }));
+      }
       closeModal();
     }
 

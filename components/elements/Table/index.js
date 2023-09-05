@@ -8,7 +8,7 @@ import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 import { sortTable } from '@/utils/helpers';
 
-const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
+const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const initialOrder = useMemo(() => rows, []);
 
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
@@ -31,7 +31,7 @@ const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };
 
-  const printTableRow = (rowData) => <TableRow key={rowData?.id} fleetId={fleetId} rowData={rowData} />;
+  const printTableRow = (rowData) => <TableRow key={rowData?.id} type={type} fleetId={fleetId} rowData={rowData} />;
 
   return headerData.length > 0 ? (
     <div className="table-scroll-wrapper z-20">
