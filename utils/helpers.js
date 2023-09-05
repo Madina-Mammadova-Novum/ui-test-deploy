@@ -496,3 +496,11 @@ export const getSocketConnectionsParams = (token) => {
 };
 
 export const clientIdentification = ({ senderId, clientId }) => (senderId === clientId ? ROLES.OWNER : ROLES.BROKER);
+
+export const getAppropriateFailedBy = ({ failedBy, role }) => {
+  let failedByText = failedBy;
+  if (ROLES[String(failedBy).toUpperCase()]) {
+    failedByText = role === failedBy.toLowerCase() ? 'Me' : 'Counterparty';
+  }
+  return failedByText;
+};

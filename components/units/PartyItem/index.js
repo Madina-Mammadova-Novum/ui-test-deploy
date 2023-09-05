@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 
+import parse from 'html-react-parser';
+
 import { PartyTermsItemPropTypes } from '@/lib/types';
 
 import { Button, Modal, Title } from '@/elements';
 
-const PartyItem = ({ buttonText, modalTitle, content = 'No Content Provided' }) => {
+const PartyItem = ({ buttonText, modalTitle, body = 'No Content Provided' }) => {
   const [opened, setOpened] = useState(false);
   const handleCloseModal = () => setOpened(false);
   const handleOpenModal = () => setOpened(true);
@@ -21,7 +23,7 @@ const PartyItem = ({ buttonText, modalTitle, content = 'No Content Provided' }) 
       <Modal opened={opened} onClose={handleCloseModal}>
         <div className="w-[672px]">
           <Title component="2">{modalTitle}</Title>
-          {content}
+          {parse(body)}
         </div>
       </Modal>
     </>
