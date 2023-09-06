@@ -2,16 +2,33 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
 import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
+import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
 export const sidebarSelector = ({ user }) => user?.params;
 export const userSelector = ({ user }) => user;
-export const vesselsSelector = ({ positions }) => positions;
+export const vesselsSelector = ({ positions, fleets }) => {
+  return {
+    ...positions,
+    data: {
+      ...positions.data,
+      unassigned: {
+        title: 'Unassigned Fleet',
+        activeTankers: fleets.unassignedFleetData.length,
+        inActiveTankers: 0,
+        type: 'unassigned',
+        tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
+      },
+    },
+  };
+};
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
 export const negotiatingSelector = ({ negotiating }) => negotiating;
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
+export const preFixtureSelector = ({ preFixture }) => preFixture;
+export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
@@ -53,6 +70,19 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
     loading: state?.loading,
     error: state?.error,
     vessels: state?.data?.vessels,
+    unassignedVessel: state?.data?.unassigned,
     totalPages: state?.data?.totalPages,
+  };
+});
+
+export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+  return {
+    loading: state.loading,
+    search: state.filterParams.searchValue,
+    tab: state.filterParams.tabValue,
+    limit: state.filterParams.limit,
+    chats: state.data,
+    totalActive: state.data.active.length,
+    totalArchived: state.data.archived.length,
   };
 });

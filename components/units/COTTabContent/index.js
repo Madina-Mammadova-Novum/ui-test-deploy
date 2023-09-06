@@ -7,7 +7,7 @@ const COTTabContent = ({ data = {} }) => {
     <div className="text-xsm">
       <Title level={3}>Commercial Offer Terms</Title>
       <div className="mt-2.5">
-        {data.cargo.map(({ key, label }) => (
+        {data.cargo?.map(({ key, label }) => (
           <TextRow title={key}>{label}</TextRow>
         ))}
       </div>
@@ -29,7 +29,7 @@ const COTTabContent = ({ data = {} }) => {
 
       <hr className="my-4" />
 
-      {data.details.map(({ key, label }) => (
+      {data.details?.map(({ key, label }) => (
         <TextRow title={key}>{label}</TextRow>
       ))}
     </div>

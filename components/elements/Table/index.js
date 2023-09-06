@@ -8,8 +8,9 @@ import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 import { sortTable } from '@/utils/helpers';
 
-const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
+const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const initialOrder = useMemo(() => rows, []);
+
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
   const { data, sortDirection, sortBy } = sortedData;
 
@@ -20,20 +21,22 @@ const Table = ({ headerData, fleetId, rows, noDataMessage = '' }) => {
 
   const handleSort = (options) => {
     const { index, sortDirection: newSortDirection, sortBy: newSortBy, sortType } = options;
+
     if (newSortBy === sortBy && newSortDirection === sortDirection) {
       setSortedData({ data: initialOrder, sortDirection: null, sortBy: null });
       return;
     }
+
     const newSortedData = sortTable(rows, index, newSortDirection, sortType);
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };
 
-  const printTableRow = (rowData) => <TableRow key={rowData?.id} fleetId={fleetId} rowData={rowData} />;
+  const printTableRow = (rowData) => <TableRow key={rowData?.id} type={type} fleetId={fleetId} rowData={rowData} />;
 
   return headerData.length > 0 ? (
-    <div className="table-scroll-wrapper ">
-      <div className="w-full relative border bg-purple-light rounded-t-lg ">
-        <table className="min-w-full border-collapse table-fixed ">
+    <div className="table-scroll-wrapper z-20">
+      <div className="w-full relative border bg-purple-light rounded-t-lg z-20">
+        <table className="min-w-full border-collapse table-fixed z-20">
           {headerData.length && (
             <thead className="uppercase text-black font-semibold text-xs-sm">
               <TableHeader

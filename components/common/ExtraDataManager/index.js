@@ -60,12 +60,14 @@ const ExtraDataManager = ({ children }) => {
   }, [session?.accessToken]);
 
   useEffect(() => {
-    if (Date.now() > session?.expires) updateSession();
-  }, [session?.expires]);
+    if (session?.expires <= Date.now()) updateSession();
+  }, [session]);
 
   useEffect(() => {
-    if (isAuthenticated) dispatch(fetchNotifications(filterParams));
-  }, [filterParams, isAuthenticated]);
+    if (isAuthenticated) {
+      dispatch(fetchNotifications(filterParams));
+    }
+  }, [isAuthenticated, filterParams]);
 
   return children;
 };

@@ -13,7 +13,8 @@ import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
-import { updateVesselPortAndDate } from '@/services/vessel';
+import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
+import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
 import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { countriesOptions } from '@/utils/helpers';
@@ -35,6 +36,8 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     setValue,
     formState: { errors },
   } = methods;
+
+  const { id, type, action } = state;
 
   const [tankerState, setTankerState] = useState({
     listOfPorts: countriesOptions(ports?.searchPorts) ?? [],
@@ -60,17 +63,21 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
 
   const onSubmit = async ({ port, date }) => {
     const { error, data, status } = await updateVesselPortAndDate({
-      id: state.id,
-      action: state.action,
+      id,
+      action,
       portId: port?.value,
       available: true,
       date,
     });
 
     if (status === 200) {
-      const { data: tankers } = await getUserPositionById({ id: state?.fleetId });
-
-      dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers }));
+      if (type === 'assigned') {
+        const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
+        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, assignedTankers }));
+      } else if (type === 'unassigned') {
+        const { data: unassignedTankers } = await getUnassignedVessels();
+        dispatch(updateUnassignedFleet({ id, tankers: unassignedTankers }));
+      }
       closeModal();
     }
 

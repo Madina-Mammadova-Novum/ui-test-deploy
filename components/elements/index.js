@@ -1,8 +1,11 @@
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
+import ArchiveButton from '@/elements/ArchiveButton';
+import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
+import ChatButton from '@/elements/ChatButton';
+import ConversationButton from '@/elements/ConversationButton';
 import Copyright from '@/elements/Copyright';
-// import Badge from '@/elements/Badge';
 import DatePicker from '@/elements/DatePicker';
 import DateTimeRow from '@/elements/DateTimeRow';
 import Divider from '@/elements/Divider';
@@ -97,4 +100,8 @@ export {
   SubmitButton,
   ResetButton,
   LabelAsOption,
+  Badge,
+  ChatButton,
+  ConversationButton,
+  ArchiveButton,
 };

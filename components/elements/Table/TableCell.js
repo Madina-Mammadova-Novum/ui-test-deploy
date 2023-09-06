@@ -4,6 +4,8 @@ import { useCallback, useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
+import NextLink from '../NextLink';
+
 import { TableCellPropTypes } from '@/lib/types';
 
 import { HoverTooltip, Placeholder } from '@/elements';
@@ -45,36 +47,40 @@ const TableCell = ({ cellProps }) => {
     available,
     fleetId,
     fleetName,
+    link,
   } = cellProps;
 
-  const emptyCell = !value && !editable;
+  const emptyCell = !value && !editable && !link;
 
   const printModal = useCallback(
     (action) => {
       switch (action) {
         case ACTIONS.PORT:
           return (
-            <EditPortForm title="edit open port" state={{ name, id, date, available, fleetId, action: ACTIONS.PORT }} />
+            <EditPortForm
+              title="edit open port"
+              state={{ name, id, date, available, fleetId, type, action: ACTIONS.PORT }}
+            />
           );
         case ACTIONS.DATE:
           return (
             <EditDateForm
               title="edit open date"
-              state={{ name, id, portId, available, fleetId, action: ACTIONS.DATE }}
+              state={{ name, id, portId, available, fleetId, type, action: ACTIONS.DATE }}
             />
           );
         case ACTIONS.TANKER_DEACTIVATE:
           return (
             <DeactivateTankerForm
               title="Deactivate your Tanker"
-              state={{ name, id, portId, date, available, fleetId, action: ACTIONS.TANKER_DEACTIVATE }}
+              state={{ name, id, portId, date, available, fleetId, type, action: ACTIONS.TANKER_DEACTIVATE }}
             />
           );
         case ACTIONS.TANKER_REACTIVATE:
           return (
             <ReactivateTankerForm
               title="Reactivate your Tanker"
-              state={{ name, id, fleetId, action: ACTIONS.TANKER_REACTIVATE }}
+              state={{ name, id, fleetId, type, action: ACTIONS.TANKER_REACTIVATE }}
             />
           );
         case ACTIONS.VIEW_OFFER:
@@ -103,7 +109,7 @@ const TableCell = ({ cellProps }) => {
           return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
       }
     },
-    [available, date, fleetId, id, name, portId]
+    [available, date, fleetId, id, name, portId, type]
   );
 
   const printValue = useMemo(() => {
@@ -127,14 +133,13 @@ const TableCell = ({ cellProps }) => {
 
   return (
     <td
-      name={type}
       className={`${
         disabled ? 'custom-table' : 'bg-white'
       } py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
       <div
         className={`flex ${
-          typeof value === 'boolean' ? 'justify-start' : 'justify-between'
+          typeof value === 'boolean' ? 'justify-start' : 'justify-between gap-x-12'
         } normal-case items-center text-xsm`}
       >
         {emptyCell && <Placeholder />}
@@ -149,6 +154,12 @@ const TableCell = ({ cellProps }) => {
               </span>
             )}
           </div>
+        )}
+
+        {link && (
+          <NextLink href={link} target="blank" className="bg-white p-0 text-blue hover:text-blue-darker">
+            View
+          </NextLink>
         )}
 
         <div className="flex gap-x-2.5">

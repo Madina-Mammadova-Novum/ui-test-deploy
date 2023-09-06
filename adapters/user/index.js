@@ -434,6 +434,7 @@ export function positionAdapter({ data }) {
     title: name,
     activeTankers: numberOfActiveVessels,
     inActiveTankers: numberOfInactiveVessels,
+    type: 'assigned',
   };
 }
 
@@ -507,9 +508,10 @@ export function sessionAdapter({ session, token }) {
   if (!token) throw new Error('UNATHORIZED');
 
   if (token.accessToken) {
-    const { exp, ...rest } = decodedTokenAdapter(token.accessToken);
+    const { exp, sub, ...rest } = decodedTokenAdapter(token.accessToken);
 
     session.user = { ...rest };
+    session.userId = sub;
     session.expires = exp * 1000;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;

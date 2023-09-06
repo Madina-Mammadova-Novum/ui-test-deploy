@@ -17,6 +17,7 @@ const ExpandableCard = ({ data, expandAll, className, onClick }) => {
     >
       <Table
         fleetId={data?.fleetId}
+        type={data?.type}
         headerData={fleetsHeader}
         rows={rowsData}
         noDataMessage="This Fleet has no Tankers"

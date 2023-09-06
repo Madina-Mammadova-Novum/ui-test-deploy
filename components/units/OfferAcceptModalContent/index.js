@@ -1,12 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useSession } from 'next-auth/react';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
-import { Button, Title } from '@/elements';
+import { offerDetailsAdapter } from '@/adapters/offer';
+import { Button, Loader, Title } from '@/elements';
+import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
-import { COTData, voyageDetailData } from '@/utils/mock';
+import { parseErrors } from '@/utils/helpers';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
   {
@@ -19,18 +24,55 @@ const tabs = [
   },
 ];
 
-const OfferAcceptModalContent = ({ closeModal }) => {
+const OfferAcceptModalContent = ({ closeModal, offerId }) => {
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [pending, setPending] = useState(false);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const [offerDetails, setOfferDetails] = useState({});
+  const { commercialOfferTerms, voyageDetails } = offerDetails;
+  const { data: session } = useSession();
+
+  const handleSubmit = async () => {
+    setPending(true);
+    const { error, message: successMessage } = await acceptPrefixtureOffer(offerId, session?.role);
+    if (!error) {
+      successToast(successMessage);
+    } else {
+      const { errors, message } = error;
+      errorToast(parseErrors({ ...errors, ...message }));
+    }
+    setPending(false);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { status, data, error } = await getOfferDetails(offerId, session?.role);
+      if (status === 200) {
+        setOfferDetails(offerDetailsAdapter({ data }));
+      } else {
+        console.log(error);
+      }
+      setInitialLoading(false);
+    })();
+  }, []);
 
   const tabContent = () => {
     switch (currentTab) {
       case 'commercial_offer_terms':
-        return <COTTabContent data={COTData} />;
+        return <COTTabContent data={commercialOfferTerms} />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
+        return <VoyageDetailsTabContent data={voyageDetails} />;
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="w-72 h-72">
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-[610px]">
@@ -67,7 +109,15 @@ const OfferAcceptModalContent = ({ closeModal }) => {
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }} />
+        <Button
+          buttonProps={{
+            text: pending ? 'Please wait...' : 'Accept the pre-fixture offer',
+            variant: 'primary',
+            size: 'large',
+          }}
+          onClick={handleSubmit}
+          disabled={pending}
+        />
       </div>
     </div>
   );

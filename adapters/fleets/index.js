@@ -141,14 +141,14 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     details: { name, summerDwt, q88QuestionnarieFile },
     imo,
     vesselSizeCategoryId,
-    apearsInSearch,
+    appearsInSearch,
     status: requestStatus,
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
-  const status = apearsInSearch ? 'Active' : 'Inactive';
+  const status = appearsInSearch ? 'Active' : 'Inactive';
 
   return [
     {
@@ -173,15 +173,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      editable: !!q88QuestionnarieFile,
-      actions: [
-        {
-          action: ACTIONS.VIEW_QUESTIONAIRE,
-          actionText: 'View',
-          actionVariant: 'primary',
-          actionSize: 'small',
-        },
-      ],
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
@@ -228,14 +220,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     details: { summerDwt, name, q88QuestionnarieFile },
     vesselSizeCategoryId,
-    apearsInSearch,
+    appearsInSearch,
     status: requestStatus,
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
-  const status = apearsInSearch ? 'Active' : 'Inactive';
+  const status = appearsInSearch ? 'Active' : 'Inactive';
 
   return [
     {
@@ -260,15 +252,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      editable: !!q88QuestionnarieFile,
-      actions: [
-        {
-          action: ACTIONS.VIEW_QUESTIONAIRE,
-          actionText: 'View',
-          actionVariant: 'primary',
-          actionSize: 'small',
-        },
-      ],
+      link: q88QuestionnarieFile && `https://shiplink-api.azurewebsites.net/v1/file/get/${q88QuestionnarieFile}`,
     },
     {
       id,
