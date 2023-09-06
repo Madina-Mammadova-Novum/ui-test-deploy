@@ -24,7 +24,7 @@ const tabs = [
 const ViewOffer = ({ setStep, data }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
-  const { voyageDetails, commercialOfferTerms, comments } = data;
+  const { voyageDetails, commercialOfferTerms, comments, countdown } = data;
 
   const tabContent = () => {
     switch (currentTab) {
@@ -40,7 +40,7 @@ const ViewOffer = ({ setStep, data }) => {
       <ModalHeader>View Incoming Offer</ModalHeader>
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time="1d 1h 50m" />
+        <Countdown time={countdown} />
         <div className="pl-4 border-l h-min flex flex-col items-start">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button

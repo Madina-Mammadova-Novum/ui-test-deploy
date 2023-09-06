@@ -151,7 +151,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -229,7 +229,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -318,7 +318,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -389,7 +389,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -606,11 +606,7 @@ export const prefilledSearchDataAdapter = ({ data }) => {
   const {
     laycanStart,
     laycanEnd,
-    searchedCargo: {
-      loadTerminal = {},
-      dischargeTerminal = {},
-      cargoType: { id: cargoId, name: cargoName } = {},
-    } = {},
+    searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType: { id: cargoId, name: cargoName } = {} } = {},
     products,
   } = data;
   const {

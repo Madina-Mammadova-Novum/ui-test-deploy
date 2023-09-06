@@ -39,7 +39,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
 
-  const { counterofferData, voyageDetails, comments } = offerDetails;
+  const { counterofferData, voyageDetails, comments, countdown } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
 
   const handleCountdownStateChange = (key, value) =>
@@ -77,7 +77,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       </ModalHeader>
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time="1h 50m" />
+        <Countdown time={countdown} />
         <div className="pl-4 border-l h-min flex items-center">
           <p className="font-bold max-w-[240px]">
             Set a response countdown timer for the vessel owner to reply to this offer
