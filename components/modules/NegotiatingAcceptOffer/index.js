@@ -40,7 +40,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
   const { data: session } = useSession();
   const methods = useHookFormParams({ schema });
   const dispatch = useDispatch();
-  const { comments, voyageDetails, commercialOfferTerms } = offerDetails;
+  const { comments, voyageDetails, commercialOfferTerms, countdown } = offerDetails;
 
   const handleSubmit = async (formData) => {
     const { message: successMessage, error } = await acceptOffer({
@@ -71,7 +71,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
     <div className="w-[610px]">
       <ModalHeader goBack={goBack}>Accept the offer</ModalHeader>
 
-      <Countdown time="1d 1h 50m" customStyles="mt-5" />
+      <Countdown time={countdown} customStyles="mt-5" />
 
       <Tabs
         tabs={tabs}

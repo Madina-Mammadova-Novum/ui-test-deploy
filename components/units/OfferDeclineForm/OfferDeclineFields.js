@@ -38,11 +38,10 @@ const reasonsOfDecline = [
   },
 ];
 
-const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton = true }) => {
+const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton = true, offerDetails }) => {
   const [reasons, setReasons] = useState(reasonsOfDecline);
-
   const [showTextField, setShowTextField] = useState(false);
-
+  const { countdown } = offerDetails;
   const { setValue, register } = useHookForm();
 
   const handleChange = ({ target }) => setValue('reason', target.value);
@@ -69,7 +68,7 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
   return (
     <div className="w-[300px]">
       <ModalHeader goBack={goBack}>{title}</ModalHeader>
-      <Countdown time="1d 1h 50m" customStyles="mt-5" />
+      <Countdown time={countdown} customStyles="mt-5" />
       <Title level={3} className="mt-5">
         Indicate the reason for decline:
       </Title>

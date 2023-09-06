@@ -36,7 +36,7 @@ const NavTreeXl = ({ data, active }) => {
       case 'faq':
         return <QuestionCircleSVG className={customStyles} />;
       case 'tools':
-        return <ToolsSVG className={customStyles} />;
+        return <ToolsSVG className={customStyles} width="24" height="24" viewBox="0 0 14 14" />;
       default:
         return null;
     }

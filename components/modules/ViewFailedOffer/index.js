@@ -66,10 +66,10 @@ const ViewFailedOffer = ({ itemId }) => {
 
   return (
     <div className="w-[610px]">
-      <ModalHeader>View Failed Offer</ModalHeader>
+      <ModalHeader>View Declined Offer</ModalHeader>
       <div className="bg-red-light rounded-base py-3 px-5 mt-5">
         <div className="text-xsm font-semibold">
-          <span>Declained by:</span>
+          <span>Declined by:</span>
           <span className="text-red ml-1.5">{declinedBy}</span>
         </div>
         <div className="text-[12px] mt-1.5">

@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
+import { calculateCountdown, extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -142,9 +142,11 @@ export function offerDetailsAdapter({ data, role }) {
     isFailed,
     failureReason,
     failedBy,
+    expiresAt,
   } = data;
 
   return {
+    countdown: calculateCountdown(expiresAt),
     voyageDetails: {
       dates: [
         [
@@ -222,11 +224,11 @@ export function offerDetailsAdapter({ data, role }) {
         },
         {
           key: 'Undisputed demurrage payment terms',
-          label: demurragePaymentTerm,
+          label: demurragePaymentTerm?.name,
         },
         {
           key: 'Payment terms',
-          label: paymentTerm,
+          label: paymentTerm?.name,
         },
       ],
     },

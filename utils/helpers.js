@@ -451,8 +451,9 @@ export const calculateCountdown = (expiresAt) => {
   const milisecondsInMinute = 60 * milisecondsInSecond;
   const milisecondsInHour = 60 * milisecondsInMinute;
   const milisecondsInDay = 24 * milisecondsInHour;
-  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(new Date().toISOString()).getTime();
-  const sign = milisecondsUntilExpiration < 0 && '-';
+  const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
+  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
+  const sign = milisecondsUntilExpiration < 0 ? '-' : '';
   const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
 
   const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
