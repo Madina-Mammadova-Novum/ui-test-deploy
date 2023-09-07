@@ -1,4 +1,5 @@
-import { HubConnectionBuilder } from '@microsoft/signalr';
+/* eslint-disable class-methods-use-this */
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { getSession } from 'next-auth/react';
 
 import { getRtURL } from '.';
@@ -15,14 +16,19 @@ export class SignalRService {
     this.host = host;
   }
 
-  async initNotifications() {
-    const session = await getSession();
+  setupConnection({ path, token }) {
+    return new HubConnectionBuilder()
+      .withUrl(getRtURL(path), getSocketConnectionsParams(token))
+      .configureLogging(LogLevel.None)
+      .withAutomaticReconnect()
+      .build();
+  }
 
+  async initNotifications() {
     try {
-      this.connection = new HubConnectionBuilder()
-        .withUrl(getRtURL(this.host), getSocketConnectionsParams(session?.accessToken))
-        .withAutomaticReconnect()
-        .build();
+      const session = await getSession();
+
+      this.connection = this.setupConnection({ path: this.host, token: session?.accessToken });
 
       await this.connection.start();
 
@@ -35,28 +41,24 @@ export class SignalRService {
     }
   }
 
-  async initChat(chatId) {
-    const session = await getSession();
-
+  async initChat({ chatId }) {
     try {
-      this.connection = new HubConnectionBuilder()
-        .withUrl(getRtURL(`${this.host}?chatId=${chatId}`), getSocketConnectionsParams(session?.accessToken))
-        .withAutomaticReconnect()
-        .build();
+      const session = await getSession();
+
+      this.connection = this.setupConnection({ path: `${this.host}?chatId=${chatId}`, token: session?.accessToken });
 
       await this.connection.start();
-      this.isConnected = true;
+
       this.connection.on('ReceiveMessage', async (response) => {
         const message = await messageResponseAdapter({ data: response, clientId: session?.userId });
-        this.updateMessage(message);
+        this.updateChatMessage({ message });
       });
     } catch (err) {
       console.error(err);
-      this.isConnected = false;
     }
   }
 
-  async sendMessage(message) {
+  async sendMessage({ message }) {
     try {
       await this.connection.invoke('SendMessage', message);
     } catch (e) {
@@ -64,7 +66,7 @@ export class SignalRService {
     }
   }
 
-  updateMessage(message) {
+  updateChatMessage({ message }) {
     const { messages } = this.store.getState().chat.data.currentUser;
     const isMessageAlreadyExists = messages.some((msg) => msg.id === message.id);
 

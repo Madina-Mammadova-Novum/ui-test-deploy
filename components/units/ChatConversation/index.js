@@ -24,7 +24,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    chatService.initChat(data?.chatId);
+    chatService.initChat({ chatId: data?.chatId });
   }, [data?.chatId]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    chatService.sendMessage(message);
+    chatService.sendMessage({ message });
     setMessage('');
   };
 

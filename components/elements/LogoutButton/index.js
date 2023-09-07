@@ -8,14 +8,12 @@ import { signOut } from 'next-auth/react';
 import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
-import { notificationService } from '@/services/signalR';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const dispatch = useDispatch();
 
   const resetUserData = useCallback(() => {
-    notificationService.stop();
     dispatch(setRoleIdentity(null));
     dispatch(setIsAuthenticated(false));
   }, [dispatch]);

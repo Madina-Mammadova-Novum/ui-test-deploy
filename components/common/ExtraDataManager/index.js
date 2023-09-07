@@ -18,12 +18,6 @@ const ExtraDataManager = ({ children }) => {
 
   const { filterParams } = useSelector(getNotificationsDataSelector);
 
-  const updateSession = useCallback(async () => {
-    const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
-
-    await update({ ...refreshedData });
-  }, [session?.refreshToken, update]);
-
   const getGeneralData = useCallback(() => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
@@ -36,6 +30,12 @@ const ExtraDataManager = ({ children }) => {
     },
     [dispatch]
   );
+
+  const updateSession = useCallback(async () => {
+    const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
+
+    await update({ ...refreshedData });
+  }, [session?.refreshToken, update]);
 
   const resetUserParams = useCallback(() => {
     notificationService.stop();
