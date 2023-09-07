@@ -1,7 +1,5 @@
 import { store } from '@/store';
-import { SignalRService } from '@/utils/signalr';
+import { ChatController, NotificationController } from '@/utils/signalr';
 
-const signalR = ({ host }) => new SignalRService({ host, state: store });
-
-export const notificationService = signalR({ host: 'hubs/NotificationHub' });
-export const chatService = signalR({ host: 'hubs/chat' });
+export const notificationService = new NotificationController({ host: 'hubs/NotificationHub', state: store });
+export const chatService = new ChatController({ host: 'hubs/chat', state: store });
