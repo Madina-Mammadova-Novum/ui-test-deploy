@@ -10,7 +10,7 @@ import { ChatConversationPropTypes } from '@/lib/types';
 
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
-import chatService from '@/services/chat';
+import { chatService } from '@/services/signalR';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
@@ -24,7 +24,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    chatService.startConnection(data?.chatId);
+    chatService.initChat(data?.chatId);
   }, [data?.chatId]);
 
   useEffect(() => {
@@ -44,9 +44,14 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
     if (charCode === 13) handleSubmit();
   };
 
+  const handleClose = () => {
+    chatService.stop();
+    onCloseSession();
+  };
+
   return (
     <div className="absolute bg-white border shadow-xmd border-gray-light -left-[370px] -top-44 h-auto w-[360px] rounded-base">
-      <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
+      <СhatConversationHeader data={data} onClose={handleClose} onCollapse={onCollapseSession} />
       <div className="flex flex-col h-[47vh] p-5">
         <ChatConversationBody messages={messages} />
         <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>

@@ -8,8 +8,8 @@ import { signOut } from 'next-auth/react';
 import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
+import { notificationService } from '@/services/signalR';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
-import notificationService from '@/utils/signalr';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const dispatch = useDispatch();

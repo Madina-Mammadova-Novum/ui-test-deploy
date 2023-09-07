@@ -4,18 +4,18 @@ import { getSession } from 'next-auth/react';
 import { getRtURL } from '.';
 import { getSocketConnectionsParams } from './helpers';
 
-import { store } from '@/store';
-import { setConnectionStatus, setFilterParams } from '@/store/entities/notifications/slice';
+import { messageResponseAdapter } from '@/adapters';
+import { setUserConversation } from '@/store/entities/chat/slice';
+import { setFilterParams } from '@/store/entities/notifications/slice';
 
-class NotificationService {
+export class SignalRService {
   constructor({ host, state }) {
     this.connection = null;
-    this.isConnected = false;
     this.store = state;
     this.host = host;
   }
 
-  async start() {
+  async initNotifications() {
     const session = await getSession();
 
     try {
@@ -25,32 +25,57 @@ class NotificationService {
         .build();
 
       await this.connection.start();
-      this.isConnected = true;
-      this.store.dispatch(setConnectionStatus(this.isConnected));
 
-      this.connection.on('ReceiveNotification', async (message) => {
-        if (message) {
+      this.connection.on('ReceiveNotification', async (notification) => {
+        if (notification)
           this.store.dispatch(setFilterParams({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
-        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async initChat(chatId) {
+    const session = await getSession();
+
+    try {
+      this.connection = new HubConnectionBuilder()
+        .withUrl(getRtURL(`${this.host}?chatId=${chatId}`), getSocketConnectionsParams(session?.accessToken))
+        .withAutomaticReconnect()
+        .build();
+
+      await this.connection.start();
+      this.isConnected = true;
+      this.connection.on('ReceiveMessage', async (response) => {
+        const message = await messageResponseAdapter({ data: response, clientId: session?.userId });
+        this.updateMessage(message);
       });
     } catch (err) {
       console.error(err);
       this.isConnected = false;
-      this.store.dispatch(setConnectionStatus(this.isConnected));
     }
+  }
+
+  async sendMessage(message) {
+    try {
+      await this.connection.invoke('SendMessage', message);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  updateMessage(message) {
+    const { messages } = this.store.getState().chat.data.currentUser;
+    const isMessageAlreadyExists = messages.some((msg) => msg.id === message.id);
+
+    if (!isMessageAlreadyExists) this.store.dispatch(setUserConversation(message));
   }
 
   async stop() {
     try {
       await this.connection.stop();
-      this.isConnected = false;
-      this.store.dispatch(setConnectionStatus(this.isConnected));
     } catch (err) {
       console.error(err);
     }
   }
 }
-
-const notificationService = new NotificationService({ host: 'hubs/NotificationHub', state: store });
-
-export default notificationService;
