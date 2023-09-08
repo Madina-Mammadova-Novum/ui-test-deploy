@@ -16,7 +16,7 @@ const schema = yup.object({
   ...offerSchema(),
 });
 
-const OfferForm = ({ children, handleSubmit = () => {} }) => {
+const OfferForm = ({ children, handleSubmit = () => {}, handleValidationError = () => {} }) => {
   const {
     searchData: { products = [], cargoType },
   } = useSelector(searchSelector);
@@ -42,6 +42,7 @@ const OfferForm = ({ children, handleSubmit = () => {} }) => {
     <FormProvider {...methods}>
       <FormManager
         submitAction={handleSubmit}
+        onErrorAction={handleValidationError}
         className="!gap-0"
         submitButton={{
           text: 'Send offer',

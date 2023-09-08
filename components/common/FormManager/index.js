@@ -10,6 +10,7 @@ import { ResetButton, SubmitButton } from '@/elements';
 const FormManager = ({
   children,
   submitAction,
+  onErrorAction = () => {},
   submitButton,
   showReset = false,
   resetAction,
@@ -57,7 +58,7 @@ const FormManager = ({
   }, [showReset, text, variant, size, isSubmitting, disabled, buttonClassName, icon, resetAction, isDirty]);
 
   return (
-    <form className={className} onSubmit={handleSubmit(submitAction)}>
+    <form className={className} onSubmit={handleSubmit(submitAction, onErrorAction)}>
       {children}
       {printCta}
     </form>
