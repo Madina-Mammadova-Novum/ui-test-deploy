@@ -14,11 +14,9 @@ import { chatService } from '@/services/signalR';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
-  const {
-    chats: {
-      currentUser: { data, messages },
-    },
-  } = useSelector(getChatSelector);
+  const { chats } = useSelector(getChatSelector);
+
+  const { data, messages } = chats?.user;
 
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);

@@ -20,6 +20,7 @@ import ChatModal from '@/units/ChatModal';
 import ChatLoadMoreCta from '@/units/ChatModal/ChatLoadMoreCta';
 import ChatModalHeader from '@/units/ChatModal/ChatModalHeader';
 import ChatSession from '@/units/ChatSession';
+import CollapsedChats from '@/units/CollapsedChats';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
@@ -172,4 +173,5 @@ export {
   ChatDeactivate,
   ChatConversationCard,
   ChatMessage,
+  CollapsedChats,
 };

@@ -85,7 +85,7 @@ export class ChatController extends SignalRController {
   }
 
   updateMessage({ message }) {
-    const { messages } = this.store.getState().chat.data.currentUser;
+    const { messages } = this.store.getState().chat.data.user;
     const isMessageAlreadyExists = messages.some((msg) => msg.id === message.id);
 
     if (!isMessageAlreadyExists) this.store.dispatch(setUserConversation(message));

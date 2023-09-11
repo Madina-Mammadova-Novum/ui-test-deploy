@@ -39,6 +39,7 @@
   "rules": {
     "react/prop-types": [2, { "ignore": ["children"] }],
     "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
     "no-console": ["warn", { "allow": ["info", "error"] }],
 
     "max-classes-per-file": ["error", { "ignoreExpressions": true, "max": 5 }],
