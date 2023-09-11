@@ -5,10 +5,11 @@ import ReactCountryFlag from 'react-country-flag';
 
 import { useSession } from 'next-auth/react';
 
+import { NegotiatingTankerInformationPropTypes } from '@/lib/types';
+
 import { tankerInformationAdapter } from '@/adapters/vessel';
 import { Divider, FieldsetContent, Loader, TextRow, Title } from '@/elements';
 import { getOfferDetails } from '@/services/offer';
-import { NegotiatingTankerInformationPropTypes } from '@/lib/types';
 
 const NegotiatingTankerInformation = ({ offerId }) => {
   const [loading, setLoading] = useState(true);

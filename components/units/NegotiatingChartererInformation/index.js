@@ -7,7 +7,6 @@ import { useSession } from 'next-auth/react';
 
 import { ChartererInformationContentPropTypes } from '@/lib/types';
 
-
 import { chartererInformationAdapter } from '@/adapters/vessel';
 import { Loader, TextRow, Title } from '@/elements';
 import { getOfferDetails } from '@/services/offer';
