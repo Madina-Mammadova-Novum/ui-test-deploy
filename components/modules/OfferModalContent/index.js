@@ -5,15 +5,15 @@ import { useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
+import { voyageDetailsAdapter } from '@/adapters/offer';
 import { Button, Dropdown, Title } from '@/elements';
-import { CommentsContent, VoyageDetailsContent } from '@/modules';
+import { CommentsContent } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
 import { searchSelector } from '@/store/selectors';
-import { CommercialOfferTerms, OfferForm, Tabs } from '@/units';
+import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
 import { convertDataToOptions, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
-import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
 
 const tabs = [
   {
@@ -40,6 +40,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
   });
   const { searchData } = useSelector(searchSelector);
   const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchData;
+  const { voyageDetails } = voyageDetailsAdapter({ data: searchData });
 
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
@@ -56,9 +57,9 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsContent data={voyageDetailData} />;
+        return <VoyageDetailsTabContent data={voyageDetails} />;
       case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} />;
+        return <CommentsContent />;
       default:
         return <CommercialOfferTerms tankerId={tankerId} />;
     }

@@ -14,13 +14,13 @@ import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules'
 import { getGeneralDataSelector } from '@/store/selectors';
 import {
   AssignToFleet,
-  ChartererInformationContent,
   DeactivateTankerForm,
   DeleteTankerModal,
   EditDateForm,
   EditPortForm,
   IconWrapper,
   ModalWindow,
+  NegotiatingChartererInformation,
   NegotiatingTankerInformation,
   ReactivateTankerForm,
   UpdateTankerForm,
@@ -94,9 +94,9 @@ const TableCell = ({ cellProps }) => {
         case ACTIONS.VIEW_FAILED_OFFER:
           return <ViewFailedOffer itemId={id} />;
         case ACTIONS.CHARTERER_INFORMATION:
-          return <ChartererInformationContent title="Charterer information" />;
+          return <NegotiatingChartererInformation offerId={id} />;
         case ACTIONS.TANKER_INFORMATION:
-          return <NegotiatingTankerInformation />;
+          return <NegotiatingTankerInformation offerId={id} />;
         case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
           return <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} />;
         case ACTIONS.DELETE_TANKER_FROM_FLEET:

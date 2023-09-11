@@ -263,6 +263,52 @@ export function offerDetailsAdapter({ data, role }) {
   };
 }
 
+export function voyageDetailsAdapter({ data }) {
+  if (!data) return null;
+  const { laycanStart, laycanEnd, loadPort, loadTerminal, dischargePort, dischargeTerminal } = data;
+
+  return {
+    voyageDetails: {
+      dates: [
+        [
+          {
+            key: 'Laycan start',
+            label: transformDate(laycanStart, 'MMM dd, yyyy'),
+          },
+          {
+            key: 'Laycan end',
+            label: transformDate(laycanEnd, 'MMM dd, yyyy'),
+          },
+        ],
+      ],
+      ports: [
+        [
+          {
+            key: 'Load port',
+            label: loadPort?.label,
+            countryCode: loadPort?.countryFlag,
+          },
+          {
+            key: 'Load terminal',
+            label: loadTerminal?.label,
+          },
+        ],
+        [
+          {
+            key: 'Discharge port',
+            label: dischargePort?.label,
+            countryCode: dischargePort?.countryFlag,
+          },
+          {
+            key: 'Discharge terminal',
+            label: dischargeTerminal?.label,
+          },
+        ],
+      ],
+    },
+  };
+}
+
 export function confirmCounterofferDetailsAdapter({ data }) {
   if (!data) return null;
   const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms, comment } = data;
