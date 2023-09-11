@@ -1,5 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
+import { trimTonValue } from '@/utils/helpers';
 
 export function requestSearchVesselAdapter({ data }) {
   if (data === null) return null;
@@ -88,7 +89,7 @@ export function responseSearchVesselAdapter({ data }) {
         },
         {
           title: 'Cubic capacity 98%',
-          description: cubicCapacity,
+          description: `${trimTonValue(cubicCapacity)} m³`,
         },
         {
           title: 'Number of Segregations',
@@ -525,3 +526,149 @@ export function vesselDetailsAdapter({ data }) {
     disponentOwnerCountry: disponentOwnerCountryId && { label: '', value: disponentOwnerCountryId },
   };
 }
+
+export const tankerInformationAdapter = (data) => {
+  if (!data) return [];
+  const {
+    vessel: {
+      company: {
+        estimatedAverageTankerDWT,
+        details: { numberOfVessels, yearsInOperation },
+        registeredOwnerCountry = {},
+        disponentOwnerCountry = {},
+        technicalOperatorCountry = {},
+        commercialOperatorCountry = {},
+      } = {},
+      details: { summerDwt, built, cubicCapacity, segregationCount, loa, beam, typeOfHull },
+      flag,
+      countryCode,
+      estimatedArrival,
+      ballastLeg,
+    } = {},
+  } = data;
+
+  return {
+    ownerInfo: [
+      {
+        title: 'Years of Operation',
+        description: `${yearsInOperation} ${yearsInOperation > 1 ? 'years' : 'year'}`,
+      },
+      {
+        title: 'Number of Tankers',
+        description: `${numberOfVessels} ${numberOfVessels > 1 ? 'tankers' : 'tanker'}`,
+      },
+      {
+        title: 'Estimated average tanker DWT',
+        description: `${estimatedAverageTankerDWT} kt`,
+      },
+    ],
+    tankerInfo: [
+      {
+        title: 'Tanker name',
+        description: 'Hidden name',
+      },
+      {
+        title: 'IMO',
+        description: 'Hidden number',
+      },
+      {
+        title: 'Flag / Country',
+        description: flag,
+        countryCode,
+      },
+      {
+        title: 'DWT',
+        description: `${trimTonValue(summerDwt)} tons`,
+      },
+      {
+        title: 'Estimated Arrival',
+        description: estimatedArrival,
+      },
+      {
+        title: 'Ballast Leg',
+        description: ballastLeg,
+      },
+      {
+        title: 'Ship Age',
+        description: `≤ ${new Date().getFullYear() - built} years`,
+      },
+      {
+        title: 'Cubic Capacity 98%',
+        description: `${trimTonValue(cubicCapacity)} m³`,
+      },
+      {
+        title: 'Number of Segregations',
+        description: segregationCount,
+      },
+      {
+        title: 'LOA',
+        description: `${loa} m`,
+      },
+      {
+        title: 'Beam',
+        description: `${beam} m`,
+      },
+      {
+        title: 'Type of Hull',
+        description: typeOfHull,
+      },
+      {
+        title: 'Country of Registered Owner',
+        description: registeredOwnerCountry?.name,
+        countryCode: registeredOwnerCountry?.countryCode,
+      },
+      {
+        title: 'Country of Disponent Owner',
+        description: disponentOwnerCountry?.name,
+        countryCode: disponentOwnerCountry?.countryCode,
+      },
+      {
+        title: 'Country of Technical Operator',
+        description: technicalOperatorCountry?.name,
+        countryCode: technicalOperatorCountry?.countryCode,
+      },
+      {
+        title: 'Country of Commercial Operator',
+        description: commercialOperatorCountry?.name,
+        countryCode: commercialOperatorCountry?.countryCode,
+      },
+    ],
+  };
+};
+
+export const chartererInformationAdapter = (data) => {
+  if (!data) return [];
+
+  const {
+    charterer: {
+      yearsInOperation,
+      estimatedNumberOfChartersPerYear,
+      averageTonnagePerCharter,
+      registrationCity: {
+        country: { name: registrationnCountryName, codeISO2: registrationCountryCode },
+      },
+    } = {},
+  } = data;
+
+  return [
+    {
+      title: 'Years in Operation',
+      description: `${yearsInOperation} ${yearsInOperation > 1 ? 'years' : 'year'}`,
+    },
+    {
+      title: 'Estimated Number of Charters per Year',
+      description: `${estimatedNumberOfChartersPerYear} ${
+        estimatedNumberOfChartersPerYear > 1 ? 'charters' : 'charter'
+      }`,
+    },
+    {
+      title: 'Average Tonnage per Charter',
+      description: `${averageTonnagePerCharter} kt`,
+    },
+    {
+      title: 'Country of registration',
+      description: registrationnCountryName,
+      countryCode: registrationCountryCode,
+    },
+  ];
+};
