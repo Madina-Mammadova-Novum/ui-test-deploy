@@ -1,20 +1,31 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
 import { ArchiveButton, ConversationButton } from '@/elements';
-import { resetCurrentUser, setCurrentUser } from '@/store/entities/chat/slice';
+import {
+  removeCollapsedChat,
+  resetUser,
+  setCollapsedChat,
+  setConversation,
+  setUser,
+} from '@/store/entities/chat/slice';
+import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatConversationCard, ChatDeactivate } from '@/units';
 
 const ChatSession = ({ data }) => {
   const dispatch = useDispatch();
 
+  const {
+    isActive,
+    chats: { user, collapsed },
+  } = useSelector(getChatSelector);
+
   const [modalState, setModalState] = useState({
     setDeactivate: false,
-    setConversation: false,
     setCargoeInfo: false,
   });
 
@@ -26,9 +37,15 @@ const ChatSession = ({ data }) => {
   };
 
   const handleOpenConversation = () => {
-    handleChangeState('setConversation', true);
+    dispatch(resetUser());
+    dispatch(setConversation(true));
+
+    const existedCollapsed = collapsed.find((chatRoom) => chatRoom?.chatId === data?.chatId);
+
+    if (existedCollapsed) dispatch(removeCollapsedChat(existedCollapsed?.chatId));
+
     dispatch(
-      setCurrentUser({
+      setUser({
         chatId: data?.chatId,
         vessel: { name: data?.vessel?.name, data: data?.vessel?.data, cargoId: data?.vessel?.cargoId },
       })
@@ -36,11 +53,23 @@ const ChatSession = ({ data }) => {
   };
 
   const handleCloseConversation = () => {
-    handleChangeState('setConversation', false);
-    dispatch(resetCurrentUser());
+    dispatch(setConversation(false));
+    dispatch(resetUser());
   };
 
-  const { setDeactivate, setConversation } = modalState;
+  const handleCollapseConversation = () => {
+    dispatch(
+      setCollapsedChat({
+        chatId: user?.data?.chatId,
+        name: user?.data?.vessel?.name,
+        status: null,
+        newMessages: 0,
+      })
+    );
+    dispatch(setConversation(false));
+  };
+
+  const { setDeactivate } = modalState;
 
   const printDeactivateModal = useMemo(() => {
     return (
@@ -54,8 +83,12 @@ const ChatSession = ({ data }) => {
   }, [setDeactivate]);
 
   const printConversationModal = useMemo(() => {
-    return setConversation && <ChatConversation onCloseSession={handleCloseConversation} />;
-  }, [setConversation]);
+    return (
+      isActive && (
+        <ChatConversation onCloseSession={handleCloseConversation} onCollapseSession={handleCollapseConversation} />
+      )
+    );
+  }, [isActive]);
 
   return (
     <>

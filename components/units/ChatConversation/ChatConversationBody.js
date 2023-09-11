@@ -7,9 +7,7 @@ import { ChatMessage } from '@/units';
 
 const ChatConversationBody = ({ messages = [] }) => {
   const printChatMessage = ({ message, id, sender, time }) => {
-    if (sender === ROLES.OWNER)
-      return <ChatMessage key={id} time={time} sender={sender} message={message} isBroker={false} />;
-    return <ChatMessage key={id} time={time} sender={sender} message={message} isBroker />;
+    return <ChatMessage key={id} time={time} sender={sender} message={message} isBroker={sender === ROLES.BROKER} />;
   };
 
   return (

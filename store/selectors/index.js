@@ -77,12 +77,19 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   return {
+    opened: state.opened,
     loading: state.loading,
     search: state.filterParams.searchValue,
     tab: state.filterParams.tabValue,
     limit: state.filterParams.limit,
     chats: state.data,
+    collapsedChats: {
+      counter: state.data.collapsed.length,
+      data: state.data.collapsed,
+    },
     totalActive: state.data.active.length,
     totalArchived: state.data.archived.length,
+    isActive: state.isActiveSession,
+    isDeactivated: state.isDeactivatedSession,
   };
 });
