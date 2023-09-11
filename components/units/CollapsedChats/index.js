@@ -32,7 +32,7 @@ const CollapsedChats = () => {
   );
 
   const handleStartConversation = (id) => {
-    const { chatId, vessel } = active.find((session) => session?.chatId === id);
+    const { chatId, vessel } = active?.find((session) => session?.chatId === id);
 
     onRemove({ id: chatId }).then(() => onActivate({ chatId, vessel }));
 
@@ -59,7 +59,8 @@ const CollapsedChats = () => {
   };
 
   return (
-    data.length > 0 && (
+    data &&
+    data?.length > 0 && (
       <div className="flex z-40 flex-col gap-4 fixed right-3 bottom-24">{data.map(printCollapsedChat)}</div>
     )
   );
