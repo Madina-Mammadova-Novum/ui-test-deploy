@@ -37,7 +37,7 @@ const ChatModal = ({ isOpened, onClose }) => {
 
   const printChatRooms = useMemo(() => {
     return <ChatList data={dataByTab?.slice(0, limit)} />;
-  }, [dataByTab, active.length, limit]);
+  }, [dataByTab, limit]);
 
   return (
     isOpened && (

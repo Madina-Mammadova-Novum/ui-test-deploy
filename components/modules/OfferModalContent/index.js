@@ -7,8 +7,8 @@ import { OfferModalContentPropTypes } from '@/lib/types';
 
 import { voyageDetailsAdapter } from '@/adapters/offer';
 import { Button, Dropdown, Title } from '@/elements';
-import { CommentsContent } from '@/modules';
 import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
+import { CommentsContent } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
 import { searchSelector } from '@/store/selectors';
@@ -120,7 +120,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
             asyncCall={loading}
-            disabled={!responseCountdownOptions.length}
+            disabled={!responseCountdownOptions?.length}
             onChange={handleChangeOption}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />

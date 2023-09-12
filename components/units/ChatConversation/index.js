@@ -22,7 +22,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    chatService.initChat({ chatId: data?.chatId });
+    chatService?.initChat({ chatId: data?.chatId });
   }, [data?.chatId]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    chatService.sendMessage({ message });
+    chatService?.sendMessage({ message });
     setMessage('');
   };
 
@@ -43,7 +43,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   };
 
   const handleClose = () => {
-    chatService.stop();
+    chatService?.stop();
     onCloseSession();
   };
 
