@@ -40,7 +40,7 @@ const CollapsedChats = () => {
   };
 
   const handleCloseConversation = (e, id) => {
-    e.stopPropagation();
+    e?.stopPropagation();
 
     onRemove({ id });
   };

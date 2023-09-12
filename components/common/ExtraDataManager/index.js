@@ -38,7 +38,7 @@ const ExtraDataManager = ({ children }) => {
   }, [session?.refreshToken, update]);
 
   const resetUserParams = useCallback(() => {
-    notificationService.stop();
+    notificationService?.stop();
     setUserData({ role: null, isValid: false });
   }, [dispatch]);
 
@@ -49,7 +49,7 @@ const ExtraDataManager = ({ children }) => {
   useEffect(() => {
     if (session?.accessToken !== undefined) {
       setUserData({ role: session?.role, isValid: true });
-      notificationService.initNotifications();
+      notificationService?.initNotifications();
       dispatch(fetchNotifications(filterParams));
     }
 
