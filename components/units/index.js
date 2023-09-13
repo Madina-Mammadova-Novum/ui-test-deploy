@@ -82,6 +82,7 @@ import ToggleRows from '@/units/ToggleRows';
 import UnassignedFleet from '@/units/UnassignedFleet';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
+import ViewCommentContent from '@/units/ViewCommentContent';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
 
 export * from '@/units/Account';
@@ -172,4 +173,5 @@ export {
   ChatDeactivate,
   ChatConversationCard,
   ChatMessage,
+  ViewCommentContent,
 };

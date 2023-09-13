@@ -64,7 +64,6 @@ const CounterofferForm = ({
       const { errors, message } = error;
       errorToast(parseErrors({ ...errors, ...message }));
     }
-    
   };
 
   return (

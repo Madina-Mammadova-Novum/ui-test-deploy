@@ -505,3 +505,20 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   }
   return failedByText;
 };
+
+export const downloadFile = ({ url, fileName }) => {
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    })
+    .catch(console.error);
+};
+
+export const transformBytes = ({ format = 'mb', value }) => {
+  if (format === 'mb') return value / 1e6;
+  return 0;
+};
