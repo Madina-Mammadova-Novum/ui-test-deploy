@@ -74,7 +74,6 @@ const SendCounterofferFormFields = ({ data }) => {
           placeholder="mt/m³"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
-          disabled
         />
         <Input
           {...register(`products[${index}].quantity`)}
@@ -82,7 +81,6 @@ const SendCounterofferFormFields = ({ data }) => {
           placeholder="tons"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.quantity?.message : null}
-          disabled
         />
       </div>
     );

@@ -53,7 +53,12 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
-            footer={<TankerExpandedFooter tankerId={rowHeader.id} />}
+            footer={
+              <TankerExpandedFooter
+                tankerId={rowHeader.id}
+                tankerData={{ ballastLeg: rowHeader.ballastLeg, estimatedArrivalTime: rowHeader.estimatedArrivalTime }}
+              />
+            }
             expand={expandExactResults}
           >
             <ExpandedContent data={rowHeader.expandedData} />
@@ -73,7 +78,12 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         {data?.partialResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
-            footer={<TankerExpandedFooter tankerId={rowHeader.id} />}
+            footer={
+              <TankerExpandedFooter
+                tankerId={rowHeader.id}
+                tankerData={{ ballastLeg: rowHeader.ballastLeg, estimatedArrivalTime: rowHeader.estimatedArrivalTime }}
+              />
+            }
             expand={expandPartialResults}
           >
             <ExpandedContent data={rowHeader.expandedData} />
