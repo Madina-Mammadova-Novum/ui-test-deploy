@@ -522,3 +522,10 @@ export const transformBytes = ({ format = 'mb', value }) => {
   if (format === 'mb') return value / 1e6;
   return 0;
 };
+
+export const trimTonValue = (number) =>
+  String(number).length > 3
+    ? `${String(number)
+        .slice(0, String(number).length - 3)
+        .replace('.', '')},***`
+    : `${String(number).replace('.', '')},***`;

@@ -18,13 +18,13 @@ const СhatConversationHeader = ({ data, onCollapse, onClose }) => {
           <Button
             type="button"
             onClick={onCollapse}
-            customStyles="!p-0"
+            customStyles="!p-0 h-8"
             buttonProps={{ icon: { before: <CollapseSVG className="fill-white" /> } }}
           />
           <Button
             type="button"
             onClick={onClose}
-            customStyles="!p-0"
+            customStyles="!p-0 h-8"
             buttonProps={{ icon: { before: <CloseSVG className="fill-white" /> } }}
           />
         </div>

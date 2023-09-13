@@ -1,3 +1,5 @@
+import { trimTonValue } from '@/utils/helpers';
+
 export const searchHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
@@ -18,7 +20,7 @@ export const searchHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Dwt',
-      text: dwt ?? '',
+      text: dwt && `${trimTonValue(dwt)} tons`,
     },
     {
       label: 'Estimated arrival',

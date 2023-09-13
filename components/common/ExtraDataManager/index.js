@@ -6,25 +6,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
+import { notificationService } from '@/services/signalR';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
-import { getNotificationsDataSelector, getUserDataSelector } from '@/store/selectors';
-import notificationService from '@/utils/signalr';
+import { getNotificationsDataSelector } from '@/store/selectors';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
   const { data: session, update } = useSession();
 
-  const { isAuthenticated } = useSelector(getUserDataSelector);
-
   const { filterParams } = useSelector(getNotificationsDataSelector);
-
-  const updateSession = useCallback(async () => {
-    const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
-
-    await update({ ...refreshedData });
-  }, [session?.refreshToken, update]);
 
   const getGeneralData = useCallback(() => {
     dispatch(fetchPorts());
@@ -39,35 +31,34 @@ const ExtraDataManager = ({ children }) => {
     [dispatch]
   );
 
-  const setUserParams = () => {
-    notificationService.start();
-    setUserData({ role: session?.role, isValid: true });
-  };
+  const updateSession = useCallback(async () => {
+    const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
+
+    await update({ ...refreshedData });
+  }, [session?.refreshToken, update]);
 
   const resetUserParams = useCallback(() => {
-    notificationService.stop();
+    notificationService?.stop();
     setUserData({ role: null, isValid: false });
   }, [dispatch]);
 
   useEffect(() => {
     getGeneralData();
+  }, []);
 
-    if (session?.accessToken) setUserParams();
+  useEffect(() => {
+    if (session?.accessToken !== undefined) {
+      setUserData({ role: session?.role, isValid: true });
+      notificationService?.initNotifications();
+      dispatch(fetchNotifications(filterParams));
+    }
+
+    if (session?.expires <= Date.now()) updateSession();
 
     return () => {
       resetUserParams();
     };
-  }, [session?.accessToken]);
-
-  useEffect(() => {
-    if (session?.expires <= Date.now()) updateSession();
-  }, [session]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(fetchNotifications(filterParams));
-    }
-  }, [isAuthenticated, filterParams]);
+  }, [filterParams, session]);
 
   return children;
 };

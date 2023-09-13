@@ -12,7 +12,7 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
   return (
     <div>
       <Title level="3">Comments</Title>
-      {data.length && (
+      {!!data.length && (
         <>
           <Title level="5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
             historical negotiating comments

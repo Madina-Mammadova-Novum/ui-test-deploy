@@ -1,3 +1,5 @@
+import { getSession } from 'next-auth/react';
+
 import { transformDate } from '@/utils/date';
 import { clientIdentification, extractTime } from '@/utils/helpers';
 
@@ -58,14 +60,16 @@ export function listOfChatsDataAdapter({ data }) {
   }));
 }
 
-export async function messageResponseAdapter({ data, clientId }) {
+export async function messageResponseAdapter({ data }) {
   if (!data) return {};
+
+  const session = await getSession();
 
   const { body, senderId, createdAt, id } = data;
 
   return {
     id,
-    sender: clientIdentification({ senderId, clientId }),
+    sender: clientIdentification({ senderId, clientId: session?.userId }),
     time: extractTime(createdAt),
     message: body,
   };
