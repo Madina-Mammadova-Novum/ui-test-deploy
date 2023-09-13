@@ -6,7 +6,7 @@ import { prefixtureHeader } from '@/utils/mock';
 const DocumentsContent = ({ rowsData = [] }) => {
   return (
     <div className="table-scroll pt-2.5">
-      <Table headerData={prefixtureHeader} rows={rowsData} />
+      <Table headerData={prefixtureHeader} rows={rowsData} noDataMessage="No Documments Provided" />
     </div>
   );
 };

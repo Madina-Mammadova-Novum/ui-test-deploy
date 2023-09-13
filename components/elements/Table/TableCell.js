@@ -8,7 +8,7 @@ import NextLink from '../NextLink';
 
 import { TableCellPropTypes } from '@/lib/types';
 
-import { HoverTooltip, Placeholder } from '@/elements';
+import { Button, HoverTooltip, Placeholder } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
 import { getGeneralDataSelector } from '@/store/selectors';
@@ -24,8 +24,9 @@ import {
   NegotiatingTankerInformation,
   ReactivateTankerForm,
   UpdateTankerForm,
+  ViewCommentContent,
 } from '@/units';
-import { getCountryById } from '@/utils/helpers';
+import { downloadFile, getCountryById } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
   const { countries } = useSelector(getGeneralDataSelector);
@@ -48,9 +49,11 @@ const TableCell = ({ cellProps }) => {
     fleetId,
     fleetName,
     link,
+    data,
+    downloadData,
   } = cellProps;
 
-  const emptyCell = !value && !editable && !link;
+  const emptyCell = !value && !editable && !link && !downloadData;
 
   const printModal = useCallback(
     (action) => {
@@ -93,6 +96,8 @@ const TableCell = ({ cellProps }) => {
           return <ViewCounteroffer itemId={id} />;
         case ACTIONS.VIEW_FAILED_OFFER:
           return <ViewFailedOffer itemId={id} />;
+        case ACTIONS.VIEW_COMMENTS:
+          return <ViewCommentContent data={data} />;
         case ACTIONS.CHARTERER_INFORMATION:
           return <NegotiatingChartererInformation offerId={id} />;
         case ACTIONS.TANKER_INFORMATION:
@@ -160,6 +165,13 @@ const TableCell = ({ cellProps }) => {
           <NextLink href={link} target="blank" className="bg-white p-0 text-blue hover:text-blue-darker">
             View
           </NextLink>
+        )}
+        {downloadData && (
+          <Button
+            buttonProps={{ text: 'Download', size: 'medium', variant: 'primary' }}
+            customStyles="!px-0"
+            onClick={() => downloadFile(downloadData)}
+          />
         )}
 
         <div className="flex gap-x-2.5">
