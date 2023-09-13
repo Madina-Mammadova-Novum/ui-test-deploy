@@ -9,14 +9,14 @@ import { ROUTES } from '@/lib';
 import OfferModalContent from '@/modules/OfferModalContent';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 
-const TankerExpandedFooter = ({ tankerId }) => {
+const TankerExpandedFooter = ({ tankerId, tankerData }) => {
   const { status } = useSession();
   const isAuthorized = status === 'authenticated';
   return (
     <ExpandableRowFooter>
       {isAuthorized ? (
         <ModalWindow buttonProps={{ variant: 'primary', size: 'large', text: 'Send offer', className: 'ml-auto' }}>
-          <OfferModalContent tankerId={tankerId} />
+          <OfferModalContent tankerId={tankerId} tankerData={tankerData} />
         </ModalWindow>
       ) : (
         <LinkAsButton

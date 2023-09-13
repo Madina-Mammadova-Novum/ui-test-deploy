@@ -31,7 +31,7 @@ const tabs = [
   },
 ];
 
-const OfferModalContent = ({ closeModal, tankerId }) => {
+const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
     responseCountdown: null,
@@ -76,6 +76,7 @@ const OfferModalContent = ({ closeModal, tankerId }) => {
     } = await sendOffer({
       data: {
         ...formData,
+        ...tankerData,
         responseCountdown,
         tankerId,
         laycanStart,

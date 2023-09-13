@@ -67,6 +67,7 @@ export function responseSearchVesselAdapter({ data }) {
     dwt: summerDeadWeight,
     estimatedArrival: estimatedArrivalTime && transformDate(estimatedArrivalTime, 'MMM dd, yyyy'),
     ballastLeg,
+    estimatedArrivalTime,
     expandedData: {
       vesselOwnerData: [
         {
@@ -531,20 +532,24 @@ export const tankerInformationAdapter = (data) => {
   if (!data) return [];
   const {
     vessel: {
-      company: {
-        estimatedAverageTankerDWT,
-        details: { numberOfVessels, yearsInOperation },
-        registeredOwnerCountry = {},
-        disponentOwnerCountry = {},
-        technicalOperatorCountry = {},
-        commercialOperatorCountry = {},
+      company: { estimatedAverageTankerDWT, details: { numberOfVessels, yearsInOperation } } = {},
+      details: {
+        summerDwt,
+        built,
+        cubicCapacity,
+        segregationCount,
+        loa,
+        beam,
+        typeOfHull,
+        flagOfRegistry,
+        registeredOwnerCountry,
+        disponentOwnerCountry,
+        technicalOperatorCountry,
+        commercialOperatorCountry,
       } = {},
-      details: { summerDwt, built, cubicCapacity, segregationCount, loa, beam, typeOfHull },
-      flag,
-      countryCode,
-      estimatedArrival,
-      ballastLeg,
     } = {},
+    ballastLeg,
+    estimatedArrivalTime,
   } = data;
 
   return {
@@ -573,8 +578,8 @@ export const tankerInformationAdapter = (data) => {
       },
       {
         title: 'Flag / Country',
-        description: flag,
-        countryCode,
+        description: flagOfRegistry?.name,
+        countryCode: flagOfRegistry?.codeISO2,
       },
       {
         title: 'DWT',
@@ -582,7 +587,7 @@ export const tankerInformationAdapter = (data) => {
       },
       {
         title: 'Estimated Arrival',
-        description: estimatedArrival,
+        description: transformDate(estimatedArrivalTime, 'MMM dd, yyyy'),
       },
       {
         title: 'Ballast Leg',
@@ -615,22 +620,22 @@ export const tankerInformationAdapter = (data) => {
       {
         title: 'Country of Registered Owner',
         description: registeredOwnerCountry?.name,
-        countryCode: registeredOwnerCountry?.countryCode,
+        countryCode: registeredOwnerCountry?.codeISO2,
       },
       {
         title: 'Country of Disponent Owner',
         description: disponentOwnerCountry?.name,
-        countryCode: disponentOwnerCountry?.countryCode,
+        countryCode: disponentOwnerCountry?.codeISO2,
       },
       {
         title: 'Country of Technical Operator',
         description: technicalOperatorCountry?.name,
-        countryCode: technicalOperatorCountry?.countryCode,
+        countryCode: technicalOperatorCountry?.codeISO2,
       },
       {
         title: 'Country of Commercial Operator',
         description: commercialOperatorCountry?.name,
-        countryCode: commercialOperatorCountry?.countryCode,
+        countryCode: commercialOperatorCountry?.codeISO2,
       },
     ],
   };

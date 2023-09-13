@@ -127,7 +127,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
         label="Demurrage rate"
         name="demurrageRate"
         type="number"
-        placeholder="Daily payment"
+        placeholder="$ per day"
         customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
         disabled={isSubmitting}
@@ -140,7 +140,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
           name="layTime"
           type="number"
           helperText="The maximum laytime is 100 hours"
-          placeholder="Daily payment"
+          placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
           error={errors.layTime?.message}
           disabled={isSubmitting}

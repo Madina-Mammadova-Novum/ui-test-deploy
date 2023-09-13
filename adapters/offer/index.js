@@ -22,6 +22,8 @@ export function sendOfferAdapter({ data }) {
     value,
     minOfferQuantity,
     totalAmount,
+    ballastLeg,
+    estimatedArrivalTime,
     // nor,
   } = data;
   return {
@@ -32,6 +34,8 @@ export function sendOfferAdapter({ data }) {
     loadTerminalId: loadTerminal.value,
     dischargeTerminalId: dischargeTerminal.value,
     vesselId: tankerId,
+    estimatedArrivalTime,
+    ballastLeg,
     freightFormatId: freight.value,
     mt: value,
     totalAmount: +totalAmount.toFixed(0),
