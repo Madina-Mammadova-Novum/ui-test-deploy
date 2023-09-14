@@ -53,7 +53,7 @@ const CounterofferForm = ({
     if (!allowSubmit) return handleConfirmCounteroffer();
 
     const { message: successMessage, error } = await sendCounteroffer({
-      data: { ...formData, offerId, responseCountdown, products },
+      data: { ...formData, offerId, responseCountdown },
       role: session?.role,
     });
     if (!error) {

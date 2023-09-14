@@ -74,11 +74,11 @@ export function sendCounterofferAdapter({ data }) {
     comment,
     freightFormatId: freight?.value,
     countDownTimerSettingId: responseCountdown?.value,
-    cargoes: products.map(({ density, product: { value: productId }, quantity, tolerance }) => ({
+    cargoes: products.map(({ density, product: { value: productId }, quantity }, index) => ({
       productId,
-      referenceDensity: density,
-      quantity,
-      tolerance,
+      referenceDensity: +density,
+      quantity: +quantity,
+      tolerance: data[`products[${index}].tolerance`],
     })),
   };
 }
