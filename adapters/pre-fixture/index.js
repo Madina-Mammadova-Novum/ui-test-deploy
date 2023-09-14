@@ -206,8 +206,6 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     additionalCharterPartyTerms,
   } = data;
 
-  console.log(data.documents, 'WAWA');
-
   return {
     partyInformation: {
       operationYears: yearsInOperation,
