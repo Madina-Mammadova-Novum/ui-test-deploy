@@ -3,7 +3,7 @@ import { trimTonValue } from '@/utils/helpers';
 export const searchHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { tankerName, imo, flag, dwt, estimatedArrival, ballastLeg } = data;
+  const { tankerName, imo, flagOfRegistry, dwt, estimatedArrival, ballastLeg } = data;
 
   return [
     {
@@ -16,7 +16,8 @@ export const searchHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Flag',
-      text: flag ?? '',
+      text: flagOfRegistry?.name,
+      countryCode: flagOfRegistry?.codeISO2,
     },
     {
       label: 'Dwt',

@@ -1,6 +1,8 @@
+import ReactCountryFlag from 'react-country-flag';
+
 import { ExpandedContentPropTypes } from '@/lib/types';
 
-import { IconComponent, TextRow, Title } from '@/elements';
+import { TextRow, Title } from '@/elements';
 
 const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;
@@ -35,9 +37,9 @@ const ExpandedContent = ({ data }) => {
 
             {countryData.length && (
               <div>
-                {countryData.map(({ title, description, icon }) => (
+                {countryData.map(({ title, description, countryCode }) => (
                   <TextRow title={title}>
-                    <IconComponent icon={icon} />
+                    <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={countryCode} />
                     {description}
                   </TextRow>
                 ))}
