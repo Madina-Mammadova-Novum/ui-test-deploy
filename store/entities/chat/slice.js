@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { HYDRATE } from 'next-redux-wrapper';
 
-import { getListOfChats } from './actions';
+import { getChatHistory, getListOfChats } from './actions';
 
 const initialState = {
   connected: false,
@@ -17,6 +17,7 @@ const initialState = {
     archived: [],
     collapsed: [],
     user: {
+      loading: false,
       data: {},
       messages: [],
     },
@@ -34,14 +35,18 @@ const chatSlice = createSlice({
   reducers: {
     searchedData: (state, { payload }) => {
       state.data.searched = state.data.active.filter(({ vessel }) => {
-        return vessel?.name?.includes(payload) || vessel?.imo?.includes(payload) || vessel?.type?.includes(payload);
+        return (
+          vessel.name.includes(payload) ||
+          vessel.imo.includes(payload) ||
+          vessel.products.some(({ name }) => name?.includes(payload))
+        );
       });
     },
     setUser: (state, action) => {
       state.data.user.data = action.payload;
     },
     setUserConversation: (state, { payload }) => {
-      state.data.user.messages.push(payload);
+      state.data.user.messages = payload;
     },
     setCollapsedChat: (state, { payload }) => {
       state.data.collapsed = [...state.data.collapsed, payload];
@@ -82,6 +87,16 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.rejected, (state) => {
       state.loading = false;
+      state.error = 'Error';
+    });
+    builder.addCase(getChatHistory.pending, (state) => {
+      state.data.user.loading = true;
+    });
+    builder.addCase(getChatHistory.fulfilled, (state) => {
+      state.data.user.loading = false;
+    });
+    builder.addCase(getChatHistory.rejected, (state) => {
+      state.data.user.loading = false;
       state.error = 'Error';
     });
   },

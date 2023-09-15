@@ -7,3 +7,11 @@ export const getListOfChatSessions = async () => {
     ...response,
   };
 };
+
+export const getChatHistoryById = async ({ data }) => {
+  const response = await getData(`chat/history?id=${data?.id}&date=${data?.date}`);
+
+  return {
+    ...response,
+  };
+};

@@ -1,7 +1,5 @@
-import { getSession } from 'next-auth/react';
-
-import { transformDate } from '@/utils/date';
-import { clientIdentification, extractTime } from '@/utils/helpers';
+import { convertDate, transformDate } from '@/utils/date';
+import { clientIdentification, extractTime, getListOfDataByDays, sortFromPastToToday } from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
   if (!data) return null;
@@ -30,6 +28,7 @@ function chatDealDataAdapter({ data }) {
       imo: vessel?.imo?.toLowerCase(),
       type: searchedCargo?.cargoType?.toLowerCase(),
       cargoId: searchedCargo?.code,
+      products: products?.map((product) => ({ id: product?.id, name: product?.productName?.toLowerCase() })),
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
         yearsOfOperation: vessel?.company?.details?.yearsInOperation,
@@ -44,7 +43,6 @@ function chatDealDataAdapter({ data }) {
         countryId: searchedCargo?.loadTerminal?.port?.countryId,
       },
       totalQuantity: searchedCargo?.totalQuantity?.toLocaleString(),
-      products: products?.map((product) => ({ id: product?.id, name: product?.productName })),
       laycanStart: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
     },
@@ -60,17 +58,41 @@ export function listOfChatsDataAdapter({ data }) {
   }));
 }
 
-export async function messageResponseAdapter({ data }) {
-  if (!data) return {};
-
-  const session = await getSession();
+export function messageDataAdapter({ data, session }) {
+  if (!data) return null;
 
   const { body, senderId, createdAt, id } = data;
 
   return {
     id,
-    sender: clientIdentification({ senderId, clientId: session?.userId }),
-    time: extractTime(createdAt),
     message: body,
+    time: extractTime(createdAt),
+    sender: clientIdentification({ senderId, session }),
+  };
+}
+
+export function messagesDataAdapter({ data, session }) {
+  const sortedArray = data?.map((el) => el).sort(sortFromPastToToday);
+
+  const messagesByDate = sortedArray.reduce((acc, currentValue) => {
+    const date = convertDate(currentValue?.createdAt);
+
+    acc[date] = [...(acc[date] ?? []), messageDataAdapter({ data: currentValue, session })];
+
+    return acc;
+  }, {});
+
+  return getListOfDataByDays(messagesByDate);
+}
+
+export function chatHistoryResponseAdapter({ data, session }) {
+  if (!data) return null;
+
+  const { messages } = data?.data;
+
+  return {
+    data: {
+      messages: messagesDataAdapter({ data: messages, session }),
+    },
   };
 }

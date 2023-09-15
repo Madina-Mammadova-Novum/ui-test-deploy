@@ -35,8 +35,8 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   const textColor = contrasted ? 'text-white' : 'text-black';
 
   const printAdditionalProducts = ({ id, name }, index) => (
-    <TextRow key={id} title={`Product #${index + 1}`} className="!text-xs-sm">
-      {name || '-'}
+    <TextRow key={id} title={`Product #${index + 1}`} className="!text-xs-sm normal-case">
+      {name.charAt(0).toUpperCase() + name.slice(1) || '-'}
     </TextRow>
   );
 
@@ -59,7 +59,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
           <TextRow title="Laycan" className="whitespace-nowrap !text-xs-sm pb-2.5">
             {additional?.laycanStart} to {additional?.laycanEnd}
           </TextRow>
-          {additional?.products?.map(printAdditionalProducts)}
+          {vessel?.products?.map(printAdditionalProducts)}
           <TextRow title="Total Quantity" className="!text-xs-sm">
             {additional?.totalQuantity || '-'} tons
           </TextRow>

@@ -17,7 +17,7 @@ const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
       case ROLES.CHARTERER:
         return 'charterer';
       case ROLES.BROKER:
-        return 'broker';
+        return 'ship.link broker';
       default:
         return '';
     }

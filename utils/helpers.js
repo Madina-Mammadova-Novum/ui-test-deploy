@@ -1,7 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { HttpTransportType } from '@microsoft/signalr';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
+
+import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { ACTIONS, REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
@@ -429,6 +432,7 @@ export const getCountryById = ({ id, data = [] }) => {
 };
 
 export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
+export const sortFromPastToToday = (a, b) => new Date(a?.createdAt) - new Date(b?.createdAt);
 
 export const formattedBySpaces = ({ string }) => {
   if (!string) return '';
@@ -444,6 +448,18 @@ export const getFormattedDays = () => {
   const yesterday = yesterdayDate.toISOString().split('T')[0];
 
   return { today, yesterday };
+};
+
+export const getListOfDataByDays = (data) => {
+  const { today, yesterday } = getFormattedDays();
+
+  return Object.entries(data).map(([key, value]) => {
+    if (key === today) key = 'Today';
+    else if (key === yesterday) key = 'Yesterday';
+    else key = transformDate(key, 'MMM dd, yyyy');
+
+    return { title: key, data: value };
+  });
 };
 
 export const calculateCountdown = (expiresAt) => {
@@ -496,7 +512,9 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId, clientId }) => (senderId === clientId ? ROLES.OWNER : ROLES.BROKER);
+export const clientIdentification = ({ senderId, session }) => {
+  return senderId === session?.userId ? session?.role : ROLES.BROKER;
+};
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {
   let failedByText = failedBy;

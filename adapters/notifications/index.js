@@ -1,6 +1,5 @@
-/* eslint-disable no-param-reassign */
 import { convertDate, transformDate } from '@/utils/date';
-import { extractTimeFromDate, getFormattedDays, makeId, sortFromCurrentToPast } from '@/utils/helpers';
+import { extractTimeFromDate, getListOfDataByDays, sortFromCurrentToPast } from '@/utils/helpers';
 
 export const notificationsResponseAdapter = (data) => {
   if (!data) return [];
@@ -23,18 +22,6 @@ export const notificationAdapter = (data) => {
   };
 };
 
-const formattedNotificationsDataAdapter = (data) => {
-  const { today, yesterday } = getFormattedDays();
-
-  return Object.entries(data).map(([key, value]) => {
-    if (key === today) key = 'today';
-    else if (key === yesterday) key = 'yesterday';
-    else key = transformDate(key, 'MMM dd, yyyy');
-
-    return { id: makeId(), title: key, data: value };
-  });
-};
-
 export const notificationsDataAdapter = ({ data }) => {
   if (!data) return [];
 
@@ -48,7 +35,7 @@ export const notificationsDataAdapter = ({ data }) => {
     return acc;
   }, {});
 
-  return formattedNotificationsDataAdapter(notificationsByDate);
+  return getListOfDataByDays(notificationsByDate);
 };
 
 export const notificationParamsAdapter = ({ data }) => {

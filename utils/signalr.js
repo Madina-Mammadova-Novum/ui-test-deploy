@@ -4,19 +4,22 @@ import { getSession } from 'next-auth/react';
 import { getRtURL } from '.';
 import { getSocketConnectionsParams } from './helpers';
 
-import { messageResponseAdapter } from '@/adapters';
+import { messagesDataAdapter } from '@/adapters';
 import { setUserConversation } from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
 export class SignalRController {
   constructor({ host, state }) {
     this.connection = null;
+    this.session = null;
     this.store = state;
     this.host = host;
   }
 
   async setupConnection({ path }) {
     const session = await getSession();
+
+    this.session = session;
 
     this.connection = new HubConnectionBuilder()
       .withUrl(getRtURL(path), getSocketConnectionsParams(session?.accessToken))
@@ -59,21 +62,17 @@ export class NotificationController extends SignalRController {
 export class ChatController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
+    this.messages = [];
   }
 
   async initChat({ chatId }) {
     try {
       await this.setupConnection({ path: `${this.host}?chatId=${chatId}` });
 
-      this.connection.on('ReceiveMessage', async (response) => this.recievedMessage({ response }));
+      this.connection.on('ReceiveMessage', async (response) => this.updateMessage({ message: response }));
     } catch (err) {
       console.error(err);
     }
-  }
-
-  async recievedMessage({ response }) {
-    const message = await messageResponseAdapter({ data: response });
-    this.updateMessage({ message });
   }
 
   async sendMessage({ message }) {
@@ -85,9 +84,18 @@ export class ChatController extends SignalRController {
   }
 
   updateMessage({ message }) {
-    const { messages } = this.store.getState().chat.data.user;
-    const isMessageAlreadyExists = messages.some((msg) => msg.id === message.id);
+    const isMessageAlreadyExists = this.messages.some((msg) => msg.id === message.id);
+    if (!isMessageAlreadyExists) this.messages.push(message);
+    this.getMessages();
+  }
 
-    if (!isMessageAlreadyExists) this.store.dispatch(setUserConversation(message));
+  getMessages() {
+    const data = messagesDataAdapter({ data: this.messages, session: this.session });
+    this.store.dispatch(setUserConversation(data));
+  }
+
+  disconnectChat() {
+    this.messages = [];
+    this.stop();
   }
 }

@@ -55,6 +55,7 @@ const NotificationFilter = ({ containerClass, value, onChange, ...rest }) => {
   return (
     <div className={containerClass}>
       <Dropdown
+        isMulti
         label="Filter By:"
         placeholder="All notifications"
         defaultValue={value}
