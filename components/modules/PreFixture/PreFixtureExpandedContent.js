@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
 import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
+import { extendCountdown } from '@/services/offer';
 import { Tabs } from '@/units';
+import { parseErrors } from '@/utils/helpers';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
   {
@@ -19,15 +24,26 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ underNegotiation, detailsData, documentsData }) => {
+const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const allowCountdownExtension = detailsData?.additionalCharterPartyTerms?.length;
+  const { data: session } = useSession();
+
+  const handleExtendCountdown = async () => {
+    const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
+    if (error) {
+      errorToast(parseErrors(error.message));
+    } else {
+      successToast(successMessage);
+    }
+  };
 
   const tabContent = () => {
     switch (currentTab) {
       case 'documents':
         return <DocumentsContent rowsData={documentsData} />;
       default:
-        return <DetailsContent underNegotiation={underNegotiation} data={detailsData} />;
+        return <DetailsContent data={detailsData} />;
     }
   };
 
@@ -58,6 +74,8 @@ const PreFixtureExpandedContent = ({ underNegotiation, detailsData, documentsDat
               xlMax:transform
               xlMax:-translate-x-1/2
             "
+            disabled={!allowCountdownExtension}
+            onClick={handleExtendCountdown}
           />
         </div>
       </div>

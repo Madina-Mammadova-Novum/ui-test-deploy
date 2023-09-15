@@ -1,5 +1,11 @@
 import { requestAcceptPrefixtureAdapter } from '@/adapters';
-import { acceptOfferAdapter, declineOfferAdapter, sendCounterofferAdapter, sendOfferAdapter } from '@/adapters/offer';
+import {
+  acceptOfferAdapter,
+  declineOfferAdapter,
+  requestExtendCountdownAdapter,
+  sendCounterofferAdapter,
+  sendOfferAdapter,
+} from '@/adapters/offer';
 import { ROLES } from '@/lib';
 import { getData, postData } from '@/utils/dataFetching';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -27,7 +33,7 @@ export async function acceptOffer({ data, role }) {
   const body = acceptOfferAdapter({ data });
   const path = role === ROLES.OWNER ? 'offer/accept' : 'offer/charterer/accept';
   const response = await postData(path, body);
-  if (!response.error) response.message = 'You have successfully submitted your application for an offer';
+  if (!response.error) response.message = 'You have successfully accepted the offer';
   return {
     ...response,
   };
@@ -78,6 +84,17 @@ export async function acceptPrefixtureOffer(offerId, role) {
   const path = isOwner ? `account/pre-fixture/owner/accept` : `account/pre-fixture/charterer/accept`;
   const response = await postData(path, body);
   if (!response.error) response.message = 'Your have successfully confirmed Offer';
+  return {
+    ...response,
+  };
+}
+
+export async function extendCountdown({ offerId, role }) {
+  const body = requestExtendCountdownAdapter({ data: offerId });
+  const { isOwner } = getRoleIdentity({ role });
+  const path = isOwner ? `offer/extend-countdown` : `offer/charterer/extend-countdown`;
+  const response = await postData(path, body);
+  if (!response.error) response.message = 'Countdown has been successfully extended';
   return {
     ...response,
   };
