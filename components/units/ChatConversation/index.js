@@ -14,15 +14,17 @@ import { chatService } from '@/services/signalR';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
-  const { chats } = useSelector(getChatSelector);
-
-  const { data, messages } = chats?.user;
+  const { data, messages } = useSelector(getChatSelector).chats?.user;
 
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     chatService?.initChat({ chatId: data?.chatId });
+
+    return () => {
+      chatService?.disconnectChat();
+    };
   }, [data?.chatId]);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   };
 
   const handleClose = () => {
-    chatService?.stop();
+    chatService?.disconnectChat();
     onCloseSession();
   };
 

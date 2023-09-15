@@ -427,13 +427,11 @@ export function tankerInfoAdapter({ data }) {
 export function positionAdapter({ data }) {
   if (!data) return null;
 
-  const { id, name, numberOfActiveVessels, numberOfInactiveVessels } = data;
+  const { id, name } = data;
 
   return {
     id,
     title: name,
-    activeTankers: numberOfActiveVessels,
-    inActiveTankers: numberOfInactiveVessels,
     type: 'assigned',
   };
 }

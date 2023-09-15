@@ -37,7 +37,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
     if (status === 200) {
       if (type === 'assigned') {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
-        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, assignedTankers }));
+        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
       } else if (type === 'unassigned') {
         const { data: unassignedTankers } = await getUnassignedVessels();
         dispatch(updateUnassignedFleet({ id, tankers: unassignedTankers }));

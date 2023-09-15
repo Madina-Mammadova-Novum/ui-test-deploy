@@ -13,8 +13,8 @@ export const vesselsSelector = ({ positions, fleets }) => {
       ...positions.data,
       unassigned: {
         title: 'Unassigned Fleet',
-        activeTankers: fleets.unassignedFleetData.length,
-        inActiveTankers: 0,
+        activeTankers: fleets.unassignedFleetData.filter((fleet) => fleet.appearsInSearch === true).length,
+        inActiveTankers: fleets.unassignedFleetData.filter((fleet) => fleet.appearsInSearch !== true).length,
         type: 'unassigned',
         tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
       },

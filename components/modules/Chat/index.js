@@ -27,7 +27,7 @@ const Chat = () => {
 
   return (
     <>
-      <ChatButton counter={3} onClick={handleOpen} className="fixed right-3 bottom-3" />
+      <ChatButton counter={3} onClick={handleOpen} className="fixed right-3 bottom-3 z-30" />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <CollapsedChats />
     </>
