@@ -69,6 +69,7 @@ const PreFixture = () => {
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          offerId={rowData?.id}
         />
       </ExpandableRow>
     );

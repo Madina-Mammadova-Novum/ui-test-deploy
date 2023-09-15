@@ -369,3 +369,15 @@ export function confirmCounterofferDetailsAdapter({ data }) {
     },
   };
 }
+
+export const requestExtendCountdownAdapter = ({ data }) => {
+  if (!data) return [];
+  return {
+    dealId: data,
+  };
+};
+
+export const responseExtendCountdownAdapter = ({ data }) => {
+  if (!data) return {};
+  return data;
+};

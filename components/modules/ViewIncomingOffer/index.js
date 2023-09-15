@@ -61,7 +61,7 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
         />
       );
     default:
-      return <ViewOffer setStep={setStep} closeModal={closeModal} data={offerDetails} />;
+      return <ViewOffer setStep={setStep} closeModal={closeModal} data={offerDetails} offerId={itemId} />;
   }
 };
 
