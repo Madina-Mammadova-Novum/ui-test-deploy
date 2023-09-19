@@ -25,23 +25,23 @@ const DeleteTankerModal = ({ closeModal, state }) => {
         const { error, message: successMessage } = await removeVesselFromFleet({ id });
         if (error) {
           return console.log(error);
-        } 
-          dispatch(fetchUnassignedFleetData());
-          dispatch(deleteVesselFromFleetsState({ tankerId: id, fleetId }));
-          successToast(successMessage);
-          closeModal();
-        
+        }
+        dispatch(fetchUnassignedFleetData());
+        dispatch(deleteVesselFromFleetsState({ tankerId: id, fleetId }));
+        successToast(successMessage);
+        closeModal();
+
         break;
       }
       case ACTIONS.DELETE_TANKER: {
         const { error, message: successMessage } = await removeVessel({ id });
         if (error) {
           return console.log(error);
-        } 
-          dispatch(deleteVesselFromUnassignedFleetsState(id));
-          successToast(successMessage);
-          closeModal();
-        
+        }
+        dispatch(deleteVesselFromUnassignedFleetsState(id));
+        successToast(successMessage);
+        closeModal();
+
         break;
       }
       default: {
