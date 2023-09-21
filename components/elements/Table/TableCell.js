@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
@@ -55,67 +55,60 @@ const TableCell = ({ cellProps }) => {
 
   const emptyCell = !value && !editable && !link && !downloadData;
 
-  const printModal = useCallback(
-    (action) => {
-      switch (action) {
-        case ACTIONS.PORT:
-          return (
-            <EditPortForm
-              title="edit open port"
-              state={{ name, id, date, available, fleetId, type, action: ACTIONS.PORT }}
-            />
-          );
-        case ACTIONS.DATE:
-          return (
-            <EditDateForm
-              title="edit open date"
-              state={{ name, id, portId, available, fleetId, type, action: ACTIONS.DATE }}
-            />
-          );
-        case ACTIONS.TANKER_DEACTIVATE:
-          return (
-            <DeactivateTankerForm
-              title="Deactivate your Tanker"
-              state={{ name, id, portId, date, available, fleetId, type, action: ACTIONS.TANKER_DEACTIVATE }}
-            />
-          );
-        case ACTIONS.TANKER_REACTIVATE:
-          return (
-            <ReactivateTankerForm
-              title="Reactivate your Tanker"
-              state={{ name, id, fleetId, type, action: ACTIONS.TANKER_REACTIVATE }}
-            />
-          );
-        case ACTIONS.VIEW_OFFER:
-          return <ViewIncomingOffer itemId={id} />;
-        case ACTIONS.VIEW_COUNTEROFFER:
-          return <ViewCounteroffer itemId={id} />;
-        case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
-          return <ViewIncomingOffer itemId={id} />;
-        case ACTIONS.VIEW_SENT_OFFER:
-          return <ViewCounteroffer itemId={id} />;
-        case ACTIONS.VIEW_FAILED_OFFER:
-          return <ViewFailedOffer itemId={id} />;
-        case ACTIONS.VIEW_COMMENTS:
-          return <ViewCommentContent data={data} />;
-        case ACTIONS.CHARTERER_INFORMATION:
-          return <NegotiatingChartererInformation offerId={id} />;
-        case ACTIONS.TANKER_INFORMATION:
-          return <NegotiatingTankerInformation offerId={id} />;
-        case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
-          return <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} />;
-        case ACTIONS.DELETE_TANKER_FROM_FLEET:
-          return <DeleteTankerModal state={{ id, fleetId, name, action }} />;
-        case ACTIONS.DELETE_TANKER:
-          return <DeleteTankerModal state={{ id, name, action }} />;
-        case ACTIONS.ASSIGN_FLEET:
-          return <AssignToFleet tankerId={id} name={name} />;
-        default:
-          return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
-      }
-    },
-    [available, date, fleetId, id, name, portId, type]
-  );
+  const country = getCountryById({ data: countries, id: countryId });
+  const availableCountryCode = countryFlag || country?.countryCode;
+  const port = { value: portId, label: value, countryFlag: availableCountryCode };
+
+  const printModal = (action) => {
+    const state = { id, name, date, available, portId, fleetId, type, port };
+
+    switch (action) {
+      case ACTIONS.TANKER_DEACTIVATE:
+        return (
+          <DeactivateTankerForm
+            title="Deactivate your Tanker"
+            state={{ ...state, action: ACTIONS.TANKER_DEACTIVATE }}
+          />
+        );
+      case ACTIONS.TANKER_REACTIVATE:
+        return (
+          <ReactivateTankerForm
+            title="Reactivate your Tanker"
+            state={{ ...state, action: ACTIONS.TANKER_REACTIVATE }}
+          />
+        );
+      case ACTIONS.PORT:
+        return <EditPortForm title="edit open port" state={{ ...state, action: ACTIONS.PORT }} />;
+      case ACTIONS.DATE:
+        return <EditDateForm title="edit open date" state={{ ...state, action: ACTIONS.DATE }} />;
+      case ACTIONS.VIEW_OFFER:
+        return <ViewIncomingOffer itemId={id} />;
+      case ACTIONS.VIEW_COUNTEROFFER:
+        return <ViewCounteroffer itemId={id} />;
+      case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
+        return <ViewIncomingOffer itemId={id} />;
+      case ACTIONS.VIEW_SENT_OFFER:
+        return <ViewCounteroffer itemId={id} />;
+      case ACTIONS.VIEW_FAILED_OFFER:
+        return <ViewFailedOffer itemId={id} />;
+      case ACTIONS.VIEW_COMMENTS:
+        return <ViewCommentContent data={data} />;
+      case ACTIONS.CHARTERER_INFORMATION:
+        return <NegotiatingChartererInformation offerId={id} />;
+      case ACTIONS.TANKER_INFORMATION:
+        return <NegotiatingTankerInformation offerId={id} />;
+      case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
+        return <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} />;
+      case ACTIONS.DELETE_TANKER_FROM_FLEET:
+        return <DeleteTankerModal state={{ id, fleetId, name, action }} />;
+      case ACTIONS.DELETE_TANKER:
+        return <DeleteTankerModal state={{ id, name, action }} />;
+      case ACTIONS.ASSIGN_FLEET:
+        return <AssignToFleet tankerId={id} name={name} />;
+      default:
+        return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
+    }
+  };
 
   const printValue = useMemo(() => {
     return helperData ? (
@@ -128,13 +121,10 @@ const TableCell = ({ cellProps }) => {
   }, [disabled, helperData, value]);
 
   const printCountryFlag = useMemo(() => {
-    const country = getCountryById({ data: countries, id: countryId });
-    const availableCountryCode = countryFlag || country?.countryCode;
-
     return (
       availableCountryCode && <ReactCountryFlag countryCode={availableCountryCode} svg className="!w-5 !h-4 mr-1.5" />
     );
-  }, [countries, countryFlag, countryId]);
+  }, [availableCountryCode]);
 
   return (
     <td
