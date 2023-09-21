@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable consistent-return */
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -19,7 +20,14 @@ const schema = yup.object({
   ...offerSchema(),
 });
 
-const CounterofferForm = ({ children, allowSubmit = false, data, closeModal }) => {
+const CounterofferForm = ({
+  children,
+  allowSubmit = false,
+  data,
+  closeModal,
+  handleConfirmCounteroffer,
+  handleValidationError,
+}) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
   const { cargoType, products, offerId, responseCountdown } = data;
@@ -42,8 +50,10 @@ const CounterofferForm = ({ children, allowSubmit = false, data, closeModal }) =
   });
 
   const handleSubmit = async (formData) => {
+    if (!allowSubmit) return handleConfirmCounteroffer();
+
     const { message: successMessage, error } = await sendCounteroffer({
-      data: { ...formData, offerId, responseCountdown, products },
+      data: { ...formData, offerId, responseCountdown },
       role: session?.role,
     });
     if (!error) {
@@ -60,14 +70,17 @@ const CounterofferForm = ({ children, allowSubmit = false, data, closeModal }) =
     <FormProvider {...methods}>
       <FormManager
         submitAction={handleSubmit}
+        onErrorAction={handleValidationError}
         className="!gap-0"
         submitButton={
-          allowSubmit && {
-            text: 'Confirm Changes and Send',
-            variant: 'primary',
-            size: 'large',
-            className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1]',
-          }
+          allowSubmit
+            ? {
+                text: 'Confirm Changes and Send',
+                variant: 'primary',
+                size: 'large',
+                className: 'ml-auto',
+              }
+            : { text: 'Proceed', variant: 'primary', size: 'large', className: 'ml-auto' }
         }
       >
         {children}

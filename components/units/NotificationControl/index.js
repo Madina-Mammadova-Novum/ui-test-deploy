@@ -34,8 +34,10 @@ const NotificationControl = () => {
     };
   }, [isWatchedTab, noReadedMessages, noUnreadedMessages]);
 
-  const handleSearch = ({ target: { value } }) => dispatch(setFilterParams({ searchValue: value, skip: 0, take: 50 }));
-  const handleFilter = ({ value }) => dispatch(setFilterParams({ sortedValue: value, skip: 0, take: 50 }));
+  const handleSearch = ({ target: { value } }) => dispatch(setFilterParams({ searchValue: value, skip: 0, take: 500 }));
+  const handleFilter = (options) => {
+    dispatch(setFilterParams({ sortedValue: options.map(({ value }) => value), skip: 0, take: 500 }));
+  };
   const handleTab = ({ target: { value } }) => {
     dispatch(resetNotifications());
     dispatch(setFilterParams({ activeTab: value, watched: isReadValue(value), skip: 0, take: 50 }));

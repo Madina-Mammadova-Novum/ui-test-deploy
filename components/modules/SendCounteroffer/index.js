@@ -8,7 +8,8 @@ import SendCounterofferFormFields from './SendCounterofferFormFields';
 
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
-import { Button, Dropdown } from '@/elements';
+import { Dropdown } from '@/elements';
+import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
@@ -39,7 +40,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
 
-  const { counterofferData, voyageDetails, comments } = offerDetails;
+  const { counterofferData, voyageDetails, comments, countdown } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
 
   const handleCountdownStateChange = (key, value) =>
@@ -64,11 +65,15 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       handleCountdownStateChange('loading', true);
       const { data = [] } = await getCountdownTimer();
       const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+      const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
       handleCountdownStateChange('responseCountdownOptions', convertedOptions);
-      handleCountdownStateChange('responseCountdown', convertedOptions[0]);
+      handleCountdownStateChange('responseCountdown', defaultCountdown);
       handleCountdownStateChange('loading', false);
     })();
   }, []);
+
+  const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
+  const handleValidationError = () => setCurrentTab(tabs[0].value);
 
   return (
     <div className="w-[610px]">
@@ -77,7 +82,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       </ModalHeader>
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time="1h 50m" />
+        <Countdown time={countdown} />
         <div className="pl-4 border-l h-min flex items-center">
           <p className="font-bold max-w-[240px]">
             Set a response countdown timer for the vessel owner to reply to this offer
@@ -86,7 +91,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
             asyncCall={loading}
-            disabled={!responseCountdownOptions.length}
+            disabled={!responseCountdownOptions.length || confirmCounteroffer}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
@@ -96,6 +101,8 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
         allowSubmit={confirmCounteroffer}
         data={{ ...counterofferData, responseCountdown }}
         closeModal={closeModal}
+        handleConfirmCounteroffer={handleConfirmCounteroffer}
+        handleValidationError={handleValidationError}
       >
         {!confirmCounteroffer ? (
           <>
@@ -117,15 +124,6 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           <ConfirmCounteroffer closeModal={closeModal} offerDetails={offerDetails} />
         )}
       </CounterofferForm>
-
-      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end h-10">
-        {!confirmCounteroffer && (
-          <Button
-            onClick={() => setConfirmCounteroffer(true)}
-            buttonProps={{ text: 'Proceed', variant: 'primary', size: 'large' }}
-          />
-        )}
-      </div>
     </div>
   );
 };

@@ -37,7 +37,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       text: countdown ?? '',
       textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
   ];
 };

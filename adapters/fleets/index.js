@@ -11,7 +11,10 @@ import { transformToCapitalize } from '@/utils/helpers';
 export const fleetsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { title, activeTankers, inActiveTankers, fleetId } = data;
+  const { title, fleetId, tankers } = data;
+
+  const activeTankers = tankers?.filter((fleet) => fleet?.status === true).length;
+  const inActiveTankers = tankers?.filter((fleet) => fleet?.status !== true).length;
 
   return [
     {

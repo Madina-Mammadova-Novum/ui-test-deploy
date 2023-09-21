@@ -3,7 +3,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown } from '@/utils/helpers';
+import { calculateCountdown, transformBytes } from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -224,8 +224,8 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       freight: `${freightFormat} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
-      demurragePaymmentTerms: demurragePaymentTerm,
-      paymentTerms: paymentTerm,
+      demurragePaymmentTerms: demurragePaymentTerm?.name,
+      paymentTerms: paymentTerm?.name,
     },
     voyageDetails: {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
@@ -290,6 +290,69 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     },
     additionalCharterPartyTerms,
   };
+};
+
+const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return [];
+
+  const { id, title, comments, name, extention, size, createdAt, url } = data;
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD,
+      value: id,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD,
+      value: title,
+    },
+    {
+      id,
+      editable: comments,
+      data: { comments },
+      actions: [
+        {
+          action: ACTIONS.VIEW_COMMENTS,
+          editIcon: comments && <CommentIcon />,
+        },
+      ],
+    },
+    {
+      id,
+      value: name,
+    },
+    {
+      id,
+      value: extention,
+    },
+    {
+      id,
+      value: `${transformBytes({ value: size }).toFixed(2)} MB`,
+    },
+    {
+      id,
+      value: transformDate(createdAt, 'MMM dd, yyyy'),
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD_BLUE,
+      downloadData: url && {
+        url: `https://shiplink-api.azurewebsites.net/v1/file/get/${url}`,
+        fileName: `${name}${extention}`,
+      },
+    },
+  ];
+};
+
+export const prefixtureDocumentsTabRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => prefixtureDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
 export const prefixtureDetailsAdapter = ({ data, role }) => {

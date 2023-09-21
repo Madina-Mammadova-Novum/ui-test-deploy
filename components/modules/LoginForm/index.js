@@ -41,7 +41,7 @@ const LoginForm = () => {
     try {
       await signIn('credentials', signInAdapter({ data }));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
 
     return () => {

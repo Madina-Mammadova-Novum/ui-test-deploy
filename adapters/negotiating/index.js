@@ -4,7 +4,7 @@ import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown } from '@/utils/helpers';
+import { calculateCountdown, trimTonValue } from '@/utils/helpers';
 
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -151,7 +151,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -177,13 +177,8 @@ export const sentOffersTabRowsDataAdapter = ({ data }) => {
 export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const {
-    id,
-    vessel: { details: { name, summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = {},
-    status,
-    createdAt,
-    expiresAt,
-  } = data;
+  const { id, vessel, status, createdAt, expiresAt } = data;
+  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
 
   return [
     {
@@ -195,7 +190,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
-          actionText: name,
+          actionText: `Tanker #${index}`,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -213,7 +208,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: summerDwt && `${summerDwt} tons`,
+      value: summerDwt && `${trimTonValue(summerDwt)} tons`,
     },
     {
       id,
@@ -229,7 +224,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -318,7 +313,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -344,12 +339,8 @@ export const counteroffersTabRowsDataAdapter = ({ data }) => {
 export const counteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const {
-    vessel: { details: { name, summerDwt } = {}, openDate, openPort: { name: portName, locode: portLocode } = {} } = {},
-    createdAt,
-    expiresAt,
-    id,
-  } = data;
+  const { vessel, createdAt, expiresAt, id } = data;
+  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
 
   return [
     {
@@ -361,7 +352,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
-          actionText: name,
+          actionText: `Tanker #${index}`,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -389,7 +380,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: calculateCountdown(expiresAt),
       type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 24 24" />,
+      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
     {
       id,
@@ -506,7 +497,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const {
-    vessel: { details: { name, openPort: { name: portName, locode: portLocode } = {}, summerDwt } = {}, openDate } = {},
+    vessel: { details: { openPort: { name: portName, locode: portLocode } = {}, summerDwt } = {}, openDate } = {},
     failedAt,
     reason,
     id,
@@ -522,7 +513,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
-          actionText: name,
+          actionText: `Tanker #${index}`,
           actionVariant: 'primary',
           actionSize: 'small',
         },

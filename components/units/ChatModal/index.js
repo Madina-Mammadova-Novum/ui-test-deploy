@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatModalPropTypes } from '@/lib/types';
 
-import { Divider, Loader } from '@/elements';
+import { Divider } from '@/elements';
 import { setChatFilter } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatControl, ChatList, ChatLoadMoreCta, ChatModalHeader } from '@/units';
@@ -18,7 +18,6 @@ const ChatModal = ({ isOpened, onClose }) => {
     tab,
     limit,
     search,
-    loading,
     totalActive,
     totalArchived,
     chats: { active, archived, searched },
@@ -37,8 +36,8 @@ const ChatModal = ({ isOpened, onClose }) => {
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
   const printChatRooms = useMemo(() => {
-    return loading ? <Loader className="h-8 w-8 absolute top-1/2" /> : <ChatList data={dataByTab?.slice(0, limit)} />;
-  }, [loading, dataByTab, active.length, limit]);
+    return <ChatList data={dataByTab?.slice(0, limit)} />;
+  }, [dataByTab, limit]);
 
   return (
     isOpened && (
@@ -47,7 +46,7 @@ const ChatModal = ({ isOpened, onClose }) => {
         <ChatControl tab={tab} search={search} activeCounter={totalActive} archivedCounter={totalArchived} />
         <Divider />
         <div className="relative min-h-[320px]">{printChatRooms}</div>
-        <ChatLoadMoreCta onClick={handleMore} disabled={active.length <= limit || loading} />
+        <ChatLoadMoreCta onClick={handleMore} disabled={active.length <= limit} />
       </div>
     )
   );

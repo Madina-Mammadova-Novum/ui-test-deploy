@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
+import { calculateCountdown, extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -22,6 +22,8 @@ export function sendOfferAdapter({ data }) {
     value,
     minOfferQuantity,
     totalAmount,
+    ballastLeg,
+    estimatedArrivalTime,
     // nor,
   } = data;
   return {
@@ -32,6 +34,8 @@ export function sendOfferAdapter({ data }) {
     loadTerminalId: loadTerminal.value,
     dischargeTerminalId: dischargeTerminal.value,
     vesselId: tankerId,
+    estimatedArrivalTime,
+    ballastLeg,
     freightFormatId: freight.value,
     mt: value,
     totalAmount: +totalAmount.toFixed(0),
@@ -70,11 +74,11 @@ export function sendCounterofferAdapter({ data }) {
     comment,
     freightFormatId: freight?.value,
     countDownTimerSettingId: responseCountdown?.value,
-    cargoes: products.map(({ density, product: { value: productId }, quantity, tolerance }) => ({
+    cargoes: products.map(({ density, product: { value: productId }, quantity }, index) => ({
       productId,
-      referenceDensity: density,
-      quantity,
-      tolerance,
+      referenceDensity: +density,
+      quantity: +quantity,
+      tolerance: data[`products[${index}].tolerance`],
     })),
   };
 }
@@ -142,9 +146,11 @@ export function offerDetailsAdapter({ data, role }) {
     isFailed,
     failureReason,
     failedBy,
+    expiresAt,
   } = data;
 
   return {
+    countdown: calculateCountdown(expiresAt),
     voyageDetails: {
       dates: [
         [
@@ -222,11 +228,11 @@ export function offerDetailsAdapter({ data, role }) {
         },
         {
           key: 'Undisputed demurrage payment terms',
-          label: demurragePaymentTerm,
+          label: demurragePaymentTerm?.name,
         },
         {
           key: 'Payment terms',
-          label: paymentTerm,
+          label: paymentTerm?.name,
         },
       ],
     },
@@ -257,6 +263,52 @@ export function offerDetailsAdapter({ data, role }) {
       isFailed,
       failureReason,
       declinedBy: getAppropriateFailedBy({ failedBy, role }),
+    },
+  };
+}
+
+export function voyageDetailsAdapter({ data }) {
+  if (!data) return null;
+  const { laycanStart, laycanEnd, loadPort, loadTerminal, dischargePort, dischargeTerminal } = data;
+
+  return {
+    voyageDetails: {
+      dates: [
+        [
+          {
+            key: 'Laycan start',
+            label: transformDate(laycanStart, 'MMM dd, yyyy'),
+          },
+          {
+            key: 'Laycan end',
+            label: transformDate(laycanEnd, 'MMM dd, yyyy'),
+          },
+        ],
+      ],
+      ports: [
+        [
+          {
+            key: 'Load port',
+            label: loadPort?.label,
+            countryCode: loadPort?.countryFlag,
+          },
+          {
+            key: 'Load terminal',
+            label: loadTerminal?.label,
+          },
+        ],
+        [
+          {
+            key: 'Discharge port',
+            label: dischargePort?.label,
+            countryCode: dischargePort?.countryFlag,
+          },
+          {
+            key: 'Discharge terminal',
+            label: dischargeTerminal?.label,
+          },
+        ],
+      ],
     },
   };
 }
@@ -317,3 +369,15 @@ export function confirmCounterofferDetailsAdapter({ data }) {
     },
   };
 }
+
+export const requestExtendCountdownAdapter = ({ data }) => {
+  if (!data) return [];
+  return {
+    dealId: data,
+  };
+};
+
+export const responseExtendCountdownAdapter = ({ data }) => {
+  if (!data) return {};
+  return data;
+};

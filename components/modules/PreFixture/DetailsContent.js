@@ -67,8 +67,18 @@ const DetailsContent = ({ data = {} }) => {
             <TextRow title="Freight">{freight}</TextRow>
             <TextRow title="Demurrage rate">{demurrageRate}</TextRow>
             <TextRow title="Laytime + NOR">{laytime}</TextRow>
-            <TextRow title="Undisputed demurrage payment terms">{demurragePaymmentTerms}</TextRow>
-            <TextRow title="Payment term">{paymentTerms}</TextRow>
+            <TextRow
+              title="Undisputed demurrage payment terms"
+              className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline"
+            >
+              {demurragePaymmentTerms}
+            </TextRow>
+            <TextRow
+              title="Payment term"
+              className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline"
+            >
+              {paymentTerms}
+            </TextRow>
           </FieldsetContent>
         </FieldsetWrapper>
 

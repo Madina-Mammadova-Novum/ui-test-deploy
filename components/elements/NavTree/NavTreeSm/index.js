@@ -36,7 +36,7 @@ const NavTreeSm = ({ data, active }) => {
       case 'faq':
         return <QuestionCircleSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'tools':
-        return <ToolsSVG className={customStyles} viewBox="0 0 24 24" />;
+        return <ToolsSVG className={customStyles} viewBox="0 0 14 14" />;
       default:
         return null;
     }

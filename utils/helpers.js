@@ -1,7 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { HttpTransportType } from '@microsoft/signalr';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
+
+import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { ACTIONS, REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
@@ -429,6 +432,7 @@ export const getCountryById = ({ id, data = [] }) => {
 };
 
 export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
+export const sortFromPastToToday = (a, b) => new Date(a?.createdAt) - new Date(b?.createdAt);
 
 export const formattedBySpaces = ({ string }) => {
   if (!string) return '';
@@ -446,13 +450,26 @@ export const getFormattedDays = () => {
   return { today, yesterday };
 };
 
+export const getListOfDataByDays = (data) => {
+  const { today, yesterday } = getFormattedDays();
+
+  return Object.entries(data).map(([key, value]) => {
+    if (key === today) key = 'Today';
+    else if (key === yesterday) key = 'Yesterday';
+    else key = transformDate(key, 'MMM dd, yyyy');
+
+    return { title: key, data: value };
+  });
+};
+
 export const calculateCountdown = (expiresAt) => {
   const milisecondsInSecond = 1000;
   const milisecondsInMinute = 60 * milisecondsInSecond;
   const milisecondsInHour = 60 * milisecondsInMinute;
   const milisecondsInDay = 24 * milisecondsInHour;
-  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(new Date().toISOString()).getTime();
-  const sign = milisecondsUntilExpiration < 0 && '-';
+  const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
+  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
+  const sign = milisecondsUntilExpiration < 0 ? '-' : '';
   const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
 
   const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
@@ -495,7 +512,9 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId, clientId }) => (senderId === clientId ? ROLES.OWNER : ROLES.BROKER);
+export const clientIdentification = ({ senderId, session }) => {
+  return senderId === session?.userId ? session?.role : ROLES.BROKER;
+};
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {
   let failedByText = failedBy;
@@ -504,3 +523,27 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   }
   return failedByText;
 };
+
+export const downloadFile = ({ url, fileName }) => {
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    })
+    .catch(console.error);
+};
+
+export const transformBytes = ({ format = 'mb', value }) => {
+  if (format === 'mb') return value / 1e6;
+  return 0;
+};
+
+export const trimTonValue = (number) =>
+  String(number).length > 3
+    ? `${String(number)
+        .slice(0, String(number).length - 3)
+        .replace('.', '')},***`
+    : `${String(number).replace('.', '')},***`;

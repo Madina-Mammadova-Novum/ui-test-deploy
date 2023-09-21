@@ -46,6 +46,7 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
           goBack={() => setStep('view_offer')}
           showCancelButton={false}
           itemId={itemId}
+          offerDetails={offerDetails}
         />
       );
     case 'offer_counteroffer':
@@ -60,7 +61,7 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
         />
       );
     default:
-      return <ViewOffer setStep={setStep} closeModal={closeModal} data={offerDetails} />;
+      return <ViewOffer setStep={setStep} closeModal={closeModal} data={offerDetails} offerId={itemId} />;
   }
 };
 

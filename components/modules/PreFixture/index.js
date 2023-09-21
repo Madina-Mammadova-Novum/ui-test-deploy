@@ -12,6 +12,7 @@ import {
   chartererPrefixtureHeaderDataAdapter,
   ownerPrefixtureHeaderDataAdapter,
   prefixtureDetailsAdapter,
+  prefixtureDocumentsTabRowsDataAdapter,
 } from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
@@ -65,7 +66,11 @@ const PreFixture = () => {
         }
         expand={toggle}
       >
-        <PreFixtureExpandedContent detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })} />
+        <PreFixtureExpandedContent
+          detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })}
+          documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          offerId={rowData?.id}
+        />
       </ExpandableRow>
     );
   };

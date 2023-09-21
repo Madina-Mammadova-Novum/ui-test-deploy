@@ -23,7 +23,7 @@ const schema = yup.object({
 
 const defaultState = {};
 
-const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, itemId }) => {
+const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, offerDetails, itemId }) => {
   const { data: session } = useSession();
   const methods = useHookFormParams({ state: defaultState, schema });
   const reason = methods.watch('reason');
@@ -60,7 +60,13 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, it
         }}
         className="!gap-0"
       >
-        <OfferDeclineFields closeModal={closeModal} title={title} goBack={goBack} showCancelButton={showCancelButton} />
+        <OfferDeclineFields
+          closeModal={closeModal}
+          title={title}
+          goBack={goBack}
+          showCancelButton={showCancelButton}
+          offerDetails={offerDetails}
+        />
       </FormManager>
     </FormProvider>
   );

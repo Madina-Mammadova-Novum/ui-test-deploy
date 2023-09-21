@@ -36,7 +36,6 @@ const VerifficationUserAccount = () => {
 
   useEffect(() => {
     fetchVeriffUrl();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return !invalidUrl ? (

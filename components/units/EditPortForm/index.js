@@ -23,20 +23,18 @@ const EditPortForm = ({ title, state, closeModal }) => {
     ...portsSchema(),
   });
 
-  const methods = useHookFormParams({ schema });
-
-  const { type, id } = state;
+  const methods = useHookFormParams({ schema, state });
 
   const onSubmit = async ({ port }) => {
     const { error, data, status } = await updateVesselPortAndDate({ ...state, portId: port?.value });
 
     if (status === 200) {
-      if (type === 'assigned') {
+      if (state?.type === 'assigned') {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
-        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, assignedTankers }));
-      } else if (type === 'unassigned') {
+        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
+      } else if (state?.type === 'unassigned') {
         const { data: unassignedTankers } = await getUnassignedVessels();
-        dispatch(updateUnassignedFleet({ id, tankers: unassignedTankers }));
+        dispatch(updateUnassignedFleet({ id: state.fleetId, tankers: unassignedTankers }));
       }
       closeModal();
     }

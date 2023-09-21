@@ -30,7 +30,9 @@ const COTTabContent = ({ data = {} }) => {
       <hr className="my-4" />
 
       {data.details?.map(({ key, label }) => (
-        <TextRow title={key}>{label}</TextRow>
+        <TextRow title={key} className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline">
+          {label}
+        </TextRow>
       ))}
     </div>
   );
