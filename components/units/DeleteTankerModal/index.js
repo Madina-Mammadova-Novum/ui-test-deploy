@@ -10,6 +10,7 @@ import { ACTIONS } from '@/lib/constants';
 import { removeVessel, removeVesselFromFleet } from '@/services/vessel';
 import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { deleteVesselFromFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
+import { successToast } from '@/utils/hooks';
 
 const DeleteTankerModal = ({ closeModal, state }) => {
   const dispatch = useDispatch();
@@ -21,18 +22,26 @@ const DeleteTankerModal = ({ closeModal, state }) => {
     setIsSubmitting(true);
     switch (action) {
       case ACTIONS.DELETE_TANKER_FROM_FLEET: {
-        const { error } = await removeVesselFromFleet({ id });
-        if (error) return console.log(error);
+        const { error, message: successMessage } = await removeVesselFromFleet({ id });
+        if (error) {
+          return console.log(error);
+        }
         dispatch(fetchUnassignedFleetData());
         dispatch(deleteVesselFromFleetsState({ tankerId: id, fleetId }));
+        successToast(successMessage);
         closeModal();
+
         break;
       }
       case ACTIONS.DELETE_TANKER: {
-        const { error } = await removeVessel({ id });
-        if (error) return console.log(error);
+        const { error, message: successMessage } = await removeVessel({ id });
+        if (error) {
+          return console.log(error);
+        }
         dispatch(deleteVesselFromUnassignedFleetsState(id));
+        successToast(successMessage);
         closeModal();
+
         break;
       }
       default: {
