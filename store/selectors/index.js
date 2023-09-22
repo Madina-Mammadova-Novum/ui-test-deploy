@@ -83,12 +83,16 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     tab: state.filterParams.tabValue,
     limit: state.filterParams.limit,
     chats: state.data,
+    support: {
+      chatId: state?.data?.support?.chatId,
+      vessel: state?.data?.support?.broker,
+    },
     collapsedChats: {
       counter: state.data.collapsed.length,
       data: state.data.collapsed,
     },
-    totalActive: state.data.active.length,
-    totalArchived: state.data.archived.length,
+    totalActive: state.data?.active?.length,
+    totalArchived: state.data?.archived?.length,
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
   };

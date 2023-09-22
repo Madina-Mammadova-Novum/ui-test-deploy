@@ -20,14 +20,6 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    chatService?.initChat({ chatId: data?.chatId });
-
-    return () => {
-      chatService?.disconnectChat();
-    };
-  }, [data?.chatId]);
-
-  useEffect(() => {
     if (message !== '') setDisabled(false);
     else setDisabled(true);
   }, [message]);
@@ -39,19 +31,11 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   };
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
-
-  const handleEnter = ({ charCode }) => {
-    if (charCode === 13) handleSubmit();
-  };
-
-  const handleClose = () => {
-    chatService?.disconnectChat();
-    onCloseSession();
-  };
+  const handleEnter = ({ charCode }) => charCode === 13 && handleSubmit();
 
   return (
     <div className="absolute bg-white border shadow-xmd border-gray-light -left-[370px] -top-44 h-auto w-[360px] rounded-base">
-      <СhatConversationHeader data={data} onClose={handleClose} onCollapse={onCollapseSession} />
+      <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
       <div className="flex flex-col h-[47vh] p-5">
         <ChatConversationBody messages={messages} />
         <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>

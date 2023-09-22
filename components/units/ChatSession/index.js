@@ -15,6 +15,7 @@ import {
 } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatConversationCard, ChatDeactivate } from '@/units';
+import { chatService } from '@/services/signalR';
 
 const ChatSession = ({ data }) => {
   const dispatch = useDispatch();
@@ -37,11 +38,12 @@ const ChatSession = ({ data }) => {
   };
 
   const handleOpenConversation = () => {
-    dispatch(resetUser());
+    chatService?.initChat({ chatId: data?.chatId });
     dispatch(setConversation(true));
 
-    const existedCollapsed = collapsed.find((chatRoom) => chatRoom?.chatId === data?.chatId);
+    dispatch(resetUser());
 
+    const existedCollapsed = collapsed.find((chatRoom) => chatRoom?.chatId === data?.chatId);
     if (existedCollapsed) dispatch(removeCollapsedChat(existedCollapsed?.chatId));
 
     dispatch(
@@ -55,6 +57,7 @@ const ChatSession = ({ data }) => {
   const handleCloseConversation = () => {
     dispatch(setConversation(false));
     dispatch(resetUser());
+    chatService.stop();
   };
 
   const handleCollapseConversation = () => {
@@ -95,7 +98,7 @@ const ChatSession = ({ data }) => {
       <div className="flex justify-between">
         <ChatConversationCard data={data} />
         <div className="flex flex-col">
-          <ConversationButton counter={data?.unreaded} onClick={handleOpenConversation} />
+          <ConversationButton counter={data?.unreaded} onClick={() => handleOpenConversation()} />
           <ArchiveButton onClick={() => handleChangeState('setDeactivate', !setDeactivate)} />
           {printDeactivateModal}
         </div>

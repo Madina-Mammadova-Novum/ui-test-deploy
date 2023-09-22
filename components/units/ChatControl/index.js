@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { debounce } from 'lodash';
 
 import ChatSearch from './ChatSearch';
