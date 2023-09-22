@@ -103,7 +103,7 @@ const PreFixture = () => {
         <ToggleRows onToggleClick={setToggle} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{offers?.length && offers.map(printExpandableRow)}</div>
+      <div className="flex flex-col gap-y-2.5">{!!offers?.length && offers.map(printExpandableRow)}</div>
       {printComplexPagination}
     </section>
   );

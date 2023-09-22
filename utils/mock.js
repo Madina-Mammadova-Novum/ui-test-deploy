@@ -1083,6 +1083,12 @@ export const recentActiveCargoesHeader = [
   },
 ];
 
+export const counterofferPointsToImprove = [
+  'Reduce laytime by at least 6 hours',
+  'Increase demurrage rate at least by 5%',
+  'Increase freight rate at least by 5%“',
+];
+
 export const providedEmails = [
   '001.igg.biz',
   '027168.com',

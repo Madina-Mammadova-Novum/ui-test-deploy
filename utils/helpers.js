@@ -462,13 +462,20 @@ export const getListOfDataByDays = (data) => {
   });
 };
 
-export const calculateCountdown = (expiresAt) => {
+export const calculateCountdown = (expiresAt, frozenAt) => {
   const milisecondsInSecond = 1000;
   const milisecondsInMinute = 60 * milisecondsInSecond;
   const milisecondsInHour = 60 * milisecondsInMinute;
   const milisecondsInDay = 24 * milisecondsInHour;
   const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
-  const milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
+
+  let milisecondsUntilExpiration = 0;
+  if (frozenAt) {
+    milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(frozenAt).getTime();
+  } else {
+    milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
+  }
+
   const sign = milisecondsUntilExpiration < 0 ? '-' : '';
   const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
 
@@ -547,3 +554,13 @@ export const trimTonValue = (number) =>
         .slice(0, String(number).length - 3)
         .replace('.', '')},***`
     : `${String(number).replace('.', '')},***`;
+
+export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOffer }) => {
+  const layTimeImprovement = initialOffer.layTime - counterOffer.layTime >= 6;
+  const damurrageRateImprovement = initialOffer.demurrageRate * 1.05 <= counterOffer.demurrageRate;
+  const freightImprovement = initialOffer.value * 1.05 <= counterOffer.value;
+  const isMinimalImprovementMet = [layTimeImprovement, damurrageRateImprovement, freightImprovement].some(
+    (value) => value
+  );
+  return isMinimalImprovementMet;
+};

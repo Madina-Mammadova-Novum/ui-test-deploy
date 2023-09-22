@@ -19,6 +19,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     laycanStart,
     laycanEnd,
     expiresAt,
+    frozenAt,
   } = data;
 
   return [
@@ -52,7 +53,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
+      text: calculateCountdown(expiresAt, frozenAt),
       textStyles: 'text-red',
       coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
