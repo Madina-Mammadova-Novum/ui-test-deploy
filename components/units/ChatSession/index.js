@@ -1,11 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
-import { ArchiveButton, ConversationButton } from '@/elements';
+import { ArchiveButton } from '@/elements';
+import { chatService } from '@/services/signalR';
 import {
   removeCollapsedChat,
   resetUser,
@@ -15,15 +16,11 @@ import {
 } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatConversationCard, ChatDeactivate } from '@/units';
-import { chatService } from '@/services/signalR';
 
 const ChatSession = ({ data }) => {
-  const dispatch = useDispatch();
+  const { user, collapsed } = useSelector(getChatSelector).chats;
 
-  const {
-    isActive,
-    chats: { user, collapsed },
-  } = useSelector(getChatSelector);
+  const dispatch = useDispatch();
 
   const [modalState, setModalState] = useState({
     setDeactivate: false,
@@ -35,6 +32,16 @@ const ChatSession = ({ data }) => {
       ...prevState,
       [key]: value,
     }));
+  };
+
+  const handleArchiveConversation = (e) => {
+    e.stopPropagation();
+    handleChangeState('setDeactivate', !setDeactivate);
+  };
+
+  const handleDeactivateConversation = (e) => {
+    e.stopPropagation();
+    handleChangeState('setDeactivate', false);
   };
 
   const handleOpenConversation = () => {
@@ -74,36 +81,21 @@ const ChatSession = ({ data }) => {
 
   const { setDeactivate } = modalState;
 
-  const printDeactivateModal = useMemo(() => {
-    return (
-      setDeactivate && (
-        <ChatDeactivate
-          title="Do you want to archive this chat?"
-          onCancel={() => handleChangeState('setDeactivate', false)}
-        />
-      )
-    );
-  }, [setDeactivate]);
-
-  const printConversationModal = useMemo(() => {
-    return (
-      isActive && (
-        <ChatConversation onCloseSession={handleCloseConversation} onCollapseSession={handleCollapseConversation} />
-      )
-    );
-  }, [isActive]);
-
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between cursor-pointer" aria-hidden onClick={() => handleOpenConversation()}>
         <ChatConversationCard data={data} />
-        <div className="flex flex-col">
-          <ConversationButton counter={data?.unreaded} onClick={() => handleOpenConversation()} />
-          <ArchiveButton onClick={() => handleChangeState('setDeactivate', !setDeactivate)} />
-          {printDeactivateModal}
+        <div className="flex flex-col justify-end">
+          <ArchiveButton onClick={(e) => handleArchiveConversation(e)} />
+          {setDeactivate && (
+            <ChatDeactivate
+              title="Do you want to archive this chat?"
+              onCancel={(e) => handleDeactivateConversation(e)}
+            />
+          )}
         </div>
       </div>
-      {printConversationModal}
+      <ChatConversation onCloseSession={handleCloseConversation} onCollapseSession={handleCollapseConversation} />
     </>
   );
 };

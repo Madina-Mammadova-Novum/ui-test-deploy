@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatSupportPropTypes } from '@/lib/types';
 
 import SupportSVG from '@/assets/images/support.svg';
-import { ConversationButton, Title } from '@/elements';
+import { Title } from '@/elements';
 import { chatService } from '@/services/signalR';
 import { resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
@@ -15,7 +15,8 @@ const ChatSupport = ({ title, description }) => {
 
   const { support } = useSelector(getChatSelector);
 
-  const handleOpenConversation = () => {
+  const handleOpenConversation = (e) => {
+    e.stopPropagation();
     dispatch(resetUser());
 
     chatService.initChat({ chatId: support?.chatId });
@@ -25,19 +26,16 @@ const ChatSupport = ({ title, description }) => {
   };
 
   return (
-    <div className="flex justify-between items-center">
-      <div className="text-black flex items-center gap-x-3">
+    <div aria-hidden onClick={handleOpenConversation}>
+      <div className="text-black flex items-center gap-x-3 cursor-pointer">
         <div className="w-0.5 h-10 rounded-xl bg-blue" />
         <SupportSVG />
-        <div className="flex flex-col">
-          <Title level="6" className="text-sm font-semibold">
+        <div className="flex flex-col  w-5/6">
+          <Title level="6" className="text-sm font-semibold hover:text-blue">
             {title}
           </Title>
           {description && <p className="text-xsm">{description}</p>}
         </div>
-      </div>
-      <div className="flex flex-col items-center gap-y-1.5 pr-2">
-        <ConversationButton onClick={handleOpenConversation} />
       </div>
     </div>
   );
