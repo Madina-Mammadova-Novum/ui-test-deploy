@@ -13,7 +13,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
       code,
       cargoType: { name: cargoName } = {},
       totalQuantity,
-      loadTerminal: { port: { name: portName, locode } = {} } = {},
+      loadTerminal: { port: { name: portName, locode, country } = {} } = {},
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     laycanStart,
@@ -42,6 +42,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
+      countryCode: country?.codeISO2,
     },
     {
       label: 'Laycan start',
@@ -333,7 +334,7 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: `${transformBytes({ value: size }).toFixed(2)} MB`,
+      value: `${+transformBytes({ value: size }).toFixed(2) || 0.01} MB`,
     },
     {
       id,

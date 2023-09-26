@@ -31,22 +31,22 @@ const CounterofferForm = ({
 }) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
+  
   const { products, offerId, responseCountdown } = data;
+
   const methods = useHookFormParams({
     schema,
     state: {
       ...data,
       ...products
         .filter((product) => product)
-        .reduce(
-          (_, curr, index) => ({
-            [`products[${index}].product`]: curr.product,
-            [`products[${index}].density`]: curr.density,
-            [`products[${index}].tolerance`]: curr.tolerance,
-            [`products[${index}].quantity`]: curr.quantity,
-          }),
-          {}
-        ),
+        .reduce((resulted, curr, index) => {
+          resulted[`products[${index}].product`] = curr.product;
+          resulted[`products[${index}].density`] = curr.density;
+          resulted[`products[${index}].tolerance`] = curr.tolerance;
+          resulted[`products[${index}].quantity`] = curr.quantity;
+          return resulted;
+        }, {}),
     },
   });
 
