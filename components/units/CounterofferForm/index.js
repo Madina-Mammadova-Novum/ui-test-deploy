@@ -10,10 +10,11 @@ import * as yup from 'yup';
 import { CounterofferFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
+import { COUNTEROFFER_REQUIREMENTS_ERROR } from '@/lib/constants';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
-import { parseErrors } from '@/utils/helpers';
+import { counterofferMinimumImprovementAchieved, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -30,12 +31,13 @@ const CounterofferForm = ({
 }) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
-  const { cargoType, products, offerId, responseCountdown } = data;
+  
+  const { products, offerId, responseCountdown } = data;
 
   const methods = useHookFormParams({
     schema,
     state: {
-      cargoType,
+      ...data,
       ...products
         .filter((product) => product)
         .reduce((resulted, curr, index) => {
@@ -49,6 +51,8 @@ const CounterofferForm = ({
   });
 
   const handleSubmit = async (formData) => {
+    if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData }))
+      return errorToast(COUNTEROFFER_REQUIREMENTS_ERROR);
     if (!allowSubmit) return handleConfirmCounteroffer();
 
     const { message: successMessage, error } = await sendCounteroffer({

@@ -147,6 +147,7 @@ export function offerDetailsAdapter({ data, role }) {
     failureReason,
     failedBy,
     expiresAt,
+    freightFormat,
   } = data;
 
   return {
@@ -258,6 +259,21 @@ export function offerDetailsAdapter({ data, role }) {
         tolerance,
         quantity: minQuantity,
       })),
+      value: freight,
+      demurrageRate,
+      layTime,
+      undisputedDemurrage: {
+        label: demurragePaymentTerm?.name,
+        value: demurragePaymentTerm?.id,
+      },
+      paymentTerms: {
+        label: paymentTerm?.name,
+        value: paymentTerm?.id,
+      },
+      freight: {
+        label: freightFormat?.value,
+        value: freightFormat?.id,
+      },
     },
     failedOfferData: {
       isFailed,
