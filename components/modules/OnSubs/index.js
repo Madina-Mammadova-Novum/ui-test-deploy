@@ -1,44 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
 
-import { ownerOnSubsHeaderDataAdapter } from '@/adapters';
+import { chartererOnSubsHeaderDataAdapter, onSubsDetailsAdapter, ownerOnSubsHeaderDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
-import { getUserOnSubs } from '@/services';
+import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
+import { onSubsSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFetch, useFilters } from '@/utils/hooks';
+import { useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
-  const [toggle, setToggle] = useState({ value: false });
   const { data: session } = useSession();
+  const role = useMemo(() => session?.role, [session?.role]);
   const { isOwner } = getRoleIdentity({ role: session?.role });
-  const [data, isLoading] = useFetch(getUserOnSubs);
+  const [toggle, setToggle] = useState({ value: false });
+  const dispatch = useDispatch();
+  const {
+    data: { offers, totalPages },
+    loading,
+  } = useSelector(onSubsSelector);
   const initialPagesStore = {
     currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
     perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
   };
 
-  const {
-    numberOfPages,
-    items,
-    currentPage,
-    handlePageChange,
-    handleSelectedPageChange,
-    selectedPage,
-    onChangeOffers,
-    perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data);
+  const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
+    initialPagesStore.perPage,
+    initialPagesStore.currentPage,
+    offers
+  );
 
-  const printExpandableRow = (rowData, underRecap) => {
-    const rowHeader = ownerOnSubsHeaderDataAdapter({ data: rowData });
+  useEffect(() => {
+    if (role) {
+      dispatch(fetchOnSubsOffers({ role: session?.role, page: currentPage, perPage }));
+    }
+  }, [role, currentPage, perPage]);
+
+  const printExpandableRow = (rowData) => {
+    const rowHeader = isOwner
+      ? ownerOnSubsHeaderDataAdapter({ data: rowData })
+      : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
     return (
       <ExpandableRow
@@ -49,14 +59,29 @@ const OnSubs = () => {
           />
         }
         expand={toggle}
-        footer={<OnSubsExpandedFooter underRecap={underRecap} />}
+        footer={<OnSubsExpandedFooter underRecap />}
       >
-        <OnSubsExpandedContent />
+        <OnSubsExpandedContent detailsData={onSubsDetailsAdapter({ data: rowData, role: session?.role })} />
       </ExpandableRow>
     );
   };
 
-  if (isLoading) {
+  const printComplexPagination = useMemo(
+    () => (
+      <ComplexPagination
+        currentPage={currentPage}
+        numberOfPages={totalPages}
+        onPageChange={handlePageChange}
+        onSelectedPageChange={handleSelectedPageChange}
+        pages={selectedPage}
+        onChangeOffers={onChangeOffers}
+        perPage={perPage}
+      />
+    ),
+    [currentPage, selectedPage, perPage]
+  );
+
+  if (loading) {
     return <Loader className="h-8 w-8 absolute top-1/2" />;
   }
 
@@ -70,17 +95,8 @@ const OnSubs = () => {
         <ToggleRows onToggleClick={setToggle} />
       </div>
 
-      <div className="flex flex-col gap-y-2.5">{items && items.map(printExpandableRow)}</div>
-
-      <ComplexPagination
-        currentPage={currentPage}
-        numberOfPages={numberOfPages}
-        onPageChange={handlePageChange}
-        onSelectedPageChange={handleSelectedPageChange}
-        pages={selectedPage}
-        onChangeOffers={onChangeOffers}
-        perPage={perPage}
-      />
+      <div className="flex flex-col gap-y-2.5">{offers?.length && offers.map(printExpandableRow)}</div>
+      {printComplexPagination}
     </section>
   );
 };

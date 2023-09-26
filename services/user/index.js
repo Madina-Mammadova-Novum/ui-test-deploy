@@ -251,3 +251,17 @@ export async function getUserFleets() {
     ...response,
   };
 }
+
+export async function getOwnerOnSubs({ page, perPage }) {
+  const response = await postData(`account/on-subs/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
+  return {
+    ...response,
+  };
+}
+
+export async function getChartererOnSubs({ page, perPage }) {
+  const response = await postData(`account/on-subs/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
+  return {
+    ...response,
+  };
+}

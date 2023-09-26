@@ -28,6 +28,7 @@ export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
 export const preFixtureSelector = ({ preFixture }) => preFixture;
+export const onSubsSelector = ({ onSubs }) => onSubs;
 export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
