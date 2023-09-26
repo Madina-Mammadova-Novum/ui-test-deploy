@@ -271,8 +271,8 @@ export function offerDetailsAdapter({ data, role }) {
         value: paymentTerm?.id,
       },
       freight: {
-        label: 'unknown',
-        value: freightFormat,
+        label: freightFormat?.value,
+        value: freightFormat?.id,
       },
     },
     failedOfferData: {

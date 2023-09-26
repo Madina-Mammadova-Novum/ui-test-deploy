@@ -167,7 +167,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
         />
 
         <FormDropdown
-          label="payemnt terms"
+          label="payment terms"
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
