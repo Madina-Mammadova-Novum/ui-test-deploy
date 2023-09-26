@@ -183,44 +183,61 @@ export const useMounted = () => {
   return mounted.current;
 };
 
-export const useFilters = (itemsPerPage, initialPage, data, sortValue) => {
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [perPage, setPerPage] = useState(itemsPerPage);
-  const [option, setSelectedPage] = useState([]);
+export const useFilters = ({ itemsPerPage, initialPage, data, sortValue }) => {
+  const prevItemsPerPageRef = useRef(itemsPerPage);
 
-  const [ascSort, setAscSort] = useState(sortValue === SORT_OPTIONS.asc);
-  const prevItemsPerPageRef = useRef(perPage);
+  const [state, setState] = useState({
+    currentPage: initialPage,
+    perPage: itemsPerPage,
+    ascSort: sortValue === SORT_OPTIONS.asc,
+    option: [],
+  });
+
+  const { currentPage, perPage, ascSort, option } = state;
+
+  const handleChangeState = (key, value) => {
+    setState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  const getNumberOfPages = useCallback(() => Math.ceil(data?.length / perPage), [data, perPage]);
+  const getItems = useCallback(
+    () => data?.slice((currentPage - 1) * perPage, currentPage * perPage),
+    [data, currentPage, perPage]
+  );
+  const getSortedItems = useCallback(
+    (items) => {
+      if (!items || !items[0]?.type) {
+        return items;
+      }
+      return [...items].sort((a, b) => sortByType(a, b, ascSort));
+    },
+    [ascSort]
+  );
+
+  const items = getItems();
+  const numberOfPages = getNumberOfPages();
+  const options = getFilledArray(numberOfPages)?.map(navigationPagesAdapter);
+  const sortedItems = getSortedItems(items);
+
+  const handlePageChange = (page) => handleChangeState('currentPage', page.selected + 1);
+  const handleSelectedPageChange = ({ value }) => handleChangeState('currentPage', value);
+  const onChangeOffers = ({ value }) => handleChangeState('perPage', value);
+  const handleSortChange = ({ value }) => handleChangeState('ascSort', value === 'Asc');
+  const handleOptionsChange = () => handleChangeState('option', options);
+
+  useEffect(() => {
+    handleOptionsChange();
+  }, [data]);
 
   useEffect(() => {
     if (perPage !== prevItemsPerPageRef.current) {
-      setCurrentPage(1);
+      handleChangeState('currentPage', 1);
+      prevItemsPerPageRef.current = perPage;
     }
   }, [perPage]);
-
-  const numberOfPages = Math.ceil(data?.length / perPage);
-  const itemsFrom = (currentPage - 1) * perPage;
-  const items = data?.slice(itemsFrom, itemsFrom + perPage);
-  // We checking if type presented only after that we can sort
-  const sortedItems = items?.[0]?.type ? items.sort((a, b) => sortByType(a, b, ascSort)) : items;
-
-  useEffect(() => {
-    setSelectedPage(getFilledArray(numberOfPages)?.map(navigationPagesAdapter));
-  }, [data, numberOfPages]);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page.selected + 1);
-  };
-
-  const handleSelectedPageChange = ({ value }) => {
-    setCurrentPage(value);
-  };
-  const onChangeOffers = ({ value }) => {
-    setPerPage(value);
-  };
-
-  const handleSortChange = ({ value }) => {
-    setAscSort(value === 'Asc');
-  };
 
   if (!data) return [];
 

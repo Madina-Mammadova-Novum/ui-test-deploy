@@ -4,7 +4,7 @@ import { NextLinkPropTypes } from '@/lib/types';
 
 const NextLink = ({ children, href, className = '', target = null, ...rest }) => {
   return (
-    <Link href={href} className={className} target={target} {...rest}>
+    <Link href={href} prefetch className={className} target={target} {...rest}>
       {children}
     </Link>
   );

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Dropdown, Loader, Title } from '@/elements';
-import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { PAGE_STATE } from '@/lib/constants';
 import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { getUserVesselsSelector } from '@/store/selectors';
@@ -12,34 +12,26 @@ import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 const AccountPositions = () => {
-  const [toggle, setToggle] = useState({ value: false });
-
   const dispatch = useDispatch();
 
-  const { vessels, unassignedVessel, totalPages, loading } = useSelector(getUserVesselsSelector);
-
-  const [userStore, setUserStore] = useState({
-    sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
-    sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
-    page: NAVIGATION_PARAMS.CURRENT_PAGE,
-    pageSize: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
-  });
-
-  const { page, pageSize, sortOptions, sortValue } = userStore;
+  const [pageState, setPageState] = useState(PAGE_STATE);
+  const [toggle, setToggle] = useState({ value: false });
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
-  /* Change handler by key-value for userStore */
+  const { vessels, unassignedVessel, totalPages, loading } = useSelector(getUserVesselsSelector);
+  const { page, pageSize, sortOptions, sortValue } = pageState;
 
+  /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
-    setUserStore((prevState) => ({
+    setPageState((prevState) => ({
       ...prevState,
       [key]: value,
     }));
   };
 
   const { currentPage, handleSortChange, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters(pageSize, page, vessels, sortValue.value);
+    useFilters({ data: vessels, itemsPerPage: pageSize, initialPage: page, sortValue });
 
   /* fetching user positions data */
 
@@ -49,7 +41,7 @@ const AccountPositions = () => {
 
   useEffect(() => {
     dispatch(fetchUserVessels({ page: currentPage, perPage, sortBy: sortValue.value }));
-  }, [currentPage, dispatch, perPage, sortValue]);
+  }, [currentPage, perPage, sortValue]);
 
   const handleChange = (option) => {
     handleSortChange(option);
@@ -85,7 +77,6 @@ const AccountPositions = () => {
           />
         </div>
       </div>
-
       <div className="grow">
         <ExpandableCard
           data={unassignedVessel}
@@ -95,7 +86,6 @@ const AccountPositions = () => {
         />
         {printContent}
       </div>
-
       <ComplexPagination
         label="fleets"
         currentPage={currentPage}

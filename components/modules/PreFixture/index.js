@@ -15,7 +15,7 @@ import {
   prefixtureDocumentsTabRowsDataAdapter,
 } from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
-import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
 import { preFixtureSelector } from '@/store/selectors';
@@ -29,24 +29,21 @@ const PreFixture = () => {
   const { isOwner } = getRoleIdentity({ role });
   const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
+
   const {
-    data: { offers, totalPages },
     loading,
+    data: { offers, totalPages },
   } = useSelector(preFixtureSelector);
 
-  const initialPagesStore = {
-    currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
-    perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
-  };
+  const { page, pageSize } = PAGE_STATE;
+
   const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    initialPagesStore.perPage,
-    initialPagesStore.currentPage,
-    offers
+    { initialPage: page, itemsPerPage: pageSize, data: offers }
   );
 
   useEffect(() => {
     if (role) {
-      dispatch(fetchPrefixtureOffers({ role: session?.role, page: currentPage, perPage }));
+      dispatch(fetchPrefixtureOffers({ role, page: currentPage, perPage }));
     }
   }, [role, currentPage, perPage]);
 
@@ -74,8 +71,24 @@ const PreFixture = () => {
       </ExpandableRow>
     );
   };
-  const printComplexPagination = useMemo(
-    () => (
+
+  const printContent = useMemo(() => {
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (offers) return offers.map(printExpandableRow);
+
+    return <Title level="3">No pre-fixture positions</Title>;
+  }, [loading, offers, printExpandableRow]);
+
+  return (
+    <section className="flex min-h-[90vh] flex-col gap-y-5">
+      <div className="flex justify-between items-center pt-5">
+        <div className="flex flex-col">
+          <Label className="text-xs-sm">Offer stage #2</Label>
+          <Title level="1">Pre-fixture</Title>
+        </div>
+        <ToggleRows onToggleClick={setToggle} />
+      </div>
+      <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
       <ComplexPagination
         currentPage={currentPage}
         numberOfPages={totalPages}
@@ -85,26 +98,6 @@ const PreFixture = () => {
         onChangeOffers={onChangeOffers}
         perPage={perPage}
       />
-    ),
-    [currentPage, selectedPage, perPage]
-  );
-
-  if (loading) {
-    return <Loader className="h-8 w-8 absolute top-1/2" />;
-  }
-
-  return (
-    <section>
-      <div className="flex justify-between items-center py-5">
-        <div className="flex flex-col">
-          <Label className="text-xs-sm">Offer stage #2</Label>
-          <Title level={1}>Pre-fixture</Title>
-        </div>
-        <ToggleRows onToggleClick={setToggle} />
-      </div>
-
-      <div className="flex flex-col gap-y-2.5">{offers?.length && offers.map(printExpandableRow)}</div>
-      {printComplexPagination}
     </section>
   );
 };
