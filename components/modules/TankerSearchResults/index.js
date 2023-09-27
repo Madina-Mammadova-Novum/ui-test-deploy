@@ -5,11 +5,11 @@ import React, { useState } from 'react';
 import { TankerSearchResultPropTypes } from '@/lib/types';
 
 import { searchHeaderDataAdapter } from '@/adapters/search';
-import { Dropdown, ExpandableCardHeader, NotFound, TextRow, Title } from '@/elements';
+import { Dropdown, ExpandableCardHeader, TextRow, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
-import { ToggleRows } from '@/units';
+import { SearchNotFound, ToggleRows } from '@/units';
 
 const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
   const [expandExactResults, setExpandExactResults] = useState({ value: false });
@@ -92,7 +92,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
       </div>
     </>
   ) : (
-    <NotFound />
+    <SearchNotFound />
   );
 };
 
