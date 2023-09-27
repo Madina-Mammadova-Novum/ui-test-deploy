@@ -31,7 +31,7 @@ const CounterofferForm = ({
 }) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
-  
+
   const { products, offerId, responseCountdown } = data;
 
   const methods = useHookFormParams({

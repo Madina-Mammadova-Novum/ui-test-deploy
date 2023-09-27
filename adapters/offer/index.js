@@ -170,7 +170,7 @@ export function offerDetailsAdapter({ data, role }) {
           {
             key: 'Load port',
             label: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
-            countryCode: 'us',
+            countryCode: loadTerminal?.port?.country?.codeISO2,
           },
           {
             key: 'Load terminal',
@@ -183,7 +183,7 @@ export function offerDetailsAdapter({ data, role }) {
             label: `${dischargeTerminal?.port?.name}${
               dischargeTerminal?.port?.locode && `, ${dischargeTerminal?.port?.locode}`
             }`,
-            countryCode: 'us',
+            countryCode: dischargeTerminal?.port?.country?.codeISO2,
           },
           {
             key: 'Discharge terminal',
