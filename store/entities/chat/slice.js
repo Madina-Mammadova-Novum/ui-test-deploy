@@ -12,10 +12,16 @@ const initialState = {
   isActiveSession: false,
   isDeactivatedSession: false,
   data: {
-    searched: [],
     active: [],
     archived: [],
+    searched: [],
     collapsed: [],
+    support: {
+      chatId: null,
+      created: null,
+      broker: null,
+      unreadedMessages: 0,
+    },
     user: {
       loading: false,
       data: {},
@@ -83,7 +89,8 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.data.active = payload.data;
+      state.data.active = payload.active;
+      state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {
       state.loading = false;

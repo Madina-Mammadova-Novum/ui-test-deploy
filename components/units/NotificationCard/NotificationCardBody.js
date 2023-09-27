@@ -13,7 +13,7 @@ const NotificationCardBody = ({ message, url }) => {
       <p className="text-xsm font-normal text-black">{parse(formattedMessage)}</p>
       {url && (
         <LinkAsButton
-          href="/"
+          href={url}
           customStyles="p-0 mt-2.5 underline decoration-underline "
           buttonProps={{
             size: 'small',

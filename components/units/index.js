@@ -10,10 +10,12 @@ import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
+import ChatAdditional from '@/units/ChatAdditional';
 import ChatControl from '@/units/ChatControl';
 import ChatConversation from '@/units/ChatConversation';
 import ChatConversationCard from '@/units/ChatConversationCard';
 import ChatDeactivate from '@/units/ChatDeactivate';
+import ChatInfoModal from '@/units/ChatInfoModal';
 import ChatList from '@/units/ChatList';
 import ChatMessage from '@/units/ChatMessage';
 import ChatModal from '@/units/ChatModal';
@@ -45,6 +47,7 @@ import Dropzone from '@/units/FileUpload/Dropzone';
 import File from '@/units/FileUpload/File';
 import FilterByForm from '@/units/FilterByForm';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
+import Flag from '@/units/Flag';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import ImoNotFound from '@/units/ImoNotFound';
@@ -178,6 +181,9 @@ export {
   ChatMessage,
   ViewCommentContent,
   CollapsedChats,
+  ChatAdditional,
+  Flag,
+  ChatInfoModal,
   NegotiatingChartererInformation,
   SearchNotFound,
 };

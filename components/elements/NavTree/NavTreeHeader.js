@@ -18,13 +18,6 @@ const NavTreeHeader = ({ children, href, className, onClick, isSubMenu }) => {
   );
 };
 
-NavTreeHeader.defaultProps = {
-  className: '',
-  href: '/',
-  isSubMenu: false,
-  onClick: () => {},
-};
-
 NavTreeHeader.propTypes = {
   className: PropTypes.string,
   href: PropTypes.string,

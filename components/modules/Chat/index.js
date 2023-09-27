@@ -22,7 +22,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    dispatch(getListOfChats());
+    if (opened) dispatch(getListOfChats());
   }, [opened]);
 
   return (

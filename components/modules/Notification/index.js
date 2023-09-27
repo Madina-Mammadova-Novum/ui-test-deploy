@@ -9,6 +9,7 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
+import { notificationService } from '@/services/signalR';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -22,6 +23,10 @@ const Notification = () => {
 
   const handleOpen = () => setIsOpened(!isOpened);
   const handleClose = () => setIsOpened(false);
+
+  useEffect(() => {
+    notificationService?.initNotifications();
+  }, []);
 
   useEffect(() => {
     if (!isOpened) dispatch(resetParams());

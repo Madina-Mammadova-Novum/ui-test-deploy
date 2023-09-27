@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react';
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
+import { UrlPropTypes } from '@/lib/types';
+
 import {
   chartererPrefixtureHeaderDataAdapter,
   ownerPrefixtureHeaderDataAdapter,
@@ -15,38 +17,34 @@ import {
   prefixtureDocumentsTabRowsDataAdapter,
 } from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
-import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
-import { preFixtureSelector } from '@/store/selectors';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
-const PreFixture = () => {
-  const { data: session } = useSession();
-  const role = useMemo(() => session?.role, [session?.role]);
-  const { isOwner } = getRoleIdentity({ role });
+const PreFixture = ({ searchParams }) => {
   const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
-  const {
-    data: { offers, totalPages },
-    loading,
-  } = useSelector(preFixtureSelector);
+  const { data: session } = useSession();
 
-  const initialPagesStore = {
-    currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
-    perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
-  };
+  const role = useMemo(() => session?.role, [session?.role]);
+  const { isOwner } = getRoleIdentity({ role });
+
+  const { loading, totalPages, data } = useSelector(getPreFixtureDataSelector);
+  const searchedData = data.find((element) => element?.cargoeId === searchParams.id);
+
+  const { page, pageSize } = PAGE_STATE;
+
   const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    initialPagesStore.perPage,
-    initialPagesStore.currentPage,
-    offers
+    { initialPage: page, itemsPerPage: pageSize, data }
   );
 
   useEffect(() => {
     if (role) {
-      dispatch(fetchPrefixtureOffers({ role: session?.role, page: currentPage, perPage }));
+      dispatch(fetchPrefixtureOffers({ role, page: currentPage, perPage }));
     }
   }, [role, currentPage, perPage]);
 
@@ -54,6 +52,9 @@ const PreFixture = () => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
+
+    const isOpened = searchedData?.cargoeId === rowData?.cargoeId;
+
     return (
       <ExpandableRow
         key={rowData.id}
@@ -64,18 +65,36 @@ const PreFixture = () => {
             offerId={rowData.id}
           />
         }
+        isOpened={isOpened}
         expand={toggle}
       >
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          params={searchParams}
           offerId={rowData?.id}
         />
       </ExpandableRow>
     );
   };
-  const printComplexPagination = useMemo(
-    () => (
+
+  const printContent = useMemo(() => {
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (data) return data.map(printExpandableRow);
+
+    return <Title level="3">No pre-fixture positions</Title>;
+  }, [loading, data, printExpandableRow]);
+
+  return (
+    <section className="flex min-h-[90vh] flex-col gap-y-5">
+      <div className="flex justify-between items-center pt-5">
+        <div className="flex flex-col">
+          <Label className="text-xs-sm">Offer stage #2</Label>
+          <Title level="1">Pre-fixture</Title>
+        </div>
+        <ToggleRows onToggleClick={setToggle} />
+      </div>
+      <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
       <ComplexPagination
         currentPage={currentPage}
         numberOfPages={totalPages}
@@ -85,28 +104,10 @@ const PreFixture = () => {
         onChangeOffers={onChangeOffers}
         perPage={perPage}
       />
-    ),
-    [currentPage, selectedPage, perPage]
-  );
-
-  if (loading) {
-    return <Loader className="h-8 w-8 absolute top-1/2" />;
-  }
-
-  return (
-    <section>
-      <div className="flex justify-between items-center py-5">
-        <div className="flex flex-col">
-          <Label className="text-xs-sm">Offer stage #2</Label>
-          <Title level={1}>Pre-fixture</Title>
-        </div>
-        <ToggleRows onToggleClick={setToggle} />
-      </div>
-
-      <div className="flex flex-col gap-y-2.5">{!!offers?.length && offers.map(printExpandableRow)}</div>
-      {printComplexPagination}
     </section>
   );
 };
+
+PreFixture.propTypes = UrlPropTypes;
 
 export default PreFixture;

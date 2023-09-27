@@ -46,7 +46,7 @@ const ChatModal = ({ isOpened, onClose }) => {
         <ChatControl tab={tab} search={search} activeCounter={totalActive} archivedCounter={totalArchived} />
         <Divider />
         <div className="relative min-h-[320px]">{printChatRooms}</div>
-        <ChatLoadMoreCta onClick={handleMore} disabled={active.length <= limit} />
+        <ChatLoadMoreCta onClick={handleMore} disabled={active?.length <= limit} />
       </div>
     )
   );
