@@ -74,6 +74,7 @@ import PortDetailsForm from '@/units/PortDetailsForm';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
+import SearchNotFound from '@/units/SearchNotFound';
 import SocialNetworks from '@/units/SocialNetworks';
 import Step from '@/units/Step';
 import Tabs from '@/units/Tabs';
@@ -184,4 +185,5 @@ export {
   Flag,
   ChatInfoModal,
   NegotiatingChartererInformation,
+  SearchNotFound,
 };

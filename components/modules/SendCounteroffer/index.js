@@ -14,15 +14,12 @@ import { CommentsContent, ConfirmCounteroffer } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
+import { counterofferPointsToImprove } from '@/utils/mock';
 
 const tabs = [
   {
     value: 'commercial_offer_terms',
     label: 'Commercial offer terms',
-  },
-  {
-    value: 'voyage_details',
-    label: 'Voyage details',
   },
   {
     value: 'comments',
@@ -51,12 +48,15 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
-      case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetails} />;
       case 'comments':
         return <CommentsContent data={comments} />;
       default:
-        return <SendCounterofferFormFields data={counterofferData} />;
+        return (
+          <>
+            <VoyageDetailsTabContent data={voyageDetails} inlineVariant />
+            <SendCounterofferFormFields data={counterofferData} />
+          </>
+        );
     }
   }, [currentTab]);
 
@@ -80,6 +80,19 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       <ModalHeader goBack={() => (confirmCounteroffer ? setConfirmCounteroffer(false) : goBack('view_offer'))}>
         {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
       </ModalHeader>
+
+      {!confirmCounteroffer && (
+        <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
+          <p>
+            In order to send counteroffer, please make at least <b>one of the following</b> adjustments:{' '}
+          </p>
+          <ul>
+            {counterofferPointsToImprove.map((lineToImprove) => (
+              <li>- {lineToImprove}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="flex text-[12px] items-center mt-5">
         <Countdown time={countdown} />
