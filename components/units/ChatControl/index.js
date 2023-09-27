@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { debounce } from 'lodash';
 
@@ -12,9 +12,12 @@ import ChatTabs from './ChatTabs';
 import { ChatControlPropTypes } from '@/lib/types';
 
 import { searchedData, setChatFilter } from '@/store/entities/chat/slice';
+import { getUserDataSelector } from '@/store/selectors';
 
 const ChatControl = ({ tab, search, activeCounter, archivedCounter }) => {
   const dispatch = useDispatch();
+
+  const { role } = useSelector(getUserDataSelector);
 
   const handleTab = ({ target: { value } }) => dispatch(setChatFilter({ tabValue: value }));
   const handleSearch = ({ target: { value } }) => dispatch(setChatFilter({ searchValue: value }));
@@ -40,7 +43,7 @@ const ChatControl = ({ tab, search, activeCounter, archivedCounter }) => {
         onClick={handleTab}
         containerClass="flex justify-center"
       />
-      <ChatSearch value={search} onChange={handleSearch} />
+      <ChatSearch value={search} role={role} onChange={handleSearch} />
       <ChatSupport title="Help Center" description="Do you have any problems?" />
     </div>
   );

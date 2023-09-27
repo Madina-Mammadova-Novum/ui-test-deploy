@@ -1,3 +1,15 @@
+import { Label, Loader, Title } from '@/elements';
+
 export default function Loading() {
-  return 'Loading...';
+  return (
+    <section className="flex relative min-h-[90vh] flex-col px-5">
+      <div className="flex justify-between items-center pt-5">
+        <div className="flex flex-col">
+          <Label className="text-xs-sm">Offer stage #4</Label>
+          <Title level="1">Fixture</Title>
+        </div>
+      </div>
+      <Loader className="h-8 w-8 absolute top-1/2" />
+    </section>
+  );
 }

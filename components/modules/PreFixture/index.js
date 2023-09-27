@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react';
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
+import { UrlPropTypes } from '@/lib/types';
+
 import {
   chartererPrefixtureHeaderDataAdapter,
   ownerPrefixtureHeaderDataAdapter,
@@ -18,27 +20,26 @@ import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
-import { preFixtureSelector } from '@/store/selectors';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
-const PreFixture = () => {
-  const { data: session } = useSession();
-  const role = useMemo(() => session?.role, [session?.role]);
-  const { isOwner } = getRoleIdentity({ role });
+const PreFixture = ({ searchParams }) => {
   const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
+  const { data: session } = useSession();
 
-  const {
-    loading,
-    data: { offers, totalPages },
-  } = useSelector(preFixtureSelector);
+  const role = useMemo(() => session?.role, [session?.role]);
+  const { isOwner } = getRoleIdentity({ role });
+
+  const { loading, totalPages, data } = useSelector(getPreFixtureDataSelector);
+  const searchedData = data.find((element) => element?.cargoeId === searchParams.id);
 
   const { page, pageSize } = PAGE_STATE;
 
   const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    { initialPage: page, itemsPerPage: pageSize, data: offers }
+    { initialPage: page, itemsPerPage: pageSize, data }
   );
 
   useEffect(() => {
@@ -51,6 +52,9 @@ const PreFixture = () => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
+
+    const isOpened = searchedData?.cargoeId === rowData?.cargoeId;
+
     return (
       <ExpandableRow
         key={rowData.id}
@@ -61,11 +65,13 @@ const PreFixture = () => {
             offerId={rowData.id}
           />
         }
+        isOpened={isOpened}
         expand={toggle}
       >
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          params={searchParams}
           offerId={rowData?.id}
         />
       </ExpandableRow>
@@ -74,10 +80,10 @@ const PreFixture = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers) return offers.map(printExpandableRow);
+    if (data) return data.map(printExpandableRow);
 
     return <Title level="3">No pre-fixture positions</Title>;
-  }, [loading, offers, printExpandableRow]);
+  }, [loading, data, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">
@@ -101,5 +107,7 @@ const PreFixture = () => {
     </section>
   );
 };
+
+PreFixture.propTypes = UrlPropTypes;
 
 export default PreFixture;

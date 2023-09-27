@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { memo, useLayoutEffect, useMemo, useState } from 'react';
 
 import { TablePropTypes } from '@/lib/types';
 
@@ -8,7 +8,7 @@ import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
 import { sortTable } from '@/utils/helpers';
 
-const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
+const Table = ({ headerData, fleetId, type, rows, urlAction, noDataMessage = '' }) => {
   const initialOrder = useMemo(() => rows, []);
 
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
@@ -31,7 +31,9 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };
 
-  const printTableRow = (rowData) => <TableRow key={rowData?.id} type={type} fleetId={fleetId} rowData={rowData} />;
+  const printTableRow = (rowData) => (
+    <TableRow urlAction={urlAction} key={rowData?.id} type={type} fleetId={fleetId} rowData={rowData} />
+  );
 
   return headerData.length > 0 ? (
     <div className="table-scroll-wrapper z-20">
@@ -61,4 +63,4 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
 
 Table.propTypes = TablePropTypes;
 
-export default Table;
+export default memo(Table);

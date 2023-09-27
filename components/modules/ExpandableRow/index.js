@@ -4,13 +4,17 @@ import { cloneElement, useEffect, useState } from 'react';
 
 import { ExpandableRowPropTypes } from '@/lib/types';
 
-const ExpandableRow = ({ header, footer, children, expand = { value: false }, className = '' }) => {
+const ExpandableRow = ({ header, footer, children, expand = { value: false }, isOpened, className = '' }) => {
   const [toggle, setToggle] = useState(false);
   const headerWithProps = cloneElement(header, { toggle });
 
   useEffect(() => {
     setToggle(expand.value);
   }, [expand]);
+
+  useEffect(() => {
+    if (isOpened) setToggle(isOpened);
+  }, [isOpened]);
 
   return (
     <div className="rounded-base shadow-xmd box-border bg-white">

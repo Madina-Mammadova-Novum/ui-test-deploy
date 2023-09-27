@@ -207,6 +207,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
   } = data;
 
   return {
+    releatedCargoeId: data?.searchedCargo?.id,
     partyInformation: {
       operationYears: yearsInOperation,
       chartersPerYear: estimatedNumberOfChartersPerYear || '0',

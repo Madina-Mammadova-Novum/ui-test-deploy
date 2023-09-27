@@ -97,3 +97,12 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     isDeactivated: state.isDeactivatedSession,
   };
 });
+
+export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    totalPages: state.data?.totalPages,
+    data: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});

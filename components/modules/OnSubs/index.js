@@ -60,7 +60,7 @@ const OnSubs = () => {
       <div className="flex justify-between items-center py-5">
         <div className="flex flex-col">
           <Label className="text-xs-sm">Offer stage #3</Label>
-          <Title level={1}>On subs</Title>
+          <Title level="1">On subs</Title>
         </div>
         <ToggleRows onToggleClick={setToggle} />
       </div>

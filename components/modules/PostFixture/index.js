@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { PostFixturePropTypes } from '@/lib/types';
+import { UrlPropTypes } from '@/lib/types';
 
 import { Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
@@ -11,7 +11,7 @@ import { getUserFixtures } from '@/services';
 import { ComplexPagination, FilterByForm, PostFixtureFilter, ToggleRows } from '@/units';
 import { useFetch, useFilters } from '@/utils/hooks';
 
-const PostFixture = ({ title }) => {
+const PostFixture = () => {
   const [toggle, setToggle] = useState({ value: false });
   const [data, isLoading] = useFetch(getUserFixtures);
 
@@ -33,7 +33,7 @@ const PostFixture = ({ title }) => {
         <div className="flex flex-col">
           <Label className="text-xs-sm">Offer stage #5</Label>
           <div className="flex justify-between">
-            <Title level={1}>{title}</Title>
+            <Title level="1">Post-fixture</Title>
             <ToggleRows onToggleClick={setToggle} />
           </div>
           <FilterByForm>
@@ -54,6 +54,7 @@ const PostFixture = ({ title }) => {
     </section>
   );
 };
-PostFixture.propTypes = PostFixturePropTypes;
+
+PostFixture.propTypes = UrlPropTypes;
 
 export default PostFixture;
