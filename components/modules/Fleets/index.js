@@ -47,7 +47,6 @@ const Fleets = ({ searchParams }) => {
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
     const cellData = searchedData?.vessels?.find((el) => el.fleetId === rowData?.id);
-
     const isOpened = cellData?.fleetId === rowData?.id;
 
     return (
@@ -78,7 +77,6 @@ const Fleets = ({ searchParams }) => {
       >
         <FleetsExpandedContent
           rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels, fleetName: rowData.name })}
-          urlAction={isOpened && searchParams.update}
           fleetId={rowData.id}
         />
       </ExpandableRow>

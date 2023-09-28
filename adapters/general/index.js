@@ -7,7 +7,7 @@ export function getGeneralDataAdapter({ data }) {
   };
 }
 
-export const searachParamsAdapter = ({ data }) => {
+export const searchParamsAdapter = ({ data }) => {
   if (!data) return null;
 
   return Object.keys(data).reduce((newObject, key) => {

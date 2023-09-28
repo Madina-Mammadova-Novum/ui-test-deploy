@@ -19,8 +19,8 @@ const Sidebar = ({ containerStyles }) => {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   const { data } = useRoleNavigation();
+
   const { collapsed } = useSelector(getSidebarSelector);
 
   const lgScreen = useMediaQuery(SCREENS.LG);

@@ -1,8 +1,10 @@
+'use client';
+
 import classnames from 'classnames';
+import { useRouter } from 'next/navigation';
 
 import { LinkAsButtonPropTypes } from '@/lib/types';
 
-import { NextLink } from '@/elements';
 import { getButtonClassNames } from '@/utils/helpers';
 
 const LinkAsButton = ({
@@ -14,10 +16,13 @@ const LinkAsButton = ({
   target = null,
   ...rest
 }) => {
+  const router = useRouter();
   const buttonClassNames = getButtonClassNames(variant, size);
+
   return (
-    <NextLink
-      href={href}
+    <span
+      aria-hidden
+      onClick={() => router.push(href)}
       className={classnames(
         'text-xsm flex items-center justify-center whitespace-nowrap',
         buttonClassNames,
@@ -28,7 +33,7 @@ const LinkAsButton = ({
       {...rest}
     >
       {children}
-    </NextLink>
+    </span>
   );
 };
 

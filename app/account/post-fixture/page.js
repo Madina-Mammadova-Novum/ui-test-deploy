@@ -1,6 +1,6 @@
 import { UrlPropTypes } from '@/lib/types';
 
-import { searachParamsAdapter } from '@/adapters';
+import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { AccountWrapper, PostFixture } from '@/modules';
 
@@ -15,7 +15,7 @@ export function generateMetadata() {
 }
 
 const PostFixturePage = ({ searchParams }) => {
-  const urlParams = searachParamsAdapter({ data: searchParams });
+  const urlParams = searchParamsAdapter({ data: searchParams });
   return (
     <AccountWrapper containerClass="px-5">
       <PostFixture searchParams={urlParams} />

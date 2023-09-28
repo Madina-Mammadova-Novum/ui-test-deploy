@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { UrlPropTypes } from '@/lib/types';
+
 import { Dropdown, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
@@ -11,7 +13,7 @@ import { getUserVesselsSelector } from '@/store/selectors';
 import { ComplexPagination, ExpandableCard, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
-const AccountPositions = () => {
+const AccountPositions = ({ searchParams }) => {
   const dispatch = useDispatch();
 
   const [pageState, setPageState] = useState(PAGE_STATE);
@@ -49,7 +51,19 @@ const AccountPositions = () => {
   };
 
   const printExpandableCard = useCallback(
-    (fleet) => <ExpandableCard className="px-5 my-5 bg-white" key={fleet.id} data={fleet} expandAll={toggle} />,
+    (fleet) => {
+      const isOpened = searchParams?.id === fleet?.fleetId;
+
+      return (
+        <ExpandableCard
+          className="px-5 my-5 bg-white"
+          key={fleet.id}
+          data={fleet}
+          isOpened={isOpened}
+          expandAll={toggle}
+        />
+      );
+    },
     [toggle]
   );
 
@@ -98,5 +112,7 @@ const AccountPositions = () => {
     </section>
   );
 };
+
+AccountPositions.propTypes = UrlPropTypes;
 
 export default AccountPositions;

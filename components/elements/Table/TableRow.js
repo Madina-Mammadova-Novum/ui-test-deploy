@@ -1,7 +1,5 @@
 'use client';
 
-import { memo } from 'react';
-
 import { TableRowPropTypes } from '@/lib/types';
 
 import TableCell from '@/elements/Table/TableCell';
@@ -14,4 +12,4 @@ const TableRow = ({ rowData = [], fleetId, urlAction, type }) => {
 
 TableRow.propTypes = TableRowPropTypes;
 
-export default memo(TableRow);
+export default TableRow;

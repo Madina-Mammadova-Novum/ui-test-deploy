@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useMemo } from 'react';
+import { useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
@@ -194,4 +194,4 @@ const TableCell = ({ cellProps }) => {
 
 TableCell.propTypes = TableCellPropTypes;
 
-export default memo(TableCell);
+export default TableCell;

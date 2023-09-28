@@ -18,7 +18,7 @@ const ChatSearch = ({ value, onChange, role, containerClass, ...rest }) => {
         placeholder={printPlaceholer}
         icon={<SearchSVG className="fill-gray" />}
         customStyles="bg-gray-light border-gray"
-        inputStyles="!pl-4 !pr-1"
+        inputStyles="!pl-4 !pr-1 placeholder:text-xs-sm"
         {...rest}
       />
     </div>
