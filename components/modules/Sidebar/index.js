@@ -19,6 +19,7 @@ const Sidebar = ({ containerStyles }) => {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const { data } = useRoleNavigation();
 
   const { collapsed } = useSelector(getSidebarSelector);
@@ -37,6 +38,7 @@ const Sidebar = ({ containerStyles }) => {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (isNotXLView && url !== currentPage?.path && collapsed) setCollapse(true);
+
     if (isNotXLView && !collapsed) {
       return () => {
         setCollapse(true);

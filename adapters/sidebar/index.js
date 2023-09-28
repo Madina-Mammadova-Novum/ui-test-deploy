@@ -1,48 +1,47 @@
 import { ROUTES } from '@/lib';
-import { makeId } from '@/utils/helpers';
 
 export const ownerSidebarAdapter = ({ role }) => {
   if (!role) return [];
 
   return [
     {
-      id: makeId(),
+      id: 1,
       title: 'My positions',
       variant: 'positions',
       path: ROUTES.ACCOUNT_POSITIONS,
       items: [],
     },
     {
-      id: makeId(),
+      id: 2,
       title: 'Offers',
       variant: 'offers',
       items: [
         {
-          id: makeId(),
+          id: 1,
           label: 'offer stage #1',
           title: 'Negotiating',
           path: ROUTES.ACCOUNT_NEGOTIATING,
         },
         {
-          id: makeId(),
+          id: 2,
           label: 'offer stage #2',
           title: 'Pre-fixture',
           path: ROUTES.ACCOUNT_PREFIXTURE,
         },
         {
-          id: makeId(),
+          id: 3,
           label: 'offer stage #3',
           title: 'On subs',
           path: ROUTES.ACCOUNT_ONSUBS,
         },
         {
-          id: makeId(),
+          id: 4,
           label: 'offer stage #4',
           title: 'Fixture',
           path: ROUTES.ACCOUNT_FIXTURE,
         },
         {
-          id: makeId(),
+          id: 5,
           label: 'offer stage #5',
           title: 'Post-fixture',
           path: ROUTES.ACCOUNT_POSTFIXTURE,
@@ -50,14 +49,14 @@ export const ownerSidebarAdapter = ({ role }) => {
       ],
     },
     {
-      id: makeId(),
+      id: 6,
       title: 'Tanker List',
       variant: 'fleets',
       path: ROUTES.ACCOUNT_FLEETS,
       items: [],
     },
     {
-      id: makeId(),
+      id: 7,
       title: 'FAQ',
       variant: 'faq',
       path: ROUTES.FAQ,
@@ -71,43 +70,43 @@ export const chartererSidebarAdapter = ({ role }) => {
 
   return [
     {
-      id: makeId(),
+      id: 1,
       title: 'Search',
       variant: 'search',
       path: ROUTES.ACCOUNT_SEARCH,
       items: [],
     },
     {
-      id: makeId(),
+      id: 2,
       title: 'Offers',
       variant: 'offers',
       items: [
         {
-          id: makeId(),
+          id: 1,
           label: 'offer stage #1',
           title: 'Negotiating',
           path: ROUTES.ACCOUNT_NEGOTIATING,
         },
         {
-          id: makeId(),
+          id: 2,
           label: 'offer stage #2',
           title: 'Pre-fixture',
           path: ROUTES.ACCOUNT_PREFIXTURE,
         },
         {
-          id: makeId(),
+          id: 3,
           label: 'offer stage #3',
           title: 'On subs',
           path: ROUTES.ACCOUNT_ONSUBS,
         },
         {
-          id: makeId(),
+          id: 4,
           label: 'offer stage #4',
           title: 'Fixture',
           path: ROUTES.ACCOUNT_FIXTURE,
         },
         {
-          id: makeId(),
+          id: 5,
           label: 'offer stage #5',
           title: 'Post-fixture',
           path: ROUTES.ACCOUNT_POSTFIXTURE,
@@ -115,14 +114,14 @@ export const chartererSidebarAdapter = ({ role }) => {
       ],
     },
     {
-      id: makeId(),
+      id: 3,
       title: 'Tools',
       variant: 'tools',
       path: ROUTES.ACCOUNT_TOOLS,
       items: [],
     },
     {
-      id: makeId(),
+      id: 4,
       title: 'FAQ',
       variant: 'faq',
       path: ROUTES.FAQ,
