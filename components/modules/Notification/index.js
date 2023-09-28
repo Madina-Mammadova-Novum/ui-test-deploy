@@ -18,7 +18,7 @@ import { NotificationContent, NotificationControl } from '@/units';
 const Notification = () => {
   const dispatch = useDispatch();
 
-  const { unreadCounter } = useSelector(getNotificationsDataSelector);
+  const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
 
   const [isOpened, setIsOpened] = useState(false);
 
@@ -27,12 +27,12 @@ const Notification = () => {
 
   useEffect(() => {
     notificationService?.initNotifications();
-    dispatch(fetchNotifications());
   }, []);
 
   useEffect(() => {
     if (!isOpened) dispatch(resetParams());
-  }, [isOpened]);
+    dispatch(fetchNotifications(filterParams));
+  }, [isOpened, filterParams]);
 
   return (
     <div>
