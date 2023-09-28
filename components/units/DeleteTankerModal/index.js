@@ -79,7 +79,7 @@ const DeleteTankerModal = ({ closeModal, state }) => {
         />
         <Button
           buttonProps={{
-            text: isSubmitting ? 'Please wait...' : 'Delete tanker',
+            text: isSubmitting ? 'Please wait...' : `${isRemoveFromFleet ? 'Remove' : 'Delete'} tanker`,
             variant: 'delete',
             size: 'large',
           }}
