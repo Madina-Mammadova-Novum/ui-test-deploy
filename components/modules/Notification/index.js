@@ -10,6 +10,7 @@ import { NotificationPropTypes } from '@/lib/types';
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
 import { notificationService } from '@/services/signalR';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -26,6 +27,7 @@ const Notification = () => {
 
   useEffect(() => {
     notificationService?.initNotifications();
+    dispatch(fetchNotifications());
   }, []);
 
   useEffect(() => {
