@@ -3,6 +3,8 @@ import { useMemo, useState } from 'react';
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
+import { OnSubsExpandedContentPropTypes } from '@/lib/types';
+
 import { Tabs } from '@/units';
 
 const tabs = [
@@ -16,7 +18,7 @@ const tabs = [
   },
 ];
 
-const OnSubsExpandedContent = () => {
+const OnSubsExpandedContent = ({ detailsData }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const tabContent = useMemo(() => {
@@ -24,7 +26,7 @@ const OnSubsExpandedContent = () => {
       case 'documents':
         return <DocumentsContent />;
       default:
-        return <DetailsContent />;
+        return <DetailsContent detailsData={detailsData} />;
     }
   }, [currentTab]);
 
@@ -40,5 +42,7 @@ const OnSubsExpandedContent = () => {
     </div>
   );
 };
+
+OnSubsExpandedContent.propTypes = OnSubsExpandedContentPropTypes;
 
 export default OnSubsExpandedContent;

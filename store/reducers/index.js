@@ -9,6 +9,7 @@ import {
   negotiating,
   notifications,
   offer,
+  onSubs,
   positions,
   preFixture,
   search,
@@ -26,4 +27,5 @@ export const reducer = combineReducers({
   notifications,
   preFixture,
   chat,
+  onSubs,
 });
