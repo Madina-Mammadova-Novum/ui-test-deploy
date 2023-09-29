@@ -9,7 +9,7 @@ import { NavTreeSubBodyPropTypes } from '@/lib/types';
 import { Divider } from '@/elements';
 import { useSidebarActiveColor } from '@/utils/hooks';
 
-const NavTreeSubBody = ({ data, collapsed = false }) => {
+const NavTreeSubBody = ({ data, onClick, autoClose = false, collapsed = false }) => {
   const router = useRouter();
   const { isActive } = useSidebarActiveColor(data.path);
 
@@ -21,8 +21,10 @@ const NavTreeSubBody = ({ data, collapsed = false }) => {
 
   const handleRedirect = (e) => {
     e.stopPropagation();
-
-    router.push(path);
+    if (autoClose) {
+      router.push(path);
+      onClick();
+    } else router.push(path);
   };
 
   return (

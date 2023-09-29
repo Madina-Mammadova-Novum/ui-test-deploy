@@ -42,7 +42,9 @@ const NavTreeSm = ({ data, active }) => {
     }
   }, [data?.variant, active]);
 
-  const printSubTree = (link) => <NavTreeSubBody key={link.id} data={link} collapsed />;
+  const printSubTree = (link) => (
+    <NavTreeSubBody autoClose onClick={() => setShowLinks(!showLinks)} key={link.id} data={link} collapsed />
+  );
 
   return (
     <NavTreeHeader
