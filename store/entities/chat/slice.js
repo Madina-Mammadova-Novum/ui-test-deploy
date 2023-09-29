@@ -82,6 +82,18 @@ const chatSlice = createSlice({
     resetUser: (state) => {
       state.data.user = initialState.data.user;
     },
+    messageAlert: (state, { payload }) => {
+      const updatedState = state.data.active.map((user) => {
+        if (user.contentId === payload.contentId) {
+          return {
+            ...user,
+            messageCount: payload.messageCount,
+          };
+        }
+        return user;
+      });
+      state.data.active = updatedState;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getListOfChats.pending, (state) => {
@@ -124,6 +136,7 @@ export const {
   setCollapsedChat,
   resetUser,
   setConversation,
+  messageAlert,
   deactivateConversation,
   removeCollapsedChat,
   setOpenedChat,
