@@ -1,15 +1,34 @@
+'use client';
+
+import { useEffect } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import { NavTreeSubBodyPropTypes } from '@/lib/types';
 
-import { Divider, NextLink } from '@/elements';
+import { Divider } from '@/elements';
 import { useSidebarActiveColor } from '@/utils/hooks';
 
 const NavTreeSubBody = ({ data, collapsed = false }) => {
+  const router = useRouter();
+  const { isActive } = useSidebarActiveColor(data.path);
+
   const { label, path, title } = data;
 
-  const { isActive } = useSidebarActiveColor(data.path);
+  useEffect(() => {
+    router.prefetch(path);
+  }, [router]);
+
+  const handleRedirect = (e) => {
+    e.stopPropagation();
+
+    router.push(path);
+  };
 
   return (
     <li
+      aria-hidden
+      onClick={handleRedirect}
       className={`${
         isActive ? 'bg-blue text-white' : 'hover:bg-blue-dark'
       } flex flex-col text-gray my-2 px-5 py-1.5 rounded-base whitespace-nowrap relative`}
@@ -17,9 +36,7 @@ const NavTreeSubBody = ({ data, collapsed = false }) => {
       {label && (
         <span className={`uppercase font-bold ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{label}</span>
       )}
-      <NextLink href={path ?? '/'} className="text-xsm text-white font-semibold">
-        {title ?? 'No Data'}
-      </NextLink>
+      <p className="text-xsm text-white font-semibold">{title ?? 'No Data'}</p>
 
       {!collapsed && (
         <div className="absolute -top-9 -left-3 w-px h-14 rotate-180 bg-blue-dark">

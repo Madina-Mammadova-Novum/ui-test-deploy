@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import { useMemo, useState } from 'react';
 
 import { useSession } from 'next-auth/react';
 
@@ -24,7 +26,7 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
+const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const allowCountdownExtension = detailsData?.additionalCharterPartyTerms?.length;
   const { data: session } = useSession();
@@ -38,14 +40,15 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
     }
   };
 
-  const tabContent = () => {
-    switch (currentTab) {
-      case 'documents':
-        return <DocumentsContent rowsData={documentsData} />;
-      default:
-        return <DetailsContent data={detailsData} />;
+  const tabContent = useMemo(() => {
+    if (currentTab === 'documents' || params.documents) {
+      return <DocumentsContent rowsData={documentsData} />;
     }
-  };
+    if (currentTab === 'details' || currentTab === params.details) {
+      return <DetailsContent data={detailsData} />;
+    }
+    return <DetailsContent data={detailsData} />;
+  }, [currentTab, params, documentsData, detailsData]);
 
   return (
     <div>
@@ -79,7 +82,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
           />
         </div>
       </div>
-      {tabContent()}
+      {tabContent}
     </div>
   );
 };

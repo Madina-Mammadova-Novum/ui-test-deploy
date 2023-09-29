@@ -13,12 +13,13 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
       code,
       cargoType: { name: cargoName } = {},
       totalQuantity,
-      loadTerminal: { port: { name: portName, locode } = {} } = {},
+      loadTerminal: { port: { name: portName, locode, country } = {} } = {},
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     laycanStart,
     laycanEnd,
     expiresAt,
+    frozenAt,
   } = data;
 
   return [
@@ -41,6 +42,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
+      countryCode: country?.codeISO2,
     },
     {
       label: 'Laycan start',
@@ -52,7 +54,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
+      text: calculateCountdown(expiresAt, frozenAt),
       textStyles: 'text-red',
       coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
@@ -207,6 +209,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
   } = data;
 
   return {
+    releatedCargoeId: data?.searchedCargo?.id,
     partyInformation: {
       operationYears: yearsInOperation,
       chartersPerYear: estimatedNumberOfChartersPerYear || '0',
@@ -332,7 +335,7 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: `${transformBytes({ value: size }).toFixed(2)} MB`,
+      value: `${+transformBytes({ value: size }).toFixed(2) || 0.01} MB`,
     },
     {
       id,

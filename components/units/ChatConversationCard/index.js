@@ -1,17 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
 import { ChatConversationCardPropTypes } from '@/lib/types';
 
 import ShipIcon from '@/assets/icons/ShipIcon';
-import ArrowSVG from '@/assets/images/small-arrow.svg';
-import { TextRow, Title } from '@/elements';
+import { Title } from '@/elements';
 import { getGeneralDataSelector } from '@/store/selectors';
-import { ChartererInformationContent, ModalWindow } from '@/units';
-import { getCountryById } from '@/utils/helpers';
+import { ChatAdditional, ChatInfoModal } from '@/units';
 
 const ChatConversationCard = ({ data, contrasted = false }) => {
   const { additional, vessel, isActive, subtitle } = data;
@@ -32,98 +29,42 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
     }));
   };
 
-  const textColor = contrasted ? 'text-white' : 'text-black';
+  const handleShowMore = (e) => {
+    e.stopPropagation();
 
-  const printAdditionalProducts = ({ id, name }, index) => (
-    <TextRow key={id} title={`Product #${index + 1}`} className="!text-xs-sm normal-case">
-      {name.charAt(0).toUpperCase() + name.slice(1) || '-'}
-    </TextRow>
-  );
-
-  const printCountryFlag = useMemo(() => {
-    const country = getCountryById({ data: countries, id: additional?.terminal?.countryId });
-
-    return <ReactCountryFlag countryCode={country?.countryCode} svg />;
-  }, [countries, additional?.terminal?.countryId]);
-
-  const printAdditionalData = useMemo(() => {
-    return (
-      setMore && (
-        <div className="h-auto pt-1.5">
-          <TextRow title="Load terminal" className="!text-xs-sm">
-            <span className="flex gap-x-1">
-              {printCountryFlag}
-              {additional?.terminal?.name || '-'}
-            </span>
-          </TextRow>
-          <TextRow title="Laycan" className="whitespace-nowrap !text-xs-sm pb-2.5">
-            {additional?.laycanStart} to {additional?.laycanEnd}
-          </TextRow>
-          {vessel?.products?.map(printAdditionalProducts)}
-          <TextRow title="Total Quantity" className="!text-xs-sm">
-            {additional?.totalQuantity || '-'} tons
-          </TextRow>
-        </div>
-      )
-    );
-  }, [additional, setMore, printCountryFlag]);
+    handleChangeState('setMore', !setMore);
+  };
 
   const printCargoeModal = useMemo(() => {
-    const country = getCountryById({
-      data: countries,
-      id: vessel?.data?.countryOfRegestrationCode,
-    });
-
     return (
-      <ModalWindow
-        containerClass="!border !border-gray-light shadow-xmd"
-        buttonProps={{
-          variant: 'primary',
-          size: 'small',
-          text: vessel?.cargoId,
-          className: '!p-0 !text-xs-sm !bg-transparent',
-        }}
-      >
-        <ChartererInformationContent title="Charterer information" data={{ ...vessel?.data, country }} />
-      </ModalWindow>
+      vessel?.cargoId && (
+        <p className={`${contrasted ? 'text-white' : 'text-black'} uppercase text-xs-sm font-semibold text-black flex`}>
+          cargo id:
+          <span
+            aria-hidden
+            className="text-blue font-bold text-xs-sm cursor-pointer"
+            onClick={() => handleChangeState('setCargoeInfo', !setCargoeInfo)}
+          >
+            <ChatInfoModal data={{ vessel, countries }} />
+          </span>
+        </p>
+      )
     );
-  }, [vessel?.cargoId, vessel?.data]);
+  }, [vessel, countries, setCargoeInfo]);
 
   return (
-    <div className="text-black flex items-start gap-x-1.5">
+    <div className="text-black flex items-start gap-x-1.5 w-full">
       <ShipIcon isActive={isActive} />
       <div className="flex flex-col">
-        <Title level="6" className={`text-sm font-semibold capitalize ${textColor}`}>
+        <Title
+          level="6"
+          className={`text-sm font-semibold capitalize ${contrasted ? 'text-white' : 'text-black hover:text-blue'}`}
+        >
           {vessel?.name}
         </Title>
-        {subtitle && <p className={`text-xsm ${textColor}`}>{subtitle}</p>}
-        {vessel?.cargoId && (
-          <p className={`uppercase text-xs-sm font-semibold text-black flex  ${textColor}`}>
-            cargo id:
-            <span
-              aria-hidden
-              className="text-blue font-bold text-xs-sm cursor-pointer"
-              onClick={() => handleChangeState('setCargoeInfo', !setCargoeInfo)}
-            >
-              {printCargoeModal}
-            </span>
-          </p>
-        )}
-        {additional && (
-          <>
-            <span
-              aria-hidden
-              onClick={() => handleChangeState('setMore', !setMore)}
-              className="text-blue flex items-center gap-x-1.5 text-xsm font-medium pt-1.5 cursor-pointer"
-            >
-              Show all info
-              <ArrowSVG
-                className={`transform transition-all ease-in-out duration-300 ${setMore ? '-rotate-180' : 'rotate-0'}`}
-              />
-            </span>
-            {printAdditionalData}
-          </>
-        )}
+        {subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{subtitle}</p>}
+        {printCargoeModal}
+        <ChatAdditional data={{ vessel, countries, additional }} isActive={setMore} onClick={handleShowMore} />
       </div>
     </div>
   );

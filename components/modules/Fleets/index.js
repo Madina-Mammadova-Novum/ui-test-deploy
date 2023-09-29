@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FleetsExpandedContent from './FleetsExpandedContent';
 
+import { UrlPropTypes } from '@/lib/types';
+
 import { fleetsPageHeaderDataAdapter, fleetsPageRowsDataAdapter } from '@/adapters';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
-import { ACTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
+import { ACTIONS, PAGE_STATE } from '@/lib/constants';
 import { AddNewTanker, ExpandableRow } from '@/modules';
 import { fetchFleetsWithVessels, fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { fleetsSelector } from '@/store/selectors';
@@ -16,26 +18,20 @@ import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, Unassigned
 import { convertDataToOptions } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
-const Fleets = () => {
-  const [toggle, setToggle] = useState({ value: false });
-  const { refetch, data, loading: isLoading } = useSelector(fleetsSelector);
-  const [userStore] = useState({
-    sortOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
-    sortValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
-  });
+const Fleets = ({ searchParams }) => {
   const dispatch = useDispatch();
+  const { refetch, data, loading: isLoading } = useSelector(fleetsSelector);
+
+  const [toggle, setToggle] = useState({ value: false });
+
+  const searchedData = data.find((element) => element?.id === searchParams.id);
 
   useEffect(() => {
     dispatch(fetchFleetsWithVessels());
     dispatch(fetchUnassignedFleetData());
   }, [dispatch, refetch]);
 
-  const initialPagesStore = {
-    currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
-    perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
-  };
-
-  const { sortValue } = userStore;
+  const { page, pageSize, sortValue } = PAGE_STATE;
 
   const {
     numberOfPages,
@@ -46,10 +42,13 @@ const Fleets = () => {
     selectedPage,
     onChangeOffers,
     perPage,
-  } = useFilters(initialPagesStore.perPage, initialPagesStore.currentPage, data, sortValue.value);
+  } = useFilters({ initialPage: page, sortValue, itemsPerPage: pageSize, data });
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
+    const cellData = searchedData?.vessels?.find((el) => el.fleetId === rowData?.id);
+    const isOpened = cellData?.fleetId === rowData?.id;
+
     return (
       <ExpandableRow
         header={
@@ -73,6 +72,7 @@ const Fleets = () => {
             ]}
           />
         }
+        isOpened={isOpened}
         expand={toggle}
       >
         <FleetsExpandedContent
@@ -83,14 +83,17 @@ const Fleets = () => {
     );
   };
 
-  if (isLoading) {
-    return <Loader className="h-8 w-8 absolute top-1/2" />;
-  }
+  const printContent = useMemo(() => {
+    if (isLoading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (items) return items.map(printExpandableRow);
+
+    return <Title level="3">No positions</Title>;
+  }, [isLoading, items, printExpandableRow]);
 
   return (
-    <section>
+    <section className="flex min-h-[90vh] flex-col gap-y-5">
       <div className="flex justify-between items-center py-5">
-        <Title level={1} className="self-baseline">
+        <Title level="1" className="self-baseline">
           Tanker list
         </Title>
         <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
@@ -123,10 +126,9 @@ const Fleets = () => {
           </div>
         </div>
       </div>
-
-      <div className="flex flex-col gap-y-2.5">
+      <div className="flex flex-col gap-y-2.5 grow">
         <UnassignedFleet toggle={toggle} />
-        {items && items.map(printExpandableRow)}
+        {printContent}
       </div>
       <ComplexPagination
         label="fleets"
@@ -141,5 +143,7 @@ const Fleets = () => {
     </section>
   );
 };
+
+Fleets.propTypes = UrlPropTypes;
 
 export default Fleets;

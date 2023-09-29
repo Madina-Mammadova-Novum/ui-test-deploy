@@ -31,7 +31,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'open port',
       text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
-      countryCode: 'us',
+      countryCode: openPort?.country?.codeISO2,
     },
   ];
 };
@@ -96,7 +96,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     cargo: {
       code: cargoId,
       loadTerminal: {
-        port: { name: portName, locode: portLocode },
+        port: { name: portName, locode: portLocode, country: portCountry },
       },
     },
     status,
@@ -104,6 +104,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     laycanEnd,
     createdAt: dateReceived,
     expiresAt,
+    frozenAt,
     id,
   } = data;
 
@@ -135,7 +136,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
     },
     {
       id,
@@ -149,7 +150,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt),
+      value: calculateCountdown(expiresAt, frozenAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
@@ -177,8 +178,12 @@ export const sentOffersTabRowsDataAdapter = ({ data }) => {
 export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, vessel, status, createdAt, expiresAt } = data;
-  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
+  const { id, vessel, status, createdAt, expiresAt, frozenAt } = data;
+  const {
+    details: { summerDwt } = {},
+    openPort: { name: portName, locode: portLocode, country: portCountry } = {},
+    openDate,
+  } = vessel || {};
 
   return [
     {
@@ -200,7 +205,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
     },
     {
       id,
@@ -222,7 +227,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt),
+      value: calculateCountdown(expiresAt, frozenAt),
       type: TYPE.RED,
       icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
     },
@@ -265,7 +270,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     cargo: {
       code,
       loadTerminal: {
-        port: { name: portName, locode: portLocode },
+        port: { name: portName, locode: portLocode, country: portCountry },
       },
     },
     laycanStart,
@@ -303,7 +308,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
     },
     {
       id,
@@ -340,7 +345,11 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { vessel, createdAt, expiresAt, id } = data;
-  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
+  const {
+    details: { summerDwt } = {},
+    openPort: { name: portName, locode: portLocode, country: portCountry } = {},
+    openDate,
+  } = vessel || {};
 
   return [
     {
@@ -362,7 +371,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
     },
     {
       id,
@@ -370,7 +379,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: `${summerDwt} tons`,
+      value: summerDwt && `${trimTonValue(summerDwt)} tons`,
     },
     {
       id,
@@ -423,7 +432,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     cargo: {
       code,
       loadTerminal: {
-        port: { name: portName, locode: portLocode },
+        port: { name: portName, locode: portLocode, country: portCountry },
       },
     },
     laycanStart,
@@ -461,7 +470,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
     },
     {
       id,
@@ -497,7 +506,10 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const {
-    vessel: { details: { openPort: { name: portName, locode: portLocode } = {}, summerDwt } = {}, openDate } = {},
+    vessel: {
+      details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
+      openDate,
+    } = {},
     failedAt,
     reason,
     id,
@@ -523,7 +535,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode="us" />,
+      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
     },
     {
       id,
@@ -531,7 +543,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: `${summerDwt} tons`,
+      value: summerDwt && `${trimTonValue(summerDwt)} tons`,
     },
     {
       id,

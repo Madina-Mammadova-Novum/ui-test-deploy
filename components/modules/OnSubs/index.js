@@ -10,7 +10,7 @@ import OnSubsExpandedFooter from './OnSubsExpandedFooter';
 
 import { chartererOnSubsHeaderDataAdapter, onSubsDetailsAdapter, ownerOnSubsHeaderDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
-import { NAVIGATION_PARAMS } from '@/lib/constants';
+import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
 import { onSubsSelector } from '@/store/selectors';
@@ -28,22 +28,32 @@ const OnSubs = () => {
     data: { offers, totalPages },
     loading,
   } = useSelector(onSubsSelector);
-  const initialPagesStore = {
-    currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
-    perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
-  };
+  // const initialPagesStore = {
+  //   currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
+  //   perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
+  // };
 
-  const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    initialPagesStore.perPage,
-    initialPagesStore.currentPage,
-    offers
-  );
+  // const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
+  //   initialPagesStore.perPage,
+  //   initialPagesStore.currentPage,
+  //   offers
+  // );
+  const { page, pageSize } = PAGE_STATE;
+
+  const { currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
+    useFilters({ initialPage: page, itemsPerPage: pageSize, data: offers });
 
   useEffect(() => {
     if (role) {
       dispatch(fetchOnSubsOffers({ role: session?.role, page: currentPage, perPage }));
     }
   }, [role, currentPage, perPage]);
+
+  // const [data, isLoading] = useFetch(getUserOnSubs);
+  // const [toggle, setToggle] = useState({ value: false });
+
+  // const { isOwner } = getRoleIdentity({ role: session?.role });
+
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -66,37 +76,32 @@ const OnSubs = () => {
     );
   };
 
-  const printComplexPagination = useMemo(
-    () => (
+  const printContent = useMemo(() => {
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (offers) return offers.map(printExpandableRow);
+
+    return <Title level="3">No offers at current stage</Title>;
+  }, [loading, offers, printExpandableRow]);
+
+  return (
+    <section className="flex min-h-[90vh] flex-col gap-y-5">
+      <div className="flex justify-between items-center py-5">
+        <div className="flex flex-col">
+          <Label className="text-xs-sm">Offer stage #3</Label>
+          <Title level="1">On subs</Title>
+        </div>
+        <ToggleRows onToggleClick={setToggle} />
+      </div>
+      <div className="grow flex flex-col gap-y-2.5">{printContent}</div>
       <ComplexPagination
+        label="fleets"
+        perPage={perPage}
         currentPage={currentPage}
         numberOfPages={totalPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
-        pages={selectedPage}
         onChangeOffers={onChangeOffers}
-        perPage={perPage}
       />
-    ),
-    [currentPage, selectedPage, perPage]
-  );
-
-  if (loading) {
-    return <Loader className="h-8 w-8 absolute top-1/2" />;
-  }
-
-  return (
-    <section>
-      <div className="flex justify-between items-center py-5">
-        <div className="flex flex-col">
-          <Label className="text-xs-sm">Offer stage #3</Label>
-          <Title level={1}>On subs</Title>
-        </div>
-        <ToggleRows onToggleClick={setToggle} />
-      </div>
-
-      <div className="flex flex-col gap-y-2.5">{offers?.length && offers.map(printExpandableRow)}</div>
-      {printComplexPagination}
     </section>
   );
 };

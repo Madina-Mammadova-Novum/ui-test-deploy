@@ -20,7 +20,7 @@ const LoadingIndicator = () => (
   </div>
 );
 
-export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, ...rest }) => {
+export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, isDisabled, ...rest }) => {
   const [open, setOpen] = useState(false);
 
   const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
@@ -41,6 +41,7 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, ..
         isLoading={asyncCall}
         theme={dropdownTheme}
         closeMenuOnSelect
+        isDisabled={isDisabled}
       />
     );
   }
@@ -54,8 +55,10 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, ..
       theme={dropdownTheme}
       closeMenuOnSelect
       menuIsOpen={open}
+      isDisabled={isDisabled}
       onMenuOpen={() => setOpen(true)}
       onMenuClose={() => setOpen(false)}
+      className={isDisabled && 'opacity-50'}
     />
   );
 };

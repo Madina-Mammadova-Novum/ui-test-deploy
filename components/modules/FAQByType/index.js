@@ -71,7 +71,7 @@ const FAQByType = () => {
   };
   return (
     <div className="py-5">
-      <Title className="mb-5" level={1}>
+      <Title className="mb-5" level="1">
         FAQ
       </Title>
       {faqList.length > 0 && (
