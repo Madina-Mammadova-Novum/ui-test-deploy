@@ -23,7 +23,7 @@ const PartyItem = ({ buttonText, modalTitle, body = 'No Content Provided' }) => 
       <Modal opened={opened} onClose={handleCloseModal}>
         <div className="w-[672px]">
           <Title component="2">{modalTitle}</Title>
-          {parse(body)}
+          {body && parse(body)}
         </div>
       </Modal>
     </>
