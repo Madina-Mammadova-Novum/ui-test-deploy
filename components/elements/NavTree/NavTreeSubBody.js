@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { useRouter } from 'next/navigation';
 
 import { NavTreeSubBodyPropTypes } from '@/lib/types';
@@ -9,27 +7,29 @@ import { NavTreeSubBodyPropTypes } from '@/lib/types';
 import { Divider } from '@/elements';
 import { useSidebarActiveColor } from '@/utils/hooks';
 
-const NavTreeSubBody = ({ data, onClick, autoClose = false, collapsed = false }) => {
+const NavTreeSubBody = ({ data, onClick, collapsed = false }) => {
   const router = useRouter();
   const { isActive } = useSidebarActiveColor(data.path);
 
   const { label, path, title } = data;
 
-  useEffect(() => {
-    router.prefetch(path);
-  }, [router]);
+  const handlePrefetch = () => router.prefetch(path);
 
   const handleRedirect = (e) => {
     e.stopPropagation();
-    if (autoClose) {
+
+    if (collapsed) {
       router.push(path);
       onClick();
-    } else router.push(path);
+    }
+
+    router.push(path);
   };
 
   return (
     <li
       aria-hidden
+      onMouseEnter={handlePrefetch}
       onClick={handleRedirect}
       className={`${
         isActive ? 'bg-blue text-white' : 'hover:bg-blue-dark'

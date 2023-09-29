@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -20,6 +20,10 @@ const NavTreeSm = ({ data, active }) => {
   const [showLinks, setShowLinks] = useState(false);
 
   const hasNestedLinks = Boolean(data?.items?.length);
+
+  const handleClick = useCallback(() => {
+    setShowLinks(!showLinks);
+  }, [showLinks]);
 
   const printIcon = useMemo(() => {
     const customStyles = classnames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
@@ -42,14 +46,12 @@ const NavTreeSm = ({ data, active }) => {
     }
   }, [data?.variant, active]);
 
-  const printSubTree = (link) => (
-    <NavTreeSubBody autoClose onClick={() => setShowLinks(!showLinks)} key={link.id} data={link} collapsed />
-  );
+  const printSubTree = (link) => <NavTreeSubBody key={link.id} data={link} collapsed onClick={handleClick} />;
 
   return (
     <NavTreeHeader
       href={data?.path}
-      onClick={() => setShowLinks(!showLinks)}
+      onClick={handleClick}
       isSubMenu={hasNestedLinks}
       className="flex items-center transition-all relative"
     >
