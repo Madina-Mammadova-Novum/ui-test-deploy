@@ -17,7 +17,10 @@ const DetailsContent = ({ detailsData }) => {
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
-  const { generalOfferTerms, bankName, bankInfo } = commercialOfferTerms || {};
+  const {
+    generalOfferTerms,
+    bankInfo: { bankName, bankDetails },
+  } = commercialOfferTerms || {};
 
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
@@ -131,7 +134,7 @@ const DetailsContent = ({ detailsData }) => {
             <Title level={4}>{bankName}</Title>
 
             <div className="mt-1.5">
-              {bankInfo?.map(({ title, text }) => (
+              {bankDetails?.map(({ title, text }) => (
                 <TextRow key={title} title={title} inlineVariant>
                   {text}
                 </TextRow>

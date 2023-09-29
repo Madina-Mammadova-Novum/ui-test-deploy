@@ -4,48 +4,6 @@ import { calculateCountdown } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
-  const { cargoId, tankerName, cargoType, quantiity, loadPort, laycanStart, laycanEnd, countdown } = data;
-
-  return [
-    {
-      label: 'Cargo id',
-      text: cargoId ?? '',
-    },
-    {
-      label: 'Tanker name',
-      text: tankerName ?? '',
-    },
-    {
-      label: 'Cargo type',
-      text: cargoType ?? '',
-    },
-    {
-      label: 'Quantity',
-      text: quantiity ?? '',
-    },
-    {
-      label: 'Load port',
-      text: loadPort ?? '',
-    },
-    {
-      label: 'Laycan start',
-      text: laycanStart ?? '',
-    },
-    {
-      label: 'Laycan end',
-      text: laycanEnd ?? '',
-    },
-    {
-      label: 'Countdown',
-      text: countdown ?? '',
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
-    },
-  ];
-};
-
-export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
-  if (!data) return null;
   const {
     searchedCargo: {
       code,
@@ -98,6 +56,65 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   ];
 };
 
+export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
+  if (!data) return null;
+  const {
+    searchedCargo: {
+      code,
+      cargoType,
+      totalQuantity,
+      laycanStart,
+      laycanEnd,
+      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode, country: loadPortCountry } } = {},
+    } = {},
+    vessel: { details: { name: tankerName } = {} } = {},
+    expiresAt,
+    createdAt,
+  } = data;
+
+  return [
+    {
+      label: 'Cargo id',
+      text: code,
+    },
+    {
+      label: 'Tanker name',
+      text: tankerName,
+    },
+    {
+      label: 'Cargo type',
+      text: cargoType?.name,
+    },
+    {
+      label: 'Quantity',
+      text: totalQuantity && `${totalQuantity} tons`,
+    },
+    {
+      label: 'Load port',
+      text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      countryCode: loadPortCountry?.codeISO2,
+    },
+    {
+      label: 'Laycan start',
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
+    },
+    {
+      label: 'Laycan end',
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+    },
+    {
+      label: 'Creation date',
+      text: transformDate(createdAt, 'MMM dd, yyyy'),
+    },
+    {
+      label: 'Countdown',
+      text: calculateCountdown(expiresAt),
+      textStyles: 'text-red',
+      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+    },
+  ];
+};
+
 export const onSubsDetailsAdapter = ({ data }) => {
   if (!data) return {};
   const {
@@ -130,6 +147,13 @@ export const onSubsDetailsAdapter = ({ data }) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
+    itinerary,
+    lastCargo,
+    secondCargo,
+    thirdCargo,
+    lastSire,
+    approvals,
+    bankDetails,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -143,7 +167,9 @@ export const onSubsDetailsAdapter = ({ data }) => {
     port: { name: dischargePortName, locode: dischargePortLocode, country: dischargePortCountry },
   } = dischargeTerminal || {};
 
-  const placeholder = 'Not provided';
+  const bankInfoValues = bankDetails?.split('\r\n');
+  const bankName = bankInfoValues.splice(0, 1);
+  const bankInfoTitles = ['Account Number', 'Bank Code', 'BIC (SWIFT-CODE)', 'IBAN', 'Bank Address'];
 
   return {
     chartererInformation: [
@@ -185,31 +211,31 @@ export const onSubsDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Itinerary',
-          text: placeholder,
+          text: itinerary,
         },
       ],
       lastCargoes: [
         {
           title: 'Last cargo',
-          text: placeholder,
+          text: lastCargo,
         },
         {
           title: '2nd last',
-          text: placeholder,
+          text: secondCargo,
         },
         {
           title: '3rd last',
-          text: placeholder,
+          text: thirdCargo,
         },
       ],
       additionalInformation: [
         {
           title: 'Last sire',
-          text: placeholder,
+          text: lastSire,
         },
         {
           title: 'Approvals',
-          text: placeholder,
+          text: approvals,
         },
       ],
     },
@@ -263,7 +289,6 @@ export const onSubsDetailsAdapter = ({ data }) => {
       ],
     },
     commercialOfferTerms: {
-      bankName: placeholder,
       generalOfferTerms: [
         {
           title: 'Freight',
@@ -286,30 +311,11 @@ export const onSubsDetailsAdapter = ({ data }) => {
           text: paymentTerm?.name,
         },
       ],
-      bankInfo: [
-        {
-          title: 'Account Number',
-          text: placeholder,
-        },
-        {
-          title: 'Bank Code',
-          text: placeholder,
-        },
-        {
-          title: 'BIC (SWIFT-CODE)',
-          text: placeholder,
-        },
-        {
-          title: 'IBAN',
-          text: placeholder,
-        },
-        {
-          title: 'Bank Address',
-          text: placeholder,
-        },
-      ],
+      bankInfo: {
+        bankName,
+        bankDetails: bankInfoTitles.map((point, index) => ({ title: point, text: bankInfoValues[index] })),
+      },
     },
-
     additionalCharterPartyTerms,
   };
 };
