@@ -28,32 +28,20 @@ const OnSubs = () => {
     data: { offers, totalPages },
     loading,
   } = useSelector(onSubsSelector);
-  // const initialPagesStore = {
-  //   currentPage: NAVIGATION_PARAMS.CURRENT_PAGE,
-  //   perPage: NAVIGATION_PARAMS.DATA_PER_PAGE[0].value,
-  // };
 
-  // const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-  //   initialPagesStore.perPage,
-  //   initialPagesStore.currentPage,
-  //   offers
-  // );
   const { page, pageSize } = PAGE_STATE;
 
-  const { currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters({ initialPage: page, itemsPerPage: pageSize, data: offers });
+  const { currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } = useFilters({
+    initialPage: page,
+    itemsPerPage: pageSize,
+    data: offers,
+  });
 
   useEffect(() => {
     if (role) {
       dispatch(fetchOnSubsOffers({ role: session?.role, page: currentPage, perPage }));
     }
   }, [role, currentPage, perPage]);
-
-  // const [data, isLoading] = useFetch(getUserOnSubs);
-  // const [toggle, setToggle] = useState({ value: false });
-
-  // const { isOwner } = getRoleIdentity({ role: session?.role });
-
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
