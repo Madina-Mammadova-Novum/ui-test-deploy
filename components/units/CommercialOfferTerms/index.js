@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CommercialOfferTermsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
+import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { calculateFreightEstimation } from '@/services/calculator';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
 import { offerSelector, searchSelector } from '@/store/selectors';
@@ -21,6 +22,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
     formState: { errors, isSubmitting },
     setValue,
     getValues,
+    watch,
   } = useHookForm();
 
   const { searchData } = useSelector(searchSelector);
@@ -29,6 +31,8 @@ const CommercialOfferTerms = ({ tankerId }) => {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
     loading: initialLoading,
   } = useSelector(offerSelector);
+
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
 
   useEffect(() => {
     dispatch(fetchOfferOptioins(tankerId));
@@ -112,7 +116,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
           label="Value"
           name="value"
           type="number"
-          placeholder="WS"
+          placeholder={freightValuePlaceholder}
           customStyles="w-1/2"
           helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
           error={errors.value?.message}

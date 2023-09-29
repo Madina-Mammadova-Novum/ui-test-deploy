@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
+import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { calculateFreightEstimation } from '@/services/calculator';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
 import { offerSelector } from '@/store/selectors';
@@ -23,6 +24,7 @@ const SendCounterofferFormFields = ({ data }) => {
     formState: { errors, isSubmitting },
     setValue,
     getValues,
+    watch,
   } = useHookForm();
 
   const { data: session } = useSession();
@@ -33,6 +35,8 @@ const SendCounterofferFormFields = ({ data }) => {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
     loading: initialLoading,
   } = useSelector(offerSelector);
+
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
 
   useEffect(() => {
     dispatch(fetchOfferOptioins(tankerId));
@@ -115,7 +119,7 @@ const SendCounterofferFormFields = ({ data }) => {
           label="Value"
           name="value"
           type="number"
-          placeholder="WS"
+          placeholder={freightValuePlaceholder}
           customStyles="w-1/2"
           helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
           error={errors.value?.message}
