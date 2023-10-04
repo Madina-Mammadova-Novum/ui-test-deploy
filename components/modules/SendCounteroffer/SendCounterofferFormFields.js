@@ -1,15 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useSession } from 'next-auth/react';
 
 import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
+import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { calculateFreightEstimation } from '@/services/calculator';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
 import { offerSelector } from '@/store/selectors';
-import { calculateIntDigit, calculateTotal, getValueWithPath } from '@/utils/helpers';
+import { calculateIntDigit, calculateTotal, getRoleIdentity, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SendCounterofferFormFields = ({ data }) => {
@@ -21,13 +24,19 @@ const SendCounterofferFormFields = ({ data }) => {
     formState: { errors, isSubmitting },
     setValue,
     getValues,
+    watch,
   } = useHookForm();
+
+  const { data: session } = useSession();
+  const { isOwner } = getRoleIdentity({ role: session?.role });
 
   const { tankerId, products, loadPortId, dischargePortId } = data;
   const {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
     loading: initialLoading,
   } = useSelector(offerSelector);
+
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
 
   useEffect(() => {
     dispatch(fetchOfferOptioins(tankerId));
@@ -74,6 +83,7 @@ const SendCounterofferFormFields = ({ data }) => {
           placeholder="mt/m³"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
+          disabled={isOwner}
         />
         <Input
           {...register(`products[${index}].quantity`)}
@@ -81,6 +91,7 @@ const SendCounterofferFormFields = ({ data }) => {
           placeholder="tons"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.quantity?.message : null}
+          disabled={isOwner}
         />
       </div>
     );
@@ -90,7 +101,7 @@ const SendCounterofferFormFields = ({ data }) => {
     <>
       <Title level="3">Commercial offer terms</Title>
       <div className="flex items-center mt-3">
-        <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
+        <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-4' }} name="cargoType" />
       </div>
       {products?.filter((product) => product).map(printProduct)}
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
@@ -108,7 +119,7 @@ const SendCounterofferFormFields = ({ data }) => {
           label="Value"
           name="value"
           type="number"
-          placeholder="WS"
+          placeholder={freightValuePlaceholder}
           customStyles="w-1/2"
           helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
           error={errors.value?.message}
@@ -123,7 +134,7 @@ const SendCounterofferFormFields = ({ data }) => {
         label="Demurrage rate"
         name="demurrageRate"
         type="number"
-        placeholder="Daily payment"
+        placeholder="$ per day"
         customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
         disabled={isSubmitting}
@@ -136,7 +147,7 @@ const SendCounterofferFormFields = ({ data }) => {
           name="layTime"
           type="number"
           helperText="The maximum laytime is 100 hours"
-          placeholder="Daily payment"
+          placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
           error={errors.layTime?.message}
           disabled={isSubmitting}
@@ -163,7 +174,7 @@ const SendCounterofferFormFields = ({ data }) => {
         />
 
         <FormDropdown
-          label="payemnt terms"
+          label="payment terms"
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}

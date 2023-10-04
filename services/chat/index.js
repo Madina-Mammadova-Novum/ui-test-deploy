@@ -15,3 +15,11 @@ export const getChatHistoryById = async ({ data }) => {
     ...response,
   };
 };
+
+export const getHelpCenterSession = async () => {
+  const response = await getData('chat/help-center');
+
+  return {
+    ...response,
+  };
+};

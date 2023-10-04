@@ -49,6 +49,20 @@ function chatDealDataAdapter({ data }) {
   };
 }
 
+export function helpCenterDataAdapter({ data }) {
+  if (!data) return null;
+
+  return {
+    chatId: data?.chat?.id,
+    created: data?.createdAt,
+    unreadedMessages: data?.chat?.messageCount,
+    broker: {
+      id: data?.broker?.id,
+      name: `${data?.broker?.name} ${data?.broker?.surname}`,
+    },
+  };
+}
+
 export function listOfChatsDataAdapter({ data }) {
   if (!data) return [];
 
@@ -95,4 +109,10 @@ export function chatHistoryResponseAdapter({ data, session }) {
       messages: messagesDataAdapter({ data: messages, session }),
     },
   };
+}
+
+export function chatSupportResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
 }

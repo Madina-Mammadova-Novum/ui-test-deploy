@@ -34,6 +34,7 @@ const OnSubsExpandedFooter = ({ underRecap = false }) => {
                 size: 'large',
                 text: 'Fail the Subs',
                 className: 'w-max',
+                disabled: underRecap,
               }}
               containerClass="w-[356px]"
             >

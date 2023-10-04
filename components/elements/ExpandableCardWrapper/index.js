@@ -10,6 +10,7 @@ const ExpandableCardWrapper = ({
   headerComponent,
   footerComponent,
   children,
+  isOpened,
   className = '',
   expandAll = { value: false },
 }) => {
@@ -20,6 +21,10 @@ const ExpandableCardWrapper = ({
   useEffect(() => {
     setToggle(expandAll.value);
   }, [expandAll]);
+
+  useEffect(() => {
+    if (isOpened) setToggle(isOpened);
+  }, [isOpened]);
 
   const handleClick = () => {
     setToggle((prevValue) => !prevValue);

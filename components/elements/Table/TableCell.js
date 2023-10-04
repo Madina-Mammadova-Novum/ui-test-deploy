@@ -57,6 +57,7 @@ const TableCell = ({ cellProps }) => {
 
   const country = getCountryById({ data: countries, id: countryId });
   const availableCountryCode = countryFlag || country?.countryCode;
+
   const port = { value: portId, label: value, countryFlag: availableCountryCode };
 
   const printModal = (action) => {
@@ -126,6 +127,28 @@ const TableCell = ({ cellProps }) => {
     );
   }, [availableCountryCode]);
 
+  const printModalView = useMemo(() => {
+    return actions.map((cell) => {
+      const { action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles } = cell;
+
+      return (
+        <ModalWindow
+          containerClass="overflow-y-[unset] z-50"
+          buttonProps={{
+            icon: { before: editIcon },
+            variant: actionVariant,
+            size: actionSize,
+            text: actionText,
+            disabled: actionDisabled,
+            className: !editable ? `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}` : `!p-0 ${actionStyles}`,
+          }}
+        >
+          {printModal(action)}
+        </ModalWindow>
+      );
+    });
+  }, [actions]);
+
   return (
     <td
       className={`${
@@ -150,7 +173,6 @@ const TableCell = ({ cellProps }) => {
             )}
           </div>
         )}
-
         {link && (
           <NextLink href={link} target="blank" className="bg-white p-0 text-blue hover:text-blue-darker">
             View
@@ -164,28 +186,7 @@ const TableCell = ({ cellProps }) => {
           />
         )}
 
-        <div className="flex gap-x-2.5">
-          {editable &&
-            actions.map(
-              ({ action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles }) => (
-                <ModalWindow
-                  containerClass="overflow-y-[unset] z-50"
-                  buttonProps={{
-                    icon: { before: editIcon },
-                    variant: actionVariant,
-                    size: actionSize,
-                    text: actionText,
-                    disabled: actionDisabled,
-                    className: !editable
-                      ? `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}`
-                      : `!p-0 ${actionStyles}`,
-                  }}
-                >
-                  {printModal(action)}
-                </ModalWindow>
-              )
-            )}
-        </div>
+        <div className="flex gap-x-2.5">{editable && printModalView}</div>
       </div>
     </td>
   );

@@ -5,13 +5,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 /* Services */
 import { CHAT } from './types';
 
-import { listOfChatsDataAdapter } from '@/adapters';
-import { getChatHistoryById, getListOfChatSessions } from '@/services';
+import { helpCenterDataAdapter, listOfChatsDataAdapter } from '@/adapters';
+import { getChatHistoryById, getHelpCenterSession, getListOfChatSessions } from '@/services';
 
 export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async () => {
-  const { data } = await getListOfChatSessions();
+  const [{ data: chats }, { data: support }] = await Promise.all([getListOfChatSessions(), getHelpCenterSession()]);
 
-  return { data: listOfChatsDataAdapter({ data }) };
+  return { active: listOfChatsDataAdapter({ data: chats }), support: helpCenterDataAdapter({ data: support }) };
 });
 
 export const getChatHistory = createAsyncThunk(CHAT.GET_HISTORY, async ({ data }) => {

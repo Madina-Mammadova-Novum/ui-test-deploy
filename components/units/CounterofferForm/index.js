@@ -10,10 +10,11 @@ import * as yup from 'yup';
 import { CounterofferFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
+import { COUNTEROFFER_REQUIREMENTS_ERROR } from '@/lib/constants';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
-import { parseErrors } from '@/utils/helpers';
+import { counterofferMinimumImprovementAchieved, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -30,26 +31,28 @@ const CounterofferForm = ({
 }) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
-  const { cargoType, products, offerId, responseCountdown } = data;
+
+  const { products, offerId, responseCountdown } = data;
+
   const methods = useHookFormParams({
     schema,
     state: {
-      cargoType,
+      ...data,
       ...products
         .filter((product) => product)
-        .reduce(
-          (_, curr, index) => ({
-            [`products[${index}].product`]: curr.product,
-            [`products[${index}].density`]: curr.density,
-            [`products[${index}].tolerance`]: curr.tolerance,
-            [`products[${index}].quantity`]: curr.quantity,
-          }),
-          {}
-        ),
+        .reduce((resulted, curr, index) => {
+          resulted[`products[${index}].product`] = curr.product;
+          resulted[`products[${index}].density`] = curr.density;
+          resulted[`products[${index}].tolerance`] = curr.tolerance;
+          resulted[`products[${index}].quantity`] = curr.quantity;
+          return resulted;
+        }, {}),
     },
   });
 
   const handleSubmit = async (formData) => {
+    if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData }))
+      return errorToast(COUNTEROFFER_REQUIREMENTS_ERROR);
     if (!allowSubmit) return handleConfirmCounteroffer();
 
     const { message: successMessage, error } = await sendCounteroffer({

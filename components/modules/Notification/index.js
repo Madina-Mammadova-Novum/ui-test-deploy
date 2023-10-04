@@ -9,6 +9,8 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
+import { notificationService } from '@/services/signalR';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -16,7 +18,7 @@ import { NotificationContent, NotificationControl } from '@/units';
 const Notification = () => {
   const dispatch = useDispatch();
 
-  const { unreadCounter } = useSelector(getNotificationsDataSelector);
+  const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
 
   const [isOpened, setIsOpened] = useState(false);
 
@@ -24,8 +26,13 @@ const Notification = () => {
   const handleClose = () => setIsOpened(false);
 
   useEffect(() => {
+    notificationService?.initNotifications();
+  }, []);
+
+  useEffect(() => {
     if (!isOpened) dispatch(resetParams());
-  }, [isOpened]);
+    dispatch(fetchNotifications(filterParams));
+  }, [isOpened, filterParams]);
 
   return (
     <div>

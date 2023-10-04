@@ -13,8 +13,8 @@ export const vesselsSelector = ({ positions, fleets }) => {
       ...positions.data,
       unassigned: {
         title: 'Unassigned Fleet',
-        activeTankers: fleets.unassignedFleetData.filter((fleet) => fleet.appearsInSearch === true).length,
-        inActiveTankers: fleets.unassignedFleetData.filter((fleet) => fleet.appearsInSearch !== true).length,
+        activeTankers: fleets.unassignedFleetData?.filter((fleet) => fleet.appearsInSearch === true).length,
+        inActiveTankers: fleets.unassignedFleetData?.filter((fleet) => fleet.appearsInSearch !== true).length,
         type: 'unassigned',
         tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
       },
@@ -28,6 +28,7 @@ export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
 export const preFixtureSelector = ({ preFixture }) => preFixture;
+export const onSubsSelector = ({ onSubs }) => onSubs;
 export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
@@ -83,13 +84,26 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     tab: state.filterParams.tabValue,
     limit: state.filterParams.limit,
     chats: state.data,
+    support: {
+      chatId: state?.data?.support?.chatId,
+      vessel: state?.data?.support?.broker,
+    },
     collapsedChats: {
       counter: state.data.collapsed.length,
       data: state.data.collapsed,
     },
-    totalActive: state.data.active.length,
-    totalArchived: state.data.archived.length,
+    totalActive: state.data?.active?.length,
+    totalArchived: state.data?.archived?.length,
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
+  };
+});
+
+export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    totalPages: state.data?.totalPages,
+    data: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };
 });

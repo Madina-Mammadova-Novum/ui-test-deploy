@@ -42,10 +42,12 @@ const NavTreeXl = ({ data, active }) => {
     }
   }, [data?.variant, active]);
 
+  const onToggle = () => dispatch(handleToggle(!opened));
+
   return (
     <NavTreeHeader
       href={data.path}
-      onClick={() => dispatch(handleToggle(!opened))}
+      onClick={onToggle}
       isSubMenu={hasNestedLinks}
       className="flex items-center transition-all"
     >

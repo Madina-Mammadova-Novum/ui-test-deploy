@@ -34,6 +34,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
   const {
     prefilledUpdateVesselState: { loading, data: prefilledData, ports, countries, tankerTypes },
   } = useSelector(fleetsSelector);
+
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
       options: [],

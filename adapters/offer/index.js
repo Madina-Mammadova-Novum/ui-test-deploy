@@ -147,6 +147,7 @@ export function offerDetailsAdapter({ data, role }) {
     failureReason,
     failedBy,
     expiresAt,
+    freightFormat,
   } = data;
 
   return {
@@ -169,7 +170,7 @@ export function offerDetailsAdapter({ data, role }) {
           {
             key: 'Load port',
             label: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
-            countryCode: 'us',
+            countryCode: loadTerminal?.port?.country?.codeISO2,
           },
           {
             key: 'Load terminal',
@@ -182,7 +183,7 @@ export function offerDetailsAdapter({ data, role }) {
             label: `${dischargeTerminal?.port?.name}${
               dischargeTerminal?.port?.locode && `, ${dischargeTerminal?.port?.locode}`
             }`,
-            countryCode: 'us',
+            countryCode: dischargeTerminal?.port?.country?.codeISO2,
           },
           {
             key: 'Discharge terminal',
@@ -258,6 +259,21 @@ export function offerDetailsAdapter({ data, role }) {
         tolerance,
         quantity: minQuantity,
       })),
+      value: freight,
+      demurrageRate,
+      layTime,
+      undisputedDemurrage: {
+        label: demurragePaymentTerm?.name,
+        value: demurragePaymentTerm?.id,
+      },
+      paymentTerms: {
+        label: paymentTerm?.name,
+        value: paymentTerm?.id,
+      },
+      freight: {
+        label: freightFormat?.value,
+        value: freightFormat?.id,
+      },
     },
     failedOfferData: {
       isFailed,
