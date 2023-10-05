@@ -6,7 +6,7 @@ import { BadgePropTypes } from '@/lib/types';
 
 import CloseIcon from '@/assets/icons/CloseIcon';
 
-const Badge = ({ counter, onClose, className = 'h-5 w-5 -top-0.5 right-0 p-1' }) => {
+const Badge = ({ counter, onClose, withCancel = false, className = 'h-5 w-5 -top-0.5 right-0 p-1' }) => {
   const printAction = useMemo(() => {
     if (counter !== 0)
       return (
@@ -17,7 +17,9 @@ const Badge = ({ counter, onClose, className = 'h-5 w-5 -top-0.5 right-0 p-1' })
         </div>
       );
 
-    return <CloseIcon onClick={onClose} className="fill-black absolute top-0 right-0 !z-50" />;
+    if (withCancel) return <CloseIcon onClick={onClose} className="fill-black absolute top-0 right-0 !z-50" />;
+
+    return null;
   }, [onClose, counter, className]);
 
   return printAction;

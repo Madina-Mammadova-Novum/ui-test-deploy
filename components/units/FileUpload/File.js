@@ -9,7 +9,7 @@ const File = memo(({ title, onClick }) => {
     <div className="flex max-w-xs h-min px-5 py-2 rounded-md border border-blue border-solid justify-between items-center">
       <p className="text-black text-xsm font-semibold normal-case">{title}</p>
       <button type="button" className="h-min" onClick={onClick}>
-        <CloseSVG />
+        <CloseSVG className="fill-black pl-1" />
       </button>
     </div>
   );

@@ -1,3 +1,4 @@
+import { FILE_CODE_ERRORS } from '@/lib/constants';
 import { uploadData } from '@/services/upload';
 import { makeId } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
@@ -17,12 +18,23 @@ export const fileReaderAdapter = (file, setValue, setError, setLoading) => {
     setLoading(false);
     if (status === 200) setValue('file', data);
     else {
-      setError('file', { type: 'manual', message: 'This file size is not supported.' });
+      setError('file', { type: 'manual', message: errors?.message });
       errorToast(errors?.title, errors?.message);
     }
   };
 
   reader.readAsDataURL(file);
+};
+
+export const fileErrorAdapter = ({ data }) => {
+  if (!data) return [];
+
+  const errors = data?.map((error) => ({ message: FILE_CODE_ERRORS[error.code] }));
+
+  return {
+    type: 'manual',
+    message: errors?.map((error) => `${error.message} `),
+  };
 };
 
 export const uploadDataAdapter = ({ data }) => {

@@ -76,7 +76,12 @@ const OwnerRegistrationForm = () => {
         <Step title="Step #2: User Details" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <PersonalDetails />
           <p className="text-black font-semibold text-sm pt-5">Enter a password for account access</p>
-          <PasswordValidation />
+          <PasswordValidation
+            helperData={{
+              password: { label: 'chose password', placeholder: 'Enter your password' },
+              confirm: { label: 'confirm password', placeholder: 'Enter your password' },
+            }}
+          />
         </Step>
         <Divider className="mt-5" />
         <Step title="Step #3: Choose who you are" titleClass="pt-5" containerClass="flex flex-col gap-5">

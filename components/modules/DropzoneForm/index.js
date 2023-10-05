@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 
 import { DropZonePropTypes } from '@/lib/types';
 
-import { fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
+import { fileErrorAdapter, fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
 import { Input, Loader, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { Dropzone, File } from '@/units';
@@ -17,6 +17,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
     register,
     setValue,
     setError,
+    clearErrors,
     formState: { errors },
   } = useHookForm();
 
@@ -25,16 +26,13 @@ const DropzoneForm = ({ showTextFields = true }) => {
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
 
   const resetDropzone = useCallback(() => {
-    setValue('file', null);
     setFiles([]);
-  }, [setValue]);
+    setValue('file', null);
+  }, [setValue, setError]);
 
   const onDrop = (acceptedFiles, rejections) => {
-    if (rejections && rejections.length > 0) {
-      setError('file', {
-        type: 'manual',
-        message: rejections && 'This file size is not supported.',
-      });
+    if (rejections.length > 0) {
+      setError('file', fileErrorAdapter({ data: rejections[0]?.errors }));
       resetDropzone();
     } else {
       setFiles(acceptedFiles.map(fileUpdateAdapter));
@@ -46,19 +44,23 @@ const DropzoneForm = ({ showTextFields = true }) => {
     (e, file) => {
       e.preventDefault();
       const newFiles = [...files].filter((el) => el.id !== file.id);
+
       if (newFiles.length > 0) {
         setFiles(newFiles);
         setValue('file', newFiles);
       } else {
         resetDropzone();
+        clearErrors('file');
       }
     },
-    [files, resetDropzone, setValue]
+    [files, resetDropzone, setValue, clearErrors]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false,
+    maxFiles: 1,
+    maxSize: 10 * 1024 * 1024,
     accept: { files: AVAILABLE_FORMATS.DOCS },
   });
 
