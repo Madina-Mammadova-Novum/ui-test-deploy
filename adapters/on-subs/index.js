@@ -1,4 +1,5 @@
 import ClockSVG from '@/assets/images/clock.svg';
+import { DynamicCountdownTimer } from '@/units';
 import { transformDate } from '@/utils/date';
 import { calculateCountdown } from '@/utils/helpers';
 
@@ -49,9 +50,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      text: <DynamicCountdownTimer date={calculateCountdown(expiresAt)} />,
     },
   ];
 };

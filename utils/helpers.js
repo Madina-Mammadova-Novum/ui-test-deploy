@@ -464,10 +464,10 @@ export const getListOfDataByDays = (data) => {
 };
 
 export const calculateCountdown = (expiresAt, frozenAt) => {
-  const milisecondsInSecond = 1000;
-  const milisecondsInMinute = 60 * milisecondsInSecond;
-  const milisecondsInHour = 60 * milisecondsInMinute;
-  const milisecondsInDay = 24 * milisecondsInHour;
+  // const milisecondsInSecond = 1000;
+  // const milisecondsInMinute = 60 * milisecondsInSecond;
+  // const milisecondsInHour = 60 * milisecondsInMinute;
+  // const milisecondsInDay = 24 * milisecondsInHour;
   const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
 
   let milisecondsUntilExpiration = 0;
@@ -477,16 +477,19 @@ export const calculateCountdown = (expiresAt, frozenAt) => {
     milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
   }
 
-  const sign = milisecondsUntilExpiration < 0 ? '-' : '';
-  const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
+  return milisecondsUntilExpiration < 0 ? Date.now() : Date.now() + milisecondsUntilExpiration;
 
-  const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
-  const hours = Math.abs(Math[method]((milisecondsUntilExpiration % milisecondsInDay) / milisecondsInHour));
-  const minutes = Math.abs(
-    Math[method](((milisecondsUntilExpiration % milisecondsInDay) % milisecondsInHour) / milisecondsInMinute)
-  );
+  // Old implementation
+  // const sign = milisecondsUntilExpiration < 0 ? '-' : '';
+  // const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
 
-  return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
+  // const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
+  // const hours = Math.abs(Math[method]((milisecondsUntilExpiration % milisecondsInDay) / milisecondsInHour));
+  // const minutes = Math.abs(
+  //   Math[method](((milisecondsUntilExpiration % milisecondsInDay) % milisecondsInHour) / milisecondsInMinute)
+  // );
+
+  // return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
 };
 
 export const formattetTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
