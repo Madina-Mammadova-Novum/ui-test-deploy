@@ -46,17 +46,15 @@ const ChatSession = ({ data }) => {
     handleChangeState('deactivate', false);
   };
 
+  const handleCloseConversation = () => chatService.disconnect();
+
   const handleOpenConversation = () => {
-    if (data?.chatId !== user?.chatId) chatService.disconnect();
+    if (data?.chatId !== user?.chatId) handleCloseConversation();
 
     chatService?.initChat({
       chatId: data?.chatId,
       vessel: { name: data?.vessel?.name, data: data?.vessel?.data, cargoId: data?.vessel?.cargoId },
     });
-  };
-
-  const handleCloseConversation = () => {
-    chatService.disconnect();
   };
 
   const handleCollapseConversation = () => {

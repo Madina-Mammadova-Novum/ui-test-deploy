@@ -73,6 +73,4 @@ const UploadForm = () => {
   );
 };
 
-UploadForm.propTypes = {};
-
 export default UploadForm;

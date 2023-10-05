@@ -47,7 +47,7 @@ const CompanyInfoForm = ({ closeModal }) => {
 
     if (status === 200) {
       dispatch(fetchUserProfileData());
-      successToast(null, response.message);
+      successToast(null, response.data?.message);
     }
     if (error) errorToast(error?.message);
     return null;
