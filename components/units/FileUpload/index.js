@@ -5,6 +5,8 @@ import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
+import { UploadFormPropTypes } from '@/lib/types';
+
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { FormManager } from '@/common';
@@ -12,7 +14,7 @@ import { uploadFileSchema } from '@/lib/schemas';
 import { DropzoneForm } from '@/modules';
 import { useHookFormParams } from '@/utils/hooks';
 
-const UploadForm = () => {
+const UploadForm = ({ onSubmit = () => {} }) => {
   const schema = yup.object().shape({
     ...uploadFileSchema(),
   });
@@ -23,10 +25,6 @@ const UploadForm = () => {
   const [toggle, setToggle] = useState(false);
 
   const handleToggle = () => setToggle((prev) => !prev);
-
-  const onSubmit = async (formData) => {
-    return { formData };
-  };
 
   const printTextCta = useMemo(() => {
     switch (toggle) {
@@ -73,6 +71,6 @@ const UploadForm = () => {
   );
 };
 
-UploadForm.propTypes = {};
+UploadForm.propTypes = UploadFormPropTypes;
 
 export default UploadForm;

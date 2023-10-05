@@ -24,7 +24,7 @@ export const fetchPrefixtureOffers = (() => {
     const { data } = await fetchByRole({ page, perPage });
 
     return {
-      data: { offers: data, totalPages },
+      data: { offers: data || [], totalPages },
     };
   });
 })();

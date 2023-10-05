@@ -28,6 +28,7 @@ const tabs = [
 const ViewOffer = ({ setStep, data, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const [allowCountdownExtension, setAllowCountdownExtension] = useState(data?.allowExtension);
   const { data: session } = useSession();
   const { voyageDetails, commercialOfferTerms, comments, countdown } = data;
 
@@ -37,6 +38,7 @@ const ViewOffer = ({ setStep, data, offerId }) => {
       errorToast(parseErrors(error.message));
     } else {
       successToast(successMessage);
+      setAllowCountdownExtension(false);
     }
   };
 
@@ -60,6 +62,7 @@ const ViewOffer = ({ setStep, data, offerId }) => {
           <Button
             customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
+            disabled={!allowCountdownExtension}
             onClick={handleExtendCountdown}
           />
         </div>

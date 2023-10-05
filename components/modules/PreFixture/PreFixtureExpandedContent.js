@@ -28,7 +28,7 @@ const tabs = [
 
 const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const allowCountdownExtension = detailsData?.additionalCharterPartyTerms?.length;
+  const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
   const { data: session } = useSession();
 
   const handleExtendCountdown = async () => {
@@ -37,6 +37,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params
       errorToast(parseErrors(error.message));
     } else {
       successToast(successMessage);
+      setAllowCountdownExtension(false);
     }
   };
 

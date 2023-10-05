@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, extractTimeFromDate, getAppropriateFailedBy } from '@/utils/helpers';
+import { calculateCountdown, extractTimeFromDate, getAppropriateFailedBy, getRoleIdentity } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -148,10 +148,15 @@ export function offerDetailsAdapter({ data, role }) {
     failedBy,
     expiresAt,
     freightFormat,
+    isCountdownExtendedByOwner,
+    isCountdownExtendedByCharterer,
   } = data;
+  const { isOwner } = getRoleIdentity({ role });
+  const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
 
   return {
     countdown: calculateCountdown(expiresAt),
+    allowExtension: allowExtensionByRole,
     voyageDetails: {
       dates: [
         [

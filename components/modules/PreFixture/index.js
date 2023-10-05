@@ -20,7 +20,10 @@ import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
-import { getPreFixtureDataSelector } from '@/store/selectors';
+import {
+  // getPreFixtureDataSelector,
+  preFixtureSelector,
+} from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
@@ -33,13 +36,18 @@ const PreFixture = ({ searchParams }) => {
   const role = useMemo(() => session?.role, [session?.role]);
   const { isOwner } = getRoleIdentity({ role });
 
-  const { loading, totalPages, data } = useSelector(getPreFixtureDataSelector);
-  const searchedData = data.find((element) => element?.cargoeId === searchParams.id);
+  const {
+    loading,
+    data: { offers, totalPages },
+  } = useSelector(preFixtureSelector);
+  // TODO: consider empty responses
+  // const { loading, totalPages, data } = useSelector(getPreFixtureDataSelector);
+  // const searchedData = data?.find((element) => element?.cargoeId === searchParams.id);
 
   const { page, pageSize } = PAGE_STATE;
 
   const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    { initialPage: page, itemsPerPage: pageSize, data }
+    { initialPage: page, itemsPerPage: pageSize, data: offers }
   );
 
   useEffect(() => {
@@ -53,19 +61,24 @@ const PreFixture = ({ searchParams }) => {
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
-    const isOpened = searchedData?.cargoeId === rowData?.cargoeId;
+    // const isOpened = searchedData?.cargoeId === rowData?.cargoeId;
 
     return (
       <ExpandableRow
         key={rowData.id}
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr" />}
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr'}
+          />
+        }
         footer={
           <PreFixtureExpandedFooter
             underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
             offerId={rowData.id}
           />
         }
-        isOpened={isOpened}
+        // isOpened={isOpened}
         expand={toggle}
       >
         <PreFixtureExpandedContent
@@ -80,10 +93,10 @@ const PreFixture = ({ searchParams }) => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (data) return data.map(printExpandableRow);
+    if (offers) return offers.map(printExpandableRow);
 
-    return <Title level="3">No pre-fixture positions</Title>;
-  }, [loading, data, printExpandableRow]);
+    return <Title level="3">No offers at current stage</Title>;
+  }, [loading, offers, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">

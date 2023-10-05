@@ -11,9 +11,18 @@ const initialState = {
   },
 };
 
-const userSlice = createSlice({
+const onSubsSlice = createSlice({
   name: 'on-subs',
   initialState,
+  reducers: {
+    updateDocumentStatus: (state, action) => {
+      const { documentId, status } = action?.payload;
+      state.data.offers = state.data.offers.map((offer) => ({
+        ...offer,
+        documents: offer.documents.map((document) => (document.id === documentId ? { ...document, status } : document)),
+      }));
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchOnSubsOffers.pending, (state) => {
       state.loading = true;
@@ -29,4 +38,6 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export const { updateDocumentStatus } = onSubsSlice.actions;
+
+export default onSubsSlice.reducer;

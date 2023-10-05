@@ -72,6 +72,8 @@ import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
+import RequestDocumentDeletionModal from '@/units/RequestDocumentDeletionModal';
+import RevokeDocumentDeletionModal from '@/units/RevokeDocumentDeletionModal';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
 import SearchNotFound from '@/units/SearchNotFound';
@@ -186,4 +188,6 @@ export {
   ChatInfoModal,
   NegotiatingChartererInformation,
   SearchNotFound,
+  RequestDocumentDeletionModal,
+  RevokeDocumentDeletionModal,
 };

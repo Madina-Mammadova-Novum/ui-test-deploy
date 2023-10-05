@@ -23,6 +23,8 @@ import {
   NegotiatingChartererInformation,
   NegotiatingTankerInformation,
   ReactivateTankerForm,
+  RequestDocumentDeletionModal,
+  RevokeDocumentDeletionModal,
   UpdateTankerForm,
   ViewCommentContent,
 } from '@/units';
@@ -106,6 +108,10 @@ const TableCell = ({ cellProps }) => {
         return <DeleteTankerModal state={{ id, name, action }} />;
       case ACTIONS.ASSIGN_FLEET:
         return <AssignToFleet tankerId={id} name={name} />;
+      case ACTIONS.REQUEST_DOCUMENT_DELETION:
+        return <RequestDocumentDeletionModal documentId={id} />;
+      case ACTIONS.REVOKE_DOCUMENT_DELETION:
+        return <RevokeDocumentDeletionModal documentId={id} />;
       default:
         return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
     }

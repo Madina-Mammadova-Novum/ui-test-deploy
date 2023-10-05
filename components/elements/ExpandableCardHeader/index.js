@@ -5,7 +5,10 @@ import classnames from 'classnames';
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
-import { TextWithLabel } from '@/elements';
+import {
+  // HoverTooltip,
+  TextWithLabel,
+} from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
@@ -45,6 +48,13 @@ const ExpandableCardHeader = ({
       })}
       style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
     >
+      {/* TODO: Discuss with team */}
+      {/* <HoverTooltip
+        data={{
+          description: data?.text,
+        }}
+        className="!top-0 -translate-y-2/4"
+      > */}
       <TextWithLabel
         label={data?.label}
         text={data?.text}
@@ -55,6 +65,7 @@ const ExpandableCardHeader = ({
         icon={data?.icon}
         countryCode={data?.countryCode}
       />
+      {/* </HoverTooltip> */}
     </div>
   );
 
