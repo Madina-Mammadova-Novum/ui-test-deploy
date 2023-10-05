@@ -10,10 +10,13 @@ export function chatSessionResponseAdapter({ data }) {
 function chatSessionDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id } = data;
+  const { id, contentId, archieved, messageCount } = data;
 
   return {
     chatId: id,
+    contentId,
+    archieved,
+    messageCount,
   };
 }
 

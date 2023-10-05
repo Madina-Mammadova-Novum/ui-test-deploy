@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
+import { chatService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
@@ -22,12 +23,16 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    chatService.initStatus();
+  }, []);
+
+  useEffect(() => {
     if (opened) dispatch(getListOfChats());
   }, [opened]);
 
   return (
     <>
-      <ChatButton counter={3} onClick={handleOpen} className="fixed right-3 bottom-3 z-30" />
+      <ChatButton counter={1} onClick={handleOpen} className="fixed right-3 bottom-3 z-30" />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <CollapsedChats />
     </>

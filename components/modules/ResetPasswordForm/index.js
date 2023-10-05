@@ -49,7 +49,12 @@ const ResetPasswordForm = ({ params }) => {
         }}
         submitAction={onSubmit}
       >
-        <PasswordValidation />
+        <PasswordValidation
+          helperData={{
+            password: { label: 'chose password', placeholder: 'Enter your password' },
+            confirm: { label: 'confirm password', placeholder: 'Enter your password' },
+          }}
+        />
       </FormManager>
     </FormProvider>
   );

@@ -30,7 +30,7 @@ const ChatButton = ({ counter, name, onClick, onClose, className = '' }) => {
         className={`relative rounded-full shadow-2xmd z-30 outline-none ${setStyles}`}
       >
         {printIcon}
-        <Badge counter={counter} onClose={onClose} />
+        <Badge counter={counter} onClose={onClose} withCancel />
       </button>
     </div>
   );

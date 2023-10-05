@@ -30,7 +30,7 @@ const AccountDetails = () => {
 
   return (
     <section className="flex justify-start items-start flex-col gap-2.5">
-      <Title level={1} className="py-5">
+      <Title level="1" className="py-5">
         Account information
       </Title>
       {loading && <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />}

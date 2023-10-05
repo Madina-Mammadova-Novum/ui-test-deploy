@@ -38,13 +38,16 @@ const initialState = [
   },
 ];
 
-const PasswordValidation = ({ title = '', customStyles = '' }) => {
+const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
   const [validation, setValidation] = useState(initialState);
+
   const {
     clearErrors,
     setValue,
     formState: { isSubmitSuccessful, isSubmitting },
   } = useHookForm();
+
+  const { password, confirm } = helperData;
 
   useEffect(() => {
     if (isSubmitSuccessful) setValidation(initialState);
@@ -72,15 +75,15 @@ const PasswordValidation = ({ title = '', customStyles = '' }) => {
         <div className="w-full flex flex-col gap-y-5 justify-between">
           <PasswordInput
             name="password"
-            label="Chose password"
-            placeholder="Enter your password"
+            label={password?.label}
+            placeholder={password?.placeholder}
             disabled={isSubmitting}
             onChange={passwordValidation}
           />
           <PasswordInput
             name="confirmPassword"
-            label="Confirm password"
-            placeholder="Enter your password"
+            label={confirm?.label}
+            placeholder={confirm?.placeholder}
             disabled={isSubmitting}
             customStyles="mt-4"
             onChange={passwordValidation}
