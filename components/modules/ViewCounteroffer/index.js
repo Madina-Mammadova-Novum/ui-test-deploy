@@ -32,7 +32,7 @@ const ViewCounteroffer = ({ itemId }) => {
   const isOwner = session?.role === ROLES.OWNER;
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
-  const { comments, voyageDetails, commercialOfferTerms, countdown } = offerDetails;
+  const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;
 
   useEffect(() => {
     (async () => {
@@ -68,7 +68,7 @@ const ViewCounteroffer = ({ itemId }) => {
       <ModalHeader>{isOwner ? 'View Counteroffer' : 'View Sent Offer'}</ModalHeader>
 
       {isOwner ? (
-        <Countdown time={countdown} customStyles="mt-5" />
+        <Countdown time={countdownData} customStyles="mt-5" />
       ) : (
         <div className="flex text-[12px] items-center mt-5">
           <div className="pl-4 border-l-2 border-blue h-min flex items-center">
