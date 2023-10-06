@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback } from 'react';
 
 import classnames from 'classnames';
@@ -7,7 +9,7 @@ import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 import TableArrowSVG from '@/assets/images/arrow.svg';
 import { TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
-import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
+import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
 const ExpandableCardHeader = ({
@@ -47,7 +49,7 @@ const ExpandableCardHeader = ({
     >
       <TextWithLabel
         label={data?.label}
-        text={data?.text}
+        text={data.countdownData ? <DynamicCountdownTimer {...data.countdownData} /> : data?.text}
         coverImage={data?.coverImage}
         customStyles={!index && 'mr-auto'}
         textStyles={data?.textStyles}

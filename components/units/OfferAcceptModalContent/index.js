@@ -30,7 +30,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [offerDetails, setOfferDetails] = useState({});
-  const { commercialOfferTerms, voyageDetails, countdown } = offerDetails;
+  const { commercialOfferTerms, voyageDetails, countdownData } = offerDetails;
   const { data: session } = useSession();
 
   const handleSubmit = async () => {
@@ -79,7 +79,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
       <Title level={2}>Accept the Pre-fixture Offer</Title>
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time={countdown} />
+        <Countdown time={countdownData} />
         <div className="pl-4 border-l h-min flex flex-col items-start">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button

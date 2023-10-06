@@ -147,11 +147,15 @@ export function offerDetailsAdapter({ data, role }) {
     failureReason,
     failedBy,
     expiresAt,
+    frozenAt,
     freightFormat,
   } = data;
 
   return {
-    countdown: calculateCountdown(expiresAt),
+    countdownData: {
+      date: calculateCountdown(expiresAt, frozenAt),
+      autoStart: !frozenAt,
+    },
     voyageDetails: {
       dates: [
         [
