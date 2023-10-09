@@ -1,9 +1,12 @@
+import { useDispatch } from 'react-redux';
+
 import { useSession } from 'next-auth/react';
 
 import { documentsContentPropTypes } from '@/lib/types';
 
 import { Table } from '@/elements';
 import { uploadOnSubsDocument } from '@/services/on-subs';
+import { updateDocumentList } from '@/store/entities/on-subs/slice';
 import { UploadForm } from '@/units';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -11,9 +14,14 @@ import { onSubsHeader } from '@/utils/mock';
 
 const DocumentsContent = ({ rowsData = [], offerId }) => {
   const { data: session } = useSession();
+  const dispatch = useDispatch();
 
   const onSubmit = async (formData) => {
-    const { error, message: successMessage } = await uploadOnSubsDocument({
+    const {
+      data,
+      error,
+      message: successMessage,
+    } = await uploadOnSubsDocument({
       data: { ...formData, offerId },
       role: session?.role,
     });
@@ -21,6 +29,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       const { errors } = error;
       errorToast(parseErrors({ errors }));
     } else {
+      dispatch(updateDocumentList({ offerId, newDocument: data }));
       successToast(successMessage);
     }
   };

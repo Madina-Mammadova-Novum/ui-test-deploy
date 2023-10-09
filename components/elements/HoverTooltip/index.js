@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { TooltipParamsPropTypes } from '@/lib/types';
 
-const HoverTooltip = ({ data, className, children }) => {
+const HoverTooltip = ({ data, disabled = false, className, children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleEnter = () => setShowTooltip(true);
@@ -14,10 +14,10 @@ const HoverTooltip = ({ data, className, children }) => {
 
   return (
     <div className="group relative transition-all">
-      <span onMouseEnter={handleEnter} onMouseLeave={handleClose} className="text-gray cursor-help">
+      <span onMouseEnter={handleEnter} onMouseLeave={handleClose} className={`text-gray ${!disabled && 'cursor-help'}`}>
         {children}
       </span>
-      {showTooltip && (
+      {!disabled && showTooltip && (
         <div
           className={`absolute top-8 ${className} bg-white transition-all w-max flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-2.5 rounded-base`}
           onMouseEnter={handleEnter}
