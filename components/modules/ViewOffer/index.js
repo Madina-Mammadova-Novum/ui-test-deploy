@@ -28,8 +28,9 @@ const tabs = [
 const ViewOffer = ({ setStep, data, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const [allowCountdownExtension, setAllowCountdownExtension] = useState(data?.allowExtension);
   const { data: session } = useSession();
-  const { voyageDetails, commercialOfferTerms, comments, countdown } = data;
+  const { voyageDetails, commercialOfferTerms, comments, countdownData } = data;
 
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
@@ -37,6 +38,7 @@ const ViewOffer = ({ setStep, data, offerId }) => {
       errorToast(parseErrors(error.message));
     } else {
       successToast(successMessage);
+      setAllowCountdownExtension(false);
     }
   };
 
@@ -54,12 +56,13 @@ const ViewOffer = ({ setStep, data, offerId }) => {
       <ModalHeader>View Incoming Offer</ModalHeader>
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time={countdown} />
+        <Countdown time={countdownData} />
         <div className="pl-4 border-l h-min flex flex-col items-start">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button
             customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
+            disabled={!allowCountdownExtension}
             onClick={handleExtendCountdown}
           />
         </div>

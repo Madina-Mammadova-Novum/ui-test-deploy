@@ -1,6 +1,8 @@
-import ClockSVG from '@/assets/images/clock.svg';
+import CommentIcon from '@/assets/images/commentMessage.svg';
+import StatusIndicator from '@/elements/StatusIndicator';
+import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown } from '@/utils/helpers';
+import { calculateCountdown, transformBytes } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -49,9 +51,9 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt),
+      },
     },
   ];
 };
@@ -108,9 +110,9 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt),
+      },
     },
   ];
 };
@@ -166,10 +168,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     name: dischargeTerminalName,
     port: { name: dischargePortName, locode: dischargePortLocode, country: dischargePortCountry },
   } = dischargeTerminal || {};
-
-  const bankInfoValues = bankDetails?.split('\r\n');
-  const bankName = bankInfoValues?.splice(0, 1);
-  const bankInfoTitles = ['Account Number', 'Bank Code', 'BIC (SWIFT-CODE)', 'IBAN', 'Bank Address'];
+  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
   return {
     chartererInformation: [
@@ -312,10 +311,141 @@ export const onSubsDetailsAdapter = ({ data }) => {
         },
       ],
       bankInfo: {
-        bankName,
-        bankDetails: bankInfoTitles.map((point, index) => ({ title: point, text: bankInfoValues[index] })),
+        bankName: accountName,
+        bankDetails: [
+          {
+            title: 'Account Number',
+            text: accountNumber,
+          },
+          {
+            title: 'Bank Code',
+            text: bankCode,
+          },
+          {
+            title: 'BIC (SWIFT-CODE)',
+            text: swift,
+          },
+          {
+            title: 'IBAN',
+            text: iban,
+          },
+          {
+            title: 'Bank Address',
+            text: bankAddress,
+          },
+        ],
       },
     },
     additionalCharterPartyTerms,
+  };
+};
+
+const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return [];
+  const { id, title, comments, name, extention, size, createdAt, status, url } = data;
+  const revokeDeletionForbidden = status === 'Active';
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD,
+      value: id,
+    },
+    {
+      id,
+      type: TYPE.SEMIBOLD,
+      value: title,
+    },
+    {
+      id,
+      editable: comments,
+      data: { comments },
+      actions: [
+        {
+          action: ACTIONS.VIEW_COMMENTS,
+          editIcon: comments && <CommentIcon />,
+        },
+      ],
+    },
+    {
+      id,
+      value: name,
+    },
+    {
+      id,
+      value: extention,
+    },
+    {
+      id,
+      value: `${+transformBytes({ value: size }).toFixed(2) || 0.01} MB`,
+    },
+    {
+      id,
+      value: transformDate(createdAt, 'MMM dd, yyyy'),
+    },
+    {
+      id,
+      value: status,
+      icon: <StatusIndicator status={status} />,
+    },
+    {
+      id,
+      editable: true,
+      value: true,
+      downloadData: url && {
+        url: `https://shiplink-api.azurewebsites.net/v1/file/get/${url}`,
+        fileName: `${name}${extention}`,
+      },
+      actions: [
+        {
+          action: revokeDeletionForbidden ? ACTIONS.REQUEST_DOCUMENT_DELETION : ACTIONS.REVOKE_DOCUMENT_DELETION,
+          actionText: revokeDeletionForbidden ? 'Delete' : 'Revoke',
+          actionVariant: revokeDeletionForbidden ? 'delete' : 'primary',
+          actionSize: 'medium',
+          actionStyles: 'ml-2.5 w-[68px]',
+        },
+      ],
+    },
+  ];
+};
+
+export const onSubsDocumentsTabRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => onSubsDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const onSubsAddDocumentAdapter = ({ data }) => {
+  if (!data) return {};
+  const { offerId, title, comment, fileDetails, file } = data;
+  const { name, size } = fileDetails || {};
+  const extension = name?.split('.')?.pop();
+  return {
+    dealId: offerId,
+    title,
+    name,
+    comments: comment,
+    size,
+    extention: extension,
+    url: file,
+  };
+};
+
+export const onSubsRequestDocumentDeletionAdapter = ({ data }) => {
+  if (!data) return {};
+  const { documentId } = data;
+  return {
+    documentId,
+  };
+};
+
+export const onSubsRevokeDocumentDeletionAdapter = ({ data }) => {
+  if (!data) return {};
+  const { documentId } = data;
+  return {
+    documentId,
   };
 };

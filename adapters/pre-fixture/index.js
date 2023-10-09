@@ -1,4 +1,3 @@
-import ClockSVG from '@/assets/images/clock.svg';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
@@ -54,9 +53,10 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt, frozenAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
   ];
 };
@@ -69,12 +69,13 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
       code,
       cargoType: { name: cargoName } = {},
       totalQuantity,
-      loadTerminal: { port: { name, locode } = {} } = {},
+      loadTerminal: { port: { name, locode, country } = {} } = {},
     } = {},
     laycanStart,
     laycanEnd,
-    creationDate,
+    createdAt,
     expiresAt,
+    frozenAt,
   } = data;
 
   return [
@@ -93,6 +94,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: name && `${name}${locode && `, ${locode}`}`,
+      countryCode: country?.codeISO2,
     },
     {
       label: 'Laycan start',
@@ -104,13 +106,14 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Creation date',
-      text: transformDate(creationDate, 'MMM dd, yyyy'),
+      text: transformDate(createdAt, 'MMM dd, yyyy'),
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
   ];
 };
@@ -190,6 +193,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
+    isCountdownExtendedByOwner,
     searchedCargo: {
       laycanStart,
       laycanEnd,
@@ -224,7 +228,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       products,
     },
     commercialOfferTerms: {
-      freight: `${freightFormat} ${freight}`,
+      freight: `${freightFormat?.value} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymmentTerms: demurragePaymentTerm?.name,
@@ -239,6 +243,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,
+    allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByOwner,
   };
 };
 
@@ -254,6 +259,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
+    isCountdownExtendedByCharterer,
     searchedCargo: {
       laycanStart,
       laycanEnd,
@@ -277,7 +283,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       products,
     },
     commercialOfferTerms: {
-      freight: `${freightFormat} ${freight}`,
+      freight: `${freightFormat?.value} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymmentTerms: demurragePaymentTerm,
@@ -292,6 +298,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,
+    allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByCharterer,
   };
 };
 

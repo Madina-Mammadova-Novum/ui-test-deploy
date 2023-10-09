@@ -8,7 +8,12 @@ import { useSession } from 'next-auth/react';
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
 
-import { chartererOnSubsHeaderDataAdapter, onSubsDetailsAdapter, ownerOnSubsHeaderDataAdapter } from '@/adapters';
+import {
+  chartererOnSubsHeaderDataAdapter,
+  onSubsDetailsAdapter,
+  onSubsDocumentsTabRowsDataAdapter,
+  ownerOnSubsHeaderDataAdapter,
+} from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
@@ -53,13 +58,17 @@ const OnSubs = () => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr'}
+            gridStyles={isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr 1fr'}
           />
         }
         expand={toggle}
         footer={<OnSubsExpandedFooter underRecap />}
       >
-        <OnSubsExpandedContent detailsData={onSubsDetailsAdapter({ data: rowData, role: session?.role })} />
+        <OnSubsExpandedContent
+          offerId={rowData?.id}
+          detailsData={onSubsDetailsAdapter({ data: rowData, role: session?.role })}
+          documentsData={onSubsDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+        />
       </ExpandableRow>
     );
   };

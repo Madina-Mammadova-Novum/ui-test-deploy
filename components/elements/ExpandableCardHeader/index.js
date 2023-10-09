@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback } from 'react';
 
 import classnames from 'classnames';
@@ -5,9 +7,10 @@ import classnames from 'classnames';
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
-import { TextWithLabel } from '@/elements';
+import { HoverTooltip, TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
-import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
+import { processTooltipData } from '@/utils/helpers';
+import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
 const ExpandableCardHeader = ({
@@ -36,27 +39,44 @@ const ExpandableCardHeader = ({
     [itemId]
   );
 
-  const printHeaderRow = (data, index) => (
-    <div
-      className={classnames({
-        'col-start-1': !lg,
-        [`${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`]: !lg,
-        [`${!index && 'w-full'}`]: !gridLayout,
-      })}
-      style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
-    >
-      <TextWithLabel
-        label={data?.label}
-        text={data?.text}
-        coverImage={data?.coverImage}
-        customStyles={!index && 'mr-auto'}
-        textStyles={data?.textStyles}
-        helperData={data?.helperData}
-        icon={data?.icon}
-        countryCode={data?.countryCode}
-      />
-    </div>
-  );
+  const printHeaderRow = (data, index) => {
+    const { disableTooltip, tooltipText, trimmedText } = processTooltipData(data.text);
+    let textContent = lg ? trimmedText : tooltipText;
+    if (data.countdownData) {
+      textContent = <DynamicCountdownTimer {...data.countdownData} />;
+    }
+
+    return (
+      <div
+        className={classnames({
+          'col-start-1': !lg,
+          [`${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`]: !lg,
+          [`${!index && 'w-full'}`]: !gridLayout,
+        })}
+        style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
+      >
+        <HoverTooltip
+          data={{
+            description: tooltipText,
+          }}
+          disabled={!lg || disableTooltip}
+          className="!top-0 -translate-y-2/4"
+        >
+          <TextWithLabel
+            label={data?.label}
+            // text={data.countdownData ? <DynamicCountdownTimer {...data.countdownData} /> : data?.text}
+            text={textContent}
+            coverImage={data?.coverImage}
+            customStyles={!index && 'mr-auto'}
+            textStyles={data?.textStyles}
+            helperData={data?.helperData}
+            icon={data?.icon}
+            countryCode={data?.countryCode}
+          />
+        </HoverTooltip>
+      </div>
+    );
+  };
 
   return (
     <div className="w-full h-auto lg:h-[60px] flex items-center gap-x-2.5 py-3 lg:py-0">

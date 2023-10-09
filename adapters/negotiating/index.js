@@ -1,6 +1,5 @@
 import ReactCountryFlag from 'react-country-flag';
 
-import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
@@ -150,9 +149,10 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt, frozenAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -227,9 +227,10 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt, frozenAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -277,6 +278,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     laycanEnd,
     dateSent,
     expiresAt,
+    frozenAt,
     id,
   } = data;
 
@@ -316,9 +318,10 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -344,7 +347,7 @@ export const counteroffersTabRowsDataAdapter = ({ data }) => {
 export const counteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { vessel, createdAt, expiresAt, id } = data;
+  const { vessel, createdAt, expiresAt, frozenAt, id } = data;
   const {
     details: { summerDwt } = {},
     openPort: { name: portName, locode: portLocode, country: portCountry } = {},
@@ -387,9 +390,10 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,

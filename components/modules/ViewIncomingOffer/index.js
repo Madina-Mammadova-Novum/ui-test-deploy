@@ -22,7 +22,7 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
     (async () => {
       const { status, data, error } = await getOfferDetails(itemId, session?.role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data }));
+        setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
       } else {
         console.log(error);
       }
