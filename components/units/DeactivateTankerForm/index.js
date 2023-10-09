@@ -24,14 +24,14 @@ const DeactivateTankerForm = ({ title, state, closeModal }) => {
     const nextDate = new Date();
     nextDate.setDate(currentDate.getDate() + 1);
 
-    const { status, error, data } = await updateVesselPortAndDate({
+    const { error, message } = await updateVesselPortAndDate({
       id,
       date: nextDate,
       available: !available,
       ...rest,
     });
 
-    if (status === 200) {
+    if (!error) {
       if (type === 'assigned') {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
@@ -42,7 +42,7 @@ const DeactivateTankerForm = ({ title, state, closeModal }) => {
       closeModal();
     }
 
-    if (data?.message) successToast(data.message);
+    if (message) successToast(message);
     if (error) errorToast(error.message, error.errors);
   };
 

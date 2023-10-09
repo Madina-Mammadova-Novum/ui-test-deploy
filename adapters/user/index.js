@@ -309,7 +309,7 @@ export function updateChartererCompanyAdapter({ data }) {
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     ...companyAddressesAdapter({ data }),
-    experiences: cargoesAdapter({ data: cargoes }),
+    experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
   };
 }
 
@@ -394,7 +394,7 @@ export function chartererSignUpAdapter({ data }) {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
-    experiences: cargoesAdapter({ data: cargoes }),
+    experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
     ...companyAddressesAdapter({ data }),
   };
 }

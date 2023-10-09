@@ -62,7 +62,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
   };
 
   const onSubmit = async ({ port, date }) => {
-    const { error, data, status } = await updateVesselPortAndDate({
+    const { error, message } = await updateVesselPortAndDate({
       id,
       action,
       portId: port?.value,
@@ -70,7 +70,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
       date,
     });
 
-    if (status === 200) {
+    if (!error) {
       if (type === 'assigned') {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
@@ -81,7 +81,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
       closeModal();
     }
 
-    if (data?.message) successToast(data.message);
+    if (message) successToast(message);
     if (error) errorToast(error.message, error.errors);
   };
 

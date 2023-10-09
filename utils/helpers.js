@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { ACTIONS, REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
+import { REGEX, RESPONSE_MESSAGES, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -410,23 +410,7 @@ export const transformToCapitalize = (str) => {
     .join(' ');
 };
 
-export const generateMessageByActionType = ({ action, status }) => {
-  if (status === 200) {
-    switch (action) {
-      case ACTIONS.DATE:
-        return 'You have successfully changed the date';
-      case ACTIONS.PORT:
-        return 'You have successfully changed the port';
-      case ACTIONS.TANKER_DEACTIVATE:
-        return 'You have successfully deactivated the tanker';
-      case ACTIONS.TANKER_REACTIVATE:
-        return 'You have successfully reopened the port and select a date';
-      default:
-        return null;
-    }
-  }
-  return null;
-};
+export const generateMessageByActionType = ({ action }) => RESPONSE_MESSAGES[action];
 
 export const getCountryById = ({ id, data = [] }) => {
   return data?.find((country) => country.countryId === id);

@@ -27,6 +27,7 @@ import { useFilters } from '@/utils/hooks';
 
 const PreFixture = ({ searchParams }) => {
   const [toggle, setToggle] = useState({ value: false });
+
   const dispatch = useDispatch();
   const { data: session } = useSession();
 

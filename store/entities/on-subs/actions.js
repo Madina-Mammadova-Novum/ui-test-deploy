@@ -15,7 +15,7 @@ export const fetchOnSubsOffers = (() => {
     const { isOwner } = getRoleIdentity({ role });
     const fetchByRole = isOwner ? getOwnerOnSubs : getChartererOnSubs;
 
-    if (typeof totalPages === 'undefined' || currentPerPage !== perPage) {
+    if (!totalPages || currentPerPage !== perPage) {
       const { recordsTotal, recordsFiltered } = await fetchByRole({ page, perPage });
       totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       currentPerPage = perPage;

@@ -153,7 +153,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     thirdCargo,
     lastSire,
     approvals,
-    bankDetails,
+    bankDetails = '',
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -168,7 +168,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
   } = dischargeTerminal || {};
 
   const bankInfoValues = bankDetails?.split('\r\n');
-  const bankName = bankInfoValues.splice(0, 1);
+  const bankName = bankInfoValues?.splice(0, 1);
   const bankInfoTitles = ['Account Number', 'Bank Code', 'BIC (SWIFT-CODE)', 'IBAN', 'Bank Address'];
 
   return {

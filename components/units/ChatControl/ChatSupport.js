@@ -7,7 +7,7 @@ import { ChatSupportPropTypes } from '@/lib/types';
 import SupportSVG from '@/assets/images/support.svg';
 import { Title } from '@/elements';
 import { chatService } from '@/services/signalR';
-import { resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
+import { resetUser, setUser } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatSupport = ({ title, description }) => {
@@ -20,8 +20,6 @@ const ChatSupport = ({ title, description }) => {
     dispatch(resetUser());
 
     chatService.initChat({ chatId: support?.chatId });
-
-    dispatch(setConversation(true));
     dispatch(setUser(support));
   };
 
