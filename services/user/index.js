@@ -166,25 +166,10 @@ export async function getUserFixtures() {
   };
 }
 
-export async function getOwnerPrefixture({ page, perPage }) {
-  const response = await postData(`account/pre-fixture/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
-  return {
-    ...response,
-  };
-}
-
-export async function getChartererPrefixture({ page, perPage }) {
-  const response = await postData(`account/pre-fixture/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
-  return {
-    ...response,
-  };
-}
-
 export async function getRoleBasedPrefixture({ page, perPage }) {
-  const session = await getSession();
   const body = basePageNavAdapter({ data: { page, perPage } });
 
-  const response = await postData(`account/pre-fixture/${session.role}?page=${page}&perPage=${perPage}`, body);
+  const response = await postData(`account/pre-fixture?page=${page}&perPage=${perPage}`, body);
 
   return {
     ...response,
@@ -228,13 +213,6 @@ export async function getChartererUserCargoes() {
   };
 }
 
-export async function getUserOnSubs() {
-  const response = await getData(`account/on-subs`);
-  return {
-    ...response,
-  };
-}
-
 export async function getUserFleets() {
   const body = {
     pageSize: DEFAULT_FETCH_AMOUNT,
@@ -246,15 +224,11 @@ export async function getUserFleets() {
   };
 }
 
-export async function getOwnerOnSubs({ page, perPage }) {
-  const response = await postData(`account/on-subs/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
-  return {
-    ...response,
-  };
-}
+export async function getRoleBasedOnSubs({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
 
-export async function getChartererOnSubs({ page, perPage }) {
-  const response = await postData(`account/on-subs/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
+  const response = await postData(`account/on-subs?page=${page}&perPage=${perPage}`, body);
+
   return {
     ...response,
   };

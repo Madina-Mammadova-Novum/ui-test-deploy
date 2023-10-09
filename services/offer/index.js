@@ -120,12 +120,13 @@ export async function getOfferDetails(offerId, role) {
     ...response,
   };
 }
-export async function acceptPrefixtureOffer(offerId, role) {
+export async function acceptPrefixtureOffer(offerId) {
   const body = requestAcceptPrefixtureAdapter({ data: offerId });
-  const { isOwner } = getRoleIdentity({ role });
-  const path = isOwner ? `account/pre-fixture/owner/accept` : `account/pre-fixture/charterer/accept`;
-  const response = await postData(path, body);
+
+  const response = await postData(`account/pre-fixture/accept`, body);
+
   if (!response.error) response.message = 'Your have successfully confirmed Offer';
+
   return {
     ...response,
   };

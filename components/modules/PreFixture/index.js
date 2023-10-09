@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
-
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
@@ -20,53 +18,39 @@ import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
-import {
-  // getPreFixtureDataSelector,
-  preFixtureSelector,
-} from '@/store/selectors';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
 const PreFixture = ({ searchParams }) => {
+  const dispatch = useDispatch();
   const [toggle, setToggle] = useState({ value: false });
 
-  const dispatch = useDispatch();
-  const { data: session } = useSession();
-
-  const role = useMemo(() => session?.role, [session?.role]);
-  const { isOwner } = getRoleIdentity({ role });
-
-  const {
-    loading,
-    data: { offers, totalPages },
-  } = useSelector(preFixtureSelector);
   // TODO: consider empty responses
-  // const { loading, totalPages, data } = useSelector(getPreFixtureDataSelector);
-  // const searchedData = data?.find((element) => element?.cargoeId === searchParams.id);
+  const { loading, totalPages, data, role } = useSelector(getPreFixtureDataSelector);
+
+  const { isOwner } = getRoleIdentity({ role });
 
   const { page, pageSize } = PAGE_STATE;
 
   const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    { initialPage: page, itemsPerPage: pageSize, data: offers }
+    { initialPage: page, itemsPerPage: pageSize, data }
   );
 
   useEffect(() => {
-    if (role) {
-      dispatch(fetchPrefixtureOffers({ role, page: currentPage, perPage }));
-    }
-  }, [role, currentPage, perPage]);
+    dispatch(fetchPrefixtureOffers({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
-    // const isOpened = searchedData?.cargoeId === rowData?.cargoeId;
-
     return (
       <ExpandableRow
         key={rowData.id}
+        expand={toggle}
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
@@ -79,11 +63,9 @@ const PreFixture = ({ searchParams }) => {
             offerId={rowData.id}
           />
         }
-        // isOpened={isOpened}
-        expand={toggle}
       >
         <PreFixtureExpandedContent
-          detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })}
+          detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
           params={searchParams}
           offerId={rowData?.id}
@@ -94,10 +76,10 @@ const PreFixture = ({ searchParams }) => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers) return offers.map(printExpandableRow);
+    if (data) return data.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
-  }, [loading, offers, printExpandableRow]);
+  }, [loading, data, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">

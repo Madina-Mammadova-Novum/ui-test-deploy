@@ -23,7 +23,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
 
   const { isOwner } = getRoleIdentity({ role });
 
-  const { incoming, sent, failed } = offerById[data.id];
+  const { incoming = [], sent = [], failed = [] } = offerById[data.id];
 
   const tabContent = useMemo(() => {
     return {

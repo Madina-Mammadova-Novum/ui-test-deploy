@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/owner/deals/prefixture?Skip=${skip}&PageSize=${pageSize}`),
+    path: getApiURL(`v1/${session.role}/deals/prefixture?Skip=${skip}&PageSize=${pageSize}`),
     dataAdapter: responseOwnerPrefixtureAdapter,
     requestMethod: 'GET',
     options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
