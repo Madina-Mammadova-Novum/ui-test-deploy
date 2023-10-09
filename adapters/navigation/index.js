@@ -46,3 +46,15 @@ export const accountNavigationAdapter = ({ data }) => {
     sortColumnDirection: sortBy,
   };
 };
+
+export const offerPageNavAdapter = ({ data }) => {
+  if (!data) return {};
+
+  const { page, perPage, stage } = data;
+
+  return {
+    skip: setSkipedValue(page, perPage),
+    pageSize: perPage,
+    stage,
+  };
+};

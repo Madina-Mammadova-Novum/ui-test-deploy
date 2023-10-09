@@ -1,3 +1,5 @@
+import { getCargoCounteroffers, getCargoFailedOffers, getCargoSentOffers } from '../cargo';
+
 import { requestAcceptPrefixtureAdapter } from '@/adapters';
 import {
   acceptOfferAdapter,
@@ -70,8 +72,48 @@ export async function getSentCounteroffers(tankerId) {
   };
 }
 
+export async function getOwnerDetailsOffers({ id }) {
+  const [incomingOffersData, sentCounterOffersData, failedOffersData] = await Promise.all([
+    getIncomingOffers(id),
+    getSentCounteroffers(id),
+    getFailedOffers(id),
+  ]);
+
+  return {
+    [id]: {
+      incoming: incomingOffersData?.data,
+      sent: sentCounterOffersData?.data,
+      failed: failedOffersData?.data,
+    },
+  };
+}
+
+export async function getChartererDetailsOffers({ id }) {
+  const [sentOffersData, counteroffersData, failedOffersData] = await Promise.all([
+    getCargoSentOffers(id),
+    getCargoCounteroffers(id),
+    getCargoFailedOffers(id),
+  ]);
+
+  return {
+    [id]: {
+      incoming: sentOffersData?.data,
+      sent: counteroffersData?.data,
+      failed: failedOffersData?.data,
+    },
+  };
+}
+
+export function* getOffersById({ data, role }) {
+  const { isOwner } = getRoleIdentity({ role });
+  const fetchOfferDetailsById = isOwner ? getOwnerDetailsOffers : getChartererDetailsOffers;
+
+  return yield Promise.all(data.map(fetchOfferDetailsById));
+}
+
 export async function getOfferDetails(offerId, role) {
   const { isOwner } = getRoleIdentity({ role });
+
   const path = isOwner ? `offer/details/${offerId}` : `offer/charterer/details/${offerId}`;
   const response = await getData(path);
   return {

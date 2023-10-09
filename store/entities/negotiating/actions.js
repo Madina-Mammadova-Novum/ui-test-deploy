@@ -4,36 +4,37 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { NEGOTIATING } from './types';
 
 /* Services */
-import { getCargoCounteroffers, getCargoFailedOffers, getCargoSentOffers } from '@/services/cargo';
-import { getFailedOffers, getIncomingOffers, getSentCounteroffers } from '@/services/offer';
+import { getRoleBasedNegotiating } from '@/services';
+import { getOffersById } from '@/services/offer';
+import { calculateAmountOfPages } from '@/utils/helpers';
 
-export const fetchNegotiatingOffers = createAsyncThunk(NEGOTIATING.GET_OFFERS, async ({ isOwner, id }) => {
-  if (isOwner) {
-    const [{ data: incomingOffersData }, { data: sentCounteroffersData }, { data: failedOffersData }] =
-      await Promise.all([getIncomingOffers(id), getSentCounteroffers(id), getFailedOffers(id)]);
+export const fetchUserNegotiating = (() => {
+  let totalPages;
+  let currentPerPage;
+
+  return createAsyncThunk(NEGOTIATING.GET_DATA, async ({ page, perPage }, { getState }) => {
+    const { role } = getState().user;
+
+    if (!totalPages || currentPerPage !== perPage) {
+      const { recordsTotal, recordsFiltered } = await getRoleBasedNegotiating({ page, perPage });
+      totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
+      currentPerPage = perPage;
+    }
+
+    const { data } = await getRoleBasedNegotiating({ page, perPage });
+
+    const generator = getOffersById({ data, role });
+    const { value } = generator.next();
+
+    const res = await value;
+
+    const offerById = data.reduce((acc, item) => {
+      acc[item.id] = res?.find((offer) => offer[item.id])[item.id];
+      return acc;
+    }, {});
+
     return {
-      data: {
-        [id]: {
-          incoming: incomingOffersData,
-          sent: sentCounteroffersData,
-          failed: failedOffersData,
-        },
-      },
+      data: { offers: data, totalPages, offerById },
     };
-  }
-  const [{ data: sentOffersData }, { data: counteroffersData }, { data: failedOffersData }] = await Promise.all([
-    getCargoSentOffers(id),
-    getCargoCounteroffers(id),
-    getCargoFailedOffers(id),
-  ]);
-
-  return {
-    data: {
-      [id]: {
-        incoming: sentOffersData,
-        sent: counteroffersData,
-        failed: failedOffersData,
-      },
-    },
-  };
-});
+  });
+})();

@@ -1,5 +1,7 @@
+import { getSession } from 'next-auth/react';
+
 import { getFleetByIdAdapter } from '@/adapters';
-import { accountNavigationAdapter } from '@/adapters/navigation';
+import { accountNavigationAdapter, offerPageNavAdapter } from '@/adapters/navigation';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -12,7 +14,7 @@ import {
   updatePasswordAdapter,
 } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { ContentTypeJson, DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
+import { ContentTypeJson, DEFAULT_FETCH_AMOUNT } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -178,33 +180,14 @@ export async function getChartererPrefixture({ page, perPage }) {
   };
 }
 
-export function getUserNegotiating(role) {
-  switch (role) {
-    case ROLES.OWNER: {
-      return getOwnerNegotiating;
-    }
-    case ROLES.CHARTERER: {
-      return getChartererNegotiating;
-    }
-    default:
-      return () => {};
-  }
-}
+export async function getRoleBasedNegotiating({ page = 1, perPage = 5, stage = 'Negotiating' }) {
+  const session = await getSession();
+  const body = offerPageNavAdapter({ data: { page, perPage, stage } });
 
-export async function getOwnerNegotiating() {
-  const body = {
-    skip: 0,
-    pageSize: 1000,
-    stage: 'Negotiating',
-  };
-  const response = await postData(`account/negotiating/owner`, body);
-  return {
-    ...response,
-  };
-}
+  const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body, {
+    headers: { ...ContentTypeJson() },
+  });
 
-export async function getChartererNegotiating() {
-  const response = await getData(`account/negotiating/charterer`);
   return {
     ...response,
   };
