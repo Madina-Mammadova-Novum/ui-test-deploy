@@ -18,17 +18,17 @@ const tabs = [
   },
 ];
 
-const OnSubsExpandedContent = ({ detailsData }) => {
+const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
-        return <DocumentsContent />;
+        return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
       default:
         return <DetailsContent detailsData={detailsData} />;
     }
-  }, [currentTab]);
+  }, [currentTab, documentsData]);
 
   return (
     <div className="pt-16">

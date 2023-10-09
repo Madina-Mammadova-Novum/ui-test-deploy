@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { ACTIONS, REGEX, ROLES, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
+import { ACTIONS, REGEX, ROLES, SETTINGS, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -568,3 +568,10 @@ export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOf
   );
   return isMinimalImprovementMet;
 };
+
+export const processTooltipData = (text) => ({
+  disableTooltip: !(text?.length > SETTINGS.MAX_VISIBLE_TEXT_LENGTH),
+  tooltipText: text,
+  trimmedText:
+    text?.length > SETTINGS.MAX_VISIBLE_TEXT_LENGTH ? `${text?.slice(0, SETTINGS.MAX_VISIBLE_TEXT_LENGTH)}...` : text,
+});

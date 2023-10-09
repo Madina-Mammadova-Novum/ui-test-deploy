@@ -16,8 +16,10 @@ export const fileReaderAdapter = (file, setValue, setError, setLoading) => {
     setLoading(true);
     const { data, status, errors } = await uploadData({ data: file });
     setLoading(false);
-    if (status === 200) setValue('file', data);
-    else {
+    if (status === 200) {
+      setValue('file', data);
+      setValue('fileDetails', file);
+    } else {
       setError('file', { type: 'manual', message: errors?.message });
       errorToast(errors?.title, errors?.message);
     }
@@ -47,6 +49,18 @@ export const uploadDataAdapter = ({ data }) => {
 };
 
 export const uploadResponseAdapter = ({ data }) => {
+  if (!data) return null;
+
+  return data;
+};
+
+export const responseDocumentUploadAdapter = ({ data }) => {
+  if (!data) return null;
+
+  return data;
+};
+
+export const responseDocumentDeletionAdapter = ({ data }) => {
   if (!data) return null;
 
   return data;
