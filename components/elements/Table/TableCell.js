@@ -16,6 +16,7 @@ import {
   AssignToFleet,
   DeactivateTankerForm,
   DeleteTankerModal,
+  DynamicCountdownTimer,
   EditDateForm,
   EditPortForm,
   IconWrapper,
@@ -53,9 +54,10 @@ const TableCell = ({ cellProps }) => {
     link,
     data,
     downloadData,
+    countdownData,
   } = cellProps;
 
-  const emptyCell = !value && !editable && !link && !downloadData;
+  const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
   const country = getCountryById({ data: countries, id: countryId });
   const availableCountryCode = countryFlag || country?.countryCode;
@@ -191,6 +193,7 @@ const TableCell = ({ cellProps }) => {
             onClick={() => downloadFile(downloadData)}
           />
         )}
+        {countdownData && <DynamicCountdownTimer {...countdownData} />}
 
         <div className="flex gap-x-2.5">{editable && printModalView}</div>
       </div>

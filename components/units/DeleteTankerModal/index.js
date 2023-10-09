@@ -10,46 +10,48 @@ import { ACTIONS } from '@/lib/constants';
 import { removeVessel, removeVesselFromFleet } from '@/services/vessel';
 import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { deleteVesselFromFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
-import { successToast } from '@/utils/hooks';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const DeleteTankerModal = ({ closeModal, state }) => {
   const dispatch = useDispatch();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { id, fleetId, name, action } = state;
+
   const isRemoveFromFleet = ACTIONS.DELETE_TANKER_FROM_FLEET === action;
 
-  const handleSubmit = async () => {
+  const handleRemoveFleet = async () => {
     setIsSubmitting(true);
-    switch (action) {
-      case ACTIONS.DELETE_TANKER_FROM_FLEET: {
-        const { error, message: successMessage } = await removeVesselFromFleet({ id });
-        if (error) {
-          return console.log(error);
-        }
-        dispatch(fetchUnassignedFleetData());
-        dispatch(deleteVesselFromFleetsState({ tankerId: id, fleetId }));
-        successToast(successMessage);
-        closeModal();
+    const { error, message } = await removeVesselFromFleet({ id });
 
-        break;
-      }
-      case ACTIONS.DELETE_TANKER: {
-        const { error, message: successMessage } = await removeVessel({ id });
-        if (error) {
-          return console.log(error);
-        }
-        dispatch(deleteVesselFromUnassignedFleetsState(id));
-        successToast(successMessage);
-        closeModal();
+    dispatch(deleteVesselFromFleetsState({ tankerId: id, fleetId }));
+    successToast(message);
+    closeModal();
 
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-    return setIsSubmitting(false);
+    if (error) errorToast(error.message, error.errors);
+
+    dispatch(fetchUnassignedFleetData());
+    setIsSubmitting(false);
   };
+
+  const handleDelete = async () => {
+    setIsSubmitting(true);
+    const { error, message } = await removeVessel({ id });
+
+    dispatch(deleteVesselFromUnassignedFleetsState(id));
+    successToast(message);
+    closeModal();
+
+    if (error) errorToast(error.message, error.errors);
+    setIsSubmitting(false);
+  };
+
+  const HANDLERS = {
+    DELETE_TANKER: handleDelete,
+    DELETE_TANKER_FROM_FLEET: handleRemoveFleet,
+  };
+
+  const handleSubmit = () => HANDLERS[action]();
 
   return (
     <div className="flex flex-col gap-y-4 max-w-[292px]">

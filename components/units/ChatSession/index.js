@@ -1,31 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
-import { ArchiveButton } from '@/elements';
+import { ArchiveButton, Badge } from '@/elements';
 import { chatService } from '@/services/signalR';
-import {
-  removeCollapsedChat,
-  resetUser,
-  setCollapsedChat,
-  setConversation,
-  setUser,
-} from '@/store/entities/chat/slice';
+import { removeCollapsedChat, setCollapsedChat, setConversation } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatConversationCard, ChatDeactivate } from '@/units';
 
 const ChatSession = ({ data }) => {
   const { user, collapsed } = useSelector(getChatSelector).chats;
 
+  const inCollapsed = collapsed.find((chatRoom) => chatRoom?.chatId === data?.chatId);
+
+  useEffect(() => {
+    if (inCollapsed) dispatch(removeCollapsedChat(inCollapsed?.chatId));
+  }, [inCollapsed, collapsed, data?.chatId]);
+
   const dispatch = useDispatch();
 
   const [modalState, setModalState] = useState({
-    setDeactivate: false,
-    setCargoeInfo: false,
+    deactivate: false,
+    id: null,
   });
+
+  const { deactivate } = modalState;
 
   const handleChangeState = (key, value) => {
     setModalState((prevState) => ({
@@ -36,35 +38,23 @@ const ChatSession = ({ data }) => {
 
   const handleArchiveConversation = (e) => {
     e.stopPropagation();
-    handleChangeState('setDeactivate', !setDeactivate);
+    handleChangeState('deactivate', !deactivate);
   };
 
   const handleDeactivateConversation = (e) => {
     e.stopPropagation();
-    handleChangeState('setDeactivate', false);
+    handleChangeState('deactivate', false);
   };
+
+  const handleCloseConversation = () => chatService.disconnect();
 
   const handleOpenConversation = () => {
-    chatService?.initChat({ chatId: data?.chatId });
-    dispatch(setConversation(true));
+    if (data?.chatId !== user?.chatId) handleCloseConversation();
 
-    dispatch(resetUser());
-
-    const existedCollapsed = collapsed.find((chatRoom) => chatRoom?.chatId === data?.chatId);
-    if (existedCollapsed) dispatch(removeCollapsedChat(existedCollapsed?.chatId));
-
-    dispatch(
-      setUser({
-        chatId: data?.chatId,
-        vessel: { name: data?.vessel?.name, data: data?.vessel?.data, cargoId: data?.vessel?.cargoId },
-      })
-    );
-  };
-
-  const handleCloseConversation = () => {
-    dispatch(setConversation(false));
-    dispatch(resetUser());
-    chatService.stop();
+    chatService?.initChat({
+      chatId: data?.chatId,
+      vessel: { name: data?.vessel?.name, data: data?.vessel?.data, cargoId: data?.vessel?.cargoId },
+    });
   };
 
   const handleCollapseConversation = () => {
@@ -79,15 +69,14 @@ const ChatSession = ({ data }) => {
     dispatch(setConversation(false));
   };
 
-  const { setDeactivate } = modalState;
-
   return (
     <>
-      <div className="flex justify-between cursor-pointer" aria-hidden onClick={() => handleOpenConversation()}>
+      <div className="flex justify-between relative cursor-pointer" aria-hidden onClick={handleOpenConversation}>
         <ChatConversationCard data={data} />
-        <div className="flex flex-col justify-end">
+        <div className="flex flex-col relative justify-end">
+          <Badge className="h-5 w-5 -top-0.5 right-1 p-1" counter={data?.messageCount} />
           <ArchiveButton onClick={(e) => handleArchiveConversation(e)} />
-          {setDeactivate && (
+          {deactivate && (
             <ChatDeactivate
               title="Do you want to archive this chat?"
               onCancel={(e) => handleDeactivateConversation(e)}

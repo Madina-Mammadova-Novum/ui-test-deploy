@@ -1,4 +1,3 @@
-import ClockSVG from '@/assets/images/clock.svg';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
@@ -52,9 +51,9 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt),
+      },
     },
   ];
 };
@@ -111,9 +110,9 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt),
+      },
     },
   ];
 };

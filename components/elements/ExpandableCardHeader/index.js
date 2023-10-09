@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback } from 'react';
 
 import classnames from 'classnames';
@@ -7,8 +9,8 @@ import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 import TableArrowSVG from '@/assets/images/arrow.svg';
 import { HoverTooltip, TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
-import { DeleteFleetModal, EditFleetForm, ModalWindow } from '@/units';
 import { processTooltipData } from '@/utils/helpers';
+import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
 const ExpandableCardHeader = ({
@@ -39,6 +41,11 @@ const ExpandableCardHeader = ({
 
   const printHeaderRow = (data, index) => {
     const { disableTooltip, tooltipText, trimmedText } = processTooltipData(data.text);
+    let textContent = lg ? trimmedText : tooltipText;
+    if(data.countdownData) {
+      textContent = <DynamicCountdownTimer {...data.countdownData} />
+    }
+
     return (
       <div
         className={classnames({
@@ -57,7 +64,8 @@ const ExpandableCardHeader = ({
         >
           <TextWithLabel
             label={data?.label}
-            text={lg ? trimmedText : tooltipText}
+            // text={data.countdownData ? <DynamicCountdownTimer {...data.countdownData} /> : data?.text}
+            text={textContent}
             coverImage={data?.coverImage}
             customStyles={!index && 'mr-auto'}
             textStyles={data?.textStyles}

@@ -1,4 +1,3 @@
-import ClockSVG from '@/assets/images/clock.svg';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
@@ -54,9 +53,10 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt, frozenAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
   ];
 };
@@ -110,9 +110,10 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt, frozenAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
   ];
 };

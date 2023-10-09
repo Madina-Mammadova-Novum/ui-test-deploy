@@ -16,7 +16,7 @@ import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
-import { getRoleIdentity, makeId } from '@/utils/helpers';
+import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
@@ -43,24 +43,25 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { status, error, data: response } = await updateCompany({ data: formData, role: data?.role });
+    const { error, data: response } = await updateCompany({ data: formData, role: data?.role });
 
-    if (status === 200) {
+    if (!error) {
       dispatch(fetchUserProfileData());
-      successToast(null, response.message);
+      successToast(null, response.data?.message);
     }
-    if (error) errorToast(error?.message);
+
+    if (error) errorToast(error?.message, error?.errors);
     return null;
   };
 
   const noteList = [
     {
-      id: makeId(),
+      id: 1,
       label: 'Сompany information',
       list: ['Company Name', 'Years of Operation'],
     },
     {
-      id: makeId(),
+      id: 2,
       label: 'Company Registration Address',
       list: ['Address line #1', 'Address line #2', 'City', 'State / Province / Region', 'Zip / Postal code', 'Country'],
     },

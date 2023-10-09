@@ -147,6 +147,7 @@ export function offerDetailsAdapter({ data, role }) {
     failureReason,
     failedBy,
     expiresAt,
+    frozenAt,
     freightFormat,
     isCountdownExtendedByOwner,
     isCountdownExtendedByCharterer,
@@ -155,8 +156,11 @@ export function offerDetailsAdapter({ data, role }) {
   const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
 
   return {
-    countdown: calculateCountdown(expiresAt),
     allowExtension: allowExtensionByRole,
+    countdownData: {
+      date: calculateCountdown(expiresAt, frozenAt),
+      autoStart: !frozenAt,
+    },
     voyageDetails: {
       dates: [
         [
