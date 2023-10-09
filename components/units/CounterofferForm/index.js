@@ -2,7 +2,6 @@
 
 /* eslint-disable consistent-return */
 import { FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
@@ -13,7 +12,6 @@ import { FormManager } from '@/common';
 import { COUNTEROFFER_REQUIREMENTS_ERROR } from '@/lib/constants';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
-import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
 import { counterofferMinimumImprovementAchieved, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -30,7 +28,6 @@ const CounterofferForm = ({
   handleValidationError,
 }) => {
   const { data: session } = useSession();
-  const dispatch = useDispatch();
 
   const { products, offerId, responseCountdown } = data;
 
@@ -60,7 +57,6 @@ const CounterofferForm = ({
       role: session?.role,
     });
     if (!error) {
-      dispatch(refetchNegotiatingOffers());
       successToast(successMessage);
       closeModal();
     } else {

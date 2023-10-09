@@ -24,11 +24,12 @@ import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
-  const { data: session } = useSession();
-  const role = useMemo(() => session?.role, [session?.role]);
-  const { isOwner } = getRoleIdentity({ role: session?.role });
-  const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
+  const { data: session } = useSession();
+  const [toggle, setToggle] = useState({ value: false });
+
+  const { isOwner } = getRoleIdentity({ role: session?.role });
+  const role = useMemo(() => session?.role, [session?.role]);
   const {
     data: { offers, totalPages },
     loading,

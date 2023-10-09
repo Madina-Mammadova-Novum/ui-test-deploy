@@ -34,27 +34,36 @@ export const navigationPagesAdapter = (item) => ({
   value: item,
 });
 
-export const accountNavigationAdapter = ({ data }) => {
+export const basePageNavAdapter = ({ data }) => {
   if (!data) return {};
 
-  const { page, perPage, sortBy } = data;
+  const { page, perPage } = data;
 
   return {
     skip: setSkipedValue(page, perPage),
     pageSize: perPage,
+  };
+};
+
+export const positionsPageNavAdapter = ({ data }) => {
+  if (!data) return {};
+
+  const { sortBy } = data;
+
+  return {
+    ...basePageNavAdapter({ data }),
     sortColumn: 'Name',
     sortColumnDirection: sortBy,
   };
 };
 
-export const offerPageNavAdapter = ({ data }) => {
+export const negotiationPageNavAdapter = ({ data }) => {
   if (!data) return {};
 
-  const { page, perPage, stage } = data;
+  const { stage } = data;
 
   return {
-    skip: setSkipedValue(page, perPage),
-    pageSize: perPage,
+    ...basePageNavAdapter({ data }),
     stage,
   };
 };

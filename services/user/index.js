@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/react';
 
 import { getFleetByIdAdapter } from '@/adapters';
-import { accountNavigationAdapter, offerPageNavAdapter } from '@/adapters/navigation';
+import { basePageNavAdapter, negotiationPageNavAdapter, positionsPageNavAdapter } from '@/adapters/navigation';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -125,7 +125,7 @@ export async function deleteCompany({ data }) {
 }
 
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
-  const body = accountNavigationAdapter({ data: { page, perPage, sortBy } });
+  const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
   const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body, {
     headers: { ...ContentTypeJson() },
@@ -180,9 +180,20 @@ export async function getChartererPrefixture({ page, perPage }) {
   };
 }
 
+export async function getRoleBasedPrefixture({ page, perPage }) {
+  const session = await getSession();
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/pre-fixture/${session.role}?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}
+
 export async function getRoleBasedNegotiating({ page = 1, perPage = 5, stage = 'Negotiating' }) {
   const session = await getSession();
-  const body = offerPageNavAdapter({ data: { page, perPage, stage } });
+  const body = negotiationPageNavAdapter({ data: { page, perPage, stage } });
 
   const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body, {
     headers: { ...ContentTypeJson() },
