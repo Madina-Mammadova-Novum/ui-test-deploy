@@ -1,8 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-
-import { useSession } from 'next-auth/react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
@@ -10,24 +9,27 @@ import { NEGOTIATING_TABS, PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
-import { getUserNegotiating } from '@/services';
+import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
+import { getNegotiatingDataSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFetch, useFilters } from '@/utils/hooks';
+import { useFilters } from '@/utils/hooks';
 
 const Negotiating = () => {
-  const { data: session } = useSession();
-
-  const [data, isLoading] = useFetch(getUserNegotiating(session?.role));
-  const { isOwner } = getRoleIdentity({ role: session?.role });
-
+  const dispatch = useDispatch();
   const [toggle, setToggle] = useState({ value: false });
+  const { offers, loading, role } = useSelector(getNegotiatingDataSelector);
 
-  const tabs = isOwner ? NEGOTIATING_TABS.OWNER : NEGOTIATING_TABS.CHARTERER;
+  const { isOwner } = getRoleIdentity({ role });
+
   const { page, pageSize } = PAGE_STATE;
 
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters({ initialPage: page, itemsPerPage: pageSize, data });
+  const { numberOfPages, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
+    useFilters({ initialPage: page, itemsPerPage: pageSize, data: offers });
+
+  useEffect(() => {
+    dispatch(fetchUserNegotiating({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -46,17 +48,17 @@ const Negotiating = () => {
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
         expand={toggle}
       >
-        <NegotiatingExpandedContent data={rowData} tabs={tabs} />
+        <NegotiatingExpandedContent data={rowData} tabs={NEGOTIATING_TABS[role]} />
       </ExpandableRow>
     );
   };
 
   const printContent = useMemo(() => {
-    if (isLoading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (items) return items.map(printExpandableRow);
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (offers) return offers.map(printExpandableRow);
 
     return <Title level="3">No opened positions</Title>;
-  }, [isLoading, items, printExpandableRow]);
+  }, [loading, offers, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">

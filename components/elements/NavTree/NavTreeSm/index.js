@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import ToolsSVG from '@/assets/images/setting.svg';
 import { Button } from '@/elements';
 
 const NavTreeSm = ({ data, active }) => {
+  const subTreeRef = useRef(null);
   const [showLinks, setShowLinks] = useState(false);
 
   const hasNestedLinks = Boolean(data?.items?.length);
@@ -24,6 +25,28 @@ const NavTreeSm = ({ data, active }) => {
   const handleClick = useCallback(() => {
     setShowLinks(!showLinks);
   }, [showLinks]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (subTreeRef.current && !subTreeRef.current.contains(event.target)) {
+        setShowLinks(false);
+      }
+    };
+
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        setShowLinks(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscapeKey);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, []);
 
   const printIcon = useMemo(() => {
     const customStyles = classnames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
@@ -70,7 +93,10 @@ const NavTreeSm = ({ data, active }) => {
         </div>
       )}
       {showLinks && (
-        <div className="absolute w-auto h-auto pr-2 py-2 left-12 top-5 bg-black rounded-br-base rounded-tr-base">
+        <div
+          ref={subTreeRef}
+          className="absolute w-auto h-auto pr-2 py-2 left-12 top-5 bg-black rounded-br-base rounded-tr-base"
+        >
           {data?.items?.length > 0 && data?.items?.map(printSubTree)}
         </div>
       )}

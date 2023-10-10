@@ -1,27 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchNegotiatingOffers } from './actions';
+import { fetchUserNegotiating } from './actions';
 
 const initialState = {
-  refetchOffers: false,
-  negotiatingOffers: {},
+  loading: true,
+  error: null,
+  data: {
+    totalPages: 0,
+    offers: [],
+    offerById: {},
+  },
 };
 
 const negotiatingSlice = createSlice({
   name: 'negotiating',
   initialState,
-  reducers: {
-    refetchNegotiatingOffers: (state) => {
-      state.refetchOffers = !state.refetchOffers;
-    },
-  },
   extraReducers: (builder) => {
-    builder.addCase(fetchNegotiatingOffers.fulfilled, (state, action) => {
-      state.negotiatingOffers = { ...state.negotiatingOffers, ...action.payload?.data };
+    builder.addCase(fetchUserNegotiating.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchUserNegotiating.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload?.data;
+    });
+    builder.addCase(fetchUserNegotiating.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload?.error;
     });
   },
 });
-
-export const { refetchNegotiatingOffers } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

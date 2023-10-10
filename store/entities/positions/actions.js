@@ -12,7 +12,7 @@ export const fetchUserVessels = (() => {
   let currentPerPage;
 
   return createAsyncThunk(POSITIONS.GET_USER_POSITIONS, async ({ page, perPage, sortBy }) => {
-    if (typeof totalPages === 'undefined' || currentPerPage !== perPage) {
+    if (!totalPages || currentPerPage !== perPage) {
       const { recordsTotal, recordsFiltered } = await getUserPositions({ page, perPage, sortBy });
       totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       currentPerPage = perPage;

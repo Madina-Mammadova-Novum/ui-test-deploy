@@ -27,12 +27,9 @@ const EditDateForm = ({ state, title, closeModal }) => {
   const methods = useHookFormParams({ state, schema });
 
   const onSubmit = async ({ date }) => {
-    const { error, data, status } = await updateVesselPortAndDate({
-      ...state,
-      date,
-    });
+    const { error, message } = await updateVesselPortAndDate({ ...state, date });
 
-    if (status === 200) {
+    if (!error) {
       if (state?.type === 'assigned') {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
@@ -43,7 +40,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
       closeModal();
     }
 
-    if (data?.message) successToast(data.message);
+    if (message) successToast(message);
     if (error) errorToast(error.message, error.errors);
   };
 

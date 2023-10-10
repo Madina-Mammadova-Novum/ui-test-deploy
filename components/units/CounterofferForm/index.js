@@ -13,7 +13,7 @@ import { FormManager } from '@/common';
 import { COUNTEROFFER_REQUIREMENTS_ERROR } from '@/lib/constants';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
-import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
+import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { counterofferMinimumImprovementAchieved, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -29,8 +29,8 @@ const CounterofferForm = ({
   handleConfirmCounteroffer,
   handleValidationError,
 }) => {
-  const { data: session } = useSession();
   const dispatch = useDispatch();
+  const { data: session } = useSession();
 
   const { products, offerId, responseCountdown } = data;
 
@@ -60,8 +60,8 @@ const CounterofferForm = ({
       role: session?.role,
     });
     if (!error) {
-      dispatch(refetchNegotiatingOffers());
       successToast(successMessage);
+      dispatch(fetchUserNegotiating());
       closeModal();
     } else {
       const { errors, message } = error;

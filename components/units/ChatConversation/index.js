@@ -13,13 +13,8 @@ import { Button, Input } from '@/elements';
 import { chatService } from '@/services/signalR';
 import { getChatSelector } from '@/store/selectors';
 
-const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
-  const {
-    isActive,
-    chats: { user },
-  } = useSelector(getChatSelector);
-
-  const { data, messages } = user;
+const ChatConversation = ({ isOpened, onCloseSession, onCollapseSession }) => {
+  const { data, messages } = useSelector(getChatSelector).chats?.user;
 
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -39,8 +34,8 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   const handleEnter = ({ charCode }) => charCode === 13 && handleSubmit();
 
   return (
-    isActive && (
-      <div className="absolute bg-white border shadow-xmd border-gray-light -left-[370px] -top-44 h-auto w-[360px] rounded-base">
+    isOpened && (
+      <div className="fixed bg-white border shadow-xmd border-gray-light right-[480px] bottom-6 h-auto w-[360px] rounded-base">
         <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
         <div className="flex flex-col h-[47vh] p-5">
           <ChatConversationBody messages={messages} />

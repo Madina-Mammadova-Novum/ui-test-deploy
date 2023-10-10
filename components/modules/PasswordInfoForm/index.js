@@ -68,7 +68,7 @@ const PasswordInfoForm = ({ closeModal }) => {
         <p className="text-black font-semibold text-sm">Enter a strong password according to our requirements</p>
         <PasswordValidation
           helperData={{
-            password: { label: 'chose password', placeholder: 'Enter your password' },
+            password: { label: 'chose password', placeholder: 'Enter a new password' },
             confirm: { label: 'confirm password', placeholder: 'Enter a new password' },
           }}
         />

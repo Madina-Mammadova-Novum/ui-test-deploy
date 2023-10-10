@@ -23,11 +23,11 @@ export const vesselsSelector = ({ positions, fleets }) => {
 };
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating }) => negotiating;
+export const negotiatingSelector = ({ negotiating, user }) => ({ ...negotiating, role: user.role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture }) => preFixture;
+export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
 export const onSubsSelector = ({ onSubs }) => onSubs;
 export const chatSelector = ({ chat }) => chat;
 
@@ -104,6 +104,18 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
     error: state.error,
     loading: state.loading,
     totalPages: state.data?.totalPages,
+    role: state.role,
     data: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
+export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    totalPages: state.data?.totalPages,
+    offers: state.data.offers,
+    offerById: state.data.offerById,
+    role: state.role,
   };
 });

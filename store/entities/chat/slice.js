@@ -73,7 +73,7 @@ const chatSlice = createSlice({
     setOpenedChat: (state, { payload }) => {
       state.opened = payload;
     },
-    deactivateConversation: (state, { payload }) => {
+    setDeactivateConversation: (state, { payload }) => {
       state.isDeactivatedSession = payload;
     },
     resetChatFilter: (state) => {
@@ -128,18 +128,18 @@ const chatSlice = createSlice({
 });
 
 export const {
-  setChatFilter,
   setUser,
-  resetChatFilter,
-  searchedData,
-  setUserConversation,
-  setCollapsedChat,
-  resetUser,
-  setConversation,
-  messageAlert,
-  deactivateConversation,
-  removeCollapsedChat,
+  setChatFilter,
   setOpenedChat,
+  setConversation,
+  setCollapsedChat,
+  setUserConversation,
+  setDeactivateConversation,
+  messageAlert,
+  searchedData,
+  resetUser,
+  resetChatFilter,
+  removeCollapsedChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

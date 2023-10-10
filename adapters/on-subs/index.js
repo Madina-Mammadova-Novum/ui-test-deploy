@@ -155,7 +155,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     thirdCargo,
     lastSire,
     approvals,
-    bankDetails,
+    bankDetails = '',
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};

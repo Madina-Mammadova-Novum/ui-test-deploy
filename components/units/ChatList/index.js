@@ -8,8 +8,8 @@ import { ChatSession } from '@/units';
 const ChatList = ({ data }) => {
   const printChatSession = (session, index) => (
     <>
-      {index !== 0 && <Divider />}
-      <ChatSession data={session} />
+      {index !== 0 && <Divider key={index} />}
+      <ChatSession key={session.chatId} data={session} />
     </>
   );
 
