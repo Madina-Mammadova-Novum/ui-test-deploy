@@ -119,3 +119,13 @@ export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSel
     role: state.role,
   };
 });
+
+export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    totalPages: state.data?.totalPages,
+    data: state.data?.vessels,
+    refetch: state.refetch,
+  };
+});

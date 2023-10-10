@@ -14,7 +14,10 @@ const initialState = {
     countries: [],
     tankerTypes: [],
   },
-  data: [],
+  data: {
+    vessels: [],
+    totalPages: 0,
+  },
 };
 
 const fleetsSlice = createSlice({
@@ -25,11 +28,11 @@ const fleetsSlice = createSlice({
       state.refetch = !state.refetch;
     },
     deleteFleetFromState: (state, action) => {
-      state.data = state.data.filter(({ id }) => id !== action?.payload);
+      state.data.vessels = state.data.vessels.filter(({ id }) => id !== action?.payload);
     },
     deleteVesselFromFleetsState: (state, action) => {
       const { tankerId, fleetId } = action?.payload;
-      state.data = state.data.map((fleet) =>
+      state.data.vessels = state.data.vessels.map((fleet) =>
         fleet.id === fleetId ? { ...fleet, vessels: fleet.vessels.filter((vessel) => vessel.id !== tankerId) } : fleet
       );
     },
@@ -45,7 +48,7 @@ const fleetsSlice = createSlice({
     addVesselToFleetsState: (state, action) => {
       const { fleetId, tankerId } = action?.payload;
       const vessel = state.unassignedFleetData.find(({ id }) => id === tankerId);
-      state.data = state.data.map((fleet) =>
+      state.data.vessels = state.data.vessels.map((fleet) =>
         fleet.id === fleetId ? { ...fleet, vessels: [{ ...vessel, fleetId }, ...fleet.vessels] } : fleet
       );
     },
@@ -71,7 +74,7 @@ const fleetsSlice = createSlice({
 
     builder.addCase(fetchPrefilledDataToUpdate.fulfilled, (state, action) => {
       state.prefilledUpdateVesselState.loading = false;
-      state.prefilledUpdateVesselState.data = action.payload?.data;
+      state.prefilledUpdateVesselstate.data.vessels = action.payload?.data;
       state.prefilledUpdateVesselState.ports = action.payload?.ports;
       state.prefilledUpdateVesselState.countries = action.payload?.countries;
       state.prefilledUpdateVesselState.tankerTypes = action.payload?.tankerTypes;

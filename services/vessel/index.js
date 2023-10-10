@@ -128,6 +128,7 @@ export async function removeVesselFromFleet(data) {
 
   const response = await postData(`vessels/delete-from-fleet`, body);
   if (!response.error) response.message = 'Your have successfully removed tanker from fleet';
+
   return {
     ...response,
   };
@@ -137,6 +138,7 @@ export async function removeVessel(data) {
 
   const response = await postData(`vessels/delete`, body);
   if (!response.error) response.message = 'You have successfully deleted the tanker';
+
   return {
     ...response,
   };
