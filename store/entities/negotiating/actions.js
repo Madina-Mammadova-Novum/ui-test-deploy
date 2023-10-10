@@ -12,7 +12,7 @@ export const fetchUserNegotiating = (() => {
   let totalPages;
   let currentPerPage;
 
-  return createAsyncThunk(NEGOTIATING.GET_DATA, async ({ page, perPage }, { getState }) => {
+  return createAsyncThunk(NEGOTIATING.GET_DATA, async ({ page = 1, perPage = 5 }, { getState }) => {
     const { role } = getState().user;
 
     if (!totalPages || currentPerPage !== perPage) {

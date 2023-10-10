@@ -180,9 +180,7 @@ export async function getRoleBasedNegotiating({ page = 1, perPage = 5, stage = '
   const session = await getSession();
   const body = negotiationPageNavAdapter({ data: { page, perPage, stage } });
 
-  const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body, {
-    headers: { ...ContentTypeJson() },
-  });
+  const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body);
 
   return {
     ...response,

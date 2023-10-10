@@ -509,15 +509,12 @@ export const chartererFailedTabRowsDataAdapter = ({ data }) => {
 export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
+  const { vessel, failedAt, reason, id } = data;
+
   const {
-    vessel: {
-      details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
-      openDate,
-    } = {},
-    failedAt,
-    reason,
-    id,
-  } = data;
+    details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
+    openDate,
+  } = vessel || {};
 
   return [
     {

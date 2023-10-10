@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
@@ -13,6 +14,7 @@ import { Button } from '@/elements';
 import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
+import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
@@ -33,10 +35,14 @@ const schema = yup.object({
 });
 
 const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
+  const dispatch = useDispatch();
+
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const { data: session } = useSession();
+
   const methods = useHookFormParams({ schema });
+
   const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;
 
   const handleSubmit = async (formData) => {
@@ -47,6 +53,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
     if (!error) {
       successToast(successMessage);
+      dispatch(fetchUserNegotiating());
       closeModal();
     } else {
       const { errors } = error;

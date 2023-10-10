@@ -29,7 +29,6 @@ const OnSubs = () => {
   const [toggle, setToggle] = useState({ value: false });
 
   const { isOwner } = getRoleIdentity({ role: session?.role });
-  const role = useMemo(() => session?.role, [session?.role]);
   const {
     data: { offers, totalPages },
     loading,
@@ -44,10 +43,8 @@ const OnSubs = () => {
   });
 
   useEffect(() => {
-    if (role) {
-      dispatch(fetchOnSubsOffers({ role: session?.role, page: currentPage, perPage }));
-    }
-  }, [role, currentPage, perPage]);
+    dispatch(fetchOnSubsOffers({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
