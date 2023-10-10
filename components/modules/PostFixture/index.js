@@ -43,7 +43,7 @@ const PostFixture = () => {
       </div>
       <div className="grow">{printContent}</div>
       <ComplexPagination
-        label="fleets"
+        label="offers"
         perPage={perPage}
         currentPage={currentPage}
         numberOfPages={numberOfPages}

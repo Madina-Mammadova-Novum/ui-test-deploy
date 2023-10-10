@@ -18,14 +18,17 @@ import { useFilters } from '@/utils/hooks';
 const Negotiating = () => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState({ value: false });
-  const { offers, loading, role } = useSelector(getNegotiatingDataSelector);
+  const { offers, loading, totalPages, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
 
   const { page, pageSize } = PAGE_STATE;
 
-  const { numberOfPages, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters({ initialPage: page, itemsPerPage: pageSize, data: offers });
+  const { currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } = useFilters({
+    initialPage: page,
+    itemsPerPage: pageSize,
+    data: offers,
+  });
 
   useEffect(() => {
     dispatch(fetchUserNegotiating({ page: currentPage, perPage }));
@@ -35,6 +38,7 @@ const Negotiating = () => {
     const rowHeader = isOwner
       ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
       : chartererNegotiatingHeaderDataAdapter({ data: rowData });
+
     return (
       <ExpandableRow
         key={rowData.id}
@@ -71,10 +75,10 @@ const Negotiating = () => {
       </div>
       <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
       <ComplexPagination
-        label="fleets"
+        label="offers"
         perPage={perPage}
         currentPage={currentPage}
-        numberOfPages={numberOfPages}
+        numberOfPages={totalPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
         onChangeOffers={onChangeOffers}

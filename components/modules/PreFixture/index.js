@@ -92,6 +92,7 @@ const PreFixture = ({ searchParams }) => {
       </div>
       <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
       <ComplexPagination
+        label="offers"
         currentPage={currentPage}
         numberOfPages={totalPages}
         onPageChange={handlePageChange}
