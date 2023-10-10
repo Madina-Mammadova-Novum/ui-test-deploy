@@ -156,6 +156,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     lastSire,
     approvals,
     bankDetails,
+    isCountdownExtendedByCharterer,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -337,6 +338,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       },
     },
     additionalCharterPartyTerms,
+    allowExtension: !isCountdownExtendedByCharterer,
   };
 };
 

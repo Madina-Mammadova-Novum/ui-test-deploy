@@ -74,7 +74,7 @@ const OnSubs = () => {
       >
         <OnSubsExpandedContent
           offerId={rowData?.id}
-          detailsData={onSubsDetailsAdapter({ data: rowData, role: session?.role })}
+          detailsData={onSubsDetailsAdapter({ data: rowData })}
           documentsData={onSubsDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
         />
       </ExpandableRow>
