@@ -8,16 +8,25 @@ import { vesselDetailsAdapter } from '@/adapters/vessel';
 import { getCountries, getUserFleets } from '@/services';
 import { getPorts } from '@/services/port';
 import { getFleetsVessels, getUnassignedVessels, getVesselDetails, getVesselTypes } from '@/services/vessel';
-import { convertDataToOptions, countriesOptions } from '@/utils/helpers';
+import { calculateAmountOfPages, convertDataToOptions, countriesOptions } from '@/utils/helpers';
 
 export const fetchFleetsWithVessels = (() => {
-  return createAsyncThunk(FLEETS.GET_USER_FLEETS, async () => {
-    const { data } = await getUserFleets();
+  let totalPages;
+  let currentPerPage;
+
+  return createAsyncThunk(FLEETS.GET_USER_FLEETS, async ({ page, perPage, sortBy }) => {
+    if (!totalPages || currentPerPage !== perPage) {
+      const { recordsTotal, recordsFiltered } = await getUserFleets({ page, perPage, sortBy });
+      totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
+      currentPerPage = perPage;
+    }
+
+    const { data } = await getUserFleets({ page, perPage, sortBy });
     const generator = getFleetsVessels(data);
     const { value } = generator.next();
 
     return {
-      data: await value,
+      data: { vessels: await value, totalPages },
     };
   });
 })();

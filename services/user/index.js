@@ -14,7 +14,7 @@ import {
   updatePasswordAdapter,
 } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { ContentTypeJson, DEFAULT_FETCH_AMOUNT } from '@/lib/constants';
+import { ContentTypeJson } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -127,9 +127,7 @@ export async function deleteCompany({ data }) {
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
   const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
-  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body, {
-    headers: { ...ContentTypeJson() },
-  });
+  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
 
   return {
     ...response,
@@ -211,12 +209,11 @@ export async function getChartererUserCargoes() {
   };
 }
 
-export async function getUserFleets() {
-  const body = {
-    pageSize: DEFAULT_FETCH_AMOUNT,
-  };
+export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
+  const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
   const response = await postData(`account/fleets`, body);
+
   return {
     ...response,
   };
