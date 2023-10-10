@@ -11,8 +11,6 @@ export default async function handler(req, res) {
 
   const { skip, pageSize } = JSON.parse(req.body);
 
-  console.log(req.body);
-
   return responseHandler({
     req,
     res,
