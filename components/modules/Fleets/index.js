@@ -13,41 +13,36 @@ import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ACTIONS, PAGE_STATE } from '@/lib/constants';
 import { AddNewTanker, ExpandableRow } from '@/modules';
 import { fetchFleetsWithVessels, fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
-import { fleetsSelector } from '@/store/selectors';
+import { getFleetsSelector } from '@/store/selectors';
 import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, UnassignedFleet } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
-const Fleets = ({ searchParams }) => {
+const Fleets = () => {
   const dispatch = useDispatch();
-  const { refetch, data, loading: isLoading } = useSelector(fleetsSelector);
+  const { refetch, data, totalPages, loading } = useSelector(getFleetsSelector);
 
   const [toggle, setToggle] = useState({ value: false });
 
-  const searchedData = data.find((element) => element?.id === searchParams.id);
-
-  useEffect(() => {
-    dispatch(fetchFleetsWithVessels());
-    dispatch(fetchUnassignedFleetData());
-  }, [dispatch, refetch]);
-
   const { page, pageSize, sortValue } = PAGE_STATE;
 
-  const {
-    numberOfPages,
-    items,
-    currentPage,
-    handlePageChange,
-    handleSelectedPageChange,
-    selectedPage,
-    onChangeOffers,
-    perPage,
-  } = useFilters({ initialPage: page, sortValue, itemsPerPage: pageSize, data });
+  const { items, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } = useFilters({
+    initialPage: page,
+    sortValue,
+    itemsPerPage: pageSize,
+    data,
+  });
+
+  useEffect(() => {
+    dispatch(fetchUnassignedFleetData());
+  }, [refetch]);
+
+  useEffect(() => {
+    dispatch(fetchFleetsWithVessels({ page: currentPage, perPage }));
+  }, [perPage, currentPage, refetch]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
-    const cellData = searchedData?.vessels?.find((el) => el.fleetId === rowData?.id);
-    const isOpened = cellData?.fleetId === rowData?.id;
 
     return (
       <ExpandableRow
@@ -72,7 +67,6 @@ const Fleets = ({ searchParams }) => {
             ]}
           />
         }
-        isOpened={isOpened}
         expand={toggle}
       >
         <FleetsExpandedContent
@@ -84,11 +78,11 @@ const Fleets = ({ searchParams }) => {
   };
 
   const printContent = useMemo(() => {
-    if (isLoading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (items) return items.map(printExpandableRow);
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (items) return data.map(printExpandableRow);
 
     return <Title level="3">No positions</Title>;
-  }, [isLoading, items, printExpandableRow]);
+  }, [loading, data, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">
@@ -133,10 +127,9 @@ const Fleets = ({ searchParams }) => {
       <ComplexPagination
         label="fleets"
         currentPage={currentPage}
-        numberOfPages={numberOfPages}
+        numberOfPages={totalPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
-        pages={selectedPage}
         onChangeOffers={onChangeOffers}
         perPage={perPage}
       />

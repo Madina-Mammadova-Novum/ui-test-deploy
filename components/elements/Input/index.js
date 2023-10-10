@@ -65,6 +65,7 @@ const Input = React.forwardRef(
             )}
             type={type}
             name={name}
+            onTouchStartCapture={({ target }) => target.blur()}
             onWheelCapture={({ target }) => target.blur()}
             {...rest}
           />

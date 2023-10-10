@@ -1,16 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { useSession } from 'next-auth/react';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
 import { counteroffersTabDataByRole, failedTabDataByRole, offerTabDataByRole } from '@/adapters/negotiating';
 import { Table } from '@/elements';
-import { ROLES } from '@/lib/constants';
-import { fetchNegotiatingOffers } from '@/store/entities/negotiating/actions';
-import { negotiatingSelector } from '@/store/selectors';
+import { getNegotiatingDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
 import {
   chartererNegotiatingCounterofferTableHeader,
   chartererNegotiatingFailedTableHeader,
@@ -22,60 +19,48 @@ import {
 
 const NegotiatingExpandedContent = ({ data, tabs }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const { offerById, role } = useSelector(getNegotiatingDataSelector);
 
-  const dispatch = useDispatch();
-  const { refetchOffers, negotiatingOffers } = useSelector(negotiatingSelector);
-  const {
-    incoming = [],
-    sent = [],
-    failed = [],
-  } = useMemo(() => negotiatingOffers[data.id] || {}, [negotiatingOffers[data.id]]);
-  const { data: session } = useSession();
-  const isOwner = session?.role === ROLES.OWNER;
+  const { isOwner } = getRoleIdentity({ role });
 
-  useEffect(() => {
-    dispatch(fetchNegotiatingOffers({ isOwner, id: data.id }));
-  }, [data.id, dispatch, isOwner, refetchOffers]);
+  const { incoming = [], sent = [], failed = [] } = offerById[data.id];
 
   const tabContent = useMemo(() => {
-    switch (currentTab) {
-      case 'counteroffers':
-        return (
-          <Table
-            headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
-            rows={counteroffersTabDataByRole({ data: sent, role: session?.role })}
-            noDataMessage="No data provided"
-          />
-        );
-      case 'failed':
-        return (
-          <Table
-            headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
-            rows={failedTabDataByRole({ data: failed, role: session?.role })}
-            noDataMessage="No data provided"
-          />
-        );
-      default:
-        return (
-          <Table
-            headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
-            rows={offerTabDataByRole({ data: incoming, role: session?.role })}
-            noDataMessage="No data provided"
-          />
-        );
-    }
-  }, [currentTab, failed, incoming, isOwner, sent, session?.role]);
+    return {
+      counteroffers: (
+        <Table
+          headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
+          rows={counteroffersTabDataByRole({ data: sent, role })}
+          noDataMessage="No data provided"
+        />
+      ),
+      failed: (
+        <Table
+          headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
+          rows={failedTabDataByRole({ data: failed, role })}
+          noDataMessage="No data provided"
+        />
+      ),
+      incoming: (
+        <Table
+          headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
+          rows={offerTabDataByRole({ data: incoming, role })}
+          noDataMessage="No data provided"
+        />
+      ),
+    };
+  });
 
   return (
-    <div>
+    <>
       <Tabs
         onClick={({ target }) => setCurrentTab(target.value)}
         activeTab={currentTab}
         tabs={tabs}
         customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
-      <div className="mb-3 table-scroll">{tabContent}</div>
-    </div>
+      <div className="mb-3 table-scroll">{tabContent[currentTab]}</div>
+    </>
   );
 };
 

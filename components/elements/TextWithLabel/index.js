@@ -1,10 +1,14 @@
-import ReactCountryFlag from 'react-country-flag';
+'use client';
+
+import { useSelector } from 'react-redux';
 
 import classnames from 'classnames';
 
 import { TextWithLabelPropTypes } from '@/lib/types';
 
 import { Label, ManualTooltip, Placeholder } from '@/elements';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { Flag } from '@/units';
 
 const TextWithLabel = ({
   text,
@@ -16,6 +20,8 @@ const TextWithLabel = ({
   coverImage = null,
   countryCode,
 }) => {
+  const { countries } = useSelector(getGeneralDataSelector);
+
   return (
     <div
       className={classnames(
@@ -31,11 +37,11 @@ const TextWithLabel = ({
           </ManualTooltip>
         )}
       </Label>
-      <p className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0">
+      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center">
         {coverImage && coverImage}
-        {countryCode && <ReactCountryFlag countryCode={countryCode} style={{ zoom: 1.3 }} className="mr-1" />}
-        {text ? <span className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</span> : <Placeholder />}
-      </p>
+        {countryCode && <Flag data={countries} id={countryCode} />}
+        {text ? <p className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}
+      </div>
     </div>
   );
 };

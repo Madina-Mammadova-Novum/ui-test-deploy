@@ -21,7 +21,7 @@ const schema = yup.object({
 });
 
 const AssignToFleet = ({ tankerId, name, closeModal }) => {
-  const [data, isLoading] = useFetch(getUserFleets);
+  const [data, isLoading] = useFetch(() => getUserFleets({ page: 1, perPage: 100, sortBy: 'asc' }));
   const methods = useHookFormParams({ schema });
   const { setValue, getValues } = methods;
   const dispatch = useDispatch();

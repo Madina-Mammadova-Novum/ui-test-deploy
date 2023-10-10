@@ -24,11 +24,11 @@ import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
-  const { data: session } = useSession();
-  const role = useMemo(() => session?.role, [session?.role]);
-  const { isOwner } = getRoleIdentity({ role: session?.role });
-  const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
+  const { data: session } = useSession();
+  const [toggle, setToggle] = useState({ value: false });
+
+  const { isOwner } = getRoleIdentity({ role: session?.role });
   const {
     data: { offers, totalPages },
     loading,
@@ -43,10 +43,8 @@ const OnSubs = () => {
   });
 
   useEffect(() => {
-    if (role) {
-      dispatch(fetchOnSubsOffers({ role: session?.role, page: currentPage, perPage }));
-    }
-  }, [role, currentPage, perPage]);
+    dispatch(fetchOnSubsOffers({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -99,7 +97,7 @@ const OnSubs = () => {
       </div>
       <div className="grow flex flex-col gap-y-2.5">{printContent}</div>
       <ComplexPagination
-        label="fleets"
+        label="offers"
         perPage={perPage}
         currentPage={currentPage}
         numberOfPages={totalPages}

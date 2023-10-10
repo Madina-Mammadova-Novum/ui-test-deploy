@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import { useSession } from 'next-auth/react';
-
 import { FailTheSubsModalContentPropTypes } from '@/lib/types';
 
 import { Button, Title } from '@/elements';
@@ -13,12 +11,10 @@ import { errorToast, successToast } from '@/utils/hooks';
 
 const FailTheSubsModalContent = ({ closeModal, offerId }) => {
   const [loading, setLoading] = useState(false);
-  const { data: session } = useSession();
-  console.log(session?.role, 'WAWA');
 
   const handleFailTheSubs = async () => {
     setLoading(true);
-    const { error, message: successMessage } = await failTheSubs({ data: { offerId }, role: session?.role });
+    const { error, message: successMessage } = await failTheSubs({ data: { offerId } });
     setLoading(false);
     if (error) {
       const { errors } = error;

@@ -30,7 +30,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'open port',
       text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
-      countryCode: openPort?.country?.codeISO2,
+      country: openPort?.country,
     },
   ];
 };
@@ -509,15 +509,12 @@ export const chartererFailedTabRowsDataAdapter = ({ data }) => {
 export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
+  const { vessel, failedAt, reason, id } = data;
+
   const {
-    vessel: {
-      details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
-      openDate,
-    } = {},
-    failedAt,
-    reason,
-    id,
-  } = data;
+    details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
+    openDate,
+  } = vessel || {};
 
   return [
     {

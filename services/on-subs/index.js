@@ -37,9 +37,9 @@ export async function revokeOnSubsDocumentDeletion({ data, role }) {
   };
 }
 
-export async function failTheSubs({ data, role }) {
+export async function failTheSubs({ data }) {
   const body = failTheSubsAdapter({ data });
-  const path = role === ROLES.OWNER ? 'account/on-subs/owner/fail' : 'account/on-subs/charterer/fail';
+  const path = 'account/on-subs/fail';
   const response = await postData(path, body);
   if (!response.error) response.message = 'You have successfully failed the Subs';
   return {

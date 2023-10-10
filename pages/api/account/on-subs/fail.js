@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/owner/deals/failthesubs`),
+    path: getApiURL(`v1/${session.role}/deals/failthesubs`),
     dataAdapter: responseFailTheSubsAdapter,
     requestMethod: 'POST',
     options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },

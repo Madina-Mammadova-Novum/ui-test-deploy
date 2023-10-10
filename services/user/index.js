@@ -1,5 +1,7 @@
+import { getSession } from 'next-auth/react';
+
 import { getFleetByIdAdapter } from '@/adapters';
-import { accountNavigationAdapter } from '@/adapters/navigation';
+import { basePageNavAdapter, negotiationPageNavAdapter, positionsPageNavAdapter } from '@/adapters/navigation';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -12,7 +14,7 @@ import {
   updatePasswordAdapter,
 } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { ContentTypeJson, DEFAULT_FETCH_AMOUNT, ROLES } from '@/lib/constants';
+import { ContentTypeJson } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
@@ -123,11 +125,9 @@ export async function deleteCompany({ data }) {
 }
 
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
-  const body = accountNavigationAdapter({ data: { page, perPage, sortBy } });
+  const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
-  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body, {
-    headers: { ...ContentTypeJson() },
-  });
+  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
 
   return {
     ...response,
@@ -164,47 +164,22 @@ export async function getUserFixtures() {
   };
 }
 
-export async function getOwnerPrefixture({ page, perPage }) {
-  const response = await postData(`account/pre-fixture/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
+export async function getRoleBasedPrefixture({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/pre-fixture?page=${page}&perPage=${perPage}`, body);
+
   return {
     ...response,
   };
 }
 
-export async function getChartererPrefixture({ page, perPage }) {
-  const response = await postData(`account/pre-fixture/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
-  return {
-    ...response,
-  };
-}
+export async function getRoleBasedNegotiating({ page = 1, perPage = 5, stage = 'Negotiating' }) {
+  const session = await getSession();
+  const body = negotiationPageNavAdapter({ data: { page, perPage, stage } });
 
-export function getUserNegotiating(role) {
-  switch (role) {
-    case ROLES.OWNER: {
-      return getOwnerNegotiating;
-    }
-    case ROLES.CHARTERER: {
-      return getChartererNegotiating;
-    }
-    default:
-      return () => {};
-  }
-}
+  const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body);
 
-export async function getOwnerNegotiating() {
-  const body = {
-    skip: 0,
-    pageSize: 1000,
-    stage: 'Negotiating',
-  };
-  const response = await postData(`account/negotiating/owner`, body);
-  return {
-    ...response,
-  };
-}
-
-export async function getChartererNegotiating() {
-  const response = await getData(`account/negotiating/charterer`);
   return {
     ...response,
   };
@@ -234,33 +209,21 @@ export async function getChartererUserCargoes() {
   };
 }
 
-export async function getUserOnSubs() {
-  const response = await getData(`account/on-subs`);
-  return {
-    ...response,
-  };
-}
-
-export async function getUserFleets() {
-  const body = {
-    pageSize: DEFAULT_FETCH_AMOUNT,
-  };
+export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
+  const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
   const response = await postData(`account/fleets`, body);
+
   return {
     ...response,
   };
 }
 
-export async function getOwnerOnSubs({ page, perPage }) {
-  const response = await postData(`account/on-subs/owner?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
-  return {
-    ...response,
-  };
-}
+export async function getRoleBasedOnSubs({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
 
-export async function getChartererOnSubs({ page, perPage }) {
-  const response = await postData(`account/on-subs/charterer?Skip=${(page - 1) * perPage}&PageSize=${perPage}`);
+  const response = await postData(`account/on-subs?page=${page}&perPage=${perPage}`, body);
+
   return {
     ...response,
   };

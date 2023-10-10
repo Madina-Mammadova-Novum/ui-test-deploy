@@ -56,9 +56,7 @@ const ExpandableCardHeader = ({
         style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
       >
         <HoverTooltip
-          data={{
-            description: tooltipText,
-          }}
+          data={{ description: tooltipText }}
           disabled={!lg || disableTooltip}
           className="!top-0 -translate-y-2/4"
         >
@@ -71,7 +69,7 @@ const ExpandableCardHeader = ({
             textStyles={data?.textStyles}
             helperData={data?.helperData}
             icon={data?.icon}
-            countryCode={data?.countryCode}
+            countryCode={data?.country?.id}
           />
         </HoverTooltip>
       </div>
