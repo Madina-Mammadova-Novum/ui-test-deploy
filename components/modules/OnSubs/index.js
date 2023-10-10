@@ -53,6 +53,8 @@ const OnSubs = () => {
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
+    const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
+
     return (
       <ExpandableRow
         header={
@@ -62,7 +64,13 @@ const OnSubs = () => {
           />
         }
         expand={toggle}
-        footer={<OnSubsExpandedFooter underRecap />}
+        footer={
+          <OnSubsExpandedFooter
+            underRecap={!rowData?.isCountdownActive}
+            offerId={rowData?.id}
+            scriveURL={scriveURL || ''}
+          />
+        }
       >
         <OnSubsExpandedContent
           offerId={rowData?.id}

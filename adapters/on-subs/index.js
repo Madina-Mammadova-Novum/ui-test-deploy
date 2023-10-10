@@ -449,3 +449,17 @@ export const onSubsRevokeDocumentDeletionAdapter = ({ data }) => {
     documentId,
   };
 };
+
+export const failTheSubsAdapter = ({ data }) => {
+  if (!data) return {};
+  const { offerId } = data;
+  return {
+    dealId: offerId,
+    reason: 'placeholder',
+  };
+};
+
+export const responseFailTheSubsAdapter = ({ data }) => {
+  if (!data) return {};
+  return data;
+};

@@ -1,8 +1,34 @@
+'use client';
+
+import { useState } from 'react';
+
+import { useSession } from 'next-auth/react';
+
 import { FailTheSubsModalContentPropTypes } from '@/lib/types';
 
 import { Button, Title } from '@/elements';
+import { failTheSubs } from '@/services/on-subs';
+import { parseErrors } from '@/utils/helpers';
+import { errorToast, successToast } from '@/utils/hooks';
 
-const FailTheSubsModalContent = ({ closeModal }) => {
+const FailTheSubsModalContent = ({ closeModal, offerId }) => {
+  const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
+  console.log(session?.role, 'WAWA');
+
+  const handleFailTheSubs = async () => {
+    setLoading(true);
+    const { error, message: successMessage } = await failTheSubs({ data: { offerId }, role: session?.role });
+    setLoading(false);
+    if (error) {
+      const { errors } = error;
+      errorToast(parseErrors({ ...errors }));
+    } else {
+      successToast(successMessage);
+      closeModal();
+    }
+  };
+
   return (
     <div>
       <Title level={2}>Do you want to fail the Subs?</Title>
@@ -16,8 +42,10 @@ const FailTheSubsModalContent = ({ closeModal }) => {
         </div>
         <div className="w-full">
           <Button
-            buttonProps={{ text: 'Fail the Subs', variant: 'delete', size: 'large' }}
+            buttonProps={{ text: loading ? 'Please wait...' : 'Fail the Subs', variant: 'delete', size: 'large' }}
             customStyles="w-full whitespace-nowrap"
+            onClick={handleFailTheSubs}
+            disabled={loading}
           />
         </div>
       </div>
