@@ -3,10 +3,10 @@ import FailTheSubsModalContent from './FailTheSubsModalContent';
 import { OnSubsExpandedFooterPropTypes } from '@/lib/types';
 
 import CircleArrowsSVG from '@/assets/images/process.svg';
-import { Button, Divider } from '@/elements';
+import { Button, Divider, NextLink } from '@/elements';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 
-const OnSubsExpandedFooter = ({ underRecap = false }) => {
+const OnSubsExpandedFooter = ({ underRecap = true, offerId, scriveURL = '' }) => {
   return (
     <ExpandableRowFooter>
       <Divider className="absolute left-0 w-full" />
@@ -38,15 +38,17 @@ const OnSubsExpandedFooter = ({ underRecap = false }) => {
               }}
               containerClass="w-[356px]"
             >
-              <FailTheSubsModalContent />
+              <FailTheSubsModalContent offerId={offerId} />
             </ModalWindow>
           </div>
           <div className="w-full">
-            <Button
-              buttonProps={{ text: 'Lift the Subs', variant: 'primary', size: 'large' }}
-              customStyles="w-full whitespace-nowrap"
-              disabled={underRecap}
-            />
+            <NextLink
+              href={scriveURL}
+              target="blank"
+              className="block text-xsm whitespace-nowrap bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker"
+            >
+              Lift the Subs
+            </NextLink>
           </div>
         </div>
       </div>

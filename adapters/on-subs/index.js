@@ -155,7 +155,8 @@ export const onSubsDetailsAdapter = ({ data }) => {
     thirdCargo,
     lastSire,
     approvals,
-    bankDetails = '',
+    bankDetails,
+    isCountdownExtendedByCharterer,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -337,6 +338,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       },
     },
     additionalCharterPartyTerms,
+    allowExtension: !isCountdownExtendedByCharterer,
   };
 };
 
@@ -448,4 +450,18 @@ export const onSubsRevokeDocumentDeletionAdapter = ({ data }) => {
   return {
     documentId,
   };
+};
+
+export const failTheSubsAdapter = ({ data }) => {
+  if (!data) return {};
+  const { offerId } = data;
+  return {
+    dealId: offerId,
+    reason: 'placeholder',
+  };
+};
+
+export const responseFailTheSubsAdapter = ({ data }) => {
+  if (!data) return {};
+  return data;
 };

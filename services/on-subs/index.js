@@ -1,4 +1,5 @@
 import {
+  failTheSubsAdapter,
   onSubsAddDocumentAdapter,
   onSubsRequestDocumentDeletionAdapter,
   onSubsRevokeDocumentDeletionAdapter,
@@ -30,7 +31,17 @@ export async function revokeOnSubsDocumentDeletion({ data, role }) {
   const body = onSubsRevokeDocumentDeletionAdapter({ data });
   const path = role === ROLES.OWNER ? 'document/owner/revoke' : 'document/charterer/revoke';
   const response = await postData(path, body);
-  if (!response.error) response.message = 'Your have successfully canceled your request to delete a file';
+  if (!response.error) response.message = 'You have successfully canceled your request to delete a file';
+  return {
+    ...response,
+  };
+}
+
+export async function failTheSubs({ data }) {
+  const body = failTheSubsAdapter({ data });
+  const path = 'account/on-subs/fail';
+  const response = await postData(path, body);
+  if (!response.error) response.message = 'You have successfully failed the Subs';
   return {
     ...response,
   };
