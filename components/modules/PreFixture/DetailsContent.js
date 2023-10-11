@@ -1,20 +1,23 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import { DetailsContentPropTypes } from '@/lib/types';
 
-import usFlag from '@/assets/images/flag.png';
-import { FieldsetContent, FieldsetWrapper, IconComponent, TextRow, Title } from '@/elements';
+import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 import { ROLES } from '@/lib';
 import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
-import { PartyItem } from '@/units';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ data = {} }) => {
   const { data: session } = useSession();
+  const { countries } = useSelector(getGeneralDataSelector);
+
   const {
     partyInformation = {},
     cargoDetails = {},
@@ -24,7 +27,16 @@ const DetailsContent = ({ data = {} }) => {
   } = data;
   const { cargoType, products = [] } = cargoDetails;
   const { freight, demurrageRate, laytime, demurragePaymmentTerms, paymentTerms } = commercialOfferTerms;
-  const { laycanStart, laycanEnd, loadPort, loadTerminal, dischargePort, dischargeTerminal } = voyageDetails;
+  const {
+    laycanStart,
+    laycanEnd,
+    loadPort,
+    loadPortCountryId,
+    loadTerminal,
+    dischargePort,
+    dischargePortCountryId,
+    dischargeTerminal,
+  } = voyageDetails;
 
   const printRoleBasedSection = useMemo(() => {
     if (session?.role === ROLES.CHARTERER) {
@@ -93,7 +105,7 @@ const DetailsContent = ({ data = {} }) => {
           <FieldsetContent label="Ports" className="mt-4">
             <div>
               <TextRow title="Load port">
-                <IconComponent icon={usFlag} />
+                <Flag data={countries} id={loadPortCountryId} className="mr-1" />
                 {loadPort}
               </TextRow>
               <TextRow title="Load terminal">{loadTerminal}</TextRow>
@@ -101,7 +113,7 @@ const DetailsContent = ({ data = {} }) => {
 
             <div className="mt-2.5">
               <TextRow title="Discharge port">
-                <IconComponent icon={usFlag} />
+                <Flag data={countries} id={dischargePortCountryId} className="mr-1" />
                 {dischargePort}
               </TextRow>
               <TextRow title="Discharge terminal">{dischargeTerminal}</TextRow>

@@ -62,7 +62,6 @@ const ExpandableCardHeader = ({
         >
           <TextWithLabel
             label={data?.label}
-            // text={data.countdownData ? <DynamicCountdownTimer {...data.countdownData} /> : data?.text}
             text={textContent}
             coverImage={data?.coverImage}
             customStyles={!index && 'mr-auto'}

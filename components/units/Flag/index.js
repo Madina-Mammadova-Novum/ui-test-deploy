@@ -5,10 +5,10 @@ import { FlagPropTypes } from '@/lib/types';
 
 import { getCountryById } from '@/utils/helpers';
 
-const Flag = ({ id, data = [] }) => {
+const Flag = ({ id, data = [], className }) => {
   const country = getCountryById({ data, id });
 
-  return <ReactCountryFlag countryCode={country?.countryCode} svg />;
+  return <ReactCountryFlag countryCode={country?.countryCode} className={className} svg />;
 };
 
 Flag.propTypes = FlagPropTypes;
