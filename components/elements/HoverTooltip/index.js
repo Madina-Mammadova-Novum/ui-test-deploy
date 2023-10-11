@@ -14,7 +14,13 @@ const HoverTooltip = ({ data, disabled = false, className, children }) => {
 
   return (
     <div className="group relative transition-all">
-      <span onMouseEnter={handleEnter} onMouseLeave={handleClose} className={`text-gray ${!disabled && 'cursor-help'}`}>
+      <span
+        onMouseEnter={handleEnter}
+        onTouchStart={handleEnter}
+        onTouchEnd={handleClose}
+        onMouseLeave={handleClose}
+        className={`text-gray ${!disabled && 'cursor-help'}`}
+      >
         {children}
       </span>
       {!disabled && showTooltip && (

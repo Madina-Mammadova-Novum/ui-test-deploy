@@ -18,7 +18,7 @@ import {
 } from '@/utils/mock';
 
 const NegotiatingExpandedContent = ({ data, tabs }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const [currentTab, setCurrentTab] = useState(tabs[0]?.value);
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });

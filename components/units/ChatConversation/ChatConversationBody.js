@@ -4,10 +4,11 @@ import { useRef } from 'react';
 
 import { ChatConversationBodyPropTypes } from '@/lib/types';
 
+import { Loader } from '@/elements';
 import { ROLES } from '@/lib';
 import { ChatMessage } from '@/units';
 
-const ChatConversationBody = ({ messages = [] }) => {
+const ChatConversationBody = ({ messages = [], loading = false }) => {
   const scrollRef = useRef();
   // const [minus, setMinus] = useState(1);
 
@@ -38,14 +39,18 @@ const ChatConversationBody = ({ messages = [] }) => {
   return (
     <div ref={scrollRef} className="flex flex-col-reverse h-96 overflow-scroll">
       <div className="relative">
-        {messages.map(({ data, title, id }) => {
-          return (
-            <div className="flex flex-col" key={id}>
-              <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
-              {data?.map(printChatMessage)}
-            </div>
-          );
-        })}
+        {loading ? (
+          <Loader className="h-4 w-4 absolute bottom-0" />
+        ) : (
+          messages.map(({ data, title, id }) => {
+            return (
+              <div className="flex flex-col" key={id}>
+                <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
+                {data?.map(printChatMessage)}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

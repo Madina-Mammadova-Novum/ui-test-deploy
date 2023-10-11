@@ -559,3 +559,5 @@ export const processTooltipData = (text) => ({
   trimmedText:
     text?.length > SETTINGS.MAX_VISIBLE_TEXT_LENGTH ? `${text?.slice(0, SETTINGS.MAX_VISIBLE_TEXT_LENGTH)}...` : text,
 });
+
+export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
