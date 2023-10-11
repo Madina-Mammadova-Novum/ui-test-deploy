@@ -3,8 +3,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
-
 import { Loader, Title } from '@/elements';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
@@ -19,10 +17,9 @@ import { getRoleIdentity } from '@/utils/helpers';
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
-  const { loading, data } = useSelector(getUserDataSelector);
+  const { loading, data, role } = useSelector(getUserDataSelector);
 
-  const { isCharterer } = getRoleIdentity({ role: session?.role });
+  const { isCharterer } = getRoleIdentity({ role });
 
   useEffect(() => {
     dispatch(fetchUserProfileData({ isCharterer }));

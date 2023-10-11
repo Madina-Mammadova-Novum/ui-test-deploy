@@ -4,14 +4,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
+import { SCREENS } from '@/lib/constants';
 import { chatService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setCollapsedChat, setConversation, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
+import { useMediaQuery } from '@/utils/hooks';
 
 const Chat = () => {
   const dispatch = useDispatch();
+  const mdScreen = useMediaQuery(SCREENS.MDX);
 
   const {
     opened,
@@ -46,12 +49,17 @@ const Chat = () => {
     dispatch(setConversation(false));
   };
 
+  useEffect(() => {
+    if (mdScreen && isActive) dispatch(setOpenedChat(false));
+  }, [mdScreen, isActive]);
+
   return (
     <>
       <ChatButton counter={1} onClick={handleOpen} className="fixed right-3 bottom-3 z-30" />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <ChatConversation
         isOpened={isActive}
+        isMediumScreen={mdScreen}
         onCloseSession={handleCloseConversation}
         onCollapseSession={handleCollapseConversation}
       />

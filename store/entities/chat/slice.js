@@ -40,19 +40,23 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     searchedData: (state, { payload }) => {
-      state.data.searched = state.data.active.filter(({ vessel }) => {
-        return (
+      const result = state.data.active.filter(
+        ({ vessel }) =>
           vessel.name.includes(payload) ||
           vessel.imo.includes(payload) ||
           vessel.products.some(({ name }) => name?.includes(payload))
-        );
-      });
+      );
+
+      state.data.searched = result;
     },
     setUser: (state, action) => {
       state.data.user.data = action.payload;
     },
     setUserConversation: (state, { payload }) => {
       state.data.user.messages = payload;
+    },
+    setLoadConversation: (state, { payload }) => {
+      state.data.user.loading = payload;
     },
     setCollapsedChat: (state, { payload }) => {
       state.data.collapsed = [...state.data.collapsed, payload];
@@ -140,6 +144,7 @@ export const {
   resetUser,
   resetChatFilter,
   removeCollapsedChat,
+  setLoadConversation,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

@@ -121,7 +121,10 @@ const TableCell = ({ cellProps }) => {
 
   const printValue = useMemo(() => {
     return helperData ? (
-      <HoverTooltip className="!-top-10 !-translate-x-[50%]" data={{ description: helperData }}>
+      <HoverTooltip
+        className="!-top-16 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
+        data={{ description: helperData }}
+      >
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
       </HoverTooltip>
     ) : (

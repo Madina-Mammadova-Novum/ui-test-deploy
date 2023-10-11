@@ -5,7 +5,14 @@ import { getRtURL } from '.';
 import { getSocketConnectionsParams } from './helpers';
 
 import { messagesDataAdapter } from '@/adapters';
-import { messageAlert, resetUser, setConversation, setUser, setUserConversation } from '@/store/entities/chat/slice';
+import {
+  messageAlert,
+  resetUser,
+  setConversation,
+  setLoadConversation,
+  setUser,
+  setUserConversation,
+} from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
 export class SignalRController {
@@ -68,16 +75,23 @@ export class ChatController extends SignalRController {
   async initStatus() {
     await this.setupConnection({ path: `${this.host}/chatlist` });
 
-    this.connection.on('ReceiveMessage', async (response) => this.incomingMessage({ chat: response }));
+    this.connection.on('ReceiveMessage', async (response) => {
+      this.incomingMessage({ chat: response });
+    });
   }
 
   async initChat({ chatId, vessel }) {
+    this.store.dispatch(setLoadConversation(true));
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser({ chatId, vessel }));
+    this.store.dispatch(setUserConversation([]));
 
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}` });
-      this.connection.on('ReceiveMessage', async (response) => this.updateMessage({ message: response }));
+      this.connection.on('ReceiveMessage', async (response) => {
+        this.store.dispatch(setLoadConversation(false));
+        this.updateMessage({ message: response });
+      });
     } catch (err) {
       console.error(err);
     }
@@ -109,6 +123,8 @@ export class ChatController extends SignalRController {
     this.stop();
     this.messages = [];
     this.store.dispatch(resetUser());
+    this.store.dispatch(setUserConversation([]));
+    this.store.dispatch(setLoadConversation(false));
     this.store.dispatch(setConversation(false));
   }
 }

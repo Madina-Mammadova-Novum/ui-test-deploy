@@ -37,7 +37,7 @@ const ChatModal = ({ isOpened, onClose }) => {
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
   const printChatRooms = useMemo(() => {
-    return <ChatList data={dataByTab} />;
+    return <ChatList data={dataByTab.slice(0, limit)} />;
   }, [dataByTab, limit]);
 
   return (
