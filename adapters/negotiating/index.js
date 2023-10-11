@@ -43,7 +43,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     cargoType,
     minQuantity,
     maxQuantity,
-    loadPort: { name: portName, locode: portLocode, country: { codeISO2 } = {} } = {},
+    loadPort: { name: portName, locode: portLocode, country: portCountry } = {},
     laycanStart,
     laycanEnd,
     createdAt,
@@ -65,7 +65,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      countryCode: codeISO2,
+      country: portCountry,
     },
     {
       label: 'Laycan start',

@@ -11,9 +11,22 @@ const initialState = {
   },
 };
 
-const userSlice = createSlice({
+const preFixtureSlice = createSlice({
   name: 'pre-fixture',
   initialState,
+  reducers: {
+    updateConfirmationStatus: (state, action) => {
+      const { offerId, isOwner } = action?.payload;
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              [isOwner ? 'ownerConfirmed' : 'chartererConfirmed']: 'Confirmed',
+            }
+          : offer
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPrefixtureOffers.pending, (state) => {
       state.loading = true;
@@ -29,4 +42,6 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export const { updateConfirmationStatus } = preFixtureSlice.actions;
+
+export default preFixtureSlice.reducer;

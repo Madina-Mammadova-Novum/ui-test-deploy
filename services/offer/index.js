@@ -125,7 +125,7 @@ export async function acceptPrefixtureOffer(offerId) {
 
   const response = await postData(`account/pre-fixture/accept`, body);
 
-  if (!response.error) response.message = 'Your have successfully confirmed Offer';
+  if (!response.error) response.message = 'You have confirmed to go on subs';
 
   return {
     ...response,

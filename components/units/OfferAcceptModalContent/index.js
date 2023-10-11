@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -9,8 +10,9 @@ import { OfferModalContentPropTypes } from '@/lib/types';
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Button, Loader, Title } from '@/elements';
 import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
+import { updateConfirmationStatus } from '@/store/entities/pre-fixture/slice';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
-import { parseErrors } from '@/utils/helpers';
+import { getRoleIdentity, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -32,12 +34,16 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const [offerDetails, setOfferDetails] = useState({});
   const { commercialOfferTerms, voyageDetails, countdownData } = offerDetails;
   const { data: session } = useSession();
+  const { isOwner } = getRoleIdentity({ role: session?.role });
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     setPending(true);
-    const { error, message: successMessage } = await acceptPrefixtureOffer(offerId, session?.role);
+    const { error, message: successMessage } = await acceptPrefixtureOffer(offerId);
     if (!error) {
+      dispatch(updateConfirmationStatus({ offerId, isOwner }));
       successToast(successMessage);
+      closeModal();
     } else {
       const { errors, message } = error;
       errorToast(parseErrors({ ...errors, ...message }));

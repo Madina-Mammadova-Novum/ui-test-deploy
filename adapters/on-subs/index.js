@@ -39,7 +39,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      countryCode: loadPortCountry?.codeISO2,
+      country: loadPortCountry,
     },
     {
       label: 'Laycan start',
@@ -94,7 +94,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      countryCode: loadPortCountry?.codeISO2,
+      country: loadPortCountry,
     },
     {
       label: 'Laycan start',

@@ -61,6 +61,7 @@ const PreFixture = ({ searchParams }) => {
           <PreFixtureExpandedFooter
             underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
             offerId={rowData.id}
+            offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
           />
         }
       >
