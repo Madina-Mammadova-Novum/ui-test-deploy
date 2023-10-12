@@ -4,7 +4,7 @@ import { useRef } from 'react';
 
 import { ChatConversationBodyPropTypes } from '@/lib/types';
 
-import { Loader } from '@/elements';
+import { ChatLoader } from '@/elements';
 import { ROLES } from '@/lib';
 import { ChatMessage } from '@/units';
 
@@ -32,26 +32,22 @@ const ChatConversationBody = ({ messages = [], loading = false }) => {
   //   }
   // };
 
-  const printChatMessage = ({ sender, id, message, time }) => {
+  const printMessage = ({ sender, id, message, time }) => {
     return <ChatMessage key={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
   };
 
-  return (
-    <div ref={scrollRef} className="flex flex-col-reverse h-96 overflow-scroll">
-      <div className="relative">
-        {loading ? (
-          <Loader className="h-4 w-4 absolute bottom-0" />
-        ) : (
-          messages.map(({ data, title, id }) => {
-            return (
-              <div className="flex flex-col" key={id}>
-                <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
-                {data?.map(printChatMessage)}
-              </div>
-            );
-          })
-        )}
+  const printChatList = ({ data, title, id }) => {
+    return (
+      <div className="flex flex-col" key={id}>
+        <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
+        {data?.map(printMessage)}
       </div>
+    );
+  };
+
+  return (
+    <div ref={scrollRef} className={`flex flex-col-reverse h-96 ${!loading && 'overflow-scroll'}`}>
+      <div className="relative">{loading ? <ChatLoader /> : messages.map(printChatList)}</div>
     </div>
   );
 };
