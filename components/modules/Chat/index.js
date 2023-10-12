@@ -19,6 +19,7 @@ const Chat = () => {
   const {
     opened,
     isActive,
+    newMessagesCounter,
     chats: { user },
   } = useSelector(getChatSelector);
 
@@ -55,7 +56,12 @@ const Chat = () => {
 
   return (
     <>
-      <ChatButton counter={1} onClick={handleOpen} className="fixed right-3 bottom-3 z-30" />
+      <ChatButton
+        counter={newMessagesCounter}
+        onClick={handleOpen}
+        withCancel={false}
+        className="fixed right-3 bottom-3 z-30"
+      />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <ChatConversation
         isOpened={isActive}

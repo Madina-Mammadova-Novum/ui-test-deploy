@@ -41,7 +41,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed bg-white border shadow-xmd border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] rounded-base`}
+        className={`fixed bg-white border shadow-xmd border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] rounded-base z-50`}
       >
         <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
         <div className="flex flex-col h-[47vh] p-5">

@@ -43,6 +43,7 @@ import Placeholder from '@/elements/Placeholder';
 import Portal from '@/elements/Portal';
 import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
+import { ChatLoader } from '@/elements/Skeletons';
 import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
@@ -104,4 +105,5 @@ export {
   ChatButton,
   ConversationButton,
   ArchiveButton,
+  ChatLoader,
 };
