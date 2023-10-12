@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 import ModalHeader from '../ModalHeader';
@@ -10,8 +11,9 @@ import ModalHeader from '../ModalHeader';
 import { RevokeDocumentDeletionModalPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
-import { revokeOnSubsDocumentDeletion } from '@/services/on-subs';
-import { updateDocumentStatus } from '@/store/entities/on-subs/slice';
+import { revokeDocumentDeletion } from '@/services/on-subs';
+import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
+import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
@@ -20,16 +22,28 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
 
+  const pathname = usePathname();
+  const modalSettings = {
+    '/account/fixture': {
+      updateDocumentStatus: updateFixtureDocumentStatus,
+    },
+    '/account/onsubs': {
+      updateDocumentStatus: updateOnSubsDocumentStatus,
+    },
+  };
+
+  const { updateDocumentStatus } = useMemo(() => modalSettings[pathname], [pathname]);
+
   const handleRevokeDocumentDeletion = async () => {
     setLoading(true);
-    const { error, message: successMessage } = await revokeOnSubsDocumentDeletion({
+    const { error, message: successMessage } = await revokeDocumentDeletion({
       data: { documentId },
       role: session?.role,
     });
     setLoading(false);
     if (error) {
       const { errors } = error;
-      errorToast(parseErrors({ ...errors }));
+      errorToast(parseErrors({ errors }));
     } else {
       dispatch(updateDocumentStatus({ documentId, status: 'Active' }));
       successToast(successMessage);

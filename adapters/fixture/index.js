@@ -1,118 +1,383 @@
 import CommentIcon from '@/assets/images/commentMessage.svg';
-import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import StatusIndicator from '@/elements/StatusIndicator';
+import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { transformBytes } from '@/utils/helpers';
 
 export const fixtureHeaderDataAdapter = ({ data }) => {
-  if (!data) return null;
+  if (!data) return [];
 
-  const { cargoId, tankerName, cargoType, quantity, loadPort, laycanStart, laycanEnd, fixtureDate } = data;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
+  const {
+    code: cargoId,
+    cargoType,
+    totalQuantity,
+    loadTerminal: {
+      port: { name: portName, locode: portLocode, country: portCountry },
+    },
+  } = searchedCargo || {};
+  const {
+    details: { name: tankerName },
+  } = vessel || {};
 
   return [
     {
       label: 'Cargo id',
-      text: cargoId || '',
+      text: cargoId,
     },
     {
       label: 'Tanker name',
-      text: tankerName || '',
+      text: tankerName,
     },
     {
       label: 'Cargo type',
-      text: cargoType || '',
+      text: cargoType?.name,
     },
     {
       label: 'Quantity',
-      text: quantity || '',
+      text: totalQuantity && `${totalQuantity} tons`,
     },
     {
       label: 'Load port',
-      text: loadPort || '',
+      text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      country: portCountry,
     },
     {
       label: 'Laycan start',
-      text: laycanStart || '',
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
     },
     {
       label: 'Laycan end',
-      text: laycanEnd || '',
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
       label: 'Fixture date',
-      text: fixtureDate || '',
+      text: transformDate(fixtureDate, 'MMM dd, yyyy'),
     },
   ];
 };
 
-export const fixtureRowDataAdapter = ({ data, index }) => {
-  if (!data) return null;
-  const { id, docId, title, comment, docName, extension, size, dateAdded, status } = data;
+export const fixtureDetailsAdapter = ({ data }) => {
+  if (!data) return {};
+  const {
+    charterer: {
+      name: chartererName,
+      registrationAddress,
+      registrationCity,
+      correspondenceAddress,
+      correspondenceCity,
+    } = {},
+    vessel: {
+      details: {
+        registeredOwner,
+        technicalOperator,
+        commercialOperator,
+        disponentOwner,
+        name: tankerName,
+        flagOfRegistry,
+      } = {},
+    } = {},
+    searchedCargo: { cargoType, loadTerminal, dischargeTerminal } = {},
+    heat,
+    products,
+    laycanStart,
+    laycanEnd,
+    additionalCharterPartyTerms,
+    freightFormat,
+    freight,
+    demurrageRate,
+    layTime,
+    demurragePaymentTerm,
+    paymentTerm,
+    itinerary,
+    lastCargo,
+    secondCargo,
+    thirdCargo,
+    lastSire,
+    approvals,
+    bankDetails,
+    isCountdownExtendedByCharterer,
+    charterPartyUrl,
+  } = data;
+
+  const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
+  const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
+  const {
+    name: loadTerminalName,
+    port: { name: loadPortName, locode: loadPortLocode, country: loadPortCountry },
+  } = loadTerminal || {};
+  const {
+    name: dischargeTerminalName,
+    port: { name: dischargePortName, locode: dischargePortLocode, country: dischargePortCountry },
+  } = dischargeTerminal || {};
+  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
+
+  return {
+    chartererInformation: [
+      {
+        title: 'Charterer',
+        text: chartererName,
+      },
+      {
+        title: 'Registration Adress',
+        text: `${registrationAddress}, ${registrationCityName}, ${registrationCountry?.name}`,
+      },
+      {
+        title: 'Correspondence Adress',
+        text: `${correspondenceAddress}, ${correspondenceCityName}, ${correspondenceCountry?.name}`,
+      },
+    ],
+    tankerInformation: {
+      generalInformation: [
+        {
+          title: 'Registered owner',
+          text: registeredOwner,
+        },
+        {
+          title: 'Technical operator',
+          text: technicalOperator,
+        },
+        {
+          title: 'Commercial operator',
+          text: commercialOperator,
+        },
+        {
+          title: 'Disponent owner',
+          text: disponentOwner,
+        },
+        {
+          title: 'Tanker name',
+          text: tankerName,
+          countryCode: flagOfRegistry?.codeISO2,
+        },
+        {
+          title: 'Itinerary',
+          text: itinerary,
+        },
+      ],
+      lastCargoes: [
+        {
+          title: 'Last cargo',
+          text: lastCargo,
+        },
+        {
+          title: '2nd last',
+          text: secondCargo,
+        },
+        {
+          title: '3rd last',
+          text: thirdCargo,
+        },
+      ],
+      additionalInformation: [
+        {
+          title: 'Last sire',
+          text: lastSire,
+        },
+        {
+          title: 'Approvals',
+          text: approvals,
+        },
+      ],
+    },
+    cargoDetails: {
+      cargoInformation: [
+        {
+          title: 'Cargo Type',
+          text: cargoType?.name,
+        },
+        {
+          title: 'Heat',
+          text: heat || 'Not Aplicable',
+        },
+      ],
+      products,
+    },
+    voyageDetails: {
+      voyageDates: [
+        {
+          title: 'Laycan start',
+          text: transformDate(laycanStart, 'MMM dd, yyyy'),
+        },
+        {
+          title: 'Laycan end',
+          text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+        },
+      ],
+      voyagePorts: [
+        [
+          {
+            title: 'Load port',
+            text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+            countryCode: loadPortCountry?.codeISO2,
+          },
+          {
+            title: 'Load terminal',
+            text: loadTerminalName,
+          },
+        ],
+        [
+          {
+            title: 'Discharge port',
+            text: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
+            countryCode: dischargePortCountry?.codeISO2,
+          },
+          {
+            title: 'Discharge terminal',
+            text: dischargeTerminalName,
+          },
+        ],
+      ],
+    },
+    commercialOfferTerms: {
+      generalOfferTerms: [
+        {
+          title: 'Freight',
+          text: `${freightFormat?.value} ${freight}`,
+        },
+        {
+          title: 'Demurrage rate',
+          text: `$${demurrageRate} per day`,
+        },
+        {
+          title: 'Laytime + NOR',
+          text: `${layTime} hrs + (6 + 6 hrs)`,
+        },
+        {
+          title: 'Undisputed demurrage payment terms',
+          text: demurragePaymentTerm?.name,
+        },
+        {
+          title: 'Payment term',
+          text: paymentTerm?.name,
+        },
+      ],
+      bankInfo: {
+        bankName: accountName,
+        bankDetails: [
+          {
+            title: 'Account Number',
+            text: accountNumber,
+          },
+          {
+            title: 'Bank Code',
+            text: bankCode,
+          },
+          {
+            title: 'BIC (SWIFT-CODE)',
+            text: swift,
+          },
+          {
+            title: 'IBAN',
+            text: iban,
+          },
+          {
+            title: 'Bank Address',
+            text: bankAddress,
+          },
+        ],
+      },
+    },
+    additionalCharterPartyTerms,
+    allowExtension: !isCountdownExtendedByCharterer,
+    charterPartyUrl,
+  };
+};
+
+const fixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
+  if (!data) return [];
+  const { id, title, comments, name, extention, size, createdAt, status, url, deleted: isDocumentDeleted } = data;
+  const revokeDeletionForbidden = status === 'Active';
+
+  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
+
+  console.log(data, 'WAWA-file');
 
   return [
     {
       value: index,
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      value: docId,
       type: TYPE.SEMIBOLD,
+      value: id,
+      disabled: isDocumentDeleted,
     },
     {
       id,
+      type: TYPE.SEMIBOLD,
       value: title,
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      editable: true,
+      editable: comments,
+      data: { comments },
       actions: [
         {
-          editIcon: comment ? <CommentIcon /> : '---',
+          action: ACTIONS.VIEW_COMMENTS,
+          editIcon: comments && <CommentIcon />,
         },
       ],
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      value: docName,
+      value: name,
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      value: extension,
+      value: extention,
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      value: size,
+      value: `${+transformBytes({ value: size }).toFixed(2) || 0.01} MB`,
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      value: dateAdded ? transformDate(dateAdded, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      value: transformDate(createdAt, 'MMM dd, yyyy'),
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: status,
-      type: TYPE.SEMIBOLD,
+      icon: <StatusIndicator status={status} />,
+      disabled: isDocumentDeleted,
     },
     {
       id,
+      editable: !isDocumentDeleted,
+      disabled: isDocumentDeleted,
+      value: true,
+      downloadData: !isDocumentDeleted &&
+        url && {
+          url,
+          fileName,
+        },
       actions: [
         {
-          action: ACTIONS.DOWNLOAD,
-          actionText: 'Download',
-          actionVariant: 'primary',
+          action: revokeDeletionForbidden ? ACTIONS.REQUEST_DOCUMENT_DELETION : ACTIONS.REVOKE_DOCUMENT_DELETION,
+          actionText: revokeDeletionForbidden ? 'Delete' : 'Revoke',
+          actionVariant: revokeDeletionForbidden ? 'delete' : 'primary',
           actionSize: 'medium',
-        },
-        {
-          action: ACTIONS.DELETE,
-          actionText: 'Delete',
-          actionVariant: 'delete',
-          actionSize: 'medium',
+          actionStyles: 'ml-2.5 w-[68px]',
         },
       ],
-      editable: true,
     },
   ];
 };
 
-export const fixtureRowsDataAdapter = ({ data }) => {
+export const fixtureDocumentsTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => fixtureRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => fixtureDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const responseFixtureAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
 };

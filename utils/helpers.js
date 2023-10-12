@@ -520,7 +520,8 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
 };
 
 export const downloadFile = ({ url, fileName }) => {
-  fetch(url)
+  const requestuUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+  fetch(requestuUrl)
     .then((response) => response.blob())
     .then((blob) => {
       const link = document.createElement('a');
