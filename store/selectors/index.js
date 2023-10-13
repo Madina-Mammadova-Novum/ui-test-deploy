@@ -94,7 +94,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     },
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
-    newMessagesCounter: state?.data?.active.forEach((chat) => chat?.messageCount > 1),
+    newMessagesCounter: state?.data?.active.forEach((chat) => chat?.messageCount > 0),
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
   };
