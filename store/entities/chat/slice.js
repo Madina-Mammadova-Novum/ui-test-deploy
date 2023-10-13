@@ -5,7 +5,6 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { getChatHistory, getListOfChats } from './actions';
 
 const initialState = {
-  connected: false,
   loading: false,
   error: false,
   opened: false,
@@ -106,6 +105,7 @@ const chatSlice = createSlice({
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.data.active = payload.active;
+      state.data.archived = payload.archived;
       state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {
