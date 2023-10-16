@@ -48,6 +48,7 @@ const CollapsedChats = () => {
   const printCollapsedChat = (session) => {
     return (
       <ChatButton
+        withCancel
         counter={0}
         name={session?.name}
         key={session?.chatId}

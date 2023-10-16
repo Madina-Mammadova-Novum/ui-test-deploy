@@ -87,11 +87,10 @@ export async function updateVesselPortAndDate(data) {
 
   const response = await putData(`account/my-positions/update-vessel-port`, body);
 
+  if (!response.errors) response.message = generateMessageByActionType({ action: data?.action });
+
   return {
     ...response,
-    data: {
-      message: generateMessageByActionType({ action: data?.action, status: response?.status }),
-    },
   };
 }
 
@@ -129,6 +128,7 @@ export async function removeVesselFromFleet(data) {
 
   const response = await postData(`vessels/delete-from-fleet`, body);
   if (!response.error) response.message = 'Your have successfully removed tanker from fleet';
+
   return {
     ...response,
   };
@@ -138,6 +138,7 @@ export async function removeVessel(data) {
 
   const response = await postData(`vessels/delete`, body);
   if (!response.error) response.message = 'You have successfully deleted the tanker';
+
   return {
     ...response,
   };

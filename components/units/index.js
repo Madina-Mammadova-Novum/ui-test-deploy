@@ -36,6 +36,7 @@ import DateDetailsForm from '@/units/DateDetailsForm';
 import DeactivateTankerForm from '@/units/DeactivateTankerForm';
 import DeleteFleetModal from '@/units/DeleteFleetModal';
 import DeleteTankerModal from '@/units/DeleteTankerModal';
+import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
 import EditDateForm from '@/units/EditDateForm';
 import EditFleetForm from '@/units/EditFleetForm';
 import EditPortForm from '@/units/EditPortForm';
@@ -72,6 +73,8 @@ import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
+import RequestDocumentDeletionModal from '@/units/RequestDocumentDeletionModal';
+import RevokeDocumentDeletionModal from '@/units/RevokeDocumentDeletionModal';
 import SearchForm from '@/units/SearchForm';
 import SearchFormFields from '@/units/SearchFormFields';
 import SearchNotFound from '@/units/SearchNotFound';
@@ -186,4 +189,7 @@ export {
   ChatInfoModal,
   NegotiatingChartererInformation,
   SearchNotFound,
+  RequestDocumentDeletionModal,
+  RevokeDocumentDeletionModal,
+  DynamicCountdownTimer,
 };

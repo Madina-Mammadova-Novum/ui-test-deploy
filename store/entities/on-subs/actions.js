@@ -4,24 +4,21 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ON_SUBS } from './types';
 
 /* Services */
-import { getChartererOnSubs, getOwnerOnSubs } from '@/services';
-import { calculateAmountOfPages, getRoleIdentity } from '@/utils/helpers';
+import { getRoleBasedOnSubs } from '@/services';
+import { calculateAmountOfPages } from '@/utils/helpers';
 
 export const fetchOnSubsOffers = (() => {
   let totalPages;
   let currentPerPage;
 
-  return createAsyncThunk(ON_SUBS, async ({ role, page, perPage }) => {
-    const { isOwner } = getRoleIdentity({ role });
-    const fetchByRole = isOwner ? getOwnerOnSubs : getChartererOnSubs;
-
-    if (typeof totalPages === 'undefined' || currentPerPage !== perPage) {
-      const { recordsTotal, recordsFiltered } = await fetchByRole({ page, perPage });
+  return createAsyncThunk(ON_SUBS, async ({ page, perPage }) => {
+    if (!totalPages || currentPerPage !== perPage) {
+      const { recordsTotal, recordsFiltered } = await getRoleBasedOnSubs({ page, perPage });
       totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       currentPerPage = perPage;
     }
 
-    const { data } = await fetchByRole({ page, perPage });
+    const { data } = await getRoleBasedOnSubs({ page, perPage });
 
     return {
       data: { offers: data, totalPages },

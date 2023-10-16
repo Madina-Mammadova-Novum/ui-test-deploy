@@ -24,7 +24,7 @@ const ChatControl = ({ tab, search, activeCounter, archivedCounter }) => {
 
   useEffect(() => {
     const debounceDispatch = debounce((value) => {
-      dispatch(searchedData(value));
+      dispatch(searchedData(value?.toLowerCase()));
     }, 300);
 
     if (search) debounceDispatch(search);

@@ -1,4 +1,3 @@
-import ClockSVG from '@/assets/images/clock.svg';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
@@ -7,7 +6,6 @@ import { calculateCountdown, transformBytes } from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
-
   const {
     searchedCargo: {
       code,
@@ -42,7 +40,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
-      countryCode: country?.codeISO2,
+      country,
     },
     {
       label: 'Laycan start',
@@ -54,9 +52,10 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt, frozenAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
   ];
 };
@@ -69,12 +68,13 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
       code,
       cargoType: { name: cargoName } = {},
       totalQuantity,
-      loadTerminal: { port: { name, locode } = {} } = {},
+      loadTerminal: { port: { name, locode, country, countryId } = {} } = {},
     } = {},
     laycanStart,
     laycanEnd,
-    creationDate,
+    createdAt,
     expiresAt,
+    frozenAt,
   } = data;
 
   return [
@@ -93,6 +93,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: name && `${name}${locode && `, ${locode}`}`,
+      country: country || { id: countryId },
     },
     {
       label: 'Laycan start',
@@ -104,13 +105,14 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Creation date',
-      text: transformDate(creationDate, 'MMM dd, yyyy'),
+      text: transformDate(createdAt, 'MMM dd, yyyy'),
     },
     {
       label: 'Countdown',
-      text: calculateCountdown(expiresAt),
-      textStyles: 'text-red',
-      coverImage: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
   ];
 };
@@ -190,13 +192,17 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
+    isCountdownExtendedByOwner,
     searchedCargo: {
       laycanStart,
       laycanEnd,
-      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
+      loadTerminal: {
+        name: loadTerminalName,
+        port: { name: loadPortName, locode: loadPortLocode, countryId: loadPortCountryId } = {},
+      } = {},
       dischargeTerminal: {
         name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode } = {},
+        port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
       } = {},
     } = {},
     charterer: {
@@ -224,7 +230,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       products,
     },
     commercialOfferTerms: {
-      freight: `${freightFormat} ${freight}`,
+      freight: `${freightFormat?.value} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymmentTerms: demurragePaymentTerm?.name,
@@ -234,11 +240,14 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
       loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      loadPortCountryId,
       loadTerminal: loadTerminalName,
       dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
+      dischargePortCountryId,
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,
+    allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByOwner,
   };
 };
 
@@ -254,13 +263,17 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
+    isCountdownExtendedByCharterer,
     searchedCargo: {
       laycanStart,
       laycanEnd,
-      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
+      loadTerminal: {
+        name: loadTerminalName,
+        port: { name: loadPortName, locode: loadPortLocode, countryId: loadPortCountryId } = {},
+      } = {},
       dischargeTerminal: {
         name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode } = {},
+        port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
       } = {},
     } = {},
     additionalCharterPartyTerms,
@@ -277,7 +290,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       products,
     },
     commercialOfferTerms: {
-      freight: `${freightFormat} ${freight}`,
+      freight: `${freightFormat?.value} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymmentTerms: demurragePaymentTerm,
@@ -287,11 +300,14 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
       loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      loadPortCountryId,
       loadTerminal: loadTerminalName,
       dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
+      dischargePortCountryId,
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,
+    allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByCharterer,
   };
 };
 

@@ -3,8 +3,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
-
 import { Loader, Title } from '@/elements';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
@@ -19,10 +17,9 @@ import { getRoleIdentity } from '@/utils/helpers';
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
-  const { loading, data } = useSelector(getUserDataSelector);
+  const { loading, data, role } = useSelector(getUserDataSelector);
 
-  const { isCharterer } = getRoleIdentity({ role: session?.role });
+  const { isCharterer } = getRoleIdentity({ role });
 
   useEffect(() => {
     dispatch(fetchUserProfileData({ isCharterer }));
@@ -30,7 +27,7 @@ const AccountDetails = () => {
 
   return (
     <section className="flex justify-start items-start flex-col gap-2.5">
-      <Title level={1} className="py-5">
+      <Title level="1" className="py-5">
         Account information
       </Title>
       {loading && <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -9,8 +10,9 @@ import { OfferModalContentPropTypes } from '@/lib/types';
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Button, Loader, Title } from '@/elements';
 import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
+import { updateConfirmationStatus } from '@/store/entities/pre-fixture/slice';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
-import { parseErrors } from '@/utils/helpers';
+import { getRoleIdentity, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -30,14 +32,18 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [offerDetails, setOfferDetails] = useState({});
-  const { commercialOfferTerms, voyageDetails, countdown } = offerDetails;
+  const { commercialOfferTerms, voyageDetails, countdownData } = offerDetails;
   const { data: session } = useSession();
+  const { isOwner } = getRoleIdentity({ role: session?.role });
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     setPending(true);
-    const { error, message: successMessage } = await acceptPrefixtureOffer(offerId, session?.role);
+    const { error, message: successMessage } = await acceptPrefixtureOffer(offerId);
     if (!error) {
+      dispatch(updateConfirmationStatus({ offerId, isOwner }));
       successToast(successMessage);
+      closeModal();
     } else {
       const { errors, message } = error;
       errorToast(parseErrors({ ...errors, ...message }));
@@ -79,7 +85,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
       <Title level={2}>Accept the Pre-fixture Offer</Title>
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time={countdown} />
+        <Countdown time={countdownData} />
         <div className="pl-4 border-l h-min flex flex-col items-start">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button

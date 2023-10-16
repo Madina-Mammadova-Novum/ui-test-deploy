@@ -16,6 +16,7 @@ import {
   AssignToFleet,
   DeactivateTankerForm,
   DeleteTankerModal,
+  DynamicCountdownTimer,
   EditDateForm,
   EditPortForm,
   IconWrapper,
@@ -23,6 +24,8 @@ import {
   NegotiatingChartererInformation,
   NegotiatingTankerInformation,
   ReactivateTankerForm,
+  RequestDocumentDeletionModal,
+  RevokeDocumentDeletionModal,
   UpdateTankerForm,
   ViewCommentContent,
 } from '@/units';
@@ -51,9 +54,10 @@ const TableCell = ({ cellProps }) => {
     link,
     data,
     downloadData,
+    countdownData,
   } = cellProps;
 
-  const emptyCell = !value && !editable && !link && !downloadData;
+  const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
   const country = getCountryById({ data: countries, id: countryId });
   const availableCountryCode = countryFlag || country?.countryCode;
@@ -106,6 +110,10 @@ const TableCell = ({ cellProps }) => {
         return <DeleteTankerModal state={{ id, name, action }} />;
       case ACTIONS.ASSIGN_FLEET:
         return <AssignToFleet tankerId={id} name={name} />;
+      case ACTIONS.REQUEST_DOCUMENT_DELETION:
+        return <RequestDocumentDeletionModal documentId={id} />;
+      case ACTIONS.REVOKE_DOCUMENT_DELETION:
+        return <RevokeDocumentDeletionModal documentId={id} />;
       default:
         return <div>{NO_DATA_MESSAGE.DEFAULT}</div>;
     }
@@ -113,7 +121,10 @@ const TableCell = ({ cellProps }) => {
 
   const printValue = useMemo(() => {
     return helperData ? (
-      <HoverTooltip className="!-top-10 !-left-28 !lg:-left-16" data={{ description: helperData }}>
+      <HoverTooltip
+        className="!-top-16 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
+        data={{ description: helperData }}
+      >
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
       </HoverTooltip>
     ) : (
@@ -185,6 +196,7 @@ const TableCell = ({ cellProps }) => {
             onClick={() => downloadFile(downloadData)}
           />
         )}
+        {countdownData && <DynamicCountdownTimer {...countdownData} />}
 
         <div className="flex gap-x-2.5">{editable && printModalView}</div>
       </div>

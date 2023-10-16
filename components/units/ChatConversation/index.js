@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ChatConversationBody from './ChatConversationBody';
@@ -13,13 +13,8 @@ import { Button, Input } from '@/elements';
 import { chatService } from '@/services/signalR';
 import { getChatSelector } from '@/store/selectors';
 
-const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
-  const {
-    isActive,
-    chats: { user },
-  } = useSelector(getChatSelector);
-
-  const { data, messages } = user;
+const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
+  const { data, messages, loading } = useSelector(getChatSelector).chats?.user;
 
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -30,20 +25,27 @@ const ChatConversation = ({ onCloseSession, onCollapseSession }) => {
   }, [message]);
 
   const handleSubmit = (e) => {
-    e?.preventDefault();
-    chatService?.sendMessage({ message });
+    e.preventDefault();
+    chatService.sendMessage({ message });
     setMessage('');
   };
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
   const handleEnter = ({ charCode }) => charCode === 13 && handleSubmit();
 
+  const setConversationPosition = useMemo(() => {
+    if (isMediumScreen && isOpened) return 'right-24';
+    return 'right-[480px]';
+  }, [isMediumScreen, isOpened]);
+
   return (
-    isActive && (
-      <div className="absolute bg-white border shadow-xmd border-gray-light -left-[370px] -top-44 h-auto w-[360px] rounded-base">
+    isOpened && (
+      <div
+        className={`fixed bg-white border shadow-xmd border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] rounded-base z-50`}
+      >
         <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
         <div className="flex flex-col h-[47vh] p-5">
-          <ChatConversationBody messages={messages} />
+          <ChatConversationBody messages={messages} loading={loading} />
           <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
             <Input
               type="text"

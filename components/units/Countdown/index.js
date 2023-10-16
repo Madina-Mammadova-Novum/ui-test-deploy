@@ -1,14 +1,13 @@
-import { CountdownPropTypes } from '@/lib/types';
+import DynamicCountdownTimer from '../DynamicCountdownTimer';
 
-import ClockSVG from '@/assets/images/clock.svg';
+import { CountdownPropTypes } from '@/lib/types';
 
 const Countdown = ({ time, customStyles = '' }) => {
   return (
     <div className={`px-4 py-1 border-l-2 border-l-blue ${customStyles}`}>
       <span className="uppercase font-semibold">Countdown</span>
-      <div className="flex">
-        <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />
-        <span className="ml-1.5 text-xsm text-red">{time}</span>
+      <div className="flex text-xsm">
+        <DynamicCountdownTimer {...time} />
       </div>
     </div>
   );

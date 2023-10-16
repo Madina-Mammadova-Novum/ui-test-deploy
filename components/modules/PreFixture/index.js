@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
-
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
@@ -26,15 +24,13 @@ import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
 const PreFixture = ({ searchParams }) => {
-  const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
-  const { data: session } = useSession();
+  const [toggle, setToggle] = useState({ value: false });
 
-  const role = useMemo(() => session?.role, [session?.role]);
+  // TODO: consider empty responses
+  const { loading, totalPages, data, role } = useSelector(getPreFixtureDataSelector);
+
   const { isOwner } = getRoleIdentity({ role });
-
-  const { loading, totalPages, data } = useSelector(getPreFixtureDataSelector);
-  const searchedData = data.find((element) => element?.cargoeId === searchParams.id);
 
   const { page, pageSize } = PAGE_STATE;
 
@@ -43,33 +39,34 @@ const PreFixture = ({ searchParams }) => {
   );
 
   useEffect(() => {
-    if (role) {
-      dispatch(fetchPrefixtureOffers({ role, page: currentPage, perPage }));
-    }
-  }, [role, currentPage, perPage]);
+    dispatch(fetchPrefixtureOffers({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
-    const isOpened = searchedData?.cargoeId === rowData?.cargoeId;
-
     return (
       <ExpandableRow
         key={rowData.id}
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr" />}
+        expand={toggle}
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr'}
+          />
+        }
         footer={
           <PreFixtureExpandedFooter
             underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
             offerId={rowData.id}
+            offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
           />
         }
-        isOpened={isOpened}
-        expand={toggle}
       >
         <PreFixtureExpandedContent
-          detailsData={prefixtureDetailsAdapter({ data: rowData, role: session?.role })}
+          detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
           params={searchParams}
           offerId={rowData?.id}
@@ -82,7 +79,7 @@ const PreFixture = ({ searchParams }) => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (data) return data.map(printExpandableRow);
 
-    return <Title level="3">No pre-fixture positions</Title>;
+    return <Title level="3">No offers at current stage</Title>;
   }, [loading, data, printExpandableRow]);
 
   return (
@@ -96,6 +93,7 @@ const PreFixture = ({ searchParams }) => {
       </div>
       <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
       <ComplexPagination
+        label="offers"
         currentPage={currentPage}
         numberOfPages={totalPages}
         onPageChange={handlePageChange}

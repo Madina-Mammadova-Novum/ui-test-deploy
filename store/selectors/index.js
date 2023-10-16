@@ -23,11 +23,11 @@ export const vesselsSelector = ({ positions, fleets }) => {
 };
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating }) => negotiating;
+export const negotiatingSelector = ({ negotiating, user }) => ({ ...negotiating, role: user.role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture }) => preFixture;
+export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
 export const onSubsSelector = ({ onSubs }) => onSubs;
 export const chatSelector = ({ chat }) => chat;
 
@@ -41,7 +41,7 @@ export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (stat
 export const getUserDataSelector = createDraftSafeSelector(userSelector, (state) => {
   return {
     ...state,
-    data: userDetailsAdapter({ data: state.data }),
+    data: userDetailsAdapter({ data: state.data, role: state.role }),
   };
 });
 
@@ -94,6 +94,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     },
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
+    newMessagesCounter: state?.data?.active.forEach((chat) => chat?.messageCount > 0),
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
   };
@@ -104,6 +105,28 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
     error: state.error,
     loading: state.loading,
     totalPages: state.data?.totalPages,
+    role: state.role,
     data: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
+export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    totalPages: state.data?.totalPages,
+    offers: state.data.offers,
+    offerById: state.data.offerById,
+    role: state.role,
+  };
+});
+
+export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    totalPages: state.data?.totalPages,
+    data: state.data?.vessels,
+    refetch: state.refetch,
   };
 });

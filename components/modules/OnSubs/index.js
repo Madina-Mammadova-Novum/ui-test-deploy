@@ -8,7 +8,12 @@ import { useSession } from 'next-auth/react';
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
 
-import { chartererOnSubsHeaderDataAdapter, onSubsDetailsAdapter, ownerOnSubsHeaderDataAdapter } from '@/adapters';
+import {
+  chartererOnSubsHeaderDataAdapter,
+  onSubsDetailsAdapter,
+  onSubsDocumentsTabRowsDataAdapter,
+  ownerOnSubsHeaderDataAdapter,
+} from '@/adapters';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
@@ -19,11 +24,11 @@ import { getRoleIdentity } from '@/utils/helpers';
 import { useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
-  const { data: session } = useSession();
-  const role = useMemo(() => session?.role, [session?.role]);
-  const { isOwner } = getRoleIdentity({ role: session?.role });
-  const [toggle, setToggle] = useState({ value: false });
   const dispatch = useDispatch();
+  const { data: session } = useSession();
+  const [toggle, setToggle] = useState({ value: false });
+
+  const { isOwner } = getRoleIdentity({ role: session?.role });
   const {
     data: { offers, totalPages },
     loading,
@@ -38,28 +43,38 @@ const OnSubs = () => {
   });
 
   useEffect(() => {
-    if (role) {
-      dispatch(fetchOnSubsOffers({ role: session?.role, page: currentPage, perPage }));
-    }
-  }, [role, currentPage, perPage]);
+    dispatch(fetchOnSubsOffers({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
+    const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
+
     return (
       <ExpandableRow
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr'}
+            gridStyles={isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr 1fr'}
           />
         }
         expand={toggle}
-        footer={<OnSubsExpandedFooter underRecap />}
+        footer={
+          <OnSubsExpandedFooter
+            underRecap={!rowData?.isCountdownActive}
+            offerId={rowData?.id}
+            scriveURL={scriveURL || ''}
+          />
+        }
       >
-        <OnSubsExpandedContent detailsData={onSubsDetailsAdapter({ data: rowData, role: session?.role })} />
+        <OnSubsExpandedContent
+          offerId={rowData?.id}
+          detailsData={onSubsDetailsAdapter({ data: rowData })}
+          documentsData={onSubsDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+        />
       </ExpandableRow>
     );
   };
@@ -82,7 +97,7 @@ const OnSubs = () => {
       </div>
       <div className="grow flex flex-col gap-y-2.5">{printContent}</div>
       <ComplexPagination
-        label="fleets"
+        label="offers"
         perPage={perPage}
         currentPage={currentPage}
         numberOfPages={totalPages}

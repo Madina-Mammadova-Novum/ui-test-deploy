@@ -14,7 +14,7 @@ import { Button } from '@/elements';
 import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
-import { refetchNegotiatingOffers } from '@/store/entities/negotiating/slice';
+import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
@@ -35,12 +35,15 @@ const schema = yup.object({
 });
 
 const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
+  const dispatch = useDispatch();
+
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const { data: session } = useSession();
+
   const methods = useHookFormParams({ schema });
-  const dispatch = useDispatch();
-  const { comments, voyageDetails, commercialOfferTerms, countdown } = offerDetails;
+
+  const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;
 
   const handleSubmit = async (formData) => {
     const { message: successMessage, error } = await acceptOffer({
@@ -50,7 +53,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
     if (!error) {
       successToast(successMessage);
-      dispatch(refetchNegotiatingOffers());
+      dispatch(fetchUserNegotiating());
       closeModal();
     } else {
       const { errors } = error;
@@ -71,7 +74,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
     <div className="w-[610px]">
       <ModalHeader goBack={goBack}>Accept the offer</ModalHeader>
 
-      <Countdown time={countdown} customStyles="mt-5" />
+      <Countdown time={countdownData} customStyles="mt-5" />
 
       <Tabs
         tabs={tabs}

@@ -53,7 +53,7 @@ const Fixture = () => {
       </div>
       <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
       <ComplexPagination
-        label="fleets"
+        label="offers"
         perPage={perPage}
         currentPage={currentPage}
         numberOfPages={numberOfPages}

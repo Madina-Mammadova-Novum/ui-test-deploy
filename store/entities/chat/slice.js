@@ -5,7 +5,6 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { getChatHistory, getListOfChats } from './actions';
 
 const initialState = {
-  connected: false,
   loading: false,
   error: false,
   opened: false,
@@ -40,19 +39,23 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     searchedData: (state, { payload }) => {
-      state.data.searched = state.data.active.filter(({ vessel }) => {
-        return (
+      const result = state.data.active.filter(
+        ({ vessel }) =>
           vessel.name.includes(payload) ||
           vessel.imo.includes(payload) ||
           vessel.products.some(({ name }) => name?.includes(payload))
-        );
-      });
+      );
+
+      state.data.searched = result;
     },
     setUser: (state, action) => {
       state.data.user.data = action.payload;
     },
     setUserConversation: (state, { payload }) => {
       state.data.user.messages = payload;
+    },
+    setLoadConversation: (state, { payload }) => {
+      state.data.user.loading = payload;
     },
     setCollapsedChat: (state, { payload }) => {
       state.data.collapsed = [...state.data.collapsed, payload];
@@ -73,7 +76,7 @@ const chatSlice = createSlice({
     setOpenedChat: (state, { payload }) => {
       state.opened = payload;
     },
-    deactivateConversation: (state, { payload }) => {
+    setDeactivateConversation: (state, { payload }) => {
       state.isDeactivatedSession = payload;
     },
     resetChatFilter: (state) => {
@@ -81,6 +84,18 @@ const chatSlice = createSlice({
     },
     resetUser: (state) => {
       state.data.user = initialState.data.user;
+    },
+    messageAlert: (state, { payload }) => {
+      const updatedState = state.data.active.map((user) => {
+        if (user.contentId === payload.contentId) {
+          return {
+            ...user,
+            messageCount: payload.messageCount,
+          };
+        }
+        return user;
+      });
+      state.data.active = updatedState;
     },
   },
   extraReducers: (builder) => {
@@ -90,6 +105,7 @@ const chatSlice = createSlice({
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.data.active = payload.active;
+      state.data.archived = payload.archived;
       state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {
@@ -116,17 +132,19 @@ const chatSlice = createSlice({
 });
 
 export const {
-  setChatFilter,
   setUser,
-  resetChatFilter,
-  searchedData,
-  setUserConversation,
-  setCollapsedChat,
-  resetUser,
-  setConversation,
-  deactivateConversation,
-  removeCollapsedChat,
+  setChatFilter,
   setOpenedChat,
+  setConversation,
+  setCollapsedChat,
+  setUserConversation,
+  setDeactivateConversation,
+  messageAlert,
+  searchedData,
+  resetUser,
+  resetChatFilter,
+  removeCollapsedChat,
+  setLoadConversation,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

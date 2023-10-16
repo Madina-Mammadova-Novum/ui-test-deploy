@@ -22,10 +22,6 @@ const Input = React.forwardRef(
     },
     ref
   ) => {
-    const onWheel = (event) => {
-      event.preventDefault();
-    };
-
     return (
       <div
         className={classnames(
@@ -69,7 +65,8 @@ const Input = React.forwardRef(
             )}
             type={type}
             name={name}
-            onWheel={onWheel}
+            onTouchStartCapture={({ target }) => target.blur()}
+            onWheelCapture={({ target }) => target.blur()}
             {...rest}
           />
           {icon && <span className="ml-2.5 mr-4 my-auto">{icon}</span>}

@@ -1,6 +1,5 @@
 import ReactCountryFlag from 'react-country-flag';
 
-import ClockSVG from '@/assets/images/clock.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
@@ -31,7 +30,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'open port',
       text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
-      countryCode: openPort?.country?.codeISO2,
+      country: openPort?.country,
     },
   ];
 };
@@ -44,7 +43,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     cargoType,
     minQuantity,
     maxQuantity,
-    loadPort: { name: portName, locode: portLocode, country: { codeISO2 } = {} } = {},
+    loadPort: { name: portName, locode: portLocode, country: portCountry } = {},
     laycanStart,
     laycanEnd,
     createdAt,
@@ -66,7 +65,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      countryCode: codeISO2,
+      country: portCountry,
     },
     {
       label: 'Laycan start',
@@ -150,9 +149,10 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt, frozenAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -227,9 +227,10 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt, frozenAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -277,6 +278,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     laycanEnd,
     dateSent,
     expiresAt,
+    frozenAt,
     id,
   } = data;
 
@@ -316,9 +318,10 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -344,7 +347,7 @@ export const counteroffersTabRowsDataAdapter = ({ data }) => {
 export const counteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { vessel, createdAt, expiresAt, id } = data;
+  const { vessel, createdAt, expiresAt, frozenAt, id } = data;
   const {
     details: { summerDwt } = {},
     openPort: { name: portName, locode: portLocode, country: portCountry } = {},
@@ -387,9 +390,10 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: calculateCountdown(expiresAt),
-      type: TYPE.RED,
-      icon: <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" />,
+      countdownData: {
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
+      },
     },
     {
       id,
@@ -505,15 +509,12 @@ export const chartererFailedTabRowsDataAdapter = ({ data }) => {
 export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
+  const { vessel, failedAt, reason, id } = data;
+
   const {
-    vessel: {
-      details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
-      openDate,
-    } = {},
-    failedAt,
-    reason,
-    id,
-  } = data;
+    details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
+    openDate,
+  } = vessel || {};
 
   return [
     {

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { formattedPhoneNumber, imoFormatter, isEmpty } from '@/utils/helpers';
+import { formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -23,12 +23,12 @@ export function listOfImosAdapter({ data }) {
   return data.map(({ imo }) => imo);
 }
 
-export function userDetailsAdapter({ data }) {
+export function userDetailsAdapter({ data, role }) {
   if (!data) return {};
 
   return {
     ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
-    ...userCompanyDetailsAdapter({ data: data?.companyDetails }),
+    ...userCompanyDetailsAdapter({ data: data?.companyDetails, role }),
   };
 }
 
@@ -49,7 +49,7 @@ function userPersonalDetailsAdapter({ data }) {
   };
 }
 
-function userCompanyDetailsAdapter({ data }) {
+function userCompanyDetailsAdapter({ data, role }) {
   if (!data) return {};
 
   const {
@@ -74,6 +74,25 @@ function userCompanyDetailsAdapter({ data }) {
   const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
   const formattedImos = companyImosAdapter({ data: imos });
 
+  const getRoleBasedData = () => {
+    const { isOwner, isCharterer } = getRoleIdentity({ role });
+
+    if (isOwner) {
+      return {
+        totalTankers: formattedImos.countOfTankers,
+        imos: formattedImos,
+      };
+    }
+
+    if (isCharterer) {
+      return {
+        totalTankers: formattedCargoes.countOfCargoes,
+        cargoes: formattedCargoes,
+      };
+    }
+    return null;
+  };
+
   return {
     companyDetails: {
       companyName: name,
@@ -90,9 +109,7 @@ function userCompanyDetailsAdapter({ data }) {
       correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
       correspondencePostalCode,
       correspondenceProvince,
-      totalTankers: formattedCargoes.countOfCargoes || formattedImos.countOfTankers,
-      cargoes: formattedCargoes,
-      imos: formattedImos,
+      ...getRoleBasedData(),
     },
   };
 }
@@ -292,7 +309,7 @@ export function updateChartererCompanyAdapter({ data }) {
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     ...companyAddressesAdapter({ data }),
-    experiences: cargoesAdapter({ data: cargoes }),
+    experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
   };
 }
 
@@ -377,7 +394,7 @@ export function chartererSignUpAdapter({ data }) {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
-    experiences: cargoesAdapter({ data: cargoes }),
+    experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
     ...companyAddressesAdapter({ data }),
   };
 }

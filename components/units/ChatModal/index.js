@@ -11,8 +11,9 @@ import { getChatSelector } from '@/store/selectors';
 import { ChatControl, ChatList, ChatLoadMoreCta, ChatModalHeader } from '@/units';
 
 const ChatModal = ({ isOpened, onClose }) => {
-  const dispatch = useDispatch();
   const [dataByTab, setDataByTab] = useState([]);
+
+  const dispatch = useDispatch();
 
   const {
     tab,
@@ -36,7 +37,7 @@ const ChatModal = ({ isOpened, onClose }) => {
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
   const printChatRooms = useMemo(() => {
-    return <ChatList data={dataByTab?.slice(0, limit)} />;
+    return <ChatList data={dataByTab.slice(0, limit)} />;
   }, [dataByTab, limit]);
 
   return (

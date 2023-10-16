@@ -1,3 +1,5 @@
+import { getCargoCounteroffers, getCargoFailedOffers, getCargoSentOffers } from '../cargo';
+
 import { requestAcceptPrefixtureAdapter } from '@/adapters';
 import {
   acceptOfferAdapter,
@@ -70,20 +72,61 @@ export async function getSentCounteroffers(tankerId) {
   };
 }
 
+export async function getOwnerDetailsOffers({ id }) {
+  const [incomingOffersData, sentCounterOffersData, failedOffersData] = await Promise.all([
+    getIncomingOffers(id),
+    getSentCounteroffers(id),
+    getFailedOffers(id),
+  ]);
+
+  return {
+    [id]: {
+      incoming: incomingOffersData?.data,
+      sent: sentCounterOffersData?.data,
+      failed: failedOffersData?.data,
+    },
+  };
+}
+
+export async function getChartererDetailsOffers({ id }) {
+  const [sentOffersData, counteroffersData, failedOffersData] = await Promise.all([
+    getCargoSentOffers(id),
+    getCargoCounteroffers(id),
+    getCargoFailedOffers(id),
+  ]);
+
+  return {
+    [id]: {
+      incoming: sentOffersData?.data,
+      sent: counteroffersData?.data,
+      failed: failedOffersData?.data,
+    },
+  };
+}
+
+export function* getOffersById({ data, role }) {
+  const { isOwner } = getRoleIdentity({ role });
+  const fetchOfferDetailsById = isOwner ? getOwnerDetailsOffers : getChartererDetailsOffers;
+
+  return yield Promise.all(data.map(fetchOfferDetailsById));
+}
+
 export async function getOfferDetails(offerId, role) {
   const { isOwner } = getRoleIdentity({ role });
+
   const path = isOwner ? `offer/details/${offerId}` : `offer/charterer/details/${offerId}`;
   const response = await getData(path);
   return {
     ...response,
   };
 }
-export async function acceptPrefixtureOffer(offerId, role) {
+export async function acceptPrefixtureOffer(offerId) {
   const body = requestAcceptPrefixtureAdapter({ data: offerId });
-  const { isOwner } = getRoleIdentity({ role });
-  const path = isOwner ? `account/pre-fixture/owner/accept` : `account/pre-fixture/charterer/accept`;
-  const response = await postData(path, body);
-  if (!response.error) response.message = 'Your have successfully confirmed Offer';
+
+  const response = await postData(`account/pre-fixture/accept`, body);
+
+  if (!response.error) response.message = 'You have confirmed to go on subs';
+
   return {
     ...response,
   };

@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/charterer/deals/acceptprefixture`),
+    path: getApiURL(`v1/${session.role}/deals/acceptprefixture`),
     dataAdapter: responseOwnerAcceptPrefixtureAdapter,
     requestMethod: 'POST',
     options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
