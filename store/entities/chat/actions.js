@@ -5,7 +5,13 @@ import { CHAT } from './types';
 
 /* Services */
 import { helpCenterDataAdapter, listOfChatsDataAdapter } from '@/adapters';
-import { deactivateChatById, getChatHistoryById, getHelpCenterSession, getListOfChatSessions } from '@/services';
+import {
+  deactivateChatById,
+  getChatHistoryById,
+  getHelpCenterSession,
+  getListOfChatSessions,
+  reactivateChatById,
+} from '@/services';
 
 export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async () => {
   const [{ data: chats }, { data: support }] = await Promise.all([getListOfChatSessions(), getHelpCenterSession()]);
@@ -26,8 +32,14 @@ export const getChatHistory = createAsyncThunk(CHAT.GET_HISTORY, async ({ data }
   return { data: result?.messages };
 });
 
-export const deactivateUserChat = createAsyncThunk(CHAT.DEACTIVATE_BY_ID, async ({ data }, { dispatch }) => {
+export const deactivateUserChat = createAsyncThunk(CHAT.DEACTIVATE, async ({ data }, { dispatch }) => {
   const { status } = await deactivateChatById({ data });
+
+  if (status === 200) dispatch(getListOfChats());
+});
+
+export const reactivateUserChat = createAsyncThunk(CHAT.REACTIVATE, async ({ data }, { dispatch }) => {
+  const { status } = await reactivateChatById({ data });
 
   if (status === 200) dispatch(getListOfChats());
 });

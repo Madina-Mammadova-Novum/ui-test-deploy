@@ -1,55 +1,92 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
-import { ArchiveButton, Badge } from '@/elements';
+import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
 import { chatService } from '@/services/signalR';
-import { deactivateUserChat } from '@/store/entities/chat/actions';
-import { ChatConversationCard, ChatDeactivate } from '@/units';
+import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
+import { ChatConversationCard, ChatSubModal } from '@/units';
 
-const ChatSession = ({ data }) => {
-  const [deactivate, setDeactivate] = useState(false);
+const ChatSession = ({ data, tab }) => {
   const dispatch = useDispatch();
 
-  const handleArchivedModal = (e) => {
-    e.stopPropagation();
-    setDeactivate(!deactivate);
+  const [state, setState] = useState({ deactivate: false, reactivate: false });
+
+  /* Change handler by key-value for userStore */
+  const handleChangeState = (key, value) => {
+    setState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
   };
 
-  const handleDeactivateConversation = (e) => {
+  const handleModal = (e, key) => {
     e.stopPropagation();
-    dispatch(deactivateUserChat({ data: data?.chatId }));
-    setDeactivate(false);
+    handleChangeState(key, !state[key]);
   };
 
-  const handleCancelArchived = (e) => {
+  const handleConversation = (e, key) => {
     e.stopPropagation();
-    setDeactivate(false);
+    handleChangeState(key, false);
+
+    if (key === 'deactivate') dispatch(deactivateUserChat({ data: data?.chatId }));
+    else dispatch(reactivateUserChat({ data: data?.chatId }));
+  };
+
+  const handleCancel = (e) => {
+    e.stopPropagation();
+
+    if (tab === 'active') handleChangeState('deactivate', false);
+    else handleChangeState('reactivate', false);
   };
 
   const handleOpenConversation = () => {
     chatService?.initChat({
       chatId: data?.chatId,
-      vessel: { name: data?.vessel?.name, data: data?.vessel?.data, cargoId: data?.vessel?.cargoId },
+      archieved: data?.archieved,
+      vessel: {
+        name: data?.vessel?.name,
+        data: data?.vessel?.data,
+        cargoId: data?.vessel?.cargoId,
+      },
     });
   };
+
+  const actions = useMemo(
+    () => ({
+      active: <ArchiveButton onClick={(e) => handleModal(e, 'deactivate')} />,
+      archived: <ReActivateButton onClick={(e) => handleModal(e, 'reactivate')} />,
+      deactivate: (
+        <ChatSubModal
+          tab={tab}
+          title="Do you want to archive this chat?"
+          onCancel={(e) => handleCancel(e)}
+          onClick={(e) => handleConversation(e, 'deactivate')}
+        />
+      ),
+      reactivate: (
+        <ChatSubModal
+          tab={tab}
+          title="Do you want to restore this chat?"
+          onCancel={(e) => handleCancel(e)}
+          onClick={(e) => handleConversation(e, 'reactivate')}
+        />
+      ),
+    }),
+    [tab, state.deactivate, state.reactivate]
+  );
 
   return (
     <div className="flex justify-between relative cursor-pointer" aria-hidden onClick={handleOpenConversation}>
       <ChatConversationCard data={data} />
       <div className="flex flex-col relative justify-end">
         <Badge className="h-5 w-5 -top-0.5 right-1 p-1" counter={data?.messageCount} />
-        <ArchiveButton onClick={(e) => handleArchivedModal(e)} />
-        {deactivate && (
-          <ChatDeactivate
-            title="Do you want to archive this chat?"
-            onCancel={(e) => handleCancelArchived(e)}
-            onDeactivate={(e) => handleDeactivateConversation(e)}
-          />
-        )}
+        {actions[tab]}
+        {state.deactivate && actions.deactivate}
+        {state.reactivate && actions.reactivate}
       </div>
     </div>
   );

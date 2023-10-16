@@ -1,23 +1,27 @@
 'use client';
 
+import { Fragment, useMemo } from 'react';
+
 import { ChatListPropTypes } from '@/lib/types';
 
-import { Divider } from '@/elements';
+import { ChatListLoader, Divider } from '@/elements';
 import { ChatSession } from '@/units';
 
-const ChatList = ({ data }) => {
+const ChatList = ({ data, loading = true, tab = 'active' }) => {
   const printChatSession = (session, index) => (
-    <>
-      {index !== 0 && <Divider key={index} />}
-      <ChatSession key={session.chatId} data={session} />
-    </>
+    <Fragment key={index !== 0}>
+      {index !== 0 && <Divider />}
+      <ChatSession key={session.chatId} tab={tab} data={session} />
+    </Fragment>
   );
 
-  return (
-    <div className="p-5 h-[320px] overflow-y-scroll flex flex-col gap-y-4">
-      {data?.length > 0 ? data?.map(printChatSession) : <p className="mx-auto font-semibold text-gray">No Data</p>}
-    </div>
-  );
+  const printContent = useMemo(() => {
+    if (loading && data.length <= 0) return <ChatListLoader />;
+    if (data?.length > 0) return data?.map(printChatSession);
+    return <p className="mx-auto font-semibold text-gray">No Data</p>;
+  }, [loading, data, printChatSession]);
+
+  return <div className="p-5 h-[320px] relative overflow-y-scroll flex flex-col gap-y-4">{printContent}</div>;
 };
 
 ChatList.propTypes = ChatListPropTypes;
