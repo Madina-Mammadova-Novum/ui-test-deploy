@@ -291,8 +291,6 @@ const fixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
 
   const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
 
-  console.log(data, 'WAWA-file');
-
   return [
     {
       value: index,
