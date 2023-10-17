@@ -7,7 +7,6 @@ import { fleetsHeader } from '@/utils/mock';
 const ExpandableCard = ({ data, expandAll, className, isOpened, onClick }) => {
   const headerData = fleetsHeaderDataAdapter({ data });
   const rowsData = fleetsRowsDataAdapter({ data: data?.tankers });
-  // console.log('rowsData: ', rowsData);
 
   return (
     <ExpandableCardWrapper

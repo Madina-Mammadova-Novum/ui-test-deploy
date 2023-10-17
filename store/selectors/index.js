@@ -29,7 +29,8 @@ export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
 export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
 export const onSubsSelector = ({ onSubs, user }) => ({ ...onSubs, role: user.role });
-export const fixtureSelector = ({ fixture }) => fixture;
+export const fixtureSelector = ({ fixture, user }) => ({ ...fixture, role: user.role });
+export const postFixtureSelector = ({ postFixture, user }) => ({ ...postFixture, role: user.role });
 export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
@@ -105,6 +106,28 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
   };
 });
 
+export const getFixtureSelector = createDraftSafeSelector(fixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    role: state.role,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
+export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    role: state.role,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
 export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelector, (state) => {
   return {
     error: state.error,
@@ -144,6 +167,7 @@ export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state)
   return {
     error: state.error,
     loading: state.loading,
+    toggle: state.toggle,
     totalPages: state.data?.totalPages,
     data: state.data?.vessels,
     refetch: state.refetch,

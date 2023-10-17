@@ -5,6 +5,7 @@ import { fetchFixtureOffers } from './actions';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -15,6 +16,9 @@ const fixtureSlice = createSlice({
   name: 'fixture',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateDocumentStatus: (state, action) => {
       const { documentId, status } = action?.payload;
       state.data.offers = state.data.offers.map((offer) => ({
@@ -49,6 +53,6 @@ const fixtureSlice = createSlice({
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList } = fixtureSlice.actions;
+export const { updateDocumentStatus, updateDocumentList, setToggle } = fixtureSlice.actions;
 
 export default fixtureSlice.reducer;

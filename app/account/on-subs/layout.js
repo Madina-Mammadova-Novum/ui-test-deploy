@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Label, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
-import { AccountWrapper } from '@/modules';
 import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
 import { setToggle } from '@/store/entities/on-subs/slice';
 import { getNegotiatingDataSelector } from '@/store/selectors';
@@ -31,7 +30,7 @@ export default function OnSubsLayout({ children }) {
   }, [currentPage, perPage]);
 
   return (
-    <AccountWrapper containerClass="px-5">
+    <div className="px-5">
       <section className="flex min-h-[90vh] flex-col gap-y-5">
         <div className="flex justify-between items-center pt-5">
           <div className="flex flex-col">
@@ -51,6 +50,6 @@ export default function OnSubsLayout({ children }) {
           onChangeOffers={onChangeOffers}
         />
       </section>
-    </AccountWrapper>
+    </div>
   );
 }

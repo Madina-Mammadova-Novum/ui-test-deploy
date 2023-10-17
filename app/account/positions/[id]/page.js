@@ -8,7 +8,7 @@ export function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Account Positions',
+        metaTitle: 'Account Position Details',
       },
     },
   });

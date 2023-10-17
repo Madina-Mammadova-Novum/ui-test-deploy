@@ -51,32 +51,34 @@ export default function PositionsLayout({ children }) {
   const handleToggle = ({ value }) => dispatch(setToggle(value));
 
   return (
-    <section className="flex min-h-[90vh] flex-col gap-y-5 px-5">
-      <div className="flex flex-col 3md:flex-row 3md:justify-between 3md:items-center gap-4 3md:gap-0 pt-5 w-full">
-        <Title level="1" className="text-2xl">
-          My positions
-        </Title>
-        <div className="flex items-center justify-between 3md:justify-end gap-x-5">
-          <ToggleRows onToggleClick={handleToggle} />
-          <Dropdown
-            label="Sort by open day:"
-            options={sortOptions}
-            defaultValue={sortValue}
-            customStyles={dropdownStyles}
-            onChange={handleChange}
-          />
+    <div className="px-5">
+      <section className="flex min-h-[90vh] flex-col gap-y-5 px-5">
+        <div className="flex flex-col 3md:flex-row 3md:justify-between 3md:items-center gap-4 3md:gap-0 pt-5 w-full">
+          <Title level="1" className="text-2xl">
+            My positions
+          </Title>
+          <div className="flex items-center justify-between 3md:justify-end gap-x-5">
+            <ToggleRows onToggleClick={handleToggle} />
+            <Dropdown
+              label="Sort by open day:"
+              options={sortOptions}
+              defaultValue={sortValue}
+              customStyles={dropdownStyles}
+              onChange={handleChange}
+            />
+          </div>
         </div>
-      </div>
-      {children}
-      <ComplexPagination
-        label="fleets"
-        currentPage={currentPage}
-        numberOfPages={totalPages}
-        onPageChange={handlePageChange}
-        onSelectedPageChange={handleSelectedPageChange}
-        onChangeOffers={onChangeOffers}
-        perPage={perPage}
-      />
-    </section>
+        {children}
+        <ComplexPagination
+          label="fleets"
+          currentPage={currentPage}
+          numberOfPages={totalPages}
+          onPageChange={handlePageChange}
+          onSelectedPageChange={handleSelectedPageChange}
+          onChangeOffers={onChangeOffers}
+          perPage={perPage}
+        />
+      </section>
+    </div>
   );
 }

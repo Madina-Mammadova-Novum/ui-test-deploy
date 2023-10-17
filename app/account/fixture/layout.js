@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Label, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
-import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { setToggle } from '@/store/entities/post-fixture/slice';
-import { getPostFixtureDataSelector } from '@/store/selectors';
+import { setToggle } from '@/store/entities/fixture/slice';
+import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
-export default function PostFixtureLayout({ children }) {
+export default function FixtureLayout({ children }) {
   const dispatch = useDispatch();
-  const { offers, totalPages } = useSelector(getPostFixtureDataSelector);
+  const { offers, totalPages } = useSelector(getPreFixtureDataSelector);
 
   const { page, pageSize } = PAGE_STATE;
 
@@ -26,7 +26,7 @@ export default function PostFixtureLayout({ children }) {
   const handleToggle = ({ value }) => dispatch(setToggle(value));
 
   useEffect(() => {
-    dispatch(fetchPostFixtureOffers({ page: currentPage, perPage }));
+    dispatch(fetchPrefixtureOffers({ page: currentPage, perPage }));
   }, [currentPage, perPage]);
 
   return (
@@ -34,8 +34,8 @@ export default function PostFixtureLayout({ children }) {
       <section className="flex min-h-[90vh] flex-col gap-y-5">
         <div className="flex justify-between items-center pt-5">
           <div className="flex flex-col">
-            <Label className="text-xs-sm">Offer stage #5</Label>
-            <Title level="1">Post-fixture</Title>
+            <Label className="text-xs-sm">Offer stage #4</Label>
+            <Title level="1">Fixture</Title>
           </div>
           <ToggleRows onToggleClick={handleToggle} />
         </div>

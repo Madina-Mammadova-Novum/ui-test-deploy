@@ -1,7 +1,5 @@
-import { UrlPropTypes } from '@/lib/types';
-
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, PreFixture } from '@/modules';
+import { PreFixture } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -12,15 +10,6 @@ export function generateMetadata() {
     },
   });
 }
-
-const PreFixturePage = () => {
-  return (
-    <AccountWrapper containerClass="px-5">
-      <PreFixture />
-    </AccountWrapper>
-  );
-};
-
-PreFixturePage.propTypes = UrlPropTypes;
-
-export default PreFixturePage;
+export default function Page() {
+  return <PreFixture />;
+}

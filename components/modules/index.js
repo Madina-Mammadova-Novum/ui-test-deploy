@@ -18,6 +18,7 @@ import DropzoneForm from '@/modules/DropzoneForm';
 import ExpandableRow from '@/modules/ExpandableRow';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
+import FixtureDetails from '@/modules/Fixture/FixtureDetails';
 import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
@@ -36,6 +37,7 @@ import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PostFixture from '@/modules/PostFixture';
+import PostFixtureDetails from '@/modules/PostFixture/PostFixtureDetails';
 import PostFixtureExpandedContent from '@/modules/PostFixture/PostFixtureExpandedContent';
 import PostFixtureExpandedFooter from '@/modules/PostFixture/PostFixtureExpandedFooter';
 import PostFixtureResultContent from '@/modules/PostFixture/PostFixtureResultContent';
@@ -113,4 +115,6 @@ export {
   NegotiatingDetails,
   OnSubsDetails,
   PreFixtureDetails,
+  PostFixtureDetails,
+  FixtureDetails,
 };

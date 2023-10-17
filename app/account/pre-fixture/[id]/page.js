@@ -1,7 +1,8 @@
 import { UrlPropTypes } from '@/lib/types';
 
+import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, PreFixtureDetails } from '@/modules';
+import { PreFixtureDetails } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -14,13 +15,9 @@ export function generateMetadata() {
 }
 
 export default function Page({ params, searchParams }) {
-  const data = { id: params.id, ...searchParams };
+  const searchedParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
 
-  return (
-    <AccountWrapper containerClass="px-5">
-      <PreFixtureDetails searchedParams={data} />
-    </AccountWrapper>
-  );
+  return <PreFixtureDetails searchedParams={searchedParams} />;
 }
 
 Page.propTypes = UrlPropTypes;

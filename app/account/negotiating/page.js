@@ -1,7 +1,5 @@
-import { UrlPropTypes } from '@/lib/types';
-
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, Negotiating } from '@/modules';
+import { Negotiating } from '@/modules';
 
 export async function generateMetadata() {
   return metaData({
@@ -13,14 +11,6 @@ export async function generateMetadata() {
   });
 }
 
-const NegotiatingPage = () => {
-  return (
-    <AccountWrapper containerClass="px-5">
-      <Negotiating />
-    </AccountWrapper>
-  );
-};
-
-NegotiatingPage.propTypes = UrlPropTypes;
-
-export default NegotiatingPage;
+export default function Page() {
+  return <Negotiating />;
+}

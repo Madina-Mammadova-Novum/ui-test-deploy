@@ -2,13 +2,13 @@ import { UrlPropTypes } from '@/lib/types';
 
 import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
-import { PostFixtureDetails } from '@/modules';
+import { FixtureDetails } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Post-Fixture Details',
+        metaTitle: 'Fixture Details',
       },
     },
   });
@@ -17,7 +17,7 @@ export function generateMetadata() {
 export default function Page({ params, searchParams }) {
   const searchedParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
 
-  return <PostFixtureDetails searchedParams={searchedParams} />;
+  return <FixtureDetails searchedParams={searchedParams} />;
 }
 
 Page.propTypes = UrlPropTypes;
