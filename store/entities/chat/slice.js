@@ -90,9 +90,19 @@ const chatSlice = createSlice({
     resetUser: (state) => {
       state.data.user = initialState.data.user;
     },
+
     messageAlert: (state, { payload }) => {
-      const updatedState = state.data.active.map((user) => {
-        if (user.contentId === payload.contentId) {
+      if (state.data.support.chatId === payload?.id) {
+        const updatedMessage = {
+          ...state.data.support,
+          unreadedMessages: payload.messageCount,
+        };
+
+        state.data.support = updatedMessage;
+      }
+
+      const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload?.contentId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -100,7 +110,8 @@ const chatSlice = createSlice({
         }
         return user;
       });
-      state.data.active = updatedState;
+
+      state.data.active = updatedActiveState;
     },
   },
   extraReducers: (builder) => {
