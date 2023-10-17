@@ -1,46 +1,69 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import FixtureExpandedContent from './FixtureExpandedContent';
+import FixtureExpandedFooter from './FixtureExpandedFooter';
 
-import { fixtureHeaderDataAdapter, fixtureRowsDataAdapter } from '@/adapters/fixture';
+import {
+  fixtureDetailsAdapter,
+  fixtureDocumentsTabRowsDataAdapter,
+  fixtureHeaderDataAdapter,
+} from '@/adapters/fixture';
 import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
-import { getUserFixtures } from '@/services';
+import { fetchFixtureOffers } from '@/store/entities/fixture/actions';
+import { fixtureSelector } from '@/store/selectors';
 import { ComplexPagination, ToggleRows } from '@/units';
-import { useFetch, useFilters } from '@/utils/hooks';
+import { useFilters } from '@/utils/hooks';
 
 const Fixture = () => {
+  const dispatch = useDispatch();
   const [toggle, setToggle] = useState({ value: false });
-  const [data, isLoading] = useFetch(getUserFixtures);
+
+  const {
+    data: { offers, totalPages },
+    loading,
+  } = useSelector(fixtureSelector);
 
   const { page, pageSize } = PAGE_STATE;
 
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters({ initialPage: page, itemsPerPage: pageSize, data });
+  const { currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } = useFilters({
+    initialPage: page,
+    itemsPerPage: pageSize,
+    data: offers,
+  });
 
-  const printExpandableRow = (headerData) => (
-    <ExpandableRow
-      header={
-        <ExpandableCardHeader
-          headerData={fixtureHeaderDataAdapter({ data: headerData })}
-          gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr"
+  useEffect(() => {
+    dispatch(fetchFixtureOffers({ page: currentPage, perPage }));
+  }, [currentPage, perPage]);
+
+  const printExpandableRow = (rowData) => {
+    const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
+
+    return (
+      <ExpandableRow
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
+        footer={<FixtureExpandedFooter drafted={!rowData?.isCountdownActive} />}
+        expand={toggle}
+      >
+        <FixtureExpandedContent
+          offerId={rowData?.id}
+          detailsData={fixtureDetailsAdapter({ data: rowData })}
+          documentsData={fixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
         />
-      }
-      expand={toggle}
-    >
-      <FixtureExpandedContent rowsData={fixtureRowsDataAdapter({ data: headerData.documentsInfo })} />
-    </ExpandableRow>
-  );
+      </ExpandableRow>
+    );
+  };
 
   const printContent = useMemo(() => {
-    if (isLoading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (items) return items.map(printExpandableRow);
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (offers?.length) return offers.map(printExpandableRow);
 
-    return <Title level="3">No opened positions</Title>;
-  }, [isLoading, items, printExpandableRow]);
+    return <Title level="3">No offers at current stage</Title>;
+  }, [loading, offers, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">
@@ -56,7 +79,7 @@ const Fixture = () => {
         label="offers"
         perPage={perPage}
         currentPage={currentPage}
-        numberOfPages={numberOfPages}
+        numberOfPages={totalPages}
         onPageChange={handlePageChange}
         onSelectedPageChange={handleSelectedPageChange}
         onChangeOffers={onChangeOffers}

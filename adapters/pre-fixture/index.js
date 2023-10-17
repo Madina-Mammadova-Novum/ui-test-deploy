@@ -316,6 +316,8 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
 
   const { id, title, comments, name, extention, size, createdAt, url } = data;
 
+  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
+
   return [
     {
       value: index,
@@ -361,8 +363,8 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
       id,
       type: TYPE.SEMIBOLD_BLUE,
       downloadData: url && {
-        url: `https://shiplink-api.azurewebsites.net/v1/file/get/${url}`,
-        fileName: `${name}${extention}`,
+        url,
+        fileName,
       },
     },
   ];

@@ -344,22 +344,27 @@ export const onSubsDetailsAdapter = ({ data }) => {
 
 const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
   if (!data) return [];
-  const { id, title, comments, name, extention, size, createdAt, status, url } = data;
+  const { id, title, comments, name, extention, size, createdAt, status, url, deleted: isDocumentDeleted } = data;
   const revokeDeletionForbidden = status === 'Active';
+
+  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
 
   return [
     {
       value: index,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       type: TYPE.SEMIBOLD,
       value: id,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       type: TYPE.SEMIBOLD,
       value: title,
+      disabled: isDocumentDeleted,
     },
     {
       id,
@@ -371,36 +376,44 @@ const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
           editIcon: comments && <CommentIcon />,
         },
       ],
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: name,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: extention,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: `${+transformBytes({ value: size }).toFixed(2) || 0.01} MB`,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: transformDate(createdAt, 'MMM dd, yyyy'),
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: status,
       icon: <StatusIndicator status={status} />,
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      editable: true,
+      editable: !isDocumentDeleted,
       value: true,
-      downloadData: url && {
-        url: `https://shiplink-api.azurewebsites.net/v1/file/get/${url}`,
-        fileName: `${name}${extention}`,
-      },
+      disabled: isDocumentDeleted,
+      downloadData: !isDocumentDeleted &&
+        url && {
+          url,
+          fileName,
+        },
       actions: [
         {
           action: revokeDeletionForbidden ? ACTIONS.REQUEST_DOCUMENT_DELETION : ACTIONS.REVOKE_DOCUMENT_DELETION,

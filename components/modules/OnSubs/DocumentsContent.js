@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { documentsContentPropTypes } from '@/lib/types';
 
 import { Table } from '@/elements';
-import { uploadOnSubsDocument } from '@/services/on-subs';
+import { uploadDocument } from '@/services/on-subs';
 import { updateDocumentList } from '@/store/entities/on-subs/slice';
 import { UploadForm } from '@/units';
 import { parseErrors } from '@/utils/helpers';
@@ -21,7 +21,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       data,
       error,
       message: successMessage,
-    } = await uploadOnSubsDocument({
+    } = await uploadDocument({
       data: { ...formData, offerId },
       role: session?.role,
     });

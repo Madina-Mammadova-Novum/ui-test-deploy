@@ -7,7 +7,7 @@ import {
 import { ROLES } from '@/lib';
 import { postData } from '@/utils/dataFetching';
 
-export async function uploadOnSubsDocument({ data, role }) {
+export async function uploadDocument({ data, role }) {
   const body = onSubsAddDocumentAdapter({ data });
   const path = role === ROLES.OWNER ? 'document/owner/add' : 'document/charterer/add';
   const response = await postData(path, body);
@@ -17,7 +17,7 @@ export async function uploadOnSubsDocument({ data, role }) {
   };
 }
 
-export async function requestOnSubsDocumentDeletion({ data, role }) {
+export async function requestDocumentDeletion({ data, role }) {
   const body = onSubsRequestDocumentDeletionAdapter({ data });
   const path = role === ROLES.OWNER ? 'document/owner/delete' : 'document/charterer/delete';
   const response = await postData(path, body);
@@ -27,7 +27,7 @@ export async function requestOnSubsDocumentDeletion({ data, role }) {
   };
 }
 
-export async function revokeOnSubsDocumentDeletion({ data, role }) {
+export async function revokeDocumentDeletion({ data, role }) {
   const body = onSubsRevokeDocumentDeletionAdapter({ data });
   const path = role === ROLES.OWNER ? 'document/owner/revoke' : 'document/charterer/revoke';
   const response = await postData(path, body);
