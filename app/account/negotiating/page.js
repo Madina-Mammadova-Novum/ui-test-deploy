@@ -1,6 +1,5 @@
 import { UrlPropTypes } from '@/lib/types';
 
-import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { AccountWrapper, Negotiating } from '@/modules';
 
@@ -14,12 +13,10 @@ export async function generateMetadata() {
   });
 }
 
-const NegotiatingPage = ({ searchParams }) => {
-  const urlParams = searchParamsAdapter({ data: searchParams });
-
+const NegotiatingPage = () => {
   return (
     <AccountWrapper containerClass="px-5">
-      <Negotiating searachParams={urlParams} />
+      <Negotiating />
     </AccountWrapper>
   );
 };

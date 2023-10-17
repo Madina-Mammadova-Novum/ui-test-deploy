@@ -39,7 +39,7 @@ const PostFixtureResultContent = ({ data, toggle }) => {
     return (
       <ExpandableRow
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
-        footer={<PostFixtureExpandedFooter />}
+        footer={<PostFixtureExpandedFooter charterPartyUrl={rowData?.charterPartyUrl} />}
         expand={toggle}
       >
         <PostFixtureExpandedContent

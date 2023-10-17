@@ -30,6 +30,7 @@ export const offerSelector = ({ offer }) => offer;
 export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
 export const onSubsSelector = ({ onSubs }) => onSubs;
 export const postFixtureSelector = ({ postFixture }) => postFixture;
+export const fixtureSelector = ({ fixture }) => fixture;
 export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
@@ -78,9 +79,12 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 });
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+  const newMessagesCounter = state?.data?.active?.filter(({ messageCount }) => messageCount > 0)?.length;
+
   return {
     opened: state.opened,
     loading: state.loading,
+    updating: state.updating,
     search: state.filterParams.searchValue,
     tab: state.filterParams.tabValue,
     limit: state.filterParams.limit,
@@ -95,6 +99,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     },
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
+    newMessagesCounter,
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
   };

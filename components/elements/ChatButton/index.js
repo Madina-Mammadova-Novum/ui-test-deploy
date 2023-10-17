@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useMemo } from 'react';
 
 import { ChatButtonPropTypes } from '@/lib/types';
@@ -9,7 +7,7 @@ import { ChatButtonPropTypes } from '@/lib/types';
 import ChatSVG from '@/assets/images/chat.svg';
 import { Badge } from '@/elements';
 
-const ChatButton = ({ counter, name, onClick, onClose, className = '' }) => {
+const ChatButton = ({ counter, name, onClick, onClose, withCancel, className = '' }) => {
   const printIcon = useMemo(() => {
     if (name) return <p className="text-xsm font-semibold mx-auto uppercase">{name?.slice(0, 2)}</p>;
 
@@ -20,7 +18,7 @@ const ChatButton = ({ counter, name, onClick, onClose, className = '' }) => {
     if (name) return 'bg-white border p-5 border-gray-light';
 
     return 'border border-transparent p-4 bg-black';
-  }, []);
+  }, [name]);
 
   return (
     <div className={className}>
@@ -30,7 +28,7 @@ const ChatButton = ({ counter, name, onClick, onClose, className = '' }) => {
         className={`relative rounded-full shadow-2xmd z-30 outline-none ${setStyles}`}
       >
         {printIcon}
-        <Badge counter={counter} onClose={onClose} withCancel />
+        <Badge counter={counter} onClose={onClose} withCancel={withCancel} />
       </button>
     </div>
   );

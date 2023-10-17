@@ -45,7 +45,9 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, scriveURL = '' }) =>
             <NextLink
               href={scriveURL}
               target="blank"
-              className="block text-xsm whitespace-nowrap bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker"
+              className={`block text-xsm whitespace-nowrap bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker ${
+                underRecap && 'opacity-50 pointer-events-none'
+              }`}
             >
               Lift the Subs
             </NextLink>

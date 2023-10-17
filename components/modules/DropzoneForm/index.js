@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { DropZonePropTypes } from '@/lib/types';
@@ -18,12 +18,17 @@ const DropzoneForm = ({ showTextFields = true }) => {
     setValue,
     setError,
     clearErrors,
+    watch,
     formState: { errors },
   } = useHookForm();
 
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
+
+  useEffect(() => {
+    if (!watch('file')) setFiles([]);
+  }, [watch('file')]);
 
   const resetDropzone = useCallback(() => {
     setFiles([]);

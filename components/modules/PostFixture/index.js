@@ -9,7 +9,7 @@ import { Label, Loader, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { PostFixtureResultContent } from '@/modules';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { onSubsSelector } from '@/store/selectors';
+import { postFixtureSelector } from '@/store/selectors';
 import { ComplexPagination, FilterByForm, PostFixtureFilter, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
@@ -20,7 +20,7 @@ const PostFixture = () => {
   const {
     data: { offers, totalPages },
     loading,
-  } = useSelector(onSubsSelector);
+  } = useSelector(postFixtureSelector);
 
   const { page, pageSize } = PAGE_STATE;
 

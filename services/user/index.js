@@ -238,3 +238,13 @@ export async function getPostFixtureOffers({ page, perPage }) {
     ...response,
   };
 }
+
+export async function getFixtureOffers({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/fixture?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}

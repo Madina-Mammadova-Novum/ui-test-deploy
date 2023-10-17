@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PostFixtureDocumentsContentPropTypes } from '@/lib/types';
 
 import { Table } from '@/elements';
-import { uploadOnSubsDocument } from '@/services/on-subs';
+import { uploadDocument } from '@/services/on-subs';
 import { updateDocumentList } from '@/store/entities/post-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { UploadForm } from '@/units';
@@ -20,7 +20,7 @@ const PostFixtureDocumentsContent = ({ rowsData = [], offerId }) => {
       data,
       error,
       message: successMessage,
-    } = await uploadOnSubsDocument({
+    } = await uploadDocument({
       data: { ...formData, offerId },
       role,
     });

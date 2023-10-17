@@ -13,11 +13,13 @@ import { NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { OfferDeclineForm } from '@/units';
 
-const ViewIncomingOffer = ({ closeModal, itemId }) => {
+const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
   const [step, setStep] = useState('view_offer');
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
   const { data: session } = useSession();
+
+  const { parentId } = cellData || {};
 
   const handleCountdownExtensionSuccess = () => setOfferDetails(extendCountdownDataAdapter);
 
@@ -70,6 +72,7 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
           closeModal={closeModal}
           data={offerDetails}
           offerId={itemId}
+          parentId={parentId}
           handleCountdownExtensionSuccess={handleCountdownExtensionSuccess}
         />
       );

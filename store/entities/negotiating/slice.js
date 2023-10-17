@@ -20,8 +20,8 @@ const negotiatingSlice = createSlice({
   initialState,
   reducers: {
     updateCountdown: (state, action) => {
-      const { itemId, offerId, isOwner } = action?.payload;
-      state.data.offerById[itemId][isOwner ? 'incoming' : 'sent'] = state.data.offerById[itemId][
+      const { parentId, offerId, isOwner } = action?.payload;
+      state.data.offerById[parentId][isOwner ? 'incoming' : 'sent'] = state.data.offerById[parentId][
         isOwner ? 'incoming' : 'sent'
       ].map((offer) =>
         offer.id === offerId

@@ -80,10 +80,11 @@ export class ChatController extends SignalRController {
     });
   }
 
-  async initChat({ chatId, vessel }) {
+  async initChat({ chatId, vessel, archieved }) {
+    this.messages = [];
     this.store.dispatch(setLoadConversation(true));
     this.store.dispatch(setConversation(true));
-    this.store.dispatch(setUser({ chatId, vessel }));
+    this.store.dispatch(setUser({ chatId, vessel, archieved }));
     this.store.dispatch(setUserConversation([]));
 
     try {
