@@ -38,23 +38,26 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { date, id, marked, imo, port, portId, status, title, countryId } = data;
+  const { date, id, marked, imo, port, portId, status, title, countryId, notified } = data;
 
   return [
     {
       value: index,
       disabled: !status,
+      notified: notified || false,
     },
     {
       id,
       value: transformToCapitalize(title) ?? NO_DATA_MESSAGE.DEFAULT,
       type: TYPE.SEMIBOLD,
       disabled: !status,
+      notified: notified || false,
     },
     {
       id,
       value: imo ?? NO_DATA_MESSAGE.IMO,
       disabled: !status,
+      notified: notified || false,
     },
     {
       id,
@@ -67,6 +70,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       value: status ? port : NO_DATA_MESSAGE.PORT,
       helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: status,
+      notified: notified || false,
       actions: [
         {
           action: ACTIONS.PORT,
@@ -86,6 +90,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       value: status ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
       editable: status,
+      notified: notified || false,
       actions: [
         {
           action: ACTIONS.DATE,
@@ -102,6 +107,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       name: title,
       value: status,
       editable: true,
+      notified: notified || false,
       actions: [
         {
           editIcon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,

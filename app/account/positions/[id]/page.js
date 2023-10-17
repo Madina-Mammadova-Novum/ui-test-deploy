@@ -2,7 +2,7 @@ import { UrlPropTypes } from '@/lib/types';
 
 import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
-import { AccountPositions } from '@/modules';
+import { AccountPositionDetails } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -14,10 +14,10 @@ export function generateMetadata() {
   });
 }
 
-export default function Page({ searchParams }) {
-  const urlParams = searchParamsAdapter({ data: searchParams });
+export default function Page({ params, searchParams }) {
+  const urlParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
 
-  return <AccountPositions searchParams={urlParams} />;
+  return <AccountPositionDetails searchedParms={urlParams} />;
 }
 
 Page.propTypes = UrlPropTypes;

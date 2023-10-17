@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 import { TablePropTypes } from '@/lib/types';
 
@@ -9,8 +9,6 @@ import TableRow from '@/elements/Table/TableRow';
 import { sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
-  const initialOrder = useMemo(() => rows, []);
-
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
   const { data, sortDirection, sortBy } = sortedData;
 
@@ -23,7 +21,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
     const { index, sortDirection: newSortDirection, sortBy: newSortBy, sortType } = options;
 
     if (newSortBy === sortBy && newSortDirection === sortDirection) {
-      setSortedData({ data: initialOrder, sortDirection: null, sortBy: null });
+      setSortedData({ data: rows, sortDirection: null, sortBy: null });
       return;
     }
 

@@ -5,6 +5,7 @@ import { fetchPrefixtureOffers } from './actions';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -15,6 +16,9 @@ const preFixtureSlice = createSlice({
   name: 'pre-fixture',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateConfirmationStatus: (state, action) => {
       const { offerId, isOwner } = action?.payload;
       state.data.offers = state.data.offers.map((offer) =>
@@ -42,6 +46,6 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, setToggle } = preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;

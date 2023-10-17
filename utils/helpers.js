@@ -306,7 +306,7 @@ export const transformInvalidLoginMessage = (msg) => {
 };
 
 export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
-export const isEmptyString = (value) => value === '';
+export const isDocument = (value) => value === 'doc';
 
 export const checkEmailPrefix = (value) => {
   if (!value) return true;

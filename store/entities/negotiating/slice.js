@@ -5,6 +5,7 @@ import { fetchUserNegotiating } from './actions';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     totalPages: 0,
     offers: [],
@@ -15,6 +16,11 @@ const initialState = {
 const negotiatingSlice = createSlice({
   name: 'negotiating',
   initialState,
+  reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchUserNegotiating.pending, (state) => {
       state.loading = true;
@@ -29,5 +35,7 @@ const negotiatingSlice = createSlice({
     });
   },
 });
+
+export const { setToggle } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
@@ -14,33 +14,17 @@ import {
   prefixtureDetailsAdapter,
   prefixtureDocumentsTabRowsDataAdapter,
 } from '@/adapters';
-import { ExpandableCardHeader, Label, Loader, Title } from '@/elements';
-import { PAGE_STATE } from '@/lib/constants';
+import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
 import { getPreFixtureDataSelector } from '@/store/selectors';
-import { ComplexPagination, ToggleRows } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFilters } from '@/utils/hooks';
 
-const PreFixture = ({ searchParams }) => {
-  const dispatch = useDispatch();
-  const [toggle, setToggle] = useState({ value: false });
+const PreFixtureDetails = ({ searchedParams }) => {
+  const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
 
-  // TODO: consider empty responses
-  const { loading, totalPages, offers, role } = useSelector(getPreFixtureDataSelector);
+  const searchedResult = offers.find((offer) => offer?.cargoeId === searchedParams?.id);
 
   const { isOwner } = getRoleIdentity({ role });
-
-  const { page, pageSize } = PAGE_STATE;
-
-  const { currentPage, handlePageChange, handleSelectedPageChange, selectedPage, onChangeOffers, perPage } = useFilters(
-    { initialPage: page, itemsPerPage: pageSize }
-  );
-
-  useEffect(() => {
-    dispatch(fetchPrefixtureOffers({ page: currentPage, perPage }));
-  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -50,7 +34,7 @@ const PreFixture = ({ searchParams }) => {
     return (
       <ExpandableRow
         key={rowData.id}
-        expand={toggle}
+        expand={toggle || searchedParams?.status}
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
@@ -68,7 +52,7 @@ const PreFixture = ({ searchParams }) => {
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
-          params={searchParams}
+          tab={searchedParams?.status}
           offerId={rowData?.id}
         />
       </ExpandableRow>
@@ -77,35 +61,18 @@ const PreFixture = ({ searchParams }) => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers) return offers.map(printExpandableRow);
+    if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
-  }, [loading, offers, printExpandableRow]);
+  }, [loading, searchedResult, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">
-      <div className="flex justify-between items-center pt-5">
-        <div className="flex flex-col">
-          <Label className="text-xs-sm">Offer stage #2</Label>
-          <Title level="1">Pre-fixture</Title>
-        </div>
-        <ToggleRows onToggleClick={setToggle} />
-      </div>
       <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
-      <ComplexPagination
-        label="offers"
-        currentPage={currentPage}
-        numberOfPages={totalPages}
-        onPageChange={handlePageChange}
-        onSelectedPageChange={handleSelectedPageChange}
-        pages={selectedPage}
-        onChangeOffers={onChangeOffers}
-        perPage={perPage}
-      />
     </section>
   );
 };
 
-PreFixture.propTypes = UrlPropTypes;
+PreFixtureDetails.propTypes = UrlPropTypes;
 
-export default PreFixture;
+export default PreFixtureDetails;
