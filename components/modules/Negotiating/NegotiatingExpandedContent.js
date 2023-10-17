@@ -17,7 +17,7 @@ import {
   ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
 
-const NegotiatingExpandedContent = ({ data, tabs }) => {
+const NegotiatingExpandedContent = ({ data, tabs = [] }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0]?.value);
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
 

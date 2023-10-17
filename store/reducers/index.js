@@ -11,6 +11,7 @@ import {
   offer,
   onSubs,
   positions,
+  postFixture,
   preFixture,
   search,
   user,
@@ -28,4 +29,5 @@ export const reducer = combineReducers({
   preFixture,
   chat,
   onSubs,
+  postFixture,
 });

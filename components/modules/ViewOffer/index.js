@@ -25,7 +25,7 @@ const tabs = [
   },
 ];
 
-const ViewOffer = ({ setStep, data, offerId }) => {
+const ViewOffer = ({ setStep, data, offerId, handleCountdownExtensionSuccess }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(data?.allowExtension);
@@ -39,6 +39,7 @@ const ViewOffer = ({ setStep, data, offerId }) => {
     } else {
       successToast(successMessage);
       setAllowCountdownExtension(false);
+      handleCountdownExtensionSuccess();
     }
   };
 
