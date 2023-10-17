@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
+
+import { UrlPropTypes } from '@/lib/types';
 
 import {
   chartererOnSubsHeaderDataAdapter,
@@ -13,30 +15,16 @@ import {
   ownerOnSubsHeaderDataAdapter,
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
-import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
-import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
 import { getOnSubsDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFilters } from '@/utils/hooks';
 
-const OnSubs = () => {
-  const dispatch = useDispatch();
+const OnSubsDetails = ({ searchedParams }) => {
+  const { offers, loading, role, toggle } = useSelector(getOnSubsDataSelector);
 
-  const { offers, toggle, loading, role } = useSelector(getOnSubsDataSelector);
   const { isOwner } = getRoleIdentity({ role });
 
-  const { page, pageSize } = PAGE_STATE;
-
-  const { currentPage, perPage } = useFilters({
-    initialPage: page,
-    itemsPerPage: pageSize,
-    data: offers,
-  });
-
-  useEffect(() => {
-    dispatch(fetchOnSubsOffers({ page: currentPage, perPage }));
-  }, [currentPage, perPage]);
+  const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -66,6 +54,7 @@ const OnSubs = () => {
           offerId={rowData?.id}
           detailsData={onSubsDetailsAdapter({ data: rowData })}
           documentsData={onSubsDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          tab={searchedParams?.status}
         />
       </ExpandableRow>
     );
@@ -73,10 +62,10 @@ const OnSubs = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers) return offers.map(printExpandableRow);
+    if (searchedResult) return [searchedResult].map(printExpandableRow);
 
-    return <Title level="3">No offers at current stage</Title>;
-  }, [loading, offers, printExpandableRow]);
+    return <Title level="3">Notification is outdated.</Title>;
+  }, [loading, searchedResult, printExpandableRow]);
 
   return (
     <section className="flex min-h-[90vh] flex-col gap-y-5">
@@ -85,4 +74,6 @@ const OnSubs = () => {
   );
 };
 
-export default OnSubs;
+OnSubsDetails.propTypes = UrlPropTypes;
+
+export default OnSubsDetails;

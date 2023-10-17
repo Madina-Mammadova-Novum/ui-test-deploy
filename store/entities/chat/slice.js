@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { HYDRATE } from 'next-redux-wrapper';
 
+// eslint-disable-next-line import/no-cycle
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 const initialState = {
@@ -51,6 +52,9 @@ const chatSlice = createSlice({
     },
     setUser: (state, action) => {
       state.data.user.data = action.payload;
+    },
+    setUpdate: (state, action) => {
+      state.updating = action.payload;
     },
     setUserConversation: (state, { payload }) => {
       state.data.user.messages = payload;
@@ -105,6 +109,7 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
+      state.updating = payload.updating;
       state.data.active = payload.active;
       state.data.archived = payload.archived;
       state.data.support = payload.support;
@@ -152,6 +157,7 @@ export const {
   setUser,
   setChatFilter,
   setOpenedChat,
+  setUpdate,
   setConversation,
   setCollapsedChat,
   setUserConversation,

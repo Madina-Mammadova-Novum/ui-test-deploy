@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import FixtureExpandedContent from './FixtureExpandedContent';
 import FixtureExpandedFooter from './FixtureExpandedFooter';
 
+import { UrlPropTypes } from '@/lib/types';
+
 import {
   fixtureDetailsAdapter,
   fixtureDocumentsTabRowsDataAdapter,
@@ -15,8 +17,10 @@ import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getFixtureSelector } from '@/store/selectors';
 
-const Fixture = () => {
+const FixtureDetails = ({ searchedParams }) => {
   const { offers, toggle, loading } = useSelector(getFixtureSelector);
+
+  const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
@@ -38,11 +42,14 @@ const Fixture = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers?.length) return offers.map(printExpandableRow);
+    if (searchedResult) return [searchedResult].map(printExpandableRow);
 
-    return <Title level="3">No offers at current stage</Title>;
-  }, [loading, offers, printExpandableRow]);
+    return <Title level="3">Notification is outdated.</Title>;
+  }, [loading, searchedResult, printExpandableRow]);
 
   return <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>;
 };
-export default Fixture;
+
+FixtureDetails.propTypes = UrlPropTypes;
+
+export default FixtureDetails;

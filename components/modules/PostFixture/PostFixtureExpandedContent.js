@@ -20,8 +20,8 @@ const tabs = [
   },
 ];
 
-const PostFixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+const PostFixtureExpandedContent = ({ detailsData, documentsData, tab, offerId }) => {
+  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
 
   const tabContent = useMemo(() => {
     switch (currentTab) {

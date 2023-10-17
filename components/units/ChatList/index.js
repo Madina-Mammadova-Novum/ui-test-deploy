@@ -16,7 +16,7 @@ const ChatList = ({ data, loading = true, tab = 'active' }) => {
   );
 
   const printContent = useMemo(() => {
-    if (loading && data.length <= 0) return <ChatListLoader />;
+    if (loading) return <ChatListLoader />;
     if (data?.length > 0) return data?.map(printChatSession);
     return <p className="mx-auto font-semibold text-gray">No Data</p>;
   }, [loading, data, printChatSession]);

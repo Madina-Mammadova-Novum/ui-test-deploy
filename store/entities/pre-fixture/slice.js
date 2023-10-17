@@ -8,6 +8,7 @@ import { transformDate } from '@/utils/date';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -18,6 +19,9 @@ const preFixtureSlice = createSlice({
   name: 'pre-fixture',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateConfirmationStatus: (state, action) => {
       const { offerId, isOwner } = action?.payload;
       state.data.offers = state.data.offers.map((offer) =>

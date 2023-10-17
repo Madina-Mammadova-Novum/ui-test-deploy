@@ -1,16 +1,16 @@
 import { metaData } from '@/adapters/metaData';
-import { Negotiating } from '@/modules';
+import { OnSubs } from '@/modules';
 
 export async function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Negotiating',
+        metaTitle: 'On-Subs',
       },
     },
   });
 }
 
 export default function Page() {
-  return <Negotiating />;
+  return <OnSubs />;
 }

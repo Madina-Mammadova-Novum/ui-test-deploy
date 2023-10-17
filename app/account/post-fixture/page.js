@@ -1,8 +1,7 @@
 import { UrlPropTypes } from '@/lib/types';
 
-import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, PostFixture } from '@/modules';
+import { PostFixture } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -14,15 +13,8 @@ export function generateMetadata() {
   });
 }
 
-const PostFixturePage = ({ searchParams }) => {
-  const urlParams = searchParamsAdapter({ data: searchParams });
-  return (
-    <AccountWrapper containerClass="px-5">
-      <PostFixture searchParams={urlParams} />
-    </AccountWrapper>
-  );
-};
+export default function Page() {
+  return <PostFixture />;
+}
 
-PostFixturePage.propTypes = UrlPropTypes;
-
-export default PostFixturePage;
+Page.propTypes = UrlPropTypes;

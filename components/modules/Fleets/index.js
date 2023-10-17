@@ -1,45 +1,23 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import FleetsExpandedContent from './FleetsExpandedContent';
 
 import { UrlPropTypes } from '@/lib/types';
 
 import { fleetsPageHeaderDataAdapter, fleetsPageRowsDataAdapter } from '@/adapters';
-import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
-import { ACTIONS, PAGE_STATE } from '@/lib/constants';
-import { AddNewTanker, ExpandableRow } from '@/modules';
-import { fetchFleetsWithVessels, fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
+import { ACTIONS } from '@/lib/constants';
+import { ExpandableRow } from '@/modules';
 import { getFleetsSelector } from '@/store/selectors';
-import { ComplexPagination, CreateFleetForm, ModalWindow, ToggleRows, UnassignedFleet } from '@/units';
-import { convertDataToOptions } from '@/utils/helpers';
-import { useFilters } from '@/utils/hooks';
+import { UnassignedFleet } from '@/units';
 
-const Fleets = () => {
-  const dispatch = useDispatch();
-  const { refetch, data, totalPages, loading } = useSelector(getFleetsSelector);
+const Fleets = ({ searchedParams }) => {
+  const { data, toggle, loading } = useSelector(getFleetsSelector);
 
-  const [toggle, setToggle] = useState({ value: false });
-
-  const { page, pageSize, sortValue } = PAGE_STATE;
-
-  const { items, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } = useFilters({
-    initialPage: page,
-    sortValue,
-    itemsPerPage: pageSize,
-    data,
-  });
-
-  useEffect(() => {
-    dispatch(fetchUnassignedFleetData());
-  }, [refetch]);
-
-  useEffect(() => {
-    dispatch(fetchFleetsWithVessels({ page: currentPage, perPage }));
-  }, [perPage, currentPage, refetch]);
+  const searchedResult = data?.find((vessel) => vessel?.id === searchedParams?.id);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
@@ -68,6 +46,7 @@ const Fleets = () => {
           />
         }
         expand={toggle}
+        isOpened={Boolean(searchedParams?.id)}
       >
         <FleetsExpandedContent
           rowsData={fleetsPageRowsDataAdapter({ data: rowData.vessels, fleetName: rowData.name })}
@@ -79,61 +58,17 @@ const Fleets = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (items) return data.map(printExpandableRow);
+    if (searchedResult) return [searchedResult].map(printExpandableRow);
+    if (data && !searchedResult) return data.map(printExpandableRow);
 
     return <Title level="3">No positions</Title>;
-  }, [loading, data, printExpandableRow]);
+  }, [loading, data, searchedResult, printExpandableRow]);
 
   return (
-    <section className="flex min-h-[90vh] flex-col gap-y-5">
-      <div className="flex justify-between items-center py-5">
-        <Title level="1" className="self-baseline">
-          Tanker list
-        </Title>
-        <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
-          <ToggleRows onToggleClick={setToggle} />
-          <div className="flex gap-x-5">
-            <ModalWindow
-              buttonProps={{
-                text: 'Create new fleet',
-                variant: 'primary',
-                size: 'large',
-                icon: {
-                  before: <PlusCircleSVG className="fill-white" />,
-                },
-              }}
-            >
-              <CreateFleetForm />
-            </ModalWindow>
-            <ModalWindow
-              buttonProps={{
-                text: 'Add a New Tanker',
-                variant: 'primary',
-                size: 'large',
-                icon: {
-                  before: <PlusCircleSVG className="fill-white" />,
-                },
-              }}
-            >
-              <AddNewTanker fleetOptions={convertDataToOptions({ data }, 'id', 'name')} />
-            </ModalWindow>
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col gap-y-2.5 grow">
-        <UnassignedFleet toggle={toggle} />
-        {printContent}
-      </div>
-      <ComplexPagination
-        label="fleets"
-        currentPage={currentPage}
-        numberOfPages={totalPages}
-        onPageChange={handlePageChange}
-        onSelectedPageChange={handleSelectedPageChange}
-        onChangeOffers={onChangeOffers}
-        perPage={perPage}
-      />
-    </section>
+    <div className="flex flex-col gap-y-2.5 grow">
+      <UnassignedFleet toggle={toggle} />
+      {printContent}
+    </div>
   );
 };
 
