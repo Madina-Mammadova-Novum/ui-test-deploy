@@ -9,7 +9,7 @@ import { AUTHCONFIG } from '@/utils/auth';
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
 
-  const { skip, pageSize } = req.body;
+  const { skip, pageSize } = JSON.parse(req.body);
 
   return responseHandler({
     req,
