@@ -88,11 +88,11 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.DATE:
         return <EditDateForm title="edit open date" state={{ ...state, action: ACTIONS.DATE }} />;
       case ACTIONS.VIEW_OFFER:
-        return <ViewIncomingOffer itemId={id} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} />;
       case ACTIONS.VIEW_COUNTEROFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
-        return <ViewIncomingOffer itemId={id} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} />;
       case ACTIONS.VIEW_SENT_OFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_FAILED_OFFER:

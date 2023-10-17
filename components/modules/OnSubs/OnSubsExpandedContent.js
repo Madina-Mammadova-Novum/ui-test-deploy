@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -9,6 +10,7 @@ import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { extendCountdown } from '@/services/offer';
+import { updateCountdown } from '@/store/entities/on-subs/slice';
 import { Tabs } from '@/units';
 import { getRoleIdentity, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -30,6 +32,7 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId, tab }) => 
 
   const { data: session } = useSession();
   const { isCharterer } = getRoleIdentity({ role: session?.role });
+  const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
@@ -38,6 +41,7 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId, tab }) => 
     } else {
       successToast(successMessage);
       setAllowCountdownExtension(false);
+      dispatch(updateCountdown({ offerId }));
     }
   };
 

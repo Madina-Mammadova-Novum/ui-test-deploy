@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchPrefixtureOffers } from './actions';
 
+import { FIFTEEN_MINUTES_IN_MS } from '@/lib/constants';
+import { transformDate } from '@/utils/date';
+
 const initialState = {
   loading: true,
   error: null,
@@ -30,6 +33,20 @@ const preFixtureSlice = createSlice({
           : offer
       );
     },
+    updateCountdown: (state, action) => {
+      const { offerId } = action?.payload;
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              expiresAt: transformDate(
+                new Date(offer.expiresAt).getTime() + FIFTEEN_MINUTES_IN_MS,
+                "yyyy-MM-dd'T'HH:mm:ss.SSS"
+              ),
+            }
+          : offer
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPrefixtureOffers.pending, (state) => {
@@ -46,6 +63,6 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus, setToggle } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, updateCountdown } = preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;

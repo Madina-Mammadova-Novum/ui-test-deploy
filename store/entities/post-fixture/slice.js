@@ -1,27 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchOnSubsOffers } from './actions';
-
-import { FIFTEEN_MINUTES_IN_MS } from '@/lib/constants';
-import { transformDate } from '@/utils/date';
+import { fetchPostFixtureOffers } from './actions';
 
 const initialState = {
   loading: true,
   error: null,
-  toggle: false,
   data: {
     offers: [],
     totalPages: 0,
   },
 };
 
-const onSubsSlice = createSlice({
-  name: 'on-subs',
+const postFixtureSlice = createSlice({
+  name: 'post-fixture',
   initialState,
   reducers: {
-    setToggle: (state, { payload }) => {
-      state.toggle = payload;
-    },
     updateDocumentStatus: (state, action) => {
       const { documentId, status } = action?.payload;
       state.data.offers = state.data.offers.map((offer) => ({
@@ -40,36 +33,22 @@ const onSubsSlice = createSlice({
           : offer
       );
     },
-    updateCountdown: (state, action) => {
-      const { offerId } = action?.payload;
-      state.data.offers = state.data.offers.map((offer) =>
-        offer.id === offerId
-          ? {
-              ...offer,
-              expiresAt: transformDate(
-                new Date(offer.expiresAt).getTime() + FIFTEEN_MINUTES_IN_MS,
-                "yyyy-MM-dd'T'HH:mm:ss.SSS"
-              ),
-            }
-          : offer
-      );
-    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchOnSubsOffers.pending, (state) => {
+    builder.addCase(fetchPostFixtureOffers.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchOnSubsOffers.fulfilled, (state, action) => {
+    builder.addCase(fetchPostFixtureOffers.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload?.data;
     });
-    builder.addCase(fetchOnSubsOffers.rejected, (state, action) => {
+    builder.addCase(fetchPostFixtureOffers.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload?.error;
     });
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList, updateCountdown, setToggle } = onSubsSlice.actions;
+export const { updateDocumentStatus, updateDocumentList } = postFixtureSlice.actions;
 
-export default onSubsSlice.reducer;
+export default postFixtureSlice.reducer;

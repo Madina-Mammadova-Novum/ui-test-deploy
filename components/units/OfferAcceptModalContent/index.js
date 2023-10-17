@@ -7,10 +7,11 @@ import { useSession } from 'next-auth/react';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
+import { extendCountdownDataAdapter } from '@/adapters/countdownTimer';
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Button, Loader, Title } from '@/elements';
-import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
-import { updateConfirmationStatus } from '@/store/entities/pre-fixture/slice';
+import { acceptPrefixtureOffer, extendCountdown, getOfferDetails } from '@/services/offer';
+import { updateConfirmationStatus, updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
 import { getRoleIdentity, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -32,7 +33,8 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [offerDetails, setOfferDetails] = useState({});
-  const { commercialOfferTerms, voyageDetails, countdownData } = offerDetails;
+
+  const { commercialOfferTerms, voyageDetails, countdownData, allowExtension } = offerDetails;
   const { data: session } = useSession();
   const { isOwner } = getRoleIdentity({ role: session?.role });
   const dispatch = useDispatch();
@@ -51,11 +53,22 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
     setPending(false);
   };
 
+  const handleExtendCountdown = async () => {
+    const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
+    if (error) {
+      errorToast(parseErrors(error.message));
+    } else {
+      successToast(successMessage);
+      setOfferDetails(extendCountdownDataAdapter);
+      dispatch(updateCountdown({ offerId }));
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const { status, data, error } = await getOfferDetails(offerId, session?.role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data }));
+        setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
       } else {
         console.log(error);
       }
@@ -91,6 +104,8 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
           <Button
             customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
+            disabled={!allowExtension}
+            onClick={handleExtendCountdown}
           />
         </div>
       </div>

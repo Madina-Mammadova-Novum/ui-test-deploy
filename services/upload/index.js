@@ -11,7 +11,7 @@ export async function uploadData({ data }) {
   //   ...response,
   // };
 
-  const res = await fetch('https://shiplink-api.azurewebsites.net/v1/file/upload', {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/upload`, {
     method: 'POST',
     body,
   });
