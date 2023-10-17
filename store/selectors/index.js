@@ -77,9 +77,12 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 });
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+  const newMessagesCounter = state?.data?.active?.filter(({ messageCount }) => messageCount > 0)?.length;
+
   return {
     opened: state.opened,
     loading: state.loading,
+    updating: state.updating,
     search: state.filterParams.searchValue,
     tab: state.filterParams.tabValue,
     limit: state.filterParams.limit,
@@ -94,7 +97,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     },
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
-    newMessagesCounter: state?.data?.active.forEach((chat) => chat?.messageCount > 0),
+    newMessagesCounter,
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
   };

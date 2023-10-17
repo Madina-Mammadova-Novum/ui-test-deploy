@@ -14,7 +14,6 @@ import ChatAdditional from '@/units/ChatAdditional';
 import ChatControl from '@/units/ChatControl';
 import ChatConversation from '@/units/ChatConversation';
 import ChatConversationCard from '@/units/ChatConversationCard';
-import ChatDeactivate from '@/units/ChatDeactivate';
 import ChatInfoModal from '@/units/ChatInfoModal';
 import ChatList from '@/units/ChatList';
 import ChatMessage from '@/units/ChatMessage';
@@ -22,6 +21,7 @@ import ChatModal from '@/units/ChatModal';
 import ChatLoadMoreCta from '@/units/ChatModal/ChatLoadMoreCta';
 import ChatModalHeader from '@/units/ChatModal/ChatModalHeader';
 import ChatSession from '@/units/ChatSession';
+import ChatSubModal from '@/units/ChatSubModal';
 import CollapsedChats from '@/units/CollapsedChats';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
@@ -179,7 +179,7 @@ export {
   ChatModal,
   ChatModalHeader,
   ChatLoadMoreCta,
-  ChatDeactivate,
+  ChatSubModal,
   ChatConversationCard,
   ChatMessage,
   ViewCommentContent,

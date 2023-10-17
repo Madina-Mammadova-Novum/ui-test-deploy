@@ -25,7 +25,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   }, [message]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     chatService.sendMessage({ message });
     setMessage('');
   };
@@ -41,27 +41,29 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed bg-white border shadow-xmd border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] rounded-base z-50`}
+        className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-50`}
       >
         <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
-        <div className="flex flex-col h-[47vh] p-5">
+        <div className="flex flex-col p-5">
           <ChatConversationBody messages={messages} loading={loading} />
-          <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              value={message}
-              onChange={handleMessage}
-              onKeyPress={handleEnter}
-              placeholder="Message ..."
-              customStyles="!border-gray-darker !w-full"
-            />
-            <Button
-              type="submit"
-              disabled={disabled}
-              customStyles="border border-gray-darker !p-2.5"
-              buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
-            />
-          </form>
+          {!data?.archieved && (
+            <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
+              <Input
+                type="text"
+                value={message}
+                onChange={handleMessage}
+                onKeyPress={handleEnter}
+                placeholder="Message ..."
+                customStyles="!border-gray-darker !w-full"
+              />
+              <Button
+                type="submit"
+                disabled={disabled}
+                customStyles="border border-gray-darker !p-2.5"
+                buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
+              />
+            </form>
+          )}
         </div>
       </div>
     )

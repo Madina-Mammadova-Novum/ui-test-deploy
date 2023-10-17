@@ -2,7 +2,11 @@ import { ChatLoadMoreCtaPropTypes } from '@/lib/types';
 
 import { Button, Divider } from '@/elements';
 
-const ChatLoadMoreCta = ({ disabled, onClick }) => {
+const ChatLoadMoreCta = ({ disabled, tab, onClick }) => {
+  const ctaText = {
+    active: 'Show more active conversations',
+    archived: 'Show more archived conversations',
+  };
   return (
     <div className="flex flex-col gap-y-2.5">
       <Divider />
@@ -10,7 +14,7 @@ const ChatLoadMoreCta = ({ disabled, onClick }) => {
         customStyles="mb-2.5"
         onClick={onClick}
         disabled={disabled}
-        buttonProps={{ text: 'Show more active conversations', variant: 'tertiary', size: 'large' }}
+        buttonProps={{ text: ctaText[tab], variant: 'tertiary', size: 'large' }}
       />
     </div>
   );

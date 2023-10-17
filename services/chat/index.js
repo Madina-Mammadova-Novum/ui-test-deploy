@@ -33,3 +33,13 @@ export const deactivateChatById = async ({ data }) => {
     ...response,
   };
 };
+
+export const reactivateChatById = async ({ data }) => {
+  const body = { data };
+
+  const response = await postData(`chat/reactivate?chatId=${data}`, body);
+
+  return {
+    ...response,
+  };
+};

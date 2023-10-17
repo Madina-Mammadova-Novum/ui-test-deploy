@@ -2,10 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { HYDRATE } from 'next-redux-wrapper';
 
-import { getChatHistory, getListOfChats } from './actions';
+import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 const initialState = {
   loading: false,
+  updating: false,
   error: false,
   opened: false,
   isActiveSession: false,
@@ -110,7 +111,7 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.rejected, (state) => {
       state.loading = false;
-      state.error = 'Error';
+      state.error = true;
     });
     builder.addCase(getChatHistory.pending, (state) => {
       state.data.user.loading = true;
@@ -121,6 +122,22 @@ const chatSlice = createSlice({
     builder.addCase(getChatHistory.rejected, (state) => {
       state.data.user.loading = false;
       state.error = 'Error';
+    });
+    builder.addCase(deactivateUserChat.pending, (state) => {
+      state.updating = true;
+      state.loading = false;
+    });
+    builder.addCase(deactivateUserChat.fulfilled, (state) => {
+      state.updating = false;
+      state.loading = false;
+    });
+    builder.addCase(reactivateUserChat.pending, (state) => {
+      state.updating = true;
+      state.loading = false;
+    });
+    builder.addCase(reactivateUserChat.fulfilled, (state) => {
+      state.updating = false;
+      state.loading = false;
     });
   },
   [HYDRATE]: (state, action) => {
