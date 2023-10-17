@@ -29,6 +29,7 @@ export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
 export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
 export const onSubsSelector = ({ onSubs }) => onSubs;
+export const postFixtureSelector = ({ postFixture }) => postFixture;
 export const fixtureSelector = ({ fixture }) => fixture;
 export const chatSelector = ({ chat }) => chat;
 

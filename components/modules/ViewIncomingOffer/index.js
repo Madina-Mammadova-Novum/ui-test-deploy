@@ -6,17 +6,22 @@ import { useSession } from 'next-auth/react';
 
 import { ViewIncomingOfferPropTypes } from '@/lib/types';
 
+import { extendCountdownDataAdapter } from '@/adapters/countdownTimer';
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Loader } from '@/elements';
 import { NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { OfferDeclineForm } from '@/units';
 
-const ViewIncomingOffer = ({ closeModal, itemId }) => {
+const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
   const [step, setStep] = useState('view_offer');
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
   const { data: session } = useSession();
+
+  const { parentId } = cellData || {};
+
+  const handleCountdownExtensionSuccess = () => setOfferDetails(extendCountdownDataAdapter);
 
   useEffect(() => {
     (async () => {
@@ -61,7 +66,16 @@ const ViewIncomingOffer = ({ closeModal, itemId }) => {
         />
       );
     default:
-      return <ViewOffer setStep={setStep} closeModal={closeModal} data={offerDetails} offerId={itemId} />;
+      return (
+        <ViewOffer
+          setStep={setStep}
+          closeModal={closeModal}
+          data={offerDetails}
+          offerId={itemId}
+          parentId={parentId}
+          handleCountdownExtensionSuccess={handleCountdownExtensionSuccess}
+        />
+      );
   }
 };
 

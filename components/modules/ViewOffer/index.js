@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import classnames from 'classnames';
 import { useSession } from 'next-auth/react';
@@ -10,8 +11,9 @@ import { ViewOfferPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { extendCountdown } from '@/services/offer';
+import { updateCountdown } from '@/store/entities/negotiating/slice';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
-import { parseErrors } from '@/utils/helpers';
+import { getRoleIdentity, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -25,20 +27,26 @@ const tabs = [
   },
 ];
 
-const ViewOffer = ({ setStep, data, offerId }) => {
+const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionSuccess }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(data?.allowExtension);
   const { data: session } = useSession();
+  const { isOwner } = getRoleIdentity({ role: session?.role });
   const { voyageDetails, commercialOfferTerms, comments, countdownData } = data;
+  const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
+    setAllowCountdownExtension(false);
     const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
     if (error) {
       errorToast(parseErrors(error.message));
+      setAllowCountdownExtension(data?.allowExtension);
     } else {
-      successToast(successMessage);
       setAllowCountdownExtension(false);
+      dispatch(updateCountdown({ parentId, offerId, isOwner }));
+      handleCountdownExtensionSuccess();
+      successToast(successMessage);
     }
   };
 
