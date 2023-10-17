@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -11,6 +12,7 @@ import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { extendCountdown } from '@/services/offer';
+import { updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { Tabs } from '@/units';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -30,6 +32,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
   const { data: session } = useSession();
+  const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
@@ -38,6 +41,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params
     } else {
       successToast(successMessage);
       setAllowCountdownExtension(false);
+      dispatch(updateCountdown({ offerId }));
     }
   };
 

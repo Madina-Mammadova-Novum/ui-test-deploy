@@ -14,6 +14,7 @@ import { Button } from '@/elements';
 import { requestDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
+import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
 import { parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
@@ -28,6 +29,9 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
     },
     '/account/onsubs': {
       updateDocumentStatus: updateOnSubsDocumentStatus,
+    },
+    '/account/post-fixture': {
+      updateDocumentStatus: updatePostFixtureDocumentStatus,
     },
   };
 
