@@ -27,10 +27,8 @@ export default function OnSubsLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   const layoutConfig = {
-    data: {
-      label: 'Offer stage #3',
-      title: 'On subs',
-    },
+    withActions: false,
+    data: { label: 'Offer stage #3', title: 'On subs' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
   };

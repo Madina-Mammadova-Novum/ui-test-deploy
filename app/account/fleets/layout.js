@@ -31,13 +31,10 @@ export default function FleetsLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage, refetch]);
 
   const layoutConfig = {
-    data: {
-      label: null,
-      title: 'Тanker List',
-    },
+    withActions: true,
+    data: { label: null, title: 'Тanker List' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
-    withActions: true,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

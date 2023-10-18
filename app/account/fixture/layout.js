@@ -27,10 +27,8 @@ export default function FixtureLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   const layoutConfig = {
-    data: {
-      label: 'Offer stage #4',
-      title: 'Fixture',
-    },
+    withActions: false,
+    data: { label: 'Offer stage #4', title: 'Fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
   };

@@ -27,13 +27,10 @@ export default function PostFixtureLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   const layoutConfig = {
-    data: {
-      label: 'Offer stage #5',
-      title: 'Post fixture',
-    },
+    withActions: false,
+    data: { label: 'Offer stage #5', title: 'Post fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
-    withActions: false,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;
