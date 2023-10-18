@@ -62,10 +62,6 @@ const Negotiating = () => {
     return <Title level="3">No opened positions</Title>;
   }, [loading, offers, toggle, printExpandableRow]);
 
-  return (
-    <section className="flex min-h-[90vh] flex-col gap-y-5">
-      <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
-    </section>
-  );
+  return printContent;
 };
 export default Negotiating;

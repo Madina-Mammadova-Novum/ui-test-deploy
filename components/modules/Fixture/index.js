@@ -43,6 +43,6 @@ const Fixture = () => {
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, printExpandableRow]);
 
-  return <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>;
+  return printContent;
 };
 export default Fixture;

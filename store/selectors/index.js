@@ -140,6 +140,17 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
   };
 });
 
+export const getFixtureDataSelector = createDraftSafeSelector(fixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    role: state.role,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
 export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSelector, (state) => {
   return {
     error: state.error,

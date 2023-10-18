@@ -5,7 +5,7 @@ export function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Pre Fixture',
+        metaTitle: 'Fixture',
       },
     },
   });

@@ -3,21 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Dropdown, Title } from '@/elements';
+import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
 import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { setToggle } from '@/store/entities/positions/slice';
 import { getUserVesselsSelector } from '@/store/selectors';
-import { ComplexPagination, ToggleRows } from '@/units';
 import { useFilters } from '@/utils/hooks';
 
 export default function PositionsLayout({ children }) {
   const dispatch = useDispatch();
 
   const [pageState, setPageState] = useState(PAGE_STATE);
-
-  const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
   const { vessels, totalPages } = useSelector(getUserVesselsSelector);
   const { page, pageSize, sortOptions, sortValue } = pageState;
@@ -30,8 +27,11 @@ export default function PositionsLayout({ children }) {
     }));
   };
 
-  const { currentPage, handleSortChange, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters({ data: vessels, itemsPerPage: pageSize, initialPage: page, sortValue });
+  const paginationParams = useFilters({
+    initialPage: page,
+    itemsPerPage: pageSize,
+    data: vessels,
+  });
 
   /* fetching user positions data */
 
@@ -40,45 +40,36 @@ export default function PositionsLayout({ children }) {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchUserVessels({ page: currentPage, perPage, sortBy: sortValue.value }));
-  }, [currentPage, perPage, sortValue]);
+    dispatch(
+      fetchUserVessels({
+        page: paginationParams.currentPage,
+        perPage: paginationParams.perPage,
+        sortBy: sortValue.value,
+      })
+    );
+  }, [paginationParams.currentPage, paginationParams.perPage, sortValue]);
 
   const handleChange = (option) => {
-    handleSortChange(option);
+    paginationParams.handleSortChange(option);
     handleChangeState('sortValue', option);
   };
 
-  const handleToggle = ({ value }) => dispatch(setToggle(value));
+  const layoutConfig = {
+    data: {
+      label: null,
+      title: 'My positions',
+    },
+    pagination: {
+      ...paginationParams,
+      totalPages,
+    },
+    sorting: {
+      value: sortValue,
+      options: sortOptions,
+      onChange: handleChange,
+    },
+    onToggle: ({ value }) => dispatch(setToggle(value)),
+  };
 
-  return (
-    <div className="px-5">
-      <section className="flex min-h-[90vh] flex-col gap-y-5 px-5">
-        <div className="flex flex-col 3md:flex-row 3md:justify-between 3md:items-center gap-4 3md:gap-0 pt-5 w-full">
-          <Title level="1" className="text-2xl">
-            My positions
-          </Title>
-          <div className="flex items-center justify-between 3md:justify-end gap-x-5">
-            <ToggleRows onToggleClick={handleToggle} />
-            <Dropdown
-              label="Sort by open day:"
-              options={sortOptions}
-              defaultValue={sortValue}
-              customStyles={dropdownStyles}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        {children}
-        <ComplexPagination
-          label="fleets"
-          currentPage={currentPage}
-          numberOfPages={totalPages}
-          onPageChange={handlePageChange}
-          onSelectedPageChange={handleSelectedPageChange}
-          onChangeOffers={onChangeOffers}
-          perPage={perPage}
-        />
-      </section>
-    </div>
-  );
+  return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;
 }

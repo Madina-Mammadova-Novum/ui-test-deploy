@@ -47,7 +47,7 @@ const FixtureDetails = ({ searchedParams }) => {
     return <Title level="3">Notification is outdated.</Title>;
   }, [loading, searchedResult, printExpandableRow]);
 
-  return <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>;
+  return printContent;
 };
 
 FixtureDetails.propTypes = UrlPropTypes;

@@ -29,7 +29,7 @@ const PostFixtureDetails = ({ searchedParams }) => {
     return <Title level="3">Notification is outdated.</Title>;
   }, [loading, searchedResult, toggle]);
 
-  return <div className="grow">{printContent}</div>;
+  return printContent;
 };
 
 PostFixtureDetails.propTypes = UrlPropTypes;

@@ -19,7 +19,7 @@ const PostFixture = () => {
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, toggle]);
 
-  return <div className="grow">{printContent}</div>;
+  return printContent;
 };
 
 PostFixture.propTypes = UrlPropTypes;

@@ -1,7 +1,7 @@
 import { AccountWrapperPropTypes } from '@/lib/types';
 
-const AccountWrapper = ({ children, containerClass = 'w-full' }) => {
-  return <div className={containerClass}>{children}</div>;
+const AccountWrapper = ({ children, className }) => {
+  return <div className={`flex flex-col gap-y-2.5 grow ${className}`}>{children}</div>;
 };
 
 AccountWrapper.propTypes = AccountWrapperPropTypes;
