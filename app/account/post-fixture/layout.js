@@ -33,6 +33,7 @@ export default function PostFixtureLayout({ children }) {
     },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    withActions: false,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

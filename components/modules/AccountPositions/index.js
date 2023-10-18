@@ -16,7 +16,7 @@ const AccountPositions = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (vessels) return vessels?.map(printExpandableCard);
+    if (vessels?.length) return vessels?.map(printExpandableCard);
 
     return <Title level="3">No opened positions</Title>;
   }, [loading, vessels, printExpandableCard]);

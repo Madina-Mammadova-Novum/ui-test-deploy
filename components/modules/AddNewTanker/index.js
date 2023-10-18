@@ -10,7 +10,7 @@ import { getFleetsSelector } from '@/store/selectors';
 import { AddTankerManuallyForm, AddTankerWithImoForm } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 
-const AddNewTanker = ({ closeModal, id }) => {
+const AddNewTanker = ({ closeModal }) => {
   const [step, setStep] = useState('imo');
   const [selectedFleet, setSelectedFleet] = useState(unassignedFleetOption);
   const [q88, setQ88] = useState({});
@@ -26,7 +26,6 @@ const AddNewTanker = ({ closeModal, id }) => {
           <AddTankerManuallyForm
             closeModal={closeModal}
             goBack={() => setStep('imo')}
-            id={id}
             fleetData={selectedFleet}
             q88={q88}
           />
@@ -45,7 +44,7 @@ const AddNewTanker = ({ closeModal, id }) => {
     }
   }, [step]);
 
-  return <div>{printModal}</div>;
+  return printModal;
 };
 
 AddNewTanker.propTypes = AddNewTankerPropTypes;

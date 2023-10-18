@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, TankerSearch } from '@/modules';
+import { TankerSearch } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -12,11 +12,7 @@ export function generateMetadata() {
 }
 
 const VesselsSearch = () => {
-  return (
-    <AccountWrapper containerClass="grow px-5">
-      <TankerSearch title="Search" />
-    </AccountWrapper>
-  );
+  return <TankerSearch title="Search" />;
 };
 
 export default VesselsSearch;
