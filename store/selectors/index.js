@@ -169,7 +169,7 @@ export const getOnSubsDataSelector = createDraftSafeSelector(onSubsSelector, (st
     loading: state.loading,
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
-    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })) || [],
     offerById: state.data.offerById,
     role: state.role,
   };
