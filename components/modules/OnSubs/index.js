@@ -56,7 +56,7 @@ const OnSubs = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers?.length) return offers.map(printExpandableRow);
+    if (offers?.length) return offers?.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, printExpandableRow]);
