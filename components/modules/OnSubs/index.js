@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
@@ -13,30 +13,13 @@ import {
   ownerOnSubsHeaderDataAdapter,
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
-import { PAGE_STATE } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
-import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
 import { getOnSubsDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFilters } from '@/utils/hooks';
 
 const OnSubs = () => {
-  const dispatch = useDispatch();
-
   const { offers, toggle, loading, role } = useSelector(getOnSubsDataSelector);
   const { isOwner } = getRoleIdentity({ role });
-
-  const { page, pageSize } = PAGE_STATE;
-
-  const { currentPage, perPage } = useFilters({
-    initialPage: page,
-    itemsPerPage: pageSize,
-    data: offers,
-  });
-
-  useEffect(() => {
-    dispatch(fetchOnSubsOffers({ page: currentPage, perPage }));
-  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -73,16 +56,12 @@ const OnSubs = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (offers) return offers.map(printExpandableRow);
+    if (offers?.length) return offers.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, printExpandableRow]);
 
-  return (
-    <section className="flex min-h-[90vh] flex-col gap-y-5">
-      <div className="flex flex-col gap-y-2.5 grow">{printContent}</div>
-    </section>
-  );
+  return printContent;
 };
 
 export default OnSubs;

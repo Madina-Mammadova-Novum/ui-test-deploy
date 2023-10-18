@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
-import { setToggle } from '@/store/entities/fixture/slice';
 import { fetchFleetsWithVessels, fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
+import { setToggle } from '@/store/entities/fleets/slice';
 import { getFleetsSelector } from '@/store/selectors';
 import { useFilters } from '@/utils/hooks';
 

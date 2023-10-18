@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import { AccountTools, AccountWrapper } from '@/modules';
+import { AccountTools } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -12,9 +12,5 @@ export function generateMetadata() {
 }
 
 export default function AccountTool() {
-  return (
-    <AccountWrapper containerClass="px-5">
-      <AccountTools title="Tools" />
-    </AccountWrapper>
-  );
+  return <AccountTools title="Tools" />;
 }

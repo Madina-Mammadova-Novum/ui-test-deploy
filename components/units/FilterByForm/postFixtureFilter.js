@@ -1,3 +1,5 @@
+'use client';
+
 import { DatePicker, FormDropdown, Input } from '@/elements';
 import { options } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
