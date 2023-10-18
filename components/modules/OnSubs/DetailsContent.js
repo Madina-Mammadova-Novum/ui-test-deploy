@@ -5,7 +5,7 @@ import { DetailsContentPropTypes } from '@/lib/types';
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 import { PartyItem } from '@/units';
 
-const DetailsContent = ({ detailsData }) => {
+const DetailsContent = ({ detailsData = {} }) => {
   const {
     chartererInformation,
     tankerInformation,
@@ -13,40 +13,40 @@ const DetailsContent = ({ detailsData }) => {
     voyageDetails,
     commercialOfferTerms,
     additionalCharterPartyTerms,
-  } = detailsData;
+  } = detailsData || {};
+
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
-  const {
-    generalOfferTerms,
-    bankInfo: { bankName, bankDetails },
-  } = commercialOfferTerms || {};
+  const { generalOfferTerms, bankInfo } = commercialOfferTerms || {};
 
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
           <Title level={3}>Charterer Information</Title>
-          <FieldsetContent className="mt-2.5">
-            {chartererInformation?.map(({ title, text }) => (
-              <TextRow key={title} title={title} inlineVariant>
-                {text}
-              </TextRow>
-            ))}
-          </FieldsetContent>
+          {chartererInformation && (
+            <FieldsetContent className="mt-2.5">
+              {chartererInformation?.map(({ title, text }) => (
+                <TextRow key={title} title={title} inlineVariant>
+                  {text}
+                </TextRow>
+              ))}
+            </FieldsetContent>
+          )}
         </FieldsetWrapper>
 
         <FieldsetWrapper>
           <Title level={3}>Tanker Information</Title>
-
-          <FieldsetContent className="mt-2.5">
-            {generalInformation?.map(({ title, text, countryCode }) => (
-              <TextRow key={title} title={title} inlineVariant>
-                <ReactCountryFlag countryCode={countryCode} /> {text}
-              </TextRow>
-            ))}
-          </FieldsetContent>
-
+          {generalInformation && (
+            <FieldsetContent className="mt-2.5">
+              {generalInformation?.map(({ title, text, countryCode }) => (
+                <TextRow key={title} title={title} inlineVariant>
+                  <ReactCountryFlag countryCode={countryCode} /> {text}
+                </TextRow>
+              ))}
+            </FieldsetContent>
+          )}
           <Divider className="mt-4" />
 
           <FieldsetContent label="last 3 cargoes" className="mt-4">
@@ -131,10 +131,10 @@ const DetailsContent = ({ detailsData }) => {
           </FieldsetContent>
 
           <FieldsetContent label="Bank details" className="mt-2.5">
-            <Title level={4}>{bankName}</Title>
+            <Title level={4}>{bankInfo?.bankName}</Title>
 
             <div className="mt-1.5">
-              {bankDetails?.map(({ title, text }) => (
+              {bankInfo?.bankDetails?.map(({ title, text }) => (
                 <TextRow key={title} title={title} inlineVariant>
                   {text}
                 </TextRow>

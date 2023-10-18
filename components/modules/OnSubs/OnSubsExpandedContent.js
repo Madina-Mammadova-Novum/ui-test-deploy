@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
@@ -26,7 +28,7 @@ const tabs = [
   },
 ];
 
-const OnSubsExpandedContent = ({ detailsData, documentsData, offerId, tab }) => {
+const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, tab = 'details' }) => {
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
@@ -45,10 +47,13 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId, tab }) => 
     }
   };
 
-  const contentByTab = {
-    documents: <DocumentsContent rowsData={documentsData} offerId={offerId} />,
-    details: <DetailsContent data={detailsData} />,
-  };
+  const printContent = useMemo(() => {
+    if (currentTab === 'documents') {
+      return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
+    }
+
+    return <DetailsContent data={detailsData} />;
+  }, [currentTab, detailsData, documentsData, offerId]);
 
   return (
     <div>
@@ -82,7 +87,7 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId, tab }) => 
           />
         )}
       </div>
-      {contentByTab[currentTab]}
+      {printContent}
     </div>
   );
 };

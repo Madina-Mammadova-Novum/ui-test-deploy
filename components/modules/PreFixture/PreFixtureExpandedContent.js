@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
@@ -28,7 +28,7 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab }) => {
+const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 'details' }) => {
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
@@ -46,10 +46,13 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab })
     }
   };
 
-  const contentByTab = {
-    documents: <DocumentsContent rowsData={documentsData} />,
-    details: <DetailsContent data={detailsData} />,
-  };
+  const printContent = useMemo(() => {
+    if (currentTab === 'documents') {
+      return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
+    }
+
+    return <DetailsContent data={detailsData} />;
+  }, [currentTab, detailsData, documentsData, offerId]);
 
   return (
     <div>
@@ -83,7 +86,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab })
           />
         </div>
       </div>
-      {contentByTab[currentTab]}
+      {printContent}
     </div>
   );
 };
