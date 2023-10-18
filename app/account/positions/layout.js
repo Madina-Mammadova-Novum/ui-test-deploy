@@ -55,20 +55,15 @@ export default function PositionsLayout({ children }) {
   };
 
   const layoutConfig = {
-    data: {
-      label: null,
-      title: 'My positions',
-    },
-    pagination: {
-      ...paginationParams,
-      totalPages,
-    },
+    withActions: false,
+    data: { label: null, title: 'My positions' },
+    pagination: { ...paginationParams, totalPages },
+    onToggle: ({ value }) => dispatch(setToggle(value)),
     sorting: {
       value: sortValue,
       options: sortOptions,
       onChange: handleChange,
     },
-    onToggle: ({ value }) => dispatch(setToggle(value)),
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

@@ -30,8 +30,10 @@ const ContactUsForm = () => {
     setValue,
     clearErrors,
   } = methods;
+
   const onSubmit = async (data) => {
     setIsSubmitted(true);
+    console.log('data: ', data);
     return data;
   };
 
@@ -76,7 +78,7 @@ const ContactUsForm = () => {
         }}
         submitAction={onSubmit}
       >
-        <Title level={2} className="mb-5">
+        <Title level="2" className="mb-5">
           Write to us
         </Title>
         <div className="grid gap-y-4">

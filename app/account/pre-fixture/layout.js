@@ -27,10 +27,8 @@ export default function PreFixtureLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   const layoutConfig = {
-    data: {
-      label: 'Offer stage #2',
-      title: 'Pre fixture',
-    },
+    withActions: false,
+    data: { label: 'Offer stage #2', title: 'Pre fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
   };

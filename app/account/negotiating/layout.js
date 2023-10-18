@@ -27,10 +27,8 @@ export default function NegotiatingLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   const layoutConfig = {
-    data: {
-      label: 'Offer stage #1',
-      title: 'Negotiating',
-    },
+    withActions: false,
+    data: { label: 'Offer stage #1', title: 'Negotiating' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
   };

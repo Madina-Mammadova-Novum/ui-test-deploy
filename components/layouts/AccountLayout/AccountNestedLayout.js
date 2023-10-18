@@ -8,7 +8,7 @@ import FleetsActions from '@/modules/FleetsActions';
 import { ComplexPagination, ToggleRows } from '@/units';
 
 const AccountNestedLayout = ({ children, config }) => {
-  const { onToggle, pagination, sorting, withActions, data } = config;
+  const { data = {}, pagination = {}, sorting = {}, withActions = false, onToggle = () => null } = config;
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
