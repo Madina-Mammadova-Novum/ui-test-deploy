@@ -1,4 +1,8 @@
+'use client';
+
 import { useMemo } from 'react';
+
+import { usePathname } from 'next/navigation';
 
 import { AccountNestedLayoutPropTypes } from '@/lib/types';
 
@@ -9,6 +13,9 @@ import { ComplexPagination, ToggleRows } from '@/units';
 
 const AccountNestedLayout = ({ children, config }) => {
   const { data = {}, pagination = {}, sorting = {}, withActions = false, onToggle = () => null } = config;
+
+  const searchedParams = usePathname();
+  const existedId = searchedParams?.split('/')[3];
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
@@ -51,15 +58,17 @@ const AccountNestedLayout = ({ children, config }) => {
           {printActions}
         </div>
         <AccountWrapper>{children}</AccountWrapper>
-        <ComplexPagination
-          label="offers"
-          perPage={pagination.perPage}
-          currentPage={pagination.currentPage}
-          numberOfPages={pagination.totalPages}
-          onPageChange={pagination.handlePageChange}
-          onSelectedPageChange={pagination.handleSelectedPageChange}
-          onChangeOffers={pagination.onChangeOffers}
-        />
+        {!existedId && (
+          <ComplexPagination
+            label="offers"
+            perPage={pagination.perPage}
+            currentPage={pagination.currentPage}
+            numberOfPages={pagination.totalPages}
+            onPageChange={pagination.handlePageChange}
+            onSelectedPageChange={pagination.handleSelectedPageChange}
+            onChangeOffers={pagination.onChangeOffers}
+          />
+        )}
       </section>
     </div>
   );
