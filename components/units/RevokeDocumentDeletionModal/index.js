@@ -11,6 +11,7 @@ import ModalHeader from '../ModalHeader';
 import { RevokeDocumentDeletionModalPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
+import { ROUTES } from '@/lib';
 import { revokeDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
@@ -24,19 +25,21 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
   const dispatch = useDispatch();
 
   const pathname = usePathname();
-  const modalSettings = {
-    '/account/fixture': {
-      updateDocumentStatus: updateFixtureDocumentStatus,
-    },
-    '/account/onsubs': {
-      updateDocumentStatus: updateOnSubsDocumentStatus,
-    },
-    '/account/post-fixture': {
-      updateDocumentStatus: updatePostFixtureDocumentStatus,
-    },
-  };
 
-  const { updateDocumentStatus } = useMemo(() => modalSettings[pathname], [pathname]);
+  const modalSettings = useMemo(() => {
+    switch (pathname) {
+      case ROUTES.ACCOUNT_FIXTURE:
+        return { updateDocumentStatus: updateFixtureDocumentStatus };
+      case ROUTES.ACCOUNT_ONSUBS:
+        return { updateDocumentStatus: updateOnSubsDocumentStatus };
+      case ROUTES.ACCOUNT_POSTFIXTURE:
+        return { updateDocumentStatus: updatePostFixtureDocumentStatus };
+      default:
+        return { updateDocumentStatus: null };
+    }
+  }, [ROUTES, pathname, updateFixtureDocumentStatus, updateOnSubsDocumentStatus, updatePostFixtureDocumentStatus]);
+
+  const { updateDocumentStatus } = modalSettings;
 
   const handleRevokeDocumentDeletion = async () => {
     setLoading(true);

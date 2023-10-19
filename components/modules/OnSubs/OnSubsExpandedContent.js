@@ -52,7 +52,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
       return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
 
-    return <DetailsContent data={detailsData} />;
+    return <DetailsContent detailsData={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
   return (

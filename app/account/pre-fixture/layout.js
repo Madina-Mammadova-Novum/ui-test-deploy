@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
-import { setToggle } from '@/store/entities/negotiating/slice';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
+import { setToggle } from '@/store/entities/pre-fixture/slice';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { useFilters } from '@/utils/hooks';
 

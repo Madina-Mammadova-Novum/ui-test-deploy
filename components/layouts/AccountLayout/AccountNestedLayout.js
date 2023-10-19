@@ -12,7 +12,7 @@ import FleetsActions from '@/modules/FleetsActions';
 import { ComplexPagination, ToggleRows } from '@/units';
 
 const AccountNestedLayout = ({ children, config }) => {
-  const { data = {}, pagination = {}, sorting = {}, withActions = false, onToggle = () => null } = config;
+  const { data, pagination, sorting, onToggle, withActions = false } = config;
 
   const searchedParams = usePathname();
   const existedId = searchedParams?.split('/')[3];
@@ -20,15 +20,15 @@ const AccountNestedLayout = ({ children, config }) => {
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
   const printActions = useMemo(() => {
-    if (sorting) {
+    if (sorting?.options?.length) {
       return (
         <div className="flex justify-end gap-x-5">
           <ToggleRows onToggleClick={onToggle} />
           <Dropdown
             label="Sort by open day:"
-            options={sorting.options}
-            onChange={sorting.onChange}
-            defaultValue={sorting.value}
+            options={sorting?.options}
+            onChange={sorting?.onChange}
+            defaultValue={sorting?.value}
             customStyles={dropdownStyles}
           />
         </div>
@@ -45,7 +45,7 @@ const AccountNestedLayout = ({ children, config }) => {
     }
 
     return <ToggleRows onToggleClick={onToggle} />;
-  }, [onToggle, sorting]);
+  }, [onToggle, sorting, withActions]);
 
   return (
     <div className="px-5">
