@@ -63,6 +63,6 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus, updateCountdown } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, updateCountdown, setToggle } = preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;
