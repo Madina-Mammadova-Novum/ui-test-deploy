@@ -37,7 +37,7 @@ const ContactUsForm = () => {
     const { error } = await contactUs({ data });
 
     if (!error) setIsSubmitted(true);
-    else errorToast(error.message, errors.errors);
+    else errorToast(error.message, error.errors);
   };
 
   const onSubmitAgain = () => {
