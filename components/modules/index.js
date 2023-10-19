@@ -1,6 +1,7 @@
 import AccountContainer from '@/modules/AccountContainer';
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
+import AccountPositionDetails from '@/modules/AccountPositions/AccountPositionsDetails';
 import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AddNewTanker from '@/modules/AddNewTanker';
@@ -17,6 +18,7 @@ import DropzoneForm from '@/modules/DropzoneForm';
 import ExpandableRow from '@/modules/ExpandableRow';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
+import FixtureDetails from '@/modules/Fixture/FixtureDetails';
 import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
@@ -25,18 +27,22 @@ import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
 import Negotiating from '@/modules/Negotiating';
+import NegotiatingDetails from '@/modules/Negotiating/NegotiatingDetails';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
 import OnSubs from '@/modules/OnSubs';
+import OnSubsDetails from '@/modules/OnSubs/OnSubsDetails';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PostFixture from '@/modules/PostFixture';
+import PostFixtureDetails from '@/modules/PostFixture/PostFixtureDetails';
 import PostFixtureExpandedContent from '@/modules/PostFixture/PostFixtureExpandedContent';
 import PostFixtureExpandedFooter from '@/modules/PostFixture/PostFixtureExpandedFooter';
 import PostFixtureResultContent from '@/modules/PostFixture/PostFixtureResultContent';
 import PreFixture from '@/modules/PreFixture';
+import PreFixtureDetails from '@/modules/PreFixture/PreFixtureDetails';
 import ProfileMenu from '@/modules/ProfileMenu';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import SendCounteroffer from '@/modules/SendCounteroffer';
@@ -53,6 +59,7 @@ import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 export {
   AccountContainer,
   AccountWrapper,
+  AccountPositionDetails,
   AccountPositions,
   AccountDetails,
   CompanyInfoForm,
@@ -105,4 +112,9 @@ export {
   AddNewTanker,
   DropzoneForm,
   Chat,
+  NegotiatingDetails,
+  OnSubsDetails,
+  PreFixtureDetails,
+  PostFixtureDetails,
+  FixtureDetails,
 };

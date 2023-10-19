@@ -55,6 +55,7 @@ const TableCell = ({ cellProps }) => {
     data,
     downloadData,
     countdownData,
+    notified,
   } = cellProps;
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
@@ -87,11 +88,11 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.DATE:
         return <EditDateForm title="edit open date" state={{ ...state, action: ACTIONS.DATE }} />;
       case ACTIONS.VIEW_OFFER:
-        return <ViewIncomingOffer itemId={id} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} />;
       case ACTIONS.VIEW_COUNTEROFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
-        return <ViewIncomingOffer itemId={id} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} />;
       case ACTIONS.VIEW_SENT_OFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_FAILED_OFFER:
@@ -160,11 +161,16 @@ const TableCell = ({ cellProps }) => {
     });
   }, [actions]);
 
+  const cellColor = useMemo(() => {
+    if (notified) return 'bg-yellow-light';
+    if (disabled) return 'custom-table';
+
+    return 'bg-white';
+  }, [notified, disabled]);
+
   return (
     <td
-      className={`${
-        disabled ? 'custom-table' : 'bg-white'
-      } py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
+      className={`${cellColor} py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
       <div
         className={`flex ${

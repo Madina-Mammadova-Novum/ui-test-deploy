@@ -6,6 +6,7 @@ import { fetchFleetsWithVessels, fetchPrefilledDataToUpdate, fetchUnassignedFlee
 const initialState = {
   loading: true,
   refetch: false,
+  toggle: false,
   unassignedFleetData: [],
   prefilledUpdateVesselState: {
     loading: true,
@@ -24,6 +25,9 @@ const fleetsSlice = createSlice({
   name: 'fleets',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     refetchFleets: (state) => {
       state.refetch = !state.refetch;
     },
@@ -94,6 +98,7 @@ export const {
   addVesselToFleetsState,
   clearPrefilledState,
   updateUnassignedFleet,
+  setToggle,
 } = fleetsSlice.actions;
 
 export default fleetsSlice.reducer;

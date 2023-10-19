@@ -1,4 +1,7 @@
+'use client';
+
 import { useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
@@ -9,6 +12,7 @@ import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { extendCountdown } from '@/services/offer';
+import { updateCountdown } from '@/store/entities/on-subs/slice';
 import { Tabs } from '@/units';
 import { getRoleIdentity, parseErrors } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -24,12 +28,13 @@ const tabs = [
   },
 ];
 
-const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, tab = 'details' }) => {
+  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
   const { data: session } = useSession();
   const { isCharterer } = getRoleIdentity({ role: session?.role });
+  const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
@@ -38,17 +43,17 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
     } else {
       successToast(successMessage);
       setAllowCountdownExtension(false);
+      dispatch(updateCountdown({ offerId }));
     }
   };
 
-  const tabContent = useMemo(() => {
-    switch (currentTab) {
-      case 'documents':
-        return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
-      default:
-        return <DetailsContent detailsData={detailsData} />;
+  const printContent = useMemo(() => {
+    if (currentTab === 'documents') {
+      return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
-  }, [currentTab, documentsData]);
+
+    return <DetailsContent detailsData={detailsData} />;
+  }, [currentTab, detailsData, documentsData, offerId]);
 
   return (
     <div>
@@ -82,7 +87,7 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
           />
         )}
       </div>
-      {tabContent}
+      {printContent}
     </div>
   );
 };

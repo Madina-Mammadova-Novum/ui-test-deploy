@@ -2,13 +2,17 @@
 
 import { useState } from 'react';
 
-import { postFixtureHeaderDataAdapter, postFixtureRowsDataAdapter } from '@/adapters/post-fixture';
+import {
+  postFixtureDetailsAdapter,
+  postFixtureDocumentsTabRowsDataAdapter,
+  postFixtureHeaderDataAdapter,
+} from '@/adapters/post-fixture';
 import { Dropdown, ExpandableCardHeader, Label } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow, PostFixtureExpandedContent, PostFixtureExpandedFooter } from '@/modules';
 import { options } from '@/utils/helpers';
 
-const PostFixtureResultContent = ({ data, toggle }) => {
+const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
   const [userStore, setUserStore] = useState({
     sortByUpDownOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortByUpDownValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
@@ -30,20 +34,24 @@ const PostFixtureResultContent = ({ data, toggle }) => {
   const handleChangeCargoeTypeSort = (option) => handleChangeState('sortByCargoeTypeValue', option);
   const handleChangeUpDownSort = (option) => handleChangeState('sortByUpDownValue', option);
 
-  const printExpandableRow = (headerData) => (
-    <ExpandableRow
-      header={
-        <ExpandableCardHeader
-          headerData={postFixtureHeaderDataAdapter({ data: headerData })}
-          gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr"
+  const printExpandableRow = (rowData) => {
+    const rowHeader = postFixtureHeaderDataAdapter({ data: rowData });
+    return (
+      <ExpandableRow
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
+        footer={<PostFixtureExpandedFooter charterPartyUrl={rowData?.charterPartyUrl} />}
+        expand={toggle}
+        isOpened={isOpened}
+      >
+        <PostFixtureExpandedContent
+          offerId={rowData?.id}
+          tab={tab}
+          detailsData={postFixtureDetailsAdapter({ data: rowData })}
+          documentsData={postFixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
         />
-      }
-      footer={<PostFixtureExpandedFooter />}
-      expand={toggle}
-    >
-      <PostFixtureExpandedContent rowsData={postFixtureRowsDataAdapter({ data: headerData?.documentsInfo })} />
-    </ExpandableRow>
-  );
+      </ExpandableRow>
+    );
+  };
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 

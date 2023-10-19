@@ -42,7 +42,7 @@ const NegotiatingChartererInformation = ({ offerId }) => {
       <Title level={3} className="mb-5">
         Charterer Information
       </Title>
-      {chartererInformation.map(({ title, description, countryCode }) => (
+      {chartererInformation?.map(({ title, description, countryCode }) => (
         <TextRow title={title}>
           <ReactCountryFlag countryCode={countryCode} svg className="!w-5 !h-3 mr-1.5" /> {description}
         </TextRow>

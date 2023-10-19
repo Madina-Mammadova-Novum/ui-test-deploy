@@ -82,13 +82,13 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
   ];
 };
 
-export const incomingTabRowsDataAdapter = ({ data }) => {
+export const incomingTabRowsDataAdapter = ({ data, parentId }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => incomingTabRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => incomingTabRowDataAdapter({ data: rowData, index: index + 1, parentId }));
 };
 
-export const incomingTabRowDataAdapter = ({ data, index }) => {
+export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
   const {
@@ -165,6 +165,7 @@ export const incomingTabRowDataAdapter = ({ data, index }) => {
         },
       ],
       editable: true,
+      data: { parentId },
     },
   ];
 };
@@ -247,10 +248,10 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const offerTabDataByRole = ({ data, role }) => {
+export const offerTabDataByRole = ({ data, role, parentId }) => {
   switch (role) {
     case ROLES.OWNER:
-      return incomingTabRowsDataAdapter({ data });
+      return incomingTabRowsDataAdapter({ data, parentId });
     case ROLES.CHARTERER:
       return sentOffersTabRowsDataAdapter({ data });
     default:
@@ -338,13 +339,13 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const counteroffersTabRowsDataAdapter = ({ data }) => {
+export const counteroffersTabRowsDataAdapter = ({ data, parentId }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => counteroffersTabRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => counteroffersTabRowDataAdapter({ data: rowData, index: index + 1, parentId }));
 };
 
-export const counteroffersTabRowDataAdapter = ({ data, index }) => {
+export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
   const { vessel, createdAt, expiresAt, frozenAt, id } = data;
@@ -406,16 +407,17 @@ export const counteroffersTabRowDataAdapter = ({ data, index }) => {
         },
       ],
       editable: true,
+      data: { parentId },
     },
   ];
 };
 
-export const counteroffersTabDataByRole = ({ data, role }) => {
+export const counteroffersTabDataByRole = ({ data, role, parentId }) => {
   switch (role) {
     case ROLES.OWNER:
       return sentCounteroffersTabRowsDataAdapter({ data });
     case ROLES.CHARTERER:
-      return counteroffersTabRowsDataAdapter({ data });
+      return counteroffersTabRowsDataAdapter({ data, parentId });
     default:
       return [];
   }

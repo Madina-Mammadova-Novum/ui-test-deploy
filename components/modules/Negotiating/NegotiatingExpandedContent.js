@@ -17,8 +17,8 @@ import {
   ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
 
-const NegotiatingExpandedContent = ({ data, tabs }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0]?.value);
+const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
+  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
@@ -30,7 +30,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
       counteroffers: (
         <Table
           headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
-          rows={counteroffersTabDataByRole({ data: sent, role })}
+          rows={counteroffersTabDataByRole({ data: sent, role, parentId: data.id })}
           noDataMessage="No data provided"
         />
       ),
@@ -44,7 +44,7 @@ const NegotiatingExpandedContent = ({ data, tabs }) => {
       incoming: (
         <Table
           headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
-          rows={offerTabDataByRole({ data: incoming, role })}
+          rows={offerTabDataByRole({ data: incoming, role, parentId: data.id })}
           noDataMessage="No data provided"
         />
       ),

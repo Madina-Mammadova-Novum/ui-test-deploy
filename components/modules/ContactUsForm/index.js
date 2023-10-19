@@ -10,14 +10,16 @@ import TickInCircleSVG from '@/assets/images/checkCircle.svg';
 import { FormManager } from '@/common';
 import { Button, FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
 import { contactInfoSchema } from '@/lib/schemas';
+import { contactUs } from '@/services/contactUs';
 import { getValueWithPath } from '@/utils/helpers';
-
-const schema = yup.object({
-  ...contactInfoSchema(),
-});
+import { errorToast } from '@/utils/hooks';
 
 const ContactUsForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const schema = yup.object({
+    ...contactInfoSchema(),
+  });
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -26,19 +28,23 @@ const ContactUsForm = () => {
   const {
     reset,
     register,
-    formState: { errors, isSubmitting },
     setValue,
     clearErrors,
+    formState: { errors, isSubmitting },
   } = methods;
+
   const onSubmit = async (data) => {
-    setIsSubmitted(true);
-    return data;
+    const { error } = await contactUs({ data });
+
+    if (!error) setIsSubmitted(true);
+    else errorToast(error.message, error.errors);
   };
 
   const onSubmitAgain = () => {
     reset();
     setIsSubmitted(false);
   };
+
   const testOption = [
     { label: 'testLabel', value: 'testValue' },
     { label: 'testLabel2', value: 'testValue2' },
@@ -46,9 +52,9 @@ const ContactUsForm = () => {
 
   const handleChange = (key, value) => {
     const error = getValueWithPath(errors, key);
-    if (error) {
-      clearErrors(key);
-    }
+
+    if (error) clearErrors(key);
+
     setValue(key, value);
   };
 
@@ -76,7 +82,7 @@ const ContactUsForm = () => {
         }}
         submitAction={onSubmit}
       >
-        <Title level={2} className="mb-5">
+        <Title level="2" className="mb-5">
           Write to us
         </Title>
         <div className="grid gap-y-4">

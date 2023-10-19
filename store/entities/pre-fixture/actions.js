@@ -13,9 +13,13 @@ export const fetchPrefixtureOffers = (() => {
 
   return createAsyncThunk(PRE_FIXTURE, async ({ page, perPage }) => {
     if (!totalPages || currentPerPage !== perPage) {
-      const { recordsTotal, recordsFiltered } = await getRoleBasedPrefixture({ page, perPage });
+      const { recordsTotal, recordsFiltered, data } = await getRoleBasedPrefixture({ page, perPage });
       totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       currentPerPage = perPage;
+
+      return {
+        data: { offers: data || [], totalPages },
+      };
     }
 
     const { data } = await getRoleBasedPrefixture({ page, perPage });

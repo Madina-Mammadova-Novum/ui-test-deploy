@@ -2,9 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchPrefixtureOffers } from './actions';
 
+import { FIFTEEN_MINUTES_IN_MS } from '@/lib/constants';
+import { transformDate } from '@/utils/date';
+
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -15,6 +19,9 @@ const preFixtureSlice = createSlice({
   name: 'pre-fixture',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateConfirmationStatus: (state, action) => {
       const { offerId, isOwner } = action?.payload;
       state.data.offers = state.data.offers.map((offer) =>
@@ -22,6 +29,20 @@ const preFixtureSlice = createSlice({
           ? {
               ...offer,
               [isOwner ? 'ownerConfirmed' : 'chartererConfirmed']: 'Confirmed',
+            }
+          : offer
+      );
+    },
+    updateCountdown: (state, action) => {
+      const { offerId } = action?.payload;
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              expiresAt: transformDate(
+                new Date(offer.expiresAt).getTime() + FIFTEEN_MINUTES_IN_MS,
+                "yyyy-MM-dd'T'HH:mm:ss.SSS"
+              ),
             }
           : offer
       );
@@ -42,6 +63,6 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, updateCountdown, setToggle } = preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;

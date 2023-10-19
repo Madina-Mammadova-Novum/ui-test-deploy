@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { HYDRATE } from 'next-redux-wrapper';
 
-import { getChatHistory, getListOfChats } from './actions';
+// eslint-disable-next-line import/no-cycle
+import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 const initialState = {
   loading: false,
+  updating: false,
   error: false,
   opened: false,
   isActiveSession: false,
@@ -51,6 +53,9 @@ const chatSlice = createSlice({
     setUser: (state, action) => {
       state.data.user.data = action.payload;
     },
+    setUpdate: (state, action) => {
+      state.updating = action.payload;
+    },
     setUserConversation: (state, { payload }) => {
       state.data.user.messages = payload;
     },
@@ -85,9 +90,19 @@ const chatSlice = createSlice({
     resetUser: (state) => {
       state.data.user = initialState.data.user;
     },
+
     messageAlert: (state, { payload }) => {
-      const updatedState = state.data.active.map((user) => {
-        if (user.contentId === payload.contentId) {
+      if (state.data.support.chatId === payload?.id) {
+        const updatedMessage = {
+          ...state.data.support,
+          unreadedMessages: payload.messageCount,
+        };
+
+        state.data.support = updatedMessage;
+      }
+
+      const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload?.contentId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -95,7 +110,8 @@ const chatSlice = createSlice({
         }
         return user;
       });
-      state.data.active = updatedState;
+
+      state.data.active = updatedActiveState;
     },
   },
   extraReducers: (builder) => {
@@ -104,13 +120,14 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
+      state.updating = payload.updating;
       state.data.active = payload.active;
       state.data.archived = payload.archived;
       state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {
       state.loading = false;
-      state.error = 'Error';
+      state.error = true;
     });
     builder.addCase(getChatHistory.pending, (state) => {
       state.data.user.loading = true;
@@ -121,6 +138,22 @@ const chatSlice = createSlice({
     builder.addCase(getChatHistory.rejected, (state) => {
       state.data.user.loading = false;
       state.error = 'Error';
+    });
+    builder.addCase(deactivateUserChat.pending, (state) => {
+      state.updating = true;
+      state.loading = false;
+    });
+    builder.addCase(deactivateUserChat.fulfilled, (state) => {
+      state.updating = false;
+      state.loading = false;
+    });
+    builder.addCase(reactivateUserChat.pending, (state) => {
+      state.updating = true;
+      state.loading = false;
+    });
+    builder.addCase(reactivateUserChat.fulfilled, (state) => {
+      state.updating = false;
+      state.loading = false;
     });
   },
   [HYDRATE]: (state, action) => {
@@ -135,6 +168,7 @@ export const {
   setUser,
   setChatFilter,
   setOpenedChat,
+  setUpdate,
   setConversation,
   setCollapsedChat,
   setUserConversation,

@@ -1,58 +1,35 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { UrlPropTypes } from '@/lib/types';
 
-import { Label, Loader, Title } from '@/elements';
-import { PAGE_STATE } from '@/lib/constants';
+import { Loader, Title } from '@/elements';
 import { PostFixtureResultContent } from '@/modules';
-import { getUserFixtures } from '@/services';
-import { ComplexPagination, FilterByForm, PostFixtureFilter, ToggleRows } from '@/units';
-import { useFetch, useFilters } from '@/utils/hooks';
+import { getPostFixtureDataSelector } from '@/store/selectors';
+import { FilterByForm, PostFixtureFilter } from '@/units';
 
 const PostFixture = () => {
-  const [toggle, setToggle] = useState({ value: false });
-  const [data, isLoading] = useFetch(getUserFixtures);
-
-  const { page, pageSize } = PAGE_STATE;
-
-  const { numberOfPages, items, currentPage, handlePageChange, handleSelectedPageChange, onChangeOffers, perPage } =
-    useFilters({ initialPage: page, itemsPerPage: pageSize, data });
+  const { offers, loading, toggle } = useSelector(getPostFixtureDataSelector);
 
   const printContent = useMemo(() => {
-    if (isLoading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (items?.length) return <PostFixtureResultContent data={items} toggle={toggle} />;
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
 
-    return <Title level="3">No opened positions</Title>;
-  }, [isLoading, items, toggle]);
-
-  return (
-    <section className="flex min-h-[90vh] flex-col gap-y-5">
-      <div className="items-center pt-5">
-        <div className="flex flex-col">
-          <Label className="text-xs-sm">Offer stage #5</Label>
-          <div className="flex justify-between">
-            <Title level="1">Post-fixture</Title>
-            <ToggleRows onToggleClick={setToggle} />
-          </div>
+    if (offers?.length)
+      return (
+        <div className="flex flex-col gap-y-5">
           <FilterByForm>
             <PostFixtureFilter />
           </FilterByForm>
+          <PostFixtureResultContent data={offers} toggle={toggle} />
         </div>
-      </div>
-      <div className="grow">{printContent}</div>
-      <ComplexPagination
-        label="offers"
-        perPage={perPage}
-        currentPage={currentPage}
-        numberOfPages={numberOfPages}
-        onPageChange={handlePageChange}
-        onSelectedPageChange={handleSelectedPageChange}
-        onChangeOffers={onChangeOffers}
-      />
-    </section>
-  );
+      );
+
+    return <Title level="3">No offers at current stage</Title>;
+  }, [loading, offers, toggle]);
+
+  return printContent;
 };
 
 PostFixture.propTypes = UrlPropTypes;

@@ -12,9 +12,10 @@ import UploadSVG from '@/assets/images/upload.svg';
 import { FormManager } from '@/common';
 import { uploadFileSchema } from '@/lib/schemas';
 import { DropzoneForm } from '@/modules';
+import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const UploadForm = ({ onSubmit = () => {} }) => {
+const UploadForm = ({ onSubmit = async () => {} }) => {
   const schema = yup.object().shape({
     ...uploadFileSchema(),
   });
@@ -25,6 +26,18 @@ const UploadForm = ({ onSubmit = () => {} }) => {
   const [toggle, setToggle] = useState(false);
 
   const handleToggle = () => setToggle((prev) => !prev);
+
+  const handleResetFields = () => {
+    methods.reset((formValues) => {
+      resetObjectFields(formValues);
+      return formValues;
+    });
+  };
+
+  const handleSubmit = async (formData) => {
+    await onSubmit(formData);
+    handleResetFields();
+  };
 
   const printTextCta = useMemo(() => {
     switch (toggle) {
@@ -54,7 +67,7 @@ const UploadForm = ({ onSubmit = () => {} }) => {
 
       <FormProvider {...methods}>
         <FormManager
-          submitAction={onSubmit}
+          submitAction={handleSubmit}
           className={`${toggle ? 'opacity-100' : 'py-0 opacity-0'} transition-all pt-5 duration-500 `}
           submitButton={{
             text: 'Upload file',

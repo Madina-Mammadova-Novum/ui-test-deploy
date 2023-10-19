@@ -28,7 +28,9 @@ export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
 export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
-export const onSubsSelector = ({ onSubs }) => onSubs;
+export const onSubsSelector = ({ onSubs, user }) => ({ ...onSubs, role: user.role });
+export const fixtureSelector = ({ fixture, user }) => ({ ...fixture, role: user.role });
+export const postFixtureSelector = ({ postFixture, user }) => ({ ...postFixture, role: user.role });
 export const chatSelector = ({ chat }) => chat;
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
@@ -70,6 +72,7 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
   return {
     loading: state?.loading,
     error: state?.error,
+    toggle: state.toggle,
     vessels: state?.data?.vessels,
     unassignedVessel: state?.data?.unassigned,
     totalPages: state?.data?.totalPages,
@@ -77,16 +80,20 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 });
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+  const newMessagesCounter = state?.data?.active?.filter(({ messageCount }) => messageCount > 0)?.length;
+
   return {
     opened: state.opened,
     loading: state.loading,
-    search: state.filterParams.searchValue,
-    tab: state.filterParams.tabValue,
-    limit: state.filterParams.limit,
+    updating: state.updating,
+    search: state.filterParams?.searchValue,
+    tab: state.filterParams?.tabValue,
+    limit: state.filterParams?.limit,
     chats: state.data,
     support: {
       chatId: state?.data?.support?.chatId,
       vessel: state?.data?.support?.broker,
+      unreadedMessages: state?.data?.support?.unreadedMessages,
     },
     collapsedChats: {
       counter: state.data.collapsed.length,
@@ -94,9 +101,31 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     },
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
-    newMessagesCounter: state?.data?.active.forEach((chat) => chat?.messageCount > 0),
+    newMessagesCounter,
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
+  };
+});
+
+export const getFixtureSelector = createDraftSafeSelector(fixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    role: state.role,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
+export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    role: state.role,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };
 });
 
@@ -104,9 +133,21 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
   return {
     error: state.error,
     loading: state.loading,
+    toggle: state.toggle,
     totalPages: state.data?.totalPages,
     role: state.role,
-    data: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+  };
+});
+
+export const getFixtureDataSelector = createDraftSafeSelector(fixtureSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    role: state.role,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };
 });
 
@@ -114,8 +155,21 @@ export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSel
   return {
     error: state.error,
     loading: state.loading,
+    toggle: state.toggle,
     totalPages: state.data?.totalPages,
     offers: state.data.offers,
+    offerById: state.data.offerById,
+    role: state.role,
+  };
+});
+
+export const getOnSubsDataSelector = createDraftSafeSelector(onSubsSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })) || [],
     offerById: state.data.offerById,
     role: state.role,
   };
@@ -125,6 +179,7 @@ export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state)
   return {
     error: state.error,
     loading: state.loading,
+    toggle: state.toggle,
     totalPages: state.data?.totalPages,
     data: state.data?.vessels,
     refetch: state.refetch,

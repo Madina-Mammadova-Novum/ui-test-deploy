@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, Fixture } from '@/modules';
+import { Fixture } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -10,13 +10,6 @@ export function generateMetadata() {
     },
   });
 }
-
-const FixturePage = () => {
-  return (
-    <AccountWrapper containerClass="px-5">
-      <Fixture />
-    </AccountWrapper>
-  );
-};
-
-export default FixturePage;
+export default function Page() {
+  return <Fixture />;
+}

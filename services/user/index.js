@@ -228,3 +228,23 @@ export async function getRoleBasedOnSubs({ page, perPage }) {
     ...response,
   };
 }
+
+export async function getPostFixtureOffers({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getFixtureOffers({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/fixture?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}

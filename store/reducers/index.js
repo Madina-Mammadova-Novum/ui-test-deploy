@@ -4,6 +4,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import {
   chat,
+  fixture,
   fleets,
   general,
   negotiating,
@@ -11,6 +12,7 @@ import {
   offer,
   onSubs,
   positions,
+  postFixture,
   preFixture,
   search,
   user,
@@ -28,4 +30,6 @@ export const reducer = combineReducers({
   preFixture,
   chat,
   onSubs,
+  postFixture,
+  fixture,
 });
