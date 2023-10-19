@@ -14,6 +14,7 @@ import { SearchNotFound, ToggleRows } from '@/units';
 const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
   const [expandExactResults, setExpandExactResults] = useState({ value: false });
   const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
+
   if (!request) return null;
 
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };

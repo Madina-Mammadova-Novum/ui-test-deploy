@@ -37,7 +37,6 @@ const TableCell = ({ cellProps }) => {
     id,
     type,
     value,
-    marked,
     date,
     portId,
     helperData,
@@ -56,6 +55,7 @@ const TableCell = ({ cellProps }) => {
     downloadData,
     countdownData,
     notified,
+    rolled,
   } = cellProps;
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
@@ -183,9 +183,9 @@ const TableCell = ({ cellProps }) => {
             {icon && <IconWrapper iconData={{ icon }} />}
             {available && printCountryFlag}
             {printValue}
-            {marked && (
+            {rolled && (
               <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
-                {marked}
+                Rolled
               </span>
             )}
           </div>

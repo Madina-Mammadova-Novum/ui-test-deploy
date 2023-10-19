@@ -20,6 +20,9 @@ import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
   const response = await postData(`auth/forgot-password`, body);
+
+  if (!response.error) response.message = 'A link to reset your password has been sent! Please check your e-mail';
+
   return {
     ...response,
   };
@@ -106,13 +109,13 @@ export async function updateInfo({ data }) {
 
 export async function updateCompany({ data, role }) {
   const body = roleBasedUpdateCompanyAdapter({ data, role });
-  const response = await putData(`account/update-company`, body, { headers: { ...ContentTypeJson() } });
+
+  const response = await putData(`account/update-company`, body);
+
+  if (!response.error) response.message = 'You will be notified soon. The rest of the changes have been edited';
 
   return {
     ...response,
-    data: {
-      message: response.status === 200 && 'You will be notified soon. The rest of the changes have been edited',
-    },
   };
 }
 
