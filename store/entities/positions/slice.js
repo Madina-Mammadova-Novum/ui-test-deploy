@@ -7,6 +7,7 @@ import { userTankersDetailsAdapter } from '@/adapters/vessel';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     vessels: [],
     totalPages: 0,
@@ -17,6 +18,9 @@ const userSlice = createSlice({
   name: 'vessels',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateTankersByFleetId: (state, action) => {
       const { fleetId, tankers } = action.payload;
       const updatedVessel = state.data.vessels.find((vessel) => vessel.fleetId === fleetId);
@@ -41,6 +45,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateTankersByFleetId } = userSlice.actions;
+export const { updateTankersByFleetId, setToggle } = userSlice.actions;
 
 export default userSlice.reducer;

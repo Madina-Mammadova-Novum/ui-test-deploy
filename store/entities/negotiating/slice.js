@@ -8,6 +8,7 @@ import { transformDate } from '@/utils/date';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     totalPages: 0,
     offers: [],
@@ -19,6 +20,9 @@ const negotiatingSlice = createSlice({
   name: 'negotiating',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateCountdown: (state, action) => {
       const { parentId, offerId, isOwner } = action?.payload;
       state.data.offerById[parentId][isOwner ? 'incoming' : 'sent'] = state.data.offerById[parentId][
@@ -51,6 +55,6 @@ const negotiatingSlice = createSlice({
   },
 });
 
-export const { updateCountdown } = negotiatingSlice.actions;
+export const { updateCountdown, setToggle } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

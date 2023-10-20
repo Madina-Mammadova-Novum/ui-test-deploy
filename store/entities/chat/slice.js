@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 import { HYDRATE } from 'next-redux-wrapper';
 
+// eslint-disable-next-line import/no-cycle
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 const initialState = {
@@ -52,6 +53,9 @@ const chatSlice = createSlice({
     setUser: (state, action) => {
       state.data.user.data = action.payload;
     },
+    setUpdate: (state, action) => {
+      state.updating = action.payload;
+    },
     setUserConversation: (state, { payload }) => {
       state.data.user.messages = payload;
     },
@@ -86,9 +90,19 @@ const chatSlice = createSlice({
     resetUser: (state) => {
       state.data.user = initialState.data.user;
     },
+
     messageAlert: (state, { payload }) => {
-      const updatedState = state.data.active.map((user) => {
-        if (user.contentId === payload.contentId) {
+      if (state.data.support.chatId === payload?.id) {
+        const updatedMessage = {
+          ...state.data.support,
+          unreadedMessages: payload.messageCount,
+        };
+
+        state.data.support = updatedMessage;
+      }
+
+      const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload?.contentId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -96,7 +110,8 @@ const chatSlice = createSlice({
         }
         return user;
       });
-      state.data.active = updatedState;
+
+      state.data.active = updatedActiveState;
     },
   },
   extraReducers: (builder) => {
@@ -105,6 +120,7 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
+      state.updating = payload.updating;
       state.data.active = payload.active;
       state.data.archived = payload.archived;
       state.data.support = payload.support;
@@ -152,6 +168,7 @@ export const {
   setUser,
   setChatFilter,
   setOpenedChat,
+  setUpdate,
   setConversation,
   setCollapsedChat,
   setUserConversation,

@@ -28,7 +28,14 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (opened) dispatch(getListOfChats());
+    if (opened) {
+      dispatch(getListOfChats());
+      document.body.classList.add('!overflow-hidden');
+    }
+
+    return () => {
+      document.body.classList.remove('!overflow-hidden');
+    };
   }, [opened]);
 
   const handleOpen = () => dispatch(setOpenedChat(!opened));

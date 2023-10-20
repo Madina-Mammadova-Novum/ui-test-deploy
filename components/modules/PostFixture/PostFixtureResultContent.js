@@ -12,7 +12,7 @@ import { NAVIGATION_PARAMS } from '@/lib/constants';
 import { ExpandableRow, PostFixtureExpandedContent } from '@/modules';
 import { options } from '@/utils/helpers';
 
-const PostFixtureResultContent = ({ data, toggle }) => {
+const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
   const [userStore, setUserStore] = useState({
     sortByUpDownOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortByUpDownValue: NAVIGATION_PARAMS.DATA_SORT_OPTIONS[0],
@@ -40,9 +40,11 @@ const PostFixtureResultContent = ({ data, toggle }) => {
       <ExpandableRow
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
         expand={toggle}
+        isOpened={isOpened}
       >
         <PostFixtureExpandedContent
           offerId={rowData?.id}
+          tab={tab}
           detailsData={postFixtureDetailsAdapter({ data: rowData })}
           documentsData={postFixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
         />

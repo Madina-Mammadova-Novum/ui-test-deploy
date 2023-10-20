@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -26,8 +28,8 @@ const tabs = [
   },
 ];
 
-const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, tab = 'details' }) => {
+  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
   const { data: session } = useSession();
@@ -45,14 +47,13 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
     }
   };
 
-  const tabContent = useMemo(() => {
-    switch (currentTab) {
-      case 'documents':
-        return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
-      default:
-        return <DetailsContent detailsData={detailsData} />;
+  const printContent = useMemo(() => {
+    if (currentTab === 'documents') {
+      return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
-  }, [currentTab, documentsData]);
+
+    return <DetailsContent detailsData={detailsData} />;
+  }, [currentTab, detailsData, documentsData, offerId]);
 
   return (
     <div>
@@ -86,7 +87,7 @@ const OnSubsExpandedContent = ({ detailsData, documentsData, offerId }) => {
           />
         )}
       </div>
-      {tabContent}
+      {printContent}
     </div>
   );
 };

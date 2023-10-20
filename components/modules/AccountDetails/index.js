@@ -26,7 +26,7 @@ const AccountDetails = () => {
   }, [isCharterer]);
 
   return (
-    <section className="flex justify-start items-start flex-col gap-2.5">
+    <section className="flex justify-start items-start flex-col px-5 gap-2.5">
       <Title level="1" className="py-5">
         Account information
       </Title>

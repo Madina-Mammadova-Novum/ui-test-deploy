@@ -8,7 +8,6 @@ import { linkImageAdapter } from '@/adapters/global';
 import { HoverableIcon, NextImage, NextLink } from '@/elements';
 import { getSingleType } from '@/services/singleType';
 import { getStrapiMedia } from '@/utils';
-import { makeId } from '@/utils/helpers';
 
 const SocialNetworks = () => {
   const [socialLinks, setSocialLinks] = useState([]);
@@ -28,7 +27,12 @@ const SocialNetworks = () => {
     <div className="flex gap-x-2.5">
       {socialLinks.map((socialLink) => {
         return (
-          <NextLink key={makeId()} href={delve(socialLink, 'path')} title={delve(socialLink, 'title')}>
+          <NextLink
+            key={socialLink}
+            href={delve(socialLink, 'path')}
+            target="_blank"
+            title={delve(socialLink, 'title')}
+          >
             <HoverableIcon
               className="border border-gray-darker rounded-md"
               icon={

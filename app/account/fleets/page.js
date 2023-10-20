@@ -2,7 +2,7 @@ import { UrlPropTypes } from '@/lib/types';
 
 import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, Fleets } from '@/modules';
+import { Fleets } from '@/modules';
 
 export async function generateMetadata() {
   return metaData({
@@ -14,15 +14,10 @@ export async function generateMetadata() {
   });
 }
 
-const FleetsPage = ({ searchParams }) => {
-  const urlParams = searchParamsAdapter({ data: searchParams });
-  return (
-    <AccountWrapper containerClass="px-5">
-      <Fleets searchParams={urlParams} />
-    </AccountWrapper>
-  );
-};
+export default function Page({ searchParams }) {
+  const searchedParams = searchParamsAdapter({ data: searchParams });
 
-FleetsPage.propTypes = UrlPropTypes;
+  return <Fleets searchedParams={searchedParams} />;
+}
 
-export default FleetsPage;
+Page.propTypes = UrlPropTypes;

@@ -33,7 +33,7 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
 
   return (
     <>
-      <Title level="3" className="uppercase text-xsm py-5">
+      <Title level="3" className="uppercase text-xsm">
         {title}
       </Title>
 

@@ -8,6 +8,7 @@ import { transformDate } from '@/utils/date';
 const initialState = {
   loading: true,
   error: null,
+  toggle: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -18,6 +19,9 @@ const onSubsSlice = createSlice({
   name: 'on-subs',
   initialState,
   reducers: {
+    setToggle: (state, { payload }) => {
+      state.toggle = payload;
+    },
     updateDocumentStatus: (state, action) => {
       const { documentId, status } = action?.payload;
       state.data.offers = state.data.offers.map((offer) => ({
@@ -66,6 +70,6 @@ const onSubsSlice = createSlice({
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList, updateCountdown } = onSubsSlice.actions;
+export const { updateDocumentStatus, updateDocumentList, updateCountdown, setToggle } = onSubsSlice.actions;
 
 export default onSubsSlice.reducer;

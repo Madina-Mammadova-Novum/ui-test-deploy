@@ -28,9 +28,10 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 'details' }) => {
+  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
+
   const { data: session } = useSession();
   const dispatch = useDispatch();
 
@@ -45,15 +46,13 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params
     }
   };
 
-  const tabContent = useMemo(() => {
-    if (currentTab === 'documents' || params.documents) {
-      return <DocumentsContent rowsData={documentsData} />;
+  const printContent = useMemo(() => {
+    if (currentTab === 'documents') {
+      return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
-    if (currentTab === 'details' || currentTab === params.details) {
-      return <DetailsContent data={detailsData} />;
-    }
+
     return <DetailsContent data={detailsData} />;
-  }, [currentTab, params, documentsData, detailsData]);
+  }, [currentTab, detailsData, documentsData, offerId]);
 
   return (
     <div>
@@ -87,7 +86,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, params
           />
         </div>
       </div>
-      {tabContent}
+      {printContent}
     </div>
   );
 };
