@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { getServerSession } from 'next-auth';
 
 import { responseOwnerPrefixtureAdapter } from '@/adapters';
@@ -8,12 +9,16 @@ import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
-  const { skip, pageSize } = JSON.parse(req.body);
+  const { skip, pageSize, filters } = JSON.parse(req.body);
+  const queryParams = Object.keys(filters).reduce((result, curr) => {
+    result += filters[curr] ? `&${curr}=${filters[curr]}` : '';
+    return result;
+  }, '');
 
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/${session.role}/deals/postfixture?Skip=${skip}&PageSize=${pageSize}`),
+    path: getApiURL(`v1/${session.role}/deals/postfixture?Skip=${skip}&PageSize=${pageSize}${queryParams}`),
     dataAdapter: responseOwnerPrefixtureAdapter,
     requestMethod: 'GET',
     options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },

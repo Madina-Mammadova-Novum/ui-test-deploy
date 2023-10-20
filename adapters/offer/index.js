@@ -340,7 +340,8 @@ export function voyageDetailsAdapter({ data }) {
 
 export function confirmCounterofferDetailsAdapter({ data }) {
   if (!data) return null;
-  const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms, comment, value } = data;
+  const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms, comment, value } =
+    data;
 
   return {
     commercialOfferTerms: {

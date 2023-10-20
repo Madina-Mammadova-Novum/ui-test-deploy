@@ -1,13 +1,17 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
 import { FilterByFormPropTypes } from '@/lib/types';
 
+import { filtersAdapter } from '@/adapters/post-fixture';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
+import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
+import { postFixtureSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
@@ -15,9 +19,14 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
   const schema = yup.object().shape({});
 
   const methods = useHookFormParams({ schema });
+  const dispatch = useDispatch();
+  const {
+    data: { perPage },
+  } = useSelector(postFixtureSelector);
 
   const onSubmit = (formData) => {
-    return { formData };
+    const filters = filtersAdapter(formData);
+    dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters }));
   };
 
   const onReset = () => resetForm(methods, '');
@@ -28,7 +37,7 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
         {title}
       </Title>
 
-      <div className="bg-white rounded-base shadow-xmd p-5 flex w-full">
+      <div className="bg-white rounded-base shadow-xmd p-5 flex w-full relative">
         <FormProvider {...methods}>
           <FormManager
             showReset
@@ -39,6 +48,7 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
               text: 'Show results',
               variant: 'secondary',
               size: 'large',
+              buttonContainerClassName: 'absolute right-10 bottom-5',
             }}
           >
             {children}

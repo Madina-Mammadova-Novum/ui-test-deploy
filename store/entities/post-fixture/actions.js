@@ -11,17 +11,17 @@ export const fetchPostFixtureOffers = (() => {
   let totalPages;
   let currentPerPage;
 
-  return createAsyncThunk(POST_FIXTURE, async ({ page, perPage }) => {
+  return createAsyncThunk(POST_FIXTURE, async ({ page, perPage, filters = {} }) => {
     if (!totalPages || currentPerPage !== perPage) {
-      const { recordsTotal, recordsFiltered } = await getPostFixtureOffers({ page, perPage });
+      const { recordsTotal, recordsFiltered } = await getPostFixtureOffers({ page, perPage, filters });
       totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       currentPerPage = perPage;
     }
 
-    const { data } = await getPostFixtureOffers({ page, perPage });
+    const { data } = await getPostFixtureOffers({ page, perPage, filters });
 
     return {
-      data: { offers: data, totalPages },
+      data: { offers: data, totalPages, filters, perPage },
     };
   });
 })();

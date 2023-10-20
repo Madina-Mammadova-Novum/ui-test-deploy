@@ -18,7 +18,7 @@ const PostFixture = () => {
   const [toggle, setToggle] = useState({ value: false });
 
   const {
-    data: { offers, totalPages },
+    data: { offers, totalPages, filters },
     loading,
   } = useSelector(postFixtureSelector);
 
@@ -31,7 +31,7 @@ const PostFixture = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchPostFixtureOffers({ page: currentPage, perPage }));
+    dispatch(fetchPostFixtureOffers({ page: currentPage, perPage, filters }));
   }, [currentPage, perPage]);
 
   const printContent = useMemo(() => {

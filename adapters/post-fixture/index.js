@@ -375,3 +375,15 @@ export const postFixtureDocumentsTabRowsDataAdapter = ({ data }) => {
 
   return data.map((rowData, index) => postFixtureDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
+
+export const filtersAdapter = (formData = {}) => {
+  const { cargoId, cargoType, tankerName, rangeDate } = formData || {};
+
+  return {
+    CargoCode: cargoId,
+    CargoTypeId: cargoType?.value,
+    TankerName: tankerName,
+    FixtureDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
+    FixtureDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
+  };
+};
