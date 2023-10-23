@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
-import { HYDRATE } from 'next-redux-wrapper';
 
 import { fetchUsers } from '@/store/entities/example/actions';
 
@@ -28,12 +27,6 @@ const userSlice = createSlice({
     builder.addCase(fetchUsers.pending, (state) => {
       state.pending = true;
     });
-  },
-  [HYDRATE]: (state, action) => {
-    return {
-      ...state,
-      ...action.payload,
-    };
   },
 });
 

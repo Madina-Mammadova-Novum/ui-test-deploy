@@ -4,12 +4,15 @@ import { Provider } from 'react-redux';
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { persistore, store } from '@/store/store';
+import { PageLoader } from '@/elements/PageLoader';
+import { getStore } from '@/store';
 
 export default function StoreManager({ children }) {
+  const { store, persistore } = getStore();
+
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistore}>
+      <PersistGate loading={<PageLoader text="Uploading..." />} persistor={persistore}>
         {children}
       </PersistGate>
     </Provider>

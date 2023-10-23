@@ -1,9 +1,5 @@
-import { Loader } from '@/elements';
+import { PageLoader } from '@/elements/PageLoader';
 
 export default function Loading() {
-  return (
-    <div className="relative h-[80vh]">
-      <Loader className="h-8 w-8 absolute top-1/2" />
-    </div>
-  );
+  return <PageLoader text="Uploading..." />;
 }

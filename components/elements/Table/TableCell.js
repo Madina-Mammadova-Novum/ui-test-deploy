@@ -183,7 +183,7 @@ const TableCell = ({ cellProps }) => {
             {icon && <IconWrapper iconData={{ icon }} />}
             {available && printCountryFlag}
             {printValue}
-            {rolled && (
+            {rolled && available && (
               <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
                 Rolled
               </span>

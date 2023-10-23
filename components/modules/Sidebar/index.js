@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -13,14 +13,24 @@ import { SidebarPropTypes } from '@/lib/types';
 import { SCREENS } from '@/lib/constants';
 import { handleCollapse } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
-import { useMediaQuery, useRoleNavigation } from '@/utils/hooks';
+import { geRoleNavigation, useMediaQuery } from '@/utils/hooks';
 
 const Sidebar = ({ containerStyles }) => {
   const dispatch = useDispatch();
+  const [pages, setPages] = useState([]);
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const { data } = useRoleNavigation();
+  useEffect(async () => {
+    const { data } = await geRoleNavigation();
+
+    setPages(data);
+
+    return () => {
+      setPages([]);
+    };
+  }, []);
 
   const { collapsed } = useSelector(getSidebarSelector);
 
@@ -31,7 +41,7 @@ const Sidebar = ({ containerStyles }) => {
   const isNotXLView = lgScreen || mdScreen || smScreen;
 
   const url = pathname + searchParams.toString();
-  const currentPage = data?.filter((item) => item.path === url)[0];
+  const currentPage = pages?.filter((item) => item.path === url)[0];
 
   const setCollapse = useCallback((value) => dispatch(handleCollapse(value)), [dispatch]);
 
@@ -52,9 +62,9 @@ const Sidebar = ({ containerStyles }) => {
       ${collapsed ? 'w-16' : 'w-64'}`}
     >
       {collapsed ? (
-        <SidebarSm data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
+        <SidebarSm data={pages} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       ) : (
-        <SidebarXl data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
+        <SidebarXl data={pages} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       )}
     </aside>
   );

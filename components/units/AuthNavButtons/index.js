@@ -19,6 +19,7 @@ const AuthNavButtons = ({ data = [] }) => {
           <LoginButton className="max-w-[115px] mx-auto" text={label} variant={linkOptions?.style} />
         </li>
       );
+
     return (
       <li key={path}>
         <LinkAsButton

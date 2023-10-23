@@ -30,11 +30,11 @@ const Chat = () => {
   useEffect(() => {
     if (opened) {
       dispatch(getListOfChats());
-      document.body.classList.add('!overflow-hidden');
+      document.body.classList.add('overflow-hidden');
     }
 
     return () => {
-      document.body.classList.remove('!overflow-hidden');
+      document.body.classList.remove('overflow-hidden');
     };
   }, [opened]);
 
