@@ -6,19 +6,7 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: 'jwt',
-    cookies: {
-      callbackUrl: {
-        name: `__Secure-next-auth.callback-url`,
-        options: {
-          sameSite: 'lax',
-          path: process.env.NEXTAUTH_URL || '/',
-          secure: true,
-        },
-      },
-    },
-  },
+  session: { strategy: 'jwt' },
   pages: {
     signIn: ROUTES.LOGIN,
   },
