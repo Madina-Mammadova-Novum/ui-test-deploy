@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-/* Actions */
-import { HYDRATE } from 'next-redux-wrapper';
 
 // eslint-disable-next-line import/no-cycle
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
@@ -155,12 +153,6 @@ const chatSlice = createSlice({
       state.updating = false;
       state.loading = false;
     });
-  },
-  [HYDRATE]: (state, action) => {
-    return {
-      ...state,
-      ...action.payload,
-    };
   },
 });
 
