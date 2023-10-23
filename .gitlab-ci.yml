@@ -14,7 +14,7 @@ build-staging:
     - export NODE_OPTIONS=--max_old_space_size=4096
     - yarn install
     - cp /var/www/web/.env .env
-    - yarn turbo-build
+    - yarn build
     - rm -rf /var/www/web/.next
     - rsync -a . /var/www/web
     - cd /var/www/web
