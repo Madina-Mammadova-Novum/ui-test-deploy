@@ -17,6 +17,7 @@ function chatSessionDataAdapter({ data }) {
     contentId,
     archieved,
     messageCount,
+    isTyping: false,
   };
 }
 
@@ -59,6 +60,7 @@ export function helpCenterDataAdapter({ data }) {
     chatId: data?.chat?.id,
     created: data?.createdAt,
     unreadedMessages: data?.chat?.messageCount,
+    isTyping: false,
     broker: {
       id: data?.broker?.id,
       name: `${data?.broker?.name} ${data?.broker?.surname}`,

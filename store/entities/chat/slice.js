@@ -89,6 +89,20 @@ const chatSlice = createSlice({
       state.data.user = initialState.data.user;
     },
 
+    typingStatus: (state, { payload }) => {
+      const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload.contentId) {
+          return {
+            ...user,
+            isTyping: true,
+          };
+        }
+        return user;
+      });
+
+      state.data.active = updatedActiveState;
+    },
+
     messageAlert: (state, { payload }) => {
       if (state.data.support.chatId === payload?.id) {
         const updatedMessage = {
@@ -166,6 +180,7 @@ export const {
   setUserConversation,
   setDeactivateConversation,
   messageAlert,
+  typingStatus,
   searchedData,
   resetUser,
   resetChatFilter,

@@ -19,6 +19,7 @@ export const fetchUserVessels = (() => {
     }
 
     const { data } = await getUserPositions({ page, perPage, sortBy });
+
     const generator = getVesselsById(data);
     const { value } = generator.next();
 

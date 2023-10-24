@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { CompanyInfoFormPropTypes } from '@/lib/types';
@@ -20,18 +19,18 @@ import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
+  const dispatch = useDispatch();
+
   const [sameAddress, setSameAddress] = useState(false);
 
-  const dispatch = useDispatch();
-  const { data: session } = useSession();
-  const { data } = useSelector(getUserDataSelector);
-
-  const { isCharterer, isOwner } = getRoleIdentity({ role: session?.role });
+  const { data, role } = useSelector(getUserDataSelector);
 
   const schema = yup.object({
     ...companyDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
   });
+
+  const { isCharterer, isOwner } = getRoleIdentity({ role });
 
   const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
@@ -43,11 +42,11 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { error, data: response } = await updateCompany({ data: formData, role: data?.role });
+    const { error, message } = await updateCompany({ data: formData, role });
 
     if (!error) {
       dispatch(fetchUserProfileData());
-      successToast(null, response.data?.message);
+      successToast(null, message);
     }
 
     if (error) errorToast(error?.message, error?.errors);

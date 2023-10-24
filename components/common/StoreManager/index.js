@@ -1,17 +1,21 @@
 'use client';
 
+import { memo } from 'react';
 import { Provider } from 'react-redux';
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { persistore, store } from '@/store/store';
+import { PageLoader } from '@/elements/PageLoader';
+import { persistore, store } from '@/store';
 
-export default function StoreManager({ children }) {
+function StoreManager({ children }) {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistore}>
+      <PersistGate loading={<PageLoader text="Updating..." />} persistor={persistore}>
         {children}
       </PersistGate>
     </Provider>
   );
 }
+
+export default memo(StoreManager);

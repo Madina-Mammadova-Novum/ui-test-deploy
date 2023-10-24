@@ -294,8 +294,8 @@ export function updateOwnerCompanyAdapter({ data }) {
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
-    numberOfVessels: imos?.countOfTankers,
-    imos: listOfImosAdapter({ data: imos?.listOfTankers }),
+    numberOfVessels: imos.countOfTankers,
+    imos: listOfImosAdapter({ data: imos.listOfTankers }),
     ...companyAddressesAdapter({ data }),
   };
 }
@@ -460,6 +460,7 @@ export function positionsAdapter({ data }) {
 
 export function positionByIdAdapter({ data }) {
   if (!data) return null;
+
   return data;
 }
 

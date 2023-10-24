@@ -16,7 +16,7 @@ const initialState = {
 };
 
 const onSubsSlice = createSlice({
-  name: 'on-subs',
+  name: 'onSubs',
   initialState,
   reducers: {
     setToggle: (state, { payload }) => {
