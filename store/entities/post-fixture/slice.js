@@ -9,6 +9,8 @@ const initialState = {
   data: {
     offers: [],
     totalPages: 0,
+    filters: {},
+    perPage: 5,
   },
 };
 

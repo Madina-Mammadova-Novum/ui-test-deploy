@@ -124,6 +124,7 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     loading: state.loading,
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
+    filters: state.data?.filters,
     role: state.role,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };

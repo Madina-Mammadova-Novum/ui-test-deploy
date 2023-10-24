@@ -226,7 +226,7 @@ export function offerDetailsAdapter({ data, role }) {
       details: [
         {
           key: 'Freight',
-          label: freight,
+          label: `${freightFormat?.value} ${freight}`,
         },
         {
           key: 'Demurrage rate',
@@ -340,7 +340,8 @@ export function voyageDetailsAdapter({ data }) {
 
 export function confirmCounterofferDetailsAdapter({ data }) {
   if (!data) return null;
-  const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms, comment } = data;
+  const { cargoType, products, freight, demurrageRate, layTime, undisputedDemurrage, paymentTerms, comment, value } =
+    data;
 
   return {
     commercialOfferTerms: {
@@ -367,7 +368,7 @@ export function confirmCounterofferDetailsAdapter({ data }) {
       details: [
         {
           key: 'Freight',
-          label: freight?.label,
+          label: `${freight?.label} ${value}`,
         },
         {
           key: 'Demurrage rate',

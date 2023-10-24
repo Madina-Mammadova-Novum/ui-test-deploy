@@ -41,6 +41,7 @@ import NextLink from '@/elements/NextLink';
 import NotFound from '@/elements/NotFound';
 import Placeholder from '@/elements/Placeholder';
 import Portal from '@/elements/Portal';
+import RangeDatePicker from '@/elements/RangeDatePicker';
 import ReActivateButton from '@/elements/ReActivateButton';
 import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
@@ -109,4 +110,5 @@ export {
   ConversationButton,
   ArchiveButton,
   ChatLoader,
+  RangeDatePicker,
 };
