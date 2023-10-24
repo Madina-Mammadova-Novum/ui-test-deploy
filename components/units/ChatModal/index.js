@@ -52,7 +52,7 @@ const ChatModal = ({ isOpened, onClose }) => {
         <div className="flex flex-col gap-y-2.5">
           <Divider />
           <p className="inline-flex mb-2.5 font-semibold py-2 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
-            Updating <Loader className="h-4 w-4" />
+            Updating... <Loader className="h-4 w-4" />
           </p>
         </div>
       );

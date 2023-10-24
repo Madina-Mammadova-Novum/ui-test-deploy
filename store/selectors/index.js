@@ -81,7 +81,6 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   const newMessagesCounter = state?.data?.active.reduce((res, curr) => res + curr.messageCount, 0);
-  console.log('newMessagesCounter: ', newMessagesCounter);
 
   const unreadedMessages = newMessagesCounter + state?.data?.support?.unreadedMessages;
 
@@ -93,6 +92,11 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     tab: state.filterParams?.tabValue,
     limit: state.filterParams?.limit,
     chats: state.data,
+    totalActive: state.data?.active?.length,
+    totalArchived: state.data?.archived?.length,
+    newMessagesCounter: unreadedMessages,
+    isActive: state.isActiveSession,
+    isDeactivated: state.isDeactivatedSession,
     support: {
       chatId: state?.data?.support?.chatId,
       vessel: state?.data?.support?.broker,
@@ -102,11 +106,6 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
       counter: state.data.collapsed.length,
       data: state.data.collapsed,
     },
-    totalActive: state.data?.active?.length,
-    totalArchived: state.data?.archived?.length,
-    newMessagesCounter: unreadedMessages,
-    isActive: state.isActiveSession,
-    isDeactivated: state.isDeactivatedSession,
   };
 });
 

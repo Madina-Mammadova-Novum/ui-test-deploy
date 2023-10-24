@@ -6,9 +6,7 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: 'jwt',
-  },
+  session: { strategy: 'jwt' },
   pages: {
     signIn: ROUTES.LOGIN,
   },

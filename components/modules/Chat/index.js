@@ -7,7 +7,7 @@ import { ChatButton } from '@/elements';
 import { SCREENS } from '@/lib/constants';
 import { chatService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
-import { resetChatFilter, setCollapsedChat, setConversation, setOpenedChat } from '@/store/entities/chat/slice';
+import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
@@ -54,7 +54,8 @@ const Chat = () => {
         status: null,
       })
     );
-    dispatch(setConversation(false));
+
+    chatService.disconnect();
   };
 
   useEffect(() => {

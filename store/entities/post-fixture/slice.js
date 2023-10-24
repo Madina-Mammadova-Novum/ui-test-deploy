@@ -13,7 +13,7 @@ const initialState = {
 };
 
 const postFixtureSlice = createSlice({
-  name: 'post-fixture',
+  name: 'postFixture',
   initialState,
   reducers: {
     setToggle: (state, { payload }) => {

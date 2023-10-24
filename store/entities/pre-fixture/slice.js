@@ -16,7 +16,7 @@ const initialState = {
 };
 
 const preFixtureSlice = createSlice({
-  name: 'pre-fixture',
+  name: 'preFixture',
   initialState,
   reducers: {
     setToggle: (state, { payload }) => {
