@@ -493,8 +493,15 @@ export function signInAdapter({ data }) {
   return {
     email,
     password,
-    redirect: true,
+    redirect: false,
     callbackUrl: ROUTES.ACCOUNT_INFO,
+  };
+}
+
+export function signOutAdapter() {
+  return {
+    redirect: false,
+    callbackUrl: ROUTES.ROOT,
   };
 }
 

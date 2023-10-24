@@ -29,14 +29,11 @@ const ResetPasswordForm = ({ params }) => {
   };
 
   const onSubmit = async (formData) => {
-    const { status, message } = await resetPassword({ data: { ...formData, ...params } });
-    if (status === 200) {
-      successToast('You have successfully changed your password');
-      handleResetFields();
-    }
-    if (message) {
-      errorToast(message);
-    }
+    const { error } = await resetPassword({ data: { ...formData, ...params } });
+    if (!error) successToast('You have successfully changed your password');
+    else errorToast(error.message, error.errors);
+
+    handleResetFields();
   };
 
   return (

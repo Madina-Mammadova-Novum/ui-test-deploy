@@ -14,9 +14,14 @@ const ExpandableCardWrapper = ({
   className = '',
   expandAll = false,
 }) => {
-  const [toggle, setToggle] = useState(expandAll ?? false);
+  const [toggle, setToggle] = useState(false);
+
   const contentRef = useRef(null);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
+
+  useEffect(() => {
+    setToggle(expandAll);
+  }, [expandAll]);
 
   useEffect(() => {
     if (isOpened) setToggle(isOpened);

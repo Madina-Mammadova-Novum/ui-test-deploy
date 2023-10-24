@@ -21,6 +21,7 @@ export const AUTHCONFIG = {
           // Any object returned will be saved in `user` property of the JWT
           return data;
         }
+
         return null;
       },
     }),

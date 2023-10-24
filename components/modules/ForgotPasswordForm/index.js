@@ -25,12 +25,10 @@ const ForgotPasswordForm = () => {
   const onSubmit = async (formData) => {
     const { error, message } = await forgotPassword({ data: formData });
 
-    if (!error) {
-      successToast(message);
-      reset();
-    }
+    if (!error) successToast(message);
+    else errorToast(error.message, error.errors);
 
-    errorToast(error.message, error.errors);
+    reset();
   };
 
   return (

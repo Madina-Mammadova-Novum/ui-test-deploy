@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import * as yup from 'yup';
 
@@ -14,8 +13,7 @@ import { loginSchema } from '@/lib/schemas';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
-  const searchParams = useSearchParams();
-  const error = searchParams.get('error');
+  const router = useRouter();
 
   const schema = yup.object().shape({
     ...loginSchema(),
@@ -31,22 +29,11 @@ const LoginForm = () => {
     formState: { errors, isSubmitting },
   } = methods;
 
-  useEffect(() => {
-    if (error === 'CredentialsSignin') {
-      errorToast('Invalid email or password');
-    }
-  }, [error]);
-
   const onSubmit = async (data) => {
-    try {
-      await signIn('credentials', signInAdapter({ data }));
-    } catch (err) {
-      console.error(err);
-    }
-
-    return () => {
-      reset();
-    };
+    const { ok, error, url } = await signIn('credentials', signInAdapter({ data }));
+    if (ok) router.replace(url);
+    if (error === 'CredentialsSignin') errorToast('Bad request', 'Incorrect email or password');
+    reset();
   };
 
   const handlePassword = (event) => {

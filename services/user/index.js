@@ -19,7 +19,8 @@ import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
-  const response = await postData(`auth/forgot-password`, body);
+
+  const response = await postData(`auth/forgot-password`, body, { headers: { ...ContentTypeJson() } });
 
   if (!response.error) response.message = 'A link to reset your password has been sent! Please check your e-mail';
 
@@ -30,7 +31,7 @@ export async function forgotPassword({ data }) {
 
 export async function resetPassword({ data }) {
   const body = resetPasswordAdapter({ data });
-  const response = await postData(`auth/reset-password`, body);
+  const response = await postData(`auth/reset-password`, body, { headers: { ...ContentTypeJson() } });
   return {
     ...response,
   };
@@ -72,6 +73,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
+
   const response = await postData(`auth/login`, body, { headers: { ...ContentTypeJson() } });
 
   return {

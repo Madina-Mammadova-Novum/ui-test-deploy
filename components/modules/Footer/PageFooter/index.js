@@ -70,7 +70,7 @@ const PageFooter = async () => {
             <ul className="space-y-2 text-black">
               {phones &&
                 phones.map(({ Phone }) => (
-                  <li key={makeId()}>
+                  <li key={Phone}>
                     <NextLink href={`tel:${Phone}`} className="text-xsm">
                       {Phone}
                     </NextLink>
@@ -78,7 +78,7 @@ const PageFooter = async () => {
                 ))}
               {emails &&
                 emails.map(({ Email }) => (
-                  <li key={makeId()}>
+                  <li key={Email}>
                     <NextLink href={`mailto:${Email}`} className="text-xsm">
                       {Email}
                     </NextLink>
