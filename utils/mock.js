@@ -977,6 +977,7 @@ export const fleetsPageHeader = [
     type: 'DOC_NAME',
     width: 166,
     isSortable: true,
+    sortType: 'alphabetical',
   },
   {
     text: 'Q88 questionaire',
@@ -1021,6 +1022,7 @@ export const unassignedFleetHeader = [
     type: 'DOC_NAME',
     width: 166,
     isSortable: true,
+    sortType: 'alphabetical',
   },
   {
     text: 'Q88 questionaire',
@@ -1086,7 +1088,7 @@ export const recentActiveCargoesHeader = [
 export const counterofferPointsToImprove = [
   'Reduce laytime by at least 6 hours',
   'Increase demurrage rate at least by 5%',
-  'Increase freight rate at least by 5%“',
+  'Increase freight rate at least by 5%',
 ];
 
 export const providedEmails = [
