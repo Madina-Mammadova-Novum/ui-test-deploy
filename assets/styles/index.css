@@ -205,12 +205,39 @@
   }
 
   .range_date .rdrCalendarWrapper {
-    @apply w-[536px];
+    @apply w-[450px];
+  }
+  .range_date .rdrMonths {
+    @apply w-[450px];
+  }
+
+  .range_date .rdrMonthAndYearWrapper {
+    @apply w-[450px];
+  }
+
+  .range_date .rdrDateDisplayWrapper {
+    @apply bg-white;
+  }
+
+  .range_date .rdrDateDisplay {
+    @apply m-0;
+  }
+
+  .range_date input {
+    @apply h-9 text-xsm;
   }
 
   .range_date-hidden .rdrMonthAndYearWrapper,
   .range_date-hidden .rdrMonths {
     @apply hidden;
+  }
+
+  .range_date-absolute .rdrMonthAndYearWrapper {
+    @apply absolute bottom-0 bg-white z-[1] translate-y-full;
+  }
+
+  .range_date-absolute .rdrMonths {
+    @apply absolute bottom-0 bg-white z-[1] translate-y-[calc(100%+60px)];
   }
 
   .position-unset {

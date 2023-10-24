@@ -148,9 +148,8 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
 
   const {
     id,
-    details: { name, summerDwt, q88QuestionnarieFile },
+    details: { name, summerDwt, q88QuestionnarieFile, tankerLink },
     imo,
-    vesselSizeCategoryId,
     status: requestStatus,
   } = data;
 
@@ -178,7 +177,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: vesselSizeCategoryId,
+      value: tankerLink?.name,
     },
     {
       id,
@@ -227,8 +226,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    details: { summerDwt, name, q88QuestionnarieFile },
-    vesselSizeCategoryId,
+    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
     status: requestStatus,
   } = data;
 
@@ -256,7 +254,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: vesselSizeCategoryId,
+      value: tankerLink?.name,
     },
     {
       id,

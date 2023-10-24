@@ -232,10 +232,10 @@ export async function getRoleBasedOnSubs({ page, perPage }) {
   };
 }
 
-export async function getPostFixtureOffers({ page, perPage }) {
+export async function getPostFixtureOffers({ page, perPage, filters }) {
   const body = basePageNavAdapter({ data: { page, perPage } });
 
-  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, body);
+  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, { ...body, filters });
 
   return {
     ...response,

@@ -5,6 +5,9 @@ import { StatusIndicatorPropTypes } from '@/lib/types';
 const StatusIndicator = ({ status = '', customStyles = '' }) => {
   const backgroundColor = useMemo(() => {
     switch (status) {
+      case 'Deletion Requested':
+      case 'Delete requested by Vessel Owner':
+      case 'Delete requested by Charterer':
       case 'New offer':
         return 'bg-yellow';
       case 'Counteroffer':

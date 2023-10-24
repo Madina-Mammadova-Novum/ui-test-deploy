@@ -9,7 +9,7 @@ import {
 } from '@/adapters/post-fixture';
 import { Dropdown, ExpandableCardHeader, Label } from '@/elements';
 import { NAVIGATION_PARAMS } from '@/lib/constants';
-import { ExpandableRow, PostFixtureExpandedContent, PostFixtureExpandedFooter } from '@/modules';
+import { ExpandableRow, PostFixtureExpandedContent } from '@/modules';
 import { options } from '@/utils/helpers';
 
 const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
@@ -39,7 +39,6 @@ const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
     return (
       <ExpandableRow
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
-        footer={<PostFixtureExpandedFooter charterPartyUrl={rowData?.charterPartyUrl} />}
         expand={toggle}
         isOpened={isOpened}
       >
