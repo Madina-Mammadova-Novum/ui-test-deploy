@@ -4,7 +4,7 @@ import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { PreFixtureDetails } from '@/modules';
 
-export function generateMetadata() {
+export async function generateMetadata() {
   return metaData({
     data: {
       seo: {

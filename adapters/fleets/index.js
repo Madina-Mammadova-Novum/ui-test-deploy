@@ -21,6 +21,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
       id: fleetId,
       label: 'fleet name',
       text: title ?? '',
+      disableTooltip: true,
     },
     {
       id: fleetId,
@@ -134,6 +135,7 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     {
       label: 'Fleet name',
       text: name ?? '',
+      disableTooltip: true,
     },
     {
       label: 'Number of tankers',
