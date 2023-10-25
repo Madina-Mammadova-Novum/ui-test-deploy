@@ -2,10 +2,15 @@ image: node
 stages:
   - build
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
+    - .next/cache/
 build-staging:
   stage: build
+  environment:
+    name: staging
+    url: https://shiplink.oyihost.com
   only:
     - stage
   tags:
@@ -13,8 +18,8 @@ build-staging:
   script:
     - export NODE_OPTIONS=--max_old_space_size=4096
     - yarn install
-    - cp /var/www/web/.env .env
-    - yarn turbo-build
+    # - cp /var/www/web/.env .env
+    - yarn build
     - rm -rf /var/www/web/.next
     - rsync -a . /var/www/web
     - cd /var/www/web
