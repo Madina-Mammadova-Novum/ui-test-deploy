@@ -22,6 +22,9 @@ build-staging:
 
 build-develop:
   stage: build
+  environment:
+    name: development
+    url: https://dev.shiplink.oyihost.com
   only:
     - develop
   tags:
@@ -29,7 +32,7 @@ build-develop:
   script:
     - export NODE_OPTIONS=--max_old_space_size=4096
     - yarn install
-    - cp /var/www/web/.env .env
+    # - cp /var/www/web/.env .env
     - yarn build
     - rm -rf /var/www/web/.next
     - rsync -a . /var/www/web
