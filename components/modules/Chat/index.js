@@ -19,7 +19,7 @@ const Chat = () => {
   const {
     opened,
     isActive,
-    newMessagesCounter,
+    newMessages,
     chats: { user },
   } = useSelector(getChatSelector);
 
@@ -47,13 +47,7 @@ const Chat = () => {
   };
 
   const handleCollapseConversation = () => {
-    dispatch(
-      setCollapsedChat({
-        chatId: user?.data?.chatId,
-        name: user?.data?.vessel?.name,
-        status: null,
-      })
-    );
+    dispatch(setCollapsedChat(user.data));
 
     chatService.disconnect();
   };
@@ -65,7 +59,7 @@ const Chat = () => {
   return (
     <>
       <ChatButton
-        counter={newMessagesCounter}
+        counter={newMessages}
         onClick={handleOpen}
         withCancel={false}
         className="fixed right-3 bottom-3 z-30"
@@ -81,7 +75,5 @@ const Chat = () => {
     </>
   );
 };
-
-Chat.propTypes = {};
 
 export default Chat;

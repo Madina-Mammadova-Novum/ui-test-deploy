@@ -2,28 +2,28 @@
 
 import { useDispatch } from 'react-redux';
 
-import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
+import { wssCleaner } from '@/services/signalR';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
 
-  const resetUserData = () => {
+  const reset = () => {
+    wssCleaner();
     dispatch(setRoleIdentity(null));
     dispatch(setIsAuthenticated(false));
   };
 
   const handleSignOut = async () => {
-    const { url } = await signOut({ ...signOutAdapter() });
-    router.replace(url ?? '/');
-    resetUserData();
+    await signOut({ ...signOutAdapter() }).then(() => reset());
+
+    return null;
   };
 
   return (

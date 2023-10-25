@@ -55,13 +55,13 @@ export const ownerSidebarAdapter = ({ role }) => {
       path: ROUTES.ACCOUNT_FLEETS,
       items: [],
     },
-    {
-      id: 7,
-      title: 'FAQ',
-      variant: 'faq',
-      path: ROUTES.FAQ,
-      items: [],
-    },
+    // {
+    //   id: 7,
+    //   title: 'FAQ',
+    //   variant: 'faq',
+    //   path: ROUTES.FAQ,
+    //   items: [],
+    // },
   ];
 };
 
@@ -120,12 +120,12 @@ export const chartererSidebarAdapter = ({ role }) => {
       path: ROUTES.ACCOUNT_TOOLS,
       items: [],
     },
-    {
-      id: 4,
-      title: 'FAQ',
-      variant: 'faq',
-      path: ROUTES.FAQ,
-      items: [],
-    },
+    // {
+    //   id: 4,
+    //   title: 'FAQ',
+    //   variant: 'faq',
+    //   path: ROUTES.FAQ,
+    //   items: [],
+    // },
   ];
 };

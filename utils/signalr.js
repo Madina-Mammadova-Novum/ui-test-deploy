@@ -85,15 +85,15 @@ export class ChatController extends SignalRController {
     });
   }
 
-  async initChat({ chatId, vessel, archieved }) {
+  async initChat(data) {
     this.messages = [];
     this.store.dispatch(setLoadConversation(true));
     this.store.dispatch(setConversation(true));
-    this.store.dispatch(setUser({ chatId, vessel, archieved }));
+    this.store.dispatch(setUser(data));
     this.store.dispatch(setUserConversation([]));
 
     try {
-      await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}` });
+      await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
       this.connection.on('ReceiveMessage', async (response) => {
         this.store.dispatch(setLoadConversation(false));
         this.updateMessage({ message: response });

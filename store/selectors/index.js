@@ -31,7 +31,7 @@ export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, ro
 export const onSubsSelector = ({ onSubs, user }) => ({ ...onSubs, role: user.role });
 export const fixtureSelector = ({ fixture, user }) => ({ ...fixture, role: user.role });
 export const postFixtureSelector = ({ postFixture, user }) => ({ ...postFixture, role: user.role });
-export const chatSelector = ({ chat }) => chat;
+export const chatSelector = ({ chat, user }) => ({ ...chat, role: user.role });
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
@@ -80,32 +80,23 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 });
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
-  const newMessagesCounter = state?.data?.active.reduce((res, curr) => res + curr.messageCount, 0);
-
-  const unreadedMessages = newMessagesCounter + state?.data?.support?.unreadedMessages;
+  const messagesCounter = state?.data?.active.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
+  const newMessages = messagesCounter + (state?.data?.support[0]?.messageCount || 0);
 
   return {
+    newMessages,
+    role: state.role,
+    chats: state.data,
     opened: state.opened,
     loading: state.loading,
     updating: state.updating,
     search: state.filterParams?.searchValue,
     tab: state.filterParams?.tabValue,
     limit: state.filterParams?.limit,
-    chats: state.data,
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
-    newMessagesCounter: unreadedMessages,
     isActive: state.isActiveSession,
     isDeactivated: state.isDeactivatedSession,
-    support: {
-      chatId: state?.data?.support?.chatId,
-      vessel: state?.data?.support?.broker,
-      unreadedMessages: state?.data?.support?.unreadedMessages,
-    },
-    collapsedChats: {
-      counter: state.data.collapsed.length,
-      data: state.data.collapsed,
-    },
   };
 });
 

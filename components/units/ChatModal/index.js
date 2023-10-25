@@ -57,8 +57,8 @@ const ChatModal = ({ isOpened, onClose }) => {
         </div>
       );
     }
-    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={active?.length <= limit} />;
-  }, [updating, tab, active, limit, handleMore]);
+    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit} />;
+  }, [updating, tab, dataByTab, limit, handleMore]);
 
   return (
     isOpened && (
