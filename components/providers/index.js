@@ -4,13 +4,13 @@ import { AuthManager, ClientSidePackages, ExtraDataManager, StoreManager, Tailwi
 
 const Providers = ({ children }) => {
   return (
-    <AuthManager>
-      <StoreManager>
+    <StoreManager>
+      <AuthManager>
         <ExtraDataManager>{children}</ExtraDataManager>
-      </StoreManager>
-      <ClientSidePackages />
-      <TailwindIndicator />
-    </AuthManager>
+        <ClientSidePackages />
+        <TailwindIndicator />
+      </AuthManager>
+    </StoreManager>
   );
 };
 

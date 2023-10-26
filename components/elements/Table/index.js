@@ -25,7 +25,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       return;
     }
 
-    const newSortedData = sortTable(rows, index, newSortDirection, sortType);
+    const newSortedData = sortTable([...data], index, newSortDirection, sortType);
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };
 

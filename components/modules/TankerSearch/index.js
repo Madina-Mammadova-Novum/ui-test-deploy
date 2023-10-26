@@ -54,7 +54,7 @@ const TankerSearch = ({ title }) => {
   const { request, loading, params, directions, searchResult } = tankerStore;
 
   return (
-    <section>
+    <>
       {title && (
         <Title level={1} className="py-5">
           {title}
@@ -74,7 +74,7 @@ const TankerSearch = ({ title }) => {
           Searching <Loader className="h-4 w-4" />
         </p>
       )}
-    </section>
+    </>
   );
 };
 

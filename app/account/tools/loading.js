@@ -1,5 +1,5 @@
-import { Loader } from '@/elements';
+import { PageLoader } from '@/elements/PageLoader';
 
 export default function Loading() {
-  return <Loader className="h-8 w-8 absolute top-1/2" />;
+  return <PageLoader text="Uploading..." />;
 }

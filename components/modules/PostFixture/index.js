@@ -19,9 +19,6 @@ const PostFixture = () => {
     if (offers?.length)
       return (
         <div className="flex flex-col gap-y-5">
-          <FilterByForm>
-            <PostFixtureFilter />
-          </FilterByForm>
           <PostFixtureResultContent data={offers} toggle={toggle} />
         </div>
       );
@@ -29,7 +26,14 @@ const PostFixture = () => {
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, toggle]);
 
-  return printContent;
+  return (
+    <>
+      <FilterByForm>
+        <PostFixtureFilter />
+      </FilterByForm>
+      {printContent}
+    </>
+  );
 };
 
 PostFixture.propTypes = UrlPropTypes;

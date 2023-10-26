@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-/* Actions */
-import { HYDRATE } from 'next-redux-wrapper';
 
 // eslint-disable-next-line import/no-cycle
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
@@ -91,6 +89,20 @@ const chatSlice = createSlice({
       state.data.user = initialState.data.user;
     },
 
+    typingStatus: (state, { payload }) => {
+      const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload.contentId) {
+          return {
+            ...user,
+            isTyping: true,
+          };
+        }
+        return user;
+      });
+
+      state.data.active = updatedActiveState;
+    },
+
     messageAlert: (state, { payload }) => {
       if (state.data.support.chatId === payload?.id) {
         const updatedMessage = {
@@ -156,12 +168,6 @@ const chatSlice = createSlice({
       state.loading = false;
     });
   },
-  [HYDRATE]: (state, action) => {
-    return {
-      ...state,
-      ...action.payload,
-    };
-  },
 });
 
 export const {
@@ -174,6 +180,7 @@ export const {
   setUserConversation,
   setDeactivateConversation,
   messageAlert,
+  typingStatus,
   searchedData,
   resetUser,
   resetChatFilter,

@@ -80,7 +80,9 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 });
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
-  const newMessagesCounter = state?.data?.active?.filter(({ messageCount }) => messageCount > 0)?.length;
+  const newMessagesCounter = state?.data?.active.reduce((res, curr) => res + curr.messageCount, 0);
+
+  const unreadedMessages = newMessagesCounter + state?.data?.support?.unreadedMessages;
 
   return {
     opened: state.opened,
@@ -90,6 +92,11 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     tab: state.filterParams?.tabValue,
     limit: state.filterParams?.limit,
     chats: state.data,
+    totalActive: state.data?.active?.length,
+    totalArchived: state.data?.archived?.length,
+    newMessagesCounter: unreadedMessages,
+    isActive: state.isActiveSession,
+    isDeactivated: state.isDeactivatedSession,
     support: {
       chatId: state?.data?.support?.chatId,
       vessel: state?.data?.support?.broker,
@@ -99,11 +106,6 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
       counter: state.data.collapsed.length,
       data: state.data.collapsed,
     },
-    totalActive: state.data?.active?.length,
-    totalArchived: state.data?.archived?.length,
-    newMessagesCounter,
-    isActive: state.isActiveSession,
-    isDeactivated: state.isDeactivatedSession,
   };
 });
 
@@ -124,6 +126,7 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     loading: state.loading,
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
+    filters: state.data?.filters,
     role: state.role,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };

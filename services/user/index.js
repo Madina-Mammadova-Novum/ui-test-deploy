@@ -19,7 +19,11 @@ import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
-  const response = await postData(`auth/forgot-password`, body);
+
+  const response = await postData(`auth/forgot-password`, body, { headers: { ...ContentTypeJson() } });
+
+  if (!response.error) response.message = 'A link to reset your password has been sent! Please check your e-mail';
+
   return {
     ...response,
   };
@@ -27,7 +31,7 @@ export async function forgotPassword({ data }) {
 
 export async function resetPassword({ data }) {
   const body = resetPasswordAdapter({ data });
-  const response = await postData(`auth/reset-password`, body);
+  const response = await postData(`auth/reset-password`, body, { headers: { ...ContentTypeJson() } });
   return {
     ...response,
   };
@@ -69,6 +73,7 @@ export async function postVeriffData({ data }) {
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
+
   const response = await postData(`auth/login`, body, { headers: { ...ContentTypeJson() } });
 
   return {
@@ -106,13 +111,13 @@ export async function updateInfo({ data }) {
 
 export async function updateCompany({ data, role }) {
   const body = roleBasedUpdateCompanyAdapter({ data, role });
-  const response = await putData(`account/update-company`, body, { headers: { ...ContentTypeJson() } });
+
+  const response = await putData(`account/update-company`, body);
+
+  if (!response.error) response.message = 'You will be notified soon. The rest of the changes have been edited';
 
   return {
     ...response,
-    data: {
-      message: response.status === 200 && 'You will be notified soon. The rest of the changes have been edited',
-    },
   };
 }
 
@@ -229,10 +234,10 @@ export async function getRoleBasedOnSubs({ page, perPage }) {
   };
 }
 
-export async function getPostFixtureOffers({ page, perPage }) {
+export async function getPostFixtureOffers({ page, perPage, filters }) {
   const body = basePageNavAdapter({ data: { page, perPage } });
 
-  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, body);
+  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, { ...body, filters });
 
   return {
     ...response,

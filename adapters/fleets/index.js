@@ -38,7 +38,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { date, id, marked, imo, port, portId, status, title, countryId, notified } = data;
+  const { date, id, marked, imo, port, portId, status, title, countryId, notified, rolled } = data;
 
   return [
     {
@@ -89,6 +89,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       name: title,
       value: status ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
+      rolled,
       editable: status,
       notified: notified || false,
       actions: [
@@ -147,9 +148,8 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
 
   const {
     id,
-    details: { name, summerDwt, q88QuestionnarieFile },
+    details: { name, summerDwt, q88QuestionnarieFile, tankerLink },
     imo,
-    vesselSizeCategoryId,
     status: requestStatus,
   } = data;
 
@@ -177,7 +177,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: vesselSizeCategoryId,
+      value: tankerLink?.name,
     },
     {
       id,
@@ -226,8 +226,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    details: { summerDwt, name, q88QuestionnarieFile },
-    vesselSizeCategoryId,
+    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
     status: requestStatus,
   } = data;
 
@@ -255,7 +254,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: vesselSizeCategoryId,
+      value: tankerLink?.name,
     },
     {
       id,

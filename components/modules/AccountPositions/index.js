@@ -19,7 +19,7 @@ const AccountPositions = () => {
     if (vessels?.length) return vessels?.map(printExpandableCard);
 
     return <Title level="3">No opened positions</Title>;
-  }, [loading, vessels, printExpandableCard]);
+  }, [loading, toggle, vessels, printExpandableCard]);
 
   return (
     <div className="grow">

@@ -23,14 +23,12 @@ const ForgotPasswordForm = () => {
     formState: { isSubmitting, errors },
   } = methods;
   const onSubmit = async (formData) => {
-    const response = await forgotPassword({ data: formData });
-    if (response.status === 200) {
-      successToast('A link to reset your password has been sent! Please check your e-mail');
-      reset();
-    }
-    if (response.error) {
-      errorToast(response.error.message.Email.join(''));
-    }
+    const { error, message } = await forgotPassword({ data: formData });
+
+    if (!error) successToast(message);
+    else errorToast(error.message, error.errors);
+
+    reset();
   };
 
   return (

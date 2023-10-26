@@ -12,8 +12,9 @@ import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFo
 import { SearchNotFound, ToggleRows } from '@/units';
 
 const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
-  const [expandExactResults, setExpandExactResults] = useState({ value: false });
-  const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
+  const [expandExactResults, setExpandExactResults] = useState(false);
+  const [expandPartialResults, setExpandPartialResults] = useState(false);
+
   if (!request) return null;
 
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
@@ -21,7 +22,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
   return data?.exactResults?.length || data?.partialResults?.length ? (
     <>
       <div className="mt-8 flex">
-        <Title level={2} className="mr-auto">
+        <Title level="2" className="mr-auto">
           Search results
         </Title>
 

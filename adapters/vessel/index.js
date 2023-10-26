@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { trimTonValue } from '@/utils/helpers';
+import { checkTankerStatus, trimTonValue } from '@/utils/helpers';
 
 export function requestSearchVesselAdapter({ data }) {
   if (data === null) return null;
@@ -423,6 +423,7 @@ export function userTankerAdapter({ data }) {
     portId: openPort?.id,
     countryId: openPort?.countryId,
     status: appearsInSearch,
+    rolled: checkTankerStatus(openDate),
     imo,
   };
 }

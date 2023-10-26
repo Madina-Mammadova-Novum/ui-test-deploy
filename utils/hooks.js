@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 
 import { getFilledArray, sortByType } from './helpers';
 
@@ -283,10 +283,8 @@ export const useSidebarActiveColor = (path) => {
   return { isActive: false };
 };
 
-export const useRoleNavigation = () => {
-  const { data: session } = useSession();
-
-  if (!session?.role) return { data: [] };
+export const geRoleNavigation = async () => {
+  const session = await getSession();
 
   switch (session?.role) {
     case ROLES.OWNER:

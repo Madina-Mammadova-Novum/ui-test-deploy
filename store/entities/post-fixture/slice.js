@@ -9,11 +9,13 @@ const initialState = {
   data: {
     offers: [],
     totalPages: 0,
+    filters: {},
+    perPage: 5,
   },
 };
 
 const postFixtureSlice = createSlice({
-  name: 'post-fixture',
+  name: 'postFixture',
   initialState,
   reducers: {
     setToggle: (state, { payload }) => {

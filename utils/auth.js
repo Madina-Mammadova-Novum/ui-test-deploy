@@ -6,9 +6,7 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: 'jwt',
-  },
+  session: { strategy: 'jwt' },
   pages: {
     signIn: ROUTES.LOGIN,
   },
@@ -23,6 +21,7 @@ export const AUTHCONFIG = {
           // Any object returned will be saved in `user` property of the JWT
           return data;
         }
+
         return null;
       },
     }),

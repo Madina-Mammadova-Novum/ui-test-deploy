@@ -7,7 +7,7 @@ import { getRoleIdentity } from '@/utils/helpers';
 const ChatSearch = ({ value, onChange, role, containerClass, ...rest }) => {
   const { isOwner } = getRoleIdentity({ role });
 
-  const printPlaceholer = isOwner ? 'Search by Vessel, IMO, product type' : 'Search by Cargoe ID, product, category';
+  const printPlaceholer = isOwner ? 'Search by Vessel, IMO, product type' : 'Search by Cargo ID, product, category';
 
   return (
     <div className={containerClass}>

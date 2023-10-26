@@ -21,11 +21,19 @@ const FormManager = ({
     formState: { isSubmitting, isDirty },
   } = useFormContext();
 
-  const { text, variant, size, disabled, icon, className: buttonClassName = 'w-full' } = submitButton;
+  const {
+    text,
+    variant,
+    size,
+    disabled,
+    icon,
+    className: buttonClassName = 'w-full',
+    buttonContainerClassName,
+  } = submitButton;
 
   const printCta = useMemo(() => {
     return showReset ? (
-      <div className="flex flex-row-reverse 3md:flex-row gap-x-2.5">
+      <div className={`flex gap-x-2.5 ${buttonContainerClassName}`}>
         <SubmitButton
           text={text}
           variant={variant}
@@ -39,8 +47,7 @@ const FormManager = ({
           text="Reset all"
           variant="tertiary"
           onClick={resetAction}
-          customStyles={`${!isDirty ? '!text-gray' : '!text-blue'} whitespace-nowrap`}
-          disabled={!isDirty}
+          customStyles="!text-blue whitespace-nowrap"
           icon={icon}
         />
       </div>

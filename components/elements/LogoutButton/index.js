@@ -1,26 +1,30 @@
 'use client';
 
-import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 import { LogoutButtonPropTypes } from '@/lib/types';
 
+import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
-  const resetUserData = useCallback(() => {
+  const resetUserData = () => {
     dispatch(setRoleIdentity(null));
     dispatch(setIsAuthenticated(false));
-  }, [dispatch]);
+  };
 
-  const handleSignOut = useCallback(async () => {
-    await signOut().then(() => resetUserData());
-  }, [resetUserData]);
+  const handleSignOut = async () => {
+    const { url } = await signOut({ ...signOutAdapter() });
+    router.replace(url ?? '/');
+    resetUserData();
+  };
 
   return (
     <Button

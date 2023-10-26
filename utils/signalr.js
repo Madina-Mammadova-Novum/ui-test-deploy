@@ -12,6 +12,7 @@ import {
   setLoadConversation,
   setUser,
   setUserConversation,
+  typingStatus,
 } from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
@@ -78,6 +79,10 @@ export class ChatController extends SignalRController {
     this.connection.on('ReceiveMessage', async (response) => {
       this.incomingMessage({ chat: response });
     });
+
+    this.connection.on('SomeoneIsTyping', async (response) => {
+      this.isTyping({ chat: response });
+    });
   }
 
   async initChat({ chatId, vessel, archieved }) {
@@ -118,6 +123,10 @@ export class ChatController extends SignalRController {
 
   incomingMessage({ chat }) {
     this.store.dispatch(messageAlert(chat));
+  }
+
+  isTyping({ chat }) {
+    this.store.dispatch(typingStatus(chat));
   }
 
   disconnect() {

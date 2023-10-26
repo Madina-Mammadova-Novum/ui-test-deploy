@@ -11,8 +11,8 @@ export const updateContactUsBlock = async (block) => {
   const embedMap = delve(response, 'data.embedMap');
   return {
     ...block,
-    phones: phones ? phones.map(({ Phone }) => Phone) : [],
-    emails: emails ? emails.map(({ Email }) => Email) : [],
+    phones: phones ? phones?.map(({ Phone }) => Phone) : [],
+    emails: emails ? emails?.map(({ Email }) => Email) : [],
     address,
     schedule,
     embedMap,
