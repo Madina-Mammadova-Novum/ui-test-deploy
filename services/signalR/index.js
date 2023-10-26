@@ -7,8 +7,3 @@ export const notificationService = new NotificationController({
 });
 
 export const chatService = new ChatController({ host: 'hubs', state: store });
-
-export const wssCleaner = () => {
-  chatService.disconnect();
-  notificationService.stop();
-};

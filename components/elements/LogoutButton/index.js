@@ -8,14 +8,12 @@ import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
-import { wssCleaner } from '@/services/signalR';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const dispatch = useDispatch();
 
   const reset = () => {
-    wssCleaner();
     dispatch(setRoleIdentity(null));
     dispatch(setIsAuthenticated(false));
   };

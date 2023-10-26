@@ -128,6 +128,7 @@ const chatSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getListOfChats.pending, (state) => {
       state.loading = true;
+      state.updating = false;
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
@@ -139,6 +140,7 @@ const chatSlice = createSlice({
     builder.addCase(getListOfChats.rejected, (state) => {
       state.loading = false;
       state.error = true;
+      state.updating = false;
     });
     builder.addCase(getChatHistory.pending, (state) => {
       state.data.user.loading = true;

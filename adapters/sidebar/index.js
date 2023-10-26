@@ -113,13 +113,13 @@ export const chartererSidebarAdapter = ({ role }) => {
         },
       ],
     },
-    {
-      id: 3,
-      title: 'Tools',
-      variant: 'tools',
-      path: ROUTES.ACCOUNT_TOOLS,
-      items: [],
-    },
+    // {
+    //   id: 3,
+    //   title: 'Tools',
+    //   variant: 'tools',
+    //   path: ROUTES.ACCOUNT_TOOLS,
+    //   items: [],
+    // },
     // {
     //   id: 4,
     //   title: 'FAQ',
