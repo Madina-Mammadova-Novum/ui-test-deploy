@@ -33,10 +33,12 @@ const PreFixtureExpandedFooter = ({ underNegotiation, offerId, offerAccepted }) 
             buttonProps={{
               text: 'You have confirmed to go on subs. We are waiting for your counterparty’s decision. You will be notified soon.',
               icon: { before: <ClockSVG viewBox="0 0 14 14" className="fill-gray w-4 h-4 ml-1" /> },
+              iconContainerStyles: 'self-baseline',
               variant: 'tertiary',
               size: 'large',
             }}
-            customStyles="w-full whitespace-nowrap 3md:grow"
+            customStyles="w-full h-auto"
+            customStylesFromWrap="w-full"
             disabled
           />
         ) : (

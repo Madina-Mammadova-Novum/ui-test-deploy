@@ -21,9 +21,12 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     cursor: 'pointer',
   }),
   container: (base, { selectProps: { menuIsOpen, options } }) => {
+    const containerMinHeight = options?.length > 11 ? 308 : options?.length * 28;
     return {
       ...base,
-      minHeight: menuIsOpen && expand && options?.length > 1 && 300,
+      minHeight: menuIsOpen && expand && options?.length > 1 && containerMinHeight,
+      // TODO: remove after testing
+      // minHeight: menuIsOpen && expand && options?.length > 1 && 300,
       minWidth: minWidth ?? 34,
     };
   },
@@ -47,9 +50,12 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     top: menuIsOpen && expand && options?.length > 1 && 40,
   }),
   menuList: (base, { selectProps: { menuIsOpen, options } }) => {
+    const menuListMinHeight = options?.length > 11 ? 308 : options?.length * 28;
     return {
       ...base,
-      minHeight: menuIsOpen && expand && options?.length > 1 && 314,
+      minHeight: menuIsOpen && expand && options?.length > 1 && menuListMinHeight,
+      // TODO: remove after testing
+      // minHeight: menuIsOpen && expand && options?.length > 1 && 314,
     };
   },
   dropdownIndicator: (base, { selectProps: { menuIsOpen } }) => ({
