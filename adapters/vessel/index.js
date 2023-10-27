@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { checkTankerStatus, trimTonValue } from '@/utils/helpers';
+import { trimTonValue } from '@/utils/helpers';
 
 export function requestSearchVesselAdapter({ data }) {
   if (data === null) return null;
@@ -413,7 +413,18 @@ export function responseGetVesselQ88Adapter({ data }) {
 export function userTankerAdapter({ data }) {
   if (!data) return {};
 
-  const { vesselId, name, openPort, appearsInSearch, openDate, imo, id, details } = data;
+  const {
+    vesselId,
+    name,
+    openPort,
+    appearsInSearch,
+    openDate,
+    imo,
+    id,
+    details,
+    expirationExtendedForFirstTime,
+    expirationExtendedForSecondTime,
+  } = data;
 
   return {
     id: vesselId ?? id,
@@ -423,7 +434,7 @@ export function userTankerAdapter({ data }) {
     portId: openPort?.id,
     countryId: openPort?.countryId,
     status: appearsInSearch,
-    rolled: checkTankerStatus(openDate),
+    rolled: expirationExtendedForFirstTime || expirationExtendedForSecondTime,
     imo,
   };
 }

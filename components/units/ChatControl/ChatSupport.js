@@ -10,18 +10,18 @@ import { chatService } from '@/services/signalR';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatSupport = ({ title, description }) => {
-  const { support } = useSelector(getChatSelector);
+  const { support } = useSelector(getChatSelector).chats;
 
   const handleOpenConversation = (e) => {
     e.stopPropagation();
 
-    chatService.initChat({ chatId: support?.chatId, vessel: support });
+    chatService.initChat(support[0]);
   };
 
   return (
     <div aria-hidden onClick={handleOpenConversation}>
       <div className="text-black relative flex items-center gap-x-3 cursor-pointer">
-        <Badge counter={support?.unreadedMessages} />
+        <Badge counter={support[0]?.messageCount} />
         <div className="w-0.5 h-10 rounded-xl bg-blue" />
         <SupportSVG />
         <div className="flex flex-col  w-5/6">

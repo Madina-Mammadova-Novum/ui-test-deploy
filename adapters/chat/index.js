@@ -16,6 +16,7 @@ function chatSessionDataAdapter({ data }) {
     chatId: id,
     contentId,
     archieved,
+    key: `${archieved ? 'archieved' : 'active'}`,
     messageCount,
     isTyping: false,
   };
@@ -31,7 +32,7 @@ function chatDealDataAdapter({ data }) {
       name: vessel?.details?.name?.toLowerCase(),
       imo: vessel?.imo?.toLowerCase(),
       type: searchedCargo?.cargoType?.toLowerCase(),
-      cargoId: searchedCargo?.code,
+      cargoId: searchedCargo?.code.toLowerCase(),
       products: products?.map((product) => ({ id: product?.id, name: product?.productName?.toLowerCase() })),
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
@@ -56,16 +57,20 @@ function chatDealDataAdapter({ data }) {
 export function helpCenterDataAdapter({ data }) {
   if (!data) return null;
 
-  return {
-    chatId: data?.chat?.id,
-    created: data?.createdAt,
-    unreadedMessages: data?.chat?.messageCount,
-    isTyping: false,
-    broker: {
-      id: data?.broker?.id,
-      name: `${data?.broker?.name} ${data?.broker?.surname}`,
+  return [
+    {
+      archieved: false,
+      chatId: data?.chat?.id,
+      created: data?.createdAt,
+      messageCount: data?.chat?.messageCount,
+      key: 'support',
+      isTyping: false,
+      vessel: {
+        id: data?.broker?.id,
+        name: `${data?.broker?.name} ${data?.broker?.surname}`,
+      },
     },
-  };
+  ];
 }
 
 export function listOfChatsDataAdapter({ data }) {
