@@ -21,15 +21,18 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
   const methods = useHookFormParams({ schema });
   const dispatch = useDispatch();
   const {
-    data: { perPage },
+    data: { perPage, sorting },
   } = useSelector(postFixtureSelector);
 
   const onSubmit = (formData) => {
     const filters = filtersAdapter(formData);
-    dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters }));
+    dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters, sorting }));
   };
 
-  const onReset = () => resetForm(methods, '');
+  const onReset = () => {
+    resetForm(methods, '');
+    dispatch(fetchPostFixtureOffers({ page: 1, perPage, sorting }));
+  };
 
   return (
     <>

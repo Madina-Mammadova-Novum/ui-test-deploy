@@ -10,6 +10,7 @@ const initialState = {
     offers: [],
     totalPages: 0,
     filters: {},
+    sorting: {},
     perPage: 5,
   },
 };
