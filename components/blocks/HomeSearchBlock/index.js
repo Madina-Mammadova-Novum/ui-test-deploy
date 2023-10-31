@@ -15,10 +15,6 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
       value: 'Search',
       label: 'Search',
     },
-    {
-      value: 'Tools',
-      label: 'Tools',
-    },
   ];
 
   const [activeTab, setActiveTab] = useState('Search');

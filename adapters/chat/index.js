@@ -31,7 +31,7 @@ function chatDealDataAdapter({ data }) {
     vessel: {
       name: vessel?.details?.name?.toLowerCase(),
       imo: vessel?.imo?.toLowerCase(),
-      type: searchedCargo?.cargoType?.toLowerCase(),
+      type: searchedCargo?.cargoType?.name?.toLowerCase(),
       cargoId: searchedCargo?.code.toLowerCase(),
       products: products?.map((product) => ({ id: product?.id, name: product?.productName?.toLowerCase() })),
       data: {

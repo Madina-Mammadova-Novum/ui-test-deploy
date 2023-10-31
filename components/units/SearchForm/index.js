@@ -33,7 +33,7 @@ const SearchForm = ({ onSubmit }) => {
   };
 
   return (
-    <div className="bg-white rounded-base shadow-xmd p-5 w-full relative">
+    <div className="bg-white rounded-base shadow-xmd p-5 mt-5 w-full relative">
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData)}
