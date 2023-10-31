@@ -9,9 +9,10 @@ import { AUTHCONFIG } from '@/utils/auth';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
-  const { skip, pageSize, filters } = JSON.parse(req.body);
-  const queryParams = Object.keys(filters).reduce((result, curr) => {
-    result += filters[curr] ? `&${curr}=${filters[curr]}` : '';
+  const { skip, pageSize, filters, sorting } = JSON.parse(req.body);
+  const queryData = { ...filters, ...sorting };
+  const queryParams = Object.keys(queryData).reduce((result, curr) => {
+    result += queryData[curr] ? `&${curr}=${queryData[curr]}` : '';
     return result;
   }, '');
 

@@ -30,7 +30,7 @@ export default function PostFixtureLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
-    data: { label: 'Offer stage #5', title: 'Post fixture' },
+    data: { label: 'Offer stage #5', title: 'Post-fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
   };

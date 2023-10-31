@@ -23,7 +23,7 @@ export const store = configureStore({
       },
     }), // could be extended by api reducers
   devTools:
-    process.env.NODE_ENV === 'development' && devToolsEnhancer({ serialize: false,  features: { persist: true } }),
+    process.env.NODE_ENV === 'development' && devToolsEnhancer({ serialize: false, features: { persist: true } }),
 });
 
 export const persistore = persistStore(store);

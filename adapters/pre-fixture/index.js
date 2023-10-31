@@ -72,7 +72,6 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     } = {},
     laycanStart,
     laycanEnd,
-    createdAt,
     expiresAt,
     frozenAt,
   } = data;
@@ -102,10 +101,6 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Laycan end',
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
-    },
-    {
-      label: 'Creation date',
-      text: transformDate(createdAt, 'MMM dd, yyyy'),
     },
     {
       label: 'Countdown',
