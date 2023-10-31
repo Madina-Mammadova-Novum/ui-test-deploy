@@ -76,7 +76,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         </div>
       )}
       <div className="flex flex-col gap-y-2.5 mt-3">
-        {[...data?.partialResults, ...data?.partialResults].map((rowHeader) => (
+        {data?.partialResults.map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
             footer={
