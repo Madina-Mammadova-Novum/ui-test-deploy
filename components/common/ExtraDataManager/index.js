@@ -35,8 +35,9 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     if (session?.accessToken !== undefined) setUserData({ role: session?.role, isValid: true });
-    if (session?.expires <= Date.now()) updateSession();
     else setUserData({ role: null, isValid: false });
+
+    if (session?.expires <= Date.now()) updateSession();
   }, [session]);
 
   return children;
