@@ -12,8 +12,8 @@ import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFo
 import { SearchNotFound, ToggleRows } from '@/units';
 
 const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
-  const [expandExactResults, setExpandExactResults] = useState(false);
-  const [expandPartialResults, setExpandPartialResults] = useState(false);
+  const [expandExactResults, setExpandExactResults] = useState({ value: false });
+  const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
 
   if (!request) return null;
 
@@ -76,7 +76,7 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         </div>
       )}
       <div className="flex flex-col gap-y-2.5 mt-3">
-        {data?.partialResults.map((rowHeader) => (
+        {[...data?.partialResults, ...data?.partialResults].map((rowHeader) => (
           <ExpandableRow
             header={<ExpandableCardHeader headerData={searchHeaderDataAdapter({ data: rowHeader })} />}
             footer={
