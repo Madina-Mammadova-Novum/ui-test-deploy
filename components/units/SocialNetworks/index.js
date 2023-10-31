@@ -28,7 +28,7 @@ const SocialNetworks = () => {
       {socialLinks.map((socialLink) => {
         return (
           <NextLink
-            key={socialLink}
+            key={socialLink?.label}
             href={delve(socialLink, 'path')}
             target="_blank"
             title={delve(socialLink, 'title')}

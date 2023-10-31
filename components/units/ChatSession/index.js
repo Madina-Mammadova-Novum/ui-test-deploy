@@ -51,8 +51,9 @@ const ChatSession = ({ data, tab }) => {
     chatService?.initChat({
       chatId: data?.chatId,
       archieved: data?.archieved,
+      typing: data?.isTyping,
+      key: data?.key,
       vessel: {
-        typing: data?.isTyping,
         name: data?.vessel?.name,
         data: data?.vessel?.data,
         cargoId: data?.vessel?.cargoId,

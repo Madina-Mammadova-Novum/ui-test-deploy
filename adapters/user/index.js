@@ -500,7 +500,7 @@ export function signInAdapter({ data }) {
 
 export function signOutAdapter() {
   return {
-    redirect: false,
+    redirect: true,
     callbackUrl: ROUTES.ROOT,
   };
 }

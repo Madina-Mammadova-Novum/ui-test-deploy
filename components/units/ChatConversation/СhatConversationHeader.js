@@ -1,7 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 import { ChatConversationCardPropTypes } from '@/lib/types';
 
 import CloseSVG from '@/assets/images/close.svg';
@@ -10,16 +6,6 @@ import { Button, Title } from '@/elements';
 import { ChatConversationCard } from '@/units';
 
 const СhatConversationHeader = ({ data, onCollapse, onClose }) => {
-  const [typing, setTyping] = useState(data.vessel.typing ?? false);
-
-  useEffect(() => {
-    setTyping(data.vessel.typing);
-
-    return () => {
-      setTyping(false);
-    };
-  }, [data.vessel.typing]);
-
   return (
     <div className="bg-black p-5 flex flex-col rounded-tr-base rounded-tl-base">
       <div className="flex justify-between items-center h-full relative">
@@ -43,7 +29,7 @@ const СhatConversationHeader = ({ data, onCollapse, onClose }) => {
       </div>
       <div className="flex justify-between">
         <ChatConversationCard data={data} contrasted />
-        {typing && <span className="text-gray-darker text-xs-sm pt-0.5">typing...</span>}
+        {/* {typing && <span className="text-gray-darker text-xs-sm pt-0.5">typing...</span>} */}
       </div>
     </div>
   );

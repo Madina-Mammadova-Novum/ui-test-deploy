@@ -64,7 +64,9 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
         </Title>
         {subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{subtitle}</p>}
         {printCargoeModal}
-        <ChatAdditional data={{ vessel, countries, additional }} isActive={setMore} onClick={handleShowMore} />
+        {!contrasted && (
+          <ChatAdditional data={{ vessel, countries, additional }} isActive={setMore} onClick={handleShowMore} />
+        )}
       </div>
     </div>
   );

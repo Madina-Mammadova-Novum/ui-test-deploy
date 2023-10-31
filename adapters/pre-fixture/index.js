@@ -9,7 +9,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   const {
     searchedCargo: {
       code,
-      cargoType: { name: cargoName } = {},
+      cargoType,
       totalQuantity,
       loadTerminal: { port: { name: portName, locode, country } = {} } = {},
     } = {},
@@ -31,7 +31,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Cargo type',
-      text: cargoName,
+      text: cargoType?.name,
     },
     {
       label: 'Quantity',
@@ -66,7 +66,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
   const {
     searchedCargo: {
       code,
-      cargoType: { name: cargoName } = {},
+      cargoType,
       totalQuantity,
       loadTerminal: { port: { name, locode, country, countryId } = {} } = {},
     } = {},
@@ -83,7 +83,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Cargo type',
-      text: cargoName,
+      text: cargoType?.name,
     },
     {
       label: 'Quantity',
@@ -179,7 +179,7 @@ export const prefixtureRowsDataAdapter = ({ data }) => {
 export const prefixtureOwnerDetailsAdapter = (data) => {
   if (!data) return {};
   const {
-    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
+    searchedCargo: { cargoType } = {},
     products = [],
     freight,
     freightFormat,
@@ -221,7 +221,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       },
     },
     cargoDetails: {
-      cargoType: cargoName,
+      cargoType: cargoType?.name,
       products,
     },
     commercialOfferTerms: {
@@ -250,7 +250,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
   const {
     vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
-    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
+    searchedCargo: { cargoType } = {},
     products = [],
     freight,
     freightFormat,
@@ -281,7 +281,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       estimatedTankerDWT: estimatedAverageTankerDWT,
     },
     cargoDetails: {
-      cargoType: cargoName,
+      cargoType: cargoType?.name,
       products,
     },
     commercialOfferTerms: {

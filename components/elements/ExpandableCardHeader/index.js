@@ -41,7 +41,7 @@ const ExpandableCardHeader = ({
 
   const printHeaderRow = (data, index) => {
     const { disableTooltip, tooltipText, trimmedText } = processTooltipData(data.text);
-    let textContent = lg ? trimmedText : tooltipText;
+    let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
     if (data.countdownData) {
       textContent = <DynamicCountdownTimer {...data.countdownData} />;
     }
@@ -57,7 +57,7 @@ const ExpandableCardHeader = ({
       >
         <HoverTooltip
           data={{ description: tooltipText }}
-          disabled={!lg || disableTooltip}
+          disabled={!lg || disableTooltip || data?.disableTooltip}
           className="!top-0 -translate-y-2/4"
         >
           <TextWithLabel

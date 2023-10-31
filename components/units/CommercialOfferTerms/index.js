@@ -13,7 +13,7 @@ import { offerSelector, searchSelector } from '@/store/selectors';
 import { calculateIntDigit, calculateTotal, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ tankerId }) => {
+const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
   const [freightEstimation, setFreightEstimation] = useState({});
   const dispatch = useDispatch();
   const {
@@ -168,6 +168,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
           disabled={initialLoading}
           asyncCall={initialLoading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
+          onExpand={scrollToBottom}
         />
 
         <FormDropdown
@@ -178,6 +179,7 @@ const CommercialOfferTerms = ({ tankerId }) => {
           disabled={initialLoading}
           asyncCall={initialLoading}
           onChange={(option) => handleChange('paymentTerms', option)}
+          onExpand={scrollToBottom}
         />
       </div>
     </>
