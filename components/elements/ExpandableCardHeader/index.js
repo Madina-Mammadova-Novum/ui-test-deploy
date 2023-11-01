@@ -64,8 +64,8 @@ const ExpandableCardHeader = ({
             label={data?.label}
             text={textContent}
             coverImage={data?.coverImage}
-            customStyles={!index && 'mr-auto'}
-            textStyles={data?.textStyles}
+            customStyles={`${!index && 'mr-auto'} [&>label]:!self-baseline [&>div]:!items-baseline`}
+            textStyles={`${data?.textStyles} whitespace-normal`}
             helperData={data?.helperData}
             icon={data?.icon}
             countryCode={data?.country?.id}
@@ -76,10 +76,10 @@ const ExpandableCardHeader = ({
   };
 
   return (
-    <div className="w-full h-auto lg:h-[60px] flex items-center gap-x-2.5 py-3 lg:py-0">
+    <div className="w-full h-auto lg:min-h-[60px] flex items-center gap-x-2.5 py-3">
       <div className={`flex flex-col lg:flex-row flex-grow ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
-          className={`grid md:grid-cols-1 3md:grid-cols-2 ${
+          className={`grid md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
             !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
           }`}
           style={{ gridTemplateColumns: lg && (gridStyles || `repeat(${headerData.length}, minmax(0, 1fr))`) }}

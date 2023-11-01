@@ -100,7 +100,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
         <Countdown time={countdownData} />
         <div className="pl-4 border-l h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the vessel owner to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offer
           </p>
           <Dropdown
             defaultValue={responseCountdown}
