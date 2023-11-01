@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
@@ -18,14 +18,14 @@ import {
 } from '@/utils/mock';
 
 const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
-  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
+  const [currentTab, setCurrentTab] = useState(tab || tabs[0]?.value);
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
 
   const { incoming = [], sent = [], failed = [] } = offerById[data.id];
 
-  const tabContent = useMemo(() => {
+  const tabContent = () => {
     return {
       counteroffers: (
         <Table
@@ -49,7 +49,7 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
         />
       ),
     };
-  });
+  };
 
   return (
     <>

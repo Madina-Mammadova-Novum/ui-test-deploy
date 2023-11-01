@@ -13,15 +13,15 @@ const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
   const { data: session, update } = useSession();
 
-  const getGeneralData = useCallback(() => {
+  const getGeneralData = () => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
-  }, []);
+  };
 
-  const setUserData = useCallback(({ role = null, isValid = false }) => {
+  const setUserData = ({ role = null, isValid = false }) => {
     dispatch(setRoleIdentity(role));
     dispatch(setIsAuthenticated(isValid));
-  }, []);
+  };
 
   const updateSession = useCallback(async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
@@ -34,11 +34,8 @@ const ExtraDataManager = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (session?.accessToken !== undefined) {
-      setUserData({ role: session?.role, isValid: true });
-    } else {
-      setUserData({ role: null, isValid: false });
-    }
+    if (session?.accessToken !== undefined) setUserData({ role: session?.role, isValid: true });
+    else setUserData({ role: null, isValid: false });
 
     if (session?.expires <= Date.now()) updateSession();
   }, [session]);

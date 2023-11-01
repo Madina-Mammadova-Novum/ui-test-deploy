@@ -12,8 +12,8 @@ import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFo
 import { SearchNotFound, ToggleRows } from '@/units';
 
 const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
-  const [expandExactResults, setExpandExactResults] = useState(false);
-  const [expandPartialResults, setExpandPartialResults] = useState(false);
+  const [expandExactResults, setExpandExactResults] = useState({ value: false });
+  const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
 
   if (!request) return null;
 

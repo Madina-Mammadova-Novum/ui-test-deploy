@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -22,10 +22,14 @@ const Sidebar = ({ containerStyles }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  useEffect(async () => {
+  const getPages = async () => {
     const { data } = await geRoleNavigation();
 
     setPages(data);
+  };
+
+  useEffect(() => {
+    getPages();
 
     return () => {
       setPages([]);
@@ -43,16 +47,14 @@ const Sidebar = ({ containerStyles }) => {
   const url = pathname + searchParams.toString();
   const currentPage = pages?.filter((item) => item.path === url)[0];
 
-  const setCollapse = useCallback((value) => dispatch(handleCollapse(value)), [dispatch]);
+  const setCollapse = (value) => dispatch(handleCollapse(value));
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (isNotXLView && url !== currentPage?.path && collapsed) setCollapse(true);
 
     if (isNotXLView && !collapsed) {
-      return () => {
-        setCollapse(true);
-      };
+      setCollapse(true);
     }
   }, [collapsed, currentPage?.path, setCollapse, url, isNotXLView]);
 

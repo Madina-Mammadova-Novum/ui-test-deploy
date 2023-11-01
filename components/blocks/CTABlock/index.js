@@ -2,7 +2,6 @@ import delve from 'dlv';
 import PropTypes from 'prop-types';
 
 import { NextLink } from '@/elements';
-import { makeId } from '@/utils/helpers';
 
 const CTABlock = ({ title, shortDescription, buttons }) => {
   return (
@@ -18,7 +17,7 @@ const CTABlock = ({ title, shortDescription, buttons }) => {
               <div className="mt-8 flex gap-x-4 sm:justify-center">
                 {buttons.map((button) => (
                   <NextLink
-                    key={makeId()}
+                    key={button.path}
                     href={delve(button, 'path')}
                     target={delve(button, 'linkOptions.target')}
                     rel={delve(button, 'linkOptions.rel')}

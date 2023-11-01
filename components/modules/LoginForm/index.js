@@ -31,9 +31,11 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     const { ok, error, url } = await signIn('credentials', signInAdapter({ data }));
-    if (ok) router.replace(url);
+    if (ok) {
+      router.push(url);
+      reset();
+    }
     if (error === 'CredentialsSignin') errorToast('Bad request', 'Incorrect email or password');
-    reset();
   };
 
   const handlePassword = (event) => {

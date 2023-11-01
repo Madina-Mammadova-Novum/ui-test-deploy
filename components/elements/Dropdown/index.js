@@ -11,7 +11,7 @@ import { dropdownStyles } from '@/elements/Dropdown/styles';
 
 const Dropdown = ({
   options,
-  onChange,
+  onChange = () => {},
   customStyles = {},
   name = '',
   label = '',

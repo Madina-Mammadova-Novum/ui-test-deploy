@@ -56,7 +56,7 @@ const TankerSearch = ({ title }) => {
   return (
     <>
       {title && (
-        <Title level={1} className="py-5">
+        <Title level="1" className="py-5">
           {title}
         </Title>
       )}

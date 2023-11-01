@@ -21,8 +21,8 @@ export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispa
 
   dispatch(setUpdate(true));
 
-  const activeChats = chats.filter(({ chat }) => !chat.archieved);
-  const archivedChats = chats.filter(({ chat }) => chat.archieved);
+  const activeChats = chats?.filter(({ chat }) => !chat.archieved);
+  const archivedChats = chats?.filter(({ chat }) => chat.archieved);
 
   return {
     active: listOfChatsDataAdapter({ data: activeChats }),

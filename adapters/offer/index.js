@@ -405,3 +405,17 @@ export const responseExtendCountdownAdapter = ({ data }) => {
   if (!data) return {};
   return data;
 };
+
+export const requestOnSubsCountdownExtensionAdapter = ({ data }) => {
+  if (!data) return [];
+  const { option, offerId } = data;
+  return {
+    dealId: offerId,
+    minutes: option?.value,
+  };
+};
+
+export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {
+  if (!data) return {};
+  return data;
+};
