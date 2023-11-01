@@ -26,7 +26,7 @@ const DetailsContent = ({ data = {} }) => {
     additionalCharterPartyTerms = [],
   } = data;
   const { cargoType, products = [] } = cargoDetails;
-  const { freight, demurrageRate, laytime, demurragePaymmentTerms, paymentTerms } = commercialOfferTerms;
+  const { freight, demurrageRate, laytime, demurragePaymentTerms, paymentTerms } = commercialOfferTerms;
   const {
     laycanStart,
     laycanEnd,
@@ -83,7 +83,7 @@ const DetailsContent = ({ data = {} }) => {
               title="Undisputed demurrage payment terms"
               className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline"
             >
-              {demurragePaymmentTerms}
+              {demurragePaymentTerms}
             </TextRow>
             <TextRow
               title="Payment term"
