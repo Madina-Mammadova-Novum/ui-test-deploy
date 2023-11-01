@@ -94,8 +94,9 @@ export class ChatController extends SignalRController {
 
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
+      this.store.dispatch(setLoadConversation(false));
+
       this.connection.on('ReceiveMessage', async (response) => {
-        this.store.dispatch(setLoadConversation(false));
         this.updateMessage({ message: response });
       });
     } catch (err) {
@@ -106,6 +107,14 @@ export class ChatController extends SignalRController {
   async sendMessage({ message }) {
     try {
       await this.connection.invoke('SendMessage', message);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async readMessage({ id }) {
+    try {
+      await this.connection.invoke('ReadMessage', id);
     } catch (e) {
       console.error(e);
     }

@@ -81,7 +81,7 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 
 export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   const messagesCounter = state?.data?.active.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
-  const newMessages = messagesCounter + (state?.data?.support[0]?.messageCount || 0);
+  const newMessages = messagesCounter + (state?.data?.support?.[0]?.messageCount || 0);
 
   return {
     newMessages,
