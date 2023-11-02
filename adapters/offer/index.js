@@ -1,6 +1,12 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, extractTimeFromDate, getAppropriateFailedBy, getRoleIdentity } from '@/utils/helpers';
+import {
+  addLocalDateFlag,
+  calculateCountdown,
+  extractTimeFromDate,
+  getAppropriateFailedBy,
+  getRoleIdentity,
+} from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -247,11 +253,14 @@ export function offerDetailsAdapter({ data, role }) {
       ],
     },
 
-    comments: comments?.map(({ comment, createdAt }) => ({
-      title: comment,
-      date: transformDate(createdAt, 'MMM dd, yyyy'),
-      time: extractTimeFromDate(createdAt),
-    })),
+    comments: comments?.map(({ comment, createdAt }) => {
+      const localDateFormat = addLocalDateFlag(createdAt);
+      return {
+        title: comment,
+        date: transformDate(localDateFormat, 'MMM dd, yyyy'),
+        time: extractTimeFromDate(localDateFormat),
+      };
+    }),
 
     counterofferData: {
       offerId,

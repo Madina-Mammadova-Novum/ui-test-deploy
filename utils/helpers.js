@@ -386,6 +386,8 @@ export const calculateTotal = (array, key) =>
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);
 
+export const addLocalDateFlag = (dateString) => `${dateString  }Z`;
+
 export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
 
 export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
