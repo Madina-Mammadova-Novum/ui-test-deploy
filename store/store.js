@@ -8,7 +8,7 @@ import { reducer } from '@/store/reducers';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user', 'general', 'notifications', 'chat'],
+  whitelist: ['general', 'notifications', 'chat', 'user'],
   version: 1,
 };
 

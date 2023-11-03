@@ -3,6 +3,7 @@
 import { HttpTransportType } from '@microsoft/signalr';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
+import { getSession } from 'next-auth/react';
 
 import { transformDate } from './date';
 
@@ -571,3 +572,12 @@ export function checkTankerStatus(date) {
 
   return today > openDate;
 }
+
+export const sessionValidity = async () => {
+  const session = await getSession();
+
+  const isExpired = session?.expires <= Date.now();
+  const isValid = session?.accessToken !== undefined && !isExpired;
+
+  return { isValid, isExpired };
+};

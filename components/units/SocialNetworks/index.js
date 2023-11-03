@@ -1,54 +1,39 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
-
 import delve from 'dlv';
 
-import { linkImageAdapter } from '@/adapters/global';
+import { SocialNetworksPropTypes } from '@/lib/types';
+
 import { HoverableIcon, NextImage, NextLink } from '@/elements';
-import { getSingleType } from '@/services/singleType';
 import { getStrapiMedia } from '@/utils';
 
-const SocialNetworks = () => {
-  const [socialLinks, setSocialLinks] = useState([]);
-  const fetchData = async () => {
-    const response = await getSingleType('social-network', 'en');
-    const socials = delve(response, 'data.socials');
-    const socialLinksArray = socials ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
-    setSocialLinks(socialLinksArray);
+const SocialNetworks = ({ data = [] }) => {
+  if (!data.length) return null;
+
+  const printSocialLinks = (socialLink) => {
+    return (
+      <NextLink
+        target="_blank"
+        key={delve(socialLink, 'label')}
+        href={delve(socialLink, 'path')}
+        title={delve(socialLink, 'title')}
+      >
+        <HoverableIcon
+          className="border border-gray-darker rounded-md"
+          icon={
+            <NextImage
+              alt={delve(socialLink, 'title')}
+              src={getStrapiMedia(delve(socialLink, 'coverImage.format.original.url'), '')}
+              height={20}
+              width={20}
+            />
+          }
+        />
+      </NextLink>
+    );
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  if (!socialLinks.length) return null;
-  return (
-    <div className="flex gap-x-2.5">
-      {socialLinks.map((socialLink) => {
-        return (
-          <NextLink
-            key={socialLink?.label}
-            href={delve(socialLink, 'path')}
-            target="_blank"
-            title={delve(socialLink, 'title')}
-          >
-            <HoverableIcon
-              className="border border-gray-darker rounded-md"
-              icon={
-                <NextImage
-                  alt={delve(socialLink, 'title')}
-                  src={getStrapiMedia(delve(socialLink, 'coverImage.format.original.url'), '')}
-                  height={20}
-                  width={20}
-                />
-              }
-            />
-          </NextLink>
-        );
-      })}
-    </div>
-  );
+  return <div className="flex gap-x-2.5">{data.map(printSocialLinks)}</div>;
 };
+
+SocialNetworks.propTypes = SocialNetworksPropTypes;
 
 export default SocialNetworks;

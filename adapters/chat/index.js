@@ -10,15 +10,16 @@ export function chatSessionResponseAdapter({ data }) {
 function chatSessionDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id, contentId, archieved, messageCount } = data;
+  const { id, contentId, archieved, isOnline, messageCount } = data;
 
   return {
+    key: `${archieved ? 'archieved' : 'active'}`,
     chatId: id,
     contentId,
     archieved,
-    key: `${archieved ? 'archieved' : 'active'}`,
     messageCount,
     isTyping: false,
+    isOnline,
   };
 }
 

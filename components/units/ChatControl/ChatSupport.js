@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ChatSupportPropTypes } from '@/lib/types';
@@ -18,10 +19,16 @@ const ChatSupport = ({ title, description }) => {
     chatService.initChat(support[0]);
   };
 
+  useEffect(() => {
+    return () => {
+      chatService.disconnect();
+    };
+  }, []);
+
   return (
     <div aria-hidden onClick={handleOpenConversation}>
       <div className="text-black relative flex items-center gap-x-3 cursor-pointer">
-        <Badge counter={support[0]?.messageCount} />
+        <Badge counter={support?.[0]?.messageCount} />
         <div className="w-0.5 h-10 rounded-xl bg-blue" />
         <SupportSVG />
         <div className="flex flex-col  w-5/6">

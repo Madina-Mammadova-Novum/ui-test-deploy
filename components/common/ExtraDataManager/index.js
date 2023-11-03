@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react';
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { sessionValidity } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
@@ -23,21 +25,33 @@ const ExtraDataManager = ({ children }) => {
     dispatch(setIsAuthenticated(isValid));
   };
 
-  const updateSession = useCallback(async () => {
+  const updateSession = async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
 
-    await update({ ...refreshedData });
-  }, [session?.refreshToken, update]);
+    try {
+      await update({ ...refreshedData });
+    } catch (error) {
+      errorToast('Updating session error:', error);
+    }
+  };
+
+  const sessionWatcher = async () => {
+    try {
+      const { isValid, isExpired } = await sessionValidity();
+      if (isValid) setUserData({ role: session?.role, isValid });
+      if (isExpired) await updateSession();
+    } catch (error) {
+      setUserData({ role: null, isValid: false });
+      errorToast('Session is not valid', error);
+    }
+  };
 
   useEffect(() => {
     getGeneralData();
   }, []);
 
   useEffect(() => {
-    if (session?.accessToken !== undefined) setUserData({ role: session?.role, isValid: true });
-    else setUserData({ role: null, isValid: false });
-
-    if (session?.expires <= Date.now()) updateSession();
+    sessionWatcher();
   }, [session]);
 
   return children;

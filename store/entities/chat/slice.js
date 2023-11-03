@@ -122,7 +122,18 @@ const chatSlice = createSlice({
         return user;
       });
 
+      const updatedCollapsedState = state.data.collapsed.map((user) => {
+        if (user.contentId === payload?.contentId) {
+          return {
+            ...user,
+            messageCount: payload.messageCount,
+          };
+        }
+        return user;
+      });
+
       state.data.active = updatedActiveState;
+      state.data.collapsed = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {

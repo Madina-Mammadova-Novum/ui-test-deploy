@@ -4,15 +4,16 @@ import { useMemo } from 'react';
 
 import { ChatButtonPropTypes } from '@/lib/types';
 
+import ChatSessionIcon from '@/assets/icons/ChatSessionIcon';
 import ChatSVG from '@/assets/images/chat.svg';
 import { Badge } from '@/elements';
 
-const ChatButton = ({ counter, name, onClick, onClose, withCancel, className = '' }) => {
+const ChatButton = ({ counter, name, isOnline, onClick, onClose, withCancel, className = '' }) => {
   const printIcon = useMemo(() => {
-    if (name) return <p className="text-xsm font-semibold mx-auto uppercase">{name?.slice(0, 2)}</p>;
+    if (name) return <ChatSessionIcon isOnline={isOnline} name={name} />;
 
     return <ChatSVG />;
-  }, [name]);
+  }, [name, isOnline]);
 
   const setStyles = useMemo(() => {
     if (name) return 'bg-white border p-5 border-gray-light';
