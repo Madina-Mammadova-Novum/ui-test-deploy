@@ -380,9 +380,9 @@ export const filtersAdapter = (formData = {}) => {
   const { cargoId, cargoType, tankerName, rangeDate } = formData || {};
 
   return {
-    CargoCode: cargoId,
+    CargoCode: cargoId?.value,
     CargoTypeId: cargoType?.value,
-    TankerName: tankerName,
+    TankerName: tankerName?.value,
     FixtureDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
     FixtureDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
   };

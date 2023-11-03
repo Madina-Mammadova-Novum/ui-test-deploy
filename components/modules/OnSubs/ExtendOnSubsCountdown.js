@@ -72,7 +72,7 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
         <Dropdown
           options={countdownOptions}
           defaultValue={countdownOptions[0]}
-          customStyles={{ className: 'w-24' }}
+          customStyles={{ className: 'w-28' }}
           classNames={{ menuList: () => '!max-h-20' }}
           onChange={handleSelectOption}
         />
