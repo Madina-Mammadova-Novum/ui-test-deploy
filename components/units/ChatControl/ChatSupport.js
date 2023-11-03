@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ChatSupportPropTypes } from '@/lib/types';
@@ -17,6 +18,12 @@ const ChatSupport = ({ title, description }) => {
 
     chatService.initChat(support[0]);
   };
+
+  useEffect(() => {
+    return () => {
+      chatService.disconnect();
+    };
+  }, []);
 
   return (
     <div aria-hidden onClick={handleOpenConversation}>

@@ -1,6 +1,6 @@
 import { PageFooter, PageHeader } from '@/modules';
 
-const PageLayout = ({ children }) => {
+export default function PageLayout({ children }) {
   return (
     <div className="flex min-h-screen max-w-screen-2xl">
       <div className="flex flex-col grow relative">
@@ -10,6 +10,4 @@ const PageLayout = ({ children }) => {
       </div>
     </div>
   );
-};
-
-export default PageLayout;
+}

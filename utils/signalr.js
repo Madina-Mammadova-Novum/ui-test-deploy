@@ -95,7 +95,6 @@ export class ChatController extends SignalRController {
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
       this.store.dispatch(setLoadConversation(false));
-
       this.connection.on('ReceiveMessage', async (response) => {
         this.updateMessage({ message: response });
       });

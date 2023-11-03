@@ -1,17 +1,30 @@
 import delve from 'dlv';
+import { getServerSession } from 'next-auth';
 
 import Logo from '@/assets/images/logo.svg';
 import { NavButton, NextLink } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { AuthNavButtons } from '@/units';
+import { AUTHCONFIG } from '@/utils/auth';
 
-const PageHeader = async () => {
+export default async function PageHeader() {
+  const session = await getServerSession(AUTHCONFIG);
   const headerData = await getSingleType('header', 'en');
+
   const navigationSlug = delve(headerData, 'data.navigation');
-  const buttons = delve(headerData, 'data.buttons');
   const navigationData = await getNavigation(navigationSlug, 'en');
+
+  const buttons = delve(headerData, 'data.buttons');
   const navigation = delve(navigationData, 'data');
+
+  const printNavigation = ({ path, title }) => {
+    return (
+      <li key={path}>
+        <NavButton path={path}>{title}</NavButton>
+      </li>
+    );
+  };
 
   return (
     <header className="absolute w-full z-10">
@@ -21,23 +34,11 @@ const PageHeader = async () => {
             <Logo className="fill-white" />
           </NextLink>
           <nav className="flex items-center gap-x-10">
-            {navigation.length > 0 && (
-              <ul className="flex gap-x-5 items-center">
-                {navigation.map(({ path, title }) => {
-                  return (
-                    <li key={path}>
-                      <NavButton path={path}>{title}</NavButton>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            {buttons.length > 0 && <AuthNavButtons data={buttons} />}
+            {navigation.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
+            {buttons.length > 0 && <AuthNavButtons authorized={Boolean(session?.accessToken)} data={buttons} />}
           </nav>
         </div>
       </div>
     </header>
   );
-};
-
-export default PageHeader;
+}

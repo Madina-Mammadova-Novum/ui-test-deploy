@@ -38,8 +38,9 @@ const CollapsedChats = () => {
     return (
       <ChatButton
         withCancel
-        counter={0}
+        counter={session?.messageCount}
         name={session?.vessel?.name}
+        isOnline={session?.isOnline}
         key={session?.chatId}
         onClick={() => handleStartConversation({ id: session?.chatId, key: session?.key })}
         onClose={(e) => handleCloseConversation(e, session?.chatId)}

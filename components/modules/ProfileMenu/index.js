@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import classnames from 'classnames';
 
@@ -12,13 +11,9 @@ import ExitSVG from '@/assets/images/exit.svg';
 import UserCircleSVG from '@/assets/images/userCircle.svg';
 import { LogoutButton, NextImage, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
-import { getUserDataSelector } from '@/store/selectors';
 
-const ProfileMenu = ({ image }) => {
+const ProfileMenu = ({ name, image }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const { data } = useSelector(getUserDataSelector);
-
-  const { personalDetails } = data;
 
   const closeMenu = (e) => {
     e.stopPropagation();
@@ -37,7 +32,7 @@ const ProfileMenu = ({ image }) => {
         </div>
       )}
       <div className="flex items-center mx-2.5">
-        <span className="text-black font-semibold text-xsm">{personalDetails?.fullName}</span>
+        <span className="text-black font-semibold text-xsm">{name}</span>
         <AngleDownSVG
           className={classnames('fill-black ml-6 transition duration-500', showProfileMenu && 'fill-blue rotate-180')}
         />

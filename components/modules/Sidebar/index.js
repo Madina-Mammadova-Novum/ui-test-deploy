@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
@@ -13,60 +13,32 @@ import { SidebarPropTypes } from '@/lib/types';
 import { SCREENS } from '@/lib/constants';
 import { handleCollapse } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
-import { geRoleNavigation, useMediaQuery } from '@/utils/hooks';
+import { useMediaQuery } from '@/utils/hooks';
 
-const Sidebar = ({ containerStyles }) => {
+const Sidebar = ({ data, containerStyles }) => {
   const dispatch = useDispatch();
-  const [pages, setPages] = useState([]);
-
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const getPages = async () => {
-    const { data } = await geRoleNavigation();
-
-    setPages(data);
-  };
-
-  useEffect(() => {
-    getPages();
-
-    return () => {
-      setPages([]);
-    };
-  }, []);
-
+  const xlScreen = useMediaQuery(SCREENS.XL);
   const { collapsed } = useSelector(getSidebarSelector);
-
-  const lgScreen = useMediaQuery(SCREENS.LG);
-  const mdScreen = useMediaQuery(SCREENS.MD);
-  const smScreen = useMediaQuery(SCREENS.SM);
-
-  const isNotXLView = lgScreen || mdScreen || smScreen;
-
-  const url = pathname + searchParams.toString();
-  const currentPage = pages?.filter((item) => item.path === url)[0];
 
   const setCollapse = (value) => dispatch(handleCollapse(value));
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (isNotXLView && url !== currentPage?.path && collapsed) setCollapse(true);
-
-    if (isNotXLView && !collapsed) {
-      setCollapse(true);
-    }
-  }, [collapsed, currentPage?.path, setCollapse, url, isNotXLView]);
+    if (!xlScreen && !collapsed) setCollapse(false);
+    else setCollapse(true);
+  }, [pathname, xlScreen]);
 
   return (
     <aside
-      className={`${containerStyles} flex flex-col items-stretch px-3.5 py-5 gap-2 bg-black text-white 
-      ${collapsed ? 'w-16' : 'w-64'}`}
+      className={`${containerStyles} ${
+        collapsed ? 'w-16' : 'w-64'
+      } flex flex-col transition-all duration-75 items-stretch px-3.5 py-5 gap-2 bg-black text-white 
+    `}
     >
       {collapsed ? (
-        <SidebarSm data={pages} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
+        <SidebarSm data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       ) : (
-        <SidebarXl data={pages} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
+        <SidebarXl data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       )}
     </aside>
   );

@@ -9,12 +9,10 @@ import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
 import { chatService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat } from '@/store/entities/chat/slice';
-// import { getChatSelector } from '@/store/selectors';
 import { ChatConversationCard, ChatSubModal } from '@/units';
 
 const ChatSession = ({ data, tab }) => {
   const dispatch = useDispatch();
-  // const { data: collapsedData } = useSelector(getChatSelector).collapsedChats;
 
   const [state, setState] = useState({ deactivate: false, reactivate: false });
 
@@ -48,17 +46,7 @@ const ChatSession = ({ data, tab }) => {
 
   const handleOpenConversation = () => {
     dispatch(removeCollapsedChat(data?.chatId));
-    chatService?.initChat({
-      chatId: data?.chatId,
-      archieved: data?.archieved,
-      typing: data?.isTyping,
-      key: data?.key,
-      vessel: {
-        name: data?.vessel?.name,
-        data: data?.vessel?.data,
-        cargoId: data?.vessel?.cargoId,
-      },
-    });
+    chatService?.initChat(data);
   };
 
   const actions = useMemo(

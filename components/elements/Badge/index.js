@@ -17,7 +17,8 @@ const Badge = ({ counter, onClose, withCancel = false, className = 'h-5 w-5 -top
         </div>
       );
 
-    if (withCancel) return <CloseIcon onClick={onClose} className="fill-black absolute top-0 right-0 !z-50" />;
+    if (withCancel && counter <= 0)
+      return <CloseIcon onClick={onClose} className="fill-black absolute top-0 right-0 !z-50" />;
 
     return null;
   }, [onClose, counter, className, withCancel]);
