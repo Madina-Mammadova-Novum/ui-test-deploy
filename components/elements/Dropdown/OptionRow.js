@@ -8,7 +8,7 @@ const OptionRow = ({ value, countryFlag = null, coverImage = null }) => {
       <div className="flex rounded-md text-xsm font-medium items-center box-border whitespace-nowrap">
         {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
         {coverImage && coverImage}
-        <span>{value}</span>
+        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{value}</span>
       </div>
     </div>
   );
