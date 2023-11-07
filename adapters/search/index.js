@@ -26,12 +26,12 @@ export const searchHeaderDataAdapter = ({ data }) => {
     {
       label: 'Estimated arrival',
       text: estimatedArrival ?? '',
-      customStyles: '[&>label]:w-32',
+      customStyles: '[&>label]:min-w-[8rem]',
     },
     {
       label: 'Ballast leg',
       text: ballastLeg ?? '',
-      customStyles: '[&>label]:w-32',
+      customStyles: '[&>label]:min-w-[8rem]',
     },
   ];
 };
