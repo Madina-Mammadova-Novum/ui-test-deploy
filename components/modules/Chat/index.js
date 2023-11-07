@@ -56,6 +56,28 @@ const Chat = () => {
     if (mdScreen && isActive) dispatch(setOpenedChat(false));
   }, [mdScreen, isActive]);
 
+  // const onActivate = (chat) => chatService.initChat(chat);
+
+  // const onRemove = async ({ id }) => {
+  //   dispatch(resetUser());
+  //   dispatch(removeCollapsedChat(id));
+  //   chatService.disconnect();
+  // };
+
+  // const handleStartConversation = ({ id, key }) => {
+  //   const chat = chats[key]?.find((session) => session?.chatId === id);
+
+  //   onRemove({ id: chat?.chatId }).then(() => {
+  //     onActivate(chat);
+  //     dispatch(setOpenedChat(true));
+  //   });
+  // };
+
+  // const handleCloseConversation = (e, id) => {
+  //   e?.stopPropagation();
+  //   onRemove({ id });
+  // };
+
   return (
     <>
       <ChatButton

@@ -1,3 +1,5 @@
+'use client';
+
 import classnames from 'classnames';
 
 import { AccordionHeaderPropTypes } from '@/lib/types';
@@ -6,7 +8,7 @@ import MinusSVG from '@/assets/images/minus.svg';
 import PlusSVG from '@/assets/images/plus.svg';
 import { Title } from '@/elements';
 
-const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
+const AccordionHeader = ({ title, onClick, isActive, isFullWidth }) => {
   return (
     <div
       aria-hidden
@@ -17,7 +19,7 @@ const AccordionHeader = ({ children, onClick, isActive, isFullWidth }) => {
       onClick={onClick}
     >
       <Title level={isFullWidth ? '3' : '2'} className="text-black">
-        {children}
+        {title}
       </Title>
       <div className="shrink-0">
         {isActive ? <MinusSVG className="fill-blue" /> : <PlusSVG className="fill-black" />}

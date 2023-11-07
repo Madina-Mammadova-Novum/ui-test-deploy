@@ -12,6 +12,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
       {coverImage && (
         <div className="absolute w-full h-full inset-0 -z-10">
           <NextImage
+            priority
             width={1440}
             height={410}
             alt={delve(coverImage, 'alternativeText')}
