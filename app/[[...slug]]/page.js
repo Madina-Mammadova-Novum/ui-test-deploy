@@ -1,5 +1,3 @@
-import React from 'react';
-
 import classnames from 'classnames';
 import parse from 'html-react-parser';
 import { notFound } from 'next/navigation';
@@ -21,15 +19,7 @@ export default async function Home({ params }) {
 
   const { pageData, blocks, content } = await getHomePageData({ params });
 
-  if (!pageData) notFound();
-
-  /*
-  todo: temporary solution (26-31) - need to solve the situation with double links to the same page
-        for example:
-        /legal/terms-of-use
-        /terms-of-use
-        these will be pages with identical content and that not good
-  */
+  if (pageData === null) notFound();
 
   return (
     <main className={classnames(legal && 'legal-styles')}>
@@ -37,12 +27,12 @@ export default async function Home({ params }) {
       <section className="relative pt-[115px] pb-[195px] bg-gray-light">
         <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
           <NextImage
-            src="/images/waves.jpg"
             alt="waves"
-            customStyles="absolute inset-0 z-0 h-full w-full object-cover object-center"
             height={352}
-            width={1440}
             quality={100}
+            width={1440}
+            src="/images/waves.jpg"
+            customStyles="absolute inset-0 z-0 h-full w-full object-cover object-center"
           />
           {content && <div className="heading-wrapper relative z-10 text-white">{parse(content)}</div>}
         </div>

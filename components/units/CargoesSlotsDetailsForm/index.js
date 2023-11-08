@@ -160,6 +160,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               async
             />
             <DatePicker
+              maxDate={new Date()}
               calendarClass="absolute right-0"
               name={`${fieldName}.date`}
               inputClass="w-full min-w-[150px]"

@@ -6,6 +6,7 @@ import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
 import AssignToFleet from '@/units/AssignToFleet';
 import AuthNavButtons from '@/units/AuthNavButtons';
+import Captcha from '@/units/Captcha';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
@@ -119,6 +120,7 @@ export {
   ExpandableRowFooter,
   OfferForm,
   Comment,
+  Captcha,
   CommercialOfferTerms,
   ExpandableCard,
   ModalWindow,
