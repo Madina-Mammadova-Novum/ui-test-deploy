@@ -79,14 +79,17 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
             placeholder={password?.placeholder}
             disabled={isSubmitting}
             onChange={passwordValidation}
+            autoComplete="new-password"
+            aria-autocomplete="none"
           />
           <PasswordInput
             name="confirmPassword"
             label={confirm?.label}
             placeholder={confirm?.placeholder}
             disabled={isSubmitting}
-            customStyles="mt-4"
             onChange={passwordValidation}
+            autoComplete="new-password"
+            aria-autocomplete="none"
           />
         </div>
         <div className="pl-0 md:pl-5">

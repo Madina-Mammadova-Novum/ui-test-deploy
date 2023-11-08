@@ -2,7 +2,7 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 
 const NextImage = ({ src, alt = '', width, height, customStyles = '', ...rest }) => {
-  return <Image src={src} alt={alt} width={width} height={height} className={customStyles} {...rest} />;
+  return <Image priority src={src} alt={alt} width={width} height={height} className={customStyles} {...rest} />;
 };
 
 NextImage.propTypes = {
