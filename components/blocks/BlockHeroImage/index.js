@@ -13,6 +13,7 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
       {coverImage && (
         <div className="absolute w-full h-full inset-0 -z-10">
           <Image
+            priority
             width={1440}
             height={352}
             alt={delve(coverImage, 'alternativeText')}

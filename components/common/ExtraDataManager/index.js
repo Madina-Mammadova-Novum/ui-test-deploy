@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
-import { sessionValidity } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
@@ -35,9 +34,16 @@ const ExtraDataManager = ({ children }) => {
     }
   };
 
+  const sessionValidity = () => {
+    const isExpired = session?.expires <= Date.now();
+    const isValid = session?.accessToken !== undefined && !isExpired;
+
+    return { isValid, isExpired };
+  };
+
   const sessionWatcher = async () => {
     try {
-      const { isValid, isExpired } = await sessionValidity();
+      const { isValid, isExpired } = sessionValidity();
       if (isValid) setUserData({ role: session?.role, isValid });
       if (isExpired) await updateSession();
     } catch (error) {

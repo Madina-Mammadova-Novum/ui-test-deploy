@@ -47,6 +47,7 @@ export async function getEntityData(params, preview = false) {
   const { slug: pathArray } = params;
   const { collectionType, slug, locale } = getCollectionType(pathArray);
   const response = await getData(`collection-type?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
+
   return {
     ...response,
   };

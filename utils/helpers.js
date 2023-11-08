@@ -3,7 +3,6 @@
 import { HttpTransportType } from '@microsoft/signalr';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
-import { getSession } from 'next-auth/react';
 
 import { transformDate } from './date';
 
@@ -387,6 +386,8 @@ export const calculateTotal = (array, key) =>
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);
 
+export const addLocalDateFlag = (dateString = '') => (dateString.endsWith('Z') ? dateString : `${dateString}Z`);
+
 export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
 
 export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
@@ -570,12 +571,3 @@ export function checkTankerStatus(date) {
 
   return today > openDate;
 }
-
-export const sessionValidity = async () => {
-  const session = await getSession();
-
-  const isExpired = session?.expires <= Date.now();
-  const isValid = session?.accessToken !== undefined && !isExpired;
-
-  return { isValid, isExpired };
-};

@@ -9,7 +9,7 @@ import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import ShowPasswordSVG from '@/assets/images/showPassword.svg';
 import { Input } from '@/elements';
 
-const PasswordInput = ({ name = '', label = '', placeholder = '', onChange }) => {
+const PasswordInput = ({ name = '', label = '', placeholder = '', onChange, ...rest }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -27,6 +27,7 @@ const PasswordInput = ({ name = '', label = '', placeholder = '', onChange }) =>
             min={8}
             inputStyles="!pr-12"
             error={errors[name]?.message}
+            {...rest}
           />
           <button
             type="button"

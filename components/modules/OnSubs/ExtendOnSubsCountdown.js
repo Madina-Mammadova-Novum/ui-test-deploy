@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable react/no-unescaped-entities */
+
 import { useState } from 'react';
 
 import { Button, Dropdown } from '@/elements';
@@ -62,8 +64,8 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
     <div className="w-[292px] h-[324px]">
       <ModalHeader>Request to change countdown</ModalHeader>
       <div className="bg-gray-light rounded-[10px] p-3 border border-darker text-[12px] my-5">
-        In order to increase countdown time, please, send the request. The countdown will be changed only after Vessel
-        owner approval.
+        In order to increase countdown time, please, send the request. The countdown will be changed only after Broker's
+        approval.
       </div>
       <div className="border-l-2 border-blue pl-4">
         <p className="text-[12px] font-bold mb-2.5">
@@ -72,7 +74,7 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
         <Dropdown
           options={countdownOptions}
           defaultValue={countdownOptions[0]}
-          customStyles={{ className: 'w-24' }}
+          customStyles={{ className: 'w-28' }}
           classNames={{ menuList: () => '!max-h-20' }}
           onChange={handleSelectOption}
         />

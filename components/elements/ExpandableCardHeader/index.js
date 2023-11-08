@@ -64,7 +64,9 @@ const ExpandableCardHeader = ({
             label={data?.label}
             text={textContent}
             coverImage={data?.coverImage}
-            customStyles={`${!index && 'mr-auto'} [&>label]:!self-baseline [&>div]:!items-baseline`}
+            customStyles={`${!index && 'mr-auto'} ${
+              data?.customStyles
+            } items-baseline [&>label]:!self-baseline [&>div]:!items-baseline`}
             textStyles={`${data?.textStyles} whitespace-normal`}
             helperData={data?.helperData}
             icon={data?.icon}

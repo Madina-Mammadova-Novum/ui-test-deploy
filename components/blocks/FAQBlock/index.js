@@ -9,7 +9,7 @@ import { categoryPropTypes, ctaPropTypes } from '@/lib/types';
 
 import { Accordion, AccordionCTA, TabsAsLinks } from '@/units';
 
-const FAQBlock = ({ title, subTitle, shortDescription, items, categories, category, cta }) => {
+const FAQBlock = ({ title, subTitle, shortDescription, items = [], categories, category, cta }) => {
   const [open, setOpen] = useState(null);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -31,10 +31,10 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
         {shortDescription && <div>{shortDescription}</div>}
         <TabsAsLinks tabs={tabs} activeTab={category.id} />
         <div className="relative rounded-base pt-1.5 px-5 pb-5 bg-white divide-y divide-gray-darker mt-1">
-          {items &&
+          {items.length > 0 &&
             items.map(({ id, answer, question }) => (
               <Accordion
-                key={`id-${id}`}
+                key={id}
                 open={open === id}
                 onClick={() => handleOpen(id)}
                 isFullWidth

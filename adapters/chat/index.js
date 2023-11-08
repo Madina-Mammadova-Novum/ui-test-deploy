@@ -1,5 +1,11 @@
 import { convertDate, transformDate } from '@/utils/date';
-import { clientIdentification, extractTime, getListOfDataByDays, sortFromPastToToday } from '@/utils/helpers';
+import {
+  addLocalDateFlag,
+  clientIdentification,
+  extractTimeFromDate,
+  getListOfDataByDays,
+  sortFromPastToToday,
+} from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
   if (!data) return null;
@@ -91,7 +97,7 @@ export function messageDataAdapter({ data, session }) {
   return {
     id,
     message: body,
-    time: extractTime(createdAt),
+    time: extractTimeFromDate(addLocalDateFlag(createdAt), { hour: 'numeric', minute: 'numeric', hour12: false }),
     sender: clientIdentification({ senderId, session }),
   };
 }

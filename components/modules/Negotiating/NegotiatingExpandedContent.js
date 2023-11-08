@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
@@ -25,7 +25,7 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
 
   const { incoming = [], sent = [], failed = [] } = offerById[data.id];
 
-  const tabContent = () => {
+  const tabContent = useMemo(() => {
     return {
       counteroffers: (
         <Table
@@ -48,8 +48,8 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
           noDataMessage="No data provided"
         />
       ),
-    };
-  };
+    }[currentTab];
+  }, [currentTab]);
 
   return (
     <>
@@ -59,7 +59,7 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
         tabs={tabs}
         customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
-      <div className="mb-3 table-scroll">{tabContent[currentTab]}</div>
+      <div className="mb-3 table-scroll">{tabContent}</div>
     </>
   );
 };

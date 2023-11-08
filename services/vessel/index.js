@@ -143,3 +143,10 @@ export async function removeVessel(data) {
     ...response,
   };
 }
+
+export async function getPostFixtureTankerNames() {
+  const response = await getData(`account/post-fixture/get-tankernames`);
+  return {
+    ...response,
+  };
+}
