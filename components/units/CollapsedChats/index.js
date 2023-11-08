@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
@@ -8,6 +9,8 @@ import { removeCollapsedChat, resetUser, setOpenedChat } from '@/store/entities/
 import { getChatSelector } from '@/store/selectors';
 
 const CollapsedChats = () => {
+  const [hovered, setHovered] = useState(false);
+
   const dispatch = useDispatch();
 
   const { chats } = useSelector(getChatSelector);
@@ -37,6 +40,7 @@ const CollapsedChats = () => {
   const printCollapsedChat = (session) => {
     return (
       <ChatButton
+        hovered={hovered}
         withCancel
         counter={session?.messageCount}
         name={session?.vessel?.name}
@@ -44,6 +48,10 @@ const CollapsedChats = () => {
         key={session?.chatId}
         onClick={() => handleStartConversation({ id: session?.chatId, key: session?.key })}
         onClose={(e) => handleCloseConversation(e, session?.chatId)}
+        onTouchStart={() => setHovered(true)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onTouchEnd={() => setHovered(false)}
         className="h-auto"
       />
     );
@@ -51,7 +59,7 @@ const CollapsedChats = () => {
 
   return (
     chats?.collapsed?.length > 0 && (
-      <div className="flex z-40 flex-col gap-4 fixed right-3 bottom-24">{chats?.collapsed.map(printCollapsedChat)}</div>
+      <div className="flex z-40 flex-col gap-4 fixed right-4 bottom-24">{chats?.collapsed.map(printCollapsedChat)}</div>
     )
   );
 };

@@ -61,8 +61,8 @@ const Chat = () => {
       <ChatButton
         counter={newMessages}
         onClick={handleOpen}
-        withCancel={false}
         className="fixed right-3 bottom-3 z-30"
+        withCancel={false}
       />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <ChatConversation

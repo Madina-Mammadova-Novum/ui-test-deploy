@@ -9,6 +9,7 @@ import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import { ROUTES } from '@/lib';
 import {
+  captchaSchema,
   cargoesSlotsDetailsSchema,
   companyAddressesSchema,
   companyDetailsSchema,
@@ -18,6 +19,7 @@ import {
 } from '@/lib/schemas';
 import { chartererSignUp } from '@/services';
 import {
+  Captcha,
   CargoesSlotsDetails,
   CompanyAddresses,
   CompanyDetails,
@@ -31,6 +33,7 @@ import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks
 
 const ChartererRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
+  const [captcha, setCaptcha] = useState('');
 
   const schema = yup.object().shape({
     ...personalDetailsSchema(),
@@ -39,6 +42,7 @@ const ChartererRegistrationForm = () => {
     ...cargoesSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
     ...termsAndConditionsSchema(),
+    ...captchaSchema(),
   });
 
   const methods = useHookFormParams({ schema });
@@ -46,9 +50,11 @@ const ChartererRegistrationForm = () => {
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
   useEffect(() => {
+    methods.setValue('captcha', captcha);
     methods.setValue('sameAddresses', addressValue);
+
     setSameAddress(addressValue);
-  }, [addressValue, methods]);
+  }, [addressValue, methods, captcha]);
 
   const onSubmit = async (formData) => {
     const { status, error, data } = await chartererSignUp({ data: formData });
@@ -97,6 +103,7 @@ const ChartererRegistrationForm = () => {
           <CargoesSlotsDetails applyHelper />
         </Step>
         <TermsAndConditions />
+        <Captcha onChange={setCaptcha} />
       </FormManager>
     </FormProvider>
   );
