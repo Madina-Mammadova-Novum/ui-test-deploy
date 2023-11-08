@@ -71,6 +71,7 @@ const AddTankerWithImoForm = ({
             {...methods.register('imo')}
             label="IMO"
             placeholder="Enter IMO"
+            type="number"
             error={methods.formState.errors?.imo?.message}
           />
         </div>
