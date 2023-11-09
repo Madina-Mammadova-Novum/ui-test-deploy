@@ -15,14 +15,3 @@ export const searchParamsAdapter = ({ data }) => {
     return newObject;
   }, {});
 };
-
-export const legalPropAdpater = ({ params }) => {
-  const { slug } = params;
-  let legal = false;
-  if (slug?.length >= 2 && slug[0] === 'legal') {
-    slug.splice(0, 1); // remove 'legal' from the array
-    legal = true;
-  }
-
-  return { legal };
-};
