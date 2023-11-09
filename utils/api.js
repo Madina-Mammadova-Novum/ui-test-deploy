@@ -52,7 +52,6 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
       Accept: '*/*',
       ...headers,
     },
-    next: { revalidate: 60 * 60 * 1000 },
     ...options,
   };
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {

@@ -325,9 +325,7 @@ export function deleteCompanyAdapter({ data }) {
 
   const { password } = data;
 
-  return {
-    password,
-  };
+  return { password };
 }
 
 export function ownerSignUpAdapter({ data }) {
