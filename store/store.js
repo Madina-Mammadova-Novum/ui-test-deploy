@@ -1,13 +1,27 @@
 import { devToolsEnhancer } from '@redux-devtools/extension';
 import { configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 import { reducer } from '@/store/reducers';
 
+const createNoopStorage = () => {
+  return {
+    getItem() {
+      return Promise.resolve(null);
+    },
+    setItem(_key, value) {
+      return Promise.resolve(value);
+    },
+    removeItem() {
+      return Promise.resolve();
+    },
+  };
+};
+
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage(),
   whitelist: ['general', 'notifications', 'chat', 'user'],
   version: 1,
 };
