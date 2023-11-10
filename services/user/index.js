@@ -123,7 +123,7 @@ export async function updateCompany({ data, role }) {
 
 export async function deleteCompany({ data }) {
   const body = deleteCompanyAdapter({ data });
-  const response = await deleteData(`account/delete-company`, body, { headers: { ...ContentTypeJson() } });
+  const response = await deleteData(`account/delete-company`, body);
   return {
     ...response,
   };
@@ -141,7 +141,7 @@ export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }
 
 export async function getUserPositionById({ id }) {
   const body = getFleetByIdAdapter({ id });
-  const response = await putData(`account/my-positions/vesselId`, body, { headers: { ...ContentTypeJson() } });
+  const response = await putData(`account/my-positions/vesselId`, body);
 
   return {
     ...response,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { ChatButtonPropTypes } from '@/lib/types';
 
@@ -8,9 +8,7 @@ import ChatSessionIcon from '@/assets/icons/ChatSessionIcon';
 import ChatSVG from '@/assets/images/chat.svg';
 import { Badge } from '@/elements';
 
-const ChatButton = ({ counter, name, isOnline, onClick, onClose, withCancel, className = '' }) => {
-  const [hovered, setHovered] = useState(false);
-
+const ChatButton = ({ counter, name, isOnline, onClick, onClose, hovered, withCancel, className = '', ...rest }) => {
   const printIcon = useMemo(() => {
     if (name) return <ChatSessionIcon isOnline={isOnline} name={name} />;
 
@@ -24,14 +22,14 @@ const ChatButton = ({ counter, name, isOnline, onClick, onClose, withCancel, cla
   }, [name]);
 
   return (
-    <div className={className} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+    <div className={className} {...rest}>
       <button
         type="button"
         onClick={onClick}
-        className={`relative rounded-full shadow-2xmd z-30 outline-none ${setStyles}`}
+        className={`relative rounded-full shadow-2xmd z-30 w outline-none ${setStyles}`}
       >
         {printIcon}
-        <Badge counter={counter} hovered={hovered} onClose={onClose} withCancel={withCancel} />
+        <Badge counter={counter} onClose={onClose} withCancel={withCancel} name={name} hovered={hovered} />
       </button>
     </div>
   );

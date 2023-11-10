@@ -63,9 +63,10 @@ export function putData(path, body) {
   });
 }
 
-export function deleteData(path) {
+export function deleteData(path, body) {
   return apiHandler({
     path: getApiPublicURL(path),
     requestMethod: 'DELETE',
+    body,
   });
 }
