@@ -14,6 +14,7 @@ import { useHookForm } from '@/utils/hooks';
 const TankerSlotsDetails = ({ applyHelper = false }) => {
   const {
     register,
+    unregister,
     setValue,
     clearErrors,
     watch,
@@ -69,8 +70,9 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
   };
 
   const handleRemoveSlot = (index) => {
-    setValue('imos', removeByIndex(tankers, index));
     handleChangeState('tankers', removeByIndex(tankers, index));
+    unregister(`imos[${index}]`)
+    clearErrors(`imos[${index}]`);
   };
 
   useEffect(() => {
