@@ -4,15 +4,15 @@ import { getSession } from 'next-auth/react';
 import { getRtURL } from '.';
 import { getSocketConnectionsParams } from './helpers';
 
-import { messagesDataAdapter } from '@/adapters';
+import { messageDataAdapter } from '@/adapters';
 import {
   messageAlert,
   resetUser,
   setConversation,
   setLoadConversation,
   setUser,
-  setUserConversation,
   typingStatus,
+  updateUserConversation,
 } from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
@@ -90,13 +90,12 @@ export class ChatController extends SignalRController {
     this.store.dispatch(setLoadConversation(true));
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser(data));
-    this.store.dispatch(setUserConversation([]));
 
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
       this.store.dispatch(setLoadConversation(false));
-      this.connection.on('ReceiveMessage', async (response) => {
-        this.updateMessage({ message: response });
+      this.connection.on('ReceiveMessage', async (message) => {
+        this.updateMessage({ message });
       });
     } catch (err) {
       console.error(err);
@@ -111,23 +110,23 @@ export class ChatController extends SignalRController {
     }
   }
 
-  async readMessage({ id }) {
-    try {
-      await this.connection.invoke('ReadMessage', id);
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  // async readMessage({ id }) {
+  //   try {
+  //     await this.connection.invoke('ReadMessage', id);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
 
   updateMessage({ message }) {
-    this.messages.push(message);
-    this.getMessages();
+    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
   }
 
-  getMessages() {
-    const data = messagesDataAdapter({ data: this.messages, session: this.session });
-    this.store.dispatch(setUserConversation(data));
-  }
+  // firstMessage({ message }) {
+  //   this.messages.push(message);
+  //   const data = messagesDataAdapter({ data: this.messages, session: this.session });
+  //   this.store.dispatch(setUserConversation(data));
+  // }
 
   incomingMessage({ chat }) {
     this.store.dispatch(messageAlert(chat));
@@ -141,7 +140,6 @@ export class ChatController extends SignalRController {
     this.stop();
     this.messages = [];
     this.store.dispatch(resetUser());
-    this.store.dispatch(setUserConversation([]));
     this.store.dispatch(setLoadConversation(false));
     this.store.dispatch(setConversation(false));
   }

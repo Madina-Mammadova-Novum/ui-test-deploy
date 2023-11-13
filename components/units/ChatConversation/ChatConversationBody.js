@@ -12,14 +12,6 @@ const ChatConversationBody = ({ messages = [], loading = false }) => {
   const scrollRef = useRef();
   // const [minus, setMinus] = useState(1);
 
-  // const dispatch = useDispatch();
-
-  // const { data: user } = useSelector(getChatSelector)?.chats?.user;
-
-  // useEffect(() => {
-  //   dispatch(getChatHistory({ data: { id: user?.chatId, date: '2023-09-01' } }));
-  // }, [user?.chatId]);
-
   // const handleScroll = () => {
   //   const currentDate = new Date();
 

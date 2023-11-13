@@ -123,7 +123,7 @@ export function chatHistoryResponseAdapter({ data, session }) {
 
   return {
     data: {
-      messages: messagesDataAdapter({ data: messages, session }),
+      messages: messagesDataAdapter({ data: messages || [], session }),
     },
   };
 }

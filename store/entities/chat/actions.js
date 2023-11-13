@@ -35,7 +35,7 @@ export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispa
 export const getChatHistory = createAsyncThunk(CHAT.GET_HISTORY, async ({ data }) => {
   const { data: result } = await getChatHistoryById({ data });
 
-  return { data: result?.messages };
+  return result?.messages;
 });
 
 export const deactivateUserChat = createAsyncThunk(CHAT.DEACTIVATE, async ({ data }, { dispatch }) => {

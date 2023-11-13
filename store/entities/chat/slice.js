@@ -53,8 +53,11 @@ const chatSlice = createSlice({
     setUpdate: (state, action) => {
       state.updating = action.payload;
     },
-    setUserConversation: (state, { payload }) => {
-      state.data.user.messages = payload;
+    updateUserConversation: (state, { payload }) => {
+      const today = state.data.user.messages.find((message) => message.title === 'Today');
+
+      if (today) today.data.push(payload);
+      else state.data.user.messages.push({ title: 'Today', data: [payload] });
     },
     setLoadConversation: (state, { payload }) => {
       state.data.user.loading = payload;
@@ -156,8 +159,9 @@ const chatSlice = createSlice({
     builder.addCase(getChatHistory.pending, (state) => {
       state.data.user.loading = true;
     });
-    builder.addCase(getChatHistory.fulfilled, (state) => {
+    builder.addCase(getChatHistory.fulfilled, (state, { payload }) => {
       state.data.user.loading = false;
+      state.data.user.messages = payload;
     });
     builder.addCase(getChatHistory.rejected, (state) => {
       state.data.user.loading = false;
@@ -189,7 +193,6 @@ export const {
   setUpdate,
   setConversation,
   setCollapsedChat,
-  setUserConversation,
   setDeactivateConversation,
   messageAlert,
   typingStatus,
@@ -198,6 +201,7 @@ export const {
   resetChatFilter,
   removeCollapsedChat,
   setLoadConversation,
+  updateUserConversation,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
