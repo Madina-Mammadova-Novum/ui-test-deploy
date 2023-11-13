@@ -8,7 +8,7 @@ import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { getFilledArray, removeByIndex } from '@/utils/helpers';
+import { getFilledArray } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const TankerSlotsDetails = ({ applyHelper = false }) => {
@@ -28,14 +28,13 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   const [helperText, setHelperText] = useState('');
   const isApplied = watch('applySlots');
+  const { tankersCount, tankers } = slotsState;
 
   const handleChangeState = (key, value) =>
     setSlotsState((prevState) => ({
       ...prevState,
       [key]: value,
     }));
-
-  const { tankersCount, tankers } = slotsState;
 
   const handleSlotsCount = (event) => {
     clearErrors('numberOfTankers');
@@ -47,6 +46,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
       numberOfTankers = '';
       setValue('applySlots', false);
       handleChangeState('tankers', []);
+      unregister('imos');
     }
 
     if (event.target.value && applyHelper) {
@@ -69,10 +69,13 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     handleChangeState('tankers', [...tankers, ...getFilledArray(1)]);
   };
 
-  const handleRemoveSlot = (index) => {
-    handleChangeState('tankers', removeByIndex(tankers, index));
-    unregister(`imos[${index}]`);
-    clearErrors(`imos[${index}]`);
+  const handleRemoveSlot = (tankerId) => {
+    handleChangeState(
+      'tankers',
+      tankers.filter((tanker) => tanker !== tankerId)
+    );
+    unregister(`imos[${tankerId}].imo`);
+    clearErrors(`imos[${tankerId}].imo`);
   };
 
   useEffect(() => {
@@ -112,8 +115,8 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {tankers.map((item, index) => {
-          const fieldName = `imos[${index}]`;
-          const error = errors.imos ? errors.imos[index]?.imo : null;
+          const fieldName = `imos[${item}]`;
+          const error = errors.imos ? errors.imos[item]?.imo : null;
 
           return (
             <div key={item} className="relative">
@@ -133,7 +136,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                   variant: 'tertiary',
                   size: 'small',
                 }}
-                onClick={() => handleRemoveSlot(index)}
+                onClick={() => handleRemoveSlot(item)}
                 disabled={isSubmitting}
               />
             </div>
