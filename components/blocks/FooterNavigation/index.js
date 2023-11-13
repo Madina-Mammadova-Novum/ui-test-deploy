@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { linkImagePropTypes, mediaPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
-import { makeId } from '@/utils/helpers';
 
 const FooterNavigation = ({ footerNavigation }) => {
   const [layoutImage, setLayoutImage] = useState('');
@@ -45,7 +44,7 @@ const FooterNavigation = ({ footerNavigation }) => {
             {links.map(({ label, path, image }) => {
               return (
                 <Link
-                  key={makeId()}
+                  key={path}
                   className="cursor-link text-2xl sm:text-4xl 2xl:text-5xl font-bold text-white"
                   href={path}
                   onMouseOver={() => onLinkOver(image)}
