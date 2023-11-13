@@ -22,8 +22,6 @@ import { getRoleIdentity } from '@/utils/helpers';
 const PreFixtureDetails = ({ searchedParams }) => {
   const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
 
-  const searchedResult = offers.find((offer) => offer?.cargoeId === searchedParams?.id);
-
   const { isOwner } = getRoleIdentity({ role });
 
   const printExpandableRow = (rowData) => {
@@ -31,21 +29,19 @@ const PreFixtureDetails = ({ searchedParams }) => {
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
+    const setAccepted = (isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed';
+    const setStyles = isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr';
+
     return (
       <ExpandableRow
         key={rowData.id}
         expand={toggle || searchedParams?.status}
-        header={
-          <ExpandableCardHeader
-            headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr'}
-          />
-        }
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
         footer={
           <PreFixtureExpandedFooter
             underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
             offerId={rowData.id}
-            offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
+            offerAccepted={setAccepted}
           />
         }
       >
@@ -60,11 +56,13 @@ const PreFixtureDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
+    const searchedResult = offers.find((offer) => offer?.cargoeId === searchedParams?.id);
+
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, searchedResult, printExpandableRow]);
+  }, [loading, printExpandableRow]);
 
   return printContent;
 };

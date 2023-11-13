@@ -36,7 +36,7 @@ const OnSubsDetails = ({ searchedParams }) => {
     return (
       <ExpandableRow
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
-        isOpened={Boolean(searchedParams.id)}
+        isOpened={Boolean(searchedParams?.status)}
         expand={toggle}
         footer={
           <OnSubsExpandedFooter
@@ -62,7 +62,7 @@ const OnSubsDetails = ({ searchedParams }) => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult) return [searchedResult]?.map(printExpandableRow);
 
-    return <Title level="3">Offer is not available.</Title>;
+    return <Title level="3">Notification is outdated.</Title>;
   }, [loading, offers, printExpandableRow]);
 
   return printContent;

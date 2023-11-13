@@ -12,9 +12,9 @@ import { getPostFixtureDataSelector } from '@/store/selectors';
 const PostFixtureDetails = ({ searchedParams }) => {
   const { offers, loading, toggle } = useSelector(getPostFixtureDataSelector);
 
-  const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
-
   const printContent = useMemo(() => {
+    const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
+
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult)
       return (
@@ -27,7 +27,7 @@ const PostFixtureDetails = ({ searchedParams }) => {
       );
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, searchedResult, toggle]);
+  }, [loading, toggle]);
 
   return printContent;
 };
