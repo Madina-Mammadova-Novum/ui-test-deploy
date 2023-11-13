@@ -43,7 +43,7 @@ const AccountPositionsDetails = ({ searchedParms }) => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (updatedResult) return [updatedResult]?.map(printExpandableCard);
 
-    return <Title level="3">No opened positions</Title>;
+    return <Title level="3">Notification is outdated.</Title>;
   }, [loading, updatedResult, printExpandableCard]);
 
   return (

@@ -20,7 +20,7 @@ const tabs = [
   },
   {
     label: 'Documents',
-    value: 'documents',
+    value: 'document',
   },
 ];
 
@@ -32,7 +32,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   const { isCharterer } = getRoleIdentity({ role: session?.role });
 
   const printContent = useMemo(() => {
-    if (currentTab === 'documents') {
+    if (currentTab === tabs[1].value) {
       return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
 
