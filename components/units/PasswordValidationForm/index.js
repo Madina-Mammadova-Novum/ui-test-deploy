@@ -79,7 +79,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
             placeholder={password?.placeholder}
             disabled={isSubmitting}
             onChange={passwordValidation}
-            autoComplete="new-password"
+            autoComplete="off"
             aria-autocomplete="none"
           />
           <PasswordInput
@@ -88,7 +88,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
             placeholder={confirm?.placeholder}
             disabled={isSubmitting}
             onChange={passwordValidation}
-            autoComplete="new-password"
+            autoComplete="off"
             aria-autocomplete="none"
           />
         </div>

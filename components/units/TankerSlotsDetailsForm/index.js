@@ -71,7 +71,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   const handleRemoveSlot = (index) => {
     handleChangeState('tankers', removeByIndex(tankers, index));
-    unregister(`imos[${index}]`)
+    unregister(`imos[${index}]`);
     clearErrors(`imos[${index}]`);
   };
 
