@@ -13,7 +13,7 @@ import { useFilters } from '@/utils/hooks';
 export default function PostFixtureLayout({ children }) {
   const dispatch = useDispatch();
 
-  const { offers, totalPages, filters } = useSelector(getPostFixtureDataSelector);
+  const { offers, totalPages, filters, sorting } = useSelector(getPostFixtureDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -24,9 +24,18 @@ export default function PostFixtureLayout({ children }) {
 
   useEffect(() => {
     dispatch(
-      fetchPostFixtureOffers({ page: paginationParams.currentPage, perPage: paginationParams.perPage, filters })
+      fetchPostFixtureOffers({
+        page: paginationParams.currentPage,
+        perPage: paginationParams.perPage,
+        filters,
+        sorting,
+      })
     );
   }, [paginationParams.currentPage, paginationParams.perPage]);
+
+  useEffect(() => {
+    if (paginationParams.currentPage > 1) paginationParams.handlePageChange({ selected: 0 });
+  }, [JSON.stringify({ ...filters, ...sorting })]);
 
   const layoutConfig = {
     withActions: false,
