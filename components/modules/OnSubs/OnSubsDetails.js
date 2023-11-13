@@ -24,8 +24,6 @@ const OnSubsDetails = ({ searchedParams }) => {
 
   const { isOwner } = getRoleIdentity({ role });
 
-  const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
-
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
@@ -33,14 +31,12 @@ const OnSubsDetails = ({ searchedParams }) => {
 
     const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
 
+    const setStyles = isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr 1fr';
+
     return (
       <ExpandableRow
-        header={
-          <ExpandableCardHeader
-            headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr 1fr'}
-          />
-        }
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
+        isOpened={Boolean(searchedParams.id)}
         expand={toggle}
         footer={
           <OnSubsExpandedFooter
@@ -61,11 +57,13 @@ const OnSubsDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
+    const searchedResult = offers?.find((offer) => offer.cargoeId === searchedParams.id);
+
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult) return [searchedResult]?.map(printExpandableRow);
 
-    return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, searchedResult, printExpandableRow]);
+    return <Title level="3">Offer is not available.</Title>;
+  }, [loading, offers, printExpandableRow]);
 
   return printContent;
 };
