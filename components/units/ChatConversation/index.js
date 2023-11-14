@@ -23,6 +23,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   useEffect(() => {
     if (isOpened) dispatch(getChatHistory({ data: { id: data?.chatId, date: '2023-13-11' } }));
+    else chatService.disconnect();
   }, [isOpened, data?.chatId]);
 
   useEffect(() => {

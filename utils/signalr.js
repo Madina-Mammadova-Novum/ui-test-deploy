@@ -73,41 +73,44 @@ export class ChatController extends SignalRController {
     this.messages = [];
   }
 
-  async initStatus() {
-    await this.setupConnection({ path: `${this.host}/chatlist` });
-
-    this.connection.on('ReceiveMessage', async (response) => {
-      this.incomingMessage({ chat: response });
-    });
-
-    this.connection.on('SomeoneIsTyping', async (response) => {
-      this.isTyping({ chat: response });
-    });
-  }
-
   async initChat(data) {
-    this.messages = [];
-    this.store.dispatch(setLoadConversation(true));
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser(data));
 
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
-      this.store.dispatch(setLoadConversation(false));
-      this.connection.on('ReceiveMessage', async (message) => {
-        this.updateMessage({ message });
-      });
+      this.connection.on('ReceiveMessage', (message) => this.updateMessage({ message }));
     } catch (err) {
       console.error(err);
+      this.disconnect();
     }
+  }
+
+  async initStatus() {
+    await this.setupConnection({ path: `${this.host}/chatlist` });
+
+    this.connection.on('ReceiveMessage', (chat) => this.incomingMessage({ chat }));
+    this.connection.on('SomeoneIsTyping', (chat) => this.isTyping({ chat }));
   }
 
   async sendMessage({ message }) {
     try {
-      await this.connection.invoke('SendMessage', message);
+      if (message !== '') await this.connection.invoke('SendMessage', message);
     } catch (e) {
       console.error(e);
     }
+  }
+
+  updateMessage({ message }) {
+    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
+  }
+
+  incomingMessage({ chat }) {
+    this.store.dispatch(messageAlert(chat));
+  }
+
+  isTyping({ chat }) {
+    this.store.dispatch(typingStatus(chat));
   }
 
   // async readMessage({ id }) {
@@ -118,29 +121,10 @@ export class ChatController extends SignalRController {
   //   }
   // }
 
-  updateMessage({ message }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
-  }
-
-  // firstMessage({ message }) {
-  //   this.messages.push(message);
-  //   const data = messagesDataAdapter({ data: this.messages, session: this.session });
-  //   this.store.dispatch(setUserConversation(data));
-  // }
-
-  incomingMessage({ chat }) {
-    this.store.dispatch(messageAlert(chat));
-  }
-
-  isTyping({ chat }) {
-    this.store.dispatch(typingStatus(chat));
-  }
-
   disconnect() {
     this.stop();
-    this.messages = [];
     this.store.dispatch(resetUser());
-    this.store.dispatch(setLoadConversation(false));
     this.store.dispatch(setConversation(false));
+    this.store.dispatch(setLoadConversation(false));
   }
 }

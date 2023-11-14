@@ -88,7 +88,8 @@ const chatSlice = createSlice({
       state.filterParams = initialState.filterParams;
     },
     resetUser: (state) => {
-      state.data.user = initialState.data.user;
+      state.data.user.data = {};
+      state.data.user.messages = [];
     },
 
     typingStatus: (state, { payload }) => {

@@ -119,10 +119,12 @@ export function messagesDataAdapter({ data, session }) {
 export function chatHistoryResponseAdapter({ data, session }) {
   if (!data) return null;
 
-  const { messages } = data?.data;
+  const { messages, created, isLast } = data?.data;
 
   return {
     data: {
+      created,
+      isLast,
       messages: messagesDataAdapter({ data: messages || [], session }),
     },
   };
