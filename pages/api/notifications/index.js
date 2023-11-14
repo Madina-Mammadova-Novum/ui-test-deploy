@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 
-import { notificationsAdapter } from '@/adapters/notifications';
+import { notificationsDataAdapter } from '@/adapters/notifications';
 import { Authorization } from '@/lib/constants';
 import { getRtURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     req,
     res,
     path: getRtURL(`notifications/search`),
-    dataAdapter: notificationsAdapter,
+    dataAdapter: notificationsDataAdapter,
     requestMethod: 'POST',
     options: { headers: { ...Authorization(session?.accessToken) } },
   });
