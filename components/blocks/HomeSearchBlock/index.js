@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
-import { AccountTools, TankerSearch } from '@/modules';
+import { TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
 
 const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
@@ -14,10 +14,6 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     {
       value: 'Search',
       label: 'Search',
-    },
-    {
-      value: 'Tools',
-      label: 'Tools',
     },
   ];
 
@@ -33,23 +29,23 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     elementToScroll?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleViewType = (typeOfView) => {
-    switch (typeOfView) {
-      case 'Tools':
-        return (
-          <AccountTools
-            className="flex 
-        [&>*:first-child]:xlMax:w-full
-        [&>*:nth-child(2)]:xlMax:w-full 
-        [&>*:first-child]:w-1/4 
-        [&>*:nth-child(2)]:w-3/4 
-        justify-center"
-          />
-        );
-      default:
-        return <TankerSearch />;
-    }
-  };
+  // const handleViewType = (typeOfView) => {
+  //   switch (typeOfView) {
+  //     case 'Tools':
+  //       return (
+  //         <AccountTools
+  //           className="flex
+  //       [&>*:first-child]:xlMax:w-full
+  //       [&>*:nth-child(2)]:xlMax:w-full
+  //       [&>*:first-child]:w-1/4
+  //       [&>*:nth-child(2)]:w-3/4
+  //       justify-center"
+  //         />
+  //       );
+  //     default:
+  //       return <TankerSearch />;
+  //   }
+  // };
 
   return (
     <section className="relative">
@@ -68,7 +64,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
           onClick={handleClickScroll}
         />
         <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
-        {handleViewType(activeTab)}
+        <TankerSearch />
       </div>
     </section>
   );

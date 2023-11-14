@@ -1,5 +1,11 @@
 import { convertDate, transformDate } from '@/utils/date';
-import { clientIdentification, extractTime, getListOfDataByDays, sortFromPastToToday } from '@/utils/helpers';
+import {
+  addLocalDateFlag,
+  clientIdentification,
+  extractTimeFromDate,
+  getListOfDataByDays,
+  sortFromPastToToday,
+} from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
   if (!data) return null;
@@ -10,14 +16,16 @@ export function chatSessionResponseAdapter({ data }) {
 function chatSessionDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id, contentId, archieved, messageCount } = data;
+  const { id, contentId, archieved, isOnline, messageCount } = data;
 
   return {
+    key: `${archieved ? 'archieved' : 'active'}`,
     chatId: id,
     contentId,
     archieved,
     messageCount,
     isTyping: false,
+    isOnline,
   };
 }
 
@@ -30,8 +38,8 @@ function chatDealDataAdapter({ data }) {
     vessel: {
       name: vessel?.details?.name?.toLowerCase(),
       imo: vessel?.imo?.toLowerCase(),
-      type: searchedCargo?.cargoType?.toLowerCase(),
-      cargoId: searchedCargo?.code,
+      type: searchedCargo?.cargoType?.name?.toLowerCase(),
+      cargoId: searchedCargo?.code.toLowerCase(),
       products: products?.map((product) => ({ id: product?.id, name: product?.productName?.toLowerCase() })),
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
@@ -56,16 +64,20 @@ function chatDealDataAdapter({ data }) {
 export function helpCenterDataAdapter({ data }) {
   if (!data) return null;
 
-  return {
-    chatId: data?.chat?.id,
-    created: data?.createdAt,
-    unreadedMessages: data?.chat?.messageCount,
-    isTyping: false,
-    broker: {
-      id: data?.broker?.id,
-      name: `${data?.broker?.name} ${data?.broker?.surname}`,
+  return [
+    {
+      archieved: false,
+      chatId: data?.chat?.id,
+      created: data?.createdAt,
+      messageCount: data?.chat?.messageCount,
+      key: 'support',
+      isTyping: false,
+      vessel: {
+        id: data?.broker?.id,
+        name: `${data?.broker?.name} ${data?.broker?.surname}`,
+      },
     },
-  };
+  ];
 }
 
 export function listOfChatsDataAdapter({ data }) {
@@ -85,7 +97,7 @@ export function messageDataAdapter({ data, session }) {
   return {
     id,
     message: body,
-    time: extractTime(createdAt),
+    time: extractTimeFromDate(addLocalDateFlag(createdAt), { hour: 'numeric', minute: 'numeric', hour12: false }),
     sender: clientIdentification({ senderId, session }),
   };
 }

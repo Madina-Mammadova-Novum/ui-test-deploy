@@ -9,6 +9,7 @@ import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import { ROUTES } from '@/lib';
 import {
+  captchaSchema,
   companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
@@ -18,6 +19,7 @@ import {
 } from '@/lib/schemas';
 import { ownerSignUp } from '@/services/user';
 import {
+  Captcha,
   CompanyAddresses,
   CompanyDetails,
   PasswordValidation,
@@ -31,6 +33,7 @@ import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks
 
 const OwnerRegistrationForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
+  const [captcha, setCaptcha] = useState('');
 
   const schema = yup.object().shape({
     ...personalDetailsSchema(),
@@ -39,15 +42,18 @@ const OwnerRegistrationForm = () => {
     ...tankerSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
     ...termsAndConditionsSchema(),
+    ...captchaSchema(),
   });
 
   const methods = useHookFormParams({ schema });
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
   useEffect(() => {
+    methods.setValue('captcha', captcha);
     methods.setValue('sameAddresses', addressValue);
+
     setSameAddress(addressValue);
-  }, [addressValue, methods]);
+  }, [addressValue, methods, captcha]);
 
   const onSubmit = async (formData) => {
     const { status, error, data } = await ownerSignUp({ data: formData });
@@ -96,6 +102,7 @@ const OwnerRegistrationForm = () => {
           <CompanyAddresses />
         </Step>
         <TermsAndConditions />
+        <Captcha onChange={setCaptcha} />
       </FormManager>
     </FormProvider>
   );

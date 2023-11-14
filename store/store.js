@@ -1,14 +1,28 @@
 import { devToolsEnhancer } from '@redux-devtools/extension';
 import { configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 import { reducer } from '@/store/reducers';
 
+const createNoopStorage = () => {
+  return {
+    getItem() {
+      return Promise.resolve(null);
+    },
+    setItem(_key, value) {
+      return Promise.resolve(value);
+    },
+    removeItem() {
+      return Promise.resolve();
+    },
+  };
+};
+
 const persistConfig = {
   key: 'root',
-  storage,
-  whitelist: ['user', 'general', 'notifications', 'chat'],
+  storage: typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage(),
+  whitelist: ['general', 'notifications', 'chat', 'user'],
   version: 1,
 };
 
@@ -22,8 +36,7 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }), // could be extended by api reducers
-  devTools:
-    process.env.NODE_ENV === 'development' && devToolsEnhancer({ serialize: false,  features: { persist: true } }),
+  devTools: process.env.NODE_ENV === 'development' && devToolsEnhancer(),
 });
 
 export const persistore = persistStore(store);

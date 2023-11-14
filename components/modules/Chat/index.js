@@ -19,7 +19,7 @@ const Chat = () => {
   const {
     opened,
     isActive,
-    newMessagesCounter,
+    newMessages,
     chats: { user },
   } = useSelector(getChatSelector);
 
@@ -47,13 +47,7 @@ const Chat = () => {
   };
 
   const handleCollapseConversation = () => {
-    dispatch(
-      setCollapsedChat({
-        chatId: user?.data?.chatId,
-        name: user?.data?.vessel?.name,
-        status: null,
-      })
-    );
+    dispatch(setCollapsedChat(user.data));
 
     chatService.disconnect();
   };
@@ -62,13 +56,35 @@ const Chat = () => {
     if (mdScreen && isActive) dispatch(setOpenedChat(false));
   }, [mdScreen, isActive]);
 
+  // const onActivate = (chat) => chatService.initChat(chat);
+
+  // const onRemove = async ({ id }) => {
+  //   dispatch(resetUser());
+  //   dispatch(removeCollapsedChat(id));
+  //   chatService.disconnect();
+  // };
+
+  // const handleStartConversation = ({ id, key }) => {
+  //   const chat = chats[key]?.find((session) => session?.chatId === id);
+
+  //   onRemove({ id: chat?.chatId }).then(() => {
+  //     onActivate(chat);
+  //     dispatch(setOpenedChat(true));
+  //   });
+  // };
+
+  // const handleCloseConversation = (e, id) => {
+  //   e?.stopPropagation();
+  //   onRemove({ id });
+  // };
+
   return (
     <>
       <ChatButton
-        counter={newMessagesCounter}
+        counter={newMessages}
         onClick={handleOpen}
-        withCancel={false}
         className="fixed right-3 bottom-3 z-30"
+        withCancel={false}
       />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <ChatConversation
@@ -81,7 +97,5 @@ const Chat = () => {
     </>
   );
 };
-
-Chat.propTypes = {};
 
 export default Chat;

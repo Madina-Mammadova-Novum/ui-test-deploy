@@ -1,6 +1,12 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, extractTimeFromDate, getAppropriateFailedBy, getRoleIdentity } from '@/utils/helpers';
+import {
+  addLocalDateFlag,
+  calculateCountdown,
+  extractTimeFromDate,
+  getAppropriateFailedBy,
+  getRoleIdentity,
+} from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -21,7 +27,6 @@ export function sendOfferAdapter({ data }) {
     responseCountdown,
     value,
     minOfferQuantity,
-    totalAmount,
     ballastLeg,
     estimatedArrivalTime,
     // nor,
@@ -37,8 +42,7 @@ export function sendOfferAdapter({ data }) {
     estimatedArrivalTime,
     ballastLeg,
     freightFormatId: freight.value,
-    mt: value,
-    totalAmount: +totalAmount.toFixed(0),
+    freight: value,
     minOfferQuantity,
     demurrageRate,
     laytime: layTime,
@@ -247,11 +251,14 @@ export function offerDetailsAdapter({ data, role }) {
       ],
     },
 
-    comments: comments?.map(({ comment, createdAt }) => ({
-      title: comment,
-      date: transformDate(createdAt, 'MMM dd, yyyy'),
-      time: extractTimeFromDate(createdAt),
-    })),
+    comments: comments?.map(({ comment, createdAt }) => {
+      const localDateFormat = addLocalDateFlag(createdAt);
+      return {
+        title: comment,
+        date: transformDate(localDateFormat, 'MMM dd, yyyy'),
+        time: extractTimeFromDate(localDateFormat),
+      };
+    }),
 
     counterofferData: {
       offerId,
@@ -404,6 +411,20 @@ export const requestExtendCountdownAdapter = ({ data }) => {
 };
 
 export const responseExtendCountdownAdapter = ({ data }) => {
+  if (!data) return {};
+  return data;
+};
+
+export const requestOnSubsCountdownExtensionAdapter = ({ data }) => {
+  if (!data) return [];
+  const { option, offerId } = data;
+  return {
+    dealId: offerId,
+    minutes: option?.value,
+  };
+};
+
+export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {
   if (!data) return {};
   return data;
 };

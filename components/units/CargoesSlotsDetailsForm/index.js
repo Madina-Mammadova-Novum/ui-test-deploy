@@ -19,7 +19,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     setValue,
     clearErrors,
     watch,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useHookForm();
 
   const { ports } = useSelector(getGeneralDataSelector);
@@ -99,12 +99,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     handleChangeState('cargoesCount', numberOfCargoes);
 
     if (isApplied) setHelperText('');
-
-    if (isSubmitSuccessful) {
-      handleChangeState('cargoesCount', 0);
-      handleChangeState('cargoes', []);
-    }
-  }, [cargoes, isApplied, isSubmitSuccessful, setValue]);
+  }, [cargoes?.length, isApplied, setValue]);
 
   return (
     <div className="grid gap-5">
@@ -160,6 +155,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               async
             />
             <DatePicker
+              maxDate={new Date()}
               calendarClass="absolute right-0"
               name={`${fieldName}.date`}
               inputClass="w-full min-w-[150px]"

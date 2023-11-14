@@ -129,6 +129,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             inputClass="w-full"
             containerClass="w-full"
             name="laycanStart"
+            minDate={new Date()}
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
           />
@@ -137,6 +138,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             inputClass="w-full"
             containerClass="w-full"
             name="laycanEnd"
+            minDate={new Date()}
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
           />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import classnames from 'classnames';
 
@@ -34,8 +34,8 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
     responseCountdown: {},
     loading: false,
   });
-  const [showScroll, setShowScroll] = useState(false);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
+  const scrollingContainerRef = useRef(null);
 
   const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
@@ -45,20 +45,6 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       ...prevState,
       [key]: value,
     }));
-
-  const tabContent = useMemo(() => {
-    switch (currentTab) {
-      case 'comments':
-        return <CommentsContent data={comments} />;
-      default:
-        return (
-          <>
-            <VoyageDetailsTabContent data={voyageDetails} inlineVariant />
-            <SendCounterofferFormFields data={counterofferData} />
-          </>
-        );
-    }
-  }, [currentTab]);
 
   useEffect(() => {
     (async () => {
@@ -74,6 +60,22 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
 
   const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
   const handleValidationError = () => setCurrentTab(tabs[0].value);
+  const scrollToBottom = () =>
+    setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
+
+  const tabContent = useMemo(() => {
+    switch (currentTab) {
+      case 'comments':
+        return <CommentsContent data={comments} />;
+      default:
+        return (
+          <>
+            <VoyageDetailsTabContent data={voyageDetails} inlineVariant />
+            <SendCounterofferFormFields data={counterofferData} scrollToBottom={scrollToBottom} />
+          </>
+        );
+    }
+  }, [currentTab]);
 
   return (
     <div className="w-[610px]">
@@ -98,7 +100,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
         <Countdown time={countdownData} />
         <div className="pl-4 border-l h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the vessel owner to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offer
           </p>
           <Dropdown
             defaultValue={responseCountdown}
@@ -127,8 +129,11 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
             />
 
             <div
-              ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-              className={classnames('h-[320px] overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset')}
+              ref={scrollingContainerRef}
+              className={classnames(
+                'h-[320px] overflow-y-auto overflow-x-hidden',
+                scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
+              )}
             >
               {tabContent}
             </div>

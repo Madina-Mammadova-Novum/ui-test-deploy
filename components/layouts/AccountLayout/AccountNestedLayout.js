@@ -49,7 +49,7 @@ const AccountNestedLayout = ({ children, config }) => {
 
   return (
     <div className="px-5">
-      <section className="flex min-h-[90vh] flex-col gap-y-5">
+      <section className="flex min-h-[85vh] flex-col gap-y-5">
         <div className="flex justify-between items-center pt-5">
           <div className="flex flex-col">
             <Label className="text-xs-sm">{data.label}</Label>

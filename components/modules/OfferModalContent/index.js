@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
@@ -39,6 +39,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     showScroll: false,
     loading: false,
   });
+  const scrollingContainerRef = useRef(null);
   const { searchData } = useSelector(searchSelector);
   const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchData;
   const { voyageDetails } = voyageDetailsAdapter({ data: searchData });
@@ -55,17 +56,6 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const handleValidationError = () => handleChangeState('currentTab', tabs[0].value);
 
   const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
-
-  const tabContent = useMemo(() => {
-    switch (currentTab) {
-      case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetails} />;
-      case 'comments':
-        return <CommentsContent />;
-      default:
-        return <CommercialOfferTerms tankerId={tankerId} />;
-    }
-  }, [currentTab, tankerId]);
 
   const handleSubmit = async (formData) => {
     const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
@@ -108,6 +98,20 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     })();
   }, []);
 
+  const scrollToBottom = () =>
+    setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
+
+  const tabContent = useMemo(() => {
+    switch (currentTab) {
+      case 'voyage_details':
+        return <VoyageDetailsTabContent data={voyageDetails} />;
+      case 'comments':
+        return <CommentsContent />;
+      default:
+        return <CommercialOfferTerms tankerId={tankerId} scrollToBottom={scrollToBottom} />;
+    }
+  }, [currentTab, tankerId]);
+
   return (
     <div className="w-[610px]">
       <Title level="2">Send Offer</Title>
@@ -115,7 +119,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the vessel owner to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offer
           </p>
           <Dropdown
             defaultValue={responseCountdown}
@@ -130,7 +134,10 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
       <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
 
-      <div className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}>
+      <div
+        ref={scrollingContainerRef}
+        className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+      >
         <div className="p-2.5">
           <OfferForm handleSubmit={handleSubmit} handleValidationError={handleValidationError}>
             {tabContent}

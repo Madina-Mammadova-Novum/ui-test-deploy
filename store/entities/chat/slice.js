@@ -15,12 +15,7 @@ const initialState = {
     archived: [],
     searched: [],
     collapsed: [],
-    support: {
-      chatId: null,
-      created: null,
-      broker: null,
-      unreadedMessages: 0,
-    },
+    support: [],
     user: {
       loading: false,
       data: {},
@@ -39,12 +34,16 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     searchedData: (state, { payload }) => {
-      const result = state.data.active.filter(
-        ({ vessel }) =>
-          vessel.name.includes(payload) ||
-          vessel.imo.includes(payload) ||
-          vessel.products.some(({ name }) => name?.includes(payload))
-      );
+      const { value, key } = payload;
+
+      const result = state.data[key].filter(({ vessel }) => {
+        return (
+          vessel.name.includes(value) ||
+          vessel.cargoId.includes(value) ||
+          vessel.imo.includes(value) ||
+          vessel.products.some(({ name }) => name?.includes(value))
+        );
+      });
 
       state.data.searched = result;
     },
@@ -104,13 +103,13 @@ const chatSlice = createSlice({
     },
 
     messageAlert: (state, { payload }) => {
-      if (state.data.support.chatId === payload?.id) {
+      if (state.data.support[0]?.chatId === payload?.id) {
         const updatedMessage = {
-          ...state.data.support,
-          unreadedMessages: payload.messageCount,
+          ...state.data.support[0],
+          messageCount: payload.messageCount,
         };
 
-        state.data.support = updatedMessage;
+        state.data.support[0] = updatedMessage;
       }
 
       const updatedActiveState = state.data.active.map((user) => {
@@ -123,12 +122,24 @@ const chatSlice = createSlice({
         return user;
       });
 
+      const updatedCollapsedState = state.data.collapsed.map((user) => {
+        if (user.contentId === payload?.contentId) {
+          return {
+            ...user,
+            messageCount: payload.messageCount,
+          };
+        }
+        return user;
+      });
+
       state.data.active = updatedActiveState;
+      state.data.collapsed = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getListOfChats.pending, (state) => {
       state.loading = true;
+      state.updating = false;
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
@@ -140,6 +151,7 @@ const chatSlice = createSlice({
     builder.addCase(getListOfChats.rejected, (state) => {
       state.loading = false;
       state.error = true;
+      state.updating = false;
     });
     builder.addCase(getChatHistory.pending, (state) => {
       state.data.user.loading = true;

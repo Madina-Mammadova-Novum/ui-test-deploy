@@ -20,3 +20,10 @@ export async function getCargoFailedOffers(cargoId) {
     ...response,
   };
 }
+
+export async function getPostFixtureCargoCodes() {
+  const response = await getData(`account/post-fixture/get-cargocodes`);
+  return {
+    ...response,
+  };
+}

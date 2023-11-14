@@ -17,8 +17,6 @@ import { UnassignedFleet } from '@/units';
 const Fleets = ({ searchedParams }) => {
   const { data, toggle, loading } = useSelector(getFleetsSelector);
 
-  const searchedResult = data?.find((vessel) => vessel?.id === searchedParams?.id);
-
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
 
@@ -57,12 +55,15 @@ const Fleets = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
+    const searchedResult = data?.find((vessel) => vessel?.id === searchedParams?.id);
+
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult) return [searchedResult].map(printExpandableRow);
-    if (data && !searchedResult) return data.map(printExpandableRow);
+
+    if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
 
     return <Title level="3">No positions</Title>;
-  }, [loading, data, searchedResult, printExpandableRow]);
+  }, [loading, data, printExpandableRow]);
 
   return (
     <div className="flex flex-col gap-y-2.5 grow">

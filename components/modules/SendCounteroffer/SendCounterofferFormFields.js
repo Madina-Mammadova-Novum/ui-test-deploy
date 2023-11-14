@@ -15,7 +15,7 @@ import { offerSelector } from '@/store/selectors';
 import { calculateIntDigit, calculateTotal, getRoleIdentity, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const SendCounterofferFormFields = ({ data }) => {
+const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const [freightEstimation, setFreightEstimation] = useState({});
   const dispatch = useDispatch();
   const {
@@ -171,6 +171,7 @@ const SendCounterofferFormFields = ({ data }) => {
           disabled={initialLoading}
           asyncCall={initialLoading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
+          onExpand={scrollToBottom}
         />
 
         <FormDropdown
@@ -181,6 +182,7 @@ const SendCounterofferFormFields = ({ data }) => {
           disabled={initialLoading}
           asyncCall={initialLoading}
           onChange={(option) => handleChange('paymentTerms', option)}
+          onExpand={scrollToBottom}
         />
       </div>
     </>

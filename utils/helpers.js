@@ -386,6 +386,8 @@ export const calculateTotal = (array, key) =>
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);
 
+export const addLocalDateFlag = (dateString = '') => (dateString.endsWith('Z') ? dateString : `${dateString}Z`);
+
 export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
 
 export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
@@ -565,17 +567,7 @@ export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
 
 export function checkTankerStatus(date) {
   const openDate = new Date(date);
-  const currentDate = new Date();
+  const today = new Date();
 
-  if (currentDate > openDate) {
-    const rollOnDate1 = new Date(openDate.getTime() + 48 * 60 * 60 * 1000);
-    const rollOnDate2 = new Date(rollOnDate1.getTime() + 48 * 60 * 60 * 1000);
-    const rollOnDate3 = new Date(rollOnDate2.getTime() + 48 * 60 * 60 * 1000);
-
-    if (currentDate < rollOnDate3) {
-      return true;
-    }
-    return false;
-  }
-  return null;
+  return today > openDate;
 }

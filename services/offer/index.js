@@ -5,6 +5,7 @@ import {
   acceptOfferAdapter,
   declineOfferAdapter,
   requestExtendCountdownAdapter,
+  requestOnSubsCountdownExtensionAdapter,
   sendCounterofferAdapter,
   sendOfferAdapter,
 } from '@/adapters/offer';
@@ -138,6 +139,15 @@ export async function extendCountdown({ offerId, role }) {
   const path = isOwner ? `offer/extend-countdown` : `offer/charterer/extend-countdown`;
   const response = await postData(path, body);
   if (!response.error) response.message = 'Countdown has been successfully extended';
+  return {
+    ...response,
+  };
+}
+
+export async function requestCountdownExtension({ data }) {
+  const body = requestOnSubsCountdownExtensionAdapter({ data });
+  const response = await postData('account/on-subs/request-extension', body);
+  if (!response.error) response.message = 'You have successfully requested countdown extension';
   return {
     ...response,
   };

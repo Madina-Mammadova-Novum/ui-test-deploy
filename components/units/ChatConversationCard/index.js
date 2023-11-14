@@ -11,7 +11,7 @@ import { getGeneralDataSelector } from '@/store/selectors';
 import { ChatAdditional, ChatInfoModal } from '@/units';
 
 const ChatConversationCard = ({ data, contrasted = false }) => {
-  const { additional, vessel, isActive, subtitle } = data;
+  const { additional, vessel, isOnline, subtitle } = data;
 
   const { countries } = useSelector(getGeneralDataSelector);
 
@@ -54,7 +54,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
 
   return (
     <div className="text-black flex items-start gap-x-1.5 w-full">
-      <ShipIcon isActive={isActive} />
+      <ShipIcon isOnline={isOnline} />
       <div className="flex flex-col">
         <Title
           level="6"
@@ -64,7 +64,9 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
         </Title>
         {subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{subtitle}</p>}
         {printCargoeModal}
-        <ChatAdditional data={{ vessel, countries, additional }} isActive={setMore} onClick={handleShowMore} />
+        {!contrasted && (
+          <ChatAdditional data={{ vessel, countries, additional }} isActive={setMore} onClick={handleShowMore} />
+        )}
       </div>
     </div>
   );

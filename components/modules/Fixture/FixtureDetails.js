@@ -20,8 +20,6 @@ import { getFixtureSelector } from '@/store/selectors';
 const FixtureDetails = ({ searchedParams }) => {
   const { offers, toggle, loading } = useSelector(getFixtureSelector);
 
-  const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
-
   const printExpandableRow = (rowData) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
 
@@ -41,11 +39,13 @@ const FixtureDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
+    const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
+
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, searchedResult, printExpandableRow]);
+  }, [loading, printExpandableRow]);
 
   return printContent;
 };

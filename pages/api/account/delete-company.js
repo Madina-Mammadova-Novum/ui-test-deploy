@@ -10,7 +10,7 @@ import { AUTHCONFIG } from '@/utils/auth';
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, AUTHCONFIG);
 
-  const password = delve(req, 'body.password');
+  const password = delve(req, 'body');
 
   if (!password) {
     return errorHandler(res, 422, 'Please provide the required field "password"');

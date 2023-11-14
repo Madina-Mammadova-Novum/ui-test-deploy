@@ -34,7 +34,7 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
       case ROUTES.ACCOUNT_POSTFIXTURE:
         return { updateDocumentStatus: updatePostFixtureDocumentStatus };
       default:
-        return { updateDocumentStatus: null };
+        return { updateDocumentStatus: pathname.includes(ROUTES.ACCOUNT_ONSUBS) ? updateOnSubsDocumentStatus : null };
     }
   }, [ROUTES, pathname, updateFixtureDocumentStatus, updateOnSubsDocumentStatus, updatePostFixtureDocumentStatus]);
 

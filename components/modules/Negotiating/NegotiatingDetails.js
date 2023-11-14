@@ -18,8 +18,6 @@ import { getRoleIdentity } from '@/utils/helpers';
 const NegotiatingDetails = ({ searchedParams }) => {
   const { role, toggle, loading, offers } = useSelector(getNegotiatingDataSelector);
 
-  const searchedResult = offers.find((offer) => offer.id === searchedParams.tankerId);
-
   const { isOwner } = getRoleIdentity({ role });
 
   const printExpandableRow = (rowData) => {
@@ -47,11 +45,13 @@ const NegotiatingDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
+    const searchedResult = offers.find((offer) => offer.id === searchedParams.tankerId);
+
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, searchedResult, toggle, printExpandableRow]);
+  }, [loading, toggle, printExpandableRow]);
 
   return printContent;
 };

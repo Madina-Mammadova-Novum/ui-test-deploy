@@ -7,18 +7,14 @@ import { calculateCountdown, transformBytes } from '@/utils/helpers';
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const {
-    searchedCargo: {
-      code,
-      cargoType: { name: cargoName } = {},
-      totalQuantity,
-      loadTerminal: { port: { name: portName, locode, country } = {} } = {},
-    } = {},
+    searchedCargo: { code, cargoType, totalQuantity, loadTerminal } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     laycanStart,
     laycanEnd,
     expiresAt,
     frozenAt,
   } = data;
+  const { port: { name: portName, locode, country, countryId } = {} } = loadTerminal || {};
 
   return [
     {
@@ -31,7 +27,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Cargo type',
-      text: cargoName,
+      text: cargoType?.name,
     },
     {
       label: 'Quantity',
@@ -40,7 +36,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
-      country,
+      country: country || { id: countryId },
     },
     {
       label: 'Laycan start',
@@ -64,18 +60,13 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
   const {
-    searchedCargo: {
-      code,
-      cargoType: { name: cargoName } = {},
-      totalQuantity,
-      loadTerminal: { port: { name, locode, country, countryId } = {} } = {},
-    } = {},
+    searchedCargo: { code, cargoType, totalQuantity, loadTerminal } = {},
     laycanStart,
     laycanEnd,
-    createdAt,
     expiresAt,
     frozenAt,
   } = data;
+  const { port: { name, locode, country, countryId } = {} } = loadTerminal || {};
 
   return [
     {
@@ -84,7 +75,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Cargo type',
-      text: cargoName,
+      text: cargoType?.name,
     },
     {
       label: 'Quantity',
@@ -102,10 +93,6 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Laycan end',
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
-    },
-    {
-      label: 'Creation date',
-      text: transformDate(createdAt, 'MMM dd, yyyy'),
     },
     {
       label: 'Countdown',
@@ -184,7 +171,7 @@ export const prefixtureRowsDataAdapter = ({ data }) => {
 export const prefixtureOwnerDetailsAdapter = (data) => {
   if (!data) return {};
   const {
-    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
+    searchedCargo: { cargoType } = {},
     products = [],
     freight,
     freightFormat,
@@ -205,14 +192,10 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
         port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
       } = {},
     } = {},
-    charterer: {
-      averageTonnagePerCharter,
-      estimatedNumberOfChartersPerYear,
-      yearsInOperation,
-      registrationCity: { country: { name: countryName, codeISO2: countryCode } = {} } = {},
-    } = {},
+    charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
     additionalCharterPartyTerms,
   } = data;
+  const { country: registrationCountry } = registrationCity || {};
 
   return {
     releatedCargoeId: data?.searchedCargo?.id,
@@ -221,19 +204,19 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       chartersPerYear: estimatedNumberOfChartersPerYear || '0',
       avgTonnage: averageTonnagePerCharter || '0',
       registrationCountry: {
-        countryName,
-        countryCode,
+        countryName: registrationCountry?.name,
+        countryCode: registrationCountry?.codeISO2,
       },
     },
     cargoDetails: {
-      cargoType: cargoName,
+      cargoType: cargoType?.name,
       products,
     },
     commercialOfferTerms: {
       freight: `${freightFormat?.value} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
-      demurragePaymmentTerms: demurragePaymentTerm?.name,
+      demurragePaymentTerms: demurragePaymentTerm?.name,
       paymentTerms: paymentTerm?.name,
     },
     voyageDetails: {
@@ -255,7 +238,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
   const {
     vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
-    searchedCargo: { cargoType: { name: cargoName } = {} } = {},
+    searchedCargo: { cargoType } = {},
     products = [],
     freight,
     freightFormat,
@@ -286,15 +269,15 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       estimatedTankerDWT: estimatedAverageTankerDWT,
     },
     cargoDetails: {
-      cargoType: cargoName,
+      cargoType: cargoType?.name,
       products,
     },
     commercialOfferTerms: {
       freight: `${freightFormat?.value} ${freight}`,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
-      demurragePaymmentTerms: demurragePaymentTerm,
-      paymentTerms: paymentTerm,
+      demurragePaymentTerms: demurragePaymentTerm?.name,
+      paymentTerms: paymentTerm?.name,
     },
     voyageDetails: {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),

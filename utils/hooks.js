@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
-import { getSession } from 'next-auth/react';
 
 import { getFilledArray, sortByType } from './helpers';
 
@@ -283,14 +282,12 @@ export const useSidebarActiveColor = (path) => {
   return { isActive: false };
 };
 
-export const geRoleNavigation = async () => {
-  const session = await getSession();
-
-  switch (session?.role) {
+export const getRoleBasedNavigation = async ({ role }) => {
+  switch (role) {
     case ROLES.OWNER:
-      return { data: ownerSidebarAdapter({ role: session?.role }) };
+      return { data: ownerSidebarAdapter({ role }) };
     case ROLES.CHARTERER:
-      return { data: chartererSidebarAdapter({ role: session?.role }) };
+      return { data: chartererSidebarAdapter({ role }) };
     default:
       return { data: [] };
   }
@@ -305,4 +302,24 @@ export const useFormUpdate = (name, index, initialValue) => {
   }, [fieldName, initialValue, methods]);
 
   return fieldName;
+};
+
+export const useDisableNumberInputScroll = () => {
+  useEffect(() => {
+    const handleWheel = (e) => {
+      e.preventDefault();
+    };
+
+    const numberInputs = document.querySelectorAll('input[type="number"]');
+
+    numberInputs.forEach((input) => {
+      input.addEventListener('wheel', handleWheel, { passive: false });
+    });
+
+    return () => {
+      numberInputs.forEach((input) => {
+        input.removeEventListener('wheel', handleWheel);
+      });
+    };
+  }, []);
 };

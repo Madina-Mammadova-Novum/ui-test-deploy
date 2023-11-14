@@ -4,7 +4,7 @@ import Providers from '@/providers';
 
 import '@/styles/index.css';
 
-const BaseLayout = ({ children }) => {
+export default function BaseLayout({ children }) {
   return (
     <html lang="en">
       <head />
@@ -13,8 +13,6 @@ const BaseLayout = ({ children }) => {
       </body>
     </html>
   );
-};
+}
 
 BaseLayout.propTypes = BaseLayoutPropTypes;
-
-export default BaseLayout;

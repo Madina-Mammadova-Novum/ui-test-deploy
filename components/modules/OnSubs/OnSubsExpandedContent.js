@@ -1,21 +1,17 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
+import ExtendOnSubsCountdown from './ExtendOnSubsCountdown';
 
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
-import { Button } from '@/elements';
-import { extendCountdown } from '@/services/offer';
-import { updateCountdown } from '@/store/entities/on-subs/slice';
-import { Tabs } from '@/units';
-import { getRoleIdentity, parseErrors } from '@/utils/helpers';
-import { errorToast, successToast } from '@/utils/hooks';
+import { ModalWindow, Tabs } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const tabs = [
   {
@@ -24,7 +20,7 @@ const tabs = [
   },
   {
     label: 'Documents',
-    value: 'documents',
+    value: 'document',
   },
 ];
 
@@ -34,21 +30,9 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
 
   const { data: session } = useSession();
   const { isCharterer } = getRoleIdentity({ role: session?.role });
-  const dispatch = useDispatch();
-
-  const handleExtendCountdown = async () => {
-    const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
-    if (error) {
-      errorToast(parseErrors(error.message));
-    } else {
-      successToast(successMessage);
-      setAllowCountdownExtension(false);
-      dispatch(updateCountdown({ offerId }));
-    }
-  };
 
   const printContent = useMemo(() => {
-    if (currentTab === 'documents') {
+    if (currentTab === tabs[1].value) {
       return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
 
@@ -65,26 +49,18 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
         {isCharterer && (
-          <Button
-            buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-            customStyles="
-              border border-blue 
-              hover:border-blue-darker 
-              whitespace-nowrap
-              !px-2.5 !py-0.5 uppercase !text-[10px] 
-              font-bold 
-              absolute 
-              right-1
-              -translate-x-5 
-              xlMax:w-fit
-              xlMax:top-14
-              xlMax:left-[50%] 
-              xlMax:transform
-              xlMax:-translate-x-1/2
-            "
-            disabled={!allowCountdownExtension}
-            onClick={handleExtendCountdown}
-          />
+          <ModalWindow
+            buttonProps={{
+              text: 'Request response time extension',
+              variant: 'primary',
+              size: 'small',
+              disabled: !allowCountdownExtension,
+              className:
+                'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-[50%] xlMax:transform xlMax:-translate-x-1/2',
+            }}
+          >
+            <ExtendOnSubsCountdown offerId={offerId} onExtensionSuccess={() => setAllowCountdownExtension(false)} />
+          </ModalWindow>
         )}
       </div>
       {printContent}

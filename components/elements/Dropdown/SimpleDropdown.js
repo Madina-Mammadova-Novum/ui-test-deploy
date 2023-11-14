@@ -20,7 +20,15 @@ const LoadingIndicator = () => (
   </div>
 );
 
-export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, isDisabled, ...rest }) => {
+export const SimpleDropdown = ({
+  asyncCall = false,
+  options,
+  ref,
+  hardHeight,
+  isDisabled,
+  onExpand = () => {},
+  ...rest
+}) => {
   const [open, setOpen] = useState(false);
 
   const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
@@ -56,7 +64,10 @@ export const SimpleDropdown = ({ asyncCall = false, options, ref, hardHeight, is
       closeMenuOnSelect
       menuIsOpen={open}
       isDisabled={isDisabled}
-      onMenuOpen={() => setOpen(true)}
+      onMenuOpen={() => {
+        setOpen(true);
+        onExpand();
+      }}
       onMenuClose={() => setOpen(false)}
       className={isDisabled && 'opacity-50'}
     />

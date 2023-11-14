@@ -18,7 +18,7 @@ import {
 } from '@/utils/mock';
 
 const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
-  const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
+  const [currentTab, setCurrentTab] = useState(tab || tabs[0]?.value);
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
@@ -48,8 +48,8 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
           noDataMessage="No data provided"
         />
       ),
-    };
-  });
+    }[currentTab];
+  }, [currentTab]);
 
   return (
     <>
@@ -59,7 +59,7 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
         tabs={tabs}
         customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
-      <div className="mb-3 table-scroll">{tabContent[currentTab]}</div>
+      <div className="mb-3 table-scroll">{tabContent}</div>
     </>
   );
 };

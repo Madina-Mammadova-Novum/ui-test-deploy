@@ -3,9 +3,6 @@ const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   reactStrictMode: false,
   swcMinify: true,
   images: {

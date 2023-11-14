@@ -140,10 +140,10 @@ export const metaData = (props) => {
     //   creatorId: '1467726470533754880',
     //   images: ['https://nextjs.org/og.png'],
     // },
-    viewport: {
-      width: 'device-width',
-      initialScale: 1,
-      maximumScale: 1,
-    },
+    // viewport: {
+    //   width: 'device-width',
+    //   initialScale: 1,
+    //   maximumScale: 1,
+    // },
   };
 };

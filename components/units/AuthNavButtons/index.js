@@ -1,17 +1,9 @@
-'use client';
-
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-
 import { AuthNavButtonsPropTypes } from '@/lib/types';
 
 import { LinkAsButton, LoginButton } from '@/elements';
 import { ROUTES } from '@/lib';
-import { getUserDataSelector } from '@/store/selectors';
 
-const AuthNavButtons = ({ data = [] }) => {
-  const { isAuthenticated } = useSelector(getUserDataSelector);
-
+const AuthNavButtons = ({ authorized, data = [] }) => {
   const printUnAuthButtons = ({ path, label, linkOptions }) => {
     if (path === ROUTES.LOGIN)
       return (
@@ -37,19 +29,21 @@ const AuthNavButtons = ({ data = [] }) => {
     );
   };
 
-  const printAuthButton = useMemo(() => {
-    return (
-      <LinkAsButton
-        href={ROUTES.ACCOUNT_NEGOTIATING}
-        buttonProps={{ variant: 'secondary', size: 'large' }}
-        customStyles="capitalize"
-      >
-        Go to deals
-      </LinkAsButton>
-    );
-  }, []);
-
-  return <ul className="flex gap-x-2.5">{!isAuthenticated ? data.map(printUnAuthButtons) : printAuthButton}</ul>;
+  return (
+    <ul className="flex gap-x-2.5">
+      {!authorized ? (
+        data.map(printUnAuthButtons)
+      ) : (
+        <LinkAsButton
+          href={ROUTES.ACCOUNT_NEGOTIATING}
+          buttonProps={{ variant: 'secondary', size: 'large' }}
+          customStyles="capitalize"
+        >
+          Go to deals
+        </LinkAsButton>
+      )}
+    </ul>
+  );
 };
 
 AuthNavButtons.propTypes = AuthNavButtonsPropTypes;

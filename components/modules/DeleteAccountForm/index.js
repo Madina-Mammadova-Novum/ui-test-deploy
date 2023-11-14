@@ -33,12 +33,10 @@ const DeleteAccountForm = ({ title, closeModal }) => {
   };
 
   const onSubmit = async (formData) => {
-    const { status, error } = await deleteCompany({ data: formData });
+    const { error } = await deleteCompany({ data: formData });
 
-    if (status === 200) successToast(null, 'You have successfully sent a request to delete your account');
-    if (error) errorToast(error?.message);
-
-    return null;
+    if (!error) successToast(null, 'You have successfully sent a request to delete your account');
+    else errorToast(error?.message, error?.errors);
   };
 
   return (

@@ -36,13 +36,13 @@ const PreFixture = () => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr'}
+            gridStyles={isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr'}
           />
         }
         footer={
           <PreFixtureExpandedFooter
-            underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
             offerId={rowData.id}
+            underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
             offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
           />
         }
@@ -60,7 +60,7 @@ const PreFixture = () => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
     if (offers?.length) return offers.map(printExpandableRow);
 
-    return <Title level="3">Notification is outdated.</Title>;
+    return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, printExpandableRow]);
 
   return printContent;

@@ -325,9 +325,7 @@ export function deleteCompanyAdapter({ data }) {
 
   const { password } = data;
 
-  return {
-    password,
-  };
+  return { password };
 }
 
 export function ownerSignUpAdapter({ data }) {
@@ -500,7 +498,7 @@ export function signInAdapter({ data }) {
 
 export function signOutAdapter() {
   return {
-    redirect: false,
+    redirect: true,
     callbackUrl: ROUTES.ROOT,
   };
 }

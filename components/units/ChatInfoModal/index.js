@@ -17,7 +17,7 @@ const ChatInfoModal = ({ data }) => {
       buttonProps={{
         variant: 'primary',
         size: 'small',
-        text: vessel?.cargoId,
+        text: vessel?.cargoId.toUpperCase(),
         className: '!p-0 !text-xs-sm !bg-transparent',
       }}
     >

@@ -27,6 +27,7 @@ const userSlice = createSlice({
     setIsAuthenticated: (state, { payload }) => {
       state.isAuthenticated = payload;
     },
+
     handleCollapse: (state, { payload }) => {
       state.params.sidebarCollapsed = payload;
     },

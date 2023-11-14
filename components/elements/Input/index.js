@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import classnames from 'classnames';
@@ -5,6 +7,7 @@ import classnames from 'classnames';
 import { InputPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
+import { useDisableNumberInputScroll } from '@/utils/hooks';
 
 const Input = React.forwardRef(
   (
@@ -22,6 +25,8 @@ const Input = React.forwardRef(
     },
     ref
   ) => {
+    useDisableNumberInputScroll();
+
     return (
       <div
         className={classnames(
@@ -65,8 +70,6 @@ const Input = React.forwardRef(
             )}
             type={type}
             name={name}
-            onTouchStartCapture={({ target }) => target.blur()}
-            onWheelCapture={({ target }) => target.blur()}
             {...rest}
           />
           {icon && <span className="ml-2.5 mr-4 my-auto">{icon}</span>}
