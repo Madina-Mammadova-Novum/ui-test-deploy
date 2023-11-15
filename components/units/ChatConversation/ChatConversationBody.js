@@ -1,45 +1,59 @@
 'use client';
 
 import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatConversationBodyPropTypes } from '@/lib/types';
 
 import { ChatLoader } from '@/elements';
 import { ROLES } from '@/lib';
+import { getChatHistory } from '@/store/entities/chat/actions';
+import { getChatSelector } from '@/store/selectors';
 import { ChatMessage } from '@/units';
 
-const ChatConversationBody = ({ messages = [], loading = false }) => {
-  const scrollRef = useRef();
-  // const [minus, setMinus] = useState(1);
+const ChatConversationBody = () => {
+  const scrollRef = useRef(null);
+  const dispatch = useDispatch();
 
-  // const handleScroll = () => {
-  //   const currentDate = new Date();
+  const { messages, loading, created, isLast, data, updating } = useSelector(getChatSelector).chats?.user;
 
-  //   if (scrollRef.current.scrollTop >= -425) {
-  //     setMinus((prevValue) => prevValue + 1);
-  //     currentDate.setDate(currentDate.getDate() - minus);
-  //     const dayBeforeYesterday = currentDate.toISOString();
+  const handleScroll = () => {
+    const { scrollHeight, scrollTop, clientHeight } = scrollRef?.current;
 
-  //     dispatch(getChatHistory({ data: { id: user?.chatId, date: dayBeforeYesterday } }));
-  //   }
-  // };
+    const averageScrollPosition = scrollTop / (scrollHeight - clientHeight);
+    const triggeredValue = parseFloat(averageScrollPosition.toFixed(2));
+
+    const trigger = triggeredValue === -0.95 && !isLast && !loading && !updating;
+
+    if (trigger) {
+      dispatch(getChatHistory({ data: { id: data?.chatId, date: created } }));
+
+      scrollRef.current.scrollTo({
+        top: scrollTop / 1.5,
+      });
+    }
+  };
 
   const printMessage = ({ sender, id, message, time }) => {
     return <ChatMessage key={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
   };
 
-  const printChatList = ({ data, title, id }) => {
+  const printChatList = ({ data: content, title, id }) => {
     return (
       <div className="flex flex-col" key={id}>
         <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
-        {data?.map(printMessage)}
+        {content?.map(printMessage)}
       </div>
     );
   };
 
   return (
-    <div ref={scrollRef} className={`flex flex-col-reverse h-96 ${!loading && 'overflow-scroll'}`}>
-      <div className="relative">{loading ? <ChatLoader /> : messages.map(printChatList)}</div>
+    <div
+      ref={scrollRef}
+      onScroll={handleScroll}
+      className="flex relative flex-col-reverse h-96 overflow-scroll scroll-auto"
+    >
+      {loading ? <ChatLoader /> : messages.map(printChatList)}
     </div>
   );
 };

@@ -57,14 +57,20 @@ const ChatModal = ({ isOpened, onClose }) => {
         </div>
       );
     }
-    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit} />;
+    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit || loading} />;
   }, [updating, tab, dataByTab, limit, handleMore]);
 
   return (
     isOpened && (
       <div className="fixed bg-white shadow-xmd border border-gray-light right-24 bottom-6 h-auto w-[360px] z-50 rounded-base">
         <ChatModalHeader onClose={onClose} />
-        <ChatControl tab={tab} search={search} activeCounter={totalActive} archivedCounter={totalArchived} />
+        <ChatControl
+          tab={tab}
+          search={search}
+          loading={loading}
+          activeCounter={totalActive}
+          archivedCounter={totalArchived}
+        />
         <Divider />
         <div className="relative min-h-[320px]">{printChatRooms}</div>
         {printLoadMore}

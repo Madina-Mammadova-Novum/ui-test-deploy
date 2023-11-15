@@ -19,10 +19,10 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
-  const { data, messages, loading } = useSelector(getChatSelector).chats?.user;
+  const { data, messages, loading, updating } = useSelector(getChatSelector).chats?.user;
 
   useEffect(() => {
-    if (isOpened) dispatch(getChatHistory({ data: { id: data?.chatId, date: '2023-13-11' } }));
+    if (isOpened) dispatch(getChatHistory({ data: { id: data?.chatId } }));
     else chatService.disconnect();
   }, [isOpened, data?.chatId]);
 
@@ -50,7 +50,12 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
       <div
         className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-50`}
       >
-        <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
+        <СhatConversationHeader
+          data={data}
+          updating={updating}
+          onClose={onCloseSession}
+          onCollapse={onCollapseSession}
+        />
         <div className="flex flex-col p-5">
           <ChatConversationBody messages={messages} loading={loading} />
           {!data?.archieved && (
