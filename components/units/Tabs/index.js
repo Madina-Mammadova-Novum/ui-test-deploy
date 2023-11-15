@@ -2,14 +2,12 @@ import classnames from 'classnames';
 
 import { TabsPropTypes } from '@/lib/types';
 
-import { makeId } from '@/utils/helpers';
-
 const Tabs = ({ tabs, customStyles = '', activeTab, onClick }) => {
   return (
     <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
-      {tabs.map(({ value, label }) => (
+      {tabs?.map(({ value, label }) => (
         <button
-          key={makeId()}
+          key={value}
           type="button"
           value={value}
           onClick={onClick}

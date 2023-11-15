@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatSupportPropTypes } from '@/lib/types';
 
 import SupportSVG from '@/assets/images/support.svg';
-import { Badge, Title } from '@/elements';
+import { Badge, ChatHelpLoader, Title } from '@/elements';
 import { chatService } from '@/services/signalR';
 import { removeCollapsedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 
-const ChatSupport = ({ title, description }) => {
+const ChatSupport = ({ title, description, loading }) => {
   const dispatch = useDispatch();
   const { support } = useSelector(getChatSelector).chats;
 
@@ -22,10 +22,12 @@ const ChatSupport = ({ title, description }) => {
     chatService.initChat(support[0]);
   };
 
+  if (loading) return <ChatHelpLoader />;
+
   return (
     <div aria-hidden onClick={handleOpenConversation}>
       <div className="text-black relative flex items-center gap-x-3 cursor-pointer">
-        {support?.length && <Badge counter={support[0]?.messageCount} />}
+        {!!support?.length && <Badge counter={support[0]?.messageCount} />}
         <div className="w-0.5 h-10 rounded-xl bg-blue" />
         <SupportSVG />
         <div className="flex flex-col  w-5/6">

@@ -8,14 +8,13 @@ import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
-import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { setRoleIdentity } from '@/store/entities/user/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const dispatch = useDispatch();
 
   const reset = () => {
     dispatch(setRoleIdentity(null));
-    dispatch(setIsAuthenticated(false));
   };
 
   const handleSignOut = async () => {

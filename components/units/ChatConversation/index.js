@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ChatConversationBody from './ChatConversationBody';
 import СhatConversationHeader from './СhatConversationHeader';
@@ -11,13 +11,20 @@ import { ChatConversationPropTypes } from '@/lib/types';
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
 import { chatService } from '@/services/signalR';
+import { getChatHistory } from '@/store/entities/chat/actions';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
-  const { data, messages, loading } = useSelector(getChatSelector).chats?.user;
-
+  const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
+
+  const { data, messages, loading, updating } = useSelector(getChatSelector).chats?.user;
+
+  useEffect(() => {
+    if (isOpened) dispatch(getChatHistory({ data: { id: data?.chatId } }));
+    else chatService.disconnect();
+  }, [isOpened, data?.chatId]);
 
   useEffect(() => {
     if (message !== '') setDisabled(false);
@@ -43,7 +50,12 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
       <div
         className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-50`}
       >
-        <СhatConversationHeader data={data} onClose={onCloseSession} onCollapse={onCollapseSession} />
+        <СhatConversationHeader
+          data={data}
+          updating={updating}
+          onClose={onCloseSession}
+          onCollapse={onCollapseSession}
+        />
         <div className="flex flex-col p-5">
           <ChatConversationBody messages={messages} loading={loading} />
           {!data?.archieved && (

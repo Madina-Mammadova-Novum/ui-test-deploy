@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
-import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { setRoleIdentity } from '@/store/entities/user/slice';
 import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
@@ -17,11 +17,7 @@ const ExtraDataManager = ({ children }) => {
   const getGeneralData = () => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
-  };
-
-  const setUserData = ({ role = null, isValid = false }) => {
-    dispatch(setRoleIdentity(role));
-    dispatch(setIsAuthenticated(isValid));
+    if (session?.role) dispatch(setRoleIdentity(session?.role));
   };
 
   const updateSession = async () => {
@@ -43,11 +39,10 @@ const ExtraDataManager = ({ children }) => {
 
   const sessionWatcher = async () => {
     try {
-      const { isValid, isExpired } = sessionValidity();
-      if (isValid) setUserData({ role: session?.role, isValid });
+      const { isExpired } = sessionValidity();
       if (isExpired) await updateSession();
     } catch (error) {
-      setUserData({ role: null, isValid: false });
+      dispatch(setRoleIdentity(null));
       errorToast('Session is not valid', error);
     }
   };

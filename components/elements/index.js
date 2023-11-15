@@ -46,7 +46,7 @@ import RangeDatePicker from '@/elements/RangeDatePicker';
 import ReActivateButton from '@/elements/ReActivateButton';
 import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
-import { ChatListLoader, ChatLoader } from '@/elements/Skeletons';
+import { ChatHelpLoader, ChatListLoader, ChatLoader, ChatTabLoader } from '@/elements/Skeletons';
 import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
@@ -112,5 +112,7 @@ export {
   ArchiveButton,
   ChatLoader,
   RangeDatePicker,
+  ChatTabLoader,
+  ChatHelpLoader,
   Otakoyi,
 };

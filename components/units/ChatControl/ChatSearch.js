@@ -4,7 +4,7 @@ import SearchSVG from '@/assets/images/search.svg';
 import { Input } from '@/elements';
 import { getRoleIdentity } from '@/utils/helpers';
 
-const ChatSearch = ({ value, onChange, role, containerClass, ...rest }) => {
+const ChatSearch = ({ value, onChange, role, containerClass, loading, ...rest }) => {
   const { isOwner } = getRoleIdentity({ role });
 
   const printPlaceholer = isOwner ? 'Search by Vessel, IMO, product type' : 'Search by Cargo ID, product, category';
@@ -19,6 +19,7 @@ const ChatSearch = ({ value, onChange, role, containerClass, ...rest }) => {
         icon={<SearchSVG className="fill-gray" />}
         customStyles="bg-gray-light border-gray"
         inputStyles="!pl-4 !pr-1 placeholder:text-xs-sm"
+        disabled={loading}
         {...rest}
       />
     </div>

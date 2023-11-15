@@ -45,6 +45,8 @@ const ChatSession = ({ data, tab }) => {
   };
 
   const handleOpenConversation = () => {
+    chatService.disconnect();
+
     dispatch(removeCollapsedChat(data?.chatId));
     chatService?.initChat(data);
   };
