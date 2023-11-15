@@ -75,7 +75,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
       tankers.filter((tanker) => tanker !== tankerId)
     );
     unregister(`imos[${tankerId}].imo`);
-    clearErrors(`imos[${tankerId}].imo`);
+    clearErrors(`imos`);
   };
 
   useEffect(() => {

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { addMonths } from 'date-fns';
+
 import { CargoesSlotsPropTypes } from '@/lib/types';
 
 import PlusSVG from '@/assets/images/plusCircle.svg';
@@ -100,7 +102,6 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
 
     if (isApplied) setHelperText('');
   }, [cargoes?.length, isApplied, setValue]);
-
   return (
     <div className="grid gap-5">
       <div className="w-full relative">
@@ -155,6 +156,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               async
             />
             <DatePicker
+              minDate={addMonths(new Date(), -6)}
               maxDate={new Date()}
               calendarClass="absolute right-0"
               name={`${fieldName}.date`}
