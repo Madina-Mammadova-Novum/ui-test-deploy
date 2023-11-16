@@ -10,12 +10,12 @@ import { AccountToolsPropTypes } from '@/lib/types';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
-import staticMap from '@/assets/images/staticMap.png';
 import TrashIcon from '@/assets/images/trashAlt.svg';
 import { FormManager } from '@/common';
-import { Button, FormDropdown, Input, NextImage, TextWithLabel, Title } from '@/elements';
+import { Button, FormDropdown, Input, TextWithLabel, Title } from '@/elements';
 import { toolsSchema } from '@/lib/schemas';
 import { getPorts } from '@/services/port';
+import { Map } from '@/units';
 import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
@@ -217,7 +217,8 @@ const AccountTools = ({ title, className = '' }) => {
             />
           </div>
           <div className="h-auto w-full relative">
-            <NextImage className="w-full h-full object-cover" src={staticMap} />
+            {/* <NextImage className="w-full h-full object-cover" src={staticMap} /> */}
+            <Map />
 
             <div className="absolute bg-white rounded-md p-5 w-[250px] bottom-2 left-2">
               <Title level={4}>Calculation results</Title>

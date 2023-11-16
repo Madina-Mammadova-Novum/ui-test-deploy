@@ -54,6 +54,7 @@ import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
+import Map from '@/units/Map';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import NegotiatingChartererInformation from '@/units/NegotiatingChartererInformation';
@@ -194,4 +195,5 @@ export {
   RequestDocumentDeletionModal,
   RevokeDocumentDeletionModal,
   DynamicCountdownTimer,
+  Map,
 };
