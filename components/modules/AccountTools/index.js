@@ -217,10 +217,9 @@ const AccountTools = ({ title, className = '' }) => {
             />
           </div>
           <div className="h-auto w-full relative">
-            {/* <NextImage className="w-full h-full object-cover" src={staticMap} /> */}
             <Map />
 
-            <div className="absolute bg-white rounded-md p-5 w-[250px] bottom-2 left-2">
+            <div className="absolute z-50 bg-white rounded-md p-5 w-[250px] bottom-2 left-2">
               <Title level={4}>Calculation results</Title>
               <div className="flex gap-x-2.5 mt-2.5">
                 {isFreightCalculator ? (

@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+
 import Accordion from '@/units/Accordion';
 import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
@@ -54,7 +56,6 @@ import FooterNavBlock from '@/units/FooterNavBlock';
 import IconWrapper from '@/units/IconWrapper';
 import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
-import Map from '@/units/Map';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import NegotiatingChartererInformation from '@/units/NegotiatingChartererInformation';
@@ -95,6 +96,8 @@ import UpdateTankerForm from '@/units/UpdateTankerForm';
 import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import ViewCommentContent from '@/units/ViewCommentContent';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
+
+const Map = dynamic(() => import('@/units/Map'), { ssr: false });
 
 export * from '@/units/Account';
 

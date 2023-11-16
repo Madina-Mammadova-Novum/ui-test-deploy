@@ -25,12 +25,9 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
     ),
   };
 
-  const [activeTab, setActiveTab] = useState('Search');
+  const [activeTab, setActiveTab] = useState('search');
 
-  const handleActiveTab = (event) => {
-    const { value } = event.target;
-    setActiveTab(value);
-  };
+  const handleActiveTab = ({ target }) => setActiveTab(target.value);
 
   const handleClickScroll = () => {
     const elementToScroll = document.getElementById('how-it-works');
