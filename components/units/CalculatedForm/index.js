@@ -1,0 +1,123 @@
+'use client';
+
+import { useState } from 'react';
+import { FormProvider } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
+import * as yup from 'yup';
+
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { FormManager } from '@/common';
+import { toolsSchema } from '@/lib/schemas';
+import { getEstimation } from '@/services';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { CalculatedDetails } from '@/units';
+import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
+import { useHookFormParams } from '@/utils/hooks';
+import { toolsCalculatorOptions } from '@/utils/mock';
+
+const CalculatedForm = ({ children }) => {
+  const { ports } = useSelector(getGeneralDataSelector);
+
+  const [state, setState] = useState({
+    calculator: toolsCalculatorOptions[0],
+    generalPorts: countryOptionsAdapter({ data: ports?.allPorts }),
+    additionalPorts: [],
+  });
+
+  const { calculator, additionalPorts, generalPorts } = state;
+
+  const isFreight = calculator?.value === toolsCalculatorOptions[0]?.value;
+
+  const schema = yup.object().shape({ ...toolsSchema({ isFreight }) });
+
+  const methods = useHookFormParams({ schema, state: { calculator } });
+
+  /* Change handler by key-value for userStore */
+  const handleChangeState = (key, value) => {
+    setState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  const handleSubmit = async (data) => {
+    await getEstimation({ data });
+  };
+
+  const handleReset = () => {
+    // eslint-disable-next-line no-sequences
+    methods.reset((formValues) => (resetObjectFields(formValues), formValues));
+    methods.unregister('additionalPorts');
+    methods.setValue('cargoQuantity', null);
+    methods.setValue('calculator', toolsCalculatorOptions[0]);
+    handleChangeState('calculator', toolsCalculatorOptions[0]);
+  };
+
+  const handleChangeValue = (key, value) => {
+    const error = getValueWithPath(methods?.errors, key);
+
+    const valuesByKey = methods.getValues(key);
+
+    const condition = JSON.stringify(valuesByKey) === JSON.stringify(value);
+
+    if (condition) return;
+    if (error) methods.clearErrors(key);
+
+    handleChangeState(key, value);
+    methods.setValue(key, value);
+
+    if (key === 'calculator') {
+      methods.unregister('cargoQuantity');
+      methods.unregister('speed');
+    }
+  };
+
+  const handleAddPort = () => {
+    const availablePortIds = [1, 2, 3];
+    const newPort = [...additionalPorts, availablePortIds.filter((el) => !additionalPorts.includes(el))[0]];
+
+    handleChangeState('additionalPorts', newPort);
+  };
+
+  const handleRemovePort = (id) => {
+    const removedPort = additionalPorts.filter((portId) => portId !== id);
+    handleChangeState('additionalPorts', removedPort);
+
+    methods.unregister(`additionalPorts[${id}]`);
+    methods.clearErrors(`additionalPorts[${id}]`);
+  };
+
+  return (
+    <div className="flex w-full h-max relative gap-5 rounded-base bg-white divide-gray-darker p-5 flex-row shadow-2xl">
+      <FormProvider {...methods}>
+        <FormManager
+          className="w-full gap-5"
+          showReset
+          submitAction={handleSubmit}
+          resetAction={handleReset}
+          submitButton={{
+            text: 'Calculate',
+            variant: 'secondary',
+            size: 'large',
+            className: '!w-max mr-auto !text-white',
+          }}
+        >
+          <div className="flex w-full gap-5">
+            <CalculatedDetails
+              isFreight={isFreight}
+              ports={generalPorts}
+              additionalPorts={additionalPorts}
+              onAdd={handleAddPort}
+              onChange={handleChangeValue}
+              onRemove={handleRemovePort}
+            />
+            <div className="h-auto w-[80%] relative">{children}</div>
+          </div>
+        </FormManager>
+      </FormProvider>
+    </div>
+  );
+};
+
+export default CalculatedForm;

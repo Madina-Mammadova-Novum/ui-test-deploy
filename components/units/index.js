@@ -8,6 +8,9 @@ import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
 import AssignToFleet from '@/units/AssignToFleet';
 import AuthNavButtons from '@/units/AuthNavButtons';
+import CalculatedDetails from '@/units/CalculatedDetails';
+import CalculatedForm from '@/units/CalculatedForm';
+import CalculatedResult from '@/units/CalculatedResult';
 import Captcha from '@/units/Captcha';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
@@ -103,6 +106,8 @@ export * from '@/units/Account';
 
 export {
   AddressDetails,
+  CalculatedForm,
+  CalculatedResult,
   DateDetailsForm,
   PasswordValidation,
   Tabs,
@@ -192,6 +197,7 @@ export {
   CollapsedChats,
   ChatAdditional,
   Flag,
+  CalculatedDetails,
   ChatInfoModal,
   NegotiatingChartererInformation,
   SearchNotFound,
