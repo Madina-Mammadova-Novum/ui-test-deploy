@@ -12,7 +12,7 @@ const AccountTools = ({ title }) => {
         </Title>
       )}
       <CalculatedForm>
-        <Map />
+        <Map className="h-full" />
       </CalculatedForm>
     </section>
   );

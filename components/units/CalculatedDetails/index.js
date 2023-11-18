@@ -33,7 +33,7 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
 
   const printAdditionalPorts = useMemo(() => {
     return additionalPorts?.map((portId) => (
-      <div key={portId}>
+      <div key={portId} className="relative">
         <FormDropdown
           name={`additionalPorts[${portId}].port`}
           onChange={(option) => onChange(`additionalPorts[${portId}].port`, option)}
@@ -48,7 +48,7 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
             size: 'small',
             icon: { before: <TrashIcon viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
           }}
-          customStyles="ml-auto !p-0 !pt-1 [&>span]:!px-0.5"
+          customStyles="absolute right-0 -bottom-6 !p-0 !pt-1 [&>span]:!px-0.5"
           onClick={() => onRemove(portId)}
         />
       </div>
@@ -56,7 +56,7 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
   }, [ports, additionalPorts, onChange, onRemove]);
 
   return (
-    <div className=" gap-y-4 flex flex-col h-full w-[296px]">
+    <div className=" gap-y-4 flex flex-col h-full w-[336px]">
       <FormDropdown
         name="calculator"
         onChange={(option) => onChange('calculator', option)}
@@ -93,7 +93,7 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
         disabled={additionalPorts.length >= 3}
         onClick={onAdd}
       />
-      <div className="mt-auto">{printOptionalProps}</div>
+      <div className="mb-16">{printOptionalProps}</div>
     </div>
   );
 };

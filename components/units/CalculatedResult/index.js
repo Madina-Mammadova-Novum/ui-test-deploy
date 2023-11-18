@@ -1,3 +1,5 @@
+'use client';
+
 import { CalculatedResultPropTypes } from '@/lib/types';
 
 import { TextWithLabel, Title } from '@/elements';
@@ -7,7 +9,9 @@ import { toolsCalculatorOptions } from '@/utils/mock';
 const CalculatedResult = () => {
   const { getValues } = useHookForm();
 
-  const isFreight = getValues()?.calculator?.value === toolsCalculatorOptions[0]?.value;
+  const result = getValues()?.result;
+  const { value } = getValues()?.calculator;
+  const isFreight = value === toolsCalculatorOptions[0]?.value;
 
   return (
     <div className=" bg-white rounded-md p-5 w-[250px] absolute bottom-2 left-2 z-[500] font-inter-sans">
@@ -16,12 +20,12 @@ const CalculatedResult = () => {
         {isFreight ? (
           <>
             <TextWithLabel
-              text=""
+              text={null}
               label="Total freight"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />
             <TextWithLabel
-              text=""
+              text={null}
               label="Cost per ton"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />
@@ -29,12 +33,12 @@ const CalculatedResult = () => {
         ) : (
           <>
             <TextWithLabel
-              text=""
+              text={`${result?.distance ?? ''}`}
               label="Distance"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />
             <TextWithLabel
-              text=""
+              text={`${result?.duration ?? ''}`}
               label="Duration"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />

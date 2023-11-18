@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -13,7 +13,7 @@ import { getEstimation } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { CalculatedDetails } from '@/units';
 import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
 const CalculatedForm = ({ children }) => {
@@ -42,7 +42,10 @@ const CalculatedForm = ({ children }) => {
   };
 
   const handleSubmit = async (data) => {
-    await getEstimation({ data });
+    const { data: response, error } = await getEstimation({ data });
+
+    if (response !== null) methods.setValue('result', response);
+    if (error) errorToast(error.message, error.errors);
   };
 
   const handleReset = () => {
@@ -64,8 +67,8 @@ const CalculatedForm = ({ children }) => {
     if (condition) return;
     if (error) methods.clearErrors(key);
 
-    handleChangeState(key, value);
     methods.setValue(key, value);
+    handleChangeState(key, value);
 
     if (key === 'calculator') {
       methods.unregister('cargoQuantity');
@@ -88,8 +91,19 @@ const CalculatedForm = ({ children }) => {
     methods.clearErrors(`additionalPorts[${id}]`);
   };
 
+  const setHeight = useMemo(() => {
+    const heightProps = {
+      0: 'h-[464px]',
+      1: 'h-[464px]',
+      2: 'h-[528px]',
+      3: 'h-[600px]',
+    };
+
+    return heightProps[additionalPorts.length];
+  }, [additionalPorts.length]);
+
   return (
-    <div className="flex w-full h-max relative gap-5 rounded-base bg-white divide-gray-darker p-5 flex-row shadow-2xl">
+    <div className="flex w-full h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
       <FormProvider {...methods}>
         <FormManager
           className="w-full gap-5"
@@ -100,7 +114,8 @@ const CalculatedForm = ({ children }) => {
             text: 'Calculate',
             variant: 'secondary',
             size: 'large',
-            className: '!w-max mr-auto !text-white',
+            className: '!w-auto !text-white',
+            buttonContainerClassName: 'absolute bottom-5',
           }}
         >
           <div className="flex w-full gap-5">
@@ -112,7 +127,7 @@ const CalculatedForm = ({ children }) => {
               onChange={handleChangeValue}
               onRemove={handleRemovePort}
             />
-            <div className="h-auto w-[80%] relative">{children}</div>
+            <div className={`${setHeight} w-full relative transition-all duration-150 ease-out`}>{children}</div>
           </div>
         </FormManager>
       </FormProvider>
