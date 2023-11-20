@@ -92,7 +92,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
 
       if (Object.keys(q88State).length > 1) {
         const validPrefilledOptions = {};
-        const validPortOfRegistryOption = portsData.find(({ name }) => name === q88.portOfRegistry.label);
+        const validPortOfRegistryOption = portsData.find(({ name }) =>
+          name.toLowerCase().includes(q88?.portOfRegistry?.label.toLowerCase())
+        );
         const validTankerTypeOption = tankerTypesData.find(({ name }) => name === q88.tankerType.label);
         validPrefilledOptions.portOfRegistry = countriesOptions([validPortOfRegistryOption])[0];
         validPrefilledOptions.tankerType = convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0];
@@ -226,18 +228,10 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 error={errors.built?.message}
               />
               <FormDropdown
-                label="Country"
-                options={countries}
-                name="country"
-                asyncCall={initialLoading}
-                disabled={!countries.length || q88State.country}
-                onChange={(option) => handleChange('country', option)}
-              />
-              <FormDropdown
                 label="Port of registry"
                 options={ports}
-                asyncCall={initialLoading}
-                disabled={!ports.length || q88State.portOfRegistry}
+                asyncCall={!q88State?.portOfRegistry?.value && initialLoading}
+                disabled={!ports.length || q88State?.portOfRegistry?.value}
                 name="portOfRegistry"
                 onChange={(option) => handleChange('portOfRegistry', option)}
               />
@@ -246,7 +240,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <FormDropdown
                 label="Tanker type"
                 options={tankerType.options}
-                asyncCall={initialLoading}
+                asyncCall={!q88State?.tankerType?.value && initialLoading}
                 disabled={!tankerType.options.length || q88State.tankerType}
                 name="tankerType"
                 onChange={(option) => handleChange('tankerType', option)}

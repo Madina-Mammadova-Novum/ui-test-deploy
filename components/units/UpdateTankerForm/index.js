@@ -231,14 +231,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 name="portOfRegistry"
                 onChange={(option) => handleChange('portOfRegistry', option)}
               />
-              <FormDropdown
-                label="Country"
-                options={countries}
-                name="country"
-                asyncCall={loading}
-                disabled={!countries.length}
-                onChange={(option) => handleChange('country', option)}
-              />
             </div>
             <div className="grid grid-cols-3 gap-x-5 gap-y-4">
               <FormDropdown

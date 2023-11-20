@@ -9,7 +9,8 @@ import { DeactivateAccountFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
-import { useHookFormParams } from '@/utils/hooks';
+import { deactivateAccount } from '@/services/account';
+import { successToast, useHookFormParams } from '@/utils/hooks';
 
 const state = {
   password: '',
@@ -34,8 +35,14 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
     setValue('password', value);
   };
 
-  const onSubmit = (data) => {
-    return data;
+  const onSubmit = async (data) => {
+    const { error, message: successMessage } = await deactivateAccount({ data });
+    if (!error) {
+      successToast(successMessage);
+      closeModal();
+    } else {
+      console.log(error);
+    }
   };
 
   return (
