@@ -8,7 +8,7 @@ import { calculateCountdown, trimTonValue } from '@/utils/helpers';
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { imo, openDate, openPort, details, company } = data;
+  const { imo, openDate, openPort, details, fleet } = data;
 
   return [
     {
@@ -21,7 +21,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'fleet name',
-      text: company?.details?.name,
+      text: fleet?.name,
     },
     {
       label: 'open date',
