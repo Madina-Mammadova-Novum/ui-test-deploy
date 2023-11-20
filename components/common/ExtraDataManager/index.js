@@ -17,7 +17,10 @@ const ExtraDataManager = ({ children }) => {
   const getGeneralData = () => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
-    if (session?.role) dispatch(setRoleIdentity(session?.role));
+  };
+
+  const setUserData = ({ role = null }) => {
+    dispatch(setRoleIdentity(role));
   };
 
   const updateSession = async () => {
@@ -39,10 +42,11 @@ const ExtraDataManager = ({ children }) => {
 
   const sessionWatcher = async () => {
     try {
-      const { isExpired } = sessionValidity();
+      const { isValid, isExpired } = sessionValidity();
+      if (isValid) setUserData({ role: session?.role, isValid });
       if (isExpired) await updateSession();
     } catch (error) {
-      dispatch(setRoleIdentity(null));
+      setUserData({ role: null, isValid: false });
       errorToast('Session is not valid', error);
     }
   };
