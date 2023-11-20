@@ -60,8 +60,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
       if (status === 200) {
         setFreightEstimation({
           ...freightEstimationData,
-          min: calculateIntDigit(freightEstimationData.total, 0.8),
-          max: calculateIntDigit(freightEstimationData.total, 1.2),
+          min: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
+          max: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
         });
         setValue('totalAmount', data.total);
       }
