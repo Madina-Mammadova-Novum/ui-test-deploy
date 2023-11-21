@@ -3,15 +3,14 @@
 import { CalculatedResultPropTypes } from '@/lib/types';
 
 import { TextWithLabel, Title } from '@/elements';
-import { useHookForm } from '@/utils/hooks';
+import { formatedNumber } from '@/utils/helpers';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
-const CalculatedResult = () => {
-  const { getValues } = useHookForm();
-
-  const result = getValues()?.result;
-  const { value } = getValues()?.calculator;
+const CalculatedResult = ({ result, value }) => {
   const isFreight = value === toolsCalculatorOptions[0]?.value;
+
+  const firstValue = formatedNumber(result?.resultOne);
+  const secondValue = formatedNumber(result?.resultTwo);
 
   return (
     <div className=" bg-white rounded-md p-5 w-[250px] absolute bottom-2 left-2 z-[500] font-inter-sans">
@@ -20,12 +19,12 @@ const CalculatedResult = () => {
         {isFreight ? (
           <>
             <TextWithLabel
-              text={null}
+              text={firstValue}
               label="Total freight"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />
             <TextWithLabel
-              text={null}
+              text={secondValue}
               label="Cost per ton"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />
@@ -33,12 +32,12 @@ const CalculatedResult = () => {
         ) : (
           <>
             <TextWithLabel
-              text={`${result?.distance ?? ''}`}
+              text={firstValue}
               label="Distance"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />
             <TextWithLabel
-              text={`${result?.duration ?? ''}`}
+              text={secondValue}
               label="Duration"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
             />

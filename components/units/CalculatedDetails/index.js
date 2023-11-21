@@ -19,6 +19,7 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
         label="Cargo quantity"
         placeholder="Enter the cargo quantity"
         type="number"
+        helperText="Min value: 1000"
       />
     ) : (
       <Input

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
+import { successResponseAdapter } from '@/adapters';
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { FormManager } from '@/common';
 import { toolsSchema } from '@/lib/schemas';
@@ -20,9 +21,11 @@ const CalculatedForm = ({ children }) => {
   const { ports } = useSelector(getGeneralDataSelector);
 
   const [state, setState] = useState({
-    calculator: toolsCalculatorOptions[0],
-    generalPorts: countryOptionsAdapter({ data: ports?.allPorts }),
+    generalPorts: countryOptionsAdapter({ data: ports?.searchPorts }),
     additionalPorts: [],
+    calculator: toolsCalculatorOptions[0],
+    fromPort: null,
+    toPort: null,
   });
 
   const { calculator, additionalPorts, generalPorts } = state;
@@ -31,7 +34,7 @@ const CalculatedForm = ({ children }) => {
 
   const schema = yup.object().shape({ ...toolsSchema({ isFreight }) });
 
-  const methods = useHookFormParams({ schema, state: { calculator } });
+  const methods = useHookFormParams({ schema, state });
 
   /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
@@ -44,7 +47,9 @@ const CalculatedForm = ({ children }) => {
   const handleSubmit = async (data) => {
     const { data: response, error } = await getEstimation({ data });
 
-    if (response !== null) methods.setValue('result', response);
+    const result = successResponseAdapter({ data: { ...response, key: calculator.value } });
+
+    if (result) methods.setValue('response', result);
     if (error) errorToast(error.message, error.errors);
   };
 
@@ -62,9 +67,7 @@ const CalculatedForm = ({ children }) => {
 
     const valuesByKey = methods.getValues(key);
 
-    const condition = JSON.stringify(valuesByKey) === JSON.stringify(value);
-
-    if (condition) return;
+    if (JSON.stringify(valuesByKey) === JSON.stringify(value)) return;
     if (error) methods.clearErrors(key);
 
     methods.setValue(key, value);

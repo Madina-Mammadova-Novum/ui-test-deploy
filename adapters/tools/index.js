@@ -40,3 +40,36 @@ export const estimationResponseDataAdapter = ({ data }) => {
 
   return { data };
 };
+
+export const successEstimationAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const { perTonnage, total } = data;
+
+  return {
+    resultOne: perTonnage,
+    resultTwo: total,
+  };
+};
+
+export const successDistanceAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const { distance, duration } = data;
+
+  return {
+    resultOne: distance,
+    resultTwo: duration,
+  };
+};
+
+export const successResponseAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const response = {
+    freightestimation: successEstimationAdapter({ data }),
+    distanceandduration: successDistanceAdapter({ data }),
+  };
+
+  return response[data?.key];
+};
