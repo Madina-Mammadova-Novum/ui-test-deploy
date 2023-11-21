@@ -35,9 +35,9 @@ const ChatModal = ({ isOpened, onClose }) => {
       setDataByTab(archived);
     }
 
-    return () => {
-      dispatch(setChatFilter({ limit: 3 }));
-    };
+    // return () => {
+    //   dispatch(setChatFilter({ limit: 3 }));
+    // };
   }, [tab, searched, search, active, archived]);
 
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
