@@ -70,7 +70,7 @@ const chatSlice = createSlice({
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
 
-      if (today) today.data.push(payload);
+      if (today) today.data = [...today.data, payload];
       else state.data.user.messages.unshift({ title: 'Today', data: [payload] });
     },
     setLoadConversation: (state, { payload }) => {
@@ -150,8 +150,8 @@ const chatSlice = createSlice({
         return user;
       });
 
-      state.data.active = updatedActiveState;
-      state.data.collapsed = updatedCollapsedState;
+      state.data.active[payload.contentId] = updatedActiveState;
+      state.data.collapsed[payload.contentId] = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {

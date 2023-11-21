@@ -36,6 +36,7 @@ const CollapsedChats = () => {
   const printCollapsedChat = (session) => {
     return (
       <ChatButton
+        variant="conversation"
         key={session?.chatId}
         counter={session?.messageCount}
         name={session?.vessel?.name}

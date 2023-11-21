@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatButton } from '@/elements';
 import { SCREENS } from '@/lib/constants';
 import { chatService } from '@/services/signalR';
-import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
@@ -24,14 +23,7 @@ const Chat = () => {
   } = useSelector(getChatSelector);
 
   useEffect(() => {
-    chatService.initStatus();
-  }, []);
-
-  useEffect(() => {
-    if (opened) {
-      dispatch(getListOfChats());
-      document.body.classList.add('overflow-hidden');
-    }
+    if (opened) document.body.classList.add('overflow-hidden');
 
     return () => {
       document.body.classList.remove('overflow-hidden');
@@ -84,7 +76,7 @@ const Chat = () => {
         counter={newMessages}
         onClick={handleOpen}
         className="fixed right-3 bottom-3 z-30"
-        withCancel={false}
+        variant="default"
       />
       <ChatModal isOpened={opened} onClose={handleClose} />
       <ChatConversation
