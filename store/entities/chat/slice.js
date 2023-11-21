@@ -44,6 +44,7 @@ const chatSlice = createSlice({
       const result = state.data[key].filter(({ vessel }) => {
         return (
           vessel.name.includes(value) ||
+          vessel.type.includes(value) ||
           vessel.cargoId.includes(value) ||
           vessel.imo.includes(value) ||
           vessel.products.some(({ name }) => name?.includes(value))
@@ -70,7 +71,7 @@ const chatSlice = createSlice({
       const today = state.data.user.messages.find((message) => message.title === 'Today');
 
       if (today) today.data.push(payload);
-      else state.data.user.messages.push({ title: 'Today', data: [payload] });
+      else state.data.user.messages.unshift({ title: 'Today', data: [payload] });
     },
     setLoadConversation: (state, { payload }) => {
       state.data.user.loading = payload;
