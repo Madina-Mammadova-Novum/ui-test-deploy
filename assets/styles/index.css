@@ -293,6 +293,11 @@
   transition: transform 0.3s ease-in-out;
 }
 
+.leaflet-container {
+  height: 100%;
+  z-index: 10;
+}
+
 /* Phone Field Rewrites */
 
 .react-tel-input .form-control.phone-field {

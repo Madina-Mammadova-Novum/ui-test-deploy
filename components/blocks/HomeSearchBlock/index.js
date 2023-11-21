@@ -6,46 +6,33 @@ import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
-import { TankerSearch } from '@/modules';
+import { AccountTools, TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
 
 const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
   const tabs = [
     {
-      value: 'Search',
+      value: 'search',
       label: 'Search',
     },
+    { value: 'tools', label: 'Tools' },
   ];
 
-  const [activeTab, setActiveTab] = useState('Search');
-
-  const handleActiveTab = (event) => {
-    const { value } = event.target;
-    setActiveTab(value);
+  const dataByTab = {
+    search: <TankerSearch />,
+    tools: (
+      <AccountTools className="flex [&>*:first-child]:xlMax:w-full [&>*:nth-child(2)]:xlMax:w-full [&>*:first-child]:w-1/4 [&>*:nth-child(2)]:w-3/4 justify-center" />
+    ),
   };
+
+  const [activeTab, setActiveTab] = useState('search');
+
+  const handleActiveTab = ({ target }) => setActiveTab(target.value);
 
   const handleClickScroll = () => {
     const elementToScroll = document.getElementById('how-it-works');
     elementToScroll?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // const handleViewType = (typeOfView) => {
-  //   switch (typeOfView) {
-  //     case 'Tools':
-  //       return (
-  //         <AccountTools
-  //           className="flex
-  //       [&>*:first-child]:xlMax:w-full
-  //       [&>*:nth-child(2)]:xlMax:w-full
-  //       [&>*:first-child]:w-1/4
-  //       [&>*:nth-child(2)]:w-3/4
-  //       justify-center"
-  //         />
-  //       );
-  //     default:
-  //       return <TankerSearch />;
-  //   }
-  // };
 
   return (
     <section className="relative">
@@ -64,7 +51,7 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
           onClick={handleClickScroll}
         />
         <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
-        <TankerSearch />
+        {dataByTab[activeTab]}
       </div>
     </section>
   );
