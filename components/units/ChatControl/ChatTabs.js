@@ -2,9 +2,10 @@
 
 import { ChatTabsPropTypes } from '@/lib/types';
 
+import { ChatTabLoader } from '@/elements';
 import { Tabs } from '@/units';
 
-const ChatTabs = ({ activeTab, onClick, activeCounter, archivedCounter, containerClass }) => {
+const ChatTabs = ({ activeTab, onClick, activeCounter = 0, archivedCounter = 0, containerClass, loading }) => {
   const options = [
     {
       label: `Active (${activeCounter})`,
@@ -18,7 +19,7 @@ const ChatTabs = ({ activeTab, onClick, activeCounter, archivedCounter, containe
 
   return (
     <div className={containerClass}>
-      <Tabs tabs={options} activeTab={activeTab} onClick={onClick} />
+      {loading ? <ChatTabLoader /> : <Tabs tabs={options} activeTab={activeTab} onClick={onClick} />}
     </div>
   );
 };

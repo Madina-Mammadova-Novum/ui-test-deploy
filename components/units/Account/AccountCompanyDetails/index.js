@@ -42,12 +42,12 @@ const AccountCompanyDetails = ({ company = {} }) => {
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
           {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
-          {company?.companyYearsOfOperation && (
+          {company?.companyYearsOfOperation ? (
             <TextRow title="Years in operation">{company?.companyYearsOfOperation}</TextRow>
-          )}
-          {company?.totalTankers && (
+          ) : null}
+          {company?.totalTankers ? (
             <AccountAmountOfTankers data={company?.cargoes?.listOfCargoes} total={company?.totalTankers} />
-          )}
+          ) : null}
         </FieldsetContent>
 
         <Divider className="my-4" />

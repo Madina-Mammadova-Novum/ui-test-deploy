@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 /* Types */
 
 // eslint-disable-next-line import/no-cycle
-import { setUpdate } from './slice';
+import { setUpdate, setUserMessages, updateUserMessages } from './slice';
 import { CHAT } from './types';
 
 /* Services */
@@ -32,18 +32,24 @@ export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispa
   };
 });
 
-export const getChatHistory = createAsyncThunk(CHAT.GET_HISTORY, async ({ data }) => {
+export const getChatHistory = createAsyncThunk(CHAT.GET_HISTORY, async ({ data }, { dispatch, getState }) => {
   const { data: result } = await getChatHistoryById({ data });
 
-  return { data: result?.messages };
+  const messages = getState()?.chat?.data?.user?.messages;
+
+  if (messages.length > 0) dispatch(updateUserMessages(result?.messages));
+  else dispatch(setUserMessages(result?.messages));
+
+  return {
+    created: result?.created,
+    isLast: result?.isLast,
+  };
 });
 
 export const deactivateUserChat = createAsyncThunk(CHAT.DEACTIVATE, async ({ data }, { dispatch }) => {
   const { status } = await deactivateChatById({ data });
 
-  if (status === 200) {
-    dispatch(getListOfChats());
-  }
+  if (status === 200) dispatch(getListOfChats());
 });
 
 export const reactivateUserChat = createAsyncThunk(CHAT.REACTIVATE, async ({ data }, { dispatch }) => {

@@ -9,7 +9,9 @@ export const getListOfChatSessions = async () => {
 };
 
 export const getChatHistoryById = async ({ data }) => {
-  const response = await getData(`chat/history?id=${data?.id}&date=${data?.date}`);
+  const endpoint = data?.date ? `chat/history?id=${data?.id}&date=${data?.date}` : `chat/history?id=${data?.id}`;
+
+  const response = await getData(endpoint);
 
   return {
     ...response,

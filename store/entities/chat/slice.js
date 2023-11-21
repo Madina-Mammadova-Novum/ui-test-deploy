@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
+import { moreMessagesDataAdapter } from '@/adapters';
+
 const initialState = {
   loading: false,
   updating: false,
@@ -17,9 +19,12 @@ const initialState = {
     collapsed: [],
     support: [],
     user: {
-      loading: false,
+      created: '',
       data: {},
       messages: [],
+      loading: false,
+      updating: false,
+      isLast: false,
     },
   },
   filterParams: {
@@ -53,8 +58,19 @@ const chatSlice = createSlice({
     setUpdate: (state, action) => {
       state.updating = action.payload;
     },
-    setUserConversation: (state, { payload }) => {
+    setUserMessages: (state, { payload }) => {
       state.data.user.messages = payload;
+    },
+    updateUserMessages: (state, { payload }) => {
+      const updatedData = moreMessagesDataAdapter({ payload, messages: state.data.user.messages });
+
+      state.data.user.messages = Object.values(updatedData);
+    },
+    updateUserConversation: (state, { payload }) => {
+      const today = state.data.user.messages.find((message) => message.title === 'Today');
+
+      if (today) today.data.push(payload);
+      else state.data.user.messages.push({ title: 'Today', data: [payload] });
     },
     setLoadConversation: (state, { payload }) => {
       state.data.user.loading = payload;
@@ -85,7 +101,8 @@ const chatSlice = createSlice({
       state.filterParams = initialState.filterParams;
     },
     resetUser: (state) => {
-      state.data.user = initialState.data.user;
+      state.data.user.data = {};
+      state.data.user.messages = [];
     },
 
     typingStatus: (state, { payload }) => {
@@ -154,10 +171,14 @@ const chatSlice = createSlice({
       state.updating = false;
     });
     builder.addCase(getChatHistory.pending, (state) => {
-      state.data.user.loading = true;
+      state.data.user.loading = state.data.user.messages.length === 0;
+      state.data.user.updating = state.data.user.messages.length > 0;
     });
-    builder.addCase(getChatHistory.fulfilled, (state) => {
+    builder.addCase(getChatHistory.fulfilled, (state, { payload }) => {
       state.data.user.loading = false;
+      state.data.user.updating = false;
+      state.data.user.created = payload.created;
+      state.data.user.isLast = payload.isLast;
     });
     builder.addCase(getChatHistory.rejected, (state) => {
       state.data.user.loading = false;
@@ -189,8 +210,9 @@ export const {
   setUpdate,
   setConversation,
   setCollapsedChat,
-  setUserConversation,
   setDeactivateConversation,
+  setUserMessages,
+  updateUserMessages,
   messageAlert,
   typingStatus,
   searchedData,
@@ -198,6 +220,7 @@ export const {
   resetChatFilter,
   removeCollapsedChat,
   setLoadConversation,
+  updateUserConversation,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

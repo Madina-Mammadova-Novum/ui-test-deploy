@@ -56,8 +56,8 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
       if (status === 200) {
         setFreightEstimation({
           ...data,
-          min: calculateIntDigit(data.total, 0.8),
-          max: calculateIntDigit(data.total, 1.2),
+          min: calculateIntDigit(data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
+          max: calculateIntDigit(data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
         });
         setValue('totalAmount', data.total);
       }

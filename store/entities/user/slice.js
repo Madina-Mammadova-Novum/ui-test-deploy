@@ -24,10 +24,6 @@ const userSlice = createSlice({
     setRoleIdentity: (state, { payload }) => {
       state.role = payload;
     },
-    setIsAuthenticated: (state, { payload }) => {
-      state.isAuthenticated = payload;
-    },
-
     handleCollapse: (state, { payload }) => {
       state.params.sidebarCollapsed = payload;
     },
@@ -50,6 +46,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { handleCollapse, handleToggle, setRoleIdentity, setIsAuthenticated } = userSlice.actions;
+export const { handleCollapse, handleToggle, setRoleIdentity } = userSlice.actions;
 
 export default userSlice.reducer;

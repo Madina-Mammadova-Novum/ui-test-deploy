@@ -22,7 +22,7 @@ const createNoopStorage = () => {
 const persistConfig = {
   key: 'root',
   storage: typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage(),
-  whitelist: ['general', 'notifications', 'chat', 'user'],
+  whitelist: ['general', 'notifications', 'user'],
   version: 1,
 };
 

@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
-import { setIsAuthenticated, setRoleIdentity } from '@/store/entities/user/slice';
+import { setRoleIdentity } from '@/store/entities/user/slice';
 import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
@@ -19,9 +19,8 @@ const ExtraDataManager = ({ children }) => {
     dispatch(fetchCountries());
   };
 
-  const setUserData = ({ role = null, isValid = false }) => {
+  const setUserData = ({ role = null }) => {
     dispatch(setRoleIdentity(role));
-    dispatch(setIsAuthenticated(isValid));
   };
 
   const updateSession = async () => {
