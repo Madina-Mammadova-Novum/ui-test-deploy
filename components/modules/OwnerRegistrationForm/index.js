@@ -90,11 +90,11 @@ const OwnerRegistrationForm = () => {
           />
         </Step>
         <Divider className="mt-5" />
-        <Step title="Step #3: Choose who you are" titleClass="pt-5" containerClass="flex flex-col gap-5">
+        <Step title="Step #3: Company Details" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyDetails />
         </Step>
         <Divider className="mt-5" />
-        <Step title="Step 4: Number of tankers under operation." titleClass="pt-5" containerClass="flex flex-col gap-5">
+        <Step title="Step #4: Number of tankers under operation" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <TankerSlotsDetails applyHelper />
         </Step>
         <Divider />
