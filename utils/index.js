@@ -153,6 +153,10 @@ export function getRtURL(path) {
   return `${process.env.NEXT_PUBLIC_RT_URL}/${path}`;
 }
 
+export function getSeaMetrixURL(path) {
+  return `${process.env.NEXT_PUBLIC_SEAMETRIX_API_URL}/${path}/${process.env.NEXT_PUBLIC_SEAMETRIX_KEY}/{z}/{x}/{y}.png`;
+}
+
 export function getIdentityApiURL(path, apiVersion = null) {
   let pathString = `/${path}`;
   if (apiVersion !== null) {

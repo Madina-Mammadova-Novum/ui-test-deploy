@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+
 import Accordion from '@/units/Accordion';
 import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
@@ -6,6 +8,9 @@ import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
 import AssignToFleet from '@/units/AssignToFleet';
 import AuthNavButtons from '@/units/AuthNavButtons';
+import CalculatedDetails from '@/units/CalculatedDetails';
+import CalculatedForm from '@/units/CalculatedForm';
+import CalculatedResult from '@/units/CalculatedResult';
 import Captcha from '@/units/Captcha';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
@@ -95,10 +100,14 @@ import VerifficationUserAccount from '@/units/VerifficationUserAccount';
 import ViewCommentContent from '@/units/ViewCommentContent';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
 
+const Map = dynamic(() => import('@/units/Map'), { ssr: false });
+
 export * from '@/units/Account';
 
 export {
   AddressDetails,
+  CalculatedForm,
+  CalculatedResult,
   DateDetailsForm,
   PasswordValidation,
   Tabs,
@@ -188,10 +197,12 @@ export {
   CollapsedChats,
   ChatAdditional,
   Flag,
+  CalculatedDetails,
   ChatInfoModal,
   NegotiatingChartererInformation,
   SearchNotFound,
   RequestDocumentDeletionModal,
   RevokeDocumentDeletionModal,
   DynamicCountdownTimer,
+  Map,
 };

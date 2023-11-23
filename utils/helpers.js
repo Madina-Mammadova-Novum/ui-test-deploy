@@ -571,3 +571,18 @@ export function checkTankerStatus(date) {
 
   return today > openDate;
 }
+
+export const getLineCoordinate = ({ data }) => {
+  if (!data) return [];
+
+  const { fromPort, toPort } = data;
+
+  if (fromPort === null || toPort === null) return [];
+
+  return [fromPort.coordinates, toPort.coordinates];
+};
+
+export const formatedNumber = (value) => {
+  if (value === null) return '';
+  return value?.toFixed(2);
+};

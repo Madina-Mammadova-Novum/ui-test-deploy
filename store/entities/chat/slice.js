@@ -44,6 +44,7 @@ const chatSlice = createSlice({
       const result = state.data[key].filter(({ vessel }) => {
         return (
           vessel.name.includes(value) ||
+          vessel.type.includes(value) ||
           vessel.cargoId.includes(value) ||
           vessel.imo.includes(value) ||
           vessel.products.some(({ name }) => name?.includes(value))
@@ -69,8 +70,8 @@ const chatSlice = createSlice({
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
 
-      if (today) today.data.push(payload);
-      else state.data.user.messages.push({ title: 'Today', data: [payload] });
+      if (today) today.data = [...today.data, payload];
+      else state.data.user.messages.unshift({ title: 'Today', data: [payload] });
     },
     setLoadConversation: (state, { payload }) => {
       state.data.user.loading = payload;
@@ -149,8 +150,8 @@ const chatSlice = createSlice({
         return user;
       });
 
-      state.data.active = updatedActiveState;
-      state.data.collapsed = updatedCollapsedState;
+      state.data.active[payload.contentId] = updatedActiveState;
+      state.data.collapsed[payload.contentId] = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {

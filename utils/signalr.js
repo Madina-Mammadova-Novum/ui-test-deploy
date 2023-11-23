@@ -68,8 +68,8 @@ export class NotificationController extends SignalRController {
 }
 
 export class ChatController extends SignalRController {
-  constructor({ host, state }) {
-    super({ host, state });
+  constructor({ host, state, token }) {
+    super({ host, state, token });
     this.messages = [];
   }
 
@@ -79,7 +79,10 @@ export class ChatController extends SignalRController {
 
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
-      this.connection.on('ReceiveMessage', (message) => this.updateMessage({ message }));
+      this.connection.on('ReceiveMessage', async (message) => {
+        await this.readMessage({ id: message.chatId });
+        this.updateMessage({ message });
+      });
     } catch (err) {
       console.error(err);
       this.disconnect();
@@ -90,12 +93,21 @@ export class ChatController extends SignalRController {
     await this.setupConnection({ path: `${this.host}/chatlist` });
 
     this.connection.on('ReceiveMessage', (chat) => this.incomingMessage({ chat }));
+    // this.connection.on('ChatIsOnline', (chat) => console.log(chat));
     this.connection.on('SomeoneIsTyping', (chat) => this.isTyping({ chat }));
   }
 
   async sendMessage({ message }) {
     try {
       if (message !== '') await this.connection.invoke('SendMessage', message);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async readMessage({ id }) {
+    try {
+      await this.connection.invoke('ReadMessage', id);
     } catch (e) {
       console.error(e);
     }
@@ -112,14 +124,6 @@ export class ChatController extends SignalRController {
   isTyping({ chat }) {
     this.store.dispatch(typingStatus(chat));
   }
-
-  // async readMessage({ id }) {
-  //   try {
-  //     await this.connection.invoke('ReadMessage', id);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
 
   disconnect() {
     this.stop();
