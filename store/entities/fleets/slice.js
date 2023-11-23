@@ -78,7 +78,7 @@ const fleetsSlice = createSlice({
 
     builder.addCase(fetchPrefilledDataToUpdate.fulfilled, (state, action) => {
       state.prefilledUpdateVesselState.loading = false;
-      state.prefilledUpdateVesselstate.data.vessels = action.payload?.data;
+      state.prefilledUpdateVesselState.data = action.payload?.data;
       state.prefilledUpdateVesselState.ports = action.payload?.ports;
       state.prefilledUpdateVesselState.countries = action.payload?.countries;
       state.prefilledUpdateVesselState.tankerTypes = action.payload?.tankerTypes;

@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
+import Providers from '@/providers';
 import { Tabs } from '@/units';
 
-const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
+export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
   const tabs = [
     {
       value: 'search',
@@ -35,32 +36,32 @@ const HomeSearchBlock = ({ title, subTitle, shortDescription }) => {
   };
 
   return (
-    <section className="relative">
-      {title && <div>{title}</div>}
-      {subTitle && <div>{subTitle}</div>}
-      {shortDescription && <div>{shortDescription}</div>}
-      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px] -mt-[205px]">
-        <Button
-          buttonProps={{
-            text: 'How it works',
-            variant: 'primary',
-            size: 'large',
-            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="fill-white w-5 h-5 -rotate-90" /> },
-          }}
-          customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
-          onClick={handleClickScroll}
-        />
-        <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
-        {dataByTab[activeTab]}
-      </div>
-    </section>
+    <Providers>
+      <section className="relative">
+        {title && <div>{title}</div>}
+        {subTitle && <div>{subTitle}</div>}
+        {shortDescription && <div>{shortDescription}</div>}
+        <div className="container mx-auto px-6 3md:px-14 max-w-[1258px] -mt-[205px]">
+          <Button
+            buttonProps={{
+              text: 'How it works',
+              variant: 'primary',
+              size: 'large',
+              icon: { after: <ArrowSVG viewBox="0 0 24 24" className="fill-white w-5 h-5 -rotate-90" /> },
+            }}
+            customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
+            onClick={handleClickScroll}
+          />
+          <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
+          {dataByTab[activeTab]}
+        </div>
+      </section>
+    </Providers>
   );
-};
+}
 
 HomeSearchBlock.propTypes = {
   title: PropTypes.string,
   subTitle: PropTypes.string,
   shortDescription: PropTypes.string,
 };
-
-export default HomeSearchBlock;
