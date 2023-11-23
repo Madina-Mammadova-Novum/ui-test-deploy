@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
-import Providers from '@/providers';
 import { AccountTools, TankerSearch } from '@/modules';
+import Providers from '@/providers';
 import { Tabs } from '@/units';
 
 export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
@@ -51,7 +51,7 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
             }}
             customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
             onClick={handleClickScroll}
-            />
+          />
           <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
           {dataByTab[activeTab]}
         </div>
