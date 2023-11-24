@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
+import { chatService } from '@/services/signalR';
+import { getListOfChats } from '@/store/entities/chat/actions';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
 import { errorToast } from '@/utils/hooks';
@@ -43,7 +45,11 @@ const ExtraDataManager = ({ children }) => {
   const sessionWatcher = async () => {
     try {
       const { isValid, isExpired } = sessionValidity();
-      if (isValid) setUserData({ role: session?.role, isValid });
+      if (isValid) {
+        setUserData({ role: session?.role, isValid });
+        dispatch(getListOfChats());
+        chatService.initStatus();
+      }
       if (isExpired) await updateSession();
     } catch (error) {
       setUserData({ role: null, isValid: false });
@@ -57,7 +63,7 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     sessionWatcher();
-  }, [session]);
+  }, [session?.accessToken, session?.expires, session?.role]);
 
   return children;
 };

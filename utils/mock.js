@@ -1050,8 +1050,8 @@ export const imoClassOptions = [
 ];
 
 export const toolsCalculatorOptions = [
-  { label: 'Freight Estimation', value: 'freight' },
-  { label: 'Distance and Duration', value: 'distance' },
+  { label: 'Freight Estimation', value: 'freightestimation' },
+  { label: 'Distance and Duration', value: 'distanceandduration' },
 ];
 
 export const hullTypeOptions = [

@@ -4,7 +4,7 @@ import {
   clientIdentification,
   extractTimeFromDate,
   getListOfDataByDays,
-  sortFromCurrentToPast,
+  sortFromPastToToday,
 } from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
@@ -103,7 +103,7 @@ export function messageDataAdapter({ data, session }) {
 }
 
 export function messagesDataAdapter({ data, session }) {
-  const sortedArray = data?.map((el) => el).sort(sortFromCurrentToPast);
+  const sortedArray = data?.map((el) => el).sort(sortFromPastToToday);
 
   const messagesByDate = sortedArray.reduce((acc, currentValue) => {
     const date = convertDate(currentValue?.createdAt);
