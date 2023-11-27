@@ -11,7 +11,7 @@ import { FormManager } from '@/common';
 import { passwordValidationSchema } from '@/lib/schemas';
 import { resetPassword } from '@/services/user';
 import { PasswordValidation } from '@/units';
-import { resetObjectFields } from '@/utils/helpers';
+import { parseErrorMessage, resetObjectFields } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const schema = yup.object(passwordValidationSchema()).required();
@@ -31,7 +31,7 @@ const ResetPasswordForm = ({ params }) => {
   const onSubmit = async (formData) => {
     const { error } = await resetPassword({ data: { ...formData, ...params } });
     if (!error) successToast('You have successfully changed your password');
-    else errorToast(error.message, error.errors);
+    else errorToast(parseErrorMessage(error));
 
     handleResetFields();
   };

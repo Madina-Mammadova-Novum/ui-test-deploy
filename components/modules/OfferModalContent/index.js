@@ -13,7 +13,7 @@ import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
 import { searchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
-import { convertDataToOptions, parseErrors } from '@/utils/helpers';
+import { convertDataToOptions, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -81,8 +81,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       closeModal();
     }
     if (error) {
-      const { errors, message } = error;
-      errorToast(parseErrors({ ...errors, ...message }));
+      errorToast(parseErrorMessage(error));
     }
   };
 

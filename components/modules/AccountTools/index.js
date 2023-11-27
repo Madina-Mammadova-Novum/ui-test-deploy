@@ -5,7 +5,7 @@ import { CalculatedForm, Map } from '@/units';
 
 const AccountTools = ({ title }) => {
   return (
-    <section>
+    <section className="px-5">
       {title && (
         <Title level="1" className="py-5">
           {title}

@@ -17,7 +17,7 @@ import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel
 import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
 import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { getGeneralDataSelector } from '@/store/selectors';
-import { countriesOptions } from '@/utils/helpers';
+import { countriesOptions, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ReactivateTankerForm = ({ title, state, closeModal }) => {
@@ -82,7 +82,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     }
 
     if (message) successToast(message);
-    if (error) errorToast(error.message, error.errors);
+    if (error) errorToast(parseErrorMessage(error));
   };
 
   const { listOfPorts, port, nextDay } = tankerState;

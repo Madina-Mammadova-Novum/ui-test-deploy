@@ -11,6 +11,7 @@ import { ModalFormManager } from '@/common';
 import { Button, PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deactivateAccount } from '@/services/account';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const state = {
@@ -45,8 +46,7 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
     } else if (error?.errors.includes('ongoing deal')) {
       setHasOngoingDeals(true);
     } else {
-      const { errors: responseErrors } = error;
-      errorToast(responseErrors);
+      errorToast(parseErrorMessage(error));
     }
   };
 

@@ -10,7 +10,7 @@ import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
 import { setSearchData } from '@/store/entities/search/slice';
 import { SearchForm } from '@/units';
-import { options, parseErrors } from '@/utils/helpers';
+import { options, parseErrorMessage } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const TankerSearch = ({ title }) => {
@@ -45,9 +45,8 @@ const TankerSearch = ({ title }) => {
       handleChangeState('request', true);
     }
     if (error) {
-      const { errors } = error;
       handleChangeState('request', false);
-      errorToast(parseErrors(errors));
+      errorToast(parseErrorMessage(error));
     }
   };
 

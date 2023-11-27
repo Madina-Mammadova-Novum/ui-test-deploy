@@ -586,3 +586,16 @@ export const formatedNumber = (value) => {
   if (value === null) return '';
   return value?.toFixed(2);
 };
+
+export const parseErrorMessage = (responseError = {}) => {
+  try {
+    const {
+      message: { Errors },
+      errors,
+    } = responseError;
+    const parsedErrorMessages = parse(Object.values({ ...Errors, errors }).join('<br />'));
+    return parsedErrorMessages;
+  } catch {
+    return 'Something went wrong. Please, contact Ship.Link support for detailed information.';
+  }
+};

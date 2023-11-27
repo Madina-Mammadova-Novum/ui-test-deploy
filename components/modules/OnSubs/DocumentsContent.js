@@ -8,7 +8,7 @@ import { Table } from '@/elements';
 import { uploadDocument } from '@/services/on-subs';
 import { updateDocumentList } from '@/store/entities/on-subs/slice';
 import { UploadForm } from '@/units';
-import { parseErrors } from '@/utils/helpers';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 import { onSubsHeader } from '@/utils/mock';
 
@@ -26,8 +26,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       role: session?.role,
     });
     if (error) {
-      const { errors } = error;
-      errorToast(parseErrors({ errors }));
+      errorToast(parseErrorMessage(error));
     } else {
       dispatch(updateDocumentList({ offerId, newDocument: data }));
       successToast(successMessage);

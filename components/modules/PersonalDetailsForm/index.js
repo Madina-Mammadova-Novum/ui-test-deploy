@@ -14,7 +14,7 @@ import { updateInfo } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Notes, PersonalDetails } from '@/units';
-import { makeId } from '@/utils/helpers';
+import { makeId, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsForm = ({ closeModal }) => {
@@ -34,7 +34,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
       );
     }
 
-    if (error) errorToast(error?.message, error?.errors);
+    if (error) errorToast(parseErrorMessage(error));
     return null;
   };
 

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Button, Dropdown } from '@/elements';
 import { requestCountdownExtension } from '@/services/offer';
 import { ModalHeader } from '@/units';
-import { parseErrors } from '@/utils/helpers';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const countdownOptions = [
@@ -51,8 +51,7 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
     setPending(false);
 
     if (error) {
-      const { errors } = error;
-      errorToast(parseErrors({ errors }));
+      errorToast(parseErrorMessage(error));
     } else {
       successToast(successMessage);
       onExtensionSuccess();

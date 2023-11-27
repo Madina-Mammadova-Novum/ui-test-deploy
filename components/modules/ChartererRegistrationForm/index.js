@@ -28,7 +28,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
-import { resetForm } from '@/utils/helpers';
+import { parseErrorMessage, resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = () => {
@@ -64,7 +64,7 @@ const ChartererRegistrationForm = () => {
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     }
     if (error) {
-      errorToast(error.message, error.errors);
+      errorToast(parseErrorMessage(error));
     }
   };
 

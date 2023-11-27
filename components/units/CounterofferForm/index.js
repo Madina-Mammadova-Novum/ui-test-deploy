@@ -14,7 +14,7 @@ import { COUNTEROFFER_REQUIREMENTS_ERROR } from '@/lib/constants';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
-import { counterofferMinimumImprovementAchieved, parseErrors } from '@/utils/helpers';
+import { counterofferMinimumImprovementAchieved, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -64,8 +64,7 @@ const CounterofferForm = ({
       dispatch(fetchUserNegotiating());
       closeModal();
     } else {
-      const { errors, message } = error;
-      errorToast(parseErrors({ ...errors, ...message }));
+      errorToast(parseErrorMessage(error));
     }
   };
 
