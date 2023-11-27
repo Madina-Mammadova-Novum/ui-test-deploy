@@ -6,7 +6,7 @@ import { FailTheSubsModalContentPropTypes } from '@/lib/types';
 
 import { Button, Title } from '@/elements';
 import { failTheSubs } from '@/services/on-subs';
-import { parseErrors } from '@/utils/helpers';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const FailTheSubsModalContent = ({ closeModal, offerId }) => {
@@ -17,8 +17,7 @@ const FailTheSubsModalContent = ({ closeModal, offerId }) => {
     const { error, message: successMessage } = await failTheSubs({ data: { offerId } });
     setLoading(false);
     if (error) {
-      const { errors } = error;
-      errorToast(parseErrors({ ...errors }));
+      errorToast(parseErrorMessage(error));
     } else {
       successToast(successMessage);
       closeModal();

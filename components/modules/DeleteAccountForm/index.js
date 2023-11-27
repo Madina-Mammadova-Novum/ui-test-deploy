@@ -11,6 +11,7 @@ import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
 import { Notes } from '@/units';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeleteAccountForm = ({ title, closeModal }) => {
@@ -36,7 +37,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
     const { error } = await deleteCompany({ data: formData });
 
     if (!error) successToast(null, 'You have successfully sent a request to delete your account');
-    else errorToast(error?.message, error?.errors);
+    else errorToast(parseErrorMessage(error));
   };
 
   return (

@@ -15,6 +15,7 @@ import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel
 import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
 import { updateTankersByFleetId } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const EditDateForm = ({ state, title, closeModal }) => {
@@ -41,7 +42,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
     }
 
     if (message) successToast(message);
-    if (error) errorToast(error.message, error.errors);
+    if (error) errorToast(parseErrorMessage(error));
   };
 
   return (
