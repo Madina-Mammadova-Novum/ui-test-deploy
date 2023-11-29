@@ -39,7 +39,7 @@ const Chat = () => {
   };
 
   const handleCollapseConversation = () => {
-    dispatch(setCollapsedChat(user.data));
+    dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
 
     chatService.disconnect();
   };

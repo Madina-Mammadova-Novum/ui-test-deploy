@@ -230,7 +230,7 @@ export function offerDetailsAdapter({ data, role }) {
       details: [
         {
           key: 'Freight',
-          label: `${freightFormat?.value} ${freight}`,
+          label: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
         },
         {
           key: 'Demurrage rate',
@@ -375,7 +375,7 @@ export function confirmCounterofferDetailsAdapter({ data }) {
       details: [
         {
           key: 'Freight',
-          label: `${freight?.label} ${value}`,
+          label: `${freight?.label} ${freight?.label === 'Lumpsum' ? '$' : ''}${value}`,
         },
         {
           key: 'Demurrage rate',

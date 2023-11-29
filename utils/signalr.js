@@ -36,11 +36,17 @@ export class SignalRController {
       .build();
 
     await this.connection.start();
+    // console.log(this.connection, 'con-start');
   }
 
   async stop() {
     try {
+      this.connection.off('ReceiveMessage', async (message) => {
+        await this.readMessage({ id: message.chatId });
+        this.updateMessage({ message });
+      });
       await this.connection.stop();
+      // console.log(this.connection, 'con-stop');
     } catch (err) {
       console.error(err);
     }
@@ -83,6 +89,8 @@ export class ChatController extends SignalRController {
         await this.readMessage({ id: message.chatId });
         this.updateMessage({ message });
       });
+      // Clear messageCount
+      this.store.dispatch(messageAlert({ chatId: data?.chatId, messageCount: 0 }));
     } catch (err) {
       console.error(err);
       this.disconnect();
@@ -92,7 +100,9 @@ export class ChatController extends SignalRController {
   async initStatus() {
     await this.setupConnection({ path: `${this.host}/chatlist` });
 
-    this.connection.on('ReceiveMessage', (chat) => this.incomingMessage({ chat }));
+    this.connection.on('ReceiveMessage', (chat) => {
+      this.incomingMessage({ chat });
+    });
     // this.connection.on('ChatIsOnline', (chat) => console.log(chat));
     this.connection.on('SomeoneIsTyping', (chat) => this.isTyping({ chat }));
   }

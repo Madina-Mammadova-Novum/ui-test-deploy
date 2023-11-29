@@ -18,7 +18,7 @@ import { getPorts } from '@/services/port';
 import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesselTypes } from '@/services/vessel';
 import { refetchFleets } from '@/store/entities/fleets/slice';
 import { ImoNotFound, ModalHeader } from '@/units';
-import { convertDataToOptions, countriesOptions, getValueWithPath } from '@/utils/helpers';
+import { convertDataToOptions, countriesOptions, getValueWithPath, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
@@ -142,7 +142,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       successToast(message);
       closeModal();
     }
-    if (error && error?.message?.Imo) errorToast(error?.message?.Imo);
+    if (error) errorToast(parseErrorMessage(error));
   };
 
   const handleChange = async (key, value) => {

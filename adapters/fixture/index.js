@@ -233,7 +233,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
       generalOfferTerms: [
         {
           title: 'Freight',
-          text: `${freightFormat?.value} ${freight}`,
+          text: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
         },
         {
           title: 'Demurrage rate',
