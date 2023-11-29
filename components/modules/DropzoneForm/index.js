@@ -97,7 +97,12 @@ const DropzoneForm = ({ showTextFields = true }) => {
             error={errors?.title?.message}
           />
 
-          <TextArea {...register('comment')} label="comment (optional)" placeholder="Type your Message here …" />
+          <TextArea
+            {...register('comment')}
+            label="comment (optional)"
+            placeholder="Type your Message here …"
+            error={errors?.comment?.message}
+          />
         </div>
       )}
       {!files.length ? (

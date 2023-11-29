@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 import { moreMessagesDataAdapter } from '@/adapters';
+import { sortChatMessages } from '@/utils/helpers';
 
 const initialState = {
   loading: false,
@@ -60,12 +61,11 @@ const chatSlice = createSlice({
       state.updating = action.payload;
     },
     setUserMessages: (state, { payload }) => {
-      state.data.user.messages = payload;
+      state.data.user.messages = sortChatMessages(payload);
     },
     updateUserMessages: (state, { payload }) => {
       const updatedData = moreMessagesDataAdapter({ payload, messages: state.data.user.messages });
-
-      state.data.user.messages = Object.values(updatedData);
+      state.data.user.messages = sortChatMessages(Object.values(updatedData));
     },
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
@@ -131,7 +131,7 @@ const chatSlice = createSlice({
       }
 
       const updatedActiveState = state.data.active.map((user) => {
-        if (user.contentId === payload?.contentId) {
+        if (user.contentId === payload?.contentId || user.chatId === payload.chatId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -141,7 +141,7 @@ const chatSlice = createSlice({
       });
 
       const updatedCollapsedState = state.data.collapsed.map((user) => {
-        if (user.contentId === payload?.contentId) {
+        if (user.contentId === payload?.contentId || user.chatId === payload.chatId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -150,8 +150,10 @@ const chatSlice = createSlice({
         return user;
       });
 
-      state.data.active[payload.contentId] = updatedActiveState;
-      state.data.collapsed[payload.contentId] = updatedCollapsedState;
+      state.data.active = updatedActiveState;
+      // state.data.active[payload.contentId] = updatedActiveState;
+      state.data.collapsed = updatedCollapsedState;
+      // state.data.collapsed[payload.contentId] = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {

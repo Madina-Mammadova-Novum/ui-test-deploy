@@ -7,7 +7,7 @@ import { Comment } from '@/units';
 import { useHookForm } from '@/utils/hooks';
 
 const CommentsContent = ({ data = [], areaDisabled = false }) => {
-  const { register } = useHookForm();
+  const { register, formState } = useHookForm();
 
   return (
     <div>
@@ -33,6 +33,7 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
             placeholder="Type your message here"
             customStyles="!w-full"
             {...register('comment')}
+            error={formState?.errors?.comment?.message}
           />
         </>
       )}

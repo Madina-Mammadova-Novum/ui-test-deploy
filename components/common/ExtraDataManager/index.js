@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
-import { chatService } from '@/services/signalR';
+import { chatListService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
@@ -48,7 +48,7 @@ const ExtraDataManager = ({ children }) => {
       if (isValid) {
         setUserData({ role: session?.role, isValid });
         dispatch(getListOfChats());
-        chatService.initStatus();
+        chatListService.initStatus();
       }
       if (isExpired) await updateSession();
     } catch (error) {
