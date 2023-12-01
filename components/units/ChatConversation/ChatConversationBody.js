@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatConversationBodyPropTypes } from '@/lib/types';
@@ -38,7 +38,7 @@ const ChatConversationBody = () => {
     return <ChatMessage key={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
   };
 
-  const printChatList = ({ data: content, title, id }) => {
+  const printMessages = ({ data: content, title, id }) => {
     return (
       <div className="flex flex-col" key={id}>
         <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
@@ -47,13 +47,19 @@ const ChatConversationBody = () => {
     );
   };
 
+  const printContent = useMemo(() => {
+    if (loading) return <ChatLoader />;
+    if (messages.length > 0) return messages.map(printMessages);
+    return <p className="absolute w-full text-center top-0 font-semibold text-base">Empty history</p>;
+  }, [loading, messages]);
+
   return (
     <div
       ref={scrollRef}
       onScroll={handleScroll}
       className="flex relative flex-col-reverse h-96 overflow-scroll scroll-auto"
     >
-      {loading ? <ChatLoader /> : messages.map(printChatList)}
+      {printContent}
     </div>
   );
 };

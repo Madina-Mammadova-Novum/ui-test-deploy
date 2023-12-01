@@ -41,10 +41,6 @@ export class SignalRController {
 
   async stop() {
     try {
-      this.connection.off('ReceiveMessage', async (message) => {
-        await this.readMessage({ id: message.chatId });
-        this.updateMessage({ message });
-      });
       await this.connection.stop();
       // console.log(this.connection, 'con-stop');
     } catch (err) {
@@ -77,20 +73,23 @@ export class ChatController extends SignalRController {
   constructor({ host, state, token }) {
     super({ host, state, token });
     this.messages = [];
+    this.opened = false;
   }
 
   async initChat(data) {
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser(data));
+    this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
 
     try {
       await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
-      this.connection.on('ReceiveMessage', async (message) => {
-        await this.readMessage({ id: message.chatId });
+      this.opened = true;
+
+      this.connection.on('ReceiveMessage', (message) => {
+        this.incomingMessage({ chatId: data.chatId, messageCount: 0 });
         this.updateMessage({ message });
+        this.connection.invoke('ReadMessage', message.id);
       });
-      // Clear messageCount
-      this.store.dispatch(messageAlert({ chatId: data?.chatId, messageCount: 0 }));
     } catch (err) {
       console.error(err);
       this.disconnect();
@@ -101,34 +100,22 @@ export class ChatController extends SignalRController {
     await this.setupConnection({ path: `${this.host}/chatlist` });
 
     this.connection.on('ReceiveMessage', (chat) => {
-      this.incomingMessage({ chat });
+      if (!this.opened) this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
     });
     // this.connection.on('ChatIsOnline', (chat) => console.log(chat));
     this.connection.on('SomeoneIsTyping', (chat) => this.isTyping({ chat }));
   }
 
-  async sendMessage({ message }) {
-    try {
-      if (message !== '') await this.connection.invoke('SendMessage', message);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async readMessage({ id }) {
-    try {
-      await this.connection.invoke('ReadMessage', id);
-    } catch (e) {
-      console.error(e);
-    }
+  sendMessage({ message }) {
+    if (message !== '') this.connection.invoke('SendMessage', message);
   }
 
   updateMessage({ message }) {
     this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
   }
 
-  incomingMessage({ chat }) {
-    this.store.dispatch(messageAlert(chat));
+  incomingMessage({ chatId, messageCount }) {
+    this.store.dispatch(messageAlert({ chatId, messageCount }));
   }
 
   isTyping({ chat }) {

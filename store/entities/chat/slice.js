@@ -121,13 +121,8 @@ const chatSlice = createSlice({
     },
 
     messageAlert: (state, { payload }) => {
-      if (state.data.support[0]?.chatId === payload?.id) {
-        const updatedMessage = {
-          ...state.data.support[0],
-          messageCount: payload.messageCount,
-        };
-
-        state.data.support[0] = updatedMessage;
+      if (state.data.support[0]?.chatId === payload?.chatId) {
+        state.data.support[0].messageCount = payload.messageCount;
       }
 
       const updatedActiveState = state.data.active.map((user) => {
@@ -151,9 +146,7 @@ const chatSlice = createSlice({
       });
 
       state.data.active = updatedActiveState;
-      // state.data.active[payload.contentId] = updatedActiveState;
       state.data.collapsed = updatedCollapsedState;
-      // state.data.collapsed[payload.contentId] = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {

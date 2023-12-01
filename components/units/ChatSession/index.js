@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
@@ -10,9 +10,12 @@ import { chatService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat } from '@/store/entities/chat/slice';
 import { ChatConversationCard, ChatSubModal } from '@/units';
+import { getChatSelector } from '@/store/selectors';
 
 const ChatSession = ({ data, tab }) => {
   const dispatch = useDispatch();
+
+  const { user } = useSelector(getChatSelector).chats;
 
   const [state, setState] = useState({ deactivate: false, reactivate: false });
 
@@ -45,9 +48,10 @@ const ChatSession = ({ data, tab }) => {
   };
 
   const handleOpenConversation = () => {
-    chatService.disconnect();
+    if (user.data?.chatId === data.chatId) return;
 
     dispatch(removeCollapsedChat(data?.chatId));
+    chatService.disconnect();
     chatService?.initChat(data);
   };
 
