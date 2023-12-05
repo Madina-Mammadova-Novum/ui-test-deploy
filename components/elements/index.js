@@ -54,6 +54,7 @@ import TextRow from '@/elements/TextRow';
 import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
 import Toggle from '@/elements/Toggle';
+import TypingIndicator from '@/elements/TypingIndicator';
 
 export {
   AccordionBody,
@@ -64,6 +65,7 @@ export {
   ManualTooltip,
   Toggle,
   Title,
+  TypingIndicator,
   TextRow,
   Input,
   PhoneInput,

@@ -12,7 +12,6 @@ const initialState = {
   error: false,
   opened: false,
   isActiveSession: false,
-  isDeactivatedSession: false,
   data: {
     active: [],
     archived: [],
@@ -95,9 +94,6 @@ const chatSlice = createSlice({
     setOpenedChat: (state, { payload }) => {
       state.opened = payload;
     },
-    setDeactivateConversation: (state, { payload }) => {
-      state.isDeactivatedSession = payload;
-    },
     resetChatFilter: (state) => {
       state.filterParams = initialState.filterParams;
     },
@@ -107,36 +103,40 @@ const chatSlice = createSlice({
     },
 
     typingStatus: (state, { payload }) => {
-      const updatedActiveState = state.data.active.map((user) => {
-        if (user.contentId === payload.contentId) {
+      const updatedCollapsedState = state.data.collapsed.map((user) => {
+        if (user.contentId === payload.contentId || user.chatId === payload.id) {
           return {
             ...user,
-            isTyping: true,
+            isTyping: payload?.typing,
           };
         }
         return user;
       });
 
-      state.data.active = updatedActiveState;
+      const activeSession = state.data.user.data;
+
+      if (activeSession.chatId === payload?.id) {
+        activeSession.isTyping = payload?.typing;
+      }
+
+      state.data.collapsed = updatedCollapsedState;
     },
 
     messageAlert: (state, { payload }) => {
-      if (state.data.support[0]?.chatId === payload?.chatId) {
-        state.data.support[0].messageCount = payload.messageCount;
-      }
+      const activeSessionId = state.data.user.data?.chatId;
 
       const updatedActiveState = state.data.active.map((user) => {
-        if (user.contentId === payload?.contentId || user.chatId === payload.chatId) {
+        if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
-            messageCount: payload.messageCount,
+            messageCount: activeSessionId === payload?.chatId ? 0 : payload.messageCount,
           };
         }
         return user;
       });
 
       const updatedCollapsedState = state.data.collapsed.map((user) => {
-        if (user.contentId === payload?.contentId || user.chatId === payload.chatId) {
+        if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -144,6 +144,10 @@ const chatSlice = createSlice({
         }
         return user;
       });
+
+      if (state.data.support[0]?.chatId === payload?.chatId) {
+        state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;
+      }
 
       state.data.active = updatedActiveState;
       state.data.collapsed = updatedCollapsedState;

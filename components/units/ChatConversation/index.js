@@ -10,7 +10,7 @@ import { ChatConversationPropTypes } from '@/lib/types';
 
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
-import { chatService } from '@/services/signalR';
+import { сhatSessionServcie } from '@/services/signalR';
 import { getChatHistory } from '@/store/entities/chat/actions';
 import { getChatSelector } from '@/store/selectors';
 
@@ -23,7 +23,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   useEffect(() => {
     if (isOpened) dispatch(getChatHistory({ data: { id: data?.chatId } }));
-    else chatService.disconnect();
+    else сhatSessionServcie.stop();
   }, [isOpened, data?.chatId]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    chatService.sendMessage({ message });
+    сhatSessionServcie.sendMessage({ message });
     setMessage('');
   };
 
@@ -53,9 +53,11 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         <СhatConversationHeader
           data={data}
           updating={updating}
+          typing={data?.isTyping}
           onClose={onCloseSession}
           onCollapse={onCollapseSession}
         />
+
         <div className="flex flex-col p-5">
           <ChatConversationBody messages={messages} loading={loading} />
           {!data?.archieved && (

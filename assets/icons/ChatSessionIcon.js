@@ -1,7 +1,7 @@
 import { ChatSessionIconPropTypes } from '@/lib/types';
 
 const ChatSessionIcon = ({ name, isOnline }) => {
-  const words = name.split(' ');
+  const words = name?.split(' ');
   const tagName = words?.map((word) => word.charAt(0));
 
   return (

@@ -38,7 +38,7 @@ const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
         <p
           className={`${
             isBroker ? 'bg-gray-darker bg-opacity-40 self-start' : 'bg-blue bg-opacity-10 self-end'
-          } rounded-base px-2.5 py-1.5 text-xsm relative`}
+          } rounded-base px-2.5 py-1.5 text-xsm relative break-all`}
         >
           <Linkify componentDecorator={renderLink}>{message}</Linkify>
         </p>

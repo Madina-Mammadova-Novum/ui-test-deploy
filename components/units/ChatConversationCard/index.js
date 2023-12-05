@@ -53,7 +53,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   }, [vessel, countries, setCargoeInfo]);
 
   return (
-    <div className="text-black flex items-start gap-x-1.5 w-full">
+    <div className="text-black flex items-start gap-x-1.5 w-auto">
       <ShipIcon isOnline={isOnline} />
       <div className="flex flex-col">
         <Title

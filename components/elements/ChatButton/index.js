@@ -8,7 +8,17 @@ import ChatSessionIcon from '@/assets/icons/ChatSessionIcon';
 import ChatSVG from '@/assets/images/chat.svg';
 import { Badge } from '@/elements';
 
-const ChatButton = ({ counter, name, isOnline, onClick, onClose, withCancel, className = '', variant = 'default' }) => {
+const ChatButton = ({
+  counter,
+  name,
+  isOnline,
+  onClick,
+  onClose,
+  isTyping,
+  withCancel,
+  className = '',
+  variant = 'default',
+}) => {
   const [hovered, setHovered] = useState(false);
 
   const buttons = {
@@ -33,7 +43,14 @@ const ChatButton = ({ counter, name, isOnline, onClick, onClose, withCancel, cla
         onMouseLeave={() => setHovered(false)}
       >
         <ChatSessionIcon isOnline={isOnline} name={name} />
-        <Badge counter={counter} onClose={onClose} withCancel={withCancel} name={name} hovered={hovered} />
+        <Badge
+          counter={counter}
+          onClose={onClose}
+          withCancel={withCancel}
+          typing={isTyping}
+          name={name}
+          hovered={hovered}
+        />
       </button>
     ),
   };
