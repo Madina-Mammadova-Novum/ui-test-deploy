@@ -25,9 +25,14 @@ export const AUTHCONFIG = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, session, user, trigger }) => {
+    jwt: async (params) => {
+      const { user, session, trigger, token } = params;
+
       if (user) return tokenAdapter({ data: user });
-      if (trigger === 'update') return tokenAdapter({ data: session });
+
+      if (trigger === 'update') {
+        return tokenAdapter({ data: session });
+      }
 
       return Promise.resolve(token);
     },

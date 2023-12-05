@@ -36,16 +36,6 @@ export class SignalRController {
       .build();
 
     await this.connection.start();
-    // console.log(this.connection, 'con-start');
-  }
-
-  async stop() {
-    try {
-      await this.connection.stop();
-      // console.log(this.connection, 'con-stop');
-    } catch (err) {
-      console.error(err);
-    }
   }
 }
 
@@ -67,43 +57,34 @@ export class NotificationController extends SignalRController {
     if (response)
       this.store.dispatch(setFilterParams({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
   }
+
+  async stop() {
+    if (this.connection) {
+      await this.connection.stop();
+    }
+  }
 }
 
-export class ChatController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+export class ChatSessionController extends SignalRController {
+  constructor({ host, state }) {
+    super({ host, state });
     this.messages = [];
-    this.opened = false;
   }
 
   async initChat(data) {
+    await this.stop();
+
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser(data));
+
     this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
 
-    try {
-      await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
-      this.opened = true;
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
 
-      this.connection.on('ReceiveMessage', (message) => {
-        this.incomingMessage({ chatId: data.chatId, messageCount: 0 });
-        this.updateMessage({ message });
-        this.connection.invoke('ReadMessage', message.id);
-      });
-    } catch (err) {
-      console.error(err);
-      this.disconnect();
-    }
-  }
-
-  async initStatus() {
-    await this.setupConnection({ path: `${this.host}/chatlist` });
-
-    this.connection.on('ReceiveMessage', (chat) => {
-      if (!this.opened) this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
+    this.connection.on('ReceiveMessage', (message) => {
+      this.connection.invoke('ReadMessage', message.id);
+      this.updateMessage({ message });
     });
-    // this.connection.on('ChatIsOnline', (chat) => console.log(chat));
-    this.connection.on('SomeoneIsTyping', (chat) => this.isTyping({ chat }));
   }
 
   sendMessage({ message }) {
@@ -118,14 +99,55 @@ export class ChatController extends SignalRController {
     this.store.dispatch(messageAlert({ chatId, messageCount }));
   }
 
-  isTyping({ chat }) {
-    this.store.dispatch(typingStatus(chat));
-  }
-
-  disconnect() {
-    this.stop();
+  async stop() {
     this.store.dispatch(resetUser());
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
+
+    if (this.connection) {
+      await this.connection.stop();
+    }
+  }
+}
+
+export class ChatNotificationController extends SignalRController {
+  constructor({ host, state }) {
+    super({ host, state });
+  }
+
+  async initStatus() {
+    await this.setupConnection({ path: `${this.host}/chatlist` });
+
+    this.connection.on('ReceiveMessage', (chat) => {
+      this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
+    });
+
+    this.connection.on('SomeoneIsTyping', (chat) => {
+      if (chat.id) {
+        this.isTyping({ chat, typing: true });
+        clearTimeout(this.typingTimeout);
+        this.typingTimeout = setTimeout(() => {
+          this.isTyping({ chat, typing: false });
+        }, 500);
+      }
+    });
+  }
+
+  onTypingTimeout({ chat }) {
+    this.isTyping({ chat, typing: false });
+  }
+
+  incomingMessage({ chatId, messageCount }) {
+    this.store.dispatch(messageAlert({ chatId, messageCount }));
+  }
+
+  isTyping({ chat, typing }) {
+    this.store.dispatch(typingStatus({ ...chat, typing }));
+  }
+
+  async stop() {
+    if (this.connection) {
+      await this.connection.stop();
+    }
   }
 }

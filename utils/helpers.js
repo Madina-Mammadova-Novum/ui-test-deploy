@@ -4,6 +4,7 @@ import { HttpTransportType } from '@microsoft/signalr';
 import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
+import { getSession } from 'next-auth/react';
 
 import { transformDate } from './date';
 
@@ -614,3 +615,12 @@ export const sortChatMessages = (array) =>
     if (new Date(current) - new Date(next) < 1) return 1;
     return 0;
   });
+
+export const sessionValidity = () => {
+  const session = getSession();
+
+  const isExpired = session?.expires <= Date.now();
+  const isValid = Boolean(session?.accessToken);
+
+  return { isValid, isExpired };
+};

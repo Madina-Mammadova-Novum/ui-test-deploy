@@ -515,9 +515,11 @@ export function tokenAdapter({ data }) {
 
   if (data?.access_token) {
     const { role } = decodedTokenAdapter(data.access_token);
+
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
+      expires: data.expires_in,
       role: userRoleAdapter({ data: role }),
     };
   }
@@ -529,11 +531,11 @@ export function sessionAdapter({ session, token }) {
   if (!token) throw new Error('UNATHORIZED');
 
   if (token.accessToken) {
-    const { exp, sub, ...rest } = decodedTokenAdapter(token.accessToken);
+    const { sub, ...rest } = decodedTokenAdapter(token.accessToken);
 
     session.user = { ...rest };
     session.userId = sub;
-    session.expires = exp * 1000;
+    session.expires = token.expires;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
     session.role = token.role;

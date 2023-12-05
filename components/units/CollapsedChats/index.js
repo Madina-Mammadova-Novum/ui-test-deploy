@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
-import { chatService } from '@/services/signalR';
+import { сhatSessionServcie } from '@/services/signalR';
 import { removeCollapsedChat, resetUser, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 
@@ -11,12 +11,11 @@ const CollapsedChats = () => {
   const dispatch = useDispatch();
   const { chats } = useSelector(getChatSelector);
 
-  const onActivate = (user) => chatService.initChat(user);
+  const onActivate = (user) => сhatSessionServcie.initChat(user);
 
   const onRemove = async ({ id }) => {
     dispatch(resetUser());
     dispatch(removeCollapsedChat(id));
-    chatService.disconnect();
   };
 
   const handleStartConversation = ({ id, key }) => {
@@ -41,6 +40,7 @@ const CollapsedChats = () => {
         counter={session?.messageCount}
         name={session?.vessel?.name}
         isOnline={session?.isOnline}
+        isTyping={session?.isTyping}
         onClick={() => handleStartConversation({ id: session?.chatId, key: session?.key })}
         onClose={(e) => handleCloseConversation(e, session?.chatId)}
         className="h-auto"
