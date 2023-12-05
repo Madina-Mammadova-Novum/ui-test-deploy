@@ -8,14 +8,14 @@ import { useSession } from 'next-auth/react';
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
-import { sessionValidity } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
   const { data: session, update } = useSession();
 
-  const { isValid, isExpired } = sessionValidity();
+  const isExpired = session?.expires <= Date.now();
+  const isValid = Boolean(session?.accessToken);
 
   const getGeneralData = () => {
     dispatch(fetchPorts());
