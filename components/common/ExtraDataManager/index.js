@@ -14,7 +14,7 @@ const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
   const { data: session, update } = useSession();
 
-  const isExpired = session?.expires <= Date.now();
+  const isExpired = Date.now() >= session?.expires;
   const isValid = Boolean(session?.accessToken);
 
   const getGeneralData = () => {
