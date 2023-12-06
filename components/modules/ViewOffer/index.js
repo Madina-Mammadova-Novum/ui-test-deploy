@@ -13,7 +13,7 @@ import { CommentsContent } from '@/modules';
 import { extendCountdown } from '@/services/offer';
 import { updateCountdown } from '@/store/entities/negotiating/slice';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
-import { getRoleIdentity, parseErrors } from '@/utils/helpers';
+import { getRoleIdentity, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -40,7 +40,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
     setAllowCountdownExtension(false);
     const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
     if (error) {
-      errorToast(parseErrors(error.message));
+      errorToast(parseErrorMessage(error));
       setAllowCountdownExtension(data?.allowExtension);
     } else {
       setAllowCountdownExtension(false);

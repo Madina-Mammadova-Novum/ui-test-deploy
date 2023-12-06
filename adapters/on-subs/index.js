@@ -156,7 +156,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     lastSire,
     approvals,
     bankDetails,
-    isCountdownExtendedByCharterer,
+    canRequestForCountdownExtension,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -292,7 +292,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       generalOfferTerms: [
         {
           title: 'Freight',
-          text: `${freightFormat?.value} ${freight}`,
+          text: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
         },
         {
           title: 'Demurrage rate',
@@ -338,7 +338,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       },
     },
     additionalCharterPartyTerms,
-    allowExtension: !isCountdownExtendedByCharterer,
+    allowExtension: canRequestForCountdownExtension,
   };
 };
 

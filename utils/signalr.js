@@ -37,14 +37,6 @@ export class SignalRController {
 
     await this.connection.start();
   }
-
-  async stop() {
-    try {
-      await this.connection.stop();
-    } catch (err) {
-      console.error(err);
-    }
-  }
 }
 
 export class NotificationController extends SignalRController {
@@ -65,70 +57,97 @@ export class NotificationController extends SignalRController {
     if (response)
       this.store.dispatch(setFilterParams({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
   }
+
+  async stop() {
+    if (this.connection) {
+      await this.connection.stop();
+    }
+  }
 }
 
-export class ChatController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+export class ChatSessionController extends SignalRController {
+  constructor({ host, state }) {
+    super({ host, state });
     this.messages = [];
   }
 
   async initChat(data) {
+    await this.stop();
+
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser(data));
 
-    try {
-      await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
-      this.connection.on('ReceiveMessage', async (message) => {
-        await this.readMessage({ id: message.chatId });
-        this.updateMessage({ message });
-      });
-    } catch (err) {
-      console.error(err);
-      this.disconnect();
-    }
+    this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
+
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
+
+    this.connection.on('ReceiveMessage', (message) => {
+      this.connection.invoke('ReadMessage', message.id);
+      this.updateMessage({ message });
+    });
   }
 
-  async initStatus() {
-    await this.setupConnection({ path: `${this.host}/chatlist` });
-
-    this.connection.on('ReceiveMessage', (chat) => this.incomingMessage({ chat }));
-    // this.connection.on('ChatIsOnline', (chat) => console.log(chat));
-    this.connection.on('SomeoneIsTyping', (chat) => this.isTyping({ chat }));
-  }
-
-  async sendMessage({ message }) {
-    try {
-      if (message !== '') await this.connection.invoke('SendMessage', message);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async readMessage({ id }) {
-    try {
-      await this.connection.invoke('ReadMessage', id);
-    } catch (e) {
-      console.error(e);
-    }
+  sendMessage({ message }) {
+    if (message !== '') this.connection.invoke('SendMessage', message);
   }
 
   updateMessage({ message }) {
     this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
   }
 
-  incomingMessage({ chat }) {
-    this.store.dispatch(messageAlert(chat));
+  incomingMessage({ chatId, messageCount }) {
+    this.store.dispatch(messageAlert({ chatId, messageCount }));
   }
 
-  isTyping({ chat }) {
-    this.store.dispatch(typingStatus(chat));
-  }
-
-  disconnect() {
-    this.stop();
+  async stop() {
     this.store.dispatch(resetUser());
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
+
+    if (this.connection) {
+      await this.connection.stop();
+    }
+  }
+}
+
+export class ChatNotificationController extends SignalRController {
+  constructor({ host, state }) {
+    super({ host, state });
+  }
+
+  async initStatus() {
+    await this.setupConnection({ path: `${this.host}/chatlist` });
+
+    this.connection.on('ReceiveMessage', (chat) => {
+      this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
+    });
+
+    this.connection.on('SomeoneIsTyping', (chat) => {
+      if (chat.id) {
+        this.isTyping({ chat, typing: true });
+        clearTimeout(this.typingTimeout);
+        this.typingTimeout = setTimeout(() => {
+          this.isTyping({ chat, typing: false });
+        }, 500);
+      }
+    });
+  }
+
+  onTypingTimeout({ chat }) {
+    this.isTyping({ chat, typing: false });
+  }
+
+  incomingMessage({ chatId, messageCount }) {
+    this.store.dispatch(messageAlert({ chatId, messageCount }));
+  }
+
+  isTyping({ chat, typing }) {
+    this.store.dispatch(typingStatus({ ...chat, typing }));
+  }
+
+  async stop() {
+    if (this.connection) {
+      await this.connection.stop();
+    }
   }
 }

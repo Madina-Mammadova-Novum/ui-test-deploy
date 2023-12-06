@@ -20,7 +20,7 @@ import { fetchPrefilledDataToUpdate } from '@/store/entities/fleets/actions';
 import { clearPrefilledState, refetchFleets } from '@/store/entities/fleets/slice';
 import { fleetsSelector } from '@/store/selectors';
 import { ModalHeader } from '@/units';
-import { convertDataToOptions, getValueWithPath, parseErrors } from '@/utils/helpers';
+import { convertDataToOptions, getValueWithPath, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
@@ -124,8 +124,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       closeModal();
     }
     if (error) {
-      const { errors: requestUpdateErrors, message: requestUpdateMessage } = error;
-      errorToast(parseErrors({ ...requestUpdateErrors, ...requestUpdateMessage }));
+      errorToast(parseErrorMessage(error));
     }
   };
 

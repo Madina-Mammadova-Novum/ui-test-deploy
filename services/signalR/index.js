@@ -1,5 +1,10 @@
 import { store } from '@/store';
-import { ChatController, NotificationController } from '@/utils/signalr';
+import { ChatNotificationController, ChatSessionController, NotificationController } from '@/utils/signalr';
 
-export const notificationService = new NotificationController({ host: 'hubs/NotificationHub', state: store });
-export const chatService = new ChatController({ host: 'hubs', state: store });
+const serviceParams = (host) => ({ host, state: store });
+
+/* chat api */
+export const сhatSessionServcie = new ChatSessionController(serviceParams('hubs'));
+export const chatNotificationService = new ChatNotificationController(serviceParams('hubs'));
+/* notificaton api */
+export const notificationService = new NotificationController(serviceParams('hubs/NotificationHub'));

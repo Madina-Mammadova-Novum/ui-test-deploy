@@ -802,7 +802,7 @@ export const ownerNegotiatingFailedTableHeader = [
     text: 'load port',
   },
   {
-    text: 'date failed',
+    text: 'Date Declined',
   },
   {
     text: 'reason',
@@ -828,7 +828,7 @@ export const chartererNegotiatingFailedTableHeader = [
     text: 'DWT',
   },
   {
-    text: 'Date failed',
+    text: 'Date Declined',
   },
   {
     text: 'reason',

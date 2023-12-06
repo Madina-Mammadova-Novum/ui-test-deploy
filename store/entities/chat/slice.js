@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 import { moreMessagesDataAdapter } from '@/adapters';
+import { sortChatMessages } from '@/utils/helpers';
 
 const initialState = {
   loading: false,
@@ -11,7 +12,6 @@ const initialState = {
   error: false,
   opened: false,
   isActiveSession: false,
-  isDeactivatedSession: false,
   data: {
     active: [],
     archived: [],
@@ -60,12 +60,11 @@ const chatSlice = createSlice({
       state.updating = action.payload;
     },
     setUserMessages: (state, { payload }) => {
-      state.data.user.messages = payload;
+      state.data.user.messages = sortChatMessages(payload);
     },
     updateUserMessages: (state, { payload }) => {
       const updatedData = moreMessagesDataAdapter({ payload, messages: state.data.user.messages });
-
-      state.data.user.messages = Object.values(updatedData);
+      state.data.user.messages = sortChatMessages(Object.values(updatedData));
     },
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
@@ -95,9 +94,6 @@ const chatSlice = createSlice({
     setOpenedChat: (state, { payload }) => {
       state.opened = payload;
     },
-    setDeactivateConversation: (state, { payload }) => {
-      state.isDeactivatedSession = payload;
-    },
     resetChatFilter: (state) => {
       state.filterParams = initialState.filterParams;
     },
@@ -107,41 +103,40 @@ const chatSlice = createSlice({
     },
 
     typingStatus: (state, { payload }) => {
-      const updatedActiveState = state.data.active.map((user) => {
-        if (user.contentId === payload.contentId) {
+      const updatedCollapsedState = state.data.collapsed.map((user) => {
+        if (user.contentId === payload.contentId || user.chatId === payload.id) {
           return {
             ...user,
-            isTyping: true,
+            isTyping: payload?.typing,
           };
         }
         return user;
       });
 
-      state.data.active = updatedActiveState;
+      const activeSession = state.data.user.data;
+
+      if (activeSession.chatId === payload?.id) {
+        activeSession.isTyping = payload?.typing;
+      }
+
+      state.data.collapsed = updatedCollapsedState;
     },
 
     messageAlert: (state, { payload }) => {
-      if (state.data.support[0]?.chatId === payload?.id) {
-        const updatedMessage = {
-          ...state.data.support[0],
-          messageCount: payload.messageCount,
-        };
-
-        state.data.support[0] = updatedMessage;
-      }
+      const activeSessionId = state.data.user.data?.chatId;
 
       const updatedActiveState = state.data.active.map((user) => {
-        if (user.contentId === payload?.contentId) {
+        if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
-            messageCount: payload.messageCount,
+            messageCount: activeSessionId === payload?.chatId ? 0 : payload.messageCount,
           };
         }
         return user;
       });
 
       const updatedCollapsedState = state.data.collapsed.map((user) => {
-        if (user.contentId === payload?.contentId) {
+        if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
             messageCount: payload.messageCount,
@@ -150,8 +145,12 @@ const chatSlice = createSlice({
         return user;
       });
 
-      state.data.active[payload.contentId] = updatedActiveState;
-      state.data.collapsed[payload.contentId] = updatedCollapsedState;
+      if (state.data.support[0]?.chatId === payload?.chatId) {
+        state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;
+      }
+
+      state.data.active = updatedActiveState;
+      state.data.collapsed = updatedCollapsedState;
     },
   },
   extraReducers: (builder) => {

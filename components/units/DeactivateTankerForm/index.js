@@ -11,6 +11,7 @@ import { getUserPositionById } from '@/services';
 import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
 import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
 import { updateTankersByFleetId } from '@/store/entities/positions/slice';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeactivateTankerForm = ({ title, state, closeModal }) => {
@@ -43,7 +44,7 @@ const DeactivateTankerForm = ({ title, state, closeModal }) => {
     }
 
     if (message) successToast(message);
-    if (error) errorToast(error.message, error.errors);
+    if (error) errorToast(parseErrorMessage(error));
   };
 
   return (

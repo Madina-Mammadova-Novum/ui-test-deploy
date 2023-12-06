@@ -2,10 +2,10 @@ import { ChatConversationCardPropTypes } from '@/lib/types';
 
 import CloseSVG from '@/assets/images/close.svg';
 import CollapseSVG from '@/assets/images/line.svg';
-import { Button, Loader, Title } from '@/elements';
+import { Button, Loader, Title, TypingIndicator } from '@/elements';
 import { ChatConversationCard } from '@/units';
 
-const СhatConversationHeader = ({ data, onCollapse, onClose, updating }) => {
+const СhatConversationHeader = ({ data, onCollapse, onClose, updating, typing }) => {
   return (
     <div className="bg-black p-5 flex flex-col rounded-tr-base rounded-tl-base">
       <div className="flex justify-between items-center h-full relative">
@@ -30,9 +30,9 @@ const СhatConversationHeader = ({ data, onCollapse, onClose, updating }) => {
           />
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex gap-x-5 relative">
         <ChatConversationCard data={data} contrasted />
-        {/* {typing && <span className="text-gray-darker text-xs-sm pt-0.5">typing...</span>} */}
+        <div className="absolute right-36 -top-1">{typing && <TypingIndicator size="md" />}</div>
       </div>
     </div>
   );

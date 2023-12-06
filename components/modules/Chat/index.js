@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
 import { SCREENS } from '@/lib/constants';
-import { chatService } from '@/services/signalR';
+import { chatNotificationService, сhatSessionServcie } from '@/services/signalR';
+import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
@@ -23,6 +24,11 @@ const Chat = () => {
   } = useSelector(getChatSelector);
 
   useEffect(() => {
+    chatNotificationService.initStatus();
+    dispatch(getListOfChats());
+  }, []);
+
+  useEffect(() => {
     if (opened) document.body.classList.add('overflow-hidden');
 
     return () => {
@@ -31,7 +37,7 @@ const Chat = () => {
   }, [opened]);
 
   const handleOpen = () => dispatch(setOpenedChat(!opened));
-  const handleCloseConversation = () => chatService.disconnect();
+  const handleCloseConversation = () => сhatSessionServcie.stop();
 
   const handleClose = async () => {
     dispatch(resetChatFilter());
@@ -39,21 +45,20 @@ const Chat = () => {
   };
 
   const handleCollapseConversation = () => {
-    dispatch(setCollapsedChat(user.data));
-
-    chatService.disconnect();
+    сhatSessionServcie.stop();
+    dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
   };
 
   useEffect(() => {
     if (mdScreen && isActive) dispatch(setOpenedChat(false));
   }, [mdScreen, isActive]);
 
-  // const onActivate = (chat) => chatService.initChat(chat);
+  // const onActivate = (chat) => сhatSessionServcie.initChat(chat);
 
   // const onRemove = async ({ id }) => {
   //   dispatch(resetUser());
   //   dispatch(removeCollapsedChat(id));
-  //   chatService.disconnect();
+  //   сhatSessionServcie.stop();
   // };
 
   // const handleStartConversation = ({ id, key }) => {

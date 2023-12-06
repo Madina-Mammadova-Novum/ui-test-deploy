@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { HttpTransportType } from '@microsoft/signalr';
+import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
 import dynamic from 'next/dynamic';
 
@@ -586,3 +587,30 @@ export const formatedNumber = (value) => {
   if (value === null) return '';
   return value?.toFixed(2);
 };
+
+export const parseErrorMessage = (responseError = {}) => {
+  try {
+    const {
+      message: { Errors },
+      errors,
+    } = responseError;
+    const parsedErrorMessages = parse(Object.values({ ...Errors, errors }).join('<br />'));
+    return parsedErrorMessages;
+  } catch {
+    return 'Something went wrong. Please, contact Ship.Link support for detailed information.';
+  }
+};
+
+export const sortChatMessages = (array) =>
+  array.sort((a, b) => {
+    const customDates = {
+      Today: new Date(),
+      Yesterday: addDays(new Date(), -1),
+    };
+
+    const current = customDates[a.title] || a.title;
+    const next = customDates[b.title] || b.title;
+    if (new Date(current) - new Date(next) >= 1) return -1;
+    if (new Date(current) - new Date(next) < 1) return 1;
+    return 0;
+  });

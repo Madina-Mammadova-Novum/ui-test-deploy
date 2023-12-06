@@ -518,3 +518,36 @@ tr > td:nth-child(2) {
   border-style: solid;
   border-color: #fff transparent;
 }
+
+.typing-dot {
+  opacity: 0;
+  animation: dot-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes dot-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.visible {
+  opacity: 1;
+  animation-play-state: running;
+}

@@ -11,7 +11,7 @@ import { FormManager } from '@/common';
 import { Button, FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
 import { contactInfoSchema } from '@/lib/schemas';
 import { contactUs } from '@/services/contactUs';
-import { getValueWithPath } from '@/utils/helpers';
+import { getValueWithPath, parseErrorMessage } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const ContactUsForm = () => {
@@ -37,7 +37,7 @@ const ContactUsForm = () => {
     const { error } = await contactUs({ data });
 
     if (!error) setIsSubmitted(true);
-    else errorToast(error.message, error.errors);
+    else errorToast(parseErrorMessage(error));
   };
 
   const onSubmitAgain = () => {

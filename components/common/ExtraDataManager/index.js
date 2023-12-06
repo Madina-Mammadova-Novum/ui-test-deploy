@@ -6,8 +6,6 @@ import { useDispatch } from 'react-redux';
 import { useSession } from 'next-auth/react';
 
 import { refreshAccessToken } from '@/services';
-import { chatService } from '@/services/signalR';
-import { getListOfChats } from '@/store/entities/chat/actions';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
 import { errorToast } from '@/utils/hooks';
@@ -15,6 +13,9 @@ import { errorToast } from '@/utils/hooks';
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
   const { data: session, update } = useSession();
+
+  const isExpired = session?.expires <= Date.now();
+  const isValid = Boolean(session?.accessToken);
 
   const getGeneralData = () => {
     dispatch(fetchPorts());
@@ -35,26 +36,11 @@ const ExtraDataManager = ({ children }) => {
     }
   };
 
-  const sessionValidity = () => {
-    const isExpired = session?.expires <= Date.now();
-    const isValid = session?.accessToken !== undefined && !isExpired;
-
-    return { isValid, isExpired };
-  };
-
   const sessionWatcher = async () => {
-    try {
-      const { isValid, isExpired } = sessionValidity();
-      if (isValid) {
-        setUserData({ role: session?.role, isValid });
-        dispatch(getListOfChats());
-        chatService.initStatus();
-      }
-      if (isExpired) await updateSession();
-    } catch (error) {
-      setUserData({ role: null, isValid: false });
-      errorToast('Session is not valid', error);
-    }
+    if (isValid) setUserData({ role: session?.role, isValid });
+    if (isExpired) await updateSession();
+
+    return setUserData({ role: null, isValid: false });
   };
 
   useEffect(() => {
@@ -63,7 +49,7 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     sessionWatcher();
-  }, [session?.accessToken, session?.expires, session?.role]);
+  }, [isExpired]);
 
   return children;
 };

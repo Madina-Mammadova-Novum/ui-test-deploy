@@ -16,7 +16,7 @@ import { revokeDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
-import { parseErrors } from '@/utils/helpers';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
@@ -49,8 +49,7 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
     });
     setLoading(false);
     if (error) {
-      const { errors } = error;
-      errorToast(parseErrors({ errors }));
+      errorToast(parseErrorMessage(error));
     } else {
       dispatch(updateDocumentStatus({ documentId, status: 'Active' }));
       successToast(successMessage);
