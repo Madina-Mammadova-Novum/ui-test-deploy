@@ -13,17 +13,14 @@ import {
   AccountPasswordDetails,
   AccountPersonalDetails,
 } from '@/units';
-import { getRoleIdentity } from '@/utils/helpers';
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
-  const { loading, data, role } = useSelector(getUserDataSelector);
-
-  const { isCharterer } = getRoleIdentity({ role });
+  const { loading, data } = useSelector(getUserDataSelector);
 
   useEffect(() => {
-    dispatch(fetchUserProfileData({ isCharterer }));
-  }, [isCharterer]);
+    dispatch(fetchUserProfileData());
+  }, []);
 
   return (
     <section className="flex justify-start items-start flex-col px-5 gap-2.5">
