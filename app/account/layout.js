@@ -3,7 +3,7 @@ import Providers from '@/providers';
 
 export default function RootLayout({ children }) {
   return (
-    <Providers>
+    <Providers loader="page">
       <AccountLayout>{children}</AccountLayout>
     </Providers>
   );

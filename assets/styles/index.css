@@ -551,3 +551,12 @@ tr > td:nth-child(2) {
   opacity: 1;
   animation-play-state: running;
 }
+
+.search-skeleton {
+  display: flex;
+  height: 310px;
+  top: -50px;
+  margin: -130px auto;
+  position: relative;
+  max-width: 1158px;
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -8,9 +8,10 @@ import * as yup from 'yup';
 import { DeactivateAccountFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
-import { Button, PasswordInput, Title } from '@/elements';
+import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deactivateAccount } from '@/services/account';
+import { OngoingAlert } from '@/units';
 import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -24,6 +25,7 @@ const schema = yup.object({
 
 const DeactivateAccountForm = ({ title, closeModal }) => {
   const [hasOngoingDeals, setHasOngoingDeals] = useState(false);
+
   const methods = useHookFormParams({ state, schema });
 
   const {
@@ -50,63 +52,45 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
     }
   };
 
-  return (
-    <div className="w-[292px]">
-      {!hasOngoingDeals ? (
-        <FormProvider {...methods}>
-          <ModalFormManager
-            onClose={closeModal}
-            className="max-w-sm "
-            submitAction={onSubmit}
-            specialStyle
-            submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
-          >
-            <div className="text-black flex flex-col gap-2.5">
-              <Title level="3" className="text-lg font-bold pr-5">
-                {title}
-              </Title>
-              <p className="text-xsm">
-                <span className="font-semibold">
-                  We will deactivate all your tankers and your account will become inactive.&nbsp;
-                </span>
-                But if you want to reactivate your account, then after logging in, we will automatically reactivate your
-                account.
-              </p>
-            </div>
+  const printContnet = useMemo(() => {
+    if (hasOngoingDeals) return <OngoingAlert title={title} onClose={closeModal} />;
+    return (
+      <FormProvider {...methods}>
+        <ModalFormManager
+          onClose={closeModal}
+          className="max-w-sm "
+          submitAction={onSubmit}
+          specialStyle
+          submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
+        >
+          <div className="text-black flex flex-col gap-2.5">
+            <Title level="3" className="text-lg font-bold pr-5">
+              {title}
+            </Title>
+            <p className="text-xsm">
+              <span className="font-semibold">
+                We will deactivate all your tankers and your account will become inactive.&nbsp;
+              </span>
+              But if you want to reactivate your account, then after logging in, we will automatically reactivate your
+              account.
+            </p>
+          </div>
 
-            <p className="text-xsm font-semibold text-black">Please enter your password to deactivate account</p>
-            <PasswordInput
-              name="password"
-              label="Password"
-              placeholder="Enter your password"
-              disabled={isSubmitting}
-              onChange={handlePassword}
-              error={errors.password?.message}
-            />
-          </ModalFormManager>
-        </FormProvider>
-      ) : (
-        <>
-          <Title level="3" className="text-lg font-bold pr-5">
-            {title}
-          </Title>
-          <p className="mt-2.5 mb-5 text-xsm">
-            Sorry, but you <span className="text-red font-bold">cannot deactivate your account</span> since you have
-            ongoing cargo deals.
-          </p>
-          <Button
-            buttonProps={{
-              text: 'OK',
-              variant: 'primary',
-              size: 'large',
-            }}
-            customStyles="w-full"
-            onClick={closeModal}
+          <p className="text-xsm font-semibold text-black">Please enter your password to deactivate account</p>
+          <PasswordInput
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
+            disabled={isSubmitting}
+            onChange={handlePassword}
+            error={errors.password?.message}
           />
-        </>
-      )}
-    </div>
-  );
+        </ModalFormManager>
+      </FormProvider>
+    );
+  }, [hasOngoingDeals, title, errors.password?.message, isSubmitting, closeModal, onSubmit, handlePassword]);
+
+  return <div className="w-[292px]">{printContnet}</div>;
 };
 
 DeactivateAccountForm.propTypes = DeactivateAccountFormPropTypes;
