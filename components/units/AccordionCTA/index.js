@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { buttonsPropTypes } from '@/lib/types';
 
 import { LinkAsButton, Title } from '@/elements';
-import { makeId } from '@/utils/helpers';
 
 const AccordionCTA = ({ title, buttons, shortDescription }) => {
   return (
@@ -16,7 +15,7 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
         {buttons &&
           buttons.map(({ path, label }) => {
             return (
-              <LinkAsButton key={makeId()} href={path} buttonProps={{ variant: 'primary', size: 'medium' }}>
+              <LinkAsButton key={path} href={path} buttonProps={{ variant: 'primary', size: 'medium' }}>
                 {label}
               </LinkAsButton>
             );

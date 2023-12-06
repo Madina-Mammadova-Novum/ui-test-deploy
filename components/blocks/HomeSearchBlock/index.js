@@ -36,12 +36,12 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
   };
 
   return (
-    <Providers>
+    <Providers loader="component">
       <section className="relative">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
-        <div className="container mx-auto px-6 3md:px-14 max-w-[1258px] -mt-[205px]">
+        <div className="container mx-auto h- px-6 3md:px-14 max-w-[1258px] -mt-[205px]">
           <Button
             buttonProps={{
               text: 'How it works',
