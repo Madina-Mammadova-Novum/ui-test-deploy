@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
-import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
@@ -29,18 +28,16 @@ const ExtraDataManager = ({ children }) => {
   const updateSession = async () => {
     const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
 
-    try {
-      await update({ ...refreshedData });
-    } catch (error) {
-      errorToast('Updating session error:', error);
-    }
+    await update({ ...refreshedData });
   };
 
   const sessionWatcher = async () => {
-    if (isValid) setUserData({ role: session?.role, isValid });
-    if (isExpired) await updateSession();
+    if (isExpired) {
+      await updateSession();
+    }
 
-    return setUserData({ role: null, isValid: false });
+    if (isValid) setUserData({ role: session?.role, isValid });
+    else setUserData({ role: null, isValid: false });
   };
 
   useEffect(() => {
@@ -49,7 +46,7 @@ const ExtraDataManager = ({ children }) => {
 
   useEffect(() => {
     sessionWatcher();
-  }, [isExpired]);
+  }, [isExpired, isValid]);
 
   return children;
 };
