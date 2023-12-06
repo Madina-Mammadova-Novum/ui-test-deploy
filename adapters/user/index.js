@@ -514,12 +514,12 @@ export function tokenAdapter({ data }) {
   if (!data) return null;
 
   if (data?.access_token) {
-    const { role } = decodedTokenAdapter(data.access_token);
+    const { exp, role } = decodedTokenAdapter(data.access_token);
 
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      expires: data.expires_in,
+      expires: exp * 1000,
       role: userRoleAdapter({ data: role }),
     };
   }
