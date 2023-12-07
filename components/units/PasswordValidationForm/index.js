@@ -98,7 +98,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
           </Title>
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
-              <li className={classnames('flex items-center', index && 'mt-1.5')}>
+              <li key={text} className={classnames('flex items-center', index && 'mt-1.5')}>
                 <TickInCircleSVG
                   className={`${isValidated ? 'fill-green' : 'fill-black'} w-5 h-5`}
                   viewBox="0 0 24 24"

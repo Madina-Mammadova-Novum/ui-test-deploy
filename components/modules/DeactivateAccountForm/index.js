@@ -41,9 +41,9 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
   };
 
   const onSubmit = async (data) => {
-    const { error, message: successMessage } = await deactivateAccount({ data });
+    const { error, message } = await deactivateAccount({ data });
     if (!error) {
-      successToast(successMessage);
+      successToast(message);
       closeModal();
     } else if (error?.errors.includes('ongoing deal')) {
       setHasOngoingDeals(true);
@@ -53,12 +53,12 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
   };
 
   const printContnet = useMemo(() => {
-    if (hasOngoingDeals) return <OngoingAlert title={title} onClose={closeModal} />;
+    if (hasOngoingDeals) return <OngoingAlert title={title} text="deactivate" onClose={closeModal} />;
     return (
       <FormProvider {...methods}>
         <ModalFormManager
           onClose={closeModal}
-          className="max-w-sm "
+          className="max-w-[356px]"
           submitAction={onSubmit}
           specialStyle
           submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
@@ -90,7 +90,7 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
     );
   }, [hasOngoingDeals, title, errors.password?.message, isSubmitting, closeModal, onSubmit, handlePassword]);
 
-  return <div className="w-[292px]">{printContnet}</div>;
+  return printContnet;
 };
 
 DeactivateAccountForm.propTypes = DeactivateAccountFormPropTypes;
