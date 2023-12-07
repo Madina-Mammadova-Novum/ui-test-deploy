@@ -161,7 +161,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     approvals,
     bankDetails,
     canRequestForCountdownExtension,
-    isCountdownActive
+    isCountdownActive,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
