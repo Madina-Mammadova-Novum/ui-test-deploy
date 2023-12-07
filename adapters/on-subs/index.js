@@ -17,6 +17,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     expiresAt,
+    frozenAt,
   } = data;
 
   return [
@@ -52,7 +53,8 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       countdownData: {
-        date: calculateCountdown(expiresAt),
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
       },
     },
   ];
@@ -71,6 +73,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     expiresAt,
+    frozenAt,
     createdAt,
   } = data;
 
@@ -111,7 +114,8 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       countdownData: {
-        date: calculateCountdown(expiresAt),
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
       },
     },
   ];
@@ -157,6 +161,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     approvals,
     bankDetails,
     canRequestForCountdownExtension,
+    isCountdownActive
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -338,7 +343,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       },
     },
     additionalCharterPartyTerms,
-    allowExtension: canRequestForCountdownExtension,
+    allowExtension: canRequestForCountdownExtension && isCountdownActive,
   };
 };
 
