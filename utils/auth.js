@@ -2,7 +2,7 @@ import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import { login } from '@/services';
+import { login, refreshAccessToken } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -25,18 +25,28 @@ export const AUTHCONFIG = {
     }),
   ],
   callbacks: {
-    jwt: async (params) => {
-      const { user, session, trigger, token } = params;
-
-      if (user) return tokenAdapter({ data: user });
-
-      if (trigger === 'update') {
-        return tokenAdapter({ data: session });
+    async jwt({ token, user }) {
+      if (user) {
+        return tokenAdapter({ data: user });
       }
 
-      return Promise.resolve(token);
+      if (Date.now() < token.expires) {
+        return Promise.resolve(token);
+      }
+
+      // If the access token has expired, try to refresh it
+      try {
+        const response = await refreshAccessToken({ token: token.refreshToken });
+
+        if (!response.data) throw Error('RefreshAccessTokenError');
+
+        return tokenAdapter({ data: response.data });
+      } catch (error) {
+        // The error property will be used client-side to handle the refresh token error
+        return { ...token, error: error.message };
+      }
     },
-    session: async ({ session, token }) => {
+    async session({ session, token }) {
       return Promise.resolve(sessionAdapter({ session, token }));
     },
   },
