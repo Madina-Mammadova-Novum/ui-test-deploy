@@ -554,9 +554,9 @@ tr > td:nth-child(2) {
 
 .search-skeleton {
   display: flex;
-  height: 310px;
-  top: -50px;
-  margin: -130px auto;
+  height: 320px;
+  top: 25px;
+  margin: 0px auto;
   position: relative;
   max-width: 1158px;
 }
