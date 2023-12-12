@@ -1,32 +1,38 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { ChatPropTypes } from '@/lib/types';
+
 import { ChatButton } from '@/elements';
-import { SCREENS } from '@/lib/constants';
-import { chatNotificationService, сhatSessionServcie } from '@/services/signalR';
+import { chatNotificationService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
-import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
+import { resetChatFilter, resetUser, setOpenedChat } from '@/store/entities/chat/slice';
+import { fetchCountries } from '@/store/entities/general/actions';
 import { getChatSelector } from '@/store/selectors';
-import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
-import { useMediaQuery } from '@/utils/hooks';
+import { AnonChat, AuthChat } from '@/units';
 
-const Chat = () => {
+const Chat = ({ isAuth }) => {
   const dispatch = useDispatch();
-  const mdScreen = useMediaQuery(SCREENS.MDX);
 
-  const {
-    opened,
-    isActive,
-    newMessages,
-    chats: { user },
-  } = useSelector(getChatSelector);
+  const { opened, newMessages, chats } = useSelector(getChatSelector);
+
+  const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened, dispatch]);
+
+  const handleClose = useCallback(() => {
+    dispatch(resetUser());
+    dispatch(resetChatFilter());
+    dispatch(setOpenedChat(false));
+  }, [dispatch]);
 
   useEffect(() => {
-    chatNotificationService.initStatus();
-    dispatch(getListOfChats());
-  }, []);
+    if (isAuth) {
+      chatNotificationService.initStatus();
+      dispatch(getListOfChats());
+    }
+    dispatch(fetchCountries());
+  }, [isAuth]);
 
   useEffect(() => {
     if (opened) document.body.classList.add('overflow-hidden');
@@ -36,44 +42,12 @@ const Chat = () => {
     };
   }, [opened]);
 
-  const handleOpen = () => dispatch(setOpenedChat(!opened));
-  const handleCloseConversation = () => сhatSessionServcie.stop();
-
-  const handleClose = async () => {
-    dispatch(resetChatFilter());
-    dispatch(setOpenedChat(false));
-  };
-
-  const handleCollapseConversation = () => {
-    сhatSessionServcie.stop();
-    dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
-  };
-
-  useEffect(() => {
-    if (mdScreen && isActive) dispatch(setOpenedChat(false));
-  }, [mdScreen, isActive]);
-
-  // const onActivate = (chat) => сhatSessionServcie.initChat(chat);
-
-  // const onRemove = async ({ id }) => {
-  //   dispatch(resetUser());
-  //   dispatch(removeCollapsedChat(id));
-  //   сhatSessionServcie.stop();
-  // };
-
-  // const handleStartConversation = ({ id, key }) => {
-  //   const chat = chats[key]?.find((session) => session?.chatId === id);
-
-  //   onRemove({ id: chat?.chatId }).then(() => {
-  //     onActivate(chat);
-  //     dispatch(setOpenedChat(true));
-  //   });
-  // };
-
-  // const handleCloseConversation = (e, id) => {
-  //   e?.stopPropagation();
-  //   onRemove({ id });
-  // };
+  const printChat = useMemo(() => {
+    if (isAuth) {
+      return <AuthChat user={chats?.user?.data} handleClose={handleClose} />;
+    }
+    return <AnonChat isOpened={opened} handleClose={handleClose} />;
+  }, [isAuth, handleClose, opened, chats.user.data]);
 
   return (
     <>
@@ -83,16 +57,11 @@ const Chat = () => {
         className="fixed right-3 bottom-3 z-30"
         variant="default"
       />
-      <ChatModal isOpened={opened} onClose={handleClose} />
-      <ChatConversation
-        isOpened={isActive}
-        isMediumScreen={mdScreen}
-        onCloseSession={handleCloseConversation}
-        onCollapseSession={handleCollapseConversation}
-      />
-      <CollapsedChats />
+      {printChat}
     </>
   );
 };
+
+Chat.propTypes = ChatPropTypes;
 
 export default Chat;

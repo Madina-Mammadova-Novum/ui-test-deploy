@@ -2,7 +2,7 @@
 
 import { ProvidersPropTypes } from '@/lib/types';
 
-import { AuthManager, ClientSidePackages, ExtraDataManager, StoreManager, TailwindIndicator } from '@/common';
+import { AuthManager, ClientSidePackages, StoreManager, TailwindIndicator } from '@/common';
 import { Hydrate } from '@/elements';
 import { PageLoader } from '@/elements/PageLoader';
 import { SearchLoader } from '@/elements/Skeletons';
@@ -15,13 +15,11 @@ const Providers = ({ children, loader }) => {
 
   return (
     <Hydrate loader={loaderType[loader]}>
-      <StoreManager loader={loader}>
-        <AuthManager>
-          <ExtraDataManager>{children}</ExtraDataManager>
-          <ClientSidePackages />
-          <TailwindIndicator />
-        </AuthManager>
-      </StoreManager>
+      <AuthManager>
+        <StoreManager>{children}</StoreManager>
+      </AuthManager>
+      <ClientSidePackages />
+      <TailwindIndicator />
     </Hydrate>
   );
 };

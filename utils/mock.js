@@ -1091,6 +1091,98 @@ export const counterofferPointsToImprove = [
   'Increase freight rate at least by 5%',
 ];
 
+export const steps = {
+  1: {
+    key: 'role',
+    support: {
+      message: 'Hello! Tell us more about you. Are you potential charterer or owner?',
+      time: '10:10',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: [
+      {
+        text: 'Charterer',
+        value: 'charterer',
+      },
+      {
+        text: 'Owner',
+        value: 'VesselOwner',
+      },
+    ],
+  },
+  2: {
+    key: 'company',
+    support: {
+      message: 'Tell us about yourself. Please enter your company name.',
+      time: '10:10',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {
+      label: 'Company name',
+      placeholder: 'Enter the company name',
+      customStyles: 'w-full',
+      type: 'text',
+    },
+  },
+  3: {
+    key: 'location',
+    support: {
+      message: 'Please choose the place of registration below.',
+      time: '10:10',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {},
+  },
+  4: {
+    key: 'phone',
+    support: {
+      message: 'To proceed please enter your valid phone number.',
+      time: '10:10',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {
+      label: 'Phone number',
+      type: 'number',
+      placeholder: 'Enter phone number',
+      customStyles: 'w-full',
+    },
+  },
+  5: {
+    key: 'email',
+    support: {
+      message: 'To finish please enter your valid email.',
+      time: '10:10',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {
+      label: 'Email',
+      placeholder: 'Enter your email',
+      type: 'email',
+      customStyles: 'w-full',
+    },
+  },
+  6: {
+    key: 'connection',
+    support: null,
+    userProps: null,
+  },
+  7: {
+    key: 'question',
+    support: {
+      message: 'Please describe your question below and we will get in touch with you.',
+      time: '10:10',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {},
+  },
+};
+
 export const providedEmails = [
   '001.igg.biz',
   '027168.com',

@@ -1,44 +1,44 @@
 'use client';
 
-import { useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { useSession } from 'next-auth/react';
 
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
 import { errorToast } from '@/utils/hooks';
 
-const ExtraDataManager = ({ children }) => {
+const ExtraDataManager = ({ children, session }) => {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
 
-  const getGeneralData = () => {
+  const getGeneralData = useCallback(() => {
     dispatch(fetchPorts());
     dispatch(fetchCountries());
-  };
+  }, [dispatch]);
 
-  const setUserData = ({ role = null }) => {
-    dispatch(setRoleIdentity(role));
-  };
+  const setUserData = useCallback(
+    ({ role = null }) => {
+      dispatch(setRoleIdentity(role));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     getGeneralData();
   }, []);
+
+  if (session?.error) {
+    errorToast('Bad request ', session.error);
+  }
 
   useEffect(() => {
     if (session?.role) {
       return setUserData({ role: session.role });
     }
 
-    if (session?.error) {
-      errorToast('Bad request ', session.error);
-    }
-
     return setUserData({ role: null });
-  }, [session?.role, session?.error]);
+  }, [session?.role]);
 
   return children;
 };
 
-export default ExtraDataManager;
+export default memo(ExtraDataManager);

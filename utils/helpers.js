@@ -511,6 +511,10 @@ export const getSocketConnectionsParams = (token) => {
 };
 
 export const clientIdentification = ({ senderId, session }) => {
+  if (session?.role === ROLES.ANON) {
+    return senderId === session?.userId ? session?.role : ROLES.SUPPORT;
+  }
+
   return senderId === session?.userId ? session?.role : ROLES.BROKER;
 };
 

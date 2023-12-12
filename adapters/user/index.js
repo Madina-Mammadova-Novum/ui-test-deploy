@@ -13,7 +13,7 @@ export function userRoleAdapter({ data }) {
     case 'Charterer':
       return ROLES.CHARTERER;
     default:
-      return '';
+      return null;
   }
 }
 
@@ -523,7 +523,7 @@ export function tokenAdapter({ data }) {
   };
 }
 
-export function sessionAdapter({ session, token }) {
+export function sessionAdapter({ session = {}, token }) {
   if (!token) throw new Error('UNATHORIZED');
 
   if (token.accessToken) {
@@ -534,7 +534,7 @@ export function sessionAdapter({ session, token }) {
     session.expires = token.expires;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
-    session.role = token.role;
+    session.role = token.role ?? ROLES.ANON;
     session.error = token.error;
   }
 

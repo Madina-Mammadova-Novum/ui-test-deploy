@@ -18,8 +18,10 @@ const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
         return 'charterer';
       case ROLES.BROKER:
         return 'ship.link broker';
+      case ROLES.SUPPORT:
+        return 'support operator';
       default:
-        return '';
+        return 'anonymous';
     }
   }, [sender, ROLES]);
 
@@ -38,9 +40,9 @@ const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
         <p
           className={`${
             isBroker ? 'bg-gray-darker bg-opacity-40 self-start' : 'bg-blue bg-opacity-10 self-end'
-          } rounded-base px-2.5 py-1.5 text-xsm relative break-all`}
+          } rounded-base px-2.5 py-1.5 text-xsm relative break-words`}
         >
-          <Linkify componentDecorator={renderLink}>{message}</Linkify>
+          {message?.includes('@') ? message : <Linkify componentDecorator={renderLink}>{message}</Linkify>}
         </p>
         <div className={`text-xs-sm text-gray font-normal flex w-full ${isBroker ? 'justify-start' : 'justify-end'} `}>
           {time}

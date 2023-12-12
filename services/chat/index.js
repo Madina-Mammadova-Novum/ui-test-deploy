@@ -1,3 +1,4 @@
+import { chatTokenAdapter } from '@/adapters';
 import { getData, postData } from '@/utils/dataFetching';
 
 export const getListOfChatSessions = async () => {
@@ -44,4 +45,12 @@ export const reactivateChatById = async ({ data }) => {
   return {
     ...response,
   };
+};
+
+export const getChatToken = async ({ data }) => {
+  const body = chatTokenAdapter({ data });
+
+  const response = await postData('chat/token', body);
+
+  return { ...response };
 };

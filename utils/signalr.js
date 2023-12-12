@@ -24,13 +24,13 @@ export class SignalRController {
     this.host = host;
   }
 
-  async setupConnection({ path }) {
+  async setupConnection({ path, data }) {
     const session = await getSession();
 
-    this.session = session;
+    this.session = data ?? session;
 
     this.connection = new HubConnectionBuilder()
-      .withUrl(getRtURL(path), getSocketConnectionsParams(session?.accessToken))
+      .withUrl(getRtURL(path), getSocketConnectionsParams(this.session?.accessToken))
       .configureLogging(LogLevel.None)
       .withAutomaticReconnect()
       .build();
@@ -143,6 +143,41 @@ export class ChatNotificationController extends SignalRController {
 
   isTyping({ chat, typing }) {
     this.store.dispatch(typingStatus({ ...chat, typing }));
+  }
+
+  async stop() {
+    if (this.connection) {
+      await this.connection.stop();
+    }
+  }
+}
+
+export class AnonChatController extends SignalRController {
+  constructor({ host, state }) {
+    super({ host, state });
+  }
+
+  async initChat({ data, session }) {
+    this.store.dispatch(setUser(data));
+
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, data: session });
+
+    this.connection.on('ReceiveMessage', (message) => {
+      this.connection.invoke('ReadMessage', message.id);
+      this.updateMessage({ message });
+    });
+  }
+
+  sendMessage({ message }) {
+    if (message !== '') this.connection.invoke('SendMessage', message);
+  }
+
+  updateMessage({ message }) {
+    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
+  }
+
+  incomingMessage({ chatId, messageCount }) {
+    this.store.dispatch(messageAlert({ chatId, messageCount }));
   }
 
   async stop() {

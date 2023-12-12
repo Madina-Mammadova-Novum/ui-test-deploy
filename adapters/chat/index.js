@@ -1,3 +1,4 @@
+import { tokenAdapter } from '@/adapters/user';
 import { convertDate, transformDate } from '@/utils/date';
 import {
   addLocalDateFlag,
@@ -147,4 +148,24 @@ export function chatSupportResponseAdapter({ data }) {
   if (!data) return null;
 
   return { data };
+}
+
+export function chatTokenAdapter({ data }) {
+  if (!data) return null;
+
+  return {
+    clientId: 'shiplink-api',
+    type: data.role.message,
+    email: data.email.message,
+    fullName: data.phone.message,
+    companyName: data.company.message,
+    registrationCityId: data.location.city.value,
+    clientSecret: '49C1A7E1-0C79-4A7889-Ay3D6-0997998FB86B0',
+  };
+}
+
+export function chatTokenResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { chatId: data.chatId, connected: true, ...tokenAdapter({ data: data.token }) };
 }
