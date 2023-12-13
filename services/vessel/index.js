@@ -87,7 +87,7 @@ export async function updateVesselPortAndDate(data) {
 
   const response = await putData(`account/my-positions/update-vessel-port`, body);
 
-  if (!response.errors) response.message = generateMessageByActionType({ action: data?.action });
+  if (!response.error) response.message = generateMessageByActionType({ action: data?.action });
 
   return {
     ...response,
