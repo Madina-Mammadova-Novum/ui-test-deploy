@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, freightFormatter, transformBytes } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -17,6 +17,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     expiresAt,
+    frozenAt,
   } = data;
 
   return [
@@ -52,7 +53,8 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       countdownData: {
-        date: calculateCountdown(expiresAt),
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
       },
     },
   ];
@@ -71,6 +73,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     expiresAt,
+    frozenAt,
     createdAt,
   } = data;
 
@@ -111,7 +114,8 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Countdown',
       countdownData: {
-        date: calculateCountdown(expiresAt),
+        date: calculateCountdown(expiresAt, frozenAt),
+        autoStart: !frozenAt,
       },
     },
   ];
@@ -157,6 +161,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     approvals,
     bankDetails,
     canRequestForCountdownExtension,
+    isCountdownActive,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -292,7 +297,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       generalOfferTerms: [
         {
           title: 'Freight',
-          text: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
+          text: freightFormatter({ format: freightFormat?.value, value: freight }),
         },
         {
           title: 'Demurrage rate',
@@ -338,7 +343,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       },
     },
     additionalCharterPartyTerms,
-    allowExtension: canRequestForCountdownExtension,
+    allowExtension: canRequestForCountdownExtension && isCountdownActive,
   };
 };
 

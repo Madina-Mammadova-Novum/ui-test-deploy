@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatPropTypes } from '@/lib/types';
@@ -8,50 +8,47 @@ import { ChatPropTypes } from '@/lib/types';
 import { ChatButton } from '@/elements';
 import { chatNotificationService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
-import { setOpenedChat } from '@/store/entities/chat/slice';
+import { messageAlert, setOpenedChat } from '@/store/entities/chat/slice';
 import { fetchCountries } from '@/store/entities/general/actions';
-import { getChatSelector } from '@/store/selectors';
+import { getAnonChatSelector } from '@/store/selectors';
 import { AnonChat, AuthChat } from '@/units';
 
 const Chat = ({ isAuth }) => {
   const dispatch = useDispatch();
 
-  const { opened, newMessages, chats } = useSelector(getChatSelector);
+  const { opened, messageCount, chats } = useSelector(getAnonChatSelector);
 
   const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened, dispatch]);
 
   useEffect(() => {
+    dispatch(fetchCountries());
+
     if (isAuth) {
       chatNotificationService.initStatus();
       dispatch(getListOfChats());
     }
-    dispatch(fetchCountries());
   }, [isAuth]);
 
   useEffect(() => {
-    if (opened) document.body.classList.add('overflow-hidden');
+    if (opened) {
+      document.body.classList.add('overflow-hidden');
+      dispatch(messageAlert({ chatId: chats?.user?.data?.chatId, messageCount: 0 }));
+    }
 
     return () => {
       document.body.classList.remove('overflow-hidden');
     };
   }, [opened]);
 
-  const printChat = useMemo(() => {
-    if (isAuth) {
-      return <AuthChat user={chats?.user?.data} />;
-    }
-    return <AnonChat isOpened={opened} />;
-  }, [isAuth, opened, chats.user.data]);
-
   return (
     <>
       <ChatButton
-        counter={newMessages}
-        onClick={handleOpen}
-        className="fixed right-3 bottom-3 z-30"
         variant="default"
+        onClick={handleOpen}
+        counter={messageCount}
+        className="fixed right-3 bottom-3 z-30"
       />
-      {printChat}
+      {isAuth ? <AuthChat user={chats?.user?.data} /> : <AnonChat isOpened={opened} />}
     </>
   );
 };

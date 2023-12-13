@@ -1,25 +1,21 @@
-'use client';
-
 import { ProvidersPropTypes } from '@/lib/types';
 
-import { AuthManager, ClientSidePackages, StoreManager, TailwindIndicator } from '@/common';
+import { AuthManager, StoreManager } from '@/common';
 import { Hydrate } from '@/elements';
 import { PageLoader } from '@/elements/PageLoader';
 import { SearchLoader } from '@/elements/Skeletons';
 
-const Providers = ({ children, loader }) => {
+const Providers = ({ children, loader, session }) => {
   const loaderType = {
     component: <SearchLoader />,
     page: <PageLoader text="Uploading..." />,
   };
 
   return (
-    <Hydrate loader={loaderType[loader]}>
-      <AuthManager>
+    <Hydrate loader={loaderType[loader]} session={session}>
+      <AuthManager session={session}>
         <StoreManager>{children}</StoreManager>
       </AuthManager>
-      <ClientSidePackages />
-      <TailwindIndicator />
     </Hydrate>
   );
 };

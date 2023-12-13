@@ -20,7 +20,11 @@ const initialState = {
     support: [],
     user: {
       created: '',
-      data: {},
+      data: {
+        messageCount: 0,
+        isOnline: false,
+        isTyping: false,
+      },
       messages: [],
       loading: false,
       updating: false,
@@ -144,6 +148,13 @@ const chatSlice = createSlice({
         }
         return user;
       });
+
+      if (state.data.user.data?.chatId === payload?.chatId) {
+        state.data.user.data = {
+          ...state.data.user.data,
+          messageCount: state.opened ? 0 : payload.messageCount,
+        };
+      }
 
       if (state.data.support[0]?.chatId === payload?.chatId) {
         state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;

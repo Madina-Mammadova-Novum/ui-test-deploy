@@ -27,7 +27,7 @@ export const AUTHCONFIG = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        return tokenAdapter({ data: user });
+        return Promise.resolve(tokenAdapter({ data: user }));
       }
 
       if (Date.now() < token.expires) {
@@ -38,9 +38,9 @@ export const AUTHCONFIG = {
       try {
         const response = await refreshAccessToken({ token: token.refreshToken });
 
-        if (!response.data) throw Error('RefreshAccessTokenError');
+        if (!response.data) throw Error('Access token was expired, please sign in again');
 
-        return tokenAdapter({ data: response.data });
+        return Promise.resolve(tokenAdapter({ data: response.data }));
       } catch (error) {
         // The error property will be used client-side to handle the refresh token error
         return { ...token, error: error.message };

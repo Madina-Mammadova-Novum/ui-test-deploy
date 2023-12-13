@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,9 +14,9 @@ import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
-import { chatAnonService } from '@/services/signalR';
+import { chatAnonService, chatNotificationService } from '@/services/signalR';
 import { resetUser, setOpenedChat } from '@/store/entities/chat/slice';
-import { getChatSelector, getGeneralDataSelector } from '@/store/selectors';
+import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
 import { convertDataToOptions, countriesOptions, extractTimeFromDate } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
@@ -28,14 +28,6 @@ const AnonChat = ({ isOpened }) => {
   const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
-
-  const [chatSession, setChatSession] = useState({
-    connected: false,
-    accessToken: null,
-    refreshToken: null,
-    expires: null,
-    chatId: null,
-  });
 
   const methods = useForm({
     defaultValues: {
@@ -56,12 +48,13 @@ const AnonChat = ({ isOpened }) => {
 
   const data = getValues();
   const initialization = watch('init');
+
   const country = watch('location.country');
   const city = watch('location.city');
 
   const { countries } = useSelector(getGeneralDataSelector);
 
-  const { messages } = useSelector(getChatSelector).chats?.user;
+  const { messages } = useSelector(getAnonChatSelector).chats?.user;
 
   const currentStep = flow[flow.length - 1];
 
@@ -76,8 +69,7 @@ const AnonChat = ({ isOpened }) => {
 
     const session = sessionAdapter({ token, session: {} });
 
-    setChatSession(token);
-
+    chatNotificationService.initStatus({ session });
     chatAnonService.initChat({
       session,
       data: {
@@ -89,11 +81,16 @@ const AnonChat = ({ isOpened }) => {
     });
   };
 
-  const handleClose = useCallback(() => {
-    dispatch(resetUser());
-    dispatch(setOpenedChat(false));
+  const handleClose = () => {
+    chatNotificationService.stop();
+    chatAnonService.stop();
     setFlow([updatedStep]);
+    dispatch(resetUser());
     reset();
+  };
+
+  const handleCollapse = useCallback(() => {
+    dispatch(setOpenedChat(false));
   }, [dispatch]);
 
   const handleCountryChange = async (params) => {
@@ -133,6 +130,7 @@ const AnonChat = ({ isOpened }) => {
     }
   }, [currentStep.key]);
 
+  /* Submit handler used for switching steps and init conversation with support */
   const onSubmit = async () => {
     if (country && city) {
       setValue('location.message', `${country.label}, ${city.label}`);
@@ -149,10 +147,12 @@ const AnonChat = ({ isOpened }) => {
   const handleMessage = ({ target: { value } }) => setMessage(value);
   const handleEnter = ({ charCode }) => charCode === 13 && onSubmit();
 
+  /* Render the message */
   const printMessage = ({ sender, id, message: text, time }) => {
     return <ChatMessage key={id} sender={sender} time={time} message={text} isBroker={ROLES.ANON !== sender} />;
   };
 
+  /* Render the real conversation with support */
   const printMessages = ({ data: content, id }) => {
     return (
       <div className="flex flex-col" key={id}>
@@ -161,6 +161,7 @@ const AnonChat = ({ isOpened }) => {
     );
   };
 
+  /* Dynamic render form elements by key */
   const printFormElement = ({ key, props }) => {
     switch (key) {
       case 'role':
@@ -168,7 +169,7 @@ const AnonChat = ({ isOpened }) => {
           <Button
             key={el.text}
             onClick={() => {
-              setValue(key, { message: el.value });
+              setValue(key, { value: el.value, message: el.text });
               handleNextStep();
             }}
             buttonProps={{ text: el.text, variant: 'primary', size: 'medium' }}
@@ -247,12 +248,12 @@ const AnonChat = ({ isOpened }) => {
                 onKeyPress={handleEnter}
                 placeholder="Message ..."
                 customStyles="!border-gray-darker !w-full"
-                disabled={!chatSession.connected}
+                disabled={initialization}
               />
               <Button
                 type="submit"
                 customStyles="border border-gray-darker !p-2.5"
-                disabled={!chatSession.connected}
+                disabled={initialization}
                 buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
               />
             </div>
@@ -261,9 +262,10 @@ const AnonChat = ({ isOpened }) => {
     }
   };
 
+  /* Render the conversation with support */
   const printConversation = (step, index) => {
     if (data[step.key]?.message) {
-      return <ChatMessage message={data[step.key].message} isBroker={false} time={step.time} />;
+      return printMessage({ time: step.time, message: data[step.key].message, sender: ROLES.ANON });
     }
 
     return (
@@ -274,17 +276,22 @@ const AnonChat = ({ isOpened }) => {
   };
 
   return (
-    <ChatModal isOpened={isOpened} onClose={handleClose}>
-      <div className="px-2.5 py-2.5">
+    <ChatModal
+      useCollapse
+      loading={initialization}
+      isOpened={isOpened}
+      onClose={handleClose}
+      onCollapse={handleCollapse}
+    >
+      <div className="px-2.5 py-2.5 relative">
         <FormProvider {...methods}>
-          {initialization && <p className="text-center w-full">connecting...</p>}
           <form onSubmit={handleSubmit(onSubmit)} className="h-[468px] overflow-y-auto relative flex flex-col px-2.5">
             {flow.map((step, index) => {
               return (
-                <>
+                <Fragment key={step.key}>
                   {step.support && printMessage({ ...step.support, time: step.time })}
                   {printConversation(step, index)}
-                </>
+                </Fragment>
               );
             })}
           </form>

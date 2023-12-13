@@ -10,9 +10,9 @@ export default async function RootLayout({ children }) {
 
   return (
     <PageLayout>
-      <Providers loader="page">
+      <Providers loader="page" session={session}>
         {children}
-        <Chat isAuth={Boolean(session?.accessToken)} />
+        <Chat isAuth={!session?.error && session?.accessToken} />
       </Providers>
     </PageLayout>
   );

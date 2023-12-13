@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
-import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children, session }) => {
   const dispatch = useDispatch();
@@ -25,10 +24,6 @@ const ExtraDataManager = ({ children, session }) => {
   useEffect(() => {
     getGeneralData();
   }, []);
-
-  if (session?.error) {
-    errorToast('Bad request ', session.error);
-  }
 
   useEffect(() => {
     if (session?.role) {

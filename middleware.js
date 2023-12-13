@@ -7,7 +7,7 @@ import { checkAuthRoute } from '@/utils/helpers';
 
 export default withAuth(
   function middleware(req) {
-    const { accessToken, role } = req.nextauth.token;
+    const { accessToken, role, error } = req.nextauth.token;
 
     const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
     const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
@@ -23,11 +23,15 @@ export default withAuth(
     if (ownerRoutes && role !== ROLES.OWNER) {
       return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
     }
+
+    if (error) return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
   },
   {
     callbacks: {
       authorized: ({ token }) => {
         if (token?.accessToken) return true;
+        if (token?.error) return false;
+
         return false;
       },
     },

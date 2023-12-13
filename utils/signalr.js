@@ -10,6 +10,7 @@ import {
   resetUser,
   setConversation,
   setLoadConversation,
+  setOpenedChat,
   setUser,
   typingStatus,
   updateUserConversation,
@@ -115,8 +116,8 @@ export class ChatNotificationController extends SignalRController {
     super({ host, state });
   }
 
-  async initStatus() {
-    await this.setupConnection({ path: `${this.host}/chatlist` });
+  async initStatus({ session }) {
+    await this.setupConnection({ path: `${this.host}/chatlist`, data: session });
 
     this.connection.on('ReceiveMessage', (chat) => {
       this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
@@ -181,6 +182,8 @@ export class AnonChatController extends SignalRController {
   }
 
   async stop() {
+    this.store.dispatch(setOpenedChat(false));
+
     if (this.connection) {
       await this.connection.stop();
     }

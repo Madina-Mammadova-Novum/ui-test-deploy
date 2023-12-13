@@ -35,7 +35,9 @@ export default async function PageHeader() {
           </NextLink>
           <nav className="flex items-center gap-x-10">
             {navigation.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
-            {buttons.length > 0 && <AuthNavButtons authorized={Boolean(session?.accessToken)} data={buttons} />}
+            {buttons.length > 0 && (
+              <AuthNavButtons authorized={!session?.error && session?.accessToken} data={buttons} />
+            )}
           </nav>
         </div>
       </div>

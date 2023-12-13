@@ -155,7 +155,7 @@ export function chatTokenAdapter({ data }) {
 
   return {
     clientId: 'shiplink-api',
-    type: data.role.message,
+    type: data.role.value,
     email: data.email.message,
     fullName: data.phone.message,
     companyName: data.company.message,
