@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { transformBytes } from '@/utils/helpers';
+import { freightFormatter, transformBytes } from '@/utils/helpers';
 
 export const postFixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
@@ -234,7 +234,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
       generalOfferTerms: [
         {
           title: 'Freight',
-          text: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
+          text: freightFormatter({ format: freightFormat?.value, value: freight }),
         },
         {
           title: 'Demurrage rate',

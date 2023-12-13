@@ -26,17 +26,17 @@ const ExtraDataManager = ({ children }) => {
     getGeneralData();
   }, []);
 
+  if (session?.error) {
+    errorToast('Bad request ', session.error);
+  }
+
   useEffect(() => {
     if (session?.role) {
       return setUserData({ role: session.role });
     }
 
-    if (session?.error) {
-      errorToast('Bad request ', session.error);
-    }
-
     return setUserData({ role: null });
-  }, [session?.role, session?.error]);
+  }, [session?.role]);
 
   return children;
 };

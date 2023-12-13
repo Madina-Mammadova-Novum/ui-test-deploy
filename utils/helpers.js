@@ -614,3 +614,12 @@ export const sortChatMessages = (array) =>
     if (new Date(current) - new Date(next) < 1) return 1;
     return 0;
   });
+
+export const freightFormatter = ({ value, format }) => {
+  const response = {
+    Lumpsum: `${format} $${value}`,
+    '$/mt': `${value} ${format}`,
+  };
+
+  return response[format];
+};

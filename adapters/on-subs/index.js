@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, freightFormatter, transformBytes } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -297,7 +297,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
       generalOfferTerms: [
         {
           title: 'Freight',
-          text: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
+          text: freightFormatter({ format: freightFormat?.value, value: freight }),
         },
         {
           title: 'Demurrage rate',
