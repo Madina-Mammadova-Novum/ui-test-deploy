@@ -4,6 +4,7 @@ import {
   addLocalDateFlag,
   calculateCountdown,
   extractTimeFromDate,
+  freightFormatter,
   getAppropriateFailedBy,
   getRoleIdentity,
 } from '@/utils/helpers';
@@ -230,7 +231,7 @@ export function offerDetailsAdapter({ data, role }) {
       details: [
         {
           key: 'Freight',
-          label: `${freightFormat?.value} ${freightFormat?.value === 'Lumpsum' ? '$' : ''}${freight}`,
+          label: freightFormatter({ format: freightFormat?.value, value: freight }),
         },
         {
           key: 'Demurrage rate',
@@ -375,7 +376,7 @@ export function confirmCounterofferDetailsAdapter({ data }) {
       details: [
         {
           key: 'Freight',
-          label: `${freight?.label} ${freight?.label === 'Lumpsum' ? '$' : ''}${value}`,
+          label: freightFormatter({ format: freight?.label, value }),
         },
         {
           key: 'Demurrage rate',

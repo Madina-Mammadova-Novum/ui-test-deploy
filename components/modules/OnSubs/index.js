@@ -19,7 +19,7 @@ import { getRoleIdentity } from '@/utils/helpers';
 
 const OnSubs = () => {
   const { offers, toggle, loading, role } = useSelector(getOnSubsDataSelector);
-  const { isOwner } = getRoleIdentity({ role });
+  const { isOwner, isCharterer } = getRoleIdentity({ role });
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -40,6 +40,8 @@ const OnSubs = () => {
         footer={
           <OnSubsExpandedFooter
             underRecap={!rowData?.isCountdownActive}
+            identity={{ isOwner, isCharterer }}
+            status={{ chraterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
             offerId={rowData?.id}
             scriveURL={scriveURL || ''}
           />
