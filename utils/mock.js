@@ -1096,7 +1096,6 @@ export const steps = {
     key: 'role',
     support: {
       message: 'Hello! Tell us more about you. Are you potential charterer or owner?',
-      time: '10:10',
       isBroker: true,
       sender: 'support',
     },
@@ -1115,7 +1114,6 @@ export const steps = {
     key: 'company',
     support: {
       message: 'Tell us about yourself. Please enter your company name.',
-      time: '10:10',
       isBroker: true,
       sender: 'support',
     },
@@ -1130,7 +1128,6 @@ export const steps = {
     key: 'location',
     support: {
       message: 'Please choose the place of registration below.',
-      time: '10:10',
       isBroker: true,
       sender: 'support',
     },
@@ -1140,7 +1137,6 @@ export const steps = {
     key: 'phone',
     support: {
       message: 'To proceed please enter your valid phone number.',
-      time: '10:10',
       isBroker: true,
       sender: 'support',
     },
@@ -1155,7 +1151,6 @@ export const steps = {
     key: 'email',
     support: {
       message: 'To finish please enter your valid email.',
-      time: '10:10',
       isBroker: true,
       sender: 'support',
     },
@@ -1175,7 +1170,6 @@ export const steps = {
     key: 'question',
     support: {
       message: 'Please describe your question below and we will get in touch with you.',
-      time: '10:10',
       isBroker: true,
       sender: 'support',
     },

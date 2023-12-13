@@ -98,7 +98,7 @@ export function messageDataAdapter({ data, session }) {
   return {
     id,
     message: body,
-    time: extractTimeFromDate(addLocalDateFlag(createdAt), { hour: 'numeric', minute: 'numeric', hour12: false }),
+    time: extractTimeFromDate(addLocalDateFlag(createdAt)),
     sender: clientIdentification({ senderId, session }),
   };
 }

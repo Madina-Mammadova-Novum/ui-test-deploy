@@ -8,7 +8,7 @@ import { ChatPropTypes } from '@/lib/types';
 import { ChatButton } from '@/elements';
 import { chatNotificationService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
-import { resetChatFilter, resetUser, setOpenedChat } from '@/store/entities/chat/slice';
+import { setOpenedChat } from '@/store/entities/chat/slice';
 import { fetchCountries } from '@/store/entities/general/actions';
 import { getChatSelector } from '@/store/selectors';
 import { AnonChat, AuthChat } from '@/units';
@@ -19,12 +19,6 @@ const Chat = ({ isAuth }) => {
   const { opened, newMessages, chats } = useSelector(getChatSelector);
 
   const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened, dispatch]);
-
-  const handleClose = useCallback(() => {
-    dispatch(resetUser());
-    dispatch(resetChatFilter());
-    dispatch(setOpenedChat(false));
-  }, [dispatch]);
 
   useEffect(() => {
     if (isAuth) {
@@ -44,10 +38,10 @@ const Chat = ({ isAuth }) => {
 
   const printChat = useMemo(() => {
     if (isAuth) {
-      return <AuthChat user={chats?.user?.data} handleClose={handleClose} />;
+      return <AuthChat user={chats?.user?.data} />;
     }
-    return <AnonChat isOpened={opened} handleClose={handleClose} />;
-  }, [isAuth, handleClose, opened, chats.user.data]);
+    return <AnonChat isOpened={opened} />;
+  }, [isAuth, opened, chats.user.data]);
 
   return (
     <>

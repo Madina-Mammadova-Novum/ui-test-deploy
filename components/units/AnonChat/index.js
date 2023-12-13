@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatMessage } from '..';
 import ChatModal from '../ChatModal';
@@ -15,14 +15,19 @@ import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
 import { chatAnonService } from '@/services/signalR';
+import { resetUser, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector, getGeneralDataSelector } from '@/store/selectors';
-import { convertDataToOptions, countriesOptions } from '@/utils/helpers';
+import { convertDataToOptions, countriesOptions, extractTimeFromDate } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
-const AnonChat = ({ isOpened, handleClose }) => {
-  const [flow, setFlow] = useState([steps[1]]);
+const AnonChat = ({ isOpened }) => {
+  const updatedStep = { ...steps[1], time: extractTimeFromDate(new Date()) };
+
+  const [flow, setFlow] = useState([updatedStep]);
   const [cities, setCities] = useState([]);
   const [message, setMessage] = useState('');
+
+  const dispatch = useDispatch();
 
   const [chatSession, setChatSession] = useState({
     connected: false,
@@ -47,7 +52,7 @@ const AnonChat = ({ isOpened, handleClose }) => {
     },
   });
 
-  const { register, setValue, getValues, watch, handleSubmit } = methods;
+  const { register, setValue, getValues, watch, reset, handleSubmit } = methods;
 
   const data = getValues();
   const initialization = watch('init');
@@ -84,12 +89,23 @@ const AnonChat = ({ isOpened, handleClose }) => {
     });
   };
 
+  const handleClose = useCallback(() => {
+    dispatch(resetUser());
+    dispatch(setOpenedChat(false));
+    setFlow([updatedStep]);
+    reset();
+  }, [dispatch]);
+
   const handleCountryChange = async (params) => {
     const { label, value } = params;
     const { options } = await fetchCities(value);
 
     setValue('location.country', { id: value, label });
     setValue('location.city', null);
+
+    if (!city) {
+      setCities([]);
+    }
 
     if (options.length > 0) {
       setCities(options);
@@ -101,7 +117,7 @@ const AnonChat = ({ isOpened, handleClose }) => {
   };
 
   const handleNextStep = () => {
-    setFlow((prevState) => [...prevState, steps[prevState.length + 1]]);
+    setFlow((prevState) => [...prevState, { ...steps[prevState.length + 1], time: extractTimeFromDate(new Date()) }]);
   };
 
   const successCallback = () => {
@@ -178,12 +194,14 @@ const AnonChat = ({ isOpened, handleClose }) => {
                 onChange={handleCountryChange}
                 options={countriesOptions(countries)}
                 customStyles={{ className: 'w-full' }}
+                menuPlacement="auto"
               />
               <Dropdown
                 label="City"
                 onChange={handleCityChange}
                 options={cities}
                 customStyles={{ className: 'w-full' }}
+                menuPlacement="auto"
               />
             </div>
             <Button
@@ -245,7 +263,7 @@ const AnonChat = ({ isOpened, handleClose }) => {
 
   const printConversation = (step, index) => {
     if (data[step.key]?.message) {
-      return <ChatMessage message={data[step.key].message} isBroker={false} time="10:10" />;
+      return <ChatMessage message={data[step.key].message} isBroker={false} time={step.time} />;
     }
 
     return (
@@ -264,7 +282,7 @@ const AnonChat = ({ isOpened, handleClose }) => {
             {flow.map((step, index) => {
               return (
                 <>
-                  {step.support && printMessage(step.support)}
+                  {step.support && printMessage({ ...step.support, time: step.time })}
                   {printConversation(step, index)}
                 </>
               );

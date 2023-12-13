@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ChatControl from '../ChatControl';
@@ -15,11 +15,18 @@ import { AuthChatPropTypes } from '@/lib/types';
 import { Divider, Loader } from '@/elements';
 import { SCREENS } from '@/lib/constants';
 import { сhatSessionServcie } from '@/services/signalR';
-import { setChatFilter, setCollapsedChat, setConversation, setOpenedChat } from '@/store/entities/chat/slice';
+import {
+  resetChatFilter,
+  resetUser,
+  setChatFilter,
+  setCollapsedChat,
+  setConversation,
+  setOpenedChat,
+} from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { useMediaQuery } from '@/utils/hooks';
 
-const AuthChat = ({ user, handleClose }) => {
+const AuthChat = ({ user }) => {
   const [dataByTab, setDataByTab] = useState([]);
   const mdScreen = useMediaQuery(SCREENS.MDX);
 
@@ -51,6 +58,12 @@ const AuthChat = ({ user, handleClose }) => {
   useEffect(() => {
     if (mdScreen && isActive) dispatch(setOpenedChat(false));
   }, [mdScreen, isActive]);
+
+  const handleClose = useCallback(() => {
+    dispatch(resetUser());
+    dispatch(resetChatFilter());
+    dispatch(setOpenedChat(false));
+  }, [dispatch]);
 
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
