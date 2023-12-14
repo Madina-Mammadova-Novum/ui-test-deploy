@@ -68,6 +68,7 @@ const Input = React.forwardRef(
               'outline-none w-full h-[38px] text-xsm flex items-center bg-transparent',
               inputStyles
             )}
+            readOnly={disabled}
             type={type}
             name={name}
             {...rest}

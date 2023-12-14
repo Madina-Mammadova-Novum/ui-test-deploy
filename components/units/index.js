@@ -73,6 +73,7 @@ import OfferAcceptModalContent from '@/units/OfferAcceptModalContent';
 import OfferDeclineForm from '@/units/OfferDeclineForm';
 import OfferDetails from '@/units/OfferDetails';
 import OfferForm from '@/units/OfferForm';
+import OngoingAlert from '@/units/OngoingAlert';
 import PaginationComponent from '@/units/PaginationComponent';
 import PartyItem from '@/units/PartyItem';
 import PasswordValidation from '@/units/PasswordValidationForm';
@@ -144,6 +145,7 @@ export {
   VoyageDetailsTabContent,
   COTTabContent,
   PaginationComponent,
+  OngoingAlert,
   ComplexPagination,
   ModalHeader,
   EditPortForm,

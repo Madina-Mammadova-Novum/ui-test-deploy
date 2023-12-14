@@ -513,18 +513,14 @@ export function decodedTokenAdapter(token) {
 export function tokenAdapter({ data }) {
   if (!data) return null;
 
-  if (data?.access_token) {
-    const { exp, role } = decodedTokenAdapter(data.access_token);
+  const { exp, role } = decodedTokenAdapter(data.access_token);
 
-    return {
-      accessToken: data.access_token,
-      refreshToken: data.refresh_token,
-      expires: exp * 1000,
-      role: userRoleAdapter({ data: role }),
-    };
-  }
-
-  return { ...data };
+  return {
+    accessToken: data.access_token,
+    refreshToken: data.refresh_token,
+    expires: exp * 1000,
+    role: userRoleAdapter({ data: role }),
+  };
 }
 
 export function sessionAdapter({ session, token }) {
@@ -539,6 +535,7 @@ export function sessionAdapter({ session, token }) {
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
     session.role = token.role;
+    session.error = token.error;
   }
 
   return session;

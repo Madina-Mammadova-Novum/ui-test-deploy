@@ -30,10 +30,11 @@ const LoginForm = () => {
   } = methods;
 
   const onSubmit = async (data) => {
-    const { ok, error, url } = await signIn('credentials', signInAdapter({ data }));
-    if (ok) {
-      router.push(url);
+    const { error, url } = await signIn('credentials', signInAdapter({ data }));
+    if (!error) {
       reset();
+      router.push(url);
+      router.refresh();
     }
     if (error === 'CredentialsSignin') errorToast('Bad request', 'Incorrect email or password');
   };

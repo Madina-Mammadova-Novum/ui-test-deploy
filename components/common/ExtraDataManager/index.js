@@ -5,16 +5,13 @@ import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
-import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
+import { errorToast } from '@/utils/hooks';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
-  const { data: session, update } = useSession();
-
-  const isExpired = Date.now() >= session?.expires;
-  const isValid = Boolean(session?.accessToken);
+  const { data: session } = useSession();
 
   const getGeneralData = () => {
     dispatch(fetchPorts());
@@ -25,28 +22,21 @@ const ExtraDataManager = ({ children }) => {
     dispatch(setRoleIdentity(role));
   };
 
-  const updateSession = async () => {
-    const refreshedData = await refreshAccessToken({ token: session?.refreshToken });
-
-    await update({ ...refreshedData });
-  };
-
-  const sessionWatcher = async () => {
-    if (isExpired) {
-      await updateSession();
-    }
-
-    if (isValid) setUserData({ role: session?.role, isValid });
-    else setUserData({ role: null, isValid: false });
-  };
-
   useEffect(() => {
     getGeneralData();
   }, []);
 
   useEffect(() => {
-    sessionWatcher();
-  }, [isExpired, isValid]);
+    if (session?.role) {
+      return setUserData({ role: session.role });
+    }
+
+    if (session?.error) {
+      errorToast('Bad request ', session.error);
+    }
+
+    return setUserData({ role: null });
+  }, [session?.role, session?.error]);
 
   return children;
 };

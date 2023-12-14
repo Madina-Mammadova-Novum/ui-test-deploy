@@ -84,7 +84,6 @@ export async function login({ data }) {
 export async function refreshAccessToken({ token }) {
   const response = await postData(`auth/refreshToken`, { token }, { headers: { ...ContentTypeJson() } });
 
-  if (response?.data) return response?.data;
   return { ...response };
 }
 
@@ -124,6 +123,11 @@ export async function updateCompany({ data, role }) {
 export async function deleteCompany({ data }) {
   const body = deleteCompanyAdapter({ data });
   const response = await deleteData(`account/delete-company`, body);
+
+  if (!response.error) {
+    response.message = 'You have successfully sent a request to delete your account';
+  }
+
   return {
     ...response,
   };
