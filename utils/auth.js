@@ -31,23 +31,23 @@ export const AUTHCONFIG = {
       }
 
       if (Date.now() < token.expires) {
-        return Promise.resolve(token);
+        return token;
       }
 
-      // If the access token has expired, try to refresh it
       try {
         const response = await refreshAccessToken({ token: token.refreshToken });
 
-        if (!response.data) throw Error('RefreshAccessTokenError');
+        if (!response.data) {
+          throw Error(response?.error?.message);
+        }
 
         return tokenAdapter({ data: response.data });
-      } catch (error) {
-        // The error property will be used client-side to handle the refresh token error
-        return { ...token, error: error.message };
+      } catch (err) {
+        return { ...token, error: err.message };
       }
     },
     async session({ session, token }) {
-      return Promise.resolve(sessionAdapter({ session, token }));
+      return sessionAdapter({ session, token });
     },
   },
 };
