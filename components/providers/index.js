@@ -2,7 +2,7 @@
 
 import { ProvidersPropTypes } from '@/lib/types';
 
-import { AuthManager, ExtraDataManager, StoreManager } from '@/common';
+import { ExtraDataManager, StoreManager } from '@/common';
 import { Hydrate } from '@/elements';
 import { PageLoader } from '@/elements/PageLoader';
 import { SearchLoader } from '@/elements/Skeletons';
@@ -15,11 +15,9 @@ const Providers = ({ children, loader }) => {
 
   return (
     <Hydrate loader={loaderType[loader]}>
-      <AuthManager>
-        <StoreManager loader={loader}>
-          <ExtraDataManager>{children}</ExtraDataManager>
-        </StoreManager>
-      </AuthManager>
+      <StoreManager>
+        <ExtraDataManager>{children}</ExtraDataManager>
+      </StoreManager>
     </Hydrate>
   );
 };

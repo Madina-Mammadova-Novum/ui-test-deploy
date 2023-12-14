@@ -1,5 +1,8 @@
-import { ClientSidePackages } from '@/common';
+import { getServerSession } from 'next-auth';
+
+import { AuthManager, ClientSidePackages } from '@/common';
 import { BaseLayout } from '@/layouts';
+import { AUTHCONFIG } from '@/utils/auth';
 
 export const metadata = {
   title: {
@@ -8,10 +11,12 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await getServerSession(AUTHCONFIG);
+
   return (
     <BaseLayout>
-      {children}
+      <AuthManager session={session}>{children}</AuthManager>
       <ClientSidePackages />
     </BaseLayout>
   );
