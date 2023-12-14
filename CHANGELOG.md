@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.5.0...v0.5.1) (2023-12-14)
+
+
+### Bug Fixes
+
+* bugs ([ae398d2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ae398d2f83492e320e3d7c9562cf2498503477d1))
+* bugs ([fefad70](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fefad70fca1f31b324d3ce1895c12e04132e65bf))
+* delete/deactivate bug with styles issues ([9e90a28](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9e90a2872fe47ddf3a33c36d48cbad6351b22d61))
+* freight formatt issue ([fa71e53](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fa71e53b72b78f947be84dc2c70f48e9da32aeb0))
+* hydrate-component with bug-issue ([01a03d5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/01a03d5608f87f4e20be8d83b6b5695aed1ef2dd))
+* input readonly props ([4834d0a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4834d0afe30b84170a1c13f42720305af65d4f13))
+* negotiating ([fc5d4d3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fc5d4d39ba3bb4051abfbdc6afc8b64dc9367eb8))
+* node-package ([f4b0a29](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f4b0a294c19350ab4b987468de56b1410714d5e8))
+* onsubs countdown freeze and extension ([e8ea498](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e8ea498e5c2a90419c22e6fb8eefbfc9fb1ccdde))
+* refresh-token ([b351218](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b35121854834ed3ac75d4c54b639c262bf929736))
+* refresh-token-flow ([3ea0c6c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3ea0c6c69dee26c846bca3a49f4211dafa48b8de))
+
+
+### Refactors
+
+* code style ([25b3dd2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/25b3dd22f14d57258738f9488ce2bb86dc3533ad))
+
 ## [0.5.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.7...v0.5.0) (2023-12-06)
 
 ### Features
