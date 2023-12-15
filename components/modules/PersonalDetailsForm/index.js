@@ -14,7 +14,7 @@ import { updateInfo } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Notes, PersonalDetails } from '@/units';
-import { makeId, parseErrorMessage } from '@/utils/helpers';
+import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsForm = ({ closeModal }) => {
@@ -40,7 +40,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
 
   const noteList = [
     {
-      id: makeId(),
+      id: 1,
       label: null,
       list: ['First Name', 'Last name', 'Email'],
     },

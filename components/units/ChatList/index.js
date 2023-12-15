@@ -21,7 +21,11 @@ const ChatList = ({ data, loading = true, tab = 'active' }) => {
     return <p className="mx-auto font-semibold text-gray">No Data</p>;
   }, [loading, data, printChatSession]);
 
-  return <div className="p-5 h-[320px] relative overflow-y-scroll flex flex-col gap-y-4">{printContent}</div>;
+  return (
+    <div className="p-2 h-[320px]  relative overflow-y-scroll overflow-x-hidden flex flex-col gap-y-4">
+      {printContent}
+    </div>
+  );
 };
 
 ChatList.propTypes = ChatListPropTypes;

@@ -35,9 +35,9 @@ const ChatModal = ({ isOpened, onClose }) => {
       setDataByTab(archived);
     }
 
-    // return () => {
-    //   dispatch(setChatFilter({ limit: 3 }));
-    // };
+    return () => {
+      dispatch(setChatFilter({ limit: 3 }));
+    };
   }, [tab, searched, search, active, archived]);
 
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
@@ -72,7 +72,7 @@ const ChatModal = ({ isOpened, onClose }) => {
           archivedCounter={totalArchived}
         />
         <Divider />
-        <div className="relative min-h-[320px]">{printChatRooms}</div>
+        <div className="relative min-h-[320px] p-2">{printChatRooms}</div>
         {printLoadMore}
       </div>
     )

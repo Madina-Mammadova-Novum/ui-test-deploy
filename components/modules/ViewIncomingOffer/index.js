@@ -29,7 +29,7 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

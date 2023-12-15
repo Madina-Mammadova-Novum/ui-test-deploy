@@ -151,7 +151,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
           options: convertDataToOptions({ data: tankerCategoryOneData }, 'id', 'name'),
         });
       }
-      if (categoryOneError) console.log(categoryOneError);
+      if (categoryOneError) console.error(categoryOneError);
     }
 
     if (key === 'tankerCategoryOne') {
@@ -167,7 +167,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
           options: convertDataToOptions({ data: tankerCategoryTwoData }, 'id', 'name'),
         });
       }
-      if (categoryTwoError) console.log(categoryTwoError);
+      if (categoryTwoError) console.error(categoryTwoError);
     }
   };
 

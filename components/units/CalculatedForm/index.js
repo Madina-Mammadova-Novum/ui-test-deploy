@@ -106,7 +106,7 @@ const CalculatedForm = ({ children }) => {
   }, [additionalPorts.length]);
 
   return (
-    <div className="flex w-full h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
+    <div className="flex mt-5 w-full h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
       <FormProvider {...methods}>
         <FormManager
           className="w-full gap-5"

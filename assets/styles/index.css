@@ -490,7 +490,7 @@ tr > td:nth-child(2) {
 
 .tooltip .tooltip-box {
   top: 5%;
-  right: -60%;
+  right: -5%;
   width: 310px;
   @apply bg-white border border-gray-darker rounded-base absolute p-5 z-50;
 }

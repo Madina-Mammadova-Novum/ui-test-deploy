@@ -39,6 +39,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     showScroll: false,
     loading: false,
   });
+
   const scrollingContainerRef = useRef(null);
   const { searchData } = useSelector(searchSelector);
   const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchData;
@@ -59,6 +60,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const handleSubmit = async (formData) => {
     const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
+
     const {
       status,
       error,
@@ -76,6 +78,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         minOfferQuantity: totalMinQuantity,
       },
     });
+
     if (status === 200) {
       successToast(successMessage);
       closeModal();
