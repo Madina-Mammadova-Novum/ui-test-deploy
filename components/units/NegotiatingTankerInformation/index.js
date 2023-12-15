@@ -23,7 +23,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
       if (status === 200) {
         setTankerInformation(tankerInformationAdapter(data));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

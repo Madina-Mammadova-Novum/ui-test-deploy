@@ -40,7 +40,7 @@ const ViewCounteroffer = ({ itemId }) => {
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data }));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

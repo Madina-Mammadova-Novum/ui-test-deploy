@@ -1,8 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { MapContainer, Polyline, TileLayer } from 'react-leaflet';
-
-import 'leaflet/dist/leaflet.css';
 
 import { MapPropTypes } from '@/lib/types';
 
@@ -12,7 +11,7 @@ import { getSeaMetrixURL } from '@/utils';
 import { getLineCoordinate } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-import { useEffect, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
 
 const Map = ({ className = 'h-full' }) => {
   const { getValues } = useHookForm();
@@ -25,7 +24,7 @@ const Map = ({ className = 'h-full' }) => {
     (async () => {
       const { data } = await getTransitionalCoordinates();
       setCoord(data[0]?.waypoints?.map(({ lon, lat }) => [lon, lat]) || []);
-      console.log(data, 'WAWA');
+      // console.log(data, 'WAWA');
     })();
   }, []);
 

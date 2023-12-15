@@ -23,7 +23,7 @@ const NegotiatingChartererInformation = ({ offerId }) => {
       if (status === 200) {
         setChartererInformation(chartererInformationAdapter(data));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

@@ -69,7 +69,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setInitialLoading(false);
     })();

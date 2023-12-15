@@ -30,7 +30,7 @@ const EditFleetForm = ({ closeModal, id }) => {
       closeModal();
     }
     if (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

@@ -40,7 +40,9 @@ const TankerSearch = ({ title }) => {
     handleChangeState('loading', false);
 
     if (data) {
-      dispatch(setSearchData(formData));
+      const filteredProducts = formData?.products?.filter((product) => product);
+
+      dispatch(setSearchData({ ...formData, products: filteredProducts }));
       handleChangeState('searchResult', data);
       handleChangeState('request', true);
     }

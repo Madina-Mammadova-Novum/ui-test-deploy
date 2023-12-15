@@ -88,7 +88,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       setCountries(countriesOptions(countriesData));
       setPorts(countriesOptions(portsData));
       if (tankerTypesError || countriesError || portsError)
-        console.log(tankerTypesError || countriesError || portsError);
+        console.error(tankerTypesError || countriesError || portsError);
 
       if (Object.keys(q88State).length > 1) {
         const validPrefilledOptions = {};
@@ -168,7 +168,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           options: convertDataToOptions({ data: tankerCategoryOneData }, 'id', 'name'),
         });
       }
-      if (categoryOneError) console.log(categoryOneError);
+      if (categoryOneError) console.error(categoryOneError);
     }
 
     if (key === 'tankerCategoryOne') {
@@ -184,7 +184,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           options: convertDataToOptions({ data: tankerCategoryTwoData }, 'id', 'name'),
         });
       }
-      if (categoryTwoError) console.log(categoryTwoError);
+      if (categoryTwoError) console.error(categoryTwoError);
     }
   };
 
