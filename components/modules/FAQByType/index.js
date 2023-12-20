@@ -1,20 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import parse from 'html-react-parser';
-import { useSession } from 'next-auth/react';
 import PropTypes from 'prop-types';
 
 import { faqsByTypeAdapter } from '@/adapters/faqs';
 import { Title } from '@/elements';
 import { ROLES } from '@/lib';
 import { getFAQs } from '@/services/faq';
+import { getUserDataSelector } from '@/store/selectors';
 import { Accordion, TabsVertical } from '@/units';
 
 const FAQByType = () => {
-  const { data: session } = useSession();
-  const categoryId = session?.role === ROLES.OWNER ? 1 : 2;
+  const { role } = useSelector(getUserDataSelector);
+  const categoryId = role === ROLES.OWNER ? 1 : 2;
   const [faqList, setFaqList] = useState([]);
   const [currentTab, setCurrentTab] = useState('');
 

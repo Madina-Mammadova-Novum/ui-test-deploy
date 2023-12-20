@@ -1,22 +1,24 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { TankerExpandedFooterPropTypes } from '@/lib/types';
 
 import { LinkAsButton } from '@/elements';
 import { ROUTES } from '@/lib';
 import OfferModalContent from '@/modules/OfferModalContent';
+import { getUserDataSelector } from '@/store/selectors';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 
 const TankerExpandedFooter = ({ tankerId, tankerData }) => {
-  const { status, data: session } = useSession();
-  const { isCharterer } = getRoleIdentity({ role: session?.role });
-  const isAuthorized = status === 'authenticated';
+  const { role } = useSelector(getUserDataSelector);
+
+  const { isCharterer } = getRoleIdentity({ role });
+
   return (
     <ExpandableRowFooter>
-      {isAuthorized ? (
+      {role ? (
         <ModalWindow
           buttonProps={{
             variant: 'primary',

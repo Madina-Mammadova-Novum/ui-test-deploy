@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { ViewIncomingOfferPropTypes } from '@/lib/types';
 
@@ -11,13 +10,15 @@ import { offerDetailsAdapter } from '@/adapters/offer';
 import { Loader } from '@/elements';
 import { NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
 import { OfferDeclineForm } from '@/units';
 
 const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
   const [step, setStep] = useState('view_offer');
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
-  const { data: session } = useSession();
+
+  const { role } = useSelector(getUserDataSelector);
 
   const { parentId } = cellData || {};
 
@@ -25,9 +26,9 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId, session?.role);
+      const { status, data, error } = await getOfferDetails(itemId, role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
+        setOfferDetails(offerDetailsAdapter({ data, role }));
       } else {
         console.error(error);
       }

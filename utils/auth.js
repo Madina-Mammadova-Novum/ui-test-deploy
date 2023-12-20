@@ -2,7 +2,7 @@ import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import { login, refreshAccessToken } from '@/services';
+import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -25,21 +25,19 @@ export const AUTHCONFIG = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         return tokenAdapter({ data: user });
       }
 
-      if (Date.now() < token.expires) {
-        return Promise.resolve(token);
+      if (trigger === 'update') {
+        return tokenAdapter({ data: session });
       }
 
-      const response = await refreshAccessToken({ token: token.refreshToken });
-
-      return Promise.resolve(tokenAdapter({ data: response.data ?? token }));
+      return Promise.resolve(token);
     },
     async session({ session, token }) {
-      return Promise.resolve(sessionAdapter({ session, token }));
+      return sessionAdapter({ session, token });
     },
   },
 };

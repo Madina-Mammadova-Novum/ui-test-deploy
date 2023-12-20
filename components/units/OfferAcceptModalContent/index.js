@@ -1,9 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
-import { useSession } from 'next-auth/react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
@@ -12,6 +10,7 @@ import { offerDetailsAdapter } from '@/adapters/offer';
 import { Button, Loader, Title } from '@/elements';
 import { acceptPrefixtureOffer, extendCountdown, getOfferDetails } from '@/services/offer';
 import { updateConfirmationStatus, updateCountdown } from '@/store/entities/pre-fixture/slice';
+import { getUserDataSelector } from '@/store/selectors';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
 import { getRoleIdentity, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -34,10 +33,12 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [offerDetails, setOfferDetails] = useState({});
 
-  const { commercialOfferTerms, voyageDetails, countdownData, allowExtension } = offerDetails;
-  const { data: session } = useSession();
-  const { isOwner } = getRoleIdentity({ role: session?.role });
   const dispatch = useDispatch();
+
+  const { role } = useSelector(getUserDataSelector);
+  const { isOwner } = getRoleIdentity({ role });
+
+  const { commercialOfferTerms, voyageDetails, countdownData, allowExtension } = offerDetails;
 
   const handleSubmit = async () => {
     setPending(true);
@@ -53,7 +54,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   };
 
   const handleExtendCountdown = async () => {
-    const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
+    const { error, message: successMessage } = await extendCountdown({ offerId, role });
     if (error) {
       errorToast(parseErrorMessage(error));
     } else {
@@ -65,9 +66,9 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(offerId, session?.role);
+      const { status, data, error } = await getOfferDetails(offerId, role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
+        setOfferDetails(offerDetailsAdapter({ data, role }));
       } else {
         console.error(error);
       }

@@ -2,24 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import ReactCountryFlag from 'react-country-flag';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { NegotiatingTankerInformationPropTypes } from '@/lib/types';
 
 import { tankerInformationAdapter } from '@/adapters/vessel';
 import { Divider, FieldsetContent, Loader, TextRow, Title } from '@/elements';
 import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
 
 const NegotiatingTankerInformation = ({ offerId }) => {
   const [loading, setLoading] = useState(true);
   const [tankerInformation, setTankerInformation] = useState({});
-  const { data: session } = useSession();
+
+  const { role } = useSelector(getUserDataSelector);
+
   const { ownerInfo = [], tankerInfo = [] } = tankerInformation;
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(offerId, session?.role);
+      const { status, data, error } = await getOfferDetails(offerId, role);
       if (status === 200) {
         setTankerInformation(tankerInformationAdapter(data));
       } else {
