@@ -11,6 +11,8 @@ export const metadata = {
   },
 };
 
+export const revalidate = 0;
+
 export default async function RootLayout({ children }) {
   const session = await getServerSession(AUTHCONFIG);
 

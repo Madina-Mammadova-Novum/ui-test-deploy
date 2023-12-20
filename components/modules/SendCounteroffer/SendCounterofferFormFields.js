@@ -3,15 +3,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
-
 import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { calculateFreightEstimation } from '@/services/calculator';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
-import { offerSelector } from '@/store/selectors';
+import { getUserDataSelector, offerSelector } from '@/store/selectors';
 import { calculateIntDigit, calculateTotal, getRoleIdentity, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -27,8 +25,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     watch,
   } = useHookForm();
 
-  const { data: session } = useSession();
-  const { isOwner } = getRoleIdentity({ role: session?.role });
+  const { role } = useSelector(getUserDataSelector);
+  const { isOwner } = getRoleIdentity({ role });
 
   const { tankerId, products, loadPortId, dischargePortId } = data;
   const {

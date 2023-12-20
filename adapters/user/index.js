@@ -524,7 +524,7 @@ export function tokenAdapter({ data }) {
 }
 
 export function sessionAdapter({ session, token }) {
-  if (!token) throw new Error('UNATHORIZED');
+  if (!token) return null;
 
   if (token.accessToken) {
     const { sub, ...rest } = decodedTokenAdapter(token.accessToken);

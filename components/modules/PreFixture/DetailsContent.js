@@ -1,21 +1,17 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-
-import { useSession } from 'next-auth/react';
 
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { ROLES } from '@/lib';
 import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
-import { getGeneralDataSelector } from '@/store/selectors';
+import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
 import { Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ data = {} }) => {
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
   const { countries } = useSelector(getGeneralDataSelector);
 
   const {
@@ -38,20 +34,15 @@ const DetailsContent = ({ data = {} }) => {
     dischargeTerminal,
   } = voyageDetails;
 
-  const printRoleBasedSection = useMemo(() => {
-    if (session?.role === ROLES.CHARTERER) {
-      return <DetailsChartererContent title="Tanker Information" data={partyInformation} />;
-    }
-    if (session?.role === ROLES.OWNER) {
-      return <DetailsOwnerContent title="Charterer Information" data={partyInformation} />;
-    }
-    return null;
-  }, [session?.role]);
+  const roleBasedSection = {
+    owner: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
+    charterer: <DetailsOwnerContent title="Charterer Information" data={partyInformation} />,
+  };
 
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
-        {printRoleBasedSection}
+        {roleBasedSection[role]}
         <FieldsetWrapper>
           <Title level={3}>Cargo Details</Title>
 

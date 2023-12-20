@@ -3,16 +3,17 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
 
 const ExtraDataManager = ({ children }) => {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
 
-  const getGeneralData = () => {
+  const getGeneralData = async () => {
+    const session = await getSession();
+
     dispatch(fetchPorts());
     dispatch(fetchCountries());
 

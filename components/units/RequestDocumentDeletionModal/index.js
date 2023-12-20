@@ -1,10 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 import ModalHeader from '../ModalHeader';
 
@@ -16,12 +15,13 @@ import { requestDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
+import { getUserDataSelector } from '@/store/selectors';
 import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
   const [loading, setLoading] = useState(false);
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -44,7 +44,7 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
     setLoading(true);
     const { error, message: successMessage } = await requestDocumentDeletion({
       data: { documentId },
-      role: session?.role,
+      role,
     });
     setLoading(false);
     if (error) {
