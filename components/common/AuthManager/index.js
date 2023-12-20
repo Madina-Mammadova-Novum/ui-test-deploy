@@ -11,7 +11,7 @@ import { Hydrate } from '@/elements';
 export default function AuthManager({ children, session }) {
   return (
     <Hydrate loader={null}>
-      <SessionProvider session={session} refetchWhenOffline refetchInterval={0} refetchOnWindowFocus={false}>
+      <SessionProvider session={session} refetchWhenOffline refetchInterval={60} refetchOnWindowFocus>
         <SessionManager>{children}</SessionManager>
       </SessionProvider>
     </Hydrate>

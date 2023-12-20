@@ -13,22 +13,20 @@ const SessionManager = ({ children }) => {
   const isExpired = Date.now() >= data?.expires;
 
   const updateSession = async () => {
-    if (data?.accessToken) {
-      try {
-        const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
-        if (data) await update({ ...token });
-        if (error) throw Error(error.message);
-      } catch (err) {
-        errorToast('Bad request', 'Access token was expired, please login again');
-      }
+    try {
+      const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
+      if (data) await update({ ...token });
+      if (error) throw Error(error.message);
+    } catch (err) {
+      errorToast('Bad request', 'Access token was expired, please login again');
     }
   };
 
   useEffect(() => {
-    if (isExpired) {
+    if (isExpired && data?.accessToken) {
       updateSession();
     }
-  }, [isExpired]);
+  }, [isExpired, data]);
 
   return children;
 };
