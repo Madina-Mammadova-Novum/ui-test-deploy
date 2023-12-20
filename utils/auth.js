@@ -30,24 +30,16 @@ export const AUTHCONFIG = {
         return tokenAdapter({ data: user });
       }
 
-      if (Date.now() >= token.expires) {
-        try {
-          const response = await refreshAccessToken({ token: token.refreshToken });
-
-          if (!response.data) {
-            throw Error(response?.error?.message);
-          }
-
-          return tokenAdapter({ data: response.data });
-        } catch (err) {
-          return { ...token, error: err.message };
-        }
+      if (Date.now() < token.expires) {
+        return Promise.resolve(token);
       }
 
-      return token;
+      const response = await refreshAccessToken({ token: token.refreshToken });
+
+      return Promise.resolve(tokenAdapter({ data: response.data ?? token }));
     },
     async session({ session, token }) {
-      return sessionAdapter({ session, token });
+      return Promise.resolve(sessionAdapter({ session, token }));
     },
   },
 };

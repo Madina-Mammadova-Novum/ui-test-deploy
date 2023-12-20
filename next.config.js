@@ -3,6 +3,17 @@ const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  headers: () => [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'no-store',
+        },
+      ],
+    },
+  ],
   reactStrictMode: false,
   swcMinify: true,
   env: {

@@ -4,11 +4,15 @@ import { SessionProvider } from 'next-auth/react';
 
 import { AuthManagerPropTypes } from '@/lib/types';
 
+import { Hydrate } from '@/elements';
+
 export default function AuthManager({ children, session }) {
   return (
-    <SessionProvider session={session} refetchInterval={60} refetchOnWindowFocus>
-      {children}
-    </SessionProvider>
+    <Hydrate loader={null}>
+      <SessionProvider refetchOnWindowFocus refetchWhenOffline session={session}>
+        {children}
+      </SessionProvider>
+    </Hydrate>
   );
 }
 
