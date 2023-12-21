@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -11,13 +11,10 @@ import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
-import { Notes, OngoingAlert } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
+import { Notes } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeleteAccountForm = ({ title, closeModal }) => {
-  const [hasOngoingDeals, setHasOngoingDeals] = useState(false);
-
   const schema = yup.object({
     ...currentPasswordSchema(),
   });
@@ -38,18 +35,16 @@ const DeleteAccountForm = ({ title, closeModal }) => {
 
   const onSubmit = async (data) => {
     const { error, message } = await deleteCompany({ data });
+
     if (!error) {
       successToast(message);
       closeModal();
-    } else if (error?.errors.includes('ongoing deal')) {
-      setHasOngoingDeals(true);
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast('Bad request', error?.message);
     }
   };
 
   const printContnet = useMemo(() => {
-    if (hasOngoingDeals) return <OngoingAlert title={title} text="delete" onClose={closeModal} />;
     return (
       <FormProvider {...methods}>
         <ModalFormManager
@@ -93,7 +88,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
         </ModalFormManager>
       </FormProvider>
     );
-  }, [hasOngoingDeals, onSubmit, isSubmitting, errors?.password, handlePassword, title, closeModal]);
+  }, [onSubmit, isSubmitting, errors?.password, handlePassword, title, closeModal]);
 
   return printContnet;
 };

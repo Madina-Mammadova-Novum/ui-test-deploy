@@ -6,12 +6,17 @@ import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import { getFilledArray, sortByType } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
+import { tokenAdapter } from '@/adapters/user';
 import { ROLES, SORT_OPTIONS } from '@/lib/constants';
+import { refreshAccessToken } from '@/services';
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { setRoleIdentity } from '@/store/entities/user/slice';
 import { toastFunc } from '@/utils/index';
 
 export function useOnClickOutside(ref, handler) {
@@ -322,4 +327,49 @@ export const useDisableNumberInputScroll = () => {
       });
     };
   }, []);
+};
+
+export const useExtraData = ({ role }) => {
+  const dispatch = useDispatch();
+
+  const getGeneralData = () => {
+    dispatch(fetchPorts());
+    dispatch(fetchCountries());
+  };
+
+  useEffect(() => {
+    getGeneralData();
+
+    if (role) {
+      dispatch(setRoleIdentity(role));
+    }
+  }, []);
+};
+
+export const useRefreshSession = () => {
+  const { data, update } = useSession();
+
+  useExtraData({ role: data?.role });
+
+  const isExpired = Date.now() >= data?.expires;
+
+  const updateSession = async () => {
+    try {
+      const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
+
+      await update(tokenAdapter({ data: token }));
+
+      if (error) {
+        throw Error(error.message);
+      }
+    } catch (err) {
+      errorToast('Bad request', 'Access token was expired, please login again');
+    }
+  };
+
+  useEffect(() => {
+    if (isExpired) {
+      updateSession();
+    }
+  }, [isExpired]);
 };

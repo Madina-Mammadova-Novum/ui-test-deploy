@@ -149,8 +149,9 @@ export const responseHandler = async ({
 
     const responseData = await dataAdapter({ data });
     const { data: responseDataAdapted } = responseAdapter(responseData);
+
     return res.status(status).json({ status, data: responseDataAdapted, error, ...rest });
   } catch (error) {
-    return errorHandler(res, 500, error.message, [error]);
+    return errorHandler(res, 500, error.message, error);
   }
 };

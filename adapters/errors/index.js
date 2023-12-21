@@ -1,5 +1,5 @@
 import { SYSTEM_ERROR } from '@/lib/constants';
-import { convertKeysToLowerCase, errorMessage, formatErrors } from '@/utils/helpers';
+import { convertKeysToLowerCase, errorMessage } from '@/utils/helpers';
 
 export const errorsAdapter = ({ error }) => {
   const errors = convertKeysToLowerCase(error);
@@ -9,7 +9,7 @@ export const errorsAdapter = ({ error }) => {
   return {
     type: errors?.type ?? null,
     traceId: errors?.traceid ?? null,
-    message: errorMessage({ message, errors }),
-    errors: formatErrors(errors?.errors),
+    errors: errors?.errors,
+    ...errorMessage({ message, errors }),
   };
 };
