@@ -1,34 +1,44 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
+import { tokenAdapter } from '@/adapters/user';
 import { refreshAccessToken } from '@/services';
+import { setRoleIdentity } from '@/store/entities/user/slice';
 import { errorToast } from '@/utils/hooks';
 
-const SessionManager = ({ children }) => {
+const SessionManager = () => {
   const { data, update } = useSession();
+  const dispatch = useDispatch();
 
   const isExpired = Date.now() >= data?.expires;
 
   const updateSession = async () => {
     try {
       const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
-      if (data) await update({ ...token });
-      if (error) throw Error(error.message);
+
+      await update(tokenAdapter({ data: token }));
+
+      if (error) {
+        throw Error(error.message);
+      }
     } catch (err) {
       errorToast('Bad request', 'Access token was expired, please login again');
     }
   };
 
   useEffect(() => {
-    if (isExpired && data?.accessToken) {
+    if (isExpired) {
       updateSession();
     }
-  }, [isExpired, data]);
 
-  return children;
+    if (data?.role) {
+      dispatch(setRoleIdentity(data.role));
+    }
+  }, [isExpired]);
 };
 
 export default SessionManager;

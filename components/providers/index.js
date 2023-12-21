@@ -2,26 +2,16 @@
 
 import { ProvidersPropTypes } from '@/lib/types';
 
-import { ExtraDataManager, StoreManager } from '@/common';
-import { Hydrate } from '@/elements';
-import { PageLoader } from '@/elements/PageLoader';
-import { SearchLoader } from '@/elements/Skeletons';
+import { ExtraDataManager, SessionManager, StoreManager } from '@/common';
 
-const Providers = ({ children, loader }) => {
-  const loaderType = {
-    component: <SearchLoader />,
-    page: <PageLoader text="Uploading..." />,
-  };
-
+export default function Providers({ children }) {
   return (
-    <Hydrate loader={loaderType[loader]}>
-      <StoreManager>
-        <ExtraDataManager>{children}</ExtraDataManager>
-      </StoreManager>
-    </Hydrate>
+    <StoreManager>
+      <SessionManager />
+      <ExtraDataManager />
+      {children}
+    </StoreManager>
   );
-};
+}
 
 Providers.propTypes = ProvidersPropTypes;
-
-export default Providers;

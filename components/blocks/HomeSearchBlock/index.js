@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
-import Providers from '@/providers';
 import { Tabs } from '@/units';
 
 const tabs = [
@@ -52,7 +51,7 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
           onClick={handleClickScroll}
         />
         <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
-        <Providers loader="component">{dataByTab[activeTab]}</Providers>
+        {dataByTab[activeTab]}
       </div>
     </section>
   );

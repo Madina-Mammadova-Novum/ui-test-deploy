@@ -3,17 +3,6 @@ const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  headers: () => [
-    {
-      source: '/:path*',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'no-store',
-        },
-      ],
-    },
-  ],
   reactStrictMode: false,
   swcMinify: true,
   env: {
@@ -40,7 +29,11 @@ const nextConfig = {
     unoptimized: false, // true for `yarn export`
     formats: ['image/webp'],
     minimumCacheTTL: 60,
-    domains: [domain],
+    remotePatterns: [
+      {
+        hostname: domain,
+      },
+    ],
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],
   },

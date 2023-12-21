@@ -31,7 +31,7 @@ export const AUTHCONFIG = {
       }
 
       if (trigger === 'update') {
-        return tokenAdapter({ data: session });
+        return Promise.resolve(session);
       }
 
       return Promise.resolve(token);

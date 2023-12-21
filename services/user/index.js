@@ -1,5 +1,3 @@
-import { getSession } from 'next-auth/react';
-
 import { getFleetByIdAdapter } from '@/adapters';
 import { basePageNavAdapter, negotiationPageNavAdapter, positionsPageNavAdapter } from '@/adapters/navigation';
 import {
@@ -183,11 +181,10 @@ export async function getRoleBasedPrefixture({ page, perPage }) {
   };
 }
 
-export async function getRoleBasedNegotiating({ page = 1, perPage = 5, stage = 'Negotiating' }) {
-  const session = await getSession();
+export async function getRoleBasedNegotiating({ role, page = 1, perPage = 5, stage = 'Negotiating' }) {
   const body = negotiationPageNavAdapter({ data: { page, perPage, stage } });
 
-  const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body);
+  const response = await postData(`account/negotiating/${role}?page=${page}&perPage=${perPage}`, body);
 
   return {
     ...response,
