@@ -13,7 +13,7 @@ import { toolsSchema } from '@/lib/schemas';
 import { getEstimation } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { CalculatedDetails } from '@/units';
-import { getValueWithPath, parseErrorMessage, resetObjectFields } from '@/utils/helpers';
+import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
@@ -50,7 +50,7 @@ const CalculatedForm = ({ children }) => {
     const result = successResponseAdapter({ data: { ...response, key: calculator.value } });
 
     if (result) methods.setValue('response', result);
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error.message);
   };
 
   const handleReset = () => {

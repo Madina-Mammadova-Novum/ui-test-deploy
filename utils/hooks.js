@@ -371,5 +371,5 @@ export const useRefreshSession = () => {
     if (isExpired) {
       updateSession();
     }
-  }, [isExpired]);
+  }, [isExpired, data]);
 };
