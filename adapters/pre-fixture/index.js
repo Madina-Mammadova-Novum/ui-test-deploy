@@ -213,7 +213,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       products,
     },
     commercialOfferTerms: {
-      freight: `${freightFormat?.value} ${freight}`,
+      freight: `${freight} ${freightFormat?.value} `,
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymentTerms: demurragePaymentTerm?.name,

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { getSidebarSelector } from '@/store/selectors';
 
-const AccountContainer = ({ children }) => {
+export default function AccountContainer({ children }) {
   const { collapsed } = useSelector(getSidebarSelector);
 
   return (
@@ -16,6 +16,4 @@ const AccountContainer = ({ children }) => {
       {children}
     </div>
   );
-};
-
-export default AccountContainer;
+}

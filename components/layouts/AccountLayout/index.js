@@ -13,7 +13,7 @@ export default async function AccountLayout({ children }) {
   };
 
   return (
-    <AccountContainer>
+    <AccountContainer role={session.role}>
       <Sidebar data={routes[session.role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
       <AccountHeader user={session.user} />
       <main className="grow">{children}</main>
