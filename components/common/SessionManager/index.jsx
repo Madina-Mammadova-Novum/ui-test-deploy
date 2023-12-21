@@ -38,7 +38,7 @@ const SessionManager = () => {
     if (data?.role) {
       dispatch(setRoleIdentity(data.role));
     }
-  }, [isExpired]);
+  }, [isExpired, data]);
 };
 
 export default SessionManager;
