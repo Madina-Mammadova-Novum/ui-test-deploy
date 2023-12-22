@@ -2,7 +2,23 @@ import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import { login } from '@/services';
+import { login, refreshAccessToken } from '@/services';
+import { store } from '@/store';
+import { setRoleIdentity } from '@/store/entities/user/slice';
+
+const updateSession = async ({ token }) => {
+  try {
+    const { data, error } = await refreshAccessToken({ token });
+
+    if (error) {
+      throw Error(error.message);
+    }
+
+    return tokenAdapter({ data });
+  } catch (err) {
+    return { token: null, error: err.message };
+  }
+};
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -25,16 +41,22 @@ export const AUTHCONFIG = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       if (user) {
         return tokenAdapter({ data: user });
       }
+      store.dispatch(setRoleIdentity(token?.role));
 
-      if (trigger === 'update') {
-        return Promise.resolve(session);
+      if (Date.now() < token?.expires) {
+        return Promise.resolve(token);
       }
 
-      return Promise.resolve(token);
+      const refreshedToken = await updateSession({ token: token.refreshToken });
+      return Promise.resolve(refreshedToken);
+
+      // if (trigger === 'update') {
+      //   return Promise.resolve(session);
+      // }
     },
     async session({ session, token }) {
       return sessionAdapter({ session, token });

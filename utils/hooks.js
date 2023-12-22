@@ -351,8 +351,6 @@ export const useRefreshSession = () => {
 
   useExtraData({ role: data?.role });
 
-  const isExpired = Date.now() >= data?.expires;
-
   const updateSession = async () => {
     try {
       const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
@@ -368,8 +366,8 @@ export const useRefreshSession = () => {
   };
 
   useEffect(() => {
-    if (isExpired) {
+    if (Date.now() >= data?.expires) {
       updateSession();
     }
-  }, [isExpired, data]);
+  }, [data?.expires, data?.accessToken]);
 };

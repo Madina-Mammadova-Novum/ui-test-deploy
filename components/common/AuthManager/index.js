@@ -9,7 +9,9 @@ import { Hydrate } from '@/elements';
 export default function AuthManager({ children, session }) {
   return (
     <Hydrate>
-      <SessionProvider session={session}>{children}</SessionProvider>
+      <SessionProvider session={session} refetchInterval={60} refetchWhenOffline refetchOnWindowFocus>
+        {children}
+      </SessionProvider>
     </Hydrate>
   );
 }
