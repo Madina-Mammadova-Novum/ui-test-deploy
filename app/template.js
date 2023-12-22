@@ -2,7 +2,7 @@
 
 import { useRefreshSession } from '@/utils/hooks';
 
-export function RootTemplate({ children }) {
+export default function Template({ children }) {
   useRefreshSession();
 
   return children;
