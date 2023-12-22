@@ -5,11 +5,8 @@ import { ToastContainer } from 'react-toastify';
 
 import { Hydrate } from '@/elements';
 import 'react-toastify/dist/ReactToastify.css';
-import { useExtraData } from '@/utils/hooks';
 
 const ClientSidePackages = () => {
-  useExtraData();
-
   return (
     <Hydrate loader={null}>
       <div id="portal" />

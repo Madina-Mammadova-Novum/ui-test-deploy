@@ -2,21 +2,21 @@ import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import { login, refreshAccessToken } from '@/services';
+import { login } from '@/services';
 
-const updateSession = async ({ token }) => {
-  try {
-    const { data, error } = await refreshAccessToken({ token });
+// const updateSession = async ({ token }) => {
+//   try {
+//     const { data, error } = await refreshAccessToken({ token });
 
-    if (error) {
-      throw Error(error.message);
-    }
+//     if (error) {
+//       throw Error(error.message);
+//     }
 
-    return tokenAdapter({ data });
-  } catch (err) {
-    return { token: null, error: err.message };
-  }
-};
+//     return tokenAdapter({ data });
+//   } catch (err) {
+//     return { token: null, error: err.message };
+//   }
+// };
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -39,7 +39,7 @@ export const AUTHCONFIG = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         return tokenAdapter({ data: user });
       }
@@ -48,12 +48,14 @@ export const AUTHCONFIG = {
         return Promise.resolve(token);
       }
 
-      const refreshedToken = await updateSession({ token: token.refreshToken });
-      return Promise.resolve(refreshedToken);
+      // const refreshedToken = await updateSession({ token: token.refreshToken });
+      // return Promise.resolve(refreshedToken);
 
-      // if (trigger === 'update') {
-      //   return Promise.resolve(session);
-      // }
+      if (trigger === 'update') {
+        return Promise.resolve(session);
+      }
+
+      return token;
     },
     async session({ session, token }) {
       return sessionAdapter({ session, token });
