@@ -365,9 +365,11 @@ export const useRefreshSession = () => {
     }
   };
 
+  const expired = Date.now() >= data?.expires;
+
   useEffect(() => {
-    if (Date.now() >= data?.expires) {
+    if (expired) {
       updateSession();
     }
-  }, [data?.expires, data?.accessToken]);
+  }, [expired, data?.expires, data?.refreshToken]);
 };
