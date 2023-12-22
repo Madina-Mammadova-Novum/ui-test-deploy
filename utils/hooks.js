@@ -329,7 +329,9 @@ export const useDisableNumberInputScroll = () => {
   }, []);
 };
 
-export const useExtraData = ({ role }) => {
+export const useExtraData = () => {
+  const { session } = useSession();
+
   const dispatch = useDispatch();
 
   const getGeneralData = () => {
@@ -340,8 +342,8 @@ export const useExtraData = ({ role }) => {
   useEffect(() => {
     getGeneralData();
 
-    if (role) {
-      dispatch(setRoleIdentity(role));
+    if (session?.role) {
+      dispatch(setRoleIdentity(session?.role));
     }
   }, []);
 };

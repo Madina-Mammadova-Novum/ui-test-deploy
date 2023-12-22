@@ -3,8 +3,6 @@ import Credentials from 'next-auth/providers/credentials';
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
 import { login, refreshAccessToken } from '@/services';
-import { store } from '@/store';
-import { setRoleIdentity } from '@/store/entities/user/slice';
 
 const updateSession = async ({ token }) => {
   try {
@@ -45,7 +43,6 @@ export const AUTHCONFIG = {
       if (user) {
         return tokenAdapter({ data: user });
       }
-      store.dispatch(setRoleIdentity(token?.role));
 
       if (Date.now() < token?.expires) {
         return Promise.resolve(token);
