@@ -345,7 +345,7 @@ export const useExtraData = () => {
     if (data?.role) {
       dispatch(setRoleIdentity(data?.role));
     }
-  }, []);
+  }, [data?.role]);
 };
 
 export const useRefreshSession = () => {
