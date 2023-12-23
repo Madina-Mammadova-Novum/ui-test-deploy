@@ -1,20 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { useSession } from 'next-auth/react';
 
 import { tokenAdapter } from '@/adapters/user';
 import { refreshAccessToken } from '@/services';
-import { setRoleIdentity } from '@/store/entities/user/slice';
-import { errorToast } from '@/utils/hooks';
+import { errorToast, useExtraData } from '@/utils/hooks';
 
-const SessionManager = () => {
+const SessionManager = ({ children }) => {
   const { data, update } = useSession();
-  const dispatch = useDispatch();
 
-  const isExpired = Date.now() >= data?.expires;
+  useExtraData({ role: data?.role });
 
   const updateSession = async () => {
     try {
@@ -31,14 +28,15 @@ const SessionManager = () => {
   };
 
   useEffect(() => {
-    if (isExpired) {
-      updateSession();
-    }
+    const interval = setInterval(() => updateSession(), 1000 * 60);
+    return () => {
+      if (document.visibilityState === 'visible') {
+        clearInterval(interval);
+      }
+    };
+  }, [updateSession]);
 
-    if (data?.role) {
-      dispatch(setRoleIdentity(data.role));
-    }
-  }, [isExpired, data]);
+  return children;
 };
 
 export default SessionManager;

@@ -365,11 +365,8 @@ export const useRefreshSession = () => {
     }
   };
 
-  const expired = Date.now() >= data?.expires;
-
   useEffect(() => {
-    if (expired) {
-      updateSession();
-    }
-  }, [expired, data?.expires, data?.refreshToken]);
+    const interval = setInterval(() => updateSession(), 1000 * 60);
+    return () => clearInterval(interval);
+  }, [updateSession]);
 };
