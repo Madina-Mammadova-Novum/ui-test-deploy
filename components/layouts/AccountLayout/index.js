@@ -1,12 +1,7 @@
-import { getServerSession } from 'next-auth';
-
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
 import { AccountContainer, AccountFooter, AccountHeader, Chat, Sidebar } from '@/modules';
-import { AUTHCONFIG } from '@/utils/auth';
 
-export default async function AccountLayout({ children }) {
-  const session = await getServerSession(AUTHCONFIG);
-
+export default async function AccountLayout({ children, session }) {
   const routes = {
     owner: ownerSidebarAdapter({ role: session.role }),
     charterer: chartererSidebarAdapter({ role: session.role }),

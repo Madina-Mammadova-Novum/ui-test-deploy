@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 
-import { AuthManager, ClientSidePackages, StoreManager } from '@/common';
+import { AuthManager, ClientSidePackages } from '@/common';
 import { BaseLayout } from '@/layouts';
 import { AUTHCONFIG } from '@/utils/auth';
 
@@ -11,17 +11,15 @@ export const metadata = {
   },
 };
 
+export const revalidate = 60;
+
 export default async function RootLayout({ children }) {
   const session = await getServerSession(AUTHCONFIG);
 
   return (
     <BaseLayout>
-      <AuthManager session={session}>
-        <StoreManager>
-          {children}
-          <ClientSidePackages />
-        </StoreManager>
-      </AuthManager>
+      <AuthManager session={session}>{children}</AuthManager>
+      <ClientSidePackages />
     </BaseLayout>
   );
 }

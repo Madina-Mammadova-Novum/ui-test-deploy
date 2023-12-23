@@ -4,14 +4,8 @@ import { SessionProvider } from 'next-auth/react';
 
 import { AuthManagerPropTypes } from '@/lib/types';
 
-import { Hydrate } from '@/elements';
-
 export default function AuthManager({ children, session }) {
-  return (
-    <Hydrate>
-      <SessionProvider session={session}>{children}</SessionProvider>
-    </Hydrate>
-  );
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 }
 
 AuthManager.propTypes = AuthManagerPropTypes;

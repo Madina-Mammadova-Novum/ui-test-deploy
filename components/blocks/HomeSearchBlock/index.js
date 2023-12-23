@@ -5,9 +5,9 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
-import { StoreManager } from '@/common';
 import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
+import Providers from '@/providers';
 import { Tabs } from '@/units';
 
 const tabs = [
@@ -52,7 +52,7 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
           onClick={handleClickScroll}
         />
         <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
-        <StoreManager>{dataByTab[activeTab]}</StoreManager>
+        <Providers loader="search">{dataByTab[activeTab]}</Providers>
       </div>
     </section>
   );

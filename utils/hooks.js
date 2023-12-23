@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
@@ -17,95 +17,8 @@ import { ROLES, SORT_OPTIONS } from '@/lib/constants';
 import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
+import { getSidebarSelector } from '@/store/selectors';
 import { toastFunc } from '@/utils/index';
-
-export function useOnClickOutside(ref, handler) {
-  useEffect(() => {
-    const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
-
-      handler(event);
-    };
-
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-
-    return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [ref, handler]);
-}
-
-export function useIsHeaderVisible() {
-  const [isVisible, setIsVisible] = useState(true);
-  const breakpoint = 40;
-
-  const handleScroll = () => {
-    const currentScrollPos = window.scrollY;
-
-    if (currentScrollPos > breakpoint) {
-      setIsVisible(false);
-    } else {
-      setIsVisible(true);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  });
-
-  return { isVisible };
-}
-
-export function useValidationErrors() {
-  const [errors, setErrors] = useState({});
-
-  const addError = useCallback(
-    (error) => {
-      setErrors((prevState) => ({ ...prevState, ...error }));
-    },
-    [setErrors]
-  );
-
-  const removeErrorByKey = useCallback(
-    (errorName) => {
-      setErrors(({ [errorName]: _, ...rest }) => rest);
-    },
-    [setErrors]
-  );
-
-  return { errors, addError, removeErrorByKey };
-}
-
-export function useFetchEffect(ref, action) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (ref.current === false) dispatch(action());
-    return () => {
-      ref.current = true;
-    };
-  }, [action, dispatch, ref]);
-}
-
-export function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
@@ -127,6 +40,20 @@ export const useToast = (title, description = '') => {
   return toastFunc('default', title, description);
 };
 
+export function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export const redirectAfterToast = (message, url) => {
   return new Promise((resolve) => {
     successToast(message);
@@ -143,12 +70,6 @@ export const useHookForm = () => {
   return { ...methods };
 };
 
-/**
- *
- * @param state
- * @param schema
- * @returns {UseFormReturn<FieldValues, any>}
- */
 export const useHookFormParams = ({ state = {}, schema = {} }) => {
   const params = useForm({
     defaultValues: { ...state },
@@ -298,17 +219,6 @@ export const getRoleBasedNavigation = async ({ role }) => {
   }
 };
 
-export const useFormUpdate = (name, index, initialValue) => {
-  const fieldName = `${name}[${index}]`;
-  const methods = useHookForm();
-
-  useEffect(() => {
-    methods.setValue(fieldName, initialValue);
-  }, [fieldName, initialValue, methods]);
-
-  return fieldName;
-};
-
 export const useDisableNumberInputScroll = () => {
   useEffect(() => {
     const handleWheel = (e) => {
@@ -331,6 +241,7 @@ export const useDisableNumberInputScroll = () => {
 
 export const useExtraData = ({ role }) => {
   const dispatch = useDispatch();
+  const { collapsed } = useSelector(getSidebarSelector);
 
   const getGeneralData = () => {
     dispatch(fetchPorts());
@@ -344,12 +255,12 @@ export const useExtraData = ({ role }) => {
       dispatch(setRoleIdentity(role));
     }
   }, []);
+
+  return { collapsed };
 };
 
 export const useRefreshSession = () => {
   const { data, update } = useSession();
-
-  useExtraData({ role: data?.role });
 
   const updateSession = async () => {
     try {

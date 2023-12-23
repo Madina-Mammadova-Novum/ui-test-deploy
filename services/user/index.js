@@ -80,7 +80,7 @@ export async function login({ data }) {
 }
 
 export async function refreshAccessToken({ token }) {
-  const response = await postData(`auth/refreshToken`, { token }, { headers: { ...ContentTypeJson() } });
+  const response = await postData(`auth/session-update`, { token }, { headers: { ...ContentTypeJson() } });
 
   return { ...response };
 }
