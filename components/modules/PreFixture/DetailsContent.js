@@ -21,8 +21,10 @@ const DetailsContent = ({ data = {} }) => {
     voyageDetails = {},
     additionalCharterPartyTerms = [],
   } = data;
+
   const { cargoType, products = [] } = cargoDetails;
   const { freight, demurrageRate, laytime, demurragePaymentTerms, paymentTerms } = commercialOfferTerms;
+
   const {
     laycanStart,
     laycanEnd,
@@ -36,7 +38,7 @@ const DetailsContent = ({ data = {} }) => {
 
   const roleBasedSection = {
     owner: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
-    charterer: <DetailsOwnerContent title="Charterer Information" data={partyInformation} />,
+    charterer: <DetailsOwnerContent title="Charterer Information" data={partyInformation} countries={countries} />,
   };
 
   return (

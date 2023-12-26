@@ -236,6 +236,8 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
 
 export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
+  console.log('data: ', data);
+
   const {
     vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
     searchedCargo: { cargoType } = {},
@@ -260,20 +262,22 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       } = {},
     } = {},
     additionalCharterPartyTerms,
+    charterer,
   } = data;
 
   return {
     partyInformation: {
-      operationYears: yearsInOperation,
-      numberOfTankers: numberOfVessels,
-      estimatedTankerDWT: estimatedAverageTankerDWT,
+      operationYears: `${yearsInOperation}`,
+      numberOfTankers: `${numberOfVessels}`,
+      estimatedTankerDWT: `${estimatedAverageTankerDWT}`,
+      country: charterer?.registrationCity?.country || null,
     },
     cargoDetails: {
       cargoType: cargoType?.name,
       products,
     },
     commercialOfferTerms: {
-      freight: freightFormatter({ value: freightFormat?.value, format: freight }),
+      freight: freightFormatter({ value: freight, format: freightFormat.value }),
       demurrageRate: `$${demurrageRate} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymentTerms: demurragePaymentTerm?.name,
