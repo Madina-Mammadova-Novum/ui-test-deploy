@@ -1,15 +1,12 @@
-import { SYSTEM_ERROR } from '@/lib/constants';
 import { convertKeysToLowerCase, errorMessage } from '@/utils/helpers';
 
 export const errorsAdapter = ({ error }) => {
   const errors = convertKeysToLowerCase(error);
 
-  const message = errors?.title ?? (errors || SYSTEM_ERROR);
-
   return {
     type: errors?.type ?? null,
     traceId: errors?.traceid ?? null,
-    errors: errors?.errors,
-    message: errorMessage({ message, errors }),
+    title: errors?.title || 'Bad request',
+    ...errorMessage({ errors }),
   };
 };

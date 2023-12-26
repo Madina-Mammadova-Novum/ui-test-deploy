@@ -265,9 +265,7 @@ export const useRefreshSession = () => {
   const updateSession = async () => {
     try {
       const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
-
       await update(tokenAdapter({ data: token }));
-
       if (error) {
         throw Error(error.message);
       }
@@ -276,6 +274,7 @@ export const useRefreshSession = () => {
     }
   };
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const interval = setInterval(() => updateSession(), 1000 * 60);
     return () => clearInterval(interval);

@@ -16,7 +16,6 @@ import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/ent
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
@@ -48,7 +47,7 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
     });
     setLoading(false);
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentStatus({ documentId, status: 'Deletion Requested' }));
       successToast(successMessage);

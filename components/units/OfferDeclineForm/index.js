@@ -14,7 +14,6 @@ import { declineOfferSchema } from '@/lib/schemas';
 import { declineOffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -39,7 +38,7 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, of
       dispatch(fetchUserNegotiating());
       closeModal();
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
   };
 

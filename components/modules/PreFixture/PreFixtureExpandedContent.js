@@ -13,7 +13,6 @@ import { extendCountdown } from '@/services/offer';
 import { updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -37,7 +36,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role });
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     } else {
       successToast(successMessage);
       setAllowCountdownExtension(false);

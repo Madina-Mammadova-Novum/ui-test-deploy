@@ -12,7 +12,7 @@ import { acceptPrefixtureOffer, extendCountdown, getOfferDetails } from '@/servi
 import { updateConfirmationStatus, updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
-import { getRoleIdentity, parseErrorMessage } from '@/utils/helpers';
+import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -48,7 +48,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
       successToast(successMessage);
       closeModal();
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
     setPending(false);
   };
@@ -56,7 +56,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role });
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     } else {
       successToast(successMessage);
       setOfferDetails(extendCountdownDataAdapter);

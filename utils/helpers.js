@@ -635,14 +635,18 @@ export function convertKeysToLowerCase(obj) {
   }, {});
 }
 
-export const errorMessage = ({ message, errors }) => {
-  if (message === 'Internal server error') {
-    return 'External server error';
+export const errorMessage = ({ errors }) => {
+  if (errors?.message === 'Internal server error') {
+    return {
+      message: 'External server error',
+    };
   }
 
-  if (!errors) {
-    return SYSTEM_ERROR;
+  if (errors?.message === 'Bad Request') {
+    return {
+      message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
+    };
   }
 
-  return message;
+  return { message: errors[0] };
 };
