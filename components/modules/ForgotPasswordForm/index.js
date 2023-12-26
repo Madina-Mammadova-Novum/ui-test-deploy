@@ -8,7 +8,6 @@ import { FormManager } from '@/common';
 import { Input } from '@/elements';
 import { forgotPasswordSchema } from '@/lib/schemas';
 import { forgotPassword } from '@/services/user';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ForgotPasswordForm = () => {
@@ -27,7 +26,7 @@ const ForgotPasswordForm = () => {
     const { error, message } = await forgotPassword({ data: formData });
 
     if (!error) successToast(message);
-    else errorToast(parseErrorMessage(error));
+    else errorToast(error?.title, error?.message);
 
     reset();
   };

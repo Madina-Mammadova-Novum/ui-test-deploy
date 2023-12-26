@@ -236,7 +236,6 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
 
 export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
-  console.log('data: ', data);
 
   const {
     vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},

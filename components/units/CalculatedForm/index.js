@@ -50,7 +50,7 @@ const CalculatedForm = ({ children }) => {
     const result = successResponseAdapter({ data: { ...response, key: calculator.value } });
 
     if (result) methods.setValue('response', result);
-    if (error) errorToast(error.message);
+    if (error) errorToast(error?.title, error?.message);
   };
 
   const handleReset = () => {

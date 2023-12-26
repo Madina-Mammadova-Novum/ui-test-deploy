@@ -16,7 +16,6 @@ import { acceptOffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const tabs = [
@@ -56,7 +55,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
       dispatch(fetchUserNegotiating());
       closeModal();
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
   };
 

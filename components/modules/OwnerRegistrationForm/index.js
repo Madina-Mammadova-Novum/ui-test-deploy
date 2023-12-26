@@ -28,7 +28,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { parseErrorMessage, resetForm } from '@/utils/helpers';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = () => {
@@ -62,9 +62,8 @@ const OwnerRegistrationForm = () => {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     }
-    if (error) {
-      errorToast(parseErrorMessage(error));
-    }
+
+    if (error) errorToast(error?.title, error?.message);
   };
 
   return (

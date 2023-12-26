@@ -25,12 +25,12 @@ const VerifficationUserAccount = () => {
   const fetchVeriffUrl = async () => {
     const { data, message } = checkObjectValues({ data: queryData });
 
-    if (message) errorToast(message);
+    if (message) errorToast('Bad request', message);
 
     if (data) {
       const { data: link, error } = await postVeriffData({ data });
       setVeriffUrl(link?.redirectUrl);
-      if (error) errorToast(error);
+      if (error) errorToast(error?.title, error?.message);
     }
   };
 
