@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
@@ -12,29 +12,19 @@ import { removeCollapsedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversationCard, ChatSubModal } from '@/units';
 
-const ChatSession = ({ data, tab }) => {
+const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
 
   const { user } = useSelector(getChatSelector).chats;
 
-  const [state, setState] = useState({ deactivate: false, reactivate: false });
-
-  /* Change handler by key-value for userStore */
-  const handleChangeState = (key, value) => {
-    setState((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
+  const handleModal = (e, id) => {
+    e.stopPropagation();
+    setSessionId(id);
   };
 
-  const handleModal = (e, key) => {
+  const handleAction = (e, key) => {
     e.stopPropagation();
-    handleChangeState(key, !state[key]);
-  };
-
-  const handleConversation = (e, key) => {
-    e.stopPropagation();
-    handleChangeState(key, false);
+    setSessionId('');
 
     if (key === 'deactivate') dispatch(deactivateUserChat({ data: data?.chatId }));
     else dispatch(reactivateUserChat({ data: data?.chatId }));
@@ -42,9 +32,7 @@ const ChatSession = ({ data, tab }) => {
 
   const handleCancel = (e) => {
     e.stopPropagation();
-
-    if (tab === 'active') handleChangeState('deactivate', false);
-    else handleChangeState('reactivate', false);
+    setSessionId('');
   };
 
   const handleOpenConversation = () => {
@@ -56,14 +44,14 @@ const ChatSession = ({ data, tab }) => {
 
   const actions = useMemo(
     () => ({
-      active: <ArchiveButton onClick={(e) => handleModal(e, 'deactivate')} />,
-      archived: <ReActivateButton onClick={(e) => handleModal(e, 'reactivate')} />,
+      active: <ArchiveButton onClick={(e) => handleModal(e, data?.chatId)} />,
+      archived: <ReActivateButton onClick={(e) => handleModal(e, data?.chatId)} />,
       deactivate: (
         <ChatSubModal
           tab={tab}
           title="Do you want to archive this chat?"
           onCancel={(e) => handleCancel(e)}
-          onClick={(e) => handleConversation(e, 'deactivate')}
+          onClick={(e) => handleAction(e, 'deactivate')}
         />
       ),
       reactivate: (
@@ -71,12 +59,17 @@ const ChatSession = ({ data, tab }) => {
           tab={tab}
           title="Do you want to restore this chat?"
           onCancel={(e) => handleCancel(e)}
-          onClick={(e) => handleConversation(e, 'reactivate')}
+          onClick={(e) => handleAction(e, 'reactivate')}
         />
       ),
     }),
-    [tab, state.deactivate, state.reactivate]
+    [tab, sessionId]
   );
+
+  const state = {
+    active: actions.deactivate,
+    archived: actions.reactivate,
+  };
 
   return (
     <div className="flex justify-between relative cursor-pointer" aria-hidden onClick={handleOpenConversation}>
@@ -84,8 +77,7 @@ const ChatSession = ({ data, tab }) => {
       <div className="flex flex-col relative justify-end">
         <Badge className="h-5 w-5 -top-0.5 right-1 p-1" counter={data?.messageCount} />
         {actions[tab]}
-        {state.deactivate && actions.deactivate}
-        {state.reactivate && actions.reactivate}
+        {sessionId === data?.chatId && state[tab]}
       </div>
     </div>
   );
