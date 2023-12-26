@@ -9,7 +9,6 @@ import { ChatSession } from '@/units';
 
 const ChatList = ({ data, loading = true, tab = 'active' }) => {
   const [sessionId, setSessionId] = useState('');
-  console.log('sessionId: ', sessionId);
 
   useEffect(() => {
     if (sessionId) {
