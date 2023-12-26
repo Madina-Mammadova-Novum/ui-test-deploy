@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useMemo } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import { ChatListPropTypes } from '@/lib/types';
 
@@ -8,10 +8,19 @@ import { ChatListLoader, Divider } from '@/elements';
 import { ChatSession } from '@/units';
 
 const ChatList = ({ data, loading = true, tab = 'active' }) => {
+  const [sessionId, setSessionId] = useState('');
+  console.log('sessionId: ', sessionId);
+
+  useEffect(() => {
+    if (sessionId) {
+      setSessionId('');
+    }
+  }, [tab]);
+
   const printChatSession = (session, index) => (
     <Fragment key={index !== 0}>
       {index !== 0 && <Divider />}
-      <ChatSession tab={tab} data={session} />
+      <ChatSession tab={tab} data={session} sessionId={sessionId} setSessionId={setSessionId} />
     </Fragment>
   );
 
