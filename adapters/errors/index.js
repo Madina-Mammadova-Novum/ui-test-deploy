@@ -10,6 +10,6 @@ export const errorsAdapter = ({ error }) => {
     type: errors?.type ?? null,
     traceId: errors?.traceid ?? null,
     errors: errors?.errors,
-    ...errorMessage({ message, errors }),
+    message: errorMessage({ message, errors }),
   };
 };
