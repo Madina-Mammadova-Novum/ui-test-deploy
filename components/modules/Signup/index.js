@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 import { ROLES } from '@/lib/constants';
 import { ChartererRegistrationForm, OwnerRegistrationForm } from '@/modules';
 import { Step, Tabs } from '@/units';
 import { signUpTab } from '@/utils/mock';
 
-const Signup = () => {
+const Signup = ({ countries, ports }) => {
   const [role, setRole] = useState(ROLES.OWNER);
 
   const roleBasedForm = {
-    charterer: <ChartererRegistrationForm />,
-    owner: <OwnerRegistrationForm />,
+    charterer: <ChartererRegistrationForm countries={countries} ports={ports} />,
+    owner: <OwnerRegistrationForm countries={countries} />,
   };
 
   const handleActiveTab = ({ target }) => setRole(target.value);
@@ -25,6 +27,11 @@ const Signup = () => {
       {roleBasedForm[role]}
     </>
   );
+};
+
+Signup.propTypes = {
+  countries: PropTypes.arrayOf(PropTypes.shape()),
+  ports: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 export default Signup;

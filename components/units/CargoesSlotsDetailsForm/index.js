@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { addMonths } from 'date-fns';
 
@@ -11,8 +10,7 @@ import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { getGeneralDataSelector } from '@/store/selectors';
-import { countriesOptions, getFilledArray, removeByIndex } from '@/utils/helpers';
+import { getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
@@ -24,18 +22,15 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     formState: { errors, isSubmitting },
   } = useHookForm();
 
-  const { ports } = useSelector(getGeneralDataSelector);
-
   const [cargoesState, setCargoesState] = useState({
-    cargoesCount: data?.countOfCargoes ?? 0,
-    cargoes: data?.listOfCargoes ?? [],
-    cargoesPortsOptions: countriesOptions(ports?.allPorts) ?? [],
+    cargoesCount: data?.countOfCargoes,
+    cargoes: data?.listOfCargoes,
   });
 
   const [helperText, setHelperText] = useState('');
   const isApplied = watch('applySlots');
 
-  const { cargoesCount, cargoesPortsOptions, cargoes } = cargoesState;
+  const { cargoesCount, cargoes } = cargoesState;
 
   const handleChangeState = (key, value) =>
     setCargoesState((prevState) => ({
@@ -93,7 +88,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   };
 
   useEffect(() => {
-    const numberOfCargoes = cargoes.length > 0 ? cargoes.length : '';
+    const numberOfCargoes = cargoes?.length > 0 ? cargoes.length : '';
 
     setValue('numberOfCargoes', numberOfCargoes);
     setValue('applySlots', Boolean(numberOfCargoes));
@@ -148,7 +143,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               name={`${fieldName}.port`}
               label="Load port"
               errorMsg={error?.port?.message}
-              options={cargoesPortsOptions}
+              options={data?.ports}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
               customStyles={{
                 className: 'w-96 3md:w-72 mx-2.5',
@@ -180,7 +175,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
         );
       })}
 
-      {cargoes.length > 0 && (
+      {cargoes?.length > 0 && (
         <div className="flex justify-between mb-5">
           <Button
             buttonProps={{

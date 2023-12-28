@@ -1,21 +1,20 @@
 import AuthLayout from '@/layouts/AuthLayout';
 import { ROUTES } from '@/lib';
-import Providers from '@/providers';
 
-export default async function RootLayout(props) {
-  const { children } = props;
+export default async function RootLayout({ children }) {
   const navigation = {
     placeholder: 'Already have an account?',
     contrasted: true,
     cta: 'Log in',
     path: ROUTES.LOGIN,
   };
+
   return (
     <AuthLayout
       navigation={navigation}
       containerClass="grid place-items-center 3md:place-items-start 3md:mr-20 xl:mr-40 grid-cols-1 3md:grid-cols-2"
     >
-      <Providers loader="page">{children}</Providers>
+      {children}
     </AuthLayout>
   );
 }

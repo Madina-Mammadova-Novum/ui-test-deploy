@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -31,7 +32,7 @@ import {
 import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
-const ChartererRegistrationForm = () => {
+const ChartererRegistrationForm = ({ countries, ports }) => {
   const [sameAddress, setSameAddress] = useState(false);
   const [captcha, setCaptcha] = useState('');
 
@@ -96,17 +97,22 @@ const ChartererRegistrationForm = () => {
         </Step>
         <Divider className="mt-5" />
         <Step title="Step #4: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
-          <CompanyAddresses />
+          <CompanyAddresses countries={countries} />
         </Step>
         <Divider className="mt-5" />
         <Step title="Step #5: Recent Chartering Experience" titleClass="pt-5" containerClass="flex flex-col gap-5">
-          <CargoesSlotsDetails applyHelper />
+          <CargoesSlotsDetails applyHelper data={{ ports }} />
         </Step>
         <TermsAndConditions />
         <Captcha onChange={setCaptcha} />
       </FormManager>
     </FormProvider>
   );
+};
+
+ChartererRegistrationForm.propTypes = {
+  countries: PropTypes.arrayOf(PropTypes.shape()),
+  ports: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 export default ChartererRegistrationForm;
