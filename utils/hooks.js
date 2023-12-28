@@ -276,7 +276,13 @@ export const useRefreshSession = () => {
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
-    const interval = setInterval(() => updateSession(), 1000 * 60);
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible' && data?.accessToken) {
+        updateSession();
+      }
+    }, 1000 * 60);
+
+    // Clear the interval when the component unmounts
     return () => clearInterval(interval);
   }, [updateSession]);
 };

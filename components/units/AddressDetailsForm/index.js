@@ -7,7 +7,7 @@ import { AddressDetailsFormPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input } from '@/elements';
 import { getCities } from '@/services';
-import { convertDataToOptions, countriesOptions } from '@/utils/helpers';
+import { convertDataToOptions } from '@/utils/helpers';
 
 const AddressDetails = ({ title, type, countries = [] }) => {
   const {
@@ -30,11 +30,14 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   const handleCountryChange = async (data) => {
     clearErrors([`${type}Country`, `${type}City`]);
 
-    const { value: countryId } = data;
-    const { options } = await fetchCities(countryId);
-
     setValue(`${type}Country`, data);
     setValue(`${type}City`, null);
+
+    setDisabled(true);
+    setCities([]);
+
+    const { value: countryId } = data;
+    const { options } = await fetchCities(countryId);
 
     if (options.length > 0) {
       setCities(options);
@@ -53,27 +56,19 @@ const AddressDetails = ({ title, type, countries = [] }) => {
     }
   }, [getValues, type]);
 
-  const options = countriesOptions(countries);
-
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
         <div className="grid grid-cols-2 gap-5">
-          <FormDropdown
-            name={`${type}Country`}
-            label="Country"
-            options={options}
-            onChange={handleCountryChange}
-            async
-          />
+          <FormDropdown name={`${type}Country`} label="Country" options={countries} onChange={handleCountryChange} />
           <FormDropdown
             label="City"
             name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
             disabled={disabled}
-            async
+            asyncCall={disabled}
           />
           <Input
             {...register(`${type}Province`)}
