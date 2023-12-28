@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -31,7 +32,7 @@ import {
 import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
-const OwnerRegistrationForm = () => {
+const OwnerRegistrationForm = ({ countries }) => {
   const [sameAddress, setSameAddress] = useState(false);
   const [captcha, setCaptcha] = useState('');
 
@@ -98,13 +99,17 @@ const OwnerRegistrationForm = () => {
         </Step>
         <Divider />
         <Step title="Step #5: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
-          <CompanyAddresses />
+          <CompanyAddresses countries={countries} />
         </Step>
         <TermsAndConditions />
         <Captcha onChange={setCaptcha} />
       </FormManager>
     </FormProvider>
   );
+};
+
+OwnerRegistrationForm.propTypes = {
+  countries: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 export default OwnerRegistrationForm;
