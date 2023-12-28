@@ -20,7 +20,7 @@ import { fetchPrefilledDataToUpdate } from '@/store/entities/fleets/actions';
 import { clearPrefilledState, refetchFleets } from '@/store/entities/fleets/slice';
 import { fleetsSelector } from '@/store/selectors';
 import { ModalHeader } from '@/units';
-import { convertDataToOptions, getValueWithPath, parseErrorMessage } from '@/utils/helpers';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
@@ -124,7 +124,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       closeModal();
     }
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
   };
 
@@ -151,7 +151,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
           options: convertDataToOptions({ data: tankerCategoryOneData }, 'id', 'name'),
         });
       }
-      if (categoryOneError) console.log(categoryOneError);
+      if (categoryOneError) console.error(categoryOneError);
     }
 
     if (key === 'tankerCategoryOne') {
@@ -167,7 +167,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
           options: convertDataToOptions({ data: tankerCategoryTwoData }, 'id', 'name'),
         });
       }
-      if (categoryTwoError) console.log(categoryTwoError);
+      if (categoryTwoError) console.error(categoryTwoError);
     }
   };
 

@@ -625,15 +625,11 @@ export const prefilledSearchDataAdapter = ({ data }) => {
     name: dischargeTerminalName,
     port: { id: dischargePortId, name: dischargePortName, locode: dischargePortLocode } = {},
   } = dischargeTerminal;
-  const prefilledProducts = products.reduce(
-    (_, curr, index) => ({
-      [`products[${index + 1}].product`]: { label: curr.productName, value: curr.id },
-      [`products[${index + 1}].density`]: curr.density,
-      [`products[${index + 1}].tolerance`]: curr.tolerance,
-      [`products[${index + 1}].quantity`]: curr.minQuantity,
-    }),
-    {}
-  );
+  const prefilledProducts = products.reduce((resulted, curr, index) => {
+    resulted[`products[${index + 1}].product`] = { label: curr.productName, value: curr.id };
+    resulted[`products[${index + 1}].density`] = curr.density;
+    return resulted;
+  }, {});
 
   return {
     laycanStart,

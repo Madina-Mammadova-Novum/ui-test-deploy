@@ -1,11 +1,11 @@
 'use client';
 
-import { useSelector } from 'react-redux';
+import { AccountContainerPropTyes } from '@/lib/types';
 
-import { getSidebarSelector } from '@/store/selectors';
+import { useExtraData } from '@/utils/hooks';
 
-const AccountContainer = ({ children }) => {
-  const { collapsed } = useSelector(getSidebarSelector);
+export default function AccountContainer({ children, role = null }) {
+  const { collapsed } = useExtraData({ role });
 
   return (
     <div
@@ -16,6 +16,6 @@ const AccountContainer = ({ children }) => {
       {children}
     </div>
   );
-};
+}
 
-export default AccountContainer;
+AccountContainer.propTypes = AccountContainerPropTyes;

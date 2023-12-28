@@ -2,28 +2,28 @@
 
 import { useEffect, useState } from 'react';
 import ReactCountryFlag from 'react-country-flag';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { ChartererInformationContentPropTypes } from '@/lib/types';
 
 import { chartererInformationAdapter } from '@/adapters/vessel';
 import { Loader, TextRow, Title } from '@/elements';
 import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
 
 const NegotiatingChartererInformation = ({ offerId }) => {
   const [loading, setLoading] = useState(true);
   const [chartererInformation, setChartererInformation] = useState([]);
 
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(offerId, session?.role);
+      const { status, data, error } = await getOfferDetails(offerId, role);
       if (status === 200) {
         setChartererInformation(chartererInformationAdapter(data));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

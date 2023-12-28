@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -11,8 +11,6 @@ import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deactivateAccount } from '@/services/account';
-import { OngoingAlert } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const state = {
@@ -24,8 +22,6 @@ const schema = yup.object({
 });
 
 const DeactivateAccountForm = ({ title, closeModal }) => {
-  const [hasOngoingDeals, setHasOngoingDeals] = useState(false);
-
   const methods = useHookFormParams({ state, schema });
 
   const {
@@ -45,15 +41,12 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
     if (!error) {
       successToast(message);
       closeModal();
-    } else if (error?.errors.includes('ongoing deal')) {
-      setHasOngoingDeals(true);
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast('Bad request', error.message);
     }
   };
 
   const printContnet = useMemo(() => {
-    if (hasOngoingDeals) return <OngoingAlert title={title} text="deactivate" onClose={closeModal} />;
     return (
       <FormProvider {...methods}>
         <ModalFormManager
@@ -88,7 +81,7 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
         </ModalFormManager>
       </FormProvider>
     );
-  }, [hasOngoingDeals, title, errors.password?.message, isSubmitting, closeModal, onSubmit, handlePassword]);
+  }, [title, errors.password?.message, isSubmitting, closeModal, onSubmit, handlePassword]);
 
   return printContnet;
 };

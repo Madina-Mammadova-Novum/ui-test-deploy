@@ -1,4 +1,5 @@
 import delve from 'dlv';
+// import { revalidatePath } from 'next/cache';
 
 import { refreshTokenResponseAdapter } from '@/adapters/user'; // identityHandler,
 import { ROUTES } from '@/lib';
@@ -15,6 +16,8 @@ export default async function handler(req, res) {
   }
 
   req.body = setRefreshToken(refreshToken);
+
+  // revalidatePath('/');
 
   return responseHandler({
     req,

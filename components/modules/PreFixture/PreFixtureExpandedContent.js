@@ -1,9 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
-import { useSession } from 'next-auth/react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
@@ -13,8 +11,8 @@ import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { extendCountdown } from '@/services/offer';
 import { updateCountdown } from '@/store/entities/pre-fixture/slice';
+import { getUserDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -32,13 +30,13 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
   const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
-    const { error, message: successMessage } = await extendCountdown({ offerId, role: session?.role });
+    const { error, message: successMessage } = await extendCountdown({ offerId, role });
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     } else {
       successToast(successMessage);
       setAllowCountdownExtension(false);

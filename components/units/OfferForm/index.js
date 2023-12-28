@@ -20,21 +20,21 @@ const OfferForm = ({ children, handleSubmit = () => {}, handleValidationError = 
   const {
     searchData: { products = [], cargoType },
   } = useSelector(searchSelector);
+
   const methods = useHookFormParams({
     schema,
     state: {
       cargoType,
       ...products
         .filter((product) => product)
-        .reduce(
-          (_, curr, index) => ({
-            [`products[${index}].product`]: curr.product,
-            [`products[${index}].density`]: curr.density,
-            [`products[${index}].tolerance`]: curr.tolerance,
-            [`products[${index}].quantity`]: curr.quantity * (1 - curr.tolerance / 100),
-          }),
-          {}
-        ),
+        .reduce((res, curr, index) => {
+          res[`products[${index}].product`] = curr.product;
+          res[`products[${index}].density`] = curr.density;
+          res[`products[${index}].tolerance`] = curr.tolerance;
+          res[`products[${index}].quantity`] = curr.quantity * (1 - curr.tolerance / 100);
+
+          return res;
+        }, {}),
     },
   });
 

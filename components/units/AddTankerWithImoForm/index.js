@@ -39,7 +39,7 @@ const AddTankerWithImoForm = ({
     const { data, error = {} } = await getQ88DataByImo({ imo: formData.imo });
     const { errors: { Imo = [] } = {} } = error || {};
     if (Imo[0] === EXISTING_VESSEL_ERROR) {
-      errorToast(Imo);
+      errorToast('Bad request', Imo);
       return;
     }
     setQ88({ ...data, imo: formData.imo });

@@ -1,34 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+// import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
-import { AccountTools, TankerSearch } from '@/modules';
+// import { AccountTools, TankerSearch } from '@/modules';
+import { TankerSearch } from '@/modules';
 import Providers from '@/providers';
-import { Tabs } from '@/units';
+// import { Tabs } from '@/units';
 
-const tabs = [
-  {
-    value: 'search',
-    label: 'Search',
-  },
-  { value: 'tools', label: 'Tools' },
-];
+// const tabs = [
+//   {
+//     value: 'search',
+//     label: 'Search',
+//   },
+//   { value: 'tools', label: 'Tools' },
+// ];
 
 export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
-  const [activeTab, setActiveTab] = useState('search');
+  // const [activeTab, setActiveTab] = useState('search');
 
-  const dataByTab = {
-    search: <TankerSearch />,
-    tools: (
-      <AccountTools className="flex [&>*:first-child]:xlMax:w-full [&>*:nth-child(2)]:xlMax:w-full [&>*:first-child]:w-1/4 [&>*:nth-child(2)]:w-3/4 justify-center" />
-    ),
-  };
+  // const dataByTab = {
+  //   search: <TankerSearch />,
+  //   tools: (
+  //     <AccountTools className="flex [&>*:first-child]:xlMax:w-full [&>*:nth-child(2)]:xlMax:w-full [&>*:first-child]:w-1/4 [&>*:nth-child(2)]:w-3/4 justify-center" />
+  //   ),
+  // };
 
-  const handleActiveTab = ({ target }) => setActiveTab(target.value);
+  // const handleActiveTab = ({ target }) => setActiveTab(target.value);
 
   const handleClickScroll = () => {
     const elementToScroll = document.getElementById('how-it-works');
@@ -51,8 +52,10 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
           customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
           onClick={handleClickScroll}
         />
-        <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
-        <Providers loader="component">{dataByTab[activeTab]}</Providers>
+        {/* <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" /> */}
+        <Providers loader="search">
+          <TankerSearch />
+        </Providers>
       </div>
     </section>
   );

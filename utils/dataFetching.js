@@ -15,7 +15,7 @@ export function getData(path) {
     path: getApiPublicURL(path),
     requestMethod: 'GET',
     options: {
-      cache: 'no-cache',
+      cache: 'no-store',
     },
   });
 }
@@ -34,7 +34,10 @@ export function postData(path, body, options) {
     path: getApiPublicURL(path),
     requestMethod: 'POST',
     body,
-    options,
+    options: {
+      cache: 'no-store',
+      ...options,
+    },
   });
 }
 

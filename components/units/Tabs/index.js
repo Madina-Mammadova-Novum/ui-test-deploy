@@ -12,7 +12,7 @@ const Tabs = ({ tabs, customStyles = '', activeTab, onClick }) => {
           value={value}
           onClick={onClick}
           className={classnames(
-            'whitespace-nowrap min-w-16 w-full h-7 px-5 rounded-md',
+            'whitespace-nowrap min-w-16 h-7 px-5 rounded-md',
             value === activeTab && 'bg-white text-blue shadow-2xmd'
           )}
         >

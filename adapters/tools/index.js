@@ -1,12 +1,24 @@
 const rangeDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { speed, fromPort, toPort } = data;
+  const { speed, fromPort, toPort, additionalPorts } = data;
+
+  const filteredPorts = additionalPorts?.filter(({ port }) => port);
+
+  const additional = filteredPorts.map(({ port }, index) => {
+    return {
+      toPortId: port.value,
+      order: index + 1,
+    };
+  });
 
   return {
     speed,
     fromPortId: fromPort?.value,
-    toPortId: toPort?.value,
+    toPorts:
+      additional.length > 0
+        ? [{ toPortId: toPort.value, order: 0 }, ...additional]
+        : [{ toPortId: toPort.value, order: 0 }],
   };
 };
 

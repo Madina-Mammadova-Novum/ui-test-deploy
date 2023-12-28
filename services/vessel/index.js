@@ -12,7 +12,9 @@ import { generateMessageByActionType } from '@/utils/helpers';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
+
   const response = await postData(`vessels/search`, body);
+
   return {
     ...response,
   };

@@ -1,5 +1,6 @@
 import delve from 'dlv';
 
+import { errorsAdapter } from '@/adapters';
 import { responseAdapter, responseErrorAdapter } from '@/adapters/response';
 import { SYSTEM_ERROR } from '@/lib/constants';
 import { formatErrors } from '@/utils/helpers';
@@ -7,7 +8,6 @@ import { formatErrors } from '@/utils/helpers';
 /**
   Handles errors returned by the API request
   @function requestErrorHandler
-  @param {number} status - The status code of the error
   @param {string|object} message - The error message or an object with the error messages and title
   @param {Array} errors - An array of error messages
   @returns {object} - An object with the error message and error messages
@@ -24,12 +24,14 @@ export const requestErrorHandler = (status, message, errors) => {
 
   if (typeof errors === 'object') {
     return {
-      message: errors.title || statusMessage,
-      errors: formatErrors(errors?.errors ?? errors),
+      status,
+      message: errors.Title || statusMessage,
+      errors: formatErrors(errors?.Errors ?? errors),
     };
   }
 
   return {
+    status,
     message: errorMessage !== null ? errorMessage : statusMessage,
     errors: responseErrorAdapter(errors),
   };
@@ -85,25 +87,21 @@ const requestOptions = ({ requestMethod, body = null, options }) => {
  */
 export const apiHandler = async (options) => {
   try {
-    const path = delve(options, 'path');
-    const customErrorHandling = delve(options, 'customErrorHandling');
-    const response = await fetch(path, requestOptions(options));
-    const status = delve(response, 'status');
-    const ok = delve(response, 'ok');
-    const statusText = delve(response, 'statusText');
+    const response = await fetch(options.path, requestOptions(options));
+
     let responseBody = await response.text();
 
     if (responseBody) {
       responseBody = JSON.parse(responseBody);
     }
 
-    const result = ok ? responseBody : null;
-    const error = ok ? null : requestErrorHandler(status, statusText, responseBody);
+    const result = response.ok ? responseBody : null;
+    const error = response.ok ? null : requestErrorHandler(response.status, response.statusText, responseBody);
 
     return {
-      status,
+      status: response.status,
       ...responseAdapter(result),
-      error: customErrorHandling && !ok ? responseBody : error,
+      error: options.customErrorHandling && !response.ok ? responseBody : error,
     };
   } catch (error) {
     return requestErrorHandler(500, 'External server error', error);
@@ -119,12 +117,8 @@ export const apiHandler = async (options) => {
   @param {Array} errors - An array of error messages
   @returns {object} - A JSON response with the error message, error messages, status, data, and meta properties
  */
-export const errorHandler = (res, status, message, errors = []) => {
-  const error = {
-    message: message || SYSTEM_ERROR,
-    errors,
-  };
-  return res.status(status).json({ error, data: null, meta: null, status });
+export const errorHandler = (res, status, error) => {
+  return res.status(status).json({ error: errorsAdapter({ error }), data: null, meta: null, status });
 };
 
 /**
@@ -151,16 +145,13 @@ export const responseHandler = async ({
       customErrorHandling,
     });
 
-    if (error) {
-      const { message, errors } = error;
-      const errorMessage = status === 500 ? 'External server error' : message ?? error;
-      return errorHandler(res, status, errorMessage, errors);
-    }
+    if (error) errorHandler(res, status, error);
+
     const responseData = await dataAdapter({ data });
     const { data: responseDataAdapted } = responseAdapter(responseData);
+
     return res.status(status).json({ status, data: responseDataAdapted, error, ...rest });
   } catch (error) {
-    console.error(error);
-    return errorHandler(res, 500, error.message, [error]);
+    return errorHandler(res, 500, error.message, error);
   }
 };

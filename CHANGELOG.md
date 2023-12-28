@@ -2,27 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.5.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.5.0...v0.5.1) (2023-12-14)
+## [1.0.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.5.1...v1.0.0) (2023-12-28)
 
 
 ### Bug Fixes
 
-* bugs ([ae398d2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ae398d2f83492e320e3d7c9562cf2498503477d1))
-* bugs ([fefad70](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fefad70fca1f31b324d3ce1895c12e04132e65bf))
-* delete/deactivate bug with styles issues ([9e90a28](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9e90a2872fe47ddf3a33c36d48cbad6351b22d61))
-* freight formatt issue ([fa71e53](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fa71e53b72b78f947be84dc2c70f48e9da32aeb0))
-* hydrate-component with bug-issue ([01a03d5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/01a03d5608f87f4e20be8d83b6b5695aed1ef2dd))
-* input readonly props ([4834d0a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4834d0afe30b84170a1c13f42720305af65d4f13))
-* negotiating ([fc5d4d3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fc5d4d39ba3bb4051abfbdc6afc8b64dc9367eb8))
-* node-package ([f4b0a29](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f4b0a294c19350ab4b987468de56b1410714d5e8))
-* onsubs countdown freeze and extension ([e8ea498](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e8ea498e5c2a90419c22e6fb8eefbfc9fb1ccdde))
-* refresh-token ([b351218](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b35121854834ed3ac75d4c54b639c262bf929736))
-* refresh-token-flow ([3ea0c6c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3ea0c6c69dee26c846bca3a49f4211dafa48b8de))
+* base-bugs ([c9b2c90](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/c9b2c909bd5307b2e3df265d21e7b00a6d4d670e))
+* bug ([3310b7a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3310b7a0eb4fab7fdd273df4da02c3368b063335))
+* bug-fixing ([b393349](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b393349674ec00171f37c6893d5a5d5dcb824331))
+* bug-session ([80023d8](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/80023d87324fcdd1b32c6e0409ddd6626424f8dd))
+* bugs ([a592c86](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/a592c867ebbecb3badffb072fbe0b0fc5aa75495))
+* bugs and added new session hooks ([6efbe1f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/6efbe1f5cfd20d549cb91ca72ac5c7370e95ec4b))
+* build ([8505848](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/8505848333522a5e36476b385fb2f96a3ae8862f))
+* chat-modals ([1228e13](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1228e13c8809b63d7357a9814524dc7d801232aa))
+* chat-modals ([7eed361](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/7eed361462af8ac562d4ece1dbfeed7fc716d5b7))
+* error adapter ([dfaf291](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/dfaf291921c00bb0f6176308fbe72a274dea4c8c))
+* error-handler ([ea1dc90](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ea1dc90ef17a9c7bbfe43ac4c638580f8e3232ab))
+* error-message ([82c977c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/82c977cf37e22aadb618415816211d2225d5f5c4))
+* manual refresh ([31114cd](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/31114cd26ea98394039f8e030a2665c0d344823c))
+* negotiating-role-based ([ead6dea](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ead6deab0e0538642bb226e5cc237bfb78372951))
+* on-subs flow with token error ([a0a70e4](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/a0a70e41d631157a2563f4b49a0c48ceb5305edd))
+* refactoring session-update with dividing layout by ssr/csr ([f27a45d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f27a45da775c3e18bf59eb79bd1851866eea9293))
+* refresh-hook ([4242f49](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4242f494d5aab81bfd1ce15f67e807a203328070))
+* refresh-token-client-update ([d619da1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d619da18158d4867c63dcf33e0f85afac2c40d4f))
+* refresh-token-ssr ([27967f2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/27967f210cfe9d161abc40f09b58aa298849c10b))
+* revert-to-csr ([d15f4c6](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/d15f4c61094ed5e0bd678f2269b516b4cdb3720e))
+* revert-to-template ([1d570d3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/1d570d3c57b1ec03a009af5d80205c168283a1ef))
+* rm-tools from homepage ([cd83f5f](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/cd83f5fba1aebb063835fc3384b45ea5ef18402f))
+* session-provider-props ([ab89182](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ab8918270c8f417510546292645c46d5f1bb5dbe))
+* session-store-wrappers ([ea62cb5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ea62cb52ad5ad96d95982ac06609e73c2533ed83))
+* signout-cleaner ([529670d](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/529670d6cfb0e4b61f7898770305cd152b67c1eb))
+* token ([a6d891e](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/a6d891e03e1f8e47b3580932d38fa970cda77f84))
+* token-issue ([aad87a5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/aad87a595161aa6e37c81ff904cd4439c963d569))
 
+### [0.5.1](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.5.0...v0.5.1) (2023-12-14)
+
+### Bug Fixes
+
+- bugs ([ae398d2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/ae398d2f83492e320e3d7c9562cf2498503477d1))
+- bugs ([fefad70](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fefad70fca1f31b324d3ce1895c12e04132e65bf))
+- delete/deactivate bug with styles issues ([9e90a28](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/9e90a2872fe47ddf3a33c36d48cbad6351b22d61))
+- freight formatt issue ([fa71e53](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fa71e53b72b78f947be84dc2c70f48e9da32aeb0))
+- hydrate-component with bug-issue ([01a03d5](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/01a03d5608f87f4e20be8d83b6b5695aed1ef2dd))
+- input readonly props ([4834d0a](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/4834d0afe30b84170a1c13f42720305af65d4f13))
+- negotiating ([fc5d4d3](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/fc5d4d39ba3bb4051abfbdc6afc8b64dc9367eb8))
+- node-package ([f4b0a29](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/f4b0a294c19350ab4b987468de56b1410714d5e8))
+- onsubs countdown freeze and extension ([e8ea498](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/e8ea498e5c2a90419c22e6fb8eefbfc9fb1ccdde))
+- refresh-token ([b351218](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/b35121854834ed3ac75d4c54b639c262bf929736))
+- refresh-token-flow ([3ea0c6c](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/3ea0c6c69dee26c846bca3a49f4211dafa48b8de))
 
 ### Refactors
 
-* code style ([25b3dd2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/25b3dd22f14d57258738f9488ce2bb86dc3533ad))
+- code style ([25b3dd2](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/commit/25b3dd22f14d57258738f9488ce2bb86dc3533ad))
 
 ## [0.5.0](https://gitlab.otakoyi.com/shiplink/shiplink-basic-project/compare/v0.4.7...v0.5.0) (2023-12-06)
 

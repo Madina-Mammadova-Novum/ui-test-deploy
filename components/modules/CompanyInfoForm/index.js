@@ -15,7 +15,7 @@ import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
-import { getRoleIdentity, parseErrorMessage } from '@/utils/helpers';
+import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
@@ -49,7 +49,7 @@ const CompanyInfoForm = ({ closeModal }) => {
       successToast(null, message);
     }
 
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
     return null;
   };
 

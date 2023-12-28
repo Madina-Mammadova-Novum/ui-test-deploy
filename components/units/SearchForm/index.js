@@ -23,6 +23,7 @@ const schema = yup.object({
 const SearchForm = ({ onSubmit }) => {
   const [productState, setProductState] = useState([1]);
   const { prefilledSearchData } = useSelector(searchSelector);
+
   const methods = useHookFormParams({ schema, state: prefilledSearchData });
   const handleResetFields = () => {
     methods.reset((formValues) => {
@@ -33,7 +34,7 @@ const SearchForm = ({ onSubmit }) => {
   };
 
   return (
-    <div className="bg-white rounded-base shadow-xmd p-5 mt-5 w-full relative">
+    <div className="bg-white rounded-base shadow-2xmd p-5 mt-5 w-full relative">
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData)}

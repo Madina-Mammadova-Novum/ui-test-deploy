@@ -12,7 +12,6 @@ import { Input, Title } from '@/elements';
 import { createFleetSchema } from '@/lib/schemas';
 import { createFleet } from '@/services/fleets';
 import { refetchFleets } from '@/store/entities/fleets/slice';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -30,9 +29,7 @@ const CreateFleetForm = ({ closeModal }) => {
       successToast(successMessage);
       closeModal();
     }
-    if (error) {
-      errorToast(parseErrorMessage(error));
-    }
+    if (error) errorToast(error?.title, error?.message);
   };
 
   return (

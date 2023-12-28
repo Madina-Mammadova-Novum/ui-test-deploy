@@ -330,12 +330,11 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return [SYSTEM_ERROR];
+  if (!errors) return SYSTEM_ERROR;
 
+  // eslint-disable-next-line no-unused-vars
   return Object.entries(errors).map(([key, value]) => {
-    // eslint-disable-next-line no-param-reassign
-    if (key === '_' || key === '') key = 'Exeption';
-    return `${key}: ${value}`;
+    return `${value}`;
   })[0];
 };
 
@@ -622,4 +621,32 @@ export const freightFormatter = ({ value, format }) => {
   };
 
   return response[format];
+};
+
+export function convertKeysToLowerCase(obj) {
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+
+  return Object.keys(obj).reduce((newObj, key) => {
+    const newKey = key.toLowerCase();
+    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : convertKeysToLowerCase(obj[key]);
+    return newObj;
+  }, {});
+}
+
+export const errorMessage = ({ errors }) => {
+  if (errors?.message === 'Internal server error') {
+    return {
+      message: 'External server error',
+    };
+  }
+
+  if (errors?.message === 'Bad Request') {
+    return {
+      message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
+    };
+  }
+
+  return { message: formatErrors(errors?.errors) };
 };

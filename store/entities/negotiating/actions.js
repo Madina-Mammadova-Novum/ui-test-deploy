@@ -16,12 +16,12 @@ export const fetchUserNegotiating = (() => {
     const { role } = getState().user;
 
     if (!totalPages || currentPerPage !== perPage) {
-      const { recordsTotal, recordsFiltered } = await getRoleBasedNegotiating({ page, perPage });
+      const { recordsTotal, recordsFiltered } = await getRoleBasedNegotiating({ role, page, perPage });
       totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       currentPerPage = perPage;
     }
 
-    const { data } = await getRoleBasedNegotiating({ page, perPage });
+    const { data } = await getRoleBasedNegotiating({ role, page, perPage });
 
     const generator = getOffersById({ data, role });
     const { value } = generator.next();

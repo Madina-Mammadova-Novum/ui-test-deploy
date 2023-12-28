@@ -11,7 +11,6 @@ import { Divider, PasswordInput, Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
 import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const PasswordInfoForm = ({ closeModal }) => {
@@ -35,7 +34,7 @@ const PasswordInfoForm = ({ closeModal }) => {
       setValue('currentPassword', '');
     }
 
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
     return true;
   };
 

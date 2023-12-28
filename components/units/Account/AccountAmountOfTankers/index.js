@@ -1,19 +1,18 @@
 'use client';
 
 import { useMemo } from 'react';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { TextRow } from '@/elements';
-import { ROLES } from '@/lib';
+import { getUserDataSelector } from '@/store/selectors';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
 import ModalWindow from '@/units/ModalWindow';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const AccountAmountOfTankers = ({ data, total }) => {
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
 
-  const isCharterer = session?.role === ROLES.CHARTERER;
-  const isOwner = session?.role === ROLES.OWNER;
+  const { isCharterer, isOwner } = getRoleIdentity({ role });
 
   const printRoleBasedInfoInfo = useMemo(() => {
     if (isCharterer) {

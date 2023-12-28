@@ -18,7 +18,7 @@ import { getPorts } from '@/services/port';
 import { addVesselManually, getVesselCategoryOne, getVesselCategoryTwo, getVesselTypes } from '@/services/vessel';
 import { refetchFleets } from '@/store/entities/fleets/slice';
 import { ImoNotFound, ModalHeader } from '@/units';
-import { convertDataToOptions, countriesOptions, getValueWithPath, parseErrorMessage } from '@/utils/helpers';
+import { convertDataToOptions, countriesOptions, getValueWithPath } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
@@ -88,7 +88,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       setCountries(countriesOptions(countriesData));
       setPorts(countriesOptions(portsData));
       if (tankerTypesError || countriesError || portsError)
-        console.log(tankerTypesError || countriesError || portsError);
+        console.error(tankerTypesError || countriesError || portsError);
 
       if (Object.keys(q88State).length > 1) {
         const validPrefilledOptions = {};
@@ -142,7 +142,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       successToast(message);
       closeModal();
     }
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
   };
 
   const handleChange = async (key, value) => {
@@ -168,7 +168,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           options: convertDataToOptions({ data: tankerCategoryOneData }, 'id', 'name'),
         });
       }
-      if (categoryOneError) console.log(categoryOneError);
+      if (categoryOneError) console.error(categoryOneError);
     }
 
     if (key === 'tankerCategoryOne') {
@@ -184,7 +184,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           options: convertDataToOptions({ data: tankerCategoryTwoData }, 'id', 'name'),
         });
       }
-      if (categoryTwoError) console.log(categoryTwoError);
+      if (categoryTwoError) console.error(categoryTwoError);
     }
   };
 

@@ -2,9 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
@@ -15,8 +14,8 @@ import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
+import { getUserDataSelector } from '@/store/selectors';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const tabs = [
@@ -39,7 +38,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
 
   const methods = useHookFormParams({ schema });
 
@@ -48,7 +47,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
   const handleSubmit = async (formData) => {
     const { message: successMessage, error } = await acceptOffer({
       data: { ...formData, offerId: itemId },
-      role: session?.role,
+      role,
     });
 
     if (!error) {
@@ -56,7 +55,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
       dispatch(fetchUserNegotiating());
       closeModal();
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
   };
 

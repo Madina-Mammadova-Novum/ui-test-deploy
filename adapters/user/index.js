@@ -35,7 +35,7 @@ export function userDetailsAdapter({ data, role }) {
 function userPersonalDetailsAdapter({ data }) {
   if (!data) return {};
 
-  const { name, surname, email, phone, secondaryPhone } = data;
+  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest } = data;
 
   return {
     personalDetails: {
@@ -45,6 +45,7 @@ function userPersonalDetailsAdapter({ data }) {
       email,
       primaryPhone: formattedPhoneNumber(phone),
       secondaryPhone: formattedPhoneNumber(secondaryPhone),
+      pendingRequest: hasPendingPersonalInfoUpdateRequest,
     },
   };
 }
@@ -513,18 +514,22 @@ export function decodedTokenAdapter(token) {
 export function tokenAdapter({ data }) {
   if (!data) return null;
 
-  const { exp, role } = decodedTokenAdapter(data.access_token);
+  if (data.access_token) {
+    const { role } = decodedTokenAdapter(data.access_token);
 
-  return {
-    accessToken: data.access_token,
-    refreshToken: data.refresh_token,
-    expires: exp * 1000,
-    role: userRoleAdapter({ data: role }),
-  };
+    return {
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+      expires: data.expires_in * 1000,
+      role: userRoleAdapter({ data: role }),
+    };
+  }
+
+  return null;
 }
 
 export function sessionAdapter({ session, token }) {
-  if (!token) throw new Error('UNATHORIZED');
+  if (!token) return null;
 
   if (token.accessToken) {
     const { sub, ...rest } = decodedTokenAdapter(token.accessToken);
