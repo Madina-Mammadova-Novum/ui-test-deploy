@@ -49,7 +49,7 @@ const TankerSearch = ({ title }) => {
 
     if (error) {
       handleChangeState('request', false);
-      errorToast('Bad request', error.title);
+      errorToast(error.title, error.message);
     }
   };
 

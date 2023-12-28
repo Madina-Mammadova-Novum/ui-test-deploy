@@ -648,5 +648,5 @@ export const errorMessage = ({ errors }) => {
     };
   }
 
-  return { message: errors };
+  return { message: formatErrors(errors?.errors) };
 };
