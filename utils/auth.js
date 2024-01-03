@@ -6,6 +6,7 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
+  jwt: { maxAge: 60 },
   session: { strategy: 'jwt', maxAge: 3600 },
   pages: { signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}` },
   providers: [
