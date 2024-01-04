@@ -68,6 +68,7 @@ export const metaData = (props) => {
   const url = getPublicUrl(slug);
 
   return {
+    metadataBase: data?.route ?? '/',
     title,
     description,
     keywords: keywords !== null ? getKeywords(keywords) : [],
@@ -75,7 +76,6 @@ export const metaData = (props) => {
     applicationName: siteName,
     referrer: 'origin-when-cross-origin',
     // authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],
-    // colorScheme: 'dark',
     url: 'https://shiplink.oyihost.com',
     creator: 'Otakoyi',
     // publisher: 'Sebastian Markbåge',

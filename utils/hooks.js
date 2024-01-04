@@ -262,26 +262,20 @@ export const useExtraData = ({ role }) => {
 export const useRefreshSession = () => {
   const { data, update } = useSession();
 
+  const trigger = Date.now() >= data?.expires;
+
   const updateSession = async () => {
     try {
-      const { data: token, error } = await refreshAccessToken({ token: data?.refreshToken });
+      const { data: token } = await refreshAccessToken({ token: data?.refreshToken });
       await update(tokenAdapter({ data: token }));
-      if (error) {
-        throw Error(error.message);
-      }
     } catch (err) {
-      errorToast('Bad request', 'Access token was expired, please login again');
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (document.visibilityState === 'visible' && data?.accessToken) {
-        updateSession();
-      }
-    }, 1000 * 60);
-
-    // Clear the interval when the component unmounts
-    return () => clearInterval(interval);
-  }, [updateSession]);
+    if (trigger) {
+      updateSession();
+    }
+  }, [trigger]);
 };

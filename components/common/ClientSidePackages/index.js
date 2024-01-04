@@ -4,8 +4,6 @@ import { ToastContainer } from 'react-toastify';
 
 import { Hydrate } from '@/elements';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 const ClientSidePackages = () => {
   return (
     <>

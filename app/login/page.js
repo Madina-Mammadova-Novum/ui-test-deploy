@@ -6,6 +6,7 @@ import { AuthWrapper, LoginForm } from '@/modules';
 export function generateMetadata() {
   return metaData({
     data: {
+      route: ROUTES.LOGIN,
       seo: {
         metaTitle: 'Login',
       },

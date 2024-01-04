@@ -1,12 +1,14 @@
 import { portOptionsAdapter } from '@/adapters';
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { metaData } from '@/adapters/metaData';
+import { ROUTES } from '@/lib';
 import { AuthWrapper, Signup } from '@/modules';
 import { getCountries, getPorts } from '@/services';
 
 export function generateMetadata() {
   return metaData({
     data: {
+      route: ROUTES.SIGNUP,
       seo: {
         metaTitle: 'Sign Up',
       },
