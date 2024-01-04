@@ -6,6 +6,7 @@ import { AuthWrapper, ForgotPasswordForm } from '@/modules';
 export function generateMetadata() {
   return metaData({
     data: {
+      route: ROUTES.FORGOT_PASSWORD,
       seo: {
         metaTitle: 'Forgot Password',
       },

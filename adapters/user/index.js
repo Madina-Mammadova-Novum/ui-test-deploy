@@ -514,33 +514,25 @@ export function decodedTokenAdapter(token) {
 export function tokenAdapter({ data }) {
   if (!data) return null;
 
-  if (data.access_token) {
-    const { role, exp } = decodedTokenAdapter(data.access_token);
-
-    return {
-      accessToken: data.access_token,
-      refreshToken: data.refresh_token,
-      expires: exp * 1000,
-      role: userRoleAdapter({ data: role }),
-    };
-  }
-
-  return null;
+  return {
+    accessToken: data.access_token,
+    refreshToken: data.refresh_token,
+    expires: Date.now() + data.expires_in * 1000,
+  };
 }
 
 export function sessionAdapter({ session, token }) {
   if (!token) return null;
 
-  if (token.accessToken) {
-    const { sub, ...rest } = decodedTokenAdapter(token.accessToken);
+  if (token?.accessToken) {
+    const { sub, role, ...rest } = decodedTokenAdapter(token.accessToken);
 
     session.user = { ...rest };
     session.userId = sub;
     session.expires = token.expires;
     session.accessToken = token.accessToken;
     session.refreshToken = token.refreshToken;
-    session.role = token.role;
-    session.error = token.error;
+    session.role = userRoleAdapter({ data: role });
   }
 
   return session;

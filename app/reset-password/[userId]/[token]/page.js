@@ -8,6 +8,7 @@ import { AuthWrapper, ResetPasswordForm } from '@/modules';
 export function generateMetadata() {
   return metaData({
     data: {
+      route: ROUTES.RESET_PASSWORD,
       seo: {
         metaTitle: 'Reset Password',
       },
