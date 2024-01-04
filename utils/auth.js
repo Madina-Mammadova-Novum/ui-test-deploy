@@ -6,8 +6,14 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
-  session: { strategy: 'jwt' },
-  pages: { signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}` },
+  session: {
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // One day in seconds
+    updateAge: 60, // One minute in seconds
+  },
+  pages: {
+    signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}`,
+  },
   providers: [
     Credentials({
       name: 'Credentials',
