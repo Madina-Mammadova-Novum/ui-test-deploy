@@ -1,7 +1,8 @@
 import { getSession, signOut } from 'next-auth/react';
 
 import { notificationParamsAdapter } from '@/adapters/notifications';
-import { Authorization, ROUTES } from '@/lib/constants';
+import { signOutAdapter } from '@/adapters/user';
+import { Authorization } from '@/lib/constants';
 import { setNotifications } from '@/models/notificationsModel';
 import { getRtURL } from '@/utils';
 import { postData } from '@/utils/dataFetching';
@@ -18,7 +19,7 @@ export const getNotifications = async ({ data }) => {
   });
 
   if (response.status === 401) {
-    await signOut({ redirect: ROUTES.LOGIN });
+    await signOut({ ...signOutAdapter() });
   }
 
   const result = await response.text();

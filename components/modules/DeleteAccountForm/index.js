@@ -8,9 +8,9 @@ import * as yup from 'yup';
 
 import { DeleteAccountFormPropTypes } from '@/lib/types';
 
+import { signOutAdapter } from '@/adapters/user';
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
-import { ROUTES } from '@/lib';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
 import { Notes } from '@/units';
@@ -41,7 +41,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
     if (!error) {
       successToast(message);
       closeModal();
-      await signOut({ callbackUrl: ROUTES.ROOT });
+      await signOut({ ...signOutAdapter() });
     } else {
       errorToast('Bad request', error?.message);
     }

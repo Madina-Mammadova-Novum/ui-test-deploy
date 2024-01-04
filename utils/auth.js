@@ -31,6 +31,10 @@ export const AUTHCONFIG = {
   pages: {
     signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}`,
   },
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60, // One hour in seconds
+  },
   providers: [
     Credentials({
       name: 'Credentials',
