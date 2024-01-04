@@ -6,7 +6,8 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
-  session: { strategy: 'jwt' },
+  jwt: { maxAge: 60 },
+  session: { strategy: 'jwt', maxAge: 3600 },
   pages: { signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}` },
   providers: [
     Credentials({
@@ -28,10 +29,6 @@ export const AUTHCONFIG = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         return tokenAdapter({ data: user });
-      }
-
-      if (Date.now() < token?.expires) {
-        return Promise.resolve(token);
       }
 
       if (trigger === 'update') {

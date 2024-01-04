@@ -274,7 +274,6 @@ export const useRefreshSession = () => {
     }
   };
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const interval = setInterval(() => {
       if (document.visibilityState === 'visible' && data?.accessToken) {
