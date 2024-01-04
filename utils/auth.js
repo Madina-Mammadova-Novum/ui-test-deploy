@@ -6,19 +6,19 @@ import { login } from '@/services';
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
-  jwt: { maxAge: 60 },
-  session: { strategy: 'jwt', maxAge: 3600 },
+  session: { strategy: 'jwt' },
   pages: { signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}` },
   providers: [
     Credentials({
       name: 'Credentials',
       type: 'credentials',
+      credentials: {},
       async authorize(credentials) {
         const { data } = await login({ data: credentials });
 
         if (data) {
           // Any object returned will be saved in `user` property of the JWT
-          return data;
+          return tokenAdapter({ data });
         }
 
         return null;
@@ -28,7 +28,7 @@ export const AUTHCONFIG = {
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        return tokenAdapter({ data: user });
+        return { ...token, ...user };
       }
 
       if (trigger === 'update') {
