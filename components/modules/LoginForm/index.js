@@ -10,6 +10,7 @@ import { signInAdapter } from '@/adapters/user';
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
 import { loginSchema } from '@/lib/schemas';
+import { resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
@@ -25,17 +26,25 @@ const LoginForm = () => {
     register,
     setValue,
     clearErrors,
-    reset,
     formState: { errors, isSubmitting },
   } = methods;
 
+  const handleResetFields = () => {
+    methods.reset((formValues) => {
+      resetObjectFields(formValues, '');
+      return formValues;
+    });
+  };
+
   const onSubmit = async (data) => {
     const { error, url } = await signIn('credentials', signInAdapter({ data }));
+
     if (!error) {
-      reset();
+      handleResetFields();
       router.push(url);
       router.refresh();
     }
+
     if (error === 'CredentialsSignin') errorToast('Bad request', 'Incorrect email or password');
   };
 

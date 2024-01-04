@@ -14,9 +14,6 @@ export function getData(path) {
   return apiHandler({
     path: getApiPublicURL(path),
     requestMethod: 'GET',
-    options: {
-      cache: 'no-store',
-    },
   });
 }
 
@@ -35,7 +32,6 @@ export function postData(path, body, options) {
     requestMethod: 'POST',
     body,
     options: {
-      cache: 'no-store',
       ...options,
     },
   });

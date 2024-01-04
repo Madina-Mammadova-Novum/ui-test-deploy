@@ -1,9 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-/* Types */
 import { ACCOUNT } from '@/store/entities/user/types';
 
-/* Services */
 import { getChartererUserCargoes, getUserCompany, getUserProfile } from '@/services';
 import { getRoleIdentity } from '@/utils/helpers';
 
