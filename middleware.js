@@ -2,12 +2,17 @@
 import { NextResponse } from 'next/server';
 import { withAuth } from 'next-auth/middleware';
 
-import { ROLES, ROUTES } from '@/lib';
-import { checkAuthRoute } from '@/utils/helpers';
+import { decodedTokenAdapter, userRoleAdapter } from './adapters/user';
+
+import { ROUTES } from '@/lib';
+import { checkAuthRoute, getRoleIdentity } from '@/utils/helpers';
 
 export default withAuth(
   function middleware(req) {
-    const { accessToken, role } = req.nextauth.token;
+    const { accessToken } = req.nextauth.token;
+
+    const { role } = decodedTokenAdapter(accessToken);
+    const { isOwner, isCharterer } = getRoleIdentity({ role: userRoleAdapter({ data: role }) });
 
     const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
     const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
@@ -16,11 +21,11 @@ export default withAuth(
       return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
     }
 
-    if (charetererRoutes && role !== ROLES.CHARTERER) {
+    if (charetererRoutes && !isCharterer) {
       return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
     }
 
-    if (ownerRoutes && role !== ROLES.OWNER) {
+    if (ownerRoutes && !isOwner) {
       return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
     }
   },
