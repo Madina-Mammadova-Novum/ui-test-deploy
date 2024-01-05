@@ -19,7 +19,7 @@ import FieldsetHeader from '@/elements/FieldsetHeader';
 import FieldsetWrapper from '@/elements/FieldsetWrapper';
 import HoverableIcon from '@/elements/HoverableIcon';
 import HoverTooltip from '@/elements/HoverTooltip';
-import Hydrate from '@/elements/Hydrate';
+import { Hydrate } from '@/elements/Hydrate';
 import IconComponent from '@/elements/IconComponent';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
@@ -60,9 +60,9 @@ import TypingIndicator from '@/elements/TypingIndicator';
 export {
   AccordionBody,
   ReActivateButton,
-  Hydrate,
   ChatListLoader,
   Table,
+  Hydrate,
   HoverTooltip,
   ManualTooltip,
   Toggle,

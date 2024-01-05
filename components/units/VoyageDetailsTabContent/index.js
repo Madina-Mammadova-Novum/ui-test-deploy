@@ -1,12 +1,17 @@
-import React from 'react';
-import ReactCountryFlag from 'react-country-flag';
+'use client';
+
+import { useSelector } from 'react-redux';
+
+import Flag from '../Flag';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
+import { getGeneralDataSelector } from '@/store/selectors';
 
 const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
   const printPairDates = (detail) => <TextRow title={detail.key}>{detail.label}</TextRow>;
+  const { countries } = useSelector(getGeneralDataSelector);
 
   return (
     <div>
@@ -35,7 +40,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
             <div className="mt-2.5">
               {pair?.map((detail) => (
                 <TextRow title={detail.key}>
-                  <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={detail.countryCode} />
+                  <Flag data={countries} id={detail.id} className="mr-1.5" />
                   {detail.label}
                 </TextRow>
               ))}
