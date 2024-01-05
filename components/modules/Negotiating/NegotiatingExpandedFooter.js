@@ -24,7 +24,7 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, cargoId }) => {
   const { incoming, sent, failed } = offerById[cargoId];
 
   const handleSearchForAlternatives = async () => {
-    const offerId = [...incoming, ...sent, ...failed][0]?.id;
+    const offerId = [...incoming, ...sent, ...failed][2]?.id;
     const { data, errors } = await getOfferDetails(offerId, role);
 
     if (!errors) {

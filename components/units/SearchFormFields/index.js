@@ -100,14 +100,14 @@ const SearchFormFields = ({ productState, setProductState }) => {
   };
 
   const handleAddProduct = () => {
-    const availableProductIds = [1, 2, 3];
+    const availableProductIds = [0, 1, 2];
     setProductState((prevState) => [...prevState, availableProductIds.filter((el) => !prevState.includes(el))[0]]);
   };
 
   const handleRemoveProduct = (id) => {
-    setProductState((prevState) => prevState.filter((product) => product !== id));
-    unregister(`products[${id}]`);
     clearErrors(`products[${id}]`);
+    unregister(`products[${id}]`);
+    setProductState((prevState) => prevState.filter((product) => product !== id));
   };
 
   useEffect(() => {

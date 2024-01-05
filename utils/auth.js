@@ -7,9 +7,10 @@ import { login, refreshAccessToken } from '@/services';
 let isRefreshing = false;
 
 async function tokenRotation(token) {
+  if (isRefreshing) return token; // previous token if refresh in action
+
   if (Date.now() >= token?.expires) {
     isRefreshing = true; // prevent multiple calls
-
     try {
       const response = await refreshAccessToken({ token: token.refreshToken });
 
@@ -19,21 +20,17 @@ async function tokenRotation(token) {
     } catch (error) {
       return { ...token, error: 'Refresh token error' };
     } finally {
-      isRefreshing = false; // Clear flag for repeat calls
+      isRefreshing = false; // reset to re-fetch token
     }
   }
 
-  return token; // Return original token if no refresh needed
+  return token;
 }
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: `${process.env.NEXT_PUBLIC_URL}/${ROUTES.LOGIN}`,
-  },
-  session: {
-    strategy: 'jwt',
-    maxAge: 60 * 60, // One hour in seconds
   },
   providers: [
     Credentials({
@@ -54,13 +51,10 @@ export const AUTHCONFIG = {
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      if (user) {
-        return tokenAdapter({ data: user });
-      }
+      if (user) return tokenAdapter({ data: user });
 
-      if (isRefreshing) return token; // Early return if already refreshing
-
-      return Promise.resolve(tokenRotation(token));
+      // eslint-disable-next-line no-return-await
+      return await tokenRotation(token);
     },
     async session({ session, token }) {
       return sessionAdapter({ session, token });
