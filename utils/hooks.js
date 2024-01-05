@@ -6,15 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 import { getFilledArray, sortByType } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
-import { tokenAdapter } from '@/adapters/user';
 import { ROLES, SORT_OPTIONS } from '@/lib/constants';
-import { refreshAccessToken } from '@/services';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
 import { getSidebarSelector } from '@/store/selectors';
@@ -259,23 +256,23 @@ export const useExtraData = ({ role }) => {
   return { collapsed };
 };
 
-export const useRefreshSession = () => {
-  const { data, update } = useSession();
+// export const useRefreshSession = () => {
+//   const { data, update } = useSession();
 
-  const trigger = Date.now() >= data?.expires;
+//   const trigger = Date.now() >= data?.expires;
 
-  const updateSession = async () => {
-    try {
-      const { data: token } = await refreshAccessToken({ token: data?.refreshToken });
-      await update(tokenAdapter({ data: token }));
-    } catch (err) {
-      console.error(err);
-    }
-  };
+//   const updateSession = async () => {
+//     try {
+//       const { data: token } = await refreshAccessToken({ token: data?.refreshToken });
+//       await update(tokenAdapter({ data: token }));
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
 
-  useEffect(() => {
-    if (trigger) {
-      updateSession();
-    }
-  }, [trigger]);
-};
+//   useEffect(() => {
+//     if (trigger) {
+//       updateSession();
+//     }
+//   }, [trigger]);
+// };

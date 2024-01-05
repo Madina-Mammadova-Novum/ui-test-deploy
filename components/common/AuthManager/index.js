@@ -6,7 +6,7 @@ import { AuthManagerPropTypes } from '@/lib/types';
 
 export default function AuthManager({ children, session }) {
   return (
-    <SessionProvider session={session} refetchInterval={60} refetchWhenOffline>
+    <SessionProvider session={session} refetchInterval={60}>
       {children}
     </SessionProvider>
   );
