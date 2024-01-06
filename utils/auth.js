@@ -34,9 +34,9 @@ export const AUTHCONFIG = {
   },
   providers: [
     Credentials({
-      name: 'Credentials',
+      id: 'credentials',
       type: 'credentials',
-      credentials: {},
+      name: 'credentials',
       async authorize(credentials) {
         const { data } = await login({ data: credentials });
 

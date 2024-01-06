@@ -19,7 +19,6 @@ import FieldsetHeader from '@/elements/FieldsetHeader';
 import FieldsetWrapper from '@/elements/FieldsetWrapper';
 import HoverableIcon from '@/elements/HoverableIcon';
 import HoverTooltip from '@/elements/HoverTooltip';
-import { Hydrate } from '@/elements/Hydrate';
 import IconComponent from '@/elements/IconComponent';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
@@ -62,7 +61,6 @@ export {
   ReActivateButton,
   ChatListLoader,
   Table,
-  Hydrate,
   HoverTooltip,
   ManualTooltip,
   Toggle,

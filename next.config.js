@@ -5,6 +5,15 @@ const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,

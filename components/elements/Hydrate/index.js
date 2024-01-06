@@ -2,13 +2,20 @@
 
 import { useEffect, useState } from 'react';
 
-// eslint-disable-next-line react/prop-types
-export const Hydrate = ({ children, loader = null }) => {
+import { PageLoader } from '../PageLoader';
+
+const Hydrate = ({ children, loader = null }) => {
+  const loaderType = {
+    page: <PageLoader text="uploading..." />,
+  };
+
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  return hydrated ? children : loader || null;
+  return hydrated ? children : loaderType[loader];
 };
+
+export default Hydrate;
