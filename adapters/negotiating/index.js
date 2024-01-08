@@ -626,6 +626,7 @@ export const prefilledSearchDataAdapter = ({ data }) => {
     port: { id: dischargePortId, name: dischargePortName, locode: dischargePortLocode } = {},
   } = dischargeTerminal;
 
+  // Response data
   return {
     laycanStart,
     laycanEnd,
