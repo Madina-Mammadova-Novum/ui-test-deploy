@@ -9,3 +9,4 @@ export * from '@/adapters/pre-fixture';
 export * from '@/adapters/on-subs';
 export * from '@/adapters/tools';
 export * from '@/adapters/errors';
+export * from '@/adapters/api';

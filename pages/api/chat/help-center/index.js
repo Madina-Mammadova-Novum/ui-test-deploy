@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`/v1/chats/helpcenter`),
+    path: getApiURL(`v1/chats/helpcenter`),
     dataAdapter: chatSupportResponseAdapter,
     requestMethod: 'POST',
     options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },

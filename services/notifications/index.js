@@ -1,7 +1,6 @@
-import { getSession, signOut } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 
 import { notificationParamsAdapter } from '@/adapters/notifications';
-import { signOutAdapter } from '@/adapters/user';
 import { Authorization } from '@/lib/constants';
 import { setNotifications } from '@/models/notificationsModel';
 import { getRtURL } from '@/utils';
@@ -17,10 +16,6 @@ export const getNotifications = async ({ data }) => {
     headers: { Accept: '*/*', ...Authorization(session?.accessToken) },
     body: setNotifications({ data: params }),
   });
-
-  if (response.status === 401) {
-    await signOut({ ...signOutAdapter() });
-  }
 
   const result = await response.text();
 

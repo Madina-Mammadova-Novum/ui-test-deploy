@@ -1,19 +1,21 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 import { LogoutButtonPropTypes } from '@/lib/types';
 
-import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
+import { removeCookie } from '@/utils/helpers';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
-  const reset = () => {
-    localStorage.clear();
-  };
+  const router = useRouter();
 
-  const handleSignOut = async () => {
-    await signOut({ ...signOutAdapter() }).then(reset);
+  const handleSignOut = () => {
+    removeCookie('session-user-role');
+    removeCookie('session-access-token');
+    removeCookie('session-refresh-token');
+    localStorage.clear();
+    router.refresh();
   };
 
   return (

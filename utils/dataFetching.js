@@ -26,12 +26,16 @@ Sends a POST request to the API with the specified path and body.
   @returns {Promise} A promise that resolves with the response from the API.
   @throws {Error} - Will throw an error if the API request fails.
  */
-export function postData(path, body, options) {
+
+export function postData(path, body, options = {}) {
   return apiHandler({
     path: getApiPublicURL(path),
     requestMethod: 'POST',
     body,
     options: {
+      headers: {
+        ...options.headers,
+      },
       ...options,
     },
   });

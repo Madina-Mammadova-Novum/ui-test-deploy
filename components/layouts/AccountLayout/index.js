@@ -1,24 +1,33 @@
-import { getServerSession } from 'next-auth';
+'use server';
+
+import { cookies } from 'next/headers';
 
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
-import { AccountContainer, AccountFooter, AccountHeader, Chat, Sidebar } from '@/modules';
-import { AUTHCONFIG } from '@/utils/auth';
+import { AccountContainer, AccountFooter, AccountHeader, Sidebar } from '@/modules';
+
+const getServerCookie = async () => {
+  const role = cookies()?.get('session-user-role')?.value;
+
+  return { role };
+};
 
 export default async function AccountLayout({ children }) {
-  const session = await getServerSession(AUTHCONFIG);
+  const { role } = await getServerCookie();
 
   const routes = {
-    owner: ownerSidebarAdapter({ role: session.role }),
-    charterer: chartererSidebarAdapter({ role: session.role }),
+    owner: ownerSidebarAdapter({ role }),
+    charterer: chartererSidebarAdapter({ role }),
   };
 
   return (
-    <AccountContainer role={session.role}>
-      <Sidebar data={routes[session.role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
-      <AccountHeader user={session.user} />
-      <main className="grow">{children}</main>
-      <AccountFooter />
-      <Chat />
-    </AccountContainer>
+    role && (
+      <AccountContainer role={role}>
+        <Sidebar data={routes[role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
+        <AccountHeader />
+        <main className="grow">{children}</main>
+        <AccountFooter />
+        {/* <Chat /> */}
+      </AccountContainer>
+    )
   );
 }

@@ -3,6 +3,7 @@ import { setSkipedValue } from '@/utils/helpers';
 
 export const navigationItemAdapter = ({ data }) => {
   if (data === null) return null;
+
   const { order, id, title, type, path, externalPath, collapsed, related, items } = data;
   return {
     order,
@@ -24,6 +25,7 @@ export const navigationItemAdapter = ({ data }) => {
 
 export const navigationAdapter = ({ data }) => {
   if (data === null) return [];
+
   return data.map((item) => {
     return navigationItemAdapter({ data: item });
   });

@@ -2,30 +2,30 @@ import Credentials from 'next-auth/providers/credentials';
 
 import { sessionAdapter, tokenAdapter } from '@/adapters/user';
 import { ROUTES } from '@/lib';
-import { login, refreshAccessToken } from '@/services';
+import { login } from '@/services';
 
-let isRefreshing = false;
+// let isRefreshing = false;
 
-async function tokenRotation(token) {
-  if (isRefreshing) return token; // previous token if refresh in action
+// async function tokenRotation(token) {
+//   if (isRefreshing) return token; // previous token if refresh in action
 
-  if (Date.now() >= token?.expires) {
-    isRefreshing = true; // prevent multiple calls
-    try {
-      const response = await refreshAccessToken({ token: token.refreshToken });
+//   if (Date.now() >= token?.expires) {
+//     isRefreshing = true; // prevent multiple calls
+//     try {
+//       const response = await refreshAccessToken({ token: token.refreshToken });
 
-      if (response?.data) {
-        return { ...token, ...tokenAdapter({ data: response.data }) };
-      }
-    } catch (error) {
-      return { ...token, error: 'Refresh token error' };
-    } finally {
-      isRefreshing = false; // reset to re-fetch token
-    }
-  }
+//       if (response?.data) {
+//         return { ...token, ...tokenAdapter({ data: response.data }) };
+//       }
+//     } catch (error) {
+//       return { ...token, error: 'Refresh token error' };
+//     } finally {
+//       isRefreshing = false; // reset to re-fetch token
+//     }
+//   }
 
-  return token;
-}
+//   return token;
+// }
 
 export const AUTHCONFIG = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -38,11 +38,11 @@ export const AUTHCONFIG = {
       type: 'credentials',
       name: 'credentials',
       async authorize(credentials) {
-        const { data } = await login({ data: credentials });
+        const res = await login({ data: credentials });
 
-        if (data) {
+        if (res.data) {
           // Any object returned will be saved in `user` property of the JWT
-          return data;
+          return res.data;
         }
 
         return null;
@@ -54,7 +54,7 @@ export const AUTHCONFIG = {
       if (user) return tokenAdapter({ data: user });
 
       // eslint-disable-next-line no-return-await
-      return await tokenRotation(token);
+      return token;
     },
     async session({ session, token }) {
       return sessionAdapter({ session, token });

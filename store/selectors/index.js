@@ -5,7 +5,7 @@ import { userDetailsAdapter } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
 export const sidebarSelector = ({ user }) => user?.params;
-export const userSelector = ({ user }) => user;
+export const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role || null });
 export const vesselsSelector = ({ positions, fleets }) => {
   return {
     ...positions,
@@ -21,6 +21,8 @@ export const vesselsSelector = ({ positions, fleets }) => {
     },
   };
 };
+
+export const authSelector = ({ auth }) => auth;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
 export const negotiatingSelector = ({ negotiating, user }) => ({ ...negotiating, role: user.role });
@@ -180,3 +182,10 @@ export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state)
     refetch: state.refetch,
   };
 });
+
+export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
+  error: state.error,
+  loading: state.loading,
+  session: state.session,
+  authorized: state.authorized,
+}));

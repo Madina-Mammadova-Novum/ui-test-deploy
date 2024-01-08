@@ -1,5 +1,3 @@
-import delve from 'dlv';
-
 import { loginResponseAdapter } from '@/adapters/user'; // identityHandler,
 import { ContentTypeUrlEncoded } from '@/lib/constants';
 import { setLogin } from '@/models/loginModel';
@@ -7,14 +5,9 @@ import { getIdentityApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
-  const email = delve(req, 'body.email');
-  const password = delve(req, 'body.password');
+  const credentials = setLogin(req?.body);
 
-  if (!email || !password) {
-    return res.status(422).json({ error: { message: 'Please provide the required fields email and password' } });
-  }
-
-  req.body = setLogin({ email, password });
+  req.body = credentials;
 
   return responseHandler({
     req,

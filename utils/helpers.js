@@ -3,6 +3,7 @@
 import { HttpTransportType } from '@microsoft/signalr';
 import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
+import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
@@ -152,8 +153,8 @@ export function hasNestedArrays(data) {
   return isNested;
 }
 
-export function getFilledArray(length) {
-  return Array.from({ length }).map((_, index) => index + 1);
+export function getFilledArray(length = 1) {
+  return Array.from({ length: length || 1 }).map((_, index) => index + 1);
 }
 
 export function getValueWithPath(object, path, defaultValue) {
@@ -649,4 +650,32 @@ export const errorMessage = ({ errors }) => {
   }
 
   return { message: formatErrors(errors?.errors) };
+};
+
+export const setCookie = (key, value) => {
+  cookie.set(key, value, {
+    expires: 60,
+    path: '/',
+  });
+};
+
+export const removeCookie = (key) => {
+  cookie.remove(key, {
+    expires: 1,
+  });
+};
+
+export const getCookieFromBrowser = (key) => {
+  return cookie.get(key);
+};
+
+export const getCookieFromServer = (key, req) => {
+  if (!req.headers.cookie) {
+    return undefined;
+  }
+  const rawCookie = req.headers.cookie.split(';').find((c) => c.trim().startsWith(`${key}=`));
+  if (!rawCookie) {
+    return undefined;
+  }
+  return rawCookie.split('=')[1];
 };

@@ -1,5 +1,5 @@
 import { AccountLayout } from '@/layouts';
 
-export default function RootLayout({ children }) {
+export default function AccountPage({ children }) {
   return <AccountLayout>{children}</AccountLayout>;
 }

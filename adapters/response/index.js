@@ -3,9 +3,11 @@ import { isEmpty } from '@/utils/helpers';
 
 export const responseAdapter = (data) => {
   if (data === undefined || data === null || data === '') return { data: null };
+
   if ('data' in data) {
     return data;
   }
+
   return { data };
 };
 

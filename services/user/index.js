@@ -143,6 +143,7 @@ export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }
 
 export async function getUserPositionById({ id }) {
   const body = getFleetByIdAdapter({ id });
+
   const response = await putData(`account/my-positions/vesselId`, body);
 
   return {
