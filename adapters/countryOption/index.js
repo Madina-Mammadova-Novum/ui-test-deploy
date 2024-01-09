@@ -1,13 +1,12 @@
 export const countryOptionAdapter = (data) => {
   if (!data) return {};
 
-  const { id, countryId, label, countryFlag, countryName, countryCode, coordinates } = data;
+  const { id, countryId, label, countryFlag, countryName, countryCode } = data;
 
   return {
     value: id || countryId,
     label: label || countryName,
     countryFlag: countryFlag || countryCode,
-    coordinates: [coordinates?.longtitude, coordinates?.latitude],
   };
 };
 

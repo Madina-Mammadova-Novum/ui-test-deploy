@@ -1,31 +1,31 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useEffect } from 'react';
+// import { useDispatch } from 'react-redux';
 
-import { getCountries, getPorts, getPortsForSearcForm } from '@/services';
-import { setGeneralData } from '@/store/entities/general/slice';
+// import { getCountries, getPorts, getPortsForSearcForm } from '@/services';
+// import { setGeneralData } from '@/store/entities/general/slice';
 
 export default function RootTemplate({ children }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const getData = async () => {
-    const [countries, allPorts, searchPorts] = await Promise.all([getCountries(), getPorts(), getPortsForSearcForm()]);
+  // const getData = async () => {
+  //   const [countries, allPorts, searchPorts] = await Promise.all([getCountries(), getPorts(), getPortsForSearcForm()]);
 
-    const result = {
-      countries: countries.data,
-      ports: {
-        allPorts: allPorts.data,
-        searchPorts: searchPorts.data,
-      },
-    };
+  //   const result = {
+  //     countries: countries.data,
+  //     ports: {
+  //       allPorts: allPorts.data,
+  //       searchPorts: searchPorts.data,
+  //     },
+  //   };
 
-    dispatch(setGeneralData(result));
-  };
+  //   dispatch(setGeneralData(result));
+  // };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return children;
 }
