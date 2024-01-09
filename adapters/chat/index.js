@@ -89,7 +89,7 @@ export function listOfChatsDataAdapter({ data }) {
   }));
 }
 
-export function messageDataAdapter({ data, session }) {
+export function messageDataAdapter({ data }) {
   if (!data) return null;
 
   const { body, senderId, createdAt, id } = data;
@@ -98,7 +98,7 @@ export function messageDataAdapter({ data, session }) {
     id,
     message: body,
     time: extractTimeFromDate(addLocalDateFlag(createdAt), { hour: 'numeric', minute: 'numeric', hour12: false }),
-    sender: clientIdentification({ senderId, session }),
+    sender: clientIdentification({ senderId }),
   };
 }
 

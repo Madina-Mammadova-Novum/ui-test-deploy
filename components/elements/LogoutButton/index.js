@@ -11,9 +11,11 @@ const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!bo
   const router = useRouter();
 
   const handleSignOut = () => {
+    removeCookie('session-user-id');
     removeCookie('session-user-role');
     removeCookie('session-access-token');
     removeCookie('session-refresh-token');
+
     localStorage.clear();
     router.refresh();
   };

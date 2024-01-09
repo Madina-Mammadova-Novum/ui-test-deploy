@@ -1,5 +1,7 @@
+'use server';
+
 import delve from 'dlv';
-// import { cookies } from 'next/headers';
+import { cookies } from 'next/headers';
 
 import Logo from '@/assets/images/logo.svg';
 import { NavButton, NextLink } from '@/elements';
@@ -7,14 +9,14 @@ import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { AuthNavButtons } from '@/units';
 
-// const getServerToken = async () => {
-//   const token = cookies()?.get('session-access-token')?.value;
+const getServerToken = async () => {
+  const token = cookies()?.get('session-access-token')?.value;
 
-//   return { token };
-// };
+  return { token };
+};
 
 export default async function PageHeader() {
-  // const { token } = await getServerToken();
+  const { token } = await getServerToken();
 
   const headerData = await getSingleType('header', 'en');
 
@@ -41,7 +43,7 @@ export default async function PageHeader() {
           </NextLink>
           <nav className="flex items-center gap-x-10">
             {navigation.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
-            {buttons.length > 0 && <AuthNavButtons authorized={false} data={buttons} />}
+            {buttons.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>
         </div>
       </div>

@@ -3,9 +3,12 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
+import { getCookieFromBrowser } from '@/utils/helpers';
+
+const role = getCookieFromBrowser('session-user-role');
 
 export const sidebarSelector = ({ user }) => user?.params;
-export const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role || null });
+export const userSelector = ({ user }) => ({ ...user, role });
 export const vesselsSelector = ({ positions, fleets }) => {
   return {
     ...positions,
@@ -25,15 +28,15 @@ export const vesselsSelector = ({ positions, fleets }) => {
 export const authSelector = ({ auth }) => auth;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating, user }) => ({ ...negotiating, role: user.role });
+export const negotiatingSelector = ({ negotiating }) => ({ ...negotiating, role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
-export const onSubsSelector = ({ onSubs, user }) => ({ ...onSubs, role: user.role });
-export const fixtureSelector = ({ fixture, user }) => ({ ...fixture, role: user.role });
-export const postFixtureSelector = ({ postFixture, user }) => ({ ...postFixture, role: user.role });
-export const chatSelector = ({ chat, user }) => ({ ...chat, role: user.role });
+export const preFixtureSelector = ({ preFixture }) => ({ ...preFixture, role });
+export const onSubsSelector = ({ onSubs }) => ({ ...onSubs, role });
+export const fixtureSelector = ({ fixture }) => ({ ...fixture, role });
+export const postFixtureSelector = ({ postFixture }) => ({ ...postFixture, role });
+export const chatSelector = ({ chat }) => ({ ...chat, role });
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {

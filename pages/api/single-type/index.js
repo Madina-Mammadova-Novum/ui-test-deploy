@@ -6,6 +6,7 @@ import { responseHandler } from '@/utils/api';
 export default async function handler(req, res) {
   const { s: slug, l: locale } = req.query;
   const endpoint = getSingleTypeEndpoint(slug, locale || 'en');
+
   return responseHandler({
     req,
     res,

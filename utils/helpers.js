@@ -510,8 +510,11 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId, session }) => {
-  return senderId === session?.userId ? session?.role : ROLES.BROKER;
+export const clientIdentification = ({ senderId }) => {
+  const id = getCookieFromBrowser('session-user-id');
+  const role = getCookieFromBrowser('session-user-role');
+
+  return senderId === id ? role : ROLES.BROKER;
 };
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {
@@ -673,9 +676,12 @@ export const getCookieFromServer = (key, req) => {
   if (!req.headers.cookie) {
     return undefined;
   }
+
   const rawCookie = req.headers.cookie.split(';').find((c) => c.trim().startsWith(`${key}=`));
+
   if (!rawCookie) {
     return undefined;
   }
+
   return rawCookie.split('=')[1];
 };

@@ -15,9 +15,10 @@ export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWit
 
   const { sub, role, ...rest } = decodedTokenAdapter(response?.data?.access_token);
 
+  setCookie('session-user-id', sub);
+  setCookie('session-user-role', userRoleAdapter({ data: role }));
   setCookie('session-access-token', response.data.access_token);
   setCookie('session-refresh-token', response.data.refresh_token);
-  setCookie('session-user-role', userRoleAdapter({ data: role }));
 
   return {
     userId: sub,

@@ -5,9 +5,7 @@ import { getIdentityApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
-  const credentials = setLogin(req?.body);
-
-  req.body = credentials;
+  req.body = setLogin(req?.body);
 
   return responseHandler({
     req,

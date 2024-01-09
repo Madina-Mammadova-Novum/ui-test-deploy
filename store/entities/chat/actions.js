@@ -17,7 +17,8 @@ import {
 } from '@/services';
 
 export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispatch }) => {
-  const [{ data: chats }, { data: support }] = await Promise.all([getListOfChatSessions(), getHelpCenterSession()]);
+  const { data: chats } = await getListOfChatSessions();
+  const { data: support } = await getHelpCenterSession();
 
   dispatch(setUpdate(true));
 

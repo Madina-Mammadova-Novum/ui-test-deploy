@@ -12,6 +12,7 @@ class NotificationsModel {
     this.formData.append('isOpened', this.params.watched ?? false);
     this.formData.append('skip', this.params.skip ?? 0);
     this.formData.append('take', this.params.take ?? 50);
+
     return this.formData;
   }
 }
