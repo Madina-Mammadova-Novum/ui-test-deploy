@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 import { ROUTES } from '@/lib';
 import { checkAuthRoute, getRoleIdentity } from '@/utils/helpers';
 
-// eslint-disable-next-line consistent-return
 export default function middleware(req) {
   const accessToken = cookies().get('session-access-token')?.value;
   const role = cookies().get('session-user-role')?.value;
@@ -25,6 +24,8 @@ export default function middleware(req) {
   if (ownerRoutes && !isOwner) {
     return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {

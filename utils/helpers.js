@@ -657,14 +657,15 @@ export const errorMessage = ({ errors }) => {
 
 export const setCookie = (key, value) => {
   cookie.set(key, value, {
-    expires: 60,
     path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    expires: 60,
   });
 };
 
 export const removeCookie = (key) => {
   cookie.remove(key, {
-    expires: 1,
+    expires: 0.25,
   });
 };
 
