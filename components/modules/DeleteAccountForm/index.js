@@ -3,17 +3,16 @@
 import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
-import { signOut } from 'next-auth/react';
 import * as yup from 'yup';
 
 import { DeleteAccountFormPropTypes } from '@/lib/types';
 
-import { signOutAdapter } from '@/adapters/user';
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
 import { Notes } from '@/units';
+import { removeCookie } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeleteAccountForm = ({ title, closeModal }) => {
@@ -35,13 +34,22 @@ const DeleteAccountForm = ({ title, closeModal }) => {
     setValue('password', value);
   };
 
+  const handleSignOut = (message) => {
+    successToast(message);
+    closeModal();
+
+    removeCookie('session-user-id');
+    removeCookie('session-user-role');
+    removeCookie('session-access-token');
+    removeCookie('session-refresh-token');
+    localStorage.clear();
+  };
+
   const onSubmit = async (data) => {
     const { error, message } = await deleteCompany({ data });
 
     if (!error) {
-      successToast(message);
-      closeModal();
-      await signOut({ ...signOutAdapter() });
+      handleSignOut(message);
     } else {
       errorToast('Bad request', error?.message);
     }

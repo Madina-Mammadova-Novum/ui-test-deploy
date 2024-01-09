@@ -13,7 +13,7 @@ import { getNegotiatingDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
 const Negotiating = () => {
-  const { offers, loading, role, toggle } = useSelector(getNegotiatingDataSelector);
+  const { offers, loading, toggle, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
 

@@ -659,7 +659,7 @@ export const setCookie = (key, value) => {
   cookie.set(key, value, {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
-    expires: 60,
+    expires: new Date(new Date().getTime() + 60 * 60 * 1000),
   });
 };
 

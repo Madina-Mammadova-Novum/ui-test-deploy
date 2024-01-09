@@ -3,12 +3,10 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { getCookieFromBrowser } from '@/utils/helpers';
 
-const role = getCookieFromBrowser('session-user-role');
-
+export const authSelector = ({ auth }) => auth;
 export const sidebarSelector = ({ user }) => user?.params;
-export const userSelector = ({ user }) => ({ ...user, role });
+export const userSelector = ({ user }) => user;
 export const vesselsSelector = ({ positions, fleets }) => {
   return {
     ...positions,
@@ -24,19 +22,24 @@ export const vesselsSelector = ({ positions, fleets }) => {
     },
   };
 };
-
-export const authSelector = ({ auth }) => auth;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating }) => ({ ...negotiating, role });
+export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session.role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture }) => ({ ...preFixture, role });
-export const onSubsSelector = ({ onSubs }) => ({ ...onSubs, role });
-export const fixtureSelector = ({ fixture }) => ({ ...fixture, role });
-export const postFixtureSelector = ({ postFixture }) => ({ ...postFixture, role });
-export const chatSelector = ({ chat }) => ({ ...chat, role });
+export const preFixtureSelector = ({ preFixture, auth }) => ({ ...preFixture, role: auth?.session.role });
+export const onSubsSelector = ({ onSubs, auth }) => ({ ...onSubs, role: auth?.session.role });
+export const fixtureSelector = ({ fixture, auth }) => ({ ...fixture, role: auth?.session.role });
+export const postFixtureSelector = ({ postFixture, auth }) => ({ ...postFixture, role: auth?.session.role });
+export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session.role });
+
+export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
+  error: state.error,
+  loading: state.loading,
+  session: state.session,
+  authorized: state.authorized,
+}));
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
@@ -185,10 +188,3 @@ export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state)
     refetch: state.refetch,
   };
 });
-
-export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
-  error: state.error,
-  loading: state.loading,
-  session: state.session,
-  authorized: state.authorized,
-}));
