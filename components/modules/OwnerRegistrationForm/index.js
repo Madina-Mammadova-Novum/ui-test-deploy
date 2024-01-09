@@ -57,14 +57,14 @@ const OwnerRegistrationForm = ({ countries }) => {
   }, [addressValue, methods, captcha]);
 
   const onSubmit = async (formData) => {
-    const { status, error, data } = await ownerSignUp({ data: formData });
+    const { error, data } = await ownerSignUp({ data: formData });
 
-    if (status === 200) {
+    if (!error) {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     }
 
-    if (error) errorToast(error?.title, error?.message);
+    errorToast(error?.title, error?.message);
   };
 
   return (

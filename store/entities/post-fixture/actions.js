@@ -7,21 +7,19 @@ import { POST_FIXTURE } from './types';
 import { getPostFixtureOffers } from '@/services';
 import { calculateAmountOfPages } from '@/utils/helpers';
 
-export const fetchPostFixtureOffers = (() => {
-  let totalPages;
-  let currentPerPage;
-
-  return createAsyncThunk(POST_FIXTURE, async ({ page, perPage, filters = {}, sorting = {} }) => {
-    if (!totalPages || currentPerPage !== perPage) {
-      const { recordsTotal, recordsFiltered } = await getPostFixtureOffers({ page, perPage, filters, sorting });
-      totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
-      currentPerPage = perPage;
-    }
-
-    const { data } = await getPostFixtureOffers({ page, perPage, filters, sorting });
+export const fetchPostFixtureOffers = createAsyncThunk(
+  POST_FIXTURE.GET_POST_FIXTURE_OFFERS,
+  async ({ page = 1, perPage = 5, filters = {}, sorting = {} }) => {
+    const { data, recordsTotal } = await getPostFixtureOffers({ page, perPage, filters, sorting });
 
     return {
-      data: { offers: data, totalPages, filters, sorting, perPage },
+      data: {
+        offers: data,
+        totalPages: calculateAmountOfPages(recordsTotal, perPage),
+        filters,
+        sorting,
+        perPage,
+      },
     };
-  });
-})();
+  }
+);

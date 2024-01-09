@@ -1,12 +1,11 @@
-import { getServerSession } from 'next-auth';
-
-import { Authorization, ContentTypeJson } from '@/lib/constants';
+import { Authorization } from '@/lib/constants';
 import { getRtURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
+  const token = getCookieFromServer('session-access-token', req);
+
   const { chatId } = req.query;
 
   return responseHandler({
@@ -15,6 +14,6 @@ export default async function handler(req, res) {
     path: getRtURL(`/chat/${chatId}/unarchieve`),
     dataAdapter: (data) => data,
     requestMethod: 'POST',
-    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
+    options: { headers: Authorization(token) },
   });
 }

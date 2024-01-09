@@ -1,8 +1,7 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { getSession } from 'next-auth/react';
 
 import { getRtURL } from '.';
-import { getSocketConnectionsParams } from './helpers';
+import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
 
 import { messageDataAdapter } from '@/adapters';
 import {
@@ -16,21 +15,18 @@ import {
 } from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
+const token = getCookieFromBrowser('session-access-token');
+
 export class SignalRController {
   constructor({ host, state }) {
     this.connection = null;
-    this.session = null;
     this.store = state;
     this.host = host;
   }
 
   async setupConnection({ path }) {
-    const session = await getSession();
-
-    this.session = session;
-
     this.connection = new HubConnectionBuilder()
-      .withUrl(getRtURL(path), getSocketConnectionsParams(session?.accessToken))
+      .withUrl(getRtURL(path), getSocketConnectionsParams(token))
       .configureLogging(LogLevel.None)
       .withAutomaticReconnect()
       .build();
@@ -92,7 +88,7 @@ export class ChatSessionController extends SignalRController {
   }
 
   updateMessage({ message }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
+    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message })));
   }
 
   incomingMessage({ chatId, messageCount }) {

@@ -10,26 +10,21 @@ import { getPorts } from '@/services/port';
 import { getFleetsVessels, getUnassignedVessels, getVesselDetails, getVesselTypes } from '@/services/vessel';
 import { calculateAmountOfPages, convertDataToOptions, countriesOptions } from '@/utils/helpers';
 
-export const fetchFleetsWithVessels = (() => {
-  let totalPages;
-  let currentPerPage;
+export const fetchFleetsWithVessels = createAsyncThunk(
+  FLEETS.GET_USER_FLEETS,
+  async ({ page = 1, perPage = 5, sortBy }) => {
+    const { data, recordsTotal } = await getUserFleets({ page, perPage, sortBy });
 
-  return createAsyncThunk(FLEETS.GET_USER_FLEETS, async ({ page, perPage, sortBy }) => {
-    if (!totalPages || currentPerPage !== perPage) {
-      const { recordsTotal, recordsFiltered } = await getUserFleets({ page, perPage, sortBy });
-      totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
-      currentPerPage = perPage;
-    }
-
-    const { data } = await getUserFleets({ page, perPage, sortBy });
     const generator = getFleetsVessels(data);
     const { value } = generator.next();
 
+    const vessels = await value;
+
     return {
-      data: { vessels: await value, totalPages },
+      data: { vessels, totalPages: calculateAmountOfPages(recordsTotal, perPage) },
     };
-  });
-})();
+  }
+);
 
 export const fetchUnassignedFleetData = createAsyncThunk(FLEETS.GET_UNASSIGNED_FLEET_DATA, async () => {
   const { data } = await getUnassignedVessels();

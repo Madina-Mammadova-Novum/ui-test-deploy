@@ -3,6 +3,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 import {
+  auth,
   chat,
   fixture,
   fleets,
@@ -20,6 +21,7 @@ import {
 
 export const reducer = combineReducers({
   general,
+  auth,
   user,
   positions,
   fleets,

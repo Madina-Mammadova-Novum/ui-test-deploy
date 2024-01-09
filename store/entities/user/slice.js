@@ -6,7 +6,6 @@ const initialState = {
   loading: true,
   error: null,
   role: null,
-  isAuthenticated: false,
   data: {
     personalDetails: {},
     companyDetails: {},

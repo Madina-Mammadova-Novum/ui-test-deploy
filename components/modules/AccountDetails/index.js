@@ -16,6 +16,7 @@ import {
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
+
   const { loading, data } = useSelector(getUserDataSelector);
 
   useEffect(() => {

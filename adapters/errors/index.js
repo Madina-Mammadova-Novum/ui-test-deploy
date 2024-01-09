@@ -1,12 +1,10 @@
-import { convertKeysToLowerCase, errorMessage } from '@/utils/helpers';
+import { errorMessage } from '@/utils/helpers';
 
 export const errorsAdapter = ({ error }) => {
-  const errors = convertKeysToLowerCase(error);
-
   return {
-    type: errors?.type ?? null,
-    traceId: errors?.traceid ?? null,
-    title: errors?.title || 'Bad request',
-    ...errorMessage({ errors }),
+    type: error?.type ?? null,
+    traceId: error?.traceid ?? null,
+    title: error?.title || 'Bad request',
+    ...errorMessage({ error }),
   };
 };

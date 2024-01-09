@@ -1,13 +1,12 @@
-import { getServerSession } from 'next-auth';
-
 import { responseCargoSentOffersAdapter } from '@/adapters/cargo';
-import { Authorization, ContentTypeJson } from '@/lib/constants';
+import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
+  const token = getCookieFromServer('session-access-token', req);
+
   const { cargoId } = req.query;
 
   return responseHandler({
@@ -16,7 +15,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/charterer/deals/sentoffers?CargoId=${cargoId}`),
     dataAdapter: responseCargoSentOffersAdapter,
     requestMethod: 'GET',
-    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
-    customErrorHandling: true,
+    options: { headers: Authorization(token) },
   });
 }

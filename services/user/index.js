@@ -134,7 +134,7 @@ export async function deleteCompany({ data }) {
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
   const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
-  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
+  const response = await postData(`account/positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
 
   return {
     ...response,
@@ -143,7 +143,8 @@ export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }
 
 export async function getUserPositionById({ id }) {
   const body = getFleetByIdAdapter({ id });
-  const response = await putData(`account/my-positions/vesselId`, body);
+
+  const response = await putData(`account/positions/${id}`, body);
 
   return {
     ...response,

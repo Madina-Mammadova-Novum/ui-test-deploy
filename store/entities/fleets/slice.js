@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchFleetsWithVessels, fetchPrefilledDataToUpdate, fetchUnassignedFleetData } from './actions';
-// import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
 const initialState = {
   loading: true,

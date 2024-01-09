@@ -1,23 +1,11 @@
-import delve from 'dlv';
-// import { revalidatePath } from 'next/cache';
-
-import { refreshTokenResponseAdapter } from '@/adapters/user'; // identityHandler,
-import { ROUTES } from '@/lib';
+import { refreshTokenResponseAdapter } from '@/adapters/user';
 import { ContentTypeUrlEncoded } from '@/lib/constants';
 import { setRefreshToken } from '@/models/refreshTokenModel';
 import { getIdentityApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
-  const refreshToken = delve(req, 'body.token');
-
-  if (!refreshToken) {
-    return res.redirect(422, ROUTES.LOGIN);
-  }
-
-  req.body = setRefreshToken(refreshToken);
-
-  // revalidatePath('/');
+  req.body = setRefreshToken(req.body.token);
 
   return responseHandler({
     req,
