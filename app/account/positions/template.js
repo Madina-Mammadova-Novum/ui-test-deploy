@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
-import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { setToggle } from '@/store/entities/positions/slice';
 import { getUserVesselsSelector } from '@/store/selectors';
@@ -33,12 +33,12 @@ export default function PositionsLayout({ children }) {
     data: vessels,
   });
 
-  /* fetching user positions data */
-
   useEffect(() => {
-    dispatch(fetchUnassignedFleetData());
+    dispatch(fetchPorts());
+    dispatch(fetchCountries());
   }, []);
 
+  /* fetching user positions data */
   useEffect(() => {
     dispatch(
       fetchUserVessels({

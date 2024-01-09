@@ -10,10 +10,8 @@ export const fetchPorts = createAsyncThunk(ACTION.GET_PORTS, async () => {
   const [{ data: allPorts }, { data: searchPorts }] = await Promise.all([getPorts(), getPortsForSearcForm()]);
 
   return {
-    data: {
-      allPorts,
-      searchPorts,
-    },
+    allPorts,
+    searchPorts,
   };
 });
 
@@ -28,7 +26,5 @@ export const fetchSearchPorts = createAsyncThunk(ACTION.GET_PORTS, async () => {
 export const fetchCountries = createAsyncThunk(ACTION.GET_COUNTRIES, async () => {
   const { data } = await getCountries();
 
-  return {
-    data,
-  };
+  return data;
 });

@@ -2,26 +2,11 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
 import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
-import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
 export const authSelector = ({ auth }) => auth;
 export const sidebarSelector = ({ user }) => user?.params;
 export const userSelector = ({ user }) => user;
-export const vesselsSelector = ({ positions, fleets }) => {
-  return {
-    ...positions,
-    data: {
-      ...positions.data,
-      unassigned: {
-        title: 'Unassigned Fleet',
-        activeTankers: fleets.unassignedFleetData?.filter((fleet) => fleet.appearsInSearch === true).length,
-        inActiveTankers: fleets.unassignedFleetData?.filter((fleet) => fleet.appearsInSearch !== true).length,
-        type: 'unassigned',
-        tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
-      },
-    },
-  };
-};
+export const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
 export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session.role });

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { fetchCountries, fetchPorts } from './actions';
+
 const initialState = {
   loading: true,
   error: null,
@@ -15,10 +17,27 @@ const initialState = {
 const generalSlice = createSlice({
   name: 'general',
   initialState,
-  reducers: {
-    setGeneralData: (state, { payload }) => {
-      state.data = payload;
-    },
+  extraReducers: (builder) => {
+    builder.addCase(fetchPorts.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchPorts.fulfilled, (state, { payload }) => {
+      state.data.ports = payload;
+    });
+    builder.addCase(fetchPorts.rejected, (state) => {
+      state.loading = false;
+      state.error = 'Error';
+    });
+    builder.addCase(fetchCountries.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchCountries.fulfilled, (state, { payload }) => {
+      state.data.countries = payload;
+    });
+    builder.addCase(fetchCountries.rejected, (state) => {
+      state.loading = false;
+      state.error = 'Error';
+    });
   },
 });
 

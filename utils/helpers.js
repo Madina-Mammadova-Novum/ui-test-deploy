@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
+import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -331,7 +331,7 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return SYSTEM_ERROR;
+  if (!errors) return ERROR_MESSGE;
 
   // eslint-disable-next-line no-unused-vars
   return Object.entries(errors).map(([key, value]) => {
@@ -659,13 +659,13 @@ export const setCookie = (key, value) => {
   cookie.set(key, value, {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
-    expires: new Date(new Date().getTime() + 60 * 60 * 1000),
+    expires: 60,
   });
 };
 
 export const removeCookie = (key) => {
   cookie.remove(key, {
-    expires: 0.25,
+    expires: 1,
   });
 };
 

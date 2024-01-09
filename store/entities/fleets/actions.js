@@ -15,10 +15,7 @@ export const fetchFleetsWithVessels = createAsyncThunk(
   async ({ page = 1, perPage = 5, sortBy }) => {
     const { data, recordsTotal } = await getUserFleets({ page, perPage, sortBy });
 
-    const generator = getFleetsVessels(data);
-    const { value } = generator.next();
-
-    const vessels = await value;
+    const vessels = await getFleetsVessels(data);
 
     return {
       data: { vessels, totalPages: calculateAmountOfPages(recordsTotal, perPage) },

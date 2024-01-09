@@ -6,9 +6,9 @@ export const apiHandler = async (options) => {
   try {
     const response = await api.request(apiOptionsAdapter(options));
 
-    return apiSuccessAdapter(response.status, response.data);
+    return apiSuccessAdapter({ status: response.status, successResponse: response.data });
   } catch (error) {
-    return apiErrorAdapter(error.response.status, error.response.statusText, error.message);
+    return apiErrorAdapter({ status: error.response.status, errorResponse: error.response.data });
   }
 };
 

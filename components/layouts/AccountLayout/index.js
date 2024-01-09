@@ -20,14 +20,12 @@ export default async function AccountLayout({ children }) {
   };
 
   return (
-    role && (
-      <AccountContainer role={role}>
-        <Sidebar data={routes[role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
-        <AccountHeader />
-        <main className="grow">{children}</main>
-        <AccountFooter />
-        {/* <Chat /> */}
-      </AccountContainer>
-    )
+    <AccountContainer role={role}>
+      <Sidebar data={routes[role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
+      <AccountHeader />
+      <main className="grow">{children}</main>
+      <AccountFooter />
+      {/* <Chat /> */}
+    </AccountContainer>
   );
 }

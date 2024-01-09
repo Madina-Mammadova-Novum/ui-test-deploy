@@ -1,20 +1,25 @@
 import { responseAdapter } from '../response';
 
-export const apiSuccessAdapter = (status, data) => {
+import { formatErrors } from '@/utils/helpers';
+
+export const apiSuccessAdapter = ({ status, successResponse }) => {
   return {
     status,
     error: null,
-    ...responseAdapter(data),
+    ...responseAdapter(successResponse),
   };
 };
 
-export const apiErrorAdapter = (status, statusText, message) => {
+export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
   return {
     status,
     data: null,
     error: {
-      title: statusText,
-      message,
+      type: errorResponse?.type || errorResponse?.error?.type || null,
+      traceId: errorResponse?.traceId || errorResponse?.error?.traceId || null,
+      title: errorResponse?.title || errorResponse?.error?.title || 'Bad request',
+      message: formatErrors(errorResponse?.errors || errorResponse?.error?.errors) || statusText,
+      errors: errorResponse?.errors || errorResponse?.error?.errors || null,
     },
   };
 };

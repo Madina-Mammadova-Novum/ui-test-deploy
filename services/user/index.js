@@ -161,9 +161,9 @@ const fetchUserVesselById = async ({ id, ...rest }) => {
   };
 };
 
-export function* getVesselsById(data) {
-  return yield Promise.all(data.map(fetchUserVesselById));
-}
+export const getVesselsById = async (data) => {
+  return Promise.all(data.map(fetchUserVesselById));
+};
 
 export async function getUserFixtures() {
   const response = await getData(`account/fixture`, { headers: { ...ContentTypeJson() } });

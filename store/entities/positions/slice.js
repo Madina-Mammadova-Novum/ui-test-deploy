@@ -10,6 +10,7 @@ const initialState = {
   toggle: false,
   data: {
     vessels: [],
+    unassigned: {},
     totalPages: 0,
   },
 };
