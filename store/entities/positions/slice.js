@@ -10,7 +10,13 @@ const initialState = {
   toggle: false,
   data: {
     vessels: [],
-    unassigned: {},
+    unassigned: {
+      title: 'Unassigned Fleet',
+      activeTankers: [],
+      inActiveTankers: [],
+      type: 'unassigned',
+      tankers: [],
+    },
     totalPages: 0,
   },
 };
@@ -30,6 +36,14 @@ const userSlice = createSlice({
         updatedVessel.tankers = userTankersDetailsAdapter({ data: tankers });
       }
     },
+    updateUnassignedTanker: (state, action) => {
+      const { id, tankers } = action.payload;
+      const updatedTanker = state.data.unassigned.tankers?.find((fleet) => fleet.id === id);
+
+      if (updatedTanker) {
+        state.data.unassigned.tankers = userTankersDetailsAdapter({ data: tankers });
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserVessels.pending, (state) => {
@@ -46,6 +60,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateTankersByFleetId, setToggle } = userSlice.actions;
+export const { updateTankersByFleetId, updateUnassignedTanker, setToggle } = userSlice.actions;
 
 export default userSlice.reducer;

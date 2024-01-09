@@ -406,10 +406,10 @@ export const setSkipedValue = (pageValue, perPageValue) => {
   return (pageValue - 1) * perPageValue;
 };
 
-export const transformToCapitalize = (str) => {
+export const transformToCapitalize = (str = '') => {
   return str
-    .split(' ')
-    .map((word) => word[0].toUpperCase() + word.substring(1))
+    ?.split(' ')
+    .map((word) => word[0]?.toUpperCase() + word.substring(1))
     .join(' ');
 };
 

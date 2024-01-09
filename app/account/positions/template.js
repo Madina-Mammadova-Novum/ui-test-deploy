@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
-import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchUserVessels } from '@/store/entities/positions/actions';
 import { setToggle } from '@/store/entities/positions/slice';
 import { getUserVesselsSelector } from '@/store/selectors';
@@ -32,11 +31,6 @@ export default function PositionsLayout({ children }) {
     itemsPerPage: pageSize,
     data: vessels,
   });
-
-  useEffect(() => {
-    dispatch(fetchPorts());
-    dispatch(fetchCountries());
-  }, []);
 
   /* fetching user positions data */
   useEffect(() => {
