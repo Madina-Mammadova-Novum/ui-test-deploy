@@ -5,12 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountContainerPropTyes } from '@/lib/types';
 
+import { chatNotificationService, notificationService } from '@/services/signalR';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { getNotificationsDataSelector, getSidebarSelector } from '@/store/selectors';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 export default function AccountContainer({ children }) {
   const dispatch = useDispatch();
+
+  const token = getCookieFromBrowser('session-access-token');
+
   const { collapsed } = useSelector(getSidebarSelector);
   const { filterParams } = useSelector(getNotificationsDataSelector);
 
@@ -18,6 +23,11 @@ export default function AccountContainer({ children }) {
     dispatch(fetchCountries());
     dispatch(fetchPorts());
   }, []);
+
+  useEffect(() => {
+    chatNotificationService.initStatus({ token });
+    notificationService?.initNotifications({ token });
+  }, [token]);
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));

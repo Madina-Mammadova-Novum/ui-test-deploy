@@ -29,5 +29,13 @@ export default function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/account/:path*'],
+  matcher: [
+    {
+      source: '/account/:path*',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+  ],
 };

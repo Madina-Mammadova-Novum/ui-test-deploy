@@ -11,9 +11,11 @@ import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/ac
 import { removeCollapsedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversationCard, ChatSubModal } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
+  const token = getCookieFromBrowser('session-access-token');
 
   const { user } = useSelector(getChatSelector).chats;
 
@@ -39,7 +41,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     if (user.data?.chatId === data.chatId) return;
 
     dispatch(removeCollapsedChat(data?.chatId));
-    сhatSessionServcie.initChat(data);
+    сhatSessionServcie.initChat({ data, token });
   };
 
   const actions = useMemo(

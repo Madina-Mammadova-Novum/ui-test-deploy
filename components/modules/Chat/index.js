@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
 import { SCREENS } from '@/lib/constants';
-import { chatNotificationService, сhatSessionServcie } from '@/services/signalR';
+import { сhatSessionServcie } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
@@ -24,7 +24,6 @@ const Chat = () => {
   } = useSelector(getChatSelector);
 
   useEffect(() => {
-    chatNotificationService.initStatus();
     dispatch(getListOfChats());
   }, []);
 

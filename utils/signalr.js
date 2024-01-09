@@ -1,7 +1,7 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import { getRtURL } from '.';
-import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
+import { getSocketConnectionsParams } from './helpers';
 
 import { messageDataAdapter } from '@/adapters';
 import {
@@ -15,8 +15,6 @@ import {
 } from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
-const token = getCookieFromBrowser('session-access-token');
-
 export class SignalRController {
   constructor({ host, state }) {
     this.connection = null;
@@ -24,7 +22,7 @@ export class SignalRController {
     this.host = host;
   }
 
-  async setupConnection({ path }) {
+  async setupConnection({ path, token }) {
     this.connection = new HubConnectionBuilder()
       .withUrl(getRtURL(path), getSocketConnectionsParams(token))
       .configureLogging(LogLevel.None)
@@ -40,9 +38,9 @@ export class NotificationController extends SignalRController {
     super({ host, state });
   }
 
-  async initNotifications() {
+  async initNotifications({ token }) {
     try {
-      await this.setupConnection({ path: this.host });
+      await this.setupConnection({ path: this.host, token });
       this.connection.on('ReceiveNotification', async (response) => this.recievedNotification({ response }));
     } catch (err) {
       console.error(err);
@@ -64,10 +62,9 @@ export class NotificationController extends SignalRController {
 export class ChatSessionController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
-    this.messages = [];
   }
 
-  async initChat(data) {
+  async initChat({ data, token }) {
     await this.stop();
 
     this.store.dispatch(setConversation(true));
@@ -75,7 +72,7 @@ export class ChatSessionController extends SignalRController {
 
     this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
 
-    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}` });
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, token });
 
     this.connection.on('ReceiveMessage', (message) => {
       this.connection.invoke('ReadMessage', message.id);
@@ -111,8 +108,8 @@ export class ChatNotificationController extends SignalRController {
     super({ host, state });
   }
 
-  async initStatus() {
-    await this.setupConnection({ path: `${this.host}/chatlist` });
+  async initStatus({ token }) {
+    await this.setupConnection({ path: `${this.host}/chatlist`, token });
 
     this.connection.on('ReceiveMessage', (chat) => {
       this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });

@@ -627,14 +627,14 @@ export const freightFormatter = ({ value, format }) => {
   return response[format];
 };
 
-export function convertKeysToLowerCase(obj) {
+export function lowerCaseFormat(obj) {
   if (!obj || typeof obj !== 'object') {
     return obj;
   }
 
   return Object.keys(obj).reduce((newObj, key) => {
     const newKey = key.toLowerCase();
-    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : convertKeysToLowerCase(obj[key]);
+    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : lowerCaseFormat(obj[key]);
     return newObj;
   }, {});
 }
@@ -659,13 +659,14 @@ export const setCookie = (key, value) => {
   cookie.set(key, value, {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
-    expires: 60,
+    sameSite: 'Lax',
+    expires: 1,
   });
 };
 
 export const removeCookie = (key) => {
   cookie.remove(key, {
-    expires: 1,
+    expires: 0,
   });
 };
 

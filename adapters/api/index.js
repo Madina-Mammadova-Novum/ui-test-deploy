@@ -16,7 +16,7 @@ export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
     data: null,
     error: {
       type: errorResponse?.type || errorResponse?.error?.type || null,
-      traceId: errorResponse?.traceId || errorResponse?.error?.traceId || null,
+      traceid: errorResponse?.traceid || errorResponse?.error?.traceid || null,
       title: errorResponse?.title || errorResponse?.error?.title || 'Bad request',
       message: formatErrors(errorResponse?.errors || errorResponse?.error?.errors) || statusText,
       errors: errorResponse?.errors || errorResponse?.error?.errors || null,
