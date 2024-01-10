@@ -11,12 +11,24 @@ const initialState = {
       allPorts: [],
     },
     countries: [],
+    params: {
+      sidebarCollapsed: false,
+      sidebarSubMenuOpened: false,
+    },
   },
 };
 
 const generalSlice = createSlice({
   name: 'general',
   initialState,
+  reducers: {
+    handleCollapse: (state, { payload }) => {
+      state.data.params.sidebarCollapsed = payload;
+    },
+    handleToggle: (state, { payload }) => {
+      state.data.params.sidebarSubMenuOpened = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPorts.pending, (state) => {
       state.loading = true;
@@ -41,6 +53,6 @@ const generalSlice = createSlice({
   },
 });
 
-export const { setGeneralData } = generalSlice.actions;
+export const { handleCollapse, handleToggle } = generalSlice.actions;
 
 export default generalSlice.reducer;

@@ -12,7 +12,9 @@ const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, cl
     if (counter > 0 && !hovered && !typing) {
       return (
         <div
-          className={`absolute border p-1 h-5 w-5 border-white border-solid ${className} rounded-full bg-blue text-xxs font-bold text-white flex items-center justify-center`}
+          className={`absolute border p-1 h-5 w-5 border-white border-solid ${className} rounded-full bg-blue ${
+            counter > 100 ? 'text-[6px]' : 'text-xxs'
+          } font-bold text-white flex items-center justify-center`}
         >
           {counter}
         </div>
@@ -22,7 +24,9 @@ const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, cl
     if (counter > 0 && !hovered && !typing) {
       return (
         <div
-          className={`absolute border p-1 h-5 w-5 border-white border-solid ${className} rounded-full bg-blue text-xxs font-bold text-white flex items-center justify-center`}
+          className={`absolute border p-1 h-5 w-5 border-white border-solid ${className} rounded-full bg-blue ${
+            counter > 100 ? 'text-[6px]' : 'text-xxs'
+          } font-bold text-white flex items-center justify-center`}
         >
           {counter}
         </div>

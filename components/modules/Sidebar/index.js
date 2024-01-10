@@ -11,7 +11,7 @@ import SidebarXl from './SidebarXl';
 import { SidebarPropTypes } from '@/lib/types';
 
 import { SCREENS } from '@/lib/constants';
-import { handleCollapse } from '@/store/entities/user/slice';
+import { handleCollapse } from '@/store/entities/general/slice';
 import { getSidebarSelector } from '@/store/selectors';
 import { useMediaQuery } from '@/utils/hooks';
 

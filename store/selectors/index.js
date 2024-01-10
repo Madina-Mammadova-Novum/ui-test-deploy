@@ -4,7 +4,7 @@ import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
 
 export const authSelector = ({ auth }) => auth;
-export const sidebarSelector = ({ user }) => user?.params;
+export const sidebarSelector = ({ general }) => general;
 export const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role });
 export const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
@@ -28,8 +28,8 @@ export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => 
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
-    collapsed: state?.sidebarCollapsed,
-    opened: state?.sidebarSubMenuOpened,
+    collapsed: state.data.params.sidebarCollapsed,
+    opened: state.data.params.sidebarSubMenuOpened,
   };
 });
 
