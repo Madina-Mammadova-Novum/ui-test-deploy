@@ -1,22 +1,20 @@
 'use client';
 
+import { useDispatch } from 'react-redux';
+
 import { useRouter } from 'next/navigation';
 
 import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
-import { removeCookie } from '@/utils/helpers';
+import { clearSession } from '@/store/entities/auth/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleSignOut = () => {
-    removeCookie('session-user-id');
-    removeCookie('session-user-role');
-    removeCookie('session-access-token');
-    removeCookie('session-refresh-token');
-
-    localStorage.clear();
+    dispatch(clearSession());
     router.refresh();
   };
 

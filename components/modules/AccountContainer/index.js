@@ -19,15 +19,16 @@ export default function AccountContainer({ children }) {
   const { collapsed } = useSelector(getSidebarSelector);
   const { filterParams } = useSelector(getNotificationsDataSelector);
 
-  useEffect(() => {
-    dispatch(fetchCountries());
-    dispatch(fetchPorts());
-  }, []);
+  useEffect(() => {}, []);
 
   useEffect(() => {
-    chatNotificationService.initStatus({ token });
-    notificationService?.initNotifications({ token });
-  }, [token]);
+    if (token) {
+      dispatch(fetchCountries());
+      dispatch(fetchPorts());
+      chatNotificationService.initStatus();
+      notificationService?.initNotifications();
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));

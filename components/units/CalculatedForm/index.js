@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
-import { successResponseAdapter } from '@/adapters';
+import { successToolsDataAdapter } from '@/adapters';
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { FormManager } from '@/common';
 import { toolsSchema } from '@/lib/schemas';
@@ -47,10 +47,10 @@ const CalculatedForm = ({ children }) => {
   const handleSubmit = async (data) => {
     const { data: response, error } = await getEstimation({ data });
 
-    const result = successResponseAdapter({ data: { ...response, key: calculator.value } });
+    const result = successToolsDataAdapter({ data: { ...response, key: calculator.value } });
 
     if (result) methods.setValue('response', result);
-    if (error) errorToast(error?.title, error?.message);
+    if (error) errorToast(error.title, error.message);
   };
 
   const handleReset = () => {

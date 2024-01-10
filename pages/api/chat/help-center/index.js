@@ -10,9 +10,9 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
+    requestMethod: 'POST',
     path: getApiURL(`v1/chats/helpcenter`),
     dataAdapter: chatSupportResponseAdapter,
-    requestMethod: 'POST',
     options: { headers: Authorization(token) },
   });
 }
