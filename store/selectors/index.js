@@ -5,19 +5,19 @@ import { userDetailsAdapter } from '@/adapters/user';
 
 export const authSelector = ({ auth }) => auth;
 export const sidebarSelector = ({ user }) => user?.params;
-export const userSelector = ({ user }) => user;
+export const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role });
 export const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session.role });
+export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session?.role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture, auth }) => ({ ...preFixture, role: auth?.session.role });
-export const onSubsSelector = ({ onSubs, auth }) => ({ ...onSubs, role: auth?.session.role });
-export const fixtureSelector = ({ fixture, auth }) => ({ ...fixture, role: auth?.session.role });
-export const postFixtureSelector = ({ postFixture, auth }) => ({ ...postFixture, role: auth?.session.role });
-export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session.role });
+export const preFixtureSelector = ({ preFixture, auth }) => ({ ...preFixture, role: auth?.session?.role });
+export const onSubsSelector = ({ onSubs, auth }) => ({ ...onSubs, role: auth?.session?.role });
+export const fixtureSelector = ({ fixture, auth }) => ({ ...fixture, role: auth?.session?.role });
+export const postFixtureSelector = ({ postFixture, auth }) => ({ ...postFixture, role: auth?.session?.role });
+export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
 
 export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
   error: state.error,

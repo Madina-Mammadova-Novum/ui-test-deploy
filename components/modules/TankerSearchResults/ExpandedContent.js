@@ -6,9 +6,10 @@ import { TextRow, Title } from '@/elements';
 
 const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;
+
   return (
     <div className="mt-3 mb-5">
-      <Title level={3}>Tanker Information</Title>
+      <Title level="3">Tanker Information</Title>
 
       <div className="lg:flex text-xsm mt-2.5 gap-x-20">
         {vesselOwnerData.length && (
@@ -17,7 +18,7 @@ const ExpandedContent = ({ data }) => {
               About the Vessel Owner
             </Title>
             {vesselOwnerData.map(({ title, description }) => (
-              <TextRow title={title}>{description}</TextRow>
+              <TextRow title={title}>{description || 'Hidden info'}</TextRow>
             ))}
           </div>
         )}
@@ -30,7 +31,7 @@ const ExpandedContent = ({ data }) => {
             {tankerData.length && (
               <div>
                 {tankerData.map(({ title, description }) => (
-                  <TextRow title={title}>{description}</TextRow>
+                  <TextRow title={title}>{description || 'Hidden info'}</TextRow>
                 ))}
               </div>
             )}
@@ -40,7 +41,7 @@ const ExpandedContent = ({ data }) => {
                 {countryData.map(({ title, description, countryCode }) => (
                   <TextRow title={title}>
                     <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={countryCode} />
-                    {description}
+                    {description || 'Hidden info'}
                   </TextRow>
                 ))}
               </div>

@@ -102,13 +102,13 @@ export function messageDataAdapter({ data }) {
   };
 }
 
-export function messagesDataAdapter({ data, session }) {
+export function messagesDataAdapter({ data }) {
   const sortedArray = data?.map((el) => el).sort(sortFromPastToToday);
 
   const messagesByDate = sortedArray.reduce((acc, currentValue) => {
     const date = convertDate(currentValue?.createdAt);
 
-    acc[date] = [...(acc[date] ?? []), messageDataAdapter({ data: currentValue, session })];
+    acc[date] = [...(acc[date] ?? []), messageDataAdapter({ data: currentValue })];
 
     return acc;
   }, {});

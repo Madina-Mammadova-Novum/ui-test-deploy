@@ -687,3 +687,10 @@ export const getCookieFromServer = (key, req) => {
 
   return rawCookie.split('=')[1];
 };
+
+export const sessionCookieCleaner = () => {
+  removeCookie('session-access-token');
+  removeCookie('session-refresh-token');
+  removeCookie('session-user-role');
+  removeCookie('session-user-id');
+};
