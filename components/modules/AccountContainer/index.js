@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AccountContainerPropTyes } from '@/lib/types';
 
 import { chatNotificationService, notificationService } from '@/services/signalR';
+import { getListOfChats } from '@/store/entities/chat/actions';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { getNotificationsDataSelector, getSidebarSelector } from '@/store/selectors';
@@ -16,11 +17,13 @@ export default function AccountContainer({ children }) {
   const { collapsed } = useSelector(getSidebarSelector);
   const { filterParams } = useSelector(getNotificationsDataSelector);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     dispatch(fetchCountries());
     dispatch(fetchPorts());
+    dispatch(getListOfChats());
+  }, []);
+
+  useEffect(() => {
     chatNotificationService.initStatus();
     notificationService?.initNotifications();
   }, []);

@@ -4,10 +4,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
-import Hydrate from '@/elements/Hydrate';
 import { SCREENS } from '@/lib/constants';
 import { сhatSessionServcie } from '@/services/signalR';
-import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
@@ -27,10 +25,6 @@ const Chat = () => {
     status,
     chats: { user },
   } = useSelector(getChatSelector);
-
-  useEffect(() => {
-    dispatch(getListOfChats());
-  }, []);
 
   useEffect(() => {
     if (opened) document.body.classList.add('overflow-hidden');
@@ -61,7 +55,7 @@ const Chat = () => {
 
   return (
     activeConnection && (
-      <Hydrate>
+      <>
         <ChatButton
           counter={newMessages}
           onClick={handleOpen}
@@ -76,7 +70,7 @@ const Chat = () => {
           onCollapseSession={handleCollapseConversation}
         />
         <CollapsedChats />
-      </Hydrate>
+      </>
     )
   );
 };
