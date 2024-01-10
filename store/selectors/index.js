@@ -89,6 +89,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
     isActive: state.isActiveSession,
+    status: state.status,
   };
 });
 

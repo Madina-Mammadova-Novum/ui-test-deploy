@@ -9,12 +9,9 @@ import { chatNotificationService, notificationService } from '@/services/signalR
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { getNotificationsDataSelector, getSidebarSelector } from '@/store/selectors';
-import { getCookieFromBrowser } from '@/utils/helpers';
 
 export default function AccountContainer({ children }) {
   const dispatch = useDispatch();
-
-  const token = getCookieFromBrowser('session-access-token');
 
   const { collapsed } = useSelector(getSidebarSelector);
   const { filterParams } = useSelector(getNotificationsDataSelector);
@@ -22,12 +19,10 @@ export default function AccountContainer({ children }) {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    if (token) {
-      dispatch(fetchCountries());
-      dispatch(fetchPorts());
-      chatNotificationService.initStatus();
-      notificationService?.initNotifications();
-    }
+    dispatch(fetchCountries());
+    dispatch(fetchPorts());
+    chatNotificationService.initStatus();
+    notificationService?.initNotifications();
   }, []);
 
   useEffect(() => {

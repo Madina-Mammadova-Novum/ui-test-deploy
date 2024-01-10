@@ -17,7 +17,7 @@ import {
 } from '@/services';
 
 export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispatch }) => {
-  const { data: chats } = await getListOfChatSessions();
+  const { data: chats, status } = await getListOfChatSessions();
   const { data: support } = await getHelpCenterSession();
 
   dispatch(setUpdate(true));
@@ -30,6 +30,7 @@ export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispa
     archived: listOfChatsDataAdapter({ data: archivedChats }),
     support: helpCenterDataAdapter({ data: support }),
     updating: false,
+    status,
   };
 });
 
