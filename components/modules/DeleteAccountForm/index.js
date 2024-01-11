@@ -1,19 +1,22 @@
+/* eslint-disable react/prop-types */
+
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
+import { clearSession } from '@/store/entities/auth/slice';
 import { Notes } from '@/units';
-import { removeCookie } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const DeleteAccountForm = ({ title, pendingRequest }) => {
+const DeleteAccountForm = ({ title, closeModal }) => {
+  const dispatch = useDispatch();
   const schema = yup.object({ ...currentPasswordSchema() });
 
   const methods = useHookFormParams({ schema });
@@ -33,19 +36,15 @@ const DeleteAccountForm = ({ title, pendingRequest }) => {
   const handleSignOut = (message) => {
     successToast(message);
 
-    removeCookie('session-user-id');
-    removeCookie('session-user-role');
-    removeCookie('session-access-token');
-    removeCookie('session-refresh-token');
-    localStorage.clear();
+    dispatch(clearSession());
   };
 
   const onSubmit = async (data) => {
     const { error, message } = await deleteCompany({ data });
 
-    if (pendingRequest) {
-      errorToast('Bad request', 'You have pending personal request');
-    }
+    // if (pendingRequest) {
+    //   errorToast('Bad request', 'You have pending personal request');
+    // }
 
     if (!error) {
       handleSignOut(message);
@@ -57,6 +56,7 @@ const DeleteAccountForm = ({ title, pendingRequest }) => {
   return (
     <FormProvider {...methods}>
       <ModalFormManager
+        onClose={closeModal}
         className="max-w-[652px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Submit a Request to Delete ', variant: 'delete', size: 'large' }}
@@ -96,11 +96,6 @@ const DeleteAccountForm = ({ title, pendingRequest }) => {
       </ModalFormManager>
     </FormProvider>
   );
-};
-
-DeleteAccountForm.propTypes = {
-  pendingRequest: PropTypes.bool.isRequired,
-  title: PropTypes.string,
 };
 
 export default DeleteAccountForm;

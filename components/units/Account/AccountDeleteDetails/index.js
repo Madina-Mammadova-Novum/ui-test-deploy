@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types';
-
 import { DeleteAccountForm } from '@/modules';
 import { ModalWindow } from '@/units';
 
-const AccountDeleteDetails = ({ pendingRequest }) => {
+const AccountDeleteDetails = () => {
   return (
     <ModalWindow
       containerClass="w-auto"
@@ -14,13 +12,9 @@ const AccountDeleteDetails = ({ pendingRequest }) => {
         className: '!py-0 !mr-7',
       }}
     >
-      <DeleteAccountForm title="Delete your account" pendingRequest={pendingRequest} />
+      <DeleteAccountForm title="Delete your account" />
     </ModalWindow>
   );
-};
-
-AccountDeleteDetails.propTypes = {
-  pendingRequest: PropTypes.bool.isRequired,
 };
 
 export default AccountDeleteDetails;

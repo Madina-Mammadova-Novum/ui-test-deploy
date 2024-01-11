@@ -32,7 +32,7 @@ const ResetPasswordForm = ({ params }) => {
     const { error } = await resetPassword({ data: { ...formData, ...params } });
 
     if (!error) {
-      successToast('You have successfully changed your password');
+      successToast('You have successfully reset your password');
     } else {
       errorToast(error.title, error.message);
     }

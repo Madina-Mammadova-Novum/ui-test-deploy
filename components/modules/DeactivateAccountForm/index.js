@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
+
 'use client';
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { ModalFormManager } from '@/common';
@@ -11,15 +12,15 @@ import { currentPasswordSchema } from '@/lib/schemas';
 import { deactivateAccount } from '@/services/account';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const DeactivateAccountForm = ({ title, pendingRequest }) => {
+const DeactivateAccountForm = ({ title, closeModal }) => {
   const schema = yup.object({ ...currentPasswordSchema() });
 
   const methods = useHookFormParams({ state: { password: '' }, schema });
 
   const {
     setValue,
-    formState: { errors, isSubmitting },
     clearErrors,
+    formState: { errors, isSubmitting },
   } = methods;
 
   const handlePassword = (event) => {
@@ -31,12 +32,9 @@ const DeactivateAccountForm = ({ title, pendingRequest }) => {
   const onSubmit = async (data) => {
     const { error, message } = await deactivateAccount({ data });
 
-    if (pendingRequest) {
-      errorToast('Bad request', 'You have pending personal request');
-    }
-
     if (!error) {
       successToast(message);
+      closeModal();
     } else {
       errorToast('Bad request', error.message);
     }
@@ -48,6 +46,7 @@ const DeactivateAccountForm = ({ title, pendingRequest }) => {
         className="max-w-[356px]"
         submitAction={onSubmit}
         specialStyle
+        onClose={closeModal}
         submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
       >
         <div className="text-black flex flex-col gap-2.5">
@@ -75,11 +74,6 @@ const DeactivateAccountForm = ({ title, pendingRequest }) => {
       </ModalFormManager>
     </FormProvider>
   );
-};
-
-DeactivateAccountForm.propTypes = {
-  title: PropTypes.string,
-  pendingRequest: PropTypes.bool.isRequired,
 };
 
 export default DeactivateAccountForm;

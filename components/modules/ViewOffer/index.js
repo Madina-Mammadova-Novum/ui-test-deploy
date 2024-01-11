@@ -92,22 +92,23 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
         {tabContent()}
       </div>
 
-      {isCountdownActive && (
-        <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap justify-end">
-          <Button
-            onClick={() => setStep('offer_decline')}
-            buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}
-          />
-          <Button
-            onClick={() => setStep('offer_counteroffer')}
-            buttonProps={{ text: 'Send counteroffer', variant: 'secondary', size: 'large' }}
-          />
-          <Button
-            onClick={() => setStep('offer_accept')}
-            buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
-          />
-        </div>
-      )}
+      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap justify-end">
+        <Button
+          onClick={() => setStep('offer_decline')}
+          buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}
+          disabled={isCountdownActive}
+        />
+        <Button
+          onClick={() => setStep('offer_counteroffer')}
+          buttonProps={{ text: 'Send counteroffer', variant: 'secondary', size: 'large' }}
+          disabled={isCountdownActive}
+        />
+        <Button
+          onClick={() => setStep('offer_accept')}
+          buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
+          disabled={isCountdownActive}
+        />
+      </div>
     </div>
   );
 };
