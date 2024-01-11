@@ -32,7 +32,7 @@ const DeactivateAccountForm = ({ title, pendingRequest }) => {
     const { error, message } = await deactivateAccount({ data });
 
     if (pendingRequest) {
-      errorToast('Bad request', "Since you have an ongoing deal, you can't deactivate your account");
+      errorToast('Bad request', 'You have pending personal request');
     }
 
     if (!error) {

@@ -44,13 +44,13 @@ const DeleteAccountForm = ({ title, pendingRequest }) => {
     const { error, message } = await deleteCompany({ data });
 
     if (pendingRequest) {
-      errorToast('Bad request', "Since you have an ongoing deal, you can't delete your account");
+      errorToast('Bad request', 'You have pending personal request');
     }
 
     if (!error) {
       handleSignOut(message);
     } else {
-      errorToast('Bad request', error?.message);
+      errorToast('Bad request', error.title);
     }
   };
 
