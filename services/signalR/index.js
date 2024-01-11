@@ -1,10 +1,11 @@
 import { store } from '@/store';
-import { ChatNotificationController, ChatSessionController, NotificationController } from '@/utils/signalr';
+import { getCookieFromBrowser } from '@/utils/helpers';
+import { ChatNotificationController, ChatSessionController } from '@/utils/signalr';
 
-const serviceParams = (host) => ({ host, state: store });
+const token = getCookieFromBrowser('session-access-token');
+
+const serviceParams = (host) => ({ host, state: store, token });
 
 /* chat api */
 export const сhatSessionServcie = new ChatSessionController(serviceParams('hubs'));
 export const chatNotificationService = new ChatNotificationController(serviceParams('hubs'));
-/* notificaton api */
-export const notificationService = new NotificationController(serviceParams('hubs/NotificationHub'));

@@ -25,7 +25,7 @@ const Map = ({ className = 'h-full' }) => {
     (async () => {
       const { data } = await getTransitionalCoordinates();
       setCoord(data[0]?.waypoints?.map(({ lon, lat }) => [lon, lat]) || []);
-      console.log(data, 'WAWA');
+      // console.log(data, 'WAWA');
     })();
   }, []);
 

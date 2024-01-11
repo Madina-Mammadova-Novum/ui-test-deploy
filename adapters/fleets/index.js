@@ -49,7 +49,7 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: transformToCapitalize(title) ?? NO_DATA_MESSAGE.DEFAULT,
+      value: transformToCapitalize(title) || NO_DATA_MESSAGE.DEFAULT,
       type: TYPE.SEMIBOLD,
       disabled: !status,
       notified: notified || false,

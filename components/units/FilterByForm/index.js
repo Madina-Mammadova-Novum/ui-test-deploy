@@ -3,30 +3,25 @@
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import * as yup from 'yup';
-
 import { FilterByFormPropTypes } from '@/lib/types';
 
 import { filtersAdapter } from '@/adapters/post-fixture';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { postFixtureSelector } from '@/store/selectors';
+import { getPostFixtureDataSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const FilterByForm = ({ children, title = 'Filter by' }) => {
-  const schema = yup.object().shape({});
-
-  const methods = useHookFormParams({ schema });
   const dispatch = useDispatch();
-  const {
-    data: { perPage, sorting },
-  } = useSelector(postFixtureSelector);
+  const methods = useHookFormParams({ schema: null });
+
+  const { sorting, perPage } = useSelector(getPostFixtureDataSelector);
 
   const onSubmit = (formData) => {
-    const filters = filtersAdapter(formData);
-    dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters, sorting }));
+    const data = filtersAdapter(formData);
+    dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters: data, sorting }));
   };
 
   const onReset = () => {

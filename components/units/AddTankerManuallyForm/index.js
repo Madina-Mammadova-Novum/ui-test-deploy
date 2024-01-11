@@ -78,6 +78,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
         getCountries(),
         getPorts(),
       ]);
+
       setInitialLoading(false);
       const { data: tankerTypesData = [], error: tankerTypesError } = tankerTypesResponse;
       const { data: countriesData = [], error: countriesError } = countriesResponse;
@@ -137,11 +138,13 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
 
   const onSubmit = async (formData) => {
     const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId } });
+
     if (status === 200) {
       dispatch(refetchFleets());
       successToast(message);
       closeModal();
     }
+
     if (error) errorToast(error?.title, error?.message);
   };
 

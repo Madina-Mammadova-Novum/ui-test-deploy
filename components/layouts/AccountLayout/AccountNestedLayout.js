@@ -45,7 +45,7 @@ const AccountNestedLayout = ({ children, config }) => {
     }
 
     return <ToggleRows onToggleClick={onToggle} />;
-  }, [onToggle, sorting, withActions]);
+  }, [onToggle, sorting, withActions, dropdownStyles]);
 
   return (
     <div className="px-5">

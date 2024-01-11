@@ -465,6 +465,7 @@ export function positionByIdAdapter({ data }) {
 
 export function updateVesselPortAdapter({ data }) {
   if (!data) return null;
+
   return data;
 }
 

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 /* Actions */
+
 // eslint-disable-next-line import/no-cycle
 import { fetchNotifications } from './actions';
 
@@ -11,7 +12,7 @@ const initialState = {
   unwatchedData: [],
   loading: false,
   error: null,
-  isConnected: false,
+  isOpened: false,
   filterParams: {
     activeTab: 'unread',
     searchValue: '',
@@ -51,15 +52,15 @@ const notificationsSlice = createSlice({
     resetParams: (state) => {
       state.filterParams = initialState.filterParams;
     },
-    setConnectionStatus: (state, action) => {
-      state.isConnected = action.payload;
+    setIsOpened: (state, action) => {
+      state.isOpened = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchNotifications.pending, (state) => {
+    builder.addCase(fetchNotifications?.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchNotifications?.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.readed = payload.readed;
       state.unread = payload.unread;

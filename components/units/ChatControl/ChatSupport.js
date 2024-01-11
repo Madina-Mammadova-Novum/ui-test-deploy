@@ -9,17 +9,19 @@ import { Badge, ChatHelpLoader, Title } from '@/elements';
 import { сhatSessionServcie } from '@/services/signalR';
 import { removeCollapsedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatSupport = ({ title, description, loading }) => {
   const dispatch = useDispatch();
   const { support } = useSelector(getChatSelector).chats;
+  const token = getCookieFromBrowser('session-access-token');
 
   const handleOpenConversation = (e) => {
     e.stopPropagation();
 
     dispatch(removeCollapsedChat(support[0]?.chatId));
 
-    сhatSessionServcie.initChat(support[0]);
+    сhatSessionServcie.initChat({ data: support[0], token });
   };
 
   if (loading) return <ChatHelpLoader />;

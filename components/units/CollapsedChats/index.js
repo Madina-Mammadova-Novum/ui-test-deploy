@@ -6,12 +6,14 @@ import { ChatButton } from '@/elements';
 import { сhatSessionServcie } from '@/services/signalR';
 import { removeCollapsedChat, resetUser, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const CollapsedChats = () => {
   const dispatch = useDispatch();
   const { chats } = useSelector(getChatSelector);
+  const token = getCookieFromBrowser('session-access-token');
 
-  const onActivate = (user) => сhatSessionServcie.initChat(user);
+  const onActivate = (user) => сhatSessionServcie.initChat({ data: user, token });
 
   const onRemove = async ({ id }) => {
     dispatch(resetUser());

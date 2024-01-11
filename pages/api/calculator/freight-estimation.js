@@ -10,7 +10,6 @@ export default async function handler(req, res) {
     path: getApiURL(`calculator/freightestimation`),
     dataAdapter: responseFreightEstimationAdapter,
     requestMethod: 'POST',
-    options: { headers: { ...ContentTypeJson() } },
-    customErrorHandling: true,
+    options: { headers: ContentTypeJson() },
   });
 }

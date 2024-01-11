@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
 import { SCREENS } from '@/lib/constants';
-import { chatNotificationService, сhatSessionServcie } from '@/services/signalR';
-import { getListOfChats } from '@/store/entities/chat/actions';
+import { сhatSessionServcie } from '@/services/signalR';
 import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
@@ -22,11 +21,6 @@ const Chat = () => {
     newMessages,
     chats: { user },
   } = useSelector(getChatSelector);
-
-  useEffect(() => {
-    chatNotificationService.initStatus();
-    dispatch(getListOfChats());
-  }, []);
 
   useEffect(() => {
     if (opened) document.body.classList.add('overflow-hidden');

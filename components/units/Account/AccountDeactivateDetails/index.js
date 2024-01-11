@@ -1,3 +1,5 @@
+// import PropTypes from 'prop-types';
+
 import { DeactivateAccountForm } from '@/modules';
 import { ModalWindow } from '@/units';
 

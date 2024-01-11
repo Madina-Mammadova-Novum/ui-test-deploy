@@ -12,8 +12,7 @@ import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
 import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
-import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
-import { updateTankersByFleetId } from '@/store/entities/positions/slice';
+import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -35,7 +34,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
       } else if (state?.type === 'unassigned') {
         const { data: unassignedTankers } = await getUnassignedVessels();
-        dispatch(updateUnassignedFleet({ id: state.id, tankers: unassignedTankers }));
+        dispatch(updateUnassignedTanker({ id: state.id, tankers: unassignedTankers }));
       }
       closeModal();
     }

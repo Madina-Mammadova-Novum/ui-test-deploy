@@ -3,34 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchUserProfileData } from './actions';
 
 const initialState = {
-  loading: true,
+  loading: false,
   error: null,
-  role: null,
-  isAuthenticated: false,
   data: {
     personalDetails: {},
     companyDetails: {},
-  },
-  params: {
-    sidebarCollapsed: false,
-    sidebarSubMenuOpened: false,
   },
 };
 
 const userSlice = createSlice({
   name: 'account',
   initialState,
-  reducers: {
-    setRoleIdentity: (state, { payload }) => {
-      state.role = payload;
-    },
-    handleCollapse: (state, { payload }) => {
-      state.params.sidebarCollapsed = payload;
-    },
-    handleToggle: (state, { payload }) => {
-      state.params.sidebarSubMenuOpened = payload;
-    },
-  },
   extraReducers: (builder) => {
     builder.addCase(fetchUserProfileData.pending, (state) => {
       state.loading = true;
@@ -45,7 +28,5 @@ const userSlice = createSlice({
     });
   },
 });
-
-export const { handleCollapse, handleToggle, setRoleIdentity } = userSlice.actions;
 
 export default userSlice.reducer;

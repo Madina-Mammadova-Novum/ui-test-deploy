@@ -2,41 +2,34 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
 import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
-import { userTankersDetailsAdapter } from '@/adapters/vessel';
 
-export const sidebarSelector = ({ user }) => user?.params;
-export const userSelector = ({ user }) => user;
-export const vesselsSelector = ({ positions, fleets }) => {
-  return {
-    ...positions,
-    data: {
-      ...positions.data,
-      unassigned: {
-        title: 'Unassigned Fleet',
-        activeTankers: fleets.unassignedFleetData?.filter((fleet) => fleet.appearsInSearch === true).length,
-        inActiveTankers: fleets.unassignedFleetData?.filter((fleet) => fleet.appearsInSearch !== true).length,
-        type: 'unassigned',
-        tankers: userTankersDetailsAdapter({ data: fleets.unassignedFleetData }),
-      },
-    },
-  };
-};
+export const authSelector = ({ auth }) => auth;
+export const sidebarSelector = ({ general }) => general;
+export const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role });
+export const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
 export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating, user }) => ({ ...negotiating, role: user.role });
+export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session?.role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture, user }) => ({ ...preFixture, role: user.role });
-export const onSubsSelector = ({ onSubs, user }) => ({ ...onSubs, role: user.role });
-export const fixtureSelector = ({ fixture, user }) => ({ ...fixture, role: user.role });
-export const postFixtureSelector = ({ postFixture, user }) => ({ ...postFixture, role: user.role });
-export const chatSelector = ({ chat, user }) => ({ ...chat, role: user.role });
+export const preFixtureSelector = ({ preFixture, auth }) => ({ ...preFixture, role: auth?.session?.role });
+export const onSubsSelector = ({ onSubs, auth }) => ({ ...onSubs, role: auth?.session?.role });
+export const fixtureSelector = ({ fixture, auth }) => ({ ...fixture, role: auth?.session?.role });
+export const postFixtureSelector = ({ postFixture, auth }) => ({ ...postFixture, role: auth?.session?.role });
+export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
+
+export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
+  error: state.error,
+  loading: state.loading,
+  session: state.session,
+  authorized: state.authorized,
+}));
 
 export const getSidebarSelector = createDraftSafeSelector(sidebarSelector, (state) => {
   return {
-    collapsed: state?.sidebarCollapsed,
-    opened: state?.sidebarSubMenuOpened,
+    collapsed: state.data.params.sidebarCollapsed,
+    opened: state.data.params.sidebarSubMenuOpened,
   };
 });
 
@@ -96,6 +89,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
     totalActive: state.data?.active?.length,
     totalArchived: state.data?.archived?.length,
     isActive: state.isActiveSession,
+    status: state.status,
   };
 });
 

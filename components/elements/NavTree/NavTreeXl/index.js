@@ -13,7 +13,7 @@ import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
 import QuestionCircleSVG from '@/assets/images/questionCircle.svg';
 import SearchSVG from '@/assets/images/search.svg';
 import ToolsSVG from '@/assets/images/setting.svg';
-import { handleToggle } from '@/store/entities/user/slice';
+import { handleToggle } from '@/store/entities/general/slice';
 import { getSidebarSelector } from '@/store/selectors';
 
 const NavTreeXl = ({ data, active }) => {

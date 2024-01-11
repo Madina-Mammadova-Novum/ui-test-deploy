@@ -134,7 +134,7 @@ export async function deleteCompany({ data }) {
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
   const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
-  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
+  const response = await postData(`account/positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
 
   return {
     ...response,
@@ -143,7 +143,8 @@ export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }
 
 export async function getUserPositionById({ id }) {
   const body = getFleetByIdAdapter({ id });
-  const response = await putData(`account/my-positions/vesselId`, body);
+
+  const response = await putData(`account/positions/${id}`, body);
 
   return {
     ...response,
@@ -160,9 +161,9 @@ const fetchUserVesselById = async ({ id, ...rest }) => {
   };
 };
 
-export function* getVesselsById(data) {
-  return yield Promise.all(data.map(fetchUserVesselById));
-}
+export const getVesselsById = async (data) => {
+  return Promise.all(data.map(fetchUserVesselById));
+};
 
 export async function getUserFixtures() {
   const response = await getData(`account/fixture`, { headers: { ...ContentTypeJson() } });

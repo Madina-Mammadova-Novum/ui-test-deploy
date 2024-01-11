@@ -36,7 +36,9 @@ const ComplexPagination = ({
         />
 
         <div className="flex items-center absolute bottom-0 left-[50%] translate-x-[-50%] 3sm:translate-x-[unset] 3sm:position-unset">
-          <PaginationComponent currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange} />
+          {numberOfPages > 0 && (
+            <PaginationComponent currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange} />
+          )}
         </div>
         <Dropdown
           label="Go to page:"

@@ -156,12 +156,14 @@ export function offerDetailsAdapter({ data, role }) {
     freightFormat,
     isCountdownExtendedByOwner,
     isCountdownExtendedByCharterer,
+    isCountdownActive,
   } = data;
   const { isOwner } = getRoleIdentity({ role });
   const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
 
   return {
     allowExtension: allowExtensionByRole,
+    isCountdownActive,
     countdownData: {
       date: calculateCountdown(expiresAt, frozenAt),
       autoStart: !frozenAt,
@@ -185,6 +187,7 @@ export function offerDetailsAdapter({ data, role }) {
             key: 'Load port',
             label: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
             countryCode: loadTerminal?.port?.country?.codeISO2,
+            id: loadTerminal?.port?.countryId,
           },
           {
             key: 'Load terminal',
@@ -198,6 +201,7 @@ export function offerDetailsAdapter({ data, role }) {
               dischargeTerminal?.port?.locode && `, ${dischargeTerminal?.port?.locode}`
             }`,
             countryCode: dischargeTerminal?.port?.country?.codeISO2,
+            id: dischargeTerminal?.port?.countryId,
           },
           {
             key: 'Discharge terminal',

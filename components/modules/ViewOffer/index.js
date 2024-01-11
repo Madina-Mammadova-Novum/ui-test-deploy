@@ -35,7 +35,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
   const { role } = useSelector(getUserDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
-  const { voyageDetails, commercialOfferTerms, comments, countdownData } = data;
+  const { isCountdownActive, voyageDetails, commercialOfferTerms, comments, countdownData } = data;
   const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
@@ -72,7 +72,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
           <Button
             customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
             buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
-            disabled={!allowCountdownExtension}
+            disabled={!allowCountdownExtension || !isCountdownActive}
             onClick={handleExtendCountdown}
           />
         </div>
@@ -96,14 +96,17 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
         <Button
           onClick={() => setStep('offer_decline')}
           buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}
+          disabled={isCountdownActive}
         />
         <Button
           onClick={() => setStep('offer_counteroffer')}
           buttonProps={{ text: 'Send counteroffer', variant: 'secondary', size: 'large' }}
+          disabled={isCountdownActive}
         />
         <Button
           onClick={() => setStep('offer_accept')}
           buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
+          disabled={isCountdownActive}
         />
       </div>
     </div>

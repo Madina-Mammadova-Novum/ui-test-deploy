@@ -3,12 +3,13 @@
 import { HttpTransportType } from '@microsoft/signalr';
 import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
+import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
+import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -152,8 +153,8 @@ export function hasNestedArrays(data) {
   return isNested;
 }
 
-export function getFilledArray(length) {
-  return Array.from({ length }).map((_, index) => index + 1);
+export function getFilledArray(length = 1) {
+  return Array.from({ length: length || 1 }).map((_, index) => index + 1);
 }
 
 export function getValueWithPath(object, path, defaultValue) {
@@ -330,7 +331,7 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return SYSTEM_ERROR;
+  if (!errors) return ERROR_MESSGE;
 
   // eslint-disable-next-line no-unused-vars
   return Object.entries(errors).map(([key, value]) => {
@@ -405,10 +406,10 @@ export const setSkipedValue = (pageValue, perPageValue) => {
   return (pageValue - 1) * perPageValue;
 };
 
-export const transformToCapitalize = (str) => {
+export const transformToCapitalize = (str = '') => {
   return str
-    .split(' ')
-    .map((word) => word[0].toUpperCase() + word.substring(1))
+    ?.split(' ')
+    .map((word) => word[0]?.toUpperCase() + word.substring(1))
     .join(' ');
 };
 
@@ -509,8 +510,11 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId, session }) => {
-  return senderId === session?.userId ? session?.role : ROLES.BROKER;
+export const clientIdentification = ({ senderId }) => {
+  const id = getCookieFromBrowser('session-user-id');
+  const role = getCookieFromBrowser('session-user-role');
+
+  return senderId === id ? role : ROLES.BROKER;
 };
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {
@@ -623,14 +627,14 @@ export const freightFormatter = ({ value, format }) => {
   return response[format];
 };
 
-export function convertKeysToLowerCase(obj) {
+export function lowerCaseFormat(obj) {
   if (!obj || typeof obj !== 'object') {
     return obj;
   }
 
   return Object.keys(obj).reduce((newObj, key) => {
     const newKey = key.toLowerCase();
-    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : convertKeysToLowerCase(obj[key]);
+    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : lowerCaseFormat(obj[key]);
     return newObj;
   }, {});
 }
@@ -649,4 +653,44 @@ export const errorMessage = ({ errors }) => {
   }
 
   return { message: formatErrors(errors?.errors) };
+};
+
+export const setCookie = (key, value) => {
+  cookie.set(key, value, {
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Lax',
+    expires: 1,
+  });
+};
+
+export const removeCookie = (key) => {
+  cookie.remove(key, {
+    expires: 0,
+  });
+};
+
+export const getCookieFromBrowser = (key) => {
+  return cookie.get(key);
+};
+
+export const getCookieFromServer = (key, req) => {
+  if (!req.headers.cookie) {
+    return undefined;
+  }
+
+  const rawCookie = req.headers.cookie.split(';').find((c) => c.trim().startsWith(`${key}=`));
+
+  if (!rawCookie) {
+    return undefined;
+  }
+
+  return rawCookie.split('=')[1];
+};
+
+export const sessionCookieCleaner = () => {
+  removeCookie('session-access-token');
+  removeCookie('session-refresh-token');
+  removeCookie('session-user-role');
+  removeCookie('session-user-id');
 };

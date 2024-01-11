@@ -29,16 +29,42 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const { isOwner } = getRoleIdentity({ role });
 
   const { tankerId, products, loadPortId, dischargePortId } = data;
+
   const {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
     loading: initialLoading,
   } = useSelector(offerSelector);
+
+  const handleFormat = async () => {
+    const productsData = getValues('products');
+    const totalCargoQuantity = calculateTotal(productsData, 'quantity');
+
+    const body = { loadPortId, dischargePortId, totalCargoQuantity };
+    const response = await calculateFreightEstimation({ data: body });
+
+    if (!response.error) {
+      setFreightEstimation({
+        ...response.data,
+        min: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
+        max: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
+      });
+      setValue('totalAmount', data.total);
+    }
+  };
+
+  useEffect(() => {
+    if (data?.freight?.value) {
+      handleFormat();
+    }
+  }, []);
 
   const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
 
   useEffect(() => {
     dispatch(fetchOfferOptioins(tankerId));
   }, [dispatch, tankerId]);
+
+  useEffect(() => {}, []);
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -52,15 +78,18 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     if (key === 'freight') {
       const productsData = getValues('products');
       const totalCargoQuantity = calculateTotal(productsData, 'quantity');
+
       const { status, data: freightEstimationData } = await calculateFreightEstimation({
         data: { loadPortId, dischargePortId, totalCargoQuantity },
       });
+
       if (status === 200) {
         setFreightEstimation({
           ...freightEstimationData,
           min: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
           max: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
         });
+
         setValue('totalAmount', data.total);
       }
     }

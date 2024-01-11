@@ -75,7 +75,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           </>
         );
     }
-  }, [currentTab]);
+  }, [currentTab, voyageDetails, comments, counterofferData, scrollToBottom]);
 
   return (
     <div className="w-[610px]">
@@ -131,7 +131,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
             <div
               ref={scrollingContainerRef}
               className={classnames(
-                'h-[320px] overflow-y-auto overflow-x-hidden',
+                'h-[320px] overflow-y-auto overflow-x-hidden p-5',
                 scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
               )}
             >

@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   updating: false,
   error: false,
+  status: null,
   opened: false,
   isActiveSession: false,
   data: {
@@ -160,6 +161,7 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
+      state.status = payload.status;
       state.updating = payload.updating;
       state.data.active = payload.active;
       state.data.archived = payload.archived;

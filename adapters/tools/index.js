@@ -75,7 +75,7 @@ export const successDistanceAdapter = ({ data }) => {
   };
 };
 
-export const successResponseAdapter = ({ data }) => {
+export const successToolsDataAdapter = ({ data }) => {
   if (!data) return null;
 
   const response = {

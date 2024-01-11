@@ -1,36 +1,21 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
-import { NEGOTIATING_TABS, PAGE_STATE } from '@/lib/constants';
+import { NEGOTIATING_TABS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
-import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useFilters } from '@/utils/hooks';
 
 const Negotiating = () => {
-  const dispatch = useDispatch();
-  const { offers, loading, role, toggle } = useSelector(getNegotiatingDataSelector);
+  const { offers, loading, toggle, role } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
-
-  const { page, pageSize } = PAGE_STATE;
-
-  const { currentPage, perPage } = useFilters({
-    initialPage: page,
-    itemsPerPage: pageSize,
-    data: offers,
-  });
-
-  useEffect(() => {
-    dispatch(fetchUserNegotiating({ page: currentPage, perPage }));
-  }, [currentPage, perPage]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner

@@ -625,12 +625,8 @@ export const prefilledSearchDataAdapter = ({ data }) => {
     name: dischargeTerminalName,
     port: { id: dischargePortId, name: dischargePortName, locode: dischargePortLocode } = {},
   } = dischargeTerminal;
-  const prefilledProducts = products.reduce((resulted, curr, index) => {
-    resulted[`products[${index + 1}].product`] = { label: curr.productName, value: curr.id };
-    resulted[`products[${index + 1}].density`] = curr.density;
-    return resulted;
-  }, {});
 
+  // Response data
   return {
     laycanStart,
     laycanEnd,
@@ -639,6 +635,13 @@ export const prefilledSearchDataAdapter = ({ data }) => {
     dischargePort: { label: `${dischargePortName}, ${dischargePortLocode}`, value: dischargePortId },
     dischargeTerminal: { label: dischargeTerminalName, value: dischargeTerminalId },
     cargoType: { label: cargoName, value: cargoId },
-    ...prefilledProducts,
+    productsByIndex: Array.from({ length: products.length }, (_, index) => index),
+    products: products.map((product) => ({
+      density: product.density,
+      product: {
+        label: product.productName,
+        value: product.id,
+      },
+    })),
   };
 };

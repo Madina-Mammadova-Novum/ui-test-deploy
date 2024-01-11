@@ -21,7 +21,7 @@ const ExpandableCard = ({ data, expandAll, className, isOpened, onClick }) => {
         type={data?.type}
         headerData={fleetsHeader}
         rows={rowsData}
-        noDataMessage="This Fleet has no Tankers"
+        noDataMessage="This Fleet has no tankers"
       />
     </ExpandableCardWrapper>
   );

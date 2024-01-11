@@ -4,6 +4,7 @@ import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
   const { navigation, l: locale } = req.query;
+
   return responseHandler({
     req,
     res,

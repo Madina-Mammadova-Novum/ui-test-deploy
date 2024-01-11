@@ -1,19 +1,21 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
+import { useDispatch } from 'react-redux';
+
+import { useRouter } from 'next/navigation';
 
 import { LogoutButtonPropTypes } from '@/lib/types';
 
-import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
+import { clearSession } from '@/store/entities/auth/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
-  const reset = () => {
-    localStorage.clear();
-  };
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const handleSignOut = async () => {
-    await signOut({ ...signOutAdapter() }).then(reset);
+  const handleSignOut = () => {
+    dispatch(clearSession());
+    router.refresh();
   };
 
   return (

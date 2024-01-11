@@ -1,20 +1,19 @@
-import { getServerSession } from 'next-auth';
-
 import { responseOwnerAcceptPrefixtureAdapter } from '@/adapters';
-import { Authorization, ContentTypeJson } from '@/lib/constants';
+import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
+  const role = getCookieFromServer('session-user-role', req);
+  const token = getCookieFromServer('session-access-token', req);
+
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/${session.role}/deals/acceptprefixture`),
+    path: getApiURL(`v1/${role}/deals/acceptprefixture`),
     dataAdapter: responseOwnerAcceptPrefixtureAdapter,
     requestMethod: 'POST',
-    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
-    customErrorHandling: true,
+    options: { headers: Authorization(token) },
   });
 }
