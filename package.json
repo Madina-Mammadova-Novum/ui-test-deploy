@@ -1,7 +1,7 @@
 {
   "name": "shiplink-basic-project",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A NextJS application",
   "scripts": {
     "develop": "next dev",
