@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types';
+
 import { DeactivateAccountForm } from '@/modules';
 import { ModalWindow } from '@/units';
 
-const AccountDeactivateDetails = () => {
+const AccountDeactivateDetails = ({ pendingRequest }) => {
   return (
     <ModalWindow
       buttonProps={{
@@ -11,9 +13,13 @@ const AccountDeactivateDetails = () => {
         className: '!py-0',
       }}
     >
-      <DeactivateAccountForm title="Deactivation of your account" />
+      <DeactivateAccountForm title="Deactivation of your account" pendingRequest={pendingRequest} />
     </ModalWindow>
   );
+};
+
+AccountDeactivateDetails.propTypes = {
+  pendingRequest: PropTypes.bool.isRequired,
 };
 
 export default AccountDeactivateDetails;

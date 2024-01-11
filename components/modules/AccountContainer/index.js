@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountContainerPropTyes } from '@/lib/types';
 
-import { chatNotificationService, notificationService } from '@/services/signalR';
+import { chatNotificationService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
@@ -25,7 +25,6 @@ export default function AccountContainer({ children }) {
 
   useEffect(() => {
     chatNotificationService.initStatus();
-    notificationService?.initNotifications();
   }, []);
 
   useEffect(() => {

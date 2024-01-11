@@ -11,9 +11,7 @@ import { forgotPassword } from '@/services/user';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ForgotPasswordForm = () => {
-  const schema = yup.object().shape({
-    ...forgotPasswordSchema(),
-  });
+  const schema = yup.object().shape({ ...forgotPasswordSchema() });
 
   const methods = useHookFormParams({ schema });
 
@@ -22,11 +20,15 @@ const ForgotPasswordForm = () => {
     register,
     formState: { isSubmitting, errors },
   } = methods;
+
   const onSubmit = async (formData) => {
     const { error, message } = await forgotPassword({ data: formData });
 
-    if (!error) successToast(message);
-    else errorToast(error?.title, error?.message);
+    if (!error) {
+      successToast(message);
+    } else {
+      errorToast(error.title, error.message);
+    }
 
     reset();
   };

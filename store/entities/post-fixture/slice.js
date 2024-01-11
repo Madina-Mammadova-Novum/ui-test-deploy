@@ -8,9 +8,10 @@ const initialState = {
   toggle: false,
   data: {
     offers: [],
-    totalPages: 0,
     filters: {},
+    filterData: {},
     sorting: {},
+    totalPages: 0,
     perPage: 5,
   },
 };

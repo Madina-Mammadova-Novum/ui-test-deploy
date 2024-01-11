@@ -30,8 +30,12 @@ const ResetPasswordForm = ({ params }) => {
 
   const onSubmit = async (formData) => {
     const { error } = await resetPassword({ data: { ...formData, ...params } });
-    if (!error) successToast('You have successfully changed your password');
-    else errorToast(error?.title, error?.message);
+
+    if (!error) {
+      successToast('You have successfully changed your password');
+    } else {
+      errorToast(error.title, error.message);
+    }
 
     handleResetFields();
   };

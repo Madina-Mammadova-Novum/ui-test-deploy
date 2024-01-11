@@ -1,11 +1,22 @@
-import ReactCountryFlag from 'react-country-flag';
+'use client';
+
+import { useSelector } from 'react-redux';
 
 import { ExpandedContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { Flag } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;
+
+  const { countries } = useSelector(getGeneralDataSelector);
+
+  const token = getCookieFromBrowser('session-access-token');
+
+  const hashedInfo = (text = null) => (token ? text : 'Hidden info');
 
   return (
     <div className="mt-3 mb-5">
@@ -18,7 +29,7 @@ const ExpandedContent = ({ data }) => {
               About the Vessel Owner
             </Title>
             {vesselOwnerData.map(({ title, description }) => (
-              <TextRow title={title}>{description || 'Hidden info'}</TextRow>
+              <TextRow title={title}>{hashedInfo(description)}</TextRow>
             ))}
           </div>
         )}
@@ -31,7 +42,7 @@ const ExpandedContent = ({ data }) => {
             {tankerData.length && (
               <div>
                 {tankerData.map(({ title, description }) => (
-                  <TextRow title={title}>{description || 'Hidden info'}</TextRow>
+                  <TextRow title={title}>{hashedInfo(description)}</TextRow>
                 ))}
               </div>
             )}
@@ -40,8 +51,8 @@ const ExpandedContent = ({ data }) => {
               <div>
                 {countryData.map(({ title, description, countryCode }) => (
                   <TextRow title={title}>
-                    <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={countryCode} />
-                    {description || 'Hidden info'}
+                    <Flag id={countryCode} data={countries} className="mr-1" />
+                    {hashedInfo(description)}
                   </TextRow>
                 ))}
               </div>

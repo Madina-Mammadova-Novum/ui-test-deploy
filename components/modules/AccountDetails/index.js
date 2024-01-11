@@ -23,6 +23,8 @@ const AccountDetails = () => {
     dispatch(fetchUserProfileData());
   }, []);
 
+  const pendingRequest = data?.personalDetails?.hasPendingPersonalInfoUpdateRequest ?? false;
+
   return (
     <section className="flex justify-start items-start flex-col px-5 gap-2.5">
       <Title level="1" className="py-5">
@@ -35,8 +37,8 @@ const AccountDetails = () => {
           <AccountCompanyDetails company={data?.companyDetails} />
           <AccountPasswordDetails />
           <div className="pt-2.5 pb-5">
-            <AccountDeactivateDetails />
-            <AccountDeleteDetails />
+            <AccountDeactivateDetails pendingRequest={pendingRequest} />
+            <AccountDeleteDetails pendingRequest={pendingRequest} />
           </div>
         </>
       )}

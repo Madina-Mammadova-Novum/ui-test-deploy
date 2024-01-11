@@ -38,7 +38,7 @@ export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
 };
 
 export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = null }) => {
-  if (['POST', 'PATCH', 'PUT'].includes(requestMethod)) {
+  if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(requestMethod)) {
     return {
       method: requestMethod,
       url: path,

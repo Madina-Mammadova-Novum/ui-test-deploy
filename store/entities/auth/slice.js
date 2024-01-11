@@ -17,15 +17,15 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     clearSession: (state) => {
-      state.authorized = initialState.authorized;
-      state.error = initialState.error;
-      state.session = initialState.session;
-      state.loading = initialState.loading;
-
       removeCookie('session-user-id');
       removeCookie('session-user-role');
       removeCookie('session-access-token');
       removeCookie('session-refresh-token');
+
+      state.authorized = initialState.authorized;
+      state.error = initialState.error;
+      state.session = initialState.session;
+      state.loading = initialState.loading;
     },
   },
   extraReducers: (builder) => {

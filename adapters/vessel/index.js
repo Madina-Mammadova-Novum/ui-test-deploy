@@ -113,22 +113,22 @@ export function responseSearchVesselAdapter({ data }) {
         {
           title: 'Country of Registered Owner',
           description: registeredOwnerCountry?.name,
-          countryCode: registeredOwnerCountry?.codeISO2,
+          countryCode: registeredOwnerCountry?.id,
         },
         {
           title: 'Country of Disponent Owner',
           description: disponentOwnerCountry?.name,
-          countryCode: disponentOwnerCountry?.codeISO2,
+          countryCode: disponentOwnerCountry?.id,
         },
         {
           title: 'Country of Technical Operator',
           description: technicalOperatorCountry?.name,
-          countryCode: technicalOperatorCountry?.codeISO2,
+          countryCode: technicalOperatorCountry?.id,
         },
         {
           title: 'Country of Commercial Operator',
           description: commercialOperatorCountry?.name,
-          countryCode: commercialOperatorCountry?.codeISO2,
+          countryCode: commercialOperatorCountry?.id,
         },
       ],
     },
