@@ -96,17 +96,17 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
         <Button
           onClick={() => setStep('offer_decline')}
           buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}
-          disabled={isCountdownActive}
+          disabled={!isCountdownActive}
         />
         <Button
           onClick={() => setStep('offer_counteroffer')}
           buttonProps={{ text: 'Send counteroffer', variant: 'secondary', size: 'large' }}
-          disabled={isCountdownActive}
+          disabled={!isCountdownActive}
         />
         <Button
           onClick={() => setStep('offer_accept')}
           buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
-          disabled={isCountdownActive}
+          disabled={!isCountdownActive}
         />
       </div>
     </div>
