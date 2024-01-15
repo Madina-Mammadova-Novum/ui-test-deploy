@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ModalWrapper from '../ModalWrapper';
@@ -21,13 +21,11 @@ const Notification = () => {
   const [isOpened, setIsOpened] = useState(false);
 
   const handleOpen = () => setIsOpened(!isOpened);
-  const handleClose = () => setIsOpened(false);
 
-  useEffect(() => {
-    return () => {
-      dispatch(resetParams());
-    };
-  }, [isOpened]);
+  const handleClose = () => {
+    dispatch(resetParams());
+    setIsOpened(false);
+  };
 
   return (
     <div>

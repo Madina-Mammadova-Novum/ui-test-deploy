@@ -39,12 +39,12 @@ export const notificationsDataAdapter = ({ data }) => {
 };
 
 export const notificationParamsAdapter = ({ data }) => {
-  if (!data) return {};
+  if (!data) return null;
 
   return {
-    search: data?.searchValue === 'all' ? '' : data?.searchValue || '',
-    filteredBy: data?.sortedValue ?? '',
-    watched: data?.watched ?? false,
+    query: data?.searchValue === 'all' ? '' : data?.searchValue || '',
+    origin: data?.sortedValue ?? '',
+    isOpened: data?.watched ?? false,
     skip: data?.skip ?? 0,
     take: data?.take ?? 20,
   };

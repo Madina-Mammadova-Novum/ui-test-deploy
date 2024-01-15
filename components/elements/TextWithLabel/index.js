@@ -37,7 +37,7 @@ const TextWithLabel = ({
           </ManualTooltip>
         )}
       </Label>
-      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center">
+      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-3.5">
         {coverImage && coverImage}
         {countryCode && <Flag data={countries} id={countryCode} />}
         {text ? <p className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}

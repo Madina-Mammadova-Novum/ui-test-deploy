@@ -129,16 +129,16 @@ export function moreMessagesDataAdapter({ payload, messages }) {
   }, {});
 }
 
-export function chatHistoryResponseAdapter({ data, session }) {
+export function chatHistoryResponseAdapter({ data }) {
   if (!data) return null;
 
-  const { messages, created, isLast } = data?.data;
+  const { messages = [], created, isLast } = data;
 
   return {
     data: {
       created,
       isLast,
-      messages: messagesDataAdapter({ data: messages || [], session }),
+      messages: messagesDataAdapter({ data: messages }),
     },
   };
 }

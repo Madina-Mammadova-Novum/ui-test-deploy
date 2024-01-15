@@ -9,9 +9,9 @@ export const successResponseAdapter = (response) => ({
 });
 
 export const errorResponseAdapter = (error) => ({
-  status: error.response.status,
-  statusText: error.response.statusText,
-  errorResponse: lowerCaseFormat(error.response.data),
+  status: error.response?.status || 500,
+  statusText: error.response?.statusText || 'Internal Server Error',
+  errorResponse: lowerCaseFormat(error.response?.data),
 });
 
 export const apiSuccessAdapter = ({ status, statusText, successResponse }) => {
@@ -50,6 +50,7 @@ export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = 
   return {
     method: requestMethod,
     url: path,
+    data: null,
     ...options,
   };
 };

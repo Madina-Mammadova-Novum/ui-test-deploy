@@ -45,11 +45,11 @@ export class NotificationController extends SignalRController {
     super({ host, state, token });
   }
 
-  async initNotifications() {
+  init() {
     if (!this.token) return;
 
     try {
-      await this.setupConnection({ path: this.host, token: this.token });
+      this.setupConnection({ path: this.host, token: this.token });
       this.connection.on('ReceiveNotification', async (response) => this.recievedNotification({ response }));
     } catch (err) {
       console.error(err);
@@ -83,8 +83,7 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setUser(data));
 
     this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
-
-    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, token: this.token });
+    this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, token: this.token });
 
     this.connection.on('ReceiveMessage', (message) => {
       this.connection.invoke('ReadMessage', message.id);
@@ -110,7 +109,11 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setLoadConversation(false));
 
     if (this.connection) {
-      await this.connection.stop();
+      try {
+        await this.connection.stop();
+      } catch (error) {
+        console.error('Error stopping SignalR connection:', error);
+      }
     }
   }
 }
@@ -120,10 +123,10 @@ export class ChatNotificationController extends SignalRController {
     super({ host, state, token });
   }
 
-  async initStatus() {
+  init() {
     if (!this.token) return;
 
-    await this.setupConnection({ path: `${this.host}/chatlist`, token: this.token });
+    this.setupConnection({ path: `${this.host}/chatlist`, token: this.token });
 
     this.connection.on('ReceiveMessage', (chat) => {
       this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });

@@ -1,6 +1,10 @@
-import { lowerCaseFormat } from './helpers';
-
-import { apiErrorAdapter, apiOptionsAdapter, apiSuccessAdapter, successResponseAdapter } from '@/adapters/api';
+import {
+  apiErrorAdapter,
+  apiOptionsAdapter,
+  apiSuccessAdapter,
+  errorResponseAdapter,
+  successResponseAdapter,
+} from '@/adapters/api';
 import { responseAdapter } from '@/adapters/response';
 import { api } from '@/lib/axios';
 
@@ -10,11 +14,7 @@ export const apiHandler = async (options) => {
 
     return apiSuccessAdapter(successResponseAdapter(response));
   } catch (error) {
-    return apiErrorAdapter({
-      status: error.response.status,
-      statusText: error.response.statusText,
-      errorResponse: lowerCaseFormat(error.response.data),
-    });
+    return apiErrorAdapter(errorResponseAdapter(error));
   }
 };
 

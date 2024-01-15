@@ -23,8 +23,8 @@ export default async function AccountLayout({ children }) {
   };
 
   return (
-    <AccountContainer role={role}>
-      <Sidebar data={routes[role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
+    <AccountContainer>
+      <Sidebar data={routes[role]} />
       <AccountHeader />
       <main className="grow">{children}</main>
       <AccountFooter socials={socials} legal={legal} />

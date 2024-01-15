@@ -126,10 +126,11 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
           <Dropdown
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
-            asyncCall={loading}
+            loading={loading}
             disabled={!responseCountdownOptions?.length}
             onChange={handleChangeOption}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+            asyncCall
           />
         </div>
       </div>

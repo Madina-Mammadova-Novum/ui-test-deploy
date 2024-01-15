@@ -3,33 +3,27 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AccountContainerPropTyes } from '@/lib/types';
+import { usePathname } from 'next/navigation';
 
-import { chatNotificationService } from '@/services/signalR';
-import { getListOfChats } from '@/store/entities/chat/actions';
-import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { chatNotificationService, globalNotificationService } from '@/services/signalR';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { getNotificationsDataSelector, getSidebarSelector } from '@/store/selectors';
 
 export default function AccountContainer({ children }) {
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const { collapsed } = useSelector(getSidebarSelector);
   const { filterParams } = useSelector(getNotificationsDataSelector);
 
   useEffect(() => {
-    dispatch(fetchCountries());
-    dispatch(fetchPorts());
-    dispatch(getListOfChats());
-  }, []);
-
-  useEffect(() => {
-    chatNotificationService.initStatus();
+    chatNotificationService.init();
+    globalNotificationService.init();
   }, []);
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));
-  }, [filterParams]);
+  }, [filterParams, pathname]);
 
   return (
     <div
@@ -39,5 +33,3 @@ export default function AccountContainer({ children }) {
     </div>
   );
 }
-
-AccountContainer.propTypes = AccountContainerPropTyes;

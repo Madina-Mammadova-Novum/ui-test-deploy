@@ -4,7 +4,7 @@ import { AUTH } from './types';
 
 import { decodedTokenAdapter, signInAdapter, tokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { login } from '@/services';
-import { setCookie } from '@/utils/helpers';
+import { sessionCookieData } from '@/utils/helpers';
 
 export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWithValue }) => {
   const response = await login({ data: signInAdapter({ data }) });
@@ -13,12 +13,9 @@ export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWit
     return rejectWithValue(response.error);
   }
 
-  const { sub, role, ...rest } = decodedTokenAdapter(response?.data?.access_token);
+  const { sub, role, ...rest } = decodedTokenAdapter(response.data.access_token);
 
-  setCookie('session-user-id', sub);
-  setCookie('session-user-role', userRoleAdapter({ data: role }));
-  setCookie('session-access-token', response.data.access_token);
-  setCookie('session-refresh-token', response.data.refresh_token);
+  sessionCookieData(response.data);
 
   return {
     userId: sub,

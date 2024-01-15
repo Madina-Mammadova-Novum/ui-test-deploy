@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import Select from 'react-select';
 
 import AsyncSelect from 'react-select/async';
@@ -16,7 +15,7 @@ import { filterDataByLowerCase } from '@/utils/helpers';
 
 const LoadingIndicator = () => (
   <div className="spinner-border text-primary" role="status">
-    <Loader className="w-5 h-5" />
+    <Loader className="w-4 h-4" />
   </div>
 );
 
@@ -26,50 +25,59 @@ export const SimpleDropdown = ({
   ref,
   hardHeight,
   isDisabled,
+  isOpen,
+  onOpen = () => {},
+  loading,
   onExpand = () => {},
   ...rest
 }) => {
-  const [open, setOpen] = useState(false);
-
   const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
     <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} />
   );
 
+  const handleOpenMenu = () => {
+    onOpen(true);
+    onExpand();
+  };
+
+  const handleClose = () => onOpen(false);
+
   if (asyncCall) {
-    const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue));
+    const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue, options));
 
     return (
       <AsyncSelect
         {...rest}
-        cacheOptions
+        menuIsOpen={isOpen}
+        isLoading={loading}
         defaultOptions={options}
         loadOptions={loadOptions}
-        components={{ Option: OptionsList, LoadingIndicator }}
         formatOptionLabel={printOptions}
-        isLoading={asyncCall}
+        onMenuOpen={handleOpenMenu}
+        onMenuClose={handleClose}
         theme={dropdownTheme}
-        closeMenuOnSelect
         isDisabled={isDisabled}
+        className={isDisabled && 'opacity-50'}
+        components={{ Option: OptionsList, LoadingIndicator }}
+        closeMenuOnSelect
+        cacheOptions
       />
     );
   }
+
   return (
     <Select
       {...rest}
-      isLoading={asyncCall}
+      menuIsOpen={isOpen}
       options={options}
-      components={{ Option: OptionsList, LoadingIndicator }}
       formatOptionLabel={printOptions}
+      onMenuOpen={handleOpenMenu}
+      onMenuClose={handleClose}
       theme={dropdownTheme}
-      closeMenuOnSelect
-      menuIsOpen={open}
       isDisabled={isDisabled}
-      onMenuOpen={() => {
-        setOpen(true);
-        onExpand();
-      }}
-      onMenuClose={() => setOpen(false)}
       className={isDisabled && 'opacity-50'}
+      components={{ Option: OptionsList, LoadingIndicator }}
+      closeMenuOnSelect
     />
   );
 };

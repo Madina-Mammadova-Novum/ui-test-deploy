@@ -17,4 +17,4 @@ class NotificationsModel {
   }
 }
 
-export const setNotifications = ({ data }) => new NotificationsModel(data).setFormData();
+export const setNotifications = (data) => new NotificationsModel(data).setFormData();

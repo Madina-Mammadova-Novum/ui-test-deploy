@@ -105,7 +105,8 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           <Dropdown
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
-            asyncCall={loading}
+            loading={loading}
+            asyncCall
             disabled={!responseCountdownOptions.length || confirmCounteroffer}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}

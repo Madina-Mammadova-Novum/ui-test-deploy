@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { SimpleDropdown } from './SimpleDropdown';
@@ -13,6 +13,7 @@ import { getValueWithPath } from '@/utils/helpers';
 
 const FormDropdown = ({
   options = [],
+  loading,
   onChange,
   name,
   label = '',
@@ -21,14 +22,12 @@ const FormDropdown = ({
   customStyles = {},
   ...rest
 }) => {
+  const [open, setOpen] = useState(false);
+
   const { dropdownWidth, dropdownExpanded = false, className = '' } = customStyles;
 
-  const handleChange = useCallback(
-    (option) => {
-      onChange(option);
-    },
-    [onChange]
-  );
+  const handleToggle = (value) => setOpen(value);
+  const handleChange = (option) => onChange(option);
 
   return (
     <Controller
@@ -36,6 +35,10 @@ const FormDropdown = ({
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
         const hasValue = { ...field }.value;
+
+        if (open) {
+          field.value = null;
+        }
 
         return (
           <div className={`relative ${className}`}>
@@ -45,6 +48,9 @@ const FormDropdown = ({
             <SimpleDropdown
               {...field}
               {...rest}
+              іsOpen={open}
+              onOpen={handleToggle}
+              loading={loading}
               ref={ref}
               id={name}
               options={options}
