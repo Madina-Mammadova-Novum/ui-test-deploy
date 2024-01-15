@@ -511,11 +511,8 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId }) => {
-  const id = getCookieFromBrowser('session-user-id');
-  const role = getCookieFromBrowser('session-user-role');
-
-  return senderId === id ? role : ROLES.BROKER;
+export const clientIdentification = ({ senderId, clientId, role }) => {
+  return senderId === clientId ? role : ROLES.BROKER;
 };
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {

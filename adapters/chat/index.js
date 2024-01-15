@@ -89,7 +89,7 @@ export function listOfChatsDataAdapter({ data }) {
   }));
 }
 
-export function messageDataAdapter({ data }) {
+export function messageDataAdapter({ data, clientId, role }) {
   if (!data) return null;
 
   const { body, senderId, createdAt, id } = data;
@@ -98,17 +98,17 @@ export function messageDataAdapter({ data }) {
     id,
     message: body,
     time: extractTimeFromDate(addLocalDateFlag(createdAt), { hour: 'numeric', minute: 'numeric', hour12: false }),
-    sender: clientIdentification({ senderId }),
+    sender: clientIdentification({ senderId, clientId, role }),
   };
 }
 
-export function messagesDataAdapter({ data }) {
+export function messagesDataAdapter({ data, role, clientId }) {
   const sortedArray = data?.map((el) => el).sort(sortFromPastToToday);
 
   const messagesByDate = sortedArray.reduce((acc, currentValue) => {
     const date = convertDate(currentValue?.createdAt);
 
-    acc[date] = [...(acc[date] ?? []), messageDataAdapter({ data: currentValue })];
+    acc[date] = [...(acc[date] ?? []), messageDataAdapter({ data: currentValue, role, clientId })];
 
     return acc;
   }, {});
@@ -129,16 +129,16 @@ export function moreMessagesDataAdapter({ payload, messages }) {
   }, {});
 }
 
-export function chatHistoryResponseAdapter({ data }) {
+export function chatHistoryResponseAdapter({ data, clientId, role }) {
   if (!data) return null;
 
-  const { messages = [], created, isLast } = data;
+  const { messages = [], created, isLast } = data?.data;
 
   return {
     data: {
       created,
       isLast,
-      messages: messagesDataAdapter({ data: messages }),
+      messages: messagesDataAdapter({ data: messages, clientId, role }),
     },
   };
 }

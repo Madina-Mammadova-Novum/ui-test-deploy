@@ -6,13 +6,15 @@ import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
   const token = getCookieFromServer('session-access-token', req);
+  const role = getCookieFromServer('session-user-role', req);
+  const clientId = getCookieFromServer('session-user-id', req);
 
   return responseHandler({
     req,
     res,
     requestMethod: 'GET',
     path: getRtURL(`/chat/load/${req.query.id}?created=${req.query.date}`),
-    dataAdapter: chatHistoryResponseAdapter,
+    dataAdapter: (data) => chatHistoryResponseAdapter({ data, role, clientId }),
     options: { headers: Authorization(token) },
   });
 }
