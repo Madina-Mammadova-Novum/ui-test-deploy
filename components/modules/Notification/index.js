@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ModalWrapper from '../ModalWrapper';
@@ -9,7 +9,6 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -17,7 +16,7 @@ import { NotificationContent, NotificationControl } from '@/units';
 const Notification = () => {
   const dispatch = useDispatch();
 
-  const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
+  const { unreadCounter } = useSelector(getNotificationsDataSelector);
 
   const [isOpened, setIsOpened] = useState(false);
 
@@ -27,10 +26,6 @@ const Notification = () => {
     dispatch(resetParams());
     setIsOpened(false);
   };
-
-  useEffect(() => {
-    dispatch(fetchNotifications(filterParams));
-  }, [filterParams]);
 
   return (
     <div>
