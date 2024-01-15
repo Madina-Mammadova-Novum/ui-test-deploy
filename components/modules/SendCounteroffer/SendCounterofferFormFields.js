@@ -138,8 +138,9 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('freight', option)}
+          asyncCall
         />
         <Input
           {...register('value')}
@@ -196,9 +197,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
+          asyncCall
         />
 
         <FormDropdown
@@ -207,9 +209,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}
+          asyncCall
         />
       </div>
     </>

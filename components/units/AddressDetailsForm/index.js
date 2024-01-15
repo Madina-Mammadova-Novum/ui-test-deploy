@@ -67,8 +67,9 @@ const AddressDetails = ({ title, type, countries = [] }) => {
             name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
+            loading={disabled}
             disabled={disabled}
-            asyncCall={disabled}
+            asyncCall
           />
           <Input
             {...register(`${type}Province`)}

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatButton } from '@/elements';
 import { SCREENS } from '@/lib/constants';
 import { сhatSessionServcie } from '@/services/signalR';
+import { getListOfChats } from '@/store/entities/chat/actions';
 import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
@@ -14,6 +15,10 @@ import { useMediaQuery } from '@/utils/hooks';
 const Chat = () => {
   const dispatch = useDispatch();
   const mdScreen = useMediaQuery(SCREENS.MDX);
+
+  useEffect(() => {
+    dispatch(getListOfChats());
+  }, []);
 
   const {
     opened,
