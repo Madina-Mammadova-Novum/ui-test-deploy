@@ -6,40 +6,51 @@ cache:
   paths:
     - node_modules/
     - .next/cache/
-build-staging:
+
+deploy-dev:
   stage: build
+  only:
+    - develop
+  tags:
+    - dev
+  variables:
+    ENVIRONMENT_NAME: dev
   environment:
-    name: staging
-    url: https://shiplink.oyihost.com
+    name: development
+    url:  https://example.com
+  script:
+    - cp ~/.env.dev.frontend .env
+    - ./ci/ci_scripts/build.sh
+    - ./ci/ci_scripts/deploy.sh
+
+deploy-stage:
+  stage: build
   only:
     - stage
   tags:
-    - staging
-  script:
-    - export NODE_OPTIONS=--max_old_space_size=4096
-    - yarn install
-    # - cp /var/www/web/.env .env
-    - yarn build
-    - rm -rf /var/www/web/.next
-    - rsync -a . /var/www/web
-    - cd /var/www/web
-    - pm2 restart ecosystem.config.js
-
-build-develop:
-  stage: build
+    - stage
+  variables:
+    ENVIRONMENT_NAME: stage
   environment:
-    name: development
-    url: https://dev.shiplink.oyihost.com
-  only:
-    - develop
-  tags:
-    - develop
+    name: staging
+    url:  https://example.com
   script:
-    - export NODE_OPTIONS=--max_old_space_size=4096
-    - yarn install
-    # - cp /var/www/web/.env .env
-    - yarn build
-    - rm -rf /var/www/web/.next
-    - rsync -a . /var/www/web
-    - cd /var/www/web
-    - pm2 restart ecosystem.config.js
+    - cp ~/.env.dev.frontend .env
+    - ./ci/ci_scripts/build.sh
+    - ./ci/ci_scripts/deploy.sh
+
+deploy-prod:
+  stage: build
+  only:
+    - stage
+  when: manual
+  tags:
+    - production
+  variables:
+    ENVIRONMENT_NAME: prod
+  environment:
+    name: production
+    url:  https://example.com
+  script:
+    - ./ci/ci_scripts/build.sh
+    - ./ci/ci_scripts/deploy.sh
