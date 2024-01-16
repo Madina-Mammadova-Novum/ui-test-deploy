@@ -1,7 +1,7 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import { getRtURL } from '.';
-import { getSocketConnectionsParams } from './helpers';
+import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
 
 import { messageDataAdapter } from '@/adapters';
 import {
@@ -16,43 +16,42 @@ import {
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
 export class SignalRController {
-  constructor({ host, state, token }) {
+  constructor({ host, state }) {
     this.host = host;
     this.store = state;
-    this.token = token;
     this.connection = null;
   }
 
-  async setupConnection({ path }) {
-    if (!this.token) return;
+  async setupConnection({ path, token }) {
+    if (!token) return;
 
     try {
       this.connection = new HubConnectionBuilder()
-        .withUrl(getRtURL(path), getSocketConnectionsParams(this.token))
+        .withUrl(getRtURL(path), getSocketConnectionsParams(token))
         .configureLogging(LogLevel.None)
         .withAutomaticReconnect()
         .build();
 
       await this.connection.start();
     } catch (err) {
-      console.error(err);
+      this.connection.onreconnecting((error) => console.log(error));
     }
   }
 }
 
 export class NotificationController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+  constructor({ host, state }) {
+    super({ host, state });
   }
 
-  init() {
-    if (!this.token) return;
+  async init({ token }) {
+    if (!token) throw new Error('Unathorized');
 
     try {
-      this.setupConnection({ path: this.host, token: this.token });
+      await this.setupConnection({ path: this.host, token });
       this.connection.on('ReceiveNotification', async (response) => this.recievedNotification({ response }));
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   }
 
@@ -64,39 +63,51 @@ export class NotificationController extends SignalRController {
 
   async stop() {
     if (this.connection) {
-      await this.connection.stop();
+      try {
+        await this.connection.stop();
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 }
 
 export class ChatSessionController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+  constructor({ host, state }) {
+    super({ host, state });
   }
 
-  async initChat({ data }) {
-    if (!this.token) return;
+  async initChat({ data, token }) {
+    if (!token) throw new Error('Unathorized');
 
     await this.stop();
 
     this.store.dispatch(setConversation(true));
     this.store.dispatch(setUser(data));
-
     this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
-    this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, token: this.token });
 
-    this.connection.on('ReceiveMessage', (message) => {
-      this.connection.invoke('ReadMessage', message.id);
-      this.updateMessage({ message });
-    });
+    try {
+      await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, token });
+
+      this.connection.on('ReceiveMessage', (message) => {
+        this.connection.invoke('ReadMessage', message.id);
+        this.updateMessage({ message });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   sendMessage({ message }) {
-    if (message !== '') this.connection.invoke('SendMessage', message);
+    if (message !== '') {
+      this.connection.invoke('SendMessage', message);
+    }
   }
 
   updateMessage({ message }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message })));
+    const clientId = getCookieFromBrowser('session-user-id');
+    const role = getCookieFromBrowser('session-user-role');
+    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
   }
 
   incomingMessage({ chatId, messageCount }) {
@@ -109,24 +120,20 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setLoadConversation(false));
 
     if (this.connection) {
-      try {
-        await this.connection.stop();
-      } catch (error) {
-        console.error('Error stopping SignalR connection:', error);
-      }
+      await this.connection.stop();
     }
   }
 }
 
 export class ChatNotificationController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+  constructor({ host, state }) {
+    super({ host, state });
   }
 
-  init() {
-    if (!this.token) return;
+  async init({ token }) {
+    if (!token) throw new Error('Unathorized');
 
-    this.setupConnection({ path: `${this.host}/chatlist`, token: this.token });
+    await this.setupConnection({ path: `${this.host}/chatlist`, token });
 
     this.connection.on('ReceiveMessage', (chat) => {
       this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });

@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import PropTypes from 'prop-types';
+
 import { ChatButton } from '@/elements';
-import Hydrate from '@/elements/Hydrate';
 import { SCREENS } from '@/lib/constants';
 import { chatNotificationService, сhatSessionServcie } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
@@ -13,26 +14,11 @@ import { getChatSelector } from '@/store/selectors';
 import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
-const Chat = () => {
+const Chat = ({ token }) => {
   const [showChat, setShowChat] = useState(false);
 
   const dispatch = useDispatch();
   const mdScreen = useMediaQuery(SCREENS.MDX);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowChat(true);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (showChat) {
-      chatNotificationService.init();
-      dispatch(getListOfChats());
-    }
-  }, [showChat]);
 
   const {
     opened,
@@ -42,7 +28,24 @@ const Chat = () => {
   } = useSelector(getChatSelector);
 
   useEffect(() => {
-    if (opened) document.body.classList.add('overflow-hidden');
+    const timer = setTimeout(() => {
+      setShowChat(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (showChat) {
+      chatNotificationService.init({ token });
+    }
+  }, [showChat]);
+
+  useEffect(() => {
+    if (opened) {
+      dispatch(getListOfChats());
+      document.body.classList.add('overflow-hidden');
+    }
 
     return () => {
       document.body.classList.remove('overflow-hidden');
@@ -63,12 +66,14 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    if (mdScreen && isActive) dispatch(setOpenedChat(false));
+    if (mdScreen && isActive) {
+      dispatch(setOpenedChat(false));
+    }
   }, [mdScreen, isActive]);
 
   return (
     showChat && (
-      <Hydrate>
+      <>
         <ChatButton
           counter={newMessages}
           onClick={handleOpen}
@@ -83,9 +88,13 @@ const Chat = () => {
           onCollapseSession={handleCollapseConversation}
         />
         <CollapsedChats />
-      </Hydrate>
+      </>
     )
   );
+};
+
+Chat.propTypes = {
+  token: PropTypes.string,
 };
 
 export default Chat;

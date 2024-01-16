@@ -15,6 +15,7 @@ import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const Notification = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,9 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    globalNotificationService.init();
+    const token = getCookieFromBrowser('session-access-token');
+
+    globalNotificationService.init({ token });
     dispatch(fetchCountries());
   }, []);
 

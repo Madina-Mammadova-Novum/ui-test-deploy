@@ -22,13 +22,19 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const { data, messages, loading, updating } = useSelector(getChatSelector).chats?.user;
 
   useEffect(() => {
-    if (isOpened) dispatch(getChatHistory({ data: { id: data?.chatId } }));
-    else сhatSessionServcie.stop();
+    if (isOpened) {
+      dispatch(getChatHistory({ data: { id: data?.chatId } }));
+    } else {
+      сhatSessionServcie.stop();
+    }
   }, [isOpened, data?.chatId]);
 
   useEffect(() => {
-    if (message !== '') setDisabled(false);
-    else setDisabled(true);
+    if (message !== '') {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   }, [message]);
 
   const handleSubmit = (e) => {

@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
-import { AccountContainer, AccountFooter, AccountHeader, Chat, Sidebar } from '@/modules';
+import { AccountContainer, AccountFooter, AccountHeader, Sidebar } from '@/modules';
 import { getLegalLinksData, getSocialLinksData } from '@/services';
 
 const getServerCookie = async () => {
@@ -28,7 +28,6 @@ export default async function AccountLayout({ children }) {
       <AccountHeader />
       <main className="grow">{children}</main>
       <AccountFooter socials={socials} legal={legal} />
-      <Chat />
     </AccountContainer>
   );
 }
