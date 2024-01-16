@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 import { PageLoader } from '../PageLoader';
 
 const Hydrate = ({ children, loader = null }) => {
@@ -15,7 +17,11 @@ const Hydrate = ({ children, loader = null }) => {
     setHydrated(true);
   }, []);
 
-  return hydrated ? children : loaderType[loader];
+  return hydrated ? children : loaderType[loader] || null;
+};
+
+Hydrate.propTypes = {
+  loader: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
 };
 
 export default Hydrate;

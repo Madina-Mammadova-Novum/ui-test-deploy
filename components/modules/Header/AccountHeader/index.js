@@ -1,3 +1,5 @@
+'use client';
+
 import { Notification, ProfileMenu } from '@/modules';
 
 export default function AccountHeader() {

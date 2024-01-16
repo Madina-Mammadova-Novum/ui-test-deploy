@@ -17,12 +17,13 @@ import {
 } from '@/services';
 
 export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispatch }) => {
-  const [chatlist, support] = await Promise.allSettled([getListOfChatSessions(), getHelpCenterSession()]);
+  const { data: chatlist } = await getListOfChatSessions();
+  const { data: support } = await getHelpCenterSession();
 
   dispatch(setUpdate(true));
 
-  const activeChats = chatlist.value?.data?.filter(({ chat }) => !chat.archieved);
-  const archivedChats = chatlist.value?.data?.filter(({ chat }) => chat.archieved);
+  const activeChats = chatlist?.filter(({ chat }) => !chat?.archieved);
+  const archivedChats = chatlist?.filter(({ chat }) => chat?.archieved);
 
   return {
     active: listOfChatsDataAdapter({ data: activeChats }),

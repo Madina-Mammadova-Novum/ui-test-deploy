@@ -13,9 +13,9 @@ const getServerCookie = async () => {
 };
 
 export default async function AccountLayout({ children }) {
-  const { role } = await getServerCookie();
   const { socials } = await getSocialLinksData();
   const { legal } = await getLegalLinksData();
+  const { role } = await getServerCookie();
 
   const routes = {
     owner: ownerSidebarAdapter({ role }),
