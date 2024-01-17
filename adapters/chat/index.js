@@ -16,7 +16,7 @@ export function chatSessionResponseAdapter({ data }) {
 function chatSessionDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id, contentId, archieved, isOnline, messageCount } = data;
+  const { id, contentId, archieved, messageCount } = data;
 
   return {
     key: `${archieved ? 'archieved' : 'active'}`,
@@ -25,7 +25,7 @@ function chatSessionDataAdapter({ data }) {
     archieved,
     messageCount,
     isTyping: false,
-    isOnline,
+    isOnline: false,
   };
 }
 
@@ -132,7 +132,7 @@ export function moreMessagesDataAdapter({ payload, messages }) {
 export function chatHistoryResponseAdapter({ data, clientId, role }) {
   if (!data) return null;
 
-  const { messages = [], created, isLast } = data?.data;
+  const { messages = [], created, isLast } = data;
 
   return {
     data: {
