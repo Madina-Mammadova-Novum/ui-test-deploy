@@ -1,6 +1,4 @@
-import { ClientSidePackages } from '@/common';
 import { BaseLayout } from '@/layouts';
-import Providers from '@/providers';
 
 export const metadata = {
   title: {
@@ -10,10 +8,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <BaseLayout>
-      <Providers loader="page">{children}</Providers>
-      <ClientSidePackages />
-    </BaseLayout>
-  );
+  return <BaseLayout>{children}</BaseLayout>;
 }

@@ -6,16 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatSessionPropTypes } from '@/lib/types';
 
 import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
-import { сhatSessionServcie } from '@/services/signalR';
+import { сhatSessionService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
-import { removeCollapsedChat } from '@/store/entities/chat/slice';
+import { removeCollapsedChat, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 import { ChatConversationCard, ChatSubModal } from '@/units';
-import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
-  const token = getCookieFromBrowser('session-access-token');
 
   const { user } = useSelector(getChatSelector).chats;
 
@@ -28,8 +26,11 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     e.stopPropagation();
     setSessionId('');
 
-    if (key === 'deactivate') dispatch(deactivateUserChat({ data: data?.chatId }));
-    else dispatch(reactivateUserChat({ data: data?.chatId }));
+    if (key === 'deactivate') {
+      dispatch(deactivateUserChat({ data: data?.chatId }));
+    } else {
+      dispatch(reactivateUserChat({ data: data?.chatId }));
+    }
   };
 
   const handleCancel = (e) => {
@@ -40,8 +41,11 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const handleOpenConversation = () => {
     if (user.data?.chatId === data.chatId) return;
 
+    сhatSessionService.stop();
+
     dispatch(removeCollapsedChat(data?.chatId));
-    сhatSessionServcie.initChat({ data, token });
+    dispatch(setUser(data));
+    dispatch(setConversation(true));
   };
 
   const actions = useMemo(

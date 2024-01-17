@@ -10,7 +10,7 @@ import { ChatConversationPropTypes } from '@/lib/types';
 
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
-import { сhatSessionServcie } from '@/services/signalR';
+import { сhatSessionService } from '@/services/signalR';
 import { getChatHistory } from '@/store/entities/chat/actions';
 import { getChatSelector } from '@/store/selectors';
 
@@ -19,15 +19,19 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
-  const { data, messages, loading, updating } = useSelector(getChatSelector).chats?.user;
+  const { data, messages, loading, updating, status } = useSelector(getChatSelector).chats?.user;
 
   useEffect(() => {
     if (isOpened) {
       dispatch(getChatHistory({ data: { id: data?.chatId } }));
+
+      if (status === 200) {
+        сhatSessionService.init({ chatId: data?.chatId });
+      }
     } else {
-      сhatSessionServcie.stop();
+      сhatSessionService.stop();
     }
-  }, [isOpened, data?.chatId]);
+  }, [isOpened, data?.chatId, status]);
 
   useEffect(() => {
     if (message !== '') {
@@ -39,7 +43,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    сhatSessionServcie.sendMessage({ message });
+    сhatSessionService.sendMessage({ message });
     setMessage('');
   };
 

@@ -9,18 +9,16 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
-import { globalNotificationService } from '@/services/signalR';
-import { fetchCountries } from '@/store/entities/general/actions';
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
-import { getCookieFromBrowser } from '@/utils/helpers';
 
 const Notification = () => {
-  const dispatch = useDispatch();
   const [isOpened, setIsOpened] = useState(false);
 
+  const dispatch = useDispatch();
   const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
 
   const handleOpen = () => {
@@ -34,10 +32,8 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    const token = getCookieFromBrowser('session-access-token');
-
-    globalNotificationService.init({ token });
     dispatch(fetchCountries());
+    dispatch(fetchPorts());
   }, []);
 
   useEffect(() => {
