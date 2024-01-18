@@ -15,7 +15,7 @@ import { handleCollapse } from '@/store/entities/general/slice';
 import { getSidebarSelector } from '@/store/selectors';
 import { useMediaQuery } from '@/utils/hooks';
 
-const Sidebar = ({ data, containerStyles }) => {
+const Sidebar = ({ data }) => {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const xlScreen = useMediaQuery(SCREENS.XL);
@@ -24,13 +24,16 @@ const Sidebar = ({ data, containerStyles }) => {
   const setCollapse = (value) => dispatch(handleCollapse(value));
 
   useEffect(() => {
-    if (!xlScreen && !collapsed) setCollapse(false);
-    else setCollapse(true);
+    if (!xlScreen && !collapsed) {
+      setCollapse(false);
+    } else {
+      setCollapse(true);
+    }
   }, [pathname, xlScreen]);
 
   return (
     <aside
-      className={`${containerStyles} ${
+      className={`z-50 fixed top-0 left-0 h-screen ${
         collapsed ? 'w-16' : 'w-64'
       } flex flex-col transition-all duration-75 items-stretch px-3.5 py-5 gap-2 bg-black text-white 
     `}

@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
-import { AccountContainer, AccountFooter, AccountHeader, Chat, Sidebar } from '@/modules';
+import { AccountContainer, AccountFooter, AccountHeader, Sidebar } from '@/modules';
 import { getLegalLinksData, getSocialLinksData } from '@/services';
 
 const getServerCookie = async () => {
@@ -13,9 +13,9 @@ const getServerCookie = async () => {
 };
 
 export default async function AccountLayout({ children }) {
-  const { role } = await getServerCookie();
   const { socials } = await getSocialLinksData();
   const { legal } = await getLegalLinksData();
+  const { role } = await getServerCookie();
 
   const routes = {
     owner: ownerSidebarAdapter({ role }),
@@ -23,12 +23,11 @@ export default async function AccountLayout({ children }) {
   };
 
   return (
-    <AccountContainer role={role}>
-      <Sidebar data={routes[role]} containerStyles="z-50 fixed top-0 left-0 h-screen" />
+    <AccountContainer>
+      <Sidebar data={routes[role]} />
       <AccountHeader />
       <main className="grow">{children}</main>
       <AccountFooter socials={socials} legal={legal} />
-      <Chat />
     </AccountContainer>
   );
 }

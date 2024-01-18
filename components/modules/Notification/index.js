@@ -9,28 +9,39 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
 
 const Notification = () => {
-  const dispatch = useDispatch();
-
-  const { unreadCounter } = useSelector(getNotificationsDataSelector);
-
   const [isOpened, setIsOpened] = useState(false);
 
-  const handleOpen = () => setIsOpened(!isOpened);
-  const handleClose = () => setIsOpened(false);
+  const dispatch = useDispatch();
+  const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
+
+  const handleOpen = () => {
+    setIsOpened(true);
+    dispatch(fetchNotifications(filterParams));
+  };
+
+  const handleClose = () => {
+    setIsOpened(false);
+    dispatch(resetParams());
+  };
 
   useEffect(() => {
-    return () => {
-      dispatch(resetParams());
-    };
-  }, [isOpened]);
+    dispatch(fetchCountries());
+    dispatch(fetchPorts());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchNotifications(filterParams));
+  }, [filterParams]);
 
   return (
-    <div>
+    <>
       <Button
         type="button"
         className="relative"
@@ -54,7 +65,7 @@ const Notification = () => {
           </ModalWrapper>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

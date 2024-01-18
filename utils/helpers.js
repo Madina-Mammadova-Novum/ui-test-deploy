@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
@@ -258,7 +259,7 @@ export const removeByIndex = (data, index) => {
   });
 };
 
-export const filterDataByLowerCase = (inputValue, data) => {
+export const filterDataByLowerCase = (inputValue, data = []) => {
   return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
@@ -510,11 +511,8 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId }) => {
-  const id = getCookieFromBrowser('session-user-id');
-  const role = getCookieFromBrowser('session-user-role');
-
-  return senderId === id ? role : ROLES.BROKER;
+export const clientIdentification = ({ senderId, clientId, role }) => {
+  return senderId === clientId ? role : ROLES.BROKER;
 };
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {
@@ -693,4 +691,15 @@ export const sessionCookieCleaner = () => {
   removeCookie('session-refresh-token');
   removeCookie('session-user-role');
   removeCookie('session-user-id');
+};
+
+export const sessionCookieData = (data) => {
+  if (!data) throw new Error('Unathorized');
+
+  const { sub, role } = decodedTokenAdapter(data.access_token);
+
+  setCookie('session-access-token', data.access_token);
+  setCookie('session-refresh-token', data.refresh_token);
+  setCookie('session-user-role', userRoleAdapter({ data: role }));
+  setCookie('session-user-id', sub);
 };

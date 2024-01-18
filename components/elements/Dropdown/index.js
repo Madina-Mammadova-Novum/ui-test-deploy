@@ -15,6 +15,7 @@ const Dropdown = ({
   customStyles = {},
   name = '',
   label = '',
+  loading = false,
   disabled = false,
   asyncCall = false,
   ...rest
@@ -39,6 +40,7 @@ const Dropdown = ({
       <SimpleDropdown
         {...rest}
         id={name}
+        loading={loading}
         options={options}
         onChange={handleChange}
         styles={dropdownStyles(selectedOption, null, dropdownWidth)}

@@ -22,19 +22,30 @@ const PersonalDetailsForm = ({ closeModal }) => {
   const { data } = useSelector(getUserDataSelector);
 
   const methods = useHookFormParams({ state: data?.personalDetails, schema });
-  const onSubmit = async (formData) => {
-    const { status, error } = await updateInfo({ data: formData });
 
-    if (status === 200) {
+  const onSubmit = async (formData) => {
+    const isContactDataChanged = Object.keys(formData).some((key) => {
+      return (key === 'primaryPhone' || key === 'secondaryPhone') && formData[key] !== data?.personalDetails[key];
+    });
+
+    const { error } = await updateInfo({ data: formData });
+
+    if (formData === data?.personalDetails) return;
+
+    if (error) {
+      errorToast(error?.title, error?.message);
+    }
+
+    if (isContactDataChanged) {
       dispatch(fetchUserProfileData());
+    } else {
       successToast(
         'Your request has been sent for review',
         'You will be notified soon. The rest of the changes have been edited'
       );
-    }
 
-    if (error) errorToast(error?.title, error?.message);
-    return null;
+      dispatch(fetchUserProfileData());
+    }
   };
 
   const noteList = [
@@ -50,7 +61,12 @@ const PersonalDetailsForm = ({ closeModal }) => {
       <ModalFormManager
         onClose={closeModal}
         submitAction={onSubmit}
-        submitButton={{ text: 'Edit personal details', variant: 'primary', size: 'large' }}
+        submitButton={{
+          text: 'Edit personal details',
+          variant: 'primary',
+          size: 'large',
+          disabled: !methods.formState.isDirty,
+        }}
       >
         <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Edit Personal Details

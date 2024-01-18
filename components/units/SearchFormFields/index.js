@@ -50,6 +50,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
     const portKeys = ['loadPort', 'dischargePort'];
+
     const terminalKeys = {
       loadPort: 'loadTerminal',
       dischargePort: 'dischargeTerminal',
@@ -60,10 +61,12 @@ const SearchFormFields = ({ productState, setProductState }) => {
     if (error) {
       clearErrors(key);
     }
+
     setValue(key, value);
 
     if (portKeys.includes(key)) {
       setValue(terminalKeys[key], null);
+
       setTerminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
@@ -73,6 +76,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
       }));
 
       const relatedTerminals = await getTerminals(value.value);
+
       setTerminals((prevState) => ({
         ...prevState,
         [`${key}Terminals`]: {
@@ -88,6 +92,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
         ...prevState,
         loading: true,
       }));
+
       const relatedProducts = await getProducts(value.value);
       setProducts({
         loading: false,
@@ -147,41 +152,45 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <FormDropdown
             name="loadPort"
             options={ports}
-            asyncCall={initialLoading}
+            loading={initialLoading}
             disabled={!ports.length}
             id="loadPort"
             label="load port"
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
             onChange={(option) => handleChange('loadPort', option)}
+            asyncCall
           />
           <FormDropdown
             name="loadTerminal"
-            asyncCall={terminals.loadPortTerminals.loading}
+            loading={terminals.loadPortTerminals.loading}
             options={terminals.loadPortTerminals.data}
             disabled={!terminals.loadPortTerminals.data.length}
             label="load terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
+            asyncCall
           />
         </div>
         <div className="flex flex-col 3md:flex-row gap-x-5">
           <FormDropdown
             name="dischargePort"
-            options={ports}
-            asyncCall={initialLoading}
-            disabled={!ports.length}
             label="discharge port"
+            options={ports}
+            loading={initialLoading}
+            disabled={!ports.length}
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
+            asyncCall
           />
           <FormDropdown
             name="dischargeTerminal"
-            asyncCall={terminals.dischargePortTerminals.loading}
+            label="dischargee terminal"
+            loading={terminals.dischargePortTerminals.loading}
             options={terminals.dischargePortTerminals.data}
             disabled={!terminals.dischargePortTerminals.data.length}
-            label="dischargee terminal"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargeTerminal', option)}
+            asyncCall
           />
         </div>
       </div>
@@ -193,11 +202,15 @@ const SearchFormFields = ({ productState, setProductState }) => {
           id="cargoType"
           options={cargoTypes}
           disabled={!cargoTypes.length}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('cargoType', option)}
+          asyncCall
         />
         {productState?.map((productId, index) => {
           const { density = {} } = getValues(`products[${productId}].product`) || {};
+
+          const helperTextDensity = `${parseFloat(density?.min).toFixed(4)} - ${parseFloat(density?.max).toFixed(4)}`;
+
           return (
             <div key={`product_${productId}`}>
               <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1 items-baseline">
@@ -207,7 +220,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
                     handleChange(`products[${productId}].product`, option);
                   }}
                   name={`products[${productId}].product`}
-                  asyncCall={products.loading}
+                  loading={products.loading}
+                  asyncCall
                   options={products.data}
                   disabled={!products.data.length}
                   label={`product #${index + 1}`}
@@ -219,7 +233,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
-                  helperText={density.min && `${density.min} - ${density.max}`}
+                  helperText={density.min && helperTextDensity}
                   error={errors.products ? errors.products[productId]?.density?.message : null}
                   disabled={isSubmitting}
                   min={String(density.min)}

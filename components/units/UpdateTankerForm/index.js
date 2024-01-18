@@ -145,12 +145,15 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
         data: tankerCategoryOneData,
         error: categoryOneError,
       } = await getVesselCategoryOne(getValues(key).value);
+
       handleTankerOptionsChange('tankerCategoryOne', { loading: false });
+
       if (status === 200) {
         handleTankerOptionsChange('tankerCategoryOne', {
           options: convertDataToOptions({ data: tankerCategoryOneData }, 'id', 'name'),
         });
       }
+
       if (categoryOneError) console.error(categoryOneError);
     }
 
@@ -225,7 +228,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Port of registry"
                 options={ports}
-                asyncCall={loading}
+                loading={loading}
+                asyncCall
                 disabled={!ports.length}
                 name="portOfRegistry"
                 onChange={(option) => handleChange('portOfRegistry', option)}
@@ -235,7 +239,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Tanker type"
                 options={tankerType.options}
-                asyncCall={loading}
+                loading={loading}
+                asyncCall
                 disabled={!tankerType.options.length}
                 name="tankerType"
                 onChange={(option) => handleChange('tankerType', option)}
@@ -243,7 +248,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Tanker category #1"
                 options={tankerCategoryOne.options}
-                asyncCall={tankerCategoryOne.loading}
+                loading={tankerCategoryOne.loading}
+                asyncCall
                 disabled={!tankerCategoryOne.options.length}
                 name="tankerCategoryOne"
                 onChange={(option) => handleChange('tankerCategoryOne', option)}
@@ -251,7 +257,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Tanker category #2"
                 options={tankerCategoryTwo.options}
-                asyncCall={tankerCategoryTwo.loading}
+                loading={tankerCategoryTwo.loading}
+                asyncCall
                 disabled={!tankerCategoryTwo.options.length}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
@@ -352,7 +359,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Country"
                 options={countries}
-                asyncCall={loading}
+                loading={loading}
+                asyncCall
                 disabled={!countries.length || !watch('registeredOwner')}
                 name="registeredOwnerCountry"
                 onChange={(option) => handleChange('registeredOwnerCountry', option)}
@@ -366,7 +374,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Country"
                 options={countries}
-                asyncCall={loading}
+                loading={loading}
+                asyncCall
                 disabled={!countries.length || !watch('technicalOperator')}
                 name="technicalOperatorCountry"
                 onChange={(option) => handleChange('technicalOperatorCountry', option)}
@@ -380,7 +389,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Country"
                 options={countries}
-                asyncCall={loading}
+                loading={loading}
+                asyncCall
                 disabled={!countries.length || !watch('commercialOperator')}
                 name="commercialOperatorCountry"
                 onChange={(option) => handleChange('commercialOperatorCountry', option)}
@@ -394,7 +404,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Country"
                 options={countries}
-                asyncCall={loading}
+                loading={loading}
+                asyncCall
                 disabled={!countries.length || !watch('disponentOwner')}
                 name="disponentOwnerCountry"
                 onChange={(option) => handleChange('disponentOwnerCountry', option)}

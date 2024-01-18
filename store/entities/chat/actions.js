@@ -17,34 +17,38 @@ import {
 } from '@/services';
 
 export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispatch }) => {
-  const { data: chats, status } = await getListOfChatSessions();
-  const { data: support } = await getHelpCenterSession();
+  const { data: chatlist, status } = await getListOfChatSessions();
+  const { data: support, status: statusSupp } = await getHelpCenterSession();
 
   dispatch(setUpdate(true));
 
-  const activeChats = chats?.filter(({ chat }) => !chat.archieved);
-  const archivedChats = chats?.filter(({ chat }) => chat.archieved);
+  const activeChats = chatlist?.filter(({ chat }) => !chat?.archieved);
+  const archivedChats = chatlist?.filter(({ chat }) => chat?.archieved);
 
   return {
     active: listOfChatsDataAdapter({ data: activeChats }),
     archived: listOfChatsDataAdapter({ data: archivedChats }),
     support: helpCenterDataAdapter({ data: support }),
     updating: false,
-    status,
+    status: status || statusSupp,
   };
 });
 
 export const getChatHistory = createAsyncThunk(CHAT.GET_HISTORY, async ({ data }, { dispatch, getState }) => {
-  const { data: result } = await getChatHistoryById({ data });
+  const { data: result, status } = await getChatHistoryById({ data });
 
   const messages = getState()?.chat?.data?.user?.messages;
 
-  if (messages.length > 0) dispatch(updateUserMessages(result?.messages));
-  else dispatch(setUserMessages(result?.messages));
+  if (messages.length > 0) {
+    dispatch(updateUserMessages(result?.messages));
+  } else {
+    dispatch(setUserMessages(result?.messages));
+  }
 
   return {
     created: result?.created,
     isLast: result?.isLast,
+    status,
   };
 });
 

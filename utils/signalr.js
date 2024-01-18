@@ -1,59 +1,73 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import { getRtURL } from '.';
-import { getSocketConnectionsParams } from './helpers';
+import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
 
 import { messageDataAdapter } from '@/adapters';
 import {
   messageAlert,
+  offlineStatus,
+  onlineStatus,
   resetUser,
   setConversation,
   setLoadConversation,
-  setUser,
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 
 export class SignalRController {
-  constructor({ host, state, token }) {
+  constructor({ host, state }) {
     this.host = host;
     this.store = state;
-    this.token = token;
     this.connection = null;
   }
 
-  async setupConnection({ path }) {
-    if (!this.token) return;
-
+  async startConnection({ path, token }) {
     try {
       this.connection = new HubConnectionBuilder()
-        .withUrl(getRtURL(path), getSocketConnectionsParams(this.token))
+        .withUrl(getRtURL(path), getSocketConnectionsParams(token))
         .configureLogging(LogLevel.None)
         .withAutomaticReconnect()
         .build();
 
       await this.connection.start();
     } catch (err) {
-      console.error(err);
+      this.connection.onclose(async () => {
+        await this.refreshTokenAndConnect({ path });
+      });
     }
+  }
+
+  async refreshTokenAndConnect({ path }) {
+    const token = getCookieFromBrowser('session-access-token');
+
+    if (token) {
+      await this.startConnection({ path, token });
+    } else {
+      throw new Error('Failed to refresh token. Connection cannot be established.');
+    }
+  }
+
+  async setupConnection({ path }) {
+    const token = getCookieFromBrowser('session-access-token');
+
+    if (!token) {
+      throw new Error('Token is not available. Connection cannot be established.');
+    }
+
+    await this.startConnection({ path, token });
   }
 }
 
 export class NotificationController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+  constructor({ host, state }) {
+    super({ host, state });
   }
 
-  async initNotifications() {
-    if (!this.token) return;
-
-    try {
-      await this.setupConnection({ path: this.host, token: this.token });
-      this.connection.on('ReceiveNotification', async (response) => this.recievedNotification({ response }));
-    } catch (err) {
-      console.error(err);
-    }
+  init() {
+    this.setupConnection({ path: this.host });
+    this.connection.on('ReceiveNotification', (response) => this.recievedNotification({ response }));
   }
 
   recievedNotification({ response }) {
@@ -64,27 +78,19 @@ export class NotificationController extends SignalRController {
 
   async stop() {
     if (this.connection) {
-      await this.connection.stop();
+      this.connection.stop();
     }
   }
 }
 
 export class ChatSessionController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+  constructor({ host, state }) {
+    super({ host, state });
   }
 
-  async initChat({ data }) {
-    if (!this.token) return;
-
-    await this.stop();
-
-    this.store.dispatch(setConversation(true));
-    this.store.dispatch(setUser(data));
-
-    this.incomingMessage({ chatId: data?.chatId, messageCount: 0 });
-
-    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, token: this.token });
+  async init({ chatId }) {
+    this.incomingMessage({ chatId, messageCount: 0 });
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}` });
 
     this.connection.on('ReceiveMessage', (message) => {
       this.connection.invoke('ReadMessage', message.id);
@@ -93,11 +99,15 @@ export class ChatSessionController extends SignalRController {
   }
 
   sendMessage({ message }) {
-    if (message !== '') this.connection.invoke('SendMessage', message);
+    if (message !== '' && this.connection) {
+      this.connection.invoke('SendMessage', message);
+    }
   }
 
   updateMessage({ message }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message })));
+    const clientId = getCookieFromBrowser('session-user-id');
+    const role = getCookieFromBrowser('session-user-role');
+    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
   }
 
   incomingMessage({ chatId, messageCount }) {
@@ -116,15 +126,15 @@ export class ChatSessionController extends SignalRController {
 }
 
 export class ChatNotificationController extends SignalRController {
-  constructor({ host, state, token }) {
-    super({ host, state, token });
+  constructor({ host, state }) {
+    super({ host, state });
   }
 
-  async initStatus() {
-    if (!this.token) return;
+  init() {
+    this.setupConnection({ path: `${this.host}/chatlist` });
 
-    await this.setupConnection({ path: `${this.host}/chatlist`, token: this.token });
-
+    this.connection.on('ChatIsOnline', (chat) => this.store.dispatch(onlineStatus(chat)));
+    this.connection.on('ChatIsOffline', (chat) => this.store.dispatch(offlineStatus(chat)));
     this.connection.on('ReceiveMessage', (chat) => {
       this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
     });
@@ -133,6 +143,7 @@ export class ChatNotificationController extends SignalRController {
       if (chat.id) {
         this.isTyping({ chat, typing: true });
         clearTimeout(this.typingTimeout);
+
         this.typingTimeout = setTimeout(() => {
           this.isTyping({ chat, typing: false });
         }, 500);

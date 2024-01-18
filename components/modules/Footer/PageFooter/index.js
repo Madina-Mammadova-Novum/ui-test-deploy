@@ -9,6 +9,7 @@ export default async function PageFooter() {
   const { data } = await getFooterLinks();
   const { socials } = await getSocialLinksData();
   const { legal } = await getLegalLinksData();
+
   const { address, phones, emails, mapLink } = await getContactInfo();
 
   const printFooterLinks = ({ title, items, id }) => {
@@ -40,8 +41,8 @@ export default async function PageFooter() {
           <Logo className="fill-black" />
         </NextLink>
         <div className="flex mt-[30px] gap-x-4 3md:gap-x-10">
-          {data.length > 0 && data.map(printFooterLinks)}
-          {legal.length > 0 && <FooterNavBlock items={legal} title="Legal" />}
+          {data?.length > 0 && data.map(printFooterLinks)}
+          {legal?.length > 0 && <FooterNavBlock items={legal} title="Legal" />}
           <div className="w-[166px]">
             <Title level="5" className="title-main text-gray mb-4">
               Address
@@ -70,8 +71,8 @@ export default async function PageFooter() {
               contacts
             </Title>
             <ul className="space-y-2 text-black">
-              {phones.length && phones.map(printContactPhones)}
-              {emails.length && emails.map(printContactEmails)}
+              {phones?.length && phones.map(printContactPhones)}
+              {emails?.length && emails.map(printContactEmails)}
             </ul>
             <div className="flex gap-x-2.5 my-4">
               <SocialNetworks data={socials} />

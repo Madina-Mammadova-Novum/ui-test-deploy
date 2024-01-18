@@ -1,35 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { AccountContainerPropTyes } from '@/lib/types';
-
-import { chatNotificationService } from '@/services/signalR';
-import { getListOfChats } from '@/store/entities/chat/actions';
-import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
-import { getNotificationsDataSelector, getSidebarSelector } from '@/store/selectors';
+import { getSidebarSelector } from '@/store/selectors';
 
 export default function AccountContainer({ children }) {
-  const dispatch = useDispatch();
-
   const { collapsed } = useSelector(getSidebarSelector);
-  const { filterParams } = useSelector(getNotificationsDataSelector);
-
-  useEffect(() => {
-    dispatch(fetchCountries());
-    dispatch(fetchPorts());
-    dispatch(getListOfChats());
-  }, []);
-
-  useEffect(() => {
-    chatNotificationService.initStatus();
-  }, []);
-
-  useEffect(() => {
-    dispatch(fetchNotifications(filterParams));
-  }, [filterParams]);
 
   return (
     <div
@@ -39,5 +15,3 @@ export default function AccountContainer({ children }) {
     </div>
   );
 }
-
-AccountContainer.propTypes = AccountContainerPropTyes;
