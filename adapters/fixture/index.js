@@ -148,7 +148,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
         {
           title: 'Tanker name',
           text: tankerName,
-          countryCode: flagOfRegistry?.codeISO2,
+          countryCode: flagOfRegistry?.id,
         },
         {
           title: 'Itinerary',
@@ -209,7 +209,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
           {
             title: 'Load port',
             text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-            countryCode: loadPortCountry?.codeISO2,
+            countryCode: loadPortCountry?.id,
           },
           {
             title: 'Load terminal',
@@ -220,7 +220,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
           {
             title: 'Discharge port',
             text: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-            countryCode: dischargePortCountry?.codeISO2,
+            countryCode: dischargePortCountry?.id,
           },
           {
             title: 'Discharge terminal',

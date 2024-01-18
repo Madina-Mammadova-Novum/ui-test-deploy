@@ -9,8 +9,9 @@ const LegalNavigation = ({ data = [] }) => {
     </NextLink>
   );
 
-  if (!data.length) return null;
-  return <div className="flex gap-x-5 text-black"> {data.map(printLink)}</div>;
+  if (!data?.length) return null;
+
+  return <div className="flex gap-x-5 text-black"> {data?.map(printLink)}</div>;
 };
 
 LegalNavigation.propTypes = LegalNavigationPropTypes;

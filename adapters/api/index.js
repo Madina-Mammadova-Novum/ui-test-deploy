@@ -3,15 +3,15 @@ import { responseAdapter } from '../response';
 import { formatErrors, lowerCaseFormat } from '@/utils/helpers';
 
 export const successResponseAdapter = (response) => ({
-  status: response.status,
-  statusText: response.statusText,
-  successResponse: response.data,
+  status: response?.status,
+  statusText: response?.statusText,
+  successResponse: response?.data,
 });
 
 export const errorResponseAdapter = (error) => ({
-  status: error.response.status || 500,
-  statusText: error.response.statusText || 'External Server Error',
-  errorResponse: lowerCaseFormat(error.response.data),
+  status: error?.response?.status || error?.status || 500,
+  statusText: error?.response?.statusText || error?.statusText || 'External Server Error',
+  errorResponse: lowerCaseFormat(error.response?.data),
 });
 
 export const apiSuccessAdapter = ({ status, statusText, successResponse }) => {
