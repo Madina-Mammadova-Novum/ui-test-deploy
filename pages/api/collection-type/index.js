@@ -12,6 +12,7 @@ export default async function handler(req, res) {
     collectionType || ROOT_COLLECTION_TYPE,
     preview || false
   );
+
   return responseHandler({
     req,
     res,
