@@ -52,5 +52,6 @@ deploy-prod:
     name: production
     url: https://example.com
   script:
+    - cp ~/.env.dev.frontend .env
     - ./ci/ci_scripts/build.sh
     - ./ci/ci_scripts/deploy.sh
