@@ -15,16 +15,30 @@ const getServerToken = async () => {
   return { token };
 };
 
-export default async function PageHeader() {
-  const { token } = await getServerToken();
+const getHeaderData = async (headerData) => {
+  if (headerData.data) {
+    const navigationSlug = delve(headerData, 'data.navigation');
+    const navigationData = await getNavigation(navigationSlug, 'en');
+    const buttons = delve(headerData, 'data.buttons');
+    const navigation = delve(navigationData, 'data');
 
+    return {
+      buttons,
+      navigation,
+    };
+  }
+
+  return {
+    buttons: [],
+    navigation: [],
+  };
+};
+
+export default async function PageHeader() {
   const headerData = await getSingleType('header', 'en');
 
-  const navigationSlug = delve(headerData, 'data.navigation');
-  const navigationData = await getNavigation(navigationSlug, 'en');
-
-  const buttons = delve(headerData, 'data.buttons');
-  const navigation = delve(navigationData, 'data');
+  const { token } = await getServerToken();
+  const { buttons, navigation } = await getHeaderData(headerData);
 
   const printNavigation = ({ path, title }) => {
     return (
