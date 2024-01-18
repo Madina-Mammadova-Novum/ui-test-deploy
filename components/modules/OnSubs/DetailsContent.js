@@ -1,9 +1,12 @@
-import ReactCountryFlag from 'react-country-flag';
+'use client';
+
+import { useSelector } from 'react-redux';
 
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { PartyItem } from '@/units';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const {
@@ -14,6 +17,8 @@ const DetailsContent = ({ detailsData = {} }) => {
     commercialOfferTerms,
     additionalCharterPartyTerms,
   } = detailsData || {};
+
+  const { countries } = useSelector(getGeneralDataSelector);
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
@@ -42,7 +47,7 @@ const DetailsContent = ({ detailsData = {} }) => {
             <FieldsetContent className="mt-2.5">
               {generalInformation?.map(({ title, text, countryCode }) => (
                 <TextRow key={title} title={title} inlineVariant>
-                  <ReactCountryFlag countryCode={countryCode} /> {text}
+                  <Flag data={countries} id={countryCode} className="mr-1" /> {text}
                 </TextRow>
               ))}
             </FieldsetContent>
@@ -52,7 +57,7 @@ const DetailsContent = ({ detailsData = {} }) => {
           <FieldsetContent label="last 3 cargoes" className="mt-4">
             <div className="flex">
               {lastCargoes?.map(({ title, text }) => (
-                <TextRow key={title} title={title} className="flex flex-col w-full">
+                <TextRow key={title} title={title} className="flex flex-col !items-start !justify-start w-full">
                   {text}
                 </TextRow>
               ))}
@@ -95,7 +100,7 @@ const DetailsContent = ({ detailsData = {} }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Voyage Details</Title>
+          <Title level="3">Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             {voyageDates?.map(({ title, text }) => (
@@ -110,7 +115,7 @@ const DetailsContent = ({ detailsData = {} }) => {
               <div className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
                   <TextRow title={title} inlineVariant>
-                    <ReactCountryFlag countryCode={countryCode} /> {text}
+                    <Flag data={countries} id={countryCode} className="mr-1" /> {text}
                   </TextRow>
                 ))}
               </div>

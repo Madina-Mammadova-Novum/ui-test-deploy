@@ -1,9 +1,10 @@
-import ReactCountryFlag from 'react-country-flag';
+import { useSelector } from 'react-redux';
 
 import { FixtureDetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { PartyItem } from '@/units';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { Flag, PartyItem } from '@/units';
 
 const FixtureDetailsContent = ({ detailsData }) => {
   const {
@@ -14,6 +15,9 @@ const FixtureDetailsContent = ({ detailsData }) => {
     commercialOfferTerms,
     additionalCharterPartyTerms,
   } = detailsData;
+
+  const { countries } = useSelector(getGeneralDataSelector);
+
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
@@ -42,7 +46,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
           <FieldsetContent className="mt-2.5">
             {generalInformation?.map(({ title, text, countryCode }) => (
               <TextRow key={title} title={title} inlineVariant>
-                <ReactCountryFlag countryCode={countryCode} /> {text}
+                <Flag data={countries} id={countryCode} className="mr-1" /> {text}
               </TextRow>
             ))}
           </FieldsetContent>
@@ -110,7 +114,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
               <div className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
                   <TextRow title={title} inlineVariant>
-                    <ReactCountryFlag countryCode={countryCode} /> {text}
+                    <Flag data={countries} id={countryCode} className="mr-1" /> {text}
                   </TextRow>
                 ))}
               </div>

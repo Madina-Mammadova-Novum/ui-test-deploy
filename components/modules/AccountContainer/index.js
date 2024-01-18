@@ -1,11 +1,19 @@
 'use client';
 
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { getSidebarSelector } from '@/store/selectors';
 
 export default function AccountContainer({ children }) {
+  const dispatch = useDispatch();
   const { collapsed } = useSelector(getSidebarSelector);
+
+  useEffect(() => {
+    dispatch(fetchCountries());
+    dispatch(fetchPorts());
+  }, []);
 
   return (
     <div

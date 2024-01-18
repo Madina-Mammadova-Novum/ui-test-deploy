@@ -9,36 +9,28 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
-import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
-import { resetParams } from '@/store/entities/notifications/slice';
+import { resetNotifications, resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
 
 const Notification = () => {
   const [isOpened, setIsOpened] = useState(false);
-
-  const dispatch = useDispatch();
   const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
 
-  const handleOpen = () => {
-    setIsOpened(true);
-    dispatch(fetchNotifications(filterParams));
-  };
+  const dispatch = useDispatch();
+
+  const handleOpen = () => setIsOpened(true);
 
   const handleClose = () => {
-    setIsOpened(false);
     dispatch(resetParams());
+    dispatch(resetNotifications());
+    setIsOpened(false);
   };
 
   useEffect(() => {
-    dispatch(fetchCountries());
-    dispatch(fetchPorts());
-  }, []);
-
-  useEffect(() => {
     dispatch(fetchNotifications(filterParams));
-  }, [filterParams]);
+  }, [filterParams, isOpened]);
 
   return (
     <>

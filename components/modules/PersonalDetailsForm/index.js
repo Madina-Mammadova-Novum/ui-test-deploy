@@ -38,12 +38,12 @@ const PersonalDetailsForm = ({ closeModal }) => {
 
     if (isContactDataChanged) {
       dispatch(fetchUserProfileData());
+      successToast('You have succesfuly updated your "Phone Number"');
     } else {
       successToast(
         'Your request has been sent for review',
         'You will be notified soon. The rest of the changes have been edited'
       );
-
       dispatch(fetchUserProfileData());
     }
   };
