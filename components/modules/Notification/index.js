@@ -20,17 +20,19 @@ const Notification = () => {
 
   const dispatch = useDispatch();
 
-  const handleOpen = () => setIsOpened(true);
+  const handleOpen = () => {
+    dispatch(resetParams());
+    setIsOpened(true);
+  };
 
   const handleClose = () => {
-    dispatch(resetParams());
     dispatch(resetNotifications());
     setIsOpened(false);
   };
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));
-  }, [filterParams, isOpened]);
+  }, [filterParams]);
 
   return (
     <>
