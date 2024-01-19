@@ -24,6 +24,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   const fetchCities = async (id) => {
     const data = await getCities(id);
     const options = convertDataToOptions(data, 'cityId', 'cityName');
+
     return { options };
   };
 

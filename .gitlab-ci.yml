@@ -17,7 +17,7 @@ deploy-dev:
     ENVIRONMENT_NAME: dev
   environment:
     name: development
-    url:  https://example.com
+    url: https://example.com
   script:
     - cp ~/.env.dev.frontend .env
     - ./ci/ci_scripts/build.sh
@@ -33,7 +33,7 @@ deploy-stage:
     ENVIRONMENT_NAME: stage
   environment:
     name: staging
-    url:  https://example.com
+    url: https://example.com
   script:
     - cp ~/.env.dev.frontend .env
     - ./ci/ci_scripts/build.sh
@@ -50,7 +50,7 @@ deploy-prod:
     ENVIRONMENT_NAME: prod
   environment:
     name: production
-    url:  https://example.com
+    url: https://example.com
   script:
     - ./ci/ci_scripts/build.sh
     - ./ci/ci_scripts/deploy.sh
