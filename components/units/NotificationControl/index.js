@@ -55,7 +55,6 @@ const NotificationControl = () => {
       <NotificationSearch value={searchValue} onChange={handleSearch} containerClass="px-8 pt-5" disabled={disabled} />
       <NotificationTabs
         activeTab={activeTab}
-        disabled={disabled}
         onClick={handleReadAll}
         onChange={handleTab}
         containerClass="px-8 flex justify-between"
