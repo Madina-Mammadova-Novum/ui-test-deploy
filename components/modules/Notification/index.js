@@ -15,24 +15,31 @@ import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
 
 const Notification = () => {
+  const dispatch = useDispatch();
+
   const [isOpened, setIsOpened] = useState(false);
   const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
 
-  const dispatch = useDispatch();
-
   const handleOpen = () => {
-    dispatch(resetParams());
     setIsOpened(true);
   };
 
   const handleClose = () => {
-    dispatch(resetNotifications());
     setIsOpened(false);
   };
 
   useEffect(() => {
-    dispatch(fetchNotifications(filterParams));
-  }, [filterParams]);
+    dispatch(fetchNotifications());
+  }, []);
+
+  useEffect(() => {
+    if (isOpened) {
+      dispatch(fetchNotifications(filterParams));
+    } else {
+      dispatch(resetParams());
+      dispatch(resetNotifications());
+    }
+  }, [filterParams, isOpened]);
 
   return (
     <>

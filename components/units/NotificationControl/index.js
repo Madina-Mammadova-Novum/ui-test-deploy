@@ -19,6 +19,7 @@ const NotificationControl = () => {
   const [disabled, setIsDisabled] = useState(false);
 
   const {
+    loading,
     noUnreadedMessages,
     noReadedMessages,
     filterParams: { sortedValue, searchValue, activeTab },
@@ -27,12 +28,14 @@ const NotificationControl = () => {
   const isWatchedTab = isReadValue(activeTab);
 
   useEffect(() => {
-    if ((isWatchedTab && noReadedMessages) || (!isWatchedTab && noUnreadedMessages)) setIsDisabled(true);
-
-    return () => {
+    if (loading) {
+      setIsDisabled(true);
+    } else if ((isWatchedTab && noReadedMessages) || (!isWatchedTab && noUnreadedMessages)) {
+      setIsDisabled(true);
+    } else {
       setIsDisabled(false);
-    };
-  }, [isWatchedTab, noReadedMessages, noUnreadedMessages]);
+    }
+  }, [isWatchedTab, noReadedMessages, noUnreadedMessages, loading]);
 
   const handleSearch = ({ target: { value } }) => dispatch(setFilterParams({ searchValue: value, skip: 0, take: 500 }));
 
@@ -52,6 +55,7 @@ const NotificationControl = () => {
       <NotificationSearch value={searchValue} onChange={handleSearch} containerClass="px-8 pt-5" disabled={disabled} />
       <NotificationTabs
         activeTab={activeTab}
+        disabled={disabled}
         onClick={handleReadAll}
         onChange={handleTab}
         containerClass="px-8 flex justify-between"

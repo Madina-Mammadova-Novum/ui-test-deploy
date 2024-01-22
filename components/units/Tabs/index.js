@@ -2,11 +2,12 @@ import classnames from 'classnames';
 
 import { TabsPropTypes } from '@/lib/types';
 
-const Tabs = ({ tabs, customStyles = '', activeTab, onClick }) => {
+const Tabs = ({ tabs, customStyles = '', activeTab, onClick, ...rest }) => {
   return (
     <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
       {tabs?.map(({ value, label }) => (
         <button
+          {...rest}
           key={value}
           type="button"
           value={value}
