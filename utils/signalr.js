@@ -135,6 +135,7 @@ export class ChatNotificationController extends SignalRController {
 
     this.connection.on('ChatIsOnline', (chat) => this.store.dispatch(onlineStatus(chat)));
     this.connection.on('ChatIsOffline', (chat) => this.store.dispatch(offlineStatus(chat)));
+
     this.connection.on('ReceiveMessage', (chat) => {
       this.incomingMessage({ chatId: chat.id, messageCount: chat.messageCount });
     });
