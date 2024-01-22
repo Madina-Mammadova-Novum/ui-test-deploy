@@ -8,7 +8,7 @@ import { Button } from '@/elements';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 
-const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
+const NotificationTabs = ({ activeTab, onChange, onClick, containerClass, disabled }) => {
   const { unreadCounter, readedCounter, unwatchedData } = useSelector(getNotificationsDataSelector);
 
   const options = [
@@ -24,7 +24,7 @@ const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
 
   return (
     <div className={containerClass}>
-      <Tabs tabs={options} activeTab={activeTab} onClick={onChange} />
+      <Tabs tabs={options} activeTab={activeTab} onClick={onChange} disabled={disabled} />
       {activeTab === 'unread' && unwatchedData[0]?.data?.length > 0 && (
         <Button
           onClick={onClick}

@@ -14,7 +14,7 @@ import {
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
-import { setFilterParams } from '@/store/entities/notifications/slice';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 
 export class SignalRController {
   constructor({ host, state }) {
@@ -72,7 +72,7 @@ export class NotificationController extends SignalRController {
 
   recievedNotification({ response }) {
     if (response) {
-      this.store.dispatch(setFilterParams({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
+      this.store.dispatch(fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
     }
   }
 

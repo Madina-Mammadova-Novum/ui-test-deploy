@@ -2,7 +2,7 @@ import { Divider } from '@/elements';
 import NotificationCardBody from '@/units/NotificationCard/NotificationCardBody';
 import NotificationCardHeader from '@/units/NotificationCard/NotificationCardHeader';
 
-const NotificationCard = ({ data }) => {
+const NotificationCard = ({ data = [] }) => {
   const printNotificationCard = ({ title, time, topic, url, id }) => {
     return (
       <div key={id} className="flex flex-col w-full pb-4 gap-2.5">
@@ -13,7 +13,7 @@ const NotificationCard = ({ data }) => {
     );
   };
 
-  return data?.map(printNotificationCard);
+  return data.map(printNotificationCard);
 };
 
 export default NotificationCard;
