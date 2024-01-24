@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { usePathname } from 'next/navigation';
+
 import ModalWrapper from '../ModalWrapper';
 
 import { NotificationPropTypes } from '@/lib/types';
@@ -16,6 +18,7 @@ import { NotificationContent, NotificationControl } from '@/units';
 
 const Notification = () => {
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const [isOpened, setIsOpened] = useState(false);
   const { unreadCounter, filterParams } = useSelector(getNotificationsDataSelector);
@@ -29,8 +32,8 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchNotifications());
-  }, []);
+    handleClose();
+  }, [pathname]);
 
   useEffect(() => {
     if (isOpened) {

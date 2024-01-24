@@ -1,5 +1,3 @@
-import ReactCountryFlag from 'react-country-flag';
-
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
@@ -135,7 +133,8 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryId: portCountry?.id,
+      available: true,
     },
     {
       id,
@@ -206,7 +205,8 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryId: portCountry?.id,
+      available: true,
     },
     {
       id,
@@ -311,7 +311,8 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryId: portCountry?.id,
+      available: true,
     },
     {
       id,
@@ -375,7 +376,8 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryId: portCountry?.id,
+      available: true,
     },
     {
       id,
@@ -438,7 +440,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     cargo: {
       code,
       loadTerminal: {
-        port: { name: portName, locode: portLocode, country: portCountry },
+        port: { name: portName, locode: portLocode, countryId },
       },
     },
     laycanStart,
@@ -476,7 +478,8 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryId,
+      available: true,
     },
     {
       id,
@@ -538,7 +541,8 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryId: portCountry?.id,
+      available: true,
     },
     {
       id,
