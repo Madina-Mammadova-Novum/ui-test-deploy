@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
 import NextLink from '../NextLink';
@@ -19,6 +18,7 @@ import {
   DynamicCountdownTimer,
   EditDateForm,
   EditPortForm,
+  Flag,
   IconWrapper,
   ModalWindow,
   NegotiatingChartererInformation,
@@ -61,6 +61,7 @@ const TableCell = ({ cellProps }) => {
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
   const country = getCountryById({ data: countries, id: countryId });
+
   const availableCountryCode = countryFlag || country?.countryCode;
 
   const port = { value: portId, label: value, countryFlag: availableCountryCode };
@@ -133,11 +134,9 @@ const TableCell = ({ cellProps }) => {
     );
   }, [disabled, helperData, value]);
 
-  const printCountryFlag = useMemo(() => {
-    return (
-      availableCountryCode && <ReactCountryFlag countryCode={availableCountryCode} svg className="!w-5 !h-4 mr-1.5" />
-    );
-  }, [availableCountryCode]);
+  const printFlag = useMemo(() => {
+    return available && <Flag data={countries} id={countryId} />;
+  }, [countries, countryId, available]);
 
   const printModalView = useMemo(() => {
     return actions.map((cell) => {
@@ -181,7 +180,7 @@ const TableCell = ({ cellProps }) => {
         {value && (
           <div className="flex gap-x-1 text-inherit items-center">
             {icon && <IconWrapper iconData={{ icon }} />}
-            {available && printCountryFlag}
+            {printFlag}
             {printValue}
             {rolled && available && (
               <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
