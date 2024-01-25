@@ -368,10 +368,12 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   return [
     {
       value: index,
+      freezed: frozenAt,
     },
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
+      freezed: frozenAt,
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
@@ -386,18 +388,22 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
       countryCode: getLocode(portLocode),
+      freezed: frozenAt,
       available: true,
     },
     {
       id,
+      freezed: frozenAt,
       value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      freezed: frozenAt,
       value: summerDwt && `${trimTonValue(summerDwt)} tons`,
     },
     {
       id,
+      freezed: frozenAt,
       value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
@@ -524,8 +530,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { vessel, failedAt, reason, id } = data;
-
-  const { details: { openPort: { name: portName, locode: portLocode } = {}, summerDwt } = {}, openDate } = vessel || {};
+  const { details, openDate } = vessel || {};
 
   return [
     {
@@ -546,8 +551,8 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      countryCode: getLocode(portLocode),
+      value: details?.port?.name && `${details?.port?.name}${details?.port?.locode && `, ${details?.port?.locode}`}`,
+      countryCode: getLocode(details?.port?.locode),
       available: true,
     },
     {
@@ -556,7 +561,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: summerDwt && `${trimTonValue(summerDwt)} tons`,
+      value: details?.summerDwt && `${trimTonValue(details?.summerDwt)} tons`,
     },
     {
       id,

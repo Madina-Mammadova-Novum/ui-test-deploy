@@ -63,6 +63,7 @@ export class SignalRController {
 export class NotificationController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
+    this.notificationReceived = false;
   }
 
   init() {
@@ -71,7 +72,8 @@ export class NotificationController extends SignalRController {
   }
 
   recievedNotification({ response }) {
-    if (response) {
+    if (response && !this.notificationReceived) {
+      this.notificationReceived = true;
       this.store.dispatch(fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
     }
   }

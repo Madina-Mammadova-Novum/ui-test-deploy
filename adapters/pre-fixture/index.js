@@ -20,30 +20,37 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Cargo id',
       text: code,
+      freezed: frozenAt,
     },
     {
       label: 'Tanker name',
       text: tankerName,
+      freezed: frozenAt,
     },
     {
       label: 'Cargo type',
       text: cargoType?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Quantity',
       text: `${totalQuantity} tons`,
+      freezed: frozenAt,
     },
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
+      freezed: frozenAt,
       countryCode: getLocode(locode),
     },
     {
       label: 'Laycan start',
+      freezed: frozenAt,
       text: transformDate(laycanStart, 'MMM dd, yyyy'),
     },
     {
       label: 'Laycan end',
+      freezed: frozenAt,
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
@@ -72,27 +79,33 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Cargo id',
       text: code,
+      freezed: frozenAt,
     },
     {
       label: 'Cargo type',
       text: cargoType?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Quantity',
       text: `${totalQuantity} tons`,
+      freezed: frozenAt,
     },
     {
       label: 'Load port',
       text: name && `${name}${locode && `, ${locode}`}`,
       countryCode: getLocode(locode),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan start',
       text: transformDate(laycanStart, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan end',
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Countdown',

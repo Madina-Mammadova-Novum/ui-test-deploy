@@ -24,31 +24,38 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Cargo id',
       text: code,
+      freezed: frozenAt,
     },
     {
       label: 'Tanker name',
       text: tankerName,
+      freezed: frozenAt,
     },
     {
       label: 'Cargo type',
       text: cargoType?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Quantity',
       text: totalQuantity && `${totalQuantity} tons`,
+      freezed: frozenAt,
     },
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
       countryCode: getLocode(loadPortLocode),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan start',
       text: transformDate(laycanStart, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan end',
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Countdown',

@@ -117,7 +117,8 @@ const TableCell = ({ cellProps }) => {
   const printValue = useMemo(() => {
     const valueStyles = () => {
       if (disabled) return 'text-gray';
-      if (freezed) return 'opacity-50';
+      if (freezed) return 'text-opacity-50';
+
       return 'text-inherit';
     };
 
@@ -134,8 +135,8 @@ const TableCell = ({ cellProps }) => {
   }, [disabled, helperData, freezed, value]);
 
   const printFlag = useMemo(() => {
-    return available && <Flag countryCode={countryCode} />;
-  }, [countryCode, available]);
+    return available && <Flag countryCode={countryCode} className={freezed && 'opacity-50'} />;
+  }, [countryCode, available, freezed]);
 
   const printModalView = useMemo(() => {
     return actions.map((cell) => {
@@ -161,10 +162,11 @@ const TableCell = ({ cellProps }) => {
 
   const cellColor = useMemo(() => {
     if (notified) return 'bg-yellow-light';
-    if (disabled) return 'custom-table';
+    if (disabled) return 'disabled-table';
+    if (freezed) return 'freezed-table';
 
     return 'bg-white';
-  }, [notified, disabled]);
+  }, [notified, disabled, freezed]);
 
   return (
     <td
@@ -201,7 +203,6 @@ const TableCell = ({ cellProps }) => {
           />
         )}
         {countdownData && <DynamicCountdownTimer {...countdownData} />}
-
         <div className="flex gap-x-2.5">{editable && printModalView}</div>
       </div>
     </td>

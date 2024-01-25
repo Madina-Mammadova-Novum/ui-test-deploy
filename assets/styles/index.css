@@ -477,10 +477,14 @@ tr > td:nth-child(2) {
   left: 39px;
 }
 
-.custom-table {
+.disabled-table {
   background-color: #f8fafb;
   z-index: 5;
-  /* border: 1px solid red; */
+}
+
+.freezed-table {
+  background-color: #ffffff;
+  z-index: 5;
 }
 
 .tooltip {

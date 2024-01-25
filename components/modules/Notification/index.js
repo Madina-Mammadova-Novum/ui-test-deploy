@@ -11,6 +11,7 @@ import { NotificationPropTypes } from '@/lib/types';
 
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetNotifications, resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
@@ -32,6 +33,11 @@ const Notification = () => {
     dispatch(resetNotifications());
     dispatch(resetParams());
   };
+
+  useEffect(() => {
+    dispatch(fetchCountries());
+    dispatch(fetchPorts());
+  }, []);
 
   useEffect(() => {
     handleClose();

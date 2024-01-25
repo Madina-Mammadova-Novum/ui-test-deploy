@@ -136,6 +136,7 @@ export function responseSendCounterofferAdapter({ data }) {
 
 export function offerDetailsAdapter({ data, role }) {
   if (!data) return null;
+
   const {
     laycanStart,
     laycanEnd,
@@ -159,7 +160,9 @@ export function offerDetailsAdapter({ data, role }) {
     isCountdownExtendedByCharterer,
     isCountdownActive,
   } = data;
+
   const { isOwner } = getRoleIdentity({ role });
+
   const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
 
   return {
@@ -188,7 +191,6 @@ export function offerDetailsAdapter({ data, role }) {
             key: 'Load port',
             label: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
             countryCode: getLocode(loadTerminal?.port?.locode),
-            id: loadTerminal?.port?.countryId,
           },
           {
             key: 'Load terminal',
@@ -328,7 +330,7 @@ export function voyageDetailsAdapter({ data }) {
           {
             key: 'Load port',
             label: loadPort?.label,
-            countryCode: getLocode(loadPort?.locode),
+            countryCode: loadPort?.countryFlag,
           },
           {
             key: 'Load terminal',
@@ -339,7 +341,7 @@ export function voyageDetailsAdapter({ data }) {
           {
             key: 'Discharge port',
             label: dischargePort?.label,
-            countryCode: getLocode(dischargePort?.locode),
+            countryCode: dischargePort?.countryFlag,
           },
           {
             key: 'Discharge terminal',

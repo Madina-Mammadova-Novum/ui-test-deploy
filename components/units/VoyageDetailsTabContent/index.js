@@ -34,12 +34,14 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
 
           {data?.ports?.map((pair) => (
             <div className="mt-2.5" key={pair?.id}>
-              {pair?.map((detail) => (
-                <TextRow title={detail.key} key={detail.key}>
-                  <Flag countryCode={detail.countryCode} className="mr-1.5" />
-                  {detail.label}
-                </TextRow>
-              ))}
+              {pair?.map((detail) => {
+                return (
+                  <TextRow title={detail.key} key={detail.key}>
+                    <Flag countryCode={detail.countryCode} className="mr-1.5" />
+                    {detail.label}
+                  </TextRow>
+                );
+              })}
             </div>
           ))}
         </div>
