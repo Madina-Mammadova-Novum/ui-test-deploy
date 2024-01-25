@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -14,36 +14,43 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     expiresAt,
     frozenAt,
   } = data;
-  const { port: { name: portName, locode, country, countryId } = {} } = loadTerminal || {};
+  const { port: { name: portName, locode } = {} } = loadTerminal || {};
 
   return [
     {
       label: 'Cargo id',
       text: code,
+      freezed: frozenAt,
     },
     {
       label: 'Tanker name',
       text: tankerName,
+      freezed: frozenAt,
     },
     {
       label: 'Cargo type',
       text: cargoType?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Quantity',
       text: `${totalQuantity} tons`,
+      freezed: frozenAt,
     },
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
-      country: country || { id: countryId },
+      freezed: frozenAt,
+      countryCode: getLocode(locode),
     },
     {
       label: 'Laycan start',
+      freezed: frozenAt,
       text: transformDate(laycanStart, 'MMM dd, yyyy'),
     },
     {
       label: 'Laycan end',
+      freezed: frozenAt,
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
@@ -66,33 +73,39 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     expiresAt,
     frozenAt,
   } = data;
-  const { port: { name, locode, country, countryId } = {} } = loadTerminal || {};
+  const { port: { name, locode } = {} } = loadTerminal || {};
 
   return [
     {
       label: 'Cargo id',
       text: code,
+      freezed: frozenAt,
     },
     {
       label: 'Cargo type',
       text: cargoType?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Quantity',
       text: `${totalQuantity} tons`,
+      freezed: frozenAt,
     },
     {
       label: 'Load port',
       text: name && `${name}${locode && `, ${locode}`}`,
-      country: country || { id: countryId },
+      countryCode: getLocode(locode),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan start',
       text: transformDate(laycanStart, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan end',
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Countdown',
@@ -183,13 +196,10 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     searchedCargo: {
       laycanStart,
       laycanEnd,
-      loadTerminal: {
-        name: loadTerminalName,
-        port: { name: loadPortName, locode: loadPortLocode, countryId: loadPortCountryId } = {},
-      } = {},
+      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
       dischargeTerminal: {
         name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
+        port: { name: dischargePortName, locode: dischargePortLocode } = {},
       } = {},
     } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
@@ -223,10 +233,10 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
       loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      loadPortCountryId,
+      loadPortCountryCode: getLocode(loadPortLocode),
       loadTerminal: loadTerminalName,
       dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-      dischargePortCountryId,
+      dischargePortCountryCode: getLocode(dischargePortLocode),
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,
@@ -251,13 +261,10 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     searchedCargo: {
       laycanStart,
       laycanEnd,
-      loadTerminal: {
-        name: loadTerminalName,
-        port: { name: loadPortName, locode: loadPortLocode, countryId: loadPortCountryId } = {},
-      } = {},
+      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
       dischargeTerminal: {
         name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
+        port: { name: dischargePortName, locode: dischargePortLocode } = {},
       } = {},
     } = {},
     additionalCharterPartyTerms,
@@ -286,10 +293,10 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
       loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      loadPortCountryId,
+      loadPortCountryCode: getLocode(loadPortLocode),
       loadTerminal: loadTerminalName,
       dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-      dischargePortCountryId,
+      dischargePortCountryCode: getLocode(dischargePortLocode),
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,

@@ -1,33 +1,20 @@
-'use server';
+import PropTypes from 'prop-types';
 
-import { cookies } from 'next/headers';
-
-import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
 import { AccountContainer, AccountFooter, AccountHeader, Sidebar } from '@/modules';
-import { getLegalLinksData, getSocialLinksData } from '@/services';
 
-const getServerCookie = async () => {
-  const role = cookies().get('session-user-role')?.value;
-
-  return { role };
-};
-
-export default async function AccountLayout({ children }) {
-  const { socials } = await getSocialLinksData();
-  const { legal } = await getLegalLinksData();
-  const { role } = await getServerCookie();
-
-  const routes = {
-    owner: ownerSidebarAdapter({ role }),
-    charterer: chartererSidebarAdapter({ role }),
-  };
-
+export default function AccountLayout({ children, socials, legal, routes }) {
   return (
     <AccountContainer>
-      <Sidebar data={routes[role]} />
+      <Sidebar data={routes} />
       <AccountHeader />
       <main className="grow">{children}</main>
       <AccountFooter socials={socials} legal={legal} />
     </AccountContainer>
   );
 }
+
+AccountLayout.propTypes = {
+  routes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  legal: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  socials: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};

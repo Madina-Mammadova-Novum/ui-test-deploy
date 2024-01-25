@@ -27,7 +27,7 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
   } = useHookForm();
 
   const { searchData } = useSelector(searchSelector);
-  const { products, loadPort, dischargePort } = searchData;
+  const { products = [], loadPort, dischargePort } = searchData;
 
   const {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
@@ -111,7 +111,9 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
       <div className="flex items-center mt-3">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
-      {products.map(printProduct)}
+
+      {products?.map(printProduct)}
+
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
         <FormDropdown
           label="Freight"

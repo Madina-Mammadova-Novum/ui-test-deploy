@@ -439,6 +439,12 @@ export const getFormattedDays = () => {
   return { today, yesterday };
 };
 
+export const getLocode = (locode) => {
+  if (!locode) return null;
+
+  return locode.slice(0, 2).toLowerCase();
+};
+
 export const getListOfDataByDays = (data) => {
   const { today, yesterday } = getFormattedDays();
 

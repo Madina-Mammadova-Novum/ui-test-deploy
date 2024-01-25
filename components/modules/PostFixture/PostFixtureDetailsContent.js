@@ -1,9 +1,6 @@
-import { useSelector } from 'react-redux';
-
 import { PostFixtureDetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { getGeneralDataSelector } from '@/store/selectors';
 import { Flag, PartyItem } from '@/units';
 
 const PostFixtureDetailsContent = ({ detailsData }) => {
@@ -15,8 +12,6 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
     commercialOfferTerms,
     additionalCharterPartyTerms,
   } = detailsData;
-
-  const { countries } = useSelector(getGeneralDataSelector);
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
@@ -47,7 +42,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
           <FieldsetContent className="mt-2.5">
             {generalInformation?.map(({ title, text, countryCode }) => (
               <TextRow key={title} title={title} inlineVariant>
-                <Flag data={countries} id={countryCode} className="mr-1" /> {text}
+                <Flag countryCode={countryCode} className="mr-1" /> {text}
               </TextRow>
             ))}
           </FieldsetContent>
@@ -78,7 +73,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
 
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Cargo Details</Title>
+          <Title level="3">Cargo Details</Title>
 
           <FieldsetContent className="mt-2.5">
             {cargoInformation?.map(({ title, text }) => (
@@ -100,7 +95,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Voyage Details</Title>
+          <Title level="3">Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             {voyageDates?.map(({ title, text }) => (
@@ -115,7 +110,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
               <div className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
                   <TextRow title={title} inlineVariant>
-                    <Flag data={countries} id={countryCode} className="mr-1" /> {text}
+                    <Flag countryCode={countryCode} className="mr-1" /> {text}
                   </TextRow>
                 ))}
               </div>
