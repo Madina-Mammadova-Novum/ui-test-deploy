@@ -29,10 +29,10 @@ const DetailsContent = ({ data = {} }) => {
     laycanStart,
     laycanEnd,
     loadPort,
-    loadPortCountryId,
+    loadPortCountryCode,
     loadTerminal,
     dischargePort,
-    dischargePortCountryId,
+    dischargePortCountryCode,
     dischargeTerminal,
   } = voyageDetails;
 
@@ -88,7 +88,7 @@ const DetailsContent = ({ data = {} }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Voyage Details</Title>
+          <Title level="3">Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             <TextRow title="Laycan start">{laycanStart}</TextRow>
@@ -98,7 +98,7 @@ const DetailsContent = ({ data = {} }) => {
           <FieldsetContent label="Ports" className="mt-4">
             <div>
               <TextRow title="Load port">
-                <Flag data={countries} id={loadPortCountryId} className="mr-1" />
+                <Flag countryCode={loadPortCountryCode} className="mr-1" />
                 {loadPort}
               </TextRow>
               <TextRow title="Load terminal">{loadTerminal}</TextRow>
@@ -106,7 +106,7 @@ const DetailsContent = ({ data = {} }) => {
 
             <div className="mt-2.5">
               <TextRow title="Discharge port">
-                <Flag data={countries} id={dischargePortCountryId} className="mr-1" />
+                <Flag countryCode={dischargePortCountryCode} className="mr-1" />
                 {dischargePort}
               </TextRow>
               <TextRow title="Discharge terminal">{dischargeTerminal}</TextRow>
@@ -116,7 +116,7 @@ const DetailsContent = ({ data = {} }) => {
       </div>
       {!!additionalCharterPartyTerms.length && (
         <FieldsetWrapper>
-          <Title level={3}>Additional Charter Party Terms</Title>
+          <Title level="3">Additional Charter Party Terms</Title>
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
             {additionalCharterPartyTerms.map(({ title, body }) => (

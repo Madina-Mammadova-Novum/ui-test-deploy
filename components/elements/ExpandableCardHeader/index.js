@@ -70,7 +70,7 @@ const ExpandableCardHeader = ({
             textStyles={`${data?.textStyles} whitespace-normal h-4`}
             helperData={data?.helperData}
             icon={data?.icon}
-            countryCode={data?.country?.id}
+            countryCode={data?.countryCode}
           />
         </HoverTooltip>
       </div>

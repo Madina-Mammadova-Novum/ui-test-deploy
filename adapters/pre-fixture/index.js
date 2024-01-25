@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -14,7 +14,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     expiresAt,
     frozenAt,
   } = data;
-  const { port: { name: portName, locode, country, countryId } = {} } = loadTerminal || {};
+  const { port: { name: portName, locode } = {} } = loadTerminal || {};
 
   return [
     {
@@ -36,7 +36,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${locode && `, ${locode}`}`,
-      country: country || { id: countryId },
+      countryCode: getLocode(locode),
     },
     {
       label: 'Laycan start',
@@ -66,7 +66,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     expiresAt,
     frozenAt,
   } = data;
-  const { port: { name, locode, country, countryId } = {} } = loadTerminal || {};
+  const { port: { name, locode } = {} } = loadTerminal || {};
 
   return [
     {
@@ -84,7 +84,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: name && `${name}${locode && `, ${locode}`}`,
-      country: country || { id: countryId },
+      countryCode: getLocode(locode),
     },
     {
       label: 'Laycan start',
@@ -183,13 +183,10 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     searchedCargo: {
       laycanStart,
       laycanEnd,
-      loadTerminal: {
-        name: loadTerminalName,
-        port: { name: loadPortName, locode: loadPortLocode, countryId: loadPortCountryId } = {},
-      } = {},
+      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
       dischargeTerminal: {
         name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
+        port: { name: dischargePortName, locode: dischargePortLocode } = {},
       } = {},
     } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
@@ -223,10 +220,10 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
       loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      loadPortCountryId,
+      loadPortCountryCode: getLocode(loadPortLocode),
       loadTerminal: loadTerminalName,
       dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-      dischargePortCountryId,
+      dischargePortCountryCode: getLocode(dischargePortLocode),
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,
@@ -251,13 +248,10 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     searchedCargo: {
       laycanStart,
       laycanEnd,
-      loadTerminal: {
-        name: loadTerminalName,
-        port: { name: loadPortName, locode: loadPortLocode, countryId: loadPortCountryId } = {},
-      } = {},
+      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
       dischargeTerminal: {
         name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode, countryId: dischargePortCountryId } = {},
+        port: { name: dischargePortName, locode: dischargePortLocode } = {},
       } = {},
     } = {},
     additionalCharterPartyTerms,
@@ -286,10 +280,10 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
       loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      loadPortCountryId,
+      loadPortCountryCode: getLocode(loadPortLocode),
       loadTerminal: loadTerminalName,
       dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-      dischargePortCountryId,
+      dischargePortCountryCode: getLocode(dischargePortLocode),
       dischargeTerminal: dischargeTerminalName,
     },
     additionalCharterPartyTerms,

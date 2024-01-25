@@ -6,6 +6,7 @@ import {
   extractTimeFromDate,
   freightFormatter,
   getAppropriateFailedBy,
+  getLocode,
   getRoleIdentity,
 } from '@/utils/helpers';
 
@@ -186,7 +187,7 @@ export function offerDetailsAdapter({ data, role }) {
           {
             key: 'Load port',
             label: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
-            countryCode: loadTerminal?.port?.country?.codeISO2,
+            countryCode: getLocode(loadTerminal?.port?.locode),
             id: loadTerminal?.port?.countryId,
           },
           {
@@ -200,7 +201,7 @@ export function offerDetailsAdapter({ data, role }) {
             label: `${dischargeTerminal?.port?.name}${
               dischargeTerminal?.port?.locode && `, ${dischargeTerminal?.port?.locode}`
             }`,
-            countryCode: dischargeTerminal?.port?.country?.codeISO2,
+            countryCode: getLocode(dischargeTerminal?.port?.locode),
             id: dischargeTerminal?.port?.countryId,
           },
           {
@@ -327,7 +328,7 @@ export function voyageDetailsAdapter({ data }) {
           {
             key: 'Load port',
             label: loadPort?.label,
-            countryCode: loadPort?.countryFlag,
+            countryCode: getLocode(loadPort?.locode),
           },
           {
             key: 'Load terminal',
@@ -338,7 +339,7 @@ export function voyageDetailsAdapter({ data }) {
           {
             key: 'Discharge port',
             label: dischargePort?.label,
-            countryCode: dischargePort?.countryFlag,
+            countryCode: getLocode(dischargePort?.locode),
           },
           {
             key: 'Discharge terminal',

@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import NextLink from '../NextLink';
 
@@ -10,7 +9,6 @@ import { TableCellPropTypes } from '@/lib/types';
 import { Button, HoverTooltip, Placeholder } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { getGeneralDataSelector } from '@/store/selectors';
 import {
   AssignToFleet,
   DeactivateTankerForm,
@@ -29,13 +27,13 @@ import {
   UpdateTankerForm,
   ViewCommentContent,
 } from '@/units';
-import { downloadFile, getCountryById } from '@/utils/helpers';
+import { downloadFile } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
-  const { countries } = useSelector(getGeneralDataSelector);
   const {
     id,
     type,
+    freezed,
     value,
     date,
     portId,
@@ -43,8 +41,7 @@ const TableCell = ({ cellProps }) => {
     name,
     disabled,
     editable,
-    countryFlag,
-    countryId,
+    countryCode,
     icon,
     actions = [],
     available,
@@ -60,11 +57,7 @@ const TableCell = ({ cellProps }) => {
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
-  const country = getCountryById({ data: countries, id: countryId });
-
-  const availableCountryCode = countryFlag || country?.countryCode;
-
-  const port = { value: portId, label: value, countryFlag: availableCountryCode };
+  const port = { value: portId, label: value, countryFlag: countryCode };
 
   const printModal = (action) => {
     const state = { id, name, date, available, portId, fleetId, type, port };
@@ -122,6 +115,12 @@ const TableCell = ({ cellProps }) => {
   };
 
   const printValue = useMemo(() => {
+    const valueStyles = () => {
+      if (disabled) return 'text-gray';
+      if (freezed) return 'opacity-50';
+      return 'text-inherit';
+    };
+
     return helperData ? (
       <HoverTooltip
         className="!-top-16 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
@@ -130,13 +129,13 @@ const TableCell = ({ cellProps }) => {
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
       </HoverTooltip>
     ) : (
-      <span className={`${disabled ? 'text-gray' : 'text-inherit'}`}>{value}</span>
+      <span className={valueStyles()}>{value}</span>
     );
-  }, [disabled, helperData, value]);
+  }, [disabled, helperData, freezed, value]);
 
   const printFlag = useMemo(() => {
-    return available && <Flag data={countries} id={countryId} />;
-  }, [countries, countryId, available]);
+    return available && <Flag countryCode={countryCode} />;
+  }, [countryCode, available]);
 
   const printModalView = useMemo(() => {
     return actions.map((cell) => {

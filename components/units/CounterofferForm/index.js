@@ -51,14 +51,19 @@ const CounterofferForm = ({
   });
 
   const handleSubmit = async (formData) => {
-    if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData }))
-      return errorToast(COUNTEROFFER_REQUIREMENTS_ERROR);
-    if (!allowSubmit) return handleConfirmCounteroffer();
+    if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData })) {
+      return errorToast('One or more validation occured: ', COUNTEROFFER_REQUIREMENTS_ERROR);
+    }
+
+    if (!allowSubmit) {
+      return handleConfirmCounteroffer();
+    }
 
     const { message: successMessage, error } = await sendCounteroffer({
       data: { ...formData, offerId, responseCountdown },
       role,
     });
+
     if (!error) {
       successToast(successMessage);
       dispatch(fetchUserNegotiating());
@@ -74,16 +79,12 @@ const CounterofferForm = ({
         submitAction={handleSubmit}
         onErrorAction={handleValidationError}
         className="!gap-0"
-        submitButton={
-          allowSubmit
-            ? {
-                text: 'Confirm Changes and Send',
-                variant: 'primary',
-                size: 'large',
-                className: 'ml-auto',
-              }
-            : { text: 'Proceed', variant: 'primary', size: 'large', className: 'ml-auto' }
-        }
+        submitButton={{
+          text: allowSubmit ? 'Confirm Changes and Send' : 'Proceed',
+          variant: 'primary',
+          size: 'large',
+          className: 'ml-auto',
+        }}
       >
         {children}
       </FormManager>

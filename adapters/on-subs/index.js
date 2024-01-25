@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -13,7 +13,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       totalQuantity,
       laycanStart,
       laycanEnd,
-      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode, country: loadPortCountry } } = {},
+      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode } } = {},
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     expiresAt,
@@ -40,7 +40,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      country: loadPortCountry,
+      countryCode: getLocode(loadPortLocode),
     },
     {
       label: 'Laycan start',
@@ -69,7 +69,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       totalQuantity,
       laycanStart,
       laycanEnd,
-      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode, country: loadPortCountry } } = {},
+      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode } } = {},
     } = {},
     vessel: { details: { name: tankerName } = {} } = {},
     expiresAt,
@@ -97,7 +97,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      country: loadPortCountry,
+      countryCode: getLocode(loadPortLocode),
     },
     {
       label: 'Laycan start',
@@ -168,11 +168,11 @@ export const onSubsDetailsAdapter = ({ data }) => {
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
   const {
     name: loadTerminalName,
-    port: { name: loadPortName, locode: loadPortLocode, country: loadPortCountry },
+    port: { name: loadPortName, locode: loadPortLocode },
   } = loadTerminal || {};
   const {
     name: dischargeTerminalName,
-    port: { name: dischargePortName, locode: dischargePortLocode, country: dischargePortCountry },
+    port: { name: dischargePortName, locode: dischargePortLocode },
   } = dischargeTerminal || {};
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
@@ -273,7 +273,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
           {
             title: 'Load port',
             text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-            countryCode: loadPortCountry?.id,
+            countryCode: getLocode(loadPortLocode),
           },
           {
             title: 'Load terminal',
@@ -284,7 +284,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
           {
             title: 'Discharge port',
             text: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-            countryCode: dischargePortCountry?.id,
+            countryCode: getLocode(dischargePortLocode),
           },
           {
             title: 'Discharge terminal',

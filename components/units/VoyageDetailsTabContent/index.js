@@ -1,22 +1,18 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-
 import Flag from '../Flag';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
-import { getGeneralDataSelector } from '@/store/selectors';
 
 const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
   const printPairDates = (detail) => <TextRow title={detail.key}>{detail.label}</TextRow>;
-  const { countries } = useSelector(getGeneralDataSelector);
 
   return (
     <div>
       <div className="flex justify-between">
-        <Title level={3}>Voyage details</Title>
+        <Title level="3">Voyage details</Title>
       </div>
 
       <div className={`text-xsm mt-2.5 ${inlineVariant && 'flex justify-between'}`}>
@@ -32,15 +28,15 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
         <hr className="my-4" />
 
         <div>
-          <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
+          <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
             ports
           </Title>
 
           {data?.ports?.map((pair) => (
-            <div className="mt-2.5">
+            <div className="mt-2.5" key={pair?.id}>
               {pair?.map((detail) => (
-                <TextRow title={detail.key}>
-                  <Flag data={countries} id={detail.id} className="mr-1.5" />
+                <TextRow title={detail.key} key={detail.key}>
+                  <Flag countryCode={detail.countryCode} className="mr-1.5" />
                   {detail.label}
                 </TextRow>
               ))}
