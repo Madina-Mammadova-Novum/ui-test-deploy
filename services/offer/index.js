@@ -46,7 +46,9 @@ export async function sendCounteroffer({ data, role }) {
   const body = sendCounterofferAdapter({ data });
   const path = role === ROLES.OWNER ? 'counteroffer/send' : 'counteroffer/charterer/send';
   const response = await postData(path, body);
+
   if (!response.error) response.message = 'You have successfully sent a counteroffer';
+
   return {
     ...response,
   };

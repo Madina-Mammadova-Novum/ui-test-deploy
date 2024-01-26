@@ -1,12 +1,14 @@
+import { getLocode } from '@/utils/helpers';
+
 export const countryOptionAdapter = (data) => {
   if (!data) return {};
 
-  const { id, countryId, label, countryFlag, countryName, countryCode } = data;
+  const { id, countryId, label, code, countryFlag, countryName, countryCode } = data;
 
   return {
     value: id || countryId,
     label: label || countryName,
-    countryFlag: countryFlag || countryCode,
+    countryFlag: countryFlag || countryCode || getLocode(code),
   };
 };
 

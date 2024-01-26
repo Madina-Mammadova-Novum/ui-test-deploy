@@ -8,7 +8,7 @@ import { getUserVesselsSelector } from '@/store/selectors';
 import { ExpandableCard } from '@/units';
 
 const AccountPositions = () => {
-  const { vessels, unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
+  const { vessels = [], unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
 
   const printExpandableCard = (fleet) => {
     return <ExpandableCard className="px-5 my-5 bg-white" key={fleet.id} data={fleet} expandAll={toggle} />;
@@ -16,7 +16,7 @@ const AccountPositions = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (vessels?.length)
+    if (vessels.length)
       return (
         <>
           <ExpandableCard
@@ -25,7 +25,7 @@ const AccountPositions = () => {
             className="px-5 my-5 bg-white"
             expandAll={toggle}
           />
-          {vessels?.map(printExpandableCard)}
+          {vessels.map(printExpandableCard)}
         </>
       );
 

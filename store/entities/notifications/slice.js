@@ -75,6 +75,7 @@ const notificationsSlice = createSlice({
 export const {
   setConnectionStatus,
   setFilterParams,
+  setIsOpened,
   setWatchedData,
   setUnwatchedData,
   resetNotifications,

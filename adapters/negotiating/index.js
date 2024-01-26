@@ -1,9 +1,7 @@
-import ReactCountryFlag from 'react-country-flag';
-
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, trimTonValue } from '@/utils/helpers';
+import { calculateCountdown, getLocode, trimTonValue } from '@/utils/helpers';
 
 export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -30,7 +28,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'open port',
       text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
-      country: openPort?.country,
+      countryCode: getLocode(openPort?.locode),
     },
   ];
 };
@@ -43,7 +41,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     cargoType,
     minQuantity,
     maxQuantity,
-    loadPort: { name: portName, locode: portLocode, country: portCountry } = {},
+    loadPort: { name: portName, locode: portLocode } = {},
     laycanStart,
     laycanEnd,
     createdAt,
@@ -65,7 +63,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      country: portCountry,
+      countryCode: getLocode(portLocode),
     },
     {
       label: 'Laycan start',
@@ -95,7 +93,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     cargo: {
       code: cargoId,
       loadTerminal: {
-        port: { name: portName, locode: portLocode, country: portCountry },
+        port: { name: portName, locode: portLocode },
       },
     },
     status,
@@ -110,6 +108,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   return [
     {
       value: index,
+      freezed: frozenAt,
     },
     {
       id,
@@ -122,33 +121,41 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
           actionSize: 'small',
         },
       ],
+      freezed: frozenAt,
       editable: true,
     },
     {
       id,
       value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      freezed: frozenAt,
     },
     {
       id,
       value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      freezed: frozenAt,
     },
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryCode: getLocode(portLocode),
+      freezed: frozenAt,
+      available: true,
     },
     {
       id,
       value: status,
       type: TYPE.SEMIBOLD,
+      freezed: frozenAt,
       icon: <StatusIndicator status={status} />,
     },
     {
       id,
+      freezed: frozenAt,
       value: dateReceived ? transformDate(dateReceived, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      freezed: frozenAt,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -156,6 +163,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     },
     {
       id,
+      freezed: frozenAt,
       actions: [
         {
           action: ACTIONS.VIEW_OFFER,
@@ -180,19 +188,17 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { id, vessel, status, createdAt, expiresAt, frozenAt } = data;
-  const {
-    details: { summerDwt } = {},
-    openPort: { name: portName, locode: portLocode, country: portCountry } = {},
-    openDate,
-  } = vessel || {};
+  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
 
   return [
     {
       value: index,
+      freezed: frozenAt,
     },
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
+      freezed: frozenAt,
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
@@ -206,25 +212,31 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryCode: getLocode(portLocode),
+      available: true,
+      freezed: frozenAt,
     },
     {
       id,
       value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      freezed: frozenAt,
     },
     {
       id,
       value: summerDwt && `${trimTonValue(summerDwt)} tons`,
+      freezed: frozenAt,
     },
     {
       id,
       value: status,
       type: TYPE.SEMIBOLD,
       icon: <StatusIndicator status={status} />,
+      freezed: frozenAt,
     },
     {
       id,
       value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      freezed: frozenAt,
     },
     {
       id,
@@ -235,6 +247,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      freezed: frozenAt,
       actions: [
         {
           action: ACTIONS.VIEW_SENT_OFFER,
@@ -272,7 +285,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     cargo: {
       code,
       loadTerminal: {
-        port: { name: portName, locode: portLocode, country: portCountry },
+        port: { name: portName, locode: portLocode },
       },
     },
     laycanStart,
@@ -311,7 +324,8 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryCode: getLocode(portLocode),
+      available: true,
     },
     {
       id,
@@ -349,19 +363,17 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
   const { vessel, createdAt, expiresAt, frozenAt, id } = data;
-  const {
-    details: { summerDwt } = {},
-    openPort: { name: portName, locode: portLocode, country: portCountry } = {},
-    openDate,
-  } = vessel || {};
+  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
 
   return [
     {
       value: index,
+      freezed: frozenAt,
     },
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
+      freezed: frozenAt,
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
@@ -375,18 +387,23 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryCode: getLocode(portLocode),
+      freezed: frozenAt,
+      available: true,
     },
     {
       id,
+      freezed: frozenAt,
       value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      freezed: frozenAt,
       value: summerDwt && `${trimTonValue(summerDwt)} tons`,
     },
     {
       id,
+      freezed: frozenAt,
       value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
@@ -438,7 +455,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     cargo: {
       code,
       loadTerminal: {
-        port: { name: portName, locode: portLocode, country: portCountry },
+        port: { name: portName, locode: portLocode },
       },
     },
     laycanStart,
@@ -476,7 +493,8 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      countryCode: getLocode(portLocode),
+      available: true,
     },
     {
       id,
@@ -512,11 +530,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { vessel, failedAt, reason, id } = data;
-
-  const {
-    details: { openPort: { name: portName, locode: portLocode, country: portCountry } = {}, summerDwt } = {},
-    openDate,
-  } = vessel || {};
+  const { details, openDate } = vessel || {};
 
   return [
     {
@@ -537,8 +551,9 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      icon: <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={portCountry?.codeISO2} />,
+      value: details?.port?.name && `${details?.port?.name}${details?.port?.locode && `, ${details?.port?.locode}`}`,
+      countryCode: getLocode(details?.port?.locode),
+      available: true,
     },
     {
       id,
@@ -546,7 +561,7 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: summerDwt && `${trimTonValue(summerDwt)} tons`,
+      value: details?.summerDwt && `${trimTonValue(details?.summerDwt)} tons`,
     },
     {
       id,

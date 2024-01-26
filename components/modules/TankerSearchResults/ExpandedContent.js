@@ -1,18 +1,13 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-
 import { ExpandedContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
-import { getGeneralDataSelector } from '@/store/selectors';
 import { Flag } from '@/units';
 import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;
-
-  const { countries } = useSelector(getGeneralDataSelector);
 
   const token = getCookieFromBrowser('session-access-token');
 
@@ -51,7 +46,7 @@ const ExpandedContent = ({ data }) => {
               <div>
                 {countryData.map(({ title, description, countryCode }) => (
                   <TextRow title={title}>
-                    <Flag id={countryCode} data={countries} className="mr-1" />
+                    <Flag countryCode={countryCode} className="mr-1" />
                     {hashedInfo(description)}
                   </TextRow>
                 ))}

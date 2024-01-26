@@ -1,11 +1,8 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { getGeneralDataSelector } from '@/store/selectors';
 import { Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
@@ -17,8 +14,6 @@ const DetailsContent = ({ detailsData = {} }) => {
     commercialOfferTerms,
     additionalCharterPartyTerms,
   } = detailsData || {};
-
-  const { countries } = useSelector(getGeneralDataSelector);
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
@@ -47,7 +42,7 @@ const DetailsContent = ({ detailsData = {} }) => {
             <FieldsetContent className="mt-2.5">
               {generalInformation?.map(({ title, text, countryCode }) => (
                 <TextRow key={title} title={title} inlineVariant>
-                  <Flag data={countries} id={countryCode} className="mr-1" /> {text}
+                  <Flag countryCode={countryCode} className="mr-1" /> {text}
                 </TextRow>
               ))}
             </FieldsetContent>
@@ -115,7 +110,7 @@ const DetailsContent = ({ detailsData = {} }) => {
               <div className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
                   <TextRow title={title} inlineVariant>
-                    <Flag data={countries} id={countryCode} className="mr-1" /> {text}
+                    <Flag countryCode={countryCode} className="mr-1" /> {text}
                   </TextRow>
                 ))}
               </div>

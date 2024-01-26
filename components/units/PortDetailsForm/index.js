@@ -13,7 +13,7 @@ import { useHookForm } from '@/utils/hooks';
 
 const PortDetailsForm = ({ portName = '' }) => {
   const { ports } = useSelector(getGeneralDataSelector);
-  const { setValue, clearErrors, getValues } = useHookForm();
+  const { setValue, clearErrors } = useHookForm();
 
   const handlePortChange = (options) => {
     clearErrors('port');
