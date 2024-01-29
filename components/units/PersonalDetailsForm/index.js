@@ -40,11 +40,13 @@ const PersonalDetails = () => {
         <div className="grid gap-5 grid-cols-2">
           <PhoneInput
             {...register('primaryPhone')}
+            onBlur={() => {}}
             label="Primary phone number"
             disabled={isSubmitting}
             error={errors.primaryPhone?.message}
           />
           <PhoneInput
+            onBlur={() => {}}
             {...register('secondaryPhone')}
             label="Secondary phone number (optional)"
             disabled={isSubmitting}

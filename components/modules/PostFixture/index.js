@@ -48,10 +48,12 @@ const PostFixture = () => {
       })
     );
   };
+
   const handleSortColumnSelection = (option) => {
     handleChangeState('sortColumn', option);
     if (sortColumnDirection) handleSortSelection('sortColumn', option);
   };
+
   const handleSortDirectionSelection = (option) => {
     handleChangeState('sortColumnDirection', option);
     if (sortColumn) handleSortSelection('sortColumnDirection', option);

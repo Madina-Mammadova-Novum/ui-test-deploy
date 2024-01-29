@@ -207,6 +207,7 @@
   .range_date .rdrCalendarWrapper {
     @apply w-[450px];
   }
+
   .range_date .rdrMonths {
     @apply w-[450px];
   }
@@ -224,7 +225,7 @@
   }
 
   .range_date input {
-    @apply h-9 text-xsm;
+    @apply h-9 text-xsm border-black border border-solid;
   }
 
   .range_date-hidden .rdrMonthAndYearWrapper,
