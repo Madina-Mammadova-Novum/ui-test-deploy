@@ -55,6 +55,12 @@ const notificationsSlice = createSlice({
     setIsOpened: (state, action) => {
       state.isOpened = action.payload;
     },
+    resetNotificationData: (state) => {
+      state.readed = 0;
+      state.unread = 0;
+      state.unwatchedData = [];
+      state.watchedData = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchNotifications?.pending, (state) => {
@@ -84,6 +90,7 @@ export const {
   getUnwatchedData,
   getWatchedData,
   resetParams,
+  resetNotificationData,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

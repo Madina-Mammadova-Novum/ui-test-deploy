@@ -20,12 +20,12 @@ import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const tabs = [
   {
-    value: 'message',
-    label: 'Message',
-  },
-  {
     value: 'offer_details',
     label: 'Offer details',
+  },
+  {
+    value: 'message',
+    label: 'Сomments',
   },
 ];
 
@@ -71,9 +71,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
   return (
     <div className="w-[610px]">
       <ModalHeader goBack={goBack}>Accept the offer</ModalHeader>
-
       <Countdown time={countdownData} customStyles="mt-5" />
-
       <Tabs
         tabs={tabs}
         activeTab={currentTab}
