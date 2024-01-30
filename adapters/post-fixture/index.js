@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { freightFormatter, transformBytes } from '@/utils/helpers';
+import { freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const postFixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
@@ -14,7 +14,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
     cargoType,
     totalQuantity,
     loadTerminal: {
-      port: { name: portName, locode: portLocode, countryId },
+      port: { name: portName, locode: portLocode },
     },
   } = searchedCargo || {};
   const {
@@ -41,7 +41,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      country: { id: countryId },
+      countryCode: getLocode(portLocode),
     },
     {
       label: 'Laycan start',
@@ -105,11 +105,11 @@ export const postFixtureDetailsAdapter = ({ data }) => {
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
   const {
     name: loadTerminalName,
-    port: { name: loadPortName, locode: loadPortLocode, country: loadPortCountry },
+    port: { name: loadPortName, locode: loadPortLocode },
   } = loadTerminal || {};
   const {
     name: dischargeTerminalName,
-    port: { name: dischargePortName, locode: dischargePortLocode, country: dischargePortCountry },
+    port: { name: dischargePortName, locode: dischargePortLocode },
   } = dischargeTerminal || {};
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
@@ -149,7 +149,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
         {
           title: 'Tanker name',
           text: tankerName,
-          countryCode: flagOfRegistry?.codeISO2,
+          countryCode: flagOfRegistry?.id,
         },
         {
           title: 'Itinerary',
@@ -210,7 +210,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
           {
             title: 'Load port',
             text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-            countryCode: loadPortCountry?.codeISO2,
+            countryCode: getLocode(loadPortLocode),
           },
           {
             title: 'Load terminal',
@@ -221,7 +221,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
           {
             title: 'Discharge port',
             text: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-            countryCode: dischargePortCountry?.codeISO2,
+            countryCode: getLocode(dischargePortLocode),
           },
           {
             title: 'Discharge terminal',

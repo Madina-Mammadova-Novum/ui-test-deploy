@@ -19,7 +19,6 @@ import FieldsetHeader from '@/elements/FieldsetHeader';
 import FieldsetWrapper from '@/elements/FieldsetWrapper';
 import HoverableIcon from '@/elements/HoverableIcon';
 import HoverTooltip from '@/elements/HoverTooltip';
-import Hydrate from '@/elements/Hydrate';
 import IconComponent from '@/elements/IconComponent';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
@@ -47,7 +46,7 @@ import RangeDatePicker from '@/elements/RangeDatePicker';
 import ReActivateButton from '@/elements/ReActivateButton';
 import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
-import { ChatHelpLoader, ChatListLoader, ChatLoader, ChatTabLoader } from '@/elements/Skeletons';
+import { ChatHelpLoader, ChatListLoader, ChatLoader, ChatTabLoader, NotificationLoader } from '@/elements/Skeletons';
 import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
@@ -60,7 +59,6 @@ import TypingIndicator from '@/elements/TypingIndicator';
 export {
   AccordionBody,
   ReActivateButton,
-  Hydrate,
   ChatListLoader,
   Table,
   HoverTooltip,
@@ -110,6 +108,7 @@ export {
   SubmitButton,
   ResetButton,
   LabelAsOption,
+  NotificationLoader,
   Badge,
   ChatButton,
   ConversationButton,

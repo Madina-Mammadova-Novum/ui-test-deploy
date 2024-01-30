@@ -22,7 +22,7 @@ const DeleteFleetModal = ({ closeModal, id }) => {
       const { status, data, error } = await getFleetById({ fleetId: id });
       setInitialLoading(false);
       if (status === 200) setFleetData(data);
-      if (error) console.log(error);
+      if (error) console.error(error);
     })();
 
     return () => setFleetData({});
@@ -40,7 +40,7 @@ const DeleteFleetModal = ({ closeModal, id }) => {
     }
 
     if (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

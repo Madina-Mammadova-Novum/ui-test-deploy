@@ -1,9 +1,8 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
 import * as yup from 'yup';
 
 import OfferDeclineFields from './OfferDeclineFields';
@@ -14,7 +13,7 @@ import { FormManager } from '@/common';
 import { declineOfferSchema } from '@/lib/schemas';
 import { declineOffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
-import { parseErrorMessage } from '@/utils/helpers';
+import { getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -22,15 +21,16 @@ const schema = yup.object({
 });
 
 const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, offerDetails, itemId }) => {
-  const { data: session } = useSession();
   const dispatch = useDispatch();
+  const { role } = useSelector(getUserDataSelector);
+
   const methods = useHookFormParams({ state: {}, schema });
   const reason = methods.watch('reason');
 
   const handleSubmit = async (formData) => {
     const { message: successMessage, error } = await declineOffer({
       data: { ...formData, offerId: itemId },
-      role: session?.role,
+      role,
     });
 
     if (!error) {
@@ -38,7 +38,7 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, of
       dispatch(fetchUserNegotiating());
       closeModal();
     } else {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
   };
 

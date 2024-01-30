@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { NotificationContentPropTypes } from '@/lib/types';
 
-import { Loader } from '@/elements';
+import { Loader, NotificationLoader } from '@/elements';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationList, NotificationPlaceholder } from '@/units';
@@ -22,6 +22,8 @@ const NotificationContent = () => {
   }, [watched, watchedData, unwatchedData]);
 
   const handleScroll = ({ currentTarget }) => {
+    if (loading && !data.length) return;
+
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
@@ -36,10 +38,14 @@ const NotificationContent = () => {
     }
   };
 
-  const printNotificationList = (notifications) => <NotificationList data={notifications} />;
+  const printNotificationList = (notifications, index) => (
+    <Fragment key={index}>
+      <NotificationList data={notifications} />
+    </Fragment>
+  );
 
   const printNotifications = useMemo(() => {
-    if (loading && !data.length) return <Loader className="h-6 w-6 absolute top-2/3" />;
+    if (loading && !data.length) return <NotificationLoader quantity={5} />;
     if (loading && data.length > 0)
       return (
         <>

@@ -13,7 +13,7 @@ import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
 import { searchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
-import { convertDataToOptions, parseErrorMessage } from '@/utils/helpers';
+import { convertDataToOptions } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -39,6 +39,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     showScroll: false,
     loading: false,
   });
+
   const scrollingContainerRef = useRef(null);
   const { searchData } = useSelector(searchSelector);
   const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchData;
@@ -59,6 +60,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const handleSubmit = async (formData) => {
     const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
+
     const {
       status,
       error,
@@ -76,12 +78,13 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         minOfferQuantity: totalMinQuantity,
       },
     });
+
     if (status === 200) {
       successToast(successMessage);
       closeModal();
     }
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     }
   };
 
@@ -123,10 +126,11 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
           <Dropdown
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
-            asyncCall={loading}
+            loading={loading}
             disabled={!responseCountdownOptions?.length}
             onChange={handleChangeOption}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+            asyncCall
           />
         </div>
       </div>

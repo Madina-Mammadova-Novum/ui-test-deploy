@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { ViewFailedOfferPropTypes } from '@/lib/types';
 
@@ -10,6 +9,7 @@ import { offerDetailsAdapter } from '@/adapters/offer';
 import { Loader } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
 import { ModalHeader, OfferDetails, Tabs } from '@/units';
 
 const tabs = [
@@ -34,15 +34,16 @@ const ViewFailedOffer = ({ itemId }) => {
     commercialOfferTerms,
     failedOfferData: { failureReason, declinedBy } = {},
   } = offerDetails;
-  const { data: session } = useSession();
+
+  const { role } = useSelector(getUserDataSelector);
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId, session?.role);
+      const { status, data, error } = await getOfferDetails(itemId, role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data, role: session?.role }));
+        setOfferDetails(offerDetailsAdapter({ data, role }));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

@@ -6,14 +6,14 @@ import { useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
-import { successResponseAdapter } from '@/adapters';
+import { successToolsDataAdapter } from '@/adapters';
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { FormManager } from '@/common';
 import { toolsSchema } from '@/lib/schemas';
 import { getEstimation } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { CalculatedDetails } from '@/units';
-import { getValueWithPath, parseErrorMessage, resetObjectFields } from '@/utils/helpers';
+import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
@@ -47,10 +47,10 @@ const CalculatedForm = ({ children }) => {
   const handleSubmit = async (data) => {
     const { data: response, error } = await getEstimation({ data });
 
-    const result = successResponseAdapter({ data: { ...response, key: calculator.value } });
+    const result = successToolsDataAdapter({ data: { ...response, key: calculator.value } });
 
     if (result) methods.setValue('response', result);
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error.title, error.message);
   };
 
   const handleReset = () => {
@@ -106,7 +106,7 @@ const CalculatedForm = ({ children }) => {
   }, [additionalPorts.length]);
 
   return (
-    <div className="flex w-full h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
+    <div className="flex mt-5 w-full h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
       <FormProvider {...methods}>
         <FormManager
           className="w-full gap-5"

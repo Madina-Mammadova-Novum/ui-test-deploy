@@ -10,8 +10,8 @@ const ChatSubModal = ({ title = '', tab = 'active', onClick, onCancel }) => {
   };
 
   return (
-    <div className="tooltip overflow-x-hidden">
-      <div className="flex flex-col gap-y-2.5 tooltip-box">
+    <div className="tooltip">
+      <div className="flex flex-col gap-y-2.5 tooltip-box overflow-x-hidden">
         <div className="flex justify-between gap-x-5">
           <Title level="6" className="text-xsm font-semibold">
             {title}

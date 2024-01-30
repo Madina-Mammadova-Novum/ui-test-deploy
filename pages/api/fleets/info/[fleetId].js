@@ -1,13 +1,12 @@
-import { getServerSession } from 'next-auth';
-
 import { responseCreateFleetAdapter } from '@/adapters';
-import { Authorization, ContentTypeJson } from '@/lib/constants';
+import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
+  const token = getCookieFromServer('session-access-token', req);
+
   const { fleetId } = req.query;
 
   return responseHandler({
@@ -16,7 +15,6 @@ export default async function handler(req, res) {
     path: getApiURL(`v1/owner/fleets/${fleetId}`),
     dataAdapter: responseCreateFleetAdapter,
     requestMethod: 'GET',
-    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
-    customErrorHandling: true,
+    options: { headers: Authorization(token) },
   });
 }

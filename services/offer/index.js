@@ -46,7 +46,9 @@ export async function sendCounteroffer({ data, role }) {
   const body = sendCounterofferAdapter({ data });
   const path = role === ROLES.OWNER ? 'counteroffer/send' : 'counteroffer/charterer/send';
   const response = await postData(path, body);
+
   if (!response.error) response.message = 'You have successfully sent a counteroffer';
+
   return {
     ...response,
   };
@@ -74,11 +76,9 @@ export async function getSentCounteroffers(tankerId) {
 }
 
 export async function getOwnerDetailsOffers({ id }) {
-  const [incomingOffersData, sentCounterOffersData, failedOffersData] = await Promise.all([
-    getIncomingOffers(id),
-    getSentCounteroffers(id),
-    getFailedOffers(id),
-  ]);
+  const incomingOffersData = await getIncomingOffers(id);
+  const sentCounterOffersData = await getSentCounteroffers(id);
+  const failedOffersData = await getFailedOffers(id);
 
   return {
     [id]: {
@@ -90,11 +90,9 @@ export async function getOwnerDetailsOffers({ id }) {
 }
 
 export async function getChartererDetailsOffers({ id }) {
-  const [sentOffersData, counteroffersData, failedOffersData] = await Promise.all([
-    getCargoSentOffers(id),
-    getCargoCounteroffers(id),
-    getCargoFailedOffers(id),
-  ]);
+  const sentOffersData = await getCargoSentOffers(id);
+  const counteroffersData = await getCargoCounteroffers(id);
+  const failedOffersData = await getCargoFailedOffers(id);
 
   return {
     [id]: {
@@ -107,6 +105,7 @@ export async function getChartererDetailsOffers({ id }) {
 
 export function* getOffersById({ data, role }) {
   const { isOwner } = getRoleIdentity({ role });
+
   const fetchOfferDetailsById = isOwner ? getOwnerDetailsOffers : getChartererDetailsOffers;
 
   return yield Promise.all(data.map(fetchOfferDetailsById));

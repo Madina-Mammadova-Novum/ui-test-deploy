@@ -6,6 +6,7 @@ import {
   extractTimeFromDate,
   freightFormatter,
   getAppropriateFailedBy,
+  getLocode,
   getRoleIdentity,
 } from '@/utils/helpers';
 
@@ -135,6 +136,7 @@ export function responseSendCounterofferAdapter({ data }) {
 
 export function offerDetailsAdapter({ data, role }) {
   if (!data) return null;
+
   const {
     laycanStart,
     laycanEnd,
@@ -156,12 +158,16 @@ export function offerDetailsAdapter({ data, role }) {
     freightFormat,
     isCountdownExtendedByOwner,
     isCountdownExtendedByCharterer,
+    isCountdownActive,
   } = data;
+
   const { isOwner } = getRoleIdentity({ role });
+
   const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
 
   return {
     allowExtension: allowExtensionByRole,
+    isCountdownActive,
     countdownData: {
       date: calculateCountdown(expiresAt, frozenAt),
       autoStart: !frozenAt,
@@ -184,7 +190,7 @@ export function offerDetailsAdapter({ data, role }) {
           {
             key: 'Load port',
             label: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
-            countryCode: loadTerminal?.port?.country?.codeISO2,
+            countryCode: getLocode(loadTerminal?.port?.locode),
           },
           {
             key: 'Load terminal',
@@ -197,7 +203,8 @@ export function offerDetailsAdapter({ data, role }) {
             label: `${dischargeTerminal?.port?.name}${
               dischargeTerminal?.port?.locode && `, ${dischargeTerminal?.port?.locode}`
             }`,
-            countryCode: dischargeTerminal?.port?.country?.codeISO2,
+            countryCode: getLocode(dischargeTerminal?.port?.locode),
+            id: dischargeTerminal?.port?.countryId,
           },
           {
             key: 'Discharge terminal',

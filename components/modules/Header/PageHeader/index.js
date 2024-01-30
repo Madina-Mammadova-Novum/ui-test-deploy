@@ -1,22 +1,44 @@
+'use server';
+
 import delve from 'dlv';
-import { getServerSession } from 'next-auth';
+import { cookies } from 'next/headers';
 
 import Logo from '@/assets/images/logo.svg';
 import { NavButton, NextLink } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { AuthNavButtons } from '@/units';
-import { AUTHCONFIG } from '@/utils/auth';
+
+const getServerToken = async () => {
+  const token = cookies()?.get('session-access-token')?.value;
+
+  return { token };
+};
+
+const getHeaderData = async (headerData) => {
+  if (headerData.data) {
+    const navigationSlug = delve(headerData, 'data.navigation');
+    const navigationData = await getNavigation(navigationSlug, 'en');
+    const buttons = delve(headerData, 'data.buttons');
+    const navigation = delve(navigationData, 'data');
+
+    return {
+      buttons,
+      navigation,
+    };
+  }
+
+  return {
+    buttons: [],
+    navigation: [],
+  };
+};
 
 export default async function PageHeader() {
-  const session = await getServerSession(AUTHCONFIG);
   const headerData = await getSingleType('header', 'en');
 
-  const navigationSlug = delve(headerData, 'data.navigation');
-  const navigationData = await getNavigation(navigationSlug, 'en');
-
-  const buttons = delve(headerData, 'data.buttons');
-  const navigation = delve(navigationData, 'data');
+  const { token } = await getServerToken();
+  const { buttons, navigation } = await getHeaderData(headerData);
 
   const printNavigation = ({ path, title }) => {
     return (
@@ -35,9 +57,7 @@ export default async function PageHeader() {
           </NextLink>
           <nav className="flex items-center gap-x-10">
             {navigation.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
-            {buttons.length > 0 && (
-              <AuthNavButtons authorized={!session?.error && session?.accessToken} data={buttons} />
-            )}
+            {buttons.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>
         </div>
       </div>

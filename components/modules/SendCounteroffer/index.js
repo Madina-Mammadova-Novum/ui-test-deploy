@@ -75,7 +75,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           </>
         );
     }
-  }, [currentTab]);
+  }, [currentTab, voyageDetails, comments, counterofferData, scrollToBottom]);
 
   return (
     <div className="w-[610px]">
@@ -105,7 +105,8 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           <Dropdown
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
-            asyncCall={loading}
+            loading={loading}
+            asyncCall
             disabled={!responseCountdownOptions.length || confirmCounteroffer}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
@@ -131,7 +132,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
             <div
               ref={scrollingContainerRef}
               className={classnames(
-                'h-[320px] overflow-y-auto overflow-x-hidden',
+                'h-[320px] overflow-y-auto overflow-x-hidden p-5',
                 scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
               )}
             >

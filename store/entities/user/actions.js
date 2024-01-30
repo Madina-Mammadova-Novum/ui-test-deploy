@@ -1,30 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-/* Types */
 import { ACCOUNT } from '@/store/entities/user/types';
 
-/* Services */
 import { getChartererUserCargoes, getUserCompany, getUserProfile } from '@/services';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getCookieFromBrowser, getRoleIdentity } from '@/utils/helpers';
 
-export const fetchUserProfileData = createAsyncThunk(ACCOUNT.GET_USER_PROFILE, async (_, { getState }) => {
-  const { role } = getState().user;
+export const fetchUserProfileData = createAsyncThunk(ACCOUNT.GET_USER_PROFILE, async () => {
+  const role = getCookieFromBrowser('session-user-role');
 
   const { isCharterer } = getRoleIdentity({ role });
 
-  const [{ data: personalDetails }, { data: companyDetails }, { data: cargoesDetails }] = await Promise.all([
-    getUserProfile(),
-    getUserCompany(),
-    isCharterer ? getChartererUserCargoes() : Promise.resolve({}),
-  ]);
+  const personalInfo = await getUserProfile();
+  const companyInfo = await getUserCompany();
+  const cargoeInfo = isCharterer ? await getChartererUserCargoes() : {};
 
   return {
     data: {
-      personalDetails,
-      companyDetails: {
-        ...companyDetails,
-        cargoesDetails,
-      },
+      personalDetails: personalInfo?.data,
+      companyDetails: isCharterer ? { ...companyInfo?.data, cargoesDetails: cargoeInfo?.data } : companyInfo?.data,
     },
   };
 });

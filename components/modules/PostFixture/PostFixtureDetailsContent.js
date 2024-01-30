@@ -1,9 +1,7 @@
-import ReactCountryFlag from 'react-country-flag';
-
 import { PostFixtureDetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { PartyItem } from '@/units';
+import { Flag, PartyItem } from '@/units';
 
 const PostFixtureDetailsContent = ({ detailsData }) => {
   const {
@@ -14,9 +12,11 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
     commercialOfferTerms,
     additionalCharterPartyTerms,
   } = detailsData;
+
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
+
   const {
     generalOfferTerms,
     bankInfo: { bankName, bankDetails },
@@ -42,7 +42,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
           <FieldsetContent className="mt-2.5">
             {generalInformation?.map(({ title, text, countryCode }) => (
               <TextRow key={title} title={title} inlineVariant>
-                <ReactCountryFlag countryCode={countryCode} /> {text}
+                <Flag countryCode={countryCode} className="mr-1" /> {text}
               </TextRow>
             ))}
           </FieldsetContent>
@@ -52,7 +52,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
           <FieldsetContent label="last 3 cargoes" className="mt-4">
             <div className="flex">
               {lastCargoes?.map(({ title, text }) => (
-                <TextRow key={title} title={title} className="flex flex-col w-full">
+                <TextRow key={title} title={title} className="flex flex-col !items-start !justify-start w-full">
                   {text}
                 </TextRow>
               ))}
@@ -73,7 +73,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
 
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Cargo Details</Title>
+          <Title level="3">Cargo Details</Title>
 
           <FieldsetContent className="mt-2.5">
             {cargoInformation?.map(({ title, text }) => (
@@ -95,7 +95,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Voyage Details</Title>
+          <Title level="3">Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             {voyageDates?.map(({ title, text }) => (
@@ -110,7 +110,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
               <div className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
                   <TextRow title={title} inlineVariant>
-                    <ReactCountryFlag countryCode={countryCode} /> {text}
+                    <Flag countryCode={countryCode} className="mr-1" /> {text}
                   </TextRow>
                 ))}
               </div>

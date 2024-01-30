@@ -7,12 +7,18 @@ import { linkImageAdapter } from '@/adapters/global';
 
 export const getSocialLinksData = async () => {
   const response = await getSingleType('social-network', 'en');
-  const socials = delve(response, 'data.socials');
 
-  const socialLinksArray = socials.length > 0 ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
+  if (response.data) {
+    const socials = delve(response, 'data.socials');
+    const socialLinksArray = socials.length > 0 ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
+
+    return {
+      socials: socialLinksArray,
+    };
+  }
 
   return {
-    socials: socialLinksArray,
+    socials: [],
   };
 };
 

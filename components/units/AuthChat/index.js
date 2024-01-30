@@ -14,7 +14,7 @@ import { AuthChatPropTypes } from '@/lib/types';
 
 import { Divider, Loader } from '@/elements';
 import { SCREENS } from '@/lib/constants';
-import { сhatSessionServcie } from '@/services/signalR';
+import { сhatSessionService } from '@/services/signalR';
 import {
   resetChatFilter,
   resetUser,
@@ -85,7 +85,7 @@ const AuthChat = ({ user }) => {
     return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit || loading} />;
   }, [updating, tab, dataByTab, limit, handleMore]);
 
-  const handleCloseConversation = () => сhatSessionServcie.stop();
+  const handleCloseConversation = () => сhatSessionService.stop();
 
   const handleCollapseConversation = () => {
     dispatch(setConversation(false));

@@ -8,9 +8,11 @@ import { DeleteTankerModalPropTypes } from '@/lib/types';
 import { Button, TextWithLabel, Title } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { removeVessel, removeVesselFromFleet } from '@/services/vessel';
-import { fetchUnassignedFleetData } from '@/store/entities/fleets/actions';
-import { deleteVesselFromFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
-import { parseErrorMessage } from '@/utils/helpers';
+import {
+  deleteVesselFromFleetsState,
+  deleteVesselFromUnassignedFleetsState,
+  refetchFleets,
+} from '@/store/entities/fleets/slice';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const DeleteTankerModal = ({ closeModal, state }) => {
@@ -29,9 +31,9 @@ const DeleteTankerModal = ({ closeModal, state }) => {
     successToast(message);
     closeModal();
 
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
 
-    dispatch(fetchUnassignedFleetData());
+    dispatch(refetchFleets());
     setIsSubmitting(false);
   };
 
@@ -43,7 +45,7 @@ const DeleteTankerModal = ({ closeModal, state }) => {
     successToast(message);
     closeModal();
 
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
     setIsSubmitting(false);
   };
 

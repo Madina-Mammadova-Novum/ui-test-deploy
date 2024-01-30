@@ -6,14 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatPropTypes } from '@/lib/types';
 
 import { ChatButton } from '@/elements';
-import { chatNotificationService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
 import { messageAlert, setOpenedChat } from '@/store/entities/chat/slice';
-import { fetchCountries } from '@/store/entities/general/actions';
 import { getAnonChatSelector } from '@/store/selectors';
 import { AnonChat, AuthChat } from '@/units';
 
-const Chat = ({ isAuth }) => {
+const Chat = ({ token }) => {
   const dispatch = useDispatch();
 
   const { opened, messageCount, chats } = useSelector(getAnonChatSelector);
@@ -21,13 +19,10 @@ const Chat = ({ isAuth }) => {
   const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchCountries());
-
-    if (isAuth) {
-      chatNotificationService.initStatus();
+    if (token) {
       dispatch(getListOfChats());
     }
-  }, [isAuth]);
+  }, [token]);
 
   useEffect(() => {
     if (opened) {
@@ -48,7 +43,7 @@ const Chat = ({ isAuth }) => {
         counter={messageCount}
         className="fixed right-3 bottom-3 z-30"
       />
-      {isAuth ? <AuthChat user={chats?.user?.data} /> : <AnonChat isOpened={opened} />}
+      {token ? <AuthChat user={chats?.user?.data} /> : <AnonChat isOpened={opened} />}
     </>
   );
 };

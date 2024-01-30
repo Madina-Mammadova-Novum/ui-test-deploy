@@ -1,22 +1,19 @@
-import { getServerSession } from 'next-auth';
-
 import { responseFixtureAdapter } from '@/adapters/fixture';
-import { Authorization, ContentTypeJson } from '@/lib/constants';
+import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
-
-  const { skip, pageSize } = JSON.parse(req.body);
+  const role = getCookieFromServer('session-user-role', req);
+  const token = getCookieFromServer('session-access-token', req);
 
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/${session.role}/deals/fixture?Skip=${skip}&PageSize=${pageSize}`),
+    path: getApiURL(`v1/${role}/deals/fixture?Skip=${req.body.skip}&PageSize=${req.body.pageSize}`),
     dataAdapter: responseFixtureAdapter,
     requestMethod: 'GET',
-    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
+    options: { headers: Authorization(token) },
   });
 }

@@ -1,8 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import ReactCountryFlag from 'react-country-flag';
-import { useSelector } from 'react-redux';
 
 import NextLink from '../NextLink';
 
@@ -11,7 +9,6 @@ import { TableCellPropTypes } from '@/lib/types';
 import { Button, HoverTooltip, Placeholder } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
 import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { getGeneralDataSelector } from '@/store/selectors';
 import {
   AssignToFleet,
   DeactivateTankerForm,
@@ -19,6 +16,7 @@ import {
   DynamicCountdownTimer,
   EditDateForm,
   EditPortForm,
+  Flag,
   IconWrapper,
   ModalWindow,
   NegotiatingChartererInformation,
@@ -29,13 +27,13 @@ import {
   UpdateTankerForm,
   ViewCommentContent,
 } from '@/units';
-import { downloadFile, getCountryById } from '@/utils/helpers';
+import { downloadFile } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
-  const { countries } = useSelector(getGeneralDataSelector);
   const {
     id,
     type,
+    freezed,
     value,
     date,
     portId,
@@ -43,8 +41,7 @@ const TableCell = ({ cellProps }) => {
     name,
     disabled,
     editable,
-    countryFlag,
-    countryId,
+    countryCode,
     icon,
     actions = [],
     available,
@@ -60,10 +57,7 @@ const TableCell = ({ cellProps }) => {
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
-  const country = getCountryById({ data: countries, id: countryId });
-  const availableCountryCode = countryFlag || country?.countryCode;
-
-  const port = { value: portId, label: value, countryFlag: availableCountryCode };
+  const port = { value: portId, label: value, countryFlag: countryCode };
 
   const printModal = (action) => {
     const state = { id, name, date, available, portId, fleetId, type, port };
@@ -121,6 +115,13 @@ const TableCell = ({ cellProps }) => {
   };
 
   const printValue = useMemo(() => {
+    const valueStyles = () => {
+      if (disabled) return 'text-gray';
+      if (freezed) return 'text-opacity-50';
+
+      return 'text-inherit';
+    };
+
     return helperData ? (
       <HoverTooltip
         className="!-top-16 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
@@ -129,15 +130,13 @@ const TableCell = ({ cellProps }) => {
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
       </HoverTooltip>
     ) : (
-      <span className={`${disabled ? 'text-gray' : 'text-inherit'}`}>{value}</span>
+      <span className={valueStyles()}>{value}</span>
     );
-  }, [disabled, helperData, value]);
+  }, [disabled, helperData, freezed, value]);
 
-  const printCountryFlag = useMemo(() => {
-    return (
-      availableCountryCode && <ReactCountryFlag countryCode={availableCountryCode} svg className="!w-5 !h-4 mr-1.5" />
-    );
-  }, [availableCountryCode]);
+  const printFlag = useMemo(() => {
+    return available && <Flag countryCode={countryCode} className={freezed && 'opacity-50'} />;
+  }, [countryCode, available, freezed]);
 
   const printModalView = useMemo(() => {
     return actions.map((cell) => {
@@ -163,10 +162,11 @@ const TableCell = ({ cellProps }) => {
 
   const cellColor = useMemo(() => {
     if (notified) return 'bg-yellow-light';
-    if (disabled) return 'custom-table';
+    if (disabled) return 'disabled-table';
+    if (freezed) return 'freezed-table';
 
     return 'bg-white';
-  }, [notified, disabled]);
+  }, [notified, disabled, freezed]);
 
   return (
     <td
@@ -181,7 +181,7 @@ const TableCell = ({ cellProps }) => {
         {value && (
           <div className="flex gap-x-1 text-inherit items-center">
             {icon && <IconWrapper iconData={{ icon }} />}
-            {available && printCountryFlag}
+            {printFlag}
             {printValue}
             {rolled && available && (
               <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
@@ -203,7 +203,6 @@ const TableCell = ({ cellProps }) => {
           />
         )}
         {countdownData && <DynamicCountdownTimer {...countdownData} />}
-
         <div className="flex gap-x-2.5">{editable && printModalView}</div>
       </div>
     </td>

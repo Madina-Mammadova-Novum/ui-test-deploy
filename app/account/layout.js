@@ -1,20 +1,20 @@
-import { getServerSession } from 'next-auth';
-
-import { ExtraDataManager } from '@/common';
+import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
 import { AccountLayout } from '@/layouts';
-import { Chat } from '@/modules';
-import Providers from '@/providers';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getLegalLinksData, getRole, getSocialLinksData } from '@/services';
 
-export default async function RootLayout({ children }) {
-  const session = await getServerSession(AUTHCONFIG);
+export default async function AccountRootLayout({ children }) {
+  const { socials } = await getSocialLinksData();
+  const { legal } = await getLegalLinksData();
+  const { data } = await getRole();
+
+  const routes = {
+    owner: ownerSidebarAdapter({ role: data.role }),
+    charterer: chartererSidebarAdapter({ role: data.role }),
+  };
 
   return (
-    <Providers loader="page" session={session}>
-      <AccountLayout session={session}>
-        <ExtraDataManager session={session}>{children}</ExtraDataManager>
-      </AccountLayout>
-      <Chat isAuth={!session?.error && session?.accessToken} />
-    </Providers>
+    <AccountLayout socials={socials} legal={legal} routes={routes[data.role]}>
+      {children}
+    </AccountLayout>
   );
 }

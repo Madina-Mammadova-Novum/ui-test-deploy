@@ -1,5 +1,3 @@
-import { getSession } from 'next-auth/react';
-
 import { getFleetByIdAdapter } from '@/adapters';
 import { basePageNavAdapter, negotiationPageNavAdapter, positionsPageNavAdapter } from '@/adapters/navigation';
 import {
@@ -82,7 +80,7 @@ export async function login({ data }) {
 }
 
 export async function refreshAccessToken({ token }) {
-  const response = await postData(`auth/refreshToken`, { token }, { headers: { ...ContentTypeJson() } });
+  const response = await postData(`auth/session-update`, { token }, { headers: { ...ContentTypeJson() } });
 
   return { ...response };
 }
@@ -136,7 +134,7 @@ export async function deleteCompany({ data }) {
 export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
   const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
 
-  const response = await postData(`account/my-positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
+  const response = await postData(`account/positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
 
   return {
     ...response,
@@ -145,7 +143,8 @@ export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }
 
 export async function getUserPositionById({ id }) {
   const body = getFleetByIdAdapter({ id });
-  const response = await putData(`account/my-positions/vesselId`, body);
+
+  const response = await putData(`account/positions/${id}`, body);
 
   return {
     ...response,
@@ -162,9 +161,9 @@ const fetchUserVesselById = async ({ id, ...rest }) => {
   };
 };
 
-export function* getVesselsById(data) {
-  return yield Promise.all(data.map(fetchUserVesselById));
-}
+export const getVesselsById = async (data) => {
+  return Promise.all(data.map(fetchUserVesselById));
+};
 
 export async function getUserFixtures() {
   const response = await getData(`account/fixture`, { headers: { ...ContentTypeJson() } });
@@ -183,11 +182,10 @@ export async function getRoleBasedPrefixture({ page, perPage }) {
   };
 }
 
-export async function getRoleBasedNegotiating({ page = 1, perPage = 5, stage = 'Negotiating' }) {
-  const session = await getSession();
+export async function getRoleBasedNegotiating({ role, page = 1, perPage = 5, stage = 'Negotiating' }) {
   const body = negotiationPageNavAdapter({ data: { page, perPage, stage } });
 
-  const response = await postData(`account/negotiating/${session.role}?page=${page}&perPage=${perPage}`, body);
+  const response = await postData(`account/negotiating/${role}?page=${page}&perPage=${perPage}`, body);
 
   return {
     ...response,

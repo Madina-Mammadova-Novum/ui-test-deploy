@@ -1,8 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
@@ -10,6 +9,7 @@ import ExtendOnSubsCountdown from './ExtendOnSubsCountdown';
 
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
+import { getUserDataSelector } from '@/store/selectors';
 import { ModalWindow, Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 
@@ -28,8 +28,8 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
-  const { data: session } = useSession();
-  const { isCharterer } = getRoleIdentity({ role: session?.role });
+  const { role } = useSelector(getUserDataSelector);
+  const { isCharterer } = getRoleIdentity({ role });
 
   const printContent = useMemo(() => {
     if (currentTab === tabs[1].value) {

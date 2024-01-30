@@ -3,15 +3,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useSession } from 'next-auth/react';
-
 import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { calculateFreightEstimation } from '@/services/calculator';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
-import { offerSelector } from '@/store/selectors';
+import { getUserDataSelector, offerSelector } from '@/store/selectors';
 import { calculateIntDigit, calculateTotal, getRoleIdentity, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -27,20 +25,46 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     watch,
   } = useHookForm();
 
-  const { data: session } = useSession();
-  const { isOwner } = getRoleIdentity({ role: session?.role });
+  const { role } = useSelector(getUserDataSelector);
+  const { isOwner } = getRoleIdentity({ role });
 
   const { tankerId, products, loadPortId, dischargePortId } = data;
+
   const {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
     loading: initialLoading,
   } = useSelector(offerSelector);
+
+  const handleFormat = async () => {
+    const productsData = getValues('products');
+    const totalCargoQuantity = calculateTotal(productsData, 'quantity');
+
+    const body = { loadPortId, dischargePortId, totalCargoQuantity };
+    const response = await calculateFreightEstimation({ data: body });
+
+    if (!response.error) {
+      setFreightEstimation({
+        ...response.data,
+        min: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
+        max: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
+      });
+      setValue('totalAmount', data.total);
+    }
+  };
+
+  useEffect(() => {
+    if (data?.freight?.value) {
+      handleFormat();
+    }
+  }, []);
 
   const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
 
   useEffect(() => {
     dispatch(fetchOfferOptioins(tankerId));
   }, [dispatch, tankerId]);
+
+  useEffect(() => {}, []);
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -54,15 +78,18 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     if (key === 'freight') {
       const productsData = getValues('products');
       const totalCargoQuantity = calculateTotal(productsData, 'quantity');
+
       const { status, data: freightEstimationData } = await calculateFreightEstimation({
         data: { loadPortId, dischargePortId, totalCargoQuantity },
       });
+
       if (status === 200) {
         setFreightEstimation({
           ...freightEstimationData,
           min: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
           max: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
         });
+
         setValue('totalAmount', data.total);
       }
     }
@@ -111,8 +138,9 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('freight', option)}
+          asyncCall
         />
         <Input
           {...register('value')}
@@ -169,9 +197,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
+          asyncCall
         />
 
         <FormDropdown
@@ -180,9 +209,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}
+          asyncCall
         />
       </div>
     </>

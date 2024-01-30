@@ -6,6 +6,7 @@ import { AuthWrapper, LoginForm } from '@/modules';
 export function generateMetadata() {
   return metaData({
     data: {
+      route: ROUTES.LOGIN,
       seo: {
         metaTitle: 'Login',
       },
@@ -13,7 +14,7 @@ export function generateMetadata() {
   });
 }
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
     <AuthWrapper title="Log in" containerClass="flex flex-col w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40">
       <LoginForm />
@@ -25,6 +26,4 @@ const LoginPage = () => {
       </NextLink>
     </AuthWrapper>
   );
-};
-
-export default LoginPage;
+}

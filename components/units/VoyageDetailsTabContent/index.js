@@ -1,5 +1,6 @@
-import React from 'react';
-import ReactCountryFlag from 'react-country-flag';
+'use client';
+
+import Flag from '../Flag';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
@@ -11,7 +12,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
   return (
     <div>
       <div className="flex justify-between">
-        <Title level={3}>Voyage details</Title>
+        <Title level="3">Voyage details</Title>
       </div>
 
       <div className={`text-xsm mt-2.5 ${inlineVariant && 'flex justify-between'}`}>
@@ -27,18 +28,20 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
         <hr className="my-4" />
 
         <div>
-          <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
+          <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
             ports
           </Title>
 
           {data?.ports?.map((pair) => (
-            <div className="mt-2.5">
-              {pair?.map((detail) => (
-                <TextRow title={detail.key}>
-                  <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={detail.countryCode} />
-                  {detail.label}
-                </TextRow>
-              ))}
+            <div className="mt-2.5" key={pair?.id}>
+              {pair?.map((detail) => {
+                return (
+                  <TextRow title={detail.key} key={detail.key}>
+                    <Flag countryCode={detail.countryCode} className="mr-1.5" />
+                    {detail.label}
+                  </TextRow>
+                );
+              })}
             </div>
           ))}
         </div>

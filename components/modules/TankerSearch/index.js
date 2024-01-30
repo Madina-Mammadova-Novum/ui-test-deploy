@@ -10,7 +10,7 @@ import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
 import { setSearchData } from '@/store/entities/search/slice';
 import { SearchForm } from '@/units';
-import { options, parseErrorMessage } from '@/utils/helpers';
+import { options } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const TankerSearch = ({ title }) => {
@@ -40,13 +40,16 @@ const TankerSearch = ({ title }) => {
     handleChangeState('loading', false);
 
     if (data) {
-      dispatch(setSearchData(formData));
+      const filteredProducts = formData?.products?.filter((product) => product);
+
+      dispatch(setSearchData({ ...formData, products: filteredProducts }));
       handleChangeState('searchResult', data);
       handleChangeState('request', true);
     }
+
     if (error) {
       handleChangeState('request', false);
-      errorToast(parseErrorMessage(error));
+      errorToast(error.title, error.message);
     }
   };
 

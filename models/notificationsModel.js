@@ -12,8 +12,9 @@ class NotificationsModel {
     this.formData.append('isOpened', this.params.watched ?? false);
     this.formData.append('skip', this.params.skip ?? 0);
     this.formData.append('take', this.params.take ?? 50);
+
     return this.formData;
   }
 }
 
-export const setNotifications = ({ data }) => new NotificationsModel(data).setFormData();
+export const setNotifications = (data) => new NotificationsModel(data).setFormData();

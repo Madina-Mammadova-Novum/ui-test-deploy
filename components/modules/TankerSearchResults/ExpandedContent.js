@@ -1,14 +1,21 @@
-import ReactCountryFlag from 'react-country-flag';
+'use client';
 
 import { ExpandedContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
+import { Flag } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;
+
+  const token = getCookieFromBrowser('session-access-token');
+
+  const hashedInfo = (text = null) => (token ? text : 'Hidden info');
+
   return (
     <div className="mt-3 mb-5">
-      <Title level={3}>Tanker Information</Title>
+      <Title level="3">Tanker Information</Title>
 
       <div className="lg:flex text-xsm mt-2.5 gap-x-20">
         {vesselOwnerData.length && (
@@ -17,7 +24,7 @@ const ExpandedContent = ({ data }) => {
               About the Vessel Owner
             </Title>
             {vesselOwnerData.map(({ title, description }) => (
-              <TextRow title={title}>{description}</TextRow>
+              <TextRow title={title}>{hashedInfo(description)}</TextRow>
             ))}
           </div>
         )}
@@ -30,7 +37,7 @@ const ExpandedContent = ({ data }) => {
             {tankerData.length && (
               <div>
                 {tankerData.map(({ title, description }) => (
-                  <TextRow title={title}>{description}</TextRow>
+                  <TextRow title={title}>{hashedInfo(description)}</TextRow>
                 ))}
               </div>
             )}
@@ -39,8 +46,8 @@ const ExpandedContent = ({ data }) => {
               <div>
                 {countryData.map(({ title, description, countryCode }) => (
                   <TextRow title={title}>
-                    <ReactCountryFlag style={{ zoom: 1.3 }} countryCode={countryCode} />
-                    {description}
+                    <Flag countryCode={countryCode} className="mr-1" />
+                    {hashedInfo(description)}
                   </TextRow>
                 ))}
               </div>

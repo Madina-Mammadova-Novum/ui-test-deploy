@@ -17,7 +17,7 @@ export const searchHeaderDataAdapter = ({ data }) => {
     {
       label: 'Flag',
       text: flagOfRegistry?.name,
-      country: flagOfRegistry,
+      countryCode: flagOfRegistry?.codeISO2 || flagOfRegistry?.codeISO3,
     },
     {
       label: 'Dwt',

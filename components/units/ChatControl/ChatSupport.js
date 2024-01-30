@@ -6,8 +6,7 @@ import { ChatSupportPropTypes } from '@/lib/types';
 
 import SupportSVG from '@/assets/images/support.svg';
 import { Badge, ChatHelpLoader, Title } from '@/elements';
-import { сhatSessionServcie } from '@/services/signalR';
-import { removeCollapsedChat } from '@/store/entities/chat/slice';
+import { removeCollapsedChat, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 
 const ChatSupport = ({ title, description, loading }) => {
@@ -18,8 +17,8 @@ const ChatSupport = ({ title, description, loading }) => {
     e.stopPropagation();
 
     dispatch(removeCollapsedChat(support[0]?.chatId));
-
-    сhatSessionServcie.initChat(support[0]);
+    dispatch(setConversation(true));
+    dispatch(setUser(support[0]));
   };
 
   if (loading) return <ChatHelpLoader />;

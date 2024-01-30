@@ -11,5 +11,6 @@ export * from '@/store/entities/offer';
 export * from '@/store/entities/negotiating';
 export * from '@/store/entities/notifications';
 export * from '@/store/entities/chat';
+export * from '@/store/entities/auth';
 
 export * from '@/store/selectors';

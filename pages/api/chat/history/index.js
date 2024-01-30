@@ -1,21 +1,20 @@
-import { getServerSession } from 'next-auth';
-
 import { chatHistoryResponseAdapter } from '@/adapters';
 import { Authorization, ContentTypeJson } from '@/lib/constants';
 import { getRtURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
-  const { id, date } = req.query;
+  const token = getCookieFromServer('session-access-token', req);
+  const role = getCookieFromServer('session-user-role', req);
+  const clientId = getCookieFromServer('session-user-id', req);
 
   return responseHandler({
     req,
     res,
-    path: getRtURL(`/chat/load/${id}?created=${date}`),
-    dataAdapter: (data) => chatHistoryResponseAdapter({ data, session }),
     requestMethod: 'GET',
-    options: { headers: { ...Authorization(session?.accessToken), ...ContentTypeJson() } },
+    path: getRtURL(`/chat/load/${req.query.id}?created=${req.query.date}`),
+    dataAdapter: (data) => chatHistoryResponseAdapter({ role, clientId, ...data }),
+    options: { headers: Authorization(token), ...ContentTypeJson() },
   });
 }

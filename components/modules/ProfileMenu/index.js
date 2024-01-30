@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import classnames from 'classnames';
 
@@ -9,11 +10,15 @@ import { ProfileMenuPropTypes } from '@/lib/types';
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import ExitSVG from '@/assets/images/exit.svg';
 import UserCircleSVG from '@/assets/images/userCircle.svg';
-import { LogoutButton, NextImage, NextLink } from '@/elements';
+import { LogoutButton, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
+import { getAuthSelector, getUserDataSelector } from '@/store/selectors';
 
-const ProfileMenu = ({ name, image }) => {
+const ProfileMenu = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  const { data } = useSelector(getUserDataSelector);
+  const { session } = useSelector(getAuthSelector);
 
   const closeMenu = (e) => {
     e.stopPropagation();
@@ -26,13 +31,10 @@ const ProfileMenu = ({ name, image }) => {
       aria-hidden
       onClick={() => setShowProfileMenu(true)}
     >
-      {image && (
-        <div className="overflow-hidden h-10 w-10 rounded-[50%]">
-          <NextImage src={image} height={40} width={40} alt="some_alt" />
-        </div>
-      )}
       <div className="flex items-center mx-2.5">
-        <span className="text-black font-semibold text-xsm">{name}</span>
+        <span className="text-black font-semibold text-xsm">
+          {data?.personalDetails?.fullName ?? session?.user?.name}
+        </span>
         <AngleDownSVG
           className={classnames('fill-black ml-6 transition duration-500', showProfileMenu && 'fill-blue rotate-180')}
         />

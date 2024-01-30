@@ -14,7 +14,7 @@ const Captcha = ({ onChange }) => {
 
   return (
     <div>
-      <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} className="my-2.5" onChange={onChange} />
+      <ReCAPTCHA sitekey="6LeDBQMpAAAAAEFmHjH00wX_1kkrnUspo8ZG6ZZu" className="my-2.5" onChange={onChange} />
       {errors?.captcha && <InputErrorMessage message={errors.captcha.message} />}
     </div>
   );

@@ -1,17 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { ViewCounterofferPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Dropdown, Loader } from '@/elements';
-import { COUNTDOWN_OPTIONS, ROLES } from '@/lib/constants';
+import { COUNTDOWN_OPTIONS } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const tabs = [
   {
@@ -28,19 +29,22 @@ const ViewCounteroffer = ({ itemId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
   const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[1]);
-  const { data: session } = useSession();
-  const isOwner = session?.role === ROLES.OWNER;
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
+
+  const { role } = useSelector(getUserDataSelector);
+
+  const { isOwner } = getRoleIdentity({ role });
+
   const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;
 
   useEffect(() => {
     (async () => {
-      const { status, data, error } = await getOfferDetails(itemId, session?.role);
+      const { status, data, error } = await getOfferDetails(itemId, role);
       if (status === 200) {
         setOfferDetails(offerDetailsAdapter({ data }));
       } else {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     })();

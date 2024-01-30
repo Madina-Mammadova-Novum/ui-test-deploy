@@ -1,23 +1,37 @@
 'use client';
 
+import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 import * as yup from 'yup';
 
-import { signInAdapter } from '@/adapters/user';
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
+import { ROUTES } from '@/lib';
 import { loginSchema } from '@/lib/schemas';
+import { signIn } from '@/store/entities/auth/actions';
+import { getAuthSelector } from '@/store/selectors';
+import { resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { error, session, loading } = useSelector(getAuthSelector);
 
   const schema = yup.object().shape({
     ...loginSchema(),
   });
+
+  useEffect(() => {
+    if (error) errorToast(error.title, 'Incorrect email or password');
+
+    if (session?.accessToken) {
+      router.push(ROUTES.ACCOUNT_INFO);
+    }
+  }, [error, session?.accessToken]);
 
   const methods = useHookFormParams({ schema });
 
@@ -25,18 +39,20 @@ const LoginForm = () => {
     register,
     setValue,
     clearErrors,
-    reset,
     formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = async (data) => {
-    const { error, url } = await signIn('credentials', signInAdapter({ data }));
-    if (!error) {
-      reset();
-      router.push(url);
-      router.refresh();
-    }
-    if (error === 'CredentialsSignin') errorToast('Bad request', 'Incorrect email or password');
+  const handleResetFields = () => {
+    methods.reset((formValues) => {
+      resetObjectFields(formValues, '');
+      return formValues;
+    });
+  };
+
+  const onSubmit = (data) => {
+    dispatch(signIn({ data }));
+    handleResetFields();
+    router.refresh();
   };
 
   const handlePassword = (event) => {
@@ -49,6 +65,7 @@ const LoginForm = () => {
     <FormProvider {...methods}>
       <FormManager
         submitButton={{
+          disabled: loading,
           text: 'Log in',
           variant: 'primary',
           size: 'large',

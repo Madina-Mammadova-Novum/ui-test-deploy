@@ -15,16 +15,17 @@ import { FilterByForm, PostFixtureFilter } from '@/units';
 const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
 const PostFixture = () => {
-  const { offers, loading, toggle, perPage, filters } = useSelector(getPostFixtureDataSelector);
-  const [userStore, setUserStore] = useState({
-    SortColumnDirectionOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
-    SortColumnDirection: '',
-    SortColumnOptions: POST_FIXTURE_SORT_COLUMN_OPTIONS,
-    SortColumn: '',
-  });
   const dispatch = useDispatch();
 
-  const { SortColumnDirectionOptions, SortColumnDirection, SortColumnOptions, SortColumn } = userStore;
+  const [userStore, setUserStore] = useState({
+    sortColumnDirectionOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
+    sortColumnDirection: '',
+    sortColumnOptions: POST_FIXTURE_SORT_COLUMN_OPTIONS,
+    sortColumn: '',
+  });
+
+  const { offers, loading, toggle, perPage, filters } = useSelector(getPostFixtureDataSelector);
+  const { sortColumnDirectionOptions, sortColumnDirection, sortColumnOptions, sortColumn } = userStore;
 
   const handleChangeState = (key, value) => {
     setUserStore((prevState) => ({
@@ -40,20 +41,22 @@ const PostFixture = () => {
         perPage,
         filters,
         sorting: {
-          SortColumnDirection: SortColumnDirection?.value,
-          SortColumn: SortColumn?.value,
+          sortColumnDirection: sortColumnDirection?.value,
+          sortColumn: sortColumn?.value,
           [key]: sortOption.value,
         },
       })
     );
   };
+
   const handleSortColumnSelection = (option) => {
-    handleChangeState('SortColumn', option);
-    if (SortColumnDirection) handleSortSelection('SortColumn', option);
+    handleChangeState('sortColumn', option);
+    if (sortColumnDirection) handleSortSelection('sortColumn', option);
   };
+
   const handleSortDirectionSelection = (option) => {
-    handleChangeState('SortColumnDirection', option);
-    if (SortColumn) handleSortSelection('SortColumnDirection', option);
+    handleChangeState('sortColumnDirection', option);
+    if (sortColumn) handleSortSelection('sortColumnDirection', option);
   };
 
   const printContent = useMemo(() => {
@@ -72,23 +75,23 @@ const PostFixture = () => {
   return (
     <>
       <FilterByForm>
-        <PostFixtureFilter />
+        <PostFixtureFilter {...filters} />
       </FilterByForm>
       <div className="flex justify-end pt-6 items-center gap-2.5">
         <Label className="text-xs-sm	font-semibold">Sort cargoes by:</Label>
         <div className="flex">
           <Dropdown
             placeholder="Sort by"
-            options={SortColumnOptions}
-            defaultValue={SortColumn}
+            options={sortColumnOptions}
+            defaultValue={sortColumn}
             customStyles={dropdownStyles}
             onChange={handleSortColumnSelection}
           />
 
           <Dropdown
             placeholder="Sort direction"
-            options={SortColumnDirectionOptions}
-            defaultValue={SortColumnDirection}
+            options={sortColumnDirectionOptions}
+            defaultValue={sortColumnDirection}
             customStyles={dropdownStyles}
             onChange={handleSortDirectionSelection}
           />

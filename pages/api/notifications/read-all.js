@@ -1,12 +1,10 @@
-import { getServerSession } from 'next-auth';
-
 import { Authorization } from '@/lib/constants';
 import { getRtURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
-import { AUTHCONFIG } from '@/utils/auth';
+import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, AUTHCONFIG);
+  const token = getCookieFromServer('session-access-token', req);
 
   return responseHandler({
     req,
@@ -14,6 +12,6 @@ export default async function handler(req, res) {
     path: getRtURL(`notifications/markallasread`),
     dataAdapter: () => ({}),
     requestMethod: 'POST',
-    options: { headers: { ...Authorization(session?.accessToken) } },
+    options: { headers: Authorization(token) },
   });
 }

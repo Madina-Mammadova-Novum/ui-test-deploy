@@ -16,17 +16,19 @@ import { useHookForm } from '@/utils/hooks';
 const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
   const [freightEstimation, setFreightEstimation] = useState({});
   const dispatch = useDispatch();
+
   const {
+    watch,
     register,
-    clearErrors,
-    formState: { errors, isSubmitting },
     setValue,
     getValues,
-    watch,
+    clearErrors,
+    formState: { errors, isSubmitting },
   } = useHookForm();
 
   const { searchData } = useSelector(searchSelector);
-  const { products, loadPort, dischargePort } = searchData;
+  const { products = [], loadPort, dischargePort } = searchData;
+
   const {
     data: { paymentTerms, demurragePaymentTerms, freightFormats },
     loading: initialLoading,
@@ -41,6 +43,7 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
     if (error) {
       clearErrors(key);
     }
@@ -50,15 +53,22 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
     if (key === 'freight') {
       const productsData = getValues('products');
       const totalCargoQuantity = calculateTotal(productsData, 'quantity');
+
       const { status, data } = await calculateFreightEstimation({
-        data: { loadPortId: loadPort.value, dischargePortId: dischargePort.value, totalCargoQuantity },
+        data: {
+          loadPortId: loadPort.value,
+          dischargePortId: dischargePort.value,
+          totalCargoQuantity,
+        },
       });
+
       if (status === 200) {
         setFreightEstimation({
           ...data,
           min: calculateIntDigit(data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
           max: calculateIntDigit(data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
         });
+
         setValue('totalAmount', data.total);
       }
     }
@@ -66,8 +76,9 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
 
   const printProduct = (product, index) => {
     setValue(`products[${index}].tolerance`, product.tolerance);
+
     return (
-      <div className="flex items-baseline mt-3 gap-x-5">
+      <div className="flex items-baseline mt-3 gap-x-5" key={product.product.value}>
         <FormDropdown
           label={`product #${index + 1}`}
           name={`products[${index}].product`}
@@ -80,7 +91,7 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           placeholder="mt/m³"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
-          disabled={isSubmitting}
+          disabled
         />
         <Input
           {...register(`products[${index}].quantity`)}
@@ -88,7 +99,7 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           placeholder="tons"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.quantity?.message : null}
-          disabled={isSubmitting}
+          disabled
         />
       </div>
     );
@@ -100,7 +111,9 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
       <div className="flex items-center mt-3">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
-      {products?.filter((product) => product).map(printProduct)}
+
+      {products?.map(printProduct)}
+
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
         <FormDropdown
           label="Freight"
@@ -108,8 +121,9 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('freight', option)}
+          asyncCall
         />
         <Input
           {...register('value')}
@@ -166,9 +180,10 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
+          asyncCall
         />
 
         <FormDropdown
@@ -177,9 +192,10 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
           disabled={initialLoading}
-          asyncCall={initialLoading}
+          loading={initialLoading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}
+          asyncCall
         />
       </div>
     </>

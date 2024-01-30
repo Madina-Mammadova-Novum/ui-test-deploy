@@ -2,6 +2,7 @@ import { devToolsEnhancer } from '@redux-devtools/extension';
 import { configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import thunk from 'redux-thunk';
 
 import { reducer } from '@/store/reducers';
 
@@ -22,7 +23,7 @@ const createNoopStorage = () => {
 const persistConfig = {
   key: 'root',
   storage: typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage(),
-  whitelist: ['general', 'notifications', 'user', 'chat'],
+  whitelist: ['general', 'user', 'chat', 'auth'],
   version: 1,
 };
 
@@ -35,7 +36,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }), // could be extended by api reducers
+    }).concat(thunk), // could be extended by api reducers
   devTools: process.env.NODE_ENV === 'development' && devToolsEnhancer(),
 });
 

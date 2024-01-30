@@ -12,10 +12,8 @@ import { Title } from '@/elements';
 import { portsSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
 import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
-import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
-import { updateTankersByFleetId } from '@/store/entities/positions/slice';
+import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { PortDetailsForm } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const EditPortForm = ({ title, state, closeModal }) => {
@@ -35,13 +33,13 @@ const EditPortForm = ({ title, state, closeModal }) => {
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
       } else if (state?.type === 'unassigned') {
         const { data: unassignedTankers } = await getUnassignedVessels();
-        dispatch(updateUnassignedFleet({ id: state.id, tankers: unassignedTankers }));
+        dispatch(updateUnassignedTanker({ id: state.id, tankers: unassignedTankers }));
       }
       closeModal();
     }
 
     if (message) successToast(message);
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
   };
 
   return (

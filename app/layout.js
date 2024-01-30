@@ -1,4 +1,3 @@
-import { ClientSidePackages } from '@/common';
 import { BaseLayout } from '@/layouts';
 
 export const metadata = {
@@ -8,11 +7,6 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children }) {
-  return (
-    <BaseLayout>
-      {children}
-      <ClientSidePackages />
-    </BaseLayout>
-  );
+export default function RootLayout({ children }) {
+  return <BaseLayout>{children}</BaseLayout>;
 }

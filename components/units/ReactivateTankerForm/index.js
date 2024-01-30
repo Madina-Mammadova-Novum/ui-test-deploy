@@ -14,10 +14,9 @@ import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
 import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
-import { updateUnassignedFleet } from '@/store/entities/fleets/slice';
-import { updateTankersByFleetId } from '@/store/entities/positions/slice';
+import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { getGeneralDataSelector } from '@/store/selectors';
-import { countriesOptions, parseErrorMessage } from '@/utils/helpers';
+import { countriesOptions } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ReactivateTankerForm = ({ title, state, closeModal }) => {
@@ -76,13 +75,13 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
       } else if (type === 'unassigned') {
         const { data: unassignedTankers } = await getUnassignedVessels();
-        dispatch(updateUnassignedFleet({ id, tankers: unassignedTankers }));
+        dispatch(updateUnassignedTanker({ id, tankers: unassignedTankers }));
       }
       closeModal();
     }
 
     if (message) successToast(message);
-    if (error) errorToast(parseErrorMessage(error));
+    if (error) errorToast(error?.title, error?.message);
   };
 
   const { listOfPorts, port, nextDay } = tankerState;

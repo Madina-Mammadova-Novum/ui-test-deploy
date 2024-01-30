@@ -2,44 +2,55 @@
 
 import { useEffect, useState } from 'react';
 import ReactCountryFlag from 'react-country-flag';
-
-import { useSession } from 'next-auth/react';
+import { useSelector } from 'react-redux';
 
 import { NegotiatingTankerInformationPropTypes } from '@/lib/types';
 
 import { tankerInformationAdapter } from '@/adapters/vessel';
 import { Divider, FieldsetContent, Loader, TextRow, Title } from '@/elements';
 import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
+import { errorToast } from '@/utils/hooks';
 
 const NegotiatingTankerInformation = ({ offerId }) => {
   const [loading, setLoading] = useState(true);
-  const [tankerInformation, setTankerInformation] = useState({});
-  const { data: session } = useSession();
-  const { ownerInfo = [], tankerInfo = [] } = tankerInformation;
+
+  const [tankerInformation, setTankerInformation] = useState({
+    ownerInfo: [],
+    tankerInfo: [],
+  });
+
+  const { role } = useSelector(getUserDataSelector);
+
+  const { ownerInfo, tankerInfo } = tankerInformation;
+
+  const fetchTankerInfo = async () => {
+    const { data, error } = await getOfferDetails(offerId, role);
+
+    if (data) {
+      setTankerInformation(tankerInformationAdapter(data));
+    } else {
+      errorToast(error.title, error.message);
+    }
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    (async () => {
-      const { status, data, error } = await getOfferDetails(offerId, session?.role);
-      if (status === 200) {
-        setTankerInformation(tankerInformationAdapter(data));
-      } else {
-        console.log(error);
-      }
-      setLoading(false);
-    })();
+    fetchTankerInfo();
   }, []);
 
   if (loading) {
     return (
       <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-1/2" />
+        <Loader className="h-8 w-8 absolute top-3/4" />
       </div>
     );
   }
 
   return (
     <div className="w-[610px]">
-      <Title level={2}>Tanker Information</Title>
+      <Title level="2">Tanker Information</Title>
 
       <FieldsetContent label="About the Vessel Owner" className="mt-3">
         {ownerInfo.map(({ title, description }) => (

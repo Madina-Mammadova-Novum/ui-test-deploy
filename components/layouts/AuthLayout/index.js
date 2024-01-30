@@ -5,7 +5,7 @@ import { AuthHeader } from '@/modules';
 
 const AuthLayout = ({ navigation, children, containerClass = '' }) => {
   return (
-    <div className="container mx-auto max-w-screen-2xl min-h-screen flex flex-col">
+    <div className="container mx-auto max-w-screen min-h-screen flex flex-col">
       <AuthHeader navigation={navigation} />
       <div className="fixed left-0 top-0 -z-50 h-full 3md:w-5/12 xl:w-[calc(100% - 668px)] hidden 3md:block">
         <NextImage

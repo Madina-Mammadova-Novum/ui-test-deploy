@@ -14,7 +14,6 @@ import { updateInfo } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Notes, PersonalDetails } from '@/units';
-import { makeId, parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsForm = ({ closeModal }) => {
@@ -23,24 +22,35 @@ const PersonalDetailsForm = ({ closeModal }) => {
   const { data } = useSelector(getUserDataSelector);
 
   const methods = useHookFormParams({ state: data?.personalDetails, schema });
-  const onSubmit = async (formData) => {
-    const { status, error } = await updateInfo({ data: formData });
 
-    if (status === 200) {
+  const onSubmit = async (formData) => {
+    const isContactDataChanged = Object.keys(formData).some((key) => {
+      return (key === 'primaryPhone' || key === 'secondaryPhone') && formData[key] !== data?.personalDetails[key];
+    });
+
+    const { error } = await updateInfo({ data: formData });
+
+    if (formData === data?.personalDetails) return;
+
+    if (error) {
+      errorToast(error?.title, error?.message);
+    }
+
+    if (isContactDataChanged) {
       dispatch(fetchUserProfileData());
+      successToast('You have succesfuly updated your "Phone Number"');
+    } else {
       successToast(
         'Your request has been sent for review',
         'You will be notified soon. The rest of the changes have been edited'
       );
+      dispatch(fetchUserProfileData());
     }
-
-    if (error) errorToast(parseErrorMessage(error));
-    return null;
   };
 
   const noteList = [
     {
-      id: makeId(),
+      id: 1,
       label: null,
       list: ['First Name', 'Last name', 'Email'],
     },
@@ -51,7 +61,12 @@ const PersonalDetailsForm = ({ closeModal }) => {
       <ModalFormManager
         onClose={closeModal}
         submitAction={onSubmit}
-        submitButton={{ text: 'Edit personal details', variant: 'primary', size: 'large' }}
+        submitButton={{
+          text: 'Edit personal details',
+          variant: 'primary',
+          size: 'large',
+          disabled: !methods.formState.isDirty,
+        }}
       >
         <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Edit Personal Details

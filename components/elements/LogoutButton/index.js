@@ -2,25 +2,23 @@
 
 import { useDispatch } from 'react-redux';
 
-import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 import { LogoutButtonPropTypes } from '@/lib/types';
 
-import { signOutAdapter } from '@/adapters/user';
 import { Button } from '@/elements';
-import { setRoleIdentity } from '@/store/entities/user/slice';
+import { ROUTES } from '@/lib';
+import { clearSession } from '@/store/entities/auth/slice';
+import { resetNotificationData } from '@/store/entities/notifications/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
-  const reset = () => {
-    dispatch(setRoleIdentity(null));
-  };
-
-  const handleSignOut = async () => {
-    await signOut({ ...signOutAdapter() }).then(() => reset());
-
-    return null;
+  const handleSignOut = () => {
+    dispatch(clearSession());
+    dispatch(resetNotificationData());
+    router.replace(ROUTES.LOGIN);
   };
 
   return (

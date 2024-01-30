@@ -1,21 +1,17 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-
-import { useSession } from 'next-auth/react';
 
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { ROLES } from '@/lib';
 import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
-import { getGeneralDataSelector } from '@/store/selectors';
+import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
 import { Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ data = {} }) => {
-  const { data: session } = useSession();
+  const { role } = useSelector(getUserDataSelector);
   const { countries } = useSelector(getGeneralDataSelector);
 
   const {
@@ -25,33 +21,30 @@ const DetailsContent = ({ data = {} }) => {
     voyageDetails = {},
     additionalCharterPartyTerms = [],
   } = data;
+
   const { cargoType, products = [] } = cargoDetails;
   const { freight, demurrageRate, laytime, demurragePaymentTerms, paymentTerms } = commercialOfferTerms;
+
   const {
     laycanStart,
     laycanEnd,
     loadPort,
-    loadPortCountryId,
+    loadPortCountryCode,
     loadTerminal,
     dischargePort,
-    dischargePortCountryId,
+    dischargePortCountryCode,
     dischargeTerminal,
   } = voyageDetails;
 
-  const printRoleBasedSection = useMemo(() => {
-    if (session?.role === ROLES.CHARTERER) {
-      return <DetailsChartererContent title="Tanker Information" data={partyInformation} />;
-    }
-    if (session?.role === ROLES.OWNER) {
-      return <DetailsOwnerContent title="Charterer Information" data={partyInformation} />;
-    }
-    return null;
-  }, [session?.role]);
+  const roleBasedSection = {
+    owner: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
+    charterer: <DetailsOwnerContent title="Charterer Information" data={partyInformation} countries={countries} />,
+  };
 
   return (
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
-        {printRoleBasedSection}
+        {roleBasedSection[role]}
         <FieldsetWrapper>
           <Title level={3}>Cargo Details</Title>
 
@@ -95,7 +88,7 @@ const DetailsContent = ({ data = {} }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Voyage Details</Title>
+          <Title level="3">Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             <TextRow title="Laycan start">{laycanStart}</TextRow>
@@ -105,7 +98,7 @@ const DetailsContent = ({ data = {} }) => {
           <FieldsetContent label="Ports" className="mt-4">
             <div>
               <TextRow title="Load port">
-                <Flag data={countries} id={loadPortCountryId} className="mr-1" />
+                <Flag countryCode={loadPortCountryCode} className="mr-1" />
                 {loadPort}
               </TextRow>
               <TextRow title="Load terminal">{loadTerminal}</TextRow>
@@ -113,7 +106,7 @@ const DetailsContent = ({ data = {} }) => {
 
             <div className="mt-2.5">
               <TextRow title="Discharge port">
-                <Flag data={countries} id={dischargePortCountryId} className="mr-1" />
+                <Flag countryCode={dischargePortCountryCode} className="mr-1" />
                 {dischargePort}
               </TextRow>
               <TextRow title="Discharge terminal">{dischargeTerminal}</TextRow>
@@ -123,7 +116,7 @@ const DetailsContent = ({ data = {} }) => {
       </div>
       {!!additionalCharterPartyTerms.length && (
         <FieldsetWrapper>
-          <Title level={3}>Additional Charter Party Terms</Title>
+          <Title level="3">Additional Charter Party Terms</Title>
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
             {additionalCharterPartyTerms.map(({ title, body }) => (

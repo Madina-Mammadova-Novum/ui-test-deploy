@@ -9,6 +9,7 @@ export const getPorts = async () => {
 
 export const getPortsForSearcForm = async () => {
   const response = await getData(`ports/search-form-ports`);
+
   return {
     ...response,
   };

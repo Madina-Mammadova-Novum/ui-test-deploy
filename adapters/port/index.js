@@ -49,3 +49,9 @@ export const portsAdapter = ({ data }) => {
     return portAdapter({ data: port });
   });
 };
+
+export const portOptionsAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((port) => ({ value: port?.id, label: port.label }));
+};

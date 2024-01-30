@@ -10,9 +10,9 @@ const searchSlice = createSlice({
   initialState,
   reducers: {
     setSearchData: (state, { payload }) => {
-      const parsedState = JSON.parse(JSON.stringify({ ...state, searchData: payload }));
-      state.prefilledSearchData = parsedState.prefilledSearchData;
-      state.searchData = parsedState.searchData;
+      const updatedState = { ...state, searchData: payload };
+      state.prefilledSearchData = updatedState.prefilledSearchData;
+      state.searchData = updatedState.searchData;
     },
     setPrefilledSearchData: (state, { payload }) => {
       state.prefilledSearchData = payload;

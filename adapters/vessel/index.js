@@ -1,6 +1,6 @@
 import { postProductsAdapter } from '@/adapters';
 import { transformDate } from '@/utils/date';
-import { trimTonValue } from '@/utils/helpers';
+import { getLocode, trimTonValue } from '@/utils/helpers';
 
 export function requestSearchVesselAdapter({ data }) {
   if (data === null) return null;
@@ -433,6 +433,7 @@ export function userTankerAdapter({ data }) {
     port: openPort?.name,
     portId: openPort?.id,
     countryId: openPort?.countryId,
+    countryCode: getLocode(openPort?.locode),
     status: appearsInSearch,
     rolled: expirationExtendedForFirstTime || expirationExtendedForSecondTime,
     imo,

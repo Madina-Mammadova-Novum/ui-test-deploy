@@ -59,15 +59,18 @@ function getRobots(string) {
 export const metaData = (props) => {
   const { data } = props || {};
   if (!data) return null; // todo: if data === null need to set default values
-  const { title: pageTile, slug, seo } = data;
-  if (seo === null) return null; // todo: if seo === null need to set default values
+
+  const { title: pageTitle, slug, seo } = data;
+
+  if (!seo) return null; // todo: if seo === null need to set default values
   const { metaTitle, metaDescription, keywords, metaRobots, canonicalURL } = seo; // todo: metaViewport isset in seo but temporary not use
-  const title = metaTitle !== null ? metaTitle : pageTile;
+  const title = metaTitle !== null ? metaTitle : pageTitle;
   const description = metaDescription !== null ? metaDescription : '';
   const siteName = 'ShipLink';
   const url = getPublicUrl(slug);
 
   return {
+    metadataBase: data?.route ?? '/',
     title,
     description,
     keywords: keywords !== null ? getKeywords(keywords) : [],
@@ -75,7 +78,6 @@ export const metaData = (props) => {
     applicationName: siteName,
     referrer: 'origin-when-cross-origin',
     // authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],
-    // colorScheme: 'dark',
     url: 'https://shiplink.oyihost.com',
     creator: 'Otakoyi',
     // publisher: 'Sebastian Markbåge',

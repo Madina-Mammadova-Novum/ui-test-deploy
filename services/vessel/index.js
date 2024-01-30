@@ -12,7 +12,9 @@ import { generateMessageByActionType } from '@/utils/helpers';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
+
   const response = await postData(`vessels/search`, body);
+
   return {
     ...response,
   };
@@ -85,7 +87,7 @@ export async function getVesselFreightFormats(vesselId) {
 export async function updateVesselPortAndDate(data) {
   const body = updateVesselPortAndDataAdapter({ data });
 
-  const response = await putData(`account/my-positions/update-vessel-port`, body);
+  const response = await putData(`account/positions/update-vessel-port`, body);
 
   if (!response.error) response.message = generateMessageByActionType({ action: data?.action });
 
@@ -104,20 +106,21 @@ export async function getUnassignedVessels() {
 
 export async function getAssignedVessels({ id, ...rest }) {
   const response = await getData(`vessels/get-assigned/${id}`);
-  const { data = [] } = response;
+
   return {
     id,
-    vessels: data,
+    vessels: response?.data || [],
     ...rest,
   };
 }
 
-export function* getFleetsVessels(data) {
-  return yield Promise.all(data.map(getAssignedVessels));
+export async function getFleetsVessels(data) {
+  return Promise.all(data.map(getAssignedVessels));
 }
 
 export async function getVesselDetails(tankerId) {
   const response = await getData(`vessels/details/${tankerId}`);
+
   return {
     ...response,
   };

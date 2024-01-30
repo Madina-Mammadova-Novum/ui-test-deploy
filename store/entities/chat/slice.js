@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   updating: false,
   error: false,
+  status: null,
   opened: false,
   isActiveSession: false,
   data: {
@@ -25,6 +26,7 @@ const initialState = {
         isOnline: false,
         isTyping: false,
       },
+      status: null,
       messages: [],
       loading: false,
       updating: false,
@@ -126,6 +128,32 @@ const chatSlice = createSlice({
       state.data.collapsed = updatedCollapsedState;
     },
 
+    onlineStatus: (state, { payload }) => {
+      state.data.active = state.data.active.map((user) => {
+        if (user.chatId === payload.id) {
+          return {
+            ...user,
+            isOnline: true,
+          };
+        }
+
+        return user;
+      });
+    },
+
+    offlineStatus: (state, { payload }) => {
+      state.data.active = state.data.active.map((user) => {
+        if (user.chatId === payload.id) {
+          return {
+            ...user,
+            isOnline: false,
+          };
+        }
+
+        return user;
+      });
+    },
+
     messageAlert: (state, { payload }) => {
       const activeSessionId = state.data.user.data?.chatId;
 
@@ -171,6 +199,7 @@ const chatSlice = createSlice({
     });
     builder.addCase(getListOfChats.fulfilled, (state, { payload }) => {
       state.loading = false;
+      state.status = payload.status;
       state.updating = payload.updating;
       state.data.active = payload.active;
       state.data.archived = payload.archived;
@@ -190,6 +219,7 @@ const chatSlice = createSlice({
       state.data.user.updating = false;
       state.data.user.created = payload.created;
       state.data.user.isLast = payload.isLast;
+      state.data.user.status = payload.status;
     });
     builder.addCase(getChatHistory.rejected, (state) => {
       state.data.user.loading = false;
@@ -232,6 +262,8 @@ export const {
   removeCollapsedChat,
   setLoadConversation,
   updateUserConversation,
+  onlineStatus,
+  offlineStatus,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

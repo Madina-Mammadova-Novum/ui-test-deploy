@@ -6,3 +6,4 @@ export * from '@/services/chat';
 export * from '@/services/social-links';
 export * from '@/services/homePage';
 export * from '@/services/tools';
+export * from '@/services/session';

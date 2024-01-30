@@ -1,10 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 import ModalHeader from '../ModalHeader';
 
@@ -16,14 +15,14 @@ import { revokeDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
-import { parseErrorMessage } from '@/utils/helpers';
+import { getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
-  const [loading, setLoading] = useState(false);
-  const { data: session } = useSession();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
+  const { role } = useSelector(getUserDataSelector);
   const pathname = usePathname();
 
   const modalSettings = useMemo(() => {
@@ -45,11 +44,11 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
     setLoading(true);
     const { error, message: successMessage } = await revokeDocumentDeletion({
       data: { documentId },
-      role: session?.role,
+      role,
     });
     setLoading(false);
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentStatus({ documentId, status: 'Active' }));
       successToast(successMessage);

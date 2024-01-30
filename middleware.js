@@ -1,41 +1,41 @@
-/* eslint-disable consistent-return */
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { withAuth } from 'next-auth/middleware';
 
-import { ROLES, ROUTES } from '@/lib';
-import { checkAuthRoute } from '@/utils/helpers';
+import { ROUTES } from '@/lib';
+import { checkAuthRoute, getRoleIdentity } from '@/utils/helpers';
 
-export default withAuth(
-  function middleware(req) {
-    const { accessToken, role, error } = req.nextauth.token;
+export default function middleware(req) {
+  const accessToken = cookies().get('session-access-token')?.value;
+  const role = cookies().get('session-user-role')?.value;
 
-    const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
-    const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
+  const { isOwner, isCharterer } = getRoleIdentity({ role });
 
-    if (req.nextUrl.pathname.startsWith('/account') && !accessToken) {
-      return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
-    }
+  const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
+  const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
 
-    if (charetererRoutes && role !== ROLES.CHARTERER) {
-      return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
-    }
-
-    if (ownerRoutes && role !== ROLES.OWNER) {
-      return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
-    }
-
-    if (error) return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => {
-        if (token?.accessToken) return true;
-        if (token?.error) return false;
-
-        return false;
-      },
-    },
+  if (req.nextUrl.pathname.startsWith('/account') && !accessToken) {
+    return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
   }
-);
 
-export const config = { matcher: ['/account/:path*'] };
+  if (charetererRoutes && !isCharterer) {
+    return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
+  }
+
+  if (ownerRoutes && !isOwner) {
+    return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    {
+      source: '/account/:path*',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+  ],
+};

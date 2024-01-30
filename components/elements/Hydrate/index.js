@@ -2,29 +2,26 @@
 
 import { useEffect, useState } from 'react';
 
-import { HydratePropTypes } from '@/lib/types';
+import PropTypes from 'prop-types';
 
-import { errorToast } from '@/utils/hooks';
+import { PageLoader } from '../PageLoader';
 
-const Hydrate = ({ children, session, loader = null }) => {
+const Hydrate = ({ children, loader = null }) => {
+  const loaderType = {
+    page: <PageLoader text="uploading..." />,
+  };
+
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  if (hydrated && session?.error) {
-    return (
-      <>
-        {children}
-        {errorToast('Bad request', session.error)}
-      </>
-    );
-  }
-
-  return hydrated ? children : loader;
+  return hydrated ? children : loaderType[loader] || null;
 };
 
-Hydrate.propTypes = HydratePropTypes;
+Hydrate.propTypes = {
+  loader: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
+};
 
 export default Hydrate;

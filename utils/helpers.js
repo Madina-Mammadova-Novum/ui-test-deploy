@@ -3,12 +3,14 @@
 import { HttpTransportType } from '@microsoft/signalr';
 import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
+import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
-import { REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS, SYSTEM_ERROR } from '@/lib/constants';
+import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
+import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -152,8 +154,8 @@ export function hasNestedArrays(data) {
   return isNested;
 }
 
-export function getFilledArray(length) {
-  return Array.from({ length }).map((_, index) => index + 1);
+export function getFilledArray(length = 1) {
+  return Array.from({ length: length || 1 }).map((_, index) => index + 1);
 }
 
 export function getValueWithPath(object, path, defaultValue) {
@@ -257,7 +259,7 @@ export const removeByIndex = (data, index) => {
   });
 };
 
-export const filterDataByLowerCase = (inputValue, data) => {
+export const filterDataByLowerCase = (inputValue, data = []) => {
   return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
@@ -330,12 +332,11 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return [SYSTEM_ERROR];
+  if (!errors) return ERROR_MESSGE;
 
+  // eslint-disable-next-line no-unused-vars
   return Object.entries(errors).map(([key, value]) => {
-    // eslint-disable-next-line no-param-reassign
-    if (key === '_' || key === '') key = 'Exeption';
-    return `${key}: ${value}`;
+    return `${value}`;
   })[0];
 };
 
@@ -406,10 +407,10 @@ export const setSkipedValue = (pageValue, perPageValue) => {
   return (pageValue - 1) * perPageValue;
 };
 
-export const transformToCapitalize = (str) => {
+export const transformToCapitalize = (str = '') => {
   return str
-    .split(' ')
-    .map((word) => word[0].toUpperCase() + word.substring(1))
+    ?.split(' ')
+    .map((word) => word[0]?.toUpperCase() + word.substring(1))
     .join(' ');
 };
 
@@ -436,6 +437,12 @@ export const getFormattedDays = () => {
   const yesterday = yesterdayDate.toISOString().split('T')[0];
 
   return { today, yesterday };
+};
+
+export const getLocode = (locode) => {
+  if (!locode) return null;
+
+  return locode.slice(0, 2).toLowerCase();
 };
 
 export const getListOfDataByDays = (data) => {
@@ -510,12 +517,8 @@ export const getSocketConnectionsParams = (token) => {
   };
 };
 
-export const clientIdentification = ({ senderId, session }) => {
-  if (session?.role === ROLES.ANON) {
-    return senderId === session?.userId ? session?.role : ROLES.SUPPORT;
-  }
-
-  return senderId === session?.userId ? session?.role : ROLES.BROKER;
+export const clientIdentification = ({ senderId, clientId, role }) => {
+  return senderId === clientId ? role : ROLES.BROKER;
 };
 
 export const getAppropriateFailedBy = ({ failedBy, role }) => {
@@ -626,4 +629,83 @@ export const freightFormatter = ({ value, format }) => {
   };
 
   return response[format];
+};
+
+export function lowerCaseFormat(obj) {
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+
+  return Object.keys(obj).reduce((newObj, key) => {
+    const newKey = key.toLowerCase();
+    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : lowerCaseFormat(obj[key]);
+    return newObj;
+  }, {});
+}
+
+export const errorMessage = ({ errors }) => {
+  if (errors?.message === 'Internal server error') {
+    return {
+      message: 'External server error',
+    };
+  }
+
+  if (errors?.message === 'Bad Request') {
+    return {
+      message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
+    };
+  }
+
+  return { message: formatErrors(errors?.errors) };
+};
+
+export const setCookie = (key, value) => {
+  cookie.set(key, value, {
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Lax',
+    expires: 1,
+  });
+};
+
+export const removeCookie = (key) => {
+  cookie.remove(key, {
+    expires: 0,
+  });
+};
+
+export const getCookieFromBrowser = (key) => {
+  return cookie.get(key);
+};
+
+export const getCookieFromServer = (key, req) => {
+  if (!req.headers.cookie) {
+    return undefined;
+  }
+
+  const rawCookie = req.headers.cookie.split(';').find((c) => c.trim().startsWith(`${key}=`));
+
+  if (!rawCookie) {
+    return undefined;
+  }
+
+  return rawCookie.split('=')[1];
+};
+
+export const sessionCookieCleaner = () => {
+  removeCookie('session-access-token');
+  removeCookie('session-refresh-token');
+  removeCookie('session-user-role');
+  removeCookie('session-user-id');
+};
+
+export const sessionCookieData = (data) => {
+  if (!data) throw new Error('Unathorized');
+
+  const { sub, role } = decodedTokenAdapter(data.access_token);
+
+  setCookie('session-access-token', data.access_token);
+  setCookie('session-refresh-token', data.refresh_token);
+  setCookie('session-user-role', userRoleAdapter({ data: role }));
+  setCookie('session-user-id', sub);
 };

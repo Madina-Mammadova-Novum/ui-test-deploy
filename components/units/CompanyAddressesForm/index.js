@@ -1,15 +1,13 @@
 'use client';
 
-import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { CheckBoxInput } from '@/elements';
 import { ADDRESS } from '@/lib/constants';
-import { getGeneralDataSelector } from '@/store/selectors';
 import { AddressDetails } from '@/units';
 import { useHookForm } from '@/utils/hooks';
 
-const CompanyAddresses = () => {
-  const { countries } = useSelector(getGeneralDataSelector);
+const CompanyAddresses = ({ countries }) => {
   const { setValue, getValues } = useHookForm();
 
   const { sameAddresses } = getValues();
@@ -45,6 +43,10 @@ const CompanyAddresses = () => {
       )}
     </div>
   );
+};
+
+CompanyAddresses.propTypes = {
+  countries: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 export default CompanyAddresses;

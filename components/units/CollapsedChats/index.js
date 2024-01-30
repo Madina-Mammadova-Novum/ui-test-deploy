@@ -3,28 +3,29 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
-import { сhatSessionServcie } from '@/services/signalR';
-import { removeCollapsedChat, resetUser, setOpenedChat } from '@/store/entities/chat/slice';
+import { сhatSessionService } from '@/services/signalR';
+import { removeCollapsedChat, setConversation, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getChatSelector } from '@/store/selectors';
 
 const CollapsedChats = () => {
   const dispatch = useDispatch();
   const { chats } = useSelector(getChatSelector);
 
-  const onActivate = (user) => сhatSessionServcie.initChat(user);
+  const onActivate = (user) => {
+    dispatch(setConversation(true));
+    dispatch(setOpenedChat(true));
+    dispatch(setUser(user));
+  };
 
   const onRemove = async ({ id }) => {
-    dispatch(resetUser());
+    await сhatSessionService.stop();
     dispatch(removeCollapsedChat(id));
   };
 
   const handleStartConversation = ({ id, key }) => {
     const user = chats[key]?.find((session) => session?.chatId === id);
 
-    onRemove({ id: user?.chatId }).then(() => {
-      onActivate(user);
-      dispatch(setOpenedChat(true));
-    });
+    onRemove({ id: user?.chatId }).then(() => onActivate(user));
   };
 
   const handleCloseConversation = (e, id) => {

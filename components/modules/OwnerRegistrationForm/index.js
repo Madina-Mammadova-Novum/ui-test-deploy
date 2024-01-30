@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
@@ -28,10 +29,10 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { parseErrorMessage, resetForm } from '@/utils/helpers';
+import { resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
-const OwnerRegistrationForm = () => {
+const OwnerRegistrationForm = ({ countries }) => {
   const [sameAddress, setSameAddress] = useState(false);
   const [captcha, setCaptcha] = useState('');
 
@@ -56,15 +57,14 @@ const OwnerRegistrationForm = () => {
   }, [addressValue, methods, captcha]);
 
   const onSubmit = async (formData) => {
-    const { status, error, data } = await ownerSignUp({ data: formData });
+    const { error, data } = await ownerSignUp({ data: formData });
 
-    if (status === 200) {
+    if (!error) {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     }
-    if (error) {
-      errorToast(parseErrorMessage(error));
-    }
+
+    errorToast(error?.title, error?.message);
   };
 
   return (
@@ -99,13 +99,17 @@ const OwnerRegistrationForm = () => {
         </Step>
         <Divider />
         <Step title="Step #5: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
-          <CompanyAddresses />
+          <CompanyAddresses countries={countries} />
         </Step>
         <TermsAndConditions />
         <Captcha onChange={setCaptcha} />
       </FormManager>
     </FormProvider>
   );
+};
+
+OwnerRegistrationForm.propTypes = {
+  countries: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 export default OwnerRegistrationForm;

@@ -207,6 +207,7 @@
   .range_date .rdrCalendarWrapper {
     @apply w-[450px];
   }
+
   .range_date .rdrMonths {
     @apply w-[450px];
   }
@@ -224,7 +225,7 @@
   }
 
   .range_date input {
-    @apply h-9 text-xsm;
+    @apply h-9 text-xsm border-black border border-solid;
   }
 
   .range_date-hidden .rdrMonthAndYearWrapper,
@@ -477,10 +478,14 @@ tr > td:nth-child(2) {
   left: 39px;
 }
 
-.custom-table {
+.disabled-table {
   background-color: #f8fafb;
   z-index: 5;
-  /* border: 1px solid red; */
+}
+
+.freezed-table {
+  background-color: #ffffff;
+  z-index: 5;
 }
 
 .tooltip {
@@ -490,7 +495,7 @@ tr > td:nth-child(2) {
 
 .tooltip .tooltip-box {
   top: 5%;
-  right: -60%;
+  right: -5%;
   width: 310px;
   @apply bg-white border border-gray-darker rounded-base absolute p-5 z-50;
 }

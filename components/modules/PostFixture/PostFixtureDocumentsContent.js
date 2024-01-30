@@ -7,7 +7,6 @@ import { uploadDocument } from '@/services/on-subs';
 import { updateDocumentList } from '@/store/entities/post-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { UploadForm } from '@/units';
-import { parseErrorMessage } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 import { fixtureHeader } from '@/utils/mock';
 
@@ -25,7 +24,7 @@ const PostFixtureDocumentsContent = ({ rowsData = [], offerId }) => {
       role,
     });
     if (error) {
-      errorToast(parseErrorMessage(error));
+      errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentList({ offerId, newDocument: data }));
       successToast(successMessage);
