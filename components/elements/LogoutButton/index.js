@@ -7,7 +7,9 @@ import { useRouter } from 'next/navigation';
 import { LogoutButtonPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
+import { ROUTES } from '@/lib';
 import { clearSession } from '@/store/entities/auth/slice';
+import { resetNotificationData } from '@/store/entities/notifications/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
   const router = useRouter();
@@ -15,7 +17,8 @@ const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!bo
 
   const handleSignOut = () => {
     dispatch(clearSession());
-    router.refresh();
+    dispatch(resetNotificationData());
+    router.replace(ROUTES.LOGIN);
   };
 
   return (
