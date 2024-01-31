@@ -1,0 +1,89 @@
+trigger:
+- develop
+
+parameters:
+- name: environment_name
+  displayName: ENVIRONMENT_NAME
+  type: string
+  default: dev
+  values:
+  - dev
+  - stage
+  - prod
+
+variables:
+- group: shipiplink-${{ parameters.environment_name }}-ui
+- name: dockerfilePath
+  value: Dockerfile.ci
+- name: tag
+  value: '$(Build.BuildId)'
+- name: envFile
+  value: env.ui.${{ parameters.environment_name }}
+- name: sshEndpoint
+  value: shiplink-${{ parameters.environment_name }}-vm
+
+steps:
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: "$(envFile)"
+  displayName: "Download .env"
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: "$(Agent.TempDirectory)"
+    contents: "$(envFile)"
+    targetFolder: "$(Agent.BuildDirectory)"
+  displayName: "Import .env"
+
+- script: |
+    cp $(Agent.BuildDirectory)/$(envFile) $(Agent.BuildDirectory)/s/.env
+
+
+- task: Docker@2
+  displayName: Build an image
+  inputs:
+    command: build
+    repository: $(IMAGE_REPOSITORY)
+    dockerfile: $(dockerfilePath)
+    arguments: '--build-arg NEXT_PUBLIC_URL=$(NEXT_PUBLIC_URL) --build-arg NEXT_PUBLIC_API_URL=$(NEXT_PUBLIC_API_URL) --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY)'
+    containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
+    tags: |
+        $(tag)
+
+- task: Docker@2
+  displayName: Push an image to Container Registry
+  inputs:
+    command: push
+    repository: $(IMAGE_REPOSITORY)
+    containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
+    tags: |
+        $(tag)
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: $(sshEndpoint)
+    runOptions: 'inline' 
+    readyTimeout: '20000'
+    inline: |
+      name='shiplink-frontend'
+      echo "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
+      docker pull "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
+
+      if docker ps --format '{{.Names}}' | grep -q "^$name$"; then
+          echo "Container is running. Stopping it..."
+          docker stop "$name"
+          docker rm "$name"
+      elif docker ps -a --format '{{.Names}}' | grep -q "^$name$"; then
+          echo "Container $name exists. Removing it..."
+          docker rm "$name"
+      else
+          echo "Container $name does not exist."
+      fi
+
+
+      docker run -d --restart always -e NEXTAUTH_SECRET="$(NEXTAUTH_SECRET)" -e NEXT_PUBLIC_URL="$(NEXT_PUBLIC_URL)" -e NEXT_PUBLIC_API_URL="$(NEXT_PUBLIC_API_URL)" -e  NEXTAUTH_URL="$(NEXTAUTH_URL)" -e NEXT_PUBLIC_RECAPTCHA_SITE_KEY="$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY)" -e NEXT_PUBLIC_SEAMETRIX_KEY="$(NEXT_PUBLIC_SEAMETRIX_KEY)" -e RECAPTCHA_SECRET_KEY="$(RECAPTCHA_SECRET_KEY)" -e NEXT_PUBLIC_STRAPI_API_URL="$(NEXT_PUBLIC_STRAPI_API_URL)" -e NEXT_PUBLIC_RT_URL="$(NEXT_PUBLIC_RT_URL)" -e BACKEND_API_URL="$(BACKEND_API_URL)" -e IDENTITY_API_URL="$(IDENTITY_API_URL)" -e NEXT_PUBLIC_FILE_API_URL="$(NEXT_PUBLIC_FILE_API_URL)" -e NEXT_PUBLIC_SEAMETRIX_API_URL="$(NEXT_PUBLIC_SEAMETRIX_API_URL)" -e IDENTITY_API_CLIENT_ID="$(IDENTITY_API_CLIENT_ID)" -e IDENTITY_API_CLIENT_SECRET="$(IDENTITY_API_CLIENT_SECRET)" -e IDENTITY_API_GRANT_TYPE="$(IDENTITY_API_GRANT_TYPE)" -e IDENTITY_TOKEN_GRANT_TYPE="$(IDENTITY_TOKEN_GRANT_TYPE)" -e PREVIEW_SECRET="$(PREVIEW_SECRET)" --name "${name}" -p 3000:3000 "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
+
+      docker image prune -a -f
+      docker builder prune -a -f
+
+  
