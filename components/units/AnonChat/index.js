@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,10 +14,10 @@ import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
-import { chatAnonService, chatNotificationService } from '@/services/signalR';
+import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { resetUser, setOpenedChat } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
-import { convertDataToOptions, countriesOptions, extractTimeFromDate } from '@/utils/helpers';
+import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
 const AnonChat = ({ isOpened }) => {
@@ -67,31 +67,26 @@ const AnonChat = ({ isOpened }) => {
   const fetchChatRoom = async () => {
     const { data: token } = await getChatToken({ data });
 
-    const session = sessionAdapter({ token, session: {} });
+    const session = sessionAdapter({ token });
 
-    chatNotificationService.initStatus({ session });
-    chatAnonService.initChat({
-      session,
-      data: {
-        isOnline: true,
-        isTyping: false,
-        messageCount: 0,
-        chatId: token.chatId,
-      },
-    });
+    if (session.accessToken) {
+      setCookie('session-user-id', session.userId);
+      setCookie('session-user-role', session.role);
+
+      await сhatSessionService.init({ chatId: token.chatId, accessToken: session.accessToken });
+      await chatNotificationService.init({ accessToken: session.accessToken });
+    }
   };
 
-  const handleClose = () => {
-    chatNotificationService.stop();
-    chatAnonService.stop();
+  const handleClose = async () => {
+    await chatNotificationService.stop();
+    await сhatSessionService.stop();
+
+    reset();
     setFlow([updatedStep]);
     dispatch(resetUser());
-    reset();
-  };
-
-  const handleCollapse = useCallback(() => {
     dispatch(setOpenedChat(false));
-  }, [dispatch]);
+  };
 
   const handleCountryChange = async (params) => {
     const { label, value } = params;
@@ -112,6 +107,8 @@ const AnonChat = ({ isOpened }) => {
   const handleCityChange = (option) => {
     setValue(`location.city`, option);
   };
+
+  const handleCollapse = () => dispatch(setOpenedChat(false));
 
   const handleNextStep = () => {
     setFlow((prevState) => [...prevState, { ...steps[prevState.length + 1], time: extractTimeFromDate(new Date()) }]);
@@ -139,7 +136,7 @@ const AnonChat = ({ isOpened }) => {
     if (currentStep.key !== 'question') {
       handleNextStep();
     } else {
-      chatAnonService.sendMessage({ message });
+      сhatSessionService.sendMessage({ message });
       setMessage('');
     }
   };
@@ -195,14 +192,19 @@ const AnonChat = ({ isOpened }) => {
                 onChange={handleCountryChange}
                 options={countriesOptions(countries)}
                 customStyles={{ className: 'w-full' }}
+                loading={!countries?.length}
                 menuPlacement="auto"
+                asyncCall
               />
               <Dropdown
                 label="City"
                 onChange={handleCityChange}
                 options={cities}
+                disabled={!cities.length}
+                loading={!cities.length}
                 customStyles={{ className: 'w-full' }}
                 menuPlacement="auto"
+                asyncCall
               />
             </div>
             <Button

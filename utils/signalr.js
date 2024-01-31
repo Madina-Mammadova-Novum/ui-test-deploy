@@ -11,8 +11,6 @@ import {
   resetUser,
   setConversation,
   setLoadConversation,
-  setOpenedChat,
-  setUser,
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
@@ -50,14 +48,14 @@ export class SignalRController {
     }
   }
 
-  async setupConnection({ path }) {
+  async setupConnection({ path, accessToken = null }) {
     const token = getCookieFromBrowser('session-access-token');
 
-    if (!token) {
+    if (accessToken || token) {
+      await this.startConnection({ path, token: accessToken || token });
+    } else {
       throw new Error('Token is not available. Connection cannot be established.');
     }
-
-    await this.startConnection({ path, token });
   }
 }
 
@@ -67,8 +65,8 @@ export class NotificationController extends SignalRController {
     this.notificationReceived = false;
   }
 
-  init() {
-    this.setupConnection({ path: this.host });
+  init({ accessToken }) {
+    this.setupConnection({ path: this.host, accessToken });
     this.connection.on('ReceiveNotification', (response) => this.recievedNotification({ response }));
   }
 
@@ -90,9 +88,9 @@ export class ChatSessionController extends SignalRController {
     super({ host, state });
   }
 
-  async init({ chatId }) {
+  async init({ chatId, accessToken = null }) {
     this.incomingMessage({ chatId, messageCount: 0 });
-    await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}` });
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}`, accessToken });
 
     this.connection.on('ReceiveMessage', (message) => {
       this.connection.invoke('ReadMessage', message.id);
@@ -132,8 +130,8 @@ export class ChatNotificationController extends SignalRController {
     super({ host, state });
   }
 
-  init() {
-    this.setupConnection({ path: `${this.host}/chatlist` });
+  async init({ accessToken }) {
+    this.setupConnection({ path: `${this.host}/chatlist`, accessToken });
 
     this.connection.on('ChatIsOnline', (chat) => this.store.dispatch(onlineStatus(chat)));
     this.connection.on('ChatIsOffline', (chat) => this.store.dispatch(offlineStatus(chat)));
@@ -173,39 +171,39 @@ export class ChatNotificationController extends SignalRController {
   }
 }
 
-export class AnonChatController extends SignalRController {
-  constructor({ host, state }) {
-    super({ host, state });
-  }
+// export class AnonChatController extends SignalRController {
+//   constructor({ host, state }) {
+//     super({ host, state });
+//   }
 
-  async initChat({ data, session }) {
-    this.store.dispatch(setUser(data));
+//   async init({ data, session }) {
+//     this.store.dispatch(setUser(data));
 
-    await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, data: session });
+//     await this.setupConnection({ path: `${this.host}/chat?chatId=${data?.chatId}`, data: session });
 
-    this.connection.on('ReceiveMessage', (message) => {
-      this.connection.invoke('ReadMessage', message.id);
-      this.updateMessage({ message });
-    });
-  }
+//     this.connection.on('ReceiveMessage', (message) => {
+//       this.connection.invoke('ReadMessage', message.id);
+//       this.updateMessage({ message });
+//     });
+//   }
 
-  sendMessage({ message }) {
-    if (message !== '') this.connection.invoke('SendMessage', message);
-  }
+//   sendMessage({ message }) {
+//     if (message !== '') this.connection.invoke('SendMessage', message);
+//   }
 
-  updateMessage({ message }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
-  }
+//   updateMessage({ message }) {
+//     this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, session: this.session })));
+//   }
 
-  incomingMessage({ chatId, messageCount }) {
-    this.store.dispatch(messageAlert({ chatId, messageCount }));
-  }
+//   incomingMessage({ chatId, messageCount }) {
+//     this.store.dispatch(messageAlert({ chatId, messageCount }));
+//   }
 
-  async stop() {
-    this.store.dispatch(setOpenedChat(false));
+//   async stop() {
+//     this.store.dispatch(setOpenedChat(false));
 
-    if (this.connection) {
-      await this.connection.stop();
-    }
-  }
-}
+//     if (this.connection) {
+//       await this.connection.stop();
+//     }
+//   }
+// }
