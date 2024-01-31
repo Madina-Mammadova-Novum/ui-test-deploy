@@ -16,7 +16,7 @@ const Chat = ({ token }) => {
 
   const { opened, messageCount, chats } = useSelector(getAnonChatSelector);
 
-  const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened, dispatch]);
+  const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened]);
 
   useEffect(() => {
     if (token) {
@@ -41,7 +41,7 @@ const Chat = ({ token }) => {
         variant="default"
         onClick={handleOpen}
         counter={messageCount}
-        className="fixed right-3 bottom-3 z-30"
+        className="fixed right-3 bottom-3 z-50"
       />
       {token ? <AuthChat user={chats?.user?.data} /> : <AnonChat isOpened={opened} />}
     </>

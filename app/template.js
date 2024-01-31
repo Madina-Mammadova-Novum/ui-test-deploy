@@ -12,7 +12,7 @@ export default function RootTemplate({ children }) {
     <Providers loader="page">
       {children}
       <ClientSidePackages />
-      {token && <Chat token={token} />}
+      <Chat token={token} />
     </Providers>
   );
 }

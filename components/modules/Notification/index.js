@@ -12,7 +12,6 @@ import { NotificationPropTypes } from '@/lib/types';
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
 import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
 import { resetNotifications, resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
@@ -22,7 +21,7 @@ const Notification = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
-  const { unreadCounter, filterParams, isOpened } = useSelector(getNotificationsDataSelector);
+  const { unreadCounter, isOpened } = useSelector(getNotificationsDataSelector);
 
   const handleOpen = () => {
     dispatch(setIsOpened(true));
@@ -64,10 +63,6 @@ const Notification = () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchNotifications(filterParams));
-  }, [filterParams, isOpened]);
 
   return (
     <>
