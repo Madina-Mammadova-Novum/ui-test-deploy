@@ -8,7 +8,7 @@ import { PageLoader } from '../PageLoader';
 
 const Hydrate = ({ children, loader = null }) => {
   const loaderType = {
-    page: <PageLoader text="uploading..." />,
+    page: <PageLoader text="Uploading" />,
   };
 
   const [hydrated, setHydrated] = useState(false);

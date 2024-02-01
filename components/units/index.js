@@ -6,7 +6,9 @@ import AccordionHeader from '@/units/AccordionHeader';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
+import AnonChat from '@/units/AnonChat';
 import AssignToFleet from '@/units/AssignToFleet';
+import AuthChat from '@/units/AuthChat';
 import AuthNavButtons from '@/units/AuthNavButtons';
 import CalculatedDetails from '@/units/CalculatedDetails';
 import CalculatedForm from '@/units/CalculatedForm';
@@ -106,6 +108,8 @@ const Map = dynamic(() => import('@/units/Map'), { ssr: false });
 export * from '@/units/Account';
 
 export {
+  AnonChat,
+  AuthChat,
   AddressDetails,
   CalculatedForm,
   CalculatedResult,

@@ -1,3 +1,5 @@
+'use client';
+
 import { AccountToolsPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';

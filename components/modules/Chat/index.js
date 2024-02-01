@@ -1,32 +1,33 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
+import { ChatPropTypes } from '@/lib/types';
 
 import { ChatButton } from '@/elements';
-import { SCREENS } from '@/lib/constants';
-import { сhatSessionService } from '@/services/signalR';
+import { chatNotificationService } from '@/services/signalR';
 import { getListOfChats } from '@/store/entities/chat/actions';
-import { resetChatFilter, setCollapsedChat, setOpenedChat } from '@/store/entities/chat/slice';
-import { getChatSelector } from '@/store/selectors';
-import { ChatConversation, ChatModal, CollapsedChats } from '@/units';
-import { useMediaQuery } from '@/utils/hooks';
+import { setOpenedChat } from '@/store/entities/chat/slice';
+import { getAnonChatSelector } from '@/store/selectors';
+import { AnonChat, AuthChat } from '@/units';
 
 const Chat = ({ token }) => {
   const dispatch = useDispatch();
-  const mdScreen = useMediaQuery(SCREENS.MDX);
 
-  const {
-    opened,
-    isActive,
-    newMessages,
-    chats: { user },
-  } = useSelector(getChatSelector);
+  const { opened, messageCount, chats } = useSelector(getAnonChatSelector);
+
+  const handleOpen = useCallback(() => dispatch(setOpenedChat(!opened)), [opened]);
+
+  const initChat = async () => {
+    await chatNotificationService.init({ token });
+    dispatch(getListOfChats());
+  };
 
   useEffect(() => {
-    dispatch(getListOfChats());
+    if (token) {
+      initChat();
+    }
   }, [token]);
 
   useEffect(() => {
@@ -39,47 +40,19 @@ const Chat = ({ token }) => {
     };
   }, [opened]);
 
-  const handleOpen = () => dispatch(setOpenedChat(!opened));
-  const handleCloseConversation = () => сhatSessionService.stop();
-
-  const handleClose = async () => {
-    dispatch(resetChatFilter());
-    dispatch(setOpenedChat(false));
-  };
-
-  const handleCollapseConversation = () => {
-    handleCloseConversation();
-    dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
-  };
-
-  useEffect(() => {
-    if (mdScreen && isActive) {
-      dispatch(setOpenedChat(false));
-    }
-  }, [mdScreen, isActive]);
-
   return (
     <>
       <ChatButton
-        counter={newMessages}
-        onClick={handleOpen}
-        className="fixed right-3 bottom-3 z-30"
         variant="default"
+        onClick={handleOpen}
+        counter={messageCount}
+        className="fixed right-3 bottom-3 z-50"
       />
-      <ChatModal isOpened={opened} onClose={handleClose} />
-      <ChatConversation
-        isOpened={isActive}
-        isMediumScreen={mdScreen}
-        onCloseSession={handleCloseConversation}
-        onCollapseSession={handleCollapseConversation}
-      />
-      <CollapsedChats />
+      {token ? <AuthChat user={chats.user?.data} opened={opened} /> : <AnonChat opened={opened} />}
     </>
   );
 };
 
-Chat.propTypes = {
-  token: PropTypes.string,
-};
+Chat.propTypes = ChatPropTypes;
 
 export default Chat;

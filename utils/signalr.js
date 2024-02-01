@@ -14,7 +14,6 @@ import {
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
-import { fetchNotifications } from '@/store/entities/notifications/actions';
 
 export class SignalRController {
   constructor({ host, state }) {
@@ -49,14 +48,12 @@ export class SignalRController {
     }
   }
 
-  async setupConnection({ path }) {
-    const token = getCookieFromBrowser('session-access-token');
-
-    if (!token) {
+  async setupConnection({ path, token }) {
+    if (token) {
+      await this.startConnection({ path, token });
+    } else {
       throw new Error('Token is not available. Connection cannot be established.');
     }
-
-    await this.startConnection({ path, token });
   }
 }
 
@@ -66,15 +63,14 @@ export class NotificationController extends SignalRController {
     this.notificationReceived = false;
   }
 
-  init() {
-    this.setupConnection({ path: this.host });
+  async init({ token }) {
+    await this.setupConnection({ path: this.host, token });
     this.connection.on('ReceiveNotification', (response) => this.recievedNotification({ response }));
   }
 
   recievedNotification({ response }) {
     if (response && !this.notificationReceived) {
       this.notificationReceived = true;
-      this.store.dispatch(fetchNotifications({ searchValue: '', sortedValue: '', skip: 0, take: 50, watched: false }));
     }
   }
 
@@ -90,9 +86,9 @@ export class ChatSessionController extends SignalRController {
     super({ host, state });
   }
 
-  async init({ chatId }) {
+  async init({ chatId, token }) {
     this.incomingMessage({ chatId, messageCount: 0 });
-    await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}` });
+    await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}`, token });
 
     this.connection.on('ReceiveMessage', (message) => {
       this.connection.invoke('ReadMessage', message.id);
@@ -100,9 +96,9 @@ export class ChatSessionController extends SignalRController {
     });
   }
 
-  sendMessage({ message }) {
+  async sendMessage({ message }) {
     if (message !== '' && this.connection) {
-      this.connection.invoke('SendMessage', message);
+      await this.connection.invoke('SendMessage', message);
     }
   }
 
@@ -132,8 +128,8 @@ export class ChatNotificationController extends SignalRController {
     super({ host, state });
   }
 
-  init() {
-    this.setupConnection({ path: `${this.host}/chatlist` });
+  async init({ token }) {
+    await this.setupConnection({ path: `${this.host}/chatlist`, token });
 
     this.connection.on('ChatIsOnline', (chat) => this.store.dispatch(onlineStatus(chat)));
     this.connection.on('ChatIsOffline', (chat) => this.store.dispatch(offlineStatus(chat)));

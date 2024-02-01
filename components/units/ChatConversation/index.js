@@ -13,20 +13,24 @@ import { Button, Input } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
 import { getChatHistory } from '@/store/entities/chat/actions';
 import { getChatSelector } from '@/store/selectors';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
-  const { data, messages, loading, updating, status } = useSelector(getChatSelector).chats?.user;
+  const token = getCookieFromBrowser('session-access-token');
+
+  const { chats } = useSelector(getChatSelector);
+  const { data, messages, loading, updating, status } = chats?.user;
 
   useEffect(() => {
     if (isOpened) {
       dispatch(getChatHistory({ data: { id: data?.chatId } }));
 
       if (status === 200 && data?.chatId) {
-        сhatSessionService.init({ chatId: data.chatId });
+        сhatSessionService.init({ chatId: data.chatId, token });
       }
     } else {
       сhatSessionService.stop();
@@ -41,9 +45,9 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     }
   }, [message]);
 
-  const handleSubmit = (e) => {
-    e?.preventDefault();
-    сhatSessionService.sendMessage({ message });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await сhatSessionService.sendMessage({ message });
     setMessage('');
   };
 

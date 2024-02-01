@@ -94,6 +94,14 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
   };
 });
 
+export const getAnonChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+  return {
+    messageCount: state.data.user.data.messageCount ?? 0,
+    chats: state.data,
+    opened: state.opened,
+  };
+});
+
 export const getFixtureSelector = createDraftSafeSelector(fixtureSelector, (state) => {
   return {
     error: state.error,
