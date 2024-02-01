@@ -26,14 +26,13 @@ import {
 import { getChatSelector } from '@/store/selectors';
 import { useMediaQuery } from '@/utils/hooks';
 
-const AuthChat = ({ user }) => {
+const AuthChat = ({ user, opened }) => {
   const [dataByTab, setDataByTab] = useState([]);
   const mdScreen = useMediaQuery(SCREENS.MDX);
 
   const dispatch = useDispatch();
 
   const {
-    opened,
     isActive,
     tab,
     limit,

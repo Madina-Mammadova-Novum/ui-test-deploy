@@ -1,18 +1,23 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import { ClientSidePackages } from '@/common';
+import { ROUTES } from '@/lib';
 import { Chat } from '@/modules';
-import Providers from '@/providers';
 import { getCookieFromBrowser } from '@/utils/helpers';
 
 export default function RootTemplate({ children }) {
   const token = getCookieFromBrowser('session-access-token');
+  const pathname = usePathname();
+
+  const unavailbleChatRoute = pathname === ROUTES.LOGIN || pathname === ROUTES.SIGNUP;
 
   return (
-    <Providers loader="page">
+    <>
       {children}
       <ClientSidePackages />
-      <Chat token={token} />
-    </Providers>
+      {!unavailbleChatRoute && <Chat token={token} />}
+    </>
   );
 }

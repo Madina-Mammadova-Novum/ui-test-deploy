@@ -20,7 +20,7 @@ import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
 import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
-const AnonChat = ({ isOpened }) => {
+const AnonChat = ({ opened }) => {
   const updatedStep = { ...steps[1], time: extractTimeFromDate(new Date()) };
 
   const [flow, setFlow] = useState([updatedStep]);
@@ -73,8 +73,8 @@ const AnonChat = ({ isOpened }) => {
       setCookie('session-user-id', session.userId);
       setCookie('session-user-role', session.role);
 
-      await сhatSessionService.init({ chatId: token.chatId, accessToken: session.accessToken });
-      await chatNotificationService.init({ accessToken: session.accessToken });
+      await сhatSessionService.init({ chatId: token.chatId, token: session.accessToken });
+      await chatNotificationService.init({ token: session.accessToken });
     }
   };
 
@@ -136,7 +136,7 @@ const AnonChat = ({ isOpened }) => {
     if (currentStep.key !== 'question') {
       handleNextStep();
     } else {
-      сhatSessionService.sendMessage({ message });
+      await сhatSessionService.sendMessage({ message });
       setMessage('');
     }
   };
@@ -278,13 +278,7 @@ const AnonChat = ({ isOpened }) => {
   };
 
   return (
-    <ChatModal
-      useCollapse
-      loading={initialization}
-      isOpened={isOpened}
-      onClose={handleClose}
-      onCollapse={handleCollapse}
-    >
+    <ChatModal useCollapse loading={initialization} isOpened={opened} onClose={handleClose} onCollapse={handleCollapse}>
       <div className="px-2.5 py-2.5 relative">
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="h-[468px] overflow-y-auto relative flex flex-col px-2.5">

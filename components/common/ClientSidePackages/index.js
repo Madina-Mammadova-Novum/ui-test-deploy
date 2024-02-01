@@ -1,22 +1,20 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-import { chatNotificationService, globalNotificationService } from '@/services/signalR';
-import { getCookieFromBrowser } from '@/utils/helpers';
+import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 const ClientSidePackages = () => {
-  const token = getCookieFromBrowser('session-access-token');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (token) {
-      globalNotificationService.init();
-      chatNotificationService.init();
-    }
-  }, [token]);
+    dispatch(fetchCountries());
+    dispatch(fetchPorts());
+  }, []);
 
   return (
     <>
