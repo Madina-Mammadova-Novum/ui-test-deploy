@@ -82,7 +82,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
       <ChatConversationCard data={data} />
       <div className="flex flex-col relative justify-end overflow-x-hidden">
         <Badge className="h-5 w-5 -top-0.5 right-1 p-1" counter={data?.messageCount} />
-        {actions[tab]}
+        <div>{actions[tab]}</div>
         {sessionId === data?.chatId && state[tab]}
       </div>
     </div>

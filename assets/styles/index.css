@@ -217,11 +217,15 @@
   }
 
   .range_date .rdrDateDisplayWrapper {
-    @apply bg-white;
+    @apply bg-white mb-2;
+  }
+
+  .range_date .rdrDateDisplayItemActive {
+    @apply border-none;
   }
 
   .range_date .rdrDateDisplay {
-    @apply m-0;
+    @apply m-0 text-transparent;
   }
 
   .range_date input {
