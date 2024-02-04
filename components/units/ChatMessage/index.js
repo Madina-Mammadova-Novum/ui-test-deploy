@@ -38,12 +38,20 @@ const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
       <div className="flex flex-col gap-y-1">
         <p className="text-black uppercase text-xs-sm font-semibold">{senderTitle}</p>
         <p
-          className={`${
-            isBroker ? 'bg-gray-darker bg-opacity-40 self-start' : 'bg-blue bg-opacity-10 self-end'
-          } rounded-base px-2.5 py-1.5 text-xsm relative break-words`}
+          className={`relative rounded-base px-2.5 py-1.5 text-xsm break-words ${
+            isBroker ? 'bg-gray-darker bg-opacity-40 self-start' : 'bg-blue-light self-end'
+          } `}
         >
           {message?.includes('@') ? message : <Linkify componentDecorator={renderLink}>{message}</Linkify>}
+          <div
+            className={`triangle ${
+              !isBroker
+                ? '!border-b-blue-light -right-[7px] top-3 rotate-90'
+                : '!border-b-gray-darker !border-opacity-40 -left-[7px] top-3 -rotate-90'
+            }`}
+          />
         </p>
+
         <div className={`text-xs-sm text-gray font-normal flex w-full ${isBroker ? 'justify-start' : 'justify-end'} `}>
           {time}
         </div>

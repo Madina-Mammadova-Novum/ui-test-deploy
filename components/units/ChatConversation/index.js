@@ -73,7 +73,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         />
 
         <div className="flex flex-col p-5">
-          <ChatConversationBody messages={messages} loading={loading} />
+          <ChatConversationBody messages={messages} loading={loading} isOpened={isOpened} />
           {!data?.archieved && (
             <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
               <Input
