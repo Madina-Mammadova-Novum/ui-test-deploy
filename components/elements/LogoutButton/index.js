@@ -17,10 +17,11 @@ const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!bo
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
+    router.replace(ROUTES.LOGIN);
     dispatch(clearSession());
     dispatch(resetNotificationData());
     dispatch(resetUser());
-    router.replace(ROUTES.LOGIN);
+    router.refresh();
   };
 
   return (

@@ -1,3 +1,5 @@
+'use';
+
 import { ChatModalPropTypes } from '@/lib/types';
 
 import { ChatModalHeader } from '@/units';

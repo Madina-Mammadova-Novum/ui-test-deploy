@@ -97,7 +97,7 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
 export const getAnonChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   return {
     messageCount: state.data.user.data.messageCount ?? 0,
-    chats: state.data,
+    chat: state.data.user,
     opened: state.opened,
   };
 });

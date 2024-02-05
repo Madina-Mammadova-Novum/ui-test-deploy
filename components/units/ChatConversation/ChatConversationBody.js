@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatConversationBodyPropTypes } from '@/lib/types';
@@ -11,7 +11,7 @@ import { getChatHistory } from '@/store/entities/chat/actions';
 import { getChatSelector } from '@/store/selectors';
 import { ChatMessage } from '@/units';
 
-const ChatConversationBody = ({ isOpened }) => {
+const ChatConversationBody = () => {
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -33,12 +33,6 @@ const ChatConversationBody = ({ isOpened }) => {
       });
     }
   };
-
-  useEffect(() => {
-    if (isOpened) {
-      scrollRef.current.scroll({ bottom: 0, behavior: 'smooth' });
-    }
-  }, [isOpened]);
 
   const printMessage = ({ sender, id, message, time }) => {
     return <ChatMessage key={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;

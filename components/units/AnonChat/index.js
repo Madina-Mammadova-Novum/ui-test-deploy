@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,19 +15,20 @@ import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
-import { resetUser, setOpenedChat } from '@/store/entities/chat/slice';
+import { resetUser, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
 import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
 const AnonChat = ({ opened }) => {
+  const dispatch = useDispatch();
+  const containerRef = useRef();
   const updatedStep = { ...steps[1], time: extractTimeFromDate(new Date()) };
 
   const [flow, setFlow] = useState([updatedStep]);
   const [cities, setCities] = useState([]);
+  const [session, setSession] = useState(null);
   const [message, setMessage] = useState('');
-
-  const dispatch = useDispatch();
 
   const methods = useForm({
     defaultValues: {
@@ -54,7 +55,7 @@ const AnonChat = ({ opened }) => {
 
   const { countries } = useSelector(getGeneralDataSelector);
 
-  const { messages } = useSelector(getAnonChatSelector).chats?.user;
+  const { chat } = useSelector(getAnonChatSelector);
 
   const currentStep = flow[flow.length - 1];
 
@@ -66,16 +67,10 @@ const AnonChat = ({ opened }) => {
 
   const fetchChatRoom = async () => {
     const { data: token } = await getChatToken({ data });
+    const result = sessionAdapter({ token });
 
-    const session = sessionAdapter({ token });
-
-    if (session.accessToken) {
-      setCookie('session-user-id', session.userId);
-      setCookie('session-user-role', session.role);
-
-      await сhatSessionService.init({ chatId: token.chatId, token: session.accessToken });
-      await chatNotificationService.init({ token: session.accessToken });
-    }
+    dispatch(setUser({ chatId: result?.chatId }));
+    setSession(result);
   };
 
   const handleClose = async () => {
@@ -120,6 +115,34 @@ const AnonChat = ({ opened }) => {
     handleNextStep();
   };
 
+  // const handleReadMessage = () => {
+  //   const idsArray = chat?.messages?.flatMap((item) => item.data.map((entry) => entry.id));
+
+  //   idsArray.forEach(async (id) => {
+  //     await сhatSessionService.readMessage({ id });
+  //   });
+  // };
+
+  const initServices = async () => {
+    await сhatSessionService.init({ chatId: session.chatId, token: session.accessToken });
+    await chatNotificationService.init({ token: session.accessToken, opened });
+  };
+
+  useEffect(() => {
+    if (session?.accessToken) {
+      setCookie('session-user-id', session?.userId);
+      setCookie('session-user-role', session?.role);
+
+      initServices();
+    }
+  }, [session?.accessToken]);
+
+  useEffect(() => {
+    if (opened) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [opened]);
+
   useEffect(() => {
     if (currentStep.key === 'connection') {
       setValue('init', true);
@@ -128,7 +151,7 @@ const AnonChat = ({ opened }) => {
   }, [currentStep.key]);
 
   /* Submit handler used for switching steps and init conversation with support */
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (country && city) {
       setValue('location.message', `${country.label}, ${city.label}`);
     }
@@ -136,13 +159,12 @@ const AnonChat = ({ opened }) => {
     if (currentStep.key !== 'question') {
       handleNextStep();
     } else {
-      await сhatSessionService.sendMessage({ message });
+      сhatSessionService.sendMessage({ message });
       setMessage('');
     }
   };
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
-  const handleEnter = ({ charCode }) => charCode === 13 && onSubmit();
 
   /* Render the message */
   const printMessage = ({ sender, id, message: text, time }) => {
@@ -241,13 +263,12 @@ const AnonChat = ({ opened }) => {
       default:
         return (
           <div className="flex flex-col w-full gap-y-2">
-            {messages.length > 0 && messages.map(printMessages)}
+            {chat?.messages.length > 0 && chat?.messages.map(printMessages)}
             <div className="flex w-full items-end gap-x-2">
               <Input
                 type="text"
                 value={message}
                 onChange={handleMessage}
-                onKeyPress={handleEnter}
                 placeholder="Message ..."
                 customStyles="!border-gray-darker !w-full"
                 disabled={initialization}
@@ -281,7 +302,11 @@ const AnonChat = ({ opened }) => {
     <ChatModal useCollapse loading={initialization} isOpened={opened} onClose={handleClose} onCollapse={handleCollapse}>
       <div className="px-2.5 py-2.5 relative">
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="h-[468px] overflow-y-auto relative flex flex-col px-2.5">
+          <form
+            ref={containerRef}
+            onSubmit={handleSubmit(onSubmit)}
+            className="h-[468px] overflow-y-auto relative flex flex-col px-2.5"
+          >
             {flow.map((step, index) => {
               return (
                 <Fragment key={step.key}>
