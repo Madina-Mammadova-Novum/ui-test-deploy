@@ -84,7 +84,9 @@ const AuthChat = ({ user, opened }) => {
     return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit || loading} />;
   }, [updating, tab, dataByTab, limit, handleMore]);
 
-  const handleCloseConversation = () => сhatSessionService.stop();
+  const handleCloseConversation = async () => {
+    await сhatSessionService.stop();
+  };
 
   const handleCollapseConversation = () => {
     dispatch(setConversation(false));

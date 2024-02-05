@@ -106,6 +106,9 @@ const chatSlice = createSlice({
     resetUser: (state) => {
       state.data.user.data = {};
       state.data.user.messages = [];
+      state.data.active = [];
+      state.data.archived = [];
+      state.data.support = [];
     },
 
     typingStatus: (state, { payload }) => {
@@ -161,7 +164,7 @@ const chatSlice = createSlice({
         if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
-            messageCount: activeSessionId === payload?.chatId ? 0 : payload.messageCount,
+            messageCount: payload.messageCount,
           };
         }
         return user;
@@ -180,12 +183,14 @@ const chatSlice = createSlice({
       if (state.data.user.data?.chatId === payload?.chatId) {
         state.data.user.data = {
           ...state.data.user.data,
-          messageCount: state.opened ? 0 : payload.messageCount,
+          messageCount: payload.messageCount,
         };
       }
 
-      if (state.data.support[0]?.chatId === payload?.chatId) {
-        state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;
+      if (state.data.support?.length) {
+        if (state.data.support[0].chatId === payload?.chatId) {
+          state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;
+        }
       }
 
       state.data.active = updatedActiveState;

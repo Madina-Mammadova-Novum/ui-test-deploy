@@ -56,8 +56,8 @@ export default async function PageHeader() {
             <Logo className="fill-white" />
           </NextLink>
           <nav className="flex items-center gap-x-10">
-            {navigation.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
-            {buttons.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
+            {navigation?.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
+            {buttons?.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>
         </div>
       </div>
