@@ -11,6 +11,7 @@ import {
   resetUser,
   setConversation,
   setLoadConversation,
+  setOpenedChat,
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
@@ -84,6 +85,7 @@ export class NotificationController extends SignalRController {
 export class ChatSessionController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
+    this.isCollapsed = false;
   }
 
   async init({ chatId, token }) {
@@ -92,21 +94,29 @@ export class ChatSessionController extends SignalRController {
 
     await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}`, token });
 
-    this.connection.on('ReceiveMessage', (message) => {
+    this.connection.on('ReceiveMessage', async (message) => {
+      if (!this.isCollapsed) {
+        await this.readMessage({ id: message.id });
+      }
+
       this.updateMessage({ message, clientId, role, chatId });
-      // this.store.dispatch(messageAlert({ chatId, messageCount: message.messageCount }));
     });
   }
 
-  sendMessage({ message }) {
+  onCollapse(collpased) {
+    this.store.dispatch(setOpenedChat(collpased));
+    this.isCollapsed = collpased;
+  }
+
+  async sendMessage({ message }) {
     if (message !== '' && this.connection) {
-      this.connection.invoke('SendMessage', message);
+      await this.connection.invoke('SendMessage', message);
     }
   }
 
-  readMessage({ id }) {
+  async readMessage({ id }) {
     if (this.connection) {
-      this.connection.invoke('ReadMessage', id);
+      await this.connection.invoke('ReadMessage', id);
     }
   }
 

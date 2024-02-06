@@ -15,7 +15,7 @@ import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
-import { resetUser, setOpenedChat, setUser } from '@/store/entities/chat/slice';
+import { resetUser, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
 import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
@@ -80,7 +80,8 @@ const AnonChat = ({ opened }) => {
     reset();
     setFlow([updatedStep]);
     dispatch(resetUser());
-    dispatch(setOpenedChat(false));
+
+    сhatSessionService.onCollapse(false);
   };
 
   const handleCountryChange = async (params) => {
@@ -103,7 +104,7 @@ const AnonChat = ({ opened }) => {
     setValue(`location.city`, option);
   };
 
-  const handleCollapse = () => dispatch(setOpenedChat(false));
+  const handleCollapse = () => сhatSessionService.onCollapse(false);
 
   const handleNextStep = () => {
     setFlow((prevState) => [...prevState, { ...steps[prevState.length + 1], time: extractTimeFromDate(new Date()) }]);
@@ -125,7 +126,7 @@ const AnonChat = ({ opened }) => {
 
   const initServices = async () => {
     await сhatSessionService.init({ chatId: session.chatId, token: session.accessToken });
-    await chatNotificationService.init({ token: session.accessToken, opened });
+    await chatNotificationService.init({ token: session.accessToken });
   };
 
   useEffect(() => {
