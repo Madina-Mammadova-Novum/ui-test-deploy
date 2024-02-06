@@ -9,14 +9,14 @@ import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat, setConversation, setUser } from '@/store/entities/chat/slice';
-import { getChatSelector } from '@/store/selectors';
+import { getAuthChatSelector } from '@/store/selectors';
 import { ChatConversationCard, ChatSubModal } from '@/units';
 
 const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const { user } = useSelector(getChatSelector).chats;
+  const { user } = useSelector(getAuthChatSelector).chats;
 
   const handleModal = (e, id) => {
     e.stopPropagation();

@@ -85,7 +85,7 @@ export class NotificationController extends SignalRController {
 export class ChatSessionController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
-    this.isCollapsed = false;
+    this.isOpened = false;
   }
 
   async init({ chatId, token }) {
@@ -95,21 +95,21 @@ export class ChatSessionController extends SignalRController {
     await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}`, token });
 
     this.connection.on('ReceiveMessage', async (message) => {
-      if (!this.isCollapsed) {
+      this.updateMessage({ message, clientId, role, chatId });
+
+      if (this.isOpened) {
         await this.readMessage({ id: message.id });
       }
-
-      this.updateMessage({ message, clientId, role, chatId });
     });
   }
 
-  onCollapse(collpased) {
-    this.store.dispatch(setOpenedChat(collpased));
-    this.isCollapsed = collpased;
+  onToggle(opened) {
+    this.store.dispatch(setOpenedChat(opened));
+    this.isOpened = opened;
   }
 
   async sendMessage({ message }) {
-    if (message !== '' && this.connection) {
+    if (this.connection) {
       await this.connection.invoke('SendMessage', message);
     }
   }
@@ -138,6 +138,7 @@ export class ChatSessionController extends SignalRController {
 export class ChatNotificationController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
+    this.isOpened = false;
   }
 
   async init({ token }) {
@@ -147,7 +148,11 @@ export class ChatNotificationController extends SignalRController {
     this.connection.on('ChatIsOffline', (chat) => this.store.dispatch(offlineStatus(chat)));
 
     this.connection.on('ReceiveMessage', async (chat) => {
-      this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: chat.messageCount }));
+      if (this.isOpened) {
+        this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: 0 }));
+      } else {
+        this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: chat.messageCount }));
+      }
     });
 
     this.connection.on('SomeoneIsTyping', (chat) => {
@@ -164,6 +169,10 @@ export class ChatNotificationController extends SignalRController {
 
   isTyping({ chat, typing }) {
     this.store.dispatch(typingStatus({ ...chat, typing }));
+  }
+
+  onToggle(opened) {
+    this.isOpened = opened;
   }
 
   async stop() {

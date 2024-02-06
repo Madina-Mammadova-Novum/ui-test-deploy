@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatButton } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
 import { removeCollapsedChat, setConversation, setOpenedChat, setUser } from '@/store/entities/chat/slice';
-import { getChatSelector } from '@/store/selectors';
+import { getAuthChatSelector } from '@/store/selectors';
 
 const CollapsedChats = () => {
   const dispatch = useDispatch();
-  const { chats } = useSelector(getChatSelector);
+  const { chats } = useSelector(getAuthChatSelector);
 
   const onActivate = (user) => {
     dispatch(setConversation(true));
