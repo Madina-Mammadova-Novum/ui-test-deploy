@@ -120,7 +120,7 @@ export function messagesDataAdapter({ data, role, clientId }) {
 export function moreMessagesDataAdapter({ payload, messages }) {
   if (!messages) return [];
 
-  return [...messages, ...payload]?.reduce((accamulator, { title, data }) => {
+  return [...payload, ...messages]?.reduce((accamulator, { title, data }) => {
     accamulator[title] = {
       title,
       data: [...(accamulator[title]?.data ?? []), ...data],

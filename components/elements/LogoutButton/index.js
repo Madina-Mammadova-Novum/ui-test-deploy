@@ -9,7 +9,7 @@ import { LogoutButtonPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { ROUTES } from '@/lib';
 import { clearSession } from '@/store/entities/auth/slice';
-import { resetUser } from '@/store/entities/chat/slice';
+import { resetChat } from '@/store/entities/chat/slice';
 import { resetNotificationData } from '@/store/entities/notifications/slice';
 
 const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!border-none', icon }) => {
@@ -20,7 +20,7 @@ const LogoutButton = ({ text = 'Log out', variant = 'tertiary', className = '!bo
     router.replace(ROUTES.LOGIN);
     dispatch(clearSession());
     dispatch(resetNotificationData());
-    dispatch(resetUser());
+    dispatch(resetChat());
     router.refresh();
   };
 

@@ -12,7 +12,7 @@ import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
 import { getChatHistory } from '@/store/entities/chat/actions';
-import { getChatSelector } from '@/store/selectors';
+import { getAuthChatSelector } from '@/store/selectors';
 import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
@@ -22,10 +22,14 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const token = getCookieFromBrowser('session-access-token');
 
-  const { chats } = useSelector(getChatSelector);
+  const { chats } = useSelector(getAuthChatSelector);
   const { data, messages, loading, updating, status } = chats?.user;
 
   useEffect(() => {
+    if (data?.chatId) {
+      сhatSessionService.onToggle(isOpened);
+    }
+
     if (isOpened) {
       dispatch(getChatHistory({ data: { id: data?.chatId } }));
 
@@ -46,7 +50,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   }, [message]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     await сhatSessionService.sendMessage({ message });
     setMessage('');
   };
@@ -72,7 +76,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
           onCollapse={onCollapseSession}
         />
 
-        <div className="flex flex-col p-5">
+        <div className="flex flex-col px-2.5">
           <ChatConversationBody messages={messages} loading={loading} isOpened={isOpened} />
           {!data?.archieved && (
             <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>

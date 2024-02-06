@@ -607,19 +607,28 @@ export const parseErrorMessage = (responseError = {}) => {
   }
 };
 
-export const sortChatMessages = (array) =>
-  array.sort((a, b) => {
-    const customDates = {
-      Today: new Date(),
-      Yesterday: addDays(new Date(), -1),
-    };
+export const sortChatMessagesByDay = (array) =>
+  array
+    .map((day) => {
+      day.data = day.data.sort((a, b) => {
+        const timeA = new Date(a.time);
+        const timeB = new Date(b.time);
+        return timeA - timeB;
+      });
+      return day;
+    })
+    .sort((a, b) => {
+      const customDates = {
+        Today: new Date(),
+        Yesterday: addDays(new Date(), -1),
+      };
 
-    const current = customDates[a.title] || a.title;
-    const next = customDates[b.title] || b.title;
-    if (new Date(current) - new Date(next) >= 1) return -1;
-    if (new Date(current) - new Date(next) < 1) return 1;
-    return 0;
-  });
+      const current = customDates[a.title] || a.title;
+      const next = customDates[b.title] || b.title;
+      if (new Date(current) - new Date(next) >= 1) return -1;
+      if (new Date(current) - new Date(next) < 1) return 1;
+      return 0;
+    });
 
 export const freightFormatter = ({ value, format }) => {
   const response = {

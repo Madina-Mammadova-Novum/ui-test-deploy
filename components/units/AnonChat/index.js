@@ -15,7 +15,7 @@ import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
-import { resetUser, setUser } from '@/store/entities/chat/slice';
+import { messageAlert, resetUser, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
 import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
@@ -59,6 +59,13 @@ const AnonChat = ({ opened }) => {
 
   const currentStep = flow[flow.length - 1];
 
+  const initServices = async () => {
+    await Promise.all([
+      сhatSessionService.init({ chatId: session.chatId, token: session.accessToken }),
+      chatNotificationService.init({ token: session.accessToken }),
+    ]);
+  };
+
   const fetchCities = async (id) => {
     const res = await getCities(id);
     const params = convertDataToOptions(res, 'cityId', 'cityName');
@@ -73,15 +80,23 @@ const AnonChat = ({ opened }) => {
     setSession(result);
   };
 
+  const markMessagesAsRead = () => {
+    const messageIds = chat?.messages?.flatMap((item) => item.data.map((entry) => entry.id)) || [];
+
+    if (messageIds.length > 0) {
+      messageIds.forEach(async (id) => {
+        await сhatSessionService.readMessage({ id });
+      });
+    }
+  };
+
   const handleClose = async () => {
-    await chatNotificationService.stop();
-    await сhatSessionService.stop();
+    await Promise.all([chatNotificationService.stop(), сhatSessionService.stop()]);
+    сhatSessionService.onToggle(false);
 
-    reset();
-    setFlow([updatedStep]);
     dispatch(resetUser());
-
-    сhatSessionService.onCollapse(false);
+    setFlow([updatedStep]);
+    reset();
   };
 
   const handleCountryChange = async (params) => {
@@ -100,11 +115,11 @@ const AnonChat = ({ opened }) => {
     }
   };
 
-  const handleCityChange = (option) => {
-    setValue(`location.city`, option);
-  };
+  const handleCityChange = (option) => setValue(`location.city`, option);
 
-  const handleCollapse = () => сhatSessionService.onCollapse(false);
+  const handleMessage = ({ target: { value } }) => setMessage(value);
+
+  const handleCollapse = () => сhatSessionService.onToggle(false);
 
   const handleNextStep = () => {
     setFlow((prevState) => [...prevState, { ...steps[prevState.length + 1], time: extractTimeFromDate(new Date()) }]);
@@ -112,44 +127,8 @@ const AnonChat = ({ opened }) => {
 
   const successCallback = () => {
     setValue('init', false);
-
     handleNextStep();
   };
-
-  // const handleReadMessage = () => {
-  //   const idsArray = chat?.messages?.flatMap((item) => item.data.map((entry) => entry.id));
-
-  //   idsArray.forEach(async (id) => {
-  //     await сhatSessionService.readMessage({ id });
-  //   });
-  // };
-
-  const initServices = async () => {
-    await сhatSessionService.init({ chatId: session.chatId, token: session.accessToken });
-    await chatNotificationService.init({ token: session.accessToken });
-  };
-
-  useEffect(() => {
-    if (session?.accessToken) {
-      setCookie('session-user-id', session?.userId);
-      setCookie('session-user-role', session?.role);
-
-      initServices();
-    }
-  }, [session?.accessToken]);
-
-  useEffect(() => {
-    if (opened) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [opened]);
-
-  useEffect(() => {
-    if (currentStep.key === 'connection') {
-      setValue('init', true);
-      fetchChatRoom().then(successCallback);
-    }
-  }, [currentStep.key]);
 
   /* Submit handler used for switching steps and init conversation with support */
   const onSubmit = () => {
@@ -165,7 +144,35 @@ const AnonChat = ({ opened }) => {
     }
   };
 
-  const handleMessage = ({ target: { value } }) => setMessage(value);
+  useEffect(() => {
+    if (session?.accessToken) {
+      setCookie('session-user-id', session?.userId);
+      setCookie('session-user-role', session?.role);
+
+      initServices();
+    }
+  }, [session?.accessToken]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    chatNotificationService.onToggle(opened);
+
+    if (opened) {
+      container.scrollTop = container.scrollHeight;
+      dispatch(messageAlert({ chatId: session?.chatId, messageCount: 0 }));
+
+      if (session?.accessToken) {
+        markMessagesAsRead();
+      }
+    }
+  }, [opened, session?.accessToken]);
+
+  useEffect(() => {
+    if (currentStep.key === 'connection') {
+      setValue('init', true);
+      fetchChatRoom().then(successCallback);
+    }
+  }, [currentStep.key]);
 
   /* Render the message */
   const printMessage = ({ sender, id, message: text, time }) => {

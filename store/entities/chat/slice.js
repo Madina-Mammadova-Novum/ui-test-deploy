@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 import { moreMessagesDataAdapter } from '@/adapters';
-import { sortChatMessages } from '@/utils/helpers';
+import { sortChatMessagesByDay } from '@/utils/helpers';
 
 const initialState = {
   loading: false,
@@ -66,11 +66,11 @@ const chatSlice = createSlice({
       state.updating = action.payload;
     },
     setUserMessages: (state, { payload }) => {
-      state.data.user.messages = sortChatMessages(payload);
+      state.data.user.messages = sortChatMessagesByDay(payload);
     },
     updateUserMessages: (state, { payload }) => {
       const updatedData = moreMessagesDataAdapter({ payload, messages: state.data.user.messages });
-      state.data.user.messages = sortChatMessages(Object.values(updatedData));
+      state.data.user.messages = sortChatMessagesByDay(Object.values(updatedData));
     },
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
@@ -100,15 +100,17 @@ const chatSlice = createSlice({
     setOpenedChat: (state, { payload }) => {
       state.opened = payload;
     },
+    resetChat: (state) => {
+      state.data = initialState.data;
+      state.opened = initialState.opened;
+      state.filterParams = initialState.filterParams;
+    },
     resetChatFilter: (state) => {
       state.filterParams = initialState.filterParams;
     },
     resetUser: (state) => {
       state.data.user.data = {};
       state.data.user.messages = [];
-      state.data.active = [];
-      state.data.archived = [];
-      state.data.support = [];
     },
 
     typingStatus: (state, { payload }) => {
@@ -263,6 +265,7 @@ export const {
   typingStatus,
   searchedData,
   resetUser,
+  resetChat,
   resetChatFilter,
   removeCollapsedChat,
   setLoadConversation,

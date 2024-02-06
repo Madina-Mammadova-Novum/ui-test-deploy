@@ -73,7 +73,7 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
   };
 });
 
-export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => {
+export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   const messagesCounter = state?.data?.active.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
   const newMessages = state?.data?.support?.[0]?.messageCount > 0 ? messagesCounter + 1 : messagesCounter;
 
@@ -96,9 +96,10 @@ export const getChatSelector = createDraftSafeSelector(chatSelector, (state) => 
 
 export const getAnonChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   return {
-    messageCount: state.data.user.data.messageCount ?? 0,
+    messageCount: state.data?.user?.data?.messageCount || 0,
     chat: state.data.user,
     opened: state.opened,
+    isActive: state.isActiveSession,
   };
 });
 

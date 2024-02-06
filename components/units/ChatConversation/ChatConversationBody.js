@@ -8,14 +8,14 @@ import { ChatConversationBodyPropTypes } from '@/lib/types';
 import { ChatLoader } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatHistory } from '@/store/entities/chat/actions';
-import { getChatSelector } from '@/store/selectors';
+import { getAuthChatSelector } from '@/store/selectors';
 import { ChatMessage } from '@/units';
 
 const ChatConversationBody = () => {
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
 
-  const { messages, loading, created, isLast, data, updating } = useSelector(getChatSelector).chats?.user;
+  const { messages, loading, created, isLast, data, updating } = useSelector(getAuthChatSelector).chats?.user;
 
   const handleScroll = () => {
     const { scrollHeight, scrollTop, clientHeight } = scrollRef?.current;
@@ -29,7 +29,7 @@ const ChatConversationBody = () => {
       dispatch(getChatHistory({ data: { id: data?.chatId, date: created } }));
 
       scrollRef.current.scrollTo({
-        top: scrollTop / 1.5,
+        top: scrollTop / 1.25,
       });
     }
   };
@@ -40,7 +40,7 @@ const ChatConversationBody = () => {
 
   const printMessages = ({ data: content, title, id }) => {
     return (
-      <div className="flex flex-col" key={id}>
+      <div className="flex flex-col px-2.5" key={id}>
         <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
         {content?.map(printMessage)}
       </div>
