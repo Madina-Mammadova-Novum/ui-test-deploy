@@ -40,7 +40,7 @@ const ExpandableCardWrapper = ({
       </div>
       <div
         ref={contentRef}
-        className="overflow-y-hidden transition-height duration-200 z-20"
+        className="overflow-y-hidden transition-height duration-200"
         style={{ height: expandedHeight }}
       >
         <Divider />

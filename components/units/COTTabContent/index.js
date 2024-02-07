@@ -5,7 +5,7 @@ import { TextRow, Title } from '@/elements';
 const COTTabContent = ({ data = {} }) => {
   return (
     <div className="text-xsm">
-      <Title level={3}>Commercial Offer Terms</Title>
+      <Title level="3">Commercial Offer Terms</Title>
       <div className="mt-2.5">
         {data.cargo?.map(({ key, label }) => (
           <TextRow title={key}>{label}</TextRow>

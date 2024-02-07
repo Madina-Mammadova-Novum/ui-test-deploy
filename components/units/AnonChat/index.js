@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -80,15 +80,16 @@ const AnonChat = ({ opened }) => {
     setSession(result);
   };
 
-  const markMessagesAsRead = () => {
+  const markMessagesAsRead = useCallback(async () => {
     const messageIds = chat?.messages?.flatMap((item) => item.data.map((entry) => entry.id)) || [];
 
     if (messageIds.length > 0) {
-      messageIds.forEach(async (id) => {
+      for (const id of messageIds) {
+        // eslint-disable-next-line no-await-in-loop
         await сhatSessionService.readMessage({ id });
-      });
+      }
     }
-  };
+  }, [chat?.messages]);
 
   const handleClose = async () => {
     await Promise.all([chatNotificationService.stop(), сhatSessionService.stop()]);

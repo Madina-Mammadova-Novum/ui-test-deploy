@@ -66,7 +66,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-50`}
+        className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-10`}
       >
         <СhatConversationHeader
           data={data}
@@ -76,7 +76,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
           onCollapse={onCollapseSession}
         />
 
-        <div className="flex flex-col px-2.5">
+        <div className="flex flex-col p-2.5">
           <ChatConversationBody messages={messages} loading={loading} isOpened={isOpened} />
           {!data?.archieved && (
             <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
