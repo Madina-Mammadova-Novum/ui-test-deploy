@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ChatControl from '../ChatControl';
@@ -48,15 +48,16 @@ const AuthChat = ({ opened, token }) => {
     await chatNotificationService.init({ token });
   };
 
-  const markMessagesAsRead = () => {
+  const markMessagesAsRead = useCallback(async () => {
     const messageIds = user?.messages?.flatMap((item) => item.data.map((entry) => entry.id)) || [];
 
     if (messageIds.length > 0) {
-      messageIds.forEach(async (id) => {
+      for (const id of messageIds) {
+        // eslint-disable-next-line no-await-in-loop
         await сhatSessionService.readMessage({ id });
-      });
+      }
     }
-  };
+  }, [user?.messages]);
 
   const handleClose = () => {
     сhatSessionService.onToggle(false);

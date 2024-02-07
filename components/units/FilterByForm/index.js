@@ -15,11 +15,11 @@ import { useHookFormParams } from '@/utils/hooks';
 
 const FilterByForm = ({ children, title = 'Filter by' }) => {
   const dispatch = useDispatch();
-  const methods = useHookFormParams({ schema: null });
+  const methods = useHookFormParams({ state: null, schema: null });
 
   const { sorting, perPage } = useSelector(getPostFixtureDataSelector);
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     const data = filtersAdapter(formData);
     dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters: data, sorting }));
   };

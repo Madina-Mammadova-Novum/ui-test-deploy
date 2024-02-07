@@ -22,7 +22,9 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     e.stopPropagation();
     setSessionId(id);
 
-    ref?.current?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      ref?.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
   };
 
   const handleAction = (e, key) => {
@@ -44,9 +46,9 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const handleOpenConversation = async () => {
     if (user.data?.chatId === data.chatId) return;
 
+    dispatch(removeCollapsedChat(data?.chatId));
     await сhatSessionService.stop();
 
-    dispatch(removeCollapsedChat(data?.chatId));
     dispatch(setUser(data));
     dispatch(setConversation(true));
   };
@@ -78,11 +80,16 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   };
 
   return (
-    <div className="flex justify-between relative cursor-pointer" aria-hidden onClick={handleOpenConversation}>
+    <div
+      ref={ref}
+      aria-hidden
+      onClick={handleOpenConversation}
+      className="flex justify-between relative cursor-pointer"
+    >
       <ChatConversationCard data={data} />
       <div className="flex flex-col relative justify-end">
         <Badge className="h-5 w-5 -top-0.5 right-1 p-1" counter={data?.messageCount} />
-        <div ref={ref}>{actions[tab]}</div>
+        {actions[tab]}
         {sessionId === data?.chatId && state[tab]}
       </div>
     </div>
