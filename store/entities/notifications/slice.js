@@ -71,7 +71,7 @@ const notificationsSlice = createSlice({
       state.readed = payload.readed;
       state.unread = payload.unread;
     });
-    builder.addCase(fetchNotifications.rejected, (state, { payload }) => {
+    builder.addCase(fetchNotifications?.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload?.error;
     });

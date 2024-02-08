@@ -13,7 +13,7 @@ export function userRoleAdapter({ data }) {
     case 'Charterer':
       return ROLES.CHARTERER;
     default:
-      return '';
+      return ROLES.ANON;
   }
 }
 
@@ -522,21 +522,22 @@ export function tokenAdapter({ data }) {
   };
 }
 
-export function sessionAdapter({ session, token }) {
-  if (!token) return null;
-
+export function sessionAdapter({ token = null }) {
   if (token?.accessToken) {
     const { sub, role, ...rest } = decodedTokenAdapter(token.accessToken);
 
-    session.user = { ...rest };
-    session.userId = sub;
-    session.expires = token.expires;
-    session.accessToken = token.accessToken;
-    session.refreshToken = token.refreshToken;
-    session.role = userRoleAdapter({ data: role });
+    return {
+      user: { ...rest },
+      userId: sub,
+      chatId: token.chatId,
+      expires: token.expires,
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+      role: userRoleAdapter({ data: role }),
+    };
   }
 
-  return session;
+  return null;
 }
 
 export function accountPeronalDataResponseAdapter({ data }) {

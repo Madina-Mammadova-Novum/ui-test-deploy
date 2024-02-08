@@ -8,7 +8,7 @@ import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
 import { HoverTooltip, TextWithLabel } from '@/elements';
-import { ACTIONS, NO_DATA_MESSAGE } from '@/lib/constants';
+import { ACTIONS, NO_DATA_MESSAGE, SETTINGS } from '@/lib/constants';
 import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { processTooltipData } from '@/utils/helpers';
 import { useMediaQuery } from '@/utils/hooks';
@@ -39,9 +39,17 @@ const ExpandableCardHeader = ({
     [itemId]
   );
 
+  const generateTextLength = () => {
+    if (lg) return { length: 25 };
+    if (sm3) return { length: 20 };
+    return { length: SETTINGS.MAX_VISIBLE_TEXT_LENGTH };
+  };
+
   const printHeaderRow = (data, index) => {
-    const { disableTooltip, tooltipText, trimmedText } = processTooltipData(data.text);
+    const { length } = generateTextLength();
+    const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length });
     let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
+
     if (data.countdownData) {
       textContent = <DynamicCountdownTimer {...data.countdownData} />;
     }

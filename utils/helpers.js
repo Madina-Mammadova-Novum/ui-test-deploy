@@ -10,7 +10,7 @@ import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
-import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SETTINGS, SORT_OPTIONS } from '@/lib/constants';
+import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -564,11 +564,10 @@ export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOf
   return isMinimalImprovementMet;
 };
 
-export const processTooltipData = (text) => ({
-  disableTooltip: !(text?.length > SETTINGS.MAX_VISIBLE_TEXT_LENGTH),
+export const processTooltipData = ({ text, length }) => ({
+  disableTooltip: !(text?.length > length),
   tooltipText: text,
-  trimmedText:
-    text?.length > SETTINGS.MAX_VISIBLE_TEXT_LENGTH ? `${text?.slice(0, SETTINGS.MAX_VISIBLE_TEXT_LENGTH)}...` : text,
+  trimmedText: text?.length > length ? `${text?.slice(0, length)}...` : text,
 });
 
 export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
@@ -608,19 +607,28 @@ export const parseErrorMessage = (responseError = {}) => {
   }
 };
 
-export const sortChatMessages = (array) =>
-  array.sort((a, b) => {
-    const customDates = {
-      Today: new Date(),
-      Yesterday: addDays(new Date(), -1),
-    };
+export const sortChatMessagesByDay = (array) =>
+  array
+    .map((day) => {
+      day.data = day.data.sort((a, b) => {
+        const timeA = new Date(a.time);
+        const timeB = new Date(b.time);
+        return timeA - timeB;
+      });
+      return day;
+    })
+    .sort((a, b) => {
+      const customDates = {
+        Today: new Date(),
+        Yesterday: addDays(new Date(), -1),
+      };
 
-    const current = customDates[a.title] || a.title;
-    const next = customDates[b.title] || b.title;
-    if (new Date(current) - new Date(next) >= 1) return -1;
-    if (new Date(current) - new Date(next) < 1) return 1;
-    return 0;
-  });
+      const current = customDates[a.title] || a.title;
+      const next = customDates[b.title] || b.title;
+      if (new Date(current) - new Date(next) >= 1) return -1;
+      if (new Date(current) - new Date(next) < 1) return 1;
+      return 0;
+    });
 
 export const freightFormatter = ({ value, format }) => {
   const response = {

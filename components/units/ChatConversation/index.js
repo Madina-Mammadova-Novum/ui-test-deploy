@@ -12,21 +12,29 @@ import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
 import { getChatHistory } from '@/store/entities/chat/actions';
-import { getChatSelector } from '@/store/selectors';
+import { getAuthChatSelector } from '@/store/selectors';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
-  const { data, messages, loading, updating, status } = useSelector(getChatSelector).chats?.user;
+  const token = getCookieFromBrowser('session-access-token');
+
+  const { chats } = useSelector(getAuthChatSelector);
+  const { data, messages, loading, updating, status } = chats?.user;
 
   useEffect(() => {
+    if (data?.chatId) {
+      сhatSessionService.onToggle(isOpened);
+    }
+
     if (isOpened) {
       dispatch(getChatHistory({ data: { id: data?.chatId } }));
 
       if (status === 200 && data?.chatId) {
-        сhatSessionService.init({ chatId: data.chatId });
+        сhatSessionService.init({ chatId: data.chatId, token });
       }
     } else {
       сhatSessionService.stop();
@@ -41,9 +49,9 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     }
   }, [message]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e?.preventDefault();
-    сhatSessionService.sendMessage({ message });
+    await сhatSessionService.sendMessage({ message });
     setMessage('');
   };
 
@@ -58,7 +66,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-50`}
+        className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-10`}
       >
         <СhatConversationHeader
           data={data}
@@ -68,8 +76,8 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
           onCollapse={onCollapseSession}
         />
 
-        <div className="flex flex-col p-5">
-          <ChatConversationBody messages={messages} loading={loading} />
+        <div className="flex flex-col p-2.5">
+          <ChatConversationBody messages={messages} loading={loading} isOpened={isOpened} />
           {!data?.archieved && (
             <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
               <Input

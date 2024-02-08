@@ -1,3 +1,4 @@
+import { ClientSidePackages } from '@/common';
 import { BaseLayout } from '@/layouts';
 import Providers from '@/providers';
 
@@ -11,7 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <BaseLayout>
-      <Providers loader="page">{children}</Providers>
+      <Providers loader="page">
+        {children}
+        <ClientSidePackages />
+      </Providers>
     </BaseLayout>
   );
 }

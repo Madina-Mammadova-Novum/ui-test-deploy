@@ -3,26 +3,13 @@
 import PropTypes from 'prop-types';
 
 import { FormDropdown, RangeDatePicker } from '@/elements';
-import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const PostFixtureFilter = ({ cargoeCodes = [], tankerNames = [], cargoTypes = [] }) => {
-  const {
-    watch,
-    setValue,
-    getValues,
-    clearErrors,
-    formState: { errors },
-  } = useHookForm();
+  const { watch, setValue, getValues } = useHookForm();
 
   const handleChange = (key, value) => {
-    const error = getValueWithPath(errors, key);
-
-    if (getValues(key) === value) return;
-
-    if (error) {
-      clearErrors(key);
-    }
+    if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
     setValue(key, value);
   };

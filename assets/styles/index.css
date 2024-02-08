@@ -217,11 +217,15 @@
   }
 
   .range_date .rdrDateDisplayWrapper {
-    @apply bg-white;
+    @apply bg-white mb-2;
+  }
+
+  .range_date .rdrDateDisplayItemActive {
+    @apply border-none;
   }
 
   .range_date .rdrDateDisplay {
-    @apply m-0;
+    @apply m-0 text-transparent;
   }
 
   .range_date input {
@@ -564,4 +568,13 @@ tr > td:nth-child(2) {
   margin: 0px auto;
   position: relative;
   max-width: 1158px;
+}
+
+.triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
 }

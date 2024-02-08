@@ -1,3 +1,5 @@
+'use client';
+
 import { AlertPropTypes } from '@/lib/types';
 
 import CheckCircleSVG from '@/assets/images/checkCircle.svg';

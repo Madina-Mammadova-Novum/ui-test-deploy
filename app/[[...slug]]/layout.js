@@ -1,5 +1,5 @@
 import { PageLayout } from '@/layouts';
 
-export default async function RootLayout({ children }) {
+export default function RootLayout({ children }) {
   return <PageLayout>{children}</PageLayout>;
 }

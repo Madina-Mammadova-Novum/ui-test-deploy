@@ -1,5 +1,3 @@
-'use client';
-
 import { ProvidersPropTypes } from '@/lib/types';
 
 import { StoreManager } from '@/common';

@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deactivateUserChat, getChatHistory, getListOfChats, reactivateUserChat } from './actions';
 
 import { moreMessagesDataAdapter } from '@/adapters';
-import { sortChatMessages } from '@/utils/helpers';
+import { sortChatMessagesByDay } from '@/utils/helpers';
 
 const initialState = {
   loading: false,
@@ -21,7 +21,11 @@ const initialState = {
     support: [],
     user: {
       created: '',
-      data: {},
+      data: {
+        messageCount: 0,
+        isOnline: false,
+        isTyping: false,
+      },
       status: null,
       messages: [],
       loading: false,
@@ -62,11 +66,11 @@ const chatSlice = createSlice({
       state.updating = action.payload;
     },
     setUserMessages: (state, { payload }) => {
-      state.data.user.messages = sortChatMessages(payload);
+      state.data.user.messages = sortChatMessagesByDay(payload);
     },
     updateUserMessages: (state, { payload }) => {
       const updatedData = moreMessagesDataAdapter({ payload, messages: state.data.user.messages });
-      state.data.user.messages = sortChatMessages(Object.values(updatedData));
+      state.data.user.messages = sortChatMessagesByDay(Object.values(updatedData));
     },
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
@@ -96,6 +100,11 @@ const chatSlice = createSlice({
     setOpenedChat: (state, { payload }) => {
       state.opened = payload;
     },
+    resetChat: (state) => {
+      state.data = initialState.data;
+      state.opened = initialState.opened;
+      state.filterParams = initialState.filterParams;
+    },
     resetChatFilter: (state) => {
       state.filterParams = initialState.filterParams;
     },
@@ -103,7 +112,6 @@ const chatSlice = createSlice({
       state.data.user.data = {};
       state.data.user.messages = [];
     },
-
     typingStatus: (state, { payload }) => {
       const updatedCollapsedState = state.data.collapsed.map((user) => {
         if (user.contentId === payload.contentId || user.chatId === payload.id) {
@@ -123,7 +131,6 @@ const chatSlice = createSlice({
 
       state.data.collapsed = updatedCollapsedState;
     },
-
     onlineStatus: (state, { payload }) => {
       state.data.active = state.data.active.map((user) => {
         if (user.chatId === payload.id) {
@@ -136,7 +143,6 @@ const chatSlice = createSlice({
         return user;
       });
     },
-
     offlineStatus: (state, { payload }) => {
       state.data.active = state.data.active.map((user) => {
         if (user.chatId === payload.id) {
@@ -149,7 +155,6 @@ const chatSlice = createSlice({
         return user;
       });
     },
-
     messageAlert: (state, { payload }) => {
       const activeSessionId = state.data.user.data?.chatId;
 
@@ -157,7 +162,7 @@ const chatSlice = createSlice({
         if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
-            messageCount: activeSessionId === payload?.chatId ? 0 : payload.messageCount,
+            messageCount: payload.messageCount,
           };
         }
         return user;
@@ -173,8 +178,17 @@ const chatSlice = createSlice({
         return user;
       });
 
-      if (state.data.support[0]?.chatId === payload?.chatId) {
-        state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;
+      if (state.data.user.data?.chatId === payload?.chatId) {
+        state.data.user.data = {
+          ...state.data.user.data,
+          messageCount: payload.messageCount,
+        };
+      }
+
+      if (state.data.support?.length) {
+        if (state.data.support[0].chatId === payload?.chatId) {
+          state.data.support[0].messageCount = activeSessionId === payload?.chatId ? 0 : payload.messageCount;
+        }
       }
 
       state.data.active = updatedActiveState;
@@ -247,6 +261,7 @@ export const {
   typingStatus,
   searchedData,
   resetUser,
+  resetChat,
   resetChatFilter,
   removeCollapsedChat,
   setLoadConversation,
