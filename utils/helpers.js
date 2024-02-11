@@ -717,3 +717,13 @@ export const sessionCookieData = (data) => {
   setCookie('session-user-role', userRoleAdapter({ data: role }));
   setCookie('session-user-id', sub);
 };
+
+export const urlParser = (data) => {
+  const match = data?.match(/tankerId%3D([A-Za-z0-9-_]*)/);
+
+  if (match) {
+    return match[1];
+  }
+
+  return data;
+};

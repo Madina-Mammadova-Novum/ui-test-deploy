@@ -1,62 +1,37 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { UrlPropTypes } from '@/lib/types';
 
+import { fleetNotificationAdapter } from '@/adapters';
 import { Loader, Title } from '@/elements';
 import { getUserVesselsSelector } from '@/store/selectors';
 import { ExpandableCard } from '@/units';
+import { urlParser } from '@/utils/helpers';
 
 const AccountPositionsDetails = ({ searchedParms }) => {
   const { vessels, unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
 
-  const searchedResult = vessels?.find((vessel) => vessel?.fleetId === searchedParms?.id);
+  const assignedResult = vessels?.find((vessel) => vessel?.fleetId === searchedParms?.id);
 
-  const updatedResult = {
-    ...searchedResult,
-    tankers: searchedResult?.tankers?.map((tanker) => {
-      return {
-        ...tanker,
-        notified: tanker.id === searchedParms?.tankerId || false,
-      };
-    }),
+  const assignedData = fleetNotificationAdapter({ data: assignedResult, id: searchedParms?.tankerId });
+  const unassignedData = fleetNotificationAdapter({ data: unassignedVessel, id: urlParser(searchedParms.id) });
+
+  const printExpandableCard = (fleet) => {
+    return <ExpandableCard isOpened className="px-5 my-5 bg-white" key={fleet.id} data={fleet} expandAll={toggle} />;
   };
-
-  const printExpandableCard = useCallback(
-    (fleet) => {
-      return (
-        <ExpandableCard
-          className="px-5 my-5 bg-white"
-          key={fleet.id}
-          data={fleet}
-          isOpened={Boolean(searchedParms?.id)}
-          expandAll={toggle}
-        />
-      );
-    },
-    [toggle]
-  );
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (updatedResult) return [updatedResult]?.map(printExpandableCard);
+    if (assignedData) return [assignedData]?.map(printExpandableCard);
+    if (unassignedData) return [unassignedData]?.map(printExpandableCard);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, updatedResult, printExpandableCard]);
+  }, [loading, assignedData, unassignedData]);
 
-  return (
-    <div className="grow">
-      <ExpandableCard
-        data={unassignedVessel}
-        key={unassignedVessel.id}
-        className="px-5 my-5 bg-white"
-        expandAll={toggle}
-      />
-      {printContent}
-    </div>
-  );
+  return <div className="grow">{printContent}</div>;
 };
 
 AccountPositionsDetails.propTypes = UrlPropTypes;

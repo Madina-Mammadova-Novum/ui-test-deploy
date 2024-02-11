@@ -1,3 +1,6 @@
+import { UrlPropTypes } from '@/lib/types';
+
+import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { AccountPositions } from '@/modules';
 
@@ -11,6 +14,10 @@ export function generateMetadata() {
   });
 }
 
-export default function Page() {
-  return <AccountPositions />;
+export default function Page({ params, searchParams }) {
+  const urlParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
+
+  return <AccountPositions searchedParms={urlParams} />;
 }
+
+Page.propTypes = UrlPropTypes;

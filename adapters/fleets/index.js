@@ -348,3 +348,17 @@ export const complexFleetDataAdapter = ({ fleet, fleetDetails }) => {
     },
   };
 };
+
+export const fleetNotificationAdapter = ({ data, id }) => {
+  if (!data) return null;
+
+  return {
+    ...data,
+    tankers: data?.tankers?.map((tanker) => {
+      return {
+        ...tanker,
+        notified: tanker.id === id || false,
+      };
+    }),
+  };
+};
