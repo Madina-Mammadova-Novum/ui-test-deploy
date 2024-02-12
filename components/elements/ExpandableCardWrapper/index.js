@@ -38,11 +38,7 @@ const ExpandableCardWrapper = ({
       <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => handleClick()}>
         {headerComponentWithProps}
       </div>
-      <div
-        ref={contentRef}
-        className="overflow-y-hidden transition-height duration-200"
-        style={{ height: expandedHeight }}
-      >
+      <div ref={contentRef} className={`overflow-y-hidden transition-height duration-200 h-[${expandedHeight}]`}>
         <Divider />
         <div className="table-scroll pt-5">{children}</div>
         {footerComponent}
