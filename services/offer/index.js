@@ -34,9 +34,13 @@ export async function declineOffer({ data, role }) {
 
 export async function acceptOffer({ data, role }) {
   const body = acceptOfferAdapter({ data });
+
   const path = role === ROLES.OWNER ? 'offer/accept' : 'offer/charterer/accept';
+
   const response = await postData(path, body);
+
   if (!response.error) response.message = 'You have successfully accepted the offer';
+
   return {
     ...response,
   };

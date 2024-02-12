@@ -12,7 +12,7 @@ import { ExpandableCard } from '@/units';
 import { urlParser } from '@/utils/helpers';
 
 const AccountPositionsDetails = ({ searchedParms }) => {
-  const { vessels, unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
+  const { vessels, unassignedVessel, loading } = useSelector(getUserVesselsSelector);
 
   const assignedResult = vessels?.find((vessel) => vessel?.fleetId === searchedParms?.id);
 
@@ -20,13 +20,20 @@ const AccountPositionsDetails = ({ searchedParms }) => {
   const unassignedData = fleetNotificationAdapter({ data: unassignedVessel, id: urlParser(searchedParms.id) });
 
   const printExpandableCard = (fleet) => {
-    return <ExpandableCard isOpened className="px-5 my-5 bg-white" key={fleet.id} data={fleet} expandAll={toggle} />;
+    return (
+      <ExpandableCard
+        key={fleet.id}
+        data={fleet}
+        className="px-5 my-5 bg-white"
+        isOpened={Boolean(searchedParms?.tankerId || searchedParms?.id)}
+      />
+    );
   };
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (assignedData) return [assignedData]?.map(printExpandableCard);
-    if (unassignedData) return [unassignedData]?.map(printExpandableCard);
+    if (assignedData) return [assignedData].map(printExpandableCard);
+    if (unassignedData) return [unassignedData].map(printExpandableCard);
 
     return <Title level="3">Notification is outdated.</Title>;
   }, [loading, assignedData, unassignedData]);

@@ -29,17 +29,15 @@ const tabs = [
   },
 ];
 
-const schema = yup.object({
-  ...acceptOfferSchema(),
-});
-
 const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
   const dispatch = useDispatch();
 
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+
   const { role } = useSelector(getUserDataSelector);
 
+  const schema = yup.object({ ...acceptOfferSchema() });
   const methods = useHookFormParams({ schema });
 
   const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;

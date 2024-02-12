@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import NextLink from '../NextLink';
 
@@ -30,6 +30,8 @@ import {
 import { downloadFile } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
+  const tableRef = useRef(null);
+
   const {
     id,
     type,
@@ -168,8 +170,15 @@ const TableCell = ({ cellProps }) => {
     return 'bg-white';
   }, [notified, disabled, freezed]);
 
+  useEffect(() => {
+    if (notified && typeof value === 'number') {
+      tableRef?.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [notified, tableRef, value]);
+
   return (
     <td
+      ref={tableRef}
       className={`${cellColor} py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
     >
       <div

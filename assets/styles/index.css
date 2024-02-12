@@ -221,7 +221,7 @@
   }
 
   .range_date .rdrDateDisplayItemActive {
-    @apply border-none;
+    @apply border border-transparent border-solid;
   }
 
   .range_date .rdrDateDisplay {
@@ -229,7 +229,7 @@
   }
 
   .range_date input {
-    @apply h-9 text-xsm border-black border border-solid;
+    @apply h-9 text-xsm border-transparent border border-solid;
   }
 
   .range_date-hidden .rdrMonthAndYearWrapper,
