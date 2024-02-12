@@ -1,13 +1,13 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import classnames from 'classnames';
 
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
-import { HoverTooltip, TextWithLabel } from '@/elements';
+import { Divider, HoverTooltip, TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE, SETTINGS } from '@/lib/constants';
 import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { processTooltipData } from '@/utils/helpers';
@@ -22,8 +22,8 @@ const ExpandableCardHeader = ({
   gridStyles = '',
   itemId,
 }) => {
-  const sm3 = useMediaQuery('(max-width: 1023px)');
   const lg = useMediaQuery('(min-width: 1280px)');
+  const sm3 = useMediaQuery('(max-width: 1023px)');
 
   const printModal = useCallback(
     (action) => {
@@ -39,15 +39,16 @@ const ExpandableCardHeader = ({
     [itemId]
   );
 
-  const generateTextLength = () => {
-    if (lg) return { length: 25 };
-    if (sm3) return { length: 20 };
-    return { length: SETTINGS.MAX_VISIBLE_TEXT_LENGTH };
-  };
+  const textLength = useMemo(() => {
+    if (lg) return 24;
+    if (sm3) return 20;
+
+    return SETTINGS.MAX_VISIBLE_TEXT_LENGTH;
+  }, [lg, sm3]);
 
   const printHeaderRow = (data, index) => {
-    const { length } = generateTextLength();
-    const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length });
+    const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length: textLength });
+
     let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
 
     if (data.countdownData) {
@@ -86,8 +87,8 @@ const ExpandableCardHeader = ({
   };
 
   return (
-    <div className="w-full h-auto lg:min-h-[60px] flex items-center gap-x-2.5 py-3">
-      <div className={`flex flex-col lg:flex-row flex-grow ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
+    <div className="w-full h-auto min-h-[60px] flex items-start gap-x-2.5 pt-2.5">
+      <div className={`flex flex-col lg:flex-row flex-grow mb-2.5 ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
           className={`grid md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
             !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
@@ -97,21 +98,24 @@ const ExpandableCardHeader = ({
           {headerData.map(printHeaderRow)}
         </div>
         {!!actions.length && (
-          <div className="flex gap-x-2.5 justify-end border-t border-t-grey ml-5 lg:border-none pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
-            {actions.map(({ action, text, variant, size, icon }) => (
-              <ModalWindow
-                containerClass="overflow-y-[unset]"
-                buttonProps={{
-                  icon,
-                  variant,
-                  size,
-                  text,
-                  className: 'whitespace-nowrap',
-                }}
-              >
-                {printModal(action)}
-              </ModalWindow>
-            ))}
+          <div className="w-full relative">
+            <Divider className="mt-2.5 w-screen absolute -left-5" />
+            <div className="flex gap-x-2.5 justify-end pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
+              {actions.map(({ action, text, variant, size, icon }) => (
+                <ModalWindow
+                  containerClass="overflow-y-[unset]"
+                  buttonProps={{
+                    icon,
+                    variant,
+                    size,
+                    text,
+                    className: 'whitespace-nowrap',
+                  }}
+                >
+                  {printModal(action)}
+                </ModalWindow>
+              ))}
+            </div>
           </div>
         )}
       </div>

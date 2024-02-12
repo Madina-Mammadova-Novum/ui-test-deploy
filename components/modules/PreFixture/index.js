@@ -33,6 +33,7 @@ const PreFixture = () => {
       <ExpandableRow
         key={rowData.id}
         expand={toggle}
+        className="px-5"
         header={
           <ExpandableCardHeader
             headerData={rowHeader}

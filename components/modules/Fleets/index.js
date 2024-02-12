@@ -22,6 +22,7 @@ const Fleets = ({ searchedParams }) => {
 
     return (
       <ExpandableRow
+        className="px-5"
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
@@ -62,8 +63,8 @@ const Fleets = ({ searchedParams }) => {
 
     if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
 
-    return <Title level="3">No positions</Title>;
-  }, [loading, data, printExpandableRow]);
+    return <Title level="3">There are no available positions</Title>;
+  }, [loading, data, searchedParams?.id]);
 
   return (
     <div className="flex flex-col gap-y-2.5 grow">

@@ -30,6 +30,7 @@ const OnSubs = () => {
 
     return (
       <ExpandableRow
+        className="px-5"
         header={
           <ExpandableCardHeader
             headerData={rowHeader}

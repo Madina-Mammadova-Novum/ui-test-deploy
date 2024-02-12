@@ -28,6 +28,7 @@ const FixtureDetails = ({ searchedParams }) => {
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
         footer={<FixtureExpandedFooter drafted={!rowData?.isCountdownActive} />}
         expand={toggle}
+        className="px-5"
       >
         <FixtureExpandedContent
           offerId={rowData?.id}

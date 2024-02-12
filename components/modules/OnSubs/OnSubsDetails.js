@@ -38,6 +38,7 @@ const OnSubsDetails = ({ searchedParams }) => {
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
         isOpened={Boolean(searchedParams?.status)}
         expand={toggle}
+        className="px-5"
         footer={
           <OnSubsExpandedFooter
             underRecap={!rowData?.isCountdownActive}
