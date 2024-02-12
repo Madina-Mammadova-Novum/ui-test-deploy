@@ -27,7 +27,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation, offerId, offerAccepted }) 
 
   return (
     <ExpandableRowFooter>
-      <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between">
+      <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between px-5 pb-2.5">
         {offerAccepted ? (
           <Button
             buttonProps={{

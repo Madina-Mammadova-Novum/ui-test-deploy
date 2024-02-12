@@ -8,39 +8,35 @@ import { Button, Divider, NextLink } from '@/elements';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 
 const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, scriveURL = '' }) => {
-  const ownerCondition = identity.isOwner && status.owner === 'Confirmed' && status.chraterer !== 'Confirmed';
-  const chartererCondition = identity.isCharterer && status?.chraterer === 'Confirmed' && status.owner !== 'Confirmed';
+  const owner = identity.isOwner && status.owner === 'Confirmed' && status.chraterer !== 'Confirmed';
+  const charterer = identity.isCharterer && status?.chraterer === 'Confirmed' && status.owner !== 'Confirmed';
 
   const printCta = () => {
-    if (ownerCondition)
+    if (owner)
       return (
-        <div className="w-full pt-2.5">
-          <Button
-            buttonProps={{
-              text: 'You have lifted the subs. We are waiting for your counterparty’s decision. You will be notified soon',
-              icon: { before: <ClockSVG /> },
-              variant: 'tertiary',
-              size: 'large',
-            }}
-            customStyles="w-full"
-            disabled
-          />
-        </div>
+        <Button
+          buttonProps={{
+            text: 'You have lifted the subs. We are waiting for your counterparty’s decision. You will be notified soon',
+            icon: { before: <ClockSVG /> },
+            variant: 'tertiary',
+            size: 'large',
+          }}
+          customStyles="w-full"
+          disabled
+        />
       );
-    if (chartererCondition)
+    if (charterer)
       return (
-        <div className="w-full pt-2.5">
-          <Button
-            buttonProps={{
-              text: 'You have lifted the subs. We are waiting for your counterparty’s decision. You will be notified soon',
-              icon: { before: <ClockSVG /> },
-              variant: 'tertiary',
-              size: 'large',
-            }}
-            customStyles="w-full"
-            disabled
-          />
-        </div>
+        <Button
+          buttonProps={{
+            text: 'You have lifted the subs. We are waiting for your counterparty’s decision. You will be notified soon',
+            icon: { before: <ClockSVG /> },
+            variant: 'tertiary',
+            size: 'large',
+          }}
+          customStyles="w-full"
+          disabled
+        />
       );
 
     return (
@@ -94,7 +90,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
   return (
     <ExpandableRowFooter>
       <Divider className="absolute left-0 w-full" />
-      {printCta()}
+      <div className="w-full py-2.5 px-5">{printCta()}</div>
     </ExpandableRowFooter>
   );
 };

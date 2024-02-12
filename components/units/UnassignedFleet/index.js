@@ -21,6 +21,7 @@ const UnassignedFleet = ({ toggle }) => {
 
   return (
     <ExpandableRow
+      className="px-5"
       expand={toggle}
       header={<ExpandableCardHeader headerData={formattedHeaderData} itemsContainerStyles="lg:grid-cols-2" />}
     >

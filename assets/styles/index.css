@@ -432,16 +432,16 @@ table > tbody > tr td[name='GREY'] > div {
 .legal-styles .container {
   @apply max-w-[1258px] px-6 3md:px-14;
 }
+
 .table-scroll {
   overflow-x: auto;
   max-width: 150px;
   min-width: 100%;
-  margin-bottom: 8px;
 }
+
 .table-scroll-wrapper {
   min-width: 100%;
   width: fit-content;
-  margin-bottom: 8px;
 }
 
 .table-scroll::-webkit-scrollbar-thumb {
@@ -453,6 +453,7 @@ table > tbody > tr td[name='GREY'] > div {
   max-width: 28px;
   height: 6px;
 }
+
 .table-table::-webkit-scrollbar-track {
   background-color: transparent;
 }
