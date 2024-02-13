@@ -149,6 +149,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
         {
           title: 'Tanker name',
           text: tankerName,
+          textStyles: 'absolute',
           countryCode: flagOfRegistry?.id,
         },
         {

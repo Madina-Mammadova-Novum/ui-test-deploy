@@ -52,7 +52,11 @@ const DetailsContent = ({ detailsData = {} }) => {
           <FieldsetContent label="last 3 cargoes" className="mt-4">
             <div className="flex">
               {lastCargoes?.map(({ title, text }) => (
-                <TextRow key={title} title={title} className="flex flex-col !items-start !justify-start w-full">
+                <TextRow
+                  key={title}
+                  title={title}
+                  className="flex flex-col !gap-y-2 !items-start !justify-start w-full"
+                >
                   {text}
                 </TextRow>
               ))}

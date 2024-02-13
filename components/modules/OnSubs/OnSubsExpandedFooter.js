@@ -9,7 +9,7 @@ import { ExpandableRowFooter, ModalWindow } from '@/units';
 
 const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, scriveURL = '' }) => {
   const owner = identity.isOwner && status.owner === 'Confirmed' && status.chraterer !== 'Confirmed';
-  const charterer = identity.isCharterer && status?.chraterer === 'Confirmed' && status.owner !== 'Confirmed';
+  const charterer = identity.isCharterer && status.chraterer === 'Confirmed' && status.owner !== 'Confirmed';
 
   const printCta = () => {
     if (owner)
@@ -25,6 +25,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
           disabled
         />
       );
+
     if (charterer)
       return (
         <Button
@@ -90,7 +91,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
   return (
     <ExpandableRowFooter>
       <Divider className="absolute left-0 w-full" />
-      <div className="w-full py-2.5 px-5">{printCta()}</div>
+      <div className="w-full py-2.5">{printCta()}</div>
     </ExpandableRowFooter>
   );
 };

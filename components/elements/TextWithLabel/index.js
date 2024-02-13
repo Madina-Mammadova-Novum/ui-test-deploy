@@ -20,7 +20,7 @@ const TextWithLabel = ({
   return (
     <div
       className={classnames(
-        'font-semibold text-left min-w-[90px] flex items-center lg:items-start lg:flex-col',
+        'font-semibold text-left min-w-[90px] flex items-center lg:items-start lg:flex-col gap-y-1',
         customStyles
       )}
     >

@@ -29,6 +29,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Tanker name',
       text: tankerName,
+      textStyles: 'absolute',
     },
     {
       label: 'Cargo type',

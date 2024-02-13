@@ -34,9 +34,9 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, cla
         style={{ height: expandedHeight }}
         className="overflow-y-clip table-scroll transition-all duration-300"
       >
-        <div className="flex flex-col w-max lg:w-full">
-          <Divider className="w-full" />
-          <div className="m-5">{children}</div>
+        <div className="flex flex-col w-full">
+          <Divider className="mx-5" />
+          <div className="p-5">{children}</div>
           {footerComponent}
         </div>
       </div>

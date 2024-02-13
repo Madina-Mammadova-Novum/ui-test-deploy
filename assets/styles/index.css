@@ -209,11 +209,15 @@
   }
 
   .range_date .rdrMonths {
-    @apply w-[450px];
+    @apply w-[450px] border border-purple-light border-t-0 rounded-b-lg shadow-2xmd;
+  }
+
+  .range_date .rdrMonth {
+    @apply border border-purple-light border-b-0 first:border-l-0 last:border-r-0 border-t-0;
   }
 
   .range_date .rdrMonthAndYearWrapper {
-    @apply w-[450px];
+    @apply w-[450px] border border-purple-light pt-0 rounded-t-lg shadow-2xmd;
   }
 
   .range_date .rdrDateDisplayWrapper {
@@ -503,6 +507,31 @@ tr > th:nth-child(2),
 tr > td:nth-child(2) {
   position: sticky;
   left: 39px;
+}
+
+tr > td:nth-child(2) {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+tr > td:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  background-color: rgb(231 236 248);
+}
+
+tr > td:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  background-color: rgb(231 236 248);
 }
 
 .disabled-table {
