@@ -31,29 +31,33 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
 
   const printTableRow = (rowData) => <TableRow key={rowData?.id} type={type} fleetId={fleetId} rowData={rowData} />;
 
-  return headerData.length > 0 ? (
-    <div className="table-scroll-wrapper rounded-t-lg">
-      <div className="w-full relative border bg-purple-light rounded-t-lg">
-        <table className="min-w-full border-collapse table-fixed">
-          {headerData.length && (
-            <thead className="uppercase text-black font-semibold text-xs-sm">
-              <TableHeader
-                headerData={headerData}
-                handleSort={handleSort}
-                sortDirection={sortDirection}
-                sortBy={sortBy}
-              />
-            </thead>
-          )}
-          {!!data.length && <tbody>{data.map(printTableRow)}</tbody>}
-        </table>
-        {!data.length && noDataMessage && (
-          <div className="py-5 bg-gray-light text-center text-xsm text-gray">{noDataMessage}</div>
-        )}
-      </div>
+  return (
+    <div className="table-container">
+      {headerData.length > 0 ? (
+        <div className="table-scroll">
+          <div className="table-scroll-wrapper">
+            <table className="min-w-full border-collapse table-fixed">
+              {headerData.length && (
+                <thead className="uppercase text-black font-semibold text-xs-sm bg-purple-light">
+                  <TableHeader
+                    headerData={headerData}
+                    handleSort={handleSort}
+                    sortDirection={sortDirection}
+                    sortBy={sortBy}
+                  />
+                </thead>
+              )}
+              {!!data.length && <tbody>{data.map(printTableRow)}</tbody>}
+            </table>
+            {!data.length && noDataMessage && (
+              <div className="py-5 bg-gray-light text-center text-xsm text-gray">{noDataMessage}</div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <p className="text-sm font-semibold text-black uppercase">No data provided</p>
+      )}
     </div>
-  ) : (
-    <p className="text-sm font-semibold text-black uppercase">No data provided</p>
   );
 };
 
