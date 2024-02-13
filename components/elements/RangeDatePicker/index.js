@@ -63,7 +63,10 @@ const RangeDatePicker = ({ label, onChange, name, value }) => {
     <div
       ref={ref}
       aria-hidden
-      className={classnames('range_date w-min h-fit relative range_date-absolute', !showPicker && 'range_date-hidden')}
+      className={classnames(
+        'range_date w-min h-fit relative range_date-absolute flex flex-col',
+        !showPicker && 'range_date-hidden'
+      )}
     >
       <Label htmlFor={name} className="block text-xs-sm mb-0.5 whitespace-nowrap">
         {label}

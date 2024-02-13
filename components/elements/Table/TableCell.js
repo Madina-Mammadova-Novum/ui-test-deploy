@@ -126,7 +126,7 @@ const TableCell = ({ cellProps }) => {
 
     return helperData ? (
       <HoverTooltip
-        className="!-top-16 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
+        className="!-top-11 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
         data={{ description: helperData }}
       >
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
@@ -209,7 +209,7 @@ const TableCell = ({ cellProps }) => {
           />
         )}
         {countdownData && <DynamicCountdownTimer {...countdownData} />}
-        <div className="flex gap-x-2.5">{editable && printModalView}</div>
+        {editable && <div className="flex gap-x-2.5">{printModalView}</div>}
       </div>
     </td>
   );

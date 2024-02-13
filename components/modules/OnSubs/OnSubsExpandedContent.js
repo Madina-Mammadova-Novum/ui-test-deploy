@@ -40,7 +40,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   }, [currentTab, detailsData, documentsData, offerId]);
 
   return (
-    <div>
+    <>
       <div className={`py-8 ${isCharterer && 'xlMax:h-20'}`}>
         <Tabs
           activeTab={currentTab}
@@ -64,7 +64,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
         )}
       </div>
       {printContent}
-    </div>
+    </>
   );
 };
 

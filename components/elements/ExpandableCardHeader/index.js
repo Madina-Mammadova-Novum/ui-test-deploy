@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
-import { Divider, HoverTooltip, TextWithLabel } from '@/elements';
+import { HoverTooltip, TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE, SETTINGS } from '@/lib/constants';
 import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { processTooltipData } from '@/utils/helpers';
@@ -64,11 +64,7 @@ const ExpandableCardHeader = ({
         })}
         style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
       >
-        <HoverTooltip
-          data={{ description: tooltipText }}
-          disabled={!lg || disableTooltip || data?.disableTooltip}
-          className="!top-0 -translate-y-2/4"
-        >
+        <HoverTooltip data={{ description: tooltipText }} disabled={!lg || disableTooltip || data?.disableTooltip}>
           <TextWithLabel
             label={data?.label}
             text={textContent}
@@ -76,7 +72,7 @@ const ExpandableCardHeader = ({
             customStyles={`${!index && 'mr-auto'} ${
               data?.customStyles
             } items-baseline [&>label]:!self-baseline [&>div]:!items-center`}
-            textStyles={`${data?.textStyles} whitespace-normal h-4`}
+            textStyles={`${data?.textStyles} whitespace-normal`}
             helperData={data?.helperData}
             icon={data?.icon}
             countryCode={data?.countryCode}
@@ -87,8 +83,8 @@ const ExpandableCardHeader = ({
   };
 
   return (
-    <div className="w-full h-auto min-h-[60px] flex items-start gap-x-2.5 pt-2.5">
-      <div className={`flex flex-col lg:flex-row flex-grow mb-2.5 ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
+    <div className="w-full relative h-auto min-h-[60px] flex items-start gap-x-2.5 pt-2.5">
+      <div className={`flex flex-col lg:flex-row flex-grow pb-2.5 ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
           className={`grid md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
             !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
@@ -98,9 +94,8 @@ const ExpandableCardHeader = ({
           {headerData.map(printHeaderRow)}
         </div>
         {!!actions.length && (
-          <div className="w-full relative">
-            <Divider className="mt-2.5 w-screen absolute -left-5" />
-            <div className="flex gap-x-2.5 justify-end pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
+          <div className="w-full relative lg:pr-10">
+            <div className="flex border-t border-purple-light lg:border-t-0 gap-x-2.5 justify-end pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
               {actions.map(({ action, text, variant, size, icon }) => (
                 <ModalWindow
                   containerClass="overflow-y-[unset]"
@@ -119,7 +114,7 @@ const ExpandableCardHeader = ({
           </div>
         )}
       </div>
-      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto">
+      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto absolute right-0">
         <TableArrowSVG
           className={classnames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
         />

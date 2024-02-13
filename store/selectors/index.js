@@ -78,7 +78,7 @@ export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state)
   const newMessages = state?.data?.support?.[0]?.messageCount > 0 ? messagesCounter + 1 : messagesCounter;
 
   return {
-    newMessages,
+    messageCount: newMessages,
     role: state.role,
     chats: state.data,
     opened: state.opened,

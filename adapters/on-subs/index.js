@@ -59,6 +59,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
+      textStyles: 'absolute lg:relative top-px',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
