@@ -35,7 +35,7 @@ const PostFixtureExpandedContent = ({ detailsData, documentsData, tab, offerId }
   }, [currentTab, documentsData]);
 
   return (
-    <div>
+    <>
       <div className="py-8 xlMax:h-24">
         <Tabs
           activeTab={currentTab}
@@ -65,7 +65,7 @@ const PostFixtureExpandedContent = ({ detailsData, documentsData, tab, offerId }
         />
       </div>
       {tabContent}
-    </div>
+    </>
   );
 };
 
