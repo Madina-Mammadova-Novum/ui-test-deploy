@@ -437,11 +437,33 @@ table > tbody > tr td[name='GREY'] > div {
   overflow-x: auto;
   max-width: 150px;
   min-width: 100%;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .table-scroll-wrapper {
   min-width: 100%;
   width: fit-content;
+}
+
+.table-container {
+  width: 100%;
+  position: relative;
+  border: 1px solid rgb(231 236 248);
+  border-radius: 10px;
+  overflow: overlay;
+}
+
+.table-cell {
+  border: 1px solid rgb(231 236 248);
+}
+
+.table-cell:first-child {
+  border-left: none;
+}
+
+.table-cell:last-child {
+  border-right: none;
 }
 
 .table-scroll::-webkit-scrollbar-thumb {

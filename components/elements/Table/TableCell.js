@@ -177,10 +177,7 @@ const TableCell = ({ cellProps }) => {
   }, [notified, tableRef, value]);
 
   return (
-    <td
-      ref={tableRef}
-      className={`${cellColor} py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
-    >
+    <td ref={tableRef} className={`${cellColor} py-2 px-4 whitespace-nowrap table-cell`}>
       <div
         className={`flex ${
           typeof value === 'boolean' ? 'justify-start' : 'justify-between gap-x-12'
