@@ -89,21 +89,7 @@ export const incomingTabRowsDataAdapter = ({ data, parentId }) => {
 export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
-  const {
-    cargo: {
-      code: cargoId,
-      loadTerminal: {
-        port: { name: portName, locode: portLocode },
-      },
-    },
-    status,
-    laycanStart,
-    laycanEnd,
-    createdAt: dateReceived,
-    expiresAt,
-    frozenAt,
-    id,
-  } = data;
+  const { cargo, status, laycanStart, laycanEnd, createdAt: dateReceived, expiresAt, frozenAt, id } = data;
 
   return [
     {
@@ -116,7 +102,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
-          actionText: cargoId,
+          actionText: cargo?.code,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -136,8 +122,10 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     },
     {
       id,
-      value: `${portName}${portLocode && `, ${portLocode}`}`,
-      countryCode: getLocode(portLocode),
+      value: `${cargo?.loadTerminal?.port?.name}${
+        cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
+      }`,
+      countryCode: getLocode(cargo?.loadTerminal?.port?.locode),
       freezed: frozenAt,
       available: true,
     },
@@ -440,8 +428,6 @@ export const counteroffersTabDataByRole = ({ data, role, parentId }) => {
   }
 };
 
-/// ///////////////////////////////////
-
 export const ownerFailedTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
@@ -451,19 +437,7 @@ export const ownerFailedTabRowsDataAdapter = ({ data }) => {
 export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const {
-    cargo: {
-      code,
-      loadTerminal: {
-        port: { name: portName, locode: portLocode },
-      },
-    },
-    laycanStart,
-    laycanEnd,
-    failedAt,
-    reason,
-    id,
-  } = data;
+  const { cargo, laycanStart, laycanEnd, failedAt, reason, id } = data;
 
   return [
     {
@@ -475,7 +449,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
-          actionText: code,
+          actionText: cargo?.code,
           actionVariant: 'primary',
           actionSize: 'small',
         },
@@ -492,8 +466,10 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: `${portName}${portLocode && `, ${portLocode}`}`,
-      countryCode: getLocode(portLocode),
+      value: `${cargo?.loadTerminal?.port?.name}${
+        cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
+      }`,
+      countryCode: getLocode(cargo?.loadTerminal?.port?.locode),
       available: true,
     },
     {
