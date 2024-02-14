@@ -121,6 +121,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
+      textStyles: 'absolute',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,

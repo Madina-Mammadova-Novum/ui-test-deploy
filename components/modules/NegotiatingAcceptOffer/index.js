@@ -32,6 +32,7 @@ const tabs = [
 const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
   const dispatch = useDispatch();
 
+  const [disabled, setDisabled] = useState(false);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
 
@@ -42,7 +43,14 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
   const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;
 
+  const handleBack = () => {
+    if (!disabled) {
+      goBack();
+    }
+  };
+
   const handleSubmit = async (formData) => {
+    setDisabled(true);
     const { message: successMessage, error } = await acceptOffer({
       data: { ...formData, offerId: itemId },
       role,
@@ -51,8 +59,10 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
     if (!error) {
       successToast(successMessage);
       dispatch(fetchUserNegotiating());
+      setDisabled(false);
       closeModal();
     } else {
+      setDisabled(false);
       errorToast(error?.title, error?.message);
     }
   };
@@ -68,7 +78,9 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
   return (
     <div className="w-[610px]">
-      <ModalHeader goBack={goBack}>Accept the offer</ModalHeader>
+      <ModalHeader goBack={handleBack} disabled={disabled}>
+        Accept the offer
+      </ModalHeader>
       <Countdown time={countdownData} customStyles="mt-5" />
       <Tabs
         tabs={tabs}
@@ -90,6 +102,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
               variant: 'primary',
               size: 'large',
               className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1] !w-40',
+              disabled,
             }}
           >
             {tabContent}
@@ -99,7 +112,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
       <div className="flex text-xsm gap-x-2.5 mt-4 justify-end h-10">
         <Button
-          buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
+          buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large', disabled }}
           customStyles="opacity-0"
         />
       </div>

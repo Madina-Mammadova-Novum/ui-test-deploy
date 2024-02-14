@@ -86,7 +86,7 @@ const ExpandableCardHeader = ({
     <div className="w-full relative h-auto min-h-[60px] flex items-start gap-x-2.5 pt-2.5">
       <div className={`flex flex-col lg:flex-row flex-grow pb-2.5 ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
-          className={`grid md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
+          className={`grid gap-y-1 md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
             !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
           }`}
           style={{ gridTemplateColumns: lg && (gridStyles || `repeat(${headerData.length}, minmax(0, 1fr))`) }}

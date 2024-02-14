@@ -14,7 +14,7 @@ const ExpandedContent = ({ data }) => {
   const hashedInfo = (text = null) => (token ? text : 'Hidden info');
 
   return (
-    <div className="mt-3 mb-5">
+    <div className="mt-3  px-5">
       <Title level="3">Tanker Information</Title>
 
       <div className="lg:flex text-xsm mt-2.5 gap-x-20">

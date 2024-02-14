@@ -1,7 +1,5 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-
 import UnassignedFleetExpandedContent from './UnassignedFleetExpandedContent';
 
 import { UnassignedFleetPropTypes } from '@/lib/types';
@@ -9,11 +7,8 @@ import { UnassignedFleetPropTypes } from '@/lib/types';
 import { fleetsPageHeaderDataAdapter, unassignedFleetRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { fleetsSelector } from '@/store/selectors';
 
-const UnassignedFleet = ({ toggle }) => {
-  const { unassignedFleetData: data } = useSelector(fleetsSelector);
-
+const UnassignedFleet = ({ toggle, data }) => {
   const fleetData = { vessels: data, name: 'Unassigned Fleet' };
 
   const formattedHeaderData = fleetsPageHeaderDataAdapter({ data: fleetData });
@@ -21,7 +16,7 @@ const UnassignedFleet = ({ toggle }) => {
 
   return (
     <ExpandableRow
-      className="px-5"
+      className="px-5 pb-5 pt-2.5"
       expand={toggle}
       header={<ExpandableCardHeader headerData={formattedHeaderData} itemsContainerStyles="lg:grid-cols-2" />}
     >
