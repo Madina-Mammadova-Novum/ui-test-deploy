@@ -90,7 +90,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
 
   return (
     <ExpandableRowFooter>
-      <Divider className="absolute left-0 w-full" />
+      <Divider />
       <div className="w-full py-2.5">{printCta()}</div>
     </ExpandableRowFooter>
   );

@@ -38,7 +38,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
           <div className="table-scroll-wrapper">
             <table className="min-w-full border-collapse table-fixed bg-purple-light">
               {headerData.length && (
-                <thead className="uppercase text-black font-semibold text-xs-sm bg-purple-light">
+                <thead className="uppercase text-black font-semibold text-xs-sm">
                   <TableHeader
                     headerData={headerData}
                     handleSort={handleSort}

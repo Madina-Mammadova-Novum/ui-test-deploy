@@ -7,7 +7,7 @@ import { ExpandableRowFooter } from '@/units';
 const FixtureExpandedFooter = ({ drafted = true }) => {
   return (
     <ExpandableRowFooter>
-      <Divider className="absolute left-0 w-full" />
+      <Divider />
       <div className="flex gap-x-5 justify-between py-2.5 px-5">
         <div className="w-full grow">
           {drafted && (

@@ -381,9 +381,9 @@ export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).
 
 export const calculateTotal = (array, key) =>
   +array
-    .filter((item) => item)
-    .map(({ [key]: itemValue }) => itemValue)
-    .reduce((a, b) => +a + +b);
+    ?.filter((item) => item)
+    ?.map(({ [key]: itemValue }) => itemValue)
+    ?.reduce((a, b) => +a + +b);
 
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
@@ -11,7 +11,8 @@ import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
-import { searchSelector } from '@/store/selectors';
+import { fetchOfferOptioins } from '@/store/entities/offer/actions';
+import { getOfferSelector, getSearchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -32,6 +33,9 @@ const tabs = [
 ];
 
 const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
+  const dispatch = useDispatch();
+  const scrollingContainerRef = useRef(null);
+
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
     responseCountdown: null,
@@ -40,10 +44,11 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     loading: false,
   });
 
-  const scrollingContainerRef = useRef(null);
-  const { searchData } = useSelector(searchSelector);
-  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchData;
-  const { voyageDetails } = voyageDetailsAdapter({ data: searchData });
+  const offer = useSelector(getOfferSelector);
+  const search = useSelector(getSearchSelector);
+
+  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = search.data;
+  const { voyageDetails } = voyageDetailsAdapter({ data: search.data });
 
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
@@ -88,16 +93,19 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     }
   };
 
+  const fetchCountdownData = async () => {
+    handleChangeState('loading', true);
+    const { data = [] } = await getCountdownTimer();
+    const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+    const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+    handleChangeState('responseCountdownOptions', convertedOptions);
+    handleChangeOption(defaultCountdown);
+    handleChangeState('loading', false);
+  };
+
   useEffect(() => {
-    (async () => {
-      handleChangeState('loading', true);
-      const { data = [] } = await getCountdownTimer();
-      const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
-      const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
-      handleChangeState('responseCountdownOptions', convertedOptions);
-      handleChangeOption(defaultCountdown);
-      handleChangeState('loading', false);
-    })();
+    fetchCountdownData();
+    dispatch(fetchOfferOptioins(tankerId));
   }, []);
 
   const scrollToBottom = () =>
@@ -110,9 +118,17 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       case 'comments':
         return <CommentsContent />;
       default:
-        return <CommercialOfferTerms tankerId={tankerId} scrollToBottom={scrollToBottom} />;
+        return (
+          <CommercialOfferTerms
+            loading={offer.loading}
+            tankerId={tankerId}
+            offerData={offer.data}
+            searchData={search.data}
+            scrollToBottom={scrollToBottom}
+          />
+        );
     }
-  }, [currentTab, tankerId]);
+  }, [currentTab, tankerId, offer, search]);
 
   return (
     <div className="w-[610px]">

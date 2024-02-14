@@ -12,7 +12,7 @@ const ExpandableRowHeader = ({ toggle = false, headerData = [] }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
   return (
     <div className="w-full h-auto lg:h-[60px] flex items-center gap-x-2.5 py-3 lg:py-0">
-      <div className="grid md:grid-cols-1 3md:grid-cols-2 lg:flex lg:flex-row lg:items-center w-full gap-x-2.5">
+      <div className="grid md:grid-cols-1 gap-y-1 3md:grid-cols-2 lg:flex lg:flex-row lg:items-center w-full gap-x-2.5">
         {headerData.map(({ label, content: { text, image } }, index) => (
           <div
             className={`w-full col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`}

@@ -1,21 +1,27 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { CommercialOfferTermsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { calculateFreightEstimation } from '@/services/calculator';
-import { fetchOfferOptioins } from '@/store/entities/offer/actions';
-import { offerSelector, searchSelector } from '@/store/selectors';
-import { calculateIntDigit, calculateTotal, getValueWithPath } from '@/utils/helpers';
+import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
+import { setDemurragePaymentTerms, setPaymentTerms } from '@/store/entities/offer/slice';
+import { calculateIntDigit, calculateTotal, convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
-  const [freightEstimation, setFreightEstimation] = useState({});
+const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }) => {
   const dispatch = useDispatch();
+
+  const { paymentTerms, demurragePaymentTerms, freightFormats } = offerData;
+  const { products = [], loadPort, dischargePort } = searchData;
+
+  const [freightEstimation, setFreightEstimation] = useState({});
+  const [paymentLoader, setPaymentLoader] = useState(false);
+  const [demurrageLoader, setDemurrageLoader] = useState(false);
 
   const {
     watch,
@@ -26,35 +32,18 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
     formState: { errors, isSubmitting },
   } = useHookForm();
 
-  const { searchData } = useSelector(searchSelector);
-  const { products = [], loadPort, dischargePort } = searchData;
-
-  const {
-    data: { paymentTerms, demurragePaymentTerms, freightFormats },
-    loading: initialLoading,
-  } = useSelector(offerSelector);
-
   const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
-
-  useEffect(() => {
-    dispatch(fetchOfferOptioins(tankerId));
-  }, [dispatch, tankerId]);
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
-
-    if (error) {
-      clearErrors(key);
-    }
-
-    setValue(key, value);
 
     if (key === 'freight') {
       const productsData = getValues('products');
       const totalCargoQuantity = calculateTotal(productsData, 'quantity');
 
-      const { status, data } = await calculateFreightEstimation({
+      const response = await calculateFreightEstimation({
         data: {
           loadPortId: loadPort.value,
           dischargePortId: dischargePort.value,
@@ -62,16 +51,41 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
         },
       });
 
-      if (status === 200) {
+      if (response?.status === 200) {
         setFreightEstimation({
-          ...data,
-          min: calculateIntDigit(data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
-          max: calculateIntDigit(data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
+          ...response?.data,
+          min: calculateIntDigit(response?.data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
+          max: calculateIntDigit(response?.data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
         });
 
-        setValue('totalAmount', data.total);
+        setValue('totalAmount', response.data.total);
       }
     }
+
+    if (error) {
+      clearErrors(key);
+    }
+
+    setValue(key, value);
+  };
+
+  const getPaymentData = async () => {
+    setPaymentLoader(true);
+    const paymentTermsData = await getPaymentTerms();
+    const result = convertDataToOptions(paymentTermsData, 'id', 'name');
+
+    dispatch(setPaymentTerms(result));
+    setPaymentLoader(false);
+  };
+
+  const getDemurageData = async () => {
+    setDemurrageLoader(true);
+
+    const demurragePaymentTermsData = await getDemurragePaymentTerms();
+    const result = convertDataToOptions(demurragePaymentTermsData, 'id', 'name');
+
+    dispatch(setDemurragePaymentTerms(result));
+    setDemurrageLoader(false);
   };
 
   const printProduct = (product, index) => {
@@ -111,17 +125,15 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
       <div className="flex items-center mt-3">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
-
       {products?.map(printProduct)}
-
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
         <FormDropdown
           label="Freight"
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
-          disabled={initialLoading}
-          loading={initialLoading}
+          disabled={loading}
+          loading={loading}
           onChange={(option) => handleChange('freight', option)}
           asyncCall
         />
@@ -179,8 +191,9 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           label="undisputed demurrage payment terms"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
-          disabled={initialLoading}
-          loading={initialLoading}
+          disabled={loading}
+          loading={demurrageLoader ?? loading}
+          onFocus={!demurragePaymentTerms?.length && getDemurageData}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
           asyncCall
@@ -191,8 +204,9 @@ const CommercialOfferTerms = ({ tankerId, scrollToBottom }) => {
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
-          disabled={initialLoading}
-          loading={initialLoading}
+          disabled={loading}
+          onFocus={!paymentTerms?.length && getPaymentData}
+          loading={paymentLoader ?? loading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}
           asyncCall

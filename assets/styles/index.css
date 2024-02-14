@@ -466,6 +466,11 @@ table > tbody > tr td[name='GREY'] > div {
   border-left: none;
 }
 
+.table-cell:nth-child(2) {
+  border-left: none;
+  border-right: none;
+}
+
 .table-cell:last-child {
   border-right: none;
 }
@@ -491,6 +496,14 @@ table > tbody > tr td[name='GREY'] > div {
   transform: translate(-50%, -50%);
 }
 
+tr > td:first-child > div {
+  width: 30px;
+}
+
+tr > th:first-child > p {
+  width: 60px;
+}
+
 th:first-child,
 th:nth-child(2) {
   background-color: #e7ecf8;
@@ -500,13 +513,15 @@ th:nth-child(2) {
 tr > th:first-child,
 tr > td:first-child {
   position: sticky;
-  left: -1px;
+  left: 0px;
+  z-index: 5;
 }
 
 tr > th:nth-child(2),
 tr > td:nth-child(2) {
   position: sticky;
-  left: 39px;
+  left: 62px;
+  z-index: 5;
 }
 
 tr > td:nth-child(2) {
@@ -517,7 +532,7 @@ tr > td:nth-child(2) {
 tr > td:nth-child(2)::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: -1px;
   bottom: 0;
   width: 1px;
   height: 100%;

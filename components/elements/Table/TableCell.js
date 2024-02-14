@@ -180,12 +180,12 @@ const TableCell = ({ cellProps }) => {
     <td ref={tableRef} className={`${cellColor} py-2 px-4 whitespace-nowrap table-cell`}>
       <div
         className={`flex ${
-          typeof value === 'boolean' ? 'justify-start' : 'justify-between gap-x-12'
+          typeof value === 'boolean' || typeof value === 'number' ? 'justify-start' : 'justify-between gap-x-12'
         } normal-case items-center text-xsm`}
       >
         {emptyCell && <Placeholder />}
         {value && (
-          <div className="flex gap-x-1 text-inherit items-center">
+          <div className="flex gap-x-1 text-inherit items-center px-1">
             {icon && <IconWrapper iconData={{ icon }} />}
             {printFlag}
             {printValue}
