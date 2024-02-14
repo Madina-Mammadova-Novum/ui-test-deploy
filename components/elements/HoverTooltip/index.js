@@ -37,6 +37,6 @@ const HoverTooltip = ({ data, disabled = false, className, children }) => {
   );
 };
 
-HoverTooltip.propTypes = TooltipParamsPropTypes.isRequired;
+HoverTooltip.propTypes = TooltipParamsPropTypes;
 
 export default HoverTooltip;
