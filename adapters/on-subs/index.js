@@ -105,6 +105,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      textStyles: 'absolute pl-5',
       countryCode: getLocode(loadPortLocode),
     },
     {

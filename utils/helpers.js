@@ -568,7 +568,7 @@ export const processTooltipData = ({ text, length }) => {
   return {
     disableTooltip: !(text?.length > length),
     tooltipText: text,
-    trimmedText: text?.length > length ? `${text?.slice(0, length / 2)}...` : text,
+    trimmedText: text?.length >= length ? `${text?.slice(0, length / 2)}...` : text,
   };
 };
 

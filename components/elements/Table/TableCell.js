@@ -119,7 +119,7 @@ const TableCell = ({ cellProps }) => {
   const printValue = useMemo(() => {
     const valueStyles = () => {
       if (disabled) return 'text-gray';
-      if (freezed) return 'text-opacity-50';
+      if (freezed) return 'text-opacity-50 select-none';
 
       return 'text-inherit';
     };
@@ -144,16 +144,23 @@ const TableCell = ({ cellProps }) => {
     return actions.map((cell) => {
       const { action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles } = cell;
 
+      const setStyles = () => {
+        if (editable) return `!p-0 ${actionStyles} `;
+        if (freezed) return `!select-none cursor-not-allowed !py-1 !px-1.5 ${actionStyles}`;
+
+        return `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}`;
+      };
+
       return (
         <ModalWindow
-          containerClass="overflow-y-[unset] z-50"
+          containerClass="overflow-y-[unset]"
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,
             size: actionSize,
             text: actionText,
-            disabled: actionDisabled,
-            className: !editable ? `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}` : `!p-0 ${actionStyles}`,
+            disabled: actionDisabled || freezed,
+            className: setStyles(),
           }}
         >
           {printModal(action)}
@@ -165,7 +172,7 @@ const TableCell = ({ cellProps }) => {
   const cellColor = useMemo(() => {
     if (notified) return 'bg-yellow-light';
     if (disabled) return 'disabled-table';
-    if (freezed) return 'freezed-table';
+    if (freezed) return 'freezed-table blur-sm cursor-not-allowed';
 
     return 'bg-white';
   }, [notified, disabled, freezed]);

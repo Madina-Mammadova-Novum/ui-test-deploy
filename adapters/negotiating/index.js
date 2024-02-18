@@ -47,6 +47,9 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     createdAt,
   } = data;
 
+  const minValue = parseFloat(minQuantity.toFixed(1)).toString();
+  const maxValue = parseFloat(maxQuantity?.toFixed(1)).toString();
+
   return [
     {
       label: 'Cargo id',
@@ -58,7 +61,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: `${minQuantity?.toFixed(1)} - ${maxQuantity?.toFixed(1)} tons`,
+      text: `${minValue} - ${maxValue} tons`,
     },
     {
       label: 'Load port',
@@ -446,6 +449,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
+      freezed: false,
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
@@ -458,14 +462,17 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      freezed: false,
       value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      freezed: false,
       value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      freezed: false,
       value: `${cargo?.loadTerminal?.port?.name}${
         cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
       }`,
@@ -474,15 +481,18 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      freezed: false,
       value: failedAt ? transformDate(failedAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      freezed: false,
       value: reason,
       type: TYPE.SEMIBOLD,
     },
     {
       id,
+      freezed: false,
       actions: [
         {
           action: ACTIONS.VIEW_FAILED_OFFER,
