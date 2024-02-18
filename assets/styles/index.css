@@ -551,17 +551,14 @@ tr > td:nth-child(2)::after {
 
 .disabled-table {
   background-color: #f8fafb;
-  z-index: 5;
 }
 
 .freezed-table {
-  background-color: #ffffff;
-  z-index: 5;
+  background-color: #f8fafb;
 }
 
 .tooltip {
   position: relative;
-  /* backdrop-filter backdrop-blur-sm */
 }
 
 .tooltip .tooltip-box {
