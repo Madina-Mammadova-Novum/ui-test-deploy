@@ -8,7 +8,7 @@ const ModalHeader = ({ children, disabled, goBack = null }) => {
     <div className="flex items-center">
       {goBack && (
         <GoBackArrowSVG
-          className={`${disabled ? 'fill-gray-600' : 'fill-black'} cursor-pointer mr-2.5 rotate-90`}
+          className={`${disabled ? 'fill-gray-400 cursor-not-allowed' : 'fill-black cursor-pointer'}  mr-2.5 rotate-90`}
           onClick={goBack}
         />
       )}

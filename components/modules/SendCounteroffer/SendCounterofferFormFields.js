@@ -109,6 +109,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
           disabled={isOwner}
+          step="any"
         />
         <Input
           {...register(`products[${index}].quantity`)}
