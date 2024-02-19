@@ -16,7 +16,7 @@ const VoyageDetailsContent = ({ data = { dates: [], ports: [] } }) => {
           dates
         </Title>
         {dates.map((pair) => (
-          <div className="mt-2.5">
+          <div className="mt-2.5 mr-2.5">
             {pair.map((detail) => (
               <TextRow title={detail.key}>{detail.label}</TextRow>
             ))}

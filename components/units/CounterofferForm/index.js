@@ -56,10 +56,12 @@ const CounterofferForm = ({
     setDisabled(true);
 
     if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData })) {
+      setDisabled(false);
       return errorToast('One or more validation occured: ', COUNTEROFFER_REQUIREMENTS_ERROR);
     }
 
     if (!allowSubmit) {
+      setDisabled(false);
       return handleConfirmCounteroffer();
     }
 
@@ -69,13 +71,13 @@ const CounterofferForm = ({
     });
 
     if (!error) {
+      setDisabled(false);
       successToast(successMessage);
       dispatch(fetchUserNegotiating());
-      setDisabled(false);
       closeModal();
     } else {
-      errorToast(error?.title, error?.message);
       setDisabled(false);
+      errorToast(error?.title, error?.message);
     }
   };
 
