@@ -40,7 +40,7 @@ const ExpandableCardHeader = ({
   );
 
   const textLength = useMemo(() => {
-    if (lg) return 24;
+    if (lg) return 35;
     if (sm3) return 20;
 
     return SETTINGS.MAX_VISIBLE_TEXT_LENGTH;
@@ -118,7 +118,7 @@ const ExpandableCardHeader = ({
           </div>
         )}
       </div>
-      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto absolute right-0">
+      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto absolute -right-2.5">
         <TableArrowSVG
           className={classnames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
         />

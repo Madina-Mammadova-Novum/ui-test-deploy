@@ -42,6 +42,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      textStyles: 'absolute pl-5',
       countryCode: getLocode(portLocode),
     },
     {

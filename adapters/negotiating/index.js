@@ -12,6 +12,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'tanker name',
       text: details?.name,
+      textStyles: 'absolute',
     },
     {
       label: 'imo',
@@ -20,14 +21,17 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'fleet name',
       text: fleet?.name,
+      textStyles: 'absolute',
     },
     {
       label: 'open date',
       text: transformDate(openDate, 'MMM dd, yyyy'),
+      textStyles: 'absolute',
     },
     {
       label: 'open port',
       text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
+      textStyles: 'absolute pl-5',
       countryCode: getLocode(openPort?.locode),
     },
   ];
@@ -47,7 +51,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     createdAt,
   } = data;
 
-  const minValue = parseFloat(minQuantity.toFixed(1)).toString();
+  const minValue = parseFloat(minQuantity?.toFixed(1)).toString();
   const maxValue = parseFloat(maxQuantity?.toFixed(1)).toString();
 
   return [
@@ -62,6 +66,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'Quantity',
       text: `${minValue} - ${maxValue} tons`,
+      textStyles: 'absolute',
     },
     {
       label: 'Load port',
@@ -221,8 +226,8 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: status,
       type: TYPE.SEMIBOLD,
-      icon: <StatusIndicator status={status} />,
       freezed: frozenAt,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,
@@ -231,6 +236,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      freezed: frozenAt,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,

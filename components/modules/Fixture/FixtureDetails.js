@@ -1,7 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
+import { useRouter } from 'next/navigation';
 
 import FixtureExpandedContent from './FixtureExpandedContent';
 import FixtureExpandedFooter from './FixtureExpandedFooter';
@@ -15,10 +17,29 @@ import {
 } from '@/adapters/fixture';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { getOfferDetails } from '@/services/offer';
 import { getFixtureSelector } from '@/store/selectors';
+import { errorToast } from '@/utils/hooks';
 
 const FixtureDetails = ({ searchedParams }) => {
-  const { offers, toggle, loading } = useSelector(getFixtureSelector);
+  const router = useRouter();
+  const { offers, toggle, loading, role } = useSelector(getFixtureSelector);
+
+  const getInfo = async (id) => {
+    const { data, status, error } = await getOfferDetails(id, role);
+
+    if (status === 200 && data) {
+      router.replace(`/account/${data?.stage}/${searchedParams?.id}`);
+    }
+
+    if (error) {
+      errorToast(error.title, error.message);
+    }
+  };
+
+  useEffect(() => {
+    getInfo(searchedParams?.id);
+  }, [searchedParams?.id]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });

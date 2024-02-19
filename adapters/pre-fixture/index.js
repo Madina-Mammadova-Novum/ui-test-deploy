@@ -95,6 +95,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: name && `${name}${locode && `, ${locode}`}`,
+      textStyles: 'absolute pl-5',
       countryCode: getLocode(locode),
       freezed: frozenAt,
     },

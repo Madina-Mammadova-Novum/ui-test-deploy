@@ -40,6 +40,7 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      textStyles: 'absolute pl-5',
       country: portCountry,
       countryCode: getLocode(portLocode),
     },

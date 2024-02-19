@@ -149,6 +149,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           disabled={isSubmitting}
           min={String(freightEstimation.min)}
           max={String(freightEstimation.max)}
+          step="any"
         />
       </div>
 
