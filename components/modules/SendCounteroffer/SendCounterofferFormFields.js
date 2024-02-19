@@ -52,19 +52,17 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     }
   };
 
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
+
+  useEffect(() => {
+    dispatch(fetchOfferOptioins(tankerId));
+  }, [tankerId]);
+
   useEffect(() => {
     if (data?.freight?.value) {
       handleFormat();
     }
   }, []);
-
-  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
-
-  useEffect(() => {
-    dispatch(fetchOfferOptioins(tankerId));
-  }, [dispatch, tankerId]);
-
-  useEffect(() => {}, []);
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -154,6 +152,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           disabled={isSubmitting}
           min={String(freightEstimation.min)}
           max={String(freightEstimation.max)}
+          step="any"
         />
       </div>
 
