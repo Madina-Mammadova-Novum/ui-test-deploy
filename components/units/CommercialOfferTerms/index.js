@@ -106,7 +106,6 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
           disabled
-          step="any"
         />
         <Input
           {...register(`products[${index}].quantity`)}
@@ -150,6 +149,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           disabled={isSubmitting}
           min={String(freightEstimation.min)}
           max={String(freightEstimation.max)}
+          step="any"
         />
       </div>
 
