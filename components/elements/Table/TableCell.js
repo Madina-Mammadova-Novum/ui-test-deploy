@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import NextLink from '../NextLink';
 
@@ -30,6 +30,8 @@ import {
 import { downloadFile } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
+  const tableRef = useRef(null);
+
   const {
     id,
     type,
@@ -117,14 +119,14 @@ const TableCell = ({ cellProps }) => {
   const printValue = useMemo(() => {
     const valueStyles = () => {
       if (disabled) return 'text-gray';
-      if (freezed) return 'text-opacity-50';
+      if (freezed) return 'text-opacity-50 select-none';
 
       return 'text-inherit';
     };
 
     return helperData ? (
       <HoverTooltip
-        className="!-top-16 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
+        className="!-top-11 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
         data={{ description: helperData }}
       >
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
@@ -142,16 +144,23 @@ const TableCell = ({ cellProps }) => {
     return actions.map((cell) => {
       const { action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles } = cell;
 
+      const setStyles = () => {
+        if (editable) return `!p-0 ${actionStyles} `;
+        if (freezed) return `!select-none cursor-not-allowed !py-1 !px-1.5 ${actionStyles}`;
+
+        return `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}`;
+      };
+
       return (
         <ModalWindow
-          containerClass="overflow-y-[unset] z-50"
+          containerClass="overflow-y-[unset]"
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,
             size: actionSize,
             text: actionText,
-            disabled: actionDisabled,
-            className: !editable ? `hover:bg-gray-darker !py-1 !px-1.5 ${actionStyles}` : `!p-0 ${actionStyles}`,
+            disabled: actionDisabled || freezed,
+            className: setStyles(),
           }}
         >
           {printModal(action)}
@@ -163,23 +172,27 @@ const TableCell = ({ cellProps }) => {
   const cellColor = useMemo(() => {
     if (notified) return 'bg-yellow-light';
     if (disabled) return 'disabled-table';
-    if (freezed) return 'freezed-table';
+    if (freezed) return 'freezed-table blur-sm cursor-not-allowed';
 
     return 'bg-white';
   }, [notified, disabled, freezed]);
 
+  useEffect(() => {
+    if (notified && typeof value === 'number') {
+      tableRef?.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [notified, tableRef, value]);
+
   return (
-    <td
-      className={`${cellColor} py-2 px-4 whitespace-nowrap border border-purple-light border-b-0 first:border-l-0 last:border-r-0`}
-    >
+    <td ref={tableRef} className={`${cellColor} py-2 px-4 whitespace-nowrap table-cell`}>
       <div
         className={`flex ${
-          typeof value === 'boolean' ? 'justify-start' : 'justify-between gap-x-12'
+          typeof value === 'boolean' || typeof value === 'number' ? 'justify-start' : 'justify-between gap-x-12'
         } normal-case items-center text-xsm`}
       >
         {emptyCell && <Placeholder />}
         {value && (
-          <div className="flex gap-x-1 text-inherit items-center">
+          <div className="flex gap-x-1 text-inherit items-center px-1">
             {icon && <IconWrapper iconData={{ icon }} />}
             {printFlag}
             {printValue}
@@ -203,7 +216,7 @@ const TableCell = ({ cellProps }) => {
           />
         )}
         {countdownData && <DynamicCountdownTimer {...countdownData} />}
-        <div className="flex gap-x-2.5">{editable && printModalView}</div>
+        {editable && <div className="flex gap-x-2.5">{printModalView}</div>}
       </div>
     </td>
   );

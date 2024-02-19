@@ -28,6 +28,8 @@ const CounterofferForm = ({
   closeModal,
   handleConfirmCounteroffer,
   handleValidationError,
+  disabled,
+  setDisabled,
 }) => {
   const dispatch = useDispatch();
   const { role } = useSelector(getUserDataSelector);
@@ -51,6 +53,8 @@ const CounterofferForm = ({
   });
 
   const handleSubmit = async (formData) => {
+    setDisabled(true);
+
     if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData })) {
       return errorToast('One or more validation occured: ', COUNTEROFFER_REQUIREMENTS_ERROR);
     }
@@ -67,9 +71,11 @@ const CounterofferForm = ({
     if (!error) {
       successToast(successMessage);
       dispatch(fetchUserNegotiating());
+      setDisabled(false);
       closeModal();
     } else {
       errorToast(error?.title, error?.message);
+      setDisabled(false);
     }
   };
 
@@ -84,6 +90,7 @@ const CounterofferForm = ({
           variant: 'primary',
           size: 'large',
           className: 'ml-auto',
+          disabled,
         }}
       >
         {children}

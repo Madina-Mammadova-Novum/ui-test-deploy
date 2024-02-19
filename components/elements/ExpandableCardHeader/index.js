@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import classnames from 'classnames';
 
@@ -22,8 +22,8 @@ const ExpandableCardHeader = ({
   gridStyles = '',
   itemId,
 }) => {
-  const sm3 = useMediaQuery('(max-width: 1023px)');
   const lg = useMediaQuery('(min-width: 1280px)');
+  const sm3 = useMediaQuery('(max-width: 1023px)');
 
   const printModal = useCallback(
     (action) => {
@@ -39,15 +39,16 @@ const ExpandableCardHeader = ({
     [itemId]
   );
 
-  const generateTextLength = () => {
-    if (lg) return { length: 25 };
-    if (sm3) return { length: 20 };
-    return { length: SETTINGS.MAX_VISIBLE_TEXT_LENGTH };
-  };
+  const textLength = useMemo(() => {
+    if (lg) return 24;
+    if (sm3) return 20;
+
+    return SETTINGS.MAX_VISIBLE_TEXT_LENGTH;
+  }, [lg, sm3]);
 
   const printHeaderRow = (data, index) => {
-    const { length } = generateTextLength();
-    const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length });
+    const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length: textLength });
+
     let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
 
     if (data.countdownData) {
@@ -64,9 +65,9 @@ const ExpandableCardHeader = ({
         style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
       >
         <HoverTooltip
+          className="!top-0 !-left-10"
           data={{ description: tooltipText }}
           disabled={!lg || disableTooltip || data?.disableTooltip}
-          className="!top-0 -translate-y-2/4"
         >
           <TextWithLabel
             label={data?.label}
@@ -75,7 +76,7 @@ const ExpandableCardHeader = ({
             customStyles={`${!index && 'mr-auto'} ${
               data?.customStyles
             } items-baseline [&>label]:!self-baseline [&>div]:!items-center`}
-            textStyles={`${data?.textStyles} whitespace-normal h-4`}
+            textStyles={`${data?.textStyles} whitespace-normal`}
             helperData={data?.helperData}
             icon={data?.icon}
             countryCode={data?.countryCode}
@@ -86,10 +87,10 @@ const ExpandableCardHeader = ({
   };
 
   return (
-    <div className="w-full h-auto lg:min-h-[60px] flex items-center gap-x-2.5 py-3">
-      <div className={`flex flex-col lg:flex-row flex-grow ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
+    <div className="w-full relative h-auto min-h-[60px] flex items-start gap-x-2.5 pt-2.5">
+      <div className={`flex flex-col lg:flex-row flex-grow pb-2.5 ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
-          className={`grid md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
+          className={`grid gap-y-1 md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
             !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
           }`}
           style={{ gridTemplateColumns: lg && (gridStyles || `repeat(${headerData.length}, minmax(0, 1fr))`) }}
@@ -97,25 +98,27 @@ const ExpandableCardHeader = ({
           {headerData.map(printHeaderRow)}
         </div>
         {!!actions.length && (
-          <div className="flex gap-x-2.5 justify-end border-t border-t-grey ml-5 lg:border-none pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
-            {actions.map(({ action, text, variant, size, icon }) => (
-              <ModalWindow
-                containerClass="overflow-y-[unset]"
-                buttonProps={{
-                  icon,
-                  variant,
-                  size,
-                  text,
-                  className: 'whitespace-nowrap',
-                }}
-              >
-                {printModal(action)}
-              </ModalWindow>
-            ))}
+          <div className="w-full relative lg:pr-10">
+            <div className="flex border-t border-purple-light lg:border-t-0 gap-x-2.5 justify-end pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
+              {actions.map(({ action, text, variant, size, icon }) => (
+                <ModalWindow
+                  containerClass="overflow-y-[unset]"
+                  buttonProps={{
+                    icon,
+                    variant,
+                    size,
+                    text,
+                    className: 'whitespace-nowrap',
+                  }}
+                >
+                  {printModal(action)}
+                </ModalWindow>
+              ))}
+            </div>
           </div>
         )}
       </div>
-      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto">
+      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto absolute right-0">
         <TableArrowSVG
           className={classnames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
         />

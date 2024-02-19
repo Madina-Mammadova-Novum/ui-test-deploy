@@ -28,15 +28,16 @@ const tabs = [
 ];
 
 const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionSuccess }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const dispatch = useDispatch();
+
   const [showScroll, setShowScroll] = useState(false);
+  const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(data?.allowExtension);
 
   const { role } = useSelector(getUserDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
   const { isCountdownActive, voyageDetails, commercialOfferTerms, comments, countdownData } = data;
-  const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
     setAllowCountdownExtension(false);

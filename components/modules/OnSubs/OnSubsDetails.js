@@ -35,13 +35,17 @@ const OnSubsDetails = ({ searchedParams }) => {
 
     return (
       <ExpandableRow
+        key={rowData?.id}
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
         isOpened={Boolean(searchedParams?.status)}
         expand={toggle}
+        className="px-5"
         footer={
           <OnSubsExpandedFooter
-            underRecap={!rowData?.isCountdownActive}
+            status={searchedParams?.status}
             offerId={rowData?.id}
+            underRecap={!rowData?.isCountdownActive}
+            identity={{ isOwner }}
             scriveURL={scriveURL || ''}
           />
         }
@@ -63,7 +67,7 @@ const OnSubsDetails = ({ searchedParams }) => {
     if (searchedResult) return [searchedResult]?.map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, offers, printExpandableRow]);
+  }, [loading, offers, isOwner, searchedParams?.id]);
 
   return printContent;
 };

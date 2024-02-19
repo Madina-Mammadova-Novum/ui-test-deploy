@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react';
+'use client';
+
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
@@ -25,31 +27,29 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
 
   const { incoming = [], sent = [], failed = [] } = offerById[data.id];
 
-  const tabContent = useMemo(() => {
-    return {
-      counteroffers: (
-        <Table
-          headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
-          rows={counteroffersTabDataByRole({ data: sent, role, parentId: data.id })}
-          noDataMessage="No data provided"
-        />
-      ),
-      failed: (
-        <Table
-          headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
-          rows={failedTabDataByRole({ data: failed, role })}
-          noDataMessage="No data provided"
-        />
-      ),
-      incoming: (
-        <Table
-          headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
-          rows={offerTabDataByRole({ data: incoming, role, parentId: data.id })}
-          noDataMessage="No data provided"
-        />
-      ),
-    }[currentTab];
-  }, [currentTab]);
+  const tabContent = {
+    counteroffers: (
+      <Table
+        headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
+        rows={counteroffersTabDataByRole({ data: sent, role, parentId: data.id })}
+        noDataMessage="No data provided"
+      />
+    ),
+    failed: (
+      <Table
+        headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
+        rows={failedTabDataByRole({ data: failed, role })}
+        noDataMessage="No data provided"
+      />
+    ),
+    incoming: (
+      <Table
+        headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
+        rows={offerTabDataByRole({ data: incoming, role, parentId: data.id })}
+        noDataMessage="No data provided"
+      />
+    ),
+  };
 
   return (
     <>
@@ -59,7 +59,7 @@ const NegotiatingExpandedContent = ({ data, tab, tabs }) => {
         tabs={tabs}
         customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
-      <div className="mb-3 table-scroll">{tabContent}</div>
+      <div className="mb-3">{tabContent[currentTab]}</div>
     </>
   );
 };

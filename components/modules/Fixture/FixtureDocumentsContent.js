@@ -32,7 +32,7 @@ const FixtureDocumentsContent = ({ rowsData = [], offerId }) => {
   };
 
   return (
-    <div className="flex flex-col gap-y-2.5">
+    <div className="flex flex-col gap-y-2.5 pb-3">
       <UploadForm onSubmit={onSubmit} />
       <div className="table-scroll">
         <Table headerData={fixtureHeader} rows={rowsData} noDataMessage="You did not upload any documents yet" />

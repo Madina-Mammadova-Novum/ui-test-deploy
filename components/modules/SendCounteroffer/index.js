@@ -29,6 +29,7 @@ const tabs = [
 
 const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const [disabled, setDisabled] = useState(false);
   const [countdownState, setCountdownState] = useState({
     responseCountdownOptions: [],
     responseCountdown: {},
@@ -60,10 +61,12 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
 
   const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
   const handleValidationError = () => setCurrentTab(tabs[0].value);
-  const scrollToBottom = () =>
-    setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
 
   const tabContent = useMemo(() => {
+    const scrollToBottom = () => {
+      setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
+    };
+
     switch (currentTab) {
       case 'comments':
         return <CommentsContent data={comments} />;
@@ -75,11 +78,14 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
           </>
         );
     }
-  }, [currentTab, voyageDetails, comments, counterofferData, scrollToBottom]);
+  }, [currentTab, voyageDetails, comments, counterofferData]);
 
   return (
     <div className="w-[610px]">
-      <ModalHeader goBack={() => (confirmCounteroffer ? setConfirmCounteroffer(false) : goBack('view_offer'))}>
+      <ModalHeader
+        disabled={disabled}
+        goBack={() => (confirmCounteroffer ? setConfirmCounteroffer(false) : goBack('view_offer'))}
+      >
         {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
       </ModalHeader>
 
@@ -114,11 +120,13 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
         </div>
       </div>
       <CounterofferForm
-        allowSubmit={confirmCounteroffer}
-        data={{ ...counterofferData, responseCountdown }}
+        disabled={disabled}
+        setDisabled={setDisabled}
         closeModal={closeModal}
+        allowSubmit={confirmCounteroffer}
         handleConfirmCounteroffer={handleConfirmCounteroffer}
         handleValidationError={handleValidationError}
+        data={{ ...counterofferData, responseCountdown }}
       >
         {!confirmCounteroffer ? (
           <>

@@ -381,9 +381,9 @@ export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).
 
 export const calculateTotal = (array, key) =>
   +array
-    .filter((item) => item)
-    .map(({ [key]: itemValue }) => itemValue)
-    .reduce((a, b) => +a + +b);
+    ?.filter((item) => item)
+    ?.map(({ [key]: itemValue }) => itemValue)
+    ?.reduce((a, b) => +a + +b);
 
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);
@@ -564,11 +564,13 @@ export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOf
   return isMinimalImprovementMet;
 };
 
-export const processTooltipData = ({ text, length }) => ({
-  disableTooltip: !(text?.length > length),
-  tooltipText: text,
-  trimmedText: text?.length > length ? `${text?.slice(0, length)}...` : text,
-});
+export const processTooltipData = ({ text, length }) => {
+  return {
+    disableTooltip: !(text?.length > length),
+    tooltipText: text,
+    trimmedText: text?.length >= length ? `${text?.slice(0, length / 2)}...` : text,
+  };
+};
 
 export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
 
@@ -716,4 +718,14 @@ export const sessionCookieData = (data) => {
   setCookie('session-refresh-token', data.refresh_token);
   setCookie('session-user-role', userRoleAdapter({ data: role }));
   setCookie('session-user-id', sub);
+};
+
+export const urlParser = (data) => {
+  const match = data?.match(/tankerId%3D([A-Za-z0-9-_]*)/);
+
+  if (match) {
+    return match[1];
+  }
+
+  return data;
 };

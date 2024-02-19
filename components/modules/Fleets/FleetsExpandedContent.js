@@ -5,7 +5,7 @@ import { fleetsPageHeader } from '@/utils/mock';
 
 const FleetsExpandedContent = ({ rowsData = [], urlAction, fleetId }) => {
   return (
-    <div className="mt-3 table-scroll">
+    <div className="mt-3">
       <Table
         headerData={fleetsPageHeader}
         urlAction={urlAction}

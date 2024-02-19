@@ -78,7 +78,7 @@ export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state)
   const newMessages = state?.data?.support?.[0]?.messageCount > 0 ? messagesCounter + 1 : messagesCounter;
 
   return {
-    newMessages,
+    messageCount: newMessages,
     role: state.role,
     chats: state.data,
     opened: state.opened,
@@ -182,5 +182,19 @@ export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state)
     totalPages: state.data?.totalPages,
     data: state.data?.vessels,
     refetch: state.refetch,
+    unassignedData: state.unassignedFleetData,
+  };
+});
+
+export const getOfferSelector = createDraftSafeSelector(offerSelector, (state) => {
+  return {
+    data: state.data,
+    loading: state.loading,
+  };
+});
+
+export const getSearchSelector = createDraftSafeSelector(searchSelector, (state) => {
+  return {
+    data: state.searchData,
   };
 });

@@ -208,8 +208,10 @@ const SearchFormFields = ({ productState, setProductState }) => {
         />
         {productState?.map((productId, index) => {
           const { density = {} } = getValues(`products[${productId}].product`) || {};
+          const minValue = parseFloat(density?.min?.toFixed(4)).toString();
+          const maxValue = parseFloat(density?.max?.toFixed(4)).toString();
 
-          const helperTextDensity = `${parseFloat(density?.min).toFixed(4)} - ${parseFloat(density?.max).toFixed(4)}`;
+          const helperTextDensity = `${minValue} - ${maxValue}`;
 
           return (
             <div key={`product_${productId}`}>

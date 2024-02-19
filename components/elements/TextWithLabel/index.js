@@ -20,7 +20,7 @@ const TextWithLabel = ({
   return (
     <div
       className={classnames(
-        'font-semibold text-left min-w-[90px] flex items-center lg:items-start lg:flex-col',
+        'font-semibold text-left min-w-[90px] flex items-center lg:items-start lg:flex-col gap-y-1',
         customStyles
       )}
     >
@@ -32,7 +32,7 @@ const TextWithLabel = ({
           </ManualTooltip>
         )}
       </Label>
-      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-3.5">
+      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-3.5 mx-2">
         {coverImage && coverImage}
         {countryCode && <Flag countryCode={countryCode} />}
         {text ? <p className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}

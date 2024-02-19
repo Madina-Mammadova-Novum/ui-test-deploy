@@ -49,7 +49,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
   }
 
   return (
-    <div className="w-[610px]">
+    <div className="w-[610px] mx-5">
       <Title level="2">Tanker Information</Title>
 
       <FieldsetContent label="About the Vessel Owner" className="mt-3">

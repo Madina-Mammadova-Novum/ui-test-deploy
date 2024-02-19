@@ -22,6 +22,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
       label: 'fleet name',
       text: title ?? '',
       disableTooltip: true,
+      textStyles: 'absolute lg:relative top-px',
     },
     {
       id: fleetId,
@@ -137,6 +138,7 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     {
       label: 'Fleet name',
       text: name ?? '',
+      textStyles: 'absolute top-px lg:top-5',
       disableTooltip: true,
     },
     {
@@ -346,5 +348,19 @@ export const complexFleetDataAdapter = ({ fleet, fleetDetails }) => {
       ...fleet,
       tankers: fleetDetails?.data,
     },
+  };
+};
+
+export const fleetNotificationAdapter = ({ data, id }) => {
+  if (!data) return null;
+
+  return {
+    ...data,
+    tankers: data?.tankers?.map((tanker) => {
+      return {
+        ...tanker,
+        notified: tanker.id === id || false,
+      };
+    }),
   };
 };

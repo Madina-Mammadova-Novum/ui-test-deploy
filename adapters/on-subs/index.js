@@ -59,6 +59,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
+      textStyles: 'absolute lg:relative top-px',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -104,6 +105,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      textStyles: 'absolute pl-5',
       countryCode: getLocode(loadPortLocode),
     },
     {
@@ -120,6 +122,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
+      textStyles: 'absolute',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,

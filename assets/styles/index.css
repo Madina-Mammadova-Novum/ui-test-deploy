@@ -209,11 +209,15 @@
   }
 
   .range_date .rdrMonths {
-    @apply w-[450px];
+    @apply w-[450px] border border-purple-light border-t-0 rounded-b-lg shadow-2xmd;
+  }
+
+  .range_date .rdrMonth {
+    @apply border border-purple-light border-b-0 first:border-l-0 last:border-r-0 border-t-0;
   }
 
   .range_date .rdrMonthAndYearWrapper {
-    @apply w-[450px];
+    @apply w-[450px] border border-purple-light pt-0 rounded-t-lg shadow-2xmd;
   }
 
   .range_date .rdrDateDisplayWrapper {
@@ -221,7 +225,7 @@
   }
 
   .range_date .rdrDateDisplayItemActive {
-    @apply border-none;
+    @apply border border-transparent border-solid;
   }
 
   .range_date .rdrDateDisplay {
@@ -229,7 +233,7 @@
   }
 
   .range_date input {
-    @apply h-9 text-xsm border-black border border-solid;
+    @apply h-9 text-xsm border-transparent border border-solid;
   }
 
   .range_date-hidden .rdrMonthAndYearWrapper,
@@ -432,16 +436,43 @@ table > tbody > tr td[name='GREY'] > div {
 .legal-styles .container {
   @apply max-w-[1258px] px-6 3md:px-14;
 }
+
 .table-scroll {
   overflow-x: auto;
   max-width: 150px;
   min-width: 100%;
-  margin-bottom: 8px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
+
 .table-scroll-wrapper {
   min-width: 100%;
   width: fit-content;
-  margin-bottom: 8px;
+}
+
+.table-container {
+  width: 100%;
+  position: relative;
+  border: 1px solid rgb(231 236 248);
+  border-radius: 10px;
+  overflow: overlay;
+}
+
+.table-cell {
+  border: 1px solid rgb(231 236 248);
+}
+
+.table-cell:first-child {
+  border-left: none;
+}
+
+.table-cell:nth-child(2) {
+  border-left: none;
+  border-right: none;
+}
+
+.table-cell:last-child {
+  border-right: none;
 }
 
 .table-scroll::-webkit-scrollbar-thumb {
@@ -453,6 +484,7 @@ table > tbody > tr td[name='GREY'] > div {
   max-width: 28px;
   height: 6px;
 }
+
 .table-table::-webkit-scrollbar-track {
   background-color: transparent;
 }
@@ -464,6 +496,14 @@ table > tbody > tr td[name='GREY'] > div {
   transform: translate(-50%, -50%);
 }
 
+tr > td:first-child > div {
+  width: 30px;
+}
+
+tr > th:first-child > p {
+  width: 60px;
+}
+
 th:first-child,
 th:nth-child(2) {
   background-color: #e7ecf8;
@@ -473,28 +513,52 @@ th:nth-child(2) {
 tr > th:first-child,
 tr > td:first-child {
   position: sticky;
-  left: -1px;
+  left: 0px;
+  z-index: 5;
 }
 
 tr > th:nth-child(2),
 tr > td:nth-child(2) {
   position: sticky;
-  left: 39px;
+  left: 62px;
+  z-index: 5;
+}
+
+tr > td:nth-child(2) {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+tr > td:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  background-color: rgb(231 236 248);
+}
+
+tr > td:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  background-color: rgb(231 236 248);
 }
 
 .disabled-table {
   background-color: #f8fafb;
-  z-index: 5;
 }
 
 .freezed-table {
-  background-color: #ffffff;
-  z-index: 5;
+  background-color: #f8fafb;
 }
 
 .tooltip {
   position: relative;
-  /* backdrop-filter backdrop-blur-sm */
 }
 
 .tooltip .tooltip-box {

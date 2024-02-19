@@ -7,8 +7,8 @@ import { ExpandableRowFooter } from '@/units';
 const FixtureExpandedFooter = ({ drafted = true }) => {
   return (
     <ExpandableRowFooter>
-      <Divider className="absolute left-0 w-full" />
-      <div className="flex gap-x-5 justify-between pt-2.5">
+      <Divider />
+      <div className="flex gap-x-5 justify-between py-2.5 px-5">
         <div className="w-full grow">
           {drafted && (
             <Button
@@ -18,7 +18,7 @@ const FixtureExpandedFooter = ({ drafted = true }) => {
                 variant: 'tertiary',
                 size: 'large',
               }}
-              customStyles="w-full whitespace-nowrap 3md:grow"
+              customStyles="w-full whitespace-nowrap 3md:grow relative top-1.5"
               disabled
             />
           )}

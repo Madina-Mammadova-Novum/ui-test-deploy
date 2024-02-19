@@ -15,13 +15,14 @@ import { getFleetsSelector } from '@/store/selectors';
 import { UnassignedFleet } from '@/units';
 
 const Fleets = ({ searchedParams }) => {
-  const { data, toggle, loading } = useSelector(getFleetsSelector);
+  const { data, unassignedData, toggle, loading } = useSelector(getFleetsSelector);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
 
     return (
       <ExpandableRow
+        className="px-5 pb-5"
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
@@ -62,12 +63,12 @@ const Fleets = ({ searchedParams }) => {
 
     if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
 
-    return <Title level="3">No positions</Title>;
-  }, [loading, data, printExpandableRow]);
+    return <Title level="3">There are no available positions</Title>;
+  }, [loading, data, searchedParams?.id]);
 
   return (
     <div className="flex flex-col gap-y-2.5 grow">
-      <UnassignedFleet toggle={toggle} />
+      <UnassignedFleet data={unassignedData} toggle={toggle} />
       {printContent}
     </div>
   );

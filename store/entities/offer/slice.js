@@ -15,6 +15,14 @@ const initialState = {
 const offerSlice = createSlice({
   name: 'offer',
   initialState,
+  reducers: {
+    setPaymentTerms: (state, { payload }) => {
+      state.data.paymentTerms = payload;
+    },
+    setDemurragePaymentTerms: (state, { payload }) => {
+      state.data.demurragePaymentTerms = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchOfferOptioins.pending, (state) => {
       state.loading = true;
@@ -29,5 +37,7 @@ const offerSlice = createSlice({
     });
   },
 });
+
+export const { setPaymentTerms, setDemurragePaymentTerms } = offerSlice.actions;
 
 export default offerSlice.reducer;

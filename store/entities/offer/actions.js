@@ -9,11 +9,9 @@ import { getVesselFreightFormats } from '@/services/vessel';
 import { convertDataToOptions } from '@/utils/helpers';
 
 export const fetchOfferOptioins = createAsyncThunk(OFFER.GET_OFFER_OPTIONS, async (tankerId) => {
-  const [paymentTermsData, demurragePaymentTermsData, freightFormatsData] = await Promise.all([
-    getPaymentTerms(),
-    getDemurragePaymentTerms(),
-    getVesselFreightFormats(tankerId),
-  ]);
+  const paymentTermsData = await getPaymentTerms();
+  const demurragePaymentTermsData = await getDemurragePaymentTerms();
+  const freightFormatsData = await getVesselFreightFormats(tankerId);
 
   return {
     data: {
