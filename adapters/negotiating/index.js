@@ -226,8 +226,8 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       id,
       value: status,
       type: TYPE.SEMIBOLD,
-      icon: <StatusIndicator status={status} />,
       freezed: frozenAt,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,
@@ -236,6 +236,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      freezed: frozenAt,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
