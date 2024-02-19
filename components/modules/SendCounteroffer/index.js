@@ -28,15 +28,17 @@ const tabs = [
 ];
 
 const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const scrollingContainerRef = useRef(null);
+
   const [disabled, setDisabled] = useState(false);
+  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
+
   const [countdownState, setCountdownState] = useState({
     responseCountdownOptions: [],
     responseCountdown: {},
     loading: false,
   });
-  const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
-  const scrollingContainerRef = useRef(null);
 
   const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
@@ -46,6 +48,19 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       ...prevState,
       [key]: value,
     }));
+
+  const handleBack = () => {
+    if (disabled) return;
+
+    if (confirmCounteroffer) {
+      setConfirmCounteroffer(false);
+    }
+
+    goBack('view_offer');
+  };
+
+  const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
+  const handleValidationError = () => setCurrentTab(tabs[0].value);
 
   useEffect(() => {
     (async () => {
@@ -58,9 +73,6 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
       handleCountdownStateChange('loading', false);
     })();
   }, []);
-
-  const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
-  const handleValidationError = () => setCurrentTab(tabs[0].value);
 
   const tabContent = useMemo(() => {
     const scrollToBottom = () => {
@@ -82,10 +94,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
 
   return (
     <div className="w-[610px]">
-      <ModalHeader
-        disabled={disabled}
-        goBack={() => (confirmCounteroffer ? setConfirmCounteroffer(false) : goBack('view_offer'))}
-      >
+      <ModalHeader disabled={disabled} goBack={handleBack}>
         {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
       </ModalHeader>
 

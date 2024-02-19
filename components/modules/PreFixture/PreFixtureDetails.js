@@ -1,7 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
+import { useRouter } from 'next/navigation';
 
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
@@ -16,13 +18,32 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { getOfferDetails } from '@/services/offer';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const PreFixtureDetails = ({ searchedParams }) => {
-  const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
+  const router = useRouter();
 
+  const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
   const { isOwner } = getRoleIdentity({ role });
+
+  const getInfo = async (id) => {
+    const { data, status, error } = await getOfferDetails(id, role);
+
+    if (status === 200 && data) {
+      router.replace(`/account/${data?.stage}/${searchedParams?.id}`);
+    }
+
+    if (error) {
+      errorToast(error.title, error.message);
+    }
+  };
+
+  useEffect(() => {
+    getInfo(searchedParams?.id);
+  }, [searchedParams?.id]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner

@@ -1,7 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
+import { useRouter } from 'next/navigation';
 
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
@@ -16,13 +18,33 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { getOfferDetails } from '@/services/offer';
 import { getOnSubsDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const OnSubsDetails = ({ searchedParams }) => {
+  const router = useRouter();
+
   const { offers, loading, role, toggle } = useSelector(getOnSubsDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
+
+  const getInfo = async (id) => {
+    const { data, status, error } = await getOfferDetails(id, role);
+
+    if (status === 200 && data) {
+      router.replace(`/account/${data?.stage}/${searchedParams?.id}`);
+    }
+
+    if (error) {
+      errorToast(error.title, error.message);
+    }
+  };
+
+  useEffect(() => {
+    getInfo(searchedParams?.id);
+  }, [searchedParams?.id]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner

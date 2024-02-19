@@ -1,7 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
+import { useRouter } from 'next/navigation';
 
 import NegotiatingExpandedContent from './NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from './NegotiatingExpandedFooter';
@@ -12,13 +14,32 @@ import { UrlPropTypes } from '@/lib/types';
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { NEGOTIATING_TABS } from '@/lib/constants';
+import { getOfferDetails } from '@/services/offer';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const NegotiatingDetails = ({ searchedParams }) => {
-  const { role, toggle, loading, offers } = useSelector(getNegotiatingDataSelector);
+  const router = useRouter();
 
+  const { role, toggle, loading, offers } = useSelector(getNegotiatingDataSelector);
   const { isOwner } = getRoleIdentity({ role });
+
+  const getInfo = async (id) => {
+    const { data, status, error } = await getOfferDetails(id, role);
+
+    if (status === 200 && data) {
+      router.replace(`/account/${data?.stage}/${searchedParams?.id}`);
+    }
+
+    if (error) {
+      errorToast(error.title, error.message);
+    }
+  };
+
+  useEffect(() => {
+    getInfo(searchedParams?.id);
+  }, [searchedParams?.id]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
