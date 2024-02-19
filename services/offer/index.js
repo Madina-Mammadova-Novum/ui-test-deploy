@@ -119,7 +119,9 @@ export async function getOfferDetails(offerId, role) {
   const { isOwner } = getRoleIdentity({ role });
 
   const path = isOwner ? `offer/details/${offerId}` : `offer/charterer/details/${offerId}`;
+
   const response = await getData(path);
+
   return {
     ...response,
   };
