@@ -15,6 +15,7 @@ import {
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
+import { fetchNotifications } from '@/store/entities/notifications/actions';
 
 export class SignalRController {
   constructor({ host, state }) {
@@ -70,8 +71,8 @@ export class NotificationController extends SignalRController {
   }
 
   recievedNotification({ response }) {
-    if (response && !this.notificationReceived) {
-      this.notificationReceived = true;
+    if (response) {
+      this.store.dispatch(fetchNotifications());
     }
   }
 
