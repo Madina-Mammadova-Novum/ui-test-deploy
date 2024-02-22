@@ -13,7 +13,6 @@ export default async function handler(req, res) {
     path: getRtURL(`notifications/search`),
     dataAdapter: notificationsDataAdapter,
     requestMethod: 'POST',
-    formData: true,
     options: {
       headers: Authorization(token),
     },

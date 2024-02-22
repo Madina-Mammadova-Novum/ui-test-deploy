@@ -10,6 +10,7 @@ export function generateMetadata() {
     },
   });
 }
+
 export default function Page() {
   return <PreFixture />;
 }
