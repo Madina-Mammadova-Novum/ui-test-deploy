@@ -23,6 +23,7 @@ import { steps } from '@/utils/mock';
 const AnonChat = ({ opened }) => {
   const dispatch = useDispatch();
   const containerRef = useRef();
+  const footerRef = useRef();
   const updatedStep = { ...steps[1], time: extractTimeFromDate(new Date()) };
 
   const [flow, setFlow] = useState([updatedStep]);
@@ -175,6 +176,10 @@ const AnonChat = ({ opened }) => {
     }
   }, [currentStep.key]);
 
+  useEffect(() => {
+    footerRef?.current?.scrollIntoView();
+  }, [flow, chat?.messages]);
+
   /* Render the message */
   const printMessage = ({ sender, id, message: text, time }) => {
     return <ChatMessage key={id} sender={sender} time={time} message={text} isBroker={ROLES.ANON !== sender} />;
@@ -324,6 +329,7 @@ const AnonChat = ({ opened }) => {
                 </Fragment>
               );
             })}
+            <div ref={footerRef} />
           </form>
         </FormProvider>
       </div>

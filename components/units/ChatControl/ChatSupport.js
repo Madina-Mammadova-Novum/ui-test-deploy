@@ -26,7 +26,7 @@ const ChatSupport = ({ title, description, loading }) => {
   return (
     <div aria-hidden onClick={handleOpenConversation}>
       <div className="text-black relative flex items-center gap-x-3 cursor-pointer">
-        {!!support?.length && <Badge counter={support[0]?.messageCount} className="right-3 top-1.5" />}
+        {!!support?.length && <Badge counter={support[0]?.messageCount} className="right-0 top-1.5" />}
         <div className="w-0.5 h-10 rounded-xl bg-blue" />
         <SupportSVG />
         <div className="flex flex-col  w-5/6">
