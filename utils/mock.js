@@ -1173,7 +1173,7 @@ export const steps = {
       isBroker: true,
       sender: 'support',
     },
-    userProps: {},
+    userProps: null,
   },
 };
 

@@ -1,6 +1,5 @@
 import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
-import { notificationsDataAdapter } from '@/adapters/notifications';
 import { userDetailsAdapter } from '@/adapters/user';
 
 export const authSelector = ({ auth }) => auth;
@@ -53,8 +52,8 @@ export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (
 export const getNotificationsDataSelector = createDraftSafeSelector(notificationsSelector, (state) => {
   return {
     ...state,
-    watchedData: notificationsDataAdapter({ data: state?.watchedData }),
-    unwatchedData: notificationsDataAdapter({ data: state?.unwatchedData }),
+    watchedData: state?.watchedData,
+    unwatchedData: state?.unwatchedData,
     readedCounter: state.readed,
     unreadCounter: state.unread,
     noReadedMessages: state.readed === 0,
@@ -100,6 +99,7 @@ export const getAnonChatSelector = createDraftSafeSelector(chatSelector, (state)
     chat: state.data.user,
     opened: state.opened,
     isActive: state.isActiveSession,
+    data: state.data.anonymous,
   };
 });
 

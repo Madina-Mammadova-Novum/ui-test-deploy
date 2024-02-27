@@ -9,34 +9,54 @@ import { PhoneInputPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
 
-const PhoneInput = ({ name, label }) => {
+const PhoneInput = ({ name, label, err, ...rest }) => {
+  if (name) {
+    return (
+      <Controller
+        name={name}
+        render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
+          const error = errors[name];
+          return (
+            <div className="w-full">
+              <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
+                {label}
+              </Label>
+              <Phone
+                {...field}
+                inputProps={ref}
+                id={name}
+                enableSearch
+                enableAreaCodes
+                disabled={isSubmitting}
+                inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
+                  error ? '!border-red' : '!border-gray-darker'
+                }`}
+                buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
+                  error ? '!border-red' : '!border-gray-darker'
+                }`}
+              />
+              {error && <InputErrorMessage message={error?.message} />}
+            </div>
+          );
+        }}
+      />
+    );
+  }
+
   return (
-    <Controller
-      name={name}
-      render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
-        const error = errors[name];
-        return (
-          <div className="w-full">
-            <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
-              {label}
-            </Label>
-            <Phone
-              {...field}
-              inputProps={ref}
-              id={name}
-              enableSearch
-              enableAreaCodes
-              disabled={isSubmitting}
-              inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
-                error ? '!border-red' : '!border-gray-darker'
-              }`}
-              buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${error ? '!border-red' : '!border-gray-darker'}`}
-            />
-            {error && <InputErrorMessage message={error?.message} />}
-          </div>
-        );
-      }}
-    />
+    <div className="w-full">
+      <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
+        {label}
+      </Label>
+      <Phone
+        {...rest}
+        enableSearch
+        enableAreaCodes
+        inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${err ? '!border-red' : '!border-gray-darker'}`}
+        buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${err ? '!border-red' : '!border-gray-darker'}`}
+      />
+      {err && <InputErrorMessage message={err?.message} />}
+    </div>
   );
 };
 
