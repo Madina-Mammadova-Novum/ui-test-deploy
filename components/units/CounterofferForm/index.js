@@ -9,12 +9,10 @@ import * as yup from 'yup';
 import { CounterofferFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
-import { COUNTEROFFER_REQUIREMENTS_ERROR } from '@/lib/constants';
 import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { getUserDataSelector } from '@/store/selectors';
-import { counterofferMinimumImprovementAchieved } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -54,11 +52,6 @@ const CounterofferForm = ({
 
   const handleSubmit = async (formData) => {
     setDisabled(true);
-
-    if (!counterofferMinimumImprovementAchieved({ initialOffer: data, counterOffer: formData })) {
-      setDisabled(false);
-      return errorToast('One or more validation occured: ', COUNTEROFFER_REQUIREMENTS_ERROR);
-    }
 
     if (!allowSubmit) {
       setDisabled(false);
