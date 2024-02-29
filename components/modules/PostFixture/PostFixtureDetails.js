@@ -1,38 +1,26 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { UrlPropTypes } from '@/lib/types';
 
 import { Loader, Title } from '@/elements';
 import { PostFixtureResultContent } from '@/modules';
-import { getOfferDetails } from '@/services/offer';
+import { setToggle } from '@/store/entities/post-fixture/slice';
 import { getPostFixtureDataSelector } from '@/store/selectors';
-import { errorToast } from '@/utils/hooks';
 
 const PostFixtureDetails = ({ searchedParams }) => {
-  const router = useRouter();
-
-  const { offers, loading, toggle, role } = useSelector(getPostFixtureDataSelector);
-
-  const getInfo = async (id) => {
-    const { data, status, error } = await getOfferDetails(id, role);
-
-    if (status === 200 && data) {
-      router.replace(`/account/${data?.stage}/${searchedParams?.id}`);
-    }
-
-    if (error) {
-      errorToast(error.title, error.message);
-    }
-  };
+  const dispatch = useDispatch();
+  const { offers, loading, toggle } = useSelector(getPostFixtureDataSelector);
 
   useEffect(() => {
-    getInfo(searchedParams?.id);
-  }, [searchedParams?.id]);
+    dispatch(setToggle(true));
+
+    return () => {
+      dispatch(setToggle(false));
+    };
+  }, []);
 
   const printContent = useMemo(() => {
     const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);

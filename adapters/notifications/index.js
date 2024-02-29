@@ -42,10 +42,10 @@ export const notificationParamsAdapter = ({ data }) => {
   if (!data) return null;
 
   return {
-    query: '',
-    origin: null,
-    isOpened: data?.watched ?? false,
     skip: data?.skip ?? 0,
     take: data?.take ?? 20,
+    query: data.searchValue,
+    isOpened: data?.watched ?? false,
+    origin: data.sortedValue === 'all' ? null : data.sortedValue,
   };
 };
