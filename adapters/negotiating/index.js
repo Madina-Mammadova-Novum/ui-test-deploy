@@ -97,15 +97,17 @@ export const incomingTabRowsDataAdapter = ({ data, parentId }) => {
 export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
-  const { cargo, status, laycanStart, laycanEnd, createdAt: dateReceived, expiresAt, frozenAt, id } = data;
+  const { cargo, status, laycanStart, laycanEnd, createdAt: dateReceived, expiresAt, frozenAt, notified, id } = data;
 
   return [
     {
       value: index,
       freezed: frozenAt,
+      notified,
     },
     {
       id,
+      notified,
       type: TYPE.SEMIBOLD_BLUE,
       actions: [
         {
@@ -120,16 +122,19 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     },
     {
       id,
+      notified,
       value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       freezed: frozenAt,
     },
     {
       id,
+      notified,
       value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       freezed: frozenAt,
     },
     {
       id,
+      notified,
       value: `${cargo?.loadTerminal?.port?.name}${
         cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
       }`,
@@ -140,6 +145,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       value: status,
+      notified,
       type: TYPE.SEMIBOLD,
       freezed: frozenAt,
       icon: <StatusIndicator status={status} />,
@@ -147,11 +153,13 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       freezed: frozenAt,
+      notified,
       value: dateReceived ? transformDate(dateReceived, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
       freezed: frozenAt,
+      notified,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -160,6 +168,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       freezed: frozenAt,
+      notified,
       actions: [
         {
           action: ACTIONS.VIEW_OFFER,
@@ -183,16 +192,18 @@ export const sentOffersTabRowsDataAdapter = ({ data }) => {
 export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, vessel, status, createdAt, expiresAt, frozenAt } = data;
+  const { id, vessel, status, createdAt, expiresAt, frozenAt, notified } = data;
   const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
 
   return [
     {
       value: index,
       freezed: frozenAt,
+      notified,
     },
     {
       id,
+      notified,
       type: TYPE.SEMIBOLD_BLUE,
       freezed: frozenAt,
       actions: [
@@ -207,6 +218,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
       countryCode: getLocode(portLocode),
       available: true,
@@ -219,24 +231,28 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       value: summerDwt && `${trimTonValue(summerDwt)} tons`,
       freezed: frozenAt,
     },
     {
       id,
       value: status,
+      notified,
       type: TYPE.SEMIBOLD,
       freezed: frozenAt,
       icon: <StatusIndicator status={status} />,
     },
     {
       id,
+      notified,
       value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       freezed: frozenAt,
     },
     {
       id,
       freezed: frozenAt,
+      notified,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -244,6 +260,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       freezed: frozenAt,
       actions: [
         {
@@ -290,16 +307,19 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     dateSent,
     expiresAt,
     frozenAt,
+    notified,
     id,
   } = data;
 
   return [
     {
       value: index,
+      notified,
     },
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
+      notified,
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
@@ -312,24 +332,29 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      notified,
       value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      notified,
       value: `${portName}${portLocode && `, ${portLocode}`}`,
       countryCode: getLocode(portLocode),
       available: true,
     },
     {
       id,
+      notified,
       value: dateSent ? transformDate(dateSent, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      notified,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -337,6 +362,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       actions: [
         {
           action: ACTIONS.VIEW_COUNTEROFFER,
@@ -446,16 +472,18 @@ export const ownerFailedTabRowsDataAdapter = ({ data }) => {
 export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { cargo, laycanStart, laycanEnd, failedAt, reason, id } = data;
+  const { cargo, laycanStart, laycanEnd, failedAt, notified, reason, id } = data;
 
   return [
     {
       value: index,
+      notified,
     },
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
       freezed: false,
+      notified,
       actions: [
         {
           action: ACTIONS.CHARTERER_INFORMATION,
@@ -469,16 +497,19 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       freezed: false,
+      notified,
       value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
       freezed: false,
+      notified,
       value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
       freezed: false,
+      notified,
       value: `${cargo?.loadTerminal?.port?.name}${
         cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
       }`,
@@ -488,17 +519,20 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       freezed: false,
+      notified,
       value: failedAt ? transformDate(failedAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
       freezed: false,
       value: reason,
+      notified,
       type: TYPE.SEMIBOLD,
     },
     {
       id,
       freezed: false,
+      notified,
       actions: [
         {
           action: ACTIONS.VIEW_FAILED_OFFER,
@@ -521,16 +555,18 @@ export const chartererFailedTabRowsDataAdapter = ({ data }) => {
 export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { vessel, failedAt, reason, id } = data;
+  const { vessel, failedAt, reason, id, notified } = data;
   const { details, openDate } = vessel || {};
 
   return [
     {
       value: index,
+      notified,
     },
     {
       id,
       type: TYPE.SEMIBOLD_BLUE,
+      notified,
       actions: [
         {
           action: ACTIONS.TANKER_INFORMATION,
@@ -543,29 +579,35 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       value: details?.port?.name && `${details?.port?.name}${details?.port?.locode && `, ${details?.port?.locode}`}`,
       countryCode: getLocode(details?.port?.locode),
       available: true,
     },
     {
       id,
+      notified,
       value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      notified,
       value: details?.summerDwt && `${trimTonValue(details?.summerDwt)} tons`,
     },
     {
       id,
+      notified,
       value: failedAt ? transformDate(failedAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
+      notified,
       value: reason,
       type: TYPE.SEMIBOLD,
     },
     {
       id,
+      notified,
       actions: [
         {
           action: ACTIONS.VIEW_FAILED_OFFER,
@@ -651,4 +693,29 @@ export const prefilledSearchDataAdapter = ({ data }) => {
       },
     })),
   };
+};
+
+export const notifiedNegotiatingDataAdapter = ({ data, fleetId, tab }) => {
+  const dataByTab = {
+    counteroffers: data.map((el) => {
+      return {
+        ...el,
+        notified: el.id === fleetId || false,
+      };
+    }),
+    failed: data.map((el) => {
+      return {
+        ...el,
+        notified: el.id === fleetId || false,
+      };
+    }),
+    incoming: data.map((el) => {
+      return {
+        ...el,
+        notified: el.id === fleetId || false,
+      };
+    }),
+  };
+
+  return dataByTab[tab];
 };

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { debounce } from 'lodash';
+
 import { NotificationControlPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
@@ -16,13 +18,14 @@ import { isReadValue } from '@/utils/helpers';
 
 const NotificationControl = () => {
   const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
   const [disabled, setIsDisabled] = useState(false);
 
   const {
     loading,
     noUnreadedMessages,
     noReadedMessages,
-    filterParams: { sortedValue, searchValue, activeTab },
+    filterParams: { sortedValue, activeTab },
   } = useSelector(getNotificationsDataSelector);
 
   const isWatchedTab = isReadValue(activeTab);
@@ -37,7 +40,23 @@ const NotificationControl = () => {
     }
   }, [isWatchedTab, noReadedMessages, noUnreadedMessages, loading]);
 
-  const handleSearch = ({ target: { value } }) => dispatch(setFilterParams({ searchValue: value, skip: 0, take: 500 }));
+  useEffect(() => {
+    const debounceDispatch = debounce((value) => {
+      dispatch(setFilterParams({ searchValue: value?.toLowerCase(), skip: 0, take: 500 }));
+    }, 1000);
+
+    if (search) {
+      debounceDispatch(search);
+    } else {
+      dispatch(setFilterParams({ searchValue: '', skip: 0, take: 50 }));
+    }
+
+    return () => {
+      debounceDispatch.cancel();
+    };
+  }, [search]);
+
+  const handleSearch = ({ target: { value } }) => setSearch(value);
 
   const handleFilter = (options) => {
     dispatch(setFilterParams({ sortedValue: options.map(({ value }) => value), skip: 0, take: 500 }));
@@ -52,7 +71,7 @@ const NotificationControl = () => {
 
   return (
     <div className="flex flex-col gap-y-5 h-[25vh]">
-      <NotificationSearch value={searchValue} onChange={handleSearch} containerClass="px-8 pt-5" disabled={disabled} />
+      <NotificationSearch value={search} onChange={handleSearch} containerClass="px-8 pt-5" disabled={disabled} />
       <NotificationTabs
         activeTab={activeTab}
         onClick={handleReadAll}

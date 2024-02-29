@@ -1,9 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
@@ -18,33 +16,23 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { getOfferDetails } from '@/services/offer';
+import { setToggle } from '@/store/entities/pre-fixture/slice';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
-import { errorToast } from '@/utils/hooks';
 
 const PreFixtureDetails = ({ searchedParams }) => {
-  const router = useRouter();
+  const dispatch = useDispatch();
 
   const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
   const { isOwner } = getRoleIdentity({ role });
 
-  const getInfo = async (id) => {
-    const { data, status, error } = await getOfferDetails(id, role);
-
-    if (status === 200 && data) {
-      router.replace(`/account/${data?.stage}/${searchedParams?.id}`);
-    }
-
-    if (error) {
-      errorToast(error.title, error.message);
-    }
-  };
-
   useEffect(() => {
-    getInfo(searchedParams?.id);
-  }, [searchedParams?.id]);
+    dispatch(setToggle(true));
 
+    return () => {
+      dispatch(setToggle(false));
+    };
+  }, []);
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
@@ -56,7 +44,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
     return (
       <ExpandableRow
         key={rowData.id}
-        expand={toggle || searchedParams?.status}
+        expand={toggle}
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
         footer={
           <PreFixtureExpandedFooter
@@ -83,7 +71,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, printExpandableRow]);
+  }, [loading, toggle, offers, searchedParams?.id]);
 
   return printContent;
 };
