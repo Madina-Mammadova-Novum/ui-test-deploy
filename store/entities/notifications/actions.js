@@ -9,7 +9,7 @@ import { getNotifications, setReadAllNotifications } from '@/services/notificati
 export const fetchNotifications = createAsyncThunk(
   NOTIFICATIONS.GET_NOTIFICATIONS,
   async (data, { getState, dispatch }) => {
-    const { data: result } = await getNotifications({ data });
+    const { data: result, readCount, unreadCount } = await getNotifications({ data });
 
     const {
       notifications: {
@@ -20,25 +20,25 @@ export const fetchNotifications = createAsyncThunk(
     } = getState();
 
     if (watched && watchedData.length > 0) {
-      dispatch(updateWatchedData(result?.data));
+      dispatch(updateWatchedData(result));
       if (sortedValue || searchValue) {
-        dispatch(setWatchedData(result?.data));
+        dispatch(setWatchedData(result));
       }
     } else {
-      dispatch(setWatchedData(result?.data));
+      dispatch(setWatchedData(result));
     }
 
     if (!watched && unwatchedData.length > 0) {
-      dispatch(updateUnwatchedData(result?.data));
+      dispatch(updateUnwatchedData(result));
 
       if (sortedValue || searchValue) {
-        dispatch(setUnwatchedData(result?.data));
+        dispatch(setUnwatchedData(result));
       }
     } else {
-      dispatch(setUnwatchedData(result?.data));
+      dispatch(setUnwatchedData(result));
     }
 
-    return { readed: result?.readCount, unread: result?.unreadCount };
+    return { readed: readCount, unread: unreadCount };
   }
 );
 

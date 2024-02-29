@@ -32,6 +32,14 @@ const initialState = {
       updating: false,
       isLast: false,
     },
+    anonymous: {
+      init: false,
+      role: null,
+      company: null,
+      phone: null,
+      email: null,
+      location: null,
+    },
   },
   filterParams: {
     searchValue: '',
@@ -64,6 +72,18 @@ const chatSlice = createSlice({
     },
     setUpdate: (state, action) => {
       state.updating = action.payload;
+    },
+    setBotMessage: (state, { payload }) => {
+      const { key, message, cityId } = payload;
+
+      if (key === 'location') {
+        state.data.anonymous.location = {
+          message,
+          cityId,
+        };
+      } else {
+        state.data.anonymous[key] = { message };
+      }
     },
     setUserMessages: (state, { payload }) => {
       state.data.user.messages = sortChatMessagesByDay(payload);
@@ -268,6 +288,7 @@ export const {
   updateUserConversation,
   onlineStatus,
   offlineStatus,
+  setBotMessage,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

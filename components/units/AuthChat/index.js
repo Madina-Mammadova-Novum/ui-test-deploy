@@ -33,12 +33,12 @@ const AuthChat = ({ opened, token }) => {
   const dispatch = useDispatch();
 
   const {
-    isActive,
     tab,
     limit,
     search,
     loading,
     updating,
+    isActive,
     totalActive,
     totalArchived,
     chats: { active, archived, searched, user },

@@ -1,5 +1,5 @@
 import { notificationsDataAdapter } from '@/adapters/notifications';
-import { Authorization } from '@/lib/constants';
+import { Authorization, ContentTypeJson } from '@/lib/constants';
 import { getRtURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
 import { getCookieFromServer } from '@/utils/helpers';
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     dataAdapter: notificationsDataAdapter,
     requestMethod: 'POST',
     options: {
-      headers: Authorization(token),
+      headers: { ...Authorization(token), ...ContentTypeJson() },
     },
   });
 }
