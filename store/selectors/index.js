@@ -12,10 +12,26 @@ export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating,
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer }) => offer;
-export const preFixtureSelector = ({ preFixture, auth }) => ({ ...preFixture, role: auth?.session?.role });
-export const onSubsSelector = ({ onSubs, auth }) => ({ ...onSubs, role: auth?.session?.role });
-export const fixtureSelector = ({ fixture, auth }) => ({ ...fixture, role: auth?.session?.role });
-export const postFixtureSelector = ({ postFixture, auth }) => ({ ...postFixture, role: auth?.session?.role });
+export const preFixtureSelector = ({ preFixture, notifications, auth }) => ({
+  ...preFixture,
+  role: auth?.session?.role,
+  deal: notifications?.dealData,
+});
+export const onSubsSelector = ({ onSubs, notifications, auth }) => ({
+  ...onSubs,
+  role: auth?.session?.role,
+  deal: notifications.dealData,
+});
+export const fixtureSelector = ({ fixture, notifications, auth }) => ({
+  ...fixture,
+  role: auth?.session?.role,
+  deal: notifications?.dealData,
+});
+export const postFixtureSelector = ({ postFixture, notifications, auth }) => ({
+  ...postFixture,
+  role: auth?.session?.role,
+  deal: notifications?.dealData,
+});
 export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
 
 export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
@@ -58,6 +74,7 @@ export const getNotificationsDataSelector = createDraftSafeSelector(notification
     unreadCounter: state.unread,
     noReadedMessages: state.readed === 0,
     noUnreadedMessages: state.unread === 0,
+    deal: state.dealData,
   };
 });
 
@@ -110,6 +127,7 @@ export const getFixtureSelector = createDraftSafeSelector(fixtureSelector, (stat
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
     role: state.role,
+    deal: state.deal,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };
 });
@@ -123,6 +141,7 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     filters: state.data?.filters,
     sorting: state.data?.sorting,
     role: state.role,
+    deal: state.deal,
     perPage: state?.data?.perPage,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };
@@ -135,6 +154,7 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
     role: state.role,
+    deal: state.deal,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
   };
 });
@@ -171,6 +191,7 @@ export const getOnSubsDataSelector = createDraftSafeSelector(onSubsSelector, (st
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })) || [],
     offerById: state.data.offerById,
     role: state.role,
+    deal: state.deal,
   };
 });
 

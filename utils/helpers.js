@@ -771,7 +771,7 @@ export const notificationPathGenerator = ({ data, role }) => {
     Pre_Fixture: `${initialPath}/${data.searchedCargo.id}`,
     On_Subs: `${initialPath}/${data.searchedCargo.id}`,
     Fixture: `${initialPath}/${data.searchedCargo.id}`,
-    Post_Fixture: `${initialPath}/${data.searchedCargo.id}`,
+    Post_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
   };
 
   return routeByStage[data.stage];

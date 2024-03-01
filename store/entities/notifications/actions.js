@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line import/no-cycle
-import { setUnwatchedData, setWatchedData, updateUnwatchedData, updateWatchedData } from './slice';
+import { resetParams, setUnwatchedData, setWatchedData, updateUnwatchedData, updateWatchedData } from './slice';
 import { NOTIFICATIONS } from './types';
 
-import { getNotifications, setReadAllNotifications } from '@/services/notifications';
+import { getNotifications, readNotificationById, setReadAllNotifications } from '@/services/notifications';
+import { getOfferDetails } from '@/services/offer';
 
 export const fetchNotifications = createAsyncThunk(
   NOTIFICATIONS.GET_NOTIFICATIONS,
@@ -42,8 +43,34 @@ export const fetchNotifications = createAsyncThunk(
   }
 );
 
+export const getCurrnetDealStage = createAsyncThunk(
+  NOTIFICATIONS.GET_CURRENT_DEAL,
+  async ({ id, role }, { rejectWithValue }) => {
+    const { data, error } = await getOfferDetails(id, role);
+
+    if (error) {
+      rejectWithValue(error);
+    }
+
+    return data;
+  }
+);
+
 export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTIFICATIONS, async (_, { dispatch }) => {
   await setReadAllNotifications();
 
   dispatch(fetchNotifications());
 });
+
+export const readNotification = createAsyncThunk(
+  NOTIFICATIONS.READ_NOTIFICATION,
+  async ({ id }, { dispatch, rejectWithValue }) => {
+    const { error } = await readNotificationById({ id });
+
+    if (error) {
+      rejectWithValue(error);
+    } else {
+      dispatch(resetParams());
+    }
+  }
+);

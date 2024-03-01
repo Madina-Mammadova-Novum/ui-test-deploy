@@ -3,16 +3,18 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import PostFixtureResultContent from './PostFixtureResultContent';
+
 import { UrlPropTypes } from '@/lib/types';
 
-import { Loader, Title } from '@/elements';
-import { PostFixtureResultContent } from '@/modules';
+import { Loader } from '@/elements';
 import { setToggle } from '@/store/entities/post-fixture/slice';
 import { getPostFixtureDataSelector } from '@/store/selectors';
+import { FilterByForm, PostFixtureFilter } from '@/units';
 
 const PostFixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
-  const { offers, loading, toggle } = useSelector(getPostFixtureDataSelector);
+  const { loading, toggle, filters, deal } = useSelector(getPostFixtureDataSelector);
 
   useEffect(() => {
     dispatch(setToggle(true));
@@ -23,23 +25,23 @@ const PostFixtureDetails = ({ searchedParams }) => {
   }, []);
 
   const printContent = useMemo(() => {
-    const searchedResult = offers.find((offer) => offer.cargoeId === searchedParams.id);
-
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (searchedResult)
-      return (
-        <PostFixtureResultContent
-          data={[searchedResult]}
-          tab={searchedParams?.status}
-          isOpened={Boolean(searchedParams?.status)}
-          toggle={toggle}
-        />
-      );
 
-    return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, toggle]);
+    return (
+      <div className="flex flex-col gap-y-5">
+        <PostFixtureResultContent data={[deal]} toggle={toggle} />
+      </div>
+    );
+  }, [loading, searchedParams.id, toggle]);
 
-  return printContent;
+  return (
+    <>
+      <FilterByForm>
+        <PostFixtureFilter {...filters} />
+      </FilterByForm>
+      {printContent}
+    </>
+  );
 };
 
 PostFixtureDetails.propTypes = UrlPropTypes;

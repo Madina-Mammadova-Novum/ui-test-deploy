@@ -34,8 +34,10 @@ export default function PostFixtureLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   useEffect(() => {
-    if (paginationParams.currentPage > 1) paginationParams.handlePageChange({ selected: 0 });
-  }, [JSON.stringify({ ...filters, ...sorting })]);
+    if (paginationParams.currentPage > 1) {
+      paginationParams.handlePageChange({ selected: 0 });
+    }
+  }, [filters, sorting]);
 
   const layoutConfig = {
     withActions: false,

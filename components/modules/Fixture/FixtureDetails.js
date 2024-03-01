@@ -20,7 +20,7 @@ import { getFixtureSelector } from '@/store/selectors';
 
 const FixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
-  const { offers, toggle, loading } = useSelector(getFixtureSelector);
+  const { deal, toggle, loading } = useSelector(getFixtureSelector);
 
   useEffect(() => {
     dispatch(setToggle(true));
@@ -50,13 +50,9 @@ const FixtureDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
-    const searchedResult = offers.find((offer) => offer.searchedCargo?.id === searchedParams.id);
-
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (searchedResult) return [searchedResult].map(printExpandableRow);
-
-    return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, printExpandableRow]);
+    return [deal].map(printExpandableRow) || <Title>Outdated notification</Title>;
+  }, [loading, toggle, searchedParams.id]);
 
   return printContent;
 };
