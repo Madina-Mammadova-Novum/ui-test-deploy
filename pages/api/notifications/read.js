@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     req,
     res,
     path: getRtURL(`notifications/open/${req.body}`),
-    dataAdapter: () => ({}),
+    dataAdapter: (data) => data,
     requestMethod: 'GET',
     options: { headers: Authorization(token) },
   });

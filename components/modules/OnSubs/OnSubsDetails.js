@@ -22,7 +22,7 @@ import { getRoleIdentity } from '@/utils/helpers';
 
 const OnSubsDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
-  const { offers, loading, role, toggle } = useSelector(getOnSubsDataSelector);
+  const { loading, role, toggle, deal } = useSelector(getOnSubsDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
 
@@ -69,13 +69,10 @@ const OnSubsDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
-    const searchedResult = offers?.find((offer) => offer?.cargoeId === searchedParams.id);
-
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (searchedResult) return [searchedResult]?.map(printExpandableRow);
 
-    return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, offers, toggle, isOwner, searchedParams?.id]);
+    return [deal].map(printExpandableRow) || <Title>Outdated notification</Title>;
+  }, [loading, toggle, searchedParams.id]);
 
   return printContent;
 };

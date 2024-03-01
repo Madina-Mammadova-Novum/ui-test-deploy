@@ -3,8 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { usePathname } from 'next/navigation';
-
 import ModalWrapper from '../ModalWrapper';
 
 import { NotificationPropTypes } from '@/lib/types';
@@ -21,7 +19,6 @@ import { getCookieFromBrowser } from '@/utils/helpers';
 const Notification = () => {
   const ref = useRef(null);
   const dispatch = useDispatch();
-  const pathname = usePathname();
 
   const token = getCookieFromBrowser('session-access-token');
 
@@ -32,7 +29,6 @@ const Notification = () => {
   };
 
   const handleClose = () => {
-    dispatch(setIsOpened(false));
     dispatch(resetNotifications());
     dispatch(resetParams());
   };
@@ -62,10 +58,6 @@ const Notification = () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, []);
-
-  useEffect(() => {
-    handleClose();
-  }, [pathname]);
 
   useEffect(() => {
     if (token) {

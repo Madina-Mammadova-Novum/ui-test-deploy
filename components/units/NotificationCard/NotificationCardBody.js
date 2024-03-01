@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import parse from 'html-react-parser';
 import { useRouter } from 'next/navigation';
@@ -10,46 +10,46 @@ import { NotificationCardBodyPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
-import { getOfferDetails } from '@/services/offer';
-import { setIsOpened } from '@/store/entities/notifications/slice';
+import { getCurrnetDealStage, readNotification } from '@/store/entities/notifications/actions';
+import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl, notificationPathGenerator } from '@/utils/helpers';
 
 const NotificationCardBody = ({ message, url }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const role = getCookieFromBrowser('session-user-role');
 
-  const [deal, setDeal] = useState(null);
   const [prevId, setPrevId] = useState(null);
+
+  const role = getCookieFromBrowser('session-user-role');
+  const { deal } = useSelector(getNotificationsDataSelector);
+
+  const isDealPath = useMemo(() => {
+    return url?.startsWith('/deals');
+  }, [url]);
 
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
 
-  const getDealStage = useCallback(async () => {
-    if (url?.startsWith('/deals')) {
+  const getDealStage = useCallback(() => {
+    if (isDealPath) {
       const id = getIdFromUrl(url);
       if (id !== prevId) {
-        const { data, error } = await getOfferDetails(id, role);
-
-        if (!error) setDeal(data);
-
+        dispatch(getCurrnetDealStage({ id, role }));
         setPrevId(id);
       }
     }
-  }, [url, role, getOfferDetails, prevId]);
+  }, [url, role, prevId, isDealPath]);
 
-  const handleCloseTab = () => dispatch(setIsOpened(false));
+  const handleRedirect = useCallback(async () => {
+    const id = getIdFromUrl(url);
+    dispatch(readNotification({ id }));
 
-  const handleRedirect = useCallback(() => {
-    if (url?.startsWith('/deals')) {
+    if (isDealPath) {
       const route = notificationPathGenerator({ data: deal, role });
-      if (route) {
-        router.push(route);
-        handleCloseTab();
-      }
+      router.push(route);
     } else {
       router.push(url);
     }
-  }, [notificationPathGenerator, url, deal]);
+  }, [notificationPathGenerator, url, role, deal, isDealPath]);
 
   return (
     <div className="flex flex-col items-start">

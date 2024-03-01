@@ -23,7 +23,7 @@ import { getRoleIdentity } from '@/utils/helpers';
 const PreFixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
 
-  const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
+  const { loading, role, toggle, deal } = useSelector(getPreFixtureDataSelector);
   const { isOwner } = getRoleIdentity({ role });
 
   useEffect(() => {
@@ -33,6 +33,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
       dispatch(setToggle(false));
     };
   }, []);
+
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
@@ -65,13 +66,9 @@ const PreFixtureDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
-    const searchedResult = offers.find((offer) => offer?.cargoeId === searchedParams?.id);
-
     if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
-    if (searchedResult) return [searchedResult].map(printExpandableRow);
-
-    return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, toggle, offers, searchedParams?.id]);
+    return [deal].map(printExpandableRow) || <Title>Outdated notification</Title>;
+  }, [loading, toggle, searchedParams.id]);
 
   return printContent;
 };
