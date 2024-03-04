@@ -43,7 +43,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '2fr 1fr 1fr 1fr 2fr' : '1fr 1fr 2fr 2fr 1fr 1fr 1fr'}
+            gridStyles={isOwner ? '1.5fr 1fr 1fr 1fr 2fr' : '1fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr'}
           />
         }
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
@@ -65,7 +65,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;
-  }, [loading, toggle, offers, searchedParams, printExpandableRow]);
+  }, [loading, toggle, offers, searchedParams.id, printExpandableRow]);
 
   return printContent;
 };

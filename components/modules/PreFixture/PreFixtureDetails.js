@@ -40,13 +40,17 @@ const PreFixtureDetails = ({ searchedParams }) => {
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
     const setAccepted = (isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed';
-    const setStyles = isOwner ? '1fr 1fr 1.5fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr';
 
     return (
       <ExpandableRow
         key={rowData.id}
         expand={toggle}
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1fr 2fr 1fr 2fr 1fr 1fr 1fr'}
+          />
+        }
         footer={
           <PreFixtureExpandedFooter
             underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
