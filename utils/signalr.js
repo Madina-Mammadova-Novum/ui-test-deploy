@@ -67,13 +67,11 @@ export class NotificationController extends SignalRController {
 
   async init({ token }) {
     await this.setupConnection({ path: this.host, token });
-    this.connection.on('ReceiveNotification', (response) => this.recievedNotification({ response }));
+    this.connection.on('ReceiveNotification', () => this.receiveTrigger());
   }
 
-  recievedNotification({ response }) {
-    if (response) {
-      this.store.dispatch(fetchNotifications());
-    }
+  receiveTrigger() {
+    this.store.dispatch(fetchNotifications({ skip: 0, take: 50, query: '', isOpened: false, origin: null }));
   }
 
   async stop() {

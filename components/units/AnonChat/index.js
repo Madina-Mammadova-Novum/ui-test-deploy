@@ -16,7 +16,13 @@ import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
-import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
+import {
+  checkEmailPrefix,
+  convertDataToOptions,
+  countriesOptions,
+  extractTimeFromDate,
+  setCookie,
+} from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
 const AnonChat = ({ opened }) => {
@@ -96,18 +102,13 @@ const AnonChat = ({ opened }) => {
     }
   };
 
-  const validateEmail = (email) => {
-    const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    return regex.test(email);
-  };
-
   const handleCityChange = (option) => setCity(option);
 
   const handleMessage = ({ target: { value } }) => {
     setMessage(value);
 
-    if (value?.includes('@') && !validateEmail(value)) {
-      setErrorMessage('Invalid email format.');
+    if (value?.includes('@') && !checkEmailPrefix(value)) {
+      setErrorMessage('Non-public emails only.');
     } else {
       setErrorMessage('');
     }
