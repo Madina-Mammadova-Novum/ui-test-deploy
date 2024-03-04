@@ -40,12 +40,16 @@ const OnSubsDetails = ({ searchedParams }) => {
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
     const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
-    const setStyles = isOwner ? '1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1.5fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr 1fr';
 
     return (
       <ExpandableRow
         key={rowData?.id}
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles={setStyles} />}
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr'}
+          />
+        }
         expand={toggle}
         className="px-5"
         footer={

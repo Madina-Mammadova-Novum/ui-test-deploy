@@ -22,7 +22,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
       label: 'fleet name',
       text: title ?? '',
       disableTooltip: true,
-      textStyles: 'absolute lg:relative top-px',
+      textStyles: 'absolute lg:relative top-px overflow-visible',
     },
     {
       id: fleetId,

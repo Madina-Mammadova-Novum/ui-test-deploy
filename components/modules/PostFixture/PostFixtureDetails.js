@@ -10,11 +10,10 @@ import { UrlPropTypes } from '@/lib/types';
 import { Loader } from '@/elements';
 import { setToggle } from '@/store/entities/post-fixture/slice';
 import { getPostFixtureDataSelector } from '@/store/selectors';
-import { FilterByForm, PostFixtureFilter } from '@/units';
 
 const PostFixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
-  const { loading, toggle, filters, deal } = useSelector(getPostFixtureDataSelector);
+  const { loading, toggle, deal } = useSelector(getPostFixtureDataSelector);
 
   useEffect(() => {
     dispatch(setToggle(true));
@@ -34,14 +33,7 @@ const PostFixtureDetails = ({ searchedParams }) => {
     );
   }, [loading, searchedParams.id, toggle]);
 
-  return (
-    <>
-      <FilterByForm>
-        <PostFixtureFilter {...filters} />
-      </FilterByForm>
-      {printContent}
-    </>
-  );
+  return printContent;
 };
 
 PostFixtureDetails.propTypes = UrlPropTypes;
