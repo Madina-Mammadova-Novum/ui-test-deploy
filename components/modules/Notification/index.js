@@ -67,7 +67,7 @@ const Notification = () => {
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));
-  }, [filterParams, isOpened]);
+  }, [filterParams]);
 
   return (
     <>

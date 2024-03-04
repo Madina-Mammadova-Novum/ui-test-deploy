@@ -323,6 +323,7 @@ export const checkPhoneValue = (value) => {
   if (!value) {
     return true;
   }
+
   const regex = REGEX.PHONE;
   return regex.test(value);
 };
