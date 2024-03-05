@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useParams } from 'next/navigation';
+
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
@@ -12,6 +14,7 @@ import { useFilters } from '@/utils/hooks';
 
 export default function PostFixtureLayout({ children }) {
   const dispatch = useDispatch();
+  const searchedParams = useParams();
 
   const { offers, totalPages, filters, sorting } = useSelector(getPostFixtureDataSelector);
   const { page, pageSize } = PAGE_STATE;
@@ -42,6 +45,7 @@ export default function PostFixtureLayout({ children }) {
     data: { label: 'Offer stage #5', title: 'Post-fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    isDetailsPage: Boolean(searchedParams.id),
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

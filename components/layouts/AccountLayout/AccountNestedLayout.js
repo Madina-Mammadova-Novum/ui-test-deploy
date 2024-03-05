@@ -2,11 +2,12 @@
 
 import { useMemo } from 'react';
 
-import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import { AccountNestedLayoutPropTypes } from '@/lib/types';
 
-import { Dropdown, Label, Title } from '@/elements';
+import DoubleArrowSVG from '@/assets/images/angleDouble.svg';
+import { Dropdown, Label, NextLink, Title } from '@/elements';
 import { AccountWrapper } from '@/modules';
 import FleetsActions from '@/modules/FleetsActions';
 import { ComplexPagination, ToggleRows } from '@/units';
@@ -14,8 +15,10 @@ import { ComplexPagination, ToggleRows } from '@/units';
 const AccountNestedLayout = ({ children, config }) => {
   const { data, pagination, sorting, onToggle, withActions = false } = config;
 
-  const searchedParams = usePathname();
-  const existedId = searchedParams?.split('/')[3];
+  const searchedParams = useParams();
+
+  const nestedRoute = new RegExp(`/${searchedParams.id}`, 'g');
+  const parentRoute = window.location.pathname.replace(nestedRoute, '');
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
@@ -38,6 +41,7 @@ const AccountNestedLayout = ({ children, config }) => {
     if (withActions) {
       return (
         <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
+          {searchedParams?.id && <NextLink href={parentRoute}>Back to all</NextLink>}
           <ToggleRows onToggleClick={onToggle} />
           <FleetsActions />
         </div>
@@ -45,7 +49,7 @@ const AccountNestedLayout = ({ children, config }) => {
     }
 
     return <ToggleRows onToggleClick={onToggle} />;
-  }, [onToggle, sorting, withActions, dropdownStyles]);
+  }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute]);
 
   return (
     <div className="px-5">
@@ -54,11 +58,22 @@ const AccountNestedLayout = ({ children, config }) => {
           <div className="flex flex-col">
             <Label className="text-xs-sm">{data.label}</Label>
             <Title level="1">{data.title}</Title>
+            {searchedParams?.id && (
+              <div className="flex items-center group">
+                <DoubleArrowSVG className="fill-blue rotate-90 group-hover:fill-blue-darker transition-all duration-500" />
+                <NextLink
+                  className="text-blue group-hover:text-blue-darker text-xsm transition-all duration-500"
+                  href={parentRoute}
+                >
+                  Back to all deals
+                </NextLink>
+              </div>
+            )}
           </div>
           {printActions}
         </div>
         <AccountWrapper>{children}</AccountWrapper>
-        {!existedId && (
+        {!searchedParams?.id && (
           <ComplexPagination
             label="offers"
             perPage={pagination.perPage}

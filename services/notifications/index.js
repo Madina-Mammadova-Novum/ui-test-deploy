@@ -18,3 +18,11 @@ export const setReadAllNotifications = async () => {
     ...response,
   };
 };
+
+export const readNotificationById = async ({ id }) => {
+  const response = await postData(`notifications/read?id=${id}`, { body: id });
+
+  return {
+    ...response,
+  };
+};

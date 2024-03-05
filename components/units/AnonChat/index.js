@@ -16,7 +16,13 @@ import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
-import { convertDataToOptions, countriesOptions, extractTimeFromDate, setCookie } from '@/utils/helpers';
+import {
+  checkEmailPrefix,
+  convertDataToOptions,
+  countriesOptions,
+  extractTimeFromDate,
+  setCookie,
+} from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
 const AnonChat = ({ opened }) => {
@@ -32,7 +38,6 @@ const AnonChat = ({ opened }) => {
   const [session, setSession] = useState(null);
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const { chat, data } = useSelector(getAnonChatSelector);
   const { countries } = useSelector(getGeneralDataSelector);
@@ -96,22 +101,9 @@ const AnonChat = ({ opened }) => {
     }
   };
 
-  const validateEmail = (email) => {
-    const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    return regex.test(email);
-  };
-
   const handleCityChange = (option) => setCity(option);
 
-  const handleMessage = ({ target: { value } }) => {
-    setMessage(value);
-
-    if (value?.includes('@') && !validateEmail(value)) {
-      setErrorMessage('Invalid email format.');
-    } else {
-      setErrorMessage('');
-    }
-  };
+  const handleMessage = ({ target: { value } }) => setMessage(value);
 
   const handlePhoneMessage = (value) => {
     if (value.length < 5) {
@@ -144,7 +136,6 @@ const AnonChat = ({ opened }) => {
   /* Submit handler used for switching steps and init conversation with support */
   const onSubmit = async (e) => {
     e?.preventDefault();
-
     await сhatSessionService.sendMessage({ message });
     setMessage('');
   };
@@ -234,11 +225,11 @@ const AnonChat = ({ opened }) => {
       case 'email':
         return (
           <div className="flex w-full relative items-end gap-x-2">
-            <Input onChange={handleMessage} error={errorMessage} {...props} />
+            <Input onChange={handleMessage} helperText="Non public email only." {...props} />
             <Button
-              disabled={disabled}
+              disabled={checkEmailPrefix(message)}
               onClick={() => handleBotMessage({ key, answer: message })}
-              customStyles={`border bot border-gray-darker !p-2.5 ${errorMessage && 'relative bottom-3.5'}`}
+              customStyles="border border-gray-darker !p-2.5 relative bottom-[18px]"
               buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
             />
           </div>

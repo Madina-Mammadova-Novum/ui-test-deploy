@@ -52,37 +52,24 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
     return <DetailsContent data={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
+  const btnStyles =
+    'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-[50%] xlMax:transform xlMax:-translate-x-1/2';
+
   return (
-    <div>
-      <div className="">
-        <div className="py-8 xlMax:h-20">
-          <Tabs
-            activeTab={currentTab}
-            tabs={tabs}
-            onClick={({ target }) => setCurrentTab(target.value)}
-            customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
-          />
-          <Button
-            buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-            customStyles="
-              border border-blue 
-              hover:border-blue-darker 
-              whitespace-nowrap
-              !px-2.5 !py-0.5 uppercase !text-[10px] 
-              font-bold 
-              absolute 
-              right-1
-              -translate-x-5 
-              xlMax:w-fit
-              xlMax:top-14
-              xlMax:left-[50%] 
-              xlMax:transform
-              xlMax:-translate-x-1/2
-            "
-            disabled={!allowCountdownExtension}
-            onClick={handleExtendCountdown}
-          />
-        </div>
+    <div className="px-5">
+      <div className="py-8 xlMax:h-20">
+        <Tabs
+          activeTab={currentTab}
+          tabs={tabs}
+          onClick={({ target }) => setCurrentTab(target.value)}
+          customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
+        />
+        <Button
+          buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
+          customStyles={btnStyles}
+          disabled={!allowCountdownExtension}
+          onClick={handleExtendCountdown}
+        />
       </div>
       {printContent}
     </div>

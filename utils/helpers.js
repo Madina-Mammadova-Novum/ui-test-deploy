@@ -10,7 +10,7 @@ import { transformDate } from './date';
 
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
-import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, SORT_OPTIONS } from '@/lib/constants';
+import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
 import { providedEmails } from '@/utils/mock';
 
 /**
@@ -210,8 +210,8 @@ export const getButtonClassNames = (variant, size) => {
       return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
   if (size === 'small') {
-    if (variant === 'primary') return 'bg-white p-0 text-blue hover:text-blue-darker';
-    if (variant === 'secondary') return 'bg-white p-0 text-black hover:text-blue-darker';
+    if (variant === 'primary') return 'bg-transparent p-0 text-blue hover:text-blue-darker';
+    if (variant === 'secondary') return 'bg-transparent p-0 text-black hover:text-blue-darker';
     if (variant === 'delete') return 'text-red';
   }
   return null;
@@ -323,6 +323,7 @@ export const checkPhoneValue = (value) => {
   if (!value) {
     return true;
   }
+
   const regex = REGEX.PHONE;
   return regex.test(value);
 };
@@ -728,4 +729,51 @@ export const urlParser = (data) => {
   }
 
   return data;
+};
+
+export const getIdFromUrl = (url) => {
+  const idRegex = /[a-zA-Z0-9-_]{36}/;
+
+  const match = idRegex.exec(url);
+
+  return match ? match[0] : null;
+};
+
+export const stageFormatter = (stage) => {
+  const stageToPage = {
+    Fleets: ROUTES.ACCOUNT_POSITIONS,
+    Negotiating: ROUTES.ACCOUNT_NEGOTIATING,
+    Pre_Fixture: ROUTES.ACCOUNT_PREFIXTURE,
+    On_Subs: ROUTES.ACCOUNT_ONSUBS,
+    Fixture: ROUTES.ACCOUNT_FIXTURE,
+    Post_Fixture: ROUTES.ACCOUNT_POSTFIXTURE,
+  };
+
+  return stageToPage[stage];
+};
+
+const urlStatusFormatter = ({ isFailed }) => {
+  if (isFailed) return 'failed';
+
+  return 'incoming';
+};
+
+export const notificationPathGenerator = ({ data, role }) => {
+  if (!data) return null;
+
+  const { isOwner } = getRoleIdentity({ role });
+  const initialPath = stageFormatter(data.stage);
+  const statusTab = urlStatusFormatter({ isFailed: data.isFailed });
+
+  const routeByStage = {
+    Negotiating: `${initialPath}/${isOwner ? data.vessel.id : data.searchedCargo.id}?fleetId=${
+      data.id
+    }&status=${statusTab}`,
+    Pre_Fixture: `${initialPath}/${data.searchedCargo.id}`,
+    On_Subs: `${initialPath}/${data.searchedCargo.id}`,
+    Fixture: `${initialPath}/${data.searchedCargo.id}`,
+    Post_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
+  };
+
+  return routeByStage[data.stage];
 };

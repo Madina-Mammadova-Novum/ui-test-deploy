@@ -1,34 +1,69 @@
+'use client';
+
+import { useCallback, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import parse from 'html-react-parser';
+import { useRouter } from 'next/navigation';
 
 import { NotificationCardBodyPropTypes } from '@/lib/types';
 
-import { LinkAsButton } from '@/elements';
+import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
+import { getCurrnetDealStage, readNotification } from '@/store/entities/notifications/actions';
+import { getNotificationsDataSelector } from '@/store/selectors';
+import { getCookieFromBrowser, getIdFromUrl, notificationPathGenerator } from '@/utils/helpers';
 
 const NotificationCardBody = ({ message, url }) => {
-  const strippedUrl = url?.replace(/\/\?/g, '/');
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [prevId, setPrevId] = useState(null);
+
+  const role = getCookieFromBrowser('session-user-role');
+  const { deal } = useSelector(getNotificationsDataSelector);
+
+  const isDealPath = useMemo(() => {
+    return url?.startsWith('/deals');
+  }, [url]);
 
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
+
+  const getDealStage = useCallback(() => {
+    if (isDealPath) {
+      const id = getIdFromUrl(url);
+      if (id !== prevId) {
+        dispatch(getCurrnetDealStage({ id, role }));
+        setPrevId(id);
+      }
+    }
+  }, [url, role, prevId, isDealPath]);
+
+  const handleRedirect = useCallback(async () => {
+    const id = getIdFromUrl(url);
+    dispatch(readNotification({ id }));
+
+    if (isDealPath) {
+      const route = notificationPathGenerator({ data: deal, role });
+      router.push(route);
+    } else {
+      router.push(url);
+    }
+  }, [notificationPathGenerator, url, role, deal, isDealPath]);
 
   return (
     <div className="flex flex-col items-start">
       <p className="text-xsm font-normal text-black">{parse(formattedMessage)}</p>
-      {strippedUrl && (
-        <LinkAsButton
-          href={strippedUrl}
-          customStyles="p-0 mt-2.5 underline decoration-underline "
-          buttonProps={{
-            size: 'small',
-            text: 'Mark all as read',
-            variant: 'primary',
-          }}
-        >
-          See details
-        </LinkAsButton>
-      )}
+      <Button
+        onClick={handleRedirect}
+        onMouseEnter={getDealStage}
+        customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline "
+        buttonProps={{ size: 'small', variant: 'primary', text: 'See details' }}
+      />
     </div>
   );
 };
+
 NotificationCardBody.propTypes = NotificationCardBodyPropTypes;
 
 export default NotificationCardBody;

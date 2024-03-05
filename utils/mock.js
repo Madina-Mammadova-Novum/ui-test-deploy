@@ -7695,6 +7695,7 @@ export const providedEmails = [
   'protestant.com',
   'proto2mail.com',
   'protonmail.com',
+  'proton.me',
   'providier.com',
   'provmail.net',
   'proxymail.eu',

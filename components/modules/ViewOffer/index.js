@@ -43,7 +43,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
     setAllowCountdownExtension(false);
     const { error, message: successMessage } = await extendCountdown({ offerId, role });
     if (error) {
-      if (error) errorToast(error?.title, error?.message);
+      errorToast('Bad request', error?.title);
       setAllowCountdownExtension(data?.allowExtension);
     } else {
       setAllowCountdownExtension(false);

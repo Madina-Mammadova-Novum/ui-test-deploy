@@ -3,13 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 
 // eslint-disable-next-line import/no-cycle
-import { fetchNotifications } from './actions';
+import { fetchNotifications, getCurrnetDealStage, readNotification } from './actions';
 
 const initialState = {
   unread: 0,
   readed: 0,
   watchedData: [],
   unwatchedData: [],
+  dealData: {},
+  dealFetching: false,
   loading: false,
   error: null,
   isOpened: false,
@@ -51,6 +53,7 @@ const notificationsSlice = createSlice({
     },
     resetParams: (state) => {
       state.filterParams = initialState.filterParams;
+      state.isOpened = initialState.isOpened;
     },
     setIsOpened: (state, action) => {
       state.isOpened = action.payload;
@@ -63,17 +66,38 @@ const notificationsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchNotifications?.pending, (state) => {
+    builder.addCase(fetchNotifications.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchNotifications?.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.readed = payload.readed;
       state.unread = payload.unread;
     });
-    builder.addCase(fetchNotifications?.rejected, (state, { payload }) => {
+    builder.addCase(fetchNotifications.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload?.error;
+    });
+    builder.addCase(readNotification.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(readNotification?.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(readNotification.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    });
+    builder.addCase(getCurrnetDealStage.pending, (state) => {
+      state.dealFetching = true;
+    });
+    builder.addCase(getCurrnetDealStage.fulfilled, (state, { payload }) => {
+      state.dealFetching = false;
+      state.dealData = payload;
+    });
+    builder.addCase(getCurrnetDealStage.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
     });
   },
 });
