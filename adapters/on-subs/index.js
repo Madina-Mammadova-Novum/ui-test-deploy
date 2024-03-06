@@ -6,61 +6,51 @@ import { calculateCountdown, freightFormatter, getLocode, transformBytes } from 
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
-  const {
-    searchedCargo: {
-      code,
-      cargoType,
-      totalQuantity,
-      laycanStart,
-      laycanEnd,
-      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode } } = {},
-    } = {},
-    vessel: { details: { name: tankerName } = {} } = {},
-    expiresAt,
-    frozenAt,
-  } = data;
+
+  const { searchedCargo, vessel, expiresAt, frozenAt } = data;
 
   return [
     {
       label: 'Cargo id',
-      text: code,
+      text: searchedCargo?.code,
       textStyles: 'absolute',
       freezed: frozenAt,
     },
     {
       label: 'Tanker name',
-      text: tankerName,
+      text: vessel?.details?.name,
       textStyles: 'absolute',
       freezed: frozenAt,
     },
     {
       label: 'Cargo type',
-      text: cargoType?.name,
+      text: searchedCargo?.cargoType?.name,
       textStyles: 'absolute',
       freezed: frozenAt,
     },
     {
       label: 'Quantity',
-      text: totalQuantity && `${totalQuantity} tons`,
+      text: `${searchedCargo?.totalQuantity || 0} tons`,
       textStyles: 'absolute',
       freezed: frozenAt,
     },
     {
       label: 'Load port',
-      text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      countryCode: getLocode(loadPortLocode),
-      textStyles: 'absolute pl-5',
+      text:
+        searchedCargo?.loadTerminal &&
+        `${searchedCargo?.loadTerminal?.port?.name}, ${searchedCargo?.loadTerminal?.port?.locode}`,
+      countryCode: getLocode(searchedCargo?.loadTerminal?.port?.locode),
       freezed: frozenAt,
     },
     {
       label: 'Laycan start',
-      text: transformDate(laycanStart, 'MMM dd, yyyy'),
+      text: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
       textStyles: 'absolute',
       freezed: frozenAt,
     },
     {
       label: 'Laycan end',
-      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      text: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
       textStyles: 'absolute',
       freezed: frozenAt,
     },
@@ -76,59 +66,56 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
-  const {
-    searchedCargo: {
-      code,
-      cargoType,
-      totalQuantity,
-      laycanStart,
-      laycanEnd,
-      loadTerminal: { port: { name: loadPortName, locode: loadPortLocode } } = {},
-    } = {},
-    vessel: { details: { name: tankerName } = {} } = {},
-    expiresAt,
-    frozenAt,
-    createdAt,
-  } = data;
+
+  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt } = data;
 
   return [
     {
       label: 'Cargo id',
-      text: code,
+      text: searchedCargo?.code,
+      freezed: frozenAt,
     },
     {
       label: 'Tanker name',
-      text: tankerName,
+      text: vessel?.details?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Cargo type',
-      text: cargoType?.name,
+      text: searchedCargo?.cargoType?.name,
+      freezed: frozenAt,
     },
     {
       label: 'Quantity',
-      text: totalQuantity && `${totalQuantity} tons`,
+      text: `${searchedCargo?.totalQuantity || 0} tons`,
+      freezed: frozenAt,
     },
     {
       label: 'Load port',
-      text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
+      text: `${searchedCargo?.loadTerminal?.port?.name}, ${searchedCargo?.loadTerminal?.port?.locode}`,
       textStyles: 'absolute pl-5',
-      countryCode: getLocode(loadPortLocode),
+      countryCode: getLocode(searchedCargo?.loadTerminal?.port?.locode),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan start',
-      text: transformDate(laycanStart, 'MMM dd, yyyy'),
+      text: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Laycan end',
-      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
+      text: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Creation date',
       text: transformDate(createdAt, 'MMM dd, yyyy'),
+      freezed: frozenAt,
     },
     {
       label: 'Countdown',
       textStyles: 'absolute',
+      freezed: frozenAt,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -182,14 +169,6 @@ export const onSubsDetailsAdapter = ({ data }) => {
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
-  const {
-    name: loadTerminalName,
-    port: { name: loadPortName, locode: loadPortLocode },
-  } = loadTerminal || {};
-  const {
-    name: dischargeTerminalName,
-    port: { name: dischargePortName, locode: dischargePortLocode },
-  } = dischargeTerminal || {};
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
   return {
@@ -288,23 +267,23 @@ export const onSubsDetailsAdapter = ({ data }) => {
         [
           {
             title: 'Load port',
-            text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-            countryCode: getLocode(loadPortLocode),
+            text: `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
+            countryCode: getLocode(loadTerminal?.port?.locode),
           },
           {
             title: 'Load terminal',
-            text: loadTerminalName,
+            text: loadTerminal?.name,
           },
         ],
         [
           {
             title: 'Discharge port',
-            text: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-            countryCode: getLocode(dischargePortLocode),
+            text: `${dischargeTerminal?.port?.name}, ${dischargeTerminal?.port?.locode}`,
+            countryCode: getLocode(dischargeTerminal?.port?.locode),
           },
           {
             title: 'Discharge terminal',
-            text: dischargeTerminalName,
+            text: dischargeTerminal?.name,
           },
         ],
       ],

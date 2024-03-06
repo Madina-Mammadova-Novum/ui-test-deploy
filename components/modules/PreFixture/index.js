@@ -62,7 +62,7 @@ const PreFixture = () => {
     if (offers?.length) return offers.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
-  }, [loading, offers, printExpandableRow]);
+  }, [loading, offers]);
 
   return printContent;
 };

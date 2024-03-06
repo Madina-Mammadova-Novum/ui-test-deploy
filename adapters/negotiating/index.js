@@ -510,9 +510,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
       id,
       freezed: false,
       notified,
-      value: `${cargo?.loadTerminal?.port?.name}${
-        cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
-      }`,
+      value: cargo?.loadTerminal?.port && `${cargo?.loadTerminal?.port?.name}, ${cargo?.loadTerminal?.port?.locode}`,
       countryCode: getLocode(cargo?.loadTerminal?.port?.locode),
       available: true,
     },
