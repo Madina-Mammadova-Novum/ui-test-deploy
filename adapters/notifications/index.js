@@ -7,6 +7,13 @@ export const notificationsResponseAdapter = (data) => {
   return data;
 };
 
+export const readedNotificationResponseAdapter = (data) => {
+  console.log('data: ', data);
+  if (!data) return null;
+
+  return data;
+};
+
 export const notificationAdapter = (data) => {
   if (!data) return {};
 
