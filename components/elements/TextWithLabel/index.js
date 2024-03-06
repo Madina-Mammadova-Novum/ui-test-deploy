@@ -17,6 +17,7 @@ const TextWithLabel = ({
   coverImage = null,
   countryCode,
 }) => {
+  console.log(text);
   return (
     <div
       className={classnames(
