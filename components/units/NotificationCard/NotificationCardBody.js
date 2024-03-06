@@ -14,14 +14,14 @@ import { getCurrnetDealStage, readNotification } from '@/store/entities/notifica
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl, notificationPathGenerator } from '@/utils/helpers';
 
-const NotificationCardBody = ({ message, url }) => {
+const NotificationCardBody = ({ message, url, urlId }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const [prevId, setPrevId] = useState(null);
 
   const role = getCookieFromBrowser('session-user-role');
-  const { deal } = useSelector(getNotificationsDataSelector);
+  const { deal, filterParams } = useSelector(getNotificationsDataSelector);
 
   const isDealPath = useMemo(() => {
     return url?.startsWith('/deals');
@@ -40,8 +40,9 @@ const NotificationCardBody = ({ message, url }) => {
   }, [url, role, prevId, isDealPath]);
 
   const handleRedirect = useCallback(async () => {
-    const id = getIdFromUrl(url);
-    dispatch(readNotification({ id }));
+    if (filterParams?.activeTab === 'unread') {
+      dispatch(readNotification({ id: urlId }));
+    }
 
     if (isDealPath) {
       const route = notificationPathGenerator({ data: deal, role });

@@ -62,15 +62,8 @@ export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTI
   dispatch(fetchNotifications());
 });
 
-export const readNotification = createAsyncThunk(
-  NOTIFICATIONS.READ_NOTIFICATION,
-  async ({ id }, { dispatch, rejectWithValue }) => {
-    const { error } = await readNotificationById({ id });
-
-    if (error) {
-      rejectWithValue(error);
-    } else {
-      dispatch(resetParams());
-    }
-  }
-);
+export const readNotification = createAsyncThunk(NOTIFICATIONS.READ_NOTIFICATION, async ({ id }, { dispatch }) => {
+  await readNotificationById({ id }).then(() => {
+    dispatch(resetParams());
+  });
+});

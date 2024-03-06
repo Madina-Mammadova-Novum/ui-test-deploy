@@ -93,13 +93,15 @@ export class ChatSessionController extends SignalRController {
 
     await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}`, token });
 
-    this.connection.on('ReceiveMessage', async (message) => {
+    this.connection.on('ReceiveMessage', (message) => {
       this.updateMessage({ message, clientId, role, chatId });
 
       if (this.isOpened) {
-        await this.readMessage({ id: message.id });
+        this.readMessage({ id: message.id });
       }
     });
+
+    // this.connection.on('Typing', (chat) => console.log(chat));
   }
 
   onToggle(opened) {
@@ -107,15 +109,15 @@ export class ChatSessionController extends SignalRController {
     this.isOpened = opened;
   }
 
-  async sendMessage({ message }) {
-    if (this.connection) {
-      await this.connection.invoke('SendMessage', message);
+  sendMessage({ message }) {
+    if (this.connection?.state === 'Connected') {
+      this.connection.invoke('SendMessage', message);
     }
   }
 
-  async readMessage({ id }) {
-    if (this.connection) {
-      await this.connection.invoke('ReadMessage', id);
+  readMessage({ id }) {
+    if (this.connection?.state === 'Connected') {
+      this.connection?.invoke('ReadMessage', id);
     }
   }
 
@@ -128,7 +130,7 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
 
-    if (this.connection) {
+    if (this.connection?.state === 'Connected') {
       await this.connection.stop();
     }
   }

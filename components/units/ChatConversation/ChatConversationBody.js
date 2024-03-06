@@ -34,13 +34,13 @@ const ChatConversationBody = () => {
     }
   };
 
-  const printMessage = ({ sender, id, message, time }) => {
-    return <ChatMessage key={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
+  const printMessage = ({ sender, message, time, id }) => {
+    return <ChatMessage id={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
   };
 
-  const printMessages = ({ data: content, title, id }) => {
+  const printMessages = ({ data: content, title }) => {
     return (
-      <div className="flex flex-col px-2.5" key={id}>
+      <div className="flex flex-col px-2.5" key={title}>
         <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
         {content?.map(printMessage)}
       </div>
@@ -51,7 +51,7 @@ const ChatConversationBody = () => {
     if (loading) return <ChatLoader />;
     if (messages.length > 0) return messages.map(printMessages);
     return <p className="absolute w-full text-center top-0 font-semibold text-base">Empty history</p>;
-  }, [loading, messages]);
+  }, [loading, messages, printMessages]);
 
   return (
     <div

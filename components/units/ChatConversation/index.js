@@ -23,7 +23,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const token = getCookieFromBrowser('session-access-token');
 
   const { chats } = useSelector(getAuthChatSelector);
-  const { data, messages, loading, updating, status } = chats?.user;
+  const { data, updating, status } = chats?.user;
 
   useEffect(() => {
     if (data?.chatId) {
@@ -49,9 +49,9 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     }
   }, [message]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e?.preventDefault();
-    await сhatSessionService.sendMessage({ message });
+    сhatSessionService.sendMessage({ message });
     setMessage('');
   };
 
@@ -77,7 +77,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         />
 
         <div className="flex flex-col p-2.5">
-          <ChatConversationBody messages={messages} loading={loading} isOpened={isOpened} />
+          <ChatConversationBody />
           {!data?.archieved && (
             <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
               <Input

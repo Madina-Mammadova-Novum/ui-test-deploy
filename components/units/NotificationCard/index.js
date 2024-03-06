@@ -7,7 +7,7 @@ const NotificationCard = ({ data = [] }) => {
     return (
       <div key={id} className="flex flex-col w-full pb-4 gap-2.5">
         <NotificationCardHeader time={time} topic={topic} />
-        <NotificationCardBody message={title} url={url} />
+        <NotificationCardBody message={title} url={url} urlId={id} />
         <Divider />
       </div>
     );
