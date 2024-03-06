@@ -92,7 +92,9 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Load port',
-      text: `${searchedCargo?.loadTerminal?.port?.name}, ${searchedCargo?.loadTerminal?.port?.locode}`,
+      text:
+        searchedCargo?.loadTerminal?.port &&
+        `${searchedCargo?.loadTerminal?.port?.name}, ${searchedCargo?.loadTerminal?.port?.locode}`,
       textStyles: 'absolute pl-5',
       countryCode: getLocode(searchedCargo?.loadTerminal?.port?.locode),
       freezed: frozenAt,
