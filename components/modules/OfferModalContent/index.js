@@ -88,6 +88,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       successToast(successMessage);
       closeModal();
     }
+
     if (error) {
       errorToast(error?.title, error?.message);
     }
@@ -98,14 +99,15 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     const { data = [] } = await getCountdownTimer();
     const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
     const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+
     handleChangeState('responseCountdownOptions', convertedOptions);
     handleChangeOption(defaultCountdown);
     handleChangeState('loading', false);
   };
 
   useEffect(() => {
-    fetchCountdownData();
     dispatch(fetchOfferOptioins(tankerId));
+    fetchCountdownData();
   }, []);
 
   const scrollToBottom = () =>

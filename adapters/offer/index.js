@@ -7,6 +7,7 @@ import {
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
+  getOfferTotalMinQuantity,
   getRoleIdentity,
 } from '@/utils/helpers';
 
@@ -31,7 +32,6 @@ export function sendOfferAdapter({ data }) {
     minOfferQuantity,
     ballastLeg,
     estimatedArrivalTime,
-    // nor,
   } = data;
   return {
     laycanStart,
@@ -54,6 +54,34 @@ export function sendOfferAdapter({ data }) {
     cargoes: postProductsAdapter({ data: products }),
   };
 }
+
+// {
+//   "laycanStart": "2024-03-07T17:24:55.536Z",
+//   "laycanEnd": "2024-03-07T17:24:55.536Z",
+//   "comment": "string",
+//   "cargoTypeId": "string",
+//   "loadTerminalId": "string",
+//   "dischargeTerminalId": "string",
+//   "vesselId": "string",
+//   "estimatedArrivalTime": "2024-03-07T17:24:55.536Z",
+//   "ballastLeg": "string",
+//   "freightFormatId": "string",
+//   "freight": 0,
+//   "minOfferQuantity": 0,
+//   "demurrageRate": 0,
+//   "laytime": 100,
+//   "demurragePaymentTermId": "string",
+//   "paymentTermId": "string",
+//   "countDownTimerSettingId": "string",
+//   "cargoes": [
+//     {
+//       "productId": "string",
+//       "referenceDensity": 0,
+//       "quantity": 0,
+//       "tolerance": 20
+//     }
+//   ]
+// }
 
 export function sendCounterofferAdapter({ data }) {
   if (!data) return null;
@@ -92,6 +120,26 @@ export function sendCounterofferAdapter({ data }) {
 export function responseSendOfferAdapter({ data }) {
   if (!data) return null;
   return data;
+}
+
+export function sendOfferValidationAdapter({ data }) {
+  const minOfferQuantity = getOfferTotalMinQuantity({ data: data?.products });
+
+  return {
+    minOfferQuantity,
+    vesselId: data?.tankerId,
+    laycanStart: data?.laycanStart,
+    laycanEnd: data?.laycanEnd,
+    cargoTypeId: data?.cargoType?.value,
+    loadTerminalId: data?.loadTerminal?.value,
+    dischargeTerminalId: data?.dischargeTerminal?.value,
+    cargoes: data?.products?.map((item) => ({
+      productId: item?.product?.value,
+      quantity: item?.quantity,
+      referenceDensity: item?.density,
+      tolerance: item?.tolerance,
+    })),
+  };
 }
 
 export function declineOfferAdapter({ data }) {

@@ -777,3 +777,9 @@ export const notificationPathGenerator = ({ data, role }) => {
 
   return routeByStage[data.stage];
 };
+
+export const getOfferTotalMinQuantity = ({ data }) => {
+  if (!data) return null;
+
+  return data.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
+};
