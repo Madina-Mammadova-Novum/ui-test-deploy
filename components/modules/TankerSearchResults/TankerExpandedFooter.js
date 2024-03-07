@@ -29,7 +29,6 @@ const TankerExpandedFooter = ({ tankerId, tankerData }) => {
     const { data } = await sendOfferValidation({ data: { ...offerData, tankerId } });
 
     if (data) {
-      setLoading(false);
       setValid(data?.canProceed);
       if (data?.canProceed) {
         dispatch(setRanges(data?.ranges));
