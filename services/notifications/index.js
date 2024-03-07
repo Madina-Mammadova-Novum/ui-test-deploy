@@ -1,5 +1,5 @@
 import { notificationParamsAdapter } from '@/adapters/notifications';
-import { postData } from '@/utils/dataFetching';
+import { getData, postData } from '@/utils/dataFetching';
 
 export const getNotifications = async ({ data }) => {
   const body = notificationParamsAdapter({ data });
@@ -20,7 +20,7 @@ export const setReadAllNotifications = async () => {
 };
 
 export const readNotificationById = async ({ id }) => {
-  const response = await postData(`notifications/read?id=${id}`, { body: id });
+  const response = await getData(`notifications/read?id=${id}`);
 
   return {
     ...response,

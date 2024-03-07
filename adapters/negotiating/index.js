@@ -40,16 +40,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
 export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const {
-    code,
-    cargoType,
-    minQuantity,
-    maxQuantity,
-    loadPort: { name: portName, locode: portLocode } = {},
-    laycanStart,
-    laycanEnd,
-    createdAt,
-  } = data;
+  const { code, cargoType, minQuantity, maxQuantity, loadPort, laycanStart, laycanEnd, createdAt } = data;
 
   const minValue = parseFloat(minQuantity?.toFixed(1)).toString();
   const maxValue = parseFloat(maxQuantity?.toFixed(1)).toString();
@@ -70,8 +61,8 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Load port',
-      text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
-      countryCode: getLocode(portLocode),
+      text: loadPort && `${loadPort?.name}, ${loadPort?.locode}`,
+      countryCode: getLocode(loadPort?.locode),
     },
     {
       label: 'Laycan start',
@@ -510,9 +501,7 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
       id,
       freezed: false,
       notified,
-      value: `${cargo?.loadTerminal?.port?.name}${
-        cargo?.loadTerminal?.port?.locode && `, ${cargo?.loadTerminal?.port?.locode}`
-      }`,
+      value: cargo?.loadTerminal?.port && `${cargo?.loadTerminal?.port?.name}, ${cargo?.loadTerminal?.port?.locode}`,
       countryCode: getLocode(cargo?.loadTerminal?.port?.locode),
       available: true,
     },

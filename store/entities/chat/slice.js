@@ -94,9 +94,12 @@ const chatSlice = createSlice({
     },
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
+      const existedMessage = today.data.filter((message) => message.id === payload.id);
 
-      if (today) today.data = [...today.data, payload];
-      else state.data.user.messages.unshift({ title: 'Today', data: [payload] });
+      if (!existedMessage.length) {
+        if (today) today.data = [...today.data, payload];
+        else state.data.user.messages.unshift({ title: 'Today', data: [payload] });
+      }
     },
     setLoadConversation: (state, { payload }) => {
       state.data.user.loading = payload;

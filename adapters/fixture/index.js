@@ -8,17 +8,7 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
   const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
-  const {
-    code: cargoId,
-    cargoType,
-    totalQuantity,
-    loadTerminal: {
-      port: { name: portName, locode: portLocode, country: portCountry },
-    },
-  } = searchedCargo || {};
-  const {
-    details: { name: tankerName },
-  } = vessel || {};
+  const { code: cargoId, cargoType, totalQuantity, loadTerminal } = searchedCargo;
 
   return [
     {
@@ -27,7 +17,7 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Tanker name',
-      text: tankerName,
+      text: vessel?.details?.name,
     },
     {
       label: 'Cargo type',
@@ -39,10 +29,10 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Load port',
-      text: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      text: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
       textStyles: 'absolute pl-5',
-      country: portCountry,
-      countryCode: getLocode(portLocode),
+      country: loadTerminal?.port?.country,
+      countryCode: getLocode(loadTerminal?.port?.locode),
     },
     {
       label: 'Laycan start',
@@ -102,17 +92,9 @@ export const fixtureDetailsAdapter = ({ data }) => {
     charterPartyUrl,
   } = data;
 
-  const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
-  const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
-  const {
-    name: loadTerminalName,
-    port: { name: loadPortName, locode: loadPortLocode },
-  } = loadTerminal || {};
-  const {
-    name: dischargeTerminalName,
-    port: { name: dischargePortName, locode: dischargePortLocode },
-  } = dischargeTerminal || {};
-  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
+  const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;
+  const { name: correspondenceCityName = '', country: correspondenceCountry = '' } = correspondenceCity;
+  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails;
 
   return {
     chartererInformation: [
@@ -211,23 +193,23 @@ export const fixtureDetailsAdapter = ({ data }) => {
         [
           {
             title: 'Load port',
-            text: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-            countryCode: getLocode(loadPortLocode),
+            text: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
+            countryCode: getLocode(loadTerminal?.port?.locode),
           },
           {
             title: 'Load terminal',
-            text: loadTerminalName,
+            text: loadTerminal?.name,
           },
         ],
         [
           {
             title: 'Discharge port',
-            text: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-            countryCode: getLocode(dischargePortLocode),
+            text: dischargeTerminal?.port && `${dischargeTerminal?.port?.name}, ${dischargeTerminal?.port?.locode}`,
+            countryCode: getLocode(dischargeTerminal?.port?.locode),
           },
           {
             title: 'Discharge terminal',
-            text: dischargeTerminalName,
+            text: dischargeTerminal?.name,
           },
         ],
       ],

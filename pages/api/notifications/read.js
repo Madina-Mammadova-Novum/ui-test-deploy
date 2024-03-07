@@ -1,3 +1,4 @@
+import { readedNotificationResponseAdapter } from '@/adapters/notifications';
 import { Authorization } from '@/lib/constants';
 import { getRtURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -9,9 +10,11 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getRtURL(`notifications/open/${req.body}`),
-    dataAdapter: (data) => data,
+    path: getRtURL(`notifications/open/${req.query.id}`),
+    dataAdapter: readedNotificationResponseAdapter,
     requestMethod: 'GET',
-    options: { headers: Authorization(token) },
+    options: {
+      headers: { ...Authorization(token) },
+    },
   });
 }

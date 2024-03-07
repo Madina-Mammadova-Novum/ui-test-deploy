@@ -9,7 +9,7 @@ import { ChatConversationMessagePropTypes } from '@/lib/types';
 
 import { ROLES } from '@/lib';
 
-const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
+const ChatConversationMessage = ({ sender, message, time, isBroker, id }) => {
   const senderTitle = useMemo(() => {
     switch (sender) {
       case ROLES.OWNER:
@@ -34,7 +34,7 @@ const ChatConversationMessage = ({ sender, message, time, isBroker }) => {
   };
 
   return (
-    <div className={`flex flex-col py-2.5 w-full ${isBroker ? 'items-start' : 'items-end pr-2.5'}`}>
+    <div key={id} className={`flex flex-col py-2.5 w-full ${isBroker ? 'items-start' : 'items-end pr-2.5'}`}>
       <div className="flex flex-col gap-y-1">
         <p className="text-black uppercase text-xs-sm font-semibold">{senderTitle}</p>
         <p

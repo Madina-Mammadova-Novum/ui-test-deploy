@@ -8,12 +8,13 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const {
     searchedCargo: { code, cargoType, totalQuantity, loadTerminal } = {},
-    vessel: { details: { name: tankerName } = {} } = {},
+    vessel: { details: { name: tankerName = '' } = {} } = {},
     laycanStart,
     laycanEnd,
     expiresAt,
     frozenAt,
   } = data;
+
   const { port: { name: portName, locode } = {} } = loadTerminal || {};
 
   return [
@@ -24,7 +25,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Tanker name',
-      text: tankerName,
+      text: tankerName && tankerName,
       freezed: frozenAt,
     },
     {
@@ -55,7 +56,6 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      textStyles: 'absolute lg:relative top-px',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -111,7 +111,6 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      textStyles: 'absolute lg:relative top-px',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -196,15 +195,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     demurragePaymentTerm,
     paymentTerm,
     isCountdownExtendedByOwner,
-    searchedCargo: {
-      laycanStart,
-      laycanEnd,
-      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
-      dischargeTerminal: {
-        name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode } = {},
-      } = {},
-    } = {},
+    searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
     additionalCharterPartyTerms,
   } = data;
@@ -235,12 +226,14 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     voyageDetails: {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
-      loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      loadPortCountryCode: getLocode(loadPortLocode),
-      loadTerminal: loadTerminalName,
-      dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-      dischargePortCountryCode: getLocode(dischargePortLocode),
-      dischargeTerminal: dischargeTerminalName,
+      loadPort: `${loadTerminal?.port?.name}${loadTerminal?.port?.locode && `, ${loadTerminal?.port?.locode}`}`,
+      loadPortCountryCode: getLocode(loadTerminal?.port?.locode),
+      loadTerminal: loadTerminal?.name || null,
+      dischargePort: `${dischargeTerminal?.port?.name}${
+        dischargeTerminal?.port?.locode && `, ${dischargeTerminal?.port?.locode}`
+      }`,
+      dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
+      dischargeTerminal: dischargeTerminal?.name,
     },
     additionalCharterPartyTerms,
     allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByOwner,
@@ -261,15 +254,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     demurragePaymentTerm,
     paymentTerm,
     isCountdownExtendedByCharterer,
-    searchedCargo: {
-      laycanStart,
-      laycanEnd,
-      loadTerminal: { name: loadTerminalName, port: { name: loadPortName, locode: loadPortLocode } = {} } = {},
-      dischargeTerminal: {
-        name: dischargeTerminalName,
-        port: { name: dischargePortName, locode: dischargePortLocode } = {},
-      } = {},
-    } = {},
+    searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal },
     additionalCharterPartyTerms,
     charterer,
   } = data;
@@ -295,12 +280,12 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     voyageDetails: {
       laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
       laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
-      loadPort: loadPortName && `${loadPortName}${loadPortLocode && `, ${loadPortLocode}`}`,
-      loadPortCountryCode: getLocode(loadPortLocode),
-      loadTerminal: loadTerminalName,
-      dischargePort: dischargePortName && `${dischargePortName}${dischargePortLocode && `, ${dischargePortLocode}`}`,
-      dischargePortCountryCode: getLocode(dischargePortLocode),
-      dischargeTerminal: dischargeTerminalName,
+      loadPort: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
+      loadPortCountryCode: getLocode(loadTerminal?.port?.locode),
+      loadTerminal: loadTerminal?.name,
+      dischargePort: dischargeTerminal?.port && `${dischargeTerminal?.port?.name}, ${dischargeTerminal?.port?.locode}`,
+      dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
+      dischargeTerminal: dischargeTerminal?.name,
     },
     additionalCharterPartyTerms,
     allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByCharterer,
