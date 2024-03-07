@@ -1,25 +1,26 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CommercialOfferTermsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
-import { calculateFreightEstimation } from '@/services/calculator';
 import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
 import { setDemurragePaymentTerms, setPaymentTerms } from '@/store/entities/offer/slice';
-import { calculateIntDigit, calculateTotal, convertDataToOptions, getValueWithPath } from '@/utils/helpers';
+import { getOfferSelector } from '@/store/selectors';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }) => {
   const dispatch = useDispatch();
+  const { ranges } = useSelector(getOfferSelector);
 
   const { paymentTerms, demurragePaymentTerms, freightFormats } = offerData;
-  const { products = [], loadPort, dischargePort } = searchData;
 
   const [freightEstimation, setFreightEstimation] = useState({});
+
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [demurrageLoader, setDemurrageLoader] = useState(false);
 
@@ -40,26 +41,10 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
     if (key === 'freight') {
-      const productsData = getValues('products');
-      const totalCargoQuantity = calculateTotal(productsData, 'quantity');
-
-      const response = await calculateFreightEstimation({
-        data: {
-          loadPortId: loadPort.value,
-          dischargePortId: dischargePort.value,
-          totalCargoQuantity,
-        },
+      setFreightEstimation({
+        min: ranges?.freightFormats[Number(value?.value) - 1]?.ranges?.min?.start,
+        max: ranges?.freightFormats[Number(value?.value) - 1]?.ranges?.max?.end,
       });
-
-      if (response?.status === 200) {
-        setFreightEstimation({
-          ...response?.data,
-          min: calculateIntDigit(response?.data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
-          max: calculateIntDigit(response?.data[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
-        });
-
-        setValue('totalAmount', response.data.total);
-      }
     }
 
     if (error) {
@@ -125,7 +110,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
       <div className="flex items-center mt-3">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
-      {products?.map(printProduct)}
+      {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
       <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
         <FormDropdown
           label="Freight"
@@ -144,11 +129,11 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           type="number"
           placeholder={freightValuePlaceholder}
           customStyles="w-1/2"
-          helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
+          helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
           error={errors.value?.message}
           disabled={isSubmitting}
-          min={String(freightEstimation.min)}
-          max={String(freightEstimation.max)}
+          min={freightEstimation.min && String(freightEstimation.min)}
+          max={freightEstimation.max && String(freightEstimation.max)}
           step="any"
         />
       </div>
@@ -161,6 +146,9 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
         placeholder="$ per day"
         customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
+        helperText={
+          ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`
+        }
         disabled={isSubmitting}
       />
 
@@ -170,9 +158,9 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           label="lay time"
           name="layTime"
           type="number"
-          helperText="The maximum laytime is 100 hours"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
+          helperText={`The maximum laytime is ${ranges?.layTime?.max?.end || 120} hours`}
           error={errors.layTime?.message}
           disabled={isSubmitting}
         />

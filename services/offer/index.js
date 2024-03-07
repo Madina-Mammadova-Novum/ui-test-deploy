@@ -8,15 +8,26 @@ import {
   requestOnSubsCountdownExtensionAdapter,
   sendCounterofferAdapter,
   sendOfferAdapter,
+  sendOfferValidationAdapter,
 } from '@/adapters/offer';
 import { ROLES } from '@/lib';
 import { getData, postData } from '@/utils/dataFetching';
 import { getRoleIdentity } from '@/utils/helpers';
 
+export async function sendOfferValidation({ data }) {
+  const body = sendOfferValidationAdapter({ data });
+  const response = await postData(`offer/charterer/validation`, body);
+
+  return { ...response };
+}
+
 export async function sendOffer({ data }) {
   const body = sendOfferAdapter({ data });
-  const response = await postData(`offer/send`, JSON.stringify(body));
+
+  const response = await postData(`offer/send`, body);
+
   if (response.status === 200) response.message = 'You have successfully submitted your offer';
+
   return {
     ...response,
   };
