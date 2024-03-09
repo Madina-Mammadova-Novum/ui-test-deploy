@@ -13,7 +13,7 @@ import { getOfferSelector } from '@/store/selectors';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }) => {
+const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom, valid }) => {
   const dispatch = useDispatch();
   const { ranges } = useSelector(getOfferSelector);
 
@@ -117,7 +117,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
-          disabled={loading}
+          disabled={!valid || loading}
           loading={loading}
           onChange={(option) => handleChange('freight', option)}
           asyncCall
@@ -131,7 +131,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           customStyles="w-1/2"
           helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
           error={errors.value?.message}
-          disabled={isSubmitting}
+          disabled={!valid || isSubmitting}
           min={freightEstimation.min && String(freightEstimation.min)}
           max={freightEstimation.max && String(freightEstimation.max)}
           step="any"
@@ -149,7 +149,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
         helperText={
           ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`
         }
-        disabled={isSubmitting}
+        disabled={!valid || isSubmitting}
       />
 
       <div className="flex">
@@ -162,7 +162,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           customStyles="w-1/2 mt-3 pr-5"
           helperText={`The maximum laytime is ${ranges?.layTime?.max?.end || 120} hours`}
           error={errors.layTime?.message}
-          disabled={isSubmitting}
+          disabled={!valid || isSubmitting}
         />
         <Input
           {...register('nor')}
@@ -180,7 +180,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           label="undisputed demurrage payment terms"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
-          disabled={loading}
+          disabled={!valid || loading}
           loading={demurrageLoader ?? loading}
           onFocus={!demurragePaymentTerms?.length && getDemurageData}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
@@ -193,7 +193,7 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom }
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
-          disabled={loading}
+          disabled={!valid || loading}
           onFocus={!paymentTerms?.length && getPaymentData}
           loading={paymentLoader ?? loading}
           onChange={(option) => handleChange('paymentTerms', option)}

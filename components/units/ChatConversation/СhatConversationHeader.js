@@ -32,7 +32,7 @@ const СhatConversationHeader = ({ data, onCollapse, onClose, updating, typing }
       </div>
       <div className="flex gap-x-5 relative">
         <ChatConversationCard data={data} contrasted />
-        <div className="absolute right-36 -top-1">{typing && <TypingIndicator size="md" />}</div>
+        <div className="absolute right-32 -top-1">{typing && <TypingIndicator size="md" />}</div>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setUser } from '@/store/entities/chat/slice';
-import { getAnonChatSelector, getGeneralDataSelector } from '@/store/selectors';
+import { getAnonChatSelector, getAuthSelector, getGeneralDataSelector } from '@/store/selectors';
 import {
   checkEmailPrefix,
   convertDataToOptions,
@@ -43,6 +43,8 @@ const AnonChat = ({ opened }) => {
   const { countries } = useSelector(getGeneralDataSelector);
 
   const currentStep = flow[flow.length - 1];
+
+  const { authorized } = useSelector(getAuthSelector);
 
   const initServices = async () => {
     await Promise.all([
@@ -136,7 +138,7 @@ const AnonChat = ({ opened }) => {
   /* Submit handler used for switching steps and init conversation with support */
   const onSubmit = async (e) => {
     e?.preventDefault();
-    await сhatSessionService.sendMessage({ message });
+    сhatSessionService.sendMessage({ message });
     setMessage('');
   };
 
@@ -315,6 +317,12 @@ const AnonChat = ({ opened }) => {
       setDisabled(true);
     }
   }, [message, country.value, city.value]);
+
+  useEffect(() => {
+    if (authorized) {
+      сhatSessionService.onToggle(false);
+    }
+  }, [authorized]);
 
   return (
     <ChatModal
