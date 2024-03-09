@@ -28,6 +28,13 @@ const offerSlice = createSlice({
     setDemurragePaymentTerms: (state, { payload }) => {
       state.data.demurragePaymentTerms = payload;
     },
+    resetOfferData: (state) => {
+      state.data = initialState.data;
+      state.error = initialState.error;
+      state.valid = initialState.valid;
+      state.validating = initialState.validating;
+      state.loading = initialState.loading;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchOfferOptioins.pending, (state) => {
@@ -55,12 +62,13 @@ const offerSlice = createSlice({
     });
     builder.addCase(fetchOfferValidation.rejected, (state, action) => {
       state.validating = false;
+      state.loading = false;
       state.valid = false;
       state.error = action.payload;
     });
   },
 });
 
-export const { setPaymentTerms, setDemurragePaymentTerms, setRanges } = offerSlice.actions;
+export const { setPaymentTerms, setDemurragePaymentTerms, setRanges, resetOfferData } = offerSlice.actions;
 
 export default offerSlice.reducer;

@@ -6,20 +6,14 @@ import { ModalWindowPropTypes } from '@/lib/types';
 
 import { Button, Modal } from '@/elements';
 
-const ModalWindow = ({ children, buttonProps, containerClass, useValidation }) => {
+const ModalWindow = ({ children, buttonProps, containerClass }) => {
   const [opened, setOpened] = useState(false);
 
-  const { text, variant, size, icon, className, disabled, onClick } = buttonProps;
+  const { text, variant, size, icon, className, disabled } = buttonProps;
 
-  const handleOpenModal = async (e) => {
+  const handleOpenModal = (e) => {
     e?.stopPropagation();
-
-    if (useValidation) {
-      const { result } = await onClick();
-      setOpened(result);
-    } else {
-      setOpened(true);
-    }
+    setOpened(true);
   };
 
   const handleCloseModal = (e) => {

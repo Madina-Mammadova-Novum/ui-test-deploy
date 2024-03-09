@@ -163,7 +163,7 @@ export class ChatNotificationController extends SignalRController {
 
         this.typingTimeout = setTimeout(() => {
           this.isTyping({ chat, typing: false });
-        }, 500);
+        }, 1000);
       }
     });
   }
