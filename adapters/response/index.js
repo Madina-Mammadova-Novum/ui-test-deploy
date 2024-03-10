@@ -4,7 +4,7 @@ import { isEmpty } from '@/utils/helpers';
 export const responseAdapter = (data) => {
   if (!data) return { data: null };
 
-  if ('data' in data) {
+  if (Object.prototype.hasOwnProperty.call(data, 'data')) {
     return data;
   }
 

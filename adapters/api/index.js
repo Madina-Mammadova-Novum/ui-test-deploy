@@ -9,6 +9,7 @@ export const successResponseAdapter = (response) => ({
 });
 
 export const errorResponseAdapter = (error) => {
+  console.log('error: ', error);
   return {
     status: error?.response?.status || error?.status || 500,
     statusText: error?.response?.statusText || error?.statusText || 'External Server Error',

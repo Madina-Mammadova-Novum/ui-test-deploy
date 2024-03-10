@@ -10,7 +10,7 @@ export const getSocialLinksData = async () => {
 
   if (response.data) {
     const socials = delve(response, 'data.socials');
-    const socialLinksArray = socials.length > 0 ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
+    const socialLinksArray = socials?.length > 0 ? socials.map((socialLink) => linkImageAdapter(socialLink)) : [];
 
     return {
       socials: socialLinksArray,
