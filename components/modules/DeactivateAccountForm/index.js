@@ -1,61 +1,79 @@
+/* eslint-disable react/prop-types */
+
 'use client';
 
 import { FormProvider } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
-import { Input, Title } from '@/elements';
-import { useHookFormParams } from '@/utils/hooks';
+import { ModalFormManager } from '@/common';
+import { PasswordInput, Title } from '@/elements';
+import { currentPasswordSchema } from '@/lib/schemas';
+import { deactivateAccount } from '@/services/account';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const state = {
-  password: '',
-};
+const DeactivateAccountForm = ({ title, closeModal }) => {
+  const schema = yup.object({ ...currentPasswordSchema() });
 
-const schema = yup.object({ password: yup.string().required('Required field') });
-
-const DeactivateAccountForm = ({ title }) => {
-  const methods = useHookFormParams({ state, schema });
+  const methods = useHookFormParams({ state: { password: '' }, schema });
 
   const {
-    register,
-    formState: { errors },
+    setValue,
+    clearErrors,
+    formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = (data) => {
-    return data;
+  const handlePassword = (event) => {
+    clearErrors('password');
+    const { value } = event.target;
+    setValue('password', value);
+  };
+
+  const onSubmit = async (data) => {
+    const { error, message } = await deactivateAccount({ data });
+
+    if (!error) {
+      successToast(message);
+      closeModal();
+    } else {
+      errorToast('Bad request', error.message);
+    }
   };
 
   return (
     <FormProvider {...methods}>
-      <FormManager
-        className="max-w-sm"
+      <ModalFormManager
+        className="max-w-[356px]"
         submitAction={onSubmit}
+        specialStyle
+        onClose={closeModal}
         submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
       >
         <div className="text-black flex flex-col gap-2.5">
-          <Title level="3" className="text-lg font-bold">
+          <Title level="3" className="text-lg font-bold pr-5">
             {title}
           </Title>
           <p className="text-xsm">
-            <span className="font-bold">
-              We will deactivate all your tankers and your account will become inactive.
+            <span className="font-semibold">
+              We will deactivate all your tankers and your account will become inactive.&nbsp;
             </span>
             But if you want to reactivate your account, then after logging in, we will automatically reactivate your
             account.
           </p>
         </div>
 
-        <p className="font-bold text-black">Please enter your password to deactivate account</p>
-        <Input {...register('password')} type="password" label="password" error={errors.password?.message} />
-      </FormManager>
+        <p className="text-xsm font-semibold text-black">Please enter your password to deactivate account</p>
+        <PasswordInput
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+          disabled={isSubmitting}
+          onChange={handlePassword}
+          error={errors.password?.message}
+        />
+      </ModalFormManager>
     </FormProvider>
   );
-};
-
-DeactivateAccountForm.propTypes = {
-  title: PropTypes.string,
 };
 
 export default DeactivateAccountForm;

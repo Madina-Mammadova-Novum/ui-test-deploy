@@ -1,41 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
+import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
+import { ExpandableCardHeader, Loader, Title } from '@/elements';
+import { NEGOTIATING_TABS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
 import NegotiatingExpandedFooter from '@/modules/Negotiating/NegotiatingExpandedFooter';
-import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { negotiatingHeaderData } from '@/utils/mock';
+import { getNegotiatingDataSelector } from '@/store/selectors';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const Negotiating = () => {
-  const [toggle, setToggle] = useState(false);
-  const [pagination, setPagination] = useState({
-    offersPerPage: 5,
-    currentPage: 1,
-  });
+  const { offers, loading, toggle, role } = useSelector(getNegotiatingDataSelector);
 
-  return (
-    <div>
-      <div className="flex items-center justify-end">
-        <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
-      </div>
+  const { isOwner } = getRoleIdentity({ role });
 
-      <div className="flex flex-col gap-y-2.5 mt-5">
-        {negotiatingHeaderData.map((rowHeader) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={rowHeader} />}
-            footer={<NegotiatingExpandedFooter isCharterer />}
-            expand={toggle}
-          >
-            <NegotiatingExpandedContent />
-          </ExpandableRow>
-        ))}
-      </div>
+  const printExpandableRow = (rowData) => {
+    const rowHeader = isOwner
+      ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
+      : chartererNegotiatingHeaderDataAdapter({ data: rowData });
 
-      <ComplexPagination pagination={pagination} setPagination={setPagination} />
-    </div>
-  );
+    return (
+      <ExpandableRow
+        key={rowData.id}
+        className="pt-14 px-5"
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1.5fr 1fr 1fr 1fr 2fr' : '1fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr'}
+          />
+        }
+        footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
+        expand={toggle}
+      >
+        <NegotiatingExpandedContent data={rowData} tabs={NEGOTIATING_TABS[role]} />
+      </ExpandableRow>
+    );
+  };
+
+  const printContent = useMemo(() => {
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (offers?.length) return offers.map(printExpandableRow);
+
+    return <Title level="3">No offers at current stage</Title>;
+  }, [loading, offers, toggle, printExpandableRow]);
+
+  return printContent;
 };
-
 export default Negotiating;

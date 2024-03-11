@@ -5,10 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-import { linkImagePropTypes, mediaPropTypes } from '@/utils/types';
+import { linkImagePropTypes, mediaPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
-import { makeId } from '@/utils/helpers';
 
 const FooterNavigation = ({ footerNavigation }) => {
   const [layoutImage, setLayoutImage] = useState('');
@@ -35,18 +34,18 @@ const FooterNavigation = ({ footerNavigation }) => {
           alt={delve(layoutImage, 'alternativeText')}
           key={layoutImage}
           src={layoutImage}
-          className="h-full w-full object-cover object-center min-h-[342px] sm:min-h-[390px] lg:max-h-[319px] lg:min-h-max 2lg:max-h-[448px] overflow-hidden animate-fade-in-image"
+          className="h-full w-full object-cover object-center min-h-[342px] sm:min-h-[390px] lg:max-h-[319px] lg:min-h-max 2xl:max-h-[448px] overflow-hidden animate-fade-in-image"
           quality={75}
         />
       </div>
       {links && (
         <div className="absolute top-0 bg-black opacity-50 h-full w-full ">
-          <div className="h-full flex flex-col items-center justify-between px-4 py-20 sm:px-[38px] lg:flex-row lg:px-20 2lg:px-[100px] 2lg:container mx-auto">
+          <div className="h-full flex flex-col items-center justify-between px-4 py-20 sm:px-[38px] lg:flex-row lg:px-20 2xl:px-[100px] 2xl:container mx-auto">
             {links.map(({ label, path, image }) => {
               return (
                 <Link
-                  key={makeId()}
-                  className="cursor-link text-2xl sm:text-4xl 2lg:text-5xl font-bold text-white"
+                  key={path}
+                  className="cursor-link text-2xl sm:text-4xl 2xl:text-5xl font-bold text-white"
                   href={path}
                   onMouseOver={() => onLinkOver(image)}
                   onMouseOut={onLinkOut}

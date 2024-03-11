@@ -1,28 +1,18 @@
-import PropTypes from 'prop-types';
+import { CommentPropTypes } from '@/lib/types';
 
 import { DateTimeRow, Title } from '@/elements';
 
-const Comment = ({ title, date, time }) => {
-  return (
+const Comment = ({ title = '', date = '', time = '' }) => {
+  return title ? (
     <>
       <Title level="6" className="text-xsm font-semibold mt-2.5">
         {title}
       </Title>
       <DateTimeRow date={date} time={time} />
     </>
-  );
+  ) : null;
 };
 
-Comment.defaultProps = {
-  title: '',
-  date: '',
-  time: '',
-};
-
-Comment.propTypes = {
-  title: PropTypes.string,
-  date: PropTypes.string,
-  time: PropTypes.string,
-};
+Comment.propTypes = CommentPropTypes;
 
 export default Comment;

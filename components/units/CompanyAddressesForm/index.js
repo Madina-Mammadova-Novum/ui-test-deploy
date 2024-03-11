@@ -1,17 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { CheckBoxInput } from '@/elements';
 import { ADDRESS } from '@/lib/constants';
-import { getCountries } from '@/services';
 import { AddressDetails } from '@/units';
-import { convertDataToOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CompanyAddresses = () => {
+const CompanyAddresses = ({ countries }) => {
   const { setValue, getValues } = useHookForm();
-  const [countries, setCountries] = useState([]);
 
   const { sameAddresses } = getValues();
 
@@ -19,17 +16,6 @@ const CompanyAddresses = () => {
     const { checked } = event.target;
     setValue('sameAddresses', checked);
   };
-
-  const fetchCountries = async () => {
-    const data = await getCountries();
-    const options = convertDataToOptions(data, 'countryId', 'countryName');
-
-    setCountries(options);
-  };
-
-  useEffect(() => {
-    fetchCountries();
-  }, []);
 
   return (
     <div className="flex flex-col gap-5">
@@ -57,6 +43,10 @@ const CompanyAddresses = () => {
       )}
     </div>
   );
+};
+
+CompanyAddresses.propTypes = {
+  countries: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 export default CompanyAddresses;

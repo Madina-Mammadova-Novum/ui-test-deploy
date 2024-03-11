@@ -140,3 +140,27 @@ export function toastFunc(type, title, description = '') {
     return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
   });
 }
+
+export function getApiPublicURL(path) {
+  return `${process.env.NEXT_PUBLIC_API_URL}/api/${path}`;
+}
+
+export function getApiURL(path) {
+  return `${process.env.BACKEND_API_URL}/${path}`;
+}
+
+export function getRtURL(path) {
+  return `${process.env.NEXT_PUBLIC_RT_URL}/${path}`;
+}
+
+export function getSeaMetrixURL(path) {
+  return `${process.env.NEXT_PUBLIC_SEAMETRIX_API_URL}/${path}/${process.env.NEXT_PUBLIC_SEAMETRIX_MAP_KEY}/{z}/{x}/{y}.png`;
+}
+
+export function getIdentityApiURL(path, apiVersion = null) {
+  let pathString = `/${path}`;
+  if (apiVersion !== null) {
+    pathString = `/${apiVersion}${pathString}`;
+  }
+  return `${process.env.IDENTITY_API_URL}${pathString}`;
+}

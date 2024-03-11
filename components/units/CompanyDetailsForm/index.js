@@ -3,28 +3,34 @@
 import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { CompanyDetailsPropTypes } from '@/lib/types';
+
 import { Input } from '@/elements';
 import { disableDefaultBehaviour, disablePlusMinusSymbols } from '@/utils/helpers';
 
-const CompanyDetails = () => {
+const CompanyDetails = ({ notEditable }) => {
   const inputYearsRef = useRef(null);
   const {
     register,
     setValue,
     clearErrors,
+    getValues,
     formState: { errors, isSubmitting },
   } = useFormContext();
+
+  const { companyYearsOfOperation } = getValues();
 
   useEffect(() => {
     if (inputYearsRef.current) {
       inputYearsRef.current.addEventListener('wheel', disableDefaultBehaviour);
       inputYearsRef.current.addEventListener('keydown', disablePlusMinusSymbols);
+      inputYearsRef.current.value = companyYearsOfOperation;
     }
-  }, [inputYearsRef]);
+  }, [companyYearsOfOperation, inputYearsRef]);
 
   const handleNumberOfOperation = () => {
-    clearErrors('companyNumberOfOperation');
-    setValue('companyNumberOfOperation', inputYearsRef.current.value);
+    clearErrors('companyYearsOfOperation');
+    setValue('companyYearsOfOperation', inputYearsRef.current.value);
   };
 
   return (
@@ -37,19 +43,20 @@ const CompanyDetails = () => {
         disabled={isSubmitting}
       />
       <Input
-        type="number"
-        name="companyNumberOfOperation"
-        label="Years of operation"
-        placeholder="Years"
         ref={inputYearsRef}
+        type="number"
+        name="companyYearsOfOperation"
+        label="Years in operation"
+        placeholder="Years"
+        value={inputYearsRef.current?.value ?? ''}
         onChange={handleNumberOfOperation}
-        disabled={isSubmitting}
-        error={errors.companyNumberOfOperation?.message}
+        disabled={isSubmitting || notEditable}
+        error={errors.companyYearsOfOperation?.message}
       />
     </div>
   );
 };
 
-CompanyDetails.propTypes = {};
+CompanyDetails.propTypes = CompanyDetailsPropTypes;
 
 export default CompanyDetails;

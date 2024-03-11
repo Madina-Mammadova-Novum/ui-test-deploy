@@ -1,14 +1,15 @@
 import { updateBlockHeroImage } from '@/blocks/BlockHeroImage/adapter';
+import { updateContactUsBlock } from '@/blocks/ContactUsBlock/adapter';
 import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { updateCTASingleImageBlock } from '@/blocks/CTASingleImageBlock/adapter';
 import { updateFAQBlock } from '@/blocks/FAQBlock/adapter';
 import { updateFAQByCategoryBlock } from '@/blocks/FAQByCategoryBlock/adapter';
-import { updateHowItWorksBlock } from '@/blocks/HowItWorksBlock/adapter';
 import { updateImageSliderBlock } from '@/blocks/ImageSliderBlock/adapter';
 import { updateLetsTalkBlock } from '@/blocks/LetsTalkBlock/adapter';
 import { updateProductFeaturesBlock } from '@/blocks/ProductFeaturesBlock/adapter';
 import { updateTeamBlock } from '@/blocks/TeamBlock/adapter';
 import { updateWhatWeOfferBlock } from '@/blocks/WhatWeOfferBlock/adapter';
+import { updateWhyWeAreBetterBlock } from '@/blocks/WhyWeAreBetterBlock/adapter';
 
 export const blocksDataAdapter = async (blocks) => {
   if (!blocks || blocks.length === 0) {
@@ -20,14 +21,16 @@ export const blocksDataAdapter = async (blocks) => {
       switch (block.__component) {
         case 'blocks.cta':
           return updateCTABlock(block);
+        case 'blocks.contact-us':
+          return updateContactUsBlock(block);
         case 'blocks.cta-single-image':
           return updateCTASingleImageBlock(block);
         case 'blocks.hero-image':
           return updateBlockHeroImage(block);
         case 'blocks.image-slider':
           return updateImageSliderBlock(block);
-        case 'blocks.single-how-it-works':
-          return updateHowItWorksBlock(block);
+        case 'blocks.single-why-we-are-better':
+          return updateWhyWeAreBetterBlock(block);
         case 'blocks.single-what-we-offer':
           return updateWhatWeOfferBlock(block);
         case 'blocks.product-features':

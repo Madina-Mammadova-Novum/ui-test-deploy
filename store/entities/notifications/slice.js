@@ -1,0 +1,120 @@
+import { createSlice } from '@reduxjs/toolkit';
+
+/* Actions */
+
+// eslint-disable-next-line import/no-cycle
+import { fetchNotifications, getCurrnetDealStage, readNotification } from './actions';
+
+const initialState = {
+  unread: 0,
+  readed: 0,
+  watchedData: [],
+  unwatchedData: [],
+  dealData: {},
+  dealFetching: false,
+  loading: false,
+  error: null,
+  isOpened: false,
+  filterParams: {
+    activeTab: 'unread',
+    searchValue: '',
+    sortedValue: 'all',
+    skip: 0,
+    take: 50,
+    watched: false,
+  },
+};
+
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  initialState,
+  reducers: {
+    setWatchedData: (state, action) => {
+      state.watchedData = [...action.payload];
+    },
+    updateWatchedData: (state, action) => {
+      state.watchedData = [...state.watchedData, ...action.payload];
+    },
+    setUnwatchedData: (state, action) => {
+      state.unwatchedData = [...action.payload];
+    },
+    updateUnwatchedData: (state, action) => {
+      state.unwatchedData = [...state.unwatchedData, ...action.payload];
+    },
+    setFilterParams: (state, action) => {
+      state.filterParams = {
+        ...state.filterParams,
+        ...action.payload,
+      };
+    },
+    resetNotifications: (state) => {
+      state.watchedData = [];
+      state.unwatchedData = [];
+    },
+    resetParams: (state) => {
+      state.filterParams = initialState.filterParams;
+      state.isOpened = initialState.isOpened;
+    },
+    setIsOpened: (state, action) => {
+      state.isOpened = action.payload;
+    },
+    resetNotificationData: (state) => {
+      state.readed = 0;
+      state.unread = 0;
+      state.unwatchedData = [];
+      state.watchedData = [];
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchNotifications.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.readed = payload.readed;
+      state.unread = payload.unread;
+    });
+    builder.addCase(fetchNotifications.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload?.error;
+    });
+    builder.addCase(readNotification.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(readNotification?.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(readNotification.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    });
+    builder.addCase(getCurrnetDealStage.pending, (state) => {
+      state.dealFetching = true;
+    });
+    builder.addCase(getCurrnetDealStage.fulfilled, (state, { payload }) => {
+      state.dealFetching = false;
+      state.dealData = payload;
+    });
+    builder.addCase(getCurrnetDealStage.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    });
+  },
+});
+
+export const {
+  setConnectionStatus,
+  setFilterParams,
+  setIsOpened,
+  setWatchedData,
+  setUnwatchedData,
+  resetNotifications,
+  updateWatchedData,
+  updateUnwatchedData,
+  getUnwatchedData,
+  getWatchedData,
+  resetParams,
+  resetNotificationData,
+} = notificationsSlice.actions;
+
+export default notificationsSlice.reducer;

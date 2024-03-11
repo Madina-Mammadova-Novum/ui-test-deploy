@@ -1,11 +1,18 @@
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { updatePasswordResponseAdapter } from '@/adapters/user';
+import { Authorization, ContentTypeJson } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
+import { getCookieFromServer } from '@/utils/helpers';
+
 export default async function handler(req, res) {
-  await sleep(2000);
-  res.status(200).json({
-    message: 'Your password has been sent successfully',
+  const token = getCookieFromServer('session-access-token', req);
+
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`auth/updatepassword`),
+    dataAdapter: updatePasswordResponseAdapter,
+    requestMethod: 'POST',
+    options: { headers: { ...Authorization(token), ...ContentTypeJson() } },
   });
 }

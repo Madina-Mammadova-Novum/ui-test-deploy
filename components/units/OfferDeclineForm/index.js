@@ -1,46 +1,74 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import OfferDeclineFields from './OfferDeclineFields';
 
+import { OfferDeclinePropTypes } from '@/lib/types';
+
 import { FormManager } from '@/common';
-import { useHookFormParams } from '@/utils/hooks';
+import { declineOfferSchema } from '@/lib/schemas';
+import { declineOffer } from '@/services/offer';
+import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
+import { getUserDataSelector } from '@/store/selectors';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object({});
+const schema = yup.object({
+  ...declineOfferSchema(),
+});
 
-const defaultState = {};
+const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, offerDetails, itemId }) => {
+  const dispatch = useDispatch();
+  const { role } = useSelector(getUserDataSelector);
 
-const OfferDeclineForm = ({ closeModal, title, goBack }) => {
-  const methods = useHookFormParams({ state: defaultState, schema });
+  const methods = useHookFormParams({ state: {}, schema });
+  const reason = methods.watch('reason');
 
-  const handleSubmit = (data) => console.log(data);
+  const handleSubmit = async (formData) => {
+    const { message: successMessage, error } = await declineOffer({
+      data: { ...formData, offerId: itemId },
+      role,
+    });
+
+    if (!error) {
+      successToast(successMessage);
+      dispatch(fetchUserNegotiating());
+      closeModal();
+    } else {
+      errorToast(error?.title, error?.message);
+    }
+  };
 
   return (
     <FormProvider {...methods}>
       <FormManager
-        submitAction={(formData) => handleSubmit(formData)}
-        submitButton={{ text: 'Show results', variant: 'secondary', size: 'large', className: 'hidden' }}
+        submitAction={handleSubmit}
+        submitButton={{
+          text: 'Proceed',
+          variant: 'delete',
+          size: 'large',
+          disabled: !reason,
+          className: `absolute cursor-pointer !max-w-[145px] whitespace-nowrap right-8 bottom-8 !px-2.5 ${
+            !showCancelButton && 'left-8 !max-w-[unset] !w-auto'
+          }`,
+        }}
+        className="!gap-0"
       >
-        <OfferDeclineFields closeModal={closeModal} title={title} goBack={goBack} />
+        <OfferDeclineFields
+          closeModal={closeModal}
+          title={title}
+          goBack={goBack}
+          showCancelButton={showCancelButton}
+          offerDetails={offerDetails}
+        />
       </FormManager>
     </FormProvider>
   );
 };
 
-OfferDeclineForm.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-  title: '',
-};
-
-OfferDeclineForm.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-  title: PropTypes.string,
-};
+OfferDeclineForm.propTypes = OfferDeclinePropTypes;
 
 export default OfferDeclineForm;

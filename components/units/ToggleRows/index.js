@@ -1,35 +1,51 @@
 'use client';
 
-import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import DoubleArrowSVG from '@/assets/images/doubleArrow.svg';
+import { ToggleRowsPropTypes } from '@/lib/types';
+
+import DoubleArrowSVG from '@/assets/images/angleDouble.svg';
 import { Button } from '@/elements';
 
-const ToggleRows = ({ onToggleClick, value }) => {
+const ToggleRows = ({ onToggleClick }) => {
   return (
-    <div
-      aria-hidden
-      type="button"
-      className="flex gap-x-2.5 text-blue text-xsm pr-5 items-center"
-      onClick={onToggleClick}
-    >
-      <DoubleArrowSVG className={`transition duration-500 ${value && 'rotate-180'}`} />
+    <div className="flex text-xsm">
       <Button
-        buttonProps={{ text: `${value ? 'Collapse' : 'Expand'} all groups`, variant: 'primary', size: 'small' }}
-        customStyles="!bg-[transparent] px-0 py-0"
+        buttonProps={{
+          text: `Expand all groups`,
+          variant: 'primary',
+          size: 'small',
+          icon: {
+            before: (
+              <DoubleArrowSVG
+                className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500')}
+              />
+            ),
+          },
+        }}
+        customStyles="!px-0 !py-0 !bg-[transparent] !text-xsm"
+        onClick={() => onToggleClick({ value: true })}
+      />
+      <Button
+        buttonProps={{
+          text: `Collapse all groups`,
+          variant: 'primary',
+          size: 'small',
+          icon: {
+            before: (
+              <DoubleArrowSVG
+                className={classnames('fill-blue group-hover:fill-blue-darker transition duration-500 rotate-180')}
+              />
+            ),
+          },
+        }}
+        customStyles="!px-0 !py-0 !bg-[transparent] !rounded-none border-l border-gray-darker !text-xsm"
+        onClick={() => onToggleClick({ value: false })}
       />
     </div>
   );
 };
 
-ToggleRows.defaultProps = {
-  onToggleClick: () => {},
-  value: false,
-};
-
-ToggleRows.propTypes = {
-  onToggleClick: PropTypes.func,
-  value: PropTypes.bool,
-};
+ToggleRows.propTypes = ToggleRowsPropTypes;
 
 export default ToggleRows;

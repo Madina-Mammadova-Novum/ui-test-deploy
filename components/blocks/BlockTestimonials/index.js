@@ -11,7 +11,7 @@ import { Title } from '@/elements';
 
 const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
   return (
-    <section className="relative mb-28 sm:mb-44 2lg:mb-64">
+    <section className="relative mb-28 sm:mb-44 2xl:mb-64">
       {title && <Title level="1">{title}</Title>}
       {shortDescription && shortDescription}
       {testimonials && (
@@ -44,7 +44,7 @@ const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
             return (
               <SwiperSlide
                 key={testimonial.id}
-                className="!w-[330px] !h-[340px] sm:!w-[340px] md:!w-[413px] md:!h-[448px] 2lg:!h-[576px] 2lg:!w-[558px]"
+                className="!w-[330px] !h-[340px] sm:!w-[340px] md:!w-[413px] md:!h-[448px] 2xl:!h-[576px] 2xl:!w-[558px]"
               >
                 {testimonial}
                 {/* <TestimonialCard testimonial={testimonial} /> */}

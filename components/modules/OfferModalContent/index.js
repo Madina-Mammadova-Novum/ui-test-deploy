@@ -1,14 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
+import { OfferModalContentPropTypes } from '@/lib/types';
 
-import { Button, SimpleSelect, Title } from '@/elements';
-import { COUNTDOWN_OPTIONS } from '@/lib/constants';
-import { CommentsContent, VoyageDetailsContent } from '@/modules';
-import { OfferForm, Tabs } from '@/units';
-import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
+import { voyageDetailsAdapter } from '@/adapters/offer';
+import { Button, Dropdown, Title } from '@/elements';
+import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
+import { CommentsContent } from '@/modules';
+import { getCountdownTimer } from '@/services/countdownTimer';
+import { sendOffer } from '@/services/offer';
+import { fetchOfferOptioins, fetchOfferValidation } from '@/store/entities/offer/actions';
+import { resetOfferData } from '@/store/entities/offer/slice';
+import { getOfferSelector, getSearchSelector } from '@/store/selectors';
+import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
+import { convertDataToOptions } from '@/utils/helpers';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
   {
@@ -25,73 +33,177 @@ const tabs = [
   },
 ];
 
-const OfferModalContent = ({ closeModal }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[0]);
-  const [showScroll, setShowScroll] = useState(false);
+const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
+  const dispatch = useDispatch();
+  const scrollingContainerRef = useRef(null);
 
-  const tabContent = () => {
-    switch (currentTab) {
-      case 'voyage_details':
-        return <VoyageDetailsContent data={voyageDetailData} />;
-      case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} />;
-      default:
-        return <OfferForm />;
+  const [modalStore, setModalStore] = useState({
+    currentTab: tabs[0].value,
+    responseCountdown: null,
+    responseCountdownOptions: [],
+    showScroll: false,
+    loading: false,
+  });
+
+  const offer = useSelector(getOfferSelector);
+  const search = useSelector(getSearchSelector);
+
+  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = search.data;
+  const { voyageDetails } = voyageDetailsAdapter({ data: search.data });
+
+  const handleChangeState = (key, value) => {
+    setModalStore((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  const handleChangeOption = (option) => handleChangeState('responseCountdown', option);
+  const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
+  const handleValidationError = () => handleChangeState('currentTab', tabs[0].value);
+
+  const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
+
+  const handleSubmit = async (formData) => {
+    const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
+
+    const {
+      status,
+      error,
+      message: successMessage,
+    } = await sendOffer({
+      data: {
+        ...formData,
+        ...tankerData,
+        responseCountdown,
+        tankerId,
+        laycanStart,
+        laycanEnd,
+        loadTerminal,
+        dischargeTerminal,
+        minOfferQuantity: totalMinQuantity,
+      },
+    });
+
+    if (status === 200) {
+      successToast(successMessage);
+      closeModal();
+    }
+
+    if (error) {
+      errorToast(error?.title, error?.message);
     }
   };
 
+  const fetchCountdownData = async () => {
+    handleChangeState('loading', true);
+    const { data = [] } = await getCountdownTimer();
+    const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+    const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+
+    handleChangeState('responseCountdownOptions', convertedOptions);
+    handleChangeOption(defaultCountdown);
+    handleChangeState('loading', false);
+  };
+
+  useEffect(() => {
+    dispatch(fetchOfferValidation({ ...search?.data, tankerId }));
+
+    if (offer.valid) {
+      fetchCountdownData();
+      dispatch(fetchOfferOptioins(tankerId));
+    }
+
+    return () => {
+      dispatch(resetOfferData());
+    };
+  }, [tankerId]);
+
+  const scrollToBottom = () =>
+    setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
+
+  const tabContent = useMemo(() => {
+    switch (currentTab) {
+      case 'voyage_details':
+        return <VoyageDetailsTabContent data={voyageDetails} />;
+      case 'comments':
+        return <CommentsContent />;
+      default:
+        return (
+          <CommercialOfferTerms
+            loading={offer.loading}
+            valid={offer.valid}
+            tankerId={tankerId}
+            offerData={offer.data}
+            searchData={search.data}
+            scrollToBottom={scrollToBottom}
+          />
+        );
+    }
+  }, [currentTab, tankerId, offer, search]);
+
+  const errorBanner = useMemo(() => {
+    return (
+      offer?.error && (
+        <div className="bg-red-light rounded-base py-2.5 pb-3 px-5">
+          <div className="text-xsm mt-1.5">
+            <span className="font-bold">Declined:</span>
+            <span className="ml-1.5">{offer?.error}</span>
+          </div>
+        </div>
+      )
+    );
+  }, [offer?.error, offer?.valid, tankerId]);
+
   return (
     <div className="w-[610px]">
-      <Title level="2">Send Offer</Title>
-
+      <div className="flex flex-col gap-y-5">
+        <Title level="2">Send Offer</Title>
+        {errorBanner}
+      </div>
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the vessel owner to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offer
           </p>
-          <SimpleSelect
-            onChange={setResponseCountdown}
-            currentItem={responseCountdown}
-            selectableItems={COUNTDOWN_OPTIONS}
+          <Dropdown
+            defaultValue={responseCountdown}
+            options={responseCountdownOptions}
+            loading={loading}
+            disabled={!responseCountdownOptions?.length || !offer.valid}
+            onChange={handleChangeOption}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+            asyncCall
           />
         </div>
       </div>
-
-      <Tabs
-        customStyles="mx-auto mt-5 mb-3"
-        tabs={tabs}
-        activeTab={currentTab}
-        onClick={({ target }) => setCurrentTab(target.value)}
-      />
-
+      <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
       <div
-        ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
+        ref={scrollingContainerRef}
         className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
-        {tabContent()}
+        <div className="p-2.5">
+          <OfferForm disabled={!offer.valid} handleSubmit={handleSubmit} handleValidationError={handleValidationError}>
+            {tabContent}
+          </OfferForm>
+        </div>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
+      <div className="flex text-xsm gap-x-4 mt-4 justify-end">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
-        <Button buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }} customStyles="opacity-[0]" />
+        <Button
+          buttonProps={{ text: 'Send offer', variant: 'primary', size: 'large' }}
+          customStyles="opacity-[0] !w-32"
+        />
       </div>
     </div>
   );
 };
 
-OfferModalContent.defaultProps = {
-  setStep: () => {},
-  closeModal: () => {},
-};
-
-OfferModalContent.propTypes = {
-  setStep: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+OfferModalContent.propTypes = OfferModalContentPropTypes;
 
 export default OfferModalContent;

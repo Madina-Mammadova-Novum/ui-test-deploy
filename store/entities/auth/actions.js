@@ -1,39 +1,27 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { HYDRATE } from 'next-redux-wrapper';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { authorization } from '@/lib/api';
+import { AUTH } from './types';
 
-export const authApi = createApi({
-  reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_LOGIN_API_URL,
-    credentials: 'include',
-    prepareHeaders: (headers, { getState }) => {
-      const { accessToken } = getState().auth;
-      if (accessToken) headers.set(authorization(accessToken));
+import { decodedTokenAdapter, signInAdapter, tokenAdapter, userRoleAdapter } from '@/adapters/user';
+import { login } from '@/services';
+import { sessionCookieData } from '@/utils/helpers';
 
-      return headers;
-    },
-  }),
-  extractRehydrationInfo(action, { reducerPath }) {
-    if (action.type === HYDRATE) return action.payload[reducerPath];
-    return null;
-  },
-  endpoints: (builder) => ({
-    login: builder.mutation({
-      query: (credentials) => ({
-        url: 'token',
-        method: 'POST',
-        body: credentials,
-      }),
-      transformResponse: (data) => data,
-    }),
-    refreshToken: builder.mutation({
-      query: (refreshToken) => ({
-        url: 'token/refresh-token',
-        method: 'POST',
-        body: { refreshToken },
-      }),
-    }),
-  }),
+export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWithValue }) => {
+  const response = await login({ data: signInAdapter({ data }) });
+
+  if (!response?.data?.access_token) {
+    return rejectWithValue(response.error);
+  }
+
+  const { sub, role, ...rest } = decodedTokenAdapter(response.data.access_token);
+
+  sessionCookieData(response.data);
+
+  return {
+    userId: sub,
+    user: { ...rest },
+    error: null,
+    role: userRoleAdapter({ data: role }),
+    ...tokenAdapter({ data: response.data }),
+  };
 });

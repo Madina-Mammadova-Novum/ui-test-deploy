@@ -1,60 +1,64 @@
-import React from 'react';
+'use client';
 
-import usFlag from '@/assets/images/flag.png';
-import { IconComponent, TextRow, Title } from '@/elements';
+import { ExpandedContentPropTypes } from '@/lib/types';
 
-const ExpandedContent = () => {
+import { TextRow, Title } from '@/elements';
+import { Flag } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
+
+const ExpandedContent = ({ data }) => {
+  const { vesselOwnerData, tankerData, countryData } = data;
+
+  const token = getCookieFromBrowser('session-access-token');
+
+  const hashedInfo = (text = null) => (token ? text : 'Hidden info');
+
   return (
-    <div className="mt-3 mb-5">
+    <div className="mt-3  px-5">
       <Title level="3">Tanker Information</Title>
 
-      <div className="md:flex text-xsm mt-2.5 gap-x-20">
-        <div>
-          <Title level="5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
-            About the Vessel Owner
-          </Title>
-          <TextRow title="Years in Operation">3-5 years</TextRow>
-          <TextRow title="Number of Tankers">6-10 tankers</TextRow>
-          <TextRow title="Estimated average tanker DWT">21-40 kt</TextRow>
-        </div>
+      <div className="lg:flex text-xsm mt-2.5 gap-x-20">
+        {vesselOwnerData.length && (
+          <div>
+            <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
+              About the Vessel Owner
+            </Title>
+            {vesselOwnerData.map(({ title, description }) => (
+              <TextRow title={title}>{hashedInfo(description)}</TextRow>
+            ))}
+          </div>
+        )}
 
-        <div className="mt-2.5 md:mt-0">
-          <Title level="5" className="text-[12px] text-gray font-semibold mb-1.5 uppercase">
+        <div className="mt-2.5 lg:mt-0">
+          <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
             About the Tanker
           </Title>
           <div className="flex gap-x-10">
-            <div>
-              <TextRow title="Ship age">≤ 5</TextRow>
-              <TextRow title="Cubic capacity 98%">25,*** m³</TextRow>
-              <TextRow title="Number of Segregations">5</TextRow>
-              <TextRow title="LOA">100 m</TextRow>
-              <TextRow title="Beam">23 m</TextRow>
-              <TextRow title="Type of Hull">Double Hull</TextRow>
-            </div>
+            {tankerData.length && (
+              <div>
+                {tankerData.map(({ title, description }) => (
+                  <TextRow title={title}>{hashedInfo(description)}</TextRow>
+                ))}
+              </div>
+            )}
 
-            <div>
-              <TextRow title="Country of Registered Owner">
-                <IconComponent icon={usFlag} />
-                Turkey
-              </TextRow>
-              <TextRow title="Country of Disponent Owner">
-                <IconComponent icon={usFlag} />
-                The Netherlands
-              </TextRow>
-              <TextRow title="Country of Technical Operator">
-                <IconComponent icon={usFlag} />
-                The Netherlands
-              </TextRow>
-              <TextRow title="Country of Commercial Operator">
-                <IconComponent icon={usFlag} />
-                Turkey
-              </TextRow>
-            </div>
+            {countryData.length && (
+              <div>
+                {countryData.map(({ title, description, countryCode }) => (
+                  <TextRow title={title}>
+                    <Flag countryCode={countryCode} className="mr-1" />
+                    {hashedInfo(description)}
+                  </TextRow>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+ExpandedContent.propTypes = ExpandedContentPropTypes;
 
 export default ExpandedContent;

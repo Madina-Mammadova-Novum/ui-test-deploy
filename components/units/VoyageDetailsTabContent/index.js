@@ -1,63 +1,56 @@
-import PropTypes from 'prop-types';
+'use client';
 
-import InfoSVG from '@/assets/images/info.svg';
-import { IconComponent, TextRow, Title } from '@/elements';
+import Flag from '../Flag';
 
-const VoyageDetailsTabContent = ({ data }) => {
+import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
+
+import { TextRow, Title } from '@/elements';
+
+const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
+  const printPairDates = (detail) => <TextRow title={detail.key}>{detail.label}</TextRow>;
+
   return (
     <div>
       <div className="flex justify-between">
-        <Title level={3}>Voyage details</Title>
-        <div className="flex ">
-          <span className="mr-1.5">Charterer Information</span>
-          <InfoSVG className="fill-black w-3.5" />
-        </div>
+        <Title level="3">Voyage details</Title>
       </div>
 
-      <div className="text-xsm mt-2.5">
-        <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
-          dates
-        </Title>
-        {data.dates.map((pair) => (
-          <div className="mt-2.5">
-            {pair.map((detail) => (
-              <TextRow title={detail.key}>{detail.label}</TextRow>
-            ))}
-          </div>
-        ))}
+      <div className={`text-xsm mt-2.5 gap-x-2.5 ${inlineVariant && 'flex justify-between'}`}>
+        <div>
+          <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
+            dates
+          </Title>
+          {data?.dates?.map((pair) => (
+            <div className="mt-2.5">{pair.map(printPairDates)}</div>
+          ))}
+        </div>
 
         <hr className="my-4" />
 
-        <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
-          ports
-        </Title>
-        {data.ports.map((pair) => (
-          <div className="mt-2.5">
-            {pair.map((detail) => (
-              <TextRow title={detail.key}>
-                <IconComponent icon={detail.countryFlag} />
-                {detail.label}
-              </TextRow>
-            ))}
-          </div>
-        ))}
+        <div>
+          <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
+            ports
+          </Title>
+
+          {data?.ports?.map((pair) => (
+            <div className="mt-2.5" key={pair?.id}>
+              {pair?.map((detail) => {
+                return (
+                  <TextRow title={detail.key} key={detail.key}>
+                    <Flag countryCode={detail.countryCode} className="mr-1.5" />
+                    {detail.label}
+                  </TextRow>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
+      {!!inlineVariant && <hr className="my-4" />}
     </div>
   );
 };
 
-VoyageDetailsTabContent.defaultProps = {
-  data: {
-    dates: [],
-    ports: [],
-  },
-};
-
-VoyageDetailsTabContent.propTypes = {
-  data: PropTypes.shape({
-    dates: PropTypes.shape([]),
-    ports: PropTypes.shape([]),
-  }),
-};
+VoyageDetailsTabContent.propTypes = VoyageDetailsTabContentPropTypes;
 
 export default VoyageDetailsTabContent;

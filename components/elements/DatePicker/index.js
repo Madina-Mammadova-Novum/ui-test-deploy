@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Calendar } from 'react-date-range';
+import { Controller } from 'react-hook-form';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+
+import { DatePickePropTypes } from '@/lib/types';
 
 import CalendarSVG from '@/assets/images/calendar.svg';
 import { Input } from '@/elements';
@@ -13,64 +15,81 @@ import { transformDate } from '@/utils/date';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
-const DatePicker = ({ name, label, onChange, inputClass, error, ...rest }) => {
-  const [date, setDate] = useState(null);
+const DatePicker = ({
+  name = '',
+  label = '',
+  onChange,
+  error,
+  dateValue,
+  inputClass = 'min-w-[296px]',
+  calendarClass = '',
+  containerClass = '',
+  closeOnSelect = true,
+  expanded = false,
+  disabled = false,
+  dateVariant = 'MMM dd, yyyy',
+  minDate,
+  maxDate,
+  ...rest
+}) => {
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDate = (pickedDate) => {
-    setDate(pickedDate);
-    onChange(transformDate(pickedDate, 'MMM dd, yyyy'));
+    onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
+    if (closeOnSelect) setShowPicker(false);
   };
 
   return (
-    <>
+    <div className={`${containerClass} ${expanded && showPicker ? 'h-[330px]' : 'h-auto'}`}>
       <div
         aria-hidden="true"
         className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
-      <div className="single_date relative cursor-pointer w-full">
-        <div aria-hidden onClick={() => setShowPicker((prevValue) => !prevValue)}>
-          <Input
-            name={name}
-            customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
-            label={label}
-            value={transformDate(date, 'MMM dd, yyyy')}
-            icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
-            error={error}
-            {...rest}
-          />
-        </div>
-        <div
-          className={classnames('absolute bottom-0 translate-y-[95%] left-0 hidden z-10', {
-            '!block': showPicker,
-          })}
-        >
-          <Calendar date={date} onChange={handleDate} />
-        </div>
-      </div>
-    </>
+      <Controller
+        name={name}
+        render={({ field }) => {
+          const value = field.value || dateValue || new Date();
+
+          return (
+            <div className={`single_date relative cursor-pointer w-full ${disabled && 'opacity-70'}`}>
+              <div
+                aria-hidden
+                onClick={() => (disabled ? setShowPicker(false) : setShowPicker((prevValue) => !prevValue))}
+              >
+                <Input
+                  name={name}
+                  customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
+                  inputStyles="pr-0"
+                  label={label}
+                  value={transformDate(value, dateVariant)}
+                  icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
+                  error={error}
+                  {...rest}
+                />
+              </div>
+              <div
+                className={classnames('absolute w-full bottom-3 translate-y-full left-0 hidden z-10', {
+                  '!block': showPicker,
+                  'opacity-30': disabled,
+                })}
+              >
+                <Calendar
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  className={`${calendarClass} rounded-lg`}
+                  date={field.value ? new Date(field.value) : null}
+                  onChange={handleDate}
+                />
+              </div>
+            </div>
+          );
+        }}
+      />
+    </div>
   );
 };
 
-DatePicker.defaultProps = {
-  name: '',
-  label: '',
-  inputClass: 'min-w-[296px]',
-  error: null,
-  register: () => {},
-  setValue: () => {},
-  onChange: () => {},
-};
-
-DatePicker.propTypes = {
-  inputClass: PropTypes.string,
-  name: PropTypes.string,
-  label: PropTypes.string,
-  setValue: PropTypes.func,
-  register: PropTypes.func,
-  onChange: PropTypes.func,
-  error: PropTypes.string,
-};
+DatePicker.propTypes = DatePickePropTypes;
 
 export default DatePicker;

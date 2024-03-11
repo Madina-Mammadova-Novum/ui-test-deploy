@@ -1,27 +1,30 @@
-import PropTypes from 'prop-types';
+import { ExpandableCardPropTypes } from '@/lib/types';
 
 import { fleetsHeaderDataAdapter, fleetsRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, ExpandableCardWrapper, Table } from '@/elements';
 import { fleetsHeader } from '@/utils/mock';
 
-const ExpandableCard = ({ data }) => {
+const ExpandableCard = ({ data, expandAll, className }) => {
   const headerData = fleetsHeaderDataAdapter({ data });
-  const rowsData = fleetsRowsDataAdapter({ data: data.tankers });
+  const rowsData = fleetsRowsDataAdapter({ data: data?.tankers });
 
   return (
-    <ExpandableCardWrapper headerComponent={<ExpandableCardHeader headerData={headerData} />}>
-      <Table headerData={fleetsHeader} rows={rowsData} />
+    <ExpandableCardWrapper
+      expandAll={expandAll}
+      className={className}
+      headerComponent={<ExpandableCardHeader headerData={headerData} gridLayout={false} />}
+    >
+      <Table
+        fleetId={data?.fleetId}
+        type={data?.type}
+        headerData={fleetsHeader}
+        rows={rowsData}
+        noDataMessage="This Fleet has no tankers"
+      />
     </ExpandableCardWrapper>
   );
 };
 
-ExpandableCard.propTypes = {
-  data: PropTypes.shape({
-    title: PropTypes.string,
-    activeTankers: PropTypes.string,
-    inActiveTankers: PropTypes.string,
-    tankers: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-};
+ExpandableCard.propTypes = ExpandableCardPropTypes;
 
 export default ExpandableCard;

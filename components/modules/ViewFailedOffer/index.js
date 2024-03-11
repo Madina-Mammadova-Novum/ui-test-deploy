@@ -1,19 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
+import { ViewFailedOfferPropTypes } from '@/lib/types';
+
+import { offerDetailsAdapter } from '@/adapters/offer';
+import { Loader } from '@/elements';
 import { CommentsContent } from '@/modules';
-import { COTTabContent, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
-import { COTData, incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
+import { getOfferDetails } from '@/services/offer';
+import { getUserDataSelector } from '@/store/selectors';
+import { ModalHeader, OfferDetails, Tabs } from '@/units';
 
 const tabs = [
   {
-    value: 'voyage_details',
-    label: 'Voyage details',
-  },
-  {
-    value: 'commercial_offer_terms',
-    label: 'Commercial offer terms',
+    value: 'offer_details',
+    label: 'Offer details',
   },
   {
     value: 'comments',
@@ -21,32 +23,59 @@ const tabs = [
   },
 ];
 
-const ViewFailedOffer = () => {
+const ViewFailedOffer = ({ itemId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [offerDetails, setOfferDetails] = useState({});
+  const {
+    comments,
+    voyageDetails,
+    commercialOfferTerms,
+    failedOfferData: { failureReason, declinedBy } = {},
+  } = offerDetails;
+
+  const { role } = useSelector(getUserDataSelector);
+
+  useEffect(() => {
+    (async () => {
+      const { status, data, error } = await getOfferDetails(itemId, role);
+      if (status === 200) {
+        setOfferDetails(offerDetailsAdapter({ data, role }));
+      } else {
+        console.error(error);
+      }
+      setLoading(false);
+    })();
+  }, []);
 
   const tabContent = () => {
     switch (currentTab) {
-      case 'commercial_offer_terms':
-        return <COTTabContent data={COTData} />;
       case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} areaDisabled />;
+        return <CommentsContent data={comments} areaDisabled />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
+        return <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />;
     }
   };
 
+  if (loading)
+    return (
+      <div className="w-72 h-72">
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
+
   return (
     <div className="w-[610px]">
-      <ModalHeader>View Failed Offer</ModalHeader>
-      <div className="bg-red-light rounded-[10px] py-3 px-5 mt-5">
+      <ModalHeader>View Declined Offer</ModalHeader>
+      <div className="bg-red-light rounded-base py-3 px-5 mt-5">
         <div className="text-xsm font-semibold">
-          <span>Failed reason:</span>
-          <span className="text-red ml-1.5">Offer Declined by me</span>
+          <span>Declined by:</span>
+          <span className="text-red ml-1.5">{declinedBy}</span>
         </div>
         <div className="text-[12px] mt-1.5">
-          <span className="font-bold">Failed reason:</span>
-          <span className="ml-1.5">Lorem ipsum is placeholder text commonly used in the graphic</span>
+          <span className="font-bold">Reason:</span>
+          <span className="ml-1.5">{failureReason}</span>
         </div>
       </div>
 
@@ -66,5 +95,7 @@ const ViewFailedOffer = () => {
     </div>
   );
 };
+
+ViewFailedOffer.propTypes = ViewFailedOfferPropTypes;
 
 export default ViewFailedOffer;

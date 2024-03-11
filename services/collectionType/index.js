@@ -1,12 +1,12 @@
 import pluralize from 'pluralize';
 
-import { entityDataAdapter } from '@/adapters/entityData';
 import { COLLECTIONS_TYPES } from '@/lib';
+import { ROOT_COLLECTION_TYPE, ROOT_SLUG } from '@/lib/constants';
 import { getData } from '@/utils/dataFetching';
 
 export function getCollectionType(slug) {
   if (slug !== undefined) {
-    const locale = slug.shift(); // defaultLocale form next-i18next.config.js
+    const locale = 'en'; // defaultLocale without using next-i18next.config.js
     if (slug.length > 0) {
       const prefix = slug.shift();
       const collectionType = Object.keys(COLLECTIONS_TYPES)
@@ -22,15 +22,15 @@ export function getCollectionType(slug) {
         };
       }
       return {
-        collectionType: 'page',
+        collectionType: ROOT_COLLECTION_TYPE,
         slug: [prefix, ...slug].join('/'),
         locale,
       };
     }
   }
   return {
-    collectionType: 'page',
-    slug: ['home'].join('/'),
+    collectionType: ROOT_COLLECTION_TYPE,
+    slug: [ROOT_SLUG].join('/'),
     locale: 'en', // defaultLocale form next-i18next.config.js
   };
 }
@@ -40,23 +40,15 @@ export function getEndpoint(slug, locale, apiID, preview = false) {
   return `/${pluralize(apiID)}?${previewParams}
     &locale=${locale}
     &filters[slug][$eq]=${slug}
-    &populate[blocks][populate]=*,gallery,members.author,cta.buttons,categories,
-    coverImage,button,buttons,ctaList,ctaList.cta,cta,ctaList.cta.buttons,
-    category,members.author.coverImage,members.author.socialLinks,members.author.socialLinks.coverImage
-    &populate[seo]=metaSocial`.replace(/\s+|\n/g, '');
+    &populate=deep`.replace(/\s+|\n/g, '');
 }
 
 export async function getEntityData(params, preview = false) {
   const { slug: pathArray } = params;
   const { collectionType, slug, locale } = getCollectionType(pathArray);
   const response = await getData(`collection-type?s=${slug}&l=${locale}&c=${collectionType}&p=${preview}`);
-  const { data, meta } = response;
-  if (data === undefined) return null;
+
   return {
-    slug,
-    locale,
-    collectionType,
-    data: data.length > 0 ? await entityDataAdapter({ data: data[0] }) : null,
-    meta,
+    ...response,
   };
 }

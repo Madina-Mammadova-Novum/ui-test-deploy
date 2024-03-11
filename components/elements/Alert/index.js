@@ -1,27 +1,31 @@
-import PropTypes from 'prop-types';
+'use client';
 
-import { AcceptIcon, CloseIcon, InfoIcon } from '@/assets/icons';
+import { AlertPropTypes } from '@/lib/types';
 
-const Alert = ({ variant, title, description, handleClose }) => {
+import CheckCircleSVG from '@/assets/images/checkCircle.svg';
+import CloseSVG from '@/assets/images/close.svg';
+import InfoCircleSVG from '@/assets/images/infoCircle.svg';
+
+const Alert = ({ variant = '', title, description, handleClose }) => {
   let alert;
   switch (variant) {
     case 'success': {
       alert = {
-        icon: <AcceptIcon />,
+        icon: <CheckCircleSVG className="fill-green" />,
         theme: 'bg-green-light border-green',
       };
       break;
     }
     case 'error': {
       alert = {
-        icon: <InfoIcon variant="error" />,
+        icon: <InfoCircleSVG className="fill-red" variant="error" />,
         theme: 'bg-red-light border-red',
       };
       break;
     }
     case 'warning': {
       alert = {
-        icon: <InfoIcon variant="warning" />,
+        icon: <InfoCircleSVG className="fill-yellow" variant="warning" />,
         theme: 'bg-yellow-light border-yellow',
       };
       break;
@@ -38,34 +42,26 @@ const Alert = ({ variant, title, description, handleClose }) => {
 
   return (
     <div
-      className={`box-border ml-auto mb-0 max-w-lg my-3 px-4.5 py-2.5 gap-2.5 flex justify-between border border-solid rounded-base ${theme}`}
+      className={`box-border ml-auto mb-0 w-max my-3 px-4 py-2.5 gap-2.5 flex justify-between border border-solid rounded-base ${theme}`}
     >
       <div className="flex items-center gap-2.5">
         {icon}
         <div className="flex flex-col">
-          <p className="text-black font-semibold text-xsm">{title}</p>
-          <p className="text-black font-normal text-xs-sm">{description}</p>
+          {title && <p className="text-black font-semibold text-xsm">{title}</p>}
+          {description && (
+            <pre className="text-black font-inter-sans font-normal text-xs-sm">
+              <span>{description}</span>
+            </pre>
+          )}
         </div>
       </div>
       <button type="button" onClick={handleClose}>
-        <CloseIcon />
+        <CloseSVG />
       </button>
     </div>
   );
 };
 
-Alert.defaultProps = {
-  variant: '',
-  title: '',
-  description: '',
-  handleClose: () => {},
-};
-
-Alert.propTypes = {
-  variant: PropTypes.string,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  handleClose: PropTypes.func,
-};
+Alert.propTypes = AlertPropTypes;
 
 export default Alert;

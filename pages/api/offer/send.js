@@ -1,11 +1,18 @@
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { responseSendOfferAdapter } from '@/adapters/offer';
+import { Authorization } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
+import { getCookieFromServer } from '@/utils/helpers';
+
 export default async function handler(req, res) {
-  await sleep(2000);
-  res.status(200).json({
-    message: 'You have successfully submitted your offer',
+  const token = getCookieFromServer('session-access-token', req);
+
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`v1/charterer/deals/create`),
+    dataAdapter: responseSendOfferAdapter,
+    requestMethod: 'POST',
+    options: { headers: Authorization(token) },
   });
 }

@@ -3,7 +3,7 @@ import { updateCTABlock } from '@/blocks/CTABlock/adapter';
 import { getFAQs } from '@/services/faq';
 
 export const updateFAQByCategoryBlock = async (block) => {
-  const items = await getFAQs();
+  const { data: items } = await getFAQs();
   block.categories = items
     .map(({ category }) => category)
     .filter((obj, index, self) => {

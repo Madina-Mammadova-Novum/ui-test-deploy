@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
@@ -9,8 +9,8 @@ import { categoryPropTypes, ctaPropTypes } from '@/lib/types';
 
 import { Accordion, AccordionCTA, TabsAsLinks } from '@/units';
 
-const FAQBlock = ({ title, subTitle, shortDescription, items, categories, category, cta }) => {
-  const [open, setOpen] = useState(1);
+const FAQBlock = ({ title, subTitle, shortDescription, items = [], categories, category, cta }) => {
+  const [open, setOpen] = useState(null);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -25,16 +25,16 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
 
   return (
     <section className="relative z-10 -mt-[175px]">
-      <div className="container mx-auto px-[54px] max-w-[1258px]">
+      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <TabsAsLinks tabs={tabs} activeTab={category.id} />
-        <div className="rounded-[10px] pt-1.5 px-5 pb-5 bg-white shadow-xmd divide-y divide-gray-darker mt-1">
-          {items &&
+        <div className="relative rounded-base pt-1.5 px-5 pb-5 bg-white divide-y divide-gray-darker mt-1">
+          {items.length > 0 &&
             items.map(({ id, answer, question }) => (
               <Accordion
-                key={`id-${id}`}
+                key={id}
                 open={open === id}
                 onClick={() => handleOpen(id)}
                 isFullWidth
@@ -46,9 +46,12 @@ const FAQBlock = ({ title, subTitle, shortDescription, items, categories, catego
                 ]}
               />
             ))}
-          <div className="text-black pt-5">
-            {cta && <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />}
-          </div>
+          {cta && (
+            <div className="text-black pt-5">
+              <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />
+            </div>
+          )}
+          <div className="rounded-base  h-[calc(100%_-_135px)] w-full absolute shadow-xmd bottom-0 left-0 -z-10" />
         </div>
       </div>
     </section>

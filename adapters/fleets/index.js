@@ -1,162 +1,365 @@
-import EditIcon from '@/assets/images/edit.svg';
+import ClockSVG from '@/assets/images/clock.svg';
+import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
 import ToggleInactiveIcon from '@/assets/images/toggleInactive.svg';
-import { NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import TrashIcon from '@/assets/images/trashAlt.svg';
+import StatusIndicator from '@/elements/StatusIndicator';
+import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
+import { transformToCapitalize } from '@/utils/helpers';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
-  if (data === null) return null;
+  if (!data) return null;
 
-  const { title, activeTankers, inActiveTankers } = data;
+  const { title, fleetId, tankers } = data;
+
+  const activeTankers = tankers?.filter((fleet) => fleet?.status === true).length;
+  const inActiveTankers = tankers?.filter((fleet) => fleet?.status !== true).length;
 
   return [
     {
+      id: fleetId,
       label: 'fleet name',
       text: title ?? '',
+      disableTooltip: true,
     },
     {
+      id: fleetId,
       label: 'active',
       text: `${activeTankers ?? '0'} tankers`,
     },
     {
+      id: fleetId,
       label: 'inactive',
       text: `${inActiveTankers ?? '0'} tankers`,
     },
   ];
 };
 
-export const fleetsRowDataAdapter = ({ data }) => {
-  if (data === null) return null;
+export const fleetsRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
 
-  const { date, id, imo, port, status, title } = data;
-
-  const inActive = port === null || date === null;
-
-  return {
-    id,
-    imo: {
-      value: imo ?? NO_DATA_MESSAGE.IMO,
-      editable: {
-        isEdit: false,
-        icon: null,
-      },
-      disabled: inActive,
-    },
-    port: {
-      value: port ?? NO_DATA_MESSAGE.PORT,
-      editable: {
-        isEdit: !inActive,
-        icon: <EditIcon />,
-      },
-      disabled: inActive,
-    },
-    tankerName: {
-      value: title ?? NO_DATA_MESSAGE.DEFAULT,
-      editable: {
-        isEdit: false,
-        icon: null,
-      },
-      disabled: inActive,
-    },
-    tankerStatus: {
-      value: status ?? false,
-      editable: {
-        isEdit: !inActive,
-        icon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
-      },
-      disabled: inActive,
-    },
-    date: {
-      value: date ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-      editable: {
-        isEdit: !inActive,
-        icon: <EditIcon />,
-      },
-      disabled: inActive,
-    },
-  };
-};
-
-export const fleetsRowsDataAdapter = ({ data }) => {
-  if (data === null || data === undefined) return [];
-
-  return data.map((rowData) => fleetsRowDataAdapter({ data: rowData }));
-};
-
-export const fleetTableCellAdapter = ({ data, index }) => {
-  if (data === null || data === undefined) return [];
-
-  const { tankerName = {}, imo = {}, port = {}, tankerStatus = {}, date = {}, id } = data;
+  const { date, id, marked, imo, port, portId, status, title, countryId, countryCode, notified, rolled } = data;
 
   return [
     {
       value: index,
-      disabled: tankerName.disabled,
+      disabled: !status,
+      notified: notified || false,
     },
     {
       id,
-      value: tankerName.value,
-      type: TYPE.TANKER_NAME,
-      editable: tankerName.editable.isEdit,
-      editIcon: tankerName.editable.icon,
-      disabled: tankerName.disabled,
-      fontStyle: {
-        semibold: true,
-        color: 'black',
-      },
+      value: transformToCapitalize(title) || NO_DATA_MESSAGE.DEFAULT,
+      type: TYPE.SEMIBOLD,
+      disabled: !status,
+      notified: notified || false,
     },
     {
       id,
-      value: imo.value,
-      type: TYPE.IMO,
-      editable: imo.editable.isEdit,
-      editIcon: imo.editable.icon,
-      disabled: imo.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
+      value: imo ?? NO_DATA_MESSAGE.IMO,
+      disabled: !status,
+      notified: notified || false,
     },
     {
       id,
-      name: tankerName.value,
-      type: TYPE.PORT,
-      value: port.value,
-      editable: port.editable.isEdit,
-      editIcon: port.editable.icon,
-      disabled: port.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
+      date,
+      port,
+      portId,
+      countryCode,
+      countryId,
+      available: status,
+      name: status ? title : NO_DATA_MESSAGE.PORT,
+      value: status ? port : NO_DATA_MESSAGE.PORT,
+      helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
+      editable: status,
+      notified: notified || false,
+      actions: [
+        {
+          action: ACTIONS.PORT,
+          editIcon: <EditIcon />,
+        },
+      ],
+      disabled: !status,
     },
     {
       id,
-      type: TYPE.DATE,
-      name: tankerName.value,
-      value: date.value,
-      editable: date.editable.isEdit,
-      editIcon: date.editable.icon,
-      disabled: date.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
+      date,
+      port,
+      portId,
+      marked,
+      available: status,
+      name: title,
+      value: status ? transformDate(date, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      helperData: !status && NO_DATA_MESSAGE.HELPER_FLEETS,
+      rolled,
+      editable: status,
+      notified: notified || false,
+      actions: [
+        {
+          action: ACTIONS.DATE,
+          editIcon: <EditIcon />,
+        },
+      ],
+      disabled: !status,
     },
     {
       id,
-      toggle: {
-        value: tankerStatus.value,
-        name: tankerName.value,
-      },
-      type: TYPE.TANKER_STATUS,
-      editable: tankerStatus.editable.isEdit,
-      editIcon: tankerStatus.editable.icon,
-      disabled: tankerStatus.disabled,
-      fontStyle: {
-        semibold: false,
-        color: 'black',
-      },
+      portId,
+      date,
+      available: status,
+      name: title,
+      value: status,
+      editable: true,
+      notified: notified || false,
+      actions: [
+        {
+          editIcon: status ? <ToggleActiveIcon /> : <ToggleInactiveIcon />,
+          action: status ? ACTIONS.TANKER_DEACTIVATE : ACTIONS.TANKER_REACTIVATE,
+        },
+      ],
+      disabled: !status,
     },
   ];
+};
+
+export const fleetsRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => fleetsRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const fleetsPageHeaderDataAdapter = ({ data }) => {
+  if (!data) return null;
+
+  const { name, vessels = [] } = data;
+
+  return [
+    {
+      label: 'Fleet name',
+      text: name ?? '',
+      textStyles: 'absolute top-px lg:top-5',
+      disableTooltip: true,
+    },
+    {
+      label: 'Number of tankers',
+      text: vessels?.length || '0',
+    },
+  ];
+};
+
+export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
+  if (!data) return null;
+
+  const {
+    id,
+    details: { name, summerDwt, q88QuestionnarieFile, tankerLink },
+    imo,
+    status: requestStatus,
+  } = data;
+
+  const additionRequested = requestStatus === 'Addition requested';
+  const vesselInProgress = requestStatus !== 'Confirmed';
+
+  const status = additionRequested ? 'Inactive' : 'Active';
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      value: name,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
+      value: imo,
+    },
+    {
+      id,
+      value: summerDwt && `${summerDwt} tons`,
+    },
+    {
+      id,
+      value: tankerLink?.name,
+    },
+    {
+      id,
+      link: q88QuestionnarieFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnarieFile}`,
+    },
+    {
+      id,
+      value: status,
+      icon: <StatusIndicator status={status} />,
+    },
+    {
+      id,
+      editable: true,
+      name,
+      fleetName,
+      actions: [
+        {
+          action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+          actionText: vesselInProgress ? requestStatus : 'Request to update info',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+          disabled: vesselInProgress,
+          editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
+          actionStyles: '!w-[165px]',
+        },
+        {
+          action: ACTIONS.DELETE_TANKER_FROM_FLEET,
+          editIcon: <TrashIcon viewBox="0 0 24 24" className="fill-red w-5 h-5" />,
+          actionVariant: 'delete',
+          actionSize: 'medium',
+        },
+      ],
+    },
+  ];
+};
+
+export const fleetsPageRowsDataAdapter = ({ data, fleetName }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1, fleetName }));
+};
+
+export const unassignedFleetRowDataAdapter = ({ data, index }) => {
+  if (!data) return null;
+
+  const {
+    id,
+    imo,
+    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
+    status: requestStatus,
+  } = data;
+
+  const additionRequested = requestStatus === 'Addition requested';
+  const vesselInProgress = requestStatus !== 'Confirmed';
+
+  const status = additionRequested ? 'Inactive' : 'Active';
+
+  return [
+    {
+      value: index,
+    },
+    {
+      id,
+      value: name,
+      type: TYPE.SEMIBOLD,
+    },
+    {
+      id,
+      value: imo,
+    },
+    {
+      id,
+      value: `${summerDwt} tons`,
+    },
+    {
+      id,
+      value: tankerLink?.name,
+    },
+    {
+      id,
+      link: q88QuestionnarieFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnarieFile}`,
+    },
+    {
+      id,
+      editable: true,
+      value: 'Unassigned',
+      type: TYPE.GREY,
+      name,
+      actions: [
+        {
+          action: ACTIONS.ASSIGN_FLEET,
+          editIcon: <EditIcon />,
+        },
+      ],
+    },
+    {
+      id,
+      value: status,
+      icon: <StatusIndicator status={status} />,
+    },
+    {
+      id,
+      editable: true,
+      name,
+      actions: [
+        {
+          action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+          actionText: vesselInProgress ? requestStatus : 'Request to update info',
+          actionVariant: 'primary',
+          actionSize: 'medium',
+          disabled: vesselInProgress,
+          editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
+          actionStyles: '!w-[165px]',
+        },
+        {
+          action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete',
+          actionVariant: 'delete',
+          actionSize: 'medium',
+        },
+      ],
+    },
+  ];
+};
+
+export const unassignedFleetRowsDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((rowData, index) => unassignedFleetRowDataAdapter({ data: rowData, index: index + 1 }));
+};
+
+export const requestFleetNameAdapter = ({ data }) => {
+  if (!data) return [];
+  const { fleetName } = data;
+
+  return {
+    name: fleetName,
+  };
+};
+
+export const responseCreateFleetAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data;
+};
+
+export const responseGetFleetsAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
+
+export const getFleetByIdAdapter = ({ id }) => {
+  if (!id) return null;
+
+  return { fleetId: id };
+};
+
+export const complexFleetDataAdapter = ({ fleet, fleetDetails }) => {
+  if (!fleet) return [];
+
+  return {
+    data: {
+      ...fleet,
+      tankers: fleetDetails?.data,
+    },
+  };
+};
+
+export const fleetNotificationAdapter = ({ data, id }) => {
+  if (!data) return null;
+
+  return {
+    ...data,
+    tankers: data?.tankers?.map((tanker) => {
+      return {
+        ...tanker,
+        notified: tanker.id === id || false,
+      };
+    }),
+  };
 };

@@ -1,46 +1,66 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
+import { EditDateFormPropTypes } from '@/lib/types';
+
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
+import { getUserPositionById } from '@/services';
+import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditDateForm = ({ title, portName }) => {
+const EditDateForm = ({ state, title, closeModal }) => {
+  const dispatch = useDispatch();
+
   const schema = yup.object().shape({
     ...dateSchema(),
   });
 
-  const methods = useHookFormParams({ schema });
+  const methods = useHookFormParams({ state, schema });
 
-  const onSubmit = async (formData) => {
-    return { formData };
+  const onSubmit = async ({ date }) => {
+    const { error, message } = await updateVesselPortAndDate({ ...state, date });
+
+    if (!error) {
+      if (state?.type === 'assigned') {
+        const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
+        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
+      } else if (state?.type === 'unassigned') {
+        const { data: unassignedTankers } = await getUnassignedVessels();
+        dispatch(updateUnassignedTanker({ id: state.id, tankers: unassignedTankers }));
+      }
+      closeModal();
+    }
+
+    if (message) successToast(message);
+    if (error) errorToast(error?.title, error?.message);
   };
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        specialStyle
         className="w-[356px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
+        onClose={closeModal}
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <DateDetailsForm portName={portName} />
-      </FormManager>
+        <DateDetailsForm portName={state?.name} />
+      </ModalFormManager>
     </FormProvider>
   );
 };
 
-EditDateForm.propTypes = {
-  title: PropTypes.string.isRequired,
-  portName: PropTypes.string,
-};
+EditDateForm.propTypes = EditDateFormPropTypes;
 
 export default EditDateForm;

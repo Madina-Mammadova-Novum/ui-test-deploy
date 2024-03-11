@@ -1,15 +1,12 @@
-import profileMock from '@/assets/images/profileMock.png';
 import { Notification, ProfileMenu } from '@/modules';
 
-const AccountHeader = () => {
+export default function AccountHeader() {
   return (
-    <header className="w-full shadow-xmd px-5 flex items-center">
-      <div className="flex justify-end w-full items-center py-2">
-        <Notification numberOfNotifications={20} />
-        <ProfileMenu image={profileMock} />
+    <header className="w-full shadow-xmd px-5 py-2 flex items-center">
+      <div className="flex justify-end w-full items-center">
+        <Notification />
+        <ProfileMenu />
       </div>
     </header>
   );
-};
-
-export default AccountHeader;
+}

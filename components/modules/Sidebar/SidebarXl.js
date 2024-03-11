@@ -1,30 +1,26 @@
-import PropTypes from 'prop-types';
+import { SidebarXlPropTypes } from '@/lib/types';
 
-import { ArrowIcon } from '@/assets/icons';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 import Logo from '@/assets/images/logo.svg';
-import { Accordion, Button, NextLink } from '@/elements';
+import { Button, NavTree, NextLink } from '@/elements';
 
-const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
-  const printMenu = (item) => (
-    <Accordion variant="opened" opened={opened} onChange={onChange} key={item?.id} data={item} />
-  );
+const SidebarXl = ({ data, isResized, onResize }) => {
+  const printMenu = (item) => <NavTree variant="opened" key={item?.id} data={item} />;
 
   return (
     <>
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <div className="flex flex-col gap-1.5 relative">
+      <ul className="flex flex-col gap-2.5 relative overflow-auto">
         <Button
           buttonProps={{
             icon: {
               before: (
-                <ArrowIcon
+                <AngleDownSVG
                   className={`${
                     !isResized && 'rotate-90'
-                  } transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
-                  width="14px"
-                  height="14px"
+                  } fill-white transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
                 />
               ),
             },
@@ -32,22 +28,14 @@ const SidebarXl = ({ data, opened, onChange, isResized, onResize }) => {
             variant: 'tertiary',
           }}
           onClick={onResize}
-          customStyles="!rounded !relative flex self-end !bg-blue-dark !px-4 !py-2 !w-7 !h-7"
+          customStyles="!rounded !relative flex self-end !bg-blue-dark !p-2 !w-7 !h-7"
         />
         {data?.map(printMenu)}
-      </div>
+      </ul>
     </>
   );
 };
 
-SidebarXl.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  opened: PropTypes.bool.isRequired,
-  searchVal: PropTypes.string.isRequired,
-  isResized: PropTypes.bool.isRequired,
-  onResize: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+SidebarXl.propTypes = SidebarXlPropTypes;
 
 export default SidebarXl;

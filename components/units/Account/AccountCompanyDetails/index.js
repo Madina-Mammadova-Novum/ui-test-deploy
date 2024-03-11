@@ -1,16 +1,34 @@
-import PropTypes from 'prop-types';
+import { AccountCompanyDetailsPropTypes } from '@/lib/types';
 
 import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
 import Divider from '@/elements/Divider';
 import { CompanyInfoForm } from '@/modules';
-import { AddressInfo, ModalWindow } from '@/units';
+import { AccountAmountOfTankers, AddressInfo, ModalWindow } from '@/units';
 
 const AccountCompanyDetails = ({ company = {} }) => {
-  const { name, years, totalTankers, registration, correspondence } = company;
+  const registration = {
+    addressLine1: company?.registrationAddress,
+    addressLine2: company?.registrationAddress2,
+    city: company?.registrationCity?.label,
+    state: company?.registrationProvince,
+    country: company?.registrationCountry?.label,
+    postal: company?.registrationPostalCode,
+  };
+
+  const correspondence = {
+    addressLine1: company?.correspondenceAddress,
+    addressLine2: company?.correspondenceAddress2,
+    city: company?.correspondenceCity?.label,
+    state: company?.correspondenceProvince,
+    country: company?.correspondenceCountry?.label,
+    postal: company?.correspondencePostalCode,
+  };
+
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Company Details">
         <ModalWindow
+          containerClass="w-[672px]"
           buttonProps={{
             text: 'Edit company details',
             variant: 'primary',
@@ -23,21 +41,25 @@ const AccountCompanyDetails = ({ company = {} }) => {
       </FieldsetHeader>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
-          {name && <TextRow title="Company name">{name}</TextRow>}
-          {years && <TextRow title="Years in operation">{years}</TextRow>}
-          {totalTankers && <TextRow title="Number of tankers">{totalTankers}</TextRow>}
+          {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
+          {company?.companyYearsOfOperation ? (
+            <TextRow title="Years in operation">{company?.companyYearsOfOperation}</TextRow>
+          ) : null}
+          {company?.totalTankers ? (
+            <AccountAmountOfTankers data={company?.cargoes?.listOfCargoes} total={company?.totalTankers} />
+          ) : null}
         </FieldsetContent>
 
         <Divider className="my-4" />
 
-        <div className="grid grid-cols-1 3sm:grid-cols-2 gap-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
           {registration && (
             <FieldsetContent className="col-start-1" label="Registration address">
               <AddressInfo address={registration} />
             </FieldsetContent>
           )}
           {correspondence && (
-            <FieldsetContent className="col-start-1 3sm:col-start-2" label="Correspondence address">
+            <FieldsetContent className="col-start-1 md:col-start-2" label="Correspondence address">
               <AddressInfo address={correspondence} />
             </FieldsetContent>
           )}
@@ -47,28 +69,6 @@ const AccountCompanyDetails = ({ company = {} }) => {
   );
 };
 
-AccountCompanyDetails.propTypes = {
-  company: PropTypes.shape({
-    name: PropTypes.string,
-    years: PropTypes.string,
-    totalTankers: PropTypes.string,
-    registration: PropTypes.shape({
-      addressLine1: PropTypes.string,
-      addressLine2: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      postal: PropTypes.string,
-      country: PropTypes.string,
-    }),
-    correspondence: PropTypes.shape({
-      addressLine1: PropTypes.string,
-      addressLine2: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      postal: PropTypes.string,
-      country: PropTypes.string,
-    }),
-  }),
-};
+AccountCompanyDetails.propTypes = AccountCompanyDetailsPropTypes;
 
 export default AccountCompanyDetails;

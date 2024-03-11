@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, PreFixture } from '@/modules';
+import { PreFixture } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -11,12 +11,6 @@ export function generateMetadata() {
   });
 }
 
-const PreFixturePage = () => {
-  return (
-    <AccountWrapper title="Pre-fixture" suptitle="Offer stage #2" containerClass="grow px-5">
-      <PreFixture />
-    </AccountWrapper>
-  );
-};
-
-export default PreFixturePage;
+export default function Page() {
+  return <PreFixture />;
+}

@@ -1,94 +1,94 @@
-import React, { useState } from 'react';
+'use client';
 
-import { Modal, Table } from '@/elements';
-import { ViewCounteroffer, ViewFailedOffer, ViewIncomingOffer } from '@/modules';
-import { Tabs } from '@/units';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { negotiatingExpandedContentPropTypes } from '@/lib/types';
+
 import {
-  negotiatingCounterofferTableHeader,
-  negotiatingCounterofferTableRows,
-  negotiatingFailedTableHeader,
-  negotiatingFailedTableRows,
+  counteroffersTabDataByRole,
+  failedTabDataByRole,
+  notifiedNegotiatingDataAdapter,
+  offerTabDataByRole,
+} from '@/adapters/negotiating';
+import { Table } from '@/elements';
+import { getNegotiatingDataSelector } from '@/store/selectors';
+import { Tabs } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
+import {
+  chartererNegotiatingCounterofferTableHeader,
+  chartererNegotiatingFailedTableHeader,
   negotiatingIncomingTableHeader,
-  negotiatingIncomingTableRows,
+  negotiatingSentOffersTableHeader,
+  ownerNegotiatingCounterofferTableHeader,
+  ownerNegotiatingFailedTableHeader,
 } from '@/utils/mock';
 
-const tabs = [
-  {
-    value: 'incoming',
-    label: 'Incoming',
-  },
-  {
-    value: 'counteroffers',
-    label: 'Sent counteroffers',
-  },
-  {
-    value: 'failed',
-    label: 'Failed',
-  },
-];
+const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
+  const { offerById, role } = useSelector(getNegotiatingDataSelector);
+  const [currentTab, setCurrentTab] = useState(tabs?.[0]?.value);
 
-const NegotiatingExpandedContent = () => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [modal, setModal] = useState(null);
+  const { incoming = [], sent = [], failed = [] } = offerById[data.id];
+  const { isOwner } = getRoleIdentity({ role });
 
-  const handleCloseModal = () => setModal(null);
-  const handleOpenModal = ({ id }) => setModal(id);
+  const sentData = tab ? notifiedNegotiatingDataAdapter({ tab, data: sent, fleetId: data.fleetId }) : sent;
+  const failedData = tab ? notifiedNegotiatingDataAdapter({ tab, data: failed, fleetId: data.fleetId }) : failed;
+  const incomingData = tab ? notifiedNegotiatingDataAdapter({ tab, data: incoming, fleetId: data.fleetId }) : incoming;
 
-  const tabContent = () => {
-    switch (currentTab) {
-      case 'counteroffers':
-        return (
-          <Table
-            headerData={negotiatingCounterofferTableHeader}
-            rows={negotiatingCounterofferTableRows}
-            handleActionClick={handleOpenModal}
-          />
-        );
-      case 'failed':
-        return (
-          <Table
-            headerData={negotiatingFailedTableHeader}
-            rows={negotiatingFailedTableRows}
-            handleActionClick={handleOpenModal}
-          />
-        );
-      default:
-        return (
-          <Table
-            headerData={negotiatingIncomingTableHeader}
-            rows={negotiatingIncomingTableRows}
-            handleActionClick={handleOpenModal}
-          />
-        );
+  const tabIdentify = () => {
+    const urlParams = new URLSearchParams(window.location.href);
+
+    if (tab) {
+      setCurrentTab(tab);
+      if (urlParams.get('status') === 'incoming' && !incoming.length) {
+        setCurrentTab(tabs?.[1]?.value);
+      }
+    } else {
+      setCurrentTab(tabs?.[0]?.value);
     }
   };
 
-  const modalContent = () => {
-    switch (modal) {
-      case 'view_counteroffer':
-        return <ViewCounteroffer />;
-      case 'view_failed_offer':
-        return <ViewFailedOffer />;
-      default:
-        return <ViewIncomingOffer closeModal={handleCloseModal} />;
-    }
+  useEffect(() => {
+    tabIdentify();
+  }, [tab]);
+
+  const tabContent = {
+    counteroffers: (
+      <Table
+        headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
+        rows={counteroffersTabDataByRole({ data: sentData, role, parentId: data.id })}
+        noDataMessage="No data provided"
+      />
+    ),
+    failed: (
+      <Table
+        headerData={isOwner ? ownerNegotiatingFailedTableHeader : chartererNegotiatingFailedTableHeader}
+        rows={failedTabDataByRole({ data: failedData, role })}
+        noDataMessage="No data provided"
+      />
+    ),
+    incoming: (
+      <Table
+        headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
+        rows={offerTabDataByRole({ data: incomingData, role, parentId: data.id })}
+        noDataMessage="No data provided"
+      />
+    ),
   };
+
   return (
-    <div>
+    <>
       <Tabs
         onClick={({ target }) => setCurrentTab(target.value)}
         activeTab={currentTab}
         tabs={tabs}
-        customStyles="my-3 mx-auto"
+        customStyles="my-3 mr-[-50%] mx-auto absolute left-1/2 top-[7%] translate-(x/y)-1/2 custom-container "
       />
-
-      {tabContent()}
-
-      <Modal opened={modal} onClose={handleCloseModal}>
-        {modalContent()}
-      </Modal>
-    </div>
+      <div className="mb-3">{tabContent[currentTab]}</div>
+    </>
   );
 };
+
+NegotiatingExpandedContent.propTypes = negotiatingExpandedContentPropTypes;
 
 export default NegotiatingExpandedContent;

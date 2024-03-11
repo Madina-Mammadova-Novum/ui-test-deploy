@@ -1,27 +1,19 @@
-import PropTypes from 'prop-types';
+import ReactCountryFlag from 'react-country-flag';
 
-import { NextImage } from '@/elements';
+import { OptionRowPropTypes } from '@/lib/types';
 
-const OptionRow = ({ countryFlag, value }) => {
+const OptionRow = ({ value, countryFlag = null, coverImage = null }) => {
   return (
     <div className="box-border">
-      <div className="flex hover:bg-purple-light rounded-md text-xsm font-medium items-center box-border whitespace-nowrap">
-        {countryFlag && (
-          <NextImage width={20} height={15} src={countryFlag} customStyles="max-h-[15px]" alt={`${countryFlag} flag`} />
-        )}
-        <span className={countryFlag && 'ml-1.5'}>{value}</span>
+      <div className="flex rounded-md text-xsm font-medium items-center box-border whitespace-nowrap">
+        {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
+        {coverImage && coverImage}
+        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{value}</span>
       </div>
     </div>
   );
 };
 
-OptionRow.defaultProps = {
-  countryFlag: null,
-};
-
-OptionRow.propTypes = {
-  countryFlag: PropTypes.oneOf([PropTypes.node, PropTypes.string]),
-  value: PropTypes.string.isRequired,
-};
+OptionRow.propTypes = OptionRowPropTypes;
 
 export default OptionRow;

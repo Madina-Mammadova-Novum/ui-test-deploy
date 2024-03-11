@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
+import { COTTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
 
-const COTTabContent = ({ data }) => {
+const COTTabContent = ({ data = {} }) => {
   return (
     <div className="text-xsm">
-      <Title level={3}>Commercial Offer Terms</Title>
+      <Title level="3">Commercial Offer Terms</Title>
       <div className="mt-2.5">
-        {data.cargo.map(({ key, label }) => (
+        {data.cargo?.map(({ key, label }) => (
           <TextRow title={key}>{label}</TextRow>
         ))}
       </div>
@@ -18,7 +18,7 @@ const COTTabContent = ({ data }) => {
         Products
       </Title>
       <div className="mt-2.5 flex">
-        {data.products.map((product) => (
+        {data.products?.map((product) => (
           <div className="w-full">
             {product.map(({ key, label }) => (
               <TextRow title={key}>{label}</TextRow>
@@ -29,42 +29,15 @@ const COTTabContent = ({ data }) => {
 
       <hr className="my-4" />
 
-      {data.details.map(({ key, label }) => (
-        <TextRow title={key}>{label}</TextRow>
+      {data.details?.map(({ key, label }) => (
+        <TextRow title={key} className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline">
+          {label}
+        </TextRow>
       ))}
     </div>
   );
 };
 
-COTTabContent.defaultProps = {
-  data: {
-    cargo: [],
-    products: [],
-    details: [],
-  },
-};
-
-COTTabContent.propTypes = {
-  data: PropTypes.shape({
-    cargo: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string,
-        label: PropTypes.string,
-      })
-    ),
-    products: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string,
-        label: PropTypes.string,
-      })
-    ),
-    details: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string,
-        label: PropTypes.string,
-      })
-    ),
-  }),
-};
+COTTabContent.propTypes = COTTabContentPropTypes;
 
 export default COTTabContent;

@@ -1,50 +1,52 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
+import { usePathname } from 'next/navigation';
 
 import SidebarSm from './SidebarSm';
 import SidebarXl from './SidebarXl';
 
-const Sidebar = ({ data, containerStyles }) => {
-  const [sidebarState, setSidebarState] = useState({
-    opened: false,
-    resized: false,
-  });
+import { SidebarPropTypes } from '@/lib/types';
 
-  const { opened, resized } = sidebarState;
+import { SCREENS } from '@/lib/constants';
+import { handleCollapse } from '@/store/entities/general/slice';
+import { getSidebarSelector } from '@/store/selectors';
+import { useMediaQuery } from '@/utils/hooks';
 
-  const handleChange = (key, val) => {
-    setSidebarState((prevState) => ({
-      ...prevState,
-      [key]: val,
-    }));
-  };
+const Sidebar = ({ data }) => {
+  const dispatch = useDispatch();
+  const pathname = usePathname();
+  const xlScreen = useMediaQuery(SCREENS.XL);
+  const { collapsed } = useSelector(getSidebarSelector);
 
-  const handleResize = useCallback(() => handleChange('resized', !resized), [resized]);
+  const setCollapse = (value) => dispatch(handleCollapse(value));
+
+  useEffect(() => {
+    if (!xlScreen && !collapsed) {
+      setCollapse(false);
+    } else {
+      setCollapse(true);
+    }
+  }, [pathname, xlScreen]);
 
   return (
     <aside
-      className={`${containerStyles} flex flex-col items-stretch px-3.5 py-5 gap-2 bg-black text-white 
-      ${resized ? 'w-16' : 'w-64'}`}
+      className={`z-50 fixed top-0 left-0 h-screen ${
+        collapsed ? 'w-16' : 'w-64'
+      } flex flex-col transition-all duration-75 items-stretch px-3.5 py-5 gap-2 bg-black text-white 
+    `}
     >
-      {resized ? (
-        <SidebarSm data={data} opened={opened} isResized={resized} onChange={handleChange} onResize={handleResize} />
+      {collapsed ? (
+        <SidebarSm data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       ) : (
-        <SidebarXl data={data} opened={opened} isResized={resized} onChange={handleChange} onResize={handleResize} />
+        <SidebarXl data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />
       )}
     </aside>
   );
 };
 
-Sidebar.defaultProps = {
-  containerStyles: '',
-};
-
-Sidebar.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  containerStyles: PropTypes.string,
-};
+Sidebar.propTypes = SidebarPropTypes;
 
 export default Sidebar;

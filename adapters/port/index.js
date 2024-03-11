@@ -15,9 +15,12 @@ export const portAdapter = ({ data }) => {
     enabled,
     basinId,
     // countryId,
-    country,
+    country: countryData,
     terminals,
   } = data;
+
+  const country = countryAdapter({ data: countryData });
+
   return {
     id,
     name,
@@ -33,8 +36,10 @@ export const portAdapter = ({ data }) => {
       enabled,
     },
     basinId,
-    country: countryAdapter({ data: country }),
+    country,
     terminals: terminalsAdapter({ data: terminals }),
+    label: `${name}${locode ? `, ${locode}` : ``}`,
+    countryFlag: country?.countryCode || null,
   };
 };
 
@@ -43,4 +48,10 @@ export const portsAdapter = ({ data }) => {
   return data.map((port) => {
     return portAdapter({ data: port });
   });
+};
+
+export const portOptionsAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data.map((port) => ({ value: port?.id, label: port.label }));
 };

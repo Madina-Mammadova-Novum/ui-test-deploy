@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 
-import { linkTargetPropTypes } from '@/lib/types';
+import { NextLinkPropTypes } from '@/lib/types';
 
-const NextLink = ({ children, href, className, target, ...rest }) => {
+const NextLink = ({ children, href, className = '', target = null, ...rest }) => {
   return (
     <Link href={href} className={className} target={target} {...rest}>
       {children}
@@ -11,16 +10,6 @@ const NextLink = ({ children, href, className, target, ...rest }) => {
   );
 };
 
-NextLink.defaultProps = {
-  className: '',
-  target: null,
-};
-
-NextLink.propTypes = {
-  children: PropTypes.node.isRequired,
-  href: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  target: linkTargetPropTypes,
-};
+NextLink.propTypes = NextLinkPropTypes;
 
 export default NextLink;

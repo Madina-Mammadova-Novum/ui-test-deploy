@@ -1,150 +1,261 @@
+import { getFleetByIdAdapter } from '@/adapters';
+import { basePageNavAdapter, negotiationPageNavAdapter, positionsPageNavAdapter } from '@/adapters/navigation';
 import {
   chartererSignUpAdapter,
+  deleteCompanyAdapter,
   forgotPasswordAdapter,
   loginAdapter,
   ownerSignUpAdapter,
-  positionsAdapter,
   resetPasswordAdapter,
-  updateCompanyAdapter,
+  roleBasedUpdateCompanyAdapter,
   updateInfoAdapter,
   updatePasswordAdapter,
-  userDetailsAdapter,
 } from '@/adapters/user';
-import { getData, postData } from '@/utils/dataFetching';
+import { userTankersDetailsAdapter } from '@/adapters/vessel';
+import { ContentTypeJson } from '@/lib/constants';
+import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/forgot-password`, body);
+
+  const response = await postData(`auth/forgot-password`, body, { headers: { ...ContentTypeJson() } });
+
+  if (!response.error) response.message = 'A link to reset your password has been sent! Please check your e-mail';
+
   return {
-    message,
+    ...response,
   };
 }
 
 export async function resetPassword({ data }) {
   const body = resetPasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`auth/reset-password`, body);
+  const response = await postData(`auth/reset-password`, body, { headers: { ...ContentTypeJson() } });
   return {
-    message,
+    ...response,
   };
 }
 
 export async function ownerSignUp({ data }) {
   const body = ownerSignUpAdapter({ data });
-  const response = await postData(`auth/sing-up?type=owner`, body);
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
-  return response;
+  const response = await postData(`auth/signup?type=owner`, body);
+
+  return {
+    ...response,
+    data: {
+      message:
+        response.status === 200 &&
+        'To confirm registration, follow the link that was sent to the email address, you provided',
+    },
+  };
 }
 
 export async function chartererSignUp({ data }) {
   const body = chartererSignUpAdapter({ data });
-  const response = await postData(`auth/sign-up?type=charterer`, JSON.stringify(body));
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
-  return response;
-}
-
-/* Temporary owner-signup-api solution */
-
-export async function ownerRegistration({ data }) {
-  const body = ownerSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/owner/company/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
+  const response = await postData(`auth/signup?type=charterer`, body);
+  return {
+    ...response,
+    data: {
+      message:
+        response.status === 200 &&
+        'To confirm registration, follow the link that was sent to the email address, you provided',
     },
-    body: JSON.stringify(body),
-  });
-
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
-}
-
-/* Temporary charterer-signup-api solution */
-
-export async function chartererRegistration({ data }) {
-  const body = chartererSignUpAdapter({ data });
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/v1/charterer/company/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(body),
-  });
-
-  return !response.ok ? { message: 'Check your email for validating the account' } : { error: 'Something went wrong' };
-}
-
-/* Temporary user-confirm-email solution */
-
-export async function postVeriff({ data }) {
-  const response = await fetch(`https://shiplink-api.azurewebsites.net/auth/confirmemail`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(data),
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) return { error: 'something went wrong' };
-
-  return { link: result?.redirectUrl };
+  };
 }
 
 export async function postVeriffData({ data }) {
   const response = await postData(`auth/veriffication`, data);
-  // todo: response always have an error after post hadler. message: "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
-  return response;
+  return {
+    ...response,
+  };
 }
 
 export async function login({ data }) {
   const body = loginAdapter({ data });
-  const response = await postData(`auth/login`, JSON.stringify(body));
-  return response;
+
+  const response = await postData(`auth/login`, body, { headers: { ...ContentTypeJson() } });
+
+  return {
+    ...response,
+  };
+}
+
+export async function refreshAccessToken({ token }) {
+  const response = await postData(`auth/session-update`, { token }, { headers: { ...ContentTypeJson() } });
+
+  return { ...response };
 }
 
 export async function updatePassword({ data }) {
   const body = updatePasswordAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`account/update-password`, body);
+  const response = await postData(`account/update-password`, body, { headers: { ...ContentTypeJson() } });
+
   return {
-    message,
+    ...response,
+    data: {
+      message: response.status === 200 && 'You have successfully changed your password',
+    },
   };
 }
 
 export async function updateInfo({ data }) {
   const body = updateInfoAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`account/update-info`, body);
+  const response = await putData(`account/update-info`, body, { headers: { ...ContentTypeJson() } });
+
   return {
-    message,
+    ...response,
   };
 }
 
-export async function updateCompany({ data }) {
-  const body = updateCompanyAdapter({ data });
-  const {
-    data: { message },
-  } = await postData(`account/update-company`, body);
+export async function updateCompany({ data, role }) {
+  const body = roleBasedUpdateCompanyAdapter({ data, role });
+
+  const response = await putData(`account/update-company`, body);
+
+  if (!response.error) response.message = 'You will be notified soon. The rest of the changes have been edited';
+
   return {
-    message,
+    ...response,
   };
 }
 
-export async function getUserPositions() {
-  const { data } = await getData(`account/my-positions`);
-  return positionsAdapter({ data });
+export async function deleteCompany({ data }) {
+  const body = deleteCompanyAdapter({ data });
+  const response = await deleteData(`account/delete-company`, body);
+
+  if (!response.error) {
+    response.message = 'You have successfully sent a request to delete your account';
+  }
+
+  return {
+    ...response,
+  };
 }
 
-export async function getUserDetails() {
-  const { data } = await getData(`account/user-info`);
-  return userDetailsAdapter({ data });
+export async function getUserPositions({ page = 1, perPage = 5, sortBy = 'asc' }) {
+  const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
+
+  const response = await postData(`account/positions?page=${page}&perPage=${perPage}&sortBy=${sortBy}`, body);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getUserPositionById({ id }) {
+  const body = getFleetByIdAdapter({ id });
+
+  const response = await putData(`account/positions/${id}`, body);
+
+  return {
+    ...response,
+  };
+}
+
+const fetchUserVesselById = async ({ id, ...rest }) => {
+  const { data: tankers } = await getUserPositionById({ id });
+
+  return {
+    ...rest,
+    fleetId: id,
+    tankers: userTankersDetailsAdapter({ data: tankers }),
+  };
+};
+
+export const getVesselsById = async (data) => {
+  return Promise.all(data.map(fetchUserVesselById));
+};
+
+export async function getUserFixtures() {
+  const response = await getData(`account/fixture`, { headers: { ...ContentTypeJson() } });
+  return {
+    ...response,
+  };
+}
+
+export async function getRoleBasedPrefixture({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/pre-fixture?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getRoleBasedNegotiating({ role, page = 1, perPage = 5, stage = 'Negotiating' }) {
+  const body = negotiationPageNavAdapter({ data: { page, perPage, stage } });
+
+  const response = await postData(`account/negotiating/${role}?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getUserProfile() {
+  const response = await getData(`account/user-profile`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getUserCompany() {
+  const response = await getData(`account/user-company`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getChartererUserCargoes() {
+  const response = await getData(`account/user-profile-cargoes`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
+  const body = positionsPageNavAdapter({ data: { page, perPage, sortBy } });
+
+  const response = await postData(`account/fleets`, body);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getRoleBasedOnSubs({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/on-subs?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
+}
+
+export async function getPostFixtureOffers({ page, perPage, filters, sorting }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, {
+    ...body,
+    filters,
+    sorting,
+  });
+
+  return {
+    ...response,
+  };
+}
+
+export async function getFixtureOffers({ page, perPage }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/fixture?page=${page}&perPage=${perPage}`, body);
+
+  return {
+    ...response,
+  };
 }

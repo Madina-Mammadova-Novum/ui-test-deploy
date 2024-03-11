@@ -1,4 +1,6 @@
-// import LayoutManager from '@/common/LayoutManager';
+import { ClientSidePackages } from '@/common';
+import { BaseLayout } from '@/layouts';
+import Providers from '@/providers';
 
 export const metadata = {
   title: {
@@ -6,8 +8,14 @@ export const metadata = {
     template: '%s | Shiplink',
   },
 };
-export default function RootLayout(props) {
-  const { children } = props;
-  return children;
-  // return <LayoutManager>{children}</LayoutManager>;
+
+export default function RootLayout({ children }) {
+  return (
+    <BaseLayout>
+      <Providers loader="page">
+        {children}
+        <ClientSidePackages />
+      </Providers>
+    </BaseLayout>
+  );
 }

@@ -1,53 +1,87 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { Loading } from '@/elements';
+import PropTypes from 'prop-types';
+
+import { Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { searchVessels } from '@/services/vessel';
+import { setSearchData } from '@/store/entities/search/slice';
 import { SearchForm } from '@/units';
-import { errorToast, successToast } from '@/utils/hooks';
+import { options } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
-const TankerSearch = () => {
-  const [sort, setSort] = useState({
-    freeParam: 'Ballast leg',
-    direction: 'Ascending',
+const TankerSearch = ({ title }) => {
+  const [tankerStore, setTankerStore] = useState({
+    params: options(['Ballast leg', 'Arrival']),
+    directions: options(['Ascending', 'Descending']),
+    currentDirection: '',
+    currentParam: '',
+    request: false,
+    loading: false,
+    searchResult: [],
   });
-  const [requestOptions, setRequestOptions] = useState({ request: false, loading: false });
-  const [searchResult, setSearchResult] = useState([]);
+
+  const dispatch = useDispatch();
+
+  /* Change handler by key-value for userStore */
+  const handleChangeState = (key, value) => {
+    setTankerStore((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
 
   const handleSearch = async (formData) => {
-    setRequestOptions((prevState) => ({ ...prevState, loading: true }));
+    handleChangeState('loading', true);
     const { error, data } = await searchVessels({ data: formData });
-    setRequestOptions((prevState) => ({ ...prevState, loading: false }));
+    handleChangeState('loading', false);
+
     if (data) {
-      setSearchResult(data.results);
-      setRequestOptions((prevState) => ({ ...prevState, request: true }));
-      successToast(data.message);
+      const filteredProducts = formData?.products?.filter((product) => product);
+
+      dispatch(setSearchData({ ...formData, products: filteredProducts }));
+      handleChangeState('searchResult', data);
+      handleChangeState('request', true);
     }
+
     if (error) {
-      const { message, errors, description } = error;
-      setRequestOptions((prevState) => ({ ...prevState, request: false }));
-      console.error(errors);
-      errorToast(message, description);
+      handleChangeState('request', false);
+      errorToast(error.title, error.message);
     }
   };
 
+  const { request, loading, params, directions, searchResult } = tankerStore;
+
   return (
     <>
+      {title && (
+        <Title level="1" className="py-5">
+          {title}
+        </Title>
+      )}
       <SearchForm onSubmit={handleSearch} />
-      {!requestOptions.loading ? (
+      {!loading ? (
         <TankerSearchResults
-          request={requestOptions.request}
-          setSort={setSort}
-          sort={sort}
-          searchResult={searchResult}
+          data={searchResult}
+          request={request}
+          params={params}
+          directions={directions}
+          onChange={handleChangeState}
         />
       ) : (
-        <Loading />
+        <p className="inline-flex pt-5 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
+          Searching <Loader className="h-4 w-4" />
+        </p>
       )}
     </>
   );
+};
+
+TankerSearch.propTypes = {
+  title: PropTypes.string,
 };
 
 export default TankerSearch;

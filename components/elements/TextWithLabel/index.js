@@ -1,35 +1,46 @@
+'use client';
+
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-import { Label, NextImage } from '@/elements';
+import { TextWithLabelPropTypes } from '@/lib/types';
 
-const TextWithLabel = ({ image, text, label, customStyles }) => {
+import { Label, ManualTooltip, Placeholder } from '@/elements';
+import { Flag } from '@/units';
+
+const TextWithLabel = ({
+  text,
+  label,
+  helperData,
+  icon,
+  customStyles = '',
+  textStyles,
+  coverImage = null,
+  countryCode,
+}) => {
   return (
     <div
       className={classnames(
-        'font-semibold text-left min-w-[90px] flex items-center md:items-start md:flex-col',
+        'font-semibold text-left min-w-[90px] flex items-center lg:items-start lg:flex-col gap-y-1',
         customStyles
       )}
     >
-      <Label className="text-xs-sm whitespace-nowrap w-[100px] md:w-auto">{label}</Label>
-      <p className="text-xsm text-ellipsis overflow-hidden whitespace-nowrap">
-        {image && <NextImage {...image} customStyles="inline" />}
-        <span className={image && 'ml-1.5'}>{text}</span>
-      </p>
+      <Label className="text-xs-sm whitespace-nowrap min-w-[100px] md:w-auto flex items-center gap-x-0.5">
+        {label}
+        {helperData && (
+          <ManualTooltip className={helperData.className} data={helperData}>
+            {icon}
+          </ManualTooltip>
+        )}
+      </Label>
+      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-5 mx-2">
+        {coverImage && coverImage}
+        {countryCode && <Flag countryCode={countryCode} />}
+        {text ? <p className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}
+      </div>
     </div>
   );
 };
 
-TextWithLabel.defaultProps = {
-  customStyles: '',
-  image: null,
-};
-
-TextWithLabel.propTypes = {
-  text: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  customStyles: PropTypes.string,
-  image: PropTypes.node,
-};
+TextWithLabel.propTypes = TextWithLabelPropTypes;
 
 export default TextWithLabel;

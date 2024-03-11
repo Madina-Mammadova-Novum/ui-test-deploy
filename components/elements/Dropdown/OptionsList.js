@@ -1,23 +1,28 @@
-import { components } from 'react-select'; // todo: make destructure with 'Option'
+import ReactCountryFlag from 'react-country-flag';
+import { components } from 'react-select';
 
-import PropTypes from 'prop-types';
+import { OptionsListPropTypes } from '@/lib/types';
+
+const { Option } = components;
 
 const OptionsList = (props) => {
-  const { label } = props;
-
+  const {
+    label,
+    data: { countryFlag, coverImage },
+  } = props;
   return (
-    <components.Option {...props}>
-      <li className="bg-white overflow-x-clip flex flex-col">
-        <p className="text-black px-1.5 py-2.5 uppercase rounded-md cursor-pointer text-xsm font-medium hover:bg-purple-light transition-all duration-75 ease-linear">
+    <Option {...props}>
+      <li className="text-inherit bg-white overflow-x-clip flex flex-col">
+        <p className="text-inherit px-2.5 py-1.5 capitalize flex items-center rounded-md cursor-pointer text-xsm font-medium hover:bg-purple-light transition-all duration-75 ease-linear">
+          {countryFlag && <ReactCountryFlag countryCode={countryFlag} svg className="!w-5 !h-4 mr-1.5" />}
+          {coverImage && coverImage}
           {label}
         </p>
       </li>
-    </components.Option>
+    </Option>
   );
 };
 
-OptionsList.propTypes = {
-  label: PropTypes.string.isRequired,
-};
+OptionsList.propTypes = OptionsListPropTypes;
 
 export default OptionsList;

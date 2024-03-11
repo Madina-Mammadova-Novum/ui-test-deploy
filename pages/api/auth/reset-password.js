@@ -1,11 +1,15 @@
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { resetPasswordResponseAdapter } from '@/adapters/user';
+import { ContentTypeJson } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
+
 export default async function handler(req, res) {
-  await sleep(2000);
-  res.status(200).json({
-    message: 'You password was reset',
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`auth/resetpasword`),
+    dataAdapter: resetPasswordResponseAdapter,
+    requestMethod: 'POST',
+    options: { headers: { ...ContentTypeJson() } },
   });
 }

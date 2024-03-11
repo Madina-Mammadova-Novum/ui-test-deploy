@@ -56,6 +56,7 @@ export const transformDateToString = ({ dayOfStart, dayOfEnd, startMonth, endMon
 // }
 
 export function transformDate(dateString, dateFormat = 'yyyy-MM-dd') {
+  if (!dateString) return null;
   const date = isValidDate(parseISO(dateString)) ? parseISO(dateString) : parseISO(new Date(dateString).toISOString());
 
   if (isValidDate(date)) {
@@ -64,3 +65,5 @@ export function transformDate(dateString, dateFormat = 'yyyy-MM-dd') {
   console.error('0005 - Not valid date');
   return null;
 }
+
+export const convertDate = (date) => new Date(date)?.toISOString().slice(0, 10);

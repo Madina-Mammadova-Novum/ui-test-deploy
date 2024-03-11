@@ -4,14 +4,20 @@ import { Provider } from 'react-redux';
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { accountStore, persistore } from '@/store/store';
+import { ProvidersPropTypes } from '@/lib/types';
 
-export default function StoreManager({ children }) {
+import { persistore, store } from '@/store';
+
+function StoreManager({ children }) {
   return (
-    <Provider store={accountStore}>
+    <Provider store={store}>
       <PersistGate loading={null} persistor={persistore}>
         {children}
       </PersistGate>
     </Provider>
   );
 }
+
+StoreManager.propTypes = ProvidersPropTypes;
+
+export default StoreManager;

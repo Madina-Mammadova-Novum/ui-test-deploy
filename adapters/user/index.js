@@ -1,86 +1,259 @@
-export function userDetailsAdapter({ data }) {
-  if (data === null) return null;
+import jwt from 'jsonwebtoken';
 
-  const {
-    firstName,
-    lastName,
-    email,
-    primaryPhone,
-    secondaryPhone,
-    currentPassword,
-    companyName,
-    yearsInOperation,
-    numberOfTankers,
-    registrAddress,
-    correspondAddress,
-  } = data;
+import { ROUTES } from '@/lib';
+import { ROLES } from '@/lib/constants';
+import { formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
+
+export function userRoleAdapter({ data }) {
+  if (!data) return null;
+
+  switch (data) {
+    case 'VesselOwner':
+      return ROLES.OWNER;
+    case 'Charterer':
+      return ROLES.CHARTERER;
+    default:
+      return ROLES.ANON;
+  }
+}
+
+export function listOfImosAdapter({ data }) {
+  if (!data) return [];
+
+  return data.map(({ imo }) => imo);
+}
+
+export function userDetailsAdapter({ data, role }) {
+  if (!data) return {};
+
+  return {
+    ...userPersonalDetailsAdapter({ data: data?.personalDetails }),
+    ...userCompanyDetailsAdapter({ data: data?.companyDetails, role }),
+  };
+}
+
+function userPersonalDetailsAdapter({ data }) {
+  if (!data) return {};
+
+  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest } = data;
+
   return {
     personalDetails: {
-      firstName,
-      lastName,
+      firstName: name,
+      lastName: surname,
+      fullName: `${name} ${surname}`,
       email,
-      primaryPhone,
-      secondaryPhone,
-    },
-    companyDetails: {
-      name: companyName ?? '',
-      years: yearsInOperation ?? '',
-      totalTankers: numberOfTankers ?? '',
-      registration: {
-        addressLine1: registrAddress?.primaryLine ?? '',
-        addressLine2: registrAddress?.secondaryLine ?? '',
-        city: registrAddress?.city ?? '',
-        state: registrAddress?.state ?? '',
-        postal: registrAddress?.zip ?? '',
-        country: registrAddress?.country ?? '',
-      },
-      correspondence: {
-        addressLine1: correspondAddress?.primaryLine ?? '',
-        addressLine2: correspondAddress?.secondaryLine ?? '',
-        city: correspondAddress?.city ?? '',
-        state: correspondAddress?.state ?? '',
-        postal: correspondAddress?.zip ?? '',
-        country: correspondAddress?.country ?? '',
-      },
-    },
-    accountDetails: {
-      currentPassword,
+      primaryPhone: formattedPhoneNumber(phone),
+      secondaryPhone: formattedPhoneNumber(secondaryPhone),
+      pendingRequest: hasPendingPersonalInfoUpdateRequest,
     },
   };
 }
 
+function userCompanyDetailsAdapter({ data, role }) {
+  if (!data) return {};
+
+  const {
+    name,
+    imos,
+    yearsInOperation,
+    registrationAddress,
+    registrationAddress2,
+    registrationCity,
+    registrationProvince,
+    registrationPostalCode,
+    correspondenceAddress,
+    correspondenceAddress2,
+    correspondenceCity,
+    correspondenceProvince,
+    correspondencePostalCode,
+    cargoesDetails,
+  } = data;
+
+  const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
+
+  const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
+  const formattedImos = companyImosAdapter({ data: imos });
+
+  const getRoleBasedData = () => {
+    const { isOwner, isCharterer } = getRoleIdentity({ role });
+
+    if (isOwner) {
+      return {
+        totalTankers: formattedImos.countOfTankers,
+        imos: formattedImos,
+      };
+    }
+
+    if (isCharterer) {
+      return {
+        totalTankers: formattedCargoes.countOfCargoes,
+        cargoes: formattedCargoes,
+      };
+    }
+    return null;
+  };
+
+  return {
+    companyDetails: {
+      companyName: name,
+      companyYearsOfOperation: yearsInOperation,
+      registrationAddress,
+      registrationAddress2,
+      registrationCity: cityAdapter({ data: registrationCity }),
+      registrationCountry: countryAdapter({ data: registrationCity?.country }),
+      registrationPostalCode,
+      registrationProvince,
+      correspondenceAddress,
+      correspondenceAddress2,
+      correspondenceCity: cityAdapter({ data: correspondenceCity }),
+      correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
+      correspondencePostalCode,
+      correspondenceProvince,
+      ...getRoleBasedData(),
+    },
+  };
+}
+
+export function cityAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, name } = data;
+
+  return {
+    value: id,
+    label: name,
+  };
+}
+
+export function countryAdapter({ data }) {
+  if (!data) return {};
+
+  const { id, name, codeISO3, codeISO2 } = data;
+
+  const commonCode = codeISO2 === null ? codeISO3 : codeISO2;
+  const code = commonCode === null ? name.substring(0, 3) : commonCode;
+
+  return {
+    value: id,
+    label: name,
+    countryFlag: code.toLowerCase(),
+  };
+}
+
+export function companyImosAdapter({ data }) {
+  if (!data) return {};
+
+  return {
+    countOfTankers: data?.length,
+    listOfTankers: data,
+  };
+}
+
+export function companyCargoesAdapter({ data }) {
+  if (!data) return [];
+
+  return {
+    countOfCargoes: data?.length,
+    listOfCargoes: data,
+  };
+}
+
+export function cargoesDetailsAdapter({ data }) {
+  if (Array.isArray(data)) {
+    return data?.map((cargoe) => cargoeAdapter({ data: cargoe }));
+  }
+
+  return { data };
+}
+
+export function cargoeAdapter({ data }) {
+  const { billOfLadingDate, loadPort, vesselImo } = data;
+
+  return {
+    date: billOfLadingDate,
+    port: portAdapter({ data: loadPort }),
+    imo: imoAdapter({ data: vesselImo }),
+  };
+}
+
+export function imoAdapter({ data }) {
+  if (!data) return null;
+
+  return imoFormatter(data);
+}
+
+export function portAdapter({ data }) {
+  if (!data) return {};
+
+  const { name, id, enabled, countryId, terminals } = data;
+
+  return {
+    id,
+    countryId,
+    portName: name,
+    disabled: !enabled,
+    terminals,
+  };
+}
+
 export function forgotPasswordAdapter({ data }) {
-  if (data === null) return null;
+  if (!data) return null;
   const { email } = data;
   return {
     email,
   };
 }
 
-export function resetPasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password, confirmPassword } = data;
+export function forgotPasswordResponseAdapter({ data }) {
+  if (!data) return null;
   return {
-    password,
-    confirmPassword,
+    data,
+  };
+}
+
+export function resetPasswordAdapter({ data }) {
+  if (!data) return null;
+  const { password, userId, token } = data;
+  return {
+    newPassword: password,
+    userId,
+    token,
+  };
+}
+
+export function resetPasswordResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data,
+  };
+}
+
+export function updatePasswordResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data,
   };
 }
 
 export function updatePasswordAdapter({ data }) {
-  if (data === null) return null;
-  const { password } = data;
+  if (!data) return null;
+  const { currentPassword, password } = data;
   return {
-    password,
+    oldPassword: currentPassword,
+    newPassword: password,
   };
 }
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email } = data;
+  const { firstName, lastName, email, primaryPhone, secondaryPhone } = data;
   return {
-    firstName,
-    lastName,
+    name: firstName,
+    surname: lastName,
     email,
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
   };
 }
 
@@ -89,56 +262,83 @@ function companyAddressesAdapter({ data }) {
 
   const {
     sameAddresses,
-    registrationState,
+    registrationProvince,
     registrationPostalCode,
     registrationAddress,
-    registrationAddressOptional,
-    registrationCityId,
-    correspondenceState,
+    registrationAddress2,
+    registrationCity,
+    correspondenceProvince,
     correspondencePostalCode,
     correspondenceAddress,
-    correspondenceAddressOptional,
-    correspondenceCityId,
+    correspondenceAddress2,
+    correspondenceCity,
   } = data;
 
   return {
     registrationAddress,
-    registrationAddress2: registrationAddressOptional,
-    registrationCityId: registrationCityId.value,
-    registrationProvince: registrationState,
+    registrationAddress2,
+    registrationCityId: registrationCity?.value,
+    registrationProvince,
     registrationPostalCode,
     correspondenceAddress: !sameAddresses ? correspondenceAddress : registrationAddress,
-    correspondenceAddress2: !sameAddresses ? correspondenceAddressOptional : registrationAddressOptional,
-    correspondenceCityId: !sameAddresses ? correspondenceCityId.value : registrationCityId.value,
-    correspondenceProvince: !sameAddresses ? correspondenceState : registrationState,
+    correspondenceAddress2: !sameAddresses ? correspondenceAddress2 : registrationAddress2,
+    correspondenceCityId: !sameAddresses ? correspondenceCity?.value : registrationCity?.value,
+    correspondenceProvince: !sameAddresses ? correspondenceProvince : registrationProvince,
     correspondencePostalCode: !sameAddresses ? correspondencePostalCode : registrationPostalCode,
   };
 }
 
-export function updateCompanyAdapter({ data }) {
-  if (data === null) return null;
-  const { imo, numberOfTankers, companyNumberOfOperation, companyName } = data;
+export function updateOwnerCompanyAdapter({ data }) {
+  if (!data) return null;
+  const { imos, companyYearsOfOperation, companyName } = data;
 
   return {
     companyName,
-    estimatedAverageTankerDWT: 1,
-    yearsInOperation: companyNumberOfOperation,
-    numberOfVessels: numberOfTankers,
+    yearsInOperation: companyYearsOfOperation,
+    numberOfVessels: imos.countOfTankers,
+    imos: listOfImosAdapter({ data: imos.listOfTankers }),
     ...companyAddressesAdapter({ data }),
-    imos: imo,
   };
+}
+
+export function updateChartererCompanyAdapter({ data }) {
+  if (!data) return null;
+  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName } = data;
+
+  return {
+    companyName,
+    yearsInOperation: companyYearsOfOperation,
+    estimatedNumberOfChartersPerYear: numberOfCargoes,
+    ...companyAddressesAdapter({ data }),
+    experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
+  };
+}
+
+export function roleBasedUpdateCompanyAdapter({ data, role }) {
+  if (!data) return null;
+
+  if (role === ROLES.OWNER) return updateOwnerCompanyAdapter({ data });
+  return updateChartererCompanyAdapter({ data });
+}
+
+export function deleteCompanyAdapter({ data }) {
+  if (!data) return null;
+
+  const { password } = data;
+
+  return { password };
 }
 
 export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
   const {
-    imo,
+    imos,
     numberOfTankers,
-    companyNumberOfOperation,
+    companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -149,20 +349,20 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
     estimatedAverageTankerDWT: 1,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
-    imos: imo,
+    imos: listOfImosAdapter({ data: imos }),
     ...companyAddressesAdapter({ data }),
   };
 }
 
 const cargoesAdapter = ({ data }) => {
   return data?.map((item) => ({
-    vesselIMO: item?.imo,
+    vesselIMO: `IMO${item?.imo}`,
     loadPortId: item?.port?.value,
     billOfLadingDate: new Date(item?.date).toISOString(),
   }));
@@ -173,11 +373,11 @@ export function chartererSignUpAdapter({ data }) {
   const {
     cargoes,
     numberOfCargoes,
-    companyNumberOfOperation,
+    companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhoneNumber,
-    primaryPhoneNumber,
+    secondaryPhone,
+    primaryPhone,
     email,
     lastName,
     firstName,
@@ -188,10 +388,10 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email: email.replace(/\.com$/, ''),
     password,
-    phone: `+${primaryPhoneNumber}`,
-    secondaryPhone: secondaryPhoneNumber ? `+${secondaryPhoneNumber}` : '',
+    phone: `+${primaryPhone}`,
+    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
-    yearsInOperation: companyNumberOfOperation,
+    yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     experiences: cargoesAdapter({ data: cargoes }),
     ...companyAddressesAdapter({ data }),
@@ -199,17 +399,36 @@ export function chartererSignUpAdapter({ data }) {
 }
 
 export function loginAdapter({ data }) {
-  if (data === null) return null;
-  const { email, password } = data;
+  if (!data) return null;
+
   return {
-    email,
-    password,
+    ...data,
   };
+}
+
+export function loginResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function refreshTokenAdapter({ data }) {
+  if (!data) return null;
+
+  return { token: data };
+}
+
+export function refreshTokenResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
 }
 
 export function tankerInfoAdapter({ data }) {
   if (data === null) return null;
-  const { id, title, imo, port, date, status } = data;
+  const { id, title, imo, port, date, status, marked } = data;
   return {
     id,
     title,
@@ -217,24 +436,130 @@ export function tankerInfoAdapter({ data }) {
     port,
     date,
     status,
+    marked,
   };
 }
 
 export function positionAdapter({ data }) {
-  if (data === null) return null;
-  const { id, type, title, activeTankers, inActiveTankers, tankersInfo } = data;
+  if (!data) return null;
+
+  const { id, name } = data;
 
   return {
     id,
-    type,
-    title,
-    activeTankers,
-    inActiveTankers,
-    tankers: tankersInfo.map((item) => tankerInfoAdapter({ data: item })),
+    title: name,
+    type: 'assigned',
   };
 }
 
 export function positionsAdapter({ data }) {
-  if (data === null || data === undefined) return null;
-  return data.map((item) => positionAdapter({ data: item }));
+  if (!data) return null;
+  return data?.map((vessels) => positionAdapter({ data: vessels }));
+}
+
+export function positionByIdAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+
+export function updateVesselPortAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+
+export function signupResponseAdapter({ data }) {
+  if (!data) return null;
+  return {
+    data: {
+      message: 'Check your account for verify',
+    },
+  };
+}
+
+export function confirmEmailResponseAdapter({ data }) {
+  if (data === null) return null;
+  if (isEmpty(data)) return null;
+
+  return { data };
+}
+
+export function signInAdapter({ data }) {
+  if (!data) return null;
+
+  const { email, password } = data;
+
+  return {
+    email,
+    password,
+    redirect: false,
+    callbackUrl: ROUTES.ACCOUNT_INFO,
+  };
+}
+
+export function signOutAdapter() {
+  return {
+    redirect: true,
+    callbackUrl: ROUTES.ROOT,
+  };
+}
+
+export function decodedTokenAdapter(token) {
+  if (!token) return null;
+
+  const decodedData = jwt.decode(token);
+  return decodedData;
+}
+
+export function tokenAdapter({ data }) {
+  if (!data) return null;
+
+  return {
+    accessToken: data.access_token,
+    refreshToken: data.refresh_token,
+    expires: Date.now() + data.expires_in * 1000,
+  };
+}
+
+export function sessionAdapter({ token = null }) {
+  if (token?.accessToken) {
+    const { sub, role, ...rest } = decodedTokenAdapter(token.accessToken);
+
+    return {
+      user: { ...rest },
+      userId: sub,
+      chatId: token.chatId,
+      expires: token.expires,
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+      role: userRoleAdapter({ data: role }),
+    };
+  }
+
+  return null;
+}
+
+export function accountPeronalDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountCompanyUpdateDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountDeleteDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
+}
+
+export function accountCargoesDataResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return { data };
 }

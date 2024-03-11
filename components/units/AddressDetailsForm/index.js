@@ -1,39 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import PropTypes from 'prop-types';
+import { AddressDetailsFormPropTypes } from '@/lib/types';
 
-import { AsyncDropdown, Input } from '@/elements';
+import { FormDropdown, Input } from '@/elements';
 import { getCities } from '@/services';
 import { convertDataToOptions } from '@/utils/helpers';
 
-const AddressDetails = ({ title, type, countries }) => {
-  const [cities, setCities] = useState([]);
-  const [disabled, setDisabled] = useState(true);
-
+const AddressDetails = ({ title, type, countries = [] }) => {
   const {
     register,
     setValue,
+    getValues,
     clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext();
 
+  const [cities, setCities] = useState([]);
+  const [disabled, setDisabled] = useState(true);
+
   const fetchCities = async (id) => {
     const data = await getCities(id);
     const options = convertDataToOptions(data, 'cityId', 'cityName');
+
     return { options };
   };
 
   const handleCountryChange = async (data) => {
-    clearErrors([`${type}CountryId`, `${type}CityId`]);
+    clearErrors([`${type}Country`, `${type}City`]);
+
+    setValue(`${type}Country`, data);
+    setValue(`${type}City`, null);
+
+    setDisabled(true);
+    setCities([]);
 
     const { value: countryId } = data;
     const { options } = await fetchCities(countryId);
-
-    setValue(`${type}CountryId`, data);
-    setValue(`${type}CityId`, null);
 
     if (options.length > 0) {
       setCities(options);
@@ -42,27 +47,36 @@ const AddressDetails = ({ title, type, countries }) => {
   };
 
   const handleCityChange = (option) => {
-    setValue(`${type}CityId`, option);
+    clearErrors(`${type}City`);
+    setValue(`${type}City`, option);
   };
+
+  useEffect(() => {
+    if (getValues(`${type}Country`) || getValues(`${type}City`)) {
+      setDisabled(false);
+    }
+  }, [getValues, type]);
 
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
-        <div className="grid grid-cols-0 md:grid-cols-2 gap-5">
-          <AsyncDropdown name={`${type}CountryId`} label="Country" options={countries} onChange={handleCountryChange} />
-          <AsyncDropdown
+        <div className="grid grid-cols-2 gap-5">
+          <FormDropdown name={`${type}Country`} label="Country" options={countries} onChange={handleCountryChange} />
+          <FormDropdown
             label="City"
-            name={`${type}CityId`}
+            name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
+            loading={disabled}
             disabled={disabled}
+            asyncCall
           />
           <Input
-            {...register(`${type}State`)}
+            {...register(`${type}Province`)}
             label="State / Province / Region (optional)"
             placeholder="NY"
-            error={errors[`${type}State`]?.message}
+            error={errors[`${type}Province`]?.message}
             disabled={disabled || isSubmitting}
           />
           <Input
@@ -82,10 +96,10 @@ const AddressDetails = ({ title, type, countries }) => {
           disabled={disabled || isSubmitting}
         />
         <Input
-          {...register(`${type}AddressOptional`)}
+          {...register(`${type}Address2`)}
           label="Address line #2 (optional)"
           placeholder="Apartment, suite, unit, building, floor, etc."
-          error={errors[`${type}AddressOptional`]?.message}
+          error={errors[`${type}Address2`]?.message}
           disabled={disabled || isSubmitting}
         />
       </div>
@@ -93,15 +107,6 @@ const AddressDetails = ({ title, type, countries }) => {
   );
 };
 
-AddressDetails.defaultProps = {
-  title: '',
-  countries: [{}],
-};
-
-AddressDetails.propTypes = {
-  title: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  countries: PropTypes.arrayOf(PropTypes.shape({})),
-};
+AddressDetails.propTypes = AddressDetailsFormPropTypes;
 
 export default AddressDetails;

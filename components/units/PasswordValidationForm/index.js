@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-import TickInCircleSVG from '@/assets/images/tickInCircle.svg';
+import { PasswordValidationPropTypes } from '@/lib/types';
+
+import TickInCircleSVG from '@/assets/images/checkCircle.svg';
 import { PasswordInput, Title } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
@@ -37,15 +38,16 @@ const initialState = [
   },
 ];
 
-const PasswordValidation = ({ title, customStyles }) => {
+const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
   const [validation, setValidation] = useState(initialState);
+
   const {
-    register,
     clearErrors,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    setValue,
+    formState: { isSubmitSuccessful, isSubmitting },
   } = useHookForm();
 
-  const { password: passwordError, confirmPassword: confirmPasswordError } = errors;
+  const { password, confirm } = helperData;
 
   useEffect(() => {
     if (isSubmitSuccessful) setValidation(initialState);
@@ -53,7 +55,7 @@ const PasswordValidation = ({ title, customStyles }) => {
 
   const passwordValidation = (event) => {
     clearErrors(['password', 'confirmPassword']);
-    const { value } = event.target;
+    const { value, name } = event.target;
     setValidation((conditions) =>
       conditions.map((validationObject) => {
         return {
@@ -62,28 +64,32 @@ const PasswordValidation = ({ title, customStyles }) => {
         };
       })
     );
+
+    if (validation) setValue(name, value);
   };
 
   return (
     <div className={classnames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex gap-5">
-        <div className="w-full">
+      <div className="flex items-start gap-x-5 min-w-[450px]">
+        <div className="w-full flex flex-col gap-y-5 justify-between">
           <PasswordInput
-            {...register('password')}
-            label="Chose password"
-            placeholder="Enter your password"
-            error={passwordError?.message}
+            name="password"
+            label={password?.label}
+            placeholder={password?.placeholder}
             disabled={isSubmitting}
             onChange={passwordValidation}
+            autoComplete="off"
+            aria-autocomplete="none"
           />
           <PasswordInput
-            {...register('confirmPassword')}
-            label="Confirm password"
-            placeholder="Enter your password"
-            error={confirmPasswordError?.message}
+            name="confirmPassword"
+            label={confirm?.label}
+            placeholder={confirm?.placeholder}
             disabled={isSubmitting}
-            customStyles="mt-4"
+            onChange={passwordValidation}
+            autoComplete="off"
+            aria-autocomplete="none"
           />
         </div>
         <div className="pl-0 md:pl-5">
@@ -92,8 +98,11 @@ const PasswordValidation = ({ title, customStyles }) => {
           </Title>
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
-              <li className={classnames('flex items-center', index && 'mt-1.5')}>
-                <TickInCircleSVG fill={isValidated ? 'green' : 'black'} />
+              <li key={text} className={classnames('flex items-center', index && 'mt-1.5')}>
+                <TickInCircleSVG
+                  className={`${isValidated ? 'fill-green' : 'fill-black'} w-5 h-5`}
+                  viewBox="0 0 24 24"
+                />
                 <span className="ml-1.5">{text}</span>
               </li>
             ))}
@@ -104,16 +113,6 @@ const PasswordValidation = ({ title, customStyles }) => {
   );
 };
 
-PasswordValidation.defaultProps = {
-  customStyles: '',
-  submitCount: 0,
-  title: '',
-};
-
-PasswordValidation.propTypes = {
-  title: PropTypes.string,
-  customStyles: PropTypes.string,
-  submitCount: PropTypes.number,
-};
+PasswordValidation.propTypes = PasswordValidationPropTypes;
 
 export default PasswordValidation;

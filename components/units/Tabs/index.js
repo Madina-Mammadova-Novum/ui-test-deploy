@@ -1,16 +1,19 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-const Tabs = ({ tabs, customStyles, activeTab, onClick }) => {
+import { TabsPropTypes } from '@/lib/types';
+
+const Tabs = ({ tabs, customStyles = '', activeTab, onClick, ...rest }) => {
   return (
     <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
-      {tabs.map(({ value, label }) => (
+      {tabs?.map(({ value, label }) => (
         <button
+          {...rest}
+          key={value}
           type="button"
           value={value}
           onClick={onClick}
           className={classnames(
-            'whitespace-nowrap min-w-16 w-full h-7 px-5 rounded-md',
+            'whitespace-nowrap min-w-16 h-7 px-5 rounded-md',
             value === activeTab && 'bg-white text-blue shadow-2xmd'
           )}
         >
@@ -21,15 +24,6 @@ const Tabs = ({ tabs, customStyles, activeTab, onClick }) => {
   );
 };
 
-Tabs.defaultProps = {
-  customStyles: '',
-};
-
-Tabs.propTypes = {
-  tabs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  activeTab: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  customStyles: PropTypes.string,
-};
+Tabs.propTypes = TabsPropTypes;
 
 export default Tabs;

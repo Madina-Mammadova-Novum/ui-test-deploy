@@ -1,54 +1,52 @@
 import { createSlice } from '@reduxjs/toolkit';
-/* Actions */
-import { HYDRATE } from 'next-redux-wrapper';
 
-import { authApi } from './actions';
+// eslint-disable-next-line import/no-cycle
+import { signIn } from './actions';
+
+import { removeCookie } from '@/utils/helpers';
 
 const initialState = {
-  isAuthenticated: false,
-  accessToken: localStorage.getItem('accessToken') ?? '',
-  refreshToken: localStorage.getItem('refreshToken') ?? '',
+  loading: false,
+  authorized: false,
+  session: null,
+  error: null,
 };
 
-export const authSlice = createSlice({
-  name: 'auth',
+const authSlice = createSlice({
+  name: 'chat',
   initialState,
   reducers: {
-    setAccessToken: (state, action) => {
-      state.accessToken = action.payload;
-    },
-    setRefreshToken: (state, action) => {
-      state.refreshToken = action.payload;
-    },
-    setIsAuthenticated: (state, action) => {
-      state.isAuthenticated = action.payload;
-    },
-    clearTokens: (state) => {
-      state.accessToken = null;
-      state.refreshToken = null;
-      state.isAuthenticated = false;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    clearSession: (state) => {
+      removeCookie('session-user-id');
+      removeCookie('session-user-role');
+      removeCookie('session-access-token');
+      removeCookie('session-refresh-token');
+
+      state.authorized = initialState.authorized;
+      state.error = initialState.error;
+      state.session = initialState.session;
+      state.loading = initialState.loading;
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
-      const { accessToken, refreshToken } = action.payload.data;
-      state.accessToken = accessToken;
-      state.refreshToken = refreshToken;
-      state.isAuthenticated = true;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+    builder.addCase(signIn.pending, (state) => {
+      state.loading = true;
+      state.authorized = false;
     });
-  },
-  [HYDRATE]: (state, action) => {
-    return {
-      ...state,
-      ...action.payload,
-    };
+    builder.addCase(signIn.fulfilled, (state, { payload }) => {
+      state.error = false;
+      state.loading = false;
+      state.authorized = true;
+      state.session = payload;
+    });
+    builder.addCase(signIn.rejected, (state, { payload }) => {
+      state.authorized = false;
+      state.loading = false;
+      state.error = payload;
+    });
   },
 });
 
-export const { setAccessToken, setRefreshToken, setIsAuthenticated, clearTokens } = authSlice.actions;
+export const { clearSession } = authSlice.actions;
 
 export default authSlice.reducer;

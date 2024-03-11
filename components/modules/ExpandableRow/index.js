@@ -1,47 +1,42 @@
 'use client';
 
-import React, { cloneElement, useEffect, useRef, useState } from 'react';
+import { cloneElement, useEffect, useState } from 'react';
 
-import classnames from 'classnames';
-import PropTypes from 'prop-types';
+import { ExpandableRowPropTypes } from '@/lib/types';
 
-const ExpandableRow = ({ header, footer, children, expand }) => {
+import { Divider } from '@/elements';
+
+const ExpandableRow = ({ header, footer, children, expand, isOpened, className = '' }) => {
   const [toggle, setToggle] = useState(false);
-  const contentRef = useRef(null);
+
   const headerWithProps = cloneElement(header, { toggle });
 
   useEffect(() => {
-    setToggle(expand);
+    setToggle(expand?.value ?? expand);
   }, [expand]);
 
+  useEffect(() => {
+    if (isOpened) setToggle(isOpened);
+  }, [isOpened]);
+
   return (
-    <div className="rounded-[10px] shadow-xmd box-border bg-white">
-      <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
+    <div className="rounded-base shadow-xmd box-border bg-white overflow-x-clip">
+      <div aria-hidden className="w-full cursor-pointer px-5" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerWithProps}
       </div>
       <div
-        ref={contentRef}
-        className={classnames('overflow-hidden transition-height duration-500', {
-          'border-t border-gray-darker': toggle,
-        })}
-        style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
+        className={`transition-all duration-300 grid grid-rows-[0fr] overflow-hidden ${toggle && 'grid-rows-[1fr]'}`}
       >
-        <div className="px-6">{children}</div>
-        {footer}
+        <div className="min-h-0 relative">
+          <Divider className="mx-5" />
+          <div className={className}>{children}</div>
+          {footer}
+        </div>
       </div>
     </div>
   );
 };
 
-ExpandableRow.defaultProps = {
-  expand: false,
-};
-
-ExpandableRow.propTypes = {
-  header: PropTypes.node.isRequired,
-  footer: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired,
-  expand: PropTypes.bool,
-};
+ExpandableRow.propTypes = ExpandableRowPropTypes;
 
 export default ExpandableRow;

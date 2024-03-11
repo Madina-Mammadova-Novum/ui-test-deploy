@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { valuesPropTypes } from '@/utils/types';
+import { valuesPropTypes } from '@/lib/types';
 
 // import { ImprovementCard } from '@/collections';
 import { Title } from '@/elements';
 
 const BlockImprovements = ({ title, values }) => {
   return (
-    <section className="relative mb-28 sm:mb-44 2lg:mb-64">
+    <section className="relative mb-28 sm:mb-44 2xl:mb-64">
       {title && <Title level="1">{title}</Title>}
       {values && (
         <Swiper

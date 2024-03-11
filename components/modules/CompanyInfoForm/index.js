@@ -2,36 +2,40 @@
 
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
+import { CompanyInfoFormPropTypes } from '@/lib/types';
+
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
-import { companyAddressesSchema, companyDetailsSchema, tankerSlotsDetailsSchema } from '@/lib/schemas';
+import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
-import { CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetails } from '@/units';
-import { makeId } from '@/utils/helpers';
-import { successToast, useHookFormParams } from '@/utils/hooks';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
+import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const state = {
-  companyName: 'Ship.link',
-  companyNumberOfOperation: '5',
-  cityId: ' New York',
-  State: 'NY',
-  PostalCode: '10012',
-  AddressOptional: '',
-};
+const CompanyInfoForm = ({ closeModal }) => {
+  const dispatch = useDispatch();
 
-const CompanyInfoForm = () => {
   const [sameAddress, setSameAddress] = useState(false);
+
+  const { countries } = useSelector(getGeneralDataSelector);
+
+  const { data, role } = useSelector(getUserDataSelector);
 
   const schema = yup.object({
     ...companyDetailsSchema(),
-    ...tankerSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
   });
 
-  const methods = useHookFormParams({ state, schema });
+  const { isCharterer, isOwner } = getRoleIdentity({ role });
+
+  const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
@@ -40,27 +44,35 @@ const CompanyInfoForm = () => {
     setSameAddress(addressValue);
   }, [addressValue, methods]);
 
-  const onSubmit = async (data) => {
-    const { message } = await updateCompany({ data });
-    successToast(message, 'You will be notified soon. The rest of the changes have been edited');
+  const onSubmit = async (formData) => {
+    const { error, message } = await updateCompany({ data: formData, role });
+
+    if (!error) {
+      dispatch(fetchUserProfileData());
+      successToast(null, message);
+    }
+
+    if (error) errorToast(error?.title, error?.message);
+    return null;
   };
 
   const noteList = [
     {
-      id: makeId(),
+      id: 1,
       label: 'Сompany information',
-      list: ['Company Name', 'Years of Operation', 'Number of Tankers', 'IMOs'],
+      list: ['Company Name', 'Years of Operation'],
     },
     {
-      id: makeId(),
+      id: 2,
       label: 'Company Registration Address',
-      list: ['City', 'Country', 'Address line #1', 'Address line #2', 'Zip / Postal code', 'State / Province / Region'],
+      list: ['Address line #1', 'Address line #2', 'City', 'State / Province / Region', 'Zip / Postal code', 'Country'],
     },
   ];
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
+        onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
       >
@@ -72,17 +84,20 @@ const CompanyInfoForm = () => {
           subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
           data={noteList}
         />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[480px] overflow-y-scroll">
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>
-          <CompanyDetails />
-          <TankerSlotsDetails />
-          <CompanyAddresses />
+          <CompanyDetails notEditable />
+          {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
+          <CompanyAddresses countries={countryOptionsAdapter({ data: countries })} />
+          {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
+
+CompanyInfoForm.propTypes = CompanyInfoFormPropTypes;
 
 export default CompanyInfoForm;

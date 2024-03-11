@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
-
-import { Loader } from '@/elements';
-import { getUserDetails } from '@/services';
+import { Loader, Title } from '@/elements';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
+import { getUserDataSelector } from '@/store/selectors';
 import {
   AccountCompanyDetails,
   AccountDeactivateDetails,
@@ -14,44 +14,36 @@ import {
   AccountPersonalDetails,
 } from '@/units';
 
-const AccountDetails = ({ containerClass = '' }) => {
-  const [accountData, setAccountData] = useState(null);
+const AccountDetails = () => {
+  const dispatch = useDispatch();
 
-  const fetchData = async () => {
-    const data = await getUserDetails();
-    setAccountData(data);
-  };
+  const { loading, data } = useSelector(getUserDataSelector);
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchUserProfileData());
   }, []);
 
+  const pendingRequest = data?.personalDetails?.hasPendingPersonalInfoUpdateRequest ?? false;
+
   return (
-    <div className={containerClass}>
-      {accountData ? (
+    <section className="flex justify-start items-start flex-col px-5 gap-2.5">
+      <Title level="1" className="py-5">
+        Account information
+      </Title>
+      {loading && <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />}
+      {data && !loading && (
         <>
-          <AccountPersonalDetails user={accountData?.personalDetails} />
-          <AccountCompanyDetails company={accountData?.companyDetails} />
-          <AccountPasswordDetails user={accountData?.accountDetails} />
+          <AccountPersonalDetails user={data?.personalDetails} />
+          <AccountCompanyDetails company={data?.companyDetails} />
+          <AccountPasswordDetails />
           <div className="pt-2.5 pb-5">
-            <AccountDeactivateDetails />
-            <AccountDeleteDetails />
+            <AccountDeactivateDetails pendingRequest={pendingRequest} />
+            <AccountDeleteDetails pendingRequest={pendingRequest} />
           </div>
         </>
-      ) : (
-        <Loader />
       )}
-    </div>
+    </section>
   );
-};
-
-AccountDetails.propTypes = {
-  data: PropTypes.shape({
-    personalDetails: PropTypes.shape({}),
-    companyDetails: PropTypes.shape({}),
-    accountDetails: PropTypes.shape({}),
-  }),
-  containerClass: PropTypes.string,
 };
 
 export default AccountDetails;

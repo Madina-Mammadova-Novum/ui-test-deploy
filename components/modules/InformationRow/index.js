@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
+import { InformationRowPropTypes } from '@/lib/types';
 
 import { NextImage } from '@/elements';
 
-const InformationRow = ({ iconProps, keyText, label }) => {
-  const { src, alt } = iconProps;
+const InformationRow = ({ iconProps = {}, keyText = '', label = '' }) => {
+  const { src = '', alt = '' } = iconProps;
 
   return (
     <div className="flex">
@@ -15,22 +15,6 @@ const InformationRow = ({ iconProps, keyText, label }) => {
   );
 };
 
-InformationRow.defaultProps = {
-  iconProps: {
-    src: '',
-    alt: '',
-  },
-  keyText: '',
-  label: '',
-};
-
-InformationRow.propTypes = {
-  iconProps: PropTypes.shape({
-    src: PropTypes.string,
-    alt: PropTypes.string,
-  }),
-  keyText: PropTypes.string,
-  label: PropTypes.string,
-};
+InformationRow.propTypes = InformationRowPropTypes;
 
 export default InformationRow;

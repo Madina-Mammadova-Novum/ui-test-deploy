@@ -1,17 +1,15 @@
-import { postHandler } from '@/utils/api';
-
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { confirmEmailResponseAdapter } from '@/adapters/user';
+import { ContentTypeJson } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
-  if (req.body?.debug) {
-    await sleep(2000);
-    return res.status(200).json({
-      message: 'You successfully verifficate your account',
-    });
-  }
-  return postHandler('auth/confirmemail', req, res);
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`auth/confirmemail`),
+    dataAdapter: confirmEmailResponseAdapter,
+    requestMethod: 'POST',
+    options: { headers: { ...ContentTypeJson() } },
+  });
 }

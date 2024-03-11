@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
+import { FieldsetContentWrapperPropTypes } from '@/lib/types';
 
-const FieldsetContentWrapper = ({ children, className }) => {
-  return <div className={`flex flex-col ${className}`}>{children}</div>;
-};
+const FieldsetContentWrapper = ({ children, className = '' }) => (
+  <div className={`flex flex-col ${className}`}>{children}</div>
+);
 
-FieldsetContentWrapper.propTypes = {
-  className: PropTypes.string,
-};
+FieldsetContentWrapper.propTypes = FieldsetContentWrapperPropTypes;
 
 export default FieldsetContentWrapper;

@@ -1,19 +1,25 @@
-// import AddressDetails from '@/modules/AddressDetails';
-// import CompanyAddresses from '@/modules/CompanyAddresses';
-// import CompanyDetails from '@/modules/CompanyDetails';
-// import FleetRowHeader from '@/modules/FleetRowHeader';
+import AccountContainer from '@/modules/AccountContainer';
 import AccountDetails from '@/modules/AccountDetails';
 import AccountPositions from '@/modules/AccountPositions';
+import AccountPositionDetails from '@/modules/AccountPositions/AccountPositionsDetails';
+import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
+import AddNewTanker from '@/modules/AddNewTanker';
 import AuthWrapper from '@/modules/AuthWrapper';
 import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
+import Chat from '@/modules/Chat';
 import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
 import ConfirmCounteroffer from '@/modules/ConfirmCounteroffer';
+import ContactUsForm from '@/modules/ContactUsForm';
 import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
+import DropzoneForm from '@/modules/DropzoneForm';
 import ExpandableRow from '@/modules/ExpandableRow';
+import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
+import FixtureDetails from '@/modules/Fixture/FixtureDetails';
+import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
@@ -21,16 +27,23 @@ import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
 import Negotiating from '@/modules/Negotiating';
+import NegotiatingDetails from '@/modules/Negotiating/NegotiatingDetails';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
+import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
-// import PersonalDetails from '@/modules/PersonalDetails';
+import OnSubs from '@/modules/OnSubs';
+import OnSubsDetails from '@/modules/OnSubs/OnSubsDetails';
 import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
+import PostFixture from '@/modules/PostFixture';
+import PostFixtureDetails from '@/modules/PostFixture/PostFixtureDetails';
+import PostFixtureExpandedContent from '@/modules/PostFixture/PostFixtureExpandedContent';
+import PostFixtureExpandedFooter from '@/modules/PostFixture/PostFixtureExpandedFooter';
+import PostFixtureResultContent from '@/modules/PostFixture/PostFixtureResultContent';
 import PreFixture from '@/modules/PreFixture';
+import PreFixtureDetails from '@/modules/PreFixture/PreFixtureDetails';
 import ProfileMenu from '@/modules/ProfileMenu';
-// import RadioWithText from '@/modules/RadioWithText';
-// import Seo from '@/modules/Seo';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import SendCounteroffer from '@/modules/SendCounteroffer';
 import Sidebar from '@/modules/Sidebar';
@@ -42,35 +55,27 @@ import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
-// import SlotsDetails from '@/modules/SlotsDetails';
-// import TermsAndConditions from '@/modules/Terms&Conditions';
-// import Upload from '@/modules/Upload';
 
 export {
+  AccountContainer,
   AccountWrapper,
+  AccountPositionDetails,
   AccountPositions,
   AccountDetails,
   CompanyInfoForm,
+  ContactUsForm,
   DeleteAccountForm,
   DeactivateAccountForm,
-  // RadioWithText,
-  // FleetRowHeader,
-  // CompanyAddresses,
+  FAQByType,
   Sidebar,
   Navbar,
-  // Upload,
   Signup,
   Notification,
   ProfileMenu,
-  // PersonalDetails,
-  // CompanyDetails,
-  // SlotsDetails,
-  // AddressDetails,
-  // TermsAndConditions,
-  // Seo,
   PageHeader,
   AccountHeader,
   PageFooter,
+  AccountTools,
   AccountFooter,
   AuthHeader,
   AuthWrapper,
@@ -88,6 +93,10 @@ export {
   CommentsContent,
   TankerSearchResults,
   PreFixture,
+  PostFixture,
+  PostFixtureExpandedContent,
+  PostFixtureResultContent,
+  PostFixtureExpandedFooter,
   Fixture,
   Negotiating,
   ViewIncomingOffer,
@@ -97,4 +106,15 @@ export {
   ViewCounteroffer,
   ViewFailedOffer,
   ViewOffer,
+  NotFound,
+  OnSubs,
+  Fleets,
+  AddNewTanker,
+  DropzoneForm,
+  Chat,
+  NegotiatingDetails,
+  OnSubsDetails,
+  PreFixtureDetails,
+  PostFixtureDetails,
+  FixtureDetails,
 };

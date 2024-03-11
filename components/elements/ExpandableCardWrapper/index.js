@@ -1,53 +1,49 @@
 'use client';
 
-import { cloneElement, useEffect, useRef, useState } from 'react';
+import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { ExpandableCardWrapperPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 
-const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, expandAll }) => {
-  const contentRef = useRef(null);
+const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, className = '', expandAll = false }) => {
+  const [toggle, setToggle] = useState(expandAll);
 
-  const [toggle, setToggle] = useState(false);
+  const contentRef = useRef(null);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
 
   useEffect(() => {
-    setToggle(expandAll.value);
+    setToggle(expandAll);
   }, [expandAll]);
 
+  const handleClick = () => {
+    setToggle((prevValue) => !prevValue);
+  };
+
+  const expandedHeight = useMemo(() => {
+    return toggle ? contentRef?.current?.scrollHeight : 0;
+  }, [toggle]);
+
   return (
-    <div className="rounded-base shadow-xmd box-border">
-      <div aria-hidden className="w-full cursor-pointer px-6" onClick={() => setToggle((prevValue) => !prevValue)}>
+    <div className={`rounded-base shadow-xmd box-border my-3 ${className}`}>
+      <div aria-hidden className="w-full cursor-pointer px-5" onClick={() => handleClick()}>
         {headerComponentWithProps}
       </div>
       <div
         ref={contentRef}
-        className="overflow-hidden transition-height duration-200"
-        style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '0px' }}
+        style={{ height: expandedHeight }}
+        className="overflow-y-clip table-scroll transition-all duration-300"
       >
-        <div className="px-6">
-          <Divider />
-          {children}
+        <div className="flex flex-col w-full">
+          <Divider className="mx-5" />
+          <div className="p-5">{children}</div>
+          {footerComponent}
         </div>
-        {footerComponent}
       </div>
     </div>
   );
 };
 
-ExpandableCardWrapper.defaultProps = {
-  expandAll: {
-    value: false,
-  },
-};
-
-ExpandableCardWrapper.propTypes = {
-  headerComponent: PropTypes.node.isRequired,
-  footerComponent: PropTypes.node,
-  expandAll: PropTypes.shape({
-    value: PropTypes.string,
-  }),
-};
+ExpandableCardWrapper.propTypes = ExpandableCardWrapperPropTypes;
 
 export default ExpandableCardWrapper;

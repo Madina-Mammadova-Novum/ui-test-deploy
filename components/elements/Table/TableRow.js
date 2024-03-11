@@ -1,24 +1,15 @@
-import PropTypes from 'prop-types';
+'use client';
 
-import { tableRowsAdapter } from '@/adapters';
+import { TableRowPropTypes } from '@/lib/types';
+
 import TableCell from '@/elements/Table/TableCell';
 
-const TableRow = ({ rowData: data, indexCell: index }) => {
-  const result = tableRowsAdapter({ data, index });
+const TableRow = ({ rowData = [], fleetId, urlAction, type }) => {
+  const printTableCell = (props) => <TableCell cellProps={{ ...props, urlAction, fleetId, type }} />;
 
-  const printTableCell = (props) => <TableCell cellProps={props} />;
-
-  return <tr>{result.map(printTableCell)}</tr>;
+  return <tr>{rowData.map(printTableCell)}</tr>;
 };
 
-TableRow.defaultProps = {
-  rowData: [],
-  indexCell: null,
-};
-
-TableRow.propTypes = {
-  rowData: PropTypes.shape([]),
-  indexCell: PropTypes.number,
-};
+TableRow.propTypes = TableRowPropTypes;
 
 export default TableRow;

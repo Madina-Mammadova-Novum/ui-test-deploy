@@ -1,31 +1,26 @@
-import React from 'react';
+import { AuthBasePropTypes } from '@/lib/types';
 
-import PropTypes from 'prop-types';
-
-import { navBarPropTypes } from '@/lib/types';
-
-import cover from '@/assets/images/cover.jpg';
 import { NextImage } from '@/elements';
-import { BaseLayout } from '@/layouts';
 import { AuthHeader } from '@/modules';
 
-const AuthLayout = ({ navigation, children }) => {
+const AuthLayout = ({ navigation, children, containerClass = '' }) => {
   return (
-    <BaseLayout className="container max-w-screen-2lg min-h-screen flex flex-col">
+    <div className="container mx-auto max-w-screen min-h-screen flex flex-col">
       <AuthHeader navigation={navigation} />
-      <section className="grid grid-cols-1 3sm:grid-cols-2 flex-grow gap-20">
-        <div className="fixed left-0 top-0 -z-50 h-full w-full hidden 3sm:block">
-          <NextImage src={cover} alt="cover" customStyles="h-full w-1/2 object-cover" height={1000} width={1000} />
-        </div>
-        {children}
-      </section>
-    </BaseLayout>
+      <div className="fixed left-0 top-0 -z-50 h-full 3md:w-5/12 xl:w-[calc(100% - 668px)] hidden 3md:block">
+        <NextImage
+          src="/images/cover.jpg"
+          alt="cover"
+          customStyles="h-full w-full object-cover"
+          height={1000}
+          width={1000}
+        />
+      </div>
+      <section className={`my-auto ${containerClass}`}>{children}</section>
+    </div>
   );
 };
 
-AuthLayout.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  navigation: PropTypes.shape(navBarPropTypes).isRequired,
-};
+AuthLayout.propTypes = AuthBasePropTypes;
 
 export default AuthLayout;

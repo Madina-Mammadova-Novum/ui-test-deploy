@@ -1,14 +1,19 @@
+'use client';
+
 import React from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 
-import { InputErrorMessage } from '@/elements';
+import { InputPropTypes } from '@/lib/types';
+
+import { InputErrorMessage, Label } from '@/elements';
+import { useDisableNumberInputScroll } from '@/utils/hooks';
 
 const Input = React.forwardRef(
   (
     {
       customStyles = '',
+      inputStyles = '',
       disabled = false,
       error = null,
       helperText = null,
@@ -20,6 +25,8 @@ const Input = React.forwardRef(
     },
     ref
   ) => {
+    useDisableNumberInputScroll();
+
     return (
       <div
         className={classnames(
@@ -29,14 +36,14 @@ const Input = React.forwardRef(
         )}
       >
         {label && (
-          <label htmlFor={name} className="block text-gray text-[12px] font-semibold uppercase text-left">
+          <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
             {label}
-          </label>
+          </Label>
         )}
         <div
           className={classnames(
             {
-              'flex w-full min-h-10 border box-border rounded-md px-4 py-2.5 hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
+              'flex w-full min-h-10 border border-gray-darker box-border rounded-md hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
                 type !== 'checkbox',
             },
             {
@@ -54,29 +61,27 @@ const Input = React.forwardRef(
           <input
             ref={ref}
             id={name}
-            className="outline-none w-full h-5 text-xsm flex items-center bg-transparent"
+            className={classnames(
+              {
+                'px-4 py-[9px] rounded-md': type !== 'checkbox',
+              },
+              'outline-none w-full h-[38px] text-xsm flex items-center bg-transparent',
+              inputStyles
+            )}
+            readOnly={disabled}
             type={type}
             name={name}
             {...rest}
           />
-          {icon && <span className="ml-2.5">{icon}</span>}
+          {icon && <span className="ml-2.5 mr-4 my-auto">{icon}</span>}
         </div>
         {error && <InputErrorMessage message={error} />}
-        {helperText && <p className="text-[12px]">{helperText}</p>}
+        {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
       </div>
     );
   }
 );
 
-Input.propTypes = {
-  label: PropTypes.string,
-  type: PropTypes.string,
-  customStyles: PropTypes.string,
-  error: PropTypes.string,
-  helperText: PropTypes.string,
-  icon: PropTypes.node,
-  disabled: PropTypes.bool,
-  name: PropTypes.string.isRequired,
-};
+Input.propTypes = InputPropTypes;
 
 export default Input;

@@ -1,10 +1,8 @@
-import React from 'react';
-
 import delve from 'dlv';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-import { mediaPropTypes } from '@/utils/types';
+import { mediaPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -15,6 +13,7 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
       {coverImage && (
         <div className="absolute w-full h-full inset-0 -z-10">
           <Image
+            priority
             width={1440}
             height={352}
             alt={delve(coverImage, 'alternativeText')}
@@ -34,11 +33,6 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
       </div>
     </section>
   );
-};
-
-BlockHeroImage.defaultProps = {
-  title: '',
-  shortDescription: '',
 };
 
 BlockHeroImage.propTypes = {

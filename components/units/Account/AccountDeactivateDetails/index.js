@@ -1,3 +1,5 @@
+// import PropTypes from 'prop-types';
+
 import { DeactivateAccountForm } from '@/modules';
 import { ModalWindow } from '@/units';
 
@@ -11,7 +13,7 @@ const AccountDeactivateDetails = () => {
         className: '!py-0',
       }}
     >
-      <DeactivateAccountForm />
+      <DeactivateAccountForm title="Deactivation of your account" />
     </ModalWindow>
   );
 };

@@ -1,13 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import { Button, SimpleSelect } from '@/elements';
-import { CommentsContent } from '@/modules';
-import { Countdown, ModalHeader, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
-import { incomingOfferCommentsData, voyageDetailData } from '@/utils/mock';
+import SendCounterofferFormFields from './SendCounterofferFormFields';
+
+import { SendCounterOfferPropTypes } from '@/lib/types';
+
+import { Dropdown } from '@/elements';
+import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
+import { CommentsContent, ConfirmCounteroffer } from '@/modules';
+import { getCountdownTimer } from '@/services/countdownTimer';
+import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
+import { convertDataToOptions } from '@/utils/helpers';
+import { counterofferPointsToImprove } from '@/utils/mock';
 
 const tabs = [
   {
@@ -15,86 +22,148 @@ const tabs = [
     label: 'Commercial offer terms',
   },
   {
-    value: 'voyage_details',
-    label: 'Voyage details',
-  },
-  {
     value: 'comments',
     label: 'Comments',
   },
 ];
 
-const SendCounteroffer = ({ closeModal, goBack }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0].value);
-  const [responseCountdown, setResponseCountdown] = useState('20 min');
-  const [showScroll, setShowScroll] = useState(false);
+const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
+  const scrollingContainerRef = useRef(null);
 
-  const tabContent = () => {
-    switch (currentTab) {
-      case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetailData} />;
-      case 'comments':
-        return <CommentsContent data={incomingOfferCommentsData} />;
-      default:
-        return <OfferForm />;
+  const [disabled, setDisabled] = useState(false);
+  const [currentTab, setCurrentTab] = useState(tabs[0].value);
+  const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
+
+  const [countdownState, setCountdownState] = useState({
+    responseCountdownOptions: [],
+    responseCountdown: {},
+    loading: false,
+  });
+
+  const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
+  const { responseCountdownOptions, responseCountdown, loading } = countdownState;
+
+  const handleCountdownStateChange = (key, value) =>
+    setCountdownState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+
+  const handleBack = () => {
+    if (disabled) return;
+
+    if (confirmCounteroffer) {
+      setConfirmCounteroffer(false);
     }
+
+    goBack('view_offer');
   };
+
+  const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
+  const handleValidationError = () => setCurrentTab(tabs[0].value);
+
+  useEffect(() => {
+    (async () => {
+      handleCountdownStateChange('loading', true);
+      const { data = [] } = await getCountdownTimer();
+      const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+      const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+      handleCountdownStateChange('responseCountdownOptions', convertedOptions);
+      handleCountdownStateChange('responseCountdown', defaultCountdown);
+      handleCountdownStateChange('loading', false);
+    })();
+  }, []);
+
+  const tabContent = useMemo(() => {
+    const scrollToBottom = () => {
+      setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
+    };
+
+    switch (currentTab) {
+      case 'comments':
+        return <CommentsContent data={comments} />;
+      default:
+        return (
+          <>
+            <VoyageDetailsTabContent data={voyageDetails} inlineVariant />
+            <SendCounterofferFormFields data={counterofferData} scrollToBottom={scrollToBottom} />
+          </>
+        );
+    }
+  }, [currentTab, voyageDetails, comments, counterofferData]);
 
   return (
     <div className="w-[610px]">
-      <ModalHeader goBack={() => goBack('view_offer')}>Send Counteroffer</ModalHeader>
+      <ModalHeader disabled={disabled} goBack={handleBack}>
+        {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
+      </ModalHeader>
+
+      {!confirmCounteroffer && (
+        <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
+          <p>
+            In order to send counteroffer, please make at least <b>one of the following</b> adjustments:{' '}
+          </p>
+          <ul>
+            {counterofferPointsToImprove.map((lineToImprove) => (
+              <li>- {lineToImprove}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="flex text-[12px] items-center mt-5">
-        <Countdown time="1h 50m" />
+        <Countdown time={countdownData} />
         <div className="pl-4 border-l h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the vessel owner to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offer
           </p>
-          <SimpleSelect
-            onChange={setResponseCountdown}
-            currentItem={responseCountdown}
-            selectableItems={['20 min', '40 min', '60 min']}
+          <Dropdown
+            defaultValue={responseCountdown}
+            options={responseCountdownOptions}
+            loading={loading}
+            asyncCall
+            disabled={!responseCountdownOptions.length || confirmCounteroffer}
+            onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
         </div>
       </div>
-
-      <Tabs
-        customStyles="mx-auto mt-5 mb-3"
-        tabs={tabs}
-        activeTab={currentTab}
-        onClick={({ target }) => setCurrentTab(target.value)}
-      />
-
-      <div
-        ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+      <CounterofferForm
+        disabled={disabled}
+        setDisabled={setDisabled}
+        closeModal={closeModal}
+        allowSubmit={confirmCounteroffer}
+        handleConfirmCounteroffer={handleConfirmCounteroffer}
+        handleValidationError={handleValidationError}
+        data={{ ...counterofferData, responseCountdown }}
       >
-        {tabContent()}
-      </div>
+        {!confirmCounteroffer ? (
+          <>
+            <Tabs
+              customStyles="mx-auto mt-5 mb-3"
+              tabs={tabs}
+              activeTab={currentTab}
+              onClick={({ target }) => setCurrentTab(target.value)}
+            />
 
-      <div className="flex text-xsm gap-x-2.5 mt-4">
-        <Button
-          onClick={closeModal}
-          customStyles="ml-auto"
-          buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-        />
-        <Button
-          onClick={() => goBack('offer_counteroffer_confirm')}
-          buttonProps={{ text: 'Confirm changes', variant: 'primary', size: 'large' }}
-        />
-      </div>
+            <div
+              ref={scrollingContainerRef}
+              className={classnames(
+                'h-[320px] overflow-y-auto overflow-x-hidden p-5',
+                scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
+              )}
+            >
+              {tabContent}
+            </div>
+          </>
+        ) : (
+          <ConfirmCounteroffer closeModal={closeModal} offerDetails={offerDetails} />
+        )}
+      </CounterofferForm>
     </div>
   );
 };
 
-SendCounteroffer.defaultProps = {
-  goBack: () => {},
-  closeModal: () => {},
-};
-
-SendCounteroffer.propTypes = {
-  goBack: PropTypes.func,
-  closeModal: PropTypes.func,
-};
+SendCounteroffer.propTypes = SendCounterOfferPropTypes;
 
 export default SendCounteroffer;

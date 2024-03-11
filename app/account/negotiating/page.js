@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import { AccountWrapper, Negotiating } from '@/modules';
+import { Negotiating } from '@/modules';
 
 export async function generateMetadata() {
   return metaData({
@@ -11,14 +11,6 @@ export async function generateMetadata() {
   });
 }
 
-const PreFixturePage = () => {
-  return (
-    <section className="grow px-5">
-      <AccountWrapper title="Negotiating" suptitle="Offer stage #1" containerClass="w-full">
-        <Negotiating />
-      </AccountWrapper>
-    </section>
-  );
-};
-
-export default PreFixturePage;
+export default function Page() {
+  return <Negotiating />;
+}

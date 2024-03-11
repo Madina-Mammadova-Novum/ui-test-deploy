@@ -4,55 +4,79 @@ import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
-import { FormManager } from '@/common';
-import { PasswordInput, Title } from '@/elements';
+import { PasswordInfoFormPropTypes } from '@/lib/types';
+
+import { ModalFormManager } from '@/common';
+import { Divider, PasswordInput, Title } from '@/elements';
 import { updatePasswordSchema } from '@/lib/schemas';
 import { updatePassword } from '@/services';
 import { PasswordValidation } from '@/units';
-import { successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const PasswordInfoForm = () => {
+const PasswordInfoForm = ({ closeModal }) => {
   const schema = yup.object({ ...updatePasswordSchema() });
-
-  const state = {
-    currentPassword: '12345678',
-    password: '',
-    confirmPassword: '',
-  };
-
-  const methods = useHookFormParams({ state, schema });
+  const methods = useHookFormParams({ schema });
 
   const {
-    register,
-    formState: { errors },
+    clearErrors,
+    setValue,
+    formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = async (data) => {
-    const { message } = await updatePassword({ data });
-    successToast(message);
+  const onSubmit = async (formData) => {
+    const { data, status, error } = await updatePassword({ data: formData });
+
+    if (status === 200) {
+      successToast(data.message);
+
+      setValue('password', '');
+      setValue('confirmPassword', '');
+      setValue('currentPassword', '');
+    }
+
+    if (error) errorToast(error?.title, error?.message);
+    return true;
+  };
+
+  const handleCurrentPassword = (event) => {
+    clearErrors('currentPassword');
+    const { value } = event.target;
+    setValue('currentPassword', value);
   };
 
   return (
     <FormProvider {...methods}>
-      <FormManager
+      <ModalFormManager
         submitAction={onSubmit}
+        onClose={closeModal}
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
         <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
           Change Your Password
         </Title>
-        <PasswordInput
-          {...register('currentPassword')}
-          label="Current password"
-          placeholder="Enter your password"
-          error={errors.currentPassword?.message}
-          disabled
+        <div className="w-2/3">
+          <PasswordInput
+            name="currentPassword"
+            label="Current password"
+            placeholder="Enter your current password"
+            error={errors.currentPassword?.message}
+            disabled={isSubmitting}
+            onChange={handleCurrentPassword}
+          />
+        </div>
+        <Divider />
+        <p className="text-black font-semibold text-sm">Enter a strong password according to our requirements</p>
+        <PasswordValidation
+          helperData={{
+            password: { label: 'new password', placeholder: 'Enter a new password' },
+            confirm: { label: 'confirm password', placeholder: 'Enter a new password' },
+          }}
         />
-        <hr />
-        <PasswordValidation />
-      </FormManager>
+      </ModalFormManager>
     </FormProvider>
   );
 };
+
+PasswordInfoForm.propTypes = PasswordInfoFormPropTypes;
 
 export default PasswordInfoForm;

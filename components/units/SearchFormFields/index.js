@@ -1,158 +1,288 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { TrashIcon } from '@/assets/icons';
-import PlusInCircleSVG from '@/assets/images/plusInCircle.svg';
-import { Button, DatePicker, Dropdown, Input } from '@/elements';
-import { getFilledArray, getValueWithPath } from '@/utils/helpers';
+import PropTypes from 'prop-types';
+
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+import PlusCircleSVG from '@/assets/images/plusCircle.svg';
+import TrashAltSVG from '@/assets/images/trashAlt.svg';
+import { Button, DatePicker, FormDropdown, Input } from '@/elements';
+import { CARGO_TYPE_KEY } from '@/lib/constants';
+import { getCargoTypes } from '@/services/cargoTypes';
+import { getPortsForSearcForm } from '@/services/port';
+import { getProducts } from '@/services/product';
+import { getTerminals } from '@/services/terminal';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const SearchFormFields = () => {
+const SearchFormFields = ({ productState, setProductState }) => {
   const {
     register,
     clearErrors,
     formState: { errors, isSubmitting },
     setValue,
+    getValues,
     unregister,
   } = useHookForm();
 
-  const [productState, setProductState] = useState([0]);
+  const [initialLoading, setInitialLoading] = useState(false);
+  const [ports, setPorts] = useState([]);
+  const [cargoTypes, setCargoTypes] = useState([]);
+  const [selected, setSelected] = useState(false);
+  const [products, setProducts] = useState({
+    loading: false,
+    data: [],
+  });
+  const [terminals, setTerminals] = useState({
+    loadPortTerminals: {
+      loading: false,
+      data: [],
+    },
+    dischargePortTerminals: {
+      loading: false,
+      data: [],
+    },
+  });
 
-  const productsLimitExceeded = productState.length >= 3;
+  const productsLimitExceeded = productState?.length >= 3;
 
-  const handleChange = (key, value) => {
+  const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+    const portKeys = ['loadPort', 'dischargePort'];
+
+    const terminalKeys = {
+      loadPort: 'loadTerminal',
+      dischargePort: 'dischargeTerminal',
+    };
+
+    if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
     if (error) {
       clearErrors(key);
     }
+
     setValue(key, value);
+
+    if (portKeys.includes(key)) {
+      setValue(terminalKeys[key], null);
+
+      setTerminals((prevState) => ({
+        ...prevState,
+        [`${key}Terminals`]: {
+          loading: true,
+          data: prevState[`${key}Terminals`].data,
+        },
+      }));
+
+      const relatedTerminals = await getTerminals(value.value);
+
+      setTerminals((prevState) => ({
+        ...prevState,
+        [`${key}Terminals`]: {
+          loading: false,
+          data: convertDataToOptions(relatedTerminals, 'id', 'name'),
+        },
+      }));
+    }
+
+    if (key === CARGO_TYPE_KEY) {
+      productState?.map((productId) => setValue(`products[${productId}].product`, null));
+      setProducts((prevState) => ({
+        ...prevState,
+        loading: true,
+      }));
+
+      const relatedProducts = await getProducts(value.value);
+      setProducts({
+        loading: false,
+        data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
+          ...product,
+          density: relatedProducts.data.find(({ id }) => id === product.value).density,
+        })),
+      });
+    }
   };
 
   const handleAddProduct = () => {
-    setProductState((prevState) => getFilledArray(prevState.length + 1));
+    const availableProductIds = [0, 1, 2];
+    setProductState((prevState) => [...prevState, availableProductIds.filter((el) => !prevState.includes(el))[0]]);
   };
 
   const handleRemoveProduct = (id) => {
-    setProductState((prevState) => prevState.filter((product) => product !== id));
-    unregister(`products[${id}]`);
     clearErrors(`products[${id}]`);
+    unregister(`products[${id}]`);
+    setProductState((prevState) => prevState.filter((product) => product !== id));
   };
 
-  const testOption = [{ label: 'testLabel', value: 'testValue' }];
+  useEffect(() => {
+    (async () => {
+      setInitialLoading(true);
+      const [portsData, cargoTypesData] = await Promise.all([getPortsForSearcForm(), getCargoTypes()]);
+      setPorts(countryOptionsAdapter(portsData));
+      setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
+      setInitialLoading(false);
+    })();
+  }, []);
 
   return (
     <div className="flex">
       <div className="w-full flex flex-col gap-y-4 pr-5 mr-5 border-r">
-        <div className="flex flex-col 3sm:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5">
           <DatePicker
             label="laycan start"
             inputClass="w-full"
+            containerClass="w-full"
+            name="laycanStart"
+            minDate={new Date()}
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
           />
           <DatePicker
             label="laycan end"
             inputClass="w-full"
+            containerClass="w-full"
+            name="laycanEnd"
+            minDate={new Date()}
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
           />
         </div>
-        <div className="flex flex-col 3sm:flex-row gap-x-5">
-          <Dropdown
+        <div className="flex flex-col 3md:flex-row gap-x-5">
+          <FormDropdown
             name="loadPort"
-            options={testOption}
+            options={ports}
+            loading={initialLoading}
+            disabled={!ports.length}
             id="loadPort"
             label="load port"
-            customStyles="w-full"
+            customStyles={{ className: 'w-full', dropdownWidth: 3 }}
             onChange={(option) => handleChange('loadPort', option)}
+            asyncCall
           />
-          <Dropdown
+          <FormDropdown
             name="loadTerminal"
-            options={testOption}
+            loading={terminals.loadPortTerminals.loading}
+            options={terminals.loadPortTerminals.data}
+            disabled={!terminals.loadPortTerminals.data.length}
             label="load terminal"
-            customStyles="w-full"
+            customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
+            asyncCall
           />
         </div>
-        <div className="flex flex-col 3sm:flex-row gap-x-5">
-          <Dropdown
+        <div className="flex flex-col 3md:flex-row gap-x-5">
+          <FormDropdown
             name="dischargePort"
-            options={testOption}
             label="discharge port"
-            customStyles="w-full"
+            options={ports}
+            loading={initialLoading}
+            disabled={!ports.length}
+            customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
+            asyncCall
           />
-          <Dropdown
+          <FormDropdown
             name="dischargeTerminal"
-            options={testOption}
             label="dischargee terminal"
-            customStyles="w-full"
+            loading={terminals.dischargePortTerminals.loading}
+            options={terminals.dischargePortTerminals.data}
+            disabled={!terminals.dischargePortTerminals.data.length}
+            customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargeTerminal', option)}
+            asyncCall
           />
         </div>
       </div>
 
       <div className="w-full flex flex-col gap-y-4">
-        <Dropdown
+        <FormDropdown
           label="cargo type"
           name="cargoType"
           id="cargoType"
-          options={testOption}
+          options={cargoTypes}
+          disabled={!cargoTypes.length}
+          loading={initialLoading}
           onChange={(option) => handleChange('cargoType', option)}
+          asyncCall
         />
-        {productState.map((index) => (
-          <div key={`product_${index}`}>
-            <div className="flex flex-wrap 3sm:flex-nowrap justify-between gap-x-5 gap-y-1">
-              <Dropdown
-                onChange={(option) => handleChange(`products[${index}].product`, option)}
-                name={`products[${index}].product`}
-                options={testOption}
-                label={`product #${index + 1}`}
-                customStyles="w-full 3sm:w-1/2"
-              />
-              <Input
-                {...register(`products[${index}].density`)}
-                label="density"
-                placeholder="mt/m³"
-                customStyles="w-full 3sm:w-2/5"
-                error={errors.products ? errors.products[index]?.density?.message : null}
-                disabled={isSubmitting}
-              />
-              <Input
-                {...register(`products[${index}].quantity`)}
-                label="Quantity"
-                placeholder="tons"
-                customStyles="w-[45%] 3sm:w-2/5"
-                error={errors.products ? errors.products[index]?.quantity?.message : null}
-                disabled={isSubmitting}
-              />
-              <Input
-                {...register(`products[${index}].tolerance`)}
-                label="Tolerance"
-                type="number"
-                placeholder="%"
-                customStyles="w-[45%] 3sm:w-1/5"
-                error={errors.products ? errors.products[index]?.tolerance?.message : null}
-                disabled={isSubmitting}
-              />
+        {productState?.map((productId, index) => {
+          const { density = {} } = getValues(`products[${productId}].product`) || {};
+          const minValue = parseFloat(density?.min?.toFixed(4)).toString();
+          const maxValue = parseFloat(density?.max?.toFixed(4)).toString();
+
+          const helperTextDensity = `${minValue} - ${maxValue}`;
+
+          return (
+            <div key={`product_${productId}`}>
+              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1 items-baseline">
+                <FormDropdown
+                  onChange={(option) => {
+                    setSelected(!selected);
+                    handleChange(`products[${productId}].product`, option);
+                  }}
+                  name={`products[${productId}].product`}
+                  loading={products.loading}
+                  asyncCall
+                  options={products.data}
+                  disabled={!products.data.length}
+                  label={`product #${index + 1}`}
+                  customStyles={{ className: 'w-full 3md:w-1/2' }}
+                />
+                <Input
+                  {...register(`products[${productId}].density`)}
+                  label="density"
+                  type="number"
+                  placeholder="mt/m³"
+                  customStyles="w-full 3md:w-2/5"
+                  helperText={density.min && helperTextDensity}
+                  error={errors.products ? errors.products[productId]?.density?.message : null}
+                  disabled={isSubmitting}
+                  min={String(density.min)}
+                  max={String(density.max)}
+                  step="any"
+                />
+                <Input
+                  {...register(`products[${productId}].quantity`)}
+                  label="Quantity"
+                  type="number"
+                  placeholder="tons"
+                  customStyles="w-[45%] 3md:w-2/5"
+                  error={errors.products ? errors.products[productId]?.quantity?.message : null}
+                  disabled={isSubmitting}
+                />
+                <Input
+                  {...register(`products[${productId}].tolerance`)}
+                  label="Tolerance"
+                  type="number"
+                  placeholder="%"
+                  customStyles="w-[45%] 3md:w-1/5"
+                  error={errors.products ? errors.products[productId]?.tolerance?.message : null}
+                  disabled={isSubmitting}
+                />
+              </div>
+              {productState?.length > 1 && (
+                <Button
+                  buttonProps={{
+                    text: 'Delete',
+                    variant: 'tertiary',
+                    size: 'small',
+                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                  }}
+                  customStyles="ml-auto !p-0"
+                  onClick={() => handleRemoveProduct(productId)}
+                />
+              )}
             </div>
-            {!!index && (
-              <Button
-                buttonProps={{ text: 'Delete', variant: 'tertiary', size: 'small', icon: { after: <TrashIcon /> } }}
-                customStyles="ml-auto !p-0"
-                onClick={() => handleRemoveProduct(index)}
-              />
-            )}
-          </div>
-        ))}
+          );
+        })}
         <Button
           disabled={productsLimitExceeded}
           buttonProps={{
             text: 'Add more Products',
             variant: 'primary',
             size: 'small',
-            icon: { before: <PlusInCircleSVG /> },
+            icon: { before: <PlusCircleSVG className="fill-blue group-hover:fill-blue-darker" /> },
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
@@ -160,6 +290,11 @@ const SearchFormFields = () => {
       </div>
     </div>
   );
+};
+
+SearchFormFields.propTypes = {
+  productState: PropTypes.arrayOf(PropTypes.number).isRequired,
+  setProductState: PropTypes.func.isRequired,
 };
 
 export default SearchFormFields;

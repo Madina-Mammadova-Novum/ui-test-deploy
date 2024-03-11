@@ -1,30 +1,30 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
+'use client';
 
-import DragSVG from '@/assets/images/drag.svg';
-import TableArrowSVG from '@/assets/images/tableArrow.svg';
+import classNames from 'classnames';
+
+import { ExpandableRowHeaderPropTypes } from '@/lib/types';
+
+import TableArrowSVG from '@/assets/images/arrow.svg';
 import { TextWithLabel } from '@/elements';
-import { noSSR } from '@/utils/helpers';
 import { useMediaQuery } from '@/utils/hooks';
 
-const ExpandableRowHeader = ({ toggle, headerData }) => {
+const ExpandableRowHeader = ({ toggle = false, headerData = [] }) => {
   const sm3 = useMediaQuery('(max-width: 1023px)');
   return (
-    <div className="w-full h-auto md:h-[60px] flex items-center py-3 md:py-0">
-      <DragSVG className="fill-gray mr-3.5 mt-2.5 md:mt-0 self-start md:self-auto" />
-      <div className="grid sm:grid-cols-1 3sm:grid-cols-2 md:flex md:flex-row md:items-center w-full gap-x-2.5">
+    <div className="w-full h-auto lg:h-[60px] flex items-center gap-x-2.5 py-3 lg:py-0">
+      <div className="grid md:grid-cols-1 gap-y-1 3md:grid-cols-2 lg:flex lg:flex-row lg:items-center w-full gap-x-2.5">
         {headerData.map(({ label, content: { text, image } }, index) => (
           <div
-            className={`w-full col-start-1 ${index <= 3 ? '3sm:col-start-1' : '3sm:col-start-2'}`}
+            className={`w-full col-start-1 ${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`}
             style={{ gridRowStart: !sm3 && index > 3 && index - 3 }}
           >
-            <TextWithLabel label={label} text={text} image={image} customStyles={!index && 'mr-auto'} />
+            <TextWithLabel label={label} text={text} coverImage={image} customStyles={!index && 'mr-auto'} />
           </div>
         ))}
       </div>
       <TableArrowSVG
         className={classNames(
-          'fill-black transition duration-500 self-start md:self-auto mt-2.5 md:mt-0',
+          'fill-black transition duration-500 self-start lg:self-auto mt-2.5 lg:mt-0',
           toggle && 'rotate-180 !fill-blue'
         )}
       />
@@ -32,14 +32,6 @@ const ExpandableRowHeader = ({ toggle, headerData }) => {
   );
 };
 
-ExpandableRowHeader.defaultProps = {
-  toggle: false,
-  headerData: [],
-};
+ExpandableRowHeader.propTypes = ExpandableRowHeaderPropTypes;
 
-ExpandableRowHeader.propTypes = {
-  toggle: PropTypes.bool,
-  headerData: PropTypes.arrayOf(PropTypes.shape({})),
-};
-
-export default noSSR(ExpandableRowHeader);
+export default ExpandableRowHeader;

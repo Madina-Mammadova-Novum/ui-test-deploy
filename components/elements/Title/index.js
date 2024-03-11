@@ -1,24 +1,18 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import { TitlePropTypes } from '@/lib/types';
 
-const Title = ({ level, children, className, ...rest }) => {
+const Title = ({ level = '1', children, className = '', ...rest }) => {
   const Tag = `h${level}`;
+  const childElements = React.Children.toArray(children);
+
   return (
-    <Tag className={className} {...rest}>
-      {children}
+    <Tag className={`${className}`} {...rest}>
+      {childElements}
     </Tag>
   );
 };
 
-Title.propTypes = {
-  level: PropTypes.oneOf([1, 2, 3, 4, 5, 6]).isRequired,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-};
-
-Title.defaultProps = {
-  className: '',
-};
+Title.propTypes = TitlePropTypes;
 
 export default Title;

@@ -1,6 +1,15 @@
-import { getHandler } from '@/utils/api';
+import { navigationAdapter } from '@/adapters/navigation';
+import { getStrapiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
   const { navigation, l: locale } = req.query;
-  return getHandler(`/navigation/render/${navigation}?type=TREE&locale=${locale}`, 'strapi', req, res);
+
+  return responseHandler({
+    req,
+    res,
+    path: getStrapiURL(`/navigation/render/${navigation}?type=TREE&locale=${locale}`),
+    dataAdapter: navigationAdapter,
+    requestMethod: 'GET',
+  });
 }

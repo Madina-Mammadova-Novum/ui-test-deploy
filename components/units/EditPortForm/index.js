@@ -1,25 +1,45 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import { EditPortFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
 import { portsSchema } from '@/lib/schemas';
+import { getUserPositionById } from '@/services';
+import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
+import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { PortDetailsForm } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const EditPortForm = ({ title, portName }) => {
+const EditPortForm = ({ title, state, closeModal }) => {
+  const dispatch = useDispatch();
   const schema = yup.object().shape({
     ...portsSchema(),
   });
 
-  const methods = useHookFormParams({ schema });
+  const methods = useHookFormParams({ schema, state });
 
-  const onSubmit = async (formData) => {
-    return { formData };
+  const onSubmit = async ({ port }) => {
+    const { error, message } = await updateVesselPortAndDate({ ...state, portId: port?.value });
+
+    if (!error) {
+      if (state?.type === 'assigned') {
+        const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
+        dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
+      } else if (state?.type === 'unassigned') {
+        const { data: unassignedTankers } = await getUnassignedVessels();
+        dispatch(updateUnassignedTanker({ id: state.id, tankers: unassignedTankers }));
+      }
+      closeModal();
+    }
+
+    if (message) successToast(message);
+    if (error) errorToast(error?.title, error?.message);
   };
 
   return (
@@ -28,19 +48,18 @@ const EditPortForm = ({ title, portName }) => {
         className="w-[356px]"
         submitAction={onSubmit}
         submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
+        specialStyle
+        onClose={closeModal}
       >
-        <Title level="h2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="font-bold capitalize text-black text-lg">
           {title}
         </Title>
-        <PortDetailsForm portName={portName} />
+        <PortDetailsForm portName={state?.name} />
       </FormManager>
     </FormProvider>
   );
 };
 
-EditPortForm.propTypes = {
-  title: PropTypes.string.isRequired,
-  portName: PropTypes.string,
-};
+EditPortForm.propTypes = EditPortFormPropTypes;
 
 export default EditPortForm;

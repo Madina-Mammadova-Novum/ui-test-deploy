@@ -1,33 +1,14 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import { BaseLayoutPropTypes } from '@/lib/types';
 
 import '@/styles/index.css';
-import { ClientSidePackages } from '@/common';
 
-const BaseLayout = ({ children, className }) => {
+export default async function BaseLayout({ children }) {
   return (
     <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
-      <body className={className}>
-        {children}
-        <ClientSidePackages />
-      </body>
+      <body>{children}</body>
     </html>
   );
-};
+}
 
-BaseLayout.defaultProps = {
-  className: '',
-};
-
-BaseLayout.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-};
-
-export default BaseLayout;
+BaseLayout.propTypes = BaseLayoutPropTypes;

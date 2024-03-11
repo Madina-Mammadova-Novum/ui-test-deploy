@@ -1,19 +1,14 @@
-import PropTypes from 'prop-types';
+import { VoyageDetailsContentPropTypes } from '@/lib/types';
 
-import InfoSVG from '@/assets/images/info.svg';
-import { IconComponent, TextRow, Title } from '@/elements';
+import { Divider, IconComponent, TextRow, Title } from '@/elements';
 
-const VoyageDetailsContent = ({ data }) => {
+const VoyageDetailsContent = ({ data = { dates: [], ports: [] } }) => {
   const { dates, ports } = data;
 
   return (
     <div>
       <div className="flex justify-between">
         <Title level="3">Voyage details</Title>
-        <div className="flex ">
-          <span className="mr-1.5">Charterer Information</span>
-          <InfoSVG className="fill-black w-3.5" />
-        </div>
       </div>
 
       <div className="text-xsm mt-2.5">
@@ -21,15 +16,13 @@ const VoyageDetailsContent = ({ data }) => {
           dates
         </Title>
         {dates.map((pair) => (
-          <div className="mt-2.5">
+          <div className="mt-2.5 mr-2.5">
             {pair.map((detail) => (
               <TextRow title={detail.key}>{detail.label}</TextRow>
             ))}
           </div>
         ))}
-
-        <hr className="my-4" />
-
+        <Divider className="my-4" />
         <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
           ports
         </Title>
@@ -48,18 +41,6 @@ const VoyageDetailsContent = ({ data }) => {
   );
 };
 
-VoyageDetailsContent.defaultProps = {
-  data: {
-    dates: [],
-    ports: [],
-  },
-};
-
-VoyageDetailsContent.propTypes = {
-  data: PropTypes.shape({
-    dates: PropTypes.shape([]),
-    ports: PropTypes.shape([]),
-  }),
-};
+VoyageDetailsContent.propTypes = VoyageDetailsContentPropTypes;
 
 export default VoyageDetailsContent;

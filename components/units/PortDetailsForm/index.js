@@ -1,29 +1,19 @@
+/* eslint-disable no-unused-vars */
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
+import { PortDetailsFormPropTypes } from '@/lib/types';
 
-import { AsyncDropdown, Label } from '@/elements';
-import { getPorts } from '@/services/port';
-import { convertDataToOptions } from '@/utils/helpers';
+import { FormDropdown, Label } from '@/elements';
+import { getGeneralDataSelector } from '@/store/selectors';
+import { countriesOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const PortDetailsForm = ({ portName }) => {
+const PortDetailsForm = ({ portName = '' }) => {
+  const { ports } = useSelector(getGeneralDataSelector);
   const { setValue, clearErrors } = useHookForm();
-
-  const [portOptions, setPortOptions] = useState([]);
-
-  const fetchPorts = async () => {
-    const data = await getPorts();
-    const options = convertDataToOptions(data, 'id', 'name');
-
-    setPortOptions(options);
-  };
-
-  useEffect(() => {
-    fetchPorts();
-  }, []);
 
   const handlePortChange = (options) => {
     clearErrors('port');
@@ -31,18 +21,22 @@ const PortDetailsForm = ({ portName }) => {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-y-5 relative">
       <div>
         <Label className="text-xs-sm">Tanker name</Label>
         <p className="font-semibold text-black text-xsm">{portName}</p>
       </div>
-      <AsyncDropdown name="port" label="Port search" options={portOptions} onChange={handlePortChange} />
-    </>
+      <FormDropdown
+        name="port"
+        label="Port search"
+        options={countriesOptions(ports?.searchPorts)}
+        onChange={handlePortChange}
+        customStyles={{ dropdownExpanded: true }}
+      />
+    </div>
   );
 };
 
-PortDetailsForm.propTypes = {
-  portName: PropTypes.string,
-};
+PortDetailsForm.propTypes = PortDetailsFormPropTypes;
 
 export default PortDetailsForm;

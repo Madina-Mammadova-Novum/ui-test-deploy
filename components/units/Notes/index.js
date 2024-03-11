@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from 'react';
 
-import PropTypes from 'prop-types';
+import { NotesPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
 
-const Notes = ({ title, subtitle, data }) => {
+const Notes = ({ title, subtitle, data, children }) => {
   const printListItem = useCallback(({ id, label, list }) => {
     return (
       <div key={id} className="max-w-max">
@@ -31,16 +31,12 @@ const Notes = ({ title, subtitle, data }) => {
       <Title level="6" className="text-xsm font-semibold">
         {title}
       </Title>
-      <p className="text-xs-sm text-black">{subtitle}</p>
-      <div className="grid grid-cols-2 text-xs-sm text-black font-bold pt-1.5">{printRuleList}</div>
+      {subtitle && <p className="text-xs-sm text-black">{subtitle}</p>}
+      {data && <div className="grid grid-cols-2 text-xs-sm text-black font-bold pt-1.5">{printRuleList}</div>}
+      {children}
     </article>
   );
 };
 
-Notes.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.shape({})),
-};
-
+Notes.propTypes = NotesPropTypes;
 export default Notes;

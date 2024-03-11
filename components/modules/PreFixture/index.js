@@ -1,42 +1,72 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
+import { UrlPropTypes } from '@/lib/types';
+
+import {
+  chartererPrefixtureHeaderDataAdapter,
+  ownerPrefixtureHeaderDataAdapter,
+  prefixtureDetailsAdapter,
+  prefixtureDocumentsTabRowsDataAdapter,
+} from '@/adapters';
+import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { ComplexPagination, ExpandableRowHeader, ToggleRows } from '@/units';
-import { preFixtureHeaderData } from '@/utils/mock';
+import { getPreFixtureDataSelector } from '@/store/selectors';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const PreFixture = () => {
-  const [toggle, setToggle] = useState(false);
-  const [pagination, setPagination] = useState({
-    offersPerPage: 5,
-    currentPage: 1,
-  });
+  const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
 
-  return preFixtureHeaderData.length ? (
-    <div>
-      <div className="flex items-center justify-end">
-        <ToggleRows value={toggle} onToggleClick={() => setToggle((prevState) => !prevState)} />
-      </div>
+  const { isOwner } = getRoleIdentity({ role });
 
-      <div className="flex flex-col gap-y-2.5 mt-5">
-        {preFixtureHeaderData.map((headerData, index) => (
-          <ExpandableRow
-            header={<ExpandableRowHeader headerData={headerData} />}
-            footer={<PreFixtureExpandedFooter underNegotiation={index} />}
-            expand={toggle}
-          >
-            <PreFixtureExpandedContent />
-          </ExpandableRow>
-        ))}
-      </div>
+  const printExpandableRow = (rowData) => {
+    const rowHeader = isOwner
+      ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
+      : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
-      <ComplexPagination pagination={pagination} setPagination={setPagination} />
-    </div>
-  ) : null;
+    return (
+      <ExpandableRow
+        key={rowData.id}
+        expand={toggle}
+        className="px-5"
+        header={
+          <ExpandableCardHeader
+            headerData={rowHeader}
+            gridStyles={isOwner ? '1fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1fr 2fr 1fr 2fr 1fr 1fr 1fr'}
+          />
+        }
+        footer={
+          <PreFixtureExpandedFooter
+            offerId={rowData.id}
+            underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
+            offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
+          />
+        }
+      >
+        <PreFixtureExpandedContent
+          detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
+          documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          offerId={rowData?.id}
+        />
+      </ExpandableRow>
+    );
+  };
+
+  const printContent = useMemo(() => {
+    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (offers?.length) return offers.map(printExpandableRow);
+
+    return <Title level="3">No offers at current stage</Title>;
+  }, [loading, offers]);
+
+  return printContent;
 };
+
+PreFixture.propTypes = UrlPropTypes;
 
 export default PreFixture;

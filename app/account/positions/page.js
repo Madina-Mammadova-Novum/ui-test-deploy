@@ -1,5 +1,8 @@
+import { UrlPropTypes } from '@/lib/types';
+
+import { searchParamsAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
-import { AccountPositions, AccountWrapper } from '@/modules';
+import { AccountPositions } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -11,10 +14,10 @@ export function generateMetadata() {
   });
 }
 
-export default function AccountPostions() {
-  return (
-    <AccountWrapper title="My positions" containerClass="grow px-5">
-      <AccountPositions containerClass="flex flex-col gap-2" />
-    </AccountWrapper>
-  );
+export default function Page({ params, searchParams }) {
+  const urlParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
+
+  return <AccountPositions searchedParms={urlParams} />;
 }
+
+Page.propTypes = UrlPropTypes;

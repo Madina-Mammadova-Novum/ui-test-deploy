@@ -1,4 +1,17 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-nested-ternary */
+import { HttpTransportType } from '@microsoft/signalr';
+import { addDays } from 'date-fns';
+import parse from 'html-react-parser';
+import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
+
+import { transformDate } from './date';
+
+import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
+import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
+import { providedEmails } from '@/utils/mock';
 
 /**
  * createMarkup
@@ -141,8 +154,8 @@ export function hasNestedArrays(data) {
   return isNested;
 }
 
-export function getFilledArray(length) {
-  return Array.from({ length }).map((_, index) => index);
+export function getFilledArray(length = 1) {
+  return Array.from({ length: length || 1 }).map((_, index) => index + 1);
 }
 
 export function getValueWithPath(object, path, defaultValue) {
@@ -169,8 +182,8 @@ export function checkObjectValues({ data }) {
 
 export function formatDate(dateString) {
   const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-US', optionsDate);
   return formatter.format(date);
 }
 
@@ -182,21 +195,23 @@ export const getButtonClassNames = (variant, size) => {
     if (variant === 'primary') return 'bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker';
     if (variant === 'secondary') return 'bg-black text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-dark';
     if (variant === 'tertiary')
-      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-grey hover:border-black';
+      return 'bg-white text-black h-10 px-5 py-2.5 rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white text-red h-10 px-5 py-2.5 rounded-md border border-red-medium hover:border-red';
   }
   if (size === 'medium') {
     if (variant === 'primary')
-      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-red';
+      return 'bg-white px-2.5 py-1 h-7 text-blue rounded-md border border-blue hover:border-blue-darker hover:text-blue-darker';
     if (variant === 'secondary')
-      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-grey hover:border-black';
+      return 'bg-white px-2.5 py-1 h-7 text-black rounded-md border border-gray hover:border-black';
+    if (variant === 'tertiary')
+      return 'bg-white text-black h-7 px-2.5 rounded-md border border-gray hover:border-black';
     if (variant === 'delete')
       return 'bg-white px-2.5 py-1 text-red h-7 rounded-md border border-red-medium hover:border-red';
   }
   if (size === 'small') {
-    if (variant === 'primary') return 'bg-white p-0 text-blue hover:text-blue-darker';
-    if (variant === 'secondary') return 'bg-white p-0 text-black hover:text-blue-darker';
+    if (variant === 'primary') return 'bg-transparent p-0 text-blue hover:text-blue-darker';
+    if (variant === 'secondary') return 'bg-transparent p-0 text-black hover:text-blue-darker';
     if (variant === 'delete') return 'text-red';
   }
   return null;
@@ -217,19 +232,554 @@ export const disablePlusMinusSymbols = (e) => {
   if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
 };
 
-export const convertDataToOptions = (data, keyValue, keyLabel) => {
-  if (data === null || data === undefined) return [];
+export function options(values) {
+  return values?.map((value) => ({ label: value, value }));
+}
 
-  return data.map(({ [keyValue]: value, [keyLabel]: label }) => {
-    if (value === null || value === undefined) throw new Error('value cannot be empty');
-    if (label === null || label === undefined) throw new Error('label cannot be empty');
+export const countriesOptions = (data) => {
+  if (!data) return [];
 
-    return { value, label };
-  });
+  return countryOptionsAdapter({ data });
+};
+
+export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
+  if (!data?.length) return [];
+
+  return data
+    .filter(({ [keyValue]: value, [keyLabel]: label }) => value && label)
+    .map(({ [keyValue]: value, [keyLabel]: label }) => {
+      return { value, label };
+    });
 };
 
 export const removeByIndex = (data, index) => {
   if (data === null || data === undefined) return null;
+  return data.filter((_, idx) => {
+    return idx !== index;
+  });
+};
 
-  return data.filter((_, idx) => idx !== index);
+export const filterDataByLowerCase = (inputValue, data = []) => {
+  return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+};
+
+export const resetObjectFields = (initialObject, resetType = null) => {
+  if (typeof initialObject !== 'string') {
+    Object.keys(initialObject).forEach((key) => {
+      if (Array.isArray(initialObject[key])) {
+        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+      } else {
+        initialObject[key] = resetType;
+      }
+    });
+  }
+  // eslint-disable-next-line no-return-assign, no-param-reassign
+  return (initialObject = resetType);
+};
+
+export const resetForm = (methods, type) => {
+  methods.reset((formValues) => {
+    resetObjectFields(formValues, type);
+    return formValues;
+  });
+};
+
+export const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
+
+export const isEmpty = (value) => {
+  if (value === undefined || value === null) return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  return typeof value === 'object' && Object.keys(value).length === 0;
+};
+
+export const transformInvalidLoginMessage = (msg) => {
+  return msg
+    ?.split('_')
+    .map((word, index) => {
+      if (index === 0) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+};
+
+export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
+export const isDocument = (value) => value === 'doc';
+
+export const checkEmailPrefix = (value) => {
+  if (!value) return true;
+
+  const emailParts = value?.split('@')[1];
+
+  return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
+};
+
+export const checkPhoneValue = (value) => {
+  if (!value) {
+    return true;
+  }
+
+  const regex = REGEX.PHONE;
+  return regex.test(value);
+};
+
+export const checkAuthRoute = (req, pathName) => {
+  return req.nextUrl.pathname.includes(pathName);
+};
+
+export const formatErrors = (errors) => {
+  if (!errors) return ERROR_MESSGE;
+
+  // eslint-disable-next-line no-unused-vars
+  return Object.entries(errors).map(([key, value]) => {
+    return `${value}`;
+  })[0];
+};
+
+export const formattedPhoneNumber = (phone) => {
+  if (typeof phone !== 'undefined' || phone !== '') return phone?.replace('+', '');
+  return null;
+};
+
+export const sortByType = (a, b, ascSort) => {
+  const sortOrder = ascSort ? 1 : -1;
+  const aType = a.type === SORT_OPTIONS.asc ? 1 : a.type === SORT_OPTIONS.dsc ? -1 : 0;
+  const bType = b.type === SORT_OPTIONS.asc ? 1 : b.type === SORT_OPTIONS.dsc ? -1 : 0;
+  return sortOrder * (aType - bType);
+};
+
+export const imoFormatter = (str) => str?.replace(/IMO/g, '');
+
+export const isIdExist = ({ data }) => {
+  if (!data) return false;
+
+  return data.map(({ value }) => !!value);
+};
+
+export const findValueById = ({ data, id }) => {
+  if (!data) return [];
+
+  const result = data.find((obj) => obj.value === id);
+
+  return [result];
+};
+
+export const getRoleIdentity = ({ role }) => {
+  if (!role) return '';
+
+  return {
+    isOwner: role === ROLES.OWNER,
+    isCharterer: role === ROLES.CHARTERER,
+  };
+};
+
+export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).toFixed(0);
+
+export const calculateTotal = (array, key) =>
+  +array
+    ?.filter((item) => item)
+    ?.map(({ [key]: itemValue }) => itemValue)
+    ?.reduce((a, b) => +a + +b);
+
+export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
+  new Date(dateString).toLocaleString('en-US', settings);
+
+export const addLocalDateFlag = (dateString = '') => (dateString.endsWith('Z') ? dateString : `${dateString}Z`);
+
+export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
+
+export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
+  return Math.ceil(recordsTotal / recordsFiltered);
+};
+
+export const extractTime = (string) => {
+  const timePattern = /\d{2}:\d{2}/; // Matches the pattern HH:MM
+  const match = string.match(timePattern);
+  return match ? match[0] : null; // Return the matched time or null if no match found
+};
+
+export const setSkipedValue = (pageValue, perPageValue) => {
+  if (pageValue === 1) return 0;
+  return (pageValue - 1) * perPageValue;
+};
+
+export const transformToCapitalize = (str = '') => {
+  return str
+    ?.split(' ')
+    .map((word) => word[0]?.toUpperCase() + word.substring(1))
+    .join(' ');
+};
+
+export const generateMessageByActionType = ({ action }) => RESPONSE_MESSAGES[action];
+
+export const getCountryById = ({ id, data = [] }) => {
+  return data?.find((country) => country.countryId === id);
+};
+
+export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
+export const sortFromPastToToday = (a, b) => new Date(a?.createdAt) - new Date(b?.createdAt);
+
+export const formattedBySpaces = ({ string }) => {
+  if (!string) return '';
+
+  return string.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
+export const getFormattedDays = () => {
+  const today = new Date().toISOString().split('T')[0];
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+
+  const yesterday = yesterdayDate.toISOString().split('T')[0];
+
+  return { today, yesterday };
+};
+
+export const getLocode = (locode) => {
+  if (!locode) return null;
+
+  return locode.slice(0, 2).toLowerCase();
+};
+
+export const getListOfDataByDays = (data) => {
+  const { today, yesterday } = getFormattedDays();
+
+  return Object.entries(data).map(([key, value]) => {
+    if (key === today) key = 'Today';
+    else if (key === yesterday) key = 'Yesterday';
+    else key = transformDate(key, 'MMM dd, yyyy');
+
+    return { title: key, data: value };
+  });
+};
+
+export const calculateCountdown = (expiresAt, frozenAt) => {
+  // const milisecondsInSecond = 1000;
+  // const milisecondsInMinute = 60 * milisecondsInSecond;
+  // const milisecondsInHour = 60 * milisecondsInMinute;
+  // const milisecondsInDay = 24 * milisecondsInHour;
+  const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
+
+  let milisecondsUntilExpiration = 0;
+  if (frozenAt) {
+    milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(frozenAt).getTime();
+  } else {
+    milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
+  }
+
+  return milisecondsUntilExpiration < 0 ? Date.now() : Date.now() + milisecondsUntilExpiration;
+
+  // Old implementation
+  // const sign = milisecondsUntilExpiration < 0 ? '-' : '';
+  // const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
+
+  // const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
+  // const hours = Math.abs(Math[method]((milisecondsUntilExpiration % milisecondsInDay) / milisecondsInHour));
+  // const minutes = Math.abs(
+  //   Math[method](((milisecondsUntilExpiration % milisecondsInDay) % milisecondsInHour) / milisecondsInMinute)
+  // );
+
+  // return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
+};
+
+export const formattetTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
+export const isReadValue = (value) => value === 'read';
+
+export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
+  const isNumericType = sortType === 'numeric';
+  const transformValue = (value) => (isNumericType ? +value.match(/\d+/)[0] : value.toLowerCase());
+
+  if (sortDirection === 'asc') {
+    const ascSorted = array.sort((a, b) => {
+      if (transformValue(a[index].value) > transformValue(b[index].value)) return 1;
+      if (transformValue(a[index].value) < transformValue(b[index].value)) return -1;
+      return 0;
+    });
+    return ascSorted;
+  }
+  const descSorted = array.sort((a, b) => {
+    if (transformValue(a[index].value) > transformValue(b[index].value)) return -1;
+    if (transformValue(a[index].value) < transformValue(b[index].value)) return 1;
+    return 0;
+  });
+  return descSorted;
+};
+
+export const getSocketConnectionsParams = (token) => {
+  return {
+    accessTokenFactory: () => `${token}`,
+    skipNegotiation: true,
+    transport: HttpTransportType.WebSockets,
+  };
+};
+
+export const clientIdentification = ({ senderId, clientId, role }) => {
+  return senderId === clientId ? role : ROLES.BROKER;
+};
+
+export const getAppropriateFailedBy = ({ failedBy, role }) => {
+  let failedByText = failedBy;
+  if (ROLES[String(failedBy).toUpperCase()]) {
+    failedByText = role === failedBy.toLowerCase() ? 'Me' : 'Counterparty';
+  }
+  return failedByText;
+};
+
+export const downloadFile = ({ url, fileName }) => {
+  const requestuUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+  fetch(requestuUrl)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    })
+    .catch(console.error);
+};
+
+export const transformBytes = ({ format = 'mb', value }) => {
+  if (format === 'mb') return value / 1e6;
+  return 0;
+};
+
+export const trimTonValue = (number) =>
+  String(number).length > 3
+    ? `${String(number)
+        .slice(0, String(number).length - 3)
+        .replace('.', '')},***`
+    : `${String(number).replace('.', '')},***`;
+
+export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOffer }) => {
+  const layTimeImprovement = initialOffer.layTime - counterOffer.layTime >= 6;
+  const damurrageRateImprovement = initialOffer.demurrageRate * 1.05 <= counterOffer.demurrageRate;
+  const freightImprovement = initialOffer.value * 1.05 <= counterOffer.value;
+  const isMinimalImprovementMet = [layTimeImprovement, damurrageRateImprovement, freightImprovement].some(
+    (value) => value
+  );
+  return isMinimalImprovementMet;
+};
+
+export const processTooltipData = ({ text, length }) => {
+  return {
+    disableTooltip: !(text?.length > length),
+    tooltipText: text,
+    trimmedText: text?.length >= length ? `${text?.slice(0, length / 2)}...` : text,
+  };
+};
+
+export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
+
+export function checkTankerStatus(date) {
+  const openDate = new Date(date);
+  const today = new Date();
+
+  return today > openDate;
+}
+
+export const getLineCoordinate = ({ data }) => {
+  if (!data) return [];
+
+  const { fromPort, toPort } = data;
+
+  if (fromPort === null || toPort === null) return [];
+
+  return [fromPort.coordinates, toPort.coordinates];
+};
+
+export const formatedNumber = (value) => {
+  if (value === null) return '';
+  return value?.toFixed(2);
+};
+
+export const parseErrorMessage = (responseError = {}) => {
+  try {
+    const {
+      message: { Errors },
+      errors,
+    } = responseError;
+    const parsedErrorMessages = parse(Object.values({ ...Errors, errors }).join('<br />'));
+    return parsedErrorMessages;
+  } catch {
+    return 'Something went wrong. Please, contact Ship.Link support for detailed information.';
+  }
+};
+
+export const sortChatMessagesByDay = (array) =>
+  array
+    .map((day) => {
+      day.data = day.data.sort((a, b) => {
+        const timeA = new Date(a.time);
+        const timeB = new Date(b.time);
+        return timeA - timeB;
+      });
+      return day;
+    })
+    .sort((a, b) => {
+      const customDates = {
+        Today: new Date(),
+        Yesterday: addDays(new Date(), -1),
+      };
+
+      const current = customDates[a.title] || a.title;
+      const next = customDates[b.title] || b.title;
+      if (new Date(current) - new Date(next) >= 1) return -1;
+      if (new Date(current) - new Date(next) < 1) return 1;
+      return 0;
+    });
+
+export const freightFormatter = ({ value, format }) => {
+  const response = {
+    Lumpsum: `${format} $${value}`,
+    '$/mt': `${value} ${format}`,
+  };
+
+  return response[format];
+};
+
+export function lowerCaseFormat(obj) {
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+
+  return Object.keys(obj).reduce((newObj, key) => {
+    const newKey = key.toLowerCase();
+    newObj[newKey] = key === 'Errors' || key === 'errors' ? obj[key] : lowerCaseFormat(obj[key]);
+    return newObj;
+  }, {});
+}
+
+export const errorMessage = ({ errors }) => {
+  if (errors?.message === 'Internal server error') {
+    return {
+      message: 'External server error',
+    };
+  }
+
+  if (errors?.message === 'Bad Request') {
+    return {
+      message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
+    };
+  }
+
+  return { message: formatErrors(errors?.errors) };
+};
+
+export const setCookie = (key, value) => {
+  cookie.set(key, value, {
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Lax',
+    expires: 1,
+  });
+};
+
+export const removeCookie = (key) => {
+  cookie.remove(key, {
+    expires: 0,
+  });
+};
+
+export const getCookieFromBrowser = (key) => {
+  return cookie.get(key);
+};
+
+export const getCookieFromServer = (key, req) => {
+  if (!req.headers.cookie) {
+    return undefined;
+  }
+
+  const rawCookie = req.headers.cookie.split(';').find((c) => c.trim().startsWith(`${key}=`));
+
+  if (!rawCookie) {
+    return undefined;
+  }
+
+  return rawCookie.split('=')[1];
+};
+
+export const sessionCookieCleaner = () => {
+  removeCookie('session-access-token');
+  removeCookie('session-refresh-token');
+  removeCookie('session-user-role');
+  removeCookie('session-user-id');
+};
+
+export const sessionCookieData = (data) => {
+  if (!data) throw new Error('Unathorized');
+
+  const { sub, role } = decodedTokenAdapter(data.access_token);
+
+  setCookie('session-access-token', data.access_token);
+  setCookie('session-refresh-token', data.refresh_token);
+  setCookie('session-user-role', userRoleAdapter({ data: role }));
+  setCookie('session-user-id', sub);
+};
+
+export const urlParser = (data) => {
+  const match = data?.match(/tankerId%3D([A-Za-z0-9-_]*)/);
+
+  if (match) {
+    return match[1];
+  }
+
+  return data;
+};
+
+export const getIdFromUrl = (url) => {
+  const idRegex = /[a-zA-Z0-9-_]{36}/;
+
+  const match = idRegex.exec(url);
+
+  return match ? match[0] : null;
+};
+
+export const stageFormatter = (stage) => {
+  const stageToPage = {
+    Fleets: ROUTES.ACCOUNT_POSITIONS,
+    Negotiating: ROUTES.ACCOUNT_NEGOTIATING,
+    Pre_Fixture: ROUTES.ACCOUNT_PREFIXTURE,
+    On_Subs: ROUTES.ACCOUNT_ONSUBS,
+    Fixture: ROUTES.ACCOUNT_FIXTURE,
+    Post_Fixture: ROUTES.ACCOUNT_POSTFIXTURE,
+  };
+
+  return stageToPage[stage];
+};
+
+const urlStatusFormatter = ({ isFailed }) => {
+  if (isFailed) return 'failed';
+
+  return 'incoming';
+};
+
+export const notificationPathGenerator = ({ data, role }) => {
+  if (!data) return null;
+
+  const { isOwner } = getRoleIdentity({ role });
+  const initialPath = stageFormatter(data.stage);
+  const statusTab = urlStatusFormatter({ isFailed: data.isFailed });
+
+  const routeByStage = {
+    Negotiating: `${initialPath}/${isOwner ? data.vessel.id : data.searchedCargo.id}?fleetId=${
+      data.id
+    }&status=${statusTab}`,
+    Pre_Fixture: `${initialPath}/${data.searchedCargo.id}`,
+    On_Subs: `${initialPath}/${data.searchedCargo.id}`,
+    Fixture: `${initialPath}/${data.searchedCargo.id}`,
+    Post_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
+  };
+
+  return routeByStage[data.stage];
+};
+
+export const getOfferTotalMinQuantity = ({ data }) => {
+  if (!data) return null;
+
+  return data.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
 };

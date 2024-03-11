@@ -1,80 +1,140 @@
-import { Dropdown, Input, Title } from '@/elements';
-import { getValueWithPath } from '@/utils/helpers';
+'use client';
+
+import { useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { CommercialOfferTermsPropTypes } from '@/lib/types';
+
+import { FormDropdown, Input, Title } from '@/elements';
+import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
+import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
+import { setDemurragePaymentTerms, setPaymentTerms } from '@/store/entities/offer/slice';
+import { getOfferSelector } from '@/store/selectors';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const testOption = [{ label: 'testLabel', value: 'testValue' }];
+const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom, valid }) => {
+  const dispatch = useDispatch();
+  const { ranges } = useSelector(getOfferSelector);
 
-const CommercialOfferTerms = () => {
+  const { paymentTerms, demurragePaymentTerms, freightFormats } = offerData;
+
+  const [freightEstimation, setFreightEstimation] = useState({});
+
+  const [paymentLoader, setPaymentLoader] = useState(false);
+  const [demurrageLoader, setDemurrageLoader] = useState(false);
+
   const {
+    watch,
     register,
+    setValue,
+    getValues,
     clearErrors,
     formState: { errors, isSubmitting },
-    setValue,
   } = useHookForm();
 
-  const handleChange = (key, value) => {
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
+
+  const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+
+    if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
+    if (key === 'freight') {
+      setFreightEstimation({
+        min: ranges?.freightFormats[Number(value?.value) - 1]?.ranges?.min?.start,
+        max: ranges?.freightFormats[Number(value?.value) - 1]?.ranges?.max?.end,
+      });
+    }
+
     if (error) {
       clearErrors(key);
     }
+
     setValue(key, value);
   };
 
+  const getPaymentData = async () => {
+    setPaymentLoader(true);
+    const paymentTermsData = await getPaymentTerms();
+    const result = convertDataToOptions(paymentTermsData, 'id', 'name');
+
+    dispatch(setPaymentTerms(result));
+    setPaymentLoader(false);
+  };
+
+  const getDemurageData = async () => {
+    setDemurrageLoader(true);
+
+    const demurragePaymentTermsData = await getDemurragePaymentTerms();
+    const result = convertDataToOptions(demurragePaymentTermsData, 'id', 'name');
+
+    dispatch(setDemurragePaymentTerms(result));
+    setDemurrageLoader(false);
+  };
+
+  const printProduct = (product, index) => {
+    setValue(`products[${index}].tolerance`, product.tolerance);
+
+    return (
+      <div className="flex items-baseline mt-3 gap-x-5" key={product.product.value}>
+        <FormDropdown
+          label={`product #${index + 1}`}
+          name={`products[${index}].product`}
+          disabled
+          customStyles={{ className: 'w-1/2' }}
+        />
+        <Input
+          {...register(`products[${index}].density`)}
+          label="Density"
+          placeholder="mt/m³"
+          customStyles="max-w-[138px]"
+          error={errors.products ? errors.products[index]?.density?.message : null}
+          disabled
+        />
+        <Input
+          {...register(`products[${index}].quantity`)}
+          label="min quantity"
+          placeholder="tons"
+          customStyles="max-w-[138px]"
+          error={errors.products ? errors.products[index]?.quantity?.message : null}
+          disabled
+        />
+      </div>
+    );
+  };
+
   return (
-    <div className="pb-5">
+    <>
       <Title level="3">Commercial offer terms</Title>
-      <Dropdown
-        label="cargo type"
-        defaultValue="Crude Oil"
-        disabled
-        customStyles="max-w-[296px] mt-3"
-        name="cargoType"
-        options={testOption}
-      />
-      {[1, 2].map((_, index) => (
-        <div className="flex items-center mt-3 gap-x-5">
-          <Dropdown
-            label={`product #${index + 1}`}
-            defaultValue="Light Crude Oil"
-            name={`products[${index}].product`}
-            disabled
-            customStyles="w-[296px]"
-            options={testOption}
-          />
-          <Input
-            {...register(`products[${index}].density`)}
-            label="Density"
-            placeholder="mt/m³"
-            customStyles="max-w-[138px]"
-            error={errors.products ? errors.products[index]?.density?.message : null}
-            disabled={isSubmitting}
-          />
-          <Input
-            {...register(`products[${index}].quantity`)}
-            label="min quantity"
-            placeholder="tons"
-            customStyles="max-w-[138px]"
-            error={errors.products ? errors.products[index]?.quantity?.message : null}
-            disabled={isSubmitting}
-          />
-        </div>
-      ))}
-      <div className="flex gap-x-5 items-center mt-3">
-        <Dropdown
+      <div className="flex items-center mt-3">
+        <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
+      </div>
+      {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
+      <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
+        <FormDropdown
           label="Freight"
           name="freight"
-          customStyles="max-w-[138px]"
-          options={testOption}
+          customStyles={{ className: 'w-1/2' }}
+          options={freightFormats}
+          disabled={!valid || loading}
+          loading={loading}
           onChange={(option) => handleChange('freight', option)}
+          asyncCall
         />
         <Input
           {...register('value')}
           label="Value"
           name="value"
-          placeholder="WS"
-          customStyles="max-w-[138px]"
+          type="number"
+          placeholder={freightValuePlaceholder}
+          customStyles="w-1/2"
+          helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
           error={errors.value?.message}
-          disabled={isSubmitting}
+          disabled={!valid || isSubmitting}
+          min={freightEstimation.min && String(freightEstimation.min)}
+          max={freightEstimation.max && String(freightEstimation.max)}
+          step="any"
         />
       </div>
 
@@ -82,50 +142,69 @@ const CommercialOfferTerms = () => {
         {...register('demurrageRate')}
         label="Demurrage rate"
         name="demurrageRate"
-        placeholder="Daily payment"
-        customStyles="max-w-[296px] mt-3"
+        type="number"
+        placeholder="$ per day"
+        customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
-        disabled={isSubmitting}
+        helperText={
+          ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`
+        }
+        disabled={!valid || isSubmitting}
       />
 
-      <div className="flex gap-x-5">
+      <div className="flex">
         <Input
           {...register('layTime')}
           label="lay time"
           name="layTime"
-          helperText="The maximum laytime is 100 hours"
-          placeholder="Daily payment"
-          customStyles="w-full max-w-[296px] mt-3 "
+          type="number"
+          placeholder="Hours"
+          customStyles="w-1/2 mt-3 pr-5"
+          helperText={`The maximum laytime is ${ranges?.layTime?.max?.end || 120} hours`}
           error={errors.layTime?.message}
-          disabled={isSubmitting}
+          disabled={!valid || isSubmitting}
         />
         <Input
           {...register('nor')}
           label="nor"
           name="nor"
-          placeholder="Daily payment"
+          placeholder="6+6 hours"
+          value="6+6 hours"
           disabled
-          customStyles="w-full max-w-[296px] mt-3"
+          customStyles="w-1/2 mt-3"
         />
       </div>
 
-      <Dropdown
-        label="undisputed demurrage payment terms"
-        name="undisputedDemurrage"
-        customStyles="mt-3"
-        options={testOption}
-        onChange={(option) => handleChange('undisputedDemurrage', option)}
-      />
+      <div className="pt-4">
+        <FormDropdown
+          label="undisputed demurrage payment terms"
+          name="undisputedDemurrage"
+          options={demurragePaymentTerms}
+          disabled={!valid || loading}
+          loading={demurrageLoader ?? loading}
+          onFocus={!demurragePaymentTerms?.length && getDemurageData}
+          onChange={(option) => handleChange('undisputedDemurrage', option)}
+          onExpand={scrollToBottom}
+          asyncCall
+        />
 
-      <Dropdown
-        label="payemnt terms"
-        name="paymentTerms"
-        customStyles="mt-3"
-        options={testOption}
-        onChange={(option) => handleChange('paymentTerms', option)}
-      />
-    </div>
+        <FormDropdown
+          label="payment terms"
+          name="paymentTerms"
+          customStyles={{ className: 'mt-3' }}
+          options={paymentTerms}
+          disabled={!valid || loading}
+          onFocus={!paymentTerms?.length && getPaymentData}
+          loading={paymentLoader ?? loading}
+          onChange={(option) => handleChange('paymentTerms', option)}
+          onExpand={scrollToBottom}
+          asyncCall
+        />
+      </div>
+    </>
   );
 };
+
+CommercialOfferTerms.propTypes = CommercialOfferTermsPropTypes;
 
 export default CommercialOfferTerms;

@@ -1,6 +1,16 @@
-import { getHandler } from '@/utils/api';
+import { citiesAdapter } from '@/adapters/city';
+import { ContentTypeJson } from '@/lib/constants';
+import { getApiURL } from '@/utils';
+import { responseHandler } from '@/utils/api';
 
 export default async function handler(req, res) {
   const { countryId } = req.query;
-  return getHandler(`v1/countries/${countryId}/cities`, 'backend', req, res);
+  return responseHandler({
+    req,
+    res,
+    path: getApiURL(`v1/countries/${countryId}/cities`),
+    dataAdapter: citiesAdapter,
+    requestMethod: 'GET',
+    options: { headers: { ...ContentTypeJson() } },
+  });
 }

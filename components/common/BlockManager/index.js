@@ -1,61 +1,49 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import { BlocksTypes } from '@/lib/types';
 
 import {
   BlockHeroImage,
+  ContactUsBlock,
   CTABlock,
   CTASingleImageBlock,
   FAQBlock,
-  HowItWorksBlock,
+  HomeSearchBlock,
   ImageSliderBlock,
   ProductFeaturesBlock,
   SimpleContentBlock,
   TeamBlock,
   WhatWeOfferBlock,
+  WhyWeAreBetterBlock,
 } from '@/blocks';
-import { makeId } from '@/utils/helpers';
 
 const BLOCK_COMPONENTS = {
+  'blocks.contact-us': ContactUsBlock,
   'blocks.cta': CTABlock,
   'blocks.cta-single-image': CTASingleImageBlock,
   'blocks.hero-image': BlockHeroImage,
+  'blocks.search-block': HomeSearchBlock,
   'blocks.simple-content': SimpleContentBlock,
   'blocks.single-what-we-offer': WhatWeOfferBlock,
   'blocks.image-slider': ImageSliderBlock,
   'blocks.team': TeamBlock,
-  'blocks.single-how-it-works': HowItWorksBlock,
+  'blocks.single-why-we-are-better': WhyWeAreBetterBlock,
   'blocks.product-features': ProductFeaturesBlock,
   'blocks.lets-talk-block': CTASingleImageBlock,
   'blocks.faq-block': FAQBlock,
   'blocks.faq-by-category-block': FAQBlock,
 };
 
-const BlockManager = ({ blocks }) => {
+const BlockManager = ({ blocks = null }) => {
   if (!blocks) return null;
 
-  return blocks.map((block) => {
+  return blocks.map((block, idx) => {
     const Block = BLOCK_COMPONENTS[block.__component];
     if (!Block) return null;
 
-    return <Block key={makeId()} {...block} />;
+    // eslint-disable-next-line react/no-array-index-key
+    return <Block key={idx} {...block} />;
   });
 };
 
-BlockManager.defaultProps = {
-  blocks: null,
-};
-
-BlockManager.propTypes = {
-  blocks: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      __component: PropTypes.string.isRequired,
-      title: PropTypes.string,
-      subTitle: PropTypes.string,
-      shortDescription: PropTypes.string,
-    })
-  ),
-};
+BlockManager.propTypes = BlocksTypes;
 
 export default BlockManager;

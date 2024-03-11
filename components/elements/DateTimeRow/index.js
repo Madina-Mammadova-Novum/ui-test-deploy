@@ -1,14 +1,11 @@
-import PropTypes from 'prop-types';
+import { DateTimePropTypes } from '@/lib/types';
 
 const DateTimeRow = ({ date, time }) => (
-  <div className="text-[12px] text-gray mt-1.5">
+  <span className="text-xs-sm text-gray mt-1.5">
     {date} at {time}
-  </div>
+  </span>
 );
 
-DateTimeRow.propTypes = {
-  date: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
-};
+DateTimeRow.propTypes = DateTimePropTypes.isRequired;
 
 export default DateTimeRow;

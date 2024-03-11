@@ -4,3 +4,4 @@ export { default as AccountPersonalDetails } from '@/units/Account/AccountPerson
 export { default as AccountDeactivateDetails } from '@/units/Account/AccountDeactivateDetails';
 export { default as AccountDeleteDetails } from '@/units/Account/AccountDeleteDetails';
 export { default as AddressInfo } from '@/units/Account/AddressInfo';
+export { default as AccountAmountOfTankers } from '@/units/Account/AccountAmountOfTankers';

@@ -1,19 +1,29 @@
-import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 
-const StatusIndicator = ({ status, customStyles }) => {
-  const backgroundColor = status === 'new' ? 'bg-yellow' : 'bg-blue';
+import { StatusIndicatorPropTypes } from '@/lib/types';
 
-  return <span className={`w-2.5 h-2.5 rounded-[50%] ${backgroundColor} ${customStyles}`} />;
+const StatusIndicator = ({ status = '', customStyles = '' }) => {
+  const backgroundColor = useMemo(() => {
+    switch (status) {
+      case 'Deletion Requested':
+      case 'Delete requested by Vessel Owner':
+      case 'Delete requested by Charterer':
+      case 'New offer':
+        return 'bg-yellow';
+      case 'Counteroffer':
+        return 'bg-blue';
+      case 'Confirmed':
+      case 'Active':
+        return 'bg-green';
+      case 'Inactive':
+      default:
+        return 'bg-gray';
+    }
+  }, [status]);
+
+  return <span className={`block w-2.5 h-2.5 rounded-full ${backgroundColor} ${customStyles}`} />;
 };
 
-StatusIndicator.defaultProps = {
-  status: '',
-  customStyles: '',
-};
-
-StatusIndicator.propTypes = {
-  status: PropTypes.string,
-  customStyles: PropTypes.string,
-};
+StatusIndicator.propTypes = StatusIndicatorPropTypes;
 
 export default StatusIndicator;

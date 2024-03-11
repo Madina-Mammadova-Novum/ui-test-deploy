@@ -1,9 +1,7 @@
-import React from 'react';
-
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import { mediaPropTypes, valuesPropTypes } from '@/utils/types';
+import { mediaPropTypes, valuesPropTypes } from '@/lib/types';
 
 import { NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
@@ -13,11 +11,11 @@ const Offer = ({ item, index }) => {
   return (
     <div key={index} className="flex items-center gap-10 even:flex-row-reverse">
       {item.coverImage && (
-        <div className="w-[380px] h-[350px] shrink-0 rounded-[10px]">
+        <div className="w-[380px] h-[350px] shrink-0 rounded-base">
           <NextImage
             src={getStrapiMedia(delve(item.coverImage, 'format.original.url'), '?format=webp')}
             alt={delve(item.coverImage, 'alternativeText')}
-            className="h-full w-full object-cover object-center rounded-[10px]"
+            className="h-full w-full object-cover object-center rounded-base"
             quality={75}
             height={350}
             width={380}
@@ -44,6 +42,7 @@ Offer.propTypes = {
   }),
   index: PropTypes.number.isRequired,
 };
+
 const WhatWeOfferBlock = ({ title, values }) => {
   return (
     <section id="what-we-offer">

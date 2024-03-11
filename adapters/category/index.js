@@ -1,7 +1,8 @@
 import { imageAdapter } from '@/adapters/image';
 
 export const categoryAdapter = ({ data }) => {
-  if (data === null) return null;
+  if (!data) return null;
+
   const { id, attributes } = data;
   const { title, slug, content, shortDescription, coverImage } = attributes;
 
