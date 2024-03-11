@@ -13,16 +13,15 @@ import { getOfferSelector } from '@/store/selectors';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom, valid }) => {
+const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const dispatch = useDispatch();
-  const { ranges } = useSelector(getOfferSelector);
-
-  const { paymentTerms, demurragePaymentTerms, freightFormats } = offerData;
 
   const [freightEstimation, setFreightEstimation] = useState({});
-
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [demurrageLoader, setDemurrageLoader] = useState(false);
+
+  const { ranges, valid, loading, data } = useSelector(getOfferSelector);
+  const { paymentTerms, demurragePaymentTerms, freightFormats } = data;
 
   const {
     watch,
