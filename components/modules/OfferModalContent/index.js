@@ -11,7 +11,8 @@ import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
-import { fetchOfferOptioins } from '@/store/entities/offer/actions';
+import { fetchOfferOptioins, fetchOfferValidation } from '@/store/entities/offer/actions';
+import { resetOfferData } from '@/store/entities/offer/slice';
 import { getOfferSelector, getSearchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
@@ -88,6 +89,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       successToast(successMessage);
       closeModal();
     }
+
     if (error) {
       errorToast(error?.title, error?.message);
     }
@@ -98,15 +100,24 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     const { data = [] } = await getCountdownTimer();
     const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
     const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+
     handleChangeState('responseCountdownOptions', convertedOptions);
     handleChangeOption(defaultCountdown);
     handleChangeState('loading', false);
   };
 
   useEffect(() => {
-    fetchCountdownData();
-    dispatch(fetchOfferOptioins(tankerId));
-  }, []);
+    dispatch(fetchOfferValidation({ ...search?.data, tankerId }));
+
+    if (offer.valid) {
+      fetchCountdownData();
+      dispatch(fetchOfferOptioins(tankerId));
+    }
+
+    return () => {
+      dispatch(resetOfferData());
+    };
+  }, [tankerId]);
 
   const scrollToBottom = () =>
     setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
@@ -121,6 +132,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         return (
           <CommercialOfferTerms
             loading={offer.loading}
+            valid={offer.valid}
             tankerId={tankerId}
             offerData={offer.data}
             searchData={search.data}
@@ -130,10 +142,25 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     }
   }, [currentTab, tankerId, offer, search]);
 
+  const errorBanner = useMemo(() => {
+    return (
+      offer?.error && (
+        <div className="bg-red-light rounded-base py-2.5 pb-3 px-5">
+          <div className="text-xsm mt-1.5">
+            <span className="font-bold">Declined:</span>
+            <span className="ml-1.5">{offer?.error}</span>
+          </div>
+        </div>
+      )
+    );
+  }, [offer?.error, offer?.valid, tankerId]);
+
   return (
     <div className="w-[610px]">
-      <Title level="2">Send Offer</Title>
-
+      <div className="flex flex-col gap-y-5">
+        <Title level="2">Send Offer</Title>
+        {errorBanner}
+      </div>
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">
           <p className="font-bold max-w-[240px]">
@@ -143,22 +170,20 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
             defaultValue={responseCountdown}
             options={responseCountdownOptions}
             loading={loading}
-            disabled={!responseCountdownOptions?.length}
+            disabled={!responseCountdownOptions?.length || !offer.valid}
             onChange={handleChangeOption}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
             asyncCall
           />
         </div>
       </div>
-
       <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
-
       <div
         ref={scrollingContainerRef}
         className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         <div className="p-2.5">
-          <OfferForm handleSubmit={handleSubmit} handleValidationError={handleValidationError}>
+          <OfferForm disabled={!offer.valid} handleSubmit={handleSubmit} handleValidationError={handleValidationError}>
             {tabContent}
           </OfferForm>
         </div>

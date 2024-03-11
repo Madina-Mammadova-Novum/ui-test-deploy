@@ -48,6 +48,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         min: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
         max: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
       });
+
       setValue('totalAmount', data.total);
     }
   };

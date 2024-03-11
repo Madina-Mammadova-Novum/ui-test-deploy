@@ -13,13 +13,13 @@ import { getRoleIdentity } from '@/utils/helpers';
 
 const TankerExpandedFooter = ({ tankerId, tankerData }) => {
   const { role } = useSelector(getUserDataSelector);
-
   const { isCharterer } = getRoleIdentity({ role });
 
   return (
     <ExpandableRowFooter>
       {role ? (
         <ModalWindow
+          key={tankerId}
           buttonProps={{
             variant: 'primary',
             size: 'large',

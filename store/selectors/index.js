@@ -210,7 +210,11 @@ export const getFleetsSelector = createDraftSafeSelector(fleetsSelector, (state)
 export const getOfferSelector = createDraftSafeSelector(offerSelector, (state) => {
   return {
     data: state.data,
+    ranges: state.data.ranges,
     loading: state.loading,
+    validating: state.validating,
+    valid: state.valid,
+    error: state.error,
   };
 });
 

@@ -12,11 +12,9 @@ import { offerSchema } from '@/lib/schemas';
 import { searchSelector } from '@/store/selectors';
 import { useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object({
-  ...offerSchema(),
-});
+const OfferForm = ({ children, disabled, handleSubmit = () => {}, handleValidationError = () => {} }) => {
+  const schema = yup.object({ ...offerSchema() });
 
-const OfferForm = ({ children, handleSubmit = () => {}, handleValidationError = () => {} }) => {
   const {
     searchData: { products = [], cargoType },
   } = useSelector(searchSelector);
@@ -48,6 +46,7 @@ const OfferForm = ({ children, handleSubmit = () => {}, handleValidationError = 
           text: 'Send offer',
           variant: 'primary',
           size: 'large',
+          disabled,
           className: 'absolute bottom-8 right-8 text-xsm z-[1] !w-32',
         }}
       >

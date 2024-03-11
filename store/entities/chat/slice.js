@@ -94,11 +94,14 @@ const chatSlice = createSlice({
     },
     updateUserConversation: (state, { payload }) => {
       const today = state.data.user.messages.find((message) => message.title === 'Today');
-      const existedMessage = today.data.filter((message) => message.id === payload.id);
 
-      if (!existedMessage.length) {
-        if (today) today.data = [...today.data, payload];
-        else state.data.user.messages.unshift({ title: 'Today', data: [payload] });
+      if (today) {
+        const messageExists = today.data.some((message) => message.id === payload.id);
+        if (!messageExists) {
+          today.data.push(payload);
+        }
+      } else {
+        state.data.user.messages.unshift({ title: 'Today', data: [payload] });
       }
     },
     setLoadConversation: (state, { payload }) => {

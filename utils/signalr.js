@@ -100,8 +100,6 @@ export class ChatSessionController extends SignalRController {
         this.readMessage({ id: message.id });
       }
     });
-
-    // this.connection.on('Typing', (chat) => console.log(chat));
   }
 
   onToggle(opened) {
@@ -163,7 +161,7 @@ export class ChatNotificationController extends SignalRController {
 
         this.typingTimeout = setTimeout(() => {
           this.isTyping({ chat, typing: false });
-        }, 500);
+        }, 1000);
       }
     });
   }
