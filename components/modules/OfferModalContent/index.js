@@ -136,7 +136,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       offer?.error && (
         <div className="bg-red-light rounded-base py-2.5 pb-3 px-5">
           <div className="text-xsm mt-1.5">
-            <span className="font-bold">Declined:</span>
+            <span className="font-bold">{!offer?.valid ? 'Declined: ' : 'Warning: '}</span>
             <span className="ml-1.5">{offer?.error}</span>
           </div>
         </div>

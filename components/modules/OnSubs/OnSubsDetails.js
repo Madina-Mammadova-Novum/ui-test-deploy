@@ -16,6 +16,7 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { resetDealData } from '@/store/entities/notifications/slice';
 import { setToggle } from '@/store/entities/on-subs/slice';
 import { getOnSubsDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -31,6 +32,7 @@ const OnSubsDetails = ({ searchedParams }) => {
 
     return () => {
       dispatch(setToggle(false));
+      dispatch(resetDealData());
     };
   }, []);
 

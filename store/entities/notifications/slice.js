@@ -58,6 +58,9 @@ const notificationsSlice = createSlice({
     setIsOpened: (state, action) => {
       state.isOpened = action.payload;
     },
+    resetDealData: (state) => {
+      state.dealData = initialState.dealData;
+    },
     resetNotificationData: (state) => {
       state.readed = 0;
       state.unread = 0;
@@ -115,6 +118,7 @@ export const {
   getWatchedData,
   resetParams,
   resetNotificationData,
+  resetDealData,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;
