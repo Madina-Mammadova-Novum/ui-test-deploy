@@ -12,12 +12,11 @@ import ExitSVG from '@/assets/images/exit.svg';
 import UserCircleSVG from '@/assets/images/userCircle.svg';
 import { LogoutButton, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
-import { getAuthSelector, getUserDataSelector } from '@/store/selectors';
+import { getAuthSelector } from '@/store/selectors';
 
 const ProfileMenu = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const { data } = useSelector(getUserDataSelector);
   const { session } = useSelector(getAuthSelector);
 
   const closeMenu = (e) => {
@@ -32,9 +31,7 @@ const ProfileMenu = () => {
       onClick={() => setShowProfileMenu(true)}
     >
       <div className="flex items-center mx-2.5">
-        <span className="text-black font-semibold text-xsm">
-          {data?.personalDetails?.fullName ?? session?.user?.name}
-        </span>
+        {session?.user?.name && <span className="text-black font-semibold text-xsm">{session?.user?.name}</span>}
         <AngleDownSVG
           className={classnames('fill-black ml-6 transition duration-500', showProfileMenu && 'fill-blue rotate-180')}
         />

@@ -43,7 +43,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
 
     if (numberOfTankers <= 0) {
-      numberOfTankers = '';
+      numberOfTankers = null;
       setValue('applySlots', false);
       handleChangeState('tankers', []);
       unregister('imos');
@@ -74,12 +74,13 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
       'tankers',
       tankers.filter((tanker) => tanker !== tankerId)
     );
+
     unregister(`imos[${tankerId}].imo`);
     clearErrors(`imos`);
   };
 
   useEffect(() => {
-    const numberOfTankers = tankers.length > 0 ? tankers.length : '';
+    const numberOfTankers = tankers.length > 0 ? tankers.length : null;
 
     setValue('numberOfTankers', numberOfTankers);
     setValue('applySlots', Boolean(numberOfTankers));

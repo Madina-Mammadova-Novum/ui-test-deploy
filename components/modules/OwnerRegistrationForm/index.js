@@ -64,7 +64,7 @@ const OwnerRegistrationForm = ({ countries }) => {
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     }
 
-    errorToast(error?.title, error?.message);
+    errorToast('Bad request', error?.title);
   };
 
   return (

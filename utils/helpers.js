@@ -11,7 +11,6 @@ import { transformDate } from './date';
 import { countryOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
-import { providedEmails } from '@/utils/mock';
 
 /**
  * createMarkup
@@ -311,12 +310,12 @@ export const transformInvalidLoginMessage = (msg) => {
 export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
 export const isDocument = (value) => value === 'doc';
 
-export const checkEmailPrefix = (value) => {
-  if (!value) return true;
+export const checkEmailPrefix = (email) => {
+  if (!email) return false;
 
-  const emailParts = value?.split('@')[1];
+  const regExpCase = /\S+@\S+\.\S+/;
 
-  return !providedEmails.some((prefix) => emailParts?.startsWith(prefix));
+  return regExpCase.test(email);
 };
 
 export const checkPhoneValue = (value) => {
@@ -376,6 +375,18 @@ export const getRoleIdentity = ({ role }) => {
     isOwner: role === ROLES.OWNER,
     isCharterer: role === ROLES.CHARTERER,
   };
+};
+
+export const generateRedirectPath = ({ role }) => {
+  if (!role) return { path: window.location.href };
+
+  const { isOwner } = getRoleIdentity({ role });
+
+  if (isOwner) {
+    return { path: ROUTES.ACCOUNT_POSITIONS };
+  }
+
+  return { path: ROUTES.ACCOUNT_SEARCH };
 };
 
 export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).toFixed(0);
@@ -769,9 +780,9 @@ export const notificationPathGenerator = ({ data, role }) => {
     Negotiating: `${initialPath}/${isOwner ? data.vessel.id : data.searchedCargo.id}?fleetId=${
       data.id
     }&status=${statusTab}`,
-    Pre_Fixture: `${initialPath}/${data.searchedCargo.id}`,
-    On_Subs: `${initialPath}/${data.searchedCargo.id}`,
-    Fixture: `${initialPath}/${data.searchedCargo.id}`,
+    Pre_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
+    On_Subs: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
+    Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
     Post_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
   };
 
