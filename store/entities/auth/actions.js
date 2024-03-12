@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AUTH } from './types';
+import { resetChat, resetUser } from '../chat/slice';
 
 import { decodedTokenAdapter, signInAdapter, tokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { login } from '@/services';
 import { sessionCookieData } from '@/utils/helpers';
 
-export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWithValue }) => {
+export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWithValue, dispatch }) => {
   const response = await login({ data: signInAdapter({ data }) });
 
   if (!response?.data?.access_token) {
@@ -16,6 +17,11 @@ export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWit
   const { sub, role, ...rest } = decodedTokenAdapter(response.data.access_token);
 
   sessionCookieData(response.data);
+
+  if (role) {
+    dispatch(resetUser());
+    dispatch(resetChat());
+  }
 
   return {
     userId: sub,

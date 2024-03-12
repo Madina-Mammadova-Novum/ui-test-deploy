@@ -135,8 +135,9 @@ const chatSlice = createSlice({
       state.filterParams = initialState.filterParams;
     },
     resetUser: (state) => {
-      state.data.user.data = {};
-      state.data.user.messages = [];
+      state.data.user.data = initialState.data.user.data;
+      state.data.user.messages = initialState.data.user.messages;
+      state.data.anonymous = initialState.data.anonymous;
     },
     typingStatus: (state, { payload }) => {
       const updatedCollapsedState = state.data.collapsed.map((user) => {
@@ -169,6 +170,7 @@ const chatSlice = createSlice({
         return user;
       });
     },
+
     offlineStatus: (state, { payload }) => {
       state.data.active = state.data.active.map((user) => {
         if (user.chatId === payload.id) {

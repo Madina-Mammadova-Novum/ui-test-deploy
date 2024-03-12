@@ -16,7 +16,6 @@ import {
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { setToggle } from '@/store/entities/fixture/slice';
-import { resetDealData } from '@/store/entities/notifications/slice';
 import { getFixtureSelector } from '@/store/selectors';
 
 const FixtureDetails = ({ searchedParams }) => {
@@ -28,7 +27,6 @@ const FixtureDetails = ({ searchedParams }) => {
 
     return () => {
       dispatch(setToggle(false));
-      dispatch(resetDealData());
     };
   }, []);
 

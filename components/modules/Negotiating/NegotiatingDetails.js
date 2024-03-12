@@ -13,7 +13,6 @@ import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapte
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { NEGOTIATING_TABS } from '@/lib/constants';
 import { setToggle } from '@/store/entities/negotiating/slice';
-import { resetDealData } from '@/store/entities/notifications/slice';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
@@ -29,7 +28,6 @@ const NegotiatingDetails = ({ searchedParams }) => {
 
     return () => {
       dispatch(setToggle(false));
-      dispatch(resetDealData());
     };
   }, []);
 

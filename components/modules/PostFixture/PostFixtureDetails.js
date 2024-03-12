@@ -8,7 +8,6 @@ import PostFixtureResultContent from './PostFixtureResultContent';
 import { UrlPropTypes } from '@/lib/types';
 
 import { Loader } from '@/elements';
-import { resetDealData } from '@/store/entities/notifications/slice';
 import { setToggle } from '@/store/entities/post-fixture/slice';
 import { getPostFixtureDataSelector } from '@/store/selectors';
 
@@ -21,7 +20,6 @@ const PostFixtureDetails = ({ searchedParams }) => {
 
     return () => {
       dispatch(setToggle(false));
-      dispatch(resetDealData());
     };
   }, []);
 
