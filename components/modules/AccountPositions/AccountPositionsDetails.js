@@ -7,7 +7,6 @@ import { UrlPropTypes } from '@/lib/types';
 
 import { fleetNotificationAdapter } from '@/adapters';
 import { Loader, Title } from '@/elements';
-import { resetDealData } from '@/store/entities/notifications/slice';
 import { setToggle } from '@/store/entities/positions/slice';
 import { getUserVesselsSelector } from '@/store/selectors';
 import { ExpandableCard } from '@/units';
@@ -27,7 +26,6 @@ const AccountPositionsDetails = ({ searchedParms }) => {
 
     return () => {
       dispatch(setToggle(false));
-      dispatch(resetDealData());
     };
   }, []);
 
