@@ -108,11 +108,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   useEffect(() => {
     dispatch(fetchOfferValidation({ ...search?.data, tankerId }));
+    dispatch(fetchOfferOptioins(tankerId));
 
-    if (offer.valid) {
-      fetchCountdownData();
-      dispatch(fetchOfferOptioins(tankerId));
-    }
+    fetchCountdownData();
 
     return () => {
       dispatch(resetOfferData());
@@ -129,25 +127,16 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       case 'comments':
         return <CommentsContent />;
       default:
-        return (
-          <CommercialOfferTerms
-            loading={offer.loading}
-            valid={offer.valid}
-            tankerId={tankerId}
-            offerData={offer.data}
-            searchData={search.data}
-            scrollToBottom={scrollToBottom}
-          />
-        );
+        return <CommercialOfferTerms tankerId={tankerId} searchData={search.data} scrollToBottom={scrollToBottom} />;
     }
-  }, [currentTab, tankerId, offer, search]);
+  }, [currentTab, tankerId, search.data, voyageDetails, scrollToBottom]);
 
   const errorBanner = useMemo(() => {
     return (
       offer?.error && (
         <div className="bg-red-light rounded-base py-2.5 pb-3 px-5">
           <div className="text-xsm mt-1.5">
-            <span className="font-bold">Declined:</span>
+            <span className="font-bold">{!offer?.valid ? 'Declined: ' : 'Warning: '}</span>
             <span className="ml-1.5">{offer?.error}</span>
           </div>
         </div>
@@ -164,7 +153,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the counterparty to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offerssss
           </p>
           <Dropdown
             defaultValue={responseCountdown}
