@@ -29,7 +29,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { resetForm } from '@/utils/helpers';
+import { getFieldFromKey, resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
@@ -62,9 +62,19 @@ const OwnerRegistrationForm = ({ countries }) => {
     if (!error) {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
-    }
+    } else {
+      const errorKeys = Object.keys(error?.errors || {});
 
-    errorToast(error?.title, error?.message);
+      errorKeys?.forEach((key) => {
+        if (error?.errors[key]?.length > 0) {
+          methods.setError(getFieldFromKey(key), {
+            message: error?.errors[key][0],
+          });
+        }
+      });
+
+      errorToast('Bad request', error?.title);
+    }
   };
 
   return (
@@ -109,7 +119,7 @@ const OwnerRegistrationForm = ({ countries }) => {
 };
 
 OwnerRegistrationForm.propTypes = {
-  countries: PropTypes.arrayOf(PropTypes.shape()),
+  countries: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default OwnerRegistrationForm;

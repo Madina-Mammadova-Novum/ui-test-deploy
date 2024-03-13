@@ -9,29 +9,18 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
-import { ROUTES } from '@/lib';
 import { loginSchema } from '@/lib/schemas';
 import { signIn } from '@/store/entities/auth/actions';
 import { getAuthSelector } from '@/store/selectors';
-import { resetObjectFields } from '@/utils/helpers';
+import { generateRedirectPath, resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const schema = yup.object().shape({ ...loginSchema() });
   const { error, session, loading } = useSelector(getAuthSelector);
-
-  const schema = yup.object().shape({
-    ...loginSchema(),
-  });
-
-  useEffect(() => {
-    if (error) errorToast(error.title, 'Incorrect email or password');
-
-    if (session?.accessToken) {
-      router.push(ROUTES.ACCOUNT_INFO);
-    }
-  }, [error, session?.accessToken]);
 
   const methods = useHookFormParams({ schema });
 
@@ -41,6 +30,17 @@ const LoginForm = () => {
     clearErrors,
     formState: { errors, isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (error) {
+      errorToast(error.title, 'Incorrect email or password');
+    }
+
+    if (session?.accessToken) {
+      const { path } = generateRedirectPath({ role: session.role });
+      router.push(path);
+    }
+  }, [error, session?.accessToken, session?.role]);
 
   const handleResetFields = () => {
     methods.reset((formValues) => {

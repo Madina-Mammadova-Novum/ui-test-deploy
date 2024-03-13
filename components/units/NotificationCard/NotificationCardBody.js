@@ -11,6 +11,7 @@ import { NotificationCardBodyPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
 import { getCurrnetDealStage, readNotification } from '@/store/entities/notifications/actions';
+import { resetDealData, resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl, notificationPathGenerator } from '@/utils/helpers';
 
@@ -31,7 +32,9 @@ const NotificationCardBody = ({ message, url, urlId }) => {
 
   const getDealStage = useCallback(() => {
     if (isDealPath) {
+      dispatch(resetDealData());
       const id = getIdFromUrl(url);
+
       if (id !== prevId) {
         dispatch(getCurrnetDealStage({ id, role }));
         setPrevId(id);
@@ -47,10 +50,11 @@ const NotificationCardBody = ({ message, url, urlId }) => {
     if (isDealPath) {
       const route = notificationPathGenerator({ data: deal, role });
       router.push(route);
+      dispatch(resetParams());
     } else {
       router.push(url);
     }
-  }, [notificationPathGenerator, url, role, deal, isDealPath]);
+  }, [notificationPathGenerator, resetParams, url, role, deal, isDealPath]);
 
   return (
     <div className="flex flex-col items-start">
