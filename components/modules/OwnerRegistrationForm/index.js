@@ -46,6 +46,20 @@ const OwnerRegistrationForm = ({ countries }) => {
     ...captchaSchema(),
   });
 
+  const getFieldFromKey = (key) => {
+    switch (key) {
+      case 'Email':
+        return 'email';
+      case 'Phone':
+        return 'primaryPhone';
+      case 'SecondaryPhone':
+        return 'secondaryPhone';
+      // Add more cases for other fields if needed
+      default:
+        return key.toLowerCase();
+    }
+  };
+
   const methods = useHookFormParams({ schema });
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
@@ -63,25 +77,17 @@ const OwnerRegistrationForm = ({ countries }) => {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     } else {
+      const errorKeys = Object.keys(error?.errors || {});
+
+      errorKeys?.forEach((key) => {
+        if (error?.errors[key]?.length > 0) {
+          methods.setError(getFieldFromKey(key), {
+            message: error?.errors[key][0],
+          });
+        }
+      });
+
       errorToast(error?.title, error?.message);
-
-      if (error?.errors?.Email.length > 0) {
-        methods.setError('email', {
-          message: error?.errors?.Email[0],
-        });
-      }
-
-      if (error?.errors?.Phone.length > 0) {
-        methods.setError('primaryPhone', {
-          message: error?.errors?.Phone[0],
-        });
-      }
-
-      if (error?.errors?.SecondaryPhone.length > 0) {
-        methods.setError('secondaryPhone', {
-          message: error?.errors?.SecondaryPhone[0],
-        });
-      }
     }
   };
 
