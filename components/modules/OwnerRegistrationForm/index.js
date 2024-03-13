@@ -29,7 +29,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { resetForm } from '@/utils/helpers';
+import { getFieldFromKey, resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
@@ -63,25 +63,17 @@ const OwnerRegistrationForm = ({ countries }) => {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     } else {
-      errorToast(error?.title, error?.message);
+      const errorKeys = Object.keys(error?.errors || {});
 
-      if (error?.errors?.Email.length > 0) {
-        methods.setError('email', {
-          message: error?.errors?.Email[0],
-        });
-      }
+      errorKeys?.forEach((key) => {
+        if (error?.errors[key]?.length > 0) {
+          methods.setError(getFieldFromKey(key), {
+            message: error?.errors[key][0],
+          });
+        }
+      });
 
-      if (error?.errors?.Phone.length > 0) {
-        methods.setError('primaryPhone', {
-          message: error?.errors?.Phone[0],
-        });
-      }
-
-      if (error?.errors?.SecondaryPhone.length > 0) {
-        methods.setError('secondaryPhone', {
-          message: error?.errors?.SecondaryPhone[0],
-        });
-      }
+      errorToast('Bad request', error?.title);
     }
   };
 
