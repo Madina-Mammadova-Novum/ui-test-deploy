@@ -348,8 +348,8 @@ export function ownerSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email: email.replace(/\.com$/, ''),
     password,
+    email,
     phone: `+${primaryPhone}`,
     secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
@@ -387,7 +387,7 @@ export function chartererSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email: email.replace(/\.com$/, ''),
+    email,
     password,
     phone: `+${primaryPhone}`,
     secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
