@@ -62,9 +62,9 @@ const OwnerRegistrationForm = ({ countries }) => {
     if (!error) {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
+    } else {
+      errorToast(error?.title, error?.message);
     }
-
-    errorToast('Bad request', error?.title);
   };
 
   return (
@@ -109,7 +109,7 @@ const OwnerRegistrationForm = ({ countries }) => {
 };
 
 OwnerRegistrationForm.propTypes = {
-  countries: PropTypes.arrayOf(PropTypes.shape()),
+  countries: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default OwnerRegistrationForm;
