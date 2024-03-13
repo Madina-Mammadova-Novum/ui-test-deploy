@@ -47,16 +47,13 @@ const OwnerRegistrationForm = ({ countries }) => {
   });
 
   const getFieldFromKey = (key) => {
-    switch (key) {
-      case 'Email':
-        return 'email';
-      case 'Phone':
-        return 'primaryPhone';
-      case 'SecondaryPhone':
-        return 'secondaryPhone';
-      default:
-        return key.toLowerCase();
-    }
+    const errorByKey = {
+      Email: 'email',
+      Phone: 'primaryPhone',
+      SecondaryPhone: 'secondaryPhone',
+    };
+
+    return errorByKey[key];
   };
 
   const methods = useHookFormParams({ schema });
