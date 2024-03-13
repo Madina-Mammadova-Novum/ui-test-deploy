@@ -777,7 +777,7 @@ export const notificationPathGenerator = ({ data, role }) => {
   const statusTab = urlStatusFormatter({ isFailed: data.isFailed });
 
   const routeByStage = {
-    Negotiating: `${initialPath}/${isOwner ? data.vessel.id : data.searchedCargo.id}?fleetId=${
+    Negotiating: `${initialPath}/${isOwner ? data?.vessel?.id : data?.searchedCargo?.id}?fleetId=${
       data.id
     }&status=${statusTab}`,
     Pre_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,

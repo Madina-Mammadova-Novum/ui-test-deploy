@@ -53,7 +53,7 @@ export const redirectAfterToast = (message, url) => {
     setTimeout(() => {
       window.location.href = url;
       resolve();
-    }, 3000);
+    }, 2000);
   });
 };
 

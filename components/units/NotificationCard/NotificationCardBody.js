@@ -47,7 +47,7 @@ const NotificationCardBody = ({ message, url, urlId }) => {
       dispatch(readNotification({ id: urlId }));
     }
 
-    if (isDealPath && deal?.stage) {
+    if (isDealPath) {
       const route = notificationPathGenerator({ data: deal, role });
       router.push(route);
       dispatch(resetParams());
