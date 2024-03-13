@@ -54,7 +54,6 @@ const OwnerRegistrationForm = ({ countries }) => {
         return 'primaryPhone';
       case 'SecondaryPhone':
         return 'secondaryPhone';
-      // Add more cases for other fields if needed
       default:
         return key.toLowerCase();
     }
