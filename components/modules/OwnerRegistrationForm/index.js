@@ -64,6 +64,24 @@ const OwnerRegistrationForm = ({ countries }) => {
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
     } else {
       errorToast(error?.title, error?.message);
+
+      if (error?.errors?.Email.length > 0) {
+        methods.setError('email', {
+          message: error?.errors?.Email[0],
+        });
+      }
+
+      if (error?.errors?.Phone.length > 0) {
+        methods.setError('primaryPhone', {
+          message: error?.errors?.Phone[0],
+        });
+      }
+
+      if (error?.errors?.SecondaryPhone.length > 0) {
+        methods.setError('secondaryPhone', {
+          message: error?.errors?.SecondaryPhone[0],
+        });
+      }
     }
   };
 
