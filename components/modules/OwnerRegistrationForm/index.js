@@ -29,7 +29,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { resetForm } from '@/utils/helpers';
+import { getFieldFromKey, resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
@@ -45,16 +45,6 @@ const OwnerRegistrationForm = ({ countries }) => {
     ...termsAndConditionsSchema(),
     ...captchaSchema(),
   });
-
-  const getFieldFromKey = (key) => {
-    const errorByKey = {
-      Email: 'email',
-      Phone: 'primaryPhone',
-      SecondaryPhone: 'secondaryPhone',
-    };
-
-    return errorByKey[key];
-  };
 
   const methods = useHookFormParams({ schema });
   const addressValue = methods.watch('sameAddresses', sameAddress);
@@ -83,7 +73,7 @@ const OwnerRegistrationForm = ({ countries }) => {
         }
       });
 
-      errorToast(error?.title, error?.message);
+      errorToast('Bad request', error?.title);
     }
   };
 

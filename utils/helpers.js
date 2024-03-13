@@ -794,3 +794,13 @@ export const getOfferTotalMinQuantity = ({ data }) => {
 
   return data.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
 };
+
+export const getFieldFromKey = (key) => {
+  const errorByKey = {
+    Email: 'email',
+    Phone: 'primaryPhone',
+    SecondaryPhone: 'secondaryPhone',
+  };
+
+  return errorByKey[key];
+};
