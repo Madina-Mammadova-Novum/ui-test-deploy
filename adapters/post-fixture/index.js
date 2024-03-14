@@ -12,7 +12,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
   return [
     {
       label: 'Cargo id',
-      text: searchedCargo?.cargoId,
+      text: searchedCargo?.code,
     },
     {
       label: 'Tanker name',

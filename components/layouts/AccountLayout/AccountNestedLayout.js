@@ -13,9 +13,9 @@ import FleetsActions from '@/modules/FleetsActions';
 import { ComplexPagination, ToggleRows } from '@/units';
 
 const AccountNestedLayout = ({ children, config }) => {
-  const { data, pagination, sorting, onToggle, withActions = false } = config;
-
   const searchedParams = useParams();
+
+  const { data, pagination, sorting, onToggle, withActions = false } = config;
 
   const nestedRoute = new RegExp(`/${searchedParams.id}`, 'g');
   const parentRoute = window.location.pathname.replace(nestedRoute, '');

@@ -14,14 +14,16 @@ const ModalFormManager = ({ onClose, children, submitAction, submitButton, class
   const { text, variant, size, disabled, className: buttonClassName = '' } = submitButton;
 
   return (
-    <form className={`${className} flex flex-col gap-5`} onSubmit={handleSubmit(submitAction)}>
+    <form className={`${className} flex flex-col gap-5 overflow-clip`} onSubmit={handleSubmit(submitAction)}>
       {children}
       <div
-        className={`flex ${specialStyle ? 'justify-between items-start' : 'justify-end'} gap-x-2.5 whitespace-nowrap`}
+        className={`flex bg-white ${
+          specialStyle ? 'justify-between items-start' : 'justify-end'
+        } gap-x-2.5 whitespace-nowrap`}
       >
         <Button
           onClick={onClose}
-          customStyles="w-[100%]"
+          customStyles="w-full"
           customStylesFromWrap={specialStyle && `flex-1`}
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />

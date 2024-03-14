@@ -42,7 +42,7 @@ const NotificationControl = () => {
 
   useEffect(() => {
     const debounceDispatch = debounce((value) => {
-      dispatch(setFilterParams({ searchValue: value?.toLowerCase(), skip: 0, take: 500 }));
+      dispatch(setFilterParams({ searchValue: value?.toLowerCase(), skip: 0, take: 50 }));
     }, 1000);
 
     if (search) {
@@ -59,7 +59,7 @@ const NotificationControl = () => {
   const handleSearch = ({ target: { value } }) => setSearch(value);
 
   const handleFilter = (options) => {
-    dispatch(setFilterParams({ sortedValue: options.map(({ value }) => value), skip: 0, take: 500 }));
+    dispatch(setFilterParams({ sortedValue: options.map(({ value }) => value), skip: 0, take: 50 }));
   };
 
   const handleTab = ({ target: { value } }) => {
