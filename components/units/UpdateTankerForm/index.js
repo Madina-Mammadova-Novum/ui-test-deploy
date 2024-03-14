@@ -31,6 +31,7 @@ const schema = yup.object({
 
 const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId }) => {
   const [initialLoading, setInitialLoading] = useState(true);
+
   const {
     prefilledUpdateVesselState: { loading, data: prefilledData, ports, countries, tankerTypes },
   } = useSelector(fleetsSelector);
@@ -51,7 +52,9 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
   const { label: fleetName } = fleetData;
+
   const methods = useHookFormParams({ schema });
+
   const dispatch = useDispatch();
   const {
     register,
@@ -78,39 +81,37 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     return () => dispatch(clearPrefilledState());
   }, []);
 
+  const getValidOptions = (data, value) => {
+    const filteredOption = data?.filter((option) => option?.id === value);
+    const options = convertDataToOptions({ data: filteredOption }, 'id', 'name')[0];
+
+    return options;
+  };
+
+  const fetchDataOptions = async () => {
+    const validPrefilledOptions = {};
+
+    if (prefilledData?.tankerCategoryOne?.value) {
+      const { data: categoryOne } = await getVesselCategoryOne(prefilledData.tankerType.value);
+      const options = getValidOptions(categoryOne, prefilledData.tankerCategoryOne.value);
+
+      validPrefilledOptions.tankerCategoryOne = options;
+    }
+
+    if (prefilledData?.tankerCategoryTwo?.value) {
+      const { data: categoryTwo } = await getVesselCategoryTwo(prefilledData.tankerCategoryOne.value);
+      const options = getValidOptions(categoryTwo, prefilledData.tankerCategoryTwo.value);
+      validPrefilledOptions.tankerCategoryTwo = options;
+    }
+
+    setInitialLoading(false);
+    reset({ ...prefilledData, ...validPrefilledOptions });
+    handleTankerOptionsChange('tankerType', { options: tankerTypes });
+  };
+
   useEffect(() => {
     if (!loading) {
-      (async () => {
-        const validPrefilledOptions = {};
-        if (prefilledData.tankerCategoryOne.value) {
-          const { data: categoryOne } = await getVesselCategoryOne(prefilledData.tankerType.value);
-          handleTankerOptionsChange('tankerCategoryOne', {
-            options: convertDataToOptions({ data: categoryOne }, 'id', 'name'),
-          });
-          const validCategotyOneOption = categoryOne.find(({ id }) => id === prefilledData.tankerCategoryOne.value);
-          validPrefilledOptions.tankerCategoryOne = convertDataToOptions(
-            { data: [validCategotyOneOption] },
-            'id',
-            'name'
-          )[0];
-        }
-        if (prefilledData.tankerCategoryTwo?.value) {
-          const { data: categoryTwo } = await getVesselCategoryTwo(prefilledData.tankerCategoryOne.value);
-          handleTankerOptionsChange('tankerCategoryTwo', {
-            options: convertDataToOptions({ data: categoryTwo }, 'id', 'name'),
-          });
-          const validCategotyTwoOption = categoryTwo.find(({ id }) => id === prefilledData.tankerCategoryTwo?.value);
-          validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
-            { data: [validCategotyTwoOption] },
-            'id',
-            'name'
-          )[0];
-        }
-
-        reset({ ...prefilledData, ...validPrefilledOptions });
-        handleTankerOptionsChange('tankerType', { options: tankerTypes });
-        setInitialLoading(false);
-      })();
+      fetchDataOptions();
     }
   }, [loading]);
 
@@ -118,11 +119,13 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     const { status, message, messageDescription, error } = await requestUpdateVessel({
       data: { ...formData, tankerId: itemId },
     });
+
     if (status === 200) {
-      dispatch(refetchFleets());
       successToast(message, messageDescription);
+      dispatch(refetchFleets());
       closeModal();
     }
+
     if (error) {
       errorToast(error?.title, error?.message);
     }
@@ -189,20 +192,20 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
         submitAction={onSubmit}
         submitButton={{ text: 'Request to Update Info', variant: 'primary', size: 'large' }}
       >
-        <div className="w-[640px] 3md:w-[756px]">
+        <div className="w-[640px] 3md:w-[756px] overflow-clip">
           <ModalHeader>Request to Update Info</ModalHeader>
-          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0 mt-5" />
+          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start !gap-2.5 mt-5" />
 
-          <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
-            <Title level={4}>Please note!</Title>
-            <p className="text-[12px] mt-1.5">
+          <div className="border relative border-gray-darker bg-gray-light rounded-md text-xs-sm px-5 py-2.5 mt-2.5">
+            <Title level="4">Please note!</Title>
+            <p className="text-xs-sm py-2.5">
               You can edit all the fields if the information is incorrect, but for this you will need to send a request
               to change the data, which can be reviewed up to 24 hours, and after confirmation your data will be updated
               automatically.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-y-4">
+          <div className="grid grid-cols-1 gap-y-4 h-80 mt-5 pr-2.5 overflow-scroll">
             <div className="grid grid-cols-2 gap-y-4 gap-x-5">
               <Input
                 {...register(`tankerName`)}

@@ -137,7 +137,6 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     {
       label: 'Fleet name',
       text: name ?? '',
-      textStyles: 'absolute top-px lg:top-5',
       disableTooltip: true,
     },
     {

@@ -12,12 +12,11 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
   return [
     {
       label: 'Cargo id',
-      text: searchedCargo?.cargoId,
+      text: searchedCargo?.code,
     },
     {
       label: 'Tanker name',
       text: vessel?.details?.name,
-      textStyles: 'absolute',
     },
     {
       label: 'Cargo type',
@@ -32,7 +31,6 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
       text:
         searchedCargo?.loadTerminal?.port &&
         `${searchedCargo?.loadTerminal?.port?.name}, ${searchedCargo?.loadTerminal?.port?.locode}`,
-      textStyles: 'absolute pl-5',
       countryCode: searchedCargo?.loadTerminal && getLocode(searchedCargo?.loadTerminal?.port?.locode),
     },
     {

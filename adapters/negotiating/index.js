@@ -12,7 +12,6 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'tanker name',
       text: details?.name,
-      textStyles: 'absolute',
     },
     {
       label: 'imo',
@@ -21,17 +20,14 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'fleet name',
       text: fleet?.name,
-      textStyles: 'absolute',
     },
     {
       label: 'open date',
       text: transformDate(openDate, 'MMM dd, yyyy'),
-      textStyles: 'absolute',
     },
     {
       label: 'open port',
       text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
-      textStyles: 'absolute pl-5',
       countryCode: getLocode(openPort?.locode),
     },
   ];
@@ -57,7 +53,6 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'Quantity',
       text: `${minValue} - ${maxValue} tons`,
-      textStyles: 'absolute',
     },
     {
       label: 'Load port',

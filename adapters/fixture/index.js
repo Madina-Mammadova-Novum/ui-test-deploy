@@ -30,7 +30,6 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Load port',
       text: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
-      textStyles: 'absolute pl-5',
       country: loadTerminal?.port?.country,
       countryCode: getLocode(loadTerminal?.port?.locode),
     },
@@ -132,7 +131,6 @@ export const fixtureDetailsAdapter = ({ data }) => {
         {
           title: 'Tanker name',
           text: tankerName,
-          textStyles: 'absolute',
           countryCode: flagOfRegistry?.id,
         },
         {

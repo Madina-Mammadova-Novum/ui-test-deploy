@@ -6,6 +6,7 @@ import { NOTIFICATIONS } from './types';
 
 import { getNotifications, readNotificationById, setReadAllNotifications } from '@/services/notifications';
 import { getOfferDetails } from '@/services/offer';
+import { notificationPathGenerator } from '@/utils/helpers';
 
 export const fetchNotifications = createAsyncThunk(
   NOTIFICATIONS.GET_NOTIFICATIONS,
@@ -52,18 +53,19 @@ export const getCurrnetDealStage = createAsyncThunk(
       rejectWithValue(error);
     }
 
-    return data;
+    const route = notificationPathGenerator({ data, role });
+    return { ...data, route };
   }
 );
 
-export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTIFICATIONS, async (_, { dispatch }) => {
-  await setReadAllNotifications();
-
-  dispatch(fetchNotifications());
-});
-
 export const readNotification = createAsyncThunk(NOTIFICATIONS.READ_NOTIFICATION, async ({ id }, { dispatch }) => {
   await readNotificationById({ id }).then(() => {
+    dispatch(resetParams());
+  });
+});
+
+export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTIFICATIONS, async (_, { dispatch }) => {
+  await setReadAllNotifications().then(() => {
     dispatch(resetParams());
   });
 });
