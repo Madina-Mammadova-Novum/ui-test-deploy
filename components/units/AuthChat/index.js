@@ -54,7 +54,7 @@ const AuthChat = ({ opened, token }) => {
     if (messageIds.length > 0) {
       for (const id of messageIds) {
         // eslint-disable-next-line no-await-in-loop
-        await сhatSessionService.readMessage({ id });
+        сhatSessionService.readMessage({ id });
       }
     }
   }, [user?.messages]);
@@ -67,10 +67,18 @@ const AuthChat = ({ opened, token }) => {
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
   useEffect(() => {
+    let servicesTimer;
+
     if (token) {
-      getChatNotifications();
-      dispatch(getListOfChats());
+      servicesTimer = setTimeout(() => {
+        getChatNotifications();
+        dispatch(getListOfChats());
+      }, 3000);
     }
+
+    return () => {
+      clearTimeout(servicesTimer);
+    };
   }, [token]);
 
   useEffect(() => {

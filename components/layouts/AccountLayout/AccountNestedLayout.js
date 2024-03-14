@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useParams } from 'next/navigation';
 
@@ -21,6 +21,12 @@ const AccountNestedLayout = ({ children, config }) => {
   const parentRoute = window.location.pathname.replace(nestedRoute, '');
 
   const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
+
+  useEffect(() => {
+    return () => {
+      onToggle({ value: false });
+    };
+  }, []);
 
   const printActions = useMemo(() => {
     if (sorting?.options?.length) {
