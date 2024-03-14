@@ -88,7 +88,7 @@ const ViewFailedOffer = ({ itemId }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`h-[320px] mt-2.5 px-2.5 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
       </div>
