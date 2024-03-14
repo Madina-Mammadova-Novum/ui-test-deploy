@@ -17,10 +17,6 @@ const PostFixtureDetails = ({ searchedParams }) => {
 
   useEffect(() => {
     dispatch(setToggle(true));
-
-    return () => {
-      dispatch(setToggle(false));
-    };
   }, []);
 
   const printContent = useMemo(() => {

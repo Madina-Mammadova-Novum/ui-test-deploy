@@ -24,10 +24,6 @@ const FixtureDetails = ({ searchedParams }) => {
 
   useEffect(() => {
     dispatch(setToggle(true));
-
-    return () => {
-      dispatch(setToggle(false));
-    };
   }, []);
 
   const printExpandableRow = (rowData) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ModalWrapper from '../ModalWrapper';
@@ -20,9 +20,10 @@ const Notification = () => {
   const ref = useRef(null);
   const dispatch = useDispatch();
 
-  const token = getCookieFromBrowser('session-access-token');
+  const [show, setShow] = useState(false);
 
   const { unreadCounter, isOpened, filterParams } = useSelector(getNotificationsDataSelector);
+  const token = getCookieFromBrowser('session-access-token');
 
   const handleOpen = () => {
     dispatch(setIsOpened(true));
@@ -63,38 +64,49 @@ const Notification = () => {
     if (token) {
       initNotifications();
     }
-  }, [token]);
+
+    const serviceTimer = setTimeout(() => {
+      setShow(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(serviceTimer);
+      setShow(false);
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));
   }, [filterParams]);
 
   return (
-    <>
-      <Button
-        type="button"
-        className="relative"
-        onClick={handleOpen}
-        buttonProps={{ icon: { before: <BellIcon counter={unreadCounter} /> } }}
-      />
-      {isOpened && (
-        <div className="fixed top-0 right-0 z-30">
-          <ModalWrapper
-            opened={isOpened}
-            onClose={handleClose}
-            containerClass="absolute z-50 !overflow-hidden !max-h-screen h-screen !w-[530px] !-left-[265px] !-translate-y-0 !top-0 !rounded-none !p-0 z-50"
-          >
-            <div className="flex !overflow-y-hidden flex-col py-8 h-full" ref={ref}>
-              <Title level="2" className="text-black px-8">
-                Notifications
-              </Title>
-              <NotificationControl />
-              <NotificationContent />
-            </div>
-          </ModalWrapper>
-        </div>
-      )}
-    </>
+    show && (
+      <>
+        <Button
+          type="button"
+          className="relative"
+          onClick={handleOpen}
+          buttonProps={{ icon: { before: <BellIcon counter={unreadCounter} /> } }}
+        />
+        {isOpened && (
+          <div className="fixed top-0 right-0 z-30">
+            <ModalWrapper
+              opened={isOpened}
+              onClose={handleClose}
+              containerClass="absolute z-50 !overflow-hidden !max-h-screen h-screen !w-[530px] !-left-[265px] !-translate-y-0 !top-0 !rounded-none !p-0 z-50"
+            >
+              <div className="flex !overflow-y-hidden flex-col py-8 h-full" ref={ref}>
+                <Title level="2" className="text-black px-8">
+                  Notifications
+                </Title>
+                <NotificationControl />
+                <NotificationContent />
+              </div>
+            </ModalWrapper>
+          </div>
+        )}
+      </>
+    )
   );
 };
 

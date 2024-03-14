@@ -770,7 +770,7 @@ const urlStatusFormatter = ({ isFailed }) => {
 };
 
 export const notificationPathGenerator = ({ data, role }) => {
-  if (!data) return null;
+  if (!data?.stage) return null;
 
   const { isOwner } = getRoleIdentity({ role });
   const initialPath = stageFormatter(data.stage);
