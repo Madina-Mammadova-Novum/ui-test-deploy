@@ -67,18 +67,10 @@ const AuthChat = ({ opened, token }) => {
   const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
 
   useEffect(() => {
-    let servicesTimer;
-
     if (token) {
-      servicesTimer = setTimeout(() => {
-        getChatNotifications();
-        dispatch(getListOfChats());
-      }, 3000);
+      dispatch(getListOfChats());
+      getChatNotifications();
     }
-
-    return () => {
-      clearTimeout(servicesTimer);
-    };
   }, [token]);
 
   useEffect(() => {

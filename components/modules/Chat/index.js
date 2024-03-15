@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ChatPropTypes } from '@/lib/types';
@@ -11,22 +11,9 @@ import { getAnonChatSelector, getAuthChatSelector } from '@/store/selectors';
 import { AnonChat, AuthChat } from '@/units';
 
 const Chat = ({ token }) => {
-  const [show, setShow] = useState(false);
-
   const { opened, messageCount, isActive } = useSelector(token ? getAuthChatSelector : getAnonChatSelector);
 
   const handleOpen = () => сhatSessionService.onToggle(!opened);
-
-  useEffect(() => {
-    const renderTimer = setTimeout(() => {
-      setShow(true);
-    }, 3000);
-
-    return () => {
-      setShow(false);
-      clearTimeout(renderTimer);
-    };
-  }, []);
 
   useEffect(() => {
     if (opened || isActive) {
@@ -38,19 +25,17 @@ const Chat = ({ token }) => {
 
   const memoizedChatButton = useMemo(() => {
     return (
-      show && (
-        <>
-          <ChatButton
-            variant="default"
-            onClick={handleOpen}
-            counter={messageCount}
-            className="fixed right-3 bottom-3 z-20"
-          />
-          {token ? <AuthChat opened={opened} token={token} /> : <AnonChat opened={opened} />}
-        </>
-      )
+      <>
+        <ChatButton
+          variant="default"
+          onClick={handleOpen}
+          counter={messageCount}
+          className="fixed right-3 bottom-3 z-20"
+        />
+        {token ? <AuthChat opened={opened} token={token} /> : <AnonChat opened={opened} />}
+      </>
     );
-  }, [token, show, opened, messageCount, handleOpen]);
+  }, [token, opened, messageCount, handleOpen]);
 
   return memoizedChatButton;
 };

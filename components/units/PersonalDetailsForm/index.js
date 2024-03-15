@@ -30,9 +30,6 @@ const PersonalDetails = () => {
           placeholder="Enter your email"
           error={errors.email?.message}
           disabled={isSubmitting}
-          type="email"
-          autoComplete="off"
-          aria-autocomplete="none"
         />
       </div>
       <div className="flex flex-col gap-5">
