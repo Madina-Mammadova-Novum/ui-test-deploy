@@ -50,7 +50,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      textStyles: 'absolute top-1',
+      textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
@@ -110,7 +110,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Countdown',
-      textStyles: 'absolute top-1',
+      textStyles: 'absolute top-1 lg:relative lg:top-0',
       freezed: frozenAt,
       countdownData: {
         date: calculateCountdown(expiresAt, frozenAt),
@@ -263,8 +263,8 @@ export const onSubsDetailsAdapter = ({ data }) => {
         [
           {
             title: 'Load port',
-            text: `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
-            countryCode: getLocode(loadTerminal?.port?.locode),
+            text: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
+            countryCode: loadTerminal?.port && getLocode(loadTerminal?.port?.locode),
           },
           {
             title: 'Load terminal',
@@ -274,8 +274,8 @@ export const onSubsDetailsAdapter = ({ data }) => {
         [
           {
             title: 'Discharge port',
-            text: `${dischargeTerminal?.port?.name}, ${dischargeTerminal?.port?.locode}`,
-            countryCode: getLocode(dischargeTerminal?.port?.locode),
+            text: dischargeTerminal?.port && `${dischargeTerminal?.port?.name}, ${dischargeTerminal?.port?.locode}`,
+            countryCode: dischargeTerminal?.port && getLocode(dischargeTerminal?.port?.locode),
           },
           {
             title: 'Discharge terminal',
@@ -292,11 +292,11 @@ export const onSubsDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Demurrage rate',
-          text: `$${demurrageRate} per day`,
+          text: demurrageRate && `$${demurrageRate} per day`,
         },
         {
           title: 'Laytime + NOR',
-          text: `${layTime} hrs + (6 + 6 hrs)`,
+          text: layTime && `${layTime} hrs + (6 + 6 hrs)`,
         },
         {
           title: 'Undisputed demurrage payment terms',
