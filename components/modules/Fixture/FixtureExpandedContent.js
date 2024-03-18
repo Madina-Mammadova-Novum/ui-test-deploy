@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import FixtureDetailsContent from './FixtureDetailsContent';
 import FixtureDocumentsContent from './FixtureDocumentsContent';
@@ -23,6 +23,10 @@ const tabs = [
 const FixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
+  const handleDownload = useCallback(() => {
+    downloadFile({ url: detailsData?.charterPartyUrl, fileName: detailsData?.charterPartyUrl });
+  }, [detailsData?.charterPartyUrl]);
+
   const printTabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
@@ -43,23 +47,8 @@ const FixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
         />
         <Button
           buttonProps={{ text: 'Charter party (generate pdf)', variant: 'tertiary', size: 'medium' }}
-          customStyles="
-            border border-blue 
-            hover:border-blue-darker 
-            whitespace-nowrap
-            !px-2.5 !py-0.5 !text-[10px] 
-            font-medium
-            !text-xsm 
-            absolute 
-            left-1
-            translate-x-5 
-            xlMax:w-fit
-            xlMax:top-14
-            xlMax:left-[50%] 
-            xlMax:transform
-            xlMax:-translate-x-1/2
-          "
-          onClick={() => downloadFile({ url: detailsData?.charterPartyUrl, fileName: detailsData?.charterPartyUrl })}
+          customStyles="tab-btn"
+          onClick={handleDownload}
         />
       </div>
 
