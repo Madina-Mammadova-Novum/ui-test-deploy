@@ -30,6 +30,7 @@ const schema = yup.object({
 const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const [initialLoading, setInitialLoading] = useState(false);
   const [q88State, setQ88State] = useState(q88);
+
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
       options: [],
@@ -43,6 +44,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       loading: false,
     },
   });
+
   const [countries, setCountries] = useState([]);
   const [ports, setPorts] = useState([]);
 
@@ -50,7 +52,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const { label: fleetName, value: fleetId } = fleetData;
 
   const methods = useHookFormParams({ schema, state: q88State });
+
   const dispatch = useDispatch();
+
   const {
     register,
     clearErrors,
@@ -83,9 +87,11 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       const { data: tankerTypesData = [], error: tankerTypesError } = tankerTypesResponse;
       const { data: countriesData = [], error: countriesError } = countriesResponse;
       const { data: portsData = [], error: portsError } = portsResponse;
+
       handleTankerOptionsChange('tankerType', {
         options: convertDataToOptions({ data: tankerTypesData }, 'id', 'name'),
       });
+
       setCountries(countriesOptions(countriesData));
       setPorts(countriesOptions(portsData));
       if (tankerTypesError || countriesError || portsError)
