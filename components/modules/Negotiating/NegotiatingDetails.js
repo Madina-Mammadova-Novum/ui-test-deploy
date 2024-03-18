@@ -25,10 +25,6 @@ const NegotiatingDetails = ({ searchedParams }) => {
 
   useEffect(() => {
     dispatch(setToggle(true));
-
-    return () => {
-      dispatch(setToggle(false));
-    };
   }, []);
 
   const printExpandableRow = (rowData) => {

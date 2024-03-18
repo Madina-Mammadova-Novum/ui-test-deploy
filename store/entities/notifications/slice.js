@@ -18,7 +18,7 @@ const initialState = {
   filterParams: {
     activeTab: 'unread',
     searchValue: '',
-    sortedValue: 'all',
+    sortedValue: [],
     skip: 0,
     take: 50,
     watched: false,
@@ -57,6 +57,9 @@ const notificationsSlice = createSlice({
     },
     setIsOpened: (state, action) => {
       state.isOpened = action.payload;
+    },
+    setDealPath: (state, { payload }) => {
+      state.dealPath = payload;
     },
     resetDealData: (state) => {
       state.dealData = initialState.dealData;
@@ -99,7 +102,7 @@ const notificationsSlice = createSlice({
       state.dealData = payload;
     });
     builder.addCase(getCurrnetDealStage.rejected, (state, { payload }) => {
-      state.loading = false;
+      state.dealFetching = false;
       state.error = payload;
     });
   },
@@ -111,6 +114,7 @@ export const {
   setIsOpened,
   setWatchedData,
   setUnwatchedData,
+  setDealPath,
   resetNotifications,
   updateWatchedData,
   updateUnwatchedData,

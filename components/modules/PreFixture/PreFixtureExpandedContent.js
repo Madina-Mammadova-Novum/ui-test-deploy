@@ -27,11 +27,12 @@ const tabs = [
 ];
 
 const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 'details' }) => {
+  const dispatch = useDispatch();
+
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
   const { role } = useSelector(getUserDataSelector);
-  const dispatch = useDispatch();
 
   const handleExtendCountdown = async () => {
     const { error, message: successMessage } = await extendCountdown({ offerId, role });
@@ -44,6 +45,8 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
     }
   };
 
+  const handleChange = ({ target }) => setCurrentTab(target.value);
+
   const printContent = useMemo(() => {
     if (currentTab === 'documents') {
       return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
@@ -52,23 +55,20 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
     return <DetailsContent data={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
-  const btnStyles =
-    'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-[50%] xlMax:transform xlMax:-translate-x-1/2';
-
   return (
     <div className="px-5">
       <div className="py-8 xlMax:h-20">
         <Tabs
-          activeTab={currentTab}
           tabs={tabs}
-          onClick={({ target }) => setCurrentTab(target.value)}
-          customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
+          activeTab={currentTab}
+          onClick={handleChange}
+          customStyles="custom-container my-3 -mr-1/2 mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
         <Button
-          buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-          customStyles={btnStyles}
-          disabled={!allowCountdownExtension}
           onClick={handleExtendCountdown}
+          customStyles="tab-btn"
+          disabled={!allowCountdownExtension}
+          buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
         />
       </div>
       {printContent}

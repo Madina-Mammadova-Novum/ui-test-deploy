@@ -153,7 +153,7 @@ const TableCell = ({ cellProps }) => {
 
       return (
         <ModalWindow
-          containerClass="overflow-y-[unset]"
+          containerClass="overflow-y-clip"
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,

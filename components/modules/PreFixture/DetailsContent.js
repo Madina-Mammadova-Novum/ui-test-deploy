@@ -37,8 +37,8 @@ const DetailsContent = ({ data = {} }) => {
   } = voyageDetails;
 
   const roleBasedSection = {
-    owner: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
-    charterer: <DetailsOwnerContent title="Charterer Information" data={partyInformation} countries={countries} />,
+    owner: <DetailsOwnerContent title="Charterer Information" data={partyInformation} countries={countries} />,
+    charterer: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
   };
 
   return (
@@ -46,7 +46,7 @@ const DetailsContent = ({ data = {} }) => {
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         {roleBasedSection[role]}
         <FieldsetWrapper>
-          <Title level={3}>Cargo Details</Title>
+          <Title level="3">Cargo Details</Title>
 
           <FieldsetContent className="mt-2.5">
             <TextRow title="Cargo Type">{cargoType}</TextRow>
@@ -66,22 +66,16 @@ const DetailsContent = ({ data = {} }) => {
 
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Commercial Offer Terms</Title>
+          <Title level="3">Commercial Offer Terms</Title>
 
           <FieldsetContent className="mt-2.5">
             <TextRow title="Freight">{freight}</TextRow>
             <TextRow title="Demurrage rate">{demurrageRate}</TextRow>
             <TextRow title="Laytime + NOR">{laytime}</TextRow>
-            <TextRow
-              title="Undisputed demurrage payment terms"
-              className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline"
-            >
+            <TextRow title="Undisputed demurrage payment terms" className="inline-text-row">
               {demurragePaymentTerms}
             </TextRow>
-            <TextRow
-              title="Payment term"
-              className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline"
-            >
+            <TextRow title="Payment term" className="inline-text-row">
               {paymentTerms}
             </TextRow>
           </FieldsetContent>
@@ -119,8 +113,9 @@ const DetailsContent = ({ data = {} }) => {
           <Title level="3">Additional Charter Party Terms</Title>
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {additionalCharterPartyTerms.map(({ title, body }) => (
-              <PartyItem buttonText={title} modalTitle="All Additional Information" body={body} />
+            {additionalCharterPartyTerms.map(({ title, body }, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <PartyItem key={index} buttonText={title} modalTitle="All Additional Information" body={body} />
             ))}
           </FieldsetContent>
         </FieldsetWrapper>

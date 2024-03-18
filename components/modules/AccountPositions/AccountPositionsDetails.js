@@ -23,10 +23,6 @@ const AccountPositionsDetails = ({ searchedParms }) => {
 
   useEffect(() => {
     dispatch(setToggle(true));
-
-    return () => {
-      dispatch(setToggle(false));
-    };
   }, []);
 
   const printExpandableCard = (fleet) => {

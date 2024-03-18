@@ -13,10 +13,6 @@ import { NOTIFICATION_FILTERS } from '@/lib/constants';
 const NotificationFilter = ({ containerClass, value, onChange, ...rest }) => {
   const options = [
     {
-      label: <LabelAsOption text="All Notifications" />,
-      value: NOTIFICATION_FILTERS.all,
-    },
-    {
       label: <LabelAsOption icon={<BagSVG className="fill-black" />} text="New Offer" />,
       value: NOTIFICATION_FILTERS.newOffer,
     },

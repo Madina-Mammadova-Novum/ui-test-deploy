@@ -54,7 +54,7 @@ const AuthChat = ({ opened, token }) => {
     if (messageIds.length > 0) {
       for (const id of messageIds) {
         // eslint-disable-next-line no-await-in-loop
-        await сhatSessionService.readMessage({ id });
+        сhatSessionService.readMessage({ id });
       }
     }
   }, [user?.messages]);
@@ -68,8 +68,8 @@ const AuthChat = ({ opened, token }) => {
 
   useEffect(() => {
     if (token) {
-      getChatNotifications();
       dispatch(getListOfChats());
+      getChatNotifications();
     }
   }, [token]);
 

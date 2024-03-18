@@ -20,9 +20,8 @@ const Notification = () => {
   const ref = useRef(null);
   const dispatch = useDispatch();
 
-  const token = getCookieFromBrowser('session-access-token');
-
   const { unreadCounter, isOpened, filterParams } = useSelector(getNotificationsDataSelector);
+  const token = getCookieFromBrowser('session-access-token');
 
   const handleOpen = () => {
     dispatch(setIsOpened(true));
@@ -63,7 +62,7 @@ const Notification = () => {
     if (token) {
       initNotifications();
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchNotifications(filterParams));

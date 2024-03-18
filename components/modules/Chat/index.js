@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ChatPropTypes } from '@/lib/types';
@@ -23,17 +23,21 @@ const Chat = ({ token }) => {
     }
   }, [opened, isActive]);
 
-  return (
-    <>
-      <ChatButton
-        variant="default"
-        onClick={handleOpen}
-        counter={messageCount}
-        className="fixed right-3 bottom-3 z-20"
-      />
-      {token ? <AuthChat opened={opened} token={token} /> : <AnonChat opened={opened} />}
-    </>
-  );
+  const memoizedChatButton = useMemo(() => {
+    return (
+      <>
+        <ChatButton
+          variant="default"
+          onClick={handleOpen}
+          counter={messageCount}
+          className="fixed right-3 bottom-3 z-20"
+        />
+        {token ? <AuthChat opened={opened} token={token} /> : <AnonChat opened={opened} />}
+      </>
+    );
+  }, [token, opened, messageCount, handleOpen]);
+
+  return memoizedChatButton;
 };
 
 Chat.propTypes = ChatPropTypes;
