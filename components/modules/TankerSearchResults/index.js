@@ -5,19 +5,17 @@ import React, { useState } from 'react';
 import { TankerSearchResultPropTypes } from '@/lib/types';
 
 import { searchHeaderDataAdapter } from '@/adapters/search';
-import { Dropdown, ExpandableCardHeader, TextRow, Title } from '@/elements';
+import { ExpandableCardHeader, TextRow, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
 import { SearchNotFound, ToggleRows } from '@/units';
 
-const TankerSearchResults = ({ request, params = [], directions = [], data, onChange }) => {
+const TankerSearchResults = ({ request, data }) => {
   const [expandExactResults, setExpandExactResults] = useState({ value: false });
   const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
 
   if (!request) return null;
-
-  const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
 
   return data?.exactResults?.length || data?.partialResults?.length ? (
     <>
@@ -25,21 +23,6 @@ const TankerSearchResults = ({ request, params = [], directions = [], data, onCh
         <Title level="2" className="mr-auto">
           Search results
         </Title>
-
-        <Dropdown
-          label="Sort tankers by:"
-          options={params}
-          defaultValue={params[0]}
-          onChange={(option) => onChange('currentParam', option)}
-          customStyles={dropdownStyles}
-        />
-
-        <Dropdown
-          options={directions}
-          defaultValue={directions[0]}
-          onChange={(option) => onChange('currentDirection', option)}
-          customStyles={dropdownStyles}
-        />
       </div>
 
       {!!data?.exactResults.length && (

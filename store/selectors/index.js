@@ -222,5 +222,10 @@ export const getOfferSelector = createDraftSafeSelector(offerSelector, (state) =
 export const getSearchSelector = createDraftSafeSelector(searchSelector, (state) => {
   return {
     data: state.searchData,
+    error: state.error,
+    searchParams: state.searchParams,
+    toggle: state.toggle,
+    loading: state.loading,
+    prefilledSearchData: state.prefilledSearchData,
   };
 });

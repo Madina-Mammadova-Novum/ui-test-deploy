@@ -21,7 +21,7 @@ const AccountAmountOfTankers = ({ data, total }) => {
           {total} cargoes{' '}
           <ModalWindow
             buttonProps={{
-              text: 'See expiriences',
+              text: 'See expirience',
               variant: 'default',
               size: 'medium',
               className: 'normal-case text-blue text-xsm font-normal cursor-pointer !p-0',
