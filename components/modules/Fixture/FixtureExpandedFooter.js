@@ -4,7 +4,7 @@ import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button, Divider } from '@/elements';
 import { ExpandableRowFooter } from '@/units';
 
-const FixtureExpandedFooter = ({ drafted = true }) => {
+const FixtureExpandedFooter = ({ drafted }) => {
   return (
     <ExpandableRowFooter>
       <Divider />

@@ -804,3 +804,19 @@ export const getFieldFromKey = (key) => {
 
   return errorByKey[key];
 };
+
+export const getBrowser = (enviroment) => {
+  if (enviroment.indexOf('Firefox') !== -1) {
+    return 'firefox';
+  }
+  if (enviroment.indexOf('Chrome') !== -1) {
+    return 'chrome';
+  }
+  if (enviroment.indexOf('Safari') !== -1) {
+    return 'safari';
+  }
+  if (enviroment.indexOf('MSIE') !== -1 || enviroment.indexOf('Trident/') !== -1) {
+    return 'internet explorer';
+  }
+  return 'unknown';
+};
