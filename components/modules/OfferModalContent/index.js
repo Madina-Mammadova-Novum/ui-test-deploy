@@ -46,10 +46,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   });
 
   const offer = useSelector(getOfferSelector);
-  const search = useSelector(getSearchSelector);
-
-  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = search.data;
-  const { voyageDetails } = voyageDetailsAdapter({ data: search.data });
+  const { searchParams } = useSelector(getSearchSelector);
+  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchParams;
+  const { voyageDetails } = voyageDetailsAdapter({ data: searchParams });
 
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
@@ -97,8 +96,8 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const fetchCountdownData = async () => {
     handleChangeState('loading', true);
-    const { data = [] } = await getCountdownTimer();
-    const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+    const response = await getCountdownTimer();
+    const convertedOptions = convertDataToOptions({ data: response.data }, 'id', 'text');
     const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
 
     handleChangeState('responseCountdownOptions', convertedOptions);
@@ -107,15 +106,19 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchOfferValidation({ ...search?.data, tankerId }));
-    dispatch(fetchOfferOptioins(tankerId));
-
-    fetchCountdownData();
+    dispatch(fetchOfferValidation({ ...searchParams, tankerId }));
 
     return () => {
       dispatch(resetOfferData());
     };
-  }, [tankerId]);
+  }, []);
+
+  useEffect(() => {
+    if (offer?.valid) {
+      fetchCountdownData();
+      dispatch(fetchOfferOptioins(tankerId));
+    }
+  }, [offer?.valid]);
 
   const scrollToBottom = () =>
     setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
@@ -127,9 +130,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       case 'comments':
         return <CommentsContent />;
       default:
-        return <CommercialOfferTerms tankerId={tankerId} searchData={search.data} scrollToBottom={scrollToBottom} />;
+        return <CommercialOfferTerms tankerId={tankerId} searchData={searchParams} scrollToBottom={scrollToBottom} />;
     }
-  }, [currentTab, tankerId, search.data, voyageDetails, scrollToBottom]);
+  }, [currentTab, tankerId, searchParams, voyageDetails, scrollToBottom]);
 
   const errorBanner = useMemo(() => {
     return (

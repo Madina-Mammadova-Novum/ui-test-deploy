@@ -28,6 +28,8 @@ export default function NegotiatingLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
+    useExpand: true,
+    usePagination: true,
     data: { label: 'Offer stage #1', title: 'Negotiating' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),

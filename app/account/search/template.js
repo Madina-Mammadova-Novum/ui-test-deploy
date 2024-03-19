@@ -5,17 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
-import { fetchUserVessels } from '@/store/entities/positions/actions';
-import { setToggle } from '@/store/entities/positions/slice';
-import { getUserVesselsSelector } from '@/store/selectors';
+import { fetchVesselsBySearch } from '@/store/entities/search/actions';
+import { getSearchSelector } from '@/store/selectors';
 import { useFilters } from '@/utils/hooks';
 
-export default function PositionsLayout({ children }) {
+export default function SearchLayout({ children }) {
   const dispatch = useDispatch();
+  const { data, searchParams } = useSelector(getSearchSelector);
 
   const [pageState, setPageState] = useState(PAGE_STATE);
-
-  const { vessels, totalPages } = useSelector(getUserVesselsSelector);
   const { page, pageSize, sortOptions, sortValue } = pageState;
 
   /* Change handler by key-value for userStore */
@@ -29,31 +27,26 @@ export default function PositionsLayout({ children }) {
   const paginationParams = useFilters({
     initialPage: page,
     itemsPerPage: pageSize,
-    data: vessels,
+    data: data?.partialResults ?? data?.exactResults,
   });
 
-  /* fetching user positions data */
   useEffect(() => {
-    dispatch(
-      fetchUserVessels({
-        page: paginationParams.currentPage,
-        perPage: paginationParams.perPage,
-        sortBy: sortValue.value,
-      })
-    );
-  }, [paginationParams.currentPage, paginationParams.perPage, sortValue]);
+    dispatch(fetchVesselsBySearch({ sortBy: sortValue.value }));
+  }, [searchParams, sortValue]);
 
   const handleChange = (option) => {
-    paginationParams.handleSortChange(option);
     handleChangeState('sortValue', option);
+    if (paginationParams) {
+      paginationParams?.handleSortChange(option);
+    }
   };
 
   const layoutConfig = {
+    useExpand: false,
+    usePagination: false,
     withActions: false,
-    usePagination: true,
-    data: { label: null, title: 'My positions' },
-    pagination: { ...paginationParams, totalPages },
-    onToggle: ({ value }) => dispatch(setToggle(value)),
+    data: { label: null, title: 'Search' },
+    pagination: paginationParams && { ...paginationParams, totalPages: 0 },
     sorting: {
       value: sortValue,
       options: sortOptions,

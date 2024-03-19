@@ -9,15 +9,14 @@ import { OfferFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
-import { searchSelector } from '@/store/selectors';
+import { getSearchSelector } from '@/store/selectors';
 import { useHookFormParams } from '@/utils/hooks';
 
 const OfferForm = ({ children, disabled, handleSubmit = () => {}, handleValidationError = () => {} }) => {
   const schema = yup.object({ ...offerSchema() });
 
-  const {
-    searchData: { products = [], cargoType },
-  } = useSelector(searchSelector);
+  const { searchParams } = useSelector(getSearchSelector);
+  const { products = [], cargoType } = searchParams;
 
   const methods = useHookFormParams({
     schema,

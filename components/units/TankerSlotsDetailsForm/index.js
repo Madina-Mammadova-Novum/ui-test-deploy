@@ -28,6 +28,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   const [helperText, setHelperText] = useState('');
   const isApplied = watch('applySlots');
+
   const { tankersCount, tankers } = slotsState;
 
   const handleChangeState = (key, value) =>
@@ -40,13 +41,16 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     clearErrors('numberOfTankers');
 
     let numberOfTankers = Number(event.target.value);
-    if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
+
+    if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) {
+      numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
+    }
 
     if (numberOfTankers <= 0) {
       numberOfTankers = null;
+      unregister('imos');
       setValue('applySlots', false);
       handleChangeState('tankers', []);
-      unregister('imos');
     }
 
     if (event.target.value && applyHelper) {
@@ -66,7 +70,12 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   const handleAddSlot = () => {
     clearErrors('applySlots');
-    handleChangeState('tankers', [...tankers, ...getFilledArray(1)]);
+    if (tankers.length) {
+      const maxNumber = Math.max(...tankers);
+      handleChangeState('tankers', [...tankers, maxNumber + 1]);
+    } else {
+      handleChangeState('tankers', getFilledArray(1));
+    }
   };
 
   const handleRemoveSlot = (tankerId) => {
@@ -120,7 +129,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           const error = errors.imos ? errors.imos[item]?.imo : null;
 
           return (
-            <div key={item} className="relative">
+            <div key={`${item[index]}`} className="relative">
               <Input
                 {...register(`${fieldName}.imo`)}
                 label={`Imo #${index + 1}`}

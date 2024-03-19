@@ -23,7 +23,7 @@ const schema = yup.object({
 const SearchForm = ({ onSubmit }) => {
   const { prefilledSearchData } = useSelector(searchSelector);
 
-  const [productState, setProductState] = useState(prefilledSearchData.productsByIndex || [0]);
+  const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
 
   const methods = useHookFormParams({ schema, state: prefilledSearchData });
 
@@ -32,6 +32,7 @@ const SearchForm = ({ onSubmit }) => {
       resetObjectFields(formValues);
       return formValues;
     });
+
     setProductState([1]);
   };
 
