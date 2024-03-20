@@ -14,6 +14,7 @@ export function requestSearchVesselAdapter({ data }) {
     page,
     perPage,
     sortBy,
+    rangeBy,
     // dischargePort,
     // loadPort
   } = data;
@@ -26,7 +27,7 @@ export function requestSearchVesselAdapter({ data }) {
     laycanEnd,
     page,
     pageSize: perPage,
-    sortColumn: 'Name',
+    sortColumn: rangeBy,
     sortColumnDirection: sortBy,
     cargoes: postProductsAdapter({ data: products }),
   };

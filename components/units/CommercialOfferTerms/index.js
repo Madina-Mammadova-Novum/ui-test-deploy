@@ -131,8 +131,6 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
-          min={freightEstimation.min && String(freightEstimation.min)}
-          max={freightEstimation.max && String(freightEstimation.max)}
           step="any"
         />
       </div>

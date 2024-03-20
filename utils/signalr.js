@@ -33,10 +33,12 @@ export class SignalRController {
         .build();
 
       await this.connection.start();
-    } catch (err) {
-      this.connection.onclose(async () => {
-        await this.refreshTokenAndConnect({ path });
+
+      this.connection.onclose(() => {
+        this.connection.off();
       });
+    } catch (err) {
+      await this.refreshTokenAndConnect({ path, token });
     }
   }
 
@@ -75,7 +77,7 @@ export class NotificationController extends SignalRController {
   }
 
   async stop() {
-    if (this.connection) {
+    if (this.connection?.state === 'Connected') {
       this.connection.stop();
     }
   }
@@ -124,12 +126,13 @@ export class ChatSessionController extends SignalRController {
   }
 
   async stop() {
-    this.store.dispatch(resetUser());
-    this.store.dispatch(setConversation(false));
-    this.store.dispatch(setLoadConversation(false));
-
     if (this.connection?.state === 'Connected') {
       await this.connection.stop();
+      if (this.connection.state === 'Disconnected') {
+        this.store.dispatch(resetUser());
+        this.store.dispatch(setConversation(false));
+        this.store.dispatch(setLoadConversation(false));
+      }
     }
   }
 }
@@ -175,7 +178,7 @@ export class ChatNotificationController extends SignalRController {
   }
 
   async stop() {
-    if (this.connection) {
+    if (this.connection?.state === 'Connected') {
       await this.connection.stop();
     }
   }

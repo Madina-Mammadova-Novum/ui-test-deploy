@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { TankerSearchResultPropTypes } from '@/lib/types';
 
 import { searchHeaderDataAdapter } from '@/adapters/search';
-import { ExpandableCardHeader, TextRow, Title } from '@/elements';
+import { ExpandableCardHeader, TextRow } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
@@ -19,12 +19,6 @@ const TankerSearchResults = ({ request, data }) => {
 
   return data?.exactResults?.length || data?.partialResults?.length ? (
     <>
-      <div className="mt-8 flex">
-        <Title level="2" className="mr-auto">
-          Search results
-        </Title>
-      </div>
-
       {!!data?.exactResults.length && (
         <div className="mt-5 flex justify-between">
           <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${

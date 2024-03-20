@@ -57,22 +57,6 @@ const AccountNestedLayout = ({ children, config }) => {
     return useExpand && <ToggleRows onToggleClick={onToggle} />;
   }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute, useExpand]);
 
-  const printPagination = useMemo(() => {
-    return (
-      (usePagination || !searchedParams?.id) && (
-        <ComplexPagination
-          label="offers"
-          perPage={pagination.perPage}
-          currentPage={pagination.currentPage}
-          numberOfPages={pagination.totalPages}
-          onPageChange={pagination.handlePageChange}
-          onSelectedPageChange={pagination.handleSelectedPageChange}
-          onChangeOffers={pagination.onChangeOffers}
-        />
-      )
-    );
-  }, [usePagination, pagination, searchedParams?.id]);
-
   return (
     <div className="px-5">
       <section className="flex min-h-[85vh] flex-col gap-y-5">
@@ -95,7 +79,17 @@ const AccountNestedLayout = ({ children, config }) => {
           {printActions}
         </div>
         <AccountWrapper>{children}</AccountWrapper>
-        {printPagination}
+        {(usePagination || searchedParams?.id) && (
+          <ComplexPagination
+            label="offers"
+            perPage={pagination?.perPage}
+            currentPage={pagination?.currentPage}
+            numberOfPages={pagination?.totalPages}
+            onPageChange={pagination?.handlePageChange}
+            onSelectedPageChange={pagination?.handleSelectedPageChange}
+            onChangeOffers={pagination?.onChangeOffers}
+          />
+        )}
       </section>
     </div>
   );

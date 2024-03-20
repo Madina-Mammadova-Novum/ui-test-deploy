@@ -10,9 +10,9 @@ import {
 import { getData, postData, putData } from '@/utils/dataFetching';
 import { generateMessageByActionType } from '@/utils/helpers';
 
-export async function searchVessels(data) {
+export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
-  const response = await postData(`vessels/search?sortBy=${data.sortBy}`, body);
+  const response = await postData(`vessels/search?sortBy=${data?.sortBy || 'asc'}&rangeBy=${data?.rangeBy}`, body);
 
   return {
     ...response,
