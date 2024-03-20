@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -9,31 +10,23 @@ import { OfferFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { offerSchema } from '@/lib/schemas';
-import { getSearchSelector } from '@/store/selectors';
+import { getOfferSelector } from '@/store/selectors';
 import { useHookFormParams } from '@/utils/hooks';
 
 const OfferForm = ({ children, disabled, handleSubmit = () => {}, handleValidationError = () => {} }) => {
-  const schema = yup.object({ ...offerSchema() });
+  const { formState, ranges } = useSelector(getOfferSelector);
 
-  const { searchParams } = useSelector(getSearchSelector);
-  const { products = [], cargoType } = searchParams;
+  const [freightState, setFreightState] = useState({});
 
-  const methods = useHookFormParams({
-    schema,
-    state: {
-      cargoType,
-      ...products
-        .filter((product) => product)
-        .reduce((res, curr, index) => {
-          res[`products[${index}].product`] = curr.product;
-          res[`products[${index}].density`] = curr.density;
-          res[`products[${index}].tolerance`] = curr.tolerance;
-          res[`products[${index}].quantity`] = curr.quantity * (1 - curr.tolerance / 100);
+  const schema = yup.object({ ...offerSchema({ ...ranges, currentFreight: freightState }) });
+  const methods = useHookFormParams({ schema, state: formState });
 
-          return res;
-        }, {}),
-    },
-  });
+  const freightType = methods.watch('freight');
+  const freightValue = methods.watch('value');
+
+  useEffect(() => {
+    setFreightState({ type: freightType?.value, value: freightValue });
+  }, [freightType?.value, freightValue]);
 
   return (
     <FormProvider {...methods}>

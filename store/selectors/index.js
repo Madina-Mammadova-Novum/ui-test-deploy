@@ -1,5 +1,6 @@
 import { createDraftSafeSelector } from '@reduxjs/toolkit';
 
+import { getPrefilledFormDataAdapter } from '@/adapters/offer';
 import { userDetailsAdapter } from '@/adapters/user';
 
 export const authSelector = ({ auth }) => auth;
@@ -11,7 +12,11 @@ export const searchSelector = ({ search }) => search;
 export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session?.role });
 export const generalSelector = ({ general }) => general;
 export const notificationsSelector = ({ notifications }) => notifications;
-export const offerSelector = ({ offer }) => offer;
+export const offerSelector = ({ offer, search }) => ({
+  ...offer,
+  cargoType: search?.searchParams?.cargoType,
+  products: getPrefilledFormDataAdapter({ data: search?.searchParams?.products }),
+});
 export const preFixtureSelector = ({ preFixture, notifications, auth }) => ({
   ...preFixture,
   role: auth?.session?.role,
@@ -216,6 +221,10 @@ export const getOfferSelector = createDraftSafeSelector(offerSelector, (state) =
     validating: state.validating,
     valid: state.valid,
     error: state.error,
+    formState: {
+      cargoType: state?.cargoType,
+      ...state?.products,
+    },
   };
 });
 
@@ -227,5 +236,7 @@ export const getSearchSelector = createDraftSafeSelector(searchSelector, (state)
     toggle: state.toggle,
     loading: state.loading,
     prefilledSearchData: state.prefilledSearchData,
+    sorting: state.sortingData,
+    request: state.request,
   };
 });

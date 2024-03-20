@@ -6,19 +6,13 @@ import { searchVessels } from '@/services/vessel';
 
 export const fetchVesselsBySearch = createAsyncThunk(
   SEARCH.GET_VESSELS_BY_SEARCH,
-  async (pagination, { getState, rejectWithValue }) => {
-    const { search } = getState();
+  async (props, { rejectWithValue }) => {
+    const { data, error } = await searchVessels({ data: props });
 
-    if (search?.searchParams) {
-      const { data, error } = await searchVessels({ ...pagination, ...search.searchParams });
-
-      if (error) {
-        return rejectWithValue(error);
-      }
-
-      return data;
+    if (error) {
+      return rejectWithValue(error);
     }
 
-    return null;
+    return data;
   }
 );
