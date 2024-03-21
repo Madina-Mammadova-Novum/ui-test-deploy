@@ -11,20 +11,17 @@ import { SearchFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
 import { searchForTankerSchema } from '@/lib/schemas';
-import { searchSelector } from '@/store/selectors';
+import { getSearchSelector } from '@/store/selectors';
 import { SearchFormFields } from '@/units';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object({
-  ...searchForTankerSchema(),
-});
+const SearchForm = ({ onSubmit, onReset }) => {
+  const { prefilledSearchData } = useSelector(getSearchSelector);
 
-const SearchForm = ({ onSubmit }) => {
-  const { prefilledSearchData } = useSelector(searchSelector);
+  const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
 
-  const [productState, setProductState] = useState(prefilledSearchData.productsByIndex || [0]);
-
+  const schema = yup.object({ ...searchForTankerSchema() });
   const methods = useHookFormParams({ schema, state: prefilledSearchData });
 
   const handleResetFields = () => {
@@ -32,6 +29,8 @@ const SearchForm = ({ onSubmit }) => {
       resetObjectFields(formValues);
       return formValues;
     });
+
+    onReset();
     setProductState([1]);
   };
 

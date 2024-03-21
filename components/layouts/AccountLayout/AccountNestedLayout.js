@@ -15,7 +15,7 @@ import { ComplexPagination, ToggleRows } from '@/units';
 const AccountNestedLayout = ({ children, config }) => {
   const searchedParams = useParams();
 
-  const { data, pagination, sorting, onToggle, withActions = false } = config;
+  const { data, pagination, sorting, onToggle, withActions = false, useExpand = true, usePagination = true } = config;
 
   const nestedRoute = new RegExp(`/${searchedParams.id}`, 'g');
   const parentRoute = window.location.pathname.replace(nestedRoute, '');
@@ -32,7 +32,7 @@ const AccountNestedLayout = ({ children, config }) => {
     if (sorting?.options?.length) {
       return (
         <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
-          <ToggleRows onToggleClick={onToggle} />
+          {useExpand && <ToggleRows onToggleClick={onToggle} />}
           <Dropdown
             label="Sort by open day:"
             options={sorting?.options}
@@ -54,8 +54,8 @@ const AccountNestedLayout = ({ children, config }) => {
       );
     }
 
-    return <ToggleRows onToggleClick={onToggle} />;
-  }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute]);
+    return useExpand && <ToggleRows onToggleClick={onToggle} />;
+  }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute, useExpand]);
 
   return (
     <div className="px-5">
@@ -79,15 +79,15 @@ const AccountNestedLayout = ({ children, config }) => {
           {printActions}
         </div>
         <AccountWrapper>{children}</AccountWrapper>
-        {!searchedParams?.id && (
+        {(usePagination || searchedParams?.id) && (
           <ComplexPagination
             label="offers"
-            perPage={pagination.perPage}
-            currentPage={pagination.currentPage}
-            numberOfPages={pagination.totalPages}
-            onPageChange={pagination.handlePageChange}
-            onSelectedPageChange={pagination.handleSelectedPageChange}
-            onChangeOffers={pagination.onChangeOffers}
+            perPage={pagination?.perPage}
+            currentPage={pagination?.currentPage}
+            numberOfPages={pagination?.totalPages}
+            onPageChange={pagination?.handlePageChange}
+            onSelectedPageChange={pagination?.handleSelectedPageChange}
+            onChangeOffers={pagination?.onChangeOffers}
           />
         )}
       </section>

@@ -27,6 +27,8 @@ export default function OnSubsLayout({ children }) {
   }, [paginationParams.currentPage, paginationParams.perPage]);
 
   const layoutConfig = {
+    useExpand: true,
+    usePagination: true,
     withActions: false,
     data: { label: 'Offer stage #3', title: 'On subs' },
     pagination: { ...paginationParams, totalPages },

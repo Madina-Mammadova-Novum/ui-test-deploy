@@ -12,11 +12,7 @@ export function generateMetadata() {
 }
 
 const VesselsSearch = () => {
-  return (
-    <div className="px-5">
-      <TankerSearch title="Search" />
-    </div>
-  );
+  return <TankerSearch />;
 };
 
 export default VesselsSearch;

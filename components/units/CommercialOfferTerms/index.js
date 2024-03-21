@@ -131,8 +131,6 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
-          min={freightEstimation.min && String(freightEstimation.min)}
-          max={freightEstimation.max && String(freightEstimation.max)}
           step="any"
         />
       </div>
@@ -159,7 +157,9 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           type="number"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
-          helperText={`The maximum laytime is ${ranges?.layTime?.max?.end || 120} hours`}
+          helperText={`Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
+            ranges?.layTime?.max?.end || 120
+          } hours`}
           error={errors.layTime?.message}
           disabled={!valid || isSubmitting}
         />

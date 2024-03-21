@@ -32,6 +32,8 @@ export default function FleetsLayout({ children }) {
 
   const layoutConfig = {
     withActions: true,
+    useExpand: true,
+    usePagination: true,
     data: { label: null, title: 'Тanker List' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),

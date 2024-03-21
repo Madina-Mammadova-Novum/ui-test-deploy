@@ -484,3 +484,18 @@ export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {
   if (!data) return {};
   return data;
 };
+
+export const getPrefilledFormDataAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data
+    ?.filter((product) => product)
+    ?.reduce((res, curr, index) => {
+      res[`products[${index}].product`] = curr.product;
+      res[`products[${index}].density`] = curr.density;
+      res[`products[${index}].tolerance`] = curr.tolerance;
+      res[`products[${index}].quantity`] = curr.quantity * (1 - curr.tolerance / 100);
+
+      return res;
+    }, {});
+};

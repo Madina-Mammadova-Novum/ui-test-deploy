@@ -8,7 +8,6 @@ import { AddTankerWithImoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { FormDropdown, Input } from '@/elements';
-import { EXISTING_VESSEL_ERROR } from '@/lib/constants';
 import { q88ImoCheckSchema } from '@/lib/schemas';
 import { getQ88DataByImo } from '@/services/vessel';
 import { ModalHeader } from '@/units';
@@ -36,14 +35,13 @@ const AddTankerWithImoForm = ({
   };
 
   const onSubmit = async (formData) => {
-    const { data, error = {} } = await getQ88DataByImo({ imo: formData.imo });
-    const { errors: { Imo = [] } = {} } = error || {};
-    if (Imo[0] === EXISTING_VESSEL_ERROR) {
-      errorToast('Bad request', Imo);
-      return;
+    const { data, error, status } = await getQ88DataByImo({ imo: formData.imo });
+    if ((status >= 200 && status <= 400) || status === 404) {
+      setQ88({ ...data, imo: formData.imo });
+      handleNextStep();
+    } else {
+      errorToast(error.title, error.message);
     }
-    setQ88({ ...data, imo: formData.imo });
-    handleNextStep();
   };
 
   return (

@@ -11,6 +11,10 @@ export function requestSearchVesselAdapter({ data }) {
     dischargeTerminal,
     loadTerminal,
     products,
+    page,
+    perPage,
+    sortBy,
+    rangeBy,
     // dischargePort,
     // loadPort
   } = data;
@@ -21,6 +25,10 @@ export function requestSearchVesselAdapter({ data }) {
     cargoTypeId: cargoType.value,
     laycanStart,
     laycanEnd,
+    page,
+    pageSize: perPage,
+    sortColumn: rangeBy,
+    sortColumnDirection: sortBy,
     cargoes: postProductsAdapter({ data: products }),
   };
 }
