@@ -16,7 +16,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const { user } = useSelector(getAuthChatSelector).chats;
+  const { chats } = useSelector(getAuthChatSelector);
 
   const handleModal = (e, id) => {
     e.stopPropagation();
@@ -44,7 +44,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   };
 
   const handleOpenConversation = async () => {
-    if (user.data?.chatId === data.chatId) return;
+    if (chats?.user?.data?.chatId === data.chatId) return;
 
     dispatch(removeCollapsedChat(data?.chatId));
     await сhatSessionService.stop();

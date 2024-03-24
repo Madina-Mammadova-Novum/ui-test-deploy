@@ -1,26 +1,31 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useRouter } from 'next/navigation';
 
 import { ChatConversationCardPropTypes } from '@/lib/types';
 
 import ShipIcon from '@/assets/icons/ShipIcon';
 import { Title } from '@/elements';
-import { getGeneralDataSelector } from '@/store/selectors';
-import { ChatAdditional, ChatInfoModal } from '@/units';
+import { setConversation, setOpenedChat } from '@/store/entities/chat/slice';
+import { getCurrnetDealStage } from '@/store/entities/notifications/actions';
+import { resetDealData } from '@/store/entities/notifications/slice';
+import { getNotificationsDataSelector } from '@/store/selectors';
+import { ChatAdditional } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ChatConversationCard = ({ data, contrasted = false }) => {
-  const { additional, vessel, isOnline, subtitle } = data;
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const { countries } = useSelector(getGeneralDataSelector);
+  const [state, setState] = useState({ setMore: false });
+  const role = getCookieFromBrowser('session-user-role');
 
-  const [state, setState] = useState({
-    setMore: false,
-    setCargoeInfo: false,
-  });
+  const { deal } = useSelector(getNotificationsDataSelector);
 
-  const { setMore, setCargoeInfo } = state;
+  const { additional, vessel, isOnline, subtitle, dealId } = data;
 
   const handleChangeState = (key, value) => {
     setState((prevState) => ({
@@ -31,26 +36,52 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
 
   const handleShowMore = (e) => {
     e.stopPropagation();
+    handleChangeState('setMore', !state.setMore);
+  };
 
-    handleChangeState('setMore', !setMore);
+  const getDealStage = useCallback(() => {
+    dispatch(getCurrnetDealStage({ id: dealId, role }));
+  }, [dispatch, role, dealId]);
+
+  const handleRedirect = useCallback(
+    (e) => {
+      e.stopPropagation();
+
+      if (deal?.route) {
+        router.push(deal.route);
+        dispatch(setConversation(false));
+        dispatch(setOpenedChat(false));
+      }
+    },
+    [dispatch, deal.route]
+  );
+
+  const resetDealStage = () => {
+    dispatch(resetDealData());
   };
 
   const printCargoeModal = useMemo(() => {
     return (
       vessel?.cargoId && (
-        <p className={`${contrasted ? 'text-white' : 'text-black'} uppercase text-xs-sm font-semibold text-black flex`}>
+        <p
+          onMouseEnter={getDealStage}
+          onMouseLeave={resetDealStage}
+          className={`${
+            contrasted ? 'text-white' : 'text-black'
+          } uppercase text-xs-sm font-semibold text-black flex gap-x-1.5`}
+        >
           cargo id:
           <span
             aria-hidden
-            className="text-blue font-bold text-xs-sm cursor-pointer"
-            onClick={() => handleChangeState('setCargoeInfo', !setCargoeInfo)}
+            onClick={handleRedirect}
+            className="text-blue font-bold text-xs-sm cursor-pointer uppercase"
           >
-            <ChatInfoModal data={{ vessel, countries }} />
+            {vessel.cargoId}
           </span>
         </p>
       )
     );
-  }, [vessel, countries, setCargoeInfo]);
+  }, [vessel?.cargoId, getDealStage, resetDealStage, handleRedirect]);
 
   return (
     <div className="text-black flex items-start gap-x-1.5 w-auto">
@@ -65,7 +96,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
         {subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{subtitle}</p>}
         {printCargoeModal}
         {!contrasted && (
-          <ChatAdditional data={{ vessel, countries, additional }} isActive={setMore} onClick={handleShowMore} />
+          <ChatAdditional data={{ vessel, additional }} isActive={state.setMore} onClick={handleShowMore} />
         )}
       </div>
     </div>

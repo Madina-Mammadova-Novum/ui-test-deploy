@@ -12,7 +12,12 @@ export default function SearchLayout({ children }) {
   const { searchParams, sorting } = useSelector(getSearchSelector);
 
   useEffect(() => {
-    const data = { ...searchParams, sortBy: sorting?.currentDirection?.value, rangeBy: sorting?.currentRange?.value };
+    const data = {
+      ...searchParams,
+      sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
+      rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
+    };
+
     dispatch(fetchVesselsBySearch(data));
   }, [searchParams, sorting]);
 

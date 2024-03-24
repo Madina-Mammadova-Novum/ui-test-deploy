@@ -31,15 +31,21 @@ const TankerSearch = () => {
   };
 
   useEffect(() => {
-    if (data) {
-      handleRequest(true);
-    }
-
     if (error) {
       handleRequest(false);
       errorToast(error.title, error.message);
     }
+
+    if (data) {
+      handleRequest(true);
+    }
   }, [error, data]);
+
+  useEffect(() => {
+    return () => {
+      handleReset();
+    };
+  }, []);
 
   const printResult = useMemo(() => {
     if (loading) {
@@ -65,14 +71,14 @@ const TankerSearch = () => {
           <Dropdown
             label="Sort tankers by:"
             options={sorting?.directions}
-            value={sorting?.currentDirection ?? sorting?.directions[0]}
+            value={sorting?.currentDirection || sorting?.directions[0]}
             onChange={handleDirection}
             customStyles={dropdownStyles}
           />
 
           <Dropdown
             options={sorting?.range}
-            value={sorting?.currentRange ?? sorting?.range[0]}
+            value={sorting?.currentRange || sorting?.range[0]}
             onChange={handleRange}
             customStyles={dropdownStyles}
           />
