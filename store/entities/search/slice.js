@@ -2,8 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchVesselsBySearch } from './actions';
 
-import { NAVIGATION_PARAMS } from '@/lib/constants';
-import { options } from '@/utils/helpers';
+import { SORT_OPTIONS } from '@/lib/constants';
 
 const initialState = {
   toggle: false,
@@ -14,8 +13,8 @@ const initialState = {
   error: null,
   prefilledSearchData: null,
   sortingData: {
-    range: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
-    directions: options(['Ballast leg', 'Arrival']),
+    range: [SORT_OPTIONS.asc, SORT_OPTIONS.dsc],
+    directions: [SORT_OPTIONS.ballast, SORT_OPTIONS.arriaval],
     currentRange: '',
     currentDirection: '',
   },

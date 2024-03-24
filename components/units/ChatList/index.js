@@ -17,7 +17,7 @@ const ChatList = ({ data, loading = true, tab = 'active' }) => {
   }, [tab]);
 
   const printChatSession = (session, index) => (
-    <Fragment key={index !== 0}>
+    <Fragment key={index}>
       {index !== 0 && <Divider />}
       <ChatSession tab={tab} data={session} sessionId={sessionId} setSessionId={setSessionId} />
     </Fragment>

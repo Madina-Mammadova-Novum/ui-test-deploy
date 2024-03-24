@@ -12,7 +12,7 @@ import { generateMessageByActionType } from '@/utils/helpers';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
-  const response = await postData(`vessels/search?sortBy=${data?.sortBy || 'asc'}&rangeBy=${data?.rangeBy}`, body);
+  const response = await postData(`vessels/search?sortBy=${data?.sortBy}&rangeBy=${data?.rangeBy}`, body);
 
   return {
     ...response,
