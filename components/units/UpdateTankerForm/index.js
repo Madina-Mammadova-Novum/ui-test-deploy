@@ -24,11 +24,6 @@ import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
-const schema = yup.object({
-  ...tankerDataSchema(),
-  ...fileSchema(),
-});
-
 const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId }) => {
   const [initialLoading, setInitialLoading] = useState(true);
 
@@ -49,6 +44,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       loading: false,
     },
   });
+
+  const schema = yup.object({ ...tankerDataSchema(), ...fileSchema(true) });
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
   const { label: fleetName } = fleetData;
@@ -139,7 +136,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     if (error) {
       clearErrors(key);
     }
-    setValue(key, value);
 
     if (key === 'tankerType') {
       handleTankerOptionsChange('tankerCategoryOne', { loading: true });
@@ -175,6 +171,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       }
       if (categoryTwoError) console.error(categoryTwoError);
     }
+
+    setValue(key, value);
   };
 
   if (initialLoading) {
@@ -415,7 +413,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
             </div>
             <div>
-              <Title level={4} className="mb-2.5">
+              <Title level="4" className="mb-2.5">
                 Upload your Q88 questionnaire file
               </Title>
               <DropzoneForm showTextFields={false} />

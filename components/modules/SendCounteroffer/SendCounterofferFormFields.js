@@ -67,7 +67,9 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
+
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
     if (error) {
       clearErrors(key);
     }
@@ -152,8 +154,6 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
           error={errors.value?.message}
           disabled={isSubmitting}
-          min={String(freightEstimation.min)}
-          max={String(freightEstimation.max)}
           step="any"
         />
       </div>

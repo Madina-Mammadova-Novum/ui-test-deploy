@@ -46,6 +46,7 @@ export async function addVesselManually({ data }) {
 export async function requestUpdateVessel({ data }) {
   const body = requestUpdateVesselAdapter({ data });
   const response = await putData(`vessels/update`, body);
+
   if (!response.error) {
     response.message = 'Your have successfully applied to change information';
     response.messageDescription = 'Please wait for an answer within 24 hours';

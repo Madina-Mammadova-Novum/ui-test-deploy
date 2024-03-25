@@ -26,7 +26,7 @@ export const fetchOfferOptioins = createAsyncThunk(OFFER.GET_OFFER_OPTIONS, asyn
 export const fetchOfferValidation = createAsyncThunk(OFFER.GET_OFFER_VALIDATION, async (data, { rejectWithValue }) => {
   const result = await sendOfferValidation({ data });
 
-  if (!result?.data?.canProceed) {
+  if (result?.data?.message) {
     return rejectWithValue(result?.data?.message);
   }
 

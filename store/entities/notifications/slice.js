@@ -53,7 +53,6 @@ const notificationsSlice = createSlice({
     },
     resetParams: (state) => {
       state.filterParams = initialState.filterParams;
-      state.isOpened = initialState.isOpened;
     },
     setIsOpened: (state, action) => {
       state.isOpened = action.payload;
