@@ -24,7 +24,7 @@ const DetailsContent = ({ detailsData = {} }) => {
     <div className="flex flex-col gap-y-5 mb-5">
       <div className="flex flex-col gap-y-5 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Charterer Information</Title>
+          <Title level="3">Charterer Information</Title>
           {chartererInformation && (
             <FieldsetContent className="mt-2.5">
               {chartererInformation?.map(({ title, text }) => (
@@ -37,7 +37,7 @@ const DetailsContent = ({ detailsData = {} }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Tanker Information</Title>
+          <Title level="3">Tanker Information</Title>
           {generalInformation && (
             <FieldsetContent className="mt-2.5">
               {generalInformation?.map(({ title, text, countryCode }) => (

@@ -28,7 +28,7 @@ const ClientSidePackages = () => {
   return (
     <>
       <div id="portal" />
-      <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={1000} hideProgressBar />
+      <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={3500} hideProgressBar />
       {!unavailbleChatRoute && <Chat token={token} />}
     </>
   );

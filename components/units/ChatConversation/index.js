@@ -31,7 +31,9 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     }
 
     if (isOpened) {
-      dispatch(getChatHistory({ data: { id: data?.chatId } }));
+      if (data?.key !== 'support') {
+        dispatch(getChatHistory({ data: { id: data?.chatId } }));
+      }
 
       if (status === 200 && data?.chatId) {
         сhatSessionService.init({ chatId: data.chatId, token });

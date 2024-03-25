@@ -13,10 +13,6 @@ import { getQ88DataByImo } from '@/services/vessel';
 import { ModalHeader } from '@/units';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
-const schema = yup.object({
-  ...q88ImoCheckSchema(),
-});
-
 const AddTankerWithImoForm = ({
   closeModal,
   handleNextStep,
@@ -25,7 +21,10 @@ const AddTankerWithImoForm = ({
   setSelectedFleet,
   selectedFleet,
 }) => {
+  const schema = yup.object({ ...q88ImoCheckSchema() });
+
   const methods = useHookFormParams({ schema, state: { fleet: selectedFleet, imo: '' } });
+
   const { setValue, getValues } = methods;
 
   const handleChange = (key, value) => {
@@ -43,6 +42,13 @@ const AddTankerWithImoForm = ({
       errorToast(error.title, error.message);
     }
   };
+
+  const handleOnChange = ({ target }) => {
+    const modifiedValue = target.value.replace(/\D/g, '');
+    methods.setValue('imo', modifiedValue);
+  };
+
+  const imoValue = methods.watch('imo');
 
   return (
     <FormProvider {...methods}>
@@ -66,10 +72,10 @@ const AddTankerWithImoForm = ({
             you will need to add it manually.
           </p>
           <Input
-            {...methods.register('imo')}
             label="IMO"
+            value={imoValue}
+            onChange={handleOnChange}
             placeholder="Enter IMO"
-            type="number"
             error={methods.formState.errors?.imo?.message}
           />
         </div>
