@@ -57,7 +57,7 @@ const ChatConversationBody = () => {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="flex relative flex-col-reverse h-96 overflow-scroll scroll-auto"
+      className="flex relative flex-col-reverse h-96 overflow-y-scroll scroll-y-auto overflow-x-clip"
     >
       {printContent}
     </div>

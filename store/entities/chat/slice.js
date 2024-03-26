@@ -15,7 +15,7 @@ const initialState = {
   isActiveSession: false,
   data: {
     active: [],
-    archived: [],
+    archieved: [],
     searched: [],
     collapsed: [],
     support: [],
@@ -234,7 +234,7 @@ const chatSlice = createSlice({
       state.status = payload.status;
       state.updating = payload.updating;
       state.data.active = payload.active;
-      state.data.archived = payload.archived;
+      state.data.archieved = payload.archieved;
       state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {

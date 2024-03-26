@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { addMonths } from 'date-fns';
 
@@ -21,6 +21,8 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     watch,
     formState: { errors, isSubmitting },
   } = useHookForm();
+
+  const scrollRef = useRef(null);
 
   const [cargoesState, setCargoesState] = useState({
     cargoesCount: data?.countOfCargoes,
@@ -94,9 +96,15 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     setValue('applySlots', Boolean(numberOfCargoes));
 
     handleChangeState('cargoesCount', numberOfCargoes);
-
     if (isApplied) setHelperText('');
   }, [cargoes?.length, isApplied, setValue]);
+
+  useEffect(() => {
+    if (isApplied) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [cargoes?.length, isApplied]);
+
   return (
     <div className="grid gap-5">
       <div className="w-full relative">
@@ -174,6 +182,8 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
           </div>
         );
       })}
+
+      <div ref={scrollRef} />
 
       {cargoes?.length > 0 && (
         <div className="flex justify-between mb-5">

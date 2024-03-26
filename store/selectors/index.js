@@ -110,7 +110,7 @@ export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state)
     tab: state.filterParams?.tabValue,
     limit: state.filterParams?.limit,
     totalActive: state.data?.active?.length,
-    totalArchived: state.data?.archived?.length,
+    totalArchived: state.data?.archieved?.length,
     isActive: state.isActiveSession,
     status: state.status,
   };
