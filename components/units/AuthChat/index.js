@@ -41,11 +41,11 @@ const AuthChat = ({ opened, token }) => {
     isActive,
     totalActive,
     totalArchived,
-    chats: { active, archived, searched, user },
+    chats: { active, archieved, searched, user },
   } = useSelector(getAuthChatSelector);
 
   const getChatNotifications = async () => {
-    await chatNotificationService.init({ token });
+    await chatNotificationService.init({ token, key: user?.data?.key });
   };
 
   const markMessagesAsRead = useCallback(async () => {
@@ -88,9 +88,9 @@ const AuthChat = ({ opened, token }) => {
     } else if (tab === 'active') {
       setDataByTab(active);
     } else {
-      setDataByTab(archived);
+      setDataByTab(archieved);
     }
-  }, [tab, searched, search, active, archived]);
+  }, [tab, searched, search, active, archieved]);
 
   useEffect(() => {
     if (mdScreen && isActive) {
@@ -99,7 +99,7 @@ const AuthChat = ({ opened, token }) => {
   }, [mdScreen, isActive]);
 
   const printChatRooms = useMemo(() => {
-    return <ChatList loading={loading} tab={tab} data={dataByTab.slice(0, limit)} />;
+    return <ChatList loading={loading} tab={tab} data={dataByTab?.slice(0, limit)} />;
   }, [dataByTab, tab, loading, limit]);
 
   const printLoadMore = useMemo(() => {
@@ -113,7 +113,7 @@ const AuthChat = ({ opened, token }) => {
         </div>
       );
     }
-    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit || loading} />;
+    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab?.length <= limit || loading} />;
   }, [updating, tab, dataByTab, limit, handleMore]);
 
   const handleCloseConversation = async () => {

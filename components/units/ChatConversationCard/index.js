@@ -25,8 +25,6 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
 
   const { deal } = useSelector(getNotificationsDataSelector);
 
-  const { additional, vessel, isOnline, subtitle, dealId } = data;
-
   const handleChangeState = (key, value) => {
     setState((prevState) => ({
       ...prevState,
@@ -40,8 +38,8 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   };
 
   const getDealStage = useCallback(() => {
-    dispatch(getCurrnetDealStage({ id: dealId, role }));
-  }, [dispatch, role, dealId]);
+    dispatch(getCurrnetDealStage({ id: data?.dealId, role }));
+  }, [dispatch, role, data?.dealId]);
 
   const handleRedirect = useCallback(
     (e) => {
@@ -62,7 +60,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
 
   const printCargoeModal = useMemo(() => {
     return (
-      vessel?.cargoId && (
+      data?.vessel?.cargoId && (
         <p
           onMouseEnter={getDealStage}
           onMouseLeave={resetDealStage}
@@ -76,27 +74,31 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
             onClick={handleRedirect}
             className="text-blue font-bold text-xs-sm cursor-pointer uppercase"
           >
-            {vessel.cargoId}
+            {data?.vessel.cargoId}
           </span>
         </p>
       )
     );
-  }, [vessel?.cargoId, getDealStage, resetDealStage, handleRedirect]);
+  }, [data?.vessel?.cargoId, getDealStage, resetDealStage, handleRedirect]);
 
   return (
     <div className="text-black flex items-start gap-x-1.5 w-auto">
-      <ShipIcon isOnline={isOnline} />
+      <ShipIcon isOnline={data?.isOnline} />
       <div className="flex flex-col">
         <Title
           level="6"
           className={`text-sm font-semibold capitalize ${contrasted ? 'text-white' : 'text-black hover:text-blue'}`}
         >
-          {vessel?.name}
+          {data?.vessel?.name}
         </Title>
-        {subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{subtitle}</p>}
+        {data?.subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{data?.subtitle}</p>}
         {printCargoeModal}
         {!contrasted && (
-          <ChatAdditional data={{ vessel, additional }} isActive={state.setMore} onClick={handleShowMore} />
+          <ChatAdditional
+            isActive={state.setMore}
+            onClick={handleShowMore}
+            data={{ vessel: data?.vessel, additional: data?.additional }}
+          />
         )}
       </div>
     </div>
