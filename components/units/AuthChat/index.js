@@ -19,9 +19,11 @@ import { getListOfChats } from '@/store/entities/chat/actions';
 import {
   messageAlert,
   resetChatFilter,
+  resetUser,
   setChatFilter,
   setCollapsedChat,
   setConversation,
+  setOpenedChat,
 } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 import { useMediaQuery } from '@/utils/hooks';
@@ -60,7 +62,7 @@ const AuthChat = ({ opened, token }) => {
   }, [user?.messages]);
 
   const handleClose = () => {
-    сhatSessionService.onToggle(false);
+    dispatch(setOpenedChat(!opened));
     dispatch(resetChatFilter());
   };
 
@@ -118,9 +120,11 @@ const AuthChat = ({ opened, token }) => {
 
   const handleCloseConversation = async () => {
     await сhatSessionService.stop();
+    dispatch(resetUser());
   };
 
   const handleCollapseConversation = () => {
+    dispatch(setOpenedChat(true));
     dispatch(setConversation(false));
     dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
   };

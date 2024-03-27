@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatButton } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
-import { removeCollapsedChat, setConversation, setOpenedChat, setUser } from '@/store/entities/chat/slice';
+import { removeCollapsedChat, resetUser, setConversation, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 
 const CollapsedChats = () => {
@@ -12,20 +12,24 @@ const CollapsedChats = () => {
   const { chats } = useSelector(getAuthChatSelector);
 
   const onActivate = (user) => {
-    dispatch(setConversation(true));
-    dispatch(setOpenedChat(true));
     dispatch(setUser(user));
+    dispatch(setOpenedChat(true));
+    dispatch(setConversation(true));
   };
 
-  const onRemove = async ({ id }) => {
+  const onRemove = async ({ id, key }) => {
     await сhatSessionService.stop();
     dispatch(removeCollapsedChat(id));
+
+    if (key !== 'support') {
+      dispatch(resetUser());
+    }
   };
 
-  const handleStartConversation = ({ id, key }) => {
-    const user = chats[key]?.find((session) => session?.chatId === id);
+  const handleStartConversation = ({ id }) => {
+    const user = chats.collapsed?.find((session) => session?.chatId === id);
 
-    onRemove({ id: user?.chatId }).then(() => onActivate(user));
+    onRemove({ id: user?.chatId, key: user?.key }).then(() => onActivate(user));
   };
 
   const handleCloseConversation = (e, id) => {
@@ -42,7 +46,7 @@ const CollapsedChats = () => {
         name={session?.vessel?.name}
         isOnline={session?.isOnline}
         isTyping={session?.isTyping}
-        onClick={() => handleStartConversation({ id: session?.chatId, key: session?.key })}
+        onClick={() => handleStartConversation({ id: session?.chatId })}
         onClose={(e) => handleCloseConversation(e, session?.chatId)}
         className="h-auto"
         withCancel
