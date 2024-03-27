@@ -26,12 +26,7 @@ const Chat = ({ token }) => {
   const memoizedChatButton = useMemo(() => {
     return (
       <>
-        <ChatButton
-          variant="default"
-          onClick={handleOpen}
-          counter={messageCount}
-          className="fixed right-3 bottom-3 z-20"
-        />
+        <ChatButton variant="default" onClick={handleOpen} counter={messageCount} className="fixed right-3 bottom-3" />
         {token ? <AuthChat opened={opened} token={token} /> : <AnonChat opened={opened} />}
       </>
     );

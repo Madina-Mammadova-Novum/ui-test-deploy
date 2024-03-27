@@ -33,9 +33,10 @@ function chatSessionDataAdapter({ data }) {
 function chatDealDataAdapter({ data }) {
   if (!data) return {};
 
-  const { searchedCargo, products, vessel } = data;
+  const { searchedCargo, products, vessel, id } = data;
 
   return {
+    dealId: id,
     vessel: {
       name: vessel?.details?.name?.toLowerCase(),
       imo: vessel?.imo?.toLowerCase(),

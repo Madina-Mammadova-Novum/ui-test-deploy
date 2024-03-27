@@ -27,7 +27,7 @@ export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispa
 
   return {
     active: listOfChatsDataAdapter({ data: activeChats }),
-    archived: listOfChatsDataAdapter({ data: archivedChats }),
+    archieved: listOfChatsDataAdapter({ data: archivedChats }),
     support: helpCenterDataAdapter({ data: support }),
     updating: false,
     status: status || statusSupp,

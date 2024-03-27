@@ -275,7 +275,7 @@ export function requestUpdateVesselAdapter({ data }) {
     hullType: hullType.value,
     loa,
     beam,
-    countryId: country.value,
+    countryId: country?.value || null,
     summerDwt: summerDWT,
     summerDraft,
     ballastDwt: normalBallastDWT,

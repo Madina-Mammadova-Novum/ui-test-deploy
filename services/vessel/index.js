@@ -12,7 +12,7 @@ import { generateMessageByActionType } from '@/utils/helpers';
 
 export async function searchVessels({ data }) {
   const body = requestSearchVesselAdapter({ data });
-  const response = await postData(`vessels/search?sortBy=${data?.sortBy || 'asc'}&rangeBy=${data?.rangeBy}`, body);
+  const response = await postData(`vessels/search?sortBy=${data?.sortBy}&rangeBy=${data?.rangeBy}`, body);
 
   return {
     ...response,
@@ -46,6 +46,7 @@ export async function addVesselManually({ data }) {
 export async function requestUpdateVessel({ data }) {
   const body = requestUpdateVesselAdapter({ data });
   const response = await putData(`vessels/update`, body);
+
   if (!response.error) {
     response.message = 'Your have successfully applied to change information';
     response.messageDescription = 'Please wait for an answer within 24 hours';

@@ -2,7 +2,8 @@ import { countryAdapter } from '@/adapters/country';
 import { terminalsAdapter } from '@/adapters/terminal';
 
 export const portAdapter = ({ data }) => {
-  if (data === null || data === undefined) return [];
+  if (!data) return [];
+
   const {
     id,
     name,
@@ -53,5 +54,5 @@ export const portsAdapter = ({ data }) => {
 export const portOptionsAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((port) => ({ value: port?.id, label: port.label }));
+  return data.map((port) => ({ value: port?.id, label: port.label, countryFlag: port?.countryFlag }));
 };

@@ -25,7 +25,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Charterer Information</Title>
+          <Title level="3">Charterer Information</Title>
           <FieldsetContent className="mt-2.5">
             {chartererInformation?.map(({ title, text }) => (
               <TextRow key={title} title={title} inlineVariant>
