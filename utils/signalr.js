@@ -143,18 +143,14 @@ export class ChatNotificationController extends SignalRController {
     await this.setupConnection({ path: `${this.host}/chatlist`, token });
 
     this.connection.on('ChatIsOnline', (chat) => {
-      if (chat?.deactivated) return;
       this.store.dispatch(onlineStatus(chat));
     });
 
     this.connection.on('ChatIsOffline', (chat) => {
-      if (chat?.deactivated) return;
       this.store.dispatch(offlineStatus(chat));
     });
 
     this.connection.on('ReceiveMessage', async (chat) => {
-      if (chat?.deactivated) return;
-
       if (this.isOpened) {
         this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: 0 }));
       } else {
@@ -163,14 +159,14 @@ export class ChatNotificationController extends SignalRController {
     });
 
     this.connection.on('SomeoneIsTyping', (chat) => {
-      if (chat?.deactivated) return;
+      if (chat?.id) {
+        this.isTyping({ chat, typing: true });
+        clearTimeout(this.typingTimeout);
 
-      this.typingTimeout = setTimeout(() => {
-        this.isTyping({ chat, typing: false });
-      }, 1200);
-
-      this.isTyping({ chat, typing: true });
-      clearTimeout(this.typingTimeout);
+        this.typingTimeout = setTimeout(() => {
+          this.isTyping({ chat, typing: false });
+        }, 1000);
+      }
     });
   }
 
