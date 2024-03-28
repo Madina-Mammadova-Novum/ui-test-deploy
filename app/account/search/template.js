@@ -14,8 +14,8 @@ export default function SearchLayout({ children }) {
   useEffect(() => {
     const data = {
       ...searchParams,
-      sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
-      rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
+      rangeBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
+      sortBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
     };
 
     dispatch(fetchVesselsBySearch(data));

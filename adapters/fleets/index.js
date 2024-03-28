@@ -229,8 +229,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
     status: requestStatus,
+    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';

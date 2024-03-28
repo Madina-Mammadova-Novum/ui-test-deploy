@@ -6,17 +6,21 @@ import { ChatSupportPropTypes } from '@/lib/types';
 
 import SupportSVG from '@/assets/images/support.svg';
 import { Badge, ChatHelpLoader, Title } from '@/elements';
-import { removeCollapsedChat, setConversation, setUser } from '@/store/entities/chat/slice';
+import { сhatSessionService } from '@/services/signalR';
+import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 
 const ChatSupport = ({ title, description, loading }) => {
   const dispatch = useDispatch();
   const { support } = useSelector(getAuthChatSelector).chats;
 
-  const handleOpenConversation = (e) => {
+  const handleOpenConversation = async (e) => {
     e.stopPropagation();
 
+    dispatch(resetUser());
     dispatch(removeCollapsedChat(support[0]?.chatId));
+    await сhatSessionService.stop();
+
     dispatch(setConversation(true));
     dispatch(setUser(support[0]));
   };

@@ -136,16 +136,16 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const errorBanner = useMemo(() => {
     return (
-      offer?.error && (
+      offer?.message && (
         <div className={`${!offer.valid ? 'bg-red-light' : 'bg-orange-300'} rounded-base py-2.5 pb-3 px-5`}>
           <div className="text-xsm mt-1.5">
             <span className="font-bold">{!offer?.valid ? 'Declined: ' : 'Warning: '}</span>
-            <span className="ml-1.5">{offer?.error}</span>
+            <span className="ml-1.5">{offer?.message}</span>
           </div>
         </div>
       )
     );
-  }, [offer?.error, offer?.valid, tankerId]);
+  }, [offer?.message, offer?.valid, tankerId]);
 
   return (
     <div className="w-[610px]">
