@@ -8,10 +8,8 @@ import {
   messageAlert,
   offlineStatus,
   onlineStatus,
-  resetUser,
   setConversation,
   setLoadConversation,
-  setOpenedChat,
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
@@ -105,8 +103,8 @@ export class ChatSessionController extends SignalRController {
   }
 
   onToggle(opened) {
-    this.store.dispatch(setOpenedChat(opened));
     this.isOpened = opened;
+    this.store.dispatch(setConversation(this.isOpened));
   }
 
   sendMessage({ message }) {
@@ -128,7 +126,7 @@ export class ChatSessionController extends SignalRController {
   async stop() {
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
-    this.store.dispatch(resetUser());
+
     if (this.connection) {
       await this.connection.stop();
     }
@@ -141,22 +139,18 @@ export class ChatNotificationController extends SignalRController {
     this.isOpened = false;
   }
 
-  async init({ token, key }) {
+  async init({ token }) {
     await this.setupConnection({ path: `${this.host}/chatlist`, token });
 
     this.connection.on('ChatIsOnline', (chat) => {
-      if (chat?.archieved || chat?.deactivated || key === 'archieved') return;
       this.store.dispatch(onlineStatus(chat));
     });
 
     this.connection.on('ChatIsOffline', (chat) => {
-      if (chat?.archieved || chat?.deactivated || key === 'archieved') return;
       this.store.dispatch(offlineStatus(chat));
     });
 
     this.connection.on('ReceiveMessage', async (chat) => {
-      if (chat?.archieved || chat?.deactivated || key === 'archieved') return;
-
       if (this.isOpened) {
         this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: 0 }));
       } else {
@@ -165,15 +159,13 @@ export class ChatNotificationController extends SignalRController {
     });
 
     this.connection.on('SomeoneIsTyping', (chat) => {
-      if (chat?.archieved || chat?.deactivated) return;
-
-      if (key === 'archieved') {
-        this.typingTimeout = setTimeout(() => {
-          this.isTyping({ chat, typing: false });
-        }, 1200);
-
+      if (chat?.id) {
         this.isTyping({ chat, typing: true });
         clearTimeout(this.typingTimeout);
+
+        this.typingTimeout = setTimeout(() => {
+          this.isTyping({ chat, typing: false });
+        }, 1000);
       }
     });
   }

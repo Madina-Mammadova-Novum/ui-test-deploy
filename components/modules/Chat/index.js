@@ -1,19 +1,20 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatPropTypes } from '@/lib/types';
 
 import { ChatButton } from '@/elements';
-import { сhatSessionService } from '@/services/signalR';
+import { setOpenedChat } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthChatSelector } from '@/store/selectors';
 import { AnonChat, AuthChat } from '@/units';
 
 const Chat = ({ token }) => {
+  const dispatch = useDispatch();
   const { opened, messageCount, isActive } = useSelector(token ? getAuthChatSelector : getAnonChatSelector);
 
-  const handleOpen = () => сhatSessionService.onToggle(!opened);
+  const handleOpen = () => dispatch(setOpenedChat(!opened));
 
   useEffect(() => {
     if (opened || isActive) {

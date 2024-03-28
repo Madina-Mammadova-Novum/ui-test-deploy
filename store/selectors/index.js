@@ -221,6 +221,7 @@ export const getOfferSelector = createDraftSafeSelector(offerSelector, (state) =
     validating: state.validating,
     valid: state.valid,
     error: state.error,
+    message: state.data.message,
     formState: {
       cargoType: state?.cargoType,
       ...state?.products,

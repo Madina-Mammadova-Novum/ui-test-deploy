@@ -128,7 +128,7 @@ const chatSlice = createSlice({
     },
     resetChat: (state) => {
       state.data = initialState.data;
-      state.opened = initialState.opened;
+      // state.opened = initialState.opened;
       state.isActiveSession = initialState.isActiveSession;
       state.filterParams = initialState.filterParams;
     },
@@ -170,10 +170,32 @@ const chatSlice = createSlice({
 
         return user;
       });
+
+      state.data.archieved = state.data.archieved.map((user) => {
+        if (user.chatId === payload.id) {
+          return {
+            ...user,
+            isOnline: true,
+          };
+        }
+
+        return user;
+      });
     },
 
     offlineStatus: (state, { payload }) => {
       state.data.active = state.data.active.map((user) => {
+        if (user.chatId === payload.id) {
+          return {
+            ...user,
+            isOnline: false,
+          };
+        }
+
+        return user;
+      });
+
+      state.data.archieved = state.data.archieved.map((user) => {
         if (user.chatId === payload.id) {
           return {
             ...user,
@@ -188,6 +210,16 @@ const chatSlice = createSlice({
       const activeSessionId = state.data.user.data?.chatId;
 
       const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
+          return {
+            ...user,
+            messageCount: payload.messageCount,
+          };
+        }
+        return user;
+      });
+
+      const updatedArchievedState = state.data.archieved.map((user) => {
         if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
@@ -221,6 +253,7 @@ const chatSlice = createSlice({
       }
 
       state.data.active = updatedActiveState;
+      state.data.archieved = updatedArchievedState;
       state.data.collapsed = updatedCollapsedState;
     },
   },

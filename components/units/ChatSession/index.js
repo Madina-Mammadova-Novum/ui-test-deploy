@@ -8,7 +8,7 @@ import { ChatSessionPropTypes } from '@/lib/types';
 import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
-import { removeCollapsedChat, setConversation, setUser } from '@/store/entities/chat/slice';
+import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 import { ChatConversationCard, ChatSubModal } from '@/units';
 
@@ -46,6 +46,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const handleOpenConversation = async () => {
     if (chats?.user?.data?.chatId === data.chatId) return;
 
+    dispatch(resetUser());
     dispatch(removeCollapsedChat(data?.chatId));
     await сhatSessionService.stop();
 

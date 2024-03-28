@@ -8,6 +8,7 @@ const initialState = {
   valid: false,
   error: null,
   data: {
+    message: null,
     ranges: {},
     paymentTerms: [],
     demurragePaymentTerms: [],
@@ -58,6 +59,7 @@ const offerSlice = createSlice({
       state.validating = false;
       state.valid = payload?.canProceed;
       state.data.ranges = payload?.ranges;
+      state.data.message = payload?.message;
       state.error = null;
     });
     builder.addCase(fetchOfferValidation.rejected, (state, action) => {

@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect } from 'react';
+
 import { addDays } from 'date-fns';
 
 import { DateDetailsFormPropTypes } from '@/lib/types';
@@ -8,16 +12,27 @@ import { useHookForm } from '@/utils/hooks';
 const DateDetailsForm = ({ portName = '' }) => {
   const {
     setValue,
+    watch,
     clearErrors,
     formState: { errors },
   } = useHookForm();
 
   const handleDateChange = (value) => {
     clearErrors('date');
+    setValue('disabled', false);
     setValue('date', value);
   };
 
+  const prefilledDate = watch('date');
   const nextDay = addDays(new Date(), 1);
+
+  useEffect(() => {
+    setValue('disabled', true);
+
+    if (prefilledDate) {
+      setValue('date', prefilledDate);
+    }
+  }, []);
 
   return (
     <>
