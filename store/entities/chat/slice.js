@@ -15,7 +15,7 @@ const initialState = {
   isActiveSession: false,
   data: {
     active: [],
-    archived: [],
+    archieved: [],
     searched: [],
     collapsed: [],
     support: [],
@@ -128,15 +128,17 @@ const chatSlice = createSlice({
     },
     resetChat: (state) => {
       state.data = initialState.data;
-      state.opened = initialState.opened;
+      // state.opened = initialState.opened;
+      state.isActiveSession = initialState.isActiveSession;
       state.filterParams = initialState.filterParams;
     },
     resetChatFilter: (state) => {
       state.filterParams = initialState.filterParams;
     },
     resetUser: (state) => {
-      state.data.user.data = {};
-      state.data.user.messages = [];
+      state.data.user.data = initialState.data.user.data;
+      state.data.user.messages = initialState.data.user.messages;
+      state.data.anonymous = initialState.data.anonymous;
     },
     typingStatus: (state, { payload }) => {
       const updatedCollapsedState = state.data.collapsed.map((user) => {
@@ -168,9 +170,32 @@ const chatSlice = createSlice({
 
         return user;
       });
+
+      state.data.archieved = state.data.archieved.map((user) => {
+        if (user.chatId === payload.id) {
+          return {
+            ...user,
+            isOnline: true,
+          };
+        }
+
+        return user;
+      });
     },
+
     offlineStatus: (state, { payload }) => {
       state.data.active = state.data.active.map((user) => {
+        if (user.chatId === payload.id) {
+          return {
+            ...user,
+            isOnline: false,
+          };
+        }
+
+        return user;
+      });
+
+      state.data.archieved = state.data.archieved.map((user) => {
         if (user.chatId === payload.id) {
           return {
             ...user,
@@ -185,6 +210,16 @@ const chatSlice = createSlice({
       const activeSessionId = state.data.user.data?.chatId;
 
       const updatedActiveState = state.data.active.map((user) => {
+        if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
+          return {
+            ...user,
+            messageCount: payload.messageCount,
+          };
+        }
+        return user;
+      });
+
+      const updatedArchievedState = state.data.archieved.map((user) => {
         if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
@@ -218,6 +253,7 @@ const chatSlice = createSlice({
       }
 
       state.data.active = updatedActiveState;
+      state.data.archieved = updatedArchievedState;
       state.data.collapsed = updatedCollapsedState;
     },
   },
@@ -231,7 +267,7 @@ const chatSlice = createSlice({
       state.status = payload.status;
       state.updating = payload.updating;
       state.data.active = payload.active;
-      state.data.archived = payload.archived;
+      state.data.archieved = payload.archieved;
       state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {

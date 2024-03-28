@@ -4,7 +4,6 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FixtureExpandedContent from './FixtureExpandedContent';
-import FixtureExpandedFooter from './FixtureExpandedFooter';
 
 import { UrlPropTypes } from '@/lib/types';
 
@@ -24,10 +23,6 @@ const FixtureDetails = ({ searchedParams }) => {
 
   useEffect(() => {
     dispatch(setToggle(true));
-
-    return () => {
-      dispatch(setToggle(false));
-    };
   }, []);
 
   const printExpandableRow = (rowData) => {
@@ -35,10 +30,9 @@ const FixtureDetails = ({ searchedParams }) => {
 
     return (
       <ExpandableRow
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr" />}
-        footer={<FixtureExpandedFooter drafted={!rowData?.isCountdownActive} />}
         expand={toggle}
         className="px-5"
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr" />}
       >
         <FixtureExpandedContent
           offerId={rowData?.id}

@@ -20,7 +20,7 @@ export function userRoleAdapter({ data }) {
 export function listOfImosAdapter({ data }) {
   if (!data) return [];
 
-  return data.map(({ imo }) => imo);
+  return data.filter(({ imo }) => imo).map(({ imo }) => imo);
 }
 
 export function userDetailsAdapter({ data, role }) {
@@ -331,6 +331,7 @@ export function deleteCompanyAdapter({ data }) {
 
 export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
+
   const {
     imos,
     numberOfTankers,
@@ -347,8 +348,8 @@ export function ownerSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email: email.replace(/\.com$/, ''),
     password,
+    email,
     phone: `+${primaryPhone}`,
     secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
     companyName,
@@ -386,7 +387,7 @@ export function chartererSignUpAdapter({ data }) {
   return {
     ownerName: firstName,
     ownerSurname: lastName,
-    email: email.replace(/\.com$/, ''),
+    email,
     password,
     phone: `+${primaryPhone}`,
     secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',

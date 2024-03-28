@@ -52,6 +52,6 @@ export const notificationParamsAdapter = ({ data }) => {
     take: data?.take ?? 20,
     query: data.searchValue,
     isOpened: data?.watched ?? false,
-    origin: data.sortedValue === 'all' ? null : data.sortedValue,
+    origin: !data.sortedValue?.length ? null : data.sortedValue,
   };
 };

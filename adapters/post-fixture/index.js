@@ -9,31 +9,29 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
 
   const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
 
-  const { code: cargoId, cargoType, totalQuantity, loadTerminal } = searchedCargo;
-
   return [
     {
       label: 'Cargo id',
-      text: cargoId,
+      text: searchedCargo?.code,
     },
     {
       label: 'Tanker name',
       text: vessel?.details?.name,
-      textStyles: 'absolute',
     },
     {
       label: 'Cargo type',
-      text: cargoType?.name,
+      text: searchedCargo?.cargoType?.name,
     },
     {
       label: 'Quantity',
-      text: `${totalQuantity} tons`,
+      text: searchedCargo?.totalQuantity && `${searchedCargo.totalQuantity} tons`,
     },
     {
       label: 'Load port',
-      text: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
-      textStyles: 'absolute pl-5',
-      countryCode: getLocode(loadTerminal?.port?.locode),
+      text:
+        searchedCargo?.loadTerminal?.port &&
+        `${searchedCargo?.loadTerminal?.port?.name}, ${searchedCargo?.loadTerminal?.port?.locode}`,
+      countryCode: searchedCargo?.loadTerminal && getLocode(searchedCargo?.loadTerminal?.port?.locode),
     },
     {
       label: 'Laycan start',
@@ -133,7 +131,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
         {
           title: 'Tanker name',
           text: tankerName,
-          countryCode: flagOfRegistry?.id,
+          countryCode: flagOfRegistry?.codeISO2 || flagOfRegistry?.codeISO3,
         },
         {
           title: 'Itinerary',
@@ -194,7 +192,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
           {
             title: 'Load port',
             text: loadTerminal?.port && `${loadTerminal?.port?.name}, ${loadTerminal?.port?.locode}`,
-            countryCode: getLocode(loadTerminal?.port?.locode),
+            countryCode: loadTerminal?.port && getLocode(loadTerminal?.port?.locode),
           },
           {
             title: 'Load terminal',
@@ -205,7 +203,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
           {
             title: 'Discharge port',
             text: dischargeTerminal?.port && `${dischargeTerminal?.port?.name}, ${dischargeTerminal?.port?.locode}`,
-            countryCode: getLocode(dischargeTerminal?.port?.locode),
+            countryCode: dischargeTerminal?.port && getLocode(dischargeTerminal?.port?.locode),
           },
           {
             title: 'Discharge terminal',

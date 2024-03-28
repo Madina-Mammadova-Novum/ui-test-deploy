@@ -137,7 +137,6 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
     {
       label: 'Fleet name',
       text: name ?? '',
-      textStyles: 'absolute top-px lg:top-5',
       disableTooltip: true,
     },
     {
@@ -230,8 +229,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
     status: requestStatus,
+    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';

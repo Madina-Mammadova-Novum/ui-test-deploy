@@ -19,11 +19,10 @@ import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 const EditDateForm = ({ state, title, closeModal }) => {
   const dispatch = useDispatch();
 
-  const schema = yup.object().shape({
-    ...dateSchema(),
-  });
+  const schema = yup.object().shape({ ...dateSchema() });
 
   const methods = useHookFormParams({ state, schema });
+  const disabled = methods.watch('disabled');
 
   const onSubmit = async ({ date }) => {
     const { error, message } = await updateVesselPortAndDate({ ...state, date });
@@ -49,7 +48,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
         specialStyle
         className="w-[356px]"
         submitAction={onSubmit}
-        submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled: false }}
+        submitButton={{ text: 'Apply changes', variant: 'primary', size: 'large', disabled }}
         onClose={closeModal}
       >
         <Title level="2" className="font-bold capitalize text-black text-lg">

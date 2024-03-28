@@ -28,6 +28,8 @@ export default function FixtureLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
+    useExpand: true,
+    usePagination: true,
     data: { label: 'Offer stage #4', title: 'Fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),

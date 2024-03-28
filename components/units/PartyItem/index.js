@@ -10,6 +10,7 @@ import { Button, Modal, Title } from '@/elements';
 
 const PartyItem = ({ buttonText, modalTitle, body = 'No Content Provided' }) => {
   const [opened, setOpened] = useState(false);
+
   const handleCloseModal = () => setOpened(false);
   const handleOpenModal = () => setOpened(true);
 

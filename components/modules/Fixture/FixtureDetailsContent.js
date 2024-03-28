@@ -25,7 +25,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
     <div className="flex flex-col gap-y-2.5 mb-5">
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Charterer Information</Title>
+          <Title level="3">Charterer Information</Title>
           <FieldsetContent className="mt-2.5">
             {chartererInformation?.map(({ title, text }) => (
               <TextRow key={title} title={title} inlineVariant>
@@ -36,7 +36,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Tanker Information</Title>
+          <Title level="3">Tanker Information</Title>
 
           <FieldsetContent className="mt-2.5">
             {generalInformation?.map(({ title, text, countryCode }) => (
@@ -76,7 +76,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
 
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Cargo Details</Title>
+          <Title level="3">Cargo Details</Title>
 
           <FieldsetContent className="mt-2.5">
             {cargoInformation?.map(({ title, text }) => (
@@ -98,7 +98,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
         </FieldsetWrapper>
 
         <FieldsetWrapper>
-          <Title level={3}>Voyage Details</Title>
+          <Title level="3">Voyage Details</Title>
 
           <FieldsetContent label="Dates" className="mt-2.5">
             {voyageDates?.map(({ title, text }) => (
@@ -123,7 +123,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
       </div>
       <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
-          <Title level={3}>Commercial Offer Terms</Title>
+          <Title level="3">Commercial Offer Terms</Title>
 
           <FieldsetContent className="mt-2.5">
             {generalOfferTerms?.map(({ title, text }) => (

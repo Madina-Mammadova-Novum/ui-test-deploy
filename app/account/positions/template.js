@@ -50,6 +50,7 @@ export default function PositionsLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
+    usePagination: true,
     data: { label: null, title: 'My positions' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),

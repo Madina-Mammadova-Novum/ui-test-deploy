@@ -27,8 +27,8 @@ const NotificationContent = () => {
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
-    const watchedCondtion = searchValue !== '' || sortedValue !== 'all' || take >= readedCounter;
-    const unwatchedCondtion = searchValue !== '' || sortedValue !== 'all' || take >= unreadCounter;
+    const watchedCondtion = searchValue !== '' || sortedValue.length > 0 || take >= readedCounter;
+    const unwatchedCondtion = searchValue !== '' || sortedValue.length > 0 || take >= unreadCounter;
 
     if (trigger && !loading) {
       if (watched && watchedCondtion) return;

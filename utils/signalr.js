@@ -8,10 +8,8 @@ import {
   messageAlert,
   offlineStatus,
   onlineStatus,
-  resetUser,
   setConversation,
   setLoadConversation,
-  setOpenedChat,
   typingStatus,
   updateUserConversation,
 } from '@/store/entities/chat/slice';
@@ -33,10 +31,12 @@ export class SignalRController {
         .build();
 
       await this.connection.start();
-    } catch (err) {
-      this.connection.onclose(async () => {
-        await this.refreshTokenAndConnect({ path });
+
+      this.connection.onclose(() => {
+        this.connection.off();
       });
+    } catch (err) {
+      await this.refreshTokenAndConnect({ path, token });
     }
   }
 
@@ -75,7 +75,7 @@ export class NotificationController extends SignalRController {
   }
 
   async stop() {
-    if (this.connection) {
+    if (this.connection?.state === 'Connected') {
       this.connection.stop();
     }
   }
@@ -103,8 +103,8 @@ export class ChatSessionController extends SignalRController {
   }
 
   onToggle(opened) {
-    this.store.dispatch(setOpenedChat(opened));
     this.isOpened = opened;
+    this.store.dispatch(setConversation(this.isOpened));
   }
 
   sendMessage({ message }) {
@@ -124,11 +124,10 @@ export class ChatSessionController extends SignalRController {
   }
 
   async stop() {
-    this.store.dispatch(resetUser());
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
 
-    if (this.connection?.state === 'Connected') {
+    if (this.connection) {
       await this.connection.stop();
     }
   }
@@ -143,8 +142,13 @@ export class ChatNotificationController extends SignalRController {
   async init({ token }) {
     await this.setupConnection({ path: `${this.host}/chatlist`, token });
 
-    this.connection.on('ChatIsOnline', (chat) => this.store.dispatch(onlineStatus(chat)));
-    this.connection.on('ChatIsOffline', (chat) => this.store.dispatch(offlineStatus(chat)));
+    this.connection.on('ChatIsOnline', (chat) => {
+      this.store.dispatch(onlineStatus(chat));
+    });
+
+    this.connection.on('ChatIsOffline', (chat) => {
+      this.store.dispatch(offlineStatus(chat));
+    });
 
     this.connection.on('ReceiveMessage', async (chat) => {
       if (this.isOpened) {
@@ -155,7 +159,7 @@ export class ChatNotificationController extends SignalRController {
     });
 
     this.connection.on('SomeoneIsTyping', (chat) => {
-      if (chat.id) {
+      if (chat?.id) {
         this.isTyping({ chat, typing: true });
         clearTimeout(this.typingTimeout);
 
@@ -175,7 +179,7 @@ export class ChatNotificationController extends SignalRController {
   }
 
   async stop() {
-    if (this.connection) {
+    if (this.connection?.state === 'Connected') {
       await this.connection.stop();
     }
   }

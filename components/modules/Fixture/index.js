@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import FixtureExpandedContent from './FixtureExpandedContent';
-import FixtureExpandedFooter from './FixtureExpandedFooter';
 
 import {
   fixtureDetailsAdapter,
@@ -23,10 +22,9 @@ const Fixture = () => {
 
     return (
       <ExpandableRow
+        expand={toggle}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr" />}
-        footer={<FixtureExpandedFooter drafted={!rowData?.isCountdownActive} />}
-        expand={toggle}
       >
         <FixtureExpandedContent
           offerId={rowData?.id}

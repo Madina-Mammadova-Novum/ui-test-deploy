@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ChatConversationBody from './ChatConversationBody';
@@ -25,20 +25,26 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const { chats } = useSelector(getAuthChatSelector);
   const { data, updating, status } = chats?.user;
 
-  useEffect(() => {
+  const initChatActions = useCallback(async () => {
     if (data?.chatId) {
       сhatSessionService.onToggle(isOpened);
     }
 
     if (isOpened) {
-      dispatch(getChatHistory({ data: { id: data?.chatId } }));
+      if (data?.key !== 'support') {
+        dispatch(getChatHistory({ data: { id: data?.chatId } }));
+      }
 
       if (status === 200 && data?.chatId) {
-        сhatSessionService.init({ chatId: data.chatId, token });
+        await сhatSessionService.init({ chatId: data.chatId, token });
       }
     } else {
-      сhatSessionService.stop();
+      await сhatSessionService.stop();
     }
+  }, [data?.chatId, isOpened, data?.key]);
+
+  useEffect(() => {
+    initChatActions();
   }, [isOpened, data?.chatId, status]);
 
   useEffect(() => {
@@ -78,24 +84,22 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
         <div className="flex flex-col p-2.5">
           <ChatConversationBody />
-          {!data?.archieved && (
-            <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
-              <Input
-                type="text"
-                value={message}
-                onChange={handleMessage}
-                onKeyPress={handleEnter}
-                placeholder="Message ..."
-                customStyles="!border-gray-darker !w-full"
-              />
-              <Button
-                type="submit"
-                disabled={disabled}
-                customStyles="border border-gray-darker !p-2.5"
-                buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
-              />
-            </form>
-          )}
+          <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              value={message}
+              onChange={handleMessage}
+              onKeyPress={handleEnter}
+              placeholder="Message ..."
+              customStyles="!border-gray-darker !w-full"
+            />
+            <Button
+              type="submit"
+              disabled={disabled}
+              customStyles="border border-gray-darker !p-2.5"
+              buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
+            />
+          </form>
         </div>
       </div>
     )

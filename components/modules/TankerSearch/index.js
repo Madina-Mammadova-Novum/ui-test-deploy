@@ -1,87 +1,92 @@
 'use client';
 
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
-
-import { Loader, Title } from '@/elements';
+import { Dropdown, Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
-import { searchVessels } from '@/services/vessel';
-import { setSearchData } from '@/store/entities/search/slice';
+import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
+import { getSearchSelector } from '@/store/selectors';
 import { SearchForm } from '@/units';
-import { options } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
-const TankerSearch = ({ title }) => {
-  const [tankerStore, setTankerStore] = useState({
-    params: options(['Ballast leg', 'Arrival']),
-    directions: options(['Ascending', 'Descending']),
-    currentDirection: '',
-    currentParam: '',
-    request: false,
-    loading: false,
-    searchResult: [],
-  });
-
+const TankerSearch = () => {
   const dispatch = useDispatch();
 
-  /* Change handler by key-value for userStore */
-  const handleChangeState = (key, value) => {
-    setTankerStore((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
+  const { data, loading, error, sorting, request } = useSelector(getSearchSelector);
+  const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
+
+  const handleReset = () => dispatch(onReset());
+
+  const handleRequest = (value) => dispatch(setRequest(value));
+
+  const handleSearch = (formData) => dispatch(setSearchParams(formData));
+
+  const handleDirection = (option) => {
+    dispatch(setSortingParams({ key: 'currentDirection', data: option }));
   };
 
-  const handleSearch = async (formData) => {
-    handleChangeState('loading', true);
-    const { error, data } = await searchVessels({ data: formData });
-    handleChangeState('loading', false);
+  const handleRange = (option) => {
+    dispatch(setSortingParams({ key: 'currentRange', data: option }));
+  };
 
-    if (data) {
-      const filteredProducts = formData?.products?.filter((product) => product);
-
-      dispatch(setSearchData({ ...formData, products: filteredProducts }));
-      handleChangeState('searchResult', data);
-      handleChangeState('request', true);
-    }
-
+  useEffect(() => {
     if (error) {
-      handleChangeState('request', false);
+      handleRequest(false);
       errorToast(error.title, error.message);
     }
-  };
 
-  const { request, loading, params, directions, searchResult } = tankerStore;
+    if (data) {
+      handleRequest(true);
+    }
+  }, [error, data]);
+
+  useEffect(() => {
+    return () => {
+      handleReset();
+    };
+  }, []);
+
+  const printResult = useMemo(() => {
+    if (loading) {
+      return (
+        <p className="inline-flex mt-10 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
+          Searching... <Loader className="h-4 w-4" />
+        </p>
+      );
+    }
+
+    return <TankerSearchResults data={data} request={request} />;
+  }, [loading, data, request]);
 
   return (
     <>
-      {title && (
-        <Title level="1" className="py-5">
-          {title}
-        </Title>
+      <SearchForm onSubmit={handleSearch} onReset={handleReset} />
+      {request && (
+        <div className="mt-8 flex">
+          <Title level="2" className="mr-auto">
+            Search results
+          </Title>
+
+          <Dropdown
+            label="Sort tankers by:"
+            options={sorting?.directions}
+            value={sorting?.currentDirection || sorting?.directions[0]}
+            onChange={handleDirection}
+            customStyles={dropdownStyles}
+          />
+
+          <Dropdown
+            options={sorting?.range}
+            value={sorting?.currentRange || sorting?.range[0]}
+            onChange={handleRange}
+            customStyles={dropdownStyles}
+          />
+        </div>
       )}
-      <SearchForm onSubmit={handleSearch} />
-      {!loading ? (
-        <TankerSearchResults
-          data={searchResult}
-          request={request}
-          params={params}
-          directions={directions}
-          onChange={handleChangeState}
-        />
-      ) : (
-        <p className="inline-flex pt-5 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
-          Searching <Loader className="h-4 w-4" />
-        </p>
-      )}
+      {printResult}
     </>
   );
-};
-
-TankerSearch.propTypes = {
-  title: PropTypes.string,
 };
 
 export default TankerSearch;

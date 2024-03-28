@@ -227,11 +227,11 @@ const AnonChat = ({ opened }) => {
       case 'email':
         return (
           <div className="flex w-full relative items-end gap-x-2">
-            <Input onChange={handleMessage} helperText="Non public email only." {...props} />
+            <Input onChange={handleMessage} {...props} />
             <Button
-              disabled={checkEmailPrefix(message)}
+              disabled={!checkEmailPrefix(message)}
               onClick={() => handleBotMessage({ key, answer: message })}
-              customStyles="border border-gray-darker !p-2.5 relative bottom-[18px]"
+              customStyles="border border-gray-darker !p-2.5 relative"
               buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
             />
           </div>

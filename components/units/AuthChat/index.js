@@ -19,9 +19,11 @@ import { getListOfChats } from '@/store/entities/chat/actions';
 import {
   messageAlert,
   resetChatFilter,
+  resetUser,
   setChatFilter,
   setCollapsedChat,
   setConversation,
+  setOpenedChat,
 } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 import { useMediaQuery } from '@/utils/hooks';
@@ -41,11 +43,11 @@ const AuthChat = ({ opened, token }) => {
     isActive,
     totalActive,
     totalArchived,
-    chats: { active, archived, searched, user },
+    chats: { active, archieved, searched, user },
   } = useSelector(getAuthChatSelector);
 
   const getChatNotifications = async () => {
-    await chatNotificationService.init({ token });
+    await chatNotificationService.init({ token, key: user?.data?.key });
   };
 
   const markMessagesAsRead = useCallback(async () => {
@@ -54,13 +56,13 @@ const AuthChat = ({ opened, token }) => {
     if (messageIds.length > 0) {
       for (const id of messageIds) {
         // eslint-disable-next-line no-await-in-loop
-        await сhatSessionService.readMessage({ id });
+        сhatSessionService.readMessage({ id });
       }
     }
   }, [user?.messages]);
 
   const handleClose = () => {
-    сhatSessionService.onToggle(false);
+    dispatch(setOpenedChat(!opened));
     dispatch(resetChatFilter());
   };
 
@@ -68,8 +70,8 @@ const AuthChat = ({ opened, token }) => {
 
   useEffect(() => {
     if (token) {
-      getChatNotifications();
       dispatch(getListOfChats());
+      getChatNotifications();
     }
   }, [token]);
 
@@ -88,9 +90,9 @@ const AuthChat = ({ opened, token }) => {
     } else if (tab === 'active') {
       setDataByTab(active);
     } else {
-      setDataByTab(archived);
+      setDataByTab(archieved);
     }
-  }, [tab, searched, search, active, archived]);
+  }, [tab, searched, search, active, archieved]);
 
   useEffect(() => {
     if (mdScreen && isActive) {
@@ -99,7 +101,7 @@ const AuthChat = ({ opened, token }) => {
   }, [mdScreen, isActive]);
 
   const printChatRooms = useMemo(() => {
-    return <ChatList loading={loading} tab={tab} data={dataByTab.slice(0, limit)} />;
+    return <ChatList loading={loading} tab={tab} data={dataByTab?.slice(0, limit)} />;
   }, [dataByTab, tab, loading, limit]);
 
   const printLoadMore = useMemo(() => {
@@ -113,14 +115,16 @@ const AuthChat = ({ opened, token }) => {
         </div>
       );
     }
-    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab.length <= limit || loading} />;
+    return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab?.length <= limit || loading} />;
   }, [updating, tab, dataByTab, limit, handleMore]);
 
   const handleCloseConversation = async () => {
     await сhatSessionService.stop();
+    dispatch(resetUser());
   };
 
   const handleCollapseConversation = () => {
+    dispatch(setOpenedChat(true));
     dispatch(setConversation(false));
     dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import parse from 'html-react-parser';
@@ -11,46 +11,47 @@ import { NotificationCardBodyPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
 import { getCurrnetDealStage, readNotification } from '@/store/entities/notifications/actions';
+import { resetDealData, resetParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
-import { getCookieFromBrowser, getIdFromUrl, notificationPathGenerator } from '@/utils/helpers';
+import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
 
-const NotificationCardBody = ({ message, url, urlId }) => {
+const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const [prevId, setPrevId] = useState(null);
 
   const role = getCookieFromBrowser('session-user-role');
   const { deal, filterParams } = useSelector(getNotificationsDataSelector);
 
-  const isDealPath = useMemo(() => {
-    return url?.startsWith('/deals');
-  }, [url]);
-
+  const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
 
   const getDealStage = useCallback(() => {
     if (isDealPath) {
       const id = getIdFromUrl(url);
-      if (id !== prevId) {
-        dispatch(getCurrnetDealStage({ id, role }));
-        setPrevId(id);
-      }
+      dispatch(getCurrnetDealStage({ id, role }));
     }
-  }, [url, role, prevId, isDealPath]);
+  }, [isDealPath, url, getIdFromUrl, dispatch, role]);
 
-  const handleRedirect = useCallback(async () => {
+  const resetDealStage = useCallback(() => {
+    dispatch(resetDealData());
+  }, [dispatch]);
+
+  const handleRedirect = useCallback(() => {
+    setDisabled(urlId);
+
     if (filterParams?.activeTab === 'unread') {
       dispatch(readNotification({ id: urlId }));
     }
 
     if (isDealPath) {
-      const route = notificationPathGenerator({ data: deal, role });
-      router.push(route);
+      if (deal?.route) {
+        router.push(deal?.route);
+      }
     } else {
       router.push(url);
     }
-  }, [notificationPathGenerator, url, role, deal, isDealPath]);
+    dispatch(resetParams());
+  }, [urlId, setDisabled, filterParams, isDealPath, deal?.route, url, dispatch]);
 
   return (
     <div className="flex flex-col items-start">
@@ -58,8 +59,10 @@ const NotificationCardBody = ({ message, url, urlId }) => {
       <Button
         onClick={handleRedirect}
         onMouseEnter={getDealStage}
+        onMouseLeave={resetDealStage}
         customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline "
         buttonProps={{ size: 'small', variant: 'primary', text: 'See details' }}
+        disabled={disabled === urlId}
       />
     </div>
   );

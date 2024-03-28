@@ -10,7 +10,6 @@ import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import { ROUTES } from '@/lib';
 import {
-  captchaSchema,
   companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
@@ -29,21 +28,20 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { resetForm } from '@/utils/helpers';
+import { getBrowser, getFieldFromKey, resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
-  const [sameAddress, setSameAddress] = useState(false);
   const [captcha, setCaptcha] = useState('');
+  const [sameAddress, setSameAddress] = useState(false);
 
   const schema = yup.object().shape({
+    ...companyDetailsSchema(),
     ...personalDetailsSchema(),
     ...passwordValidationSchema(),
-    ...companyDetailsSchema(),
     ...tankerSlotsDetailsSchema(),
-    ...companyAddressesSchema(sameAddress),
     ...termsAndConditionsSchema(),
-    ...captchaSchema(),
+    ...companyAddressesSchema(sameAddress),
   });
 
   const methods = useHookFormParams({ schema });
@@ -62,9 +60,28 @@ const OwnerRegistrationForm = ({ countries }) => {
     if (!error) {
       resetForm(methods, '');
       Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
-    }
+    } else {
+      const errorKeys = Object.keys(error?.errors || {});
+      const browser = getBrowser(window.navigator.userAgent);
 
-    errorToast(error?.title, error?.message);
+      if (browser !== 'chrome') {
+        window.scroll({
+          behavior: 'instant',
+          top: 0,
+          left: 0,
+        });
+      }
+
+      errorKeys?.forEach((key) => {
+        if (error?.errors[key]?.length > 0) {
+          methods.setError(getFieldFromKey(key), {
+            message: error?.errors[key][0],
+          });
+        }
+      });
+
+      errorToast('Bad request', error?.title);
+    }
   };
 
   return (
@@ -109,7 +126,7 @@ const OwnerRegistrationForm = ({ countries }) => {
 };
 
 OwnerRegistrationForm.propTypes = {
-  countries: PropTypes.arrayOf(PropTypes.shape()),
+  countries: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default OwnerRegistrationForm;

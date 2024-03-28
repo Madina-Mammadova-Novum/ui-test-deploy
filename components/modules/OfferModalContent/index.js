@@ -46,10 +46,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   });
 
   const offer = useSelector(getOfferSelector);
-  const search = useSelector(getSearchSelector);
-
-  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = search.data;
-  const { voyageDetails } = voyageDetailsAdapter({ data: search.data });
+  const { searchParams } = useSelector(getSearchSelector);
+  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchParams;
+  const { voyageDetails } = voyageDetailsAdapter({ data: searchParams });
 
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
@@ -97,8 +96,8 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const fetchCountdownData = async () => {
     handleChangeState('loading', true);
-    const { data = [] } = await getCountdownTimer();
-    const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+    const response = await getCountdownTimer();
+    const convertedOptions = convertDataToOptions({ data: response.data }, 'id', 'text');
     const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
 
     handleChangeState('responseCountdownOptions', convertedOptions);
@@ -107,17 +106,19 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchOfferValidation({ ...search?.data, tankerId }));
-
-    if (offer.valid) {
-      fetchCountdownData();
-      dispatch(fetchOfferOptioins(tankerId));
-    }
+    dispatch(fetchOfferValidation({ ...searchParams, tankerId }));
 
     return () => {
       dispatch(resetOfferData());
     };
-  }, [tankerId]);
+  }, []);
+
+  useEffect(() => {
+    if (offer?.valid) {
+      fetchCountdownData();
+      dispatch(fetchOfferOptioins(tankerId));
+    }
+  }, [offer?.valid]);
 
   const scrollToBottom = () =>
     setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
@@ -129,31 +130,22 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       case 'comments':
         return <CommentsContent />;
       default:
-        return (
-          <CommercialOfferTerms
-            loading={offer.loading}
-            valid={offer.valid}
-            tankerId={tankerId}
-            offerData={offer.data}
-            searchData={search.data}
-            scrollToBottom={scrollToBottom}
-          />
-        );
+        return <CommercialOfferTerms tankerId={tankerId} searchData={searchParams} scrollToBottom={scrollToBottom} />;
     }
-  }, [currentTab, tankerId, offer, search]);
+  }, [currentTab, tankerId, searchParams, voyageDetails, scrollToBottom]);
 
   const errorBanner = useMemo(() => {
     return (
-      offer?.error && (
-        <div className="bg-red-light rounded-base py-2.5 pb-3 px-5">
+      offer?.message && (
+        <div className={`${!offer.valid ? 'bg-red-light' : 'bg-orange-300'} rounded-base py-2.5 pb-3 px-5`}>
           <div className="text-xsm mt-1.5">
-            <span className="font-bold">Declined:</span>
-            <span className="ml-1.5">{offer?.error}</span>
+            <span className="font-bold">{!offer?.valid ? 'Declined: ' : 'Warning: '}</span>
+            <span className="ml-1.5">{offer?.message}</span>
           </div>
         </div>
       )
     );
-  }, [offer?.error, offer?.valid, tankerId]);
+  }, [offer?.message, offer?.valid, tankerId]);
 
   return (
     <div className="w-[610px]">
@@ -164,7 +156,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       <div className="flex text-[12px] items-center mt-5">
         <div className="pl-4 border-l-2 border-blue h-min flex items-center">
           <p className="font-bold max-w-[240px]">
-            Set a response countdown timer for the counterparty to reply to this offer
+            Set a response countdown timer for the counterparty to reply to this offerssss
           </p>
           <Dropdown
             defaultValue={responseCountdown}

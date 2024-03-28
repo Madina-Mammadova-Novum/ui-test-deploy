@@ -49,49 +49,42 @@ const ViewFailedOffer = ({ itemId }) => {
     })();
   }, []);
 
-  const tabContent = () => {
-    switch (currentTab) {
-      case 'comments':
-        return <CommentsContent data={comments} areaDisabled />;
-      default:
-        return <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />;
-    }
+  const tabContent = {
+    offer_details: <OfferDetails voyageDetails={voyageDetails} commercialOfferTerms={commercialOfferTerms} />,
+    comments: <CommentsContent data={comments} areaDisabled />,
   };
 
-  if (loading)
-    return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-1/2" />
-      </div>
-    );
-
   return (
-    <div className="w-[610px]">
+    <div className="w-[610px] min-h-96">
       <ModalHeader>View Declined Offer</ModalHeader>
-      <div className="bg-red-light rounded-base py-3 px-5 mt-5">
-        <div className="text-xsm font-semibold">
-          <span>Declined by:</span>
-          <span className="text-red ml-1.5">{declinedBy}</span>
-        </div>
-        <div className="text-[12px] mt-1.5">
-          <span className="font-bold">Reason:</span>
-          <span className="ml-1.5">{failureReason}</span>
-        </div>
-      </div>
-
-      <Tabs
-        tabs={tabs}
-        activeTab={currentTab}
-        onClick={({ target }) => setCurrentTab(target.value)}
-        customStyles="mx-auto mt-5"
-      />
-
-      <div
-        ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
-      >
-        {tabContent()}
-      </div>
+      {loading ? (
+        <Loader className="h-8 w-8 absolute top-1/2" />
+      ) : (
+        <>
+          <div className="bg-red-light rounded-base py-3 px-5 mt-5">
+            <div className="text-xsm font-semibold">
+              <span>Declined by:</span>
+              <span className="text-red ml-1.5">{declinedBy}</span>
+            </div>
+            <div className="text-[12px] mt-1.5">
+              <span className="font-bold">Reason:</span>
+              <span className="ml-1.5">{failureReason}</span>
+            </div>
+          </div>
+          <Tabs
+            tabs={tabs}
+            activeTab={currentTab}
+            onClick={({ target }) => setCurrentTab(target.value)}
+            customStyles="mx-auto mt-5"
+          />
+          <div
+            ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
+            className={`h-[320px] mt-2.5 px-2.5 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+          >
+            {tabContent[currentTab]}
+          </div>
+        </>
+      )}
     </div>
   );
 };

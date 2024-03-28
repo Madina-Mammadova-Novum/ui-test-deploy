@@ -8,15 +8,10 @@ import { AddTankerWithImoFormPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
 import { FormDropdown, Input } from '@/elements';
-import { EXISTING_VESSEL_ERROR } from '@/lib/constants';
 import { q88ImoCheckSchema } from '@/lib/schemas';
 import { getQ88DataByImo } from '@/services/vessel';
 import { ModalHeader } from '@/units';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
-
-const schema = yup.object({
-  ...q88ImoCheckSchema(),
-});
 
 const AddTankerWithImoForm = ({
   closeModal,
@@ -26,7 +21,10 @@ const AddTankerWithImoForm = ({
   setSelectedFleet,
   selectedFleet,
 }) => {
+  const schema = yup.object({ ...q88ImoCheckSchema() });
+
   const methods = useHookFormParams({ schema, state: { fleet: selectedFleet, imo: '' } });
+
   const { setValue, getValues } = methods;
 
   const handleChange = (key, value) => {
@@ -36,15 +34,21 @@ const AddTankerWithImoForm = ({
   };
 
   const onSubmit = async (formData) => {
-    const { data, error = {} } = await getQ88DataByImo({ imo: formData.imo });
-    const { errors: { Imo = [] } = {} } = error || {};
-    if (Imo[0] === EXISTING_VESSEL_ERROR) {
-      errorToast('Bad request', Imo);
-      return;
+    const { data, error, status } = await getQ88DataByImo({ imo: formData.imo });
+    if ((status >= 200 && status <= 400) || status === 404) {
+      setQ88({ ...data, imo: formData.imo });
+      handleNextStep();
+    } else {
+      errorToast(error.title, error.message);
     }
-    setQ88({ ...data, imo: formData.imo });
-    handleNextStep();
   };
+
+  const handleOnChange = ({ target }) => {
+    const modifiedValue = target.value.replace(/\D/g, '');
+    methods.setValue('imo', modifiedValue);
+  };
+
+  const imoValue = methods.watch('imo');
 
   return (
     <FormProvider {...methods}>
@@ -68,10 +72,10 @@ const AddTankerWithImoForm = ({
             you will need to add it manually.
           </p>
           <Input
-            {...methods.register('imo')}
             label="IMO"
+            value={imoValue}
+            onChange={handleOnChange}
             placeholder="Enter IMO"
-            type="number"
             error={methods.formState.errors?.imo?.message}
           />
         </div>

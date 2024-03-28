@@ -53,7 +53,7 @@ export const redirectAfterToast = (message, url) => {
     setTimeout(() => {
       window.location.href = url;
       resolve();
-    }, 3000);
+    }, 2000);
   });
 };
 
@@ -121,10 +121,14 @@ export const useFilters = ({ itemsPerPage, initialPage, data, sortValue }) => {
   };
 
   const getNumberOfPages = useCallback(() => Math.ceil(data?.length / perPage), [data, perPage]);
-  const getItems = useCallback(
-    () => data?.slice((currentPage - 1) * perPage, currentPage * perPage),
-    [data, currentPage, perPage]
-  );
+
+  const getItems = useCallback(() => {
+    if (data) {
+      return data.slice((currentPage - 1) * perPage, currentPage * perPage);
+    }
+    return null;
+  }, [data, currentPage, perPage]);
+
   const getSortedItems = useCallback(
     (items) => {
       if (!items || !items[0]?.type) {
@@ -137,32 +141,38 @@ export const useFilters = ({ itemsPerPage, initialPage, data, sortValue }) => {
 
   const items = getItems();
   const numberOfPages = getNumberOfPages();
-  const options = getFilledArray(numberOfPages)?.map(navigationPagesAdapter);
-  const sortedItems = getSortedItems(items);
 
-  const handlePageChange = (page) => handleChangeState('currentPage', page.selected + 1);
-  const handleSelectedPageChange = ({ value }) => handleChangeState('currentPage', value);
-  const onChangeOffers = ({ value }) => handleChangeState('perPage', value);
+  const handlePageChange = useCallback(
+    (page) => handleChangeState('currentPage', page.selected + 1),
+    [handleChangeState]
+  );
+
+  const handleSelectedPageChange = useCallback(
+    ({ value }) => handleChangeState('currentPage', value),
+    [handleChangeState]
+  );
+
   const handleSortChange = ({ value }) => handleChangeState('ascSort', value === 'Asc');
-  const handleOptionsChange = () => handleChangeState('option', options);
+  const onChangeOffers = useCallback(({ value }) => handleChangeState('perPage', value), [handleChangeState]);
 
   useEffect(() => {
-    handleOptionsChange();
-  }, [data]);
+    if (data) {
+      const options = getFilledArray(numberOfPages)?.map(navigationPagesAdapter);
+      handleChangeState('option', options);
+    }
+  }, [data, numberOfPages]);
 
   useEffect(() => {
-    if (perPage !== prevItemsPerPageRef.current) {
+    if (perPage !== prevItemsPerPageRef?.current) {
       handleChangeState('currentPage', 1);
       prevItemsPerPageRef.current = perPage;
     }
-  }, [perPage]);
-
-  if (!data) return [];
+  }, [perPage, prevItemsPerPageRef.current]);
 
   return {
     numberOfPages,
-    items: sortedItems,
     currentPage,
+    items: getSortedItems(items),
     handleSortChange,
     handlePageChange,
     handleSelectedPageChange,

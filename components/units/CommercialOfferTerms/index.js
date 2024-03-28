@@ -13,16 +13,15 @@ import { getOfferSelector } from '@/store/selectors';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom, valid }) => {
+const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const dispatch = useDispatch();
-  const { ranges } = useSelector(getOfferSelector);
-
-  const { paymentTerms, demurragePaymentTerms, freightFormats } = offerData;
 
   const [freightEstimation, setFreightEstimation] = useState({});
-
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [demurrageLoader, setDemurrageLoader] = useState(false);
+
+  const { ranges, valid, loading, data } = useSelector(getOfferSelector);
+  const { paymentTerms, demurragePaymentTerms, freightFormats } = data;
 
   const {
     watch,
@@ -132,8 +131,6 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom, 
           helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
-          min={freightEstimation.min && String(freightEstimation.min)}
-          max={freightEstimation.max && String(freightEstimation.max)}
           step="any"
         />
       </div>
@@ -160,7 +157,9 @@ const CommercialOfferTerms = ({ offerData, searchData, loading, scrollToBottom, 
           type="number"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
-          helperText={`The maximum laytime is ${ranges?.layTime?.max?.end || 120} hours`}
+          helperText={`Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
+            ranges?.layTime?.max?.end || 120
+          } hours`}
           error={errors.layTime?.message}
           disabled={!valid || isSubmitting}
         />

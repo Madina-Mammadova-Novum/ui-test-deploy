@@ -1,23 +1,21 @@
 'use client';
 
 /* eslint-disable consistent-return */
+// import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import * as yup from 'yup';
+// import * as yup from 'yup';
 
 import { CounterofferFormPropTypes } from '@/lib/types';
 
+import { getPrefilledFormDataAdapter } from '@/adapters/offer';
 import { FormManager } from '@/common';
-import { offerSchema } from '@/lib/schemas';
+// import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
-
-const schema = yup.object({
-  ...offerSchema(),
-});
 
 const CounterofferForm = ({
   children,
@@ -30,25 +28,20 @@ const CounterofferForm = ({
   setDisabled,
 }) => {
   const dispatch = useDispatch();
+  // const [freightState, setFreightState] = useState({});
+
   const { role } = useSelector(getUserDataSelector);
+  // const schema = yup.object({ ...offerSchema({ currentFreight: freightState }) });
 
-  const { products, offerId, responseCountdown } = data;
+  const formState = { ...data, ...getPrefilledFormDataAdapter({ data: data?.products || [] }) };
+  const methods = useHookFormParams({ state: formState });
 
-  const methods = useHookFormParams({
-    schema,
-    state: {
-      ...data,
-      ...products
-        .filter((product) => product)
-        .reduce((resulted, curr, index) => {
-          resulted[`products[${index}].product`] = curr.product;
-          resulted[`products[${index}].density`] = curr.density;
-          resulted[`products[${index}].tolerance`] = curr.tolerance;
-          resulted[`products[${index}].quantity`] = curr.quantity;
-          return resulted;
-        }, {}),
-    },
-  });
+  // const freightType = methods.watch('freight');
+  // const freightValue = methods.watch('value');
+
+  // useEffect(() => {
+  //   setFreightState({ type: freightType, value: freightValue });
+  // }, [freightType, freightValue]);
 
   const handleSubmit = async (formData) => {
     setDisabled(true);
@@ -59,14 +52,14 @@ const CounterofferForm = ({
     }
 
     const { message: successMessage, error } = await sendCounteroffer({
-      data: { ...formData, offerId, responseCountdown },
+      data: { ...formData, offerId: data?.offerId, responseCountdown: data?.responseCountdown },
       role,
     });
 
     if (!error) {
       setDisabled(false);
       successToast(successMessage);
-      dispatch(fetchUserNegotiating());
+      dispatch(fetchUserNegotiating({ page: 1, perPage: 5 }));
       closeModal();
     } else {
       setDisabled(false);

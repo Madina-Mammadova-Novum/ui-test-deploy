@@ -351,6 +351,14 @@
   @apply bg-[url('/angle-up.png')];
 }
 
+.tab-btn {
+  @apply border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-xxs font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-1/2 xlMax:transform xlMax:-translate-x-1/2;
+}
+
+.inline-text-row {
+  @apply [&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline;
+}
+
 /* Input Number Field */
 
 input::-webkit-outer-spin-button,

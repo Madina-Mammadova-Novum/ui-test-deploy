@@ -22,14 +22,14 @@ import { convertDataToOptions, countriesOptions, getValueWithPath } from '@/util
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
-const schema = yup.object({
-  ...tankerDataSchema(),
-  ...fileSchema(false),
-});
-
 const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
+  const dispatch = useDispatch();
+
   const [initialLoading, setInitialLoading] = useState(false);
   const [q88State, setQ88State] = useState(q88);
+  const [countries, setCountries] = useState([]);
+  const [ports, setPorts] = useState([]);
+
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
       options: [],
@@ -43,14 +43,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       loading: false,
     },
   });
-  const [countries, setCountries] = useState([]);
-  const [ports, setPorts] = useState([]);
 
-  const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
-  const { label: fleetName, value: fleetId } = fleetData;
+  const schema = yup.object({
+    ...tankerDataSchema(),
+    ...fileSchema(false),
+  });
 
   const methods = useHookFormParams({ schema, state: q88State });
-  const dispatch = useDispatch();
+
   const {
     register,
     clearErrors,
@@ -59,6 +59,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     getValues,
     watch,
   } = methods;
+
+  const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
+  const { label: fleetName, value: fleetId } = fleetData;
 
   const handleTankerOptionsChange = (key, state) => {
     setTankerOptions((prevState) => ({
@@ -83,9 +86,11 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       const { data: tankerTypesData = [], error: tankerTypesError } = tankerTypesResponse;
       const { data: countriesData = [], error: countriesError } = countriesResponse;
       const { data: portsData = [], error: portsError } = portsResponse;
+
       handleTankerOptionsChange('tankerType', {
         options: convertDataToOptions({ data: tankerTypesData }, 'id', 'name'),
       });
+
       setCountries(countriesOptions(countriesData));
       setPorts(countriesOptions(portsData));
       if (tankerTypesError || countriesError || portsError)
@@ -139,13 +144,15 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const onSubmit = async (formData) => {
     const { status, message, error } = await addVesselManually({ data: { ...formData, fleetId } });
 
-    if (status === 200) {
+    if (status >= 200 && status < 400) {
       dispatch(refetchFleets());
       successToast(message);
       closeModal();
     }
 
-    if (error) errorToast(error?.title, error?.message);
+    if (error) {
+      errorToast(error?.title, error?.message);
+    }
   };
 
   const handleChange = async (key, value) => {
@@ -194,16 +201,17 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   return (
     <FormProvider {...methods}>
       <ModalFormManager
+        className="w-[640px] 3md:w-[756px]"
         onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{ text: 'Add tanker', variant: 'primary', size: 'large' }}
       >
-        <div className="w-[640px] 3md:w-[756px]">
+        <>
           <ModalHeader goBack={goBack}>Add a New Tanker</ModalHeader>
-          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0 my-5 " />
+          <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start" />
           <ImoNotFound q88={q88State} goBack={goBack} />
 
-          <div className="grid grid-cols-1 gap-y-4">
+          <div className="grid grid-cols-1 gap-y-4 h-80 pr-2.5 mt-5 overflow-scroll">
             <div className="grid grid-cols-2 gap-y-4 gap-x-5">
               <Input
                 {...register(`tankerName`)}
@@ -437,7 +445,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <DropzoneForm showTextFields={false} />
             </div>
           </div>
-        </div>
+        </>
       </ModalFormManager>
     </FormProvider>
   );
