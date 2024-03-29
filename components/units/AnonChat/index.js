@@ -14,7 +14,7 @@ import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
 import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
-import { messageAlert, resetChat, resetUser, setBotMessage, setUser } from '@/store/entities/chat/slice';
+import { messageAlert, resetChat, resetUser, setBotMessage, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthSelector, getGeneralDataSelector } from '@/store/selectors';
 import {
   checkEmailPrefix,
@@ -73,7 +73,7 @@ const AnonChat = ({ opened }) => {
     if (messageIds.length > 0) {
       for (const id of messageIds) {
         // eslint-disable-next-line no-await-in-loop
-        await сhatSessionService.readMessage({ id });
+        сhatSessionService.readMessage({ id });
       }
     }
   }, [chat?.messages]);
@@ -85,6 +85,7 @@ const AnonChat = ({ opened }) => {
     setFlow([updatedStep]);
     dispatch(resetUser());
     dispatch(resetChat());
+    dispatch(setOpenedChat(false));
   };
 
   const handleCountryChange = async (params) => {
@@ -116,7 +117,7 @@ const AnonChat = ({ opened }) => {
     }
   };
 
-  const handleCollapse = () => сhatSessionService.onToggle(false);
+  const handleCollapse = () => dispatch(setOpenedChat(false));
 
   const handleNextStep = () => {
     setMessage('');

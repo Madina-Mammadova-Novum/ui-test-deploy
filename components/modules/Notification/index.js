@@ -11,7 +11,7 @@ import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
 import { globalNotificationService } from '@/services/signalR';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
-import { resetNotifications, setIsOpened } from '@/store/entities/notifications/slice';
+import { resetNotifications, resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { NotificationContent, NotificationControl } from '@/units';
 import { getCookieFromBrowser } from '@/utils/helpers';
@@ -28,8 +28,9 @@ const Notification = () => {
   };
 
   const handleClose = () => {
-    dispatch(resetNotifications());
+    dispatch(resetParams());
     dispatch(setIsOpened(false));
+    dispatch(resetNotifications());
   };
 
   const initNotifications = async () => {
