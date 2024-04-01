@@ -16,7 +16,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const { chats } = useSelector(getAuthChatSelector);
+  const { chats, isActive } = useSelector(getAuthChatSelector);
 
   const handleModal = (e, id) => {
     e.stopPropagation();
@@ -43,15 +43,21 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     setSessionId('');
   };
 
-  const handleOpenConversation = async () => {
-    if (chats?.user?.data?.chatId === data.chatId) return;
-
-    dispatch(resetUser());
-    dispatch(removeCollapsedChat(data?.chatId));
-    await сhatSessionService.stop();
-
-    dispatch(setUser(data));
+  const onActivate = (user) => {
+    dispatch(setUser(user));
     dispatch(setConversation(true));
+  };
+
+  const onRemove = async ({ id }) => {
+    await сhatSessionService.stop();
+    dispatch(resetUser());
+    dispatch(removeCollapsedChat(id));
+  };
+
+  const handleOpenConversation = () => {
+    if (isActive && chats?.user?.data?.chatId === data.chatId) return;
+
+    onRemove({ id: data?.chatId }).then(() => onActivate(data));
   };
 
   const actions = {
