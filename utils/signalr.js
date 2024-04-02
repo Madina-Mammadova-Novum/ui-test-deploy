@@ -104,7 +104,7 @@ export class ChatSessionController extends SignalRController {
 
   onToggle(opened) {
     this.isOpened = opened;
-    this.store.dispatch(setConversation(this.isOpened));
+    this.store.dispatch(setConversation(opened));
   }
 
   sendMessage({ message }) {

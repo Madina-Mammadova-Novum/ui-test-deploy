@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Dropdown, Loader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
+import { fetchVesselsBySearch } from '@/store/entities/search/actions';
 import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
 import { SearchForm } from '@/units';
@@ -13,7 +14,7 @@ import { errorToast } from '@/utils/hooks';
 const TankerSearch = () => {
   const dispatch = useDispatch();
 
-  const { data, loading, error, sorting, request } = useSelector(getSearchSelector);
+  const { data, loading, error, sorting, searchParams, request } = useSelector(getSearchSelector);
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
 
   const handleReset = () => dispatch(onReset());
@@ -46,6 +47,16 @@ const TankerSearch = () => {
       handleReset();
     };
   }, []);
+
+  useEffect(() => {
+    const result = {
+      ...searchParams,
+      sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
+      rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
+    };
+
+    dispatch(fetchVesselsBySearch(result));
+  }, [searchParams, sorting]);
 
   const printResult = useMemo(() => {
     if (loading) {

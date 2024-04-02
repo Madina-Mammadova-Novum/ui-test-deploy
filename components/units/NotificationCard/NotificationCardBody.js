@@ -11,7 +11,7 @@ import { NotificationCardBodyPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
 import { getCurrnetDealStage, readNotification } from '@/store/entities/notifications/actions';
-import { resetDealData, resetParams } from '@/store/entities/notifications/slice';
+import { resetDealData, resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
 
@@ -50,6 +50,8 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) =>
     } else {
       router.push(url);
     }
+
+    dispatch(setIsOpened(false));
     dispatch(resetParams());
   }, [urlId, setDisabled, filterParams, isDealPath, deal?.route, url, dispatch]);
 
