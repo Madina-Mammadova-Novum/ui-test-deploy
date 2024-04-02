@@ -108,9 +108,7 @@ export class ChatSessionController extends SignalRController {
   }
 
   sendMessage({ message }) {
-    if (this.connection?.state === 'Connected') {
-      this.connection.invoke('SendMessage', message);
-    }
+    this.connection.invoke('SendMessage', message);
   }
 
   readMessage({ id }) {

@@ -56,7 +56,7 @@ const Alert = ({ variant = '', title, description, handleClose }) => {
         </div>
       </div>
       <button type="button" onClick={handleClose}>
-        <CloseSVG />
+        <CloseSVG className="fill-black" />
       </button>
     </div>
   );

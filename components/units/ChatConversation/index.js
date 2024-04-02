@@ -26,10 +26,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const { data, updating, status } = chats?.user;
 
   const initChatActions = useCallback(async () => {
-    if (data?.chatId) {
-      сhatSessionService.onToggle(isOpened);
-    }
-
     if (isOpened) {
       if (data?.key !== 'support') {
         dispatch(getChatHistory({ data: { id: data?.chatId } }));
@@ -41,11 +37,15 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     } else {
       await сhatSessionService.stop();
     }
-  }, [data?.chatId, isOpened, data?.key]);
+  }, [data?.chatId, isOpened, data?.key, status]);
 
   useEffect(() => {
     initChatActions();
-  }, [isOpened, data?.chatId, status]);
+
+    if (data?.chatId) {
+      сhatSessionService.onToggle(isOpened);
+    }
+  }, [isOpened, data?.chatId, data?.key, status]);
 
   useEffect(() => {
     if (message !== '') {

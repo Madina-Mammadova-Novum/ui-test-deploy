@@ -13,7 +13,6 @@ import { Button } from '@/elements';
 import { TankerSearch } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
 import { getSearchSelector } from '@/store/selectors';
-import { getCookieFromBrowser } from '@/utils/helpers';
 // import { Tabs } from '@/units';
 
 // const tabs = [
@@ -27,19 +26,17 @@ import { getCookieFromBrowser } from '@/utils/helpers';
 export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
   const dispatch = useDispatch();
   const { searchParams, sorting } = useSelector(getSearchSelector);
-  const token = getCookieFromBrowser('session-access-token');
+  // const token = getCookieFromBrowser('session-access-token');
 
   useEffect(() => {
-    if (!token) {
-      const result = {
-        ...searchParams,
-        sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
-        rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
-      };
+    const result = {
+      ...searchParams,
+      sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
+      rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
+    };
 
-      dispatch(fetchVesselsBySearch(result));
-    }
-  }, [searchParams, sorting, token]);
+    dispatch(fetchVesselsBySearch(result));
+  }, [searchParams, sorting]);
 
   // const [activeTab, setActiveTab] = useState('search');
 
