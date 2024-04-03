@@ -12,17 +12,25 @@ import { getAuthChatSelector } from '@/store/selectors';
 
 const ChatSupport = ({ title, description, loading }) => {
   const dispatch = useDispatch();
-  const { support } = useSelector(getAuthChatSelector).chats;
+  const { chats, isActive } = useSelector(getAuthChatSelector);
+
+  const onActivate = (user) => {
+    dispatch(setUser(user));
+    dispatch(setConversation(true));
+  };
+
+  const onRemove = async ({ id }) => {
+    await сhatSessionService.stop();
+    dispatch(resetUser());
+    dispatch(removeCollapsedChat(id));
+  };
 
   const handleOpenConversation = async (e) => {
     e.stopPropagation();
 
-    dispatch(resetUser());
-    dispatch(removeCollapsedChat(support[0]?.chatId));
-    await сhatSessionService.stop();
+    if (isActive && chats?.support[0]?.chatId === chats?.user?.data?.chatId) return;
 
-    dispatch(setConversation(true));
-    dispatch(setUser(support[0]));
+    onRemove({ id: chats?.support[0]?.chatId }).then(() => onActivate(chats?.support[0]));
   };
 
   if (loading) return <ChatHelpLoader />;
@@ -30,7 +38,7 @@ const ChatSupport = ({ title, description, loading }) => {
   return (
     <div aria-hidden onClick={handleOpenConversation}>
       <div className="text-black relative flex items-center gap-x-3 cursor-pointer">
-        {!!support?.length && <Badge counter={support[0]?.messageCount} className="right-0 top-1.5" />}
+        {!!chats?.support?.length && <Badge counter={chats?.support[0]?.messageCount} className="right-0 top-1.5" />}
         <div className="w-0.5 h-10 rounded-xl bg-blue" />
         <SupportSVG />
         <div className="flex flex-col  w-5/6">
