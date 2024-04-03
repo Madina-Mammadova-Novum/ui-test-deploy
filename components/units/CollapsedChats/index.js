@@ -17,13 +17,10 @@ const CollapsedChats = () => {
     dispatch(setConversation(true));
   };
 
-  const onRemove = async ({ id, key }) => {
+  const onRemove = async ({ id }) => {
     await сhatSessionService.stop();
+    dispatch(resetUser());
     dispatch(removeCollapsedChat(id));
-
-    if (key !== 'support') {
-      dispatch(resetUser());
-    }
   };
 
   const handleStartConversation = ({ id }) => {
