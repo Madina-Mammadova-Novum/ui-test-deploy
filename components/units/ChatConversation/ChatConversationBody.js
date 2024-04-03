@@ -25,7 +25,7 @@ const ChatConversationBody = () => {
 
     const trigger = triggeredValue === -0.95 && !isLast && !loading && !updating;
 
-    if (trigger) {
+    if (trigger && data?.key !== 'support') {
       dispatch(getChatHistory({ data: { id: data?.chatId, date: created } }));
 
       scrollRef.current.scrollTo({

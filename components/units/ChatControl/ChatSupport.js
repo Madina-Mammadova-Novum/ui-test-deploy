@@ -7,7 +7,7 @@ import { ChatSupportPropTypes } from '@/lib/types';
 import SupportSVG from '@/assets/images/support.svg';
 import { Badge, ChatHelpLoader, Title } from '@/elements';
 import { сhatSessionService } from '@/services/signalR';
-import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
+import { resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 
 const ChatSupport = ({ title, description, loading }) => {
@@ -19,18 +19,17 @@ const ChatSupport = ({ title, description, loading }) => {
     dispatch(setConversation(true));
   };
 
-  const onRemove = async ({ id }) => {
+  const onRemove = async () => {
     await сhatSessionService.stop();
     dispatch(resetUser());
-    dispatch(removeCollapsedChat(id));
   };
 
   const handleOpenConversation = async (e) => {
     e.stopPropagation();
 
-    if (isActive && chats?.support[0]?.chatId === chats?.user?.data?.chatId) return;
+    if (isActive && chats.support[0]?.chatId === chats?.user.data?.chatId) return;
 
-    onRemove({ id: chats?.support[0]?.chatId }).then(() => onActivate(chats?.support[0]));
+    onRemove({ id: chats.support[0]?.chatId }).then(() => onActivate(chats.support[0]));
   };
 
   if (loading) return <ChatHelpLoader />;

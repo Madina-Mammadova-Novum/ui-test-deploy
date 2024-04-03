@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     req,
     res,
     requestMethod: 'GET',
-    path: getRtURL(`/chat/load/${req.query.id}?created=${req.query.date}`),
+    path: getRtURL(`chat/load/${req.query.id}?created=${req.query.date}`),
     dataAdapter: (data) => chatHistoryResponseAdapter({ role, clientId, ...data }),
     options: { headers: Authorization(token), ...ContentTypeJson() },
   });
