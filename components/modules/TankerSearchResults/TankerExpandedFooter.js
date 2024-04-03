@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { TankerExpandedFooterPropTypes } from '@/lib/types';
@@ -13,11 +14,11 @@ import { getRoleIdentity } from '@/utils/helpers';
 
 const TankerExpandedFooter = ({ tankerId, tankerData }) => {
   const { role } = useSelector(getUserDataSelector);
-  const { isCharterer } = getRoleIdentity({ role });
+  const { isCharterer, isOwner } = getRoleIdentity({ role });
 
-  return (
-    <ExpandableRowFooter>
-      {role ? (
+  const printModalAction = useMemo(() => {
+    if (isCharterer) {
+      return (
         <ModalWindow
           key={tankerId}
           buttonProps={{
@@ -29,17 +30,33 @@ const TankerExpandedFooter = ({ tankerId, tankerData }) => {
         >
           <OfferModalContent tankerId={tankerId} tankerData={tankerData} />
         </ModalWindow>
-      ) : (
+      );
+    }
+
+    if (isOwner) {
+      return (
         <LinkAsButton
-          href={ROUTES.SIGNUP}
+          href={ROUTES.ACCOUNT_POSITIONS}
           buttonProps={{ variant: 'primary', size: 'large' }}
           customStyles="ml-auto w-fit"
         >
-          Register to Send offer
+          Go to my positions
         </LinkAsButton>
-      )}
-    </ExpandableRowFooter>
-  );
+      );
+    }
+
+    return (
+      <LinkAsButton
+        href={ROUTES.SIGNUP}
+        buttonProps={{ variant: 'primary', size: 'large' }}
+        customStyles="ml-auto w-fit"
+      >
+        Register to Send offer
+      </LinkAsButton>
+    );
+  }, [isCharterer, tankerId, tankerData]);
+
+  return <ExpandableRowFooter>{printModalAction}</ExpandableRowFooter>;
 };
 
 TankerExpandedFooter.propTypes = TankerExpandedFooterPropTypes;
