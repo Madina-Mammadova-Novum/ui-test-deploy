@@ -40,6 +40,15 @@ const initialState = {
       email: null,
       location: null,
     },
+    supportLobby: {
+      created: '',
+      data: {
+        messageCount: 0,
+        isOnline: false,
+        isTyping: false,
+      },
+      messages: [],
+    },
   },
   filterParams: {
     searchValue: '',

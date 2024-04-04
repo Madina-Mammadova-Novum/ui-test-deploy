@@ -26,26 +26,22 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const { data, updating, status } = chats?.user;
 
   const initChatActions = useCallback(async () => {
-    if (data?.chatId) {
-      сhatSessionService.onToggle(isOpened);
-    }
-
     if (isOpened) {
-      if (data?.key !== 'support') {
-        dispatch(getChatHistory({ data: { id: data?.chatId } }));
-      }
-
-      if (status === 200 && data?.chatId) {
-        await сhatSessionService.init({ chatId: data.chatId, token });
-      }
+      const currnetDate = new Date().toISOString();
+      dispatch(getChatHistory({ data: { id: data?.chatId, date: data?.key === 'support' && currnetDate } }));
+      await сhatSessionService.init({ chatId: data.chatId, token });
     } else {
       await сhatSessionService.stop();
     }
-  }, [data?.chatId, isOpened, data?.key]);
+  }, [data?.chatId, isOpened, data?.key, status]);
 
   useEffect(() => {
     initChatActions();
-  }, [isOpened, data?.chatId, status]);
+
+    if (data?.chatId) {
+      сhatSessionService.onToggle(isOpened);
+    }
+  }, [isOpened, data?.chatId, data?.key, status]);
 
   useEffect(() => {
     if (message !== '') {
