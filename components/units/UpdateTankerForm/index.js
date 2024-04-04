@@ -10,11 +10,13 @@ import * as yup from 'yup';
 
 import { UpdateTankerFormPropTypes } from '@/lib/types';
 
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Input, Loader, TextWithLabel, Title } from '@/elements';
 import { unassignedFleetOption } from '@/lib/constants';
 import { fileSchema, tankerDataSchema } from '@/lib/schemas';
 import DropzoneForm from '@/modules/DropzoneForm';
+import { getPorts } from '@/services';
 import { getVesselCategoryOne, getVesselCategoryTwo, requestUpdateVessel } from '@/services/vessel';
 import { fetchPrefilledDataToUpdate } from '@/store/entities/fleets/actions';
 import { clearPrefilledState, refetchFleets } from '@/store/entities/fleets/slice';
@@ -26,9 +28,12 @@ import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
 const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId }) => {
   const [initialLoading, setInitialLoading] = useState(true);
+  const [portsLoading, setPortsLoading] = useState(false);
+  const [ports, setPorts] = useState(false);
+  const [perList, setPerList] = useState(50);
 
   const {
-    prefilledUpdateVesselState: { loading, data: prefilledData, ports, countries, tankerTypes },
+    prefilledUpdateVesselState: { loading, data: prefilledData, countries, tankerTypes },
   } = useSelector(fleetsSelector);
 
   const [tankerOptions, setTankerOptions] = useState({
@@ -73,10 +78,19 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     }));
   };
 
-  useEffect(() => {
-    dispatch(fetchPrefilledDataToUpdate(itemId));
-    return () => dispatch(clearPrefilledState());
-  }, []);
+  const getPortsData = async () => {
+    setPortsLoading(true);
+    const { data } = await getPorts({ query: '', pageSize: perList });
+    setPorts(dropDownOptionsAdapter({ data }));
+    setPortsLoading(false);
+  };
+
+  const loadOptions = async (query, callback) => {
+    const { data } = await getPorts({ query, pageSize: perList });
+    callback(dropDownOptionsAdapter({ data }));
+  };
+
+  const handleMore = () => setPerList((prev) => prev + 50);
 
   const getValidOptions = (data, value) => {
     const filteredOption = data?.filter((option) => option?.id === value);
@@ -105,12 +119,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     reset({ ...prefilledData, ...validPrefilledOptions });
     handleTankerOptionsChange('tankerType', { options: tankerTypes });
   };
-
-  useEffect(() => {
-    if (!loading) {
-      fetchDataOptions();
-    }
-  }, [loading]);
 
   const onSubmit = async (formData) => {
     const { status, message, messageDescription, error } = await requestUpdateVessel({
@@ -175,6 +183,21 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     setValue(key, value);
   };
 
+  useEffect(() => {
+    if (!loading) {
+      fetchDataOptions();
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    getPortsData();
+  }, [perList]);
+
+  useEffect(() => {
+    dispatch(fetchPrefilledDataToUpdate(itemId));
+    return () => dispatch(clearPrefilledState());
+  }, []);
+
   if (initialLoading) {
     return (
       <div className="w-72 h-72">
@@ -229,9 +252,11 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <FormDropdown
                 label="Port of registry"
                 options={ports}
-                loading={loading}
+                loading={portsLoading}
+                loadOptions={loadOptions}
+                onMenuScrollToBottom={handleMore}
                 asyncCall
-                disabled={!ports.length}
+                disabled={initialLoading}
                 name="portOfRegistry"
                 onChange={(option) => handleChange('portOfRegistry', option)}
               />

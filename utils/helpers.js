@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
 
-import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
 
@@ -238,7 +238,7 @@ export function options(values) {
 export const countriesOptions = (data) => {
   if (!data) return [];
 
-  return countryOptionsAdapter({ data });
+  return dropDownOptionsAdapter({ data });
 };
 
 export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
@@ -259,7 +259,7 @@ export const removeByIndex = (data, index) => {
 };
 
 export const filterDataByLowerCase = (inputValue, data = []) => {
-  return data.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+  return data?.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
 export const resetObjectFields = (initialObject, resetType = null) => {

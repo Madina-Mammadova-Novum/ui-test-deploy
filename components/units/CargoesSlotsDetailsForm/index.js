@@ -6,10 +6,12 @@ import { addMonths } from 'date-fns';
 
 import { CargoesSlotsPropTypes } from '@/lib/types';
 
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
+import { getPorts } from '@/services';
 import { getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -27,12 +29,16 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   const [cargoesState, setCargoesState] = useState({
     cargoesCount: data?.countOfCargoes,
     cargoes: data?.listOfCargoes,
+    ports: [],
+    loading: false,
   });
+
+  const [perList, setPerList] = useState(20);
 
   const [helperText, setHelperText] = useState('');
   const isApplied = watch('applySlots');
 
-  const { cargoesCount, cargoes } = cargoesState;
+  const { cargoesCount, cargoes, ports, loading } = cargoesState;
 
   const handleChangeState = (key, value) =>
     setCargoesState((prevState) => ({
@@ -88,6 +94,24 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     setValue('cargoes', removeByIndex(cargoes, index));
     handleChangeState('cargoes', removeByIndex(cargoes, index));
   };
+
+  const getPortsData = async () => {
+    handleChangeState('loading', true);
+    const result = await getPorts({ query: '', pageSize: perList });
+    handleChangeState('ports', dropDownOptionsAdapter({ data: result?.data }));
+    handleChangeState('loading', false);
+  };
+
+  const loadOptions = async (query, callback) => {
+    const result = await getPorts({ query, pageSize: perList });
+    callback(dropDownOptionsAdapter({ data: result?.data }));
+  };
+
+  const handleMore = () => setPerList((prev) => prev + 50);
+
+  useEffect(() => {
+    getPortsData();
+  }, [perList]);
 
   useEffect(() => {
     const numberOfCargoes = cargoes?.length > 0 ? cargoes.length : '';
@@ -151,12 +175,15 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               name={`${fieldName}.port`}
               label="Load port"
               errorMsg={error?.port?.message}
-              options={data?.ports}
+              loading={loading}
+              options={ports}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
               customStyles={{
                 className: 'w-96 3md:w-72 mx-2.5',
               }}
-              async
+              onMenuScrollToBottom={handleMore}
+              loadOptions={loadOptions}
+              asyncCall
             />
             <DatePicker
               minDate={addMonths(new Date(), -6)}

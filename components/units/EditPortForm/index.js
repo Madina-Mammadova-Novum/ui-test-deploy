@@ -18,10 +18,8 @@ import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const EditPortForm = ({ title, state, closeModal }) => {
   const dispatch = useDispatch();
-  const schema = yup.object().shape({
-    ...portsSchema(),
-  });
 
+  const schema = yup.object().shape({ ...portsSchema() });
   const methods = useHookFormParams({ schema, state });
 
   const onSubmit = async ({ port }) => {

@@ -35,7 +35,7 @@ export const fetchPrefilledDataToUpdate = createAsyncThunk(FLEETS.GET_PREFILLED_
   const [tankerTypesResponse, countriesResponse, portsResponse, vesselDetailsResponse] = await Promise.all([
     getVesselTypes(),
     getCountries(),
-    getPorts(),
+    getPorts({ query: '', pageSize: 20 }),
     getVesselDetails(vesselId),
   ]);
 

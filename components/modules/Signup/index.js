@@ -26,7 +26,6 @@ const Signup = () => {
   const fetchSignUpData = async () => {
     const data = await getSignUpData();
 
-    handleChangeState('ports', data.ports);
     handleChangeState('countries', data.countries);
   };
 

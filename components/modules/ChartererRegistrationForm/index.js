@@ -32,7 +32,7 @@ import {
 import { getFieldFromKey, resetForm } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
-const ChartererRegistrationForm = ({ countries, ports }) => {
+const ChartererRegistrationForm = ({ countries }) => {
   const [sameAddress, setSameAddress] = useState(false);
   const [captcha, setCaptcha] = useState('');
 
@@ -110,7 +110,7 @@ const ChartererRegistrationForm = ({ countries, ports }) => {
         </Step>
         <Divider className="mt-5" />
         <Step title="Step #5: Recent Chartering Experience" titleClass="pt-5" containerClass="flex flex-col gap-5">
-          <CargoesSlotsDetails applyHelper data={{ ports }} />
+          <CargoesSlotsDetails applyHelper />
         </Step>
         <TermsAndConditions />
         <Captcha onChange={setCaptcha} />
