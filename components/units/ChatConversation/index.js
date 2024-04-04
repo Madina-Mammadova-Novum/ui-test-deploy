@@ -81,20 +81,27 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         <div className="flex flex-col p-2.5">
           <ChatConversationBody />
           <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              value={message}
-              onChange={handleMessage}
-              onKeyPress={handleEnter}
-              placeholder="Message ..."
-              customStyles="!border-gray-darker !w-full"
-            />
-            <Button
-              type="submit"
-              disabled={disabled}
-              customStyles="border border-gray-darker !p-2.5"
-              buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
-            />
+            <div className={`flex w-full gap-2.5 ${data?.deactivated ? 'flex-col' : 'flex-row'}`}>
+              <Input
+                type="text"
+                value={message}
+                onChange={handleMessage}
+                onKeyPress={handleEnter}
+                placeholder="Message ..."
+                customStyles="!border-gray-darker !w-full"
+              />
+              <Button
+                type="submit"
+                disabled={disabled}
+                customStyles="border border-gray-darker w-full !p-2.5"
+                buttonProps={{
+                  variant: 'tertiary',
+                  size: 'small',
+                  icon: { before: !data?.deactivated && <PlaneSVG /> },
+                  text: data?.deactivated && 'Request to deactivate',
+                }}
+              />
+            </div>
           </form>
         </div>
       </div>
