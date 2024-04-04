@@ -1,34 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { addDays } from 'date-fns';
 import * as yup from 'yup';
 
 import { ReactivateTankerFormPropTypes } from '@/lib/types';
 
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
 import { DatePicker, FormDropdown, Label, Title } from '@/elements';
 import { reactivateTankerSchema } from '@/lib/schemas';
-import { getUserPositionById } from '@/services';
+import { getPortsForSearchForm, getUserPositionById } from '@/services';
 import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
 import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
-import { getGeneralDataSelector } from '@/store/selectors';
-import { countriesOptions } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ReactivateTankerForm = ({ title, state, closeModal }) => {
   const dispatch = useDispatch();
 
-  const { ports } = useSelector(getGeneralDataSelector);
-
-  const schema = yup.object().shape({
-    ...reactivateTankerSchema(),
-  });
-
+  const schema = yup.object().shape({ ...reactivateTankerSchema() });
   const methods = useHookFormParams({ schema });
+
+  const [perList, setPerList] = useState(50);
 
   const {
     clearErrors,
@@ -39,10 +35,11 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
   const { id, type, action } = state;
 
   const [tankerState, setTankerState] = useState({
-    listOfPorts: countriesOptions(ports?.searchPorts) ?? [],
+    listOfPorts: [],
     port: null,
     date: '',
     nextDay: addDays(new Date(), 1),
+    loading: false,
   });
 
   const handleChangeState = (key, value) =>
@@ -50,6 +47,20 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
       ...prevState,
       [key]: value,
     }));
+
+  const getPorts = async () => {
+    handleChangeState('loading', true);
+    const { data } = await getPortsForSearchForm({ pageSize: perList });
+    handleChangeState('listOfPorts', dropDownOptionsAdapter({ data }));
+    handleChangeState('loading', false);
+  };
+
+  const loadOptions = async (inputValue, callback) => {
+    const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
+    callback(dropDownOptionsAdapter({ data }));
+  };
+
+  const handleMore = () => setPerList((prev) => prev + 50);
 
   const handleChangeValue = (data) => {
     const { option, key } = data;
@@ -84,7 +95,11 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     if (error) errorToast(error?.title, error?.message);
   };
 
-  const { listOfPorts, port, nextDay } = tankerState;
+  const { listOfPorts, port, nextDay, loading } = tankerState;
+
+  useEffect(() => {
+    getPorts();
+  }, [perList]);
 
   return (
     <FormProvider {...methods}>
@@ -111,10 +126,13 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
             name="port"
             label="Port search"
             errorMsg={errors?.port?.message}
+            loading={loading}
             options={listOfPorts}
             onChange={(option) => handleChangeValue({ option, key: 'port' })}
             customStyles={{ dropdownExpanded: true }}
-            async
+            loadOptions={loadOptions}
+            onMenuScrollToBottom={handleMore}
+            asyncCall
           />
           <DatePicker
             minDate={nextDay}

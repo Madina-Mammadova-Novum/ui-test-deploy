@@ -1,7 +1,7 @@
 import { getPorts } from '../port';
 
 import { portOptionsAdapter } from '@/adapters';
-import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { getData } from '@/utils/dataFetching';
 
 export const getCountries = async () => {
@@ -14,10 +14,10 @@ export const getCountries = async () => {
 
 export const getSignUpData = async () => {
   const countries = await getCountries();
-  const ports = await getPorts();
+  const ports = await getPorts({ query: '', pageSize: 20 });
 
   return {
-    countries: countryOptionsAdapter({ data: countries?.data }),
+    countries: dropDownOptionsAdapter({ data: countries?.data }),
     ports: portOptionsAdapter({ data: ports?.data }),
   };
 };

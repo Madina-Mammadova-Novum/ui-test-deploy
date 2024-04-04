@@ -8,7 +8,7 @@ import * as yup from 'yup';
 
 import { CompanyInfoFormPropTypes } from '@/lib/types';
 
-import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
@@ -85,7 +85,7 @@ const CompanyInfoForm = ({ closeModal }) => {
           </Title>
           <CompanyDetails notEditable />
           {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
-          <CompanyAddresses countries={countryOptionsAdapter({ data: countries })} />
+          <CompanyAddresses countries={dropDownOptionsAdapter({ data: countries })} />
           {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
       </ModalFormManager>

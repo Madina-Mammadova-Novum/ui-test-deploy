@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
-import { getPortsForSearcForm } from '@/services/port';
+import { getPortsForSearchForm } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
@@ -27,7 +27,10 @@ const SearchFormFields = ({ productState, setProductState }) => {
   } = useHookForm();
 
   const [initialLoading, setInitialLoading] = useState(false);
+  const [portsLoader, setPortsLoader] = useState(false);
+
   const [ports, setPorts] = useState([]);
+  const [perList, setPerList] = useState(100);
   const [cargoTypes, setCargoTypes] = useState([]);
   const [selected, setSelected] = useState(false);
   const [products, setProducts] = useState({
@@ -46,6 +49,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
   });
 
   const productsLimitExceeded = productState?.length >= 3;
+
+  const handleMore = () => setPerList((prev) => prev + 100);
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -115,15 +120,32 @@ const SearchFormFields = ({ productState, setProductState }) => {
     setProductState((prevState) => prevState.filter((product) => product !== id));
   };
 
+  const getCargoes = async () => {
+    setInitialLoading(true);
+    const cargoTypesData = await getCargoTypes();
+    setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
+    setInitialLoading(false);
+  };
+
+  const getPorts = async () => {
+    setPortsLoader(true);
+    const { data } = await getPortsForSearchForm({ pageSize: perList });
+    setPorts(dropDownOptionsAdapter({ data }));
+    setPortsLoader(false);
+  };
+
+  const loadOptions = async (inputValue, callback) => {
+    const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
+    callback(dropDownOptionsAdapter({ data }));
+  };
+
   useEffect(() => {
-    (async () => {
-      setInitialLoading(true);
-      const [portsData, cargoTypesData] = await Promise.all([getPortsForSearcForm(), getCargoTypes()]);
-      setPorts(countryOptionsAdapter(portsData));
-      setCargoTypes(convertDataToOptions(cargoTypesData, 'id', 'name'));
-      setInitialLoading(false);
-    })();
+    getCargoes();
   }, []);
+
+  useEffect(() => {
+    getPorts();
+  }, [perList]);
 
   return (
     <div className="flex">
@@ -148,17 +170,19 @@ const SearchFormFields = ({ productState, setProductState }) => {
             error={errors.laycanEnd?.message}
           />
         </div>
-        <div className="flex flex-col 3md:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
           <FormDropdown
-            name="loadPort"
-            options={ports}
-            loading={initialLoading}
-            disabled={!ports.length}
+            asyncCall
             id="loadPort"
+            name="loadPort"
             label="load port"
+            options={ports}
+            loading={portsLoader}
+            onMenuScrollToBottom={handleMore}
+            loadOptions={loadOptions}
+            disabled={initialLoading}
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
             onChange={(option) => handleChange('loadPort', option)}
-            asyncCall
           />
           <FormDropdown
             name="loadTerminal"
@@ -171,13 +195,15 @@ const SearchFormFields = ({ productState, setProductState }) => {
             asyncCall
           />
         </div>
-        <div className="flex flex-col 3md:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
           <FormDropdown
             name="dischargePort"
             label="discharge port"
             options={ports}
-            loading={initialLoading}
-            disabled={!ports.length}
+            loading={portsLoader}
+            loadOptions={loadOptions}
+            onMenuScrollToBottom={handleMore}
+            disabled={initialLoading}
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('dischargePort', option)}
             asyncCall
@@ -215,7 +241,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
           return (
             <div key={`product_${productId}`}>
-              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-1 items-baseline">
+              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-2.5 items-baseline">
                 <FormDropdown
                   onChange={(option) => {
                     setSelected(!selected);
