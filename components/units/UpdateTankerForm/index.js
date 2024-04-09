@@ -26,7 +26,7 @@ import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
-const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId }) => {
+const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId, isValid }) => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [portsLoading, setPortsLoading] = useState(false);
   const [ports, setPorts] = useState(false);
@@ -36,7 +36,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     prefilledUpdateVesselState: { loading, data: prefilledData, countries, tankerTypes },
   } = useSelector(fleetsSelector);
 
-  const [valid, setValid] = useState(prefilledData?.canSendUpdateRequest || true);
+  const [valid, setValid] = useState(isValid || false);
 
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
@@ -60,14 +60,15 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
   const methods = useHookFormParams({ schema });
 
   const dispatch = useDispatch();
+
   const {
+    reset,
+    watch,
     register,
-    clearErrors,
-    formState: { errors },
     setValue,
     getValues,
-    watch,
-    reset,
+    clearErrors,
+    formState: { errors },
   } = methods;
 
   const handleTankerOptionsChange = (key, state) => {
@@ -208,7 +209,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     );
   }
 
-  if (valid) {
+  if (!valid) {
     return (
       <div>
         <Title level="2">Your previous request has not yet been reviewed by the admin.</Title>
@@ -217,14 +218,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
           <Button
             customStyles="w-full"
             customStylesFromWrap="flex-1"
-            buttonProps={{ text: 'Submit', variant: 'primary', size: 'large' }}
-            onClick={() => setValid(!valid)}
+            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
+            onClick={closeModal}
           />
           <Button
             customStyles="w-full"
             customStylesFromWrap="flex-1"
-            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
-            onClick={closeModal}
+            buttonProps={{ text: 'Submit', variant: 'primary', size: 'large' }}
+            onClick={() => setValid(true)}
           />
         </div>
       </div>
@@ -271,6 +272,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 type="number"
                 label="Built"
                 placeholder="YYYY"
+                disabled={watch('built')}
+                inputStyles="bg-[#E7ECF8]"
                 customStyles="w-full"
                 error={errors.built?.message}
               />
@@ -292,7 +295,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerType.options}
                 loading={loading}
                 asyncCall
-                disabled={!tankerType.options.length}
+                disabled={!tankerType.options.length || watch('tankerType.value')}
                 name="tankerType"
                 onChange={(option) => handleChange('tankerType', option)}
               />
@@ -318,6 +321,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 label="Hull type"
                 options={hullTypeOptions}
                 name="hullType"
+                disabled={!hullTypeOptions.length || watch('hullType.value')}
                 onChange={(option) => handleChange('hullType', option)}
                 customStyles={{ className: 'col-span-2' }}
               />
@@ -329,12 +333,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 customStyles="w-full"
                 type="number"
                 step="any"
+                disabled={watch('loa')}
                 placeholder="meters"
                 error={errors.loa?.message}
               />
               <Input
                 {...register(`beam`)}
                 label="Beam"
+                disabled={watch('beam')}
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -343,6 +349,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`summerDWT`)}
+                disabled={watch('summerDWT')}
                 label="Summer DWT"
                 customStyles="w-full"
                 type="number"
@@ -352,6 +359,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`summerDraft`)}
+                disabled={watch('summerDraft')}
                 label="Summer draft"
                 customStyles="w-full"
                 type="number"
@@ -361,6 +369,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`normalBallastDWT`)}
+                disabled={watch('normalBallastDWT')}
                 label="Normal ballast DWT"
                 customStyles="w-full"
                 type="number"
@@ -371,6 +380,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`normalBallastDraft`)}
                 label="Normal ballast draft"
+                disabled={watch('normalBallastDraft')}
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -379,6 +389,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`cubicCapacity`)}
+                disabled={watch('cubicCapacity')}
                 label="cubic capacity 98%"
                 customStyles="w-full"
                 type="number"
@@ -388,12 +399,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <FormDropdown
                 label="IMO class"
+                disabled={watch('imoClass')}
                 options={imoClassOptions}
                 name="imoClass"
                 onChange={(option) => handleChange('imoClass', option)}
               />
               <Input
                 {...register(`grades`)}
+                disabled={watch('grades')}
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
                 type="number"
                 customStyles="col-span-4"
