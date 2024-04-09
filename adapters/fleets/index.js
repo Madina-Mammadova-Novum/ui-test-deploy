@@ -151,9 +151,10 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
 
   const {
     id,
+    canSendUpdateRequest,
+    details: { name, summerDwt, q88QuestionnarieFile, tankerLink },
     imo,
     status: requestStatus,
-    details: { name, summerDwt, q88QuestionnarieFile, tankerLink },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
@@ -204,6 +205,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       name,
       fleetName,
       disabled: additionRequested,
+      isValid: canSendUpdateRequest,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
@@ -238,6 +240,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
+    canSendUpdateRequest,
     status: requestStatus,
     details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
   } = data;
@@ -249,6 +252,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
 
   return [
     {
+      id,
       value: index,
     },
     {
@@ -294,13 +298,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       id,
       editable: true,
       name,
+      isValid: canSendUpdateRequest,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
           actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
-          disabled: vesselInProgress,
+          disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
           actionStyles: '!w-[165px]',
         },

@@ -28,13 +28,7 @@ const Input = React.forwardRef(
     useDisableNumberInputScroll();
 
     return (
-      <div
-        className={classnames(
-          disabled && 'opacity-50 pointer-events-none',
-          customStyles,
-          type === 'hidden' && 'hidden'
-        )}
-      >
+      <div className={classnames(disabled && 'pointer-events-none', customStyles, type === 'hidden' && 'hidden')}>
         {label && (
           <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
             {label}
@@ -53,8 +47,10 @@ const Input = React.forwardRef(
               '!p-0 border-none': type === 'radio',
             },
             {
-              // 'bg-purple-light': filled,
               '!border-red': error,
+            },
+            {
+              'bg-purple-light opacity-80': disabled,
             }
           )}
         >

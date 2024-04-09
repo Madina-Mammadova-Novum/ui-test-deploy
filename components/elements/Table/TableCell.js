@@ -55,6 +55,7 @@ const TableCell = ({ cellProps }) => {
     countdownData,
     notified,
     rolled,
+    isValid = false,
   } = cellProps;
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
@@ -100,7 +101,9 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.TANKER_INFORMATION:
         return <NegotiatingTankerInformation offerId={id} />;
       case ACTIONS.REQUEST_UPDATE_TANKER_INFO:
-        return <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} />;
+        return (
+          <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} isValid={isValid} />
+        );
       case ACTIONS.DELETE_TANKER_FROM_FLEET:
         return <DeleteTankerModal state={{ id, fleetId, name, action }} />;
       case ACTIONS.DELETE_TANKER:

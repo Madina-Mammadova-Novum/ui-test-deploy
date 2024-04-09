@@ -35,7 +35,7 @@ const AddTankerWithImoForm = ({
 
   const onSubmit = async (formData) => {
     const { data, error, status } = await getQ88DataByImo({ imo: formData.imo });
-    if ((status >= 200 && status <= 400) || status === 404) {
+    if (status === 200 || status === 404) {
       setQ88({ ...data, imo: formData.imo });
       handleNextStep();
     } else {
