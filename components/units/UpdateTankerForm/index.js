@@ -12,7 +12,7 @@ import { UpdateTankerFormPropTypes } from '@/lib/types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
-import { DatePicker, FormDropdown, Input, Loader, TextWithLabel, Title } from '@/elements';
+import { Button, DatePicker, FormDropdown, Input, Loader, TextWithLabel, Title } from '@/elements';
 import { unassignedFleetOption } from '@/lib/constants';
 import { fileSchema, tankerDataSchema } from '@/lib/schemas';
 import DropzoneForm from '@/modules/DropzoneForm';
@@ -35,6 +35,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
   const {
     prefilledUpdateVesselState: { loading, data: prefilledData, countries, tankerTypes },
   } = useSelector(fleetsSelector);
+
+  const [valid, setValid] = useState(prefilledData?.canSendUpdateRequest || true);
 
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
@@ -202,6 +204,29 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     return (
       <div className="w-72 h-72">
         <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
+  }
+
+  if (valid) {
+    return (
+      <div>
+        <Title level="2">Your previous request has not yet been reviewed by the admin.</Title>
+        <p className="pt-2.5 text-black">Would you like to make any new changes?</p>
+        <div className="flex gap-x-5 pt-5 w-full">
+          <Button
+            customStyles="w-full"
+            customStylesFromWrap="flex-1"
+            buttonProps={{ text: 'Submit', variant: 'primary', size: 'large' }}
+            onClick={() => setValid(!valid)}
+          />
+          <Button
+            customStyles="w-full"
+            customStylesFromWrap="flex-1"
+            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
+            onClick={closeModal}
+          />
+        </div>
       </div>
     );
   }

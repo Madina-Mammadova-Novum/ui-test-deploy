@@ -48,6 +48,7 @@ export const fetchPrefilledDataToUpdate = createAsyncThunk(FLEETS.GET_PREFILLED_
   const adaptedCountries = countriesOptions(countriesData);
   const adaptedPorts = countriesOptions(portsData);
   const adaptedVesselDetails = vesselDetailsAdapter({ data: vesselDetailsData });
+
   let validPrefilledOptions = {};
 
   const validPortOfRegistryOption = adaptedPorts.find(

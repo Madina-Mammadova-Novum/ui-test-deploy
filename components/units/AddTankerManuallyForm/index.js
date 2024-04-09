@@ -55,12 +55,12 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   const methods = useHookFormParams({ schema, state: q88State });
 
   const {
+    watch,
     register,
-    clearErrors,
-    formState: { errors },
     setValue,
     getValues,
-    watch,
+    clearErrors,
+    formState: { errors },
   } = methods;
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
@@ -220,7 +220,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 {...register(`tankerName`)}
                 label="Tanker name"
                 customStyles="w-full"
-                disabled={q88.tankerName}
                 error={errors.tankerName?.message}
               />
               <Input {...register(`imo`)} label="IMO" disabled value={q88State.imo} customStyles="w-full" />
@@ -229,7 +228,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 name="updateDate"
                 maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
-                disabled={q88State.updateDate}
                 error={errors.updateDate?.message}
               />
               <Input
@@ -249,7 +247,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 loadOptions={loadOptions}
                 onMenuScrollToBottom={handleMore}
                 loading={!q88State?.portOfRegistry?.value && portsLoading}
-                disabled={!ports.length || q88State?.portOfRegistry?.value}
                 onChange={(option) => handleChange('portOfRegistry', option)}
               />
             </div>
@@ -382,7 +379,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 {...register(`registeredOwner`)}
                 label="Registered owner"
                 customStyles="w-full"
-                disabled={q88State.registeredOwner}
                 error={errors.registeredOwner?.message}
               />
               <FormDropdown
@@ -398,7 +394,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 {...register(`technicalOperator`)}
                 label="Technical operator"
                 customStyles="w-full"
-                disabled={q88State.technicalOperator}
                 error={errors.technicalOperator?.message}
               />
               <FormDropdown
@@ -414,7 +409,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 {...register(`commercialOperator`)}
                 label="Commercial operator"
                 customStyles="w-full"
-                disabled={q88State.commercialOperator}
                 error={errors.commercialOperator?.message}
               />
               <FormDropdown
@@ -430,7 +424,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 {...register(`disponentOwner`)}
                 label="Disponent owner"
                 customStyles="w-full"
-                disabled={q88State.disponentOwner}
                 error={errors.disponentOwner?.message}
               />
               <FormDropdown
@@ -444,7 +437,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               />
             </div>
             <div>
-              <Title level={4} className="mb-2.5">
+              <Title level="4" className="mb-2.5">
                 Upload your Q88 questionnaire file (optional)
               </Title>
               <DropzoneForm showTextFields={false} />
