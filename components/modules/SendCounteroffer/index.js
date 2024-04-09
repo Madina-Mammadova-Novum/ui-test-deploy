@@ -104,8 +104,9 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
             In order to send counteroffer, please make at least <b>one of the following</b> adjustments:{' '}
           </p>
           <ul>
-            {counterofferPointsToImprove.map((lineToImprove) => (
-              <li>- {lineToImprove}</li>
+            {counterofferPointsToImprove.map((lineToImprove, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <li key={index}>- {lineToImprove}</li>
             ))}
           </ul>
         </div>
