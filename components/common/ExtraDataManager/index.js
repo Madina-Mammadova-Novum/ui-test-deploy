@@ -3,16 +3,10 @@
 import { memo, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { fetchCountries, fetchPorts } from '@/store/entities/general/actions';
 import { setRoleIdentity } from '@/store/entities/user/slice';
 
 const ExtraDataManager = ({ children, session }) => {
   const dispatch = useDispatch();
-
-  const getGeneralData = useCallback(() => {
-    dispatch(fetchPorts());
-    dispatch(fetchCountries());
-  }, [dispatch]);
 
   const setUserData = useCallback(
     ({ role = null }) => {
@@ -20,10 +14,6 @@ const ExtraDataManager = ({ children, session }) => {
     },
     [dispatch]
   );
-
-  useEffect(() => {
-    getGeneralData();
-  }, []);
 
   useEffect(() => {
     if (session?.role) {

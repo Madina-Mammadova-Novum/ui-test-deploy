@@ -32,9 +32,12 @@ const generalSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchPorts.pending, (state) => {
       state.loading = true;
+      state.error = null;
     });
     builder.addCase(fetchPorts.fulfilled, (state, { payload }) => {
+      state.loading = false;
       state.data.ports = payload;
+      state.error = null;
     });
     builder.addCase(fetchPorts.rejected, (state) => {
       state.loading = false;

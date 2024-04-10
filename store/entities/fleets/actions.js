@@ -35,7 +35,7 @@ export const fetchPrefilledDataToUpdate = createAsyncThunk(FLEETS.GET_PREFILLED_
   const [tankerTypesResponse, countriesResponse, portsResponse, vesselDetailsResponse] = await Promise.all([
     getVesselTypes(),
     getCountries(),
-    getPorts(),
+    getPorts({ query: '', pageSize: 20 }),
     getVesselDetails(vesselId),
   ]);
 
@@ -48,6 +48,7 @@ export const fetchPrefilledDataToUpdate = createAsyncThunk(FLEETS.GET_PREFILLED_
   const adaptedCountries = countriesOptions(countriesData);
   const adaptedPorts = countriesOptions(portsData);
   const adaptedVesselDetails = vesselDetailsAdapter({ data: vesselDetailsData });
+
   let validPrefilledOptions = {};
 
   const validPortOfRegistryOption = adaptedPorts.find(

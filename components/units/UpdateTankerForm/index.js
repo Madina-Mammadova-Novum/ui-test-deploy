@@ -10,11 +10,13 @@ import * as yup from 'yup';
 
 import { UpdateTankerFormPropTypes } from '@/lib/types';
 
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
-import { DatePicker, FormDropdown, Input, Loader, TextWithLabel, Title } from '@/elements';
+import { Button, DatePicker, FormDropdown, Input, Loader, TextWithLabel, Title } from '@/elements';
 import { unassignedFleetOption } from '@/lib/constants';
 import { fileSchema, tankerDataSchema } from '@/lib/schemas';
 import DropzoneForm from '@/modules/DropzoneForm';
+import { getPorts } from '@/services';
 import { getVesselCategoryOne, getVesselCategoryTwo, requestUpdateVessel } from '@/services/vessel';
 import { fetchPrefilledDataToUpdate } from '@/store/entities/fleets/actions';
 import { clearPrefilledState, refetchFleets } from '@/store/entities/fleets/slice';
@@ -24,12 +26,17 @@ import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 import { hullTypeOptions, imoClassOptions } from '@/utils/mock';
 
-const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId }) => {
+const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemId, isValid }) => {
   const [initialLoading, setInitialLoading] = useState(true);
+  const [portsLoading, setPortsLoading] = useState(false);
+  const [ports, setPorts] = useState(false);
+  const [perList, setPerList] = useState(50);
 
   const {
-    prefilledUpdateVesselState: { loading, data: prefilledData, ports, countries, tankerTypes },
+    prefilledUpdateVesselState: { loading, data: prefilledData, countries, tankerTypes },
   } = useSelector(fleetsSelector);
+
+  const [valid, setValid] = useState(isValid || false);
 
   const [tankerOptions, setTankerOptions] = useState({
     tankerType: {
@@ -53,14 +60,15 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
   const methods = useHookFormParams({ schema });
 
   const dispatch = useDispatch();
+
   const {
+    reset,
+    watch,
     register,
-    clearErrors,
-    formState: { errors },
     setValue,
     getValues,
-    watch,
-    reset,
+    clearErrors,
+    formState: { errors },
   } = methods;
 
   const handleTankerOptionsChange = (key, state) => {
@@ -73,10 +81,19 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     }));
   };
 
-  useEffect(() => {
-    dispatch(fetchPrefilledDataToUpdate(itemId));
-    return () => dispatch(clearPrefilledState());
-  }, []);
+  const getPortsData = async () => {
+    setPortsLoading(true);
+    const { data } = await getPorts({ query: '', pageSize: perList });
+    setPorts(dropDownOptionsAdapter({ data }));
+    setPortsLoading(false);
+  };
+
+  const loadOptions = async (query, callback) => {
+    const { data } = await getPorts({ query, pageSize: perList });
+    callback(dropDownOptionsAdapter({ data }));
+  };
+
+  const handleMore = () => setPerList((prev) => prev + 50);
 
   const getValidOptions = (data, value) => {
     const filteredOption = data?.filter((option) => option?.id === value);
@@ -105,12 +122,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     reset({ ...prefilledData, ...validPrefilledOptions });
     handleTankerOptionsChange('tankerType', { options: tankerTypes });
   };
-
-  useEffect(() => {
-    if (!loading) {
-      fetchDataOptions();
-    }
-  }, [loading]);
 
   const onSubmit = async (formData) => {
     const { status, message, messageDescription, error } = await requestUpdateVessel({
@@ -175,10 +186,48 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     setValue(key, value);
   };
 
+  useEffect(() => {
+    if (!loading) {
+      fetchDataOptions();
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    getPortsData();
+  }, [perList]);
+
+  useEffect(() => {
+    dispatch(fetchPrefilledDataToUpdate(itemId));
+    return () => dispatch(clearPrefilledState());
+  }, []);
+
   if (initialLoading) {
     return (
       <div className="w-72 h-72">
         <Loader className="h-8 w-8 absolute top-1/2" />
+      </div>
+    );
+  }
+
+  if (!valid) {
+    return (
+      <div>
+        <Title level="2">Your previous request has not yet been reviewed by the admin.</Title>
+        <p className="pt-2.5 text-black">Would you like to make any new changes?</p>
+        <div className="flex gap-x-5 pt-5 w-full">
+          <Button
+            customStyles="w-full"
+            customStylesFromWrap="flex-1"
+            buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
+            onClick={closeModal}
+          />
+          <Button
+            customStyles="w-full"
+            customStylesFromWrap="flex-1"
+            buttonProps={{ text: 'Submit', variant: 'primary', size: 'large' }}
+            onClick={() => setValid(true)}
+          />
+        </div>
       </div>
     );
   }
@@ -223,15 +272,19 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 type="number"
                 label="Built"
                 placeholder="YYYY"
+                disabled={watch('built')}
+                inputStyles="bg-[#E7ECF8]"
                 customStyles="w-full"
                 error={errors.built?.message}
               />
               <FormDropdown
                 label="Port of registry"
                 options={ports}
-                loading={loading}
+                loading={portsLoading}
+                loadOptions={loadOptions}
+                onMenuScrollToBottom={handleMore}
                 asyncCall
-                disabled={!ports.length}
+                disabled={initialLoading}
                 name="portOfRegistry"
                 onChange={(option) => handleChange('portOfRegistry', option)}
               />
@@ -242,7 +295,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerType.options}
                 loading={loading}
                 asyncCall
-                disabled={!tankerType.options.length}
+                disabled={!tankerType.options.length || watch('tankerType.value')}
                 name="tankerType"
                 onChange={(option) => handleChange('tankerType', option)}
               />
@@ -268,6 +321,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 label="Hull type"
                 options={hullTypeOptions}
                 name="hullType"
+                disabled={!hullTypeOptions.length || watch('hullType.value')}
                 onChange={(option) => handleChange('hullType', option)}
                 customStyles={{ className: 'col-span-2' }}
               />
@@ -279,12 +333,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 customStyles="w-full"
                 type="number"
                 step="any"
+                disabled={watch('loa')}
                 placeholder="meters"
                 error={errors.loa?.message}
               />
               <Input
                 {...register(`beam`)}
                 label="Beam"
+                disabled={watch('beam')}
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -293,6 +349,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`summerDWT`)}
+                disabled={watch('summerDWT')}
                 label="Summer DWT"
                 customStyles="w-full"
                 type="number"
@@ -302,6 +359,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`summerDraft`)}
+                disabled={watch('summerDraft')}
                 label="Summer draft"
                 customStyles="w-full"
                 type="number"
@@ -311,6 +369,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`normalBallastDWT`)}
+                disabled={watch('normalBallastDWT')}
                 label="Normal ballast DWT"
                 customStyles="w-full"
                 type="number"
@@ -321,6 +380,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`normalBallastDraft`)}
                 label="Normal ballast draft"
+                disabled={watch('normalBallastDraft')}
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -329,6 +389,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`cubicCapacity`)}
+                disabled={watch('cubicCapacity')}
                 label="cubic capacity 98%"
                 customStyles="w-full"
                 type="number"
@@ -338,12 +399,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <FormDropdown
                 label="IMO class"
+                disabled={watch('imoClass')}
                 options={imoClassOptions}
                 name="imoClass"
                 onChange={(option) => handleChange('imoClass', option)}
               />
               <Input
                 {...register(`grades`)}
+                disabled={watch('grades')}
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
                 type="number"
                 customStyles="col-span-4"

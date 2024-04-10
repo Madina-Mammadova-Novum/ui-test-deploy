@@ -1,14 +1,16 @@
 import { getData } from '@/utils/dataFetching';
 
-export const getPorts = async () => {
-  const response = await getData(`ports`);
+export const getPorts = async ({ query = '', skip = 0, pageSize = 10 }) => {
+  const response = await getData(`ports?skip=${skip}&pageSize=${pageSize}${query && `&query=${query}`}`);
   return {
     ...response,
   };
 };
 
-export const getPortsForSearcForm = async () => {
-  const response = await getData(`ports/search-form-ports`);
+export const getPortsForSearchForm = async ({ query = '', skip = 0, pageSize = 10 }) => {
+  const response = await getData(
+    `ports/search-form-ports?skip=${skip}&pageSize=${pageSize}${query && `&query=${query}`}`
+  );
 
   return {
     ...response,

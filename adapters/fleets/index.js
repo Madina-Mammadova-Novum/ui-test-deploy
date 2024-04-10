@@ -165,53 +165,54 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   return [
     {
       value: index,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       value: name,
       type: TYPE.SEMIBOLD,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       value: imo,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       value: summerDwt && `${summerDwt} tons`,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       value: tankerLink?.name,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       link: q88QuestionnarieFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnarieFile}`,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       value: status,
       icon: <StatusIndicator status={status} />,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
     },
     {
       id,
       editable: true,
       name,
       fleetName,
-      disabled: !canSendUpdateRequest,
+      disabled: additionRequested,
+      isValid: canSendUpdateRequest,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
           actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
-          disabled: vesselInProgress || !canSendUpdateRequest,
+          disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
           actionStyles: '!w-[165px]',
         },
@@ -220,7 +221,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
           editIcon: <TrashIcon viewBox="0 0 24 24" className="fill-red w-5 h-5" />,
           actionVariant: 'delete',
           actionSize: 'medium',
-          disabled: !canSendUpdateRequest,
+          disabled: additionRequested,
         },
       ],
     },
@@ -239,6 +240,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
+    canSendUpdateRequest,
     status: requestStatus,
     details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
   } = data;
@@ -250,6 +252,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
 
   return [
     {
+      id,
       value: index,
     },
     {
@@ -295,13 +298,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       id,
       editable: true,
       name,
+      isValid: canSendUpdateRequest,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
           actionText: vesselInProgress ? requestStatus : 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
-          disabled: vesselInProgress,
+          disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="fill-blue w-4 h-4 ml-1" />,
           actionStyles: '!w-[165px]',
         },

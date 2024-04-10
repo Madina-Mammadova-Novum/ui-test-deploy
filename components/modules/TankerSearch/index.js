@@ -21,7 +21,9 @@ const TankerSearch = () => {
 
   const handleRequest = (value) => dispatch(setRequest(value));
 
-  const handleSearch = (formData) => dispatch(setSearchParams(formData));
+  const handleSearch = (formData) => {
+    dispatch(setSearchParams(formData));
+  };
 
   const handleDirection = (option) => {
     dispatch(setSortingParams({ key: 'currentDirection', data: option }));

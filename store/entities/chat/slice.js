@@ -137,7 +137,6 @@ const chatSlice = createSlice({
     },
     resetChat: (state) => {
       state.data = initialState.data;
-      // state.opened = initialState.opened;
       state.isActiveSession = initialState.isActiveSession;
       state.filterParams = initialState.filterParams;
     },

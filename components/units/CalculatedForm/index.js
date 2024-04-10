@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
 import { successToolsDataAdapter } from '@/adapters';
-import { countryOptionsAdapter } from '@/adapters/countryOption';
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { FormManager } from '@/common';
 import { toolsSchema } from '@/lib/schemas';
 import { getEstimation } from '@/services';
@@ -21,7 +21,7 @@ const CalculatedForm = ({ children }) => {
   const { ports } = useSelector(getGeneralDataSelector);
 
   const [state, setState] = useState({
-    generalPorts: countryOptionsAdapter({ data: ports?.searchPorts }),
+    generalPorts: dropDownOptionsAdapter({ data: ports?.searchPorts }),
     additionalPorts: [],
     calculator: toolsCalculatorOptions[0],
     fromPort: null,
