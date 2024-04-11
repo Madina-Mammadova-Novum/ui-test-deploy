@@ -12,6 +12,7 @@ import { NegotiatingAcceptOffer, SendCounteroffer, ViewOffer } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { getUserDataSelector } from '@/store/selectors';
 import { OfferDeclineForm } from '@/units';
+import { errorToast } from '@/utils/hooks';
 
 const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
   const [step, setStep] = useState('view_offer');
@@ -24,24 +25,27 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
 
   const handleCountdownExtensionSuccess = () => setOfferDetails(extendCountdownDataAdapter);
 
+  const initActions = async () => {
+    const { status, data, error } = await getOfferDetails(itemId, role);
+    if (status === 200) {
+      setOfferDetails(offerDetailsAdapter({ data, role }));
+    } else {
+      errorToast(error.title, error.message);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    (async () => {
-      const { status, data, error } = await getOfferDetails(itemId, role);
-      if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data, role }));
-      } else {
-        console.error(error);
-      }
-      setLoading(false);
-    })();
+    initActions();
   }, []);
 
-  if (loading)
+  if (loading) {
     return (
       <div className="w-72 h-72">
         <Loader className="h-8 w-8 absolute top-1/2" />
       </div>
     );
+  }
 
   switch (step) {
     case 'offer_decline':
@@ -56,7 +60,7 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
         />
       );
     case 'offer_counteroffer':
-      return <SendCounteroffer closeModal={closeModal} goBack={setStep} offerDetails={offerDetails} />;
+      return <SendCounteroffer closeModal={closeModal} goBack={setStep} offerDetails={offerDetails} dealId={itemId} />;
     case 'offer_accept':
       return (
         <NegotiatingAcceptOffer

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchOfferOptioins, fetchOfferValidation } from './actions';
+import { fetchOfferOptioins, fetchOfferValidation, fetchСounterOfferValidation } from './actions';
 
 const initialState = {
   loading: true,
@@ -63,6 +63,22 @@ const offerSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchOfferValidation.rejected, (state, action) => {
+      state.validating = false;
+      state.loading = false;
+      state.valid = false;
+      state.error = action.payload;
+    });
+    builder.addCase(fetchСounterOfferValidation.pending, (state) => {
+      state.validating = true;
+    });
+    builder.addCase(fetchСounterOfferValidation.fulfilled, (state, { payload }) => {
+      state.validating = false;
+      state.valid = payload?.canProceed;
+      state.data.ranges = payload?.ranges;
+      state.data.message = payload?.message;
+      state.error = null;
+    });
+    builder.addCase(fetchСounterOfferValidation.rejected, (state, action) => {
       state.validating = false;
       state.loading = false;
       state.valid = false;
