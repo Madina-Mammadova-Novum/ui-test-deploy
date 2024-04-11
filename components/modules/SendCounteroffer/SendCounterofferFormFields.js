@@ -40,6 +40,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   };
 
   const selectedFreight = getFreightValue();
+  console.log('selectedFreight: ', selectedFreight);
   const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[selectedFreight?.label], [selectedFreight]);
 
   const minValue = freightEstimation?.min;
@@ -66,8 +67,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   useEffect(() => {
     setFreightEstimation({
-      min: ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
-      max: ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
+      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
     });
   }, [selectedFreight, ranges]);
 

@@ -27,8 +27,10 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const initChatActions = useCallback(async () => {
     if (isOpened) {
-      const currnetDate = new Date().toISOString();
-      dispatch(getChatHistory({ data: { id: data?.chatId, date: data?.key === 'support' && currnetDate } }));
+      if (data?.key !== 'support') {
+        dispatch(getChatHistory({ data: { id: data?.chatId } }));
+      }
+
       await сhatSessionService.init({ chatId: data.chatId, token });
     } else {
       await сhatSessionService.stop();
