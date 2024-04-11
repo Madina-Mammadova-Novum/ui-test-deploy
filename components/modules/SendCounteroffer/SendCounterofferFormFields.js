@@ -51,7 +51,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`;
 
   const helperLaytimeFormat = `Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
-    ranges?.layTime?.max?.end || 120
+    ranges?.layTime?.min?.end || 94
   }`;
 
   const handleChange = async (key, value) => {
