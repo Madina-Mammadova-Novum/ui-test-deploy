@@ -57,6 +57,11 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
+    if (value?.label === '$/mt') {
+      setValue('value', '');
+    }
+
     if (error) {
       clearErrors(key);
     }
