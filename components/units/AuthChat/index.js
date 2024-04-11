@@ -61,12 +61,23 @@ const AuthChat = ({ opened, token }) => {
     }
   }, [user?.messages]);
 
+  const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
+
   const handleClose = () => {
     dispatch(setOpenedChat(!opened));
     dispatch(resetChatFilter());
   };
 
-  const handleMore = () => dispatch(setChatFilter({ limit: limit + limit }));
+  const handleCloseConversation = async () => {
+    await сhatSessionService.stop();
+    dispatch(resetUser());
+  };
+
+  const handleCollapseConversation = () => {
+    dispatch(setOpenedChat(true));
+    dispatch(setConversation(false));
+    dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
+  };
 
   useEffect(() => {
     if (token) {
@@ -117,17 +128,6 @@ const AuthChat = ({ opened, token }) => {
     }
     return <ChatLoadMoreCta tab={tab} onClick={handleMore} disabled={dataByTab?.length <= limit || loading} />;
   }, [updating, tab, dataByTab, limit, handleMore]);
-
-  const handleCloseConversation = async () => {
-    await сhatSessionService.stop();
-    dispatch(resetUser());
-  };
-
-  const handleCollapseConversation = () => {
-    dispatch(setOpenedChat(true));
-    dispatch(setConversation(false));
-    dispatch(setCollapsedChat({ ...user.data, messageCount: 0 }));
-  };
 
   return (
     <>
