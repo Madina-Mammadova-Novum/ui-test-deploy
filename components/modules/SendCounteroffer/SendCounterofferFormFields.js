@@ -40,7 +40,6 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   };
 
   const selectedFreight = getFreightValue();
-  console.log('selectedFreight: ', selectedFreight);
   const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[selectedFreight?.label], [selectedFreight]);
 
   const minValue = freightEstimation?.min;
