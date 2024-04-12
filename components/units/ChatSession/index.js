@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatSessionPropTypes } from '@/lib/types';
 
 import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
-import { сhatSessionService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
@@ -16,7 +15,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const { chats } = useSelector(getAuthChatSelector);
+  const { chats, isActive } = useSelector(getAuthChatSelector);
 
   const handleModal = (e, id) => {
     e.stopPropagation();
@@ -43,15 +42,21 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     setSessionId('');
   };
 
-  const handleOpenConversation = async () => {
-    if (chats?.user?.data?.chatId === data.chatId) return;
-
-    dispatch(resetUser());
-    dispatch(removeCollapsedChat(data?.chatId));
-    await сhatSessionService.stop();
-
-    dispatch(setUser(data));
+  const onActivate = (user) => {
+    dispatch(setUser(user));
     dispatch(setConversation(true));
+  };
+
+  const onRemove = ({ id }) => {
+    dispatch(resetUser());
+    dispatch(removeCollapsedChat(id));
+  };
+
+  const handleOpenConversation = () => {
+    if (isActive && chats?.user?.data?.chatId === data.chatId) return;
+
+    onRemove({ id: data?.chatId });
+    onActivate(data);
   };
 
   const actions = {

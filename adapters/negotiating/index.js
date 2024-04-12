@@ -27,7 +27,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'open port',
-      text: `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
+      text: openPort?.name && `${openPort?.name}${openPort?.locode && `, ${openPort?.locode}`}`,
       countryCode: getLocode(openPort?.locode),
     },
   ];

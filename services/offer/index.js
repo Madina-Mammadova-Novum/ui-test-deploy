@@ -7,6 +7,7 @@ import {
   requestExtendCountdownAdapter,
   requestOnSubsCountdownExtensionAdapter,
   sendCounterofferAdapter,
+  sendCounterOfferValidationAdapter,
   sendOfferAdapter,
   sendOfferValidationAdapter,
 } from '@/adapters/offer';
@@ -17,6 +18,13 @@ import { getRoleIdentity } from '@/utils/helpers';
 export async function sendOfferValidation({ data }) {
   const body = sendOfferValidationAdapter({ data });
   const response = await postData(`offer/charterer/validation`, body);
+
+  return { ...response };
+}
+
+export async function sendCounterOfferValidation(tankerId) {
+  const body = sendCounterOfferValidationAdapter(tankerId);
+  const response = await postData(`offer/charterer/counter-validation`, body);
 
   return { ...response };
 }

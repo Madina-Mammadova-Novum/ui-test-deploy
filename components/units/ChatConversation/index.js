@@ -23,29 +23,20 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const token = getCookieFromBrowser('session-access-token');
 
   const { chats } = useSelector(getAuthChatSelector);
-  const { data, updating, status } = chats?.user;
+  const { data, updating } = chats?.user;
 
   const initChatActions = useCallback(async () => {
-    if (data?.chatId) {
-      сhatSessionService.onToggle(isOpened);
-    }
+    сhatSessionService.onToggle(isOpened);
 
     if (isOpened) {
-      if (data?.key !== 'support') {
-        dispatch(getChatHistory({ data: { id: data?.chatId } }));
-      }
-
-      if (status === 200 && data?.chatId) {
-        await сhatSessionService.init({ chatId: data.chatId, token });
-      }
-    } else {
-      await сhatSessionService.stop();
+      await сhatSessionService.init({ chatId: data.chatId, token });
+      dispatch(getChatHistory({ data: { id: data?.chatId } }));
     }
-  }, [data?.chatId, isOpened, data?.key]);
+  }, [data?.chatId, isOpened, token]);
 
   useEffect(() => {
     initChatActions();
-  }, [isOpened, data?.chatId, status]);
+  }, [isOpened, token, data?.chatId]);
 
   useEffect(() => {
     if (message !== '') {
@@ -62,7 +53,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   };
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
-  const handleEnter = ({ charCode }) => charCode === 13 && handleSubmit();
 
   const setConversationPosition = useMemo(() => {
     if (isMediumScreen && isOpened) return 'right-24';
@@ -85,20 +75,26 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         <div className="flex flex-col p-2.5">
           <ChatConversationBody />
           <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              value={message}
-              onChange={handleMessage}
-              onKeyPress={handleEnter}
-              placeholder="Message ..."
-              customStyles="!border-gray-darker !w-full"
-            />
-            <Button
-              type="submit"
-              disabled={disabled}
-              customStyles="border border-gray-darker !p-2.5"
-              buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
-            />
+            <div className={`flex w-full gap-2.5 ${data?.deactivated ? 'flex-col' : 'flex-row'}`}>
+              <Input
+                type="text"
+                value={message}
+                onChange={handleMessage}
+                placeholder="Message ..."
+                customStyles="!border-gray-darker !w-full"
+              />
+              <Button
+                type="submit"
+                disabled={disabled}
+                customStyles="border border-gray-darker w-full !p-2.5"
+                buttonProps={{
+                  variant: 'tertiary',
+                  size: 'small',
+                  icon: { before: !data?.deactivated && <PlaneSVG /> },
+                  text: data?.deactivated && 'Request to deactivate',
+                }}
+              />
+            </div>
           </form>
         </div>
       </div>

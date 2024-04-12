@@ -40,6 +40,19 @@ const initialState = {
       email: null,
       location: null,
     },
+    supp: {
+      created: '',
+      data: {
+        messageCount: 0,
+        isOnline: false,
+        isTyping: false,
+      },
+      messages: [],
+      status: null,
+      loading: false,
+      updating: false,
+      isLast: false,
+    },
   },
   filterParams: {
     searchValue: '',
@@ -128,7 +141,6 @@ const chatSlice = createSlice({
     },
     resetChat: (state) => {
       state.data = initialState.data;
-      // state.opened = initialState.opened;
       state.isActiveSession = initialState.isActiveSession;
       state.filterParams = initialState.filterParams;
     },

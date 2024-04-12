@@ -17,7 +17,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
 
       <div className={`text-xsm mt-2.5 gap-x-2.5 ${inlineVariant && 'flex justify-between'}`}>
         <div>
-          <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
+          <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
             dates
           </Title>
           {data?.dates?.map((pair) => (

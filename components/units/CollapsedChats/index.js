@@ -17,19 +17,17 @@ const CollapsedChats = () => {
     dispatch(setConversation(true));
   };
 
-  const onRemove = async ({ id, key }) => {
-    await сhatSessionService.stop();
+  const onRemove = ({ id }) => {
+    сhatSessionService.stop();
     dispatch(removeCollapsedChat(id));
-
-    if (key !== 'support') {
-      dispatch(resetUser());
-    }
+    dispatch(resetUser());
   };
 
   const handleStartConversation = ({ id }) => {
     const user = chats.collapsed?.find((session) => session?.chatId === id);
 
-    onRemove({ id: user?.chatId, key: user?.key }).then(() => onActivate(user));
+    onRemove({ id: user?.chatId });
+    onActivate(user);
   };
 
   const handleCloseConversation = (e, id) => {
@@ -56,7 +54,7 @@ const CollapsedChats = () => {
 
   return (
     chats.collapsed.length > 0 && (
-      <div className="flex z-40 flex-col gap-4 fixed right-4 bottom-24">{chats.collapsed.map(printCollapsedChat)}</div>
+      <div className="flex flex-col gap-4 fixed right-4 bottom-24">{chats.collapsed.map(printCollapsedChat)}</div>
     )
   );
 };

@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { OFFER } from '@/store/entities/offer/types';
 
 /* Services */
-import { sendOfferValidation } from '@/services/offer';
+import { sendCounterOfferValidation, sendOfferValidation } from '@/services/offer';
 import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
 import { getVesselFreightFormats } from '@/services/vessel';
 import { convertDataToOptions } from '@/utils/helpers';
@@ -34,3 +34,18 @@ export const fetchOfferValidation = createAsyncThunk(OFFER.GET_OFFER_VALIDATION,
     ...result?.data,
   };
 });
+
+export const fetchСounterOfferValidation = createAsyncThunk(
+  OFFER.GET_COUNTER_OFFER_VALIDATION,
+  async (data, { rejectWithValue }) => {
+    const result = await sendCounterOfferValidation(data);
+
+    if (result?.error) {
+      return rejectWithValue(result?.error);
+    }
+
+    return {
+      ...result?.data,
+    };
+  }
+);
