@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatSessionPropTypes } from '@/lib/types';
 
 import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
-import { сhatSessionService } from '@/services/signalR';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
@@ -48,8 +47,7 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     dispatch(setConversation(true));
   };
 
-  const onRemove = async ({ id }) => {
-    await сhatSessionService.stop();
+  const onRemove = ({ id }) => {
     dispatch(resetUser());
     dispatch(removeCollapsedChat(id));
   };
@@ -57,7 +55,8 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   const handleOpenConversation = () => {
     if (isActive && chats?.user?.data?.chatId === data.chatId) return;
 
-    onRemove({ id: data?.chatId }).then(() => onActivate(data));
+    onRemove({ id: data?.chatId });
+    onActivate(data);
   };
 
   const actions = {

@@ -23,27 +23,20 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const token = getCookieFromBrowser('session-access-token');
 
   const { chats } = useSelector(getAuthChatSelector);
-  const { data, updating, status } = chats?.user;
+  const { data, updating } = chats?.user;
 
   const initChatActions = useCallback(async () => {
-    if (isOpened) {
-      if (data?.key !== 'support') {
-        dispatch(getChatHistory({ data: { id: data?.chatId } }));
-      }
+    сhatSessionService.onToggle(isOpened);
 
+    if (isOpened) {
       await сhatSessionService.init({ chatId: data.chatId, token });
-    } else {
-      await сhatSessionService.stop();
+      dispatch(getChatHistory({ data: { id: data?.chatId } }));
     }
-  }, [data?.chatId, isOpened, data?.key, status]);
+  }, [data?.chatId, isOpened, token]);
 
   useEffect(() => {
     initChatActions();
-
-    if (data?.chatId) {
-      сhatSessionService.onToggle(isOpened);
-    }
-  }, [isOpened, data?.chatId, data?.key, status]);
+  }, [isOpened, token, data?.chatId]);
 
   useEffect(() => {
     if (message !== '') {
@@ -60,7 +53,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   };
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
-  const handleEnter = ({ charCode }) => charCode === 13 && handleSubmit();
 
   const setConversationPosition = useMemo(() => {
     if (isMediumScreen && isOpened) return 'right-24';
@@ -88,7 +80,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
                 type="text"
                 value={message}
                 onChange={handleMessage}
-                onKeyPress={handleEnter}
                 placeholder="Message ..."
                 customStyles="!border-gray-darker !w-full"
               />
