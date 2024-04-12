@@ -65,7 +65,7 @@ const CounterofferForm = ({
       closeModal();
     } else {
       setDisabled(false);
-      errorToast('Bad request', error?.title);
+      errorToast('Bad request', error?.message);
     }
   };
 

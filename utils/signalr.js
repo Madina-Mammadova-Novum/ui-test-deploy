@@ -71,7 +71,7 @@ export class NotificationController extends SignalRController {
   }
 
   receiveTrigger() {
-    this.store.dispatch(fetchNotifications({ skip: 0, take: 50, query: '', isOpened: false, origin: null }));
+    this.store.dispatch(fetchNotifications({ skip: 0, take: 10, query: '', isOpened: false, origin: null }));
   }
 
   async stop() {
@@ -127,12 +127,12 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
   }
 
-  async stop() {
+  stop() {
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
 
     if (this.connection) {
-      await this.connection.stop();
+      this.connection.stop();
     }
   }
 }

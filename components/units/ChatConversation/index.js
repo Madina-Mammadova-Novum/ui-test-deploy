@@ -27,15 +27,11 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const initChatActions = useCallback(async () => {
     if (isOpened) {
-      if (data?.key !== 'support') {
-        dispatch(getChatHistory({ data: { id: data?.chatId } }));
-      }
-
       await сhatSessionService.init({ chatId: data.chatId, token });
-    } else {
-      await сhatSessionService.stop();
+
+      if (data?.key !== 'support') dispatch(getChatHistory({ data: { id: data?.chatId } }));
     }
-  }, [data?.chatId, isOpened, data?.key, status]);
+  }, [data?.chatId, isOpened, data?.key, token]);
 
   useEffect(() => {
     initChatActions();
@@ -60,7 +56,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   };
 
   const handleMessage = ({ target: { value } }) => setMessage(value);
-  const handleEnter = ({ charCode }) => charCode === 13 && handleSubmit();
 
   const setConversationPosition = useMemo(() => {
     if (isMediumScreen && isOpened) return 'right-24';
@@ -88,7 +83,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
                 type="text"
                 value={message}
                 onChange={handleMessage}
-                onKeyPress={handleEnter}
                 placeholder="Message ..."
                 customStyles="!border-gray-darker !w-full"
               />

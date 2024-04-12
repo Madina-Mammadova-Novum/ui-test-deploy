@@ -68,9 +68,9 @@ const AuthChat = ({ opened, token }) => {
     dispatch(resetChatFilter());
   };
 
-  const handleCloseConversation = async () => {
-    await сhatSessionService.stop();
+  const handleCloseConversation = () => {
     dispatch(resetUser());
+    сhatSessionService.stop();
   };
 
   const handleCollapseConversation = () => {
@@ -81,8 +81,8 @@ const AuthChat = ({ opened, token }) => {
 
   useEffect(() => {
     if (token) {
-      dispatch(getListOfChats());
       getChatNotifications();
+      dispatch(getListOfChats());
     }
   }, [token]);
 
