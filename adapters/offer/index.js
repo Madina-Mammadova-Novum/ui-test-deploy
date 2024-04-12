@@ -142,6 +142,10 @@ export function sendOfferValidationAdapter({ data }) {
   };
 }
 
+export function sendCounterOfferValidationAdapter(dealId) {
+  return { dealId };
+}
+
 export function declineOfferAdapter({ data }) {
   if (!data) return null;
   const { reason, offerId } = data;

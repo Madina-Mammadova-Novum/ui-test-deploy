@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import classnames from 'classnames';
 
@@ -12,6 +13,7 @@ import { Dropdown } from '@/elements';
 import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
+import { fetchСounterOfferValidation } from '@/store/entities/offer/actions';
 import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 import { counterofferPointsToImprove } from '@/utils/mock';
@@ -27,7 +29,9 @@ const tabs = [
   },
 ];
 
-const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
+const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
+  const dispatch = useDispatch();
+
   const scrollingContainerRef = useRef(null);
 
   const [disabled, setDisabled] = useState(false);
@@ -62,16 +66,22 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails }) => {
   const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
   const handleValidationError = () => setCurrentTab(tabs[0].value);
 
+  const initActions = async () => {
+    handleCountdownStateChange('loading', true);
+    const { data = [] } = await getCountdownTimer();
+    const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
+    const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+    handleCountdownStateChange('responseCountdownOptions', convertedOptions);
+    handleCountdownStateChange('responseCountdown', defaultCountdown);
+    handleCountdownStateChange('loading', false);
+  };
+
   useEffect(() => {
-    (async () => {
-      handleCountdownStateChange('loading', true);
-      const { data = [] } = await getCountdownTimer();
-      const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
-      const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
-      handleCountdownStateChange('responseCountdownOptions', convertedOptions);
-      handleCountdownStateChange('responseCountdown', defaultCountdown);
-      handleCountdownStateChange('loading', false);
-    })();
+    dispatch(fetchСounterOfferValidation(dealId));
+  }, [dealId]);
+
+  useEffect(() => {
+    initActions();
   }, []);
 
   const tabContent = useMemo(() => {

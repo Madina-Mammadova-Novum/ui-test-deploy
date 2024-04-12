@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CommercialOfferTermsPropTypes } from '@/lib/types';
@@ -32,18 +32,34 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
     formState: { errors, isSubmitting },
   } = useHookForm();
 
-  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
+  const currentFreight = watch('freight');
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[currentFreight?.label], [currentFreight]);
+
+  const getFreightValue = () => {
+    const currentFreightType = parseFloat(currentFreight?.value);
+    return freightFormats?.find((format) => parseFloat(format?.value) === currentFreightType);
+  };
+
+  const selectedFreight = getFreightValue();
+
+  const minValue = freightEstimation?.min;
+  const maxValue = freightEstimation?.max;
+
+  const helperFreightFormat = freightEstimation?.min && `${minValue} - ${maxValue}`;
+
+  const helperRangeFormat =
+    ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`;
+
+  const helperLaytimeFormat = `Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
+    ranges?.layTime?.max?.end || 120
+  }`;
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
-
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
-    if (key === 'freight') {
-      setFreightEstimation({
-        min: ranges?.freightFormats[Number(value?.value) - 1]?.ranges?.min?.start,
-        max: ranges?.freightFormats[Number(value?.value) - 1]?.ranges?.max?.end,
-      });
+    if (value?.label === '$/mt') {
+      setValue('value', '');
     }
 
     if (error) {
@@ -103,6 +119,13 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
     );
   };
 
+  useEffect(() => {
+    setFreightEstimation({
+      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
+      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+    });
+  }, [selectedFreight, ranges]);
+
   return (
     <>
       <Title level="3">Commercial offer terms</Title>
@@ -128,7 +151,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           type="number"
           placeholder={freightValuePlaceholder}
           customStyles="w-1/2"
-          helperText={freightEstimation.min && `${freightEstimation?.min} - ${freightEstimation?.max}`}
+          helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
           step="any"
@@ -143,9 +166,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
         placeholder="$ per day"
         customStyles="w-1/2 mt-3 pr-5"
         error={errors.demurrageRate?.message}
-        helperText={
-          ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`
-        }
+        helperText={helperRangeFormat}
         disabled={!valid || isSubmitting}
       />
 
@@ -157,9 +178,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           type="number"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
-          helperText={`Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
-            ranges?.layTime?.max?.end || 120
-          } hours`}
+          helperText={helperLaytimeFormat}
           error={errors.layTime?.message}
           disabled={!valid || isSubmitting}
         />

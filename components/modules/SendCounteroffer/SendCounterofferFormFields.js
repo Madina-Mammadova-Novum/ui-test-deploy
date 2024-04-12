@@ -7,94 +7,79 @@ import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
-import { calculateFreightEstimation } from '@/services/calculator';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
-import { getUserDataSelector, offerSelector } from '@/store/selectors';
-import { calculateIntDigit, calculateTotal, getRoleIdentity, getValueWithPath } from '@/utils/helpers';
+import { getOfferSelector, getUserDataSelector } from '@/store/selectors';
+import { getRoleIdentity, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
-  const [freightEstimation, setFreightEstimation] = useState({});
   const dispatch = useDispatch();
+
   const {
+    watch,
     register,
-    clearErrors,
-    formState: { errors, isSubmitting },
     setValue,
     getValues,
-    watch,
+    clearErrors,
+    formState: { errors, isSubmitting },
   } = useHookForm();
 
+  const [freightEstimation, setFreightEstimation] = useState({});
   const { role } = useSelector(getUserDataSelector);
+  const { ranges, valid, loading, data: helperData } = useSelector(getOfferSelector);
+  const { paymentTerms, demurragePaymentTerms, freightFormats } = helperData;
   const { isOwner } = getRoleIdentity({ role });
 
-  const { tankerId, products, loadPortId, dischargePortId } = data;
+  const { tankerId, products } = data;
 
-  const {
-    data: { paymentTerms, demurragePaymentTerms, freightFormats },
-    loading: initialLoading,
-  } = useSelector(offerSelector);
+  const currentFreight = watch('freight');
 
-  const handleFormat = async () => {
-    const productsData = getValues('products');
-    const totalCargoQuantity = calculateTotal(productsData, 'quantity');
-
-    const body = { loadPortId, dischargePortId, totalCargoQuantity };
-    const response = await calculateFreightEstimation({ data: body });
-
-    if (!response.error) {
-      setFreightEstimation({
-        ...response.data,
-        min: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
-        max: calculateIntDigit(response.data[data?.freight?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
-      });
-
-      setValue('totalAmount', data.total);
-    }
+  const getFreightValue = () => {
+    const currentFreightType = parseFloat(currentFreight?.value);
+    return freightFormats?.find((format) => parseFloat(format?.value) === currentFreightType);
   };
 
-  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[watch('freight')?.label], [watch('freight')]);
+  const selectedFreight = getFreightValue();
+  const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[selectedFreight?.label], [selectedFreight]);
 
-  useEffect(() => {
-    dispatch(fetchOfferOptioins(tankerId));
-  }, [tankerId]);
+  const minValue = freightEstimation?.min;
+  const maxValue = freightEstimation?.max;
 
-  useEffect(() => {
-    if (data?.freight?.value) {
-      handleFormat();
-    }
-  }, []);
+  const helperFreightFormat = freightEstimation?.min && `${minValue} - ${maxValue}`;
+
+  const helperRangeFormat =
+    ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`;
+
+  const helperLaytimeFormat = `Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
+    ranges?.layTime?.min?.end || 94
+  }`;
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
-
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
+    if (value?.label === '$/mt') {
+      setValue('value', '');
+    }
 
     if (error) {
       clearErrors(key);
     }
-
     setValue(key, value);
-
-    if (key === 'freight') {
-      const productsData = getValues('products');
-      const totalCargoQuantity = calculateTotal(productsData, 'quantity');
-
-      const { status, data: freightEstimationData } = await calculateFreightEstimation({
-        data: { loadPortId, dischargePortId, totalCargoQuantity },
-      });
-
-      if (status === 200) {
-        setFreightEstimation({
-          ...freightEstimationData,
-          min: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 0.8),
-          max: calculateIntDigit(freightEstimationData[value?.label === '$/mt' ? 'perTonnage' : 'total'], 1.2),
-        });
-
-        setValue('totalAmount', data.total);
-      }
-    }
   };
+
+  useEffect(() => {
+    setFreightEstimation({
+      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
+      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+    });
+  }, [selectedFreight, ranges]);
+
+  useEffect(() => {
+    if (valid) {
+      dispatch(fetchOfferOptioins(tankerId));
+    }
+  }, [tankerId, valid]);
 
   const printProduct = (_, index) => {
     return (
@@ -139,8 +124,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
-          disabled={initialLoading}
-          loading={initialLoading}
+          disabled={loading}
+          loading={loading}
           onChange={(option) => handleChange('freight', option)}
           asyncCall
         />
@@ -150,8 +135,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="value"
           type="number"
           placeholder={freightValuePlaceholder}
-          customStyles="w-1/2"
-          helperText={freightEstimation.total && `${freightEstimation.min} - ${freightEstimation.max}`}
+          customStyles="w-1/2 whitespace-nowrap"
+          helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={isSubmitting}
           step="any"
@@ -164,7 +149,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         name="demurrageRate"
         type="number"
         placeholder="$ per day"
-        customStyles="w-1/2 mt-3 pr-5"
+        customStyles="w-1/2 mt-3 pr-5 whitespace-nowrap"
+        helperText={helperRangeFormat}
         error={errors.demurrageRate?.message}
         disabled={isSubmitting}
       />
@@ -175,12 +161,13 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           label="lay time"
           name="layTime"
           type="number"
-          helperText="The maximum laytime is 100 hours"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
-          error={errors.layTime?.message}
           disabled={isSubmitting}
+          error={errors.layTime?.message}
+          helperText={helperLaytimeFormat}
         />
+
         <Input
           {...register('nor')}
           label="nor"
@@ -197,8 +184,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           label="undisputed demurrage payment terms"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
-          disabled={initialLoading}
-          loading={initialLoading}
+          disabled={loading}
+          loading={loading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
           asyncCall
@@ -209,8 +196,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
-          disabled={initialLoading}
-          loading={initialLoading}
+          disabled={loading}
+          loading={loading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}
           asyncCall

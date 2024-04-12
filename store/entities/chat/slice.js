@@ -40,7 +40,7 @@ const initialState = {
       email: null,
       location: null,
     },
-    supportLobby: {
+    supp: {
       created: '',
       data: {
         messageCount: 0,
@@ -48,6 +48,10 @@ const initialState = {
         isTyping: false,
       },
       messages: [],
+      status: null,
+      loading: false,
+      updating: false,
+      isLast: false,
     },
   },
   filterParams: {

@@ -17,16 +17,17 @@ const CollapsedChats = () => {
     dispatch(setConversation(true));
   };
 
-  const onRemove = async ({ id }) => {
-    await сhatSessionService.stop();
-    dispatch(resetUser());
+  const onRemove = ({ id }) => {
+    сhatSessionService.stop();
     dispatch(removeCollapsedChat(id));
+    dispatch(resetUser());
   };
 
   const handleStartConversation = ({ id }) => {
     const user = chats.collapsed?.find((session) => session?.chatId === id);
 
-    onRemove({ id: user?.chatId, key: user?.key }).then(() => onActivate(user));
+    onRemove({ id: user?.chatId });
+    onActivate(user);
   };
 
   const handleCloseConversation = (e, id) => {

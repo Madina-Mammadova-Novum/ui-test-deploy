@@ -1,20 +1,21 @@
 'use client';
 
 /* eslint-disable consistent-return */
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import * as yup from 'yup';
+import * as yup from 'yup';
 
 import { CounterofferFormPropTypes } from '@/lib/types';
 
 import { getPrefilledFormDataAdapter } from '@/adapters/offer';
 import { FormManager } from '@/common';
-// import { offerSchema } from '@/lib/schemas';
+import { offerSchema } from '@/lib/schemas';
 import { sendCounteroffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
-import { getUserDataSelector } from '@/store/selectors';
+import { getOfferSelector } from '@/store/selectors';
+import { getCookieFromBrowser } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CounterofferForm = ({
@@ -28,20 +29,21 @@ const CounterofferForm = ({
   setDisabled,
 }) => {
   const dispatch = useDispatch();
-  // const [freightState, setFreightState] = useState({});
+  const role = getCookieFromBrowser('session-user-role');
+  const { ranges } = useSelector(getOfferSelector);
 
-  const { role } = useSelector(getUserDataSelector);
-  // const schema = yup.object({ ...offerSchema({ currentFreight: freightState }) });
-
+  const [freightState, setFreightState] = useState({});
   const formState = { ...data, ...getPrefilledFormDataAdapter({ data: data?.products || [] }) };
-  const methods = useHookFormParams({ state: formState });
 
-  // const freightType = methods.watch('freight');
-  // const freightValue = methods.watch('value');
+  const schema = yup.object({ ...offerSchema({ ...ranges, currentFreight: freightState }) });
+  const methods = useHookFormParams({ schema, state: formState });
 
-  // useEffect(() => {
-  //   setFreightState({ type: freightType, value: freightValue });
-  // }, [freightType, freightValue]);
+  const freightType = methods.watch('freight');
+  const freightValue = methods.watch('value');
+
+  useEffect(() => {
+    setFreightState({ type: freightType?.value, value: freightValue });
+  }, [freightType, freightValue]);
 
   const handleSubmit = async (formData) => {
     setDisabled(true);
@@ -63,7 +65,7 @@ const CounterofferForm = ({
       closeModal();
     } else {
       setDisabled(false);
-      errorToast('Bad request', error?.title);
+      errorToast('Bad request', error?.message);
     }
   };
 
