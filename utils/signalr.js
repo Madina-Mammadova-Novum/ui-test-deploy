@@ -102,24 +102,16 @@ export class ChatSessionController extends SignalRController {
     });
   }
 
-  async ensureConnection() {
-    if (!this.connection || this.connection.state !== 'Connected') {
-      throw new Error('WebSocket connection is not established.');
-    }
-  }
-
   onToggle(opened) {
     this.isOpened = opened;
     this.store.dispatch(setConversation(opened));
   }
 
   async sendMessage({ message }) {
-    await this.ensureConnection();
-    this.connection.invoke('SendMessage', message);
+    this.connection?.invoke('SendMessage', message);
   }
 
   async readMessage({ id }) {
-    await this.ensureConnection();
     this.connection?.invoke('ReadMessage', id);
   }
 

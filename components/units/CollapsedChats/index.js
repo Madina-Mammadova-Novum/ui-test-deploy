@@ -18,8 +18,8 @@ const CollapsedChats = () => {
   };
 
   const onRemove = ({ id }) => {
-    dispatch(removeCollapsedChat(id));
     сhatSessionService.stop();
+    dispatch(removeCollapsedChat(id));
     dispatch(resetUser());
   };
 

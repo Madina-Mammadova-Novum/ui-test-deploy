@@ -23,23 +23,20 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const token = getCookieFromBrowser('session-access-token');
 
   const { chats } = useSelector(getAuthChatSelector);
-  const { data, updating, status } = chats?.user;
+  const { data, updating } = chats?.user;
 
   const initChatActions = useCallback(async () => {
+    сhatSessionService.onToggle(isOpened);
+
     if (isOpened) {
       await сhatSessionService.init({ chatId: data.chatId, token });
-
-      if (data?.key !== 'support') dispatch(getChatHistory({ data: { id: data?.chatId } }));
+      dispatch(getChatHistory({ data: { id: data?.chatId } }));
     }
-  }, [data?.chatId, isOpened, data?.key, token]);
+  }, [data?.chatId, isOpened, token]);
 
   useEffect(() => {
     initChatActions();
-
-    if (data?.chatId) {
-      сhatSessionService.onToggle(isOpened);
-    }
-  }, [isOpened, data?.chatId, data?.key, status]);
+  }, [isOpened, token, data?.chatId]);
 
   useEffect(() => {
     if (message !== '') {
