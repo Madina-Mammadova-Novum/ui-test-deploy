@@ -71,6 +71,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     formState: { errors },
   } = methods;
 
+  console.log('form-state: ', getValues());
+
   const handleTankerOptionsChange = (key, state) => {
     setTankerOptions((prevState) => ({
       ...prevState,
