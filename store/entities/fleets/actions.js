@@ -46,14 +46,10 @@ export const fetchPrefilledDataToUpdate = createAsyncThunk(FLEETS.GET_PREFILLED_
 
   const adaptedTankerTypes = convertDataToOptions({ data: tankerTypesData }, 'id', 'name');
   const adaptedCountries = countriesOptions(countriesData);
-  const adaptedPorts = countriesOptions(portsData);
   const adaptedVesselDetails = vesselDetailsAdapter({ data: vesselDetailsData });
 
   let validPrefilledOptions = {};
 
-  const validPortOfRegistryOption = adaptedPorts.find(
-    ({ value }) => value === adaptedVesselDetails.portOfRegistry.value
-  );
   const validTankerTypeOption = adaptedTankerTypes.find(({ value }) => value === adaptedVesselDetails.tankerType.value);
   const validRegisteredOwnerCountryOption = adaptedCountries.find(
     ({ value }) => value === adaptedVesselDetails.registeredOwnerCountry.value
@@ -69,7 +65,7 @@ export const fetchPrefilledDataToUpdate = createAsyncThunk(FLEETS.GET_PREFILLED_
   );
 
   validPrefilledOptions = {
-    portOfRegistry: validPortOfRegistryOption,
+    portOfRegistry: adaptedVesselDetails?.portOfRegistry,
     tankerType: validTankerTypeOption,
     registeredOwnerCountry: validRegisteredOwnerCountryOption,
     technicalOperatorCountry: validTechnicalOperatorCountryOption,

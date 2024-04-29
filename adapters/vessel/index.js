@@ -498,7 +498,6 @@ export function vesselDetailsAdapter({ data }) {
       name,
       q88UpdateDate,
       built,
-      portOfRegistryId,
       vesselTypeId,
       vesselCategoryOneId,
       vesselCategoryTwoId,
@@ -520,6 +519,7 @@ export function vesselDetailsAdapter({ data }) {
       commercialOperatorCountryId,
       disponentOwner,
       disponentOwnerCountryId,
+      portOfRegistry,
     } = {},
     imo,
   } = data;
@@ -530,7 +530,11 @@ export function vesselDetailsAdapter({ data }) {
     imo,
     updateDate: q88UpdateDate,
     built,
-    portOfRegistry: { label: '', value: portOfRegistryId },
+    portOfRegistry: {
+      label: portOfRegistry?.name,
+      value: portOfRegistry?.id,
+      countryFlag: getLocode(portOfRegistry?.locode),
+    },
     tankerType: { label: '', value: vesselTypeId },
     tankerCategoryOne: { label: '', value: vesselCategoryOneId },
     tankerCategoryTwo: vesselCategoryTwoId && { label: '', value: vesselCategoryTwoId },
