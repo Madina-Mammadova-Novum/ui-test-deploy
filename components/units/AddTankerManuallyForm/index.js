@@ -274,7 +274,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 label="Tanker category #2"
                 options={tankerCategoryTwo.options}
                 loading={tankerCategoryTwo.loading}
-                disabled={!tankerCategoryTwo.options.length || q88State.tankerCategoryTwo}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
               />
