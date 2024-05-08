@@ -304,7 +304,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerCategoryOne.options}
                 loading={tankerCategoryOne.loading}
                 asyncCall
-                disabled={!tankerCategoryOne.options.length}
                 name="tankerCategoryOne"
                 onChange={(option) => handleChange('tankerCategoryOne', option)}
               />
