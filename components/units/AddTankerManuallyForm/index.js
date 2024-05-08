@@ -186,7 +186,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           'id',
           'name'
         )[0];
-        setValue('tankerCategoryTwo', convertDataToOptions({ data: [validTankerCategoryTwoOption] }, 'id', 'name')[0]);
+        setValue('tankerCategoryTwo', convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0]);
       /*if (q88State.tankerCategoryTwo) {
         const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
         const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
