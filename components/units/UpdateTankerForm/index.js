@@ -295,7 +295,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerType.options}
                 loading={loading}
                 asyncCall
-                disabled={!tankerType.options.length || watch('tankerType.value')}
                 name="tankerType"
                 onChange={(option) => handleChange('tankerType', option)}
               />
@@ -312,7 +311,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerCategoryTwo.options}
                 loading={tankerCategoryTwo.loading}
                 asyncCall
-                disabled={!tankerCategoryTwo.options.length}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
               />
