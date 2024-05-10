@@ -179,7 +179,18 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
         )[0];
         setValue('tankerCategoryOne', convertDataToOptions({ data: [validTankerCategoryOneOption] }, 'id', 'name')[0]);
       }
-      if (q88State.tankerCategoryTwo) {
+      const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
+        //const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
+        validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
+          { data: [categoryTwo] },
+          'id',
+          'name'
+        )[0];
+        setValue('tankerCategoryTwo', convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0]);
+        handleTankerOptionsChange('tankerCategoryTwo', {
+          options: convertDataToOptions({ data: categoryTwo }, 'id', 'name'),
+        });
+      /*if (q88State.tankerCategoryTwo) {
         const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
         const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
         validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
@@ -188,9 +199,10 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           'name'
         )[0];
         setValue('tankerCategoryTwo', convertDataToOptions({ data: [validTankerCategoryTwoOption] }, 'id', 'name')[0]);
-      }
+      }*/
       setQ88State((prevState) => ({ ...prevState, ...validPrefilledOptions }));
     }
+    
   };
 
   useEffect(() => {
@@ -274,7 +286,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 label="Tanker category #2"
                 options={tankerCategoryTwo.options}
                 loading={tankerCategoryTwo.loading}
-                disabled={!tankerCategoryTwo.options.length || q88State.tankerCategoryTwo}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
               />
