@@ -180,17 +180,13 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
         setValue('tankerCategoryOne', convertDataToOptions({ data: [validTankerCategoryOneOption] }, 'id', 'name')[0]);
       }
       const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
-        //const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
-        validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
-          { data: [categoryTwo] },
-          'id',
-          'name'
-        )[0];
-        setValue('tankerCategoryTwo', convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0]);
-        handleTankerOptionsChange('tankerCategoryTwo', {
-          options: convertDataToOptions({ data: categoryTwo }, 'id', 'name'),
-        });
-      /*if (q88State.tankerCategoryTwo) {
+      // const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
+      validPrefilledOptions.tankerCategoryTwo = convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0];
+      setValue('tankerCategoryTwo', convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0]);
+      handleTankerOptionsChange('tankerCategoryTwo', {
+        options: convertDataToOptions({ data: categoryTwo }, 'id', 'name'),
+      });
+      /* if (q88State.tankerCategoryTwo) {
         const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
         const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
         validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
@@ -199,10 +195,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           'name'
         )[0];
         setValue('tankerCategoryTwo', convertDataToOptions({ data: [validTankerCategoryTwoOption] }, 'id', 'name')[0]);
-      }*/
+      } */
       setQ88State((prevState) => ({ ...prevState, ...validPrefilledOptions }));
     }
-    
   };
 
   useEffect(() => {
