@@ -264,6 +264,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"
+                maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
                 error={errors.updateDate?.message}
               />
