@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -21,7 +22,7 @@ const schema = yup.object({
 });
 
 const AssignToFleet = ({ tankerId, name, closeModal }) => {
-  const [data, isLoading] = useFetch(() => getUserFleets({ page: 1, perPage: 100, sortBy: 'asc' }));
+  const [data, isLoading] = useFetch(useCallback(() => getUserFleets({ page: 1, perPage: 100, sortBy: 'asc' }), []));
   const methods = useHookFormParams({ schema });
   const { setValue, getValues } = methods;
   const dispatch = useDispatch();
