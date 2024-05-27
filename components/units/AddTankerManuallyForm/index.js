@@ -47,8 +47,10 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     },
   });
 
+  const tankerCategoryTwoOptions = [...tankerOptions.tankerCategoryTwo.options];
+
   const schema = yup.object({
-    ...tankerDataSchema(),
+    ...tankerDataSchema(tankerCategoryTwoOptions.length > 0),
     ...fileSchema(false),
   });
 
@@ -162,7 +164,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     if (Object.keys(q88State).length > 1) {
       const validPrefilledOptions = {};
       const validPortOfRegistryOption = ports.find(({ name }) =>
-        name.toLowerCase().includes(q88?.portOfRegistry?.label.toLowerCase())
+        name?.toLowerCase().includes(q88?.portOfRegistry?.label.toLowerCase())
       );
       const validTankerTypeOption = tankerTypesResponse?.data?.find(({ name }) => name === q88.tankerType.label);
       validPrefilledOptions.portOfRegistry = countriesOptions([validPortOfRegistryOption])[0];
@@ -283,6 +285,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 loading={tankerCategoryTwo.loading}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
+                disabled={!tankerCategoryTwo.options.length}
               />
               <FormDropdown
                 label="Hull type"
