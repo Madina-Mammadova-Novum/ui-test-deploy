@@ -19,7 +19,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   } = useFormContext();
 
   const [cities, setCities] = useState([]);
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
 
   const fetchCities = async (id) => {
     const data = await getCities(id);
@@ -62,14 +62,20 @@ const AddressDetails = ({ title, type, countries = [] }) => {
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
         <div className="grid grid-cols-2 gap-5">
-          <FormDropdown name={`${type}Country`} label="Country" options={countries} onChange={handleCountryChange} />
+          <FormDropdown
+            name={`${type}Country`}
+            label="Country"
+            disabled={countries?.length === 0}
+            options={countries}
+            onChange={handleCountryChange}
+          />
           <FormDropdown
             label="City"
             name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
             loading={disabled}
-            disabled={disabled}
+            disabled={disabled || countries?.length === 0}
             asyncCall
           />
           <Input
