@@ -63,7 +63,6 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
     clearErrors('numberOfCargoes');
 
     let numberOfCargoes = Number(event.target.value);
-    if (numberOfCargoes > SETTINGS.MAX_NUMBER_OF_CARGOES) numberOfCargoes = SETTINGS.MAX_NUMBER_OF_CARGOES;
 
     if (numberOfCargoes <= 0) {
       numberOfCargoes = '';
@@ -82,8 +81,10 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   };
 
   const handleApplySlot = () => {
+    const nextCargoesCount =
+      cargoesCount > SETTINGS.MAX_NUMBER_OF_CARGOES ? SETTINGS.MAX_NUMBER_OF_CARGOES : cargoesCount;
     clearErrors('applySlots');
-    handleChangeState('cargoes', getFilledArray(cargoesCount));
+    handleChangeState('cargoes', getFilledArray(nextCargoesCount));
   };
 
   const handleAddSlot = () => {
@@ -134,7 +135,6 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
       <div className="w-full relative">
         <Input
           label="Number of cargoes chartered in the last 6 months"
-          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_CARGOES} cargoes.`}
           disabled={isSubmitting}
           value={cargoesCount}
           type="number"

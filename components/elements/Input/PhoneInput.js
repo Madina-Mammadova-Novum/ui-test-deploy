@@ -23,7 +23,8 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
               </Label>
               <Phone
                 {...field}
-                inputProps={ref}
+                masks={{ ae: '.. .......' }}
+                inputProps={{ ref }}
                 id={name}
                 enableSearch
                 enableAreaCodes
@@ -52,6 +53,7 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
         {...rest}
         enableSearch
         enableAreaCodes
+        masks={{ ae: '.. .......' }}
         inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${err ? '!border-red' : '!border-gray-darker'}`}
         buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${err ? '!border-red' : '!border-gray-darker'}`}
       />

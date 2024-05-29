@@ -42,10 +42,6 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
     let numberOfTankers = Number(event.target.value);
 
-    if (numberOfTankers > SETTINGS.MAX_NUMBER_OF_TANKERS) {
-      numberOfTankers = SETTINGS.MAX_NUMBER_OF_TANKERS;
-    }
-
     if (numberOfTankers <= 0) {
       numberOfTankers = null;
       unregister('imos');
@@ -64,8 +60,10 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
   };
 
   const handleApplySlot = () => {
+    const nextTankersCount =
+      tankersCount > SETTINGS.MAX_NUMBER_OF_TANKERS ? SETTINGS.MAX_NUMBER_OF_TANKERS : tankersCount;
     clearErrors('applySlots');
-    handleChangeState('tankers', getFilledArray(tankersCount));
+    handleChangeState('tankers', getFilledArray(nextTankersCount));
   };
 
   const handleAddSlot = () => {
@@ -107,7 +105,6 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           type="number"
           value={tankersCount}
           label="Number of tankers"
-          placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} tankers.`}
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
