@@ -298,7 +298,10 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
 
   const { id, title, comments, name, extention, size, createdAt, url } = data;
 
-  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
+  // there was an extention check for the naming which i don't understand here...
+  // const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
+
+  const fileName = name;
 
   return [
     {
