@@ -47,8 +47,10 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     },
   });
 
+  const tankerCategoryTwoOptions = [...tankerOptions.tankerCategoryTwo.options];
+
   const schema = yup.object({
-    ...tankerDataSchema(),
+    ...tankerDataSchema(tankerCategoryTwoOptions.length > 0),
     ...fileSchema(false),
   });
 
@@ -162,7 +164,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     if (Object.keys(q88State).length > 1) {
       const validPrefilledOptions = {};
       const validPortOfRegistryOption = ports.find(({ name }) =>
-        name.toLowerCase().includes(q88?.portOfRegistry?.label.toLowerCase())
+        name?.toLowerCase().includes(q88?.portOfRegistry?.label.toLowerCase())
       );
       const validTankerTypeOption = tankerTypesResponse?.data?.find(({ name }) => name === q88.tankerType.label);
       validPrefilledOptions.portOfRegistry = countriesOptions([validPortOfRegistryOption])[0];
@@ -180,17 +182,13 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
         setValue('tankerCategoryOne', convertDataToOptions({ data: [validTankerCategoryOneOption] }, 'id', 'name')[0]);
       }
       const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
-        //const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
-        validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
-          { data: [categoryTwo] },
-          'id',
-          'name'
-        )[0];
-        setValue('tankerCategoryTwo', convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0]);
-        handleTankerOptionsChange('tankerCategoryTwo', {
-          options: convertDataToOptions({ data: categoryTwo }, 'id', 'name'),
-        });
-      /*if (q88State.tankerCategoryTwo) {
+      // const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
+      validPrefilledOptions.tankerCategoryTwo = convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0];
+      setValue('tankerCategoryTwo', convertDataToOptions({ data: [categoryTwo] }, 'id', 'name')[0]);
+      handleTankerOptionsChange('tankerCategoryTwo', {
+        options: convertDataToOptions({ data: categoryTwo }, 'id', 'name'),
+      });
+      /* if (q88State.tankerCategoryTwo) {
         const { data: categoryTwo } = await getVesselCategoryTwo(validPrefilledOptions.tankerCategoryOne.value);
         const validTankerCategoryTwoOption = categoryTwo.find(({ name }) => name === q88State.tankerCategoryTwo.label);
         validPrefilledOptions.tankerCategoryTwo = convertDataToOptions(
@@ -199,10 +197,9 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           'name'
         )[0];
         setValue('tankerCategoryTwo', convertDataToOptions({ data: [validTankerCategoryTwoOption] }, 'id', 'name')[0]);
-      }*/
+      } */
       setQ88State((prevState) => ({ ...prevState, ...validPrefilledOptions }));
     }
-    
   };
 
   useEffect(() => {
@@ -288,6 +285,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 loading={tankerCategoryTwo.loading}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
+                disabled={!tankerCategoryTwo.options.length}
               />
               <FormDropdown
                 label="Hull type"

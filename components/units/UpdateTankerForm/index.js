@@ -52,7 +52,12 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     },
   });
 
-  const schema = yup.object({ ...tankerDataSchema(), ...fileSchema(true) });
+  const tankerCategoryTwoOptions = [...tankerOptions.tankerCategoryTwo.options];
+
+  const schema = yup.object({
+    ...tankerDataSchema(tankerCategoryTwoOptions.length > 0),
+    ...fileSchema(true),
+  });
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
   const { label: fleetName } = fleetData;
@@ -264,6 +269,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"
+                maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
                 error={errors.updateDate?.message}
               />
