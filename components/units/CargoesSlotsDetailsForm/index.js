@@ -164,12 +164,17 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
         return (
           <div className="flex relative justify-center" key={item}>
             <Input
-              {...register(`${fieldName}.imo`)}
+              {...register(`${fieldName}.imo`, {
+                onChange: (e) => {
+                  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 7);
+                },
+              })}
               label={`Imo #${index + 1}`}
               placeholder="Enter IMO"
               error={error?.imo?.message}
               disabled={isSubmitting}
-              type="number"
+              maxLength={7}
+              type="text"
             />
             <FormDropdown
               name={`${fieldName}.port`}
