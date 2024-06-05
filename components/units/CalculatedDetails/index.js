@@ -1,15 +1,37 @@
-import { useMemo } from 'react';
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 
 import { CalculatedDetailsPropTypes } from '@/lib/types';
 
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashIcon from '@/assets/images/trashAlt.svg';
 import { Button, FormDropdown, Input } from '@/elements';
+import { getPortsForSearchForm } from '@/services/port';
 import { useHookForm } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
-const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd, onChange, onRemove }) => {
+const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, onRemove }) => {
   const { register, errors } = useHookForm();
+  const handleMore = () => setPerList((prev) => prev + 100);
+
+  const [portsLoader, setPortsLoader] = useState(false);
+  const [perList, setPerList] = useState(100);
+
+  const [ports, setPorts] = useState([]);
+
+  const getPorts = async () => {
+    setPortsLoader(true);
+    const { data } = await getPortsForSearchForm({ pageSize: perList });
+    setPorts(dropDownOptionsAdapter({ data }));
+    setPortsLoader(false);
+  };
+
+  const loadOptions = async (inputValue, callback) => {
+    const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
+    callback(dropDownOptionsAdapter({ data }));
+  };
 
   const printOptionalProps = useMemo(() => {
     return isFreight ? (
@@ -56,6 +78,10 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
     ));
   }, [ports, additionalPorts, onChange, onRemove]);
 
+  useEffect(() => {
+    getPorts();
+  }, [perList]);
+
   return (
     <div className=" gap-y-4 flex flex-col h-full w-[336px]">
       <FormDropdown
@@ -65,17 +91,25 @@ const CalculatedDetails = ({ isFreight, ports = [], additionalPorts = [], onAdd,
         label="Choose a calculator"
       />
       <FormDropdown
+        asyncCall
         name="fromPort"
         onChange={(option) => onChange('fromPort', option)}
         options={ports}
+        loading={portsLoader}
+        onMenuScrollToBottom={handleMore}
+        loadOptions={loadOptions}
         disabled={!ports.length}
         label="From which port"
         placeholder="Select port"
       />
       <FormDropdown
+        asyncCall
         name="toPort"
         onChange={(option) => onChange('toPort', option)}
         options={ports}
+        loading={portsLoader}
+        onMenuScrollToBottom={handleMore}
+        loadOptions={loadOptions}
         disabled={!ports.length}
         label="To which port"
         placeholder="Select port"
