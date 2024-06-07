@@ -125,7 +125,8 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         }}
         customStylesFromWrap="self-baseline !items-start [&>span]:!ml-6"
         customStyles="!p-0"
-        disabled={additionalPorts.length >= 3}
+        // disabled={additionalPorts.length >= 3}
+        disabled
         onClick={onAdd}
       />
       <div className="mb-16">{printOptionalProps}</div>

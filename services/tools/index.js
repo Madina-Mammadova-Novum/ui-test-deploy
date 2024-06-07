@@ -11,17 +11,17 @@ export const getEstimation = async ({ data }) => {
   };
 };
 
-export const getTransitionalCoordinates = async () => {
+export const getTransitionalCoordinates = async ({ StartPortCode = '', EndPortCode = '' }) => {
   const body = [
     {
       StartLon: 0,
       StartLat: 0,
-      StartPortCode: 'RUNVS',
+      StartPortCode,
       EndLon: 0,
       EndLat: 0,
-      EndPortCode: 'BGBOJ',
+      EndPortCode,
       GreatCircleInterval: 0,
-      AllowedAreas: [2, 5, 7, 14, 10003],
+      AllowedAreas: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 10004],
       SecaAvoidance: 0,
       AslCompliance: 0,
     },
