@@ -3,16 +3,25 @@
 'use client';
 
 import { FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
+import { useRouter } from 'next/navigation';
 import * as yup from 'yup';
 
 import { ModalFormManager } from '@/common';
 import { PasswordInput, Title } from '@/elements';
+import { ROUTES } from '@/lib';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deactivateAccount } from '@/services/account';
+import { clearSession } from '@/store/entities/auth/slice';
+import { resetChat } from '@/store/entities/chat/slice';
+import { resetNotificationData } from '@/store/entities/notifications/slice';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const DeactivateAccountForm = ({ title, closeModal }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const schema = yup.object({ ...currentPasswordSchema() });
 
   const methods = useHookFormParams({ state: { password: '' }, schema });
@@ -35,6 +44,11 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
     if (!error) {
       successToast(message);
       closeModal();
+      router.replace(ROUTES.LOGIN);
+      dispatch(clearSession());
+      dispatch(resetNotificationData());
+      dispatch(resetChat());
+      router.refresh();
     } else {
       errorToast('Bad request', error.message);
     }

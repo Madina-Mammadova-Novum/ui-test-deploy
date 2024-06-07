@@ -125,6 +125,41 @@ export function getNumbersFromString(str) {
   return str.replace(/\D/g, '');
 }
 
+/**
+ *
+ * @param {string} inputString
+ * @returns {string}
+ */
+export function getValueAfterComma(inputString) {
+  const parts = inputString.split(',');
+
+  if (parts.length < 2) {
+    return '';
+  }
+
+  return parts[1].trim();
+}
+
+/**
+ * Getting middle element of the array
+ *
+ * @param {Array} array
+ * @returns {Array|number}
+ */
+export function getMiddleElementFromArray(array) {
+  const { length } = array;
+
+  if (length === 0) {
+    return null;
+  }
+
+  const middleIndex = Math.floor(length / 2);
+
+  const expectedIndex = length % 2 === 0 ? middleIndex - 1 : middleIndex;
+
+  return array[expectedIndex];
+}
+
 export function cutStringToLimitation(str, limit) {
   if (str.length < limit) return str;
   return `${str.slice(0, limit)} ...`;

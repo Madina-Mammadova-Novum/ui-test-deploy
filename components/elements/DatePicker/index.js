@@ -78,7 +78,7 @@ const DatePicker = ({
                   minDate={minDate}
                   maxDate={maxDate}
                   className={`${calendarClass} rounded-lg`}
-                  date={field.value ? new Date(field.value) : null}
+                  date={field.value ? new Date(field.value) : new Date()}
                   onChange={handleDate}
                 />
               </div>
