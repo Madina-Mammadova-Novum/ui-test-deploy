@@ -45,10 +45,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat = freightEstimation?.min && `${minValue} - ${maxValue}`;
+  const helperFreightFormat = freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
 
   const helperRangeFormat =
-    ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start} - ${ranges?.demurrageRate?.max?.end}`;
+    ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start}$ - ${ranges?.demurrageRate?.max?.end}$`;
 
   const helperLaytimeFormat = `Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
     ranges?.layTime?.min?.end || 94

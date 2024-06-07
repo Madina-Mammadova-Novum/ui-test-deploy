@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -28,6 +28,8 @@ const CalculatedForm = ({ children }) => {
     toPort: null,
   });
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const { calculator, additionalPorts, generalPorts } = state;
 
   const isFreight = calculator?.value === toolsCalculatorOptions[0]?.value;
@@ -35,6 +37,14 @@ const CalculatedForm = ({ children }) => {
   const schema = yup.object().shape({ ...toolsSchema({ isFreight }) });
 
   const methods = useHookFormParams({ schema, state });
+
+  useEffect(() => {
+    if (state.fromPort === state.toPort) {
+      setErrorMessage('From port and to port cannot be the same.');
+    } else {
+      setErrorMessage('');
+    }
+  }, [state.fromPort, state.toPort]);
 
   /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
@@ -58,8 +68,9 @@ const CalculatedForm = ({ children }) => {
     methods.reset((formValues) => (resetObjectFields(formValues), formValues));
     methods.unregister('additionalPorts');
     methods.setValue('cargoQuantity', null);
-    methods.setValue('calculator', toolsCalculatorOptions[0]);
-    handleChangeState('calculator', toolsCalculatorOptions[0]);
+    methods.setValue('speed', null);
+    methods.setValue('calculator', calculator);
+    // handleChangeState('calculator', toolsCalculatorOptions[0]);
   };
 
   const handleChangeValue = (key, value) => {
@@ -76,6 +87,8 @@ const CalculatedForm = ({ children }) => {
     if (key === 'calculator') {
       methods.unregister('cargoQuantity');
       methods.unregister('speed');
+      methods.setValue('cargoQuantity', null);
+      methods.setValue('speed', null);
     }
   };
 
@@ -119,6 +132,7 @@ const CalculatedForm = ({ children }) => {
             size: 'large',
             className: '!w-auto !text-white',
             buttonContainerClassName: 'absolute bottom-5',
+            disabled: !!errorMessage,
           }}
         >
           <div className="flex w-full gap-5">
@@ -130,6 +144,7 @@ const CalculatedForm = ({ children }) => {
               onChange={handleChangeValue}
               onRemove={handleRemovePort}
             />
+
             <div className={`${setHeight} w-full relative transition-all duration-150 ease-out`}>{children}</div>
           </div>
         </FormManager>

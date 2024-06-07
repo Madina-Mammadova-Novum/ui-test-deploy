@@ -11,6 +11,7 @@ const CalculatedResult = ({ result, value }) => {
 
   const firstValue = formatedNumber(result?.resultOne);
   const secondValue = formatedNumber(result?.resultTwo);
+  const secondTextWithValue = `${secondValue} Hours`;
 
   return (
     <div className=" bg-white rounded-md p-5 w-[250px] absolute bottom-2 left-2 z-[500] font-inter-sans">
@@ -19,14 +20,16 @@ const CalculatedResult = ({ result, value }) => {
         {isFreight ? (
           <>
             <TextWithLabel
-              text={firstValue}
+              text={secondValue}
               label="Total freight"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+              textGroupStyle="!mx-0 !ml-0"
             />
             <TextWithLabel
-              text={secondValue}
+              text={firstValue}
               label="Cost per ton"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+              textGroupStyle="!mx-0 !ml-0"
             />
           </>
         ) : (
@@ -35,11 +38,13 @@ const CalculatedResult = ({ result, value }) => {
               text={firstValue}
               label="Distance"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+              textGroupStyle="!mx-0 !ml-0"
             />
             <TextWithLabel
-              text={secondValue}
+              text={secondValue && secondTextWithValue}
               label="Duration"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
+              textGroupStyle="!mx-0 !ml-0"
             />
           </>
         )}

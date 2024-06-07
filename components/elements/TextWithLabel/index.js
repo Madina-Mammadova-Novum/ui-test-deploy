@@ -14,6 +14,7 @@ const TextWithLabel = ({
   icon,
   customStyles = '',
   textStyles,
+  textGroupStyle = '',
   coverImage = null,
   countryCode,
 }) => {
@@ -32,7 +33,12 @@ const TextWithLabel = ({
           </ManualTooltip>
         )}
       </Label>
-      <div className="flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-5 mx-2">
+      <div
+        className={classnames(
+          'flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-5 mx-2',
+          textGroupStyle
+        )}
+      >
         {coverImage && coverImage}
         {countryCode && <Flag countryCode={countryCode} />}
         {text ? <p className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}
