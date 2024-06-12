@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import classnames from 'classnames';
+
 import { CompanyDetailsPropTypes } from '@/lib/types';
 
 import { Input } from '@/elements';
@@ -18,7 +20,7 @@ const CompanyDetails = ({ notEditable }) => {
     formState: { errors, isSubmitting },
   } = useFormContext();
 
-  const { companyYearsOfOperation } = getValues();
+  const { companyYearsOfOperation, pending, pendingRequest, companyName } = getValues();
 
   useEffect(() => {
     if (inputYearsRef.current) {
@@ -37,6 +39,13 @@ const CompanyDetails = ({ notEditable }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <Input
         {...register('companyName')}
+        labelBadge={
+          pendingRequest ? (
+            <p className={classnames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
+              {pending?.name}
+            </p>
+          ) : null
+        }
         label="Company name"
         placeholder="Company"
         error={errors.companyName?.message}

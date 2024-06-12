@@ -126,6 +126,14 @@ export async function updateCompany({ data, role }) {
   };
 }
 
+export async function cancelUpdateCompany() {
+  const response = await putData(`account/cancel-update-company`);
+
+  return {
+    ...response,
+  };
+}
+
 export async function deleteCompany({ data }) {
   const body = deleteCompanyAdapter({ data });
   const response = await deleteData(`account/delete-company`, body);
