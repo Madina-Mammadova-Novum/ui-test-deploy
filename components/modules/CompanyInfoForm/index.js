@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -13,12 +13,15 @@ import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
+  const dispatch = useDispatch();
+
   const [sameAddress, setSameAddress] = useState(false);
 
   const { data, role } = useSelector(getUserDataSelector);
@@ -48,6 +51,7 @@ const CompanyInfoForm = ({ closeModal }) => {
     } else {
       successToast('Success', message);
       closeModal();
+      dispatch(fetchUserProfileData());
     }
   };
 

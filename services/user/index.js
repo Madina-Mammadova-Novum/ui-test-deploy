@@ -106,12 +106,28 @@ export async function updateInfo({ data }) {
   };
 }
 
+export async function cancelUpdateInfo() {
+  const response = await putData(`account/cancel-update-info`);
+
+  return {
+    ...response,
+  };
+}
+
 export async function updateCompany({ data, role }) {
   const body = roleBasedUpdateCompanyAdapter({ data, role });
 
   const response = await putData(`account/update-company`, body);
 
   if (!response.error) response.message = 'You will be notified soon. The rest of the changes have been edited';
+
+  return {
+    ...response,
+  };
+}
+
+export async function cancelUpdateCompany() {
+  const response = await putData(`account/cancel-update-company`);
 
   return {
     ...response,
