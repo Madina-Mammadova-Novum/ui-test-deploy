@@ -35,7 +35,7 @@ export function userDetailsAdapter({ data, role }) {
 function userPersonalDetailsAdapter({ data }) {
   if (!data) return {};
 
-  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest } = data;
+  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest, pending } = data;
 
   return {
     personalDetails: {
@@ -46,6 +46,7 @@ function userPersonalDetailsAdapter({ data }) {
       primaryPhone: formattedPhoneNumber(phone),
       secondaryPhone: formattedPhoneNumber(secondaryPhone),
       pendingRequest: hasPendingPersonalInfoUpdateRequest,
+      pending,
     },
   };
 }

@@ -24,9 +24,15 @@ const PersonalDetailsForm = ({ closeModal }) => {
   const methods = useHookFormParams({ state: data?.personalDetails, schema });
 
   const onSubmit = async (formData) => {
-    // const isContactDataChanged = Object.keys(formData).some((key) => {
-    //   return (key === 'primaryPhone' || key === 'secondaryPhone') && formData[key] !== data?.personalDetails[key];
-    // });
+    const contactKeys = ['primaryPhone', 'secondaryPhone'];
+
+    const isOnlyContactDataChanged =
+      contactKeys.some((key) => {
+        return formData[key] !== data?.personalDetails[key];
+      }) &&
+      Object.keys(formData).every((key) => {
+        return contactKeys.includes(key) || formData[key] === data?.personalDetails[key];
+      });
 
     const { error } = await updateInfo({ data: formData });
 
@@ -35,10 +41,14 @@ const PersonalDetailsForm = ({ closeModal }) => {
     if (error) {
       errorToast(error?.title, error?.message);
     } else {
-      successToast(
-        'Your request has been sent for review',
-        'You will be notified soon. The remaining changes have been updated to not require admin approval.'
-      );
+      if (isOnlyContactDataChanged) {
+        successToast('You have succesfuly updated your "Phone Number"');
+      } else {
+        successToast(
+          'Your request has been sent for review',
+          'You will be notified soon. The remaining changes have been updated to not require admin approval.'
+        );
+      }
       dispatch(fetchUserProfileData());
     }
   };

@@ -106,6 +106,14 @@ export async function updateInfo({ data }) {
   };
 }
 
+export async function cancelUpdateInfo() {
+  const response = await putData(`account/cancel-update-info`);
+
+  return {
+    ...response,
+  };
+}
+
 export async function updateCompany({ data, role }) {
   const body = roleBasedUpdateCompanyAdapter({ data, role });
 

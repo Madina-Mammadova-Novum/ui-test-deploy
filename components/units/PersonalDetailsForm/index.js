@@ -1,11 +1,18 @@
+import classnames from 'classnames';
+
 import { Input, PhoneInput } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
 const PersonalDetails = () => {
   const {
     register,
+    getValues,
     formState: { errors, isSubmitting },
   } = useHookForm();
+
+  const values = getValues();
+
+  const { pending, pendingRequest, firstName, lastName, email } = values;
 
   return (
     <>
@@ -13,6 +20,13 @@ const PersonalDetails = () => {
         <Input
           {...register('firstName')}
           label="First name"
+          labelBadge={
+            pendingRequest ? (
+              <p className={classnames('font-bold', pending?.name === firstName ? 'text-green' : 'text-blue')}>
+                {pending?.name}
+              </p>
+            ) : null
+          }
           placeholder="John"
           error={errors.firstName?.message}
           disabled={isSubmitting}
@@ -20,6 +34,13 @@ const PersonalDetails = () => {
         <Input
           {...register('lastName')}
           label="Last name"
+          labelBadge={
+            pendingRequest ? (
+              <p className={classnames('font-bold', pending?.surname === lastName ? 'text-green' : 'text-blue')}>
+                {pending?.surname}
+              </p>
+            ) : null
+          }
           placeholder="Doe"
           error={errors.lastName?.message}
           disabled={isSubmitting}
@@ -27,6 +48,13 @@ const PersonalDetails = () => {
         <Input
           {...register('email')}
           label="Email"
+          labelBadge={
+            pendingRequest ? (
+              <p className={classnames('font-bold', pending?.email === email ? 'text-green' : 'text-blue')}>
+                {pending?.email}
+              </p>
+            ) : null
+          }
           placeholder="Enter your email"
           error={errors.email?.message}
           disabled={isSubmitting}
