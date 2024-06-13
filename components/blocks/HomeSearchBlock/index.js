@@ -1,17 +1,12 @@
 'use client';
 
-// import { useState } from 'react';
-
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import ArrowSVG from '@/assets/images/arrow.svg';
 import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
-import { fetchVesselsBySearch } from '@/store/entities/search/actions';
-import { getSearchSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 
 const tabs = [
@@ -23,8 +18,6 @@ const tabs = [
 ];
 
 export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
-  const dispatch = useDispatch();
-  const { searchParams, sorting } = useSelector(getSearchSelector);
   const [activeTab, setActiveTab] = useState('search');
 
   const dataByTab = {
@@ -40,16 +33,6 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
     const elementToScroll = document.getElementById('how-it-works');
     elementToScroll?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    const result = {
-      ...searchParams,
-      sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
-      rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
-    };
-
-    dispatch(fetchVesselsBySearch(result));
-  }, [searchParams, sorting]);
 
   return (
     <section className="relative">

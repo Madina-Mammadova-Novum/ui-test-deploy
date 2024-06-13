@@ -140,7 +140,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
           disabled={!valid || loading}
-          loading={loading}
+          loading={valid && loading}
           onChange={(option) => handleChange('freight', option)}
           asyncCall
         />

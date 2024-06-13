@@ -10,6 +10,7 @@ import { FormManager } from '@/common';
 import Divider from '@/elements/Divider';
 import { ROUTES } from '@/lib';
 import {
+  captchaSchema,
   companyAddressesSchema,
   companyDetailsSchema,
   passwordValidationSchema,
@@ -42,6 +43,7 @@ const OwnerRegistrationForm = ({ countries }) => {
     ...tankerSlotsDetailsSchema(),
     ...termsAndConditionsSchema(),
     ...companyAddressesSchema(sameAddress),
+    ...captchaSchema(),
   });
 
   const methods = useHookFormParams({ schema });
