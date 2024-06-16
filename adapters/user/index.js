@@ -35,7 +35,7 @@ export function userDetailsAdapter({ data, role }) {
 function userPersonalDetailsAdapter({ data }) {
   if (!data) return {};
 
-  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest } = data;
+  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest, pending } = data;
 
   return {
     personalDetails: {
@@ -46,6 +46,7 @@ function userPersonalDetailsAdapter({ data }) {
       primaryPhone: formattedPhoneNumber(phone),
       secondaryPhone: formattedPhoneNumber(secondaryPhone),
       pendingRequest: hasPendingPersonalInfoUpdateRequest,
+      pending,
     },
   };
 }
@@ -68,6 +69,8 @@ function userCompanyDetailsAdapter({ data, role }) {
     correspondenceProvince,
     correspondencePostalCode,
     cargoesDetails,
+    hasPendingCompanyInfoUpdateRequest,
+    pending,
   } = data;
 
   const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
@@ -110,6 +113,8 @@ function userCompanyDetailsAdapter({ data, role }) {
       correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
       correspondencePostalCode,
       correspondenceProvince,
+      pending,
+      pendingRequest: hasPendingCompanyInfoUpdateRequest,
       ...getRoleBasedData(),
     },
   };
