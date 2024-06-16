@@ -19,6 +19,7 @@ const Input = React.forwardRef(
       helperText = null,
       icon = null,
       label = null,
+      labelBadge = null,
       name,
       type = 'text',
       ...rest
@@ -30,8 +31,13 @@ const Input = React.forwardRef(
     return (
       <div className={classnames(disabled && 'pointer-events-none', customStyles, type === 'hidden' && 'hidden')}>
         {label && (
-          <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
-            {label}
+          <Label
+            name={name}
+            className={classnames('block text-xs-sm text-left mb-0.5 whitespace-nowrap', {
+              'flex gap-1 items-center normal-case': labelBadge,
+            })}
+          >
+            {label} {labelBadge}
           </Label>
         )}
         <div

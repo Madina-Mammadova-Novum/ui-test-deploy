@@ -1,11 +1,23 @@
+'use client';
+
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { AccountCompanyDetailsPropTypes } from '@/lib/types';
 
-import { FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
+import { Button, FieldsetContent, FieldsetContentWrapper, FieldsetHeader, FieldsetWrapper, TextRow } from '@/elements';
 import Divider from '@/elements/Divider';
+import StatusIndicator from '@/elements/StatusIndicator';
 import { CompanyInfoForm } from '@/modules';
+import { cancelUpdateCompany } from '@/services';
+import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { AccountAmountOfTankers, AddressInfo, ModalWindow } from '@/units';
+import { errorToast, successToast } from '@/utils/hooks';
 
 const AccountCompanyDetails = ({ company = {} }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const registration = {
     addressLine1: company?.registrationAddress,
     addressLine2: company?.registrationAddress2,
@@ -24,21 +36,56 @@ const AccountCompanyDetails = ({ company = {} }) => {
     postal: company?.correspondencePostalCode,
   };
 
+  const handleCancelRequest = async () => {
+    setIsLoading(true);
+    const { error } = await cancelUpdateCompany();
+    setIsLoading(false);
+
+    if (error) {
+      errorToast(error?.title, error?.message);
+    } else {
+      successToast(
+        'Your update request has been cancelled',
+        'You can update your company info anytime you want. The remaining changes will still require admin approval.'
+      );
+
+      dispatch(fetchUserProfileData());
+    }
+  };
+
   return (
     <FieldsetWrapper>
       <FieldsetHeader title="Company Details">
-        <ModalWindow
-          containerClass="w-[672px]"
-          buttonProps={{
-            text: 'Edit company details',
-            variant: 'primary',
-            size: 'medium',
-            className: '!px-2.5 !py-0.5 text-xsm',
-          }}
-        >
-          <CompanyInfoForm />
-        </ModalWindow>
+        <div className="flex gap-2">
+          {company?.pendingRequest ? (
+            <Button
+              buttonProps={{
+                text: 'Cancel Request',
+                variant: 'delete',
+                size: 'medium',
+                className: '!px-2.5 !py-0.5 text-xsm',
+              }}
+              onClick={handleCancelRequest}
+              disabled={isLoading}
+            />
+          ) : null}
+          <ModalWindow
+            containerClass="w-[672px]"
+            buttonProps={{
+              text: 'Edit company details',
+              variant: 'primary',
+              size: 'medium',
+              className: '!px-2.5 !py-0.5 text-xsm',
+            }}
+          >
+            <CompanyInfoForm />
+          </ModalWindow>
+        </div>
       </FieldsetHeader>
+      <span className="text-sm text-black font-bold inline-flex gap-1 items-center whitespace-nowrap">
+        <StatusIndicator status={company?.pendingRequest ? 'PendingRequest' : 'Active'} />
+        {company?.pendingRequest ? 'Update Requested' : 'Active'}
+      </span>
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
           {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
