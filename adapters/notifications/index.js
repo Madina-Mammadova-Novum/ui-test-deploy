@@ -1,5 +1,5 @@
 import { convertDate, transformDate } from '@/utils/date';
-import { addLocalDateFlag, extractTimeFromDate, getListOfDataByDays, sortFromCurrentToPast } from '@/utils/helpers';
+import { addLocalDateFlag, getListOfDataByDays, sortFromCurrentToPast } from '@/utils/helpers';
 
 export const notificationsResponseAdapter = (data) => {
   if (!data) return [];
@@ -19,7 +19,7 @@ export const notificationAdapter = (data) => {
   return {
     id: data?.id,
     date: transformDate(addLocalDateFlag(data?.createdAt), 'MMM dd, yyyy'),
-    time: extractTimeFromDate(addLocalDateFlag(data?.createdAt)),
+    time: addLocalDateFlag(data?.createdAt),
     watched: data?.isOpened,
     title: data?.title,
     description: data?.description,
