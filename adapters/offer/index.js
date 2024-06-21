@@ -3,7 +3,6 @@ import { transformDate } from '@/utils/date';
 import {
   addLocalDateFlag,
   calculateCountdown,
-  extractTimeFromDate,
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
@@ -316,7 +315,7 @@ export function offerDetailsAdapter({ data, role }) {
       return {
         title: comment,
         date: transformDate(localDateFormat, 'MMM dd, yyyy'),
-        time: extractTimeFromDate(localDateFormat),
+        time: localDateFormat,
       };
     }),
 
@@ -458,7 +457,7 @@ export function confirmCounterofferDetailsAdapter({ data }) {
     comment: {
       title: comment,
       date: transformDate(new Date(), 'MMM dd, yyyy'),
-      time: extractTimeFromDate(new Date()),
+      time: '',
     },
   };
 }
