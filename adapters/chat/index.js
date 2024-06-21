@@ -1,12 +1,6 @@
 import { tokenAdapter } from '@/adapters/user';
 import { convertDate, transformDate } from '@/utils/date';
-import {
-  addLocalDateFlag,
-  clientIdentification,
-  extractTimeFromDate,
-  getListOfDataByDays,
-  sortFromPastToToday,
-} from '@/utils/helpers';
+import { addLocalDateFlag, clientIdentification, getListOfDataByDays, sortFromPastToToday } from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
   if (!data) return null;
@@ -100,7 +94,7 @@ export function messageDataAdapter({ data, clientId, role }) {
   return {
     id,
     message: body,
-    time: extractTimeFromDate(addLocalDateFlag(createdAt)),
+    time: addLocalDateFlag(createdAt),
     sender: clientIdentification({ senderId, clientId, role }),
   };
 }
