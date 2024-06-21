@@ -8,8 +8,11 @@ import Link from 'next/link';
 import { ChatConversationMessagePropTypes } from '@/lib/types';
 
 import { ROLES } from '@/lib';
+import { extractTimeFromDate } from '@/utils/helpers';
 
 const ChatConversationMessage = ({ sender, message, time, isBroker, id }) => {
+  const nextTime = extractTimeFromDate(time);
+
   const senderTitle = useMemo(() => {
     switch (sender) {
       case ROLES.OWNER:
@@ -53,7 +56,7 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id }) => {
         </p>
 
         <div className={`text-xs-sm text-gray font-normal flex w-full ${isBroker ? 'justify-start' : 'justify-end'} `}>
-          {time}
+          {nextTime}
         </div>
       </div>
     </div>

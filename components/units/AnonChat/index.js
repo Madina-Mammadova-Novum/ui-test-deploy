@@ -16,20 +16,14 @@ import { getChatToken, getCities } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthSelector, getGeneralDataSelector } from '@/store/selectors';
-import {
-  checkEmailPrefix,
-  convertDataToOptions,
-  countriesOptions,
-  extractTimeFromDate,
-  setCookie,
-} from '@/utils/helpers';
+import { addLocalDateFlag, checkEmailPrefix, convertDataToOptions, countriesOptions, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
 const AnonChat = ({ opened }) => {
   const dispatch = useDispatch();
   const containerRef = useRef();
   const footerRef = useRef();
-  const updatedStep = { ...steps[1], time: extractTimeFromDate(new Date()) };
+  const updatedStep = { ...steps[1], time: addLocalDateFlag(new Date().toISOString()) };
 
   const [flow, setFlow] = useState([updatedStep]);
   const [city, setCity] = useState({ value: null, label: null });
@@ -124,7 +118,10 @@ const AnonChat = ({ opened }) => {
     setCity({ value: null, label: null });
     setCountry({ value: null, label: null });
 
-    setFlow((prevState) => [...prevState, { ...steps[prevState.length + 1], time: extractTimeFromDate(new Date()) }]);
+    setFlow((prevState) => [
+      ...prevState,
+      { ...steps[prevState.length + 1], time: addLocalDateFlag(new Date().toISOString()) },
+    ]);
   };
 
   const successCallback = () => {
