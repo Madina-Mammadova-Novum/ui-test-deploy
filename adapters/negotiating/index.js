@@ -640,7 +640,7 @@ export const responseSentCounteroffersAdapter = ({ data }) => {
   return data;
 };
 
-export const prefilledSearchDataAdapter = ({ data }) => {
+export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
   if (!data) return [];
   const {
     laycanStart,
@@ -676,6 +676,7 @@ export const prefilledSearchDataAdapter = ({ data }) => {
         value: product.id,
       },
     })),
+    isAlternative,
   };
 };
 
