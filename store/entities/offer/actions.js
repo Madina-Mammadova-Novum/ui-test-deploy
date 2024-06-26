@@ -9,10 +9,18 @@ import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTer
 import { getVesselFreightFormats } from '@/services/vessel';
 import { convertDataToOptions } from '@/utils/helpers';
 
-export const fetchOfferOptioins = createAsyncThunk(OFFER.GET_OFFER_OPTIONS, async (tankerId) => {
+export const fetchOfferOptions = createAsyncThunk(OFFER.GET_OFFER_OPTIONS, async (tankerId, isCounterOffer = false) => {
   const paymentTermsData = await getPaymentTerms();
   const demurragePaymentTermsData = await getDemurragePaymentTerms();
   const freightFormatsData = await getVesselFreightFormats(tankerId);
+
+  if (isCounterOffer) {
+    return {
+      data: {
+        freightFormats: convertDataToOptions(freightFormatsData, 'id', 'value'),
+      },
+    };
+  }
 
   return {
     data: {

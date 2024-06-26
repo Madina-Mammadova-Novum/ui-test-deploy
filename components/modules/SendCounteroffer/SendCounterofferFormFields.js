@@ -7,7 +7,7 @@ import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
-import { fetchOfferOptioins } from '@/store/entities/offer/actions';
+import { fetchOfferOptions } from '@/store/entities/offer/actions';
 import { getOfferSelector } from '@/store/selectors';
 import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
@@ -75,7 +75,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   useEffect(() => {
     if (valid) {
-      dispatch(fetchOfferOptioins(tankerId));
+      dispatch(fetchOfferOptions(tankerId, false));
     }
   }, [tankerId, valid]);
 

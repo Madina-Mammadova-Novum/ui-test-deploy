@@ -286,6 +286,16 @@ export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
     });
 };
 
+export const convertPayloadToOptions = (data, keyValue, keyLabel) => {
+  if (!data?.length) return [];
+
+  return data
+    .filter(({ [keyValue]: value, [keyLabel]: label }) => value && label)
+    .map(({ [keyValue]: value, [keyLabel]: label }) => {
+      return { value, label };
+    });
+};
+
 export const removeByIndex = (data, index) => {
   if (data === null || data === undefined) return null;
   return data.filter((_, idx) => {

@@ -11,7 +11,7 @@ import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
-import { fetchOfferOptioins, fetchOfferValidation } from '@/store/entities/offer/actions';
+import { fetchOfferOptions, fetchOfferValidation } from '@/store/entities/offer/actions';
 import { resetOfferData } from '@/store/entities/offer/slice';
 import { getOfferSelector, getSearchSelector } from '@/store/selectors';
 import { CommercialOfferTerms, OfferForm, Tabs, VoyageDetailsTabContent } from '@/units';
@@ -116,7 +116,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   useEffect(() => {
     if (offer?.valid) {
       fetchCountdownData();
-      dispatch(fetchOfferOptioins(tankerId));
+      dispatch(fetchOfferOptions(tankerId));
     }
   }, [offer?.valid]);
 
