@@ -8,8 +8,8 @@ import { SendCounterofferFormFieldsPropTypes } from '@/lib/types';
 import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { fetchOfferOptioins } from '@/store/entities/offer/actions';
-import { getOfferSelector, getUserDataSelector } from '@/store/selectors';
-import { getRoleIdentity, getValueWithPath } from '@/utils/helpers';
+import { getOfferSelector } from '@/store/selectors';
+import { getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
@@ -25,10 +25,8 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   } = useHookForm();
 
   const [freightEstimation, setFreightEstimation] = useState({});
-  const { role } = useSelector(getUserDataSelector);
   const { ranges, valid, loading, data: helperData } = useSelector(getOfferSelector);
   const { paymentTerms, demurragePaymentTerms, freightFormats } = helperData;
-  const { isOwner } = getRoleIdentity({ role });
 
   const { tankerId, products } = data;
 
@@ -96,7 +94,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           placeholder="mt/m³"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
-          disabled={isOwner}
+          disabled
           step="any"
         />
         <Input
@@ -105,7 +103,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           placeholder="tons"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.quantity?.message : null}
-          disabled={isOwner}
+          disabled
         />
       </div>
     );

@@ -29,7 +29,7 @@ const PersonalDetails = () => {
           }
           placeholder="John"
           error={errors.firstName?.message}
-          disabled={isSubmitting}
+          disabled
         />
         <Input
           {...register('lastName')}
@@ -43,7 +43,7 @@ const PersonalDetails = () => {
           }
           placeholder="Doe"
           error={errors.lastName?.message}
-          disabled={isSubmitting}
+          disabled
         />
         <Input
           {...register('email')}
