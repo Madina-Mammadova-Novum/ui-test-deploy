@@ -40,8 +40,7 @@
     "jsx-a11y/control-has-associated-label": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "no-restricted-syntax": "off",
-    //TODO: prop-types would be 2 then code refactor for prop-types
-    "react/prop-types": [0, { "ignore": ["children"] }],
+    "react/prop-types": [2, { "ignore": ["children"] }],
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     "no-console": ["warn", { "allow": ["info", "error"] }],

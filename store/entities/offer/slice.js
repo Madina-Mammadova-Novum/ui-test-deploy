@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchOfferOptioins, fetchOfferValidation, fetchСounterOfferValidation } from './actions';
+import { fetchOfferOptions, fetchOfferValidation, fetchСounterOfferValidation } from './actions';
+
+import { convertPayloadToOptions } from '@/utils/helpers';
 
 const initialState = {
   loading: true,
@@ -38,17 +40,17 @@ const offerSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchOfferOptioins.pending, (state) => {
+    builder.addCase(fetchOfferOptions.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchOfferOptioins.fulfilled, (state, action) => {
+    builder.addCase(fetchOfferOptions.fulfilled, (state, action) => {
       state.loading = false;
       state.data = {
         ...state.data,
         ...action.payload?.data,
       };
     });
-    builder.addCase(fetchOfferOptioins.rejected, (state, action) => {
+    builder.addCase(fetchOfferOptions.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload?.error;
     });
@@ -76,6 +78,8 @@ const offerSlice = createSlice({
       state.valid = payload?.canProceed;
       state.data.ranges = payload?.ranges;
       state.data.message = payload?.message;
+      state.data.demurragePaymentTerms = convertPayloadToOptions(payload?.demurragePaymentTerms, 'id', 'name');
+      state.data.paymentTerms = convertPayloadToOptions(payload?.paymentTerms, 'id', 'name');
       state.error = null;
     });
     builder.addCase(fetchСounterOfferValidation.rejected, (state, action) => {

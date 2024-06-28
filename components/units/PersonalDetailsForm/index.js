@@ -1,9 +1,11 @@
 import classnames from 'classnames';
 
+import { PersonalDetailsFormPropTypes } from '@/lib/types';
+
 import { Input, PhoneInput } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const PersonalDetails = () => {
+const PersonalDetails = ({ onUpdatePage = false }) => {
   const {
     register,
     getValues,
@@ -29,7 +31,7 @@ const PersonalDetails = () => {
           }
           placeholder="John"
           error={errors.firstName?.message}
-          disabled={isSubmitting}
+          disabled={isSubmitting || onUpdatePage}
         />
         <Input
           {...register('lastName')}
@@ -43,7 +45,7 @@ const PersonalDetails = () => {
           }
           placeholder="Doe"
           error={errors.lastName?.message}
-          disabled={isSubmitting}
+          disabled={isSubmitting || onUpdatePage}
         />
         <Input
           {...register('email')}
@@ -82,5 +84,7 @@ const PersonalDetails = () => {
     </>
   );
 };
+
+PersonalDetails.propTypes = PersonalDetailsFormPropTypes;
 
 export default PersonalDetails;
