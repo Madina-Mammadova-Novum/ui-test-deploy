@@ -81,7 +81,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
           subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
           data={noteList}
         />
-        <PersonalDetails />
+        <PersonalDetails onUpdatePage />
       </ModalFormManager>
     </FormProvider>
   );

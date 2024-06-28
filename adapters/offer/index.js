@@ -310,12 +310,13 @@ export function offerDetailsAdapter({ data, role }) {
       ],
     },
 
-    comments: comments?.map(({ comment, createdAt }) => {
+    comments: comments?.map(({ comment, createdAt, sentBy }) => {
       const localDateFormat = addLocalDateFlag(createdAt);
       return {
         title: comment,
         date: transformDate(localDateFormat, 'MMM dd, yyyy'),
         time: localDateFormat,
+        sentBy,
       };
     }),
 

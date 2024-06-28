@@ -99,6 +99,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
       }));
 
       const relatedProducts = await getProducts(value.value);
+
       setProducts({
         loading: false,
         data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
@@ -147,10 +148,52 @@ const SearchFormFields = ({ productState, setProductState }) => {
     getPorts();
   }, [perList]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const isAlternative = getValues('isAlternative');
+      const cargoType = getValues('cargoType');
+      const currentProducts = getValues('products');
+
+      if (isAlternative) {
+        const relatedProducts = await getProducts(cargoType.value);
+
+        const relatedProductsMap = relatedProducts?.data?.reduce((map, product) => {
+          map[product.id] = product;
+          return map;
+        }, {});
+
+        currentProducts.forEach((currentProduct) => {
+          const productId = currentProduct.product.value;
+          const relatedProduct = relatedProductsMap[productId];
+
+          if (relatedProduct) {
+            currentProduct.product.density = relatedProduct.density;
+          }
+        });
+
+        setValue('products', currentProducts);
+
+        setProducts({
+          loading: false,
+          data: convertDataToOptions(relatedProducts, 'id', 'name').map((product) => ({
+            ...product,
+            density: relatedProducts.data.find(({ id }) => id === product.value).density,
+          })),
+        });
+      }
+    };
+
+    fetchProducts();
+
+    return () => {
+      setValue('isAlternative', false);
+    };
+  }, []);
+
   return (
     <div className="flex">
       <div className="w-full flex flex-col gap-y-4 pr-5 mr-5 border-r">
-        <div className="flex flex-col 3md:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
           <DatePicker
             label="laycan start"
             inputClass="w-full"
@@ -234,6 +277,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
         />
         {productState?.map((productId, index) => {
           const { density = {} } = getValues(`products[${productId}].product`) || {};
+
           const minValue = parseFloat(density?.min?.toFixed(4)).toString();
           const maxValue = parseFloat(density?.max?.toFixed(4)).toString();
 

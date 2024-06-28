@@ -28,7 +28,7 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, cargoId }) => {
     const { data, errors } = await getOfferDetails(offerId, role);
 
     if (!errors) {
-      dispatch(setPrefilledSearchData(prefilledSearchDataAdapter({ data })));
+      dispatch(setPrefilledSearchData(prefilledSearchDataAdapter({ data, isAlternative: true })));
       router.push(ROUTES.ACCOUNT_SEARCH);
     } else {
       errorToast(errors?.title, errors?.message);
