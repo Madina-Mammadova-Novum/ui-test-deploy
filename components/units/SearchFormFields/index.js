@@ -193,7 +193,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   return (
     <div className="flex">
       <div className="w-full flex flex-col gap-y-4 pr-5 mr-5 border-r">
-        <div className="flex flex-col 3md:flex-row gap-x-5">
+        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
           <DatePicker
             label="laycan start"
             inputClass="w-full"

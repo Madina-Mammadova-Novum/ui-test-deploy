@@ -17,10 +17,11 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
           <Title level="5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
             historical negotiating comments
           </Title>
-
-          {data.map(({ title, date, time }) => (
-            <Comment title={title} date={date} time={time} />
-          ))}
+          <div className="flex flex-col gap-1.5 my-2">
+            {data.map(({ title, date, time, sentBy }) => (
+              <Comment title={title} date={date} time={time} sentBy={sentBy} />
+            ))}
+          </div>
         </>
       )}
 
