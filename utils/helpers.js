@@ -764,6 +764,7 @@ export const sessionCookieCleaner = () => {
   removeCookie('session-refresh-token');
   removeCookie('session-user-role');
   removeCookie('session-user-id');
+  removeCookie('session-user-email');
 };
 
 export const sessionCookieData = (data) => {
