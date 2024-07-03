@@ -31,7 +31,7 @@ const SearchForm = ({ onSubmit, onReset }) => {
     });
 
     onReset();
-    setProductState([1]);
+    setProductState([0]);
   };
 
   return (
