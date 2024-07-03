@@ -46,59 +46,59 @@ steps:
       cliProjectKey: 'bp-shiplink-frontend-ui'
 
 
-  - task: Docker@2
-    displayName: Build an image
-    inputs:
-      command: build
-      repository: $(IMAGE_REPOSITORY)
-      dockerfile: $(dockerfilePath)
-      arguments: '--build-arg NEXTAUTH_SECRET=$(NEXTAUTH_SECRET) --build-arg NEXT_PUBLIC_URL=$(NEXT_PUBLIC_URL) --build-arg NEXT_PUBLIC_API_URL=$(NEXT_PUBLIC_API_URL) --build-arg  NEXTAUTH_URL=$(NEXTAUTH_URL) --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY) --build-arg NEXT_PUBLIC_SEAMETRIX_KEY=$(NEXT_PUBLIC_SEAMETRIX_KEY) --build-arg RECAPTCHA_SECRET_KEY=$(RECAPTCHA_SECRET_KEY) --build-arg NEXT_PUBLIC_STRAPI_API_URL=$(NEXT_PUBLIC_STRAPI_API_URL) --build-arg NEXT_PUBLIC_RT_URL=$(NEXT_PUBLIC_RT_URL) --build-arg BACKEND_API_URL=$(BACKEND_API_URL) --build-arg IDENTITY_API_URL=$(IDENTITY_API_URL) --build-arg NEXT_PUBLIC_FILE_API_URL=$(NEXT_PUBLIC_FILE_API_URL) --build-arg NEXT_PUBLIC_SEAMETRIX_API_URL=$(NEXT_PUBLIC_SEAMETRIX_API_URL) --build-arg IDENTITY_API_CLIENT_ID=$(IDENTITY_API_CLIENT_ID) --build-arg IDENTITY_API_CLIENT_SECRET=$(IDENTITY_API_CLIENT_SECRET) --build-arg IDENTITY_API_GRANT_TYPE=$(IDENTITY_API_GRANT_TYPE) --build-arg IDENTITY_TOKEN_GRANT_TYPE=$(IDENTITY_TOKEN_GRANT_TYPE) --build-arg PREVIEW_SECRET=$(PREVIEW_SECRET)'
-      containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
-      tags: |
-        $(tag)
-
-  # # Run Code Analysis task
-  # - task: SonarQubeAnalyze@6
+  # - task: Docker@2
+  #   displayName: Build an image
   #   inputs:
-  #     jdkversion: 'JAVA_HOME_17_X64'
+  #     command: build
+  #     repository: $(IMAGE_REPOSITORY)
+  #     dockerfile: $(dockerfilePath)
+  #     arguments: '--build-arg NEXTAUTH_SECRET=$(NEXTAUTH_SECRET) --build-arg NEXT_PUBLIC_URL=$(NEXT_PUBLIC_URL) --build-arg NEXT_PUBLIC_API_URL=$(NEXT_PUBLIC_API_URL) --build-arg  NEXTAUTH_URL=$(NEXTAUTH_URL) --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY) --build-arg NEXT_PUBLIC_SEAMETRIX_KEY=$(NEXT_PUBLIC_SEAMETRIX_KEY) --build-arg RECAPTCHA_SECRET_KEY=$(RECAPTCHA_SECRET_KEY) --build-arg NEXT_PUBLIC_STRAPI_API_URL=$(NEXT_PUBLIC_STRAPI_API_URL) --build-arg NEXT_PUBLIC_RT_URL=$(NEXT_PUBLIC_RT_URL) --build-arg BACKEND_API_URL=$(BACKEND_API_URL) --build-arg IDENTITY_API_URL=$(IDENTITY_API_URL) --build-arg NEXT_PUBLIC_FILE_API_URL=$(NEXT_PUBLIC_FILE_API_URL) --build-arg NEXT_PUBLIC_SEAMETRIX_API_URL=$(NEXT_PUBLIC_SEAMETRIX_API_URL) --build-arg IDENTITY_API_CLIENT_ID=$(IDENTITY_API_CLIENT_ID) --build-arg IDENTITY_API_CLIENT_SECRET=$(IDENTITY_API_CLIENT_SECRET) --build-arg IDENTITY_API_GRANT_TYPE=$(IDENTITY_API_GRANT_TYPE) --build-arg IDENTITY_TOKEN_GRANT_TYPE=$(IDENTITY_TOKEN_GRANT_TYPE) --build-arg PREVIEW_SECRET=$(PREVIEW_SECRET)'
+  #     containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
+  #     tags: |
+  #       $(tag)
 
-  # # Publish Quality Gate Result task
-  # - task: SonarQubePublish@6
+  # Run Code Analysis task
+  - task: SonarQubeAnalyze@6
+    inputs:
+      jdkversion: 'JAVA_HOME_17_X64'
+
+  # Publish Quality Gate Result task
+  - task: SonarQubePublish@6
+    inputs:
+      pollingTimeoutSec: '300'
+
+  # - task: Docker@2
+  #   displayName: Push an image to Container Registry
   #   inputs:
-  #     pollingTimeoutSec: '300'
+  #     command: push
+  #     repository: $(IMAGE_REPOSITORY)
+  #     containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
+  #     tags: |
+  #       $(tag)
 
-  - task: Docker@2
-    displayName: Push an image to Container Registry
-    inputs:
-      command: push
-      repository: $(IMAGE_REPOSITORY)
-      containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
-      tags: |
-        $(tag)
+  # - task: SSH@0
+  #   inputs:
+  #     sshEndpoint: $(sshEndpoint)
+  #     runOptions: 'inline'
+  #     readyTimeout: '20000'
+  #     inline: |
+  #       name='shiplink-frontend'
+  #       echo "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
+  #       docker pull "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
 
-  - task: SSH@0
-    inputs:
-      sshEndpoint: $(sshEndpoint)
-      runOptions: 'inline'
-      readyTimeout: '20000'
-      inline: |
-        name='shiplink-frontend'
-        echo "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
-        docker pull "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
-
-        if docker ps --format '{{.Names}}' | grep -q "^$name$"; then
-            echo "Container is running. Stopping it..."
-            docker stop "$name"
-            docker rm "$name"
-        elif docker ps -a --format '{{.Names}}' | grep -q "^$name$"; then
-            echo "Container $name exists. Removing it..."
-            docker rm "$name"
-        else
-            echo "Container $name does not exist."
-        fi
+  #       if docker ps --format '{{.Names}}' | grep -q "^$name$"; then
+  #           echo "Container is running. Stopping it..."
+  #           docker stop "$name"
+  #           docker rm "$name"
+  #       elif docker ps -a --format '{{.Names}}' | grep -q "^$name$"; then
+  #           echo "Container $name exists. Removing it..."
+  #           docker rm "$name"
+  #       else
+  #           echo "Container $name does not exist."
+  #       fi
 
 
-        docker run -d --restart always -e NEXTAUTH_SECRET="$(NEXTAUTH_SECRET)" -e NEXT_PUBLIC_URL="$(NEXT_PUBLIC_URL)" -e NEXT_PUBLIC_API_URL="$(NEXT_PUBLIC_API_URL)" -e  NEXTAUTH_URL="$(NEXTAUTH_URL)" -e NEXT_PUBLIC_RECAPTCHA_SITE_KEY="$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY)" -e NEXT_PUBLIC_SEAMETRIX_KEY="$(NEXT_PUBLIC_SEAMETRIX_KEY)" -e RECAPTCHA_SECRET_KEY="$(RECAPTCHA_SECRET_KEY)" -e NEXT_PUBLIC_STRAPI_API_URL="$(NEXT_PUBLIC_STRAPI_API_URL)" -e NEXT_PUBLIC_RT_URL="$(NEXT_PUBLIC_RT_URL)" -e BACKEND_API_URL="$(BACKEND_API_URL)" -e IDENTITY_API_URL="$(IDENTITY_API_URL)" -e NEXT_PUBLIC_FILE_API_URL="$(NEXT_PUBLIC_FILE_API_URL)" -e NEXT_PUBLIC_SEAMETRIX_API_URL="$(NEXT_PUBLIC_SEAMETRIX_API_URL)" -e IDENTITY_API_CLIENT_ID="$(IDENTITY_API_CLIENT_ID)" -e IDENTITY_API_CLIENT_SECRET="$(IDENTITY_API_CLIENT_SECRET)" -e IDENTITY_API_GRANT_TYPE="$(IDENTITY_API_GRANT_TYPE)" -e IDENTITY_TOKEN_GRANT_TYPE="$(IDENTITY_TOKEN_GRANT_TYPE)" -e PREVIEW_SECRET="$(PREVIEW_SECRET)" --name "${name}" -p 3000:3000 "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
+  #       docker run -d --restart always -e NEXTAUTH_SECRET="$(NEXTAUTH_SECRET)" -e NEXT_PUBLIC_URL="$(NEXT_PUBLIC_URL)" -e NEXT_PUBLIC_API_URL="$(NEXT_PUBLIC_API_URL)" -e  NEXTAUTH_URL="$(NEXTAUTH_URL)" -e NEXT_PUBLIC_RECAPTCHA_SITE_KEY="$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY)" -e NEXT_PUBLIC_SEAMETRIX_KEY="$(NEXT_PUBLIC_SEAMETRIX_KEY)" -e RECAPTCHA_SECRET_KEY="$(RECAPTCHA_SECRET_KEY)" -e NEXT_PUBLIC_STRAPI_API_URL="$(NEXT_PUBLIC_STRAPI_API_URL)" -e NEXT_PUBLIC_RT_URL="$(NEXT_PUBLIC_RT_URL)" -e BACKEND_API_URL="$(BACKEND_API_URL)" -e IDENTITY_API_URL="$(IDENTITY_API_URL)" -e NEXT_PUBLIC_FILE_API_URL="$(NEXT_PUBLIC_FILE_API_URL)" -e NEXT_PUBLIC_SEAMETRIX_API_URL="$(NEXT_PUBLIC_SEAMETRIX_API_URL)" -e IDENTITY_API_CLIENT_ID="$(IDENTITY_API_CLIENT_ID)" -e IDENTITY_API_CLIENT_SECRET="$(IDENTITY_API_CLIENT_SECRET)" -e IDENTITY_API_GRANT_TYPE="$(IDENTITY_API_GRANT_TYPE)" -e IDENTITY_TOKEN_GRANT_TYPE="$(IDENTITY_TOKEN_GRANT_TYPE)" -e PREVIEW_SECRET="$(PREVIEW_SECRET)" --name "${name}" -p 3000:3000 "$(DOCKER_IMAGE_REPO)/${name}:$(tag)"
 
-        docker image prune -a -f
-        docker builder prune -a -f
+  #       docker image prune -a -f
+  #       docker builder prune -a -f
