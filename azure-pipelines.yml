@@ -45,7 +45,6 @@ steps:
       configMode: 'manual'
       cliProjectKey: 'bp-shiplink-frontend-ui'
 
-
   - task: Docker@2
     displayName: Build an image
     inputs:

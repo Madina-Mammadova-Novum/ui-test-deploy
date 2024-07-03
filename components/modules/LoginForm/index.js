@@ -11,6 +11,7 @@ import { FormManager } from '@/common';
 import { Input, PasswordInput } from '@/elements';
 import { loginSchema } from '@/lib/schemas';
 import { signIn } from '@/store/entities/auth/actions';
+import { clearError } from '@/store/entities/auth/slice';
 import { getAuthSelector } from '@/store/selectors';
 import { generateRedirectPath, resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
@@ -34,6 +35,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (error) {
       errorToast(error.title, 'Incorrect email or password');
+      dispatch(clearError());
     }
 
     if (session?.accessToken) {

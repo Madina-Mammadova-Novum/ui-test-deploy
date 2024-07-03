@@ -105,8 +105,18 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     handleChangeState('loading', false);
   };
 
+  const filterValidProducts = (data) => {
+    const filteredData = { ...data };
+    if (filteredData.products && Array.isArray(filteredData.products)) {
+      filteredData.products = filteredData.products.filter((product) => product !== null && product !== undefined);
+    }
+    return filteredData;
+  };
+
   useEffect(() => {
-    dispatch(fetchOfferValidation({ ...searchParams, tankerId }));
+    const filteredSearchParams = filterValidProducts(searchParams);
+
+    dispatch(fetchOfferValidation({ ...filteredSearchParams, tankerId }));
 
     return () => {
       dispatch(resetOfferData());

@@ -27,6 +27,12 @@ const authSlice = createSlice({
       state.session = initialState.session;
       state.loading = initialState.loading;
     },
+    clearError: (state) => {
+      state.authorized = initialState.authorized;
+      state.error = initialState.error;
+      state.session = initialState.session;
+      state.loading = initialState.loading;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(signIn.pending, (state) => {
@@ -47,6 +53,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearSession } = authSlice.actions;
+export const { clearSession, clearError } = authSlice.actions;
 
 export default authSlice.reducer;
