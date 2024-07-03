@@ -38,12 +38,12 @@ steps:
   - script: |
       cp $(Agent.BuildDirectory)/$(envFile) $(Agent.BuildDirectory)/s/.env
 
-  - task: SonarQubePrepare@6
-    inputs:
-      SonarQube: 'SonarQube-ShipLink-Community'
-      scannerMode: 'CLI'
-      configMode: 'manual'
-      cliProjectKey: 'bp-shiplink-frontend-ui'
+  # - task: SonarQubePrepare@6
+  #   inputs:
+  #     SonarQube: 'SonarQube-ShipLink-Community'
+  #     scannerMode: 'CLI'
+  #     configMode: 'manual'
+  #     cliProjectKey: 'bp-shiplink-frontend-ui'
 
   - task: Docker@2
     displayName: Build an image
