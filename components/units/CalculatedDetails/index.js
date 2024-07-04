@@ -51,6 +51,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         placeholder="Enter the speed"
         type="number"
         step=".1"
+        max="12"
       />
     );
   }, [isFreight, errors, register]);
