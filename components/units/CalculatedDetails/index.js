@@ -50,6 +50,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         label="Speed (Optional)"
         placeholder="Enter the speed"
         type="number"
+        step=".1"
       />
     );
   }, [isFreight, errors, register]);
