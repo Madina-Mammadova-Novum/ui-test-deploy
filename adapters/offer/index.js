@@ -6,7 +6,6 @@ import {
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
-  getOfferTotalMinQuantity,
   getRoleIdentity,
 } from '@/utils/helpers';
 
@@ -122,10 +121,9 @@ export function responseSendOfferAdapter({ data }) {
 }
 
 export function sendOfferValidationAdapter({ data }) {
-  const minOfferQuantity = getOfferTotalMinQuantity({ data: data?.products });
+  if (!data) return null;
 
   return {
-    minOfferQuantity,
     vesselId: data?.tankerId,
     laycanStart: data?.laycanStart,
     laycanEnd: data?.laycanEnd,
