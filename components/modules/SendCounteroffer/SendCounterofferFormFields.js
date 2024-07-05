@@ -75,7 +75,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   useEffect(() => {
     if (valid) {
-      dispatch(fetchOfferOptions(tankerId, false));
+      dispatch(fetchOfferOptions(tankerId, true));
     }
   }, [tankerId, valid]);
 
@@ -137,7 +137,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={isSubmitting}
-          step="any"
+          step="0.001"
         />
       </div>
 
