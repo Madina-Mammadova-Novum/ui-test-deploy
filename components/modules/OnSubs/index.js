@@ -40,7 +40,7 @@ const OnSubs = () => {
         expand={toggle}
         footer={
           <OnSubsExpandedFooter
-            underRecap={!rowData?.isCountdownActive || !!rowData?.expiresAt || !!rowData?.failedAt}
+            underRecap={!rowData?.isCountdownActive}
             identity={{ isOwner, isCharterer }}
             status={{ chraterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
             offerId={rowData?.id}
