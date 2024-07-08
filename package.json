@@ -80,6 +80,7 @@
     "leaflet": "^1.9.4",
     "linkify-react": "^4.1.1",
     "linkifyjs": "^4.1.1",
+    "lottie-react": "^2.4.0",
     "next": "^14.0.4",
     "next-sitemap": "^4.0.7",
     "pluralize": "^8.0.0",

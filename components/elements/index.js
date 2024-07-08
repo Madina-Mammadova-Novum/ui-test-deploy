@@ -49,6 +49,7 @@ import SimpleSelect from '@/elements/SimpleSelect';
 import { ChatHelpLoader, ChatListLoader, ChatLoader, ChatTabLoader, NotificationLoader } from '@/elements/Skeletons';
 import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
+import TankerLoader from '@/elements/TankerLoader';
 import TextArea from '@/elements/TextArea';
 import TextRow from '@/elements/TextRow';
 import TextWithLabel from '@/elements/TextWithLabel';
@@ -118,4 +119,5 @@ export {
   ChatTabLoader,
   ChatHelpLoader,
   Otakoyi,
+  TankerLoader,
 };
