@@ -47,7 +47,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const offer = useSelector(getOfferSelector);
   const { searchParams } = useSelector(getSearchSelector);
-  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = searchParams;
+  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal, products } = searchParams;
   const { voyageDetails } = voyageDetailsAdapter({ data: searchParams });
 
   const handleChangeState = (key, value) => {
@@ -64,8 +64,6 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
 
   const handleSubmit = async (formData) => {
-    const totalMinQuantity = formData.products.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
-
     const {
       status,
       error,
@@ -80,7 +78,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         laycanEnd,
         loadTerminal,
         dischargeTerminal,
-        minOfferQuantity: totalMinQuantity,
+        products,
       },
     });
 

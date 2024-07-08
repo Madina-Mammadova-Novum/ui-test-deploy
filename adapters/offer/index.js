@@ -496,7 +496,8 @@ export const getPrefilledFormDataAdapter = ({ data }) => {
       res[`products[${index}].product`] = curr.product;
       res[`products[${index}].density`] = curr.density;
       res[`products[${index}].tolerance`] = curr.tolerance;
-      res[`products[${index}].quantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
+      res[`products[${index}].quantity`] = curr.quantity;
+      res[`products[${index}].minQuantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
 
       return res;
     }, {});
