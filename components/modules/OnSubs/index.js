@@ -12,7 +12,7 @@ import {
   onSubsDocumentsTabRowsDataAdapter,
   ownerOnSubsHeaderDataAdapter,
 } from '@/adapters';
-import { ExpandableCardHeader, Loader, Title } from '@/elements';
+import { ExpandableCardHeader, TankerLoader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getOnSubsDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -58,7 +58,7 @@ const OnSubs = () => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <TankerLoader />;
     if (offers?.length) return offers?.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
