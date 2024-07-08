@@ -8,26 +8,26 @@ trigger:
     exclude:
       - "*"
 
-parameters:
-  - name: environment_name
-    displayName: ENVIRONMENT_NAME
-    type: string
-    default: dev
-    values:
-      - dev
-      - stage
-      - prod
+# parameters:
+#   - name: environment_name
+#     displayName: ENVIRONMENT_NAME
+#     type: string
+#     default: dev
+#     values:
+#       - dev
+#       - stage
+#       - prod
 
-variables:
-  - group: shipiplink-${{ parameters.environment_name }}-ui
-  - name: dockerfilePath
-    value: Dockerfile.ci
-  - name: tag
-    value: '$(Build.BuildId)'
-  - name: envFile
-    value: env.ui.${{ parameters.environment_name }}
-  - name: sshEndpoint
-    value: shiplink-${{ parameters.environment_name }}-vm
+# variables:
+#   - group: shipiplink-${{ parameters.environment_name }}-ui
+#   - name: dockerfilePath
+#     value: Dockerfile.ci
+#   - name: tag
+#     value: '$(Build.BuildId)'
+#   - name: envFile
+#     value: env.ui.${{ parameters.environment_name }}
+#   - name: sshEndpoint
+#     value: shiplink-${{ parameters.environment_name }}-vm
 
 steps:
 
