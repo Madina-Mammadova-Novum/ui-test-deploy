@@ -98,11 +98,11 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           step="any"
         />
         <Input
-          {...register(`products[${index}].quantity`)}
+          {...register(`products[${index}].minQuantity`)}
           label="min quantity"
           placeholder="tons"
           customStyles="max-w-[138px]"
-          error={errors.products ? errors.products[index]?.quantity?.message : null}
+          error={errors.products ? errors.products[index]?.minQuantity?.message : null}
           disabled
         />
       </div>
