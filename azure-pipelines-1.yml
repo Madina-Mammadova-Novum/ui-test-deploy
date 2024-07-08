@@ -1,0 +1,42 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    exclude:
+      - "*"
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+steps:
+
+  - task: SonarQubePrepare@6
+    inputs:
+      SonarQube: 'SonarQube-ShipLink-Community'  # Name of your SonarQube service connection
+      scannerMode: 'MSBuild'
+      projectKey: 'bp-shiplink-frontend-ui'  # Replace with your SonarQube project key
+      projectName: 'bp-shiplink-frontend-ui'  # Replace with your SonarQube project name
+
+
+  - script: |
+      FILTERED_PARAMS=$(echo $SONARQUBE_SCANNER_PARAMS | sed -e 's/"sonar.branch.name":"[^"]*"\,//g' -e 's/"sonar.pullrequest.base":"[^"]*"\,//g' -e 's/"sonar.pullrequest.branch":"[^"]*"\,//g' -e 's/"sonar.pullrequest.key":"[^"]*"\,//g')
+      echo "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$FILTERED_PARAMS"
+    displayName: Filter out non-CE sonar parameters
+
+#Build
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build $(buildConfiguration)'
+    inputs:
+      command: build
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: SonarQubeAnalyze@6
+
+  - task: SonarQubePublish@6
+    inputs:
+      pollingTimeoutSec: '300'
