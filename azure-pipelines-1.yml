@@ -8,39 +8,8 @@ trigger:
     exclude:
       - "*"
 
-# parameters:
-#   - name: environment_name
-#     displayName: ENVIRONMENT_NAME
-#     type: string
-#     default: dev
-#     values:
-#       - dev
-#       - stage
-#       - prod
-
-# variables:
-#   - group: shipiplink-${{ parameters.environment_name }}-ui
-#   - name: dockerfilePath
-#     value: Dockerfile.ci
-#   - name: tag
-#     value: '$(Build.BuildId)'
-#   - name: envFile
-#     value: env.ui.${{ parameters.environment_name }}
-#   - name: sshEndpoint
-#     value: shiplink-${{ parameters.environment_name }}-vm
-
 steps:
-
-  # - task: CopyFiles@2
-  #   inputs:
-  #     sourceFolder: '$(Agent.TempDirectory)'
-  #     contents: '$(envFile)'
-  #     targetFolder: '$(Agent.BuildDirectory)'
-  #   displayName: 'Import .env'
-
-  # - script: |
-  #     cp $(Agent.BuildDirectory)/$(envFile) $(Agent.BuildDirectory)/s/.env
-
+  # SonarQube prepare
   - task: SonarQubePrepare@6
     inputs:
       SonarQube: 'SonarQube-ShipLink-Community'
@@ -48,23 +17,10 @@ steps:
       configMode: 'manual'
       cliProjectKey: 'shiplink-frontend-ui'
 
-
   - script: |
       FILTERED_PARAMS=$(echo $SONARQUBE_SCANNER_PARAMS | sed -e 's/"sonar.branch.name":"[^"]*"\,//g' -e 's/"sonar.pullrequest.base":"[^"]*"\,//g' -e 's/"sonar.pullrequest.branch":"[^"]*"\,//g' -e 's/"sonar.pullrequest.key":"[^"]*"\,//g')
       echo "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$FILTERED_PARAMS"
     displayName: Filter out non-CE sonar parameters
-
-# #Build
-#   - task: Docker@2
-#     displayName: Build an image
-#     inputs:
-#       command: build
-#       repository: $(IMAGE_REPOSITORY)
-#       dockerfile: $(dockerfilePath)
-#       arguments: '--build-arg NEXTAUTH_SECRET=$(NEXTAUTH_SECRET) --build-arg NEXT_PUBLIC_URL=$(NEXT_PUBLIC_URL) --build-arg NEXT_PUBLIC_API_URL=$(NEXT_PUBLIC_API_URL) --build-arg  NEXTAUTH_URL=$(NEXTAUTH_URL) --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY) --build-arg NEXT_PUBLIC_SEAMETRIX_KEY=$(NEXT_PUBLIC_SEAMETRIX_KEY) --build-arg RECAPTCHA_SECRET_KEY=$(RECAPTCHA_SECRET_KEY) --build-arg NEXT_PUBLIC_STRAPI_API_URL=$(NEXT_PUBLIC_STRAPI_API_URL) --build-arg NEXT_PUBLIC_RT_URL=$(NEXT_PUBLIC_RT_URL) --build-arg BACKEND_API_URL=$(BACKEND_API_URL) --build-arg IDENTITY_API_URL=$(IDENTITY_API_URL) --build-arg NEXT_PUBLIC_FILE_API_URL=$(NEXT_PUBLIC_FILE_API_URL) --build-arg NEXT_PUBLIC_SEAMETRIX_API_URL=$(NEXT_PUBLIC_SEAMETRIX_API_URL) --build-arg IDENTITY_API_CLIENT_ID=$(IDENTITY_API_CLIENT_ID) --build-arg IDENTITY_API_CLIENT_SECRET=$(IDENTITY_API_CLIENT_SECRET) --build-arg IDENTITY_API_GRANT_TYPE=$(IDENTITY_API_GRANT_TYPE) --build-arg IDENTITY_TOKEN_GRANT_TYPE=$(IDENTITY_TOKEN_GRANT_TYPE) --build-arg PREVIEW_SECRET=$(PREVIEW_SECRET)'
-#       containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
-#       tags: |
-#         $(tag)
 
   # Run Code Analysis task
   - task: SonarQubeAnalyze@6
