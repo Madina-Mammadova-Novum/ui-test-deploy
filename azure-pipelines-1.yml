@@ -6,7 +6,7 @@
 trigger:
   branches:
     exclude:
-      - "*"
+      - '*'
 
 steps:
   # SonarQube prepare
