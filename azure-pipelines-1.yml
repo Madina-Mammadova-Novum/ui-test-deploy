@@ -50,7 +50,7 @@ steps:
       SonarQube: 'SonarQube-ShipLink-Community'
       scannerMode: 'CLI'
       configMode: 'manual'
-      cliProjectKey: 'bp-shiplink-frontend-ui'
+      cliProjectKey: 'shiplink-frontend-ui'
 
 
   - script: |
