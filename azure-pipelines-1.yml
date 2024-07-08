@@ -31,12 +31,12 @@ variables:
 
 steps:
 
-  - task: CopyFiles@2
-    inputs:
-      sourceFolder: '$(Agent.TempDirectory)'
-      contents: '$(envFile)'
-      targetFolder: '$(Agent.BuildDirectory)'
-    displayName: 'Import .env'
+  # - task: CopyFiles@2
+  #   inputs:
+  #     sourceFolder: '$(Agent.TempDirectory)'
+  #     contents: '$(envFile)'
+  #     targetFolder: '$(Agent.BuildDirectory)'
+  #   displayName: 'Import .env'
 
   - script: |
       cp $(Agent.BuildDirectory)/$(envFile) $(Agent.BuildDirectory)/s/.env
