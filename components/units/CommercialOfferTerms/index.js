@@ -112,7 +112,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           label="min quantity"
           placeholder="tons"
           customStyles="max-w-[138px]"
-          error={errors.products ? errors.products[index]?.quantity?.message : null}
+          error={errors.products ? errors.products[index]?.minQuantity?.message : null}
           disabled
         />
       </div>
