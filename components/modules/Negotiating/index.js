@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { chartererNegotiatingHeaderDataAdapter, ownerNegotiatingHeaderDataAdapter } from '@/adapters/negotiating';
-import { ExpandableCardHeader, TankerLoader, Title } from '@/elements';
+import { DynamicLoader, ExpandableCardHeader, Title } from '@/elements';
 import { NEGOTIATING_TABS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import NegotiatingExpandedContent from '@/modules/Negotiating/NegotiatingExpandedContent';
@@ -41,7 +41,7 @@ const Negotiating = () => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <TankerLoader />;
+    if (loading) return <DynamicLoader />;
     if (offers?.length) return offers.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;

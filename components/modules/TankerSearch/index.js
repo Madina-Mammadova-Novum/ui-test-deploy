@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Dropdown, TankerLoader, Title } from '@/elements';
+import { Dropdown, DynamicLoader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
 import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
@@ -62,7 +62,7 @@ const TankerSearch = () => {
 
   const printResult = useMemo(() => {
     if (loading) {
-      return <TankerLoader className="h-56 w-56" />;
+      return <DynamicLoader className="h-56 w-56" />;
     }
 
     return <TankerSearchResults data={data} request={request} />;

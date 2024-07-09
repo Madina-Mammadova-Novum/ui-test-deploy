@@ -14,7 +14,7 @@ import {
   prefixtureDetailsAdapter,
   prefixtureDocumentsTabRowsDataAdapter,
 } from '@/adapters';
-import { ExpandableCardHeader, TankerLoader, Title } from '@/elements';
+import { DynamicLoader, ExpandableCardHeader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -58,7 +58,7 @@ const PreFixture = () => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <TankerLoader />;
+    if (loading) return <DynamicLoader />;
     if (offers?.length) return offers.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
