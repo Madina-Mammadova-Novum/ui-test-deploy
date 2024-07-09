@@ -8,7 +8,7 @@ import FleetsExpandedContent from './FleetsExpandedContent';
 import { UrlPropTypes } from '@/lib/types';
 
 import { fleetsPageHeaderDataAdapter, fleetsPageRowsDataAdapter } from '@/adapters';
-import { ExpandableCardHeader, Loader, Title } from '@/elements';
+import { DynamicLoader, ExpandableCardHeader, Title } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getFleetsSelector } from '@/store/selectors';
@@ -58,7 +58,7 @@ const Fleets = ({ searchedParams }) => {
   const printContent = useMemo(() => {
     const searchedResult = data?.find((vessel) => vessel?.id === searchedParams?.id);
 
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <DynamicLoader />;
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
@@ -68,7 +68,7 @@ const Fleets = ({ searchedParams }) => {
 
   return (
     <div className="flex flex-col gap-y-2.5 grow">
-      <UnassignedFleet data={unassignedData} toggle={toggle} />
+      {!loading && <UnassignedFleet data={unassignedData} toggle={toggle} />}
       {printContent}
     </div>
   );

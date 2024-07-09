@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { TankerLoader, Title } from '@/elements';
+import { DynamicLoader, Title } from '@/elements';
 import { getUserVesselsSelector } from '@/store/selectors';
 import { ExpandableCard } from '@/units';
 
@@ -15,7 +15,7 @@ const AccountPositions = () => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <TankerLoader />;
+    if (loading) return <DynamicLoader />;
     if (vessels?.length > 0) return vessels.map(printExpandableCard);
 
     return <Title level="3">No opened positions</Title>;

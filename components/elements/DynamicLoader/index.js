@@ -3,14 +3,14 @@ import Lottie from 'lottie-react';
 import AccountLoaderData from './accountLoader.json';
 import TankerLoaderData from './tankerLoader.json';
 
-import { UpdatedLoaderPropTypes } from '@/lib/types';
+import { DynamicLoaderPropTypes } from '@/lib/types';
 
 const animationDataMap = {
   tanker: TankerLoaderData,
   account: AccountLoaderData,
 };
 
-const TankerLoader = ({ className = 'w-56 h-64', animationDataType = 'tanker' }) => {
+const DynamicLoader = ({ className = 'w-56 h-64', animationDataType = 'tanker' }) => {
   const animationData = animationDataMap[animationDataType] || TankerLoaderData;
 
   return (
@@ -20,6 +20,6 @@ const TankerLoader = ({ className = 'w-56 h-64', animationDataType = 'tanker' })
   );
 };
 
-TankerLoader.propTypes = UpdatedLoaderPropTypes;
+DynamicLoader.propTypes = DynamicLoaderPropTypes;
 
-export default TankerLoader;
+export default DynamicLoader;

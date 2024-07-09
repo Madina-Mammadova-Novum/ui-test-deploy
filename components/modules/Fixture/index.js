@@ -10,7 +10,7 @@ import {
   fixtureDocumentsTabRowsDataAdapter,
   fixtureHeaderDataAdapter,
 } from '@/adapters/fixture';
-import { ExpandableCardHeader, TankerLoader, Title } from '@/elements';
+import { DynamicLoader, ExpandableCardHeader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getFixtureSelector } from '@/store/selectors';
 
@@ -36,7 +36,7 @@ const Fixture = () => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <TankerLoader />;
+    if (loading) return <DynamicLoader />;
     if (offers?.length) return offers.map(printExpandableRow);
 
     return <Title level="3">No offers at current stage</Title>;
