@@ -131,7 +131,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         disabled
         onClick={onAdd}
       />
-      <div className="mb-16">{printOptionalProps}</div>
+      <div className="sm:mb-16">{printOptionalProps}</div>
     </div>
   );
 };

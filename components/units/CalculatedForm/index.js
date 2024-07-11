@@ -119,7 +119,7 @@ const CalculatedForm = ({ children }) => {
   }, [additionalPorts.length]);
 
   return (
-    <div className="flex mt-5 w-full h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
+    <div className="flex mt-5 w-full pb-16 sm:pb-5 h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
       <FormProvider {...methods}>
         <FormManager
           className="w-full gap-5"
@@ -131,11 +131,11 @@ const CalculatedForm = ({ children }) => {
             variant: 'secondary',
             size: 'large',
             className: '!w-auto !text-white',
-            buttonContainerClassName: 'absolute bottom-5',
+            buttonContainerClassName: 'absolute bottom-3 sm:bottom-5 right-5 sm:right-0 sm:left-5',
             disabled: !!errorMessage,
           }}
         >
-          <div className="flex w-full gap-5">
+          <div className="flex w-full gap-5 flex-col sm:flex-row">
             <CalculatedDetails
               isFreight={isFreight}
               ports={generalPorts}
@@ -144,7 +144,6 @@ const CalculatedForm = ({ children }) => {
               onChange={handleChangeValue}
               onRemove={handleRemovePort}
             />
-
             <div className={`${setHeight} w-full relative transition-all duration-150 ease-out`}>{children}</div>
           </div>
         </FormManager>
