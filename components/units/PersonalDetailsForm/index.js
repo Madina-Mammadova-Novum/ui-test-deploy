@@ -64,7 +64,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       </div>
       <div className="flex flex-col gap-5">
         <p className="text-black w- font-semibold b-l text-sm pt-5">Contact Information</p>
-        <div className="grid gap-5 grid-cols-2">
+        <div className="grid gap-5 md:grid-cols-2">
           <PhoneInput
             {...register('primaryPhone')}
             onBlur={() => {}}

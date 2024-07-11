@@ -33,7 +33,9 @@ const WhyWeAreBetterBlock = ({ values }) => {
         width={1440}
         quality={100}
       />
-      <div className="container mx-auto max-w-[960px] grid grid-cols-2 gap-10"> {values && values.map(printItem)}</div>
+      <div className="container mx-auto max-w-[960px] grid sm:grid-cols-2 gap-10">
+        {values && values.map(printItem)}
+      </div>
     </section>
   );
 };

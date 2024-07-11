@@ -20,7 +20,7 @@ const TankerSearchResults = ({ request, data }) => {
   return data?.exactResults?.length || data?.partialResults?.length ? (
     <>
       {!!data?.exactResults.length && (
-        <div className="mt-5 flex justify-between">
+        <div className="mt-5 flex justify-between flex-col sm:flex-row">
           <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${
             data?.exactResults.length > 1 ? 'results' : 'result'
           }`}</TextRow>

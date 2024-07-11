@@ -31,11 +31,11 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
-        <div className="rounded-base p-5 bg-white grid grid-cols-2 divide-x divide-gray-darker relative">
-          <div className="pr-5 flex flex-col">
+        <div className="rounded-base p-5 bg-white grid md:grid-cols-2 md:divide-x divide-y md:divide-y-0 gap-4 divide-gray-darker relative">
+          <div className="md:pr-5 flex flex-col">
             <ContactUsForm />
           </div>
-          <div className="pl-5">
+          <div className="md:pl-5 pt-5 md:pt-0">
             <Map embedMap={embedMap} title={address} />
             <div className="flex flex-wrap gap-x-[30px] mt-5">
               <div className="w-[150px]">

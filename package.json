@@ -115,9 +115,9 @@
     "node_modules/(?!(react-toastify))"
   ],
   "author": {
-    "name": "OTAKOYI",
-    "email": "hello@otakoyi.com",
-    "url": "https://otakoyi.software/"
+    "name": "ShipLink",
+    "email": "info@ship.link",
+    "url": "https://ship.link/"
   },
   "engines": {
     "node": "20.x",

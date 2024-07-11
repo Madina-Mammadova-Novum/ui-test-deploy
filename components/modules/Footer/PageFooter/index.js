@@ -1,6 +1,6 @@
 import ExternalLinkAltSVG from '@/assets/images/externalLinkAlt.svg';
 import Logo from '@/assets/images/logo.svg';
-import { Copyright, NextLink, Otakoyi, Title } from '@/elements';
+import { Copyright, NextLink, Title } from '@/elements';
 import { getLegalLinksData, getSocialLinksData } from '@/services';
 import { getContactInfo, getFooterLinks } from '@/services/navigation';
 import { FooterNavBlock, SocialNetworks } from '@/units';
@@ -40,7 +40,7 @@ export default async function PageFooter() {
         <NextLink href="/">
           <Logo className="fill-black" />
         </NextLink>
-        <div className="flex mt-[30px] gap-x-4 3md:gap-x-10">
+        <div className="flex flex-col sm:flex-row mt-[30px] gap-4 3md:gap-x-10">
           {data?.length > 0 && data.map(printFooterLinks)}
           {legal?.length > 0 && <FooterNavBlock items={legal} title="Legal" />}
           <div className="w-[166px]">
@@ -66,7 +66,7 @@ export default async function PageFooter() {
               </li>
             </ul>
           </div>
-          <div className="ml-auto w-40">
+          <div className="md:ml-auto w-40">
             <Title level="5" className="title-main text-gray mb-4">
               contacts
             </Title>
@@ -81,7 +81,6 @@ export default async function PageFooter() {
         </div>
         <div className="pt-5 text-xsm flex justify-between border-grey-darker border-t">
           <Copyright />
-          <Otakoyi />
         </div>
       </div>
     </footer>
