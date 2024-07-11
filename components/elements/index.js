@@ -40,7 +40,6 @@ import NavTree from '@/elements/NavTree';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
 import NotFound from '@/elements/NotFound';
-import Otakoyi from '@/elements/OtakoyiSign';
 import Placeholder from '@/elements/Placeholder';
 import Portal from '@/elements/Portal';
 import RangeDatePicker from '@/elements/RangeDatePicker';
@@ -118,6 +117,5 @@ export {
   RangeDatePicker,
   ChatTabLoader,
   ChatHelpLoader,
-  Otakoyi,
   DynamicLoader,
 };

@@ -72,25 +72,27 @@ const TankerSearch = () => {
     <>
       <SearchForm onSubmit={handleSearch} onReset={handleReset} />
       {request && (
-        <div className="mt-8 flex">
+        <div className="mt-8 flex flex-col sm:flex-row">
           <Title level="2" className="mr-auto">
             Search results
           </Title>
 
-          <Dropdown
-            label="Sort tankers by:"
-            options={sorting?.directions}
-            value={sorting?.currentDirection || sorting?.directions[0]}
-            onChange={handleDirection}
-            customStyles={dropdownStyles}
-          />
+          <div className="flex justify-center items-start sm:items-center gap-2 flex-col sm:flex-row">
+            <Dropdown
+              label="Sort tankers by:"
+              options={sorting?.directions}
+              value={sorting?.currentDirection || sorting?.directions[0]}
+              onChange={handleDirection}
+              customStyles={dropdownStyles}
+            />
 
-          <Dropdown
-            options={sorting?.range}
-            value={sorting?.currentRange || sorting?.range[0]}
-            onChange={handleRange}
-            customStyles={dropdownStyles}
-          />
+            <Dropdown
+              options={sorting?.range}
+              value={sorting?.currentRange || sorting?.range[0]}
+              onChange={handleRange}
+              customStyles={dropdownStyles}
+            />
+          </div>
         </div>
       )}
       {printResult}

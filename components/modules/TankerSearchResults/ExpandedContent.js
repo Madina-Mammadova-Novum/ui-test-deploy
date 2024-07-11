@@ -33,7 +33,7 @@ const ExpandedContent = ({ data }) => {
           <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
             About the Tanker
           </Title>
-          <div className="flex gap-x-10">
+          <div className="flex gap-x-10 gap-y-2 flex-col sm:flex-row">
             {tankerData.length && (
               <div>
                 {tankerData.map(({ title, description }) => (

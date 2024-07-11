@@ -191,8 +191,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
   }, []);
 
   return (
-    <div className="flex">
-      <div className="w-full flex flex-col gap-y-4 pr-5 mr-5 border-r">
+    <div className="flex flex-col sm:flex-row">
+      <div className="w-full flex flex-col gap-y-4 sm:pr-5 sm:mr-5 sm:border-r">
         <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
           <DatePicker
             label="laycan start"
@@ -317,7 +317,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                   label="Quantity"
                   type="number"
                   placeholder="tons"
-                  customStyles="w-[45%] 3md:w-2/5"
+                  customStyles="w-full sm:w-[45%] 3md:w-2/5"
                   error={errors.products ? errors.products[productId]?.quantity?.message : null}
                   disabled={isSubmitting}
                 />
@@ -326,7 +326,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                   label="Tolerance"
                   type="number"
                   placeholder="%"
-                  customStyles="w-[45%] 3md:w-1/5"
+                  customStyles="w-full sm:w-[45%] 3md:w-1/5"
                   error={errors.products ? errors.products[productId]?.tolerance?.message : null}
                   disabled={isSubmitting}
                 />
