@@ -54,10 +54,10 @@ export default async function PageHeader() {
       <div className="container px-6 3md:px-14 max-w-[1258px] mx-auto">
         <div className="py-2.5 flex align-center justify-between border-white/10 border-b">
           <NextLink href="/">
-            <Logo className="fill-white hidden sm:block" />
-            <SmallLogo className="fill-white sm:hidden" />
+            <Logo className="fill-white hidden md:block" />
+            <SmallLogo className="fill-white md:hidden" />
           </NextLink>
-          <nav className="flex flex-col sm:flex-row items-center gap-x-10">
+          <nav className="flex flex-col md:flex-row items-center gap-x-10">
             {navigation?.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
             {buttons?.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>

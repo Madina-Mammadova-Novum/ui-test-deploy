@@ -85,7 +85,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
   }, [perList]);
 
   return (
-    <div className=" gap-y-4 flex flex-col h-full w-[336px]">
+    <div className=" gap-y-4 flex flex-col h-full w-full max-w-[336px]">
       <FormDropdown
         name="calculator"
         onChange={(option) => onChange('calculator', option)}
