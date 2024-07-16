@@ -6,7 +6,7 @@ import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import CloseSVG from '@/assets/images/close.svg';
 import InfoCircleSVG from '@/assets/images/infoCircle.svg';
 
-const Alert = ({ variant = '', title, description, handleClose }) => {
+const Alert = ({ variant = '', title, description, handleClose, children }) => {
   let alert;
   switch (variant) {
     case 'success': {
@@ -30,6 +30,13 @@ const Alert = ({ variant = '', title, description, handleClose }) => {
       };
       break;
     }
+    case 'notification': {
+      alert = {
+        icon: null,
+        theme: 'bg-gray-50 max-w-[31.875rem]',
+      };
+      break;
+    }
     default: {
       alert = {
         icon: null,
@@ -46,6 +53,7 @@ const Alert = ({ variant = '', title, description, handleClose }) => {
     >
       <div className="flex items-center gap-2.5">
         {icon}
+        {children}
         <div className="flex flex-col">
           {title && <p className="text-black font-semibold text-xsm">{title}</p>}
           {description && (
