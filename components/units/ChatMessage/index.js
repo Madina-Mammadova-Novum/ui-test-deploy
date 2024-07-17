@@ -20,7 +20,7 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id }) => {
       case ROLES.CHARTERER:
         return 'charterer';
       case ROLES.BROKER:
-        return 'ship.link broker';
+        return 'support operator';
       case ROLES.SUPPORT:
         return 'support operator';
       default:
