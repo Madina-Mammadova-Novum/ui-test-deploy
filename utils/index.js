@@ -135,7 +135,7 @@ export async function getCollectionTypesData(key) {
  * @param {string} description - The detailed message in toast pop-up
  * @returns {function(): number | string}
  */
-export function toastFunc(type, title, description = '', NotificationCard = {}) {
+export function toastFunc(type, title, NotificationCard, description = '') {
   toast(
     ({ closeToast }) => {
       return (
