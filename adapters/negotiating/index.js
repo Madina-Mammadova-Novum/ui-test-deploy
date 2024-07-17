@@ -179,7 +179,10 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { id, vessel, status, createdAt, expiresAt, frozenAt, notified } = data;
-  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
+  const { details: { summerDwt } = {}, openPort, openDate } = vessel || {};
+
+  const portName = openPort?.name || null;
+  const portLocode = openPort?.locode || null;
 
   return [
     {
