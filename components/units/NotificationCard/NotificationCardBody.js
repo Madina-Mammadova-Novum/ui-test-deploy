@@ -58,14 +58,16 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) =>
   return (
     <div className="flex flex-col items-start">
       <p className="text-xsm font-normal text-black">{parse(formattedMessage)}</p>
-      <Button
-        onClick={handleRedirect}
-        onMouseEnter={getDealStage}
-        onMouseLeave={resetDealStage}
-        customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline "
-        buttonProps={{ size: 'small', variant: 'primary', text: 'See details' }}
-        disabled={disabled === urlId}
-      />
+      {url && (
+        <Button
+          onClick={handleRedirect}
+          onMouseEnter={getDealStage}
+          onMouseLeave={resetDealStage}
+          customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline "
+          buttonProps={{ size: 'small', variant: 'primary', text: 'See details' }}
+          disabled={disabled === urlId}
+        />
+      )}
     </div>
   );
 };
