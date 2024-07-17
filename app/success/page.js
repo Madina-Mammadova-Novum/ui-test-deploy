@@ -32,8 +32,7 @@ const SuccessfulVerifPage = () => {
           <NextLink href="mailto:support@ship.link" className="inline text-blue">
             support@ship.link
           </NextLink>{' '}
-          or simply start the chat to get live assistance. We&apos;re here to help and ensure that everything goes as
-          smoothly as possible.
+          or simply start the chat to get live assistance.
         </p>
       </div>
       <p className="my-5 text-xsm">Thank you for choosing our platform!</p>
