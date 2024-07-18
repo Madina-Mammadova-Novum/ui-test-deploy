@@ -34,6 +34,7 @@ import Loader from '@/elements/Loader';
 import LoginButton from '@/elements/LoginButton';
 import LogoutButton from '@/elements/LogoutButton';
 import ManualTooltip from '@/elements/ManualTooltip';
+import MapLoader from '@/elements/MapLoader';
 import Modal from '@/elements/Modal';
 import NavButton from '@/elements/NavButton';
 import NavTree from '@/elements/NavTree';
@@ -118,4 +119,5 @@ export {
   ChatTabLoader,
   ChatHelpLoader,
   DynamicLoader,
+  MapLoader,
 };
