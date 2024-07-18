@@ -179,7 +179,10 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { id, vessel, status, createdAt, expiresAt, frozenAt, notified } = data;
-  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
+  const { details: { summerDwt } = {}, openPort, openDate } = vessel || {};
+
+  const portName = openPort?.name || null;
+  const portLocode = openPort?.locode || null;
 
   return [
     {
@@ -540,7 +543,10 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { vessel, failedAt, reason, id, notified } = data;
-  const { details, openDate } = vessel || {};
+  const { details, openPort, openDate } = vessel || {};
+
+  const portName = openPort?.name || null;
+  const portLocode = openPort?.locode || null;
 
   return [
     {
@@ -564,8 +570,8 @@ export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       notified,
-      value: details?.port?.name && `${details?.port?.name}${details?.port?.locode && `, ${details?.port?.locode}`}`,
-      countryCode: getLocode(details?.port?.locode),
+      value: portName && `${portName}${portLocode && `, ${portLocode}`}`,
+      countryCode: getLocode(portLocode),
       available: true,
     },
     {

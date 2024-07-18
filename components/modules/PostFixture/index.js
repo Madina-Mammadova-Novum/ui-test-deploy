@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { UrlPropTypes } from '@/lib/types';
 
-import { Dropdown, Label, Loader, Title } from '@/elements';
+import { Dropdown, DynamicLoader, Label, Title } from '@/elements';
 import { NAVIGATION_PARAMS, POST_FIXTURE_SORT_COLUMN_OPTIONS } from '@/lib/constants';
 import { PostFixtureResultContent } from '@/modules';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
@@ -60,7 +60,7 @@ const PostFixture = () => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <DynamicLoader />;
 
     if (offers?.length)
       return (

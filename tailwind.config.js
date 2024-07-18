@@ -1,3 +1,5 @@
+/** @type {import('tailwindcss').Config} */
+
 module.exports = {
   mode: 'jit',
   content: [
@@ -146,7 +148,7 @@ module.exports = {
       ringWidth: ['hover', 'active'],
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')], // eslint-disable-line
   future: {
     hoverOnlyWhenSupported: true,
   },

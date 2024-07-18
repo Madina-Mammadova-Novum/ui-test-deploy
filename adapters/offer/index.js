@@ -6,7 +6,6 @@ import {
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
-  getOfferTotalMinQuantity,
   getRoleIdentity,
 } from '@/utils/helpers';
 
@@ -122,10 +121,9 @@ export function responseSendOfferAdapter({ data }) {
 }
 
 export function sendOfferValidationAdapter({ data }) {
-  const minOfferQuantity = getOfferTotalMinQuantity({ data: data?.products });
+  if (!data) return null;
 
   return {
-    minOfferQuantity,
     vesselId: data?.tankerId,
     laycanStart: data?.laycanStart,
     laycanEnd: data?.laycanEnd,
@@ -498,7 +496,8 @@ export const getPrefilledFormDataAdapter = ({ data }) => {
       res[`products[${index}].product`] = curr.product;
       res[`products[${index}].density`] = curr.density;
       res[`products[${index}].tolerance`] = curr.tolerance;
-      res[`products[${index}].quantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
+      res[`products[${index}].quantity`] = curr.quantity;
+      res[`products[${index}].minQuantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
 
       return res;
     }, {});

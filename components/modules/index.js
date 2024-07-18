@@ -22,6 +22,7 @@ import FixtureDetails from '@/modules/Fixture/FixtureDetails';
 import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
+import GettingStartedSection from '@/modules/GettingStartedSection';
 import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
@@ -67,6 +68,7 @@ export {
   DeleteAccountForm,
   DeactivateAccountForm,
   FAQByType,
+  GettingStartedSection,
   Sidebar,
   Navbar,
   Signup,

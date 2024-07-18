@@ -7,7 +7,7 @@ import NotificationCardBody from '@/units/NotificationCard/NotificationCardBody'
 import NotificationCardHeader from '@/units/NotificationCard/NotificationCardHeader';
 import { extractTimeFromDate } from '@/utils/helpers';
 
-const NotificationCard = ({ data = [] }) => {
+const NotificationCard = ({ data = [], useDivider = true }) => {
   const [disabled, setDisabled] = useState(false);
 
   const printNotificationCard = ({ title, time, topic, url, id }) => {
@@ -17,7 +17,7 @@ const NotificationCard = ({ data = [] }) => {
       <div key={id} className="flex flex-col w-full pb-4 gap-2.5">
         <NotificationCardHeader time={nextTime} topic={topic} />
         <NotificationCardBody message={title} url={url} urlId={id} disabled={disabled} setDisabled={setDisabled} />
-        <Divider />
+        {useDivider && <Divider />}
       </div>
     );
   };

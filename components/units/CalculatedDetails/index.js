@@ -50,6 +50,8 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         label="Speed (Optional)"
         placeholder="Enter the speed"
         type="number"
+        step=".1"
+        max="12"
       />
     );
   }, [isFreight, errors, register]);
@@ -83,7 +85,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
   }, [perList]);
 
   return (
-    <div className=" gap-y-4 flex flex-col h-full w-[336px]">
+    <div className=" gap-y-4 flex flex-col h-full w-full max-w-[336px]">
       <FormDropdown
         name="calculator"
         onChange={(option) => onChange('calculator', option)}
@@ -129,7 +131,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         disabled
         onClick={onAdd}
       />
-      <div className="mb-16">{printOptionalProps}</div>
+      <div className="sm:mb-16">{printOptionalProps}</div>
     </div>
   );
 };

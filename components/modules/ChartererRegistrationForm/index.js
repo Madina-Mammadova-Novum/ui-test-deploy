@@ -29,7 +29,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
-import { getFieldFromKey, resetForm } from '@/utils/helpers';
+import { getFieldFromKey, resetForm, setCookie } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = ({ countries }) => {
@@ -61,8 +61,10 @@ const ChartererRegistrationForm = ({ countries }) => {
     const { error, data } = await chartererSignUp({ data: formData });
 
     if (!error) {
+      setCookie('session-user-email', formData.email);
       resetForm(methods, '');
-      Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
+
+      Promise.resolve(redirectAfterToast(data.message, ROUTES.GETTING_STARTED));
     } else {
       const errorKeys = Object.keys(error?.errors || {});
 

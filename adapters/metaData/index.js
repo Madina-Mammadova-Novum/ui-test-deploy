@@ -79,7 +79,7 @@ export const metaData = (props) => {
     referrer: 'origin-when-cross-origin',
     // authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],
     url: 'https://shiplink.oyihost.com',
-    creator: 'Otakoyi',
+    creator: 'ShipLink',
     // publisher: 'Sebastian Markbåge',
     alternates: {
       canonical: canonicalURL !== null ? canonicalURL : url,

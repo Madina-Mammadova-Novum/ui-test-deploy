@@ -29,6 +29,10 @@ export const useInfoToast = (title, description = '') => {
   return toastFunc('info', title, description);
 };
 
+export const useNotificationToast = (title, notification, description = '') => {
+  return toastFunc('notification', title, description, notification);
+};
+
 export const useToast = (title, description = '') => {
   return toastFunc('default', title, description);
 };

@@ -11,6 +11,7 @@ import DateTimeRow from '@/elements/DateTimeRow';
 import Divider from '@/elements/Divider';
 import Dropdown from '@/elements/Dropdown';
 import FormDropdown from '@/elements/Dropdown/FormDropdown';
+import DynamicLoader from '@/elements/DynamicLoader';
 import ExpandableCardHeader from '@/elements/ExpandableCardHeader';
 import ExpandableCardWrapper from '@/elements/ExpandableCardWrapper';
 import FieldsetContent from '@/elements/FieldsetContent';
@@ -39,7 +40,6 @@ import NavTree from '@/elements/NavTree';
 import NextImage from '@/elements/NextImage';
 import NextLink from '@/elements/NextLink';
 import NotFound from '@/elements/NotFound';
-import Otakoyi from '@/elements/OtakoyiSign';
 import Placeholder from '@/elements/Placeholder';
 import Portal from '@/elements/Portal';
 import RangeDatePicker from '@/elements/RangeDatePicker';
@@ -117,5 +117,5 @@ export {
   RangeDatePicker,
   ChatTabLoader,
   ChatHelpLoader,
-  Otakoyi,
+  DynamicLoader,
 };

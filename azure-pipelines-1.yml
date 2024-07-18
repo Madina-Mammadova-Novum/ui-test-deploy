@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    exclude:
+      - '*'
+
+steps:
+  # SonarQube prepare
+  - task: SonarQubePrepare@6
+    inputs:
+      SonarQube: 'SonarQube-ShipLink-Community'
+      scannerMode: 'CLI'
+      configMode: 'manual'
+      cliProjectKey: 'shiplink-frontend-ui'
+
+  - script: |
+      FILTERED_PARAMS=$(echo $SONARQUBE_SCANNER_PARAMS | sed -e 's/"sonar.branch.name":"[^"]*"\,//g' -e 's/"sonar.pullrequest.base":"[^"]*"\,//g' -e 's/"sonar.pullrequest.branch":"[^"]*"\,//g' -e 's/"sonar.pullrequest.key":"[^"]*"\,//g')
+      echo "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$FILTERED_PARAMS"
+    displayName: Filter out non-CE sonar parameters
+
+  # Run Code Analysis task
+  - task: SonarQubeAnalyze@6
+    inputs:
+      jdkversion: 'JAVA_HOME_17_X64'
+
+  # Publish Quality Gate Result task
+  - task: SonarQubePublish@6
+    inputs:
+      pollingTimeoutSec: '300'

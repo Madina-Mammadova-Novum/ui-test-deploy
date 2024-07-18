@@ -311,14 +311,18 @@ export const resetObjectFields = (initialObject, resetType = null) => {
   if (typeof initialObject !== 'string') {
     Object.keys(initialObject).forEach((key) => {
       if (Array.isArray(initialObject[key])) {
-        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+        if (key === 'products') {
+          // Only keep the first valid object in the products array
+          initialObject[key] = [initialObject[key].find((item) => item !== null) || {}];
+        } else {
+          initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+        }
       } else {
         initialObject[key] = resetType;
       }
     });
   }
-  // eslint-disable-next-line no-return-assign, no-param-reassign
-  return (initialObject = resetType);
+  return initialObject;
 };
 
 export const resetForm = (methods, type) => {
@@ -764,6 +768,7 @@ export const sessionCookieCleaner = () => {
   removeCookie('session-refresh-token');
   removeCookie('session-user-role');
   removeCookie('session-user-id');
+  removeCookie('session-user-email');
 };
 
 export const sessionCookieData = (data) => {

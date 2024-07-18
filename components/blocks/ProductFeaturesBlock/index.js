@@ -64,7 +64,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
             {title}
           </Title>
         )}
-        <div className="flex gap-5">
+        <div className="flex gap-5 flex-col-reverse sm:flex-row">
           <div className="flex-1">
             {ctaList && (
               <Tabs activeTab={currentTab} onClick={({ target }) => setCurrentTab(target.value)} tabs={tabs} />
