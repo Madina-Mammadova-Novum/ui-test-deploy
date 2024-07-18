@@ -9,9 +9,9 @@ import { makeId } from '@/utils/helpers';
 
 const Offer = ({ item, index }) => {
   return (
-    <div key={index} className="flex items-center gap-10 even:flex-row-reverse">
+    <div key={index} className="flex flex-col sm:flex-row items-center gap-5 sm:gap-10 sm:even:flex-row-reverse">
       {item.coverImage && (
-        <div className="w-[380px] h-[350px] shrink-0 rounded-base">
+        <div className="size-72 md:w-[380px] md:h-[350px] shrink-0 rounded-base">
           <NextImage
             src={getStrapiMedia(delve(item.coverImage, 'format.original.url'), '?format=webp')}
             alt={delve(item.coverImage, 'alternativeText')}

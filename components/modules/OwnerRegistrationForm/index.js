@@ -29,7 +29,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { getBrowser, getFieldFromKey, resetForm } from '@/utils/helpers';
+import { getBrowser, getFieldFromKey, resetForm, setCookie } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
@@ -60,8 +60,10 @@ const OwnerRegistrationForm = ({ countries }) => {
     const { error, data } = await ownerSignUp({ data: formData });
 
     if (!error) {
+      setCookie('session-user-email', formData.email);
       resetForm(methods, '');
-      Promise.resolve(redirectAfterToast(data.message, ROUTES.ROOT));
+
+      Promise.resolve(redirectAfterToast(data.message, ROUTES.GETTING_STARTED));
     } else {
       const errorKeys = Object.keys(error?.errors || {});
       const browser = getBrowser(window.navigator.userAgent);

@@ -135,10 +135,19 @@ export async function getCollectionTypesData(key) {
  * @param {string} description - The detailed message in toast pop-up
  * @returns {function(): number | string}
  */
-export function toastFunc(type, title, description = '') {
-  toast(({ closeToast }) => {
-    return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
-  });
+export function toastFunc(type, title, NotificationCard, description = '') {
+  toast(
+    ({ closeToast }) => {
+      return (
+        <Alert variant={type} title={title} description={description} handleClose={closeToast}>
+          {NotificationCard}
+        </Alert>
+      );
+    },
+    {
+      autoClose: !NotificationCard,
+    }
+  );
 }
 
 export function getApiPublicURL(path) {

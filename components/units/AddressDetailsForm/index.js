@@ -80,7 +80,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5">
         {title ?? <p className="text-black font-semibold text-sm">{title}</p>}
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 gap-5">
           <FormDropdown
             name={`${type}Country`}
             label="Country"

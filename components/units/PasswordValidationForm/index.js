@@ -71,7 +71,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
   return (
     <div className={classnames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex items-start gap-x-5 min-w-[450px]">
+      <div className="flex flex-col md:flex-row items-start gap-5 md:min-w-[450px]">
         <div className="w-full flex flex-col gap-y-5 justify-between">
           <PasswordInput
             name="password"

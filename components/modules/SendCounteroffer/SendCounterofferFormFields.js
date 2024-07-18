@@ -75,7 +75,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   useEffect(() => {
     if (valid) {
-      dispatch(fetchOfferOptions(tankerId, false));
+      dispatch(fetchOfferOptions(tankerId, true));
     }
   }, [tankerId, valid]);
 
@@ -98,11 +98,11 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           step="any"
         />
         <Input
-          {...register(`products[${index}].quantity`)}
+          {...register(`products[${index}].minQuantity`)}
           label="min quantity"
           placeholder="tons"
           customStyles="max-w-[138px]"
-          error={errors.products ? errors.products[index]?.quantity?.message : null}
+          error={errors.products ? errors.products[index]?.minQuantity?.message : null}
           disabled
         />
       </div>
@@ -137,7 +137,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={isSubmitting}
-          step="any"
+          step="0.001"
         />
       </div>
 

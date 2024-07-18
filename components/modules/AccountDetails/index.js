@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Loader, Title } from '@/elements';
+import { DynamicLoader, Title } from '@/elements';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import {
@@ -30,7 +30,7 @@ const AccountDetails = () => {
       <Title level="1" className="py-5">
         Account information
       </Title>
-      {loading && <Loader className="h-8 w-8 absolute top-1/2 left-1/2" />}
+      {loading && <DynamicLoader animationDataType="account" />}
       {data && !loading && (
         <>
           <AccountPersonalDetails user={data?.personalDetails} />

@@ -46,10 +46,26 @@ const nextConfig = {
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],
   },
   webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    });
+    config.module.rules.push(
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      },
+      {
+        test: /\.wav$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/_next/static/',
+              outputPath: 'static/',
+              name: '[name].[hash].[ext]',
+              esModule: false,
+            },
+          },
+        ],
+      }
+    );
     return config;
   },
 };

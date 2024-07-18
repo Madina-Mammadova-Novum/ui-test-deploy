@@ -47,6 +47,7 @@
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^5.9.1",
+    "file-loader": "^6.2.0",
     "husky": "^8.0.0",
     "json": "^11.0.0",
     "postcss": "^8.4.20",
@@ -65,6 +66,7 @@
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.2",
     "@svgr/webpack": "^6.5.1",
+    "@tailwindcss/typography": "^0.5.13",
     "axios": "^1.6.5",
     "classnames": "^2.3.2",
     "cookie": "^0.5.0",
@@ -73,12 +75,14 @@
     "eslint": "^8.30.0",
     "eslint-config-next": "^13.0.6",
     "form-data": "^4.0.0",
+    "howler": "^2.2.4",
     "html-react-parser": "^3.0.15",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.0",
     "leaflet": "^1.9.4",
     "linkify-react": "^4.1.1",
     "linkifyjs": "^4.1.1",
+    "lottie-react": "^2.4.0",
     "next": "^14.0.4",
     "next-sitemap": "^4.0.7",
     "pluralize": "^8.0.0",
@@ -113,9 +117,9 @@
     "node_modules/(?!(react-toastify))"
   ],
   "author": {
-    "name": "OTAKOYI",
-    "email": "hello@otakoyi.com",
-    "url": "https://otakoyi.software/"
+    "name": "ShipLink",
+    "email": "info@ship.link",
+    "url": "https://ship.link/"
   },
   "engines": {
     "node": "20.x",

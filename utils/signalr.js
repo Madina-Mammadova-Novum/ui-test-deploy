@@ -1,7 +1,10 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { Howl } from 'howler';
+import { NotificationHorn } from 'public/sounds';
 
 import { getRtURL } from '.';
 import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
+import { useNotificationToast } from './hooks';
 
 import { messageDataAdapter } from '@/adapters';
 import {
@@ -14,6 +17,9 @@ import {
   updateUserConversation,
 } from '@/store/entities/chat/slice';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
+import { NotificationCard } from '@/units';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 export class SignalRController {
   constructor({ host, state }) {
@@ -71,7 +77,28 @@ export class NotificationController extends SignalRController {
   }
 
   receiveTrigger() {
-    this.store.dispatch(fetchNotifications({ skip: 0, take: 10, query: '', isOpened: false, origin: null }));
+    this.store
+      .dispatch(fetchNotifications({ skip: 0, take: 10, query: '', isOpened: false, origin: null }))
+      .then(() => {
+        const {
+          notifications: { unwatchedData },
+        } = this.store.getState();
+
+        const newestNotification = unwatchedData?.[0]?.data?.[0] || false;
+
+        const hornSound = new Howl({
+          src: NotificationHorn,
+          loop: false,
+          preload: true,
+          autoplay: true,
+        });
+
+        //  TODO: pause case should be added to make horn loop true also mute button should be added
+        if (newestNotification) {
+          hornSound.play();
+          useNotificationToast('', <NotificationCard data={[newestNotification]} useDivider={false} />);
+        }
+      });
   }
 
   async stop() {

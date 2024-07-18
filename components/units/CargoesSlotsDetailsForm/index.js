@@ -132,7 +132,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="w-full relative">
+      <div className="md:w-full relative">
         <Input
           label="Number of cargoes chartered in the last 6 months"
           disabled={isSubmitting}
@@ -162,7 +162,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="flex relative justify-center" key={item}>
+          <div className="flex relative flex-col md:flex-row justify-center gap-2" key={item}>
             <Input
               {...register(`${fieldName}.imo`, {
                 onChange: (e) => {
@@ -184,7 +184,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               options={ports}
               onChange={(option) => handleChangeValue({ option, index, key: 'port' })}
               customStyles={{
-                className: 'w-96 3md:w-72 mx-2.5',
+                className: 'md:w-96 3md:w-72 md:mx-2.5',
               }}
               onMenuScrollToBottom={handleMore}
               loadOptions={loadOptions}
@@ -202,7 +202,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
             />
             <Button
               type="button"
-              customStyles="absolute top-1/2 -right-8 !p-0"
+              customStyles="absolute -bottom-4 md:bottom-auto md:top-1/2 md:-right-8 !p-0"
               buttonProps={{
                 icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
                 variant: 'tertiary',

@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Dropdown, Loader, Title } from '@/elements';
+import { Dropdown, DynamicLoader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
 import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
@@ -62,11 +62,7 @@ const TankerSearch = () => {
 
   const printResult = useMemo(() => {
     if (loading) {
-      return (
-        <p className="inline-flex mt-10 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
-          Searching... <Loader className="h-4 w-4" />
-        </p>
-      );
+      return <DynamicLoader className="h-56 w-56" />;
     }
 
     return <TankerSearchResults data={data} request={request} />;
@@ -76,25 +72,27 @@ const TankerSearch = () => {
     <>
       <SearchForm onSubmit={handleSearch} onReset={handleReset} />
       {request && (
-        <div className="mt-8 flex">
+        <div className="mt-8 flex flex-col sm:flex-row">
           <Title level="2" className="mr-auto">
             Search results
           </Title>
 
-          <Dropdown
-            label="Sort tankers by:"
-            options={sorting?.directions}
-            value={sorting?.currentDirection || sorting?.directions[0]}
-            onChange={handleDirection}
-            customStyles={dropdownStyles}
-          />
+          <div className="flex justify-center items-start sm:items-center gap-2 flex-col sm:flex-row">
+            <Dropdown
+              label="Sort tankers by:"
+              options={sorting?.directions}
+              value={sorting?.currentDirection || sorting?.directions[0]}
+              onChange={handleDirection}
+              customStyles={dropdownStyles}
+            />
 
-          <Dropdown
-            options={sorting?.range}
-            value={sorting?.currentRange || sorting?.range[0]}
-            onChange={handleRange}
-            customStyles={dropdownStyles}
-          />
+            <Dropdown
+              options={sorting?.range}
+              value={sorting?.currentRange || sorting?.range[0]}
+              onChange={handleRange}
+              customStyles={dropdownStyles}
+            />
+          </div>
         </div>
       )}
       {printResult}

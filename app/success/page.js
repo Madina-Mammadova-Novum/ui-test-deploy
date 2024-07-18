@@ -20,21 +20,19 @@ const SuccessfulVerifPage = () => {
     >
       <div className="grid gap-2 my-5 text-xsm">
         <p>
-          Congratulations! You have successfully passed our identity verification procedure. %We take the security of
-          our users seriously, and this is an important step in ensuring a safe and secure platform for everyone.
+          Congratulations! You have successfully passed our identity verification procedure. We take the security of our
+          users seriously, and this is an important step in ensuring a safe and secure platform for everyone.
         </p>
         <p>
-          As part of the next steps, you will receive an email from us shortly. This email will contain templates of the
-          mandatory documents you need to fill and send back to the same email address. Please ensure that you fill out
-          all the necessary information accurately and completely.
+          Your account is now fully activated, and you can start exploring all the features and services we offer.
+          We&apos;re thrilled to have you on board and look forward to helping you achieve your goals with ShipLink.
         </p>
         <p>
-          If you have any questions or concerns about the process, please don&apos;t hesitate to reach out to our
-          support team (
+          If you have any questions or need assistance, our support team is here to help. Contact us at{' '}
           <NextLink href="mailto:support@ship.link" className="inline text-blue">
             support@ship.link
-          </NextLink>
-          ). We&apos;re here to help and ensure that everything goes as smoothly as possible.
+          </NextLink>{' '}
+          or simply start the chat to get live assistance.
         </p>
       </div>
       <p className="my-5 text-xsm">Thank you for choosing our platform!</p>
