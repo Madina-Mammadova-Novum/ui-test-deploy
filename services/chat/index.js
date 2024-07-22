@@ -47,9 +47,8 @@ export const reactivateChatById = async ({ data }) => {
   };
 };
 
-export const getChatToken = async ({ data }) => {
-  const updatedData = { ...data, clientId: 'shiplink-api', clientSecret: '49C1A7E1-0C79-4A7889-Ay3D6-0997998FB86B0' };
-  const body = chatTokenAdapter({ updatedData });
+export const getChatToken = async ({ data: tokenData }) => {
+  const body = chatTokenAdapter({ data: tokenData });
 
   const response = await postData('chat/token', body);
 
