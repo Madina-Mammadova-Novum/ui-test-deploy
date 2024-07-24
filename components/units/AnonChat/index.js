@@ -277,10 +277,14 @@ const AnonChat = ({ opened }) => {
 
   dropDownOptionsAdapter({ data: countries?.data });
 
-  useEffect(async () => {
+  const fetchCountries = async () => {
     const { data: countriesData } = await getCountries();
 
     setCountries([...countriesData]);
+  };
+
+  useEffect(() => {
+    fetchCountries();
   }, []);
 
   useEffect(() => {
