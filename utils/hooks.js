@@ -11,7 +11,7 @@ import { getFilledArray, sortByType } from './helpers';
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
 import { ROLES, SORT_OPTIONS } from '@/lib/constants';
-import { toastFunc } from '@/utils/index';
+import { notificationToastFunc, toastFunc } from '@/utils/index';
 
 export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
@@ -29,8 +29,9 @@ export const useInfoToast = (title, description = '') => {
   return toastFunc('info', title, description);
 };
 
-export const useNotificationToast = (title, notification, description = '') => {
-  return toastFunc('notification', title, description, notification, true);
+export const useNotificationToast = (notificationData) => {
+  console.log({ notificationData });
+  return notificationToastFunc(notificationData);
 };
 
 export const useToast = (title, description = '') => {

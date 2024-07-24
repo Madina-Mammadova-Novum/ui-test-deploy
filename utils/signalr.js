@@ -17,7 +17,6 @@ import {
   updateUserConversation,
 } from '@/store/entities/chat/slice';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
-import { NotificationCard } from '@/units';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -96,7 +95,7 @@ export class NotificationController extends SignalRController {
         //  TODO: pause case should be added to make horn loop true also mute button should be added
         if (newestNotification) {
           hornSound.play();
-          useNotificationToast('', <NotificationCard data={[newestNotification]} useDivider={false} />);
+          useNotificationToast([newestNotification]);
         }
       });
   }
