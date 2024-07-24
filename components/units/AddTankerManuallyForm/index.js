@@ -231,7 +231,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 customStyles="w-full"
                 error={errors.tankerName?.message}
               />
-              <Input {...register(`imo`)} label="IMO" disabled value={q88State.imo} customStyles="w-full" />
+              <Input
+                {...register(`imo`)}
+                label="IMO"
+                disabled
+                value={q88State.imo}
+                customStyles="w-full"
+                maxLength={7}
+              />
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"
