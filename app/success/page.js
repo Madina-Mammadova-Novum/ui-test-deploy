@@ -18,14 +18,15 @@ const SuccessfulVerifPage = () => {
       title="Identity Verification Successful!"
       containerClass="md:px-24 min-w-[450px] 3md:w-7/12 3md:ml-auto"
     >
-      <div className="grid gap-2 my-5 text-xsm">
+      <div className="grid gap-4 my-5 text-xsm">
         <p>
           Congratulations! You have successfully passed our identity verification procedure. We take the security of our
           users seriously, and this is an important step in ensuring a safe and secure platform for everyone.
         </p>
         <p>
-          Your account is now fully activated, and you can start exploring all the features and services we offer.
-          We&apos;re thrilled to have you on board and look forward to helping you achieve your goals with ShipLink.
+          Your account will be fully activated in 10-15 minutes, and you will be able to start exploring all the
+          features and services we offer. We&apos;re thrilled to have you on board and look forward to helping you
+          achieve your goals with <b>ShipLink</b>.
         </p>
         <p>
           If you have any questions or need assistance, our support team is here to help. Contact us at{' '}

@@ -221,7 +221,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
         <>
           <ModalHeader goBack={goBack}>Add a New Tanker</ModalHeader>
           <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start" />
-          {Object.keys(q88State).length < 2 && <ImoNotFound q88={q88State} goBack={goBack} />}
+          {Object.keys(q88State).length < 2 && <ImoNotFound q88={q88State} />}
 
           <div className="grid grid-cols-1 gap-y-4 h-80 pr-2.5 mt-5 overflow-scroll">
             <div className="grid grid-cols-2 gap-y-4 gap-x-5">
@@ -231,7 +231,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 customStyles="w-full"
                 error={errors.tankerName?.message}
               />
-              <Input {...register(`imo`)} label="IMO" disabled value={q88State.imo} customStyles="w-full" />
+              <Input
+                {...register(`imo`)}
+                label="IMO"
+                disabled
+                value={q88State.imo}
+                customStyles="w-full"
+                maxLength={7}
+              />
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"

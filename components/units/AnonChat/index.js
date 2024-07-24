@@ -168,15 +168,21 @@ const AnonChat = ({ opened }) => {
         ));
       case 'company':
         return (
-          <div className="flex w-full items-end gap-x-2">
+          <form
+            className="flex w-full items-end gap-x-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleBotMessage({ key, answer: message });
+            }}
+          >
             <Input {...props} onChange={handleMessage} />
             <Button
+              type="submit"
               disabled={disabled}
               customStyles="border border-gray-darker !p-2.5"
-              onClick={() => handleBotMessage({ key, answer: message })}
               buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
             />
-          </div>
+          </form>
         );
       case 'location':
         return (
@@ -225,15 +231,21 @@ const AnonChat = ({ opened }) => {
         );
       case 'email':
         return (
-          <div className="flex w-full relative items-end gap-x-2">
+          <form
+            className="flex w-full relative items-end gap-x-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleBotMessage({ key, answer: message });
+            }}
+          >
             <Input onChange={handleMessage} {...props} />
             <Button
+              type="submit"
               disabled={!checkEmailPrefix(message)}
-              onClick={() => handleBotMessage({ key, answer: message })}
               customStyles="border border-gray-darker !p-2.5 relative"
               buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
             />
-          </div>
+          </form>
         );
       case 'connection':
         return null;
@@ -277,10 +289,14 @@ const AnonChat = ({ opened }) => {
 
   dropDownOptionsAdapter({ data: countries?.data });
 
-  useEffect(async () => {
+  const fetchCountries = async () => {
     const { data: countriesData } = await getCountries();
 
     setCountries([...countriesData]);
+  };
+
+  useEffect(() => {
+    fetchCountries();
   }, []);
 
   useEffect(() => {

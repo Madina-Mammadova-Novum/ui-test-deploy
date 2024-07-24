@@ -265,7 +265,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 customStyles="w-full"
                 error={errors.tankerName?.message}
               />
-              <Input {...register(`imo`)} label="IMO" disabled customStyles="w-full" />
+              <Input {...register(`imo`)} label="IMO" disabled customStyles="w-full" maxLength={7} />
               <DatePicker
                 label="Last Q88 update date"
                 name="updateDate"
