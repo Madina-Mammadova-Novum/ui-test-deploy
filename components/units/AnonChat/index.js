@@ -8,14 +8,15 @@ import ChatModal from '../ChatModal';
 
 import { AnonChatPropTypes } from '@/lib/types';
 
+import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { sessionAdapter } from '@/adapters/user';
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
-import { getChatToken, getCities } from '@/services';
+import { getChatToken, getCities, getCountries } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setOpenedChat, setUser } from '@/store/entities/chat/slice';
-import { getAnonChatSelector, getAuthSelector, getGeneralDataSelector } from '@/store/selectors';
+import { getAnonChatSelector, getAuthSelector } from '@/store/selectors';
 import { addLocalDateFlag, checkEmailPrefix, convertDataToOptions, countriesOptions, setCookie } from '@/utils/helpers';
 import { steps } from '@/utils/mock';
 
@@ -28,13 +29,13 @@ const AnonChat = ({ opened }) => {
   const [flow, setFlow] = useState([updatedStep]);
   const [city, setCity] = useState({ value: null, label: null });
   const [country, setCountry] = useState({ value: null, label: null });
+  const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [session, setSession] = useState(null);
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
   const { chat, data } = useSelector(getAnonChatSelector);
-  const { countries } = useSelector(getGeneralDataSelector);
 
   const currentStep = flow[flow.length - 1];
 
@@ -273,6 +274,14 @@ const AnonChat = ({ opened }) => {
       </div>
     );
   };
+
+  dropDownOptionsAdapter({ data: countries?.data });
+
+  useEffect(async () => {
+    const { data: countriesData } = await getCountries();
+
+    setCountries([...countriesData]);
+  }, []);
 
   useEffect(() => {
     if (session?.accessToken) {

@@ -30,7 +30,7 @@ export const useInfoToast = (title, description = '') => {
 };
 
 export const useNotificationToast = (title, notification, description = '') => {
-  return toastFunc('notification', title, description, notification);
+  return toastFunc('notification', title, description, notification, true);
 };
 
 export const useToast = (title, description = '') => {

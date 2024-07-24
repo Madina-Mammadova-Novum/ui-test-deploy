@@ -150,13 +150,11 @@ export function chatTokenAdapter({ data }) {
   if (!data) return null;
 
   return {
-    clientId: 'shiplink-api',
     type: data.role?.message,
     email: data.email.message,
     fullName: data.phone.message,
     companyName: data.company.message,
     registrationCityId: data.location.cityId,
-    clientSecret: '49C1A7E1-0C79-4A7889-Ay3D6-0997998FB86B0',
   };
 }
 
