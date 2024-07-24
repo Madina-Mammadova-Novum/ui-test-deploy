@@ -30,7 +30,6 @@ export const useInfoToast = (title, description = '') => {
 };
 
 export const useNotificationToast = (notificationData) => {
-  console.log({ notificationData });
   return notificationToastFunc(notificationData);
 };
 
