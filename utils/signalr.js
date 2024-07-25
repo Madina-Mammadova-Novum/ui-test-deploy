@@ -90,6 +90,7 @@ export class NotificationController extends SignalRController {
           loop: false,
           preload: true,
           autoplay: true,
+          volume: 0.7,
         });
 
         //  TODO: pause case should be added to make horn loop true also mute button should be added
