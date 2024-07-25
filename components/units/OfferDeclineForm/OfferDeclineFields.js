@@ -74,11 +74,16 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
       </Title>
 
       {reasons.map(({ id, text, checked }) => (
-        <div className="mt-2.5">
-          <RadioInput key={id} name="reason" checked={checked} labelStyles="text-xsm" onChange={() => handleCheck(id)}>
-            {text}
-          </RadioInput>
-        </div>
+        <RadioInput
+          key={id}
+          name={`reason-${id}`}
+          checked={checked}
+          customStyles="mt-2.5"
+          labelStyles="text-xsm mt-2.5"
+          onChange={() => handleCheck(id)}
+        >
+          {text}
+        </RadioInput>
       ))}
       {showTextField && (
         <TextArea

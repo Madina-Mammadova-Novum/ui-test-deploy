@@ -77,6 +77,7 @@ const AddTankerWithImoForm = ({
             onChange={handleOnChange}
             placeholder="Enter IMO"
             error={methods.formState.errors?.imo?.message}
+            maxLength={7}
           />
         </div>
       </ModalFormManager>
