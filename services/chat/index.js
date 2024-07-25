@@ -47,8 +47,8 @@ export const reactivateChatById = async ({ data }) => {
   };
 };
 
-export const getChatToken = async ({ data }) => {
-  const body = chatTokenAdapter({ data });
+export const getChatToken = async ({ data: tokenData }) => {
+  const body = chatTokenAdapter({ data: tokenData });
 
   const response = await postData('chat/token', body);
 
