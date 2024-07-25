@@ -36,7 +36,7 @@ const NotificationCardHeader = ({ time, topic }) => {
   }, [topic]);
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-3">
       <div className="flex items-center gap-x-1.5">
         {printIcon}
         <p className="uppercase font-semibold text-xs-sm">{formattedBySpaces({ string: topic })}</p>

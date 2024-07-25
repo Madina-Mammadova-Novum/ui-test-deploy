@@ -1,6 +1,6 @@
+import SuccessfulVerifPageContent from './SuccessfulVerifPageContent';
+
 import { metaData } from '@/adapters/metaData';
-import { LinkAsButton, NextLink } from '@/elements';
-import { AuthWrapper } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -13,34 +13,7 @@ export function generateMetadata() {
 }
 
 const SuccessfulVerifPage = () => {
-  return (
-    <AuthWrapper
-      title="Identity Verification Successful!"
-      containerClass="md:px-24 min-w-[450px] 3md:w-7/12 3md:ml-auto"
-    >
-      <div className="grid gap-2 my-5 text-xsm">
-        <p>
-          Congratulations! You have successfully passed our identity verification procedure. We take the security of our
-          users seriously, and this is an important step in ensuring a safe and secure platform for everyone.
-        </p>
-        <p>
-          Your account is now fully activated, and you can start exploring all the features and services we offer.
-          We&apos;re thrilled to have you on board and look forward to helping you achieve your goals with ShipLink.
-        </p>
-        <p>
-          If you have any questions or need assistance, our support team is here to help. Contact us at{' '}
-          <NextLink href="mailto:support@ship.link" className="inline text-blue">
-            support@ship.link
-          </NextLink>{' '}
-          or simply start the chat to get live assistance.
-        </p>
-      </div>
-      <p className="my-5 text-xsm">Thank you for choosing our platform!</p>
-      <LinkAsButton href="/" buttonProps={{ size: 'large', variant: 'primary' }}>
-        Return to Homepage
-      </LinkAsButton>
-    </AuthWrapper>
-  );
+  return <SuccessfulVerifPageContent />;
 };
 
 export default SuccessfulVerifPage;

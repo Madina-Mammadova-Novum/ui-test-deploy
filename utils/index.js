@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 // import delve from 'dlv';
 import pluralize from 'pluralize';
 
-import { Alert } from '@/elements';
+import { Alert, NotificationAlert } from '@/elements';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
@@ -135,17 +135,22 @@ export async function getCollectionTypesData(key) {
  * @param {string} description - The detailed message in toast pop-up
  * @returns {function(): number | string}
  */
-export function toastFunc(type, title, description = '', NotificationCard = [], isNotification = false) {
+export function toastFunc(type, title, description = '') {
+  toast(({ closeToast }) => {
+    return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
+  });
+}
+
+/**
+ * notificationToastFunc
+ */
+export function notificationToastFunc(notificationData) {
   toast(
     ({ closeToast }) => {
-      return (
-        <Alert variant={type} title={title} description={description} handleClose={closeToast}>
-          {NotificationCard}
-        </Alert>
-      );
+      return <NotificationAlert handleClose={closeToast} notificationData={notificationData} />;
     },
     {
-      autoClose: !isNotification,
+      autoClose: false,
     }
   );
 }
