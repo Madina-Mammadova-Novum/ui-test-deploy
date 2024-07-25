@@ -41,11 +41,13 @@ const DeleteTankerModal = ({ closeModal, state }) => {
     setIsSubmitting(true);
     const { error, message } = await removeVessel({ id });
 
-    dispatch(deleteVesselFromUnassignedFleetsState(id));
-    successToast(message);
+    if (error) {
+      errorToast(error?.title, error?.message);
+    } else {
+      dispatch(deleteVesselFromUnassignedFleetsState(id));
+      successToast(message);
+    }
     closeModal();
-
-    if (error) errorToast(error?.title, error?.message);
     setIsSubmitting(false);
   };
 
