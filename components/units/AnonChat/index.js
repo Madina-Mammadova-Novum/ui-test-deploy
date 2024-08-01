@@ -166,6 +166,42 @@ const AnonChat = ({ opened }) => {
             buttonProps={{ text: el.text, variant: 'primary', size: 'medium' }}
           />
         ));
+      case 'name':
+        return (
+          <form
+            className="flex w-full items-end gap-x-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleBotMessage({ key, answer: message });
+            }}
+          >
+            <Input {...props} onChange={handleMessage} />
+            <Button
+              type="submit"
+              disabled={disabled}
+              customStyles="border border-gray-darker !p-2.5"
+              buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
+            />
+          </form>
+        );
+      case 'surname':
+        return (
+          <form
+            className="flex w-full items-end gap-x-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleBotMessage({ key, answer: message });
+            }}
+          >
+            <Input {...props} onChange={handleMessage} />
+            <Button
+              type="submit"
+              disabled={disabled}
+              customStyles="border border-gray-darker !p-2.5"
+              buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
+            />
+          </form>
+        );
       case 'company':
         return (
           <form
