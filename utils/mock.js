@@ -1107,9 +1107,37 @@ export const steps = {
     ],
   },
   2: {
+    key: 'name',
+    support: {
+      message: 'Tell us about yourself. Please enter your first name.',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {
+      label: 'First name',
+      placeholder: 'Enter the first name',
+      customStyles: 'w-full',
+      type: 'text',
+    },
+  },
+  3: {
+    key: 'surname',
+    support: {
+      message: 'Please enter your last name.',
+      isBroker: true,
+      sender: 'support',
+    },
+    userProps: {
+      label: 'Last name',
+      placeholder: 'Enter the last name',
+      customStyles: 'w-full',
+      type: 'text',
+    },
+  },
+  4: {
     key: 'company',
     support: {
-      message: 'Tell us about yourself. Please enter your company name.',
+      message: 'Please enter your company name.',
       isBroker: true,
       sender: 'support',
     },
@@ -1120,7 +1148,7 @@ export const steps = {
       type: 'text',
     },
   },
-  3: {
+  5: {
     key: 'location',
     support: {
       message: 'Please choose the place of registration below.',
@@ -1129,7 +1157,7 @@ export const steps = {
     },
     userProps: {},
   },
-  4: {
+  6: {
     key: 'phone',
     support: {
       message: 'To proceed please enter your valid phone number.',
@@ -1143,7 +1171,7 @@ export const steps = {
       customStyles: 'w-full',
     },
   },
-  5: {
+  7: {
     key: 'email',
     support: {
       message: 'To finish please enter your valid email.',
@@ -1157,12 +1185,12 @@ export const steps = {
       customStyles: 'w-full',
     },
   },
-  6: {
+  8: {
     key: 'connection',
     support: null,
     userProps: null,
   },
-  7: {
+  9: {
     key: 'question',
     support: {
       message: 'Please describe your question below and we will get in touch with you.',
