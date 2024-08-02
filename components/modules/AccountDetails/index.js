@@ -30,7 +30,7 @@ const AccountDetails = () => {
       <Title level="1" className="py-5">
         Account information
       </Title>
-      {loading && <DynamicLoader animationDataType="account" />}
+      {loading && <DynamicLoader animationDataType="account" className="size-40" />}
       {data && !loading && (
         <>
           <AccountPersonalDetails user={data?.personalDetails} />
