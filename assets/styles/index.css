@@ -412,7 +412,7 @@ table > tbody > tr td[name='GREY'] > div {
 }
 
 .Toastify__toast-container {
-  @apply !w-full !p-0 !ml-auto;
+  @apply !w-full !p-0 !ml-auto max-w-[40rem];
 }
 
 .Toastify__toast-body {
