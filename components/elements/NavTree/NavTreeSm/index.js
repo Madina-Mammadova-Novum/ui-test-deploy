@@ -13,7 +13,7 @@ import BrowserSVG from '@/assets/images/browser.svg';
 import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
 import QuestionCircleSVG from '@/assets/images/questionCircle.svg';
 import SearchSVG from '@/assets/images/search.svg';
-import ToolsSVG from '@/assets/images/setting.svg';
+import ToolsSVG from '@/assets/images/wrench.svg';
 import { Button } from '@/elements';
 
 const NavTreeSm = ({ data, active }) => {
@@ -63,7 +63,7 @@ const NavTreeSm = ({ data, active }) => {
       case 'faq':
         return <QuestionCircleSVG className={customStyles} viewBox="0 0 24 24" />;
       case 'tools':
-        return <ToolsSVG className={customStyles} viewBox="0 0 14 14" />;
+        return <ToolsSVG className={customStyles} viewBox="0 0 24 24" />;
       default:
         return null;
     }
