@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { successToolsDataAdapter } from '@/adapters';
@@ -17,7 +18,7 @@ import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
-const CalculatedForm = ({ children }) => {
+const CalculatedForm = ({ customHeight = '', children }) => {
   const { ports } = useSelector(getGeneralDataSelector);
 
   const [state, setState] = useState({
@@ -145,12 +146,18 @@ const CalculatedForm = ({ children }) => {
               onChange={handleChangeValue}
               onRemove={handleRemovePort}
             />
-            <div className={`${setHeight} w-full relative transition-all duration-150 ease-out`}>{children}</div>
+            <div className={`${customHeight || setHeight} w-full relative transition-all duration-150 ease-out`}>
+              {children}
+            </div>
           </div>
         </FormManager>
       </FormProvider>
     </div>
   );
+};
+
+CalculatedForm.propTypes = {
+  customHeight: PropTypes.string,
 };
 
 export default CalculatedForm;
