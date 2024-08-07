@@ -52,7 +52,7 @@ const Map = ({ className = 'h-full' }) => {
       <TileLayer url={getSeaMetrixURL('mapsapi/simplemap')} crossOrigin />
       <TileLayer url={getSeaMetrixURL('mapsapi/ports')} crossOrigin />
       {!!coordinates.length && <Polyline positions={coord} />}
-      <CalculatedResult value={calculator?.value} result={response ?? null} />
+      <CalculatedResult value={calculator?.value} result={isLoading || !response ? null : response} />
     </MapContainer>
   );
 };

@@ -48,7 +48,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         {...register('speed')}
         error={errors?.speed?.message}
         label="Speed (Optional)"
-        placeholder="Enter the speed"
+        placeholder="Enter the speed (Default: 11)"
         type="number"
         step=".1"
         max="12"
