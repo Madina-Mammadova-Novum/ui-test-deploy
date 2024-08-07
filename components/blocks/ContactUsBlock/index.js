@@ -10,6 +10,7 @@ import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
 const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, embedMap }) => {
+  console.log({ phones, address, schedule, embedMap });
   const printPhone = (phone) => (
     <li>
       <NextLink href={`tel:${phone}`} className="text-xsm mt-1">
@@ -37,7 +38,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
           </div>
           <div className="md:pl-5 pt-5 md:pt-0">
             <Map embedMap={embedMap} title={address} />
-            <div className="flex flex-wrap gap-x-[30px] mt-5">
+            <div className="flex flex-wrap gap-[30px] mt-5">
               <div className="w-[150px]">
                 <Title level={4} className="mb-2">
                   Address
