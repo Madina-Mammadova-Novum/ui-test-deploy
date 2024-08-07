@@ -10,7 +10,6 @@ import { ContactUsForm } from '@/modules';
 import { SocialNetworks } from '@/units';
 
 const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, embedMap }) => {
-  console.log({ phones, address, schedule, embedMap });
   const printPhone = (phone) => (
     <li>
       <NextLink href={`tel:${phone}`} className="text-xsm mt-1">
