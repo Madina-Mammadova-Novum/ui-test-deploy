@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 /* Actions */
 
 // eslint-disable-next-line import/no-cycle
-import { fetchNotifications, getCurrnetDealStage, readNotification } from './actions';
+import { fetchNotifications, getCurrentDealStage, readNotification } from './actions';
 
 const initialState = {
   unread: 0,
@@ -93,14 +93,14 @@ const notificationsSlice = createSlice({
       state.loading = false;
       state.error = payload;
     });
-    builder.addCase(getCurrnetDealStage.pending, (state) => {
+    builder.addCase(getCurrentDealStage.pending, (state) => {
       state.dealFetching = true;
     });
-    builder.addCase(getCurrnetDealStage.fulfilled, (state, { payload }) => {
+    builder.addCase(getCurrentDealStage.fulfilled, (state, { payload }) => {
       state.dealFetching = false;
       state.dealData = payload;
     });
-    builder.addCase(getCurrnetDealStage.rejected, (state, { payload }) => {
+    builder.addCase(getCurrentDealStage.rejected, (state, { payload }) => {
       state.dealFetching = false;
       state.error = payload;
     });

@@ -10,7 +10,7 @@ import { ChatConversationCardPropTypes } from '@/lib/types';
 import ShipIcon from '@/assets/icons/ShipIcon';
 import { Title } from '@/elements';
 import { setConversation, setOpenedChat } from '@/store/entities/chat/slice';
-import { getCurrnetDealStage } from '@/store/entities/notifications/actions';
+import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { resetDealData } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { ChatAdditional } from '@/units';
@@ -38,7 +38,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   };
 
   const getDealStage = useCallback(() => {
-    dispatch(getCurrnetDealStage({ id: data?.dealId, role }));
+    dispatch(getCurrentDealStage({ id: data?.dealId, role }));
   }, [dispatch, role, data?.dealId]);
 
   const handleRedirect = useCallback(
