@@ -12,6 +12,7 @@ const CalculatedResult = ({ result, value }) => {
   const firstValue = formatedNumber(result?.resultOne);
   const secondValue = formatedNumber(result?.resultTwo);
   const secondTextWithValue = `${secondValue} Hours`;
+  const distanceValue = firstValue ? `${firstValue} Nm` : '';
 
   return (
     <div className=" bg-white rounded-md p-5 w-[250px] absolute bottom-2 left-2 z-[500] font-inter-sans">
@@ -35,7 +36,7 @@ const CalculatedResult = ({ result, value }) => {
         ) : (
           <>
             <TextWithLabel
-              text={firstValue}
+              text={distanceValue}
               label="Distance"
               customStyles="!flex-col !items-start [&>label]:!text-[10px] [&>p]:!ml-0"
               textGroupStyle="!mx-0 !ml-0"

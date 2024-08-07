@@ -12,5 +12,9 @@ export function generateMetadata() {
 }
 
 export default function AccountTool() {
-  return <AccountTools title="Tools" />;
+  return (
+    <section className="mx-5">
+      <AccountTools title="Tools" />
+    </section>
+  );
 }

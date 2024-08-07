@@ -53,7 +53,7 @@ const OnSubsDetails = ({ searchedParams }) => {
             offerId={rowData?.id}
             identity={{ isOwner }}
             scriveURL={scriveURL || ''}
-            underRecap={!rowData?.isCountdownActive}
+            underRecap={!rowData?.isCountdownActive || !rowData?.failedAt}
             status={{ chraterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
           />
         }

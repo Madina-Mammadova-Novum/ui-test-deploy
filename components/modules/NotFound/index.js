@@ -4,7 +4,11 @@ import { NotFoundPropTypes } from '@/lib/types';
 
 import { LinkAsButton, NextImage, Title } from '@/elements';
 
-export default function NotFound({ code = '404', message = 'Page not found' }) {
+export default function NotFound({
+  code = '404',
+  message = 'Page not found',
+  messageDetail = 'It seems that we can’t find the page you’re looking for. Try going back to the previous page.',
+}) {
   return (
     <section className="relative min-h-screen">
       <NextImage
@@ -21,9 +25,7 @@ export default function NotFound({ code = '404', message = 'Page not found' }) {
         <Title level="1" className="text-white">
           {message}
         </Title>
-        <p className="max-w-xs text-xsm text-white mt-1.5 mb-5">
-          It seems that we can’t find the page you’re looking for. Try going back to the previous page.
-        </p>
+        <p className="max-w-xs text-xsm text-white mt-1.5 mb-5">{messageDetail}</p>
         <LinkAsButton href="/" buttonProps={{ variant: 'tertiary', size: 'large' }} customStyles="w-auto border-none">
           Back to Home
         </LinkAsButton>
