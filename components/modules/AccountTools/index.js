@@ -5,7 +5,7 @@ import { AccountToolsPropTypes } from '@/lib/types';
 import { Title } from '@/elements';
 import { CalculatedForm, Map } from '@/units';
 
-const AccountTools = ({ title }) => {
+const AccountTools = ({ title, customHeight = '' }) => {
   return (
     <>
       {title && (
@@ -13,7 +13,7 @@ const AccountTools = ({ title }) => {
           {title}
         </Title>
       )}
-      <CalculatedForm>
+      <CalculatedForm customHeight={customHeight}>
         <Map className="h-full" />
       </CalculatedForm>
     </>

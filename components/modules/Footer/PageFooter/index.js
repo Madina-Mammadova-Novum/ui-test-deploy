@@ -71,7 +71,7 @@ export default async function PageFooter() {
               contacts
             </Title>
             <ul className="space-y-2 text-black">
-              {phones?.length && phones.map(printContactPhones)}
+              {phones?.length > 0 && phones.map(printContactPhones)}
               {emails?.length && emails.map(printContactEmails)}
             </ul>
             <div className="flex gap-x-2.5 my-4">
