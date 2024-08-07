@@ -149,10 +149,13 @@ export function chatSupportResponseAdapter({ data }) {
 export function chatTokenAdapter({ data }) {
   if (!data) return null;
 
+  const fullName = `${data.name.message} ${data.surname.message}`;
+
   return {
     type: data.role?.message,
     email: data.email.message,
-    fullName: data.phone.message,
+    fullName,
+    phoneNumber: data.phone.message,
     companyName: data.company.message,
     registrationCityId: data.location.cityId,
   };

@@ -44,17 +44,21 @@ export const fetchNotifications = createAsyncThunk(
   }
 );
 
-export const getCurrnetDealStage = createAsyncThunk(
+export const getCurrentDealStage = createAsyncThunk(
   NOTIFICATIONS.GET_CURRENT_DEAL,
   async ({ id, role }, { rejectWithValue }) => {
-    const { data, error } = await getOfferDetails(id, role);
+    try {
+      const { data, error } = await getOfferDetails(id, role);
 
-    if (error) {
-      rejectWithValue(error);
+      if (error) {
+        return rejectWithValue(error);
+      }
+
+      const route = notificationPathGenerator({ data, role });
+      return { ...data, route };
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-
-    const route = notificationPathGenerator({ data, role });
-    return { ...data, route };
   }
 );
 

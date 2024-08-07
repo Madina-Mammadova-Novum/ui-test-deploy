@@ -26,6 +26,7 @@ const CalculatedForm = ({ children }) => {
     calculator: toolsCalculatorOptions[0],
     fromPort: null,
     toPort: null,
+    speed: 11,
   });
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -70,7 +71,7 @@ const CalculatedForm = ({ children }) => {
     methods.setValue('cargoQuantity', null);
     methods.setValue('speed', null);
     methods.setValue('calculator', calculator);
-    // handleChangeState('calculator', toolsCalculatorOptions[0]);
+    handleChangeState('calculator', toolsCalculatorOptions[0]);
   };
 
   const handleChangeValue = (key, value) => {
@@ -85,10 +86,10 @@ const CalculatedForm = ({ children }) => {
     handleChangeState(key, value);
 
     if (key === 'calculator') {
-      methods.unregister('cargoQuantity');
-      methods.unregister('speed');
       methods.setValue('cargoQuantity', null);
       methods.setValue('speed', null);
+      methods.unregister('cargoQuantity');
+      methods.unregister('speed');
     }
   };
 

@@ -166,6 +166,8 @@ const AnonChat = ({ opened }) => {
             buttonProps={{ text: el.text, variant: 'primary', size: 'medium' }}
           />
         ));
+      case 'name':
+      case 'surname':
       case 'company':
         return (
           <form

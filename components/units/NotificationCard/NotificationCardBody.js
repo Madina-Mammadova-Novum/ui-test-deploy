@@ -10,7 +10,7 @@ import { NotificationCardBodyPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
-import { getCurrnetDealStage, readNotification } from '@/store/entities/notifications/actions';
+import { getCurrentDealStage, readNotification } from '@/store/entities/notifications/actions';
 import { resetDealData, resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
@@ -28,7 +28,7 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) =>
   const getDealStage = useCallback(() => {
     if (isDealPath) {
       const id = getIdFromUrl(url);
-      dispatch(getCurrnetDealStage({ id, role }));
+      dispatch(getCurrentDealStage({ id, role }));
     }
   }, [isDealPath, url, getIdFromUrl, dispatch, role]);
 
