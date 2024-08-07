@@ -12,7 +12,7 @@ import BrowserSVG from '@/assets/images/browser.svg';
 import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
 import QuestionCircleSVG from '@/assets/images/questionCircle.svg';
 import SearchSVG from '@/assets/images/search.svg';
-import ToolsSVG from '@/assets/images/setting.svg';
+import ToolsSVG from '@/assets/images/wrench.svg';
 import { handleToggle } from '@/store/entities/general/slice';
 import { getSidebarSelector } from '@/store/selectors';
 
@@ -36,7 +36,7 @@ const NavTreeXl = ({ data, active }) => {
       case 'faq':
         return <QuestionCircleSVG className={customStyles} />;
       case 'tools':
-        return <ToolsSVG className={customStyles} width="24" height="24" viewBox="0 0 14 14" />;
+        return <ToolsSVG className={customStyles} width="24" height="24" viewBox="0 0 24 24" />;
       default:
         return null;
     }
