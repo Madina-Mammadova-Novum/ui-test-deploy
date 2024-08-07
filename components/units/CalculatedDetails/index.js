@@ -42,13 +42,14 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         placeholder="Enter the cargo quantity"
         type="number"
         helperText="Min value: 1000"
+        min="1000"
       />
     ) : (
       <Input
         {...register('speed')}
         error={errors?.speed?.message}
         label="Speed (Optional)"
-        placeholder="Enter the speed"
+        placeholder="Enter the speed (Default: 11)"
         type="number"
         step=".1"
         max="12"

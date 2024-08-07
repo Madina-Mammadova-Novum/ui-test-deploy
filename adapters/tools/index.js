@@ -13,7 +13,7 @@ const rangeDataAdapter = ({ data }) => {
   });
 
   return {
-    speed,
+    speed: speed || 11,
     fromPortId: fromPort?.value,
     toPorts:
       additional.length > 0
