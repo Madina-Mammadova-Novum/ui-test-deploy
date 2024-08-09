@@ -23,6 +23,7 @@ import Fleets from '@/modules/Fleets';
 import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import GettingStartedSection from '@/modules/GettingStartedSection';
+import GlobalError from '@/modules/GlobalError';
 import { AccountHeader, AuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
@@ -119,4 +120,5 @@ export {
   PreFixtureDetails,
   PostFixtureDetails,
   FixtureDetails,
+  GlobalError,
 };

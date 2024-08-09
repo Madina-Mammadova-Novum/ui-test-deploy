@@ -657,6 +657,13 @@ export const formatedNumber = (value) => {
   return value?.toFixed(2);
 };
 
+export const formatedDay = (number) => {
+  if (number === null || number === undefined) return '';
+  const hoursInADay = 24;
+  const days = number / hoursInADay;
+  return days.toFixed(2);
+};
+
 export const parseErrorMessage = (responseError = {}) => {
   try {
     const {
