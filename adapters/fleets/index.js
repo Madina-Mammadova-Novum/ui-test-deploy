@@ -26,12 +26,12 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
     {
       id: fleetId,
       label: 'active',
-      text: `${activeTankers ?? '0'} tankers`,
+      text: `${activeTankers ?? '0'} ${activeTankers > 1 ? 'tankers' : 'tanker'}`,
     },
     {
       id: fleetId,
       label: 'inactive',
-      text: `${inActiveTankers ?? '0'} tankers`,
+      text: `${inActiveTankers ?? '0'} ${inActiveTankers > 1 ? 'tankers' : 'tanker'}`,
     },
   ];
 };
