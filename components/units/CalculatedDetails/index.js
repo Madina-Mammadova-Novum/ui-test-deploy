@@ -53,6 +53,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         type="number"
         step=".1"
         max="12"
+        min="0.1"
       />
     );
   }, [isFreight, errors, register]);
