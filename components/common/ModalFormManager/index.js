@@ -25,6 +25,7 @@ const ModalFormManager = ({ onClose, children, submitAction, submitButton, class
           onClick={onClose}
           customStyles="w-full"
           customStylesFromWrap={specialStyle && `flex-1`}
+          disabled={isSubmitting}
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
         />
         <Button
