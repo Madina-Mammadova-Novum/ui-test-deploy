@@ -13,7 +13,7 @@ import { getPostFixtureDataSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FilterByForm = ({ children, title = 'Filter by' }) => {
+const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({ state: null, schema: null });
 
@@ -47,6 +47,7 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
               variant: 'secondary',
               size: 'large',
               buttonContainerClassName: 'absolute right-10 bottom-5',
+              disabled: isLoading,
             }}
           >
             {children}

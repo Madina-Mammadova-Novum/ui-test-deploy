@@ -34,7 +34,7 @@ const Dropdown = ({
 
   return (
     <div className={`relative top-px ${disabled && 'opacity-70'} ${className}`}>
-      <Label htmlFor={name} className="text-xs-sm">
+      <Label name={name} className="text-xs-sm">
         {label}
       </Label>
       <SimpleDropdown

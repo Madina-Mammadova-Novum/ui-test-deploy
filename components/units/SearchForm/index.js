@@ -16,7 +16,7 @@ import { SearchFormFields } from '@/units';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const SearchForm = ({ onSubmit, onReset }) => {
+const SearchForm = ({ onSubmit, onReset, isLoading = false }) => {
   const { prefilledSearchData } = useSelector(getSearchSelector);
 
   const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
@@ -44,6 +44,7 @@ const SearchForm = ({ onSubmit, onReset }) => {
             variant: 'secondary',
             size: 'large',
             className: '!w-max ml-auto !text-white',
+            disabled: isLoading,
           }}
         >
           <SearchFormFields productState={productState} setProductState={setProductState} />

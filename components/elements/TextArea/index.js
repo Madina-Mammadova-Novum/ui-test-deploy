@@ -25,7 +25,7 @@ const TextArea = React.forwardRef(
     return (
       <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
         {label && (
-          <Label htmlFor={name} className="text-xs-sm">
+          <Label name={name} className="text-xs-sm">
             {label}
           </Label>
         )}

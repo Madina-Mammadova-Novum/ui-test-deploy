@@ -70,7 +70,7 @@ const TankerSearch = () => {
 
   return (
     <>
-      <SearchForm onSubmit={handleSearch} onReset={handleReset} />
+      <SearchForm onSubmit={handleSearch} onReset={handleReset} isLoading={loading} />
       {request && (
         <div className="mt-8 flex flex-col sm:flex-row">
           <Title level="2" className="mr-auto">

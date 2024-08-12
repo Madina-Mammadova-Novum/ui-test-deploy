@@ -49,7 +49,7 @@ const DatePicker = ({
       <Controller
         name={name}
         render={({ field }) => {
-          const value = field.value || dateValue || new Date();
+          const value = field.value || dateValue || null;
 
           return (
             <div className={`single_date relative cursor-pointer w-full ${disabled && 'opacity-70'}`}>
@@ -78,7 +78,7 @@ const DatePicker = ({
                   minDate={minDate}
                   maxDate={maxDate}
                   className={`${calendarClass} rounded-lg`}
-                  date={field.value ? new Date(field.value) : new Date()}
+                  date={field.value ? new Date(field.value) : null}
                   onChange={handleDate}
                 />
               </div>

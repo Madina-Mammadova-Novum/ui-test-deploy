@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useWatch } from 'react-hook-form';
 
+import { addDays } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
@@ -24,6 +26,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
     setValue,
     getValues,
     unregister,
+    control,
   } = useHookForm();
 
   const [initialLoading, setInitialLoading] = useState(false);
@@ -47,6 +50,14 @@ const SearchFormFields = ({ productState, setProductState }) => {
       data: [],
     },
   });
+
+  const laycanStart = useWatch({
+    control,
+    name: 'laycanStart',
+  });
+
+  const minDateForLaycanEnd = laycanStart ? new Date(laycanStart) : new Date();
+  const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
 
   const productsLimitExceeded = productState?.length >= 3;
 
@@ -208,9 +219,11 @@ const SearchFormFields = ({ productState, setProductState }) => {
             inputClass="w-full"
             containerClass="w-full"
             name="laycanEnd"
-            minDate={new Date()}
+            minDate={minDateForLaycanEnd}
+            maxDate={maxDateForLaycanEnd}
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
+            disabled={!laycanStart}
           />
         </div>
         <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">

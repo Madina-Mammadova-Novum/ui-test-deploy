@@ -74,7 +74,7 @@ const PostFixture = () => {
 
   return (
     <>
-      <FilterByForm>
+      <FilterByForm isLoading={loading}>
         <PostFixtureFilter {...filters} />
       </FilterByForm>
       <div className="flex justify-end pt-6 items-center gap-2.5">

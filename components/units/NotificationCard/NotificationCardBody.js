@@ -4,7 +4,6 @@ import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import parse from 'html-react-parser';
-import { useRouter } from 'next/navigation';
 
 import { NotificationCardBodyPropTypes } from '@/lib/types';
 
@@ -16,7 +15,6 @@ import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
 
 const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const role = getCookieFromBrowser('session-user-role');
@@ -45,10 +43,10 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) =>
 
     if (isDealPath) {
       if (deal?.route) {
-        router.push(deal?.route);
+        window.open(deal.route, '_blank');
       }
     } else {
-      router.push(url);
+      window.open(url, '_blank');
     }
 
     dispatch(setIsOpened(false));
