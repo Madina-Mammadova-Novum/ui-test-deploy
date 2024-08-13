@@ -16,7 +16,7 @@ import { SearchFormFields } from '@/units';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const SearchForm = ({ onSubmit, onReset, isLoading = false }) => {
+const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = false }) => {
   const { prefilledSearchData } = useSelector(getSearchSelector);
 
   const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
@@ -46,8 +46,21 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false }) => {
             className: '!w-max ml-auto !text-white',
             disabled: isLoading,
           }}
+          className={`${isAccountSearch ? 'gap-20 sm:gap-9 md:gap-5' : 'gap-5'} flex flex-col`}
         >
           <SearchFormFields productState={productState} setProductState={setProductState} />
+          {isAccountSearch && (
+            <div className="flex items-end flex-col sm:flex-row gap-4 absolute bottom-[4.5rem] md:bottom-6 md:left-5 right-5 md:right-0 ">
+              <Button
+                buttonProps={{ text: 'Mark as Favorite', variant: 'primary', size: 'medium' }}
+                onClick={handleResetFields}
+              />
+              <Button
+                buttonProps={{ text: 'View Favorite Searches', variant: 'primary', size: 'medium' }}
+                onClick={handleResetFields}
+              />
+            </div>
+          )}
           <div className="absolute bottom-5 right-40">
             <Button
               buttonProps={{ text: 'Reset all', variant: 'primary', size: 'small' }}
