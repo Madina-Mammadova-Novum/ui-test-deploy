@@ -96,7 +96,7 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
         />
       )}
 
-      <div className="grid grid-cols-2 gap-x-2.5 mt-5 h-10">
+      <div className="mt-5 grid h-10 grid-cols-2 gap-x-2.5">
         <div>
           <Button
             onClick={closeModal}

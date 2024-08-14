@@ -21,11 +21,11 @@ const TextWithLabel = ({
   return (
     <div
       className={classnames(
-        'font-semibold text-left min-w-[90px] flex items-center lg:items-start lg:flex-col gap-y-1',
+        'flex min-w-[90px] items-center gap-y-1 text-left font-semibold lg:flex-col lg:items-start',
         customStyles
       )}
     >
-      <Label className="text-xs-sm whitespace-nowrap min-w-[100px] md:w-auto flex items-center gap-x-0.5">
+      <Label className="flex min-w-[100px] items-center gap-x-0.5 whitespace-nowrap text-xs-sm md:w-auto">
         {label}
         {helperData && (
           <ManualTooltip className={helperData.className} data={helperData}>
@@ -35,7 +35,7 @@ const TextWithLabel = ({
       </Label>
       <div
         className={classnames(
-          'flex text-xsm text-ellipsis overflow-hidden whitespace-nowrap ml-1.5 lg:ml-0 gap-x-2 items-center h-5 mx-2',
+          'mx-2 ml-1.5 flex h-5 items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap text-xsm lg:ml-0',
           textGroupStyle
         )}
       >

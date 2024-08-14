@@ -18,11 +18,11 @@ const Comment = ({ title = '', date = '', time = '', sentBy = '' }) => {
     (isCharterer && sentBy === 'Charterer') || (isOwner && sentBy === 'Owner') ? 'text-green-600' : 'text-blue-600';
 
   return title ? (
-    <div className={`p-2 border rounded-lg ${borderColor}`}>
+    <div className={`rounded-lg border p-2 ${borderColor}`}>
       <Title level="2" className={`text-sm font-semibold ${textColor}`}>
         {sentBy}:
       </Title>
-      <Title level="6" className="text-xsm font-semibold mt-2.5">
+      <Title level="6" className="mt-2.5 text-xsm font-semibold">
         {title}
       </Title>
       <DateTimeRow date={date} time={time} />

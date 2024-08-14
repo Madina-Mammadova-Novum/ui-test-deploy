@@ -9,7 +9,7 @@ const ReActivateButton = ({ onClick }) => {
     <button
       type="button"
       onClick={onClick}
-      className="p-1 relative rounded-md border border-gray-light hover:bg-gray-darker outline-none bg-transparent"
+      className="relative rounded-md border border-gray-light bg-transparent p-1 outline-none hover:bg-gray-darker"
     >
       <HistorySVG className="fill-black" />
     </button>

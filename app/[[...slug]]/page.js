@@ -24,8 +24,8 @@ export default async function Home({ params }) {
   return (
     <main className={classnames(legal && 'legal-styles')}>
       {/* todo: example to use legal variable */}
-      <section className="relative pt-[115px] pb-[195px] bg-gray-light">
-        <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
+      <section className="relative bg-gray-light pb-[195px] pt-[115px]">
+        <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
           <NextImage
             alt="waves"
             height={352}

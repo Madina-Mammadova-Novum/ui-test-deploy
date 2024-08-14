@@ -17,12 +17,12 @@ const Button = ({
   const { before, after } = icon;
   const buttonClassNames = getButtonClassNames(variant, size);
   return (
-    <div className={`flex flex-col justify-center items-center ${customStylesFromWrap}`}>
+    <div className={`flex flex-col items-center justify-center ${customStylesFromWrap}`}>
       <button
         className={classnames(
-          'text-xsm px-3.5 py-2.5 rounded-md flex items-center justify-center group',
+          'group flex items-center justify-center rounded-md px-3.5 py-2.5 text-xsm',
           buttonClassNames,
-          disabled && 'opacity-50 pointer-events-none',
+          disabled && 'pointer-events-none opacity-50',
           customStyles
         )}
         onClick={onClick}
@@ -35,7 +35,7 @@ const Button = ({
         {text && <span className="px-1.5 text-inherit">{text}</span>}
         {after && <IconWrapper iconData={{ className: iconContainerStyles, icon: after }} />}
       </button>
-      {helperText && <span className="text-gray text-xs-sm font-normal">{helperText}</span>}
+      {helperText && <span className="text-xs-sm font-normal text-gray">{helperText}</span>}
     </div>
   );
 };

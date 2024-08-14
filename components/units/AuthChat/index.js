@@ -120,7 +120,7 @@ const AuthChat = ({ opened, token }) => {
       return (
         <div className="flex flex-col gap-y-2.5">
           <Divider />
-          <p className="inline-flex mb-2.5 font-semibold py-2 w-full justify-center items-center gap-x-2.5 text-black text-xsm">
+          <p className="mb-2.5 inline-flex w-full items-center justify-center gap-x-2.5 py-2 text-xsm font-semibold text-black">
             Updating... <Loader className="h-4 w-4" />
           </p>
         </div>

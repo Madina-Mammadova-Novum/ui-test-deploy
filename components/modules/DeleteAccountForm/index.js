@@ -70,7 +70,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
         submitAction={onSubmit}
         submitButton={{ text: 'Submit a Request to Delete ', variant: 'delete', size: 'large' }}
       >
-        <div className="text-black flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 text-black">
           <Title level="3" className="text-lg font-bold">
             {title}
           </Title>
@@ -82,7 +82,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
                 like to come back to us.
               </p>
             </div>
-            <p className="text-xxs text-black font-bold uppercase">
+            <p className="text-xxs font-bold uppercase text-black">
               When reviewing your application, your account will be deactivated
             </p>
           </Notes>
@@ -98,7 +98,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
             error={errors.password?.message}
           />
         </div>
-        <p className="text-red font-semibold text-xsm">
+        <p className="text-xsm font-semibold text-red">
           If you send a request to delete your account, but then change your mind, it will be impossible to suspend the
           process of considering your request.
         </p>

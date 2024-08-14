@@ -6,9 +6,9 @@ const ChatSessionIcon = ({ name, isOnline }) => {
 
   return (
     <div className="relative">
-      <span className="text-xsm font-semibold mx-auto uppercase">{tagName}</span>
+      <span className="mx-auto text-xsm font-semibold uppercase">{tagName}</span>
       {isOnline && (
-        <div className="border border-white rounded-full absolute -bottom-[18px] -right-[18px] bg-green p-1.5" />
+        <div className="absolute -bottom-[18px] -right-[18px] rounded-full border border-white bg-green p-1.5" />
       )}
     </div>
   );

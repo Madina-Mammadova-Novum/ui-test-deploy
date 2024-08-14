@@ -32,7 +32,7 @@ const PasswordInput = ({ name = '', label = '', placeholder = '', onChange, ...r
           <button
             type="button"
             onClick={() => setShowPassword((prevValue) => !prevValue)}
-            className="w-6 h-6 absolute right-4 top-[26px]"
+            className="absolute right-4 top-[26px] h-6 w-6"
           >
             {showPassword ? <PasswordHiddenSVG /> : <ShowPasswordSVG />}
           </button>

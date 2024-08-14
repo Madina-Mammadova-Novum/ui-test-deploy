@@ -51,7 +51,7 @@ const PasswordInfoForm = ({ closeModal }) => {
         onClose={closeModal}
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
-        <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
+        <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
           Change Your Password
         </Title>
         <div className="w-2/3">
@@ -65,7 +65,7 @@ const PasswordInfoForm = ({ closeModal }) => {
           />
         </div>
         <Divider />
-        <p className="text-black font-semibold text-sm">Enter a strong password according to our requirements</p>
+        <p className="text-sm font-semibold text-black">Enter a strong password according to our requirements</p>
         <PasswordValidation
           helperData={{
             password: { label: 'new password', placeholder: 'Enter a new password' },

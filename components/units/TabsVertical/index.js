@@ -10,8 +10,8 @@ const TabsVertical = ({ tabs, customStyles = '', activeTab, onClick }) => {
       value={value}
       onClick={onClick}
       className={classnames(
-        'whitespace-nowrap font-semibold text-sm pl-2.5 border-l-2 border-transparent capitalize',
-        value === activeTab && 'text-blue border-l-2 !border-blue'
+        'whitespace-nowrap border-l-2 border-transparent pl-2.5 text-sm font-semibold capitalize',
+        value === activeTab && 'border-l-2 !border-blue text-blue'
       )}
     >
       {label}

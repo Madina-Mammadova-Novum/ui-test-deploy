@@ -11,7 +11,7 @@ const Map = ({ title, embedMap }) => {
       allowFullScreen=""
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-      className="rounded-base w-full h-[400px]"
+      className="h-[400px] w-full rounded-base"
     />
   );
 };

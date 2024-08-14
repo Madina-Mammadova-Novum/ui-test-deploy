@@ -79,7 +79,7 @@ const TankerSearch = ({ isAccountSearch = false }) => {
             Search results
           </Title>
 
-          <div className="flex justify-center items-start sm:items-center gap-2 flex-col sm:flex-row">
+          <div className="flex flex-col items-start justify-center gap-2 sm:flex-row sm:items-center">
             <Dropdown
               label="Sort tankers by:"
               options={sorting?.directions}

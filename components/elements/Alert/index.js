@@ -42,14 +42,14 @@ const Alert = ({ variant = '', title, description, handleClose }) => {
 
   return (
     <div
-      className={`box-border ml-auto mb-0 w-max my-3 px-4 py-2.5 gap-2.5 flex justify-between border border-solid rounded-base ${theme}`}
+      className={`my-3 mb-0 ml-auto box-border flex w-max justify-between gap-2.5 rounded-base border border-solid px-4 py-2.5 ${theme}`}
     >
       <div className="flex items-center gap-2.5">
         {icon}
         <div className="flex flex-col">
-          {title && <p className="text-black font-semibold text-xsm">{title}</p>}
+          {title && <p className="text-xsm font-semibold text-black">{title}</p>}
           {description && (
-            <pre className="text-black font-inter-sans font-normal text-xs-sm">
+            <pre className="font-inter-sans text-xs-sm font-normal text-black">
               <span>{description}</span>
             </pre>
           )}

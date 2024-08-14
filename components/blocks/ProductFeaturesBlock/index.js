@@ -58,13 +58,13 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   return (
     <section>
-      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px] scroll-mt-16" id="how-it-works">
+      <div className="container mx-auto max-w-[1258px] scroll-mt-16 px-6 3md:px-14" id="how-it-works">
         {title && (
-          <Title level="1" className="text-black mb-5">
+          <Title level="1" className="mb-5 text-black">
             {title}
           </Title>
         )}
-        <div className="flex gap-5 flex-col-reverse sm:flex-row">
+        <div className="flex flex-col-reverse gap-5 sm:flex-row">
           <div className="flex-1">
             {ctaList && (
               <Tabs activeTab={currentTab} onClick={({ target }) => setCurrentTab(target.value)} tabs={tabs} />
@@ -72,11 +72,11 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
             {ctaList && ctaList.map(printCtaBlock)}
           </div>
           {coverImage && (
-            <div className="h-full max-h-[366px] rounded-base flex-1">
+            <div className="h-full max-h-[366px] flex-1 rounded-base">
               <NextImage
                 src={getStrapiMedia(delve(coverImage, 'format.original.url'), '?format=webp')}
                 alt={delve(coverImage, 'alternativeText')}
-                className="h-full w-full object-cover object-center rounded-base"
+                className="h-full w-full rounded-base object-cover object-center"
                 quality={100}
                 height={350}
                 width={380}

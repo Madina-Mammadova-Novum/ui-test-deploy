@@ -35,7 +35,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   };
 
   return (
-    <div className="bg-white rounded-base shadow-2xmd p-5 mt-5 w-full relative">
+    <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData)}
@@ -50,7 +50,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
         >
           <SearchFormFields productState={productState} setProductState={setProductState} />
           {isAccountSearch && (
-            <div className="flex items-end flex-col sm:flex-row gap-4 absolute bottom-[4.5rem] md:bottom-6 md:left-5 right-5 md:right-0 ">
+            <div className="absolute bottom-[4.5rem] right-5 flex flex-col items-end gap-4 sm:flex-row md:bottom-6 md:left-5 md:right-0">
               <Button
                 buttonProps={{ text: 'Mark as Favorite', variant: 'primary', size: 'medium' }}
                 onClick={handleResetFields}

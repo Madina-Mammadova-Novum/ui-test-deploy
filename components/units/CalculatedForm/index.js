@@ -121,7 +121,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
   }, [additionalPorts.length]);
 
   return (
-    <div className="flex mt-5 w-full pb-16 sm:pb-5 h-max relative gap-5 rounded-base  bg-white divide-gray-darker p-5 flex-row shadow-2xl">
+    <div className="relative mt-5 flex h-max w-full flex-row gap-5 divide-gray-darker rounded-base bg-white p-5 pb-16 shadow-2xl sm:pb-5">
       <FormProvider {...methods}>
         <FormManager
           className="w-full gap-5"
@@ -137,7 +137,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
             disabled: !!errorMessage,
           }}
         >
-          <div className="flex w-full gap-5 flex-col sm:flex-row">
+          <div className="flex w-full flex-col gap-5 sm:flex-row">
             <CalculatedDetails
               isFreight={isFreight}
               ports={generalPorts}
@@ -146,7 +146,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
               onChange={handleChangeValue}
               onRemove={handleRemovePort}
             />
-            <div className={`${customHeight || setHeight} w-full relative transition-all duration-150 ease-out`}>
+            <div className={`${customHeight || setHeight} relative w-full transition-all duration-150 ease-out`}>
               {children}
             </div>
           </div>

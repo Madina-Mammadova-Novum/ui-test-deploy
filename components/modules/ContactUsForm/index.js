@@ -59,11 +59,11 @@ const ContactUsForm = () => {
   };
 
   return isSubmitted ? (
-    <div className="flex flex-col text-center items-center m-auto">
+    <div className="m-auto flex flex-col items-center text-center">
       <Title level={2} className="mb-2.5 flex items-center gap-2">
-        <TickInCircleSVG className="fill-black w-5 h-5" viewBox="0 0 24 24" /> Thank you!
+        <TickInCircleSVG className="h-5 w-5 fill-black" viewBox="0 0 24 24" /> Thank you!
       </Title>
-      <p className="text-xsm mb-4 max-w-[240px]">
+      <p className="mb-4 max-w-[240px] text-xsm">
         Your message has been submitted. Someone from our team will contact you shortly.
       </p>
       <Button
@@ -86,7 +86,7 @@ const ContactUsForm = () => {
           Write to us
         </Title>
         <div className="grid gap-y-4">
-          <div className="grid lg:grid-cols-2 gap-x-5 gap-y-4">
+          <div className="grid gap-x-5 gap-y-4 lg:grid-cols-2">
             <Input
               {...register('firstName')}
               label="First name"

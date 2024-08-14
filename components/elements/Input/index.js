@@ -33,8 +33,8 @@ const Input = React.forwardRef(
         {label && (
           <Label
             name={name}
-            className={classnames('block text-xs-sm text-left mb-0.5 whitespace-nowrap', {
-              'flex gap-1 items-center normal-case': labelBadge,
+            className={classnames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
+              'flex items-center gap-1 normal-case': labelBadge,
             })}
           >
             {label} {labelBadge}
@@ -43,14 +43,14 @@ const Input = React.forwardRef(
         <div
           className={classnames(
             {
-              'flex w-full min-h-10 border border-gray-darker box-border rounded-md hover:border-blue hover:bg-transparent focus-within:bg-white focus-within:border-blue':
+              'box-border flex min-h-10 w-full rounded-md border border-gray-darker focus-within:border-blue focus-within:bg-white hover:border-blue hover:bg-transparent':
                 type !== 'checkbox',
             },
             {
               'mt-1.5': type === 'checkbox',
             },
             {
-              '!p-0 border-none': type === 'radio',
+              'border-none !p-0': type === 'radio',
             },
             {
               '!border-red': error,
@@ -65,9 +65,9 @@ const Input = React.forwardRef(
             id={name}
             className={classnames(
               {
-                'px-4 py-[9px] rounded-md': type !== 'checkbox',
+                'rounded-md px-4 py-[9px]': type !== 'checkbox',
               },
-              'outline-none w-full h-[38px] text-xsm flex items-center bg-transparent',
+              'flex h-[38px] w-full items-center bg-transparent text-xsm outline-none',
               inputStyles
             )}
             readOnly={disabled}
@@ -75,10 +75,10 @@ const Input = React.forwardRef(
             name={name}
             {...rest}
           />
-          {icon && <span className="ml-2.5 mr-4 my-auto">{icon}</span>}
+          {icon && <span className="my-auto ml-2.5 mr-4">{icon}</span>}
         </div>
         {error && <InputErrorMessage message={error} />}
-        {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
+        {helperText && !error && <p className="pt-1 text-xs-sm text-black">{helperText}</p>}
       </div>
     );
   }

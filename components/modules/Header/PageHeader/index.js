@@ -50,15 +50,15 @@ export default async function PageHeader() {
   };
 
   return (
-    <header className="absolute w-full z-10">
-      <div className="container px-6 3md:px-14 max-w-[1258px] mx-auto">
-        <div className="py-2.5 flex align-center justify-between border-white/10 border-b">
+    <header className="absolute z-10 w-full">
+      <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
+        <div className="align-center flex justify-between border-b border-white/10 py-2.5">
           <NextLink href="/">
-            <Logo className="fill-white hidden md:block" />
+            <Logo className="hidden fill-white md:block" />
             <SmallLogo className="fill-white md:hidden" />
           </NextLink>
-          <nav className="flex flex-col md:flex-row items-center gap-x-10">
-            {navigation?.length > 0 && <ul className="flex gap-x-5 items-center">{navigation.map(printNavigation)}</ul>}
+          <nav className="flex flex-col items-center gap-x-10 md:flex-row">
+            {navigation?.length > 0 && <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>}
             {buttons?.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>
         </div>

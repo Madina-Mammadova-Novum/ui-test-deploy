@@ -19,11 +19,11 @@ const ChatAdditional = ({ data, isActive, onClick }) => {
         <span
           aria-hidden
           onClick={onClick}
-          className="text-blue flex items-center gap-x-1.5 text-xsm font-medium pt-1.5 cursor-pointer"
+          className="flex cursor-pointer items-center gap-x-1.5 pt-1.5 text-xsm font-medium text-blue"
         >
           Show all info
           <ArrowSVG
-            className={`transform transition-all ease-in-out duration-300 ${isActive ? '-rotate-180' : 'rotate-0'}`}
+            className={`transform transition-all duration-300 ease-in-out ${isActive ? '-rotate-180' : 'rotate-0'}`}
           />
         </span>
         {isActive && (
@@ -34,7 +34,7 @@ const ChatAdditional = ({ data, isActive, onClick }) => {
                 {additional?.terminal?.name || '-'}
               </span>
             </TextRow>
-            <TextRow title="Laycan" className="whitespace-nowrap !text-xs-sm pb-2.5">
+            <TextRow title="Laycan" className="whitespace-nowrap pb-2.5 !text-xs-sm">
               {additional?.laycanStart} to {additional?.laycanEnd}
             </TextRow>
             {vessel?.products?.map(printAdditionalProducts)}

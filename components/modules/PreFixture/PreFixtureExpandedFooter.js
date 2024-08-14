@@ -27,12 +27,12 @@ const PreFixtureExpandedFooter = ({ underNegotiation, offerId, offerAccepted }) 
 
   return (
     <ExpandableRowFooter>
-      <div className="flex flex-col lg:flex-row gap-x-5 gap-y-2.5 justify-between pb-2.5">
+      <div className="flex flex-col justify-between gap-x-5 gap-y-2.5 pb-2.5 lg:flex-row">
         {offerAccepted ? (
           <Button
             buttonProps={{
               text: 'You have confirmed to go on subs. We are waiting for your counterparty’s decision. You will be notified soon.',
-              icon: { before: <ClockSVG viewBox="0 0 14 14" className="fill-gray w-4 h-4 ml-1" /> },
+              icon: { before: <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-gray" /> },
               iconContainerStyles: 'self-baseline',
               variant: 'tertiary',
               size: 'large',

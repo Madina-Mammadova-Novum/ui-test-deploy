@@ -65,7 +65,7 @@ const ExpandableCardHeader = ({
         style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
       >
         <HoverTooltip
-          className="!top-0 !-left-10"
+          className="!-left-10 !top-0"
           data={{ description: tooltipText }}
           disabled={!lg || disableTooltip || data?.disableTooltip}
         >
@@ -87,19 +87,19 @@ const ExpandableCardHeader = ({
   };
 
   return (
-    <div className="w-full relative h-auto min-h-[60px] flex items-start gap-x-2.5 pt-2.5">
-      <div className={`flex flex-col lg:flex-row flex-grow pb-2.5 ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
+    <div className="relative flex h-auto min-h-[60px] w-full items-start gap-x-2.5 pt-2.5">
+      <div className={`flex flex-grow flex-col pb-2.5 lg:flex-row ${gridLayout && 'lg:grid'} ${itemsContainerStyles}`}>
         <div
           className={`grid md:grid-cols-1 ${headerData?.length > 3 && '3md:grid-cols-2'} ${
-            !gridLayout && 'lg:flex lg:flex-row lg:items-center w-full gap-x-2.5'
+            !gridLayout && 'w-full gap-x-2.5 lg:flex lg:flex-row lg:items-center'
           }`}
           style={{ gridTemplateColumns: lg && (gridStyles || `repeat(${headerData.length}, minmax(0, 1fr))`) }}
         >
           {headerData.map(printHeaderRow)}
         </div>
         {!!actions.length && (
-          <div className="w-full relative lg:pr-10">
-            <div className="flex border-t border-purple-light lg:border-t-0 gap-x-2.5 justify-end pt-2 mt-3 lg:pt-0 lg:mt-0 lg:row-start-1 lg:col-start-2">
+          <div className="relative w-full lg:pr-10">
+            <div className="mt-3 flex justify-end gap-x-2.5 border-t border-purple-light pt-2 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:border-t-0 lg:pt-0">
               {actions.map(({ action, text, variant, size, icon }) => (
                 <ModalWindow
                   containerClass="overflow-y-[unset]"
@@ -118,9 +118,9 @@ const ExpandableCardHeader = ({
           </div>
         )}
       </div>
-      <div className="hover:bg-gray-darker rounded-md self-start lg:self-auto absolute -right-2.5">
+      <div className="absolute -right-2.5 self-start rounded-md hover:bg-gray-darker lg:self-auto">
         <TableArrowSVG
-          className={classnames('fill-black rounded-md transition duration-200 ', toggle && 'rotate-180 !fill-blue')}
+          className={classnames('rounded-md fill-black transition duration-200', toggle && 'rotate-180 !fill-blue')}
         />
       </div>
     </div>

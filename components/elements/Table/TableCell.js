@@ -129,7 +129,7 @@ const TableCell = ({ cellProps }) => {
 
     return helperData ? (
       <HoverTooltip
-        className="!-top-11 !-translate-x-[50%] !w-[300px] !whitespace-pre-wrap"
+        className="!-top-11 !w-[300px] !-translate-x-[50%] !whitespace-pre-wrap"
         data={{ description: helperData }}
       >
         <span className={`${disabled && 'text-gray'}`}>{value}</span>
@@ -187,20 +187,20 @@ const TableCell = ({ cellProps }) => {
   }, [notified, tableRef, value]);
 
   return (
-    <td ref={tableRef} className={`${cellColor} py-2 px-4 whitespace-nowrap table-cell`}>
+    <td ref={tableRef} className={`${cellColor} table-cell whitespace-nowrap px-4 py-2`}>
       <div
         className={`flex ${
           typeof value === 'boolean' || typeof value === 'number' ? 'justify-start' : 'justify-between gap-x-12'
-        } normal-case items-center text-xsm`}
+        } items-center text-xsm normal-case`}
       >
         {emptyCell && <Placeholder />}
         {value && (
-          <div className="flex gap-x-1 text-inherit items-center px-1">
+          <div className="flex items-center gap-x-1 px-1 text-inherit">
             {icon && <IconWrapper iconData={{ icon }} />}
             {printFlag}
             {printValue}
             {rolled && available && (
-              <span className="bg-yellow uppercase font-bold text-xxs py-1 px-1.5 mx-2 text-black rounded-md">
+              <span className="mx-2 rounded-md bg-yellow px-1.5 py-1 text-xxs font-bold uppercase text-black">
                 Rolled
               </span>
             )}

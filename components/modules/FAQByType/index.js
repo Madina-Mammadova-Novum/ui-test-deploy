@@ -76,9 +76,9 @@ const FAQByType = () => {
         FAQ
       </Title>
       {faqList.length > 0 && (
-        <div className="shadow-xmd rounded-base bg-white flex gap-20 px-5">
+        <div className="flex gap-20 rounded-base bg-white px-5 shadow-xmd">
           <TabsVertical activeTab={currentTab} onClick={handleActiveTab} tabs={tabs} customStyles="py-5" />
-          <div className="divide-y divide-gray-darker grow">{faqList.map(printQuestionsByType)}</div>
+          <div className="grow divide-y divide-gray-darker">{faqList.map(printQuestionsByType)}</div>
         </div>
       )}
     </div>

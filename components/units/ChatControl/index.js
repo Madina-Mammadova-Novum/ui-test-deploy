@@ -35,7 +35,7 @@ const ChatControl = ({ tab, search, activeCounter, archivedCounter, loading }) =
   }, [search]);
 
   return (
-    <div className="flex flex-col gap-y-3 px-5 pt-5 pb-3">
+    <div className="flex flex-col gap-y-3 px-5 pb-3 pt-5">
       <ChatTabs
         loading={loading}
         activeTab={tab}

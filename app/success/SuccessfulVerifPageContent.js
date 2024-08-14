@@ -14,7 +14,7 @@ const SuccessfulVerifPageContent = () => {
   if (!isSuccess) {
     return (
       <AuthWrapper title="Identity Verification Failed" containerClass="md:px-24 min-w-[450px] 3md:w-7/12 3md:ml-auto">
-        <div className="grid gap-4 my-5 text-xsm">
+        <div className="my-5 grid gap-4 text-xsm">
           <p>
             Unfortunately, your identity verification has failed. Please try again or contact our support team for
             assistance.
@@ -39,7 +39,7 @@ const SuccessfulVerifPageContent = () => {
       title="Identity Verification Successful!"
       containerClass="md:px-24 min-w-[450px] 3md:w-7/12 3md:ml-auto"
     >
-      <div className="grid gap-4 my-5 text-xsm">
+      <div className="my-5 grid gap-4 text-xsm">
         <p>
           Congratulations! You have successfully passed our identity verification procedure. We take the security of our
           users seriously, and this is an important step in ensuring a safe and secure platform for everyone.

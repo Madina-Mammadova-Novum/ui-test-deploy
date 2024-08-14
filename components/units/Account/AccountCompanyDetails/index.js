@@ -82,7 +82,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
           </ModalWindow>
         </div>
       </FieldsetHeader>
-      <span className="text-sm text-black font-bold inline-flex gap-1 items-center whitespace-nowrap">
+      <span className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-bold text-black">
         <StatusIndicator status={company?.pendingRequest ? 'PendingRequest' : 'Active'} />
         {company?.pendingRequest ? 'Update Requested' : 'Active'}
       </span>
@@ -99,7 +99,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
 
         <Divider className="my-4" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
+        <div className="grid grid-cols-1 gap-y-5 md:grid-cols-2">
           {registration && (
             <FieldsetContent className="col-start-1" label="Registration address">
               <AddressInfo address={registration} />

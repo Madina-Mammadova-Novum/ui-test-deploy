@@ -61,7 +61,7 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
       <p className="mt-2.5 text-xsm">
         You cannot delete a file without broker approval. After approval, it will be automatically deleted.
       </p>
-      <div className="flex gap-x-2.5 mt-5">
+      <div className="mt-5 flex gap-x-2.5">
         <Button
           buttonProps={{
             text: 'Cancel',
