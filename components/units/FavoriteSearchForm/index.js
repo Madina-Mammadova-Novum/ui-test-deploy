@@ -38,7 +38,7 @@ const FavoriteSearchForm = ({ state, title, closeModal }) => {
         specialStyle
         className="w-[356px]"
         submitAction={onSubmit}
-        submitButton={{ text: 'Add', variant: 'primary', size: 'large' }}
+        submitButton={{ text: 'Add', variant: 'primary', size: 'large', disabled: methods.formState.isSubmitting }}
         onClose={closeModal}
       >
         <Title level="2" className="text-lg font-bold capitalize text-black">
@@ -49,7 +49,7 @@ const FavoriteSearchForm = ({ state, title, closeModal }) => {
           error={methods.formState.errors?.searchName?.message}
           label="search name"
           placeholder="Enter name of the search"
-          customStyles="w-full 3md:w-2/5"
+          customStyles="w-full"
         />
 
         <CheckBoxInput

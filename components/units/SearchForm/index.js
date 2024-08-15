@@ -20,7 +20,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const { prefilledSearchData } = useSelector(getSearchSelector);
 
   const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
-  const [opened, setOpened] = useState(false);
+  const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
 
   const schema = yup.object({ ...searchForTankerSchema() });
   const methods = useHookFormParams({ schema, state: prefilledSearchData });
@@ -37,12 +37,12 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
 
   const handleOpenModal = (e) => {
     e?.stopPropagation();
-    setOpened(true);
+    setIsAddFavoriteOpened(true);
   };
 
   const handleCloseModal = (e) => {
     e?.stopPropagation();
-    setOpened(false);
+    setIsAddFavoriteOpened(false);
   };
 
   const searchFormData = methods.getValues();
@@ -57,7 +57,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
 
   return (
     <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
-      <Modal opened={opened} onClose={handleCloseModal}>
+      <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
         <FavoriteSearchForm title="Add to Favorites" state={searchFormData} closeModal={handleCloseModal} />
       </Modal>
 
