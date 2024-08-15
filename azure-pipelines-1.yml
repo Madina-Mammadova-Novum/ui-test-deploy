@@ -35,6 +35,7 @@ steps:
   # set chatgpt reviwer    
   - checkout: self
     persistCredentials: true
+  - task: GPTPRReviewer@0
     inputs:
       api_key_source: 'azureopenai'
       api_key: $(openai.key)
