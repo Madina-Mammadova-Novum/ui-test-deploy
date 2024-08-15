@@ -1,0 +1,70 @@
+'use client';
+
+import { FormProvider } from 'react-hook-form';
+
+import * as yup from 'yup';
+
+import { FavoriteSearchFormPropTypes } from '@/lib/types';
+
+import { ModalFormManager } from '@/common';
+import { CheckBoxInput, Input, Title } from '@/elements';
+import { addToSavedSearchSchema } from '@/lib/schemas';
+import { addToSavedSearch } from '@/services/savedSearch';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+
+const schema = yup.object({
+  ...addToSavedSearchSchema(),
+});
+
+const FavoriteSearchForm = ({ state, title, closeModal }) => {
+  const methods = useHookFormParams({ schema });
+
+  const onSubmit = async ({ searchName }) => {
+    const data = { ...state, searchName };
+
+    const { status, error, message: successMessage } = await addToSavedSearch({ data });
+    if (!error) closeModal();
+
+    if (status === 200) {
+      successToast(successMessage);
+      closeModal();
+    }
+    if (error) errorToast(error?.title, error?.message);
+  };
+
+  return (
+    <FormProvider {...methods}>
+      <ModalFormManager
+        specialStyle
+        className="w-[356px]"
+        submitAction={onSubmit}
+        submitButton={{ text: 'Add', variant: 'primary', size: 'large' }}
+        onClose={closeModal}
+      >
+        <Title level="2" className="text-lg font-bold capitalize text-black">
+          {title}
+        </Title>
+        <Input
+          {...methods.register('searchName')}
+          error={methods.formState.errors?.searchName?.message}
+          label="search name"
+          placeholder="Enter name of the search"
+          customStyles="w-full 3md:w-2/5"
+        />
+
+        <CheckBoxInput
+          name="saveNotification"
+          // onChange={handleSaveNotif}
+          // checked={saveNotif}
+          labelStyles="text-black text-xsm"
+        >
+          Would you like to receive notifications related to this favorite search?
+        </CheckBoxInput>
+      </ModalFormManager>
+    </FormProvider>
+  );
+};
+
+FavoriteSearchForm.propTypes = FavoriteSearchFormPropTypes;
+
+export default FavoriteSearchForm;

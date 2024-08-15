@@ -9,10 +9,10 @@ import * as yup from 'yup';
 import { SearchFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
-import { Button } from '@/elements';
+import { Button, Modal } from '@/elements';
 import { searchForTankerSchema } from '@/lib/schemas';
 import { getSearchSelector } from '@/store/selectors';
-import { SearchFormFields } from '@/units';
+import { FavoriteSearchForm, SearchFormFields } from '@/units';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
@@ -20,6 +20,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const { prefilledSearchData } = useSelector(getSearchSelector);
 
   const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
+  const [opened, setOpened] = useState(false);
 
   const schema = yup.object({ ...searchForTankerSchema() });
   const methods = useHookFormParams({ schema, state: prefilledSearchData });
@@ -34,8 +35,32 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     setProductState([0]);
   };
 
+  const handleOpenModal = (e) => {
+    e?.stopPropagation();
+    setOpened(true);
+  };
+
+  const handleCloseModal = (e) => {
+    e?.stopPropagation();
+    setOpened(false);
+  };
+
+  const searchFormData = methods.getValues();
+
+  const handleMarkAsFavorite = async () => {
+    const isValid = await methods.trigger();
+
+    if (isValid) {
+      handleOpenModal();
+    }
+  };
+
   return (
     <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
+      <Modal opened={opened} onClose={handleCloseModal}>
+        <FavoriteSearchForm title="Add to Favorites" state={searchFormData} closeModal={handleCloseModal} />
+      </Modal>
+
       <FormProvider {...methods}>
         <FormManager
           submitAction={(formData) => onSubmit(formData)}
@@ -50,10 +75,10 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
         >
           <SearchFormFields productState={productState} setProductState={setProductState} />
           {isAccountSearch && (
-            <div className="absolute bottom-[4.5rem] right-5 flex flex-col items-end gap-4 sm:flex-row md:bottom-6 md:left-5 md:right-0">
+            <div className="absolute bottom-[4.5rem] right-5 flex flex-col items-end gap-4 sm:flex-row md:bottom-6 md:left-5 md:right-0 md:w-96">
               <Button
                 buttonProps={{ text: 'Mark as Favorite', variant: 'primary', size: 'medium' }}
-                onClick={handleResetFields}
+                onClick={handleMarkAsFavorite}
               />
               <Button
                 buttonProps={{ text: 'View Favorite Searches', variant: 'primary', size: 'medium' }}
