@@ -20,7 +20,7 @@ const CtaImages = ({ items }) => {
           return (
             <div
               key={makeId()}
-              className="relative rounded-[10px] sm:rounded-[20px] sm:w-[692px] sm:h-[690px] lg:w-full lg:h-full lg:max-w-[848px] lg:max-h-[832px] overflow-hidden"
+              className="relative overflow-hidden rounded-[10px] sm:h-[690px] sm:w-[692px] sm:rounded-[20px] lg:h-full lg:max-h-[832px] lg:w-full lg:max-w-[848px]"
             >
               <div>
                 <Image
@@ -32,7 +32,7 @@ const CtaImages = ({ items }) => {
                   quality={75}
                 />
               </div>
-              <h4 className="absolute top-5 left-5 text-white text-base font-bold sm:top-7 sm:left-7 sm:text-4xl 2xl:top-10 2xl:left-10 2xl:text-5xl">
+              <h4 className="absolute left-5 top-5 text-base font-bold text-white sm:left-7 sm:top-7 sm:text-4xl 2xl:left-10 2xl:top-10 2xl:text-5xl">
                 {title}
               </h4>
               <NextLink

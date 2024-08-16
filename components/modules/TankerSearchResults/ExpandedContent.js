@@ -14,13 +14,13 @@ const ExpandedContent = ({ data }) => {
   const hashedInfo = (text = null) => (token ? text : 'Hidden info');
 
   return (
-    <div className="mt-3  px-5">
+    <div className="mt-3 px-5">
       <Title level="3">Tanker Information</Title>
 
-      <div className="lg:flex text-xsm mt-2.5 gap-x-20">
+      <div className="mt-2.5 gap-x-20 text-xsm lg:flex">
         {vesselOwnerData.length && (
           <div>
-            <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
+            <Title level="5" className="mb-1.5 text-xs-sm font-semibold uppercase text-gray">
               About the Vessel Owner
             </Title>
             {vesselOwnerData.map(({ title, description }) => (
@@ -30,10 +30,10 @@ const ExpandedContent = ({ data }) => {
         )}
 
         <div className="mt-2.5 lg:mt-0">
-          <Title level="5" className="text-xs-sm text-gray font-semibold mb-1.5 uppercase">
+          <Title level="5" className="mb-1.5 text-xs-sm font-semibold uppercase text-gray">
             About the Tanker
           </Title>
-          <div className="flex gap-x-10 gap-y-2 flex-col sm:flex-row">
+          <div className="flex flex-col gap-x-10 gap-y-2 sm:flex-row">
             {tankerData.length && (
               <div>
                 {tankerData.map(({ title, description }) => (

@@ -10,7 +10,7 @@ const NavTreeTitle = ({ title, icon, isOpened, isActive, links, hasNestedLinks }
     <>
       <div
         className={classnames(
-          'flex items-center text-sm text-white font-semibold capitalize gap-2.5 w-full px-5 py-2.5 rounded-xl',
+          'flex w-full items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-semibold capitalize text-white',
           isActive ? 'bg-blue' : 'hover:bg-blue-dark',
           isOpened && hasNestedLinks && 'bg-blue-dark'
         )}
@@ -19,7 +19,7 @@ const NavTreeTitle = ({ title, icon, isOpened, isActive, links, hasNestedLinks }
         {!hasNestedLinks ? (
           <p className="text-white">{title}</p>
         ) : (
-          <p className="flex w-full justify-between items-center">
+          <p className="flex w-full items-center justify-between">
             <span className="text-white">{title}</span>
             <AngleDownSVG className={classnames('fill-white transition duration-200', isOpened && 'rotate-180')} />
           </p>

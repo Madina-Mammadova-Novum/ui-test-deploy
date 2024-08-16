@@ -66,13 +66,13 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
           onMouseLeave={resetDealStage}
           className={`${
             contrasted ? 'text-white' : 'text-black'
-          } uppercase text-xs-sm font-semibold text-black flex gap-x-1.5`}
+          } flex gap-x-1.5 text-xs-sm font-semibold uppercase text-black`}
         >
           cargo id:
           <span
             aria-hidden
             onClick={handleRedirect}
-            className="text-blue font-bold text-xs-sm cursor-pointer uppercase"
+            className="cursor-pointer text-xs-sm font-bold uppercase text-blue"
           >
             {data?.vessel.cargoId}
           </span>
@@ -82,7 +82,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   }, [data?.vessel?.cargoId, getDealStage, resetDealStage, handleRedirect]);
 
   return (
-    <div className="text-black flex items-start gap-x-1.5 w-auto">
+    <div className="flex w-auto items-start gap-x-1.5 text-black">
       <ShipIcon isOnline={data?.isOnline} />
       <div className="flex flex-col">
         <Title

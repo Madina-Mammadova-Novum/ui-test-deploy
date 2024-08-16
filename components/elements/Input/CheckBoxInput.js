@@ -26,7 +26,7 @@ const CheckBoxInput = ({ name = '', customStyles = '', labelStyles = '', checked
                 onChange={onChange}
                 checked={checked}
                 error={!!error}
-                className={classnames('w-5 h-5', customStyles)}
+                className={classnames('h-5 w-5', customStyles)}
               />
               {children && (
                 <label htmlFor={name} className={labelStyles}>

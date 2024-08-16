@@ -67,7 +67,7 @@ const Fleets = ({ searchedParams }) => {
   }, [loading, data, toggle, searchedParams?.id]);
 
   return (
-    <div className="flex flex-col gap-y-2.5 grow">
+    <div className="flex grow flex-col gap-y-2.5">
       {!loading && <UnassignedFleet data={unassignedData} toggle={toggle} />}
       {printContent}
     </div>

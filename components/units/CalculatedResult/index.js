@@ -14,9 +14,9 @@ const CalculatedResult = ({ result, value }) => {
   const distanceValue = firstValue ? `${firstValue} nm` : '';
 
   return (
-    <div className=" bg-white rounded-md p-5 w-[250px] absolute bottom-2 left-2 z-[500] font-inter-sans">
+    <div className="absolute bottom-2 left-2 z-[500] w-[250px] rounded-md bg-white p-5 font-inter-sans">
       <Title level="4">Calculation results</Title>
-      <div className="flex gap-x-2.5 mt-2.5">
+      <div className="mt-2.5 flex gap-x-2.5">
         {isFreight ? (
           <>
             <TextWithLabel

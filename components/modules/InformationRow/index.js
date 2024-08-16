@@ -8,7 +8,7 @@ const InformationRow = ({ iconProps = {}, keyText = '', label = '' }) => {
   return (
     <div className="flex">
       <span className="whitespace-nowrap">{keyText}</span>
-      <span className="font-semibold ml-1 flex items-center">
+      <span className="ml-1 flex items-center font-semibold">
         {src && <NextImage src={src} alt={alt} customStyles="mr-1.5 h-[15px]" />} {label}
       </span>
     </div>

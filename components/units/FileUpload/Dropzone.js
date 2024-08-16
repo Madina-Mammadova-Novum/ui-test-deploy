@@ -11,17 +11,15 @@ const Dropzone = ({ areaParams, inputParams, children }) => {
   } = useHookForm();
 
   return (
-    <div className="relative cursor-pointer w-full" {...areaParams()}>
+    <div className="relative w-full cursor-pointer" {...areaParams()}>
       <div
-        className={`flex justify-between flex-col w-full h-full gap-x-3 gap-y-0 border-dashed border relative rounded-md pt-5 px-3 
-        ${errors?.file ? 'border-red' : 'border-gray-darker hover:border-blue'}  
-        `}
+        className={`relative flex h-full w-full flex-col justify-between gap-x-3 gap-y-0 rounded-md border border-dashed px-3 pt-5 ${errors?.file ? 'border-red' : 'border-gray-darker hover:border-blue'} `}
       >
         <Input {...register('file')} type="file" multiple customStyles="hidden" {...inputParams()} />
-        <div className="flex flex-col justify-center gap-1.5 items-center">
+        <div className="flex flex-col items-center justify-center gap-1.5">
           <FileUploadSVG className="fill-gray" />
-          <p className="text-center text-xsm text-gray font-normal">Drop your File&apos;s here, or Select</p>
-          <span className="text-blue text-center font-medium text-xs pb-0 md:pb-5">Click to browse</span>
+          <p className="text-center text-xsm font-normal text-gray">Drop your File&apos;s here, or Select</p>
+          <span className="text-xs pb-0 text-center font-medium text-blue md:pb-5">Click to browse</span>
         </div>
         {children}
       </div>

@@ -26,7 +26,7 @@ const FailTheSubsModalContent = ({ closeModal, offerId }) => {
   return (
     <div>
       <Title level={2}>Do you want to fail the Subs?</Title>
-      <div className="flex gap-x-2.5 mt-7">
+      <div className="mt-7 flex gap-x-2.5">
         <div className="w-full">
           <Button
             onClick={closeModal}

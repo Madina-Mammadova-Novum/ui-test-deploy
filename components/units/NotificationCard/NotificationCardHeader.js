@@ -39,7 +39,7 @@ const NotificationCardHeader = ({ time, topic }) => {
     <div className="flex justify-between gap-3">
       <div className="flex items-center gap-x-1.5">
         {printIcon}
-        <p className="uppercase font-semibold text-xs-sm">{formattedBySpaces({ string: topic })}</p>
+        <p className="text-xs-sm font-semibold uppercase">{formattedBySpaces({ string: topic })}</p>
       </div>
       <div>
         <p className="text-xs-sm font-normal text-gray">{time}</p>

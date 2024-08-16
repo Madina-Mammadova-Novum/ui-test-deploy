@@ -67,7 +67,7 @@ const AddTankerWithImoForm = ({
             onChange={(fleet) => handleChange('fleet', fleet)}
             customStyles={{ dropdownExpanded: true }}
           />
-          <p className="text-xsm my-4">
+          <p className="my-4 text-xsm">
             Enter the IMO of the tanker, if it is in our Q88 database, then we will add it automatically, if not, then
             you will need to add it manually.
           </p>

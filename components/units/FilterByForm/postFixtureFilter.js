@@ -15,8 +15,8 @@ const PostFixtureFilter = ({ cargoeCodes = [], tankerNames = [], cargoTypes = []
   };
 
   return (
-    <div className="w-full flex gap-x-2.5 min-h-[124px]">
-      <div className="grid grid-cols-1 2md:grid-cols-2 lg:grid-cols-3 gap-2.5 !w-[calc(100%-450px)]">
+    <div className="flex min-h-[124px] w-full gap-x-2.5">
+      <div className="grid !w-[calc(100%-450px)] grid-cols-1 gap-2.5 2md:grid-cols-2 lg:grid-cols-3">
         <FormDropdown
           name="cargoId"
           label="Cargo ID"

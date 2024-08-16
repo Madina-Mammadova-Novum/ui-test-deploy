@@ -6,7 +6,7 @@ import { NextLink } from '@/elements';
 const CTABlock = ({ title, shortDescription, buttons }) => {
   return (
     <div className="relative px-6 lg:px-8">
-      <div className="mx-auto pt-20 pb-32 sm:pt-48 sm:pb-40">
+      <div className="mx-auto pb-32 pt-20 sm:pb-40 sm:pt-48">
         <div>
           <div>
             {title && <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">{title}</h1>}

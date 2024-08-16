@@ -52,8 +52,8 @@ const ViewCounteroffer = ({ itemId }) => {
 
   if (loading) {
     return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-1/2" />
+      <div className="h-72 w-72">
+        <Loader className="absolute top-1/2 h-8 w-8" />
       </div>
     );
   }
@@ -74,9 +74,9 @@ const ViewCounteroffer = ({ itemId }) => {
       {isOwner ? (
         <Countdown time={countdownData} customStyles="mt-5" />
       ) : (
-        <div className="flex text-[12px] items-center mt-5">
-          <div className="pl-4 border-l-2 border-blue h-min flex items-center">
-            <p className="font-bold max-w-[240px]">
+        <div className="mt-5 flex items-center text-[12px]">
+          <div className="flex h-min items-center border-l-2 border-blue pl-4">
+            <p className="max-w-[240px] font-bold">
               Set a response countdown timer for the counterparty to reply to this offer
             </p>
             <Dropdown
@@ -99,7 +99,7 @@ const ViewCounteroffer = ({ itemId }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
       </div>

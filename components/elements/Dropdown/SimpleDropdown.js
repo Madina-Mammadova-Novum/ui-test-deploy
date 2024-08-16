@@ -15,7 +15,7 @@ import { filterDataByLowerCase } from '@/utils/helpers';
 
 const LoadingIndicator = () => (
   <div className="spinner-border text-primary" role="status">
-    <Loader className="w-4 h-4" />
+    <Loader className="h-4 w-4" />
   </div>
 );
 

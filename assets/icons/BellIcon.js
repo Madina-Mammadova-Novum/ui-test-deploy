@@ -7,7 +7,7 @@ const BellIcon = ({ counter }) => {
   return (
     <div>
       <HoverableIcon icon={<BellSVG />} />
-      <Badge counter={counter} className="-top-1 -right-1 p-2.5" />
+      <Badge counter={counter} className="-right-1 -top-1 p-2.5" />
     </div>
   );
 };

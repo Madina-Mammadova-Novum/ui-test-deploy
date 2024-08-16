@@ -30,7 +30,7 @@ const ChatList = ({ data, loading = true, tab = 'active' }) => {
   }, [loading, data, printChatSession]);
 
   return (
-    <div className="p-2 h-[320px] relative overflow-y-scroll overflow-x-hidden flex flex-col gap-y-4">
+    <div className="relative flex h-[320px] flex-col gap-y-4 overflow-x-hidden overflow-y-scroll p-2">
       {printContent}
     </div>
   );

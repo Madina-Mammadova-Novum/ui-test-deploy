@@ -14,7 +14,7 @@ const COTTabContent = ({ data = {} }) => {
 
       <hr className="my-4" />
 
-      <Title level={5} className="uppercase text-[12px] text-gray font-semibold">
+      <Title level={5} className="text-[12px] font-semibold uppercase text-gray">
         Products
       </Title>
       <div className="mt-2.5 flex">
@@ -30,7 +30,7 @@ const COTTabContent = ({ data = {} }) => {
       <hr className="my-4" />
 
       {data.details?.map(({ key, label }) => (
-        <TextRow title={key} className="[&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline">
+        <TextRow title={key} className="[&>span:nth-child(2)]:!inline [&>span:nth-child(2)]:!whitespace-pre-wrap">
           {label}
         </TextRow>
       ))}

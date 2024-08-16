@@ -41,7 +41,7 @@ const ChatConversationBody = () => {
   const printMessages = ({ data: content, title }) => {
     return (
       <div className="flex flex-col px-2.5" key={title}>
-        <span className="text-gray text-xs-sm font-normal normal-case self-center py-2.5">{title}</span>
+        <span className="self-center py-2.5 text-xs-sm font-normal normal-case text-gray">{title}</span>
         {content?.map(printMessage)}
       </div>
     );
@@ -50,14 +50,14 @@ const ChatConversationBody = () => {
   const printContent = useMemo(() => {
     if (loading) return <ChatLoader />;
     if (messages.length > 0) return messages.map(printMessages);
-    return <p className="absolute w-full text-center top-0 font-semibold text-base">Empty history</p>;
+    return <p className="absolute top-0 w-full text-center text-base font-semibold">Empty history</p>;
   }, [loading, messages, printMessages]);
 
   return (
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="flex relative flex-col-reverse h-96 overflow-y-scroll scroll-y-auto overflow-x-clip"
+      className="scroll-y-auto relative flex h-96 flex-col-reverse overflow-x-clip overflow-y-scroll"
     >
       {printContent}
     </div>

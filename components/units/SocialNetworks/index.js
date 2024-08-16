@@ -17,7 +17,7 @@ const SocialNetworks = ({ data = [] }) => {
         title={delve(socialLink, 'title')}
       >
         <HoverableIcon
-          className="border border-gray-darker rounded-md"
+          className="rounded-md border border-gray-darker"
           icon={
             <NextImage
               alt={delve(socialLink, 'title')}

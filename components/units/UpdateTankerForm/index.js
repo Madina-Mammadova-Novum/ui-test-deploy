@@ -208,8 +208,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
 
   if (initialLoading) {
     return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-1/2" />
+      <div className="h-72 w-72">
+        <Loader className="absolute top-1/2 h-8 w-8" />
       </div>
     );
   }
@@ -219,7 +219,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       <div>
         <Title level="2">Your previous request has not yet been reviewed by the admin.</Title>
         <p className="pt-2.5 text-black">Would you like to make any new changes?</p>
-        <div className="flex gap-x-5 pt-5 w-full">
+        <div className="flex w-full gap-x-5 pt-5">
           <Button
             customStyles="w-full"
             customStylesFromWrap="flex-1"
@@ -244,21 +244,21 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
         submitAction={onSubmit}
         submitButton={{ text: 'Request to Update Info', variant: 'primary', size: 'large' }}
       >
-        <div className="w-[640px] 3md:w-[756px] overflow-clip">
+        <div className="w-[640px] overflow-clip 3md:w-[756px]">
           <ModalHeader>Request to Update Info</ModalHeader>
           <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start !gap-2.5 mt-5" />
 
-          <div className="border relative border-gray-darker bg-gray-light rounded-md text-xs-sm px-5 py-2.5 mt-2.5">
+          <div className="relative mt-2.5 rounded-md border border-gray-darker bg-gray-light px-5 py-2.5 text-xs-sm">
             <Title level="4">Please note!</Title>
-            <p className="text-xs-sm py-2.5">
+            <p className="py-2.5 text-xs-sm">
               You can edit all the fields if the information is incorrect, but for this you will need to send a request
               to change the data, which can be reviewed up to 24 hours, and after confirmation your data will be updated
               automatically.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-y-4 h-80 mt-5 pr-2.5 overflow-scroll">
-            <div className="grid grid-cols-2 gap-y-4 gap-x-5">
+          <div className="mt-5 grid h-80 grid-cols-1 gap-y-4 overflow-scroll pr-2.5">
+            <div className="grid grid-cols-2 gap-x-5 gap-y-4">
               <Input
                 {...register(`tankerName`)}
                 label="Tanker name"
@@ -332,7 +332,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 customStyles={{ className: 'col-span-2' }}
               />
             </div>
-            <div className="grid grid-cols-4 gap-x-5 gap-y-4 items-baseline">
+            <div className="grid grid-cols-4 items-baseline gap-x-5 gap-y-4">
               <Input
                 {...register(`loa`)}
                 label="LOA"
@@ -419,7 +419,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 error={errors.grades?.message}
               />
             </div>
-            <div className="grid grid-cols-2 gap-x-5 gap-y-4 items-baseline">
+            <div className="grid grid-cols-2 items-baseline gap-x-5 gap-y-4">
               <Input
                 {...register(`registeredOwner`)}
                 label="Registered owner"

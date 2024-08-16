@@ -37,25 +37,25 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id }) => {
   };
 
   return (
-    <div key={id} className={`flex flex-col py-2.5 w-full ${isBroker ? 'items-start' : 'items-end pr-2.5'}`}>
+    <div key={id} className={`flex w-full flex-col py-2.5 ${isBroker ? 'items-start' : 'items-end pr-2.5'}`}>
       <div className="flex flex-col gap-y-1">
-        <p className="text-black uppercase text-xs-sm font-semibold">{senderTitle}</p>
+        <p className="text-xs-sm font-semibold uppercase text-black">{senderTitle}</p>
         <p
-          className={`relative rounded-base px-2.5 py-1.5 text-xsm break-words ${
-            isBroker ? 'bg-gray-darker bg-opacity-40 self-start' : 'bg-blue-light self-end'
+          className={`relative break-words rounded-base px-2.5 py-1.5 text-xsm ${
+            isBroker ? 'self-start bg-gray-darker bg-opacity-40' : 'self-end bg-blue-light'
           } `}
         >
           {message?.includes('@') ? message : <Linkify componentDecorator={renderLink}>{message}</Linkify>}
           <div
             className={`triangle ${
               !isBroker
-                ? '!border-b-blue-light -right-[7px] top-3 rotate-90'
-                : '!border-b-gray-darker !border-opacity-40 -left-[7px] top-3 -rotate-90'
+                ? '-right-[7px] top-3 rotate-90 !border-b-blue-light'
+                : '-left-[7px] top-3 -rotate-90 !border-b-gray-darker !border-opacity-40'
             }`}
           />
         </p>
 
-        <div className={`text-xs-sm text-gray font-normal flex w-full ${isBroker ? 'justify-start' : 'justify-end'} `}>
+        <div className={`flex w-full text-xs-sm font-normal text-gray ${isBroker ? 'justify-start' : 'justify-end'} `}>
           {nextTime}
         </div>
       </div>

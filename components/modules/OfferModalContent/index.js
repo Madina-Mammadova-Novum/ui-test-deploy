@@ -145,8 +145,8 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const errorBanner = useMemo(() => {
     return (
       offer?.message && (
-        <div className={`${!offer.valid ? 'bg-red-light' : 'bg-orange-300'} rounded-base py-2.5 pb-3 px-5`}>
-          <div className="text-xsm mt-1.5">
+        <div className={`${!offer.valid ? 'bg-red-light' : 'bg-orange-300'} rounded-base px-5 py-2.5 pb-3`}>
+          <div className="mt-1.5 text-xsm">
             <span className="font-bold">{!offer?.valid ? 'Declined: ' : 'Warning: '}</span>
             <span className="ml-1.5">{offer?.message}</span>
           </div>
@@ -161,9 +161,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         <Title level="2">Send Offer</Title>
         {errorBanner}
       </div>
-      <div className="flex text-[12px] items-center mt-5">
-        <div className="pl-4 border-l-2 border-blue h-min flex items-center">
-          <p className="font-bold max-w-[240px]">
+      <div className="mt-5 flex items-center text-[12px]">
+        <div className="flex h-min items-center border-l-2 border-blue pl-4">
+          <p className="max-w-[240px] font-bold">
             Set a response countdown timer for the counterparty to reply to this offer
           </p>
           <Dropdown
@@ -189,7 +189,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         </div>
       </div>
 
-      <div className="flex text-xsm gap-x-4 mt-4 justify-end">
+      <div className="mt-4 flex justify-end gap-x-4 text-xsm">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"

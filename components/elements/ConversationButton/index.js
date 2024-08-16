@@ -11,10 +11,10 @@ const ConversationButton = ({ counter, onClick, className }) => {
       <button
         type="button"
         onClick={onClick}
-        className="w-[30px] h-[30px] relative rounded-md border border-gray-light outline-none bg-transparent hover:bg-gray-darker"
+        className="relative h-[30px] w-[30px] rounded-md border border-gray-light bg-transparent outline-none hover:bg-gray-darker"
       >
-        <ConversationSVG className="fill-black absolute top-[5px] left-[5px]" />
-        {counter && <Badge counter={counter} className="h-3.5 w-3.5 p-2 -top-1.5 -right-1" />}
+        <ConversationSVG className="absolute left-[5px] top-[5px] fill-black" />
+        {counter && <Badge counter={counter} className="-right-1 -top-1.5 h-3.5 w-3.5 p-2" />}
       </button>
     </div>
   );

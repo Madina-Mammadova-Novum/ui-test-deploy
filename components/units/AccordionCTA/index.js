@@ -10,7 +10,7 @@ const AccordionCTA = ({ title, buttons, shortDescription }) => {
   return (
     <div className="rounded-base border border-gray-darker bg-gray-light px-5 py-3">
       {title && <Title level="3">{title}</Title>}
-      <div className="flex gap-x-2.5 items-center">
+      <div className="flex items-center gap-x-2.5">
         {shortDescription && <p className="text-xsm">{shortDescription}</p>}
         {buttons &&
           buttons.map(({ path, label }) => {

@@ -15,9 +15,9 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
         <Title level="3">Voyage details</Title>
       </div>
 
-      <div className={`text-xsm mt-2.5 gap-x-2.5 ${inlineVariant && 'flex justify-between'}`}>
+      <div className={`mt-2.5 gap-x-2.5 text-xsm ${inlineVariant && 'flex justify-between'}`}>
         <div>
-          <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
+          <Title level="5" className="text-[12px] font-semibold uppercase text-gray">
             dates
           </Title>
           {data?.dates?.map((pair) => (
@@ -28,7 +28,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
         <hr className="my-4" />
 
         <div>
-          <Title level="5" className="uppercase text-[12px] text-gray font-semibold">
+          <Title level="5" className="text-[12px] font-semibold uppercase text-gray">
             ports
           </Title>
 

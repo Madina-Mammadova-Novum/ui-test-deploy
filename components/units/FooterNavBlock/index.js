@@ -5,7 +5,7 @@ import { NextLink, Title } from '@/elements';
 const FooterNavBlock = ({ title, items }) => {
   return (
     <div className="w-32 3md:w-40">
-      <Title level={5} className="title-main text-gray mb-4">
+      <Title level={5} className="title-main mb-4 text-gray">
         {title}
       </Title>
       <ul className="space-y-2 text-black">

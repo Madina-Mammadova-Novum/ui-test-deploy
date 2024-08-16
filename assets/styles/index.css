@@ -31,23 +31,23 @@
     border-radius: 10px;
   }
   h1 {
-    @apply font-bold text-[26px] 3md:text-[30px];
+    @apply text-[26px] font-bold 3md:text-[30px];
   }
 
   h2 {
-    @apply font-bold text-[20px];
+    @apply text-[20px] font-bold;
   }
 
   h3 {
-    @apply font-semibold text-sm;
+    @apply text-sm font-semibold;
   }
 
   h4 {
-    @apply font-bold text-xsm;
+    @apply text-xsm font-bold;
   }
 
   .title-main {
-    @apply uppercase font-semibold text-[12px];
+    @apply text-[12px] font-semibold uppercase;
   }
 }
 
@@ -79,7 +79,7 @@
   /* CKEditor 5 Styles */
 
   .content-wrapper ul {
-    @apply pl-5 list-disc;
+    @apply list-disc pl-5;
   }
 
   .content-wrapper h1 {
@@ -91,11 +91,11 @@
   }
 
   .content-wrapper h3 {
-    @apply text-black mb-1.5;
+    @apply mb-1.5 text-black;
   }
 
   .content-wrapper h4 {
-    @apply text-black mb-3 font-semibold;
+    @apply mb-3 font-semibold text-black;
   }
 
   .content-wrapper p {
@@ -104,11 +104,11 @@
 
   .content-wrapper ul li,
   .content-wrapper ol li {
-    @apply text-black text-xsm;
+    @apply text-xsm text-black;
   }
 
   .content-wrapper img {
-    @apply rounded-base h-full;
+    @apply h-full rounded-base;
   }
 
   .content-wrapper iframe {
@@ -139,7 +139,7 @@
   }
 
   .content-wrapper blockquote {
-    @apply !my-4 py-[5px] pl-4 font-semibold border-l-2 border-blue;
+    @apply !my-4 border-l-2 border-blue py-[5px] pl-4 font-semibold;
   }
 
   .content-wrapper a,
@@ -148,13 +148,13 @@
   }
 
   .heading-wrapper h1 {
-    @apply text-white mb-2.5;
+    @apply mb-2.5 text-white;
   }
   .heading-wrapper p {
-    @apply text-xsm text-white max-w-[800px] mx-auto;
+    @apply mx-auto max-w-[800px] text-xsm text-white;
   }
   .heading-wrapper h6 {
-    @apply text-xsm text-white font-medium;
+    @apply text-xsm font-medium text-white;
   }
 
   /* Swiper */
@@ -166,7 +166,7 @@
   .swiper.swiperTestimonial .swiper-wrapper,
   .swiper.swiperTeam .swiper-wrapper,
   .swiper.swiperImprovements .swiper-wrapper {
-    @apply !pb-11 mt-10 lg:mt-14 2xl:mt-16;
+    @apply mt-10 !pb-11 lg:mt-14 2xl:mt-16;
   }
   .swiper.swiperIngredients .swiper-wrapper {
     @apply !pb-8 md:!pb-0;
@@ -174,19 +174,19 @@
 
   .swiper .swiper-button-prev,
   .swiper .swiper-button-next {
-    @apply hidden md:block after:hidden absolute;
+    @apply absolute hidden after:hidden md:block;
   }
 
   .swiper .swiper-button-prev {
-    @apply bg-[url(/arrow-left.webp)] w-10 h-10;
+    @apply h-10 w-10 bg-[url(/arrow-left.webp)];
   }
 
   .swiper .swiper-button-next {
-    @apply bg-[url(/arrow-right.webp)] w-10 h-10;
+    @apply h-10 w-10 bg-[url(/arrow-right.webp)];
   }
 
   .swiper .swiper-pagination .swiper-pagination-bullet {
-    @apply w-[10px] h-[10px] rounded-[5px] !mx-[5px] bg-gray-darker opacity-100;
+    @apply !mx-[5px] h-[10px] w-[10px] rounded-[5px] bg-gray-darker opacity-100;
   }
 
   .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
@@ -209,23 +209,23 @@
   }
 
   .range_date .rdrMonths {
-    @apply w-[450px] border border-purple-light border-t-0 rounded-b-lg shadow-2xmd;
+    @apply w-[450px] rounded-b-lg border border-t-0 border-purple-light shadow-2xmd;
   }
 
   .range_date .rdrMonth {
-    @apply border border-purple-light border-b-0 first:border-l-0 last:border-r-0 border-t-0;
+    @apply border border-b-0 border-t-0 border-purple-light first:border-l-0 last:border-r-0;
   }
 
   .range_date .rdrMonthAndYearWrapper {
-    @apply w-[450px] border border-purple-light pt-0 rounded-t-lg shadow-2xmd;
+    @apply w-[450px] rounded-t-lg border border-purple-light pt-0 shadow-2xmd;
   }
 
   .range_date .rdrDateDisplayWrapper {
-    @apply bg-white mb-2;
+    @apply mb-2 bg-white;
   }
 
   .range_date .rdrDateDisplayItemActive {
-    @apply border border-transparent border-solid;
+    @apply border border-solid border-transparent;
   }
 
   .range_date .rdrDateDisplay {
@@ -233,7 +233,7 @@
   }
 
   .range_date input {
-    @apply h-9 text-xsm border-transparent border border-solid;
+    @apply h-9 border border-solid border-transparent text-xsm;
   }
 
   .range_date-hidden .rdrMonthAndYearWrapper,
@@ -242,11 +242,11 @@
   }
 
   .range_date-absolute .rdrMonthAndYearWrapper {
-    @apply absolute bottom-0 bg-white z-[1] translate-y-full;
+    @apply absolute bottom-0 z-[1] translate-y-full bg-white;
   }
 
   .range_date-absolute .rdrMonths {
-    @apply absolute bottom-0 bg-white z-[1] translate-y-[calc(100%+60px)];
+    @apply absolute bottom-0 z-[1] translate-y-[calc(100%+60px)] bg-white;
   }
 
   .position-unset {
@@ -262,12 +262,12 @@
 }
 
 .swiper.swiperConcernGalleryThumbs {
-  @apply w-full !relative;
+  @apply !relative w-full;
 }
 
 .swiper.swiperConcernGalleryThumbs .swiper-button-prev,
 .swiper.swiperConcernGalleryThumbs .swiper-button-next {
-  @apply hidden sm:block after:hidden absolute;
+  @apply absolute hidden after:hidden sm:block;
 }
 
 .swiper.swiperConcernGalleryThumbs .swiper-button-prev.swiper-button-disabled,
@@ -276,19 +276,19 @@
 }
 
 .swiper.swiperConcernGalleryThumbs .swiper-button-prev {
-  @apply bg-swiper-navigation/*  bg-[url(/angle.webp)] */ bg-no-repeat bg-center w-16 h-[calc(100%-40px)] rotate-180 m-0 top-0 left-0;
+  @apply bg-swiper-navigation/* */ left-0 top-0 m-0 h-[calc(100%-40px)] w-16 rotate-180 bg-[url(/angle.webp)] bg-center bg-no-repeat;
 }
 
 .swiper.swiperConcernGalleryThumbs .swiper-button-next {
-  @apply bg-swiper-navigation /* bg-[url(/angle.webp)] */ bg-no-repeat bg-center w-16 h-[calc(100%-40px)] m-0 top-0 right-0;
+  @apply bg-swiper-navigation /* */ right-0 top-0 m-0 h-[calc(100%-40px)] w-16 bg-[url(/angle.webp)] bg-center bg-no-repeat;
 }
 
 @media only screen and (min-width: 1280px) {
   .swiper.swiperConcernGalleryThumbs .swiper-button-prev {
-    @apply w-16 h-28  -top-6 left-6 -rotate-90;
+    @apply -top-6 left-6 h-28 w-16 -rotate-90;
   }
   .swiper.swiperConcernGalleryThumbs .swiper-button-next {
-    @apply w-16 h-28 -bottom-6 top-auto left-6 rotate-90;
+    @apply -bottom-6 left-6 top-auto h-28 w-16 rotate-90;
   }
 }
 
@@ -310,11 +310,11 @@
 /* Phone Field Rewrites */
 
 .react-tel-input .form-control.phone-field {
-  @apply h-[42px] w-full text-black rounded-base border pl-[68px] font-inter-sans outline-none;
+  @apply h-[42px] w-full rounded-base border pl-[68px] font-inter-sans text-black outline-none;
 }
 
 .react-tel-input .flag-dropdown.country-field {
-  @apply text-black rounded-base border border-none h-[28px] top-[7px] left-[1px] bg-white pl-3;
+  @apply left-[1px] top-[7px] h-[28px] rounded-base border border-none bg-white pl-3 text-black;
 }
 
 .react-tel-input .country-list .country {
@@ -327,7 +327,9 @@
 
 .react-tel-input .country-list {
   @apply !w-28 !rounded-[6px];
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.05),
+    0px 10px 15px -3px rgba(0, 0, 0, 0.1),
     0px 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
@@ -336,7 +338,7 @@
 }
 
 .react-tel-input .flag-dropdown .selected-flag {
-  @apply p-0 rounded-l-md;
+  @apply rounded-l-md p-0;
 }
 
 .react-tel-input .selected-flag {
@@ -344,7 +346,7 @@
 }
 
 .react-tel-input .selected-flag .arrow {
-  @apply !border-0 !w-5 !h-5 !mt-[-5px] !top-0 bg-[url('/angle-down.png')];
+  @apply !top-0 !mt-[-5px] !h-5 !w-5 !border-0 bg-[url('/angle-down.png')];
 }
 
 .react-tel-input .selected-flag .arrow.up {
@@ -352,11 +354,11 @@
 }
 
 .tab-btn {
-  @apply border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-xxs font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-1/2 xlMax:transform xlMax:-translate-x-1/2;
+  @apply absolute right-1 -translate-x-5 whitespace-nowrap border border-blue !px-2.5 !py-0.5 !text-xxs font-bold uppercase hover:border-blue-darker xlMax:left-1/2 xlMax:top-14 xlMax:w-fit xlMax:-translate-x-1/2 xlMax:transform;
 }
 
 .inline-text-row {
-  @apply [&>span:nth-child(2)]:!whitespace-pre-wrap [&>span:nth-child(2)]:!inline;
+  @apply [&>span:nth-child(2)]:!inline [&>span:nth-child(2)]:!whitespace-pre-wrap;
 }
 
 /* Input Number Field */
@@ -408,11 +410,11 @@ table > tbody > tr td[name='GREY'] > div {
 }
 
 .Toastify__toast {
-  @apply !shadow-none p-0 !bg-transparent !mb-0;
+  @apply !mb-0 !bg-transparent p-0 !shadow-none;
 }
 
 .Toastify__toast-container {
-  @apply !w-full !p-0 !ml-auto max-w-[40rem];
+  @apply !ml-auto !w-full max-w-[40rem] !p-0;
 }
 
 .Toastify__toast-body {
@@ -438,7 +440,7 @@ table > tbody > tr td[name='GREY'] > div {
 /*legal pages*/
 
 .legal-styles .content-wrapper {
-  @apply rounded-base p-5 bg-white relative -mt-[168px] mb-[100px] shadow-xmd;
+  @apply relative -mt-[168px] mb-[100px] rounded-base bg-white p-5 shadow-xmd;
 }
 
 .legal-styles .container {
@@ -573,7 +575,7 @@ tr > td:nth-child(2)::after {
   top: 5%;
   right: -5%;
   width: 310px;
-  @apply bg-white border border-gray-darker rounded-base absolute p-5 z-50;
+  @apply absolute z-50 rounded-base border border-gray-darker bg-white p-5;
 }
 
 .tooltip::before {

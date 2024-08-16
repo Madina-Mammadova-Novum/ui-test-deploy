@@ -25,16 +25,16 @@ const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, cla
   }, [toggle]);
 
   return (
-    <div className={`rounded-base shadow-xmd box-border my-3 ${className}`}>
+    <div className={`my-3 box-border rounded-base shadow-xmd ${className}`}>
       <div aria-hidden className="w-full cursor-pointer px-5" onClick={() => handleClick()}>
         {headerComponentWithProps}
       </div>
       <div
         ref={contentRef}
         style={{ height: expandedHeight }}
-        className="overflow-y-clip table-scroll transition-all duration-300"
+        className="table-scroll overflow-y-clip transition-all duration-300"
       >
-        <div className="flex flex-col w-full">
+        <div className="flex w-full flex-col">
           <Divider className="mx-5" />
           <div className="p-5">{children}</div>
           {footerComponent}

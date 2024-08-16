@@ -203,8 +203,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   return (
     <div className="flex flex-col sm:flex-row">
-      <div className="w-full flex flex-col gap-y-4 sm:pr-5 sm:mr-5 sm:border-r">
-        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
+      <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
+        <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <DatePicker
             label="laycan start"
             inputClass="w-full"
@@ -226,7 +226,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             disabled={!laycanStart}
           />
         </div>
-        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
+        <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <FormDropdown
             asyncCall
             id="loadPort"
@@ -251,7 +251,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             asyncCall
           />
         </div>
-        <div className="flex flex-col 3md:flex-row gap-x-5 gap-y-2.5">
+        <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <FormDropdown
             name="dischargePort"
             label="discharge port"
@@ -277,7 +277,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-y-4">
+      <div className="flex w-full flex-col gap-y-4">
         <FormDropdown
           label="cargo type"
           name="cargoType"
@@ -298,7 +298,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
           return (
             <div key={`product_${productId}`}>
-              <div className="flex flex-wrap 3md:flex-nowrap justify-between gap-x-5 gap-y-2.5 items-baseline">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2.5 3md:flex-nowrap">
                 <FormDropdown
                   onChange={(option) => {
                     setSelected(!selected);
@@ -350,7 +350,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                     text: 'Delete',
                     variant: 'tertiary',
                     size: 'small',
-                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
                   }}
                   customStyles="ml-auto !p-0"
                   onClick={() => handleRemoveProduct(productId)}

@@ -43,7 +43,7 @@ const DatePicker = ({
     <div className={`${containerClass} ${expanded && showPicker ? 'h-[330px]' : 'h-auto'}`}>
       <div
         aria-hidden="true"
-        className={classnames('fixed top-0 left-0 right-0 bottom-0 z-0', !showPicker && 'hidden')}
+        className={classnames('fixed bottom-0 left-0 right-0 top-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
       <Controller
@@ -52,7 +52,7 @@ const DatePicker = ({
           const value = field.value || dateValue || null;
 
           return (
-            <div className={`single_date relative cursor-pointer w-full ${disabled && 'opacity-70'}`}>
+            <div className={`single_date relative w-full cursor-pointer ${disabled && 'opacity-70'}`}>
               <div
                 aria-hidden
                 onClick={() => (disabled ? setShowPicker(false) : setShowPicker((prevValue) => !prevValue))}
@@ -69,7 +69,7 @@ const DatePicker = ({
                 />
               </div>
               <div
-                className={classnames('absolute w-full bottom-3 translate-y-full left-0 hidden z-10', {
+                className={classnames('absolute bottom-3 left-0 z-10 hidden w-full translate-y-full', {
                   '!block': showPicker,
                   'opacity-30': disabled,
                 })}

@@ -70,7 +70,7 @@ const NotificationControl = () => {
   const handleReadAll = () => dispatch(readAllNotifications());
 
   return (
-    <div className="flex flex-col gap-y-5 h-[25vh]">
+    <div className="flex h-[25vh] flex-col gap-y-5">
       <NotificationSearch value={search} onChange={handleSearch} containerClass="px-8 pt-5" disabled={disabled} />
       <NotificationTabs
         activeTab={activeTab}

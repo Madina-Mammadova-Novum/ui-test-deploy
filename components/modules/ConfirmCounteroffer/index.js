@@ -19,7 +19,7 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
     <div className="w-[610px]">
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] flex flex-col gap-y-5 mt-2.5 overflow-y-auto overflow-x-hidden ${
+        className={`mt-2.5 flex h-[320px] flex-col gap-y-5 overflow-y-auto overflow-x-hidden ${
           showScroll && 'shadow-vInset'
         }`}
       >

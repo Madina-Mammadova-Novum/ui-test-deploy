@@ -32,7 +32,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
   };
 
   return (
-    <div className="flex flex-col gap-y-5 mb-5">
+    <div className="mb-5 flex flex-col gap-y-5">
       <UploadForm onSubmit={onSubmit} />
       <Table headerData={onSubsHeader} rows={rowsData} noDataMessage="You did not upload any documents yet" />
     </div>

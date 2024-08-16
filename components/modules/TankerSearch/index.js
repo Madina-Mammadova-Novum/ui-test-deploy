@@ -3,6 +3,8 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { TankerSearchTypes } from '@/lib/types';
+
 import { Dropdown, DynamicLoader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
@@ -11,7 +13,7 @@ import { getSearchSelector } from '@/store/selectors';
 import { SearchForm } from '@/units';
 import { errorToast } from '@/utils/hooks';
 
-const TankerSearch = () => {
+const TankerSearch = ({ isAccountSearch = false }) => {
   const dispatch = useDispatch();
 
   const { data, loading, error, sorting, searchParams, request } = useSelector(getSearchSelector);
@@ -70,14 +72,14 @@ const TankerSearch = () => {
 
   return (
     <>
-      <SearchForm onSubmit={handleSearch} onReset={handleReset} isLoading={loading} />
+      <SearchForm onSubmit={handleSearch} onReset={handleReset} isLoading={loading} isAccountSearch={isAccountSearch} />
       {request && (
         <div className="mt-8 flex flex-col sm:flex-row">
           <Title level="2" className="mr-auto">
             Search results
           </Title>
 
-          <div className="flex justify-center items-start sm:items-center gap-2 flex-col sm:flex-row">
+          <div className="flex flex-col items-start justify-center gap-2 sm:flex-row sm:items-center">
             <Dropdown
               label="Sort tankers by:"
               options={sorting?.directions}
@@ -99,5 +101,7 @@ const TankerSearch = () => {
     </>
   );
 };
+
+TankerSearch.propTypes = TankerSearchTypes;
 
 export default TankerSearch;

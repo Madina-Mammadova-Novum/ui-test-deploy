@@ -6,7 +6,7 @@ const AuthWrapper = ({ title, subtitle, children, containerClass = '' }) => {
   return (
     <div className={`${containerClass}`}>
       <Title level="2">{title}</Title>
-      {subtitle && <p className="pt-5 text-xsm text-black max-w-[301px]">{subtitle}</p>}
+      {subtitle && <p className="max-w-[301px] pt-5 text-xsm text-black">{subtitle}</p>}
       {children}
     </div>
   );

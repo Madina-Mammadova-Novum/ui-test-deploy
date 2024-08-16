@@ -42,14 +42,14 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
   if (loading) {
     return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-3/4" />
+      <div className="h-72 w-72">
+        <Loader className="absolute top-3/4 h-8 w-8" />
       </div>
     );
   }
 
   return (
-    <div className="w-[610px] mx-5">
+    <div className="mx-5 w-[610px]">
       <Title level="2">Tanker Information</Title>
 
       <FieldsetContent label="About the Vessel Owner" className="mt-3">

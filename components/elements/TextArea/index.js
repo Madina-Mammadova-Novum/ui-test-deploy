@@ -23,7 +23,7 @@ const TextArea = React.forwardRef(
     ref
   ) => {
     return (
-      <div className={classnames(disabled && 'opacity-50 pointer-events-none', customStyles)}>
+      <div className={classnames(disabled && 'pointer-events-none opacity-50', customStyles)}>
         {label && (
           <Label name={name} className="text-xs-sm">
             {label}
@@ -38,7 +38,7 @@ const TextArea = React.forwardRef(
           disabled={disabled}
           placeholder={placeholder}
           className={classnames(
-            'border border-gray-darker rounded-md resize-none outline-none text-xsm box-border px-4 py-2.5 min-h-[60px] w-full min-w-[296px] hover:border-blue focus:border-blue',
+            'box-border min-h-[60px] w-full min-w-[296px] resize-none rounded-md border border-gray-darker px-4 py-2.5 text-xsm outline-none hover:border-blue focus:border-blue',
             inputStyles,
             {
               '!border-red': error,
@@ -46,7 +46,7 @@ const TextArea = React.forwardRef(
           )}
         />
         {error && <InputErrorMessage message={error} />}
-        {helperText && !error && <p className="text-xs-sm text-black pt-1">{helperText}</p>}
+        {helperText && !error && <p className="pt-1 text-xs-sm text-black">{helperText}</p>}
       </div>
     );
   }

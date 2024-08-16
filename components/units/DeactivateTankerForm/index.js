@@ -54,14 +54,14 @@ const DeactivateTankerForm = ({ title, state, closeModal }) => {
         onClose={closeModal}
         specialStyle
       >
-        <Title level="2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="text-lg font-bold capitalize text-black">
           {title}
         </Title>
         <div>
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{state?.name}</p>
+          <p className="text-xsm font-semibold text-black">{state?.name}</p>
         </div>
-        <p className="text-black text-xsm">
+        <p className="text-xsm text-black">
           By deactivating your tanker you make it temporarily inaccessable for charterers. You will not be able to
           update its open position while inactive. You can reactivate the tanker and update its open positions any time.
         </p>

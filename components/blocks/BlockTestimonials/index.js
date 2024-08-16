@@ -44,7 +44,7 @@ const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
             return (
               <SwiperSlide
                 key={testimonial.id}
-                className="!w-[330px] !h-[340px] sm:!w-[340px] md:!w-[413px] md:!h-[448px] 2xl:!h-[576px] 2xl:!w-[558px]"
+                className="!h-[340px] !w-[330px] sm:!w-[340px] md:!h-[448px] md:!w-[413px] 2xl:!h-[576px] 2xl:!w-[558px]"
               >
                 {testimonial}
                 {/* <TestimonialCard testimonial={testimonial} /> */}

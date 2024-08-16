@@ -10,7 +10,7 @@ const ViewCommentContent = ({ data, closeModal }) => {
     <div className="w-80">
       <ModalHeader>Comment</ModalHeader>
 
-      <p className="pt-2.5 pb-5">{comments}</p>
+      <p className="pb-5 pt-2.5">{comments}</p>
 
       <Button
         buttonProps={{

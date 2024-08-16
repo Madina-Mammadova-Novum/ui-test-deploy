@@ -90,11 +90,11 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
       ref={ref}
       aria-hidden
       onClick={handleOpenConversation}
-      className="flex justify-between relative cursor-pointer"
+      className="relative flex cursor-pointer justify-between"
     >
       <ChatConversationCard data={data} />
-      <div className="flex flex-col relative justify-end">
-        <Badge className="h-5 w-5 -top-0.5 right-1 p-1" counter={data?.messageCount} />
+      <div className="relative flex flex-col justify-end">
+        <Badge className="-top-0.5 right-1 h-5 w-5 p-1" counter={data?.messageCount} />
         {actions[tab]}
         {sessionId === data?.chatId && state[tab]}
       </div>

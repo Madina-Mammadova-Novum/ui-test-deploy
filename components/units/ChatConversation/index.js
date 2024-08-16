@@ -62,7 +62,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed bg-white border border-gray-light ${setConversationPosition} bottom-6 h-auto w-[360px] shadow-xmd rounded-base z-10`}
+        className={`fixed border border-gray-light bg-white ${setConversationPosition} bottom-6 z-10 h-auto w-[360px] rounded-base shadow-xmd`}
       >
         <СhatConversationHeader
           data={data}

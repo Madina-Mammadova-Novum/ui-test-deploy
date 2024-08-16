@@ -8,8 +8,8 @@ const BlockPrivacyPolicy = ({ title, content }) => {
   return (
     <section className="mb-28 sm:mb-44 2xl:mb-64">
       <div className="flex flex-col items-center">
-        <div className="max-w-[846px] w-full">
-          {title && <h1 className="text-4xl text-black font-bold mb-8 md:text-6xl">{title}</h1>}
+        <div className="w-full max-w-[846px]">
+          {title && <h1 className="mb-8 text-4xl font-bold text-black md:text-6xl">{title}</h1>}
           {content && (
             <div>
               <ContentElement content={content} />

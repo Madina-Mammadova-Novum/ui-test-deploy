@@ -42,14 +42,14 @@ const VerifficationUserAccount = () => {
     <NextLink
       href={veriffUrl}
       target="blank"
-      className="px-5 py-2.5 rounded-md cursor-pointer bg-blue text-white hover:bg-blue-darker"
+      className="cursor-pointer rounded-md bg-blue px-5 py-2.5 text-white hover:bg-blue-darker"
     >
       Verify
     </NextLink>
   ) : (
-    <div className="px-5 py-2.5 whitespace-nowrap rounded-md flex justify-center items-center gap-x-4 bg-black  opacity-50">
+    <div className="flex items-center justify-center gap-x-4 whitespace-nowrap rounded-md bg-black px-5 py-2.5 opacity-50">
       <p className="text-white">Please wait...</p>
-      <Loader className="w-4 h-4" />
+      <Loader className="h-4 w-4" />
     </div>
   );
 };

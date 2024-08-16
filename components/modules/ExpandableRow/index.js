@@ -20,14 +20,14 @@ const ExpandableRow = ({ header, footer, children, expand, isOpened, className =
   }, [isOpened]);
 
   return (
-    <div className="rounded-base shadow-xmd box-border bg-white overflow-x-clip">
+    <div className="box-border overflow-x-clip rounded-base bg-white shadow-xmd">
       <div aria-hidden className="w-full cursor-pointer px-5" onClick={() => setToggle((prevValue) => !prevValue)}>
         {headerWithProps}
       </div>
       <div
-        className={`transition-all duration-300 grid grid-rows-[0fr] overflow-hidden ${toggle && 'grid-rows-[1fr]'}`}
+        className={`grid grid-rows-[0fr] overflow-hidden transition-all duration-300 ${toggle && 'grid-rows-[1fr]'}`}
       >
-        <div className="min-h-0 relative">
+        <div className="relative min-h-0">
           <Divider className="mx-5" />
           <div className={className}>{children}</div>
           {footer}

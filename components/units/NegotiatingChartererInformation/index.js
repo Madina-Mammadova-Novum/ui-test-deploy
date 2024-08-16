@@ -36,8 +36,8 @@ const NegotiatingChartererInformation = ({ offerId }) => {
 
   if (loading) {
     return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-3/4" />
+      <div className="h-72 w-72">
+        <Loader className="absolute top-3/4 h-8 w-8" />
       </div>
     );
   }
@@ -49,7 +49,7 @@ const NegotiatingChartererInformation = ({ offerId }) => {
       </Title>
       {chartererInformation?.map(({ title, description, countryCode }) => (
         <TextRow title={title}>
-          <ReactCountryFlag countryCode={countryCode} svg className="!w-5 !h-3 mr-1.5" /> {description}
+          <ReactCountryFlag countryCode={countryCode} svg className="mr-1.5 !h-3 !w-5" /> {description}
         </TextRow>
       ))}
     </>

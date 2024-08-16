@@ -39,7 +39,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
     return (
       <Fragment key={rowData?.id}>
         {isFreezed && (
-          <span className="absolute z-50 left-0 sm:left-1/4 lg:left-1/3 bg-white px-4 mt-2.5 py-1 whitespace-nowrap rounded-lg border border-blue text-xs-sm">
+          <span className="absolute left-0 z-50 mt-2.5 whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm sm:left-1/4 lg:left-1/3">
             {isOwner
               ? 'The charterer has gone into pre-fixture with another tanker'
               : 'The tanker has moved into pre-fixture with another charterer'}
@@ -55,9 +55,9 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       {headerData.length > 0 ? (
         <div className="table-scroll">
           <div className="table-scroll-wrapper">
-            <table className="min-w-full border-collapse table-fixed bg-purple-light">
+            <table className="min-w-full table-fixed border-collapse bg-purple-light">
               {headerData.length && (
-                <thead className="uppercase text-black font-semibold text-xs-sm">
+                <thead className="text-xs-sm font-semibold uppercase text-black">
                   <TableHeader
                     headerData={headerData}
                     handleSort={handleSort}
@@ -69,12 +69,12 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
               {!!data.length && <tbody>{data.map(printTableRow)}</tbody>}
             </table>
             {!data.length && noDataMessage && (
-              <div className="py-5 bg-gray-light text-center text-xsm text-gray">{noDataMessage}</div>
+              <div className="bg-gray-light py-5 text-center text-xsm text-gray">{noDataMessage}</div>
             )}
           </div>
         </div>
       ) : (
-        <p className="text-sm font-semibold text-black uppercase">No data provided</p>
+        <p className="text-sm font-semibold uppercase text-black">No data provided</p>
       )}
     </div>
   );

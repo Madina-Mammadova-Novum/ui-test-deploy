@@ -12,7 +12,7 @@ const SidebarXl = ({ data, isResized, onResize }) => {
       <NextLink href="/">
         <Logo className="fill-white" />
       </NextLink>
-      <ul className="flex flex-col gap-2.5 relative overflow-auto">
+      <ul className="relative flex flex-col gap-2.5 overflow-auto">
         <Button
           buttonProps={{
             icon: {
@@ -20,7 +20,7 @@ const SidebarXl = ({ data, isResized, onResize }) => {
                 <AngleDownSVG
                   className={`${
                     !isResized && 'rotate-90'
-                  } fill-white transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 `}
+                  } absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform fill-white transition duration-150`}
                 />
               ),
             },

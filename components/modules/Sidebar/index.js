@@ -33,10 +33,9 @@ const Sidebar = ({ data }) => {
 
   return (
     <aside
-      className={`z-50 fixed top-0 left-0 h-screen ${
+      className={`fixed left-0 top-0 z-50 h-screen ${
         collapsed ? 'w-16' : 'w-64'
-      } flex flex-col transition-all duration-75 items-stretch px-3.5 py-5 gap-2 bg-black text-white 
-    `}
+      } flex flex-col items-stretch gap-2 bg-black px-3.5 py-5 text-white transition-all duration-75`}
     >
       {collapsed ? (
         <SidebarSm data={data} isResized={collapsed} onResize={() => setCollapse(!collapsed)} />

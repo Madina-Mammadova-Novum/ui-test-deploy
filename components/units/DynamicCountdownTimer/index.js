@@ -23,7 +23,7 @@ const DynamicCountdownTimer = ({ date, autoStart = true }) => {
 
         return (
           <span className={`flex gap-x-1 text-red ${!autoStart && 'opacity-50'}`}>
-            <ClockSVG className="w-4 h-4 fill-red" viewBox="0 0 14 14" /> {!!hours && `${hours}h`}{' '}
+            <ClockSVG className="h-4 w-4 fill-red" viewBox="0 0 14 14" /> {!!hours && `${hours}h`}{' '}
             {!!minutes && `${minutes}m`}
             {!hours && !minutes && `${seconds}s`}
           </span>

@@ -109,7 +109,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
       </ModalHeader>
 
       {!confirmCounteroffer && (
-        <div className="border border-gray-darker bg-gray-light rounded-md px-5 py-3 text-[12px] my-5">
+        <div className="my-5 rounded-md border border-gray-darker bg-gray-light px-5 py-3 text-[12px]">
           <p>
             In order to send counteroffer, please make at least <b>one of the following</b> adjustments:{' '}
           </p>
@@ -122,10 +122,10 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
         </div>
       )}
 
-      <div className="flex text-[12px] items-center mt-5">
+      <div className="mt-5 flex items-center text-[12px]">
         <Countdown time={countdownData} />
-        <div className="pl-4 border-l h-min flex items-center">
-          <p className="font-bold max-w-[240px]">
+        <div className="flex h-min items-center border-l pl-4">
+          <p className="max-w-[240px] font-bold">
             Set a response countdown timer for the counterparty to reply to this offer
           </p>
           <Dropdown

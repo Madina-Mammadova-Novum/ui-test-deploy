@@ -23,7 +23,7 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
     }
   }, [status]);
 
-  return <span className={`block w-2.5 h-2.5 rounded-full ${backgroundColor} ${customStyles}`} />;
+  return <span className={`block h-2.5 w-2.5 rounded-full ${backgroundColor} ${customStyles}`} />;
 };
 
 StatusIndicator.propTypes = StatusIndicatorPropTypes;

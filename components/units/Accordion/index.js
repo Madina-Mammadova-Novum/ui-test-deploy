@@ -15,8 +15,8 @@ const Accordion = ({ items, isFullWidth, open, onClick, icon }) => {
   return items?.map(({ headerContent, bodyContent }) => (
     <div
       className={classnames(
-        open && !isFullWidth && 'relative !border-transparent rounded-base bg-white shadow-xmd -mb-2',
-        'text-black pb-2.5'
+        open && !isFullWidth && 'relative -mb-2 rounded-base !border-transparent bg-white shadow-xmd',
+        'pb-2.5 text-black'
       )}
     >
       <AccordionHeader isFullWidth={isFullWidth} isActive={open} onClick={onClick} icon={icon} title={headerContent} />

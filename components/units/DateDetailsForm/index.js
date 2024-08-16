@@ -38,7 +38,7 @@ const DateDetailsForm = ({ portName = '' }) => {
     <>
       <div>
         <Label className="text-xs-sm">Tanker name</Label>
-        <p className="font-semibold text-black text-xsm">{portName}</p>
+        <p className="text-xsm font-semibold text-black">{portName}</p>
       </div>
       <DatePicker
         name="date"

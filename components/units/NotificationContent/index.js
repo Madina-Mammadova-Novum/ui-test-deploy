@@ -50,7 +50,7 @@ const NotificationContent = () => {
       return (
         <>
           {data.map(printNotificationList)}
-          <Loader className="h-5 w-5 absolute bottom-2.5" />
+          <Loader className="absolute bottom-2.5 h-5 w-5" />
         </>
       );
     if (!data.length) return <NotificationPlaceholder containerClass="mx-8" text="No notifications yet" />;
@@ -58,7 +58,7 @@ const NotificationContent = () => {
   }, [data, loading]);
 
   return (
-    <div onScroll={handleScroll} className="overflow-y-auto max-h-[calc(100vh-35vh)]">
+    <div onScroll={handleScroll} className="max-h-[calc(100vh-35vh)] overflow-y-auto">
       {printNotifications}
     </div>
   );

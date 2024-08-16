@@ -14,7 +14,7 @@ const NavTreeBody = ({ list, toggle, className = '' }) => {
   return (
     <ul
       ref={ref}
-      className={`overflow-hidden w-full transition-all relative pr-5 pl-8 ${className}`}
+      className={`relative w-full overflow-hidden pl-8 pr-5 transition-all ${className}`}
       style={{ height: toggle ? `${ref?.current?.scrollHeight}px` : '0px' }}
     >
       {list?.map(printLink)}

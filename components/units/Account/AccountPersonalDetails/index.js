@@ -70,17 +70,17 @@ const AccountPersonalDetails = ({ user = {} }) => {
           </ModalWindow>
         </div>
       </FieldsetHeader>
-      <span className="text-sm text-black font-bold inline-flex gap-1 items-center whitespace-nowrap">
+      <span className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-bold text-black">
         <StatusIndicator status={pendingRequest ? 'PendingRequest' : 'Active'} />
         {pendingRequest ? 'Update Requested' : 'Active'}
       </span>
-      <FieldsetContentWrapper className="grid grid-cols-1 3md:grid-cols-2 pt-2.5">
+      <FieldsetContentWrapper className="grid grid-cols-1 pt-2.5 3md:grid-cols-2">
         <FieldsetContent className="col-start-1">
           <TextRow title="First Name">{firstName || '—'}</TextRow>
           <TextRow title="Last Name">{lastName || '—'}</TextRow>
           <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
-        <FieldsetContent className="col-start-1 3md:col-start-2 pt-5 3md:pt-0">
+        <FieldsetContent className="col-start-1 pt-5 3md:col-start-2 3md:pt-0">
           <TextRow title="Primary phone number">{printPhoneNumber(primaryPhone)}</TextRow>
           <TextRow title="Secondary phone number">{printPhoneNumber(secondaryPhone)}</TextRow>
         </FieldsetContent>

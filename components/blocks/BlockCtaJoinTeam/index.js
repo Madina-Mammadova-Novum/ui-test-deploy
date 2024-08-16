@@ -22,18 +22,18 @@ const BlockJoinTeam = ({ title, shortDescription, button, coverImage }) => {
 
   return (
     <section className="mb-28 sm:mb-44 2xl:mb-64">
-      <div className="grid grid-rows-2 items-stretch gap-y-3 2md:grid-rows-1 2md:grid-cols-2 2md:gap-x-5">
-        <div className="col-span-1 relative flex flex-col justify-center items-center gap-y-5 px-4 bg-primary rounded-[8px] sm:px-10 2md:order-2 lg:max-w-[848px] lg:max-h-[832px] overflow-hidden">
+      <div className="grid grid-rows-2 items-stretch gap-y-3 2md:grid-cols-2 2md:grid-rows-1 2md:gap-x-5">
+        <div className="bg-primary relative col-span-1 flex flex-col items-center justify-center gap-y-5 overflow-hidden rounded-[8px] px-4 sm:px-10 2md:order-2 lg:max-h-[832px] lg:max-w-[848px]">
           {title && (
-            <h2 className=" text-white text-2xl font-bold text-center max-w-[312px] sm:text-4xl sm:max-w-none md:text-5xl">
+            <h2 className="max-w-[312px] text-center text-2xl font-bold text-white sm:max-w-none sm:text-4xl md:text-5xl">
               {title}
             </h2>
           )}
-          {shortDescription && <p className="text-white text-sm text-center 2md:max-w-[477px]">{shortDescription}</p>}
+          {shortDescription && <p className="text-center text-sm text-white 2md:max-w-[477px]">{shortDescription}</p>}
           {button && <Button button={button} onClick={() => setShowModal(true)} />}
         </div>
         {coverImage && (
-          <div className=" col-span-1 relative rounded-[10px] sm:rounded-[20px] 2md:order-1 lg:max-w-[848px] lg:max-h-[832px] overflow-hidden">
+          <div className="relative col-span-1 overflow-hidden rounded-[10px] sm:rounded-[20px] 2md:order-1 lg:max-h-[832px] lg:max-w-[848px]">
             <Image
               width={848}
               height={832}

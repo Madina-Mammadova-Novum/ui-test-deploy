@@ -50,15 +50,15 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
 
   return (
     <div
-      className="relative box-border transition-all pt-5 pb-3 duration-500 overflow-hidden rounded-lg border border-solid border-grey-darker px-5 py-3"
+      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 pb-3 pt-5 transition-all duration-500"
       ref={contentRef}
       style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '64px' }}
     >
       <div className="flex justify-between">
-        <h5 className="text-sm text-black font-semibold">Upload a new file</h5>
+        <h5 className="text-sm font-semibold text-black">Upload a new file</h5>
         <button
           type="button"
-          className={`flex items-center gap-1 text-black ${toggle && 'text-blue'} font-medium text-xsm`}
+          className={`flex items-center gap-1 text-black ${toggle && 'text-blue'} text-xsm font-medium`}
           onClick={handleToggle}
         >
           {printTextCta} <AngleDownSVG className={`fill-black ${toggle && 'rotate-180 fill-blue'}`} />
@@ -68,7 +68,7 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
       <FormProvider {...methods}>
         <FormManager
           submitAction={handleSubmit}
-          className={`${toggle ? 'opacity-100' : 'py-0 opacity-0'} transition-all pt-5 duration-500 `}
+          className={`${toggle ? 'opacity-100' : 'py-0 opacity-0'} pt-5 transition-all duration-500`}
           submitButton={{
             text: 'Upload file',
             variant: 'secondary',
