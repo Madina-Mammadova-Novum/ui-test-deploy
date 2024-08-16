@@ -714,3 +714,9 @@ export function responseAddSavedSearchAdapter({ data }) {
 
   return data;
 }
+
+export function responseGetSavedSearchAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}

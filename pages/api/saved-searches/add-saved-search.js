@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`/v1/charterer/savedsearches`),
+    path: getApiURL(`v1/charterer/savedsearches`),
     dataAdapter: responseAddSavedSearchAdapter,
     requestMethod: 'POST',
     options: { headers: Authorization(token) },

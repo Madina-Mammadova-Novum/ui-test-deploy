@@ -52,6 +52,7 @@ import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
 import FavoriteSearchForm from '@/units/FavoriteSearchForm';
+import FavoriteSearchList from '@/units/FavoriteSearchList';
 import UploadForm from '@/units/FileUpload';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import File from '@/units/FileUpload/File';
@@ -213,4 +214,5 @@ export {
   DynamicCountdownTimer,
   Map,
   FavoriteSearchForm,
+  FavoriteSearchList,
 };

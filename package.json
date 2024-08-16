@@ -61,6 +61,7 @@
     "@babel/runtime": "^7.22.5",
     "@hookform/devtools": "^4.3.0",
     "@hookform/resolvers": "2.8.5",
+    "@iconscout/react-unicons-solid": "^1.0.2",
     "@microsoft/signalr": "^7.0.9",
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.2",

@@ -12,7 +12,7 @@ import { FormManager } from '@/common';
 import { Button, Modal } from '@/elements';
 import { searchForTankerSchema } from '@/lib/schemas';
 import { getSearchSelector } from '@/store/selectors';
-import { FavoriteSearchForm, SearchFormFields } from '@/units';
+import { FavoriteSearchForm, FavoriteSearchList, SearchFormFields } from '@/units';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
@@ -21,6 +21,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
 
   const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
   const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
+  const [isViewFavoriteSearchesOpened, setIsViewFavoriteSearchesOpened] = useState(false);
 
   const schema = yup.object({ ...searchForTankerSchema() });
   const methods = useHookFormParams({ schema, state: prefilledSearchData });
@@ -35,14 +36,22 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     setProductState([0]);
   };
 
-  const handleOpenModal = (e) => {
+  const handleOpenModal = (e, modalType) => {
     e?.stopPropagation();
-    setIsAddFavoriteOpened(true);
+
+    if (modalType === 'addFavorite') {
+      setIsAddFavoriteOpened(true);
+      setIsViewFavoriteSearchesOpened(false);
+    } else if (modalType === 'viewFavorites') {
+      setIsAddFavoriteOpened(false);
+      setIsViewFavoriteSearchesOpened(true);
+    }
   };
 
   const handleCloseModal = (e) => {
     e?.stopPropagation();
     setIsAddFavoriteOpened(false);
+    setIsViewFavoriteSearchesOpened(false);
   };
 
   const searchFormData = methods.getValues();
@@ -51,14 +60,21 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     const isValid = await methods.trigger();
 
     if (isValid) {
-      handleOpenModal();
+      handleOpenModal(null, 'addFavorite');
     }
   };
 
+  const handleViewFavoriteSearches = () => {
+    handleOpenModal(null, 'viewFavorites');
+  };
   return (
     <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
       <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
         <FavoriteSearchForm title="Add to Favorites" state={searchFormData} closeModal={handleCloseModal} />
+      </Modal>
+
+      <Modal opened={isViewFavoriteSearchesOpened} onClose={handleCloseModal}>
+        <FavoriteSearchList />
       </Modal>
 
       <FormProvider {...methods}>
@@ -82,7 +98,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
               />
               <Button
                 buttonProps={{ text: 'View Favorite Searches', variant: 'primary', size: 'medium' }}
-                onClick={handleResetFields}
+                onClick={handleViewFavoriteSearches}
               />
             </div>
           )}
