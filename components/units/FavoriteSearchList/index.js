@@ -6,6 +6,7 @@ import { UisAngleDoubleRight, UisFavorite, UisObjectGroup, UisSchedule } from '@
 
 import PaginationComponent from '../PaginationComponent';
 
+import BellSVG from '@/assets/images/bell.svg';
 import { Button, Loader, TextWithLabel, Title } from '@/elements';
 import { getSavedSearches } from '@/services/savedSearch';
 import { transformDate } from '@/utils/date';
@@ -30,19 +31,24 @@ const FavoriteSearchList = () => {
       errorToast(error?.title, error?.message);
     }
   };
+
   useEffect(() => {
     initFetch();
   }, []);
+
   return (
-    <div className="relative flex flex-col gap-4 pb-16">
-      <Title level="2" className="mb-2 flex items-center gap-2 text-lg font-bold capitalize text-black">
+    <div className="relative flex flex-col gap-2 pb-12 lg:gap-4 lg:pb-16">
+      <Title level="2" className="mb-2 flex items-center gap-2 text-sm font-bold capitalize text-black lg:text-lg">
         <UisFavorite size="24" color="#072d46" />
         Favorite Searches
       </Title>
 
       {isLoading && (
-        <div className="spinner-border text-primary" role="status">
-          <Loader className="size-10" />
+        <div
+          className="spinner-border text-primary flex h-[36rem] w-[22.1875rem] items-center justify-center"
+          role="status"
+        >
+          <Loader className="size-16" />
         </div>
       )}
       {!isLoading &&
@@ -61,7 +67,7 @@ const FavoriteSearchList = () => {
                   text={loadPort.locode}
                   countryCode={loadPort.countryCodeISO2}
                 />
-                <UisAngleDoubleRight size="75" color="#072d46" />
+                <UisAngleDoubleRight size="60" color="#072d46" />
                 <TextWithLabel
                   customStyles="!max-w-[6.625rem] !w-full"
                   textGroupStyle="!text-base"
@@ -70,24 +76,37 @@ const FavoriteSearchList = () => {
                 />
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 text-xsm font-bold text-black lg:text-sm">
                 <span>{transformDate(laycanStart, 'MMM dd, yyyy')}</span>
-                <UisSchedule size="30" color="#072d46" />
+                <UisSchedule size="24" color="#072d46" />
 
                 <span>{transformDate(laycanEnd, 'MMM dd, yyyy')}</span>
               </div>
 
               <div className="mt-2 flex gap-1">
-                <span className="flex items-center justify-center gap-2 rounded-full border border-solid border-black p-3 text-black">
-                  <UisObjectGroup size="30" color="#072d46" />
+                <span className="flex items-center justify-center gap-2 rounded-full border border-solid border-black p-3 text-xsm font-bold text-black">
+                  <UisObjectGroup size="24" color="#072d46" />
                   {cargoTypeName}
                 </span>
               </div>
             </div>
 
             <div className="mt-4 flex gap-2">
-              <Button buttonProps={{ text: 'Run', size: 'medium', variant: 'primary' }} />
-              <Button buttonProps={{ text: 'Delete Search', size: 'medium', variant: 'delete' }} />
+              <Button
+                customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
+                buttonProps={{ text: 'Use Search', size: 'medium', variant: 'primary' }}
+              />
+              <Button
+                customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
+                buttonProps={{ text: 'Delete Search', size: 'medium', variant: 'delete' }}
+              />
+              <Button
+                buttonProps={{
+                  icon: { before: <BellSVG size="30" /> },
+                  size: 'medium',
+                  variant: 'tertiary',
+                }}
+              />
             </div>
           </div>
         ))}
