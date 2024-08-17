@@ -32,7 +32,7 @@ steps:
     inputs:
       pollingTimeoutSec: '300'
 
-  # set chatgpt reviwer    
+  # set chatgpt reviwer
   - checkout: self
     persistCredentials: true
   - task: GPTPRReviewer@0
