@@ -8,18 +8,18 @@ import PaginationComponent from '../PaginationComponent';
 
 import BellSVG from '@/assets/images/bell.svg';
 import { Button, Loader, TextWithLabel, Title } from '@/elements';
-import { getSavedSearches } from '@/services/savedSearch';
+import { deleteSavedSearch, getSavedSearches } from '@/services/savedSearch';
 import { Notes } from '@/units';
 import { transformDate } from '@/utils/date';
 import { calculateAmountOfPages } from '@/utils/helpers';
-import { errorToast, useFilters } from '@/utils/hooks';
+import { errorToast, successToast, useFilters } from '@/utils/hooks';
 
 const FavoriteSearchList = () => {
   const [savedSearches, setSavedSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [recordsTotals, setRecordsTotals] = useState(0);
 
-  const { currentPage, handlePageChange, perPage } = useFilters({
+  const { currentPage, handlePageChange, handleSelectedPageChange, perPage } = useFilters({
     itemsPerPage: 2,
     initialPage: 1,
     data: savedSearches,
@@ -33,7 +33,6 @@ const FavoriteSearchList = () => {
       data: searchResponse,
       status,
       error,
-      recordsFiltered,
       recordsTotal,
     } = await getSavedSearches({
       skip,
@@ -42,8 +41,29 @@ const FavoriteSearchList = () => {
 
     if (status === 200) {
       setSavedSearches([...searchResponse]);
-      const totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
+      const totalPages = calculateAmountOfPages(recordsTotal, perPage);
       setRecordsTotals(totalPages || 0);
+    } else if (error) {
+      errorToast(error?.title, error?.message);
+    }
+    setIsLoading(false);
+  };
+
+  const deleteSearchHandler = async (searchId) => {
+    setIsLoading(true);
+
+    const { message, status, error } = await deleteSavedSearch({
+      searchId,
+    });
+
+    if (status === 204) {
+      if (recordsTotals > 2) {
+        handleSelectedPageChange({ value: 1 });
+      } else {
+        fetchSearches(1, perPage);
+      }
+
+      successToast(message);
     } else if (error) {
       errorToast(error?.title, error?.message);
     }
@@ -72,7 +92,7 @@ const FavoriteSearchList = () => {
 
       {!isLoading &&
         (savedSearches.length > 0 ? (
-          savedSearches?.map(({ name, dischargePort, loadPort, cargoTypeName, laycanStart, laycanEnd }) => (
+          savedSearches?.map(({ name, dischargePort, loadPort, cargoTypeName, laycanStart, laycanEnd, id }) => (
             <div className="flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd">
               {name && (
                 <Title level="2" className="text-sm font-bold capitalize text-black">
@@ -119,6 +139,8 @@ const FavoriteSearchList = () => {
                 <Button
                   customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
                   buttonProps={{ text: 'Delete Search', size: 'medium', variant: 'delete' }}
+                  onClick={() => deleteSearchHandler(id)}
+                  disabled={isLoading}
                 />
                 <Button
                   customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
