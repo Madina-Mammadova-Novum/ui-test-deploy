@@ -6,16 +6,14 @@ import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
   const token = getCookieFromServer('session-access-token', req);
-  const { query = '', skip = 1, pageSize = 2, sortColumnDirection = 'asc' } = req.query;
+  const { searchId } = req.query;
 
   return responseHandler({
     req,
     res,
-    path: getApiURL(
-      `v1/charterer/savedsearches?Skip=${skip}&PageSize=${pageSize}&SortColumnDirection=${sortColumnDirection}${query && `&query=${query}`}`
-    ),
+    path: getApiURL(`v1/charterer/savedsearches/${searchId}`),
     dataAdapter: responseGetSavedSearchAdapter,
-    requestMethod: 'GET',
+    requestMethod: 'DELETE',
     options: { headers: Authorization(token) },
   });
 }
