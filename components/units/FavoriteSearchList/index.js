@@ -63,7 +63,7 @@ const FavoriteSearchList = () => {
 
       {isLoading && (
         <div
-          className="spinner-border text-primary flex h-[36rem] w-[22.1875rem] items-center justify-center"
+          className="spinner-border text-primary flex h-[33rem] w-[22.3rem] items-center justify-center"
           role="status"
         >
           <Loader className="size-16" />
@@ -133,7 +133,7 @@ const FavoriteSearchList = () => {
           ))
         ) : (
           <div
-            className="spinner-border text-primary flex h-[36rem] w-[22.1875rem] items-center justify-center"
+            className="spinner-border text-primary flex h-[33rem] w-[22.3rem] items-center justify-center"
             role="status"
           >
             <Notes
