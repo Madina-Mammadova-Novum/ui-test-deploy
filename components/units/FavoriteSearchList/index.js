@@ -44,11 +44,10 @@ const FavoriteSearchList = () => {
       setSavedSearches([...searchResponse]);
       const totalPages = calculateAmountOfPages(recordsTotal, recordsFiltered);
       setRecordsTotals(totalPages || 0);
-      setIsLoading(false);
     } else if (error) {
-      setIsLoading(false);
       errorToast(error?.title, error?.message);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
