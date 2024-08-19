@@ -26,9 +26,8 @@ const FavoriteSearchList = () => {
     sortValue: 'asc',
   });
 
-  const fetchSearches = async (page, pageSize) => {
+  const fetchSearches = async (skip, pageSize) => {
     setIsLoading(true);
-    const skip = page - 1;
 
     const {
       data: searchResponse,

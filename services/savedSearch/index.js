@@ -10,7 +10,7 @@ export async function addToSavedSearch({ data }) {
   };
 }
 
-export async function getSavedSearches({ skip = 0, pageSize = 2, sortColumnDirection = 'asc', query = '' }) {
+export async function getSavedSearches({ skip = 1, pageSize = 2, sortColumnDirection = 'asc', query = '' }) {
   const response = await getData(
     `saved-searches?skip=${skip}&pageSize=${pageSize}&sortColumnDirection=${sortColumnDirection}${query && `&query=${query}`}`
   );

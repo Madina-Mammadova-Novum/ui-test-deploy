@@ -6,7 +6,7 @@ import { getCookieFromServer } from '@/utils/helpers';
 
 export default async function handler(req, res) {
   const token = getCookieFromServer('session-access-token', req);
-  const { query = '', skip = 0, pageSize = 10, sortColumnDirection = 'asc' } = req.query;
+  const { query = '', skip = 1, pageSize = 2, sortColumnDirection = 'asc' } = req.query;
 
   return responseHandler({
     req,
