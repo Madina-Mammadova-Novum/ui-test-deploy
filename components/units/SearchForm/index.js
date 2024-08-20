@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -67,6 +67,12 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const handleViewFavoriteSearches = () => {
     handleOpenModal(null, 'viewFavorites');
   };
+
+  useEffect(() => {
+    if (prefilledSearchData) {
+      methods.reset(prefilledSearchData);
+    }
+  }, [prefilledSearchData]);
   return (
     <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
       <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
@@ -74,7 +80,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
       </Modal>
 
       <Modal opened={isViewFavoriteSearchesOpened} onClose={handleCloseModal}>
-        <FavoriteSearchList />
+        <FavoriteSearchList onClose={handleCloseModal} />
       </Modal>
 
       <FormProvider {...methods}>

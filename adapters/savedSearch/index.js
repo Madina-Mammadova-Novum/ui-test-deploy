@@ -1,7 +1,8 @@
 export const addToSavedSearchAdapter = ({ data }) => {
   if (!data) return {};
 
-  const { dischargeTerminal, loadTerminal, searchName, cargoType, laycanStart, laycanEnd, products } = data;
+  const { dischargeTerminal, loadTerminal, searchName, cargoType, laycanStart, laycanEnd, products, isNotification } =
+    data;
 
   const cargoes = products.map((product) => ({
     productId: product.product.value,
@@ -14,6 +15,7 @@ export const addToSavedSearchAdapter = ({ data }) => {
     dischargeTerminalId: dischargeTerminal.value,
     loadTerminalId: loadTerminal.value,
     name: searchName,
+    isNotification,
     cargoTypeId: cargoType.value,
     cargoes,
     laycanStart: new Date(laycanStart),
