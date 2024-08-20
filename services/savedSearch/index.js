@@ -1,5 +1,5 @@
 import { addToSavedSearchAdapter } from '@/adapters/savedSearch';
-import { deleteData, getData, postData } from '@/utils/dataFetching';
+import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function addToSavedSearch({ data }) {
   const body = addToSavedSearchAdapter({ data });
@@ -31,3 +31,24 @@ export const deleteSavedSearch = async ({ searchId }) => {
     ...response,
   };
 };
+
+export const getSavedSearchDetail = async ({ searchId }) => {
+  const response = await getData(`saved-searches/${searchId}/detail`);
+
+  return {
+    ...response,
+  };
+};
+
+export async function updateSavedSearch({ searchId, data }) {
+  const body = data;
+  const response = await putData(`saved-searches/${searchId}/update-search`, body);
+
+  if (!response.error) {
+    response.message = 'success msg TODO';
+    response.messageDescription = 'success msg desc TODO';
+  }
+  return {
+    ...response,
+  };
+}

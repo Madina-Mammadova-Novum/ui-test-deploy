@@ -19,8 +19,10 @@ const schema = yup.object({
 const FavoriteSearchForm = ({ state, title, closeModal }) => {
   const methods = useHookFormParams({ schema });
 
-  const onSubmit = async ({ searchName }) => {
-    const data = { ...state, searchName };
+  const { setValue, getValues } = methods;
+
+  const onSubmit = async ({ searchName, isNotification }) => {
+    const data = { ...state, searchName, isNotification };
 
     const { status, error, message: successMessage } = await addToSavedSearch({ data });
     if (!error) closeModal();
@@ -30,6 +32,11 @@ const FavoriteSearchForm = ({ state, title, closeModal }) => {
       closeModal();
     }
     if (error) errorToast(error?.title, error?.message);
+  };
+
+  const handleIsNotification = (event) => {
+    const { checked } = event.target;
+    setValue('isNotification', checked, { shouldValidate: true });
   };
 
   return (
@@ -53,9 +60,9 @@ const FavoriteSearchForm = ({ state, title, closeModal }) => {
         />
 
         <CheckBoxInput
-          name="saveNotification"
-          // onChange={handleSaveNotif}
-          // checked={saveNotif}
+          name="isNotification"
+          onChange={handleIsNotification}
+          checked={getValues('isNotification')}
           labelStyles="text-black text-xsm"
         >
           Would you like to receive notifications related to this favorite search?
