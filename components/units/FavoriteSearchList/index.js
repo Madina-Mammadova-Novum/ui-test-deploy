@@ -150,7 +150,7 @@ const FavoriteSearchList = ({ onClose }) => {
               <div
                 className={classnames(
                   'flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd',
-                  status === 'Active' && 'bg-gray-darker'
+                  status !== 'Active' && 'bg-gray-darker'
                 )}
               >
                 {name && (
