@@ -1,5 +1,6 @@
 const regex = /^(?:https?:\/\/)?([^:/\n]+)/i;
 const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
+const nrExternals = require('@newrelic/next/load-externals');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -65,6 +66,9 @@ const nextConfig = {
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['newrelic'],
+  },
   webpack(config) {
     config.module.rules.push(
       {
@@ -86,6 +90,7 @@ const nextConfig = {
         ],
       }
     );
+    nrExternals(config);
     return config;
   },
 };
