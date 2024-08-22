@@ -1,12 +1,15 @@
 // eslint-disable-next-line
 'use strict';
 
+require('dotenv').config();
+
 /**
  * New Relic agent configuration.
  *
  * See lib/config/default.js in the agent distribution for a more complete
  * description of configuration variables and their potential values.
  */
+
 exports.config = {
   /**
    * This application_logging block shows the default configuration. That is,
@@ -18,8 +21,8 @@ exports.config = {
    * by the `newrelic` agent and ship logs to New Relic so that they can be
    * viewed in the dashboard.
    */
-  app_name: ['shiplink-frontend-ui'],
-  license_key: 'eu01xx22e614a2f80ab4b2045f8f532aa258NRAL',
+  app_name: [process.env.IDENTITY_NEW_RELIC_APP_NAME],
+  license_key: process.env.IDENTITY_NEW_RELIC_LICENSE_KEY,
   application_logging: {
     forwarding: {
       enabled: true,

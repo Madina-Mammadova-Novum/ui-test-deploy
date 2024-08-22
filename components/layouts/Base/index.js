@@ -5,10 +5,12 @@ import { BaseLayoutPropTypes } from '@/lib/types';
 import '@/styles/index.css';
 
 export default async function BaseLayout({ children }) {
-  if (newrelic.agent.collector.isConnected() === false) {
-    await new Promise((resolve) => {
-      newrelic.agent.on('connected', resolve);
-    });
+  if (process.env.NODE_ENV === 'production') {
+    if (!newrelic.agent.collector.isConnected()) {
+      await new Promise((resolve) => {
+        newrelic.agent.on('connected', resolve);
+      });
+    }
   }
 
   const browserTimingHeader = newrelic.getBrowserTimingHeader({

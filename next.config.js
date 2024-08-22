@@ -23,6 +23,12 @@ const nextConfig = {
       },
     ];
   },
+  experimental: {
+    // Without this setting, the Next.js compilation step will routinely
+    // try to import files such as `LICENSE` from the `newrelic` module.
+    // See https://nextjs.org/docs/app/api-reference/next-config-js/serverComponentsExternalPackages.
+    serverComponentsExternalPackages: ['newrelic'],
+  },
   crossOrigin: 'anonymous',
   reactStrictMode: false,
   swcMinify: true,
@@ -52,6 +58,8 @@ const nextConfig = {
     IDENTITY_API_CLIENT_SECRET: process.env.IDENTITY_API_CLIENT_SECRET || '',
     IDENTITY_API_GRANT_TYPE: process.env.IDENTITY_API_GRANT_TYPE || '',
     IDENTITY_TOKEN_GRANT_TYPE: process.env.IDENTITY_TOKEN_GRANT_TYPE || '',
+    IDENTITY_NEW_RELIC_APP_NAME: process.env.IDENTITY_NEW_RELIC_APP_NAME || '',
+    IDENTITY_NEW_RELIC_LICENSE_KEY: process.env.IDENTITY_NEW_RELIC_LICENSE_KEY || '',
     PREVIEW_SECRET: process.env.PREVIEW_SECRET || '',
   },
   images: {
@@ -65,9 +73,6 @@ const nextConfig = {
     ],
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],
-  },
-  experimental: {
-    serverComponentsExternalPackages: ['newrelic'],
   },
   webpack(config) {
     config.module.rules.push(
