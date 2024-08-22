@@ -1,4 +1,4 @@
-import { addToSavedSearchAdapter } from '@/adapters/savedSearch';
+import { addToSavedSearchAdapter, updateSavedSearchAdapter } from '@/adapters/savedSearch';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
 
 export async function addToSavedSearch({ data }) {
@@ -41,12 +41,13 @@ export const getSavedSearchDetail = async ({ searchId }) => {
 };
 
 export async function updateSavedSearch({ searchId, data }) {
-  const body = data;
+  const body = updateSavedSearchAdapter({ data });
+
   const response = await putData(`saved-searches/${searchId}/update-search`, body);
 
   if (!response.error) {
-    response.message = 'success msg TODO';
-    response.messageDescription = 'success msg desc TODO';
+    response.message = 'Notification updated successfully';
+    response.messageDescription = 'The notification content for your search has been updated successfully.';
   }
   return {
     ...response,

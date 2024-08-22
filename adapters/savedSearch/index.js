@@ -22,3 +22,21 @@ export const addToSavedSearchAdapter = ({ data }) => {
     laycanEnd: new Date(laycanEnd),
   };
 };
+
+export const updateSavedSearchAdapter = ({ data }) => {
+  if (!data) return {};
+
+  const { dischargeTerminal, loadTerminal, searchName, cargoType, laycanStart, laycanEnd, cargoes, isNotification } =
+    data;
+
+  return {
+    dischargeTerminalId: dischargeTerminal.id,
+    loadTerminalId: loadTerminal.id,
+    name: searchName,
+    isNotification,
+    cargoTypeId: cargoType.id,
+    cargoes,
+    laycanStart,
+    laycanEnd,
+  };
+};

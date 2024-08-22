@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { UisAngleDoubleRight, UisFavorite, UisObjectGroup, UisSchedule } from '@iconscout/react-unicons-solid';
+import classnames from 'classnames';
 
 import PaginationComponent from '../PaginationComponent';
 
@@ -66,6 +67,7 @@ const FavoriteSearchList = ({ onClose }) => {
     if (status === 204) {
       if (recordsTotals > 2) {
         handleSelectedPageChange({ value: 1 });
+        if (currentPage) fetchSearches(1, perPage);
       } else {
         fetchSearches(1, perPage);
       }
@@ -99,19 +101,20 @@ const FavoriteSearchList = ({ onClose }) => {
     const selectedSearch = { ...savedSearches[index] };
     const nextSavedSearch = { ...selectedSearch, isNotification: !selectedSearch.isNotification };
 
-    const { message, status, error } = await updateSavedSearch({
+    const { message, messageDescription, status, error } = await updateSavedSearch({
       searchId,
       data: nextSavedSearch,
     });
 
-    if (status === 204) {
+    if (status === 200) {
       if (recordsTotals > 2) {
         handleSelectedPageChange({ value: 1 });
+        if (currentPage) fetchSearches(1, perPage);
       } else {
         fetchSearches(1, perPage);
       }
 
-      successToast(message);
+      successToast(message, messageDescription);
     } else if (error) {
       errorToast(error?.title, error?.message);
     }
@@ -141,8 +144,16 @@ const FavoriteSearchList = ({ onClose }) => {
       {!isLoading &&
         (savedSearches.length > 0 ? (
           savedSearches?.map(
-            ({ name, dischargePort, loadPort, cargoTypeName, laycanStart, laycanEnd, id, isNotification }, index) => (
-              <div className="flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd">
+            (
+              { name, id, laycanStart, laycanEnd, status, isNotification, loadTerminal, dischargeTerminal, cargoType },
+              index
+            ) => (
+              <div
+                className={classnames(
+                  'flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd',
+                  status !== 'Active' && 'bg-gray-darker'
+                )}
+              >
                 {name && (
                   <Title level="2" className="text-sm font-bold capitalize text-black">
                     {name}
@@ -153,15 +164,17 @@ const FavoriteSearchList = ({ onClose }) => {
                     <TextWithLabel
                       customStyles="!max-w-[6.625rem] !w-full"
                       textGroupStyle="!text-base"
-                      text={loadPort.locode}
-                      countryCode={loadPort.countryCodeISO2}
+                      text={loadTerminal.port.locode}
+                      countryCode={loadTerminal.port.country?.codeISO2 || loadTerminal.port.locode.slice(0, 2)}
                     />
                     <UisAngleDoubleRight size="60" color="#072d46" />
                     <TextWithLabel
                       customStyles="!max-w-[6.625rem] !w-full"
                       textGroupStyle="!text-base"
-                      text={dischargePort.locode}
-                      countryCode={dischargePort.countryCodeISO2}
+                      text={dischargeTerminal.port.locode}
+                      countryCode={
+                        dischargeTerminal.port.country?.codeISO2 || dischargeTerminal.port.locode.slice(0, 2)
+                      }
                     />
                   </div>
 
@@ -175,7 +188,7 @@ const FavoriteSearchList = ({ onClose }) => {
                   <div className="mt-2 flex gap-1">
                     <span className="flex items-center justify-center gap-2 rounded-full border border-solid border-black p-3 text-xsm font-bold text-black">
                       <UisObjectGroup size="24" color="#072d46" />
-                      {cargoTypeName}
+                      {cargoType.name}
                     </span>
                   </div>
                 </div>
@@ -196,7 +209,7 @@ const FavoriteSearchList = ({ onClose }) => {
                   <Button
                     customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
                     buttonProps={{
-                      icon: { before: <BellSVG size="30" style={{ color: 'red' }} /> },
+                      icon: { before: <BellSVG size="30" /> },
                       size: 'medium',
                       variant: isNotification ? 'primary' : 'tertiary',
                       iconContainerStyles: isNotification ? 'text-blue' : '',

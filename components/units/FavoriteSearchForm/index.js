@@ -22,7 +22,7 @@ const FavoriteSearchForm = ({ state, title, closeModal }) => {
   const { setValue, getValues } = methods;
 
   const onSubmit = async ({ searchName, isNotification }) => {
-    const data = { ...state, searchName, isNotification };
+    const data = { ...state, searchName, isNotification: isNotification || false };
 
     const { status, error, message: successMessage } = await addToSavedSearch({ data });
     if (!error) closeModal();
