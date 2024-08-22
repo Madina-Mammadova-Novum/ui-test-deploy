@@ -67,6 +67,7 @@ const FavoriteSearchList = ({ onClose }) => {
     if (status === 204) {
       if (recordsTotals > 2) {
         handleSelectedPageChange({ value: 1 });
+        if (currentPage) fetchSearches(1, perPage);
       } else {
         fetchSearches(1, perPage);
       }
