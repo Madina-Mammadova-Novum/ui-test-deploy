@@ -71,12 +71,13 @@ function userCompanyDetailsAdapter({ data, role }) {
     cargoesDetails,
     hasPendingCompanyInfoUpdateRequest,
     pending,
+    numberOfVessels,
   } = data;
 
   const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
 
   const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
-  const formattedImos = companyImosAdapter({ data: imos });
+  const formattedImos = companyImosAdapter({ data: imos, numberOfVessels });
 
   const getRoleBasedData = () => {
     const { isOwner, isCharterer } = getRoleIdentity({ role });
@@ -146,11 +147,11 @@ export function countryAdapter({ data }) {
   };
 }
 
-export function companyImosAdapter({ data }) {
+export function companyImosAdapter({ data, numberOfVessels }) {
   if (!data) return {};
 
   return {
-    countOfTankers: data?.length,
+    countOfTankers: numberOfVessels,
     listOfTankers: data,
   };
 }
