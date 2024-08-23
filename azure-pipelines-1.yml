@@ -36,6 +36,7 @@ steps:
   - checkout: self
     persistCredentials: true
   - task: GPTPRReviewer@0
+    continueOnError: true
     inputs:
       api_key_source: 'azureopenai'
       api_key: $(openai.key)
