@@ -546,7 +546,7 @@ export function sessionAdapter({ token = null }) {
   return null;
 }
 
-export function accountPeronalDataResponseAdapter({ data }) {
+export function accountPersonalDataResponseAdapter({ data }) {
   if (!data) return null;
 
   return { data };
