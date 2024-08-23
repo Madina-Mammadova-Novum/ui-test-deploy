@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import parse from 'html-react-parser';
 import { notFound } from 'next/navigation';
+import PropTypes from 'prop-types';
 
 import { legalPropAdpater } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
@@ -41,3 +42,8 @@ export default async function Home({ params }) {
     </main>
   );
 }
+
+Home.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  params: PropTypes.any.isRequired,
+};

@@ -1,6 +1,5 @@
 const regex = /^(?:https?:\/\/)?([^:/\n]+)/i;
 const domain = regex.exec(process.env.NEXT_PUBLIC_STRAPI_API_URL)[1];
-const nrExternals = require('@newrelic/next/load-externals');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -22,12 +21,6 @@ const nextConfig = {
         ],
       },
     ];
-  },
-  experimental: {
-    // Without this setting, the Next.js compilation step will routinely
-    // try to import files such as `LICENSE` from the `newrelic` module.
-    // See https://nextjs.org/docs/app/api-reference/next-config-js/serverComponentsExternalPackages.
-    serverComponentsExternalPackages: ['newrelic'],
   },
   crossOrigin: 'anonymous',
   reactStrictMode: false,
@@ -58,8 +51,6 @@ const nextConfig = {
     IDENTITY_API_CLIENT_SECRET: process.env.IDENTITY_API_CLIENT_SECRET || '',
     IDENTITY_API_GRANT_TYPE: process.env.IDENTITY_API_GRANT_TYPE || '',
     IDENTITY_TOKEN_GRANT_TYPE: process.env.IDENTITY_TOKEN_GRANT_TYPE || '',
-    IDENTITY_NEW_RELIC_APP_NAME: process.env.IDENTITY_NEW_RELIC_APP_NAME || '',
-    IDENTITY_NEW_RELIC_LICENSE_KEY: process.env.IDENTITY_NEW_RELIC_LICENSE_KEY || '',
     PREVIEW_SECRET: process.env.PREVIEW_SECRET || '',
   },
   images: {
@@ -95,7 +86,6 @@ const nextConfig = {
         ],
       }
     );
-    nrExternals(config);
     return config;
   },
 };
