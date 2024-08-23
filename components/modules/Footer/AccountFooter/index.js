@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { Copyright } from '@/elements';
 import { LegalNavigation, SocialNetworks } from '@/units';
 
@@ -12,3 +14,9 @@ export default async function AccountFooter({ socials, legal }) {
     </footer>
   );
 }
+
+AccountFooter.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  socials: PropTypes.array,
+  legal: PropTypes.array,
+};
