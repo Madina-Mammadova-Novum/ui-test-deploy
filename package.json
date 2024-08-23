@@ -4,9 +4,9 @@
   "version": "1.0.1",
   "description": "A NextJS application",
   "scripts": {
-    "develop": "cross-env NODE_OPTIONS=\"-r @newrelic/next\" next",
+    "develop": "next dev",
     "build": "next build",
-    "start": "cross-env NODE_OPTIONS=\"-r @newrelic/next\" next start",
+    "start": "next start",
     "export": "next export",
     "server": "next build && next start",
     "lint": "next lint",
