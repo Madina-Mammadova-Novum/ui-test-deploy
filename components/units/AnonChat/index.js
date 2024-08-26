@@ -298,6 +298,10 @@ const AnonChat = ({ opened }) => {
   };
 
   useEffect(() => {
+    handleClose();
+  }, []);
+
+  useEffect(() => {
     fetchCountries();
   }, []);
 
