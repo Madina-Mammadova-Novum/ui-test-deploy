@@ -4,36 +4,30 @@ import PropTypes from 'prop-types';
 
 import { linkImagePropTypes } from '@/lib/types';
 
-import { NextLink, Title } from '@/elements';
+import EnvelopeSvg from '@/assets/images/envelope.svg';
+import { Title } from '@/elements';
 import Map from '@/elements/Map';
-import { ContactUsForm } from '@/modules';
-import { SocialNetworks } from '@/units';
 
-const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, address, schedule, embedMap }) => {
-  const printPhone = (phone) => (
-    <li>
-      <NextLink href={`tel:${phone}`} className="mt-1 text-xsm">
-        {phone}
-      </NextLink>
-    </li>
-  );
-
-  const printEmail = (email) => (
-    <li>
-      <NextLink href={`mailto:${email}`} className="mt-1 text-xsm">
-        {email}
-      </NextLink>
-    </li>
-  );
+const ContactUsBlock = ({ title, subTitle, shortDescription, address, emails, embedMap }) => {
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
-        <div className="relative grid gap-4 divide-y divide-gray-darker rounded-base bg-white p-5 md:grid-cols-2 md:divide-x md:divide-y-0">
-          <div className="flex flex-col md:pr-5">
-            <ContactUsForm />
+        <div className="relative grid gap-4 divide-y divide-gray-darker rounded-base bg-white p-5 shadow-2xl md:grid-cols-2 md:divide-x md:divide-y-0">
+          <div className="flex flex-col items-center justify-center md:pr-5">
+            <div className="text-center">
+              <EnvelopeSvg className="mb-4 fill-black" />
+              <Title level={1} className="mb-2">
+                Contact Us
+              </Title>
+              {emails && emails.length > 0 && (
+                <a href={`mailto:${emails[0]}`} className="mt-2 inline-block text-blue-500 hover:underline">
+                  {emails[0]}
+                </a>
+              )}
+            </div>
           </div>
           <div className="pt-5 md:pl-5 md:pt-0">
             <Map embedMap={embedMap} title={address} />
@@ -47,24 +41,6 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, phones, emails, add
                     <p className="text-xsm">{address}</p>
                   </li>
                 </ul>
-              </div>
-              <div className="w-[150px]">
-                <Title level={4} className="mb-2">
-                  Contacts
-                </Title>
-                <ul>
-                  {phones && phones.map(printPhone)}
-                  {emails && emails.map(printEmail)}
-                </ul>
-              </div>
-              <div className="w-[330px] text-xsm md:w-[150px]">
-                <Title level={4} className="mb-2">
-                  Schedule
-                </Title>
-                <div className="flex flex-row gap-[30px] md:flex-col md:gap-5">
-                  <p>{schedule}</p>
-                  <SocialNetworks />
-                </div>
               </div>
             </div>
           </div>
