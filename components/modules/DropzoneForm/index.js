@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { DropZonePropTypes } from '@/lib/types';
@@ -25,6 +25,14 @@ const DropzoneForm = ({ showTextFields = true }) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
+
+  const fileErrorRef = useRef(null);
+
+  useEffect(() => {
+    if (Object.keys(errors).length === 1 && errors?.file) {
+      fileErrorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [errors]);
 
   useEffect(() => {
     if (!watch('file')) setFiles([]);
@@ -106,7 +114,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
         </div>
       )}
       {!files.length ? (
-        <Dropzone areaParams={getRootProps} inputParams={getInputProps}>
+        <Dropzone areaParams={getRootProps} inputParams={getInputProps} dropzoneRef={fileErrorRef}>
           {printHelpers}
         </Dropzone>
       ) : (

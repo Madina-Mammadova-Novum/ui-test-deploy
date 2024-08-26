@@ -1,4 +1,4 @@
-import { accountPeronalDataResponseAdapter } from '@/adapters/user'; // identityHandler,
+import { accountPersonalDataResponseAdapter } from '@/adapters/user'; // identityHandler,
 import { Authorization, ContentTypeJson } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     req,
     res,
     path: getApiURL(`v1/${role}/company/profile`),
-    dataAdapter: accountPeronalDataResponseAdapter,
+    dataAdapter: accountPersonalDataResponseAdapter,
     requestMethod: 'GET',
     options: { headers: { ...Authorization(token), ...ContentTypeJson() } },
   });

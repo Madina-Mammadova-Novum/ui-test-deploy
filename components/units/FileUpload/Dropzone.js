@@ -4,14 +4,14 @@ import FileUploadSVG from '@/assets/images/fileUpload.svg';
 import { Input, InputErrorMessage } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const Dropzone = ({ areaParams, inputParams, children }) => {
+const Dropzone = ({ areaParams, inputParams, children, dropzoneRef }) => {
   const {
     register,
     formState: { errors },
   } = useHookForm();
 
   return (
-    <div className="relative w-full cursor-pointer" {...areaParams()}>
+    <div className="relative w-full cursor-pointer" {...areaParams()} ref={dropzoneRef}>
       <div
         className={`relative flex h-full w-full flex-col justify-between gap-x-3 gap-y-0 rounded-md border border-dashed px-3 pt-5 ${errors?.file ? 'border-red' : 'border-gray-darker hover:border-blue'} `}
       >
