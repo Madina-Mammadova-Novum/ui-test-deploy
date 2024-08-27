@@ -63,6 +63,10 @@ const Notification = () => {
     if (token) {
       initNotifications();
     }
+
+    return () => {
+      globalNotificationService.cleanup();
+    };
   }, []);
 
   useEffect(() => {
