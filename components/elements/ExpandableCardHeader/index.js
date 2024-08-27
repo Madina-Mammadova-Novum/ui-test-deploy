@@ -51,6 +51,10 @@ const ExpandableCardHeader = ({
 
     let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
 
+    if (data.countdownData && data.isFailed) return null;
+
+    if (data.label === 'Status' && !data.isFailed) return null;
+
     if (data.countdownData) {
       textContent = <DynamicCountdownTimer {...data.countdownData} />;
     }

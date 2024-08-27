@@ -1,14 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { FailTheSubsModalContentPropTypes } from '@/lib/types';
 
 import { Button, Title } from '@/elements';
+import { getOfferDetails } from '@/services/offer';
 import { failTheSubs } from '@/services/on-subs';
+import { getCurrentDealStage } from '@/store/entities/notifications/actions';
+import { getCookieFromBrowser } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const FailTheSubsModalContent = ({ closeModal, offerId }) => {
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
 
   const handleFailTheSubs = async () => {
@@ -19,6 +25,24 @@ const FailTheSubsModalContent = ({ closeModal, offerId }) => {
       errorToast(error?.title, error?.message);
     } else {
       successToast(successMessage);
+
+      const role = getCookieFromBrowser('session-user-role');
+      const { error: offerError } = await getOfferDetails(offerId, role);
+
+      if (offerError) {
+        return;
+      }
+      const resultAction = await dispatch(getCurrentDealStage({ id: offerId, role }));
+
+      if (getCurrentDealStage.fulfilled.match(resultAction)) {
+        const { route } = resultAction.payload;
+        if (route) {
+          window.location.href = route;
+        }
+      } else {
+        console.error('Failed to get the current deal stage:', resultAction.payload);
+      }
+
       closeModal();
     }
   };
@@ -36,7 +60,11 @@ const FailTheSubsModalContent = ({ closeModal, offerId }) => {
         </div>
         <div className="w-full">
           <Button
-            buttonProps={{ text: loading ? 'Please wait...' : 'Fail the Subs', variant: 'delete', size: 'large' }}
+            buttonProps={{
+              text: loading ? 'Please wait...' : 'Fail the Subs',
+              variant: 'delete',
+              size: 'large',
+            }}
             customStyles="w-full whitespace-nowrap"
             onClick={handleFailTheSubs}
             disabled={loading}
