@@ -7,7 +7,7 @@ const NavTreeHeader = ({ children, href, className, onClick, isSubMenu }) => {
     <li
       onClick={onClick}
       aria-hidden="true"
-      className={`cursor-pointer rounded-md transition-all text-sm font-semibold flex flex-col justify-between items-center capitalize ${className}`}
+      className={`flex cursor-pointer flex-col items-center justify-between rounded-md text-sm font-semibold capitalize transition-all ${className}`}
     >
       {children}
     </li>

@@ -8,7 +8,7 @@ const CargoesInfoModal = ({ data }) => {
   const cargoesRowData = cargoesTableRowsAdapter({ data });
 
   return (
-    <div className="flex flex-col gap-y-5 w-[672px]">
+    <div className="flex w-[672px] flex-col gap-y-5">
       <Title level="3">Cargoes chartered in the last 6 months</Title>
       <Table headerData={recentActiveCargoesHeader} rows={cargoesRowData} />
     </div>

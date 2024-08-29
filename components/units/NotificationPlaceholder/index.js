@@ -5,10 +5,10 @@ import ShipSVG from '@/assets/images/ship.svg';
 const NotificationPlaceholder = ({ containerClass, text }) => {
   return (
     <figure
-      className={`${containerClass} bg-gray-light flex h-28 z-0 overflow-visible items-center justify-center gap-x-2.5 rounded-base`}
+      className={`${containerClass} z-0 flex h-28 items-center justify-center gap-x-2.5 overflow-visible rounded-base bg-gray-light`}
     >
       <ShipSVG />
-      <figcaption className="text-gray text-xsm font-semibold">{text}</figcaption>
+      <figcaption className="text-xsm font-semibold text-gray">{text}</figcaption>
     </figure>
   );
 };

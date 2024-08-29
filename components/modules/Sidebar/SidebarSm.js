@@ -12,7 +12,7 @@ const SidebarSm = ({ data, isResized, onResize }) => {
       <NextLink href="/">
         <Logo className="relative right-1.5 fill-white" />
       </NextLink>
-      <ul className="mt-4 flex flex-col items-center justify-center gap-1.5 relative">
+      <ul className="relative mt-4 flex flex-col items-center justify-center gap-1.5">
         <Button
           onClick={onResize}
           customStyles="!rounded !relative flex self-end !bg-blue-dark !p-2 !w-7 !h-7"
@@ -22,7 +22,7 @@ const SidebarSm = ({ data, isResized, onResize }) => {
             icon: {
               before: (
                 <AngleDownSVG
-                  className={`fill-white transition absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 duration-150 ${
+                  className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform fill-white transition duration-150 ${
                     isResized && '-rotate-90'
                   }`}
                 />

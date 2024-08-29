@@ -99,7 +99,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="w-full !relative">
+      <div className="!relative w-full">
         <Input
           {...register('numberOfTankers')}
           type="number"
@@ -120,7 +120,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           disabled={tankersCount <= 0 || isSubmitting}
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
         {tankers.map((item, index) => {
           const fieldName = `imos[${item}]`;
           const error = errors.imos ? errors.imos[item]?.imo : null;
@@ -144,7 +144,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                 type="button"
                 customStyles="absolute top-7 right-1.5 z-10 !p-0"
                 buttonProps={{
-                  icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                  icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
                   variant: 'tertiary',
                   size: 'small',
                 }}
@@ -156,7 +156,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
         })}
       </div>
       {tankers.length > 0 && (
-        <div className="flex justify-between mb-5">
+        <div className="mb-5 flex justify-between">
           <Button
             buttonProps={{
               text: 'Add more tankers',

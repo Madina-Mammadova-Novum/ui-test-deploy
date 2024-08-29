@@ -31,7 +31,7 @@ const AccountNestedLayout = ({ children, config }) => {
   const printActions = useMemo(() => {
     if (sorting?.options?.length) {
       return (
-        <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
+        <div className="flex flex-col-reverse items-end gap-x-5 gap-y-5 3md:flex-row 3md:items-center">
           {useExpand && <ToggleRows onToggleClick={onToggle} />}
           <Dropdown
             label="Sort by open day:"
@@ -46,7 +46,7 @@ const AccountNestedLayout = ({ children, config }) => {
 
     if (withActions) {
       return (
-        <div className="flex flex-col-reverse gap-y-5 items-end 3md:items-center 3md:flex-row gap-x-5">
+        <div className="flex flex-col-reverse items-end gap-x-5 gap-y-5 3md:flex-row 3md:items-center">
           {searchedParams?.id && <NextLink href={parentRoute}>Back to all</NextLink>}
           <ToggleRows onToggleClick={onToggle} />
           <FleetsActions />
@@ -60,15 +60,15 @@ const AccountNestedLayout = ({ children, config }) => {
   return (
     <div className="px-5">
       <section className="flex min-h-[85vh] flex-col gap-y-5">
-        <div className="flex justify-between items-center pt-5">
+        <div className="flex items-center justify-between pt-5">
           <div className="flex flex-col">
             <Label className="text-xs-sm">{data.label}</Label>
             <Title level="1">{data.title}</Title>
             {searchedParams?.id && (
-              <div className="flex items-center group">
-                <DoubleArrowSVG className="fill-blue rotate-90 group-hover:fill-blue-darker transition-all duration-500" />
+              <div className="group flex items-center">
+                <DoubleArrowSVG className="rotate-90 fill-blue transition-all duration-500 group-hover:fill-blue-darker" />
                 <NextLink
-                  className="text-blue group-hover:text-blue-darker text-xsm transition-all duration-500"
+                  className="text-xsm text-blue transition-all duration-500 group-hover:text-blue-darker"
                   href={parentRoute}
                 >
                   Back to all deals

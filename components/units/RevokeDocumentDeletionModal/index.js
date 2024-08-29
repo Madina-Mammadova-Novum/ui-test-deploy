@@ -59,7 +59,7 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
   return (
     <div className="w-[272px]">
       <ModalHeader>Revoke the request to delete the file</ModalHeader>
-      <div className="flex gap-x-2.5 mt-5">
+      <div className="mt-5 flex gap-x-2.5">
         <Button
           buttonProps={{
             text: 'Cancel',

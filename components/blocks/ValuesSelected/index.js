@@ -32,7 +32,7 @@ const renderValues = (values) => {
   switch (values[0]?.value?.valueType?.code) {
     case 'benefit':
       return (
-        <div className="flex flex-col flex-nowrap gap-y-3 lg:flex-row lg:gap-x-5 2xl:gap-x-6 mt-10 lg:mt-14 2xl:mt-16">
+        <div className="mt-10 flex flex-col flex-nowrap gap-y-3 lg:mt-14 lg:flex-row lg:gap-x-5 2xl:mt-16 2xl:gap-x-6">
           {values.map(renderValue)}
         </div>
       );

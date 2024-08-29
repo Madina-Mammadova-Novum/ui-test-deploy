@@ -686,6 +686,53 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
   };
 };
 
+export const prefilledSaveSearchDataAdapter = ({ data, isAlternative = false }) => {
+  if (!data) return [];
+
+  const {
+    laycanStart,
+    laycanEnd,
+    loadTerminal = {},
+    dischargeTerminal = {},
+    cargoType: { id: cargoId, name: cargoName } = {},
+    cargoes: products,
+  } = data;
+
+  const {
+    id: loadTerminalId,
+    name: loadTerminalName,
+    port: { id: loadPortId, name: loadPortName, locode: loadPortLocode } = {},
+  } = loadTerminal;
+
+  const {
+    id: dischargeTerminalId,
+    name: dischargeTerminalName,
+    port: { id: dischargePortId, name: dischargePortName, locode: dischargePortLocode } = {},
+  } = dischargeTerminal;
+
+  // Response data
+  return {
+    laycanStart,
+    laycanEnd,
+    loadPort: { label: `${loadPortName}, ${loadPortLocode}`, value: loadPortId },
+    loadTerminal: { label: loadTerminalName, value: loadTerminalId },
+    dischargePort: { label: `${dischargePortName}, ${dischargePortLocode}`, value: dischargePortId },
+    dischargeTerminal: { label: dischargeTerminalName, value: dischargeTerminalId },
+    cargoType: { label: cargoName, value: cargoId },
+    productsByIndex: Array.from({ length: products.length }, (_, index) => index),
+    products: products.map((product) => ({
+      density: product.referenceDensity,
+      quantity: product.quantity,
+      tolerance: product.tolerance,
+      product: {
+        label: product.name,
+        value: product.productId,
+      },
+    })),
+    isAlternative,
+  };
+};
+
 export const notifiedNegotiatingDataAdapter = ({ data, fleetId, tab }) => {
   const dataByTab = {
     counteroffers: data.map((el) => {

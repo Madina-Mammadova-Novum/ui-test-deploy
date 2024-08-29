@@ -46,14 +46,14 @@ const DeleteFleetModal = ({ closeModal, id }) => {
 
   if (initialLoading) {
     return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-1/2" />
+      <div className="h-72 w-72">
+        <Loader className="absolute top-1/2 h-8 w-8" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-y-4 max-w-[292px]">
+    <div className="flex max-w-[292px] flex-col gap-y-4">
       <Title level="2">Delete Fleet</Title>
       <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start [&>p]:!ml-0" />
       <p className="text-xsm">

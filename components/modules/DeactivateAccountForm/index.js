@@ -63,8 +63,8 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
         onClose={closeModal}
         submitButton={{ text: 'Deactivate Account', variant: 'delete', size: 'large' }}
       >
-        <div className="text-black flex flex-col gap-2.5">
-          <Title level="3" className="text-lg font-bold pr-5">
+        <div className="flex flex-col gap-2.5 text-black">
+          <Title level="3" className="pr-5 text-lg font-bold">
             {title}
           </Title>
           <p className="text-xsm">

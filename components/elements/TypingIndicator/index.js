@@ -22,12 +22,12 @@ const TypingIndicator = ({ className, size = 'md' }) => {
 
   return (
     <span className={`inline-flex items-center space-x-0.5 ${className}`}>
-      <span className={`typing-dot ${sizeProps[size]} rounded-full bg-gray-400 animate-dot-pulse ${dotState}`} />
+      <span className={`typing-dot ${sizeProps[size]} animate-dot-pulse rounded-full bg-gray-400 ${dotState}`} />
       <span
-        className={`typing-dot  ${sizeProps[size]} rounded-full bg-gray-400 animate-dot-pulse delay-100 ${dotState}`}
+        className={`typing-dot ${sizeProps[size]} animate-dot-pulse rounded-full bg-gray-400 delay-100 ${dotState}`}
       />
       <span
-        className={`typing-dot  ${sizeProps[size]} rounded-full bg-gray-400 animate-dot-pulse delay-200 ${dotState}`}
+        className={`typing-dot ${sizeProps[size]} animate-dot-pulse rounded-full bg-gray-400 delay-200 ${dotState}`}
       />
     </span>
   );

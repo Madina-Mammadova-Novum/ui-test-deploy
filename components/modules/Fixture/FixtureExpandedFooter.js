@@ -8,7 +8,7 @@ const FixtureExpandedFooter = ({ drafted }) => {
   return (
     <ExpandableRowFooter>
       <Divider />
-      <div className="flex gap-x-5 justify-between py-2.5 px-5">
+      <div className="flex justify-between gap-x-5 px-5 py-2.5">
         <div className="w-full grow">
           {drafted && (
             <Button

@@ -132,7 +132,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="md:w-full relative">
+      <div className="relative md:w-full">
         <Input
           label="Number of cargoes chartered in the last 6 months"
           disabled={isSubmitting}
@@ -162,7 +162,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="flex relative flex-col md:flex-row justify-center gap-2" key={item}>
+          <div className="relative flex flex-col justify-center gap-2 md:flex-row" key={item}>
             <Input
               {...register(`${fieldName}.imo`, {
                 onChange: (e) => {
@@ -204,7 +204,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               type="button"
               customStyles="absolute -bottom-4 md:bottom-auto md:top-1/2 md:-right-8 !p-0"
               buttonProps={{
-                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
                 variant: 'tertiary',
                 size: 'small',
               }}
@@ -218,7 +218,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
       <div ref={scrollRef} />
 
       {cargoes?.length > 0 && (
-        <div className="flex justify-between mb-5">
+        <div className="mb-5 flex justify-between">
           <Button
             buttonProps={{
               text: 'Add more cargoes',

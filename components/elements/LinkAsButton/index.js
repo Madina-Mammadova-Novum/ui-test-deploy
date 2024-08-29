@@ -19,9 +19,9 @@ const LinkAsButton = ({
     <NextLink
       href={href}
       className={classnames(
-        'text-xsm flex items-center justify-center whitespace-nowrap',
+        'flex items-center justify-center whitespace-nowrap text-xsm',
         buttonClassNames,
-        disabled && 'opacity-50 pointer-events-none',
+        disabled && 'pointer-events-none opacity-50',
         customStyles
       )}
       target={target}

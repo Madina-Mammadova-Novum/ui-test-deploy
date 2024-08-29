@@ -42,7 +42,7 @@ const FormDropdown = ({
 
         return (
           <div className={`relative ${className}`}>
-            <Label htmlFor={name} className="block text-xs-sm mb-0.5 whitespace-nowrap">
+            <Label name={name} className="mb-0.5 block whitespace-nowrap text-xs-sm">
               {label}
             </Label>
             <SimpleDropdown

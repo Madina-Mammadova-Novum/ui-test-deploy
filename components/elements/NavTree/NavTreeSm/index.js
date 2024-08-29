@@ -76,10 +76,10 @@ const NavTreeSm = ({ data, active }) => {
       href={data?.path}
       onClick={handleClick}
       isSubMenu={hasNestedLinks}
-      className="flex items-center transition-all relative"
+      className="relative flex items-center transition-all"
     >
       {data?.title && (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center">
           <Button
             buttonProps={{ icon: { before: printIcon }, variant: 'tertiary', size: 'small' }}
             customStyles={classnames(
@@ -89,13 +89,13 @@ const NavTreeSm = ({ data, active }) => {
             )}
           />
 
-          <span className="text-xxs font-bold text-white text-center">{data.title}</span>
+          <span className="text-center text-xxs font-bold text-white">{data.title}</span>
         </div>
       )}
       {showLinks && (
         <div
           ref={subTreeRef}
-          className="absolute w-auto h-auto pr-2 py-2 left-12 top-5 bg-black rounded-br-base rounded-tr-base"
+          className="absolute left-12 top-5 h-auto w-auto rounded-br-base rounded-tr-base bg-black py-2 pr-2"
         >
           {data?.items?.length > 0 && data?.items?.map(printSubTree)}
         </div>

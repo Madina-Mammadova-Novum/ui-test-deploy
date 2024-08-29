@@ -23,12 +23,11 @@ import { getRoleIdentity } from '@/utils/helpers';
 const OnSubsDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
   const { loading, role, toggle, deal } = useSelector(getOnSubsDataSelector);
-
   const { isOwner } = getRoleIdentity({ role });
 
   useEffect(() => {
     dispatch(setToggle(true));
-  }, []);
+  }, [dispatch]);
 
   const printExpandableRow = (rowData) => {
     const rowHeader = isOwner
@@ -53,7 +52,7 @@ const OnSubsDetails = ({ searchedParams }) => {
             offerId={rowData?.id}
             identity={{ isOwner }}
             scriveURL={scriveURL || ''}
-            underRecap={!rowData?.isCountdownActive || !rowData?.failedAt}
+            underRecap={!rowData?.isCountdownActive || !rowData?.failedAt || rowData?.isFailed}
             status={{ chraterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
           />
         }
@@ -69,10 +68,10 @@ const OnSubsDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
 
     return [deal].map(printExpandableRow) || <Title>Outdated notification</Title>;
-  }, [loading, toggle, searchedParams.id]);
+  }, [loading, toggle, searchedParams.id, deal]);
 
   return printContent;
 };

@@ -9,7 +9,7 @@ const TankerSlotsDetailsStatic = ({ data, helperText = null }) => {
   const { countOfTankers } = data;
 
   return (
-    <div className="w-full !relative">
+    <div className="!relative w-full">
       <Input
         type="number"
         value={countOfTankers}

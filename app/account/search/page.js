@@ -12,7 +12,7 @@ export function generateMetadata() {
 }
 
 const VesselsSearch = () => {
-  return <TankerSearch />;
+  return <TankerSearch isAccountSearch />;
 };
 
 export default VesselsSearch;

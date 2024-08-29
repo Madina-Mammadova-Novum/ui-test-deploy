@@ -10,16 +10,16 @@ const WhyWeAreBetterBlock = ({ values }) => {
     return (
       <div key={makeId()}>
         {title && (
-          <Title level="1" className="text-white text-center mb-2.5">
+          <Title level="1" className="mb-2.5 text-center text-white">
             {title}
           </Title>
         )}
         {subTitle && (
-          <Title level="3" className="text-white text-center mb-2">
+          <Title level="3" className="mb-2 text-center text-white">
             {subTitle}
           </Title>
         )}
-        {shortDescription && <p className="text-white text-xsm text-center">{shortDescription}</p>}
+        {shortDescription && <p className="text-center text-xsm text-white">{shortDescription}</p>}
       </div>
     );
   };
@@ -33,7 +33,7 @@ const WhyWeAreBetterBlock = ({ values }) => {
         width={1440}
         quality={100}
       />
-      <div className="container mx-auto max-w-[960px] grid sm:grid-cols-2 gap-10">
+      <div className="container mx-auto grid max-w-[960px] gap-10 sm:grid-cols-2">
         {values && values.map(printItem)}
       </div>
     </section>

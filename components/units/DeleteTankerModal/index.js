@@ -59,7 +59,7 @@ const DeleteTankerModal = ({ closeModal, state }) => {
   const handleSubmit = () => HANDLERS[action]();
 
   return (
-    <div className="flex flex-col gap-y-4 max-w-[292px]">
+    <div className="flex max-w-[292px] flex-col gap-y-4">
       <Title level="2">{isRemoveFromFleet ? 'Remove' : 'Delete'} Tanker</Title>
       <TextWithLabel label="Tanker name" text={name} customStyles="!flex-col !items-start [&>p]:!ml-0" />
       {isRemoveFromFleet ? (

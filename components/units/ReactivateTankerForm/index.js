@@ -114,14 +114,14 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
           disabled: port === null,
         }}
       >
-        <Title level="2" className="font-bold capitalize text-black text-lg">
+        <Title level="2" className="text-lg font-bold capitalize text-black">
           {title}
         </Title>
         <div className="py-5">
           <Label className="text-xs-sm">Tanker name</Label>
-          <p className="font-semibold text-black text-xsm">{state?.name}</p>
+          <p className="text-xsm font-semibold text-black">{state?.name}</p>
         </div>
-        <div className="grid gap-5 min-w-[296px]">
+        <div className="grid min-w-[296px] gap-5">
           <FormDropdown
             name="port"
             label="Port search"

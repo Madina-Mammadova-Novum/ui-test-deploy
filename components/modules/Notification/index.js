@@ -63,6 +63,10 @@ const Notification = () => {
     if (token) {
       initNotifications();
     }
+
+    return () => {
+      globalNotificationService.cleanup();
+    };
   }, []);
 
   useEffect(() => {
@@ -78,14 +82,14 @@ const Notification = () => {
         buttonProps={{ icon: { before: <BellIcon counter={unreadCounter} /> } }}
       />
       {isOpened && (
-        <div className="fixed top-0 right-0 z-30">
+        <div className="fixed right-0 top-0 z-30">
           <ModalWrapper
             opened={isOpened}
             onClose={handleClose}
             containerClass="absolute z-50 !overflow-hidden !max-h-screen h-screen !w-[530px] !-left-[265px] !-translate-y-0 !top-0 !rounded-none !p-0 z-50"
           >
-            <div className="flex !overflow-y-hidden flex-col py-8 h-full" ref={ref}>
-              <Title level="2" className="text-black px-8">
+            <div className="flex h-full flex-col !overflow-y-hidden py-8" ref={ref}>
+              <Title level="2" className="px-8 text-black">
                 Notifications
               </Title>
               <NotificationControl />

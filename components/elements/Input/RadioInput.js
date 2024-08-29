@@ -15,7 +15,7 @@ const RadioInput = ({ onChange, children, customStyles = '', labelStyles = '', c
       render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
         const error = errors[name];
         return (
-          <div className="flex gap-2.5 items-start">
+          <div className="flex items-start gap-2.5">
             <Input
               {...field}
               ref={ref}
@@ -23,7 +23,7 @@ const RadioInput = ({ onChange, children, customStyles = '', labelStyles = '', c
               disabled={isSubmitting}
               onChange={onChange}
               checked={checked}
-              className={classnames('w-5 h-5', customStyles)}
+              className={classnames('h-5 w-5', customStyles)}
             />
             {children && (
               <label htmlFor={name} className={labelStyles}>

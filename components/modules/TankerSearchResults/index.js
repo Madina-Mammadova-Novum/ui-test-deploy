@@ -20,14 +20,14 @@ const TankerSearchResults = ({ request, data }) => {
   return data?.exactResults?.length || data?.partialResults?.length ? (
     <>
       {!!data?.exactResults.length && (
-        <div className="mt-5 flex justify-between flex-col sm:flex-row">
+        <div className="mt-5 flex flex-col justify-between sm:flex-row">
           <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${
             data?.exactResults.length > 1 ? 'results' : 'result'
           }`}</TextRow>
           <ToggleRows onToggleClick={setExpandExactResults} />
         </div>
       )}
-      <div className="flex flex-col gap-y-2.5 mt-3">
+      <div className="mt-3 flex flex-col gap-y-2.5">
         {data?.exactResults.map((rowHeader) => (
           <ExpandableRow
             key={rowHeader.id}
@@ -56,7 +56,7 @@ const TankerSearchResults = ({ request, data }) => {
           <ToggleRows onToggleClick={setExpandPartialResults} />
         </div>
       )}
-      <div className="flex flex-col gap-y-2.5 mt-3">
+      <div className="mt-3 flex flex-col gap-y-2.5">
         {data?.partialResults.map((rowHeader) => (
           <ExpandableRow
             key={rowHeader?.id}

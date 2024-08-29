@@ -92,7 +92,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
     setValue(`products[${index}].tolerance`, product.tolerance);
 
     return (
-      <div className="flex items-baseline mt-3 gap-x-5" key={product.product.value}>
+      <div className="mt-3 flex items-baseline gap-x-5" key={product.product.value}>
         <FormDropdown
           label={`product #${index + 1}`}
           name={`products[${index}].product`}
@@ -129,11 +129,11 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   return (
     <>
       <Title level="3">Commercial offer terms</Title>
-      <div className="flex items-center mt-3">
+      <div className="mt-3 flex items-center">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
       </div>
       {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
-      <div className="flex w-1/2 gap-x-5 items-baseline mt-3 pr-5">
+      <div className="mt-3 flex w-1/2 items-baseline gap-x-5 pr-5">
         <FormDropdown
           label="Freight"
           name="freight"

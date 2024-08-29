@@ -26,33 +26,33 @@ const ProfileMenu = () => {
 
   return (
     <div
-      className="ml-3.5 flex items-center cursor-pointer relative"
+      className="relative ml-3.5 flex cursor-pointer items-center"
       aria-hidden
       onClick={() => setShowProfileMenu(true)}
     >
-      <div className="flex items-center mx-2.5">
-        {session?.user?.name && <span className="text-black font-semibold text-xsm">{session?.user?.name}</span>}
+      <div className="mx-2.5 flex items-center">
+        {session?.user?.name && <span className="text-xsm font-semibold text-black">{session?.user?.name}</span>}
         <AngleDownSVG
-          className={classnames('fill-black ml-6 transition duration-500', showProfileMenu && 'fill-blue rotate-180')}
+          className={classnames('ml-6 fill-black transition duration-500', showProfileMenu && 'rotate-180 fill-blue')}
         />
       </div>
 
       {showProfileMenu && (
         <>
-          <div className="fixed top-0 right-0 bottom-0 left-0" aria-hidden onClick={closeMenu} />
-          <div className="absolute -bottom-1 -right-0.5 z-50 translate-y-full bg-white p-2.5 shadow-xmd rounded-md min-w-[213px]">
+          <div className="fixed bottom-0 left-0 right-0 top-0" aria-hidden onClick={closeMenu} />
+          <div className="absolute -bottom-1 -right-0.5 z-50 min-w-[213px] translate-y-full rounded-md bg-white p-2.5 shadow-xmd">
             <NextLink href={ROUTES.ACCOUNT_INFO} onClick={closeMenu}>
-              <div className="flex items-center text-xsm font-semibold px-2.5 py-1.5 hover:bg-purple-light rounded-md">
+              <div className="flex items-center rounded-md px-2.5 py-1.5 text-xsm font-semibold hover:bg-purple-light">
                 <UserCircleSVG className="mr-2.5" /> My Account
               </div>
             </NextLink>
             <hr className="my-1" />
 
-            <div className="flex items-center text-xsm font-semibold px-2.5 hover:bg-purple-light rounded-md text-gray">
+            <div className="flex items-center rounded-md px-2.5 text-xsm font-semibold text-gray hover:bg-purple-light">
               <LogoutButton
                 text="Sign Out"
                 icon={<ExitSVG />}
-                className="!w-full !bg-transparent text-gray !border-none !p-0"
+                className="!w-full !border-none !bg-transparent !p-0 text-gray"
               />
             </div>
           </div>

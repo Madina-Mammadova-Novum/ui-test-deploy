@@ -22,7 +22,7 @@ const ForgotPasswordPage = () => {
       containerClass="flex flex-col w-full sm:w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40"
     >
       <ForgotPasswordForm />
-      <NextLink href={ROUTES.LOGIN} className="inline-flex w-full justify-center text-blue text-xsm pt-2.5">
+      <NextLink href={ROUTES.LOGIN} className="inline-flex w-full justify-center pt-2.5 text-xsm text-blue">
         Return to Log in
       </NextLink>
     </AuthWrapper>

@@ -25,7 +25,7 @@ const TermsAndConditions = () => {
   }, []);
 
   const printLinks = legalLinks.map(({ path, title }) => (
-    <NextLink key={path} href={path} target="_blank" className="text-blue underline px-1.5">
+    <NextLink key={path} href={path} target="_blank" className="px-1.5 text-blue underline">
       {title}
     </NextLink>
   ));

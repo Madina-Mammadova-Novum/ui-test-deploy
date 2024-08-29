@@ -42,8 +42,8 @@ const DetailsContent = ({ data = {} }) => {
   };
 
   return (
-    <div className="flex flex-col gap-y-2.5 mb-5">
-      <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
+    <div className="mb-5 flex flex-col gap-y-2.5">
+      <div className="flex flex-col gap-y-2.5 3md:flex-row 3md:gap-x-2.5 3md:gap-y-0">
         {roleBasedSection[role]}
         <FieldsetWrapper>
           <Title level="3">Cargo Details</Title>
@@ -64,7 +64,7 @@ const DetailsContent = ({ data = {} }) => {
         </FieldsetWrapper>
       </div>
 
-      <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
+      <div className="flex flex-col gap-y-2.5 3md:flex-row 3md:gap-x-2.5 3md:gap-y-0">
         <FieldsetWrapper>
           <Title level="3">Commercial Offer Terms</Title>
 

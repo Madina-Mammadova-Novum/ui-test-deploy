@@ -6,9 +6,9 @@ import { Title } from '@/elements';
 const SimpleContentBlock = ({ title, content }) => {
   return (
     <section>
-      <div className="max-w-[960px] container mx-auto">
+      <div className="container mx-auto max-w-[960px]">
         {title && (
-          <Title level="1" className="text-center text-black my-2.5">
+          <Title level="1" className="my-2.5 text-center text-black">
             {title}
           </Title>
         )}

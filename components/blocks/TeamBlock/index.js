@@ -16,7 +16,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   const printSocialLink = (link) => (
     <NextLink key={link} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
-        className="border border-gray-darker rounded-md"
+        className="rounded-md border border-gray-darker"
         icon={
           <NextImage
             alt={delve(link, 'title')}
@@ -30,15 +30,15 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   );
 
   const printMember = ({ fullName, content, position, coverImage, socialLinks }) => (
-    <SwiperSlide key={makeId()} className="px-2.5 h-auto flex">
-      <div className="flex grow items-center flex-col mt-[60px] text-black shadow-2xmd px-[30px] pb-[30px] max-w-full bg-white rounded-base">
+    <SwiperSlide key={makeId()} className="flex h-auto px-2.5">
+      <div className="mt-[60px] flex max-w-full grow flex-col items-center rounded-base bg-white px-[30px] pb-[30px] text-black shadow-2xmd">
         {coverImage && (
           <NextImage
             alt={delve(coverImage, 'alternativeText')}
             src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
             height={120}
             width={120}
-            className="h-[120px] w-[120px] object-cover object-center rounded-full mb-2.5 -mt-[60px]"
+            className="-mt-[60px] mb-2.5 h-[120px] w-[120px] rounded-full object-cover object-center"
           />
         )}
         {fullName.trim() && (
@@ -47,11 +47,11 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
           </Title>
         )}
         {position && (
-          <Title level="4" className="font-semibold mb-1">
+          <Title level="4" className="mb-1 font-semibold">
             {delve(position, 'title')}
           </Title>
         )}
-        {socialLinks && <div className="flex gap-x-2.5 mb-2.5">{socialLinks.map(printSocialLink)}</div>}
+        {socialLinks && <div className="mb-2.5 flex gap-x-2.5">{socialLinks.map(printSocialLink)}</div>}
         {content && <div className="text-xsm">{parse(content)}</div>}
       </div>
     </SwiperSlide>
@@ -59,7 +59,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
 
   return (
     <section>
-      <div className="container w-screen mx-auto px-6 3md:px-14 max-w-[1268px]">
+      <div className="container mx-auto w-screen max-w-[1268px] px-6 3md:px-14">
         {title && (
           <Title level="1" className="mb-5 text-center text-black">
             {title}

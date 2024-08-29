@@ -73,7 +73,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
             text: 'Delete',
             variant: 'tertiary',
             size: 'small',
-            icon: { before: <TrashIcon viewBox="0 0 24 24" className="fill-black w-5 h-5" /> },
+            icon: { before: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
           }}
           customStyles="absolute right-0 -bottom-6 !p-0 !pt-1 [&>span]:!px-0.5"
           onClick={() => onRemove(portId)}
@@ -87,7 +87,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
   }, [perList]);
 
   return (
-    <div className=" gap-y-4 flex flex-col h-full w-full max-w-[336px]">
+    <div className="flex h-full w-full max-w-[336px] flex-col gap-y-4">
       <FormDropdown
         name="calculator"
         onChange={(option) => onChange('calculator', option)}

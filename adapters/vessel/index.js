@@ -708,3 +708,15 @@ export const chartererInformationAdapter = (data) => {
     },
   ];
 };
+
+export function responseAddSavedSearchAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}
+
+export function responseGetSavedSearchAdapter({ data }) {
+  if (!data) return null;
+
+  return data;
+}

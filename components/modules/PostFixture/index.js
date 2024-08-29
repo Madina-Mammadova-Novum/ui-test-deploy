@@ -74,11 +74,11 @@ const PostFixture = () => {
 
   return (
     <>
-      <FilterByForm>
+      <FilterByForm isLoading={loading}>
         <PostFixtureFilter {...filters} />
       </FilterByForm>
-      <div className="flex justify-end pt-6 items-center gap-2.5">
-        <Label className="text-xs-sm	font-semibold">Sort cargoes by:</Label>
+      <div className="flex items-center justify-end gap-2.5 pt-6">
+        <Label className="text-xs-sm font-semibold">Sort cargoes by:</Label>
         <div className="flex">
           <Dropdown
             placeholder="Sort by"

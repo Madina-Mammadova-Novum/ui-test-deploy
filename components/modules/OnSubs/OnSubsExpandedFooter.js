@@ -57,7 +57,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
           </div>
         )}
 
-        <div className="flex justify-end items-center gap-x-2.5 gap-y-2.5">
+        <div className="flex items-center justify-end gap-x-2.5 gap-y-2.5">
           <div className="w-full">
             <ModalWindow
               buttonProps={{
@@ -76,8 +76,8 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
             <NextLink
               href={scriveURL}
               target="blank"
-              className={`block text-xsm whitespace-nowrap bg-blue text-white h-10 px-5 py-2.5 rounded-md hover:bg-blue-darker ${
-                underRecap && 'opacity-50 pointer-events-none'
+              className={`block h-10 whitespace-nowrap rounded-md bg-blue px-5 py-2.5 text-xsm text-white hover:bg-blue-darker ${
+                underRecap && 'pointer-events-none opacity-50'
               }`}
             >
               Lift the Subs

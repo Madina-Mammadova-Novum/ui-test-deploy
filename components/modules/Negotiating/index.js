@@ -25,7 +25,7 @@ const Negotiating = () => {
     return (
       <ExpandableRow
         key={rowData.id}
-        className="pt-14 px-5"
+        className="px-5 pt-14"
         header={
           <ExpandableCardHeader
             headerData={rowHeader}

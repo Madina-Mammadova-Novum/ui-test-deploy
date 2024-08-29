@@ -25,7 +25,7 @@ const HoverTooltip = ({ data, disabled = false, className, children }) => {
       </span>
       {!disabled && showTooltip && (
         <div
-          className={`absolute top-8 ${className} bg-white transition-all w-max flex flex-col gap-2.5 h-auto text-black z-50 border border-solid border-gray-darker text-xsm font-semibold p-2.5 rounded-base`}
+          className={`absolute top-8 ${className} z-50 flex h-auto w-max flex-col gap-2.5 rounded-base border border-solid border-gray-darker bg-white p-2.5 text-xsm font-semibold text-black transition-all`}
           onMouseEnter={handleEnter}
           onMouseLeave={handleClose}
         >
