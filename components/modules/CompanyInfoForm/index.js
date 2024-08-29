@@ -75,7 +75,7 @@ const CompanyInfoForm = ({ closeModal }) => {
         submitAction={onSubmit}
         submitButton={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
       >
-        <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
+        <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
           Edit Company Details
         </Title>
         <Notes
@@ -83,7 +83,7 @@ const CompanyInfoForm = ({ closeModal }) => {
           subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
           data={noteList}
         />
-        <div className="flex flex-col gap-5 px-2.5 py-2.5 h-[480px] overflow-y-scroll">
+        <div className="flex h-[480px] flex-col gap-5 overflow-y-scroll px-2.5 py-2.5">
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>

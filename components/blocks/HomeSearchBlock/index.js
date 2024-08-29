@@ -23,7 +23,7 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
   const dataByTab = {
     search: <TankerSearch />,
     tools: (
-      <AccountTools className="flex [&>*:first-child]:xlMax:w-full [&>*:nth-child(2)]:xlMax:w-full [&>*:first-child]:w-1/4 [&>*:nth-child(2)]:w-3/4 justify-center" />
+      <AccountTools className="flex justify-center [&>*:first-child]:w-1/4 [&>*:first-child]:xlMax:w-full [&>*:nth-child(2)]:w-3/4 [&>*:nth-child(2)]:xlMax:w-full" />
     ),
   };
 
@@ -39,13 +39,13 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
       {title && <div>{title}</div>}
       {subTitle && <div>{subTitle}</div>}
       {shortDescription && <div>{shortDescription}</div>}
-      <div className="container mx-auto h- px-6 3md:px-14 max-w-[1258px] -mt-[205px]">
+      <div className="h- container mx-auto -mt-[205px] max-w-[1258px] px-6 3md:px-14">
         <Button
           buttonProps={{
             text: 'How it works',
             variant: 'primary',
             size: 'large',
-            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="fill-white w-5 h-5 -rotate-90" /> },
+            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="h-5 w-5 -rotate-90 fill-white" /> },
           }}
           customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
           onClick={handleClickScroll}

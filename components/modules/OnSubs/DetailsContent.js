@@ -21,7 +21,7 @@ const DetailsContent = ({ detailsData = {} }) => {
   const { generalOfferTerms, bankInfo } = commercialOfferTerms || {};
 
   return (
-    <div className="flex flex-col gap-y-5 mb-5">
+    <div className="mb-5 flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-5 3md:flex-row 3md:gap-x-2.5">
         <FieldsetWrapper>
           <Title level="3">Charterer Information</Title>
@@ -55,7 +55,7 @@ const DetailsContent = ({ detailsData = {} }) => {
                 <TextRow
                   key={title}
                   title={title}
-                  className="flex flex-col !gap-y-2 !items-start !justify-start w-full"
+                  className="flex w-full flex-col !items-start !justify-start !gap-y-2"
                 >
                   {text}
                 </TextRow>
@@ -75,7 +75,7 @@ const DetailsContent = ({ detailsData = {} }) => {
         </FieldsetWrapper>
       </div>
 
-      <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
+      <div className="flex flex-col gap-y-2.5 3md:flex-row 3md:gap-x-2.5 3md:gap-y-0">
         <FieldsetWrapper>
           <Title level={3}>Cargo Details</Title>
 
@@ -122,7 +122,7 @@ const DetailsContent = ({ detailsData = {} }) => {
           </FieldsetContent>
         </FieldsetWrapper>
       </div>
-      <div className="flex flex-col gap-y-2.5 3md:gap-y-0 3md:flex-row 3md:gap-x-2.5">
+      <div className="flex flex-col gap-y-2.5 3md:flex-row 3md:gap-x-2.5 3md:gap-y-0">
         <FieldsetWrapper>
           <Title level={3}>Commercial Offer Terms</Title>
 

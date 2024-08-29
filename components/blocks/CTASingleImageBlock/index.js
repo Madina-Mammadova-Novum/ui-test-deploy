@@ -10,7 +10,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
   return (
     <section className="relative py-24">
       {coverImage && (
-        <div className="absolute w-full h-full inset-0 -z-10">
+        <div className="absolute inset-0 -z-10 h-full w-full">
           <NextImage
             priority
             width={1440}
@@ -22,14 +22,14 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
           />
         </div>
       )}
-      <div className="bg-white rounded-base max-w-[500px] mx-auto py-8">
+      <div className="mx-auto max-w-[500px] rounded-base bg-white py-8">
         {title && (
-          <Title level="1" className="text-black text-center mb-2.5">
+          <Title level="1" className="mb-2.5 text-center text-black">
             {title}
           </Title>
         )}
-        <div className="max-w-[300px] mx-auto">
-          {shortDescription && <p className="text-black text-xsm text-center mb-5">{shortDescription}</p>}
+        <div className="mx-auto max-w-[300px]">
+          {shortDescription && <p className="mb-5 text-center text-xsm text-black">{shortDescription}</p>}
           {button && (
             <LinkAsButton
               href={button.path}

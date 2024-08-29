@@ -41,10 +41,10 @@ const PortDetailsForm = ({ portName = '' }) => {
   }, [perList]);
 
   return (
-    <div className="flex flex-col gap-y-5 relative">
+    <div className="relative flex flex-col gap-y-5">
       <div>
         <Label className="text-xs-sm">Tanker name</Label>
-        <p className="font-semibold text-black text-xsm">{portName}</p>
+        <p className="text-xsm font-semibold text-black">{portName}</p>
       </div>
       <FormDropdown
         asyncCall

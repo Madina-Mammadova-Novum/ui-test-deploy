@@ -8,7 +8,7 @@ const Notes = ({ title, subtitle, data, children }) => {
   const printListItem = useCallback(({ id, label, list }) => {
     return (
       <div key={id} className="max-w-max">
-        {label && <p className="text-gray uppercase pb-1.5">{label}</p>}
+        {label && <p className="pb-1.5 uppercase text-gray">{label}</p>}
         <ul className="px-5">
           {list &&
             list?.map((item, index) => (
@@ -27,12 +27,12 @@ const Notes = ({ title, subtitle, data, children }) => {
   }, [data, printListItem]);
 
   return (
-    <article className="flex flex-col py-3 px-5 gap-1.5 rounded-lg bg-gray-light border border-solid border-gray-darker">
+    <article className="flex flex-col gap-1.5 rounded-lg border border-solid border-gray-darker bg-gray-light px-5 py-3">
       <Title level="6" className="text-xsm font-semibold">
         {title}
       </Title>
       {subtitle && <p className="text-xs-sm text-black">{subtitle}</p>}
-      {data && <div className="grid grid-cols-2 text-xs-sm text-black font-bold pt-1.5">{printRuleList}</div>}
+      {data && <div className="grid grid-cols-2 pt-1.5 text-xs-sm font-bold text-black">{printRuleList}</div>}
       {children}
     </article>
   );

@@ -91,7 +91,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         <FormProvider {...methods}>
           <FormManager
@@ -110,7 +110,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
         </FormProvider>
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 justify-end h-10">
+      <div className="mt-4 flex h-10 justify-end gap-x-2.5 text-xsm">
         <Button
           buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large', disabled }}
           customStyles="opacity-0"

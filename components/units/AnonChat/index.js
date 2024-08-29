@@ -189,7 +189,7 @@ const AnonChat = ({ opened }) => {
       case 'location':
         return (
           <div className="flex w-full items-end gap-x-2">
-            <div className="flex flex-col gap-y-2.5 w-full">
+            <div className="flex w-full flex-col gap-y-2.5">
               <Dropdown
                 label="Country"
                 onChange={handleCountryChange}
@@ -234,7 +234,7 @@ const AnonChat = ({ opened }) => {
       case 'email':
         return (
           <form
-            className="flex w-full relative items-end gap-x-2"
+            className="relative flex w-full items-end gap-x-2"
             onSubmit={(e) => {
               e.preventDefault();
               handleBotMessage({ key, answer: message });
@@ -253,7 +253,7 @@ const AnonChat = ({ opened }) => {
         return null;
       default:
         return (
-          <div className="flex flex-col w-full gap-y-2">
+          <div className="flex w-full flex-col gap-y-2">
             {chat?.messages.length > 0 && chat?.messages?.map(printMessages)}
             <form className="flex w-full items-end gap-x-2" onSubmit={onSubmit}>
               <Input
@@ -296,6 +296,10 @@ const AnonChat = ({ opened }) => {
 
     setCountries([...countriesData]);
   };
+
+  useEffect(() => {
+    handleClose();
+  }, []);
 
   useEffect(() => {
     fetchCountries();
@@ -357,8 +361,8 @@ const AnonChat = ({ opened }) => {
       onClose={handleClose}
       onCollapse={handleCollapse}
     >
-      <div className="px-2.5 py-2.5 relative">
-        <div ref={containerRef} className="h-[468px] overflow-y-auto relative flex flex-col px-2.5">
+      <div className="relative px-2.5 py-2.5">
+        <div ref={containerRef} className="relative flex h-[468px] flex-col overflow-y-auto px-2.5">
           {flow.map((step, index) => {
             return (
               <Fragment key={step.key}>

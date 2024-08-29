@@ -31,3 +31,15 @@ steps:
   - task: SonarQubePublish@6
     inputs:
       pollingTimeoutSec: '300'
+
+  # set chatgpt reviwer
+  - checkout: self
+    persistCredentials: true
+  - task: GPTPRReviewer@0
+    continueOnError: true
+    inputs:
+      api_key_source: 'azureopenai'
+      api_key: $(openai.key)
+      aoai_endpoint: $(openai.endpoint)
+      model_name: 'gpt-3.5-turbo'
+      comment_language: 'en-US'

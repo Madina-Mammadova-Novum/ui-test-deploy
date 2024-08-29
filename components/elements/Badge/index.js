@@ -12,9 +12,9 @@ const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, cl
     if (counter > 0 && !hovered && !typing) {
       return (
         <div
-          className={`absolute border p-1 h-5 w-5 border-white border-solid ${className} rounded-full bg-blue ${
+          className={`absolute h-5 w-5 border border-solid border-white p-1 ${className} rounded-full bg-blue ${
             counter > 100 ? 'text-[6px]' : 'text-xxs'
-          } font-bold text-white flex items-center justify-center`}
+          } flex items-center justify-center font-bold text-white`}
         >
           {counter}
         </div>
@@ -24,9 +24,9 @@ const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, cl
     if (counter > 0 && !hovered && !typing) {
       return (
         <div
-          className={`absolute border p-1 h-5 w-5 border-white border-solid ${className} rounded-full bg-blue ${
+          className={`absolute h-5 w-5 border border-solid border-white p-1 ${className} rounded-full bg-blue ${
             counter > 100 ? 'text-[6px]' : 'text-xxs'
-          } font-bold text-white flex items-center justify-center`}
+          } flex items-center justify-center font-bold text-white`}
         >
           {counter}
         </div>
@@ -34,14 +34,14 @@ const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, cl
     }
 
     if (withCancel && hovered && name) {
-      return <CloseIcon onClick={onClose} className="fill-black absolute top-0 right-0 !z-50" />;
+      return <CloseIcon onClick={onClose} className="absolute right-0 top-0 !z-50 fill-black" />;
     }
 
     if (withCancel && typing && name) {
       return (
         <TypingIndicator
           size="sm"
-          className="bg-white h-2 p-2 rounded-base border border-solid border-gray-300 absolute top-0 right-0 !z-50"
+          className="absolute right-0 top-0 !z-50 h-2 rounded-base border border-solid border-gray-300 bg-white p-2"
         />
       );
     }

@@ -8,7 +8,7 @@ const AuthNavButtons = ({ authorized, data = [] }) => {
     if (path === ROUTES.LOGIN)
       return (
         <li key={path}>
-          <LoginButton className="max-w-[115px] mx-auto" text={label} variant={linkOptions?.style} />
+          <LoginButton className="mx-auto max-w-[115px]" text={label} variant={linkOptions?.style} />
         </li>
       );
 

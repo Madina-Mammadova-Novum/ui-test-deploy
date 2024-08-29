@@ -14,7 +14,7 @@ const AccordionHeader = ({ title, onClick, isActive, isFullWidth }) => {
       aria-hidden
       className={classnames(
         !isFullWidth && 'px-[30px]',
-        'flex gap-x-5 justify-between pb-2.5 pt-5 w-full cursor-pointer'
+        'flex w-full cursor-pointer justify-between gap-x-5 pb-2.5 pt-5'
       )}
       onClick={onClick}
     >

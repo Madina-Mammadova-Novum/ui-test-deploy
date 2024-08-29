@@ -9,13 +9,13 @@ import { makeId } from '@/utils/helpers';
 
 const Offer = ({ item, index }) => {
   return (
-    <div key={index} className="flex flex-col sm:flex-row items-center gap-5 sm:gap-10 sm:even:flex-row-reverse">
+    <div key={index} className="flex flex-col items-center gap-5 sm:flex-row sm:gap-10 sm:even:flex-row-reverse">
       {item.coverImage && (
-        <div className="size-72 md:w-[380px] md:h-[350px] shrink-0 rounded-base">
+        <div className="size-72 shrink-0 rounded-base md:h-[350px] md:w-[380px]">
           <NextImage
             src={getStrapiMedia(delve(item.coverImage, 'format.original.url'), '?format=webp')}
             alt={delve(item.coverImage, 'alternativeText')}
-            className="h-full w-full object-cover object-center rounded-base"
+            className="h-full w-full rounded-base object-cover object-center"
             quality={75}
             height={350}
             width={380}
@@ -24,11 +24,11 @@ const Offer = ({ item, index }) => {
       )}
       <div>
         {item.title && (
-          <Title level="2" className="text-black mb-2.5">
+          <Title level="2" className="mb-2.5 text-black">
             {item.title}
           </Title>
         )}
-        {item.shortDescription && <p className="text-black text-xsm">{item.shortDescription}</p>}
+        {item.shortDescription && <p className="text-xsm text-black">{item.shortDescription}</p>}
       </div>
     </div>
   );
@@ -48,7 +48,7 @@ const WhatWeOfferBlock = ({ title, values }) => {
     <section id="what-we-offer">
       <div className="container mx-auto max-w-[960px]">
         {title && (
-          <Title level="1" className="text-center text-black mb-5">
+          <Title level="1" className="mb-5 text-center text-black">
             {title}
           </Title>
         )}

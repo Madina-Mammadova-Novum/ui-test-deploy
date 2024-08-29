@@ -1,5 +1,5 @@
 const FieldsetWrapper = ({ children }) => {
-  return <div className="bg-white rounded-base border border-solid border-gray-darker p-5 w-full">{children}</div>;
+  return <div className="w-full rounded-base border border-solid border-gray-darker bg-white p-5">{children}</div>;
 };
 
 export default FieldsetWrapper;

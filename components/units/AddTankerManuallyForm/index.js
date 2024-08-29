@@ -223,8 +223,8 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
           <TextWithLabel label="Fleet name" text={fleetName} customStyles="!flex-col !items-start" />
           {Object.keys(q88State).length < 2 && <ImoNotFound q88={q88State} />}
 
-          <div className="grid grid-cols-1 gap-y-4 h-80 pr-2.5 mt-5 overflow-scroll">
-            <div className="grid grid-cols-2 gap-y-4 gap-x-5">
+          <div className="mt-5 grid h-80 grid-cols-1 gap-y-4 overflow-scroll pr-2.5">
+            <div className="grid grid-cols-2 gap-x-5 gap-y-4">
               <Input
                 {...register(`tankerName`)}
                 label="Tanker name"
@@ -303,7 +303,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 customStyles={{ className: 'col-span-2' }}
               />
             </div>
-            <div className="grid grid-cols-4 gap-x-5 gap-y-4 items-baseline">
+            <div className="grid grid-cols-4 items-baseline gap-x-5 gap-y-4">
               <Input
                 {...register(`loa`)}
                 label="LOA"
@@ -390,7 +390,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 error={errors.grades?.message}
               />
             </div>
-            <div className="grid grid-cols-2 gap-x-5 gap-y-4 items-baseline">
+            <div className="grid grid-cols-2 items-baseline gap-x-5 gap-y-4">
               <Input
                 {...register(`registeredOwner`)}
                 label="Registered owner"

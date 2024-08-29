@@ -38,14 +38,14 @@ const BlockCtaFeatured = ({ title, shortDescription, button, images }) => {
               return (
                 <div
                   key={makeId()}
-                  className="col-span-1 max-h-[343px] rounded overflow-hidden sm:rounded-[10px] sm:max-h-[384px] md:max-h-[640px]"
+                  className="col-span-1 max-h-[343px] overflow-hidden rounded sm:max-h-[384px] sm:rounded-[10px] md:max-h-[640px]"
                 >
                   <Image
                     width={558}
                     height={640}
                     alt={delve(image, 'alternativeText')}
                     src={getStrapiMedia(delve(image, 'format.original.url'), '')}
-                    className="h-full w-full object-cover object-center overflow-hidden"
+                    className="h-full w-full overflow-hidden object-cover object-center"
                     quality={75}
                   />
                 </div>

@@ -44,7 +44,7 @@ const FixtureDetails = ({ searchedParams }) => {
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
     return [deal].map(printExpandableRow) || <Title>Outdated notification</Title>;
   }, [loading, toggle, searchedParams.id]);
 

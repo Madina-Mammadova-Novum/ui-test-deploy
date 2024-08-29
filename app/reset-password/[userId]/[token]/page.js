@@ -26,7 +26,7 @@ const ResetPasswordPage = ({ params }) => {
       <ResetPasswordForm params={params} />
       <NextLink
         href={ROUTES.LOGIN}
-        className="inline-flex justify-center items-center w-full pt-2.5 text-blue text-xsm"
+        className="inline-flex w-full items-center justify-center pt-2.5 text-xsm text-blue"
       >
         Return to Log in
       </NextLink>

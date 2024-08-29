@@ -71,8 +71,8 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
   return (
     <div className={classnames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex flex-col md:flex-row items-start gap-5 md:min-w-[450px]">
-        <div className="w-full flex flex-col gap-y-5 justify-between">
+      <div className="flex flex-col items-start gap-5 md:min-w-[450px] md:flex-row">
+        <div className="flex w-full flex-col justify-between gap-y-5">
           <PasswordInput
             name="password"
             label={password?.label}
@@ -100,7 +100,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
             {validation.map(({ text, isValidated }, index) => (
               <li key={text} className={classnames('flex items-center', index && 'mt-1.5')}>
                 <TickInCircleSVG
-                  className={`${isValidated ? 'fill-green' : 'fill-black'} w-5 h-5`}
+                  className={`${isValidated ? 'fill-green' : 'fill-black'} h-5 w-5`}
                   viewBox="0 0 24 24"
                 />
                 <span className="ml-1.5">{text}</span>

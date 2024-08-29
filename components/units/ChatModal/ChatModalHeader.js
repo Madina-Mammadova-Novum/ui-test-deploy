@@ -12,7 +12,7 @@ const ChatModalHeader = ({ useCollapse = false, loading = false, onClose, onColl
   const printCta = useMemo(() => {
     if (useCollapse) {
       return (
-        <div className="flex justify-end items-center absolute right-0">
+        <div className="absolute right-0 flex items-center justify-end">
           <Button
             type="button"
             onClick={onCollapse}
@@ -40,9 +40,9 @@ const ChatModalHeader = ({ useCollapse = false, loading = false, onClose, onColl
   }, [useCollapse, onClose, onCollapse]);
 
   return (
-    <div className="flex justify-between items-end relative bg-black p-5 w-full rounded-t-base">
+    <div className="relative flex w-full items-end justify-between rounded-t-base bg-black p-5">
       <div className="flex gap-x-2.5">
-        <Title level="3" className="text-white text-lg">
+        <Title level="3" className="text-lg text-white">
           Chat with us
         </Title>
         {loading && <Loader className="h-4 w-4" />}

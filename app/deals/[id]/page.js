@@ -41,7 +41,7 @@ const DealRedirectPage = ({ params }) => {
   return (
     <>
       {isLoading ? (
-        <section className="relative min-h-screen flex items-center justify-center">
+        <section className="relative flex min-h-screen items-center justify-center">
           <DynamicLoader />
         </section>
       ) : (

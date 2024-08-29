@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { DropZonePropTypes } from '@/lib/types';
@@ -25,6 +25,14 @@ const DropzoneForm = ({ showTextFields = true }) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
+
+  const fileErrorRef = useRef(null);
+
+  useEffect(() => {
+    if (Object.keys(errors).length === 1 && errors?.file) {
+      fileErrorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [errors]);
 
   useEffect(() => {
     if (!watch('file')) setFiles([]);
@@ -73,11 +81,11 @@ const DropzoneForm = ({ showTextFields = true }) => {
 
   const printHelpers = useMemo(() => {
     return (
-      <div className="flex gap-3 h-auto self-end w-full justify-between py-2 text-xs-sm">
+      <div className="flex h-auto w-full justify-between gap-3 self-end py-2 text-xs-sm">
         <p>
           <span className="text-gray">Supports:</span> <span>{formats}</span>
         </p>
-        <p className="flex gap-2 text-gray whitespace-nowrap self-end">
+        <p className="flex gap-2 self-end whitespace-nowrap text-gray">
           Max size: <span>{SETTINGS.FILE_SIZE_RESTRICTION}MB</span>
         </p>
       </div>
@@ -85,7 +93,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
   }, [formats]);
 
   return (
-    <div className="flex flex-auto gap-5 !min-h-[160px]">
+    <div className="flex !min-h-[160px] flex-auto gap-5">
       {showTextFields && (
         <div className="flex flex-col gap-8">
           <Input
@@ -106,14 +114,14 @@ const DropzoneForm = ({ showTextFields = true }) => {
         </div>
       )}
       {!files.length ? (
-        <Dropzone areaParams={getRootProps} inputParams={getInputProps}>
+        <Dropzone areaParams={getRootProps} inputParams={getInputProps} dropzoneRef={fileErrorRef}>
           {printHelpers}
         </Dropzone>
       ) : (
-        <div className="flex flex-wrap w-full h-auto gap-x-3 gap-y-0 border-dashed border hover:border-blue border-gray-darker relative rounded-md pt-5 px-3">
+        <div className="relative flex h-auto w-full flex-wrap gap-x-3 gap-y-0 rounded-md border border-dashed border-gray-darker px-3 pt-5 hover:border-blue">
           {loading && (
-            <div className="absolute top-0 right-0 left-0 bottom-0 bg-gray-light opacity-50">
-              <Loader className="h-8 w-8 absolute top-[40%] left-[48%]" />
+            <div className="absolute bottom-0 left-0 right-0 top-0 bg-gray-light opacity-50">
+              <Loader className="absolute left-[48%] top-[40%] h-8 w-8" />
             </div>
           )}
           {files.map(printFile)}

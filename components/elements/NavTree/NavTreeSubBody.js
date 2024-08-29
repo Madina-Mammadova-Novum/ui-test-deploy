@@ -33,16 +33,16 @@ const NavTreeSubBody = ({ data, onClick, collapsed = false }) => {
       onClick={handleRedirect}
       className={`${
         isActive ? 'bg-blue text-white' : 'hover:bg-blue-dark'
-      } flex flex-col text-gray my-2 px-5 py-1.5 rounded-base whitespace-nowrap relative`}
+      } relative my-2 flex flex-col whitespace-nowrap rounded-base px-5 py-1.5 text-gray`}
     >
       {label && (
-        <span className={`uppercase font-bold ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{label}</span>
+        <span className={`font-bold uppercase ${isActive ? 'text-white' : 'text-gray'} text-xxs`}>{label}</span>
       )}
-      <p className="text-xsm text-white font-semibold">{title ?? 'No Data'}</p>
+      <p className="text-xsm font-semibold text-white">{title ?? 'No Data'}</p>
 
       {!collapsed && (
-        <div className="absolute -top-9 -left-3 w-px h-14 rotate-180 bg-blue-dark">
-          <Divider className="absolute w-2.5 h-px border-none right-0 !bg-blue-dark" />
+        <div className="absolute -left-3 -top-9 h-14 w-px rotate-180 bg-blue-dark">
+          <Divider className="absolute right-0 h-px w-2.5 border-none !bg-blue-dark" />
         </div>
       )}
     </li>

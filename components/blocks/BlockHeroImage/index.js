@@ -11,7 +11,7 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
   return (
     <section className="relative py-[100px]">
       {coverImage && (
-        <div className="absolute w-full h-full inset-0 -z-10">
+        <div className="absolute inset-0 -z-10 h-full w-full">
           <Image
             priority
             width={1440}
@@ -23,13 +23,13 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
           />
         </div>
       )}
-      <div className="max-w-[800px] mx-auto">
+      <div className="mx-auto max-w-[800px]">
         {title && (
-          <Title level="1" className="text-white text-center mb-2.5">
+          <Title level="1" className="mb-2.5 text-center text-white">
             {title}
           </Title>
         )}
-        {shortDescription && <p className="text-white text-xsm text-center">{shortDescription}</p>}
+        {shortDescription && <p className="text-center text-xsm text-white">{shortDescription}</p>}
       </div>
     </section>
   );

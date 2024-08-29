@@ -7,15 +7,15 @@ import { ChatConversationCard } from '@/units';
 
 const СhatConversationHeader = ({ data, onCollapse, onClose, updating, typing }) => {
   return (
-    <div className="bg-black p-5 flex flex-col rounded-tr-base rounded-tl-base">
-      <div className="flex justify-between items-center h-full relative">
-        <div className="flex items-baseline gap-2.5 relative w-full">
-          <Title level="6" className="text-white pb-2.5 text-lg font-bold">
+    <div className="flex flex-col rounded-tl-base rounded-tr-base bg-black p-5">
+      <div className="relative flex h-full items-center justify-between">
+        <div className="relative flex w-full items-baseline gap-2.5">
+          <Title level="6" className="pb-2.5 text-lg font-bold text-white">
             Conversation
           </Title>
           {updating && <Loader className="h-3 w-3 !border-2" />}
         </div>
-        <div className="flex items-center justify-end gap-2.5 absolute -right-2 -top-3">
+        <div className="absolute -right-2 -top-3 flex items-center justify-end gap-2.5">
           <Button
             type="button"
             onClick={onCollapse}
@@ -30,9 +30,9 @@ const СhatConversationHeader = ({ data, onCollapse, onClose, updating, typing }
           />
         </div>
       </div>
-      <div className="flex gap-x-5 relative">
+      <div className="relative flex gap-x-5">
         <ChatConversationCard data={data} contrasted />
-        <div className="absolute right-32 -top-1">{typing && <TypingIndicator size="md" />}</div>
+        <div className="absolute -top-1 right-32">{typing && <TypingIndicator size="md" />}</div>
       </div>
     </div>
   );

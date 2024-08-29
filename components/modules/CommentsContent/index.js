@@ -14,10 +14,10 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
       <Title level="3">Comments</Title>
       {!!data.length && (
         <>
-          <Title level="5" className="uppercase text-[12px] text-gray font-semibold mt-2.5">
+          <Title level="5" className="mt-2.5 text-[12px] font-semibold uppercase text-gray">
             historical negotiating comments
           </Title>
-          <div className="flex flex-col gap-1.5 my-2">
+          <div className="my-2 flex flex-col gap-1.5">
             {data.map(({ title, date, time, sentBy }) => (
               <Comment title={title} date={date} time={time} sentBy={sentBy} />
             ))}

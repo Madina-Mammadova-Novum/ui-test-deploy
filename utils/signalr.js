@@ -25,6 +25,7 @@ export class SignalRController {
     this.host = host;
     this.store = state;
     this.connection = null;
+    this.isInitialized = false;
   }
 
   async startConnection({ path, token }) {
@@ -68,9 +69,16 @@ export class NotificationController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
     this.notificationReceived = false;
+    this.isInitialized = false;
   }
 
   async init({ token }) {
+    if (this.isInitialized) {
+      return;
+    }
+
+    this.isInitialized = true;
+
     await this.setupConnection({ path: this.host, token });
     this.connection.on('ReceiveNotification', () => this.receiveTrigger());
   }
@@ -99,6 +107,14 @@ export class NotificationController extends SignalRController {
           useNotificationToast([newestNotification]);
         }
       });
+  }
+
+  async cleanup() {
+    if (this.connection) {
+      this.connection.off('ReceiveNotification', this.receiveTrigger);
+      await this.connection.stop();
+      this.isInitialized = false;
+    }
   }
 
   async stop() {

@@ -26,11 +26,11 @@ const AccountPositionsDetails = ({ searchedParms }) => {
   }, []);
 
   const printExpandableCard = (fleet) => {
-    return <ExpandableCard key={fleet.id} data={fleet} expandAll={toggle} className="px-5 my-5 bg-white" />;
+    return <ExpandableCard key={fleet.id} data={fleet} expandAll={toggle} className="my-5 bg-white px-5" />;
   };
 
   const printContent = useMemo(() => {
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
     if (assignedData) return [assignedData].map(printExpandableCard);
     if (unassignedData) return [unassignedData].map(printExpandableCard);
 

@@ -59,14 +59,14 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
   };
 
   return (
-    <div className="w-[292px] h-[324px]">
+    <div className="h-[324px] w-[292px]">
       <ModalHeader>Request to change countdown</ModalHeader>
-      <div className="bg-gray-light rounded-[10px] p-3 border border-darker text-[12px] my-5">
+      <div className="border-darker my-5 rounded-[10px] border bg-gray-light p-3 text-[12px]">
         In order to increase countdown time, please, send the request. The countdown will be changed only after Broker's
         approval.
       </div>
       <div className="border-l-2 border-blue pl-4">
-        <p className="text-[12px] font-bold mb-2.5">
+        <p className="mb-2.5 text-[12px] font-bold">
           Choose time which you want to add to countdown. Maximum 12 hours.
         </p>
         <Dropdown
@@ -77,7 +77,7 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
           onChange={handleSelectOption}
         />
       </div>
-      <div className="flex justify-between gap-2.5 mt-5">
+      <div className="mt-5 flex justify-between gap-2.5">
         <Button
           buttonProps={{ text: 'Cancel', variant: 'tertiary', size: 'large' }}
           onClick={closeModal}

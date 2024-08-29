@@ -7,7 +7,7 @@ import { calculateCountdown, freightFormatter, getLocode, transformBytes } from 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed } = data;
 
   return [
     {
@@ -55,6 +55,14 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
       },
+      isFailed,
+    },
+    {
+      label: 'Status',
+      textStyles: 'text-red',
+      freezed: frozenAt,
+      text: 'Failed',
+      isFailed,
     },
   ];
 };
@@ -62,7 +70,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed } = data;
 
   return [
     {
@@ -116,6 +124,14 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
       },
+      isFailed,
+    },
+    {
+      label: 'Status',
+      textStyles: 'text-red',
+      freezed: frozenAt,
+      text: 'Failed',
+      isFailed,
     },
   ];
 };

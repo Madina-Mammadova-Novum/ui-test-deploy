@@ -73,7 +73,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
           disabled: !methods.formState.isDirty,
         }}
       >
-        <Title level="3" className="text-lg text-black font-bold capitalize pb-5">
+        <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
           Edit Personal Details
         </Title>
         <Notes

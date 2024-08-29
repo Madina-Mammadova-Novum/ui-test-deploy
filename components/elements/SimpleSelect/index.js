@@ -17,22 +17,22 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
   return (
     <>
       {isOpened && (
-        <div className="fixed top-0 left-0 bottom-0 right-0 z-[1]" aria-hidden onClick={() => setIsOpened(false)} />
+        <div className="fixed bottom-0 left-0 right-0 top-0 z-[1]" aria-hidden onClick={() => setIsOpened(false)} />
       )}
       <div className="flex items-center">
-        {label && <span className="text-[12px] font-semibold text-gray uppercase">{label}</span>}
+        {label && <span className="text-[12px] font-semibold uppercase text-gray">{label}</span>}
         <div
           aria-hidden
-          className="relative bg-white capitalize flex items-center px-2.5 py-1 ml-2.5 border rounded-md border-gray text-xsm font-medium cursor-pointer min-w-[120px]"
+          className="relative ml-2.5 flex min-w-[120px] cursor-pointer items-center rounded-md border border-gray bg-white px-2.5 py-1 text-xsm font-medium capitalize"
           onClick={() => setIsOpened(true)}
         >
           <span className="box-border flex-1 text-center">{currentItem}</span>
           <AngleDownSVG className={`fill-black transition duration-500 ${isOpened && 'rotate-180 fill-blue'}`} />
           {isOpened && (
-            <div className="absolute -bottom-0.5 left-0 translate-y-[100%] px-2.5 py-2 rounded-md bg-white shadow-xmd w-full overflow-y-auto max-h-[112px] z-[1]">
+            <div className="absolute -bottom-0.5 left-0 z-[1] max-h-[112px] w-full translate-y-[100%] overflow-y-auto rounded-md bg-white px-2.5 py-2 shadow-xmd">
               {selectableItems.map((item) => (
                 <div
-                  className={`px-2.5 py-1.5 rounded-md hover:bg-purple-light whitespace-nowrap ${
+                  className={`whitespace-nowrap rounded-md px-2.5 py-1.5 hover:bg-purple-light ${
                     currentItem === item && 'text-blue'
                   }`}
                   key={makeId()}

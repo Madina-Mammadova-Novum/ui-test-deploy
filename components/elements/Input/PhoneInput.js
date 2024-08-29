@@ -18,7 +18,7 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
           const error = errors[name];
           return (
             <div className="w-full">
-              <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
+              <Label name={name} className="mb-0.5 block whitespace-nowrap text-left text-xs-sm">
                 {label}
               </Label>
               <Phone
@@ -46,7 +46,7 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
 
   return (
     <div className="w-full">
-      <Label name={name} className="block text-xs-sm text-left mb-0.5 whitespace-nowrap">
+      <Label name={name} className="mb-0.5 block whitespace-nowrap text-left text-xs-sm">
         {label}
       </Label>
       <Phone

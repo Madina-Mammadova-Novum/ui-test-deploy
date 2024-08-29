@@ -35,7 +35,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
     return (
       <ExpandableRow
         key={rowData.id}
-        className="pt-14 px-5"
+        className="px-5 pt-14"
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
@@ -57,7 +57,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
   const printContent = useMemo(() => {
     const searchedResult = offers.find((offer) => offer.id === searchedParams.id);
 
-    if (loading) return <Loader className="h-8 w-8 absolute top-1/2 z-0" />;
+    if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
     if (searchedResult) return [searchedResult].map(printExpandableRow);
 
     return <Title level="3">Notification is outdated.</Title>;

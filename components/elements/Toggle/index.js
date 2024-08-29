@@ -9,16 +9,16 @@ const Toggle = ({ value, id, disabled, children, className }) => {
 
   return (
     <>
-      <label htmlFor={id} className={`relative inline-block w-[30px] h-[18px] ${className}`}>
+      <label htmlFor={id} className={`relative inline-block h-[18px] w-[30px] ${className}`}>
         <input
           id={id}
           disabled={disabled}
           checked={toggle}
           onChange={() => setToggle(!toggle)}
           type="checkbox"
-          className="hidden peer"
+          className="peer hidden"
         />
-        <span className="absolute cursor-pointer bg-gray-darker rounded-[25px] w-[30px] top-0 left-0 bottom-0 right-0 transition before:absolute before:content-[''] before:left-0.5 before:top-[50%] before:translate-y-[-50%] before:w-3 before:h-3 before:rounded-[50%] before:bg-white before:transition peer-checked:bg-blue peer-checked:before:translate-x-[13px]" />
+        <span className="absolute bottom-0 left-0 right-0 top-0 w-[30px] cursor-pointer rounded-[25px] bg-gray-darker transition before:absolute before:left-0.5 before:top-[50%] before:h-3 before:w-3 before:translate-y-[-50%] before:rounded-[50%] before:bg-white before:transition before:content-[''] peer-checked:bg-blue peer-checked:before:translate-x-[13px]" />
       </label>
       {children}
     </>

@@ -7,9 +7,9 @@ const NotificationList = ({ data }) => {
   const { title, data: notifications } = data;
 
   return (
-    <div className="flex flex-col items-center w-full px-8">
-      <span className="text-gray capitalize text-xs-sm pb-4">{title}</span>
-      <Divider className="w-full mb-4" />
+    <div className="flex w-full flex-col items-center px-8">
+      <span className="pb-4 text-xs-sm capitalize text-gray">{title}</span>
+      <Divider className="mb-4 w-full" />
       <NotificationCard data={notifications} />
     </div>
   );

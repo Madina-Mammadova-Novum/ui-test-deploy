@@ -25,12 +25,12 @@ const FAQBlock = ({ title, subTitle, shortDescription, items = [], categories, c
 
   return (
     <section className="relative z-10 -mt-[175px]">
-      <div className="container mx-auto px-6 3md:px-14 max-w-[1258px]">
+      <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
         {title && <div>{title}</div>}
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <TabsAsLinks tabs={tabs} activeTab={category.id} />
-        <div className="relative rounded-base pt-1.5 px-5 pb-5 bg-white divide-y divide-gray-darker mt-1">
+        <div className="relative mt-1 divide-y divide-gray-darker rounded-base bg-white px-5 pb-5 pt-1.5">
           {items.length > 0 &&
             items.map(({ id, answer, question }) => (
               <Accordion
@@ -47,11 +47,11 @@ const FAQBlock = ({ title, subTitle, shortDescription, items = [], categories, c
               />
             ))}
           {cta && (
-            <div className="text-black pt-5">
+            <div className="pt-5 text-black">
               <AccordionCTA shortDescription={cta.shortDescription} title={cta.title} buttons={cta.buttons} />
             </div>
           )}
-          <div className="rounded-base  h-[calc(100%_-_135px)] w-full absolute shadow-xmd bottom-0 left-0 -z-10" />
+          <div className="absolute bottom-0 left-0 -z-10 h-[calc(100%_-_135px)] w-full rounded-base shadow-xmd" />
         </div>
       </div>
     </section>

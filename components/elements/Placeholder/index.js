@@ -1,5 +1,5 @@
 const Placeholder = () => {
-  return <div className="w-5 h-0.5 bg-black" />;
+  return <div className="h-0.5 w-5 bg-black" />;
 };
 
 export default Placeholder;

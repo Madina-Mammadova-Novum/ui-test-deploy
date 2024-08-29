@@ -2,8 +2,8 @@ import { PageFooter, PageHeader } from '@/modules';
 
 export default function PageLayout({ children }) {
   return (
-    <div className="flex min-h-screen max-w-screen">
-      <div className="flex flex-col md:grow relative">
+    <div className="max-w-screen flex min-h-screen">
+      <div className="relative flex w-full flex-col md:grow">
         <PageHeader />
         {children}
         <PageFooter />

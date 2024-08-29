@@ -13,7 +13,7 @@ import { getPostFixtureDataSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FilterByForm = ({ children, title = 'Filter by' }) => {
+const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({ state: null, schema: null });
 
@@ -31,22 +31,23 @@ const FilterByForm = ({ children, title = 'Filter by' }) => {
 
   return (
     <>
-      <Title level="3" className="uppercase text-xsm">
+      <Title level="3" className="text-xsm uppercase">
         {title}
       </Title>
 
-      <div className="bg-white rounded-base shadow-xmd p-5 flex w-full relative">
+      <div className="relative flex w-full rounded-base bg-white p-5 shadow-xmd">
         <FormProvider {...methods}>
           <FormManager
             showReset
             resetAction={onReset}
             submitAction={onSubmit}
-            className="flex flex-col lg:flex-row items-end gap-5 justify-between w-full"
+            className="flex w-full flex-col items-end justify-between gap-5 lg:flex-row"
             submitButton={{
               text: 'Show results',
               variant: 'secondary',
               size: 'large',
               buttonContainerClassName: 'absolute right-10 bottom-5',
+              disabled: isLoading,
             }}
           >
             {children}

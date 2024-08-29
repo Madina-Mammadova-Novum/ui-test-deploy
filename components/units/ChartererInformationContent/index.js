@@ -16,7 +16,7 @@ const ChartererInformationContent = ({ title = '', data }) => {
       <TextRow title="Estimated Number of Charters per Year">{data?.tankersPerYear || '-'} charters</TextRow>
       <TextRow title="Average Tonnage per Charter">121 - 200 kt</TextRow>
       <TextRow title="Country of registration">
-        <ReactCountryFlag countryCode={data?.country?.countryCode} svg className="!w-5 !h-3 mr-1.5" />{' '}
+        <ReactCountryFlag countryCode={data?.country?.countryCode} svg className="mr-1.5 !h-3 !w-5" />{' '}
         {data?.country?.countryName}
       </TextRow>
     </>

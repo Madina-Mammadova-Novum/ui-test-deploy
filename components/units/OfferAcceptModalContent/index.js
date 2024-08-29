@@ -87,8 +87,8 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
   if (initialLoading) {
     return (
-      <div className="w-72 h-72">
-        <Loader className="h-8 w-8 absolute top-1/2" />
+      <div className="h-72 w-72">
+        <Loader className="absolute top-1/2 h-8 w-8" />
       </div>
     );
   }
@@ -97,9 +97,9 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
     <div className="w-[610px]">
       <Title level={2}>Accept the Pre-fixture Offer</Title>
 
-      <div className="flex text-[12px] items-center mt-5">
+      <div className="mt-5 flex items-center text-[12px]">
         <Countdown time={countdownData} />
-        <div className="pl-4 border-l h-min flex flex-col items-start">
+        <div className="flex h-min flex-col items-start border-l pl-4">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button
             customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
@@ -119,12 +119,12 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`h-[320px] mt-3 overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
       </div>
 
-      <div className="flex justify-end text-xsm gap-x-2.5 mt-4">
+      <div className="mt-4 flex justify-end gap-x-2.5 text-xsm">
         <Button
           onClick={closeModal}
           customStyles="ml-auto"

@@ -20,7 +20,7 @@ export default function LoginPage() {
       <LoginForm />
       <NextLink
         href={ROUTES.FORGOT_PASSWORD}
-        className="inline-flex justify-center items-center pt-2.5 text-blue text-xsm"
+        className="inline-flex items-center justify-center pt-2.5 text-xsm text-blue"
       >
         Forgot your password
       </NextLink>

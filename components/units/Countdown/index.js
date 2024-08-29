@@ -4,8 +4,8 @@ import { CountdownPropTypes } from '@/lib/types';
 
 const Countdown = ({ time, customStyles = '' }) => {
   return (
-    <div className={`px-4 py-1 border-l-2 border-l-blue ${customStyles}`}>
-      <span className="uppercase font-semibold">Countdown</span>
+    <div className={`border-l-2 border-l-blue px-4 py-1 ${customStyles}`}>
+      <span className="font-semibold uppercase">Countdown</span>
       <div className="flex text-xsm">
         <DynamicCountdownTimer {...time} />
       </div>

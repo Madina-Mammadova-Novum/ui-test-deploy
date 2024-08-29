@@ -3,8 +3,8 @@ import { CommentPropTypes } from '@/lib/types';
 const Comment = ({ title = '', date = '', time = '' }) => {
   return (
     <>
-      <h6 className="text-xsm font-semibold mt-2.5">{title}</h6>
-      <div className="text-[12px] text-gray mt-1.5">
+      <h6 className="mt-2.5 text-xsm font-semibold">{title}</h6>
+      <div className="mt-1.5 text-[12px] text-gray">
         {date} at {time}
       </div>
     </>

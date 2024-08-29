@@ -7,13 +7,13 @@ import { makeId } from '@/utils/helpers';
 
 const TabsAsLinks = ({ tabs, customStyles = '', activeTab }) => {
   return (
-    <div className={classnames('flex p-1 bg-purple-light w-min rounded-md text-xsm font-medium', customStyles)}>
+    <div className={classnames('flex w-min rounded-md bg-purple-light p-1 text-xsm font-medium', customStyles)}>
       {tabs.map(({ value, label, path }) => (
         <NextLink
           key={makeId()}
           value={value}
           className={classnames(
-            'whitespace-nowrap min-w-16 w-full h-7 px-5 rounded-md flex items-center',
+            'flex h-7 w-full min-w-16 items-center whitespace-nowrap rounded-md px-5',
             value === activeTab && 'bg-white text-blue shadow-2xmd'
           )}
           href={path}

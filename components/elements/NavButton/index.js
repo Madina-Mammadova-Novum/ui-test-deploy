@@ -15,9 +15,9 @@ const NavButton = ({ children, path, customStyles, disabled = false, target = nu
     <NextLink
       href={path}
       className={classnames(
-        'text-xsm whitespace-nowrap font-semibold',
+        'whitespace-nowrap text-xsm font-semibold',
         isActive ? 'text-blue' : 'text-white',
-        disabled && 'opacity-50 pointer-events-none',
+        disabled && 'pointer-events-none opacity-50',
         customStyles
       )}
       target={target}

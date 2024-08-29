@@ -66,9 +66,9 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
     <div className="w-[610px]">
       <ModalHeader>View Incoming Offer</ModalHeader>
 
-      <div className="flex text-[12px] items-center mt-5">
+      <div className="mt-5 flex items-center text-[12px]">
         <Countdown time={countdownData} />
-        <div className="pl-4 border-l h-min flex flex-col items-start">
+        <div className="flex h-min flex-col items-start border-l pl-4">
           <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
           <Button
             customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
@@ -93,7 +93,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
         {tabContent()}
       </div>
 
-      <div className="flex text-xsm gap-x-2.5 mt-4 whitespace-nowrap justify-end">
+      <div className="mt-4 flex justify-end gap-x-2.5 whitespace-nowrap text-xsm">
         <Button
           onClick={() => setStep('offer_decline')}
           buttonProps={{ text: 'Decline the offer', variant: 'delete', size: 'large' }}

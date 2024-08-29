@@ -1,9 +1,9 @@
 import BoatSVG from '@/assets/images/boat.svg';
 
 const SearchNotFound = () => (
-  <div className="flex flex-col items-center my-10">
+  <div className="my-10 flex flex-col items-center">
     <BoatSVG />
-    <p className="font-bold text-lg">No results found</p>
+    <p className="text-lg font-bold">No results found</p>
   </div>
 );
 
