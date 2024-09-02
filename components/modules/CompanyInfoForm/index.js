@@ -17,7 +17,7 @@ import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
-import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const CompanyInfoForm = ({ closeModal }) => {
   const dispatch = useDispatch();
@@ -44,12 +44,11 @@ const CompanyInfoForm = ({ closeModal }) => {
   }, [addressValue, methods]);
 
   const onSubmit = async (formData) => {
-    const { error, message } = await updateCompany({ data: formData, role });
+    const { error } = await updateCompany({ data: formData, role });
 
     if (error) {
       errorToast(error?.title, error?.message);
     } else {
-      successToast('Success', message);
       closeModal();
       dispatch(fetchUserProfileData());
     }

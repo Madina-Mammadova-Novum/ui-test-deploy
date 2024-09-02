@@ -37,7 +37,12 @@ export async function getQ88DataByImo({ imo }) {
 export async function addVesselManually({ data }) {
   const body = requestAddVesselManuallyAdapter({ data });
   const response = await postData(`vessels/add-manually`, body);
-  if (!response.error) response.message = 'Your have successfully added a new tanker';
+
+  if (!response.error) {
+    response.message = 'Your tanker addition request has been successfully sent.';
+    response.messageDescription = 'You will be notified soon.';
+  }
+
   return {
     ...response,
   };
@@ -48,9 +53,10 @@ export async function requestUpdateVessel({ data }) {
   const response = await putData(`vessels/update`, body);
 
   if (!response.error) {
-    response.message = 'Your have successfully applied to change information';
-    response.messageDescription = 'Please wait for an answer within 24 hours';
+    response.message = 'You have succesfully requested to edit tanker information';
+    response.messageDescription = 'You will be notified on the decision within 24 hours.';
   }
+
   return {
     ...response,
   };
@@ -130,7 +136,7 @@ export async function removeVesselFromFleet(data) {
   const body = removeVesselFromFleetAdapter({ data });
 
   const response = await postData(`vessels/delete-from-fleet`, body);
-  if (!response.error) response.message = 'Your have successfully removed tanker from fleet';
+  if (!response.error) response.message = `You have successfully removed the tanker from '${data?.fleetName}' fleet.`;
 
   return {
     ...response,

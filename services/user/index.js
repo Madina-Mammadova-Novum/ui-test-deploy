@@ -119,8 +119,6 @@ export async function updateCompany({ data, role }) {
 
   const response = await putData(`account/update-company`, body);
 
-  if (!response.error) response.message = 'You will be notified soon. The rest of the changes have been edited';
-
   return {
     ...response,
   };

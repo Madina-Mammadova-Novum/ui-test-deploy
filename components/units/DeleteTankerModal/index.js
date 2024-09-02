@@ -19,13 +19,13 @@ const DeleteTankerModal = ({ closeModal, state }) => {
   const dispatch = useDispatch();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { id, fleetId, name, action } = state;
+  const { id, fleetId, name, action, fleetName } = state;
 
   const isRemoveFromFleet = ACTIONS.DELETE_TANKER_FROM_FLEET === action;
 
   const handleRemoveFleet = async () => {
     setIsSubmitting(true);
-    const { error, message } = await removeVesselFromFleet({ id });
+    const { error, message } = await removeVesselFromFleet({ id, fleetName });
 
     dispatch(deleteVesselFromFleetsState({ tankerId: id, fleetId }));
     successToast(message);

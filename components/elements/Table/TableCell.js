@@ -105,7 +105,7 @@ const TableCell = ({ cellProps }) => {
           <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} isValid={isValid} />
         );
       case ACTIONS.DELETE_TANKER_FROM_FLEET:
-        return <DeleteTankerModal state={{ id, fleetId, name, action }} />;
+        return <DeleteTankerModal state={{ id, fleetId, name, action, fleetName }} />;
       case ACTIONS.DELETE_TANKER:
         return <DeleteTankerModal state={{ id, name, action }} />;
       case ACTIONS.ASSIGN_FLEET:
