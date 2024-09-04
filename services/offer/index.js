@@ -45,7 +45,7 @@ export async function declineOffer({ data, role }) {
   const body = declineOfferAdapter({ data });
   const path = role === ROLES.OWNER ? 'offer/decline' : 'offer/charterer/decline';
   const response = await postData(path, body);
-  if (!response.error) response.message = 'You have successfully submitted a decline';
+  if (!response.error) response.message = 'You have successfully declined the offer';
   return {
     ...response,
   };
