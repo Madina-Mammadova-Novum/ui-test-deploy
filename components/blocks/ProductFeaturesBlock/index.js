@@ -9,19 +9,13 @@ import { ctaListPropTypes, mediaPropTypes } from '@/lib/types';
 
 import Item from '@/blocks/ProductFeaturesBlock/Item';
 import { NextImage, Title } from '@/elements';
-import { Accordion, Tabs } from '@/units';
+import { Tabs } from '@/units';
 import { getStrapiMedia } from '@/utils';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
-  const [open, setOpen] = useState(0);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
-
   const tabs = ctaList.map((ctaBlock) => {
     return {
       label: ctaBlock.title,
@@ -32,17 +26,9 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   const printCtaBlockItem = (item) => {
     return (
-      <Accordion
-        key={`id-${item.id}`}
-        open={open === item.title}
-        onClick={() => handleOpen(item.title)}
-        items={[
-          {
-            headerContent: item.title,
-            bodyContent: <Item text={item.text} buttons={item.buttons} />,
-          },
-        ]}
-      />
+      <div key={`id-${item.id}`} className="mt-1 rounded-base bg-white p-4 text-black shadow-xmd">
+        <Item text={item.text} buttons={item.buttons} />
+      </div>
     );
   };
 
