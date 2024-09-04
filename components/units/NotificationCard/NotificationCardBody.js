@@ -14,7 +14,7 @@ import { resetDealData, resetParams, setIsOpened } from '@/store/entities/notifi
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
 
-const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) => {
+const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, handleClose }) => {
   const dispatch = useDispatch();
 
   const role = getCookieFromBrowser('session-user-role');
@@ -35,6 +35,7 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled }) =>
   }, [dispatch]);
 
   const handleRedirect = useCallback(() => {
+    handleClose();
     setDisabled(urlId);
 
     if (filterParams?.activeTab === 'unread') {

@@ -14,7 +14,7 @@ import { updateInfo } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Notes, PersonalDetails } from '@/units';
-import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsForm = ({ closeModal }) => {
   const schema = yup.object({ ...personalDetailsSchema() });
@@ -24,16 +24,6 @@ const PersonalDetailsForm = ({ closeModal }) => {
   const methods = useHookFormParams({ state: data?.personalDetails, schema });
 
   const onSubmit = async (formData) => {
-    const contactKeys = ['primaryPhone', 'secondaryPhone'];
-
-    const isOnlyContactDataChanged =
-      contactKeys.some((key) => {
-        return formData[key] !== data?.personalDetails[key];
-      }) &&
-      Object.keys(formData).every((key) => {
-        return contactKeys.includes(key) || formData[key] === data?.personalDetails[key];
-      });
-
     const { error } = await updateInfo({ data: formData });
 
     if (formData === data?.personalDetails) return;
@@ -41,14 +31,6 @@ const PersonalDetailsForm = ({ closeModal }) => {
     if (error) {
       errorToast(error?.title, error?.message);
     } else {
-      if (isOnlyContactDataChanged) {
-        successToast('You have succesfuly updated your "Phone Number"');
-      } else {
-        successToast(
-          'Your request has been sent for review',
-          'You will be notified soon. The remaining changes have been updated to not require admin approval.'
-        );
-      }
       dispatch(fetchUserProfileData());
     }
   };
