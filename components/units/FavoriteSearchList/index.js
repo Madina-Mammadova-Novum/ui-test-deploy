@@ -209,10 +209,9 @@ const FavoriteSearchList = ({ onClose }) => {
                   <Button
                     customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
                     buttonProps={{
-                      icon: { before: <BellSVG size="30" /> },
+                      icon: { before: <BellSVG size="30" className={isNotification ? 'fill-blue' : 'fill-black'} /> },
                       size: 'medium',
                       variant: isNotification ? 'primary' : 'tertiary',
-                      iconContainerStyles: isNotification ? 'text-blue' : '',
                     }}
                     onClick={() => updateSearchHandler(id, index)}
                     disabled={isLoading}
