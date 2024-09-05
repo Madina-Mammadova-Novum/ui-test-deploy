@@ -144,7 +144,7 @@
 
   .content-wrapper a,
   .content-wrapper a span {
-    @apply text-blue;
+    @apply break-all text-blue;
   }
 
   .heading-wrapper h1 {
