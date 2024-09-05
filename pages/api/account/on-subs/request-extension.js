@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getApiURL(`/v1/charterer/deals/requestcountdownextension`),
+    path: getApiURL(`v1/charterer/deals/requestcountdownextension`),
     dataAdapter: responseOnSubsCountdownExtensionAdapter,
     requestMethod: 'POST',
     options: { headers: Authorization(token) },
