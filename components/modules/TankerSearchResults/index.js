@@ -1,19 +1,40 @@
 'use client';
 
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { TankerSearchResultPropTypes } from '@/lib/types';
 
 import { searchHeaderDataAdapter } from '@/adapters/search';
-import { ExpandableCardHeader, TextRow } from '@/elements';
+import { Button, ExpandableCardHeader, Modal, TextRow } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import ExpandedContent from '@/modules/TankerSearchResults/ExpandedContent';
 import TankerExpandedFooter from '@/modules/TankerSearchResults/TankerExpandedFooter';
-import { SearchNotFound, ToggleRows } from '@/units';
+import { getSearchSelector } from '@/store/selectors';
+import { FavoriteSearchForm, SearchNotFound, ToggleRows } from '@/units';
+import { useHookFormParams } from '@/utils/hooks';
 
-const TankerSearchResults = ({ request, data }) => {
+const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
+  const { searchParams } = useSelector(getSearchSelector);
+
   const [expandExactResults, setExpandExactResults] = useState({ value: false });
   const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
+  const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
+
+  const methods = useHookFormParams({ state: searchParams });
+
+  const searchFormData = methods.getValues();
+
+  const handleOpenModal = (e) => {
+    e?.stopPropagation();
+
+    setIsAddFavoriteOpened(true);
+  };
+
+  const handleCloseModal = (e) => {
+    e?.stopPropagation();
+    setIsAddFavoriteOpened(false);
+  };
 
   if (!request) return null;
 
@@ -78,7 +99,26 @@ const TankerSearchResults = ({ request, data }) => {
       </div>
     </>
   ) : (
-    <SearchNotFound />
+    <div>
+      <SearchNotFound isAccountSearch={isAccountSearch} />
+      {isAccountSearch && (
+        <>
+          <Button
+            buttonProps={{ text: 'Notify Me When Available', variant: 'secondary', size: 'large' }}
+            customStylesFromWrap="mb-4"
+            onClick={handleOpenModal}
+          />
+          <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
+            <FavoriteSearchForm
+              title="Enable Notifications and Save this Search"
+              message="Would you like to be notified when a tanker becomes available and save this search to your favorite group?" // Updated message
+              state={searchFormData}
+              closeModal={handleCloseModal}
+            />
+          </Modal>
+        </>
+      )}
+    </div>
   );
 };
 

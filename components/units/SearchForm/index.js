@@ -73,6 +73,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
       methods.reset(prefilledSearchData);
     }
   }, [prefilledSearchData]);
+
   return (
     <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
       <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
