@@ -6,12 +6,9 @@ import { TablePropTypes } from '@/lib/types';
 
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
-import { getCookieFromBrowser, getRoleIdentity, sortTable } from '@/utils/helpers';
+import { sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
-  const role = getCookieFromBrowser('session-user-role');
-  const { isOwner } = getRoleIdentity({ role });
-
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
 
   const { data, sortDirection, sortBy } = sortedData;
@@ -40,9 +37,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       <Fragment key={rowData?.id}>
         {isFreezed && (
           <span className="absolute left-0 z-50 mt-2.5 whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm sm:left-1/4 lg:left-1/3">
-            {isOwner
-              ? 'The charterer has gone into pre-fixture with another tanker'
-              : 'The tanker has moved into pre-fixture with another charterer'}
+            Deal is frozen
           </span>
         )}
         <TableRow type={type} fleetId={fleetId} rowData={rowData} />

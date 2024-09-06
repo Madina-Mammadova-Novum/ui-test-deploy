@@ -16,7 +16,12 @@ const schema = yup.object({
   ...addToSavedSearchSchema(),
 });
 
-const FavoriteSearchForm = ({ state, title, closeModal }) => {
+const FavoriteSearchForm = ({
+  state,
+  title,
+  message = 'Would you like to receive notifications related to this favorite search?',
+  closeModal,
+}) => {
   const methods = useHookFormParams({ schema });
 
   const { setValue, getValues } = methods;
@@ -65,7 +70,7 @@ const FavoriteSearchForm = ({ state, title, closeModal }) => {
           checked={getValues('isNotification')}
           labelStyles="text-black text-xsm"
         >
-          Would you like to receive notifications related to this favorite search?
+          {message}
         </CheckBoxInput>
       </ModalFormManager>
     </FormProvider>
