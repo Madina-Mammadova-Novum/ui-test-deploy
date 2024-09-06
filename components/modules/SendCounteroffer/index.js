@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import classnames from 'classnames';
 
@@ -14,6 +14,7 @@ import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
 import { getCountdownTimer } from '@/services/countdownTimer';
 import { fetchСounterOfferValidation } from '@/store/entities/offer/actions';
+import { getOfferSelector } from '@/store/selectors';
 import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 import { counterofferPointsToImprove } from '@/utils/mock';
@@ -32,6 +33,8 @@ const tabs = [
 const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const dispatch = useDispatch();
 
+  const { valid, message } = useSelector(getOfferSelector);
+
   const scrollingContainerRef = useRef(null);
 
   const [disabled, setDisabled] = useState(false);
@@ -46,6 +49,20 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
   const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
+
+  const errorBanner = useMemo(() => {
+    return (
+      message &&
+      !valid && (
+        <div className="w-full rounded-base bg-red-light px-5 py-2.5 pb-3">
+          <div className="mt-1.5 text-xsm">
+            <span className="font-bold">Declined: </span>
+            <span className="ml-1.5">{message}</span>
+          </div>
+        </div>
+      )
+    );
+  }, [message, valid, dealId]);
 
   const handleCountdownStateChange = (key, value) =>
     setCountdownState((prevState) => ({
@@ -106,9 +123,10 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
     <div className="w-[610px]">
       <ModalHeader disabled={disabled} goBack={handleBack}>
         {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
+        {errorBanner}
       </ModalHeader>
 
-      {!confirmCounteroffer && (
+      {!confirmCounteroffer && valid && (
         <div className="my-5 rounded-md border border-gray-darker bg-gray-light px-5 py-3 text-[12px]">
           <p>
             In order to send counteroffer, please make at least <b>one of the following</b> adjustments:{' '}
@@ -140,7 +158,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
         </div>
       </div>
       <CounterofferForm
-        disabled={disabled}
+        disabled={disabled || !valid}
         setDisabled={setDisabled}
         closeModal={closeModal}
         allowSubmit={confirmCounteroffer}
