@@ -293,11 +293,11 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     laycanStart,
     laycanEnd,
-    dateSent,
     expiresAt,
     frozenAt,
     notified,
     id,
+    createdAt,
   } = data;
 
   return [
@@ -339,7 +339,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       notified,
-      value: dateSent ? transformDate(dateSent, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
     {
       id,
@@ -643,6 +643,7 @@ export const responseFailedOffersAdapter = ({ data }) => {
 
 export const responseSentCounteroffersAdapter = ({ data }) => {
   if (!data) return [];
+
   return data;
 };
 

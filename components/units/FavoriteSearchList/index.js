@@ -15,7 +15,7 @@ import BellSVG from '@/assets/images/bell.svg';
 import { Button, Loader, TextWithLabel, Title } from '@/elements';
 import { deleteSavedSearch, getSavedSearchDetail, getSavedSearches, updateSavedSearch } from '@/services/savedSearch';
 import { setPrefilledSearchData } from '@/store/entities/search/slice';
-import { Notes } from '@/units';
+import { ConfirmModal, Notes } from '@/units';
 import { transformDate } from '@/utils/date';
 import { calculateAmountOfPages } from '@/utils/helpers';
 import { errorToast, successToast, useFilters } from '@/utils/hooks';
@@ -26,6 +26,8 @@ const FavoriteSearchList = ({ onClose }) => {
   const [savedSearches, setSavedSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [recordsTotals, setRecordsTotals] = useState(0);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({});
 
   const { currentPage, handlePageChange, handleSelectedPageChange, perPage } = useFilters({
     itemsPerPage: 2,
@@ -55,6 +57,16 @@ const FavoriteSearchList = ({ onClose }) => {
       errorToast(error?.title, error?.message);
     }
     setIsLoading(false);
+  };
+
+  const openModal = (config) => {
+    setModalConfig(config);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalConfig({});
   };
 
   const deleteSearchHandler = async (searchId) => {
@@ -203,19 +215,39 @@ const FavoriteSearchList = ({ onClose }) => {
                   <Button
                     customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
                     buttonProps={{ text: 'Delete Search', size: 'medium', variant: 'delete' }}
-                    onClick={() => deleteSearchHandler(id)}
+                    onClick={() =>
+                      openModal({
+                        message: 'Are you sure you want to delete this search?',
+                        onConfirm: () => deleteSearchHandler(id),
+                      })
+                    }
                     disabled={isLoading}
                   />
                   <Button
                     customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
                     buttonProps={{
-                      icon: { before: <BellSVG size="30" /> },
+                      icon: { before: <BellSVG size="30" className={isNotification ? 'fill-blue' : 'fill-black'} /> },
                       size: 'medium',
                       variant: isNotification ? 'primary' : 'tertiary',
-                      iconContainerStyles: isNotification ? 'text-blue' : '',
                     }}
-                    onClick={() => updateSearchHandler(id, index)}
+                    onClick={() =>
+                      openModal({
+                        message: isNotification
+                          ? 'Are you sure you want to stop receiving notifications for this search?'
+                          : 'Are you sure you want to start receiving notifications for this search?',
+                        onConfirm: () => updateSearchHandler(id, index),
+                      })
+                    }
                     disabled={isLoading}
+                  />
+
+                  <ConfirmModal
+                    isOpen={isModalOpen}
+                    onConfirm={modalConfig.onConfirm}
+                    onClose={closeModal}
+                    message={modalConfig.message}
+                    okButtonProps={modalConfig.okButtonProps}
+                    cancelButtonProps={modalConfig.cancelButtonProps}
                   />
                 </div>
               </div>

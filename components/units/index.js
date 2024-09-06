@@ -36,6 +36,7 @@ import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
 import ComplexPagination from '@/units/ComplexPagination';
+import ConfirmModal from '@/units/ConfirmModal';
 import COTTabContent from '@/units/COTTabContent';
 import Countdown from '@/units/Countdown';
 import CounterofferForm from '@/units/CounterofferForm';
@@ -215,4 +216,5 @@ export {
   Map,
   FavoriteSearchForm,
   FavoriteSearchList,
+  ConfirmModal,
 };
