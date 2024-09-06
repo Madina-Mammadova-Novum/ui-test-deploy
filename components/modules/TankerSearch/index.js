@@ -67,7 +67,7 @@ const TankerSearch = ({ isAccountSearch = false }) => {
       return <DynamicLoader className="h-56 w-56" />;
     }
 
-    return <TankerSearchResults data={data} request={request} />;
+    return <TankerSearchResults data={data} request={request} isAccountSearch={isAccountSearch} />;
   }, [loading, data, request]);
 
   return (
