@@ -134,11 +134,7 @@ const FavoriteSearchList = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchSearches(currentPage, perPage);
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
+    fetchSearches(currentPage, perPage);
   }, [currentPage, perPage]);
 
   return (
