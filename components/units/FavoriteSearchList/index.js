@@ -99,7 +99,7 @@ const FavoriteSearchList = ({ onClose }) => {
     });
 
     if (status === 200) {
-      dispatch(setPrefilledSearchData(prefilledSaveSearchDataAdapter({ data, isAlternative: true })));
+      dispatch(setPrefilledSearchData(prefilledSaveSearchDataAdapter({ data, isSavedSearched: true })));
       onClose();
     } else if (error) {
       errorToast(error?.title, error?.message);
