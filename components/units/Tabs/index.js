@@ -2,23 +2,29 @@ import classnames from 'classnames';
 
 import { TabsPropTypes } from '@/lib/types';
 
-const Tabs = ({ tabs, customStyles = '', activeTab, onClick, ...rest }) => {
+import { Badge } from '@/elements';
+
+const Tabs = ({ tabs, customStyles = '', hasUnreadComment = false, activeTab, onClick, ...rest }) => {
   return (
     <div className={classnames('flex w-min rounded-md bg-purple-light p-1 text-xsm font-medium', customStyles)}>
       {tabs?.map(({ value, label }) => (
-        <button
-          {...rest}
-          key={value}
-          type="button"
-          value={value}
-          onClick={onClick}
-          className={classnames(
-            'h-7 min-w-16 whitespace-nowrap rounded-md px-5',
-            value === activeTab && 'bg-white text-blue shadow-2xmd'
-          )}
-        >
-          {label}
-        </button>
+        <div key={value} className="relative flex items-center">
+          {hasUnreadComment && value === 'comments' && <Badge counter="1" className="left-1" />}
+
+          <button
+            {...rest}
+            type="button"
+            value={value}
+            onClick={onClick}
+            className={classnames(
+              'h-7 min-w-16 whitespace-nowrap rounded-md px-5',
+              value === activeTab && 'bg-white text-blue shadow-2xmd',
+              hasUnreadComment && 'px-7'
+            )}
+          >
+            {label}
+          </button>
+        </div>
       ))}
     </div>
   );
