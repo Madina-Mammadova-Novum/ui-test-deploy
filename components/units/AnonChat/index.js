@@ -18,6 +18,7 @@ import { chatNotificationService, сhatSessionService } from '@/services/signalR
 import { messageAlert, resetChat, resetUser, setBotMessage, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthSelector } from '@/store/selectors';
 import { addLocalDateFlag, checkEmailPrefix, convertDataToOptions, countriesOptions, setCookie } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 import { steps } from '@/utils/mock';
 
 const AnonChat = ({ opened }) => {
@@ -55,8 +56,14 @@ const AnonChat = ({ opened }) => {
   };
 
   const fetchChatRoom = async () => {
-    const { data: token } = await getChatToken({ data });
+    const { data: token, error } = await getChatToken({ data });
+
     const result = sessionAdapter({ token });
+
+    if (error) {
+      errorToast(error.title, error.message);
+      setDisabled(true);
+    }
 
     dispatch(setUser({ chatId: result?.chatId }));
     setSession(result);
@@ -262,12 +269,12 @@ const AnonChat = ({ opened }) => {
                 onChange={handleMessage}
                 placeholder="Message ..."
                 customStyles="!border-gray-darker !w-full"
-                disabled={data?.init?.message}
+                disabled={data?.init?.message || !session}
               />
               <Button
                 type="submit"
                 customStyles="border border-gray-darker !p-2.5"
-                disabled={data?.init?.message || disabled}
+                disabled={data?.init?.message || disabled || !session}
                 buttonProps={{ variant: 'tertiary', size: 'small', icon: { before: <PlaneSVG /> } }}
               />
             </form>
