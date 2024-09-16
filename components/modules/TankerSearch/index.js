@@ -63,7 +63,7 @@ const TankerSearch = ({ isAccountSearch = false }) => {
   }, [searchParams, sorting]);
 
   useEffect(() => {
-    if (prefilledSearchData?.isSavedSearched) {
+    if (prefilledSearchData?.isSavedSearch) {
       const savedSearchParams = {
         ...prefilledSearchData,
         sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,

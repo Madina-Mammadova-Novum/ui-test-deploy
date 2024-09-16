@@ -161,11 +161,11 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const isSavedSearched = getValues('isSavedSearched');
+      const isSavedSearch = getValues('isSavedSearch');
       const cargoType = getValues('cargoType');
       const currentProducts = getValues('products');
 
-      if (isSavedSearched) {
+      if (isSavedSearch) {
         const relatedProducts = await getProducts(cargoType.value);
 
         const relatedProductsMap = relatedProducts?.data?.reduce((map, product) => {
@@ -197,7 +197,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
     fetchProducts();
 
     return () => {
-      setValue('isSavedSearched', false);
+      setValue('isSavedSearch', false);
     };
   }, []);
 
