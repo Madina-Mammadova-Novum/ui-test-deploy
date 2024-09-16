@@ -14,7 +14,7 @@ import { prefilledSaveSearchDataAdapter } from '@/adapters/negotiating';
 import BellSVG from '@/assets/images/bell.svg';
 import { Button, Loader, TextWithLabel, Title } from '@/elements';
 import { deleteSavedSearch, getSavedSearchDetail, getSavedSearches, updateSavedSearch } from '@/services/savedSearch';
-import { setPrefilledSearchData } from '@/store/entities/search/slice';
+import { setPrefilledSearchData, setSearchParams } from '@/store/entities/search/slice';
 import { ConfirmModal, Notes } from '@/units';
 import { transformDate } from '@/utils/date';
 import { calculateAmountOfPages } from '@/utils/helpers';
@@ -100,6 +100,7 @@ const FavoriteSearchList = ({ onClose }) => {
 
     if (status === 200) {
       dispatch(setPrefilledSearchData(prefilledSaveSearchDataAdapter({ data, isSavedSearched: true })));
+      dispatch(setSearchParams(prefilledSaveSearchDataAdapter({ data, isSavedSearched: true })));
       onClose();
     } else if (error) {
       errorToast(error?.title, error?.message);
