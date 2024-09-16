@@ -687,7 +687,7 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
   };
 };
 
-export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearched = false }) => {
+export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false }) => {
   if (!data) return [];
 
   const {
@@ -730,7 +730,7 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearched = false }
         value: product.productId,
       },
     })),
-    isSavedSearched,
+    isSavedSearch,
   };
 };
 

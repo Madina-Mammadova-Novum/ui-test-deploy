@@ -1,17 +1,22 @@
 'use client';
 
 import { Fragment, useLayoutEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { TablePropTypes } from '@/lib/types';
 
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
-import { sortTable } from '@/utils/helpers';
+import { getUserDataSelector } from '@/store/selectors';
+import { getRoleIdentity, sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
 
+  const { role } = useSelector(getUserDataSelector);
+
   const { data, sortDirection, sortBy } = sortedData;
+  const { isOwner, isCharterer } = getRoleIdentity({ role });
 
   useLayoutEffect(() => {
     setSortedData((prevState) => ({ ...prevState, data: rows }));
@@ -33,11 +38,21 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const printTableRow = (rowData = []) => {
     const isFreezed = rowData?.some((cell) => cell?.freezed);
 
+    let freezedText;
+
+    if (isOwner) {
+      freezedText = 'You or the charterer have entered the prefixture stage with another party for this vessel.';
+    } else if (isCharterer) {
+      freezedText = 'You or the vessel owner have entered the prefixture stage with another party for this cargo.';
+    } else {
+      freezedText = 'Deal is frozen';
+    }
+
     return (
       <Fragment key={rowData?.id}>
         {isFreezed && (
           <span className="absolute left-0 z-50 mt-2.5 whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm sm:left-1/4 lg:left-1/3">
-            Deal is frozen
+            {freezedText}
           </span>
         )}
         <TableRow type={type} fleetId={fleetId} rowData={rowData} />

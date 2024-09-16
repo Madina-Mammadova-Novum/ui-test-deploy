@@ -2,7 +2,15 @@ import PropTypes from 'prop-types';
 
 import { Button, Modal } from '@/elements';
 
-const ConfirmModal = ({ isOpen, onConfirm, onClose, title, message, okButtonProps, cancelButtonProps }) => {
+const ConfirmModal = ({
+  isOpen,
+  onConfirm,
+  onClose,
+  title = 'Confirm Your Action',
+  message = 'Are you sure you want to proceed?',
+  okButtonProps = {},
+  cancelButtonProps = {},
+}) => {
   return (
     <Modal opened={isOpen} onClose={onClose}>
       <div className="p-4 text-center">
@@ -60,13 +68,6 @@ ConfirmModal.propTypes = {
       after: PropTypes.element,
     }),
   }),
-};
-
-ConfirmModal.defaultProps = {
-  title: 'Confirm Your Action',
-  message: 'Are you sure you want to proceed?',
-  okButtonProps: {},
-  cancelButtonProps: {},
 };
 
 export default ConfirmModal;
