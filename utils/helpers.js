@@ -322,6 +322,7 @@ export const resetObjectFields = (initialObject, resetType = null) => {
       }
     });
   }
+
   return initialObject;
 };
 
