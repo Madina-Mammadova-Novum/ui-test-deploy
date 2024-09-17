@@ -45,6 +45,11 @@ const Map = ({ className = 'h-full' }) => {
     })();
   }, [response]);
 
+  useEffect(() => {
+    setMiddleCoord([48.3794, 31.1656]);
+    setCoord([]);
+  }, [calculator]);
+
   return (
     <MapContainer center={middleCoord} zoom={4} className={`relative font-inter-sans ${className}`}>
       {isLoading && <MapLoader />}

@@ -14,7 +14,7 @@ import { toolsSchema } from '@/lib/schemas';
 import { getEstimation } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { CalculatedDetails } from '@/units';
-import { getValueWithPath, resetObjectFields } from '@/utils/helpers';
+import { getValueWithPath } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
@@ -66,13 +66,12 @@ const CalculatedForm = ({ customHeight = '', children }) => {
   };
 
   const handleReset = () => {
-    // eslint-disable-next-line no-sequences
-    methods.reset((formValues) => (resetObjectFields(formValues), formValues));
-    methods.unregister('additionalPorts');
     methods.setValue('cargoQuantity', null);
     methods.setValue('speed', null);
+    methods.setValue('fromPort', null);
+    methods.setValue('toPort', null);
     methods.setValue('calculator', calculator);
-    handleChangeState('calculator', toolsCalculatorOptions[0]);
+    methods.setValue('response', null);
   };
 
   const handleChangeValue = (key, value) => {
@@ -87,10 +86,15 @@ const CalculatedForm = ({ customHeight = '', children }) => {
     handleChangeState(key, value);
 
     if (key === 'calculator') {
-      methods.setValue('cargoQuantity', null);
-      methods.setValue('speed', null);
-      methods.unregister('cargoQuantity');
-      methods.unregister('speed');
+      if (value?.value === 'distanceandduration') {
+        methods.setValue('cargoQuantity', null);
+        methods.clearErrors('cargoQuantity');
+      } else if (value?.value === 'freightestimation') {
+        methods.setValue('speed', null);
+        methods.clearErrors('speed');
+      }
+
+      methods.setValue('response', null);
     }
   };
 
