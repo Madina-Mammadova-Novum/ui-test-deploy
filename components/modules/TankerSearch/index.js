@@ -16,7 +16,7 @@ import { errorToast } from '@/utils/hooks';
 const TankerSearch = ({ isAccountSearch = false }) => {
   const dispatch = useDispatch();
 
-  const { data, loading, error, sorting, searchParams, request } = useSelector(getSearchSelector);
+  const { data, loading, error, sorting, searchParams, request, prefilledSearchData } = useSelector(getSearchSelector);
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
 
   const handleReset = () => dispatch(onReset());
@@ -61,6 +61,18 @@ const TankerSearch = ({ isAccountSearch = false }) => {
 
     dispatch(fetchVesselsBySearch(result));
   }, [searchParams, sorting]);
+
+  useEffect(() => {
+    if (prefilledSearchData?.isSavedSearch) {
+      const savedSearchParams = {
+        ...prefilledSearchData,
+        sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
+        rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
+      };
+
+      dispatch(fetchVesselsBySearch(savedSearchParams));
+    }
+  }, [prefilledSearchData, dispatch]);
 
   const printResult = useMemo(() => {
     if (loading) {

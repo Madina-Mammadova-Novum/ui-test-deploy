@@ -208,6 +208,7 @@ export function offerDetailsAdapter({ data, role }) {
     isCountdownExtendedByOwner,
     isCountdownExtendedByCharterer,
     isCountdownActive,
+    hasUnreadComment,
   } = data;
 
   const { isOwner } = getRoleIdentity({ role });
@@ -216,6 +217,7 @@ export function offerDetailsAdapter({ data, role }) {
 
   return {
     allowExtension: allowExtensionByRole,
+    hasUnreadComment,
     isCountdownActive,
     countdownData: {
       date: calculateCountdown(expiresAt, frozenAt),
