@@ -49,6 +49,7 @@ const searchSlice = createSlice({
       state.searchData = initialState.searchData;
       state.sortingData = initialState.sortingData;
       state.request = initialState.request;
+      state.prefilledSearchData = initialState.prefilledSearchData;
     },
   },
   extraReducers: (builder) => {

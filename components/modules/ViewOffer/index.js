@@ -37,7 +37,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
   const { role } = useSelector(getUserDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
-  const { isCountdownActive, voyageDetails, commercialOfferTerms, comments, countdownData } = data;
+  const { isCountdownActive, voyageDetails, commercialOfferTerms, comments, countdownData, hasUnreadComment } = data;
 
   const handleExtendCountdown = async () => {
     setAllowCountdownExtension(false);
@@ -80,10 +80,11 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
       </div>
 
       <Tabs
-        customStyles="mx-auto mt-5 mb-3"
+        customStyles={classnames('mx-auto mt-5 mb-3', hasUnreadComment && 'gap-2')}
         tabs={tabs}
         activeTab={currentTab}
         onClick={({ target }) => setCurrentTab(target.value)}
+        hasUnreadComment={hasUnreadComment}
       />
 
       <div

@@ -49,8 +49,12 @@ export const reactivateChatById = async ({ data }) => {
 
 export const getChatToken = async ({ data: tokenData }) => {
   const body = chatTokenAdapter({ data: tokenData });
-
   const response = await postData('chat/token', body);
+
+  if (response.error) {
+    response.error.message = 'An error occurred while connecting to the chat server.';
+    response.error.title = 'Chat Error';
+  }
 
   return { ...response };
 };
