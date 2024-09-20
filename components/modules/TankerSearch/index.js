@@ -53,26 +53,25 @@ const TankerSearch = ({ isAccountSearch = false }) => {
   }, []);
 
   useEffect(() => {
-    const result = {
-      ...searchParams,
+    const baseParams = {
       sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
       rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
     };
 
-    dispatch(fetchVesselsBySearch(result));
-  }, [searchParams, sorting]);
-
-  useEffect(() => {
     if (prefilledSearchData?.isSavedSearch) {
       const savedSearchParams = {
         ...prefilledSearchData,
-        sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
-        rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
+        ...baseParams,
       };
-
       dispatch(fetchVesselsBySearch(savedSearchParams));
+    } else {
+      const searchParamsWithSorting = {
+        ...searchParams,
+        ...baseParams,
+      };
+      dispatch(fetchVesselsBySearch(searchParamsWithSorting));
     }
-  }, [prefilledSearchData, dispatch]);
+  }, [searchParams, sorting, prefilledSearchData, dispatch]);
 
   const printResult = useMemo(() => {
     if (loading) {
