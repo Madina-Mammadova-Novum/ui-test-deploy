@@ -5,9 +5,9 @@ import { FLEETS } from '@/store/entities/fleets/types';
 
 /* Services */
 import { vesselDetailsAdapter } from '@/adapters/vessel';
-import { getCountries, getUserFleets, getUserPositionById } from '@/services';
+import { getCountries, getUserFleets } from '@/services';
 import { getPorts } from '@/services/port';
-import { getFleetsVessels, getVesselDetails, getVesselTypes } from '@/services/vessel';
+import { getFleetsVessels, getUnassignedVessels, getVesselDetails, getVesselTypes } from '@/services/vessel';
 import { calculateAmountOfPages, convertDataToOptions, countriesOptions } from '@/utils/helpers';
 
 export const fetchFleetsWithVessels = createAsyncThunk(
@@ -24,7 +24,7 @@ export const fetchFleetsWithVessels = createAsyncThunk(
 );
 
 export const fetchUnassignedFleetData = createAsyncThunk(FLEETS.GET_UNASSIGNED_FLEET_DATA, async () => {
-  const { data } = await getUserPositionById({ id: null });
+  const { data } = await getUnassignedVessels();
 
   return {
     data,
