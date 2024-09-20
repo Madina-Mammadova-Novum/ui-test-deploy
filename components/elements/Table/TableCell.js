@@ -173,9 +173,9 @@ const TableCell = ({ cellProps }) => {
   }, [actions]);
 
   const cellColor = useMemo(() => {
+    if (freezed) return `${notified ? 'bg-yellow-light' : 'freezed-table'} blur-sm cursor-not-allowed`;
     if (notified) return 'bg-yellow-light';
     if (disabled) return 'disabled-table';
-    if (freezed) return 'freezed-table blur-sm cursor-not-allowed';
 
     return 'bg-white';
   }, [notified, disabled, freezed]);

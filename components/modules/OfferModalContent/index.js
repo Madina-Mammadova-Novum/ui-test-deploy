@@ -64,6 +64,8 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
 
   const handleSubmit = async (formData) => {
+    const comment = formData?.comment || null;
+
     const {
       status,
       error,
@@ -72,6 +74,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       data: {
         ...formData,
         ...tankerData,
+        comment,
         responseCountdown,
         tankerId,
         laycanStart,
