@@ -4,6 +4,7 @@ import { getLocode, trimTonValue } from '@/utils/helpers';
 
 export function requestSearchVesselAdapter({ data }) {
   if (data === null) return null;
+
   const {
     laycanStart,
     laycanEnd,
@@ -15,8 +16,7 @@ export function requestSearchVesselAdapter({ data }) {
     perPage,
     sortBy,
     rangeBy,
-    // dischargePort,
-    // loadPort
+    savedSearchId,
   } = data;
 
   return {
@@ -30,6 +30,7 @@ export function requestSearchVesselAdapter({ data }) {
     sortColumn: rangeBy,
     sortColumnDirection: sortBy,
     cargoes: postProductsAdapter({ data: products }),
+    savedSearchId,
   };
 }
 
