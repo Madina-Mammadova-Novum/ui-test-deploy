@@ -18,6 +18,8 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Tanker name',
       text: vessel?.details?.name,
+      countryCode:
+        getLocode(vessel?.details?.flagOfRegistry?.codeISO2) || getLocode(vessel?.details?.flagOfRegistry?.codeISO3),
     },
     {
       label: 'Cargo type',

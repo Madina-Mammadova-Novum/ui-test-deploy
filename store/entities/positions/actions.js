@@ -12,6 +12,7 @@ export const fetchUserVessels = createAsyncThunk(POSITIONS.GET_USER_POSITIONS, a
   const { recordsTotal, data } = await getUserPositions({ page, perPage, sortBy });
 
   const { data: unassigned } = await getUserPositionById({ id: null });
+
   const vessels = await getVesselsById(data);
 
   const unassignedVessel = {

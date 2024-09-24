@@ -25,7 +25,7 @@ export default function Page({ params }) {
       const fetchSavedSearch = async () => {
         const { data, status, error } = await getSavedSearchDetail({ searchId });
         if (status === 200) {
-          const prefilledData = prefilledSaveSearchDataAdapter({ data, isSavedSearch: true });
+          const prefilledData = prefilledSaveSearchDataAdapter({ data, isSavedSearch: true, savedSearchId: searchId });
           dispatch(setPrefilledSearchData(prefilledData));
           dispatch(setSearchParams(prefilledData));
         } else if (error) {

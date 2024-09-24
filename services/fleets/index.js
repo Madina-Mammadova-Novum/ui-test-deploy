@@ -22,6 +22,7 @@ export async function editFleet({ data, fleetId }) {
 export async function deleteFleet({ fleetId }) {
   const response = await postData(`fleets/delete/${fleetId}`);
   if (!response.error) response.message = 'You have successfully deleted the fleet';
+  if (response.error) response.error.title = 'You cannot delete this fleet';
   return {
     ...response,
   };

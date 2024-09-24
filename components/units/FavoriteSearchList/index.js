@@ -99,8 +99,10 @@ const FavoriteSearchList = ({ onClose }) => {
     });
 
     if (status === 200) {
-      dispatch(setPrefilledSearchData(prefilledSaveSearchDataAdapter({ data, isSavedSearch: true })));
-      dispatch(setSearchParams(prefilledSaveSearchDataAdapter({ data, isSavedSearch: true })));
+      dispatch(
+        setPrefilledSearchData(prefilledSaveSearchDataAdapter({ data, isSavedSearch: true, savedSearchId: searchId }))
+      );
+      dispatch(setSearchParams(prefilledSaveSearchDataAdapter({ data, isSavedSearch: true, savedSearchId: searchId })));
       onClose();
     } else if (error) {
       errorToast(error?.title, error?.message);
