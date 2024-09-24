@@ -74,7 +74,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
             <div className="w-full">
               {tankerInfo.slice(9).map(({ title, description, countryCode }) => (
-                <TextRow title={title} className={`${countryCode && 'flex flex-col'}`}>
+                <TextRow title={title} className={`${countryCode && 'flex flex-col !items-start'}`}>
                   <Flag countryCode={countryCode} className="mr-1" />
                   {description}
                 </TextRow>
