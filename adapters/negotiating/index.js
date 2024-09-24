@@ -12,6 +12,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'tanker name',
       text: details?.name,
+      countryCode: getLocode(details?.flagOfRegistry?.codeISO2) || getLocode(details?.flagOfRegistry?.codeISO3),
     },
     {
       label: 'imo',

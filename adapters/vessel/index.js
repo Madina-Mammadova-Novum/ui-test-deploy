@@ -445,6 +445,7 @@ export function userTankerAdapter({ data }) {
     status: appearsInSearch,
     rolled: expirationExtendedForFirstTime || expirationExtendedForSecondTime,
     imo,
+    flagOfRegistry: getLocode(details?.flagOfRegistry?.codeISO2) || getLocode(details?.flagOfRegistry?.codeISO3),
   };
 }
 

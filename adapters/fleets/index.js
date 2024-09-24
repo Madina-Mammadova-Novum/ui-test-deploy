@@ -39,7 +39,21 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
 export const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { date, id, marked, imo, port, portId, status, title, countryId, countryCode, notified, rolled } = data;
+  const {
+    date,
+    id,
+    marked,
+    imo,
+    port,
+    portId,
+    status,
+    title,
+    countryId,
+    countryCode,
+    notified,
+    rolled,
+    flagOfRegistry,
+  } = data;
 
   return [
     {
@@ -53,6 +67,8 @@ export const fleetsRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD,
       disabled: !status,
       notified: notified || false,
+      flagOfRegistry,
+      available: status,
     },
     {
       id,

@@ -12,7 +12,6 @@ import { getRoleIdentity, sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
-
   const { role } = useSelector(getUserDataSelector);
 
   const { data, sortDirection, sortBy } = sortedData;

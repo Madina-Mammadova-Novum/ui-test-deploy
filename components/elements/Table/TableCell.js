@@ -56,6 +56,7 @@ const TableCell = ({ cellProps }) => {
     notified,
     rolled,
     isValid = false,
+    flagOfRegistry,
   } = cellProps;
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
@@ -140,7 +141,7 @@ const TableCell = ({ cellProps }) => {
   }, [disabled, helperData, freezed, value]);
 
   const printFlag = useMemo(() => {
-    return available && <Flag countryCode={countryCode} className={freezed && 'opacity-50'} />;
+    return available && <Flag countryCode={countryCode || flagOfRegistry} className={freezed && 'opacity-50'} />;
   }, [countryCode, available, freezed]);
 
   const printModalView = useMemo(() => {
