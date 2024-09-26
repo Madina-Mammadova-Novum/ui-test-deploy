@@ -34,6 +34,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    instrumentationHook: true,
+  },
   env: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
@@ -51,7 +54,10 @@ const nextConfig = {
     IDENTITY_API_CLIENT_SECRET: process.env.IDENTITY_API_CLIENT_SECRET || '',
     IDENTITY_API_GRANT_TYPE: process.env.IDENTITY_API_GRANT_TYPE || '',
     IDENTITY_TOKEN_GRANT_TYPE: process.env.IDENTITY_TOKEN_GRANT_TYPE || '',
+    IDENTITY_NEW_RELIC_APP_NAME: process.env.IDENTITY_NEW_RELIC_APP_NAME || '',
+    IDENTITY_NEW_RELIC_LICENSE_KEY: process.env.IDENTITY_NEW_RELIC_LICENSE_KEY || '',
     PREVIEW_SECRET: process.env.PREVIEW_SECRET || '',
+    OTEL_EXPORTER_OTLP_ENDPOINT: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || '',
   },
   images: {
     unoptimized: false, // true for `yarn export`
