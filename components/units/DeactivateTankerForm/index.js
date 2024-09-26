@@ -8,7 +8,7 @@ import { DeactivateTankerFormPropTypes } from '@/lib/types';
 import { ModalFormManager } from '@/common';
 import { Label, Title } from '@/elements';
 import { getUserPositionById } from '@/services';
-import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
+import { updateVesselPortAndDate } from '@/services/vessel';
 import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -35,7 +35,7 @@ const DeactivateTankerForm = ({ title, state, closeModal }) => {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
       } else if (type === 'unassigned') {
-        const { data: unassignedTankers } = await getUnassignedVessels();
+        const { data: unassignedTankers } = await getUserPositionById({ id: null });
         dispatch(updateUnassignedTanker({ id, tankers: unassignedTankers }));
       }
       closeModal();

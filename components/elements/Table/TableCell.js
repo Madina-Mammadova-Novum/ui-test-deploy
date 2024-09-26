@@ -56,6 +56,7 @@ const TableCell = ({ cellProps }) => {
     notified,
     rolled,
     isValid = false,
+    flagOfRegistry,
   } = cellProps;
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
@@ -140,7 +141,7 @@ const TableCell = ({ cellProps }) => {
   }, [disabled, helperData, freezed, value]);
 
   const printFlag = useMemo(() => {
-    return available && <Flag countryCode={countryCode} className={freezed && 'opacity-50'} />;
+    return available && <Flag countryCode={countryCode || flagOfRegistry} className={freezed && 'opacity-50'} />;
   }, [countryCode, available, freezed]);
 
   const printModalView = useMemo(() => {
@@ -173,9 +174,9 @@ const TableCell = ({ cellProps }) => {
   }, [actions]);
 
   const cellColor = useMemo(() => {
+    if (freezed) return `${notified ? 'bg-yellow-light' : 'freezed-table'} blur-sm cursor-not-allowed`;
     if (notified) return 'bg-yellow-light';
     if (disabled) return 'disabled-table';
-    if (freezed) return 'freezed-table blur-sm cursor-not-allowed';
 
     return 'bg-white';
   }, [notified, disabled, freezed]);

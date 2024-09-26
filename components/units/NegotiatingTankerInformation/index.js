@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ReactCountryFlag from 'react-country-flag';
 import { useSelector } from 'react-redux';
 
 import { NegotiatingTankerInformationPropTypes } from '@/lib/types';
@@ -10,6 +9,7 @@ import { tankerInformationAdapter } from '@/adapters/vessel';
 import { Divider, FieldsetContent, Loader, TextRow, Title } from '@/elements';
 import { getOfferDetails } from '@/services/offer';
 import { getUserDataSelector } from '@/store/selectors';
+import { Flag } from '@/units';
 import { errorToast } from '@/utils/hooks';
 
 const NegotiatingTankerInformation = ({ offerId }) => {
@@ -50,7 +50,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
   return (
     <div className="mx-5 w-[610px]">
-      <Title level="2">Tanker Information</Title>
+      <Title level="2">Vessel Owner Information</Title>
 
       <FieldsetContent label="About the Vessel Owner" className="mt-3">
         {ownerInfo.map(({ title, description }) => (
@@ -66,7 +66,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
             <div className="w-full">
               {tankerInfo.slice(0, 9).map(({ title, description, countryCode }) => (
                 <TextRow title={title}>
-                  <ReactCountryFlag countryCode={countryCode} style={{ marginRight: '3px' }} />
+                  <Flag countryCode={countryCode} className="mr-1" />
                   {description}
                 </TextRow>
               ))}
@@ -74,8 +74,8 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
             <div className="w-full">
               {tankerInfo.slice(9).map(({ title, description, countryCode }) => (
-                <TextRow title={title} className={`${countryCode && 'flex flex-col'}`}>
-                  <ReactCountryFlag countryCode={countryCode} style={{ marginRight: '3px' }} />
+                <TextRow title={title} className={`${countryCode && 'flex flex-col !items-start'}`}>
+                  <Flag countryCode={countryCode} className="mr-1" />
                   {description}
                 </TextRow>
               ))}

@@ -53,8 +53,10 @@ const CounterofferForm = ({
       return handleConfirmCounteroffer();
     }
 
+    const comment = formData?.comment || null;
+
     const { message: successMessage, error } = await sendCounteroffer({
-      data: { ...formData, offerId: data?.offerId, responseCountdown: data?.responseCountdown },
+      data: { ...formData, comment, offerId: data?.offerId, responseCountdown: data?.responseCountdown },
       role,
     });
 

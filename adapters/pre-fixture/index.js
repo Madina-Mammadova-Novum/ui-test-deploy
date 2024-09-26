@@ -8,7 +8,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const {
     searchedCargo: { code, cargoType, totalQuantity, loadTerminal } = {},
-    vessel: { details: { name: tankerName = '' } = {} } = {},
+    vessel: { details: { name: tankerName = '', flagOfRegistry } = {} } = {},
     laycanStart,
     laycanEnd,
     expiresAt,
@@ -26,6 +26,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     {
       label: 'Tanker name',
       text: tankerName && tankerName,
+      countryCode: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
       freezed: frozenAt,
     },
     {

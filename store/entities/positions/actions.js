@@ -5,13 +5,13 @@ import { POSITIONS } from '@/store/entities/positions/types';
 
 /* Services */
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
-import { getUserPositions, getVesselsById } from '@/services';
-import { getUnassignedVessels } from '@/services/vessel';
+import { getUserPositionById, getUserPositions, getVesselsById } from '@/services';
 import { calculateAmountOfPages } from '@/utils/helpers';
 
 export const fetchUserVessels = createAsyncThunk(POSITIONS.GET_USER_POSITIONS, async ({ page, perPage, sortBy }) => {
   const { recordsTotal, data } = await getUserPositions({ page, perPage, sortBy });
-  const { data: unassigned } = await getUnassignedVessels();
+
+  const { data: unassigned } = await getUserPositionById({ id: null });
 
   const vessels = await getVesselsById(data);
 
