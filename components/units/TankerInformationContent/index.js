@@ -10,7 +10,7 @@ const TankerInformationContent = () => {
         <div className="w-full">
           {tankerInformationTooltipData.slice(0, 9).map(({ title, description, countryCode }) => (
             <TextRow title={title} className="!text-[12px]">
-              <ReactCountryFlag countryCode={countryCode} style={{ marginRight: '3px' }} />
+              <ReactCountryFlag countryCode={countryCode} style={{ marginRight: '3px' }} svg />
               {description}
             </TextRow>
           ))}
@@ -19,7 +19,7 @@ const TankerInformationContent = () => {
         <div className="w-full">
           {tankerInformationTooltipData.slice(9).map(({ title, description, countryCode }) => (
             <TextRow title={title} className={`!text-[12px] ${countryCode && 'flex flex-col'}`}>
-              <ReactCountryFlag countryCode={countryCode} style={{ marginRight: '3px' }} />
+              <ReactCountryFlag countryCode={countryCode} style={{ marginRight: '3px' }} svg />
               {description}
             </TextRow>
           ))}

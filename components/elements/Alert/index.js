@@ -47,9 +47,9 @@ const Alert = ({ variant = '', title, description, handleClose }) => {
       <div className="flex items-center gap-2.5">
         {icon}
         <div className="flex flex-col">
-          {title && <p className="text-xsm font-semibold text-black">{title}</p>}
+          {title && <p className="max-w-[26.25rem] text-wrap text-xsm font-semibold text-black">{title}</p>}
           {description && (
-            <pre className="font-inter-sans text-xs-sm font-normal text-black">
+            <pre className="max-w-[26.25rem] text-wrap font-inter-sans text-xs-sm font-normal text-black">
               <span>{description}</span>
             </pre>
           )}

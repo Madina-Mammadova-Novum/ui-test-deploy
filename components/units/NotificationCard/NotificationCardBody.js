@@ -19,6 +19,8 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
 
   const role = getCookieFromBrowser('session-user-role');
   const { deal, filterParams } = useSelector(getNotificationsDataSelector);
+  /* eslint-disable no-console */
+  console.log({ deal });
 
   const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');

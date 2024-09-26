@@ -11,7 +11,7 @@ import { prefilledSaveSearchDataAdapter } from '@/adapters/negotiating';
 import { DynamicLoader } from '@/elements';
 import TankerSearch from '@/modules/TankerSearch';
 import { getSavedSearchDetail } from '@/services/savedSearch';
-import { setPrefilledSearchData } from '@/store/entities/search/slice';
+import { setPrefilledSearchData, setSearchParams } from '@/store/entities/search/slice';
 
 export default function Page({ params }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,8 +25,9 @@ export default function Page({ params }) {
       const fetchSavedSearch = async () => {
         const { data, status, error } = await getSavedSearchDetail({ searchId });
         if (status === 200) {
-          const prefilledData = prefilledSaveSearchDataAdapter({ data, isSavedSearch: true });
+          const prefilledData = prefilledSaveSearchDataAdapter({ data, isSavedSearch: true, savedSearchId: searchId });
           dispatch(setPrefilledSearchData(prefilledData));
+          dispatch(setSearchParams(prefilledData));
         } else if (error) {
           console.error('Error fetching saved search:', error);
           router.push('/account/search');

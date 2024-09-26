@@ -24,6 +24,10 @@ const PreFixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
 
   const { loading, role, toggle, deal } = useSelector(getPreFixtureDataSelector);
+
+  /* eslint-disable no-console */
+  console.log({ deal });
+
   const { isOwner } = getRoleIdentity({ role });
 
   useEffect(() => {

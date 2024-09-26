@@ -11,7 +11,7 @@ import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { dateSchema } from '@/lib/schemas';
 import { getUserPositionById } from '@/services';
-import { getUnassignedVessels, updateVesselPortAndDate } from '@/services/vessel';
+import { updateVesselPortAndDate } from '@/services/vessel';
 import { updateTankersByFleetId, updateUnassignedTanker } from '@/store/entities/positions/slice';
 import { DateDetailsForm } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
@@ -32,7 +32,7 @@ const EditDateForm = ({ state, title, closeModal }) => {
         const { data: assignedTankers } = await getUserPositionById({ id: state?.fleetId });
         dispatch(updateTankersByFleetId({ fleetId: state.fleetId, tankers: assignedTankers }));
       } else if (state?.type === 'unassigned') {
-        const { data: unassignedTankers } = await getUnassignedVessels();
+        const { data: unassignedTankers } = await getUserPositionById({ id: null });
         dispatch(updateUnassignedTanker({ id: state.id, tankers: unassignedTankers }));
       }
       closeModal();

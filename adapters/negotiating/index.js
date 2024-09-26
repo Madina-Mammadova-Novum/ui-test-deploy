@@ -12,6 +12,7 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
     {
       label: 'tanker name',
       text: details?.name,
+      countryCode: getLocode(details?.flagOfRegistry?.codeISO2) || getLocode(details?.flagOfRegistry?.codeISO3),
     },
     {
       label: 'imo',
@@ -687,7 +688,7 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
   };
 };
 
-export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false }) => {
+export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, savedSearchId = null }) => {
   if (!data) return [];
 
   const {
@@ -731,6 +732,7 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false }) 
       },
     })),
     isSavedSearch,
+    savedSearchId,
   };
 };
 

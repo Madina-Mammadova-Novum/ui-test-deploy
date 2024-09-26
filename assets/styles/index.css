@@ -492,7 +492,7 @@ table > tbody > tr td[name='GREY'] > div {
 
 .table-scroll::-webkit-scrollbar {
   max-width: 28px;
-  height: 6px;
+  height: 10px;
 }
 
 .table-table::-webkit-scrollbar-track {

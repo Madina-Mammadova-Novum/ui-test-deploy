@@ -50,6 +50,9 @@ export const getCurrentDealStage = createAsyncThunk(
     try {
       const { data, error } = await getOfferDetails(id, role);
 
+      /* eslint-disable no-console */
+      console.log('Getting offer details with mouse action: ', data);
+
       if (error) {
         return rejectWithValue(error);
       }
