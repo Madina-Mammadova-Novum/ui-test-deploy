@@ -148,6 +148,7 @@ const TableCell = ({ cellProps }) => {
     return actions.map((cell) => {
       const { action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles } = cell;
 
+      console.log({ action });
       const setStyles = () => {
         if (editable) return `!p-0 ${actionStyles} `;
         if (freezed) return `!select-none cursor-not-allowed !py-1 !px-1.5 ${actionStyles}`;
@@ -157,7 +158,7 @@ const TableCell = ({ cellProps }) => {
 
       return (
         <ModalWindow
-          containerClass="overflow-y-hidden"
+          containerClass={`overflow-y-hidden ${action !== 'TANKER_INFORMATION' && action !== 'CHARTERER_INFORMATION' && action !== 'PORT' && action !== 'DATE' && action !== 'TANKER_REACTIVATE' && action !== 'TANKER_DEACTIVATE' && action !== 'REQUEST_UPDATE_TANKER_INFO' && action !== 'VIEW_OFFER' && action !== 'VIEW_CHARTERER_COUNTEROFFER' && 'h-full'}`}
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,

@@ -70,7 +70,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
             />
           ) : null}
           <ModalWindow
-            containerClass="w-[672px]"
+            containerClass="w-[672px] h-full"
             buttonProps={{
               text: 'Edit company details',
               variant: 'primary',

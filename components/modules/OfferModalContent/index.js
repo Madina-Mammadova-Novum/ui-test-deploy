@@ -146,6 +146,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   }, [currentTab, tankerId, searchParams, voyageDetails, scrollToBottom]);
 
   const errorBanner = useMemo(() => {
+    console.log({ offer });
     return (
       offer?.message && (
         <div className={`${!offer.valid ? 'bg-red-light' : 'bg-orange-300'} rounded-base px-5 py-2.5 pb-3`}>
@@ -159,7 +160,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   }, [offer?.message, offer?.valid, tankerId]);
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <div className="flex flex-col gap-y-5">
         <Title level="2">Send Offer</Title>
         {errorBanner}
@@ -183,7 +184,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
       <div
         ref={scrollingContainerRef}
-        className={`h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         <div className="p-2.5">
           <OfferForm disabled={!offer.valid} handleSubmit={handleSubmit} handleValidationError={handleValidationError}>
