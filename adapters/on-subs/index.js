@@ -481,10 +481,12 @@ export const onSubsRevokeDocumentDeletionAdapter = ({ data }) => {
 
 export const failTheSubsAdapter = ({ data }) => {
   if (!data) return {};
+
   const { offerId } = data;
+
   return {
     dealId: offerId,
-    reason: 'placeholder',
+    reason: 'Declined per user choice.',
   };
 };
 
