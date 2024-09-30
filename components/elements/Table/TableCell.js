@@ -144,11 +144,26 @@ const TableCell = ({ cellProps }) => {
     return available && <Flag countryCode={countryCode || flagOfRegistry} className={freezed && 'opacity-50'} />;
   }, [countryCode, available, freezed]);
 
+  const getContainerClass = (action) => {
+    const modalActions = [
+      ACTIONS.TANKER_INFORMATION,
+      ACTIONS.CHARTERER_INFORMATION,
+      ACTIONS.ASSIGN_FLEET,
+      ACTIONS.PORT,
+      ACTIONS.DATE,
+      ACTIONS.TANKER_REACTIVATE,
+      ACTIONS.TANKER_DEACTIVATE,
+      ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+      ACTIONS.DELETE_TANKER,
+    ];
+
+    return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
+  };
+
   const printModalView = useMemo(() => {
     return actions.map((cell) => {
       const { action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles } = cell;
 
-      console.log({ action });
       const setStyles = () => {
         if (editable) return `!p-0 ${actionStyles} `;
         if (freezed) return `!select-none cursor-not-allowed !py-1 !px-1.5 ${actionStyles}`;
@@ -158,7 +173,7 @@ const TableCell = ({ cellProps }) => {
 
       return (
         <ModalWindow
-          containerClass={`overflow-y-hidden ${action !== 'TANKER_INFORMATION' && action !== 'CHARTERER_INFORMATION' && action !== 'PORT' && action !== 'DATE' && action !== 'TANKER_REACTIVATE' && action !== 'TANKER_DEACTIVATE' && action !== 'REQUEST_UPDATE_TANKER_INFO' && action !== 'VIEW_OFFER' && action !== 'VIEW_CHARTERER_COUNTEROFFER' && 'h-full'}`}
+          containerClass={getContainerClass(action)}
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,
