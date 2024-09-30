@@ -69,7 +69,7 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
     <div className="w-[300px]">
       <ModalHeader goBack={goBack}>{title}</ModalHeader>
       <Countdown time={countdownData} customStyles="mt-5" />
-      <Title level={3} className="mt-5 min-h-96">
+      <Title level={3} className="mt-5">
         Indicate the reason for decline:
       </Title>
 
@@ -91,6 +91,7 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
           label="your reason"
           placeholder="Type your reason here ..."
           customStyles="mt-2.5"
+          inputStyles="min-h-40"
           onChange={handleChange}
           {...register('reason')}
         />
