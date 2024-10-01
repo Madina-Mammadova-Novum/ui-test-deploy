@@ -146,7 +146,6 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   }, [currentTab, tankerId, searchParams, voyageDetails, scrollToBottom]);
 
   const errorBanner = useMemo(() => {
-    console.log({ offer });
     return (
       offer?.message && (
         <div className={`${!offer.valid ? 'bg-red-light' : 'bg-orange-300'} rounded-base px-5 py-2.5 pb-3`}>
