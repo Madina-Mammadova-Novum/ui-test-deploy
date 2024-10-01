@@ -73,6 +73,7 @@ const CompanyInfoForm = ({ closeModal }) => {
         onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{ text: 'Edit company details', variant: 'primary', size: 'large' }}
+        className="h-full"
       >
         <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
           Edit Company Details

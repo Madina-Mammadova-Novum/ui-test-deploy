@@ -77,7 +77,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
   }, [currentTab]);
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <ModalHeader goBack={handleBack} disabled={disabled}>
         Accept the offer
       </ModalHeader>
@@ -91,7 +91,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`mt-3 h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         <FormProvider {...methods}>
           <FormManager

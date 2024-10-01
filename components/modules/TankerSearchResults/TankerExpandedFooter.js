@@ -27,6 +27,7 @@ const TankerExpandedFooter = ({ tankerId, tankerData }) => {
             text: 'Send offer',
             className: `ml-auto ${!isCharterer && 'hidden'}`,
           }}
+          containerClass="h-full"
         >
           <OfferModalContent tankerId={tankerId} tankerData={tankerData} />
         </ModalWindow>

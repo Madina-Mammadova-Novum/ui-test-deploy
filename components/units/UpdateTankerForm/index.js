@@ -257,7 +257,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
             </p>
           </div>
 
-          <div className="mt-5 grid h-80 grid-cols-1 gap-y-4 overflow-scroll pr-2.5">
+          <div className="mt-5 grid h-80 grid-cols-1 gap-y-4 overflow-scroll pr-2.5 3md:h-[26.25rem]">
             <div className="grid grid-cols-2 gap-x-5 gap-y-4">
               <Input
                 {...register(`tankerName`)}

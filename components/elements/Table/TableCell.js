@@ -144,6 +144,23 @@ const TableCell = ({ cellProps }) => {
     return available && <Flag countryCode={countryCode || flagOfRegistry} className={freezed && 'opacity-50'} />;
   }, [countryCode, available, freezed]);
 
+  const getContainerClass = (action) => {
+    const modalActions = [
+      ACTIONS.TANKER_INFORMATION,
+      ACTIONS.CHARTERER_INFORMATION,
+      ACTIONS.ASSIGN_FLEET,
+      ACTIONS.PORT,
+      ACTIONS.DATE,
+      ACTIONS.TANKER_REACTIVATE,
+      ACTIONS.TANKER_DEACTIVATE,
+      ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+      ACTIONS.DELETE_TANKER,
+      ACTIONS.VIEW_COMMENTS,
+    ];
+
+    return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
+  };
+
   const printModalView = useMemo(() => {
     return actions.map((cell) => {
       const { action, actionVariant, actionSize, actionText, editIcon, disabled: actionDisabled, actionStyles } = cell;
@@ -157,7 +174,7 @@ const TableCell = ({ cellProps }) => {
 
       return (
         <ModalWindow
-          containerClass="overflow-y-hidden"
+          containerClass={getContainerClass(action)}
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,

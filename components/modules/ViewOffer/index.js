@@ -63,7 +63,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
   };
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <ModalHeader>View Incoming Offer</ModalHeader>
 
       <div className="mt-5 flex items-center text-[12px]">
@@ -89,7 +89,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={classnames('h-[320px] overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset')}
+        className={classnames('h-full overflow-y-auto overflow-x-hidden', showScroll && 'shadow-vInset')}
       >
         {tabContent()}
       </div>
