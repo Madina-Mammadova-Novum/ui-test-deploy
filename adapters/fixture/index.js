@@ -271,10 +271,19 @@ export const fixtureDetailsAdapter = ({ data }) => {
 
 const fixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
   if (!data) return [];
-  const { id, title, comments, name, extention, size, createdAt, status, url, deleted: isDocumentDeleted } = data;
+  const {
+    id,
+    title,
+    comments,
+    name: fileName,
+    extention,
+    size,
+    createdAt,
+    status,
+    url,
+    deleted: isDocumentDeleted,
+  } = data;
   const revokeDeletionForbidden = status === 'Active';
-
-  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
 
   return [
     {
@@ -307,7 +316,7 @@ const fixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: name,
+      value: fileName,
       disabled: isDocumentDeleted,
     },
     {
