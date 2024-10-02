@@ -311,12 +311,7 @@ export const resetObjectFields = (initialObject, resetType = null) => {
   if (typeof initialObject !== 'string') {
     Object.keys(initialObject).forEach((key) => {
       if (Array.isArray(initialObject[key])) {
-        if (key === 'products') {
-          // Only keep the first valid object in the products array
-          initialObject[key] = [initialObject[key].find((item) => item !== null) || {}];
-        } else {
-          initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
-        }
+        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
       } else {
         initialObject[key] = resetType;
       }
