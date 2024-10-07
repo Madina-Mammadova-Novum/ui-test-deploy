@@ -6,7 +6,7 @@ import { Controller } from 'react-hook-form';
 
 import classnames from 'classnames';
 
-import { DatePickePropTypes } from '@/lib/types';
+import { DatePickerPropTypes } from '@/lib/types';
 
 import CalendarSVG from '@/assets/images/calendar.svg';
 import { Input } from '@/elements';
@@ -65,6 +65,7 @@ const DatePicker = ({
                   value={transformDate(value, dateVariant)}
                   icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
                   error={error}
+                  onChange={field.onChange} // Pass onChange to Input
                   {...rest}
                 />
               </div>
@@ -90,6 +91,6 @@ const DatePicker = ({
   );
 };
 
-DatePicker.propTypes = DatePickePropTypes;
+DatePicker.propTypes = DatePickerPropTypes;
 
 export default DatePicker;

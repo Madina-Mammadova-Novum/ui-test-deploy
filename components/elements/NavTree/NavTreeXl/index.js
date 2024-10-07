@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
 
+import { menuItemPropTypes } from '@/lib/types';
+
 import AnchorSVG from '@/assets/images/anchor.svg';
 import BrowserSVG from '@/assets/images/browser.svg';
 import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
@@ -66,16 +68,8 @@ const NavTreeXl = ({ data, active }) => {
 };
 
 NavTreeXl.propTypes = {
-  active: PropTypes.string,
-  opened: PropTypes.bool,
-  onChange: PropTypes.func,
-  data: PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-    title: PropTypes.string,
-    path: PropTypes.string,
-    variant: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
+  active: PropTypes.bool,
+  data: menuItemPropTypes,
 };
 
 export default NavTreeXl;

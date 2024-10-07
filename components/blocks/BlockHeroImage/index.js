@@ -16,7 +16,7 @@ const BlockHeroImage = ({ title, coverImage, shortDescription }) => {
             priority
             width={1440}
             height={352}
-            alt={delve(coverImage, 'alternativeText')}
+            alt={delve(coverImage, 'alternativeText') || 'Cover Image'}
             src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
             className="h-full w-full object-cover object-center"
             quality={100}

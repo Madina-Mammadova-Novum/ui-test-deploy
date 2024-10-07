@@ -46,7 +46,7 @@ const ConfirmModal = ({
 
 ConfirmModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onConfirm: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,

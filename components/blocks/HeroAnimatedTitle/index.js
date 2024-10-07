@@ -13,7 +13,13 @@ import {
 } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
-const HeroAnimatedTitle = ({ title, shortDescription, coverImage, button, changableTitles }) => {
+const HeroAnimatedTitle = ({
+  title = '',
+  shortDescription = '',
+  coverImage = {},
+  button = {},
+  changeableTitles = [],
+}) => {
   return (
     <section className="relative mb-28 sm:mb-44 2xl:mb-64">
       <div className="grid grid-cols-1 gap-y-10 sm:gap-y-[82px] md:grid-cols-2 md:gap-x-5">
@@ -21,8 +27,8 @@ const HeroAnimatedTitle = ({ title, shortDescription, coverImage, button, changa
           {title && (
             <h1 className="mb-4 text-3xl font-bold text-black sm:mb-10 sm:text-6xl 2xl:mb-16 2xl:text-7xl">
               {title}
-              {changableTitles}
-              {/* <AnimatedTitleText titles={changableTitles} /> */}
+              {changeableTitles}
+              {/* <AnimatedTitleText titles={changeableTitles} /> */}
             </h1>
           )}
           <div className="sm:ml-auto sm:max-w-[340px] md:max-w-[413px] 2xl:max-w-[556px]">
@@ -57,19 +63,11 @@ const HeroAnimatedTitle = ({ title, shortDescription, coverImage, button, changa
   );
 };
 
-HeroAnimatedTitle.defaultProps = {
-  title: '',
-  shortDescription: '',
-  button: {},
-  changableTitles: [],
-  coverImage: {},
-};
-
 HeroAnimatedTitle.propTypes = {
   title: PropTypes.string,
   shortDescription: PropTypes.string,
   button: linkPropTypes,
-  changableTitles: PropTypes.arrayOf({
+  changeableTitles: PropTypes.arrayOf({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     title: PropTypes.string.isRequired,
   }),

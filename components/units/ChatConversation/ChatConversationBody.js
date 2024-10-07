@@ -35,7 +35,18 @@ const ChatConversationBody = () => {
   };
 
   const printMessage = ({ sender, message, time, id }) => {
-    return <ChatMessage id={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
+    const newId = crypto.randomUUID();
+
+    return (
+      <ChatMessage
+        key={newId}
+        id={id}
+        sender={sender}
+        time={time}
+        message={message}
+        isBroker={ROLES.BROKER === sender}
+      />
+    );
   };
 
   const printMessages = ({ data: content, title }) => {

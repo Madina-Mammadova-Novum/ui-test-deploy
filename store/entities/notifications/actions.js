@@ -40,7 +40,7 @@ export const fetchNotifications = createAsyncThunk(
       dispatch(setUnwatchedData(result));
     }
 
-    return { readed: readCount, unread: unreadCount };
+    return { read: readCount, unread: unreadCount };
   }
 );
 

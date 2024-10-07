@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { CompanyDetailsPropTypes } from '@/lib/types';
 
 import { Input } from '@/elements';
-import { disableDefaultBehaviour, disablePlusMinusSymbols } from '@/utils/helpers';
+import { disableDefaultBehavior, disablePlusMinusSymbols } from '@/utils/helpers';
 
 const CompanyDetails = ({ notEditable }) => {
   const inputYearsRef = useRef(null);
@@ -24,7 +24,7 @@ const CompanyDetails = ({ notEditable }) => {
 
   useEffect(() => {
     if (inputYearsRef.current) {
-      inputYearsRef.current.addEventListener('wheel', disableDefaultBehaviour);
+      inputYearsRef.current.addEventListener('wheel', disableDefaultBehavior);
       inputYearsRef.current.addEventListener('keydown', disablePlusMinusSymbols);
       inputYearsRef.current.value = companyYearsOfOperation;
     }

@@ -3,14 +3,14 @@
 import { CalculatedResultPropTypes } from '@/lib/types';
 
 import { TextWithLabel, Title } from '@/elements';
-import { formatedDay, formatedNumber } from '@/utils/helpers';
+import { formattedDay, formattedNumber } from '@/utils/helpers';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
 const CalculatedResult = ({ result, value }) => {
   const isFreight = value === toolsCalculatorOptions[0]?.value;
-  const firstValue = formatedNumber(result?.resultOne);
-  const secondValue = formatedNumber(result?.resultTwo);
-  const secondTextWithValue = `${formatedDay(secondValue)} Days`;
+  const firstValue = formattedNumber(result?.resultOne);
+  const secondValue = formattedNumber(result?.resultTwo);
+  const secondTextWithValue = `${formattedDay(secondValue)} Days`;
   const distanceValue = firstValue ? `${firstValue} nm` : '';
 
   return (

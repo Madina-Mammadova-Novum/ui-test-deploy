@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // import { TestimonialCard } from '@/collections';
 import { Title } from '@/elements';
 
-const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
+const BlockTestimonials = ({ title = '', shortDescription = '', testimonials = '' }) => {
   return (
     <section className="relative mb-28 sm:mb-44 2xl:mb-64">
       {title && <Title level="1">{title}</Title>}
@@ -55,12 +55,6 @@ const BlockTestimonials = ({ title, shortDescription, testimonials }) => {
       )}
     </section>
   );
-};
-
-BlockTestimonials.defaultProps = {
-  title: '',
-  shortDescription: '',
-  testimonials: '',
 };
 
 BlockTestimonials.propTypes = {

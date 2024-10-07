@@ -7,7 +7,11 @@ import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 import { TextRow, Title } from '@/elements';
 
 const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
-  const printPairDates = (detail) => <TextRow title={detail.key}>{detail.label}</TextRow>;
+  const printPairDates = (detail) => (
+    <TextRow key={detail.key} title={detail.key}>
+      {detail.label}
+    </TextRow>
+  );
 
   return (
     <div>
@@ -20,8 +24,10 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
           <Title level="5" className="text-[12px] font-semibold uppercase text-gray">
             dates
           </Title>
-          {data?.dates?.map((pair) => (
-            <div className="mt-2.5">{pair.map(printPairDates)}</div>
+          {data?.dates?.map((pair, index) => (
+            <div key={`${pair[index].key}-dates-group`} className="mt-2.5">
+              {pair.map(printPairDates)}
+            </div>
           ))}
         </div>
 
@@ -32,8 +38,8 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
             ports
           </Title>
 
-          {data?.ports?.map((pair) => (
-            <div className="mt-2.5" key={pair?.id}>
+          {data?.ports?.map((pair, index) => (
+            <div className="mt-2.5" key={`${pair[index].key}-ports-group`}>
               {pair?.map((detail) => {
                 return (
                   <TextRow title={detail.key} key={detail.key}>

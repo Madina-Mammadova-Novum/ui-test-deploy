@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import { notFound } from 'next/navigation';
 import PropTypes from 'prop-types';
 
-import { legalPropAdpater } from '@/adapters';
+import { legalPropAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Home({ params }) {
-  const { legal } = legalPropAdpater({ params });
+  const { legal } = legalPropAdapter({ params });
 
   const { pageData, blocks, content } = await getHomePageData({ params });
 

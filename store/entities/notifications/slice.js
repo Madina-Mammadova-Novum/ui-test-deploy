@@ -7,7 +7,7 @@ import { fetchNotifications, getCurrentDealStage, readNotification } from './act
 
 const initialState = {
   unread: 0,
-  readed: 0,
+  read: 0,
   watchedData: [],
   unwatchedData: [],
   dealData: {},
@@ -64,7 +64,7 @@ const notificationsSlice = createSlice({
       state.dealData = initialState.dealData;
     },
     resetNotificationData: (state) => {
-      state.readed = 0;
+      state.read = 0;
       state.unread = 0;
       state.unwatchedData = [];
       state.watchedData = [];
@@ -76,7 +76,7 @@ const notificationsSlice = createSlice({
     });
     builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.readed = payload.readed;
+      state.read = payload.read;
       state.unread = payload.unread;
     });
     builder.addCase(fetchNotifications.rejected, (state, { payload }) => {

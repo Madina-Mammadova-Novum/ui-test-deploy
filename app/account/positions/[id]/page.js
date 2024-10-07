@@ -17,7 +17,7 @@ export function generateMetadata() {
 export default function Page({ params, searchParams }) {
   const urlParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
 
-  return <AccountPositionDetails searchedParms={urlParams} />;
+  return <AccountPositionDetails searchedParams={urlParams} />;
 }
 
 Page.propTypes = UrlPropTypes;

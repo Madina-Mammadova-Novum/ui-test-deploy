@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ModalWrapper from '../ModalWrapper';
 
-import { NotificationPropTypes } from '@/lib/types';
-
 import BellIcon from '@/assets/icons/BellIcon';
 import { Button, Title } from '@/elements';
 import { globalNotificationService } from '@/services/signalR';
@@ -101,7 +99,5 @@ const Notification = () => {
     </>
   );
 };
-
-Notification.propTypes = NotificationPropTypes;
 
 export default Notification;

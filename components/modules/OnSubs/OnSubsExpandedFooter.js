@@ -8,8 +8,8 @@ import { Button, Divider, NextLink } from '@/elements';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 
 const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, scriveURL = '' }) => {
-  const owner = identity.isOwner && status.owner === 'Confirmed' && status.chraterer !== 'Confirmed';
-  const charterer = identity.isCharterer && status.chraterer === 'Confirmed' && status.owner !== 'Confirmed';
+  const owner = identity.isOwner && status.owner === 'Confirmed' && status.charterer !== 'Confirmed';
+  const charterer = identity.isCharterer && status.charterer === 'Confirmed' && status.owner !== 'Confirmed';
 
   const printCta = () => {
     if (owner)
@@ -75,7 +75,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
           <div className="w-full">
             <NextLink
               href={scriveURL}
-              target="blank"
+              target="_blank"
               className={`block h-10 whitespace-nowrap rounded-md bg-blue px-5 py-2.5 text-xsm text-white hover:bg-blue-darker ${
                 underRecap && 'pointer-events-none opacity-50'
               }`}

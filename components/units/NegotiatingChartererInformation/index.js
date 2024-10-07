@@ -48,7 +48,7 @@ const NegotiatingChartererInformation = ({ offerId }) => {
         Charterer Information
       </Title>
       {chartererInformation?.map(({ title, description, countryCode }) => (
-        <TextRow title={title}>
+        <TextRow key={title} title={title}>
           <ReactCountryFlag countryCode={countryCode} svg className="mr-1.5 !h-3 !w-5" /> {description}
         </TextRow>
       ))}

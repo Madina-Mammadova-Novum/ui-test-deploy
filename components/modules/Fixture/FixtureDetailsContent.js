@@ -110,9 +110,9 @@ const FixtureDetailsContent = ({ detailsData }) => {
 
           <FieldsetContent label="Ports" className="mt-4">
             {voyagePorts?.map((portGroup, index) => (
-              <div className={index && 'mt-2.5'}>
+              <div key={portGroup[index]?.title || index} className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
-                  <TextRow title={title} inlineVariant>
+                  <TextRow key={title} title={title} inlineVariant>
                     <Flag countryCode={countryCode} className="mr-1" /> {text}
                   </TextRow>
                 ))}
@@ -151,7 +151,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
 
           <FieldsetContent className="mt-3.5 flex gap-2.5">
             {additionalCharterPartyTerms?.map(({ title, body }) => (
-              <PartyItem buttonText={title} modalTitle="Tanker Voyage Charter Party" body={body} />
+              <PartyItem key={title} buttonText={title} modalTitle="Tanker Voyage Charter Party" body={body} />
             ))}
           </FieldsetContent>
         </FieldsetWrapper>

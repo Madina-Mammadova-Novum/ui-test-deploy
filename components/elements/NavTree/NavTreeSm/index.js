@@ -93,12 +93,12 @@ const NavTreeSm = ({ data, active }) => {
         </div>
       )}
       {showLinks && (
-        <div
+        <ul
           ref={subTreeRef}
           className="absolute left-12 top-5 h-auto w-auto rounded-br-base rounded-tr-base bg-black py-2 pr-2"
         >
           {data?.items?.length > 0 && data?.items?.map(printSubTree)}
-        </div>
+        </ul>
       )}
     </NavTreeHeader>
   );
@@ -108,7 +108,7 @@ NavTreeSm.propTypes = {
   active: PropTypes.bool,
   onChange: PropTypes.func,
   data: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
     path: PropTypes.string,
     variant: PropTypes.string,

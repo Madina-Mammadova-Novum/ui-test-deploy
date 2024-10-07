@@ -12,12 +12,12 @@ export const fetchUserProfileData = createAsyncThunk(ACCOUNT.GET_USER_PROFILE, a
 
   const personalInfo = await getUserProfile();
   const companyInfo = await getUserCompany();
-  const cargoeInfo = isCharterer ? await getChartererUserCargoes() : {};
+  const cargoInfo = isCharterer ? await getChartererUserCargoes() : {};
 
   return {
     data: {
       personalDetails: personalInfo?.data,
-      companyDetails: isCharterer ? { ...companyInfo?.data, cargoesDetails: cargoeInfo?.data } : companyInfo?.data,
+      companyDetails: isCharterer ? { ...companyInfo?.data, cargoesDetails: cargoInfo?.data } : companyInfo?.data,
     },
   };
 });

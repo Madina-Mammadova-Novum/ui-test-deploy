@@ -224,7 +224,7 @@ export function requestAddVesselManuallyAdapter({ data }) {
     disponentOwner,
     disponentOwnerCountryId: disponentOwnerCountry.value,
     fleetId,
-    q88QuestionnarieFile: file,
+    q88QuestionnaireFile: file,
   };
 }
 export function requestUpdateVesselAdapter({ data }) {
@@ -291,7 +291,7 @@ export function requestUpdateVesselAdapter({ data }) {
     commercialOperatorCountryId: commercialOperatorCountry.value,
     disponentOwner,
     disponentOwnerCountryId: disponentOwnerCountry.value,
-    q88QuestionnarieFile: file,
+    q88QuestionnaireFile: file,
   };
 }
 
@@ -683,7 +683,7 @@ export const chartererInformationAdapter = (data) => {
       estimatedNumberOfChartersPerYear,
       averageTonnagePerCharter,
       registrationCity: {
-        country: { name: registrationnCountryName, codeISO2: registrationCountryCode },
+        country: { name: registrationCountryName, codeISO2: registrationCountryCode },
       },
     } = {},
   } = data;
@@ -705,7 +705,7 @@ export const chartererInformationAdapter = (data) => {
     },
     {
       title: 'Country of registration',
-      description: registrationnCountryName,
+      description: registrationCountryName,
       countryCode: registrationCountryCode,
     },
   ];

@@ -22,6 +22,7 @@ const Fleets = ({ searchedParams }) => {
 
     return (
       <ExpandableRow
+        key={rowData?.id}
         className="px-5 pb-5"
         header={
           <ExpandableCardHeader

@@ -16,6 +16,7 @@ const Button = ({
 }) => {
   const { before, after } = icon;
   const buttonClassNames = getButtonClassNames(variant, size);
+
   return (
     <div className={`flex flex-col items-center justify-center ${customStylesFromWrap}`}>
       <button

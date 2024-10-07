@@ -102,7 +102,7 @@ import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import UnassignedFleet from '@/units/UnassignedFleet';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
-import VerifficationUserAccount from '@/units/VerifficationUserAccount';
+import VerificationUserAccount from '@/units/VerificationUserAccount';
 import ViewCommentContent from '@/units/ViewCommentContent';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
 
@@ -141,7 +141,7 @@ export {
   CommercialOfferTerms,
   ExpandableCard,
   ModalWindow,
-  VerifficationUserAccount,
+  VerificationUserAccount,
   AccordionHeader,
   Accordion,
   FooterNavBlock,

@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 
 import classnames from 'classnames';
 
-import { ProfileMenuPropTypes } from '@/lib/types';
-
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import ExitSVG from '@/assets/images/exit.svg';
 import UserCircleSVG from '@/assets/images/userCircle.svg';
@@ -61,7 +59,5 @@ const ProfileMenu = () => {
     </div>
   );
 };
-
-ProfileMenu.propTypes = ProfileMenuPropTypes;
 
 export default ProfileMenu;

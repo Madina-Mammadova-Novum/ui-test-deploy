@@ -14,7 +14,7 @@ const Offer = ({ item, index }) => {
         <div className="size-72 shrink-0 rounded-base md:h-[350px] md:w-[380px]">
           <NextImage
             src={getStrapiMedia(delve(item.coverImage, 'format.original.url'), '?format=webp')}
-            alt={delve(item.coverImage, 'alternativeText')}
+            alt={delve(item.coverImage, 'alternativeText') || 'Tanker Image'}
             className="h-full w-full rounded-base object-cover object-center"
             quality={75}
             height={350}

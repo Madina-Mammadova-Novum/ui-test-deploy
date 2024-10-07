@@ -164,6 +164,7 @@ const FavoriteSearchList = ({ onClose }) => {
               index
             ) => (
               <div
+                key={id}
                 className={classnames(
                   'flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd',
                   status !== 'Active' && 'bg-gray-darker'

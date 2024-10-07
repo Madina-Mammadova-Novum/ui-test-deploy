@@ -9,7 +9,12 @@ import { linkImagePropTypes, mediaPropTypes } from '@/lib/types';
 
 import { getStrapiMedia } from '@/utils';
 
-const FooterNavigation = ({ footerNavigation }) => {
+const FooterNavigation = ({
+  footerNavigation = {
+    coverImage: '',
+    links: [],
+  },
+}) => {
   const [layoutImage, setLayoutImage] = useState('');
   const { coverImage, links } = footerNavigation;
 
@@ -41,31 +46,22 @@ const FooterNavigation = ({ footerNavigation }) => {
       {links && (
         <div className="absolute top-0 h-full w-full bg-black opacity-50">
           <div className="mx-auto flex h-full flex-col items-center justify-between px-4 py-20 2xl:container sm:px-[38px] lg:flex-row lg:px-20 2xl:px-[100px]">
-            {links.map(({ label, path, image }) => {
-              return (
-                <Link
-                  key={path}
-                  className="cursor-link text-2xl font-bold text-white sm:text-4xl 2xl:text-5xl"
-                  href={path}
-                  onMouseOver={() => onLinkOver(image)}
-                  onMouseOut={onLinkOut}
-                >
-                  {label}
-                </Link>
-              );
-            })}
+            {links.map(({ label, path, image }) => (
+              <Link
+                key={path}
+                className="cursor-link text-2xl font-bold text-white sm:text-4xl 2xl:text-5xl"
+                href={path}
+                onMouseOver={() => onLinkOver(image)}
+                onMouseOut={onLinkOut}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       )}
     </section>
   );
-};
-
-FooterNavigation.defaultProps = {
-  footerNavigation: {
-    coverImage: '',
-    links: [],
-  },
 };
 
 FooterNavigation.propTypes = {

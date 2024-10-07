@@ -166,7 +166,7 @@
       "method": "PUT",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"vesselId\": \"string\",\n  \"name\": \"string\",\n  \"imo\": \"string\",\n  \"imoClass\": \"string\",\n  \"updateDate\": \"2023-05-11T06:07:35.853Z\",\n  \"built\": 0,\n  \"registryPortId\": \"string\",\n  \"vesselTypeId\": \"string\",\n  \"vesselCategoryOneId\": \"string\",\n  \"vesselCategoryTwoId\": \"string\",\n  \"hullType\": \"string\",\n  \"loa\": 0,\n  \"beam\": 0,\n  \"summerDwt\": 0,\n  \"summerDraft\": 0,\n  \"ballastDwt\": 0,\n  \"ballastDraft\": 0,\n  \"cubicCapacity\": 0,\n  \"segregationCount\": 0,\n  \"registeredOwner\": \"string\",\n  \"technicalOperator\": \"string\",\n  \"commercialOperator\": \"string\",\n  \"disponentOwner\": \"string\",\n  \"q88QuestionnarieFile\": \"string\"\n}"
+        "text": "{\n  \"vesselId\": \"string\",\n  \"name\": \"string\",\n  \"imo\": \"string\",\n  \"imoClass\": \"string\",\n  \"updateDate\": \"2023-05-11T06:07:35.853Z\",\n  \"built\": 0,\n  \"registryPortId\": \"string\",\n  \"vesselTypeId\": \"string\",\n  \"vesselCategoryOneId\": \"string\",\n  \"vesselCategoryTwoId\": \"string\",\n  \"hullType\": \"string\",\n  \"loa\": 0,\n  \"beam\": 0,\n  \"summerDwt\": 0,\n  \"summerDraft\": 0,\n  \"ballastDwt\": 0,\n  \"ballastDraft\": 0,\n  \"cubicCapacity\": 0,\n  \"segregationCount\": 0,\n  \"registeredOwner\": \"string\",\n  \"technicalOperator\": \"string\",\n  \"commercialOperator\": \"string\",\n  \"disponentOwner\": \"string\",\n  \"q88QuestionnaireFile\": \"string\"\n}"
       },
       "parameters": [],
       "headers": [],
@@ -324,7 +324,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"name\": \"string\",\n  \"imo\": \"string\",\n  \"imoClass\": \"string\",\n  \"updateDate\": \"2023-05-11T06:07:35.853Z\",\n  \"built\": 0,\n  \"registryPortId\": \"string\",\n  \"vesselTypeId\": \"string\",\n  \"vesselCategoyOneId\": \"string\",\n  \"vesselCategoryTwoId\": \"string\",\n  \"hullType\": \"string\",\n  \"loa\": 0,\n  \"beam\": 0,\n  \"summerDwt\": 0,\n  \"summerDraft\": 0,\n  \"ballastDwt\": 0,\n  \"ballastDraft\": 0,\n  \"cubicCapacity\": 0,\n  \"segregationCount\": 0,\n  \"registeredOwner\": \"string\",\n  \"technicalOperator\": \"string\",\n  \"commercialOperator\": \"string\",\n  \"disponentOwner\": \"string\",\n  \"q88QuestionnarieFile\": \"string\",\n  \"openPortId\": \"string\",\n  \"openDate\": \"2023-05-11T06:07:35.853Z\",\n  \"fleetId\": \"string\"\n}"
+        "text": "{\n  \"name\": \"string\",\n  \"imo\": \"string\",\n  \"imoClass\": \"string\",\n  \"updateDate\": \"2023-05-11T06:07:35.853Z\",\n  \"built\": 0,\n  \"registryPortId\": \"string\",\n  \"vesselTypeId\": \"string\",\n  \"vesselCategoyOneId\": \"string\",\n  \"vesselCategoryTwoId\": \"string\",\n  \"hullType\": \"string\",\n  \"loa\": 0,\n  \"beam\": 0,\n  \"summerDwt\": 0,\n  \"summerDraft\": 0,\n  \"ballastDwt\": 0,\n  \"ballastDraft\": 0,\n  \"cubicCapacity\": 0,\n  \"segregationCount\": 0,\n  \"registeredOwner\": \"string\",\n  \"technicalOperator\": \"string\",\n  \"commercialOperator\": \"string\",\n  \"disponentOwner\": \"string\",\n  \"q88QuestionnaireFile\": \"string\",\n  \"openPortId\": \"string\",\n  \"openDate\": \"2023-05-11T06:07:35.853Z\",\n  \"fleetId\": \"string\"\n}"
       },
       "parameters": [],
       "headers": [],
@@ -2323,8 +2323,8 @@
       "parentId": "fld_642544357a864233bfae7111f3f92d1d",
       "modified": 1683628157045,
       "created": 1683565637638,
-      "url": "{{ _.NEXT_PUBLIC_API_URL }}/api/auth/veriffication",
-      "name": "Veriffication",
+      "url": "{{ _.NEXT_PUBLIC_API_URL }}/api/auth/verification",
+      "name": "verification",
       "description": "",
       "method": "POST",
       "body": { "mimeType": "application/json", "text": "{\n\t\"password\": \"12345678\"\n}" },

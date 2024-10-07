@@ -14,7 +14,7 @@ const initialState = {
   prefilledSearchData: null,
   sortingData: {
     range: [SORT_OPTIONS.asc, SORT_OPTIONS.dsc],
-    directions: [SORT_OPTIONS.ballast, SORT_OPTIONS.arriaval],
+    directions: [SORT_OPTIONS.ballast, SORT_OPTIONS.arrival],
     currentRange: '',
     currentDirection: '',
   },

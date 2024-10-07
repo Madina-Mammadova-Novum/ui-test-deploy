@@ -34,7 +34,7 @@ const freightDataAdapter = ({ data }) => {
   };
 };
 
-export const estimationBodyAdataper = ({ data }) => {
+export const estimationBodyAdapter = ({ data }) => {
   if (!data) return null;
 
   const { calculator } = data;

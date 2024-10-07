@@ -10,7 +10,7 @@ import { transformDate } from './date';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
-import { ERROR_MESSGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
+import { ERROR_MESSAGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
 
 /**
  * createMarkup
@@ -84,7 +84,7 @@ export function makeId() {
   return text;
 }
 
-export function getHighlitedInput(text, userInput) {
+export function getHighlightedInput(text, userInput) {
   if (text.match(userInput.charAt(0).toUpperCase() + userInput.slice(1))) {
     return text.replaceAll(
       userInput.charAt(0).toUpperCase() + userInput.slice(1),
@@ -221,7 +221,7 @@ export function formatDate(dateString) {
   return formatter.format(date);
 }
 
-export const disableDefaultBehaviour = (e) => e.preventDefault();
+export const disableDefaultBehavior = (e) => e.preventDefault();
 
 export const getButtonClassNames = (variant, size) => {
   // todo: need to connect constants for variants and sizes values
@@ -263,7 +263,7 @@ export const disablePlusMinusSymbols = (e) => {
     e.keyCode === 187 ||
     e.keyCode === 189;
 
-  if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehaviour(e);
+  if (disabledKeyCodes || clipboardPasteKey) disableDefaultBehavior(e);
 };
 
 export function options(values) {
@@ -377,7 +377,7 @@ export const checkAuthRoute = (req, pathName) => {
 };
 
 export const formatErrors = (errors) => {
-  if (!errors) return ERROR_MESSGE;
+  if (!errors) return ERROR_MESSAGE;
 
   // eslint-disable-next-line no-unused-vars
   return Object.entries(errors).map(([key, value]) => {
@@ -459,7 +459,7 @@ export const extractTime = (string) => {
   return match ? match[0] : null; // Return the matched time or null if no match found
 };
 
-export const setSkipedValue = (pageValue, perPageValue) => {
+export const setSkippedValue = (pageValue, perPageValue) => {
   if (pageValue === 1) return 0;
   return (pageValue - 1) * perPageValue;
 };
@@ -515,35 +515,19 @@ export const getListOfDataByDays = (data) => {
 };
 
 export const calculateCountdown = (expiresAt, frozenAt) => {
-  // const milisecondsInSecond = 1000;
-  // const milisecondsInMinute = 60 * milisecondsInSecond;
-  // const milisecondsInHour = 60 * milisecondsInMinute;
-  // const milisecondsInDay = 24 * milisecondsInHour;
   const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
 
-  let milisecondsUntilExpiration = 0;
+  let millisecondsUntilExpiration = 0;
   if (frozenAt) {
-    milisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(frozenAt).getTime();
+    millisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(frozenAt).getTime();
   } else {
-    milisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
+    millisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
   }
 
-  return milisecondsUntilExpiration < 0 ? Date.now() : Date.now() + milisecondsUntilExpiration;
-
-  // Old implementation
-  // const sign = milisecondsUntilExpiration < 0 ? '-' : '';
-  // const method = milisecondsUntilExpiration < 0 ? 'ceil' : 'floor';
-
-  // const days = Math.abs(Math[method](milisecondsUntilExpiration / milisecondsInDay));
-  // const hours = Math.abs(Math[method]((milisecondsUntilExpiration % milisecondsInDay) / milisecondsInHour));
-  // const minutes = Math.abs(
-  //   Math[method](((milisecondsUntilExpiration % milisecondsInDay) % milisecondsInHour) / milisecondsInMinute)
-  // );
-
-  // return `${sign}${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m` : ''}`;
+  return millisecondsUntilExpiration < 0 ? Date.now() : Date.now() + millisecondsUntilExpiration;
 };
 
-export const formattetTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
+export const formattedTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
 export const isReadValue = (value) => value === 'read';
 
 export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
@@ -587,8 +571,8 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
 };
 
 export const downloadFile = ({ url, fileName }) => {
-  const requestuUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
-  fetch(requestuUrl)
+  const requestUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+  fetch(requestUrl)
     .then((response) => response.blob())
     .then((blob) => {
       const link = document.createElement('a');
@@ -613,9 +597,9 @@ export const trimTonValue = (number) =>
 
 export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOffer }) => {
   const layTimeImprovement = initialOffer.layTime - counterOffer.layTime >= 6;
-  const damurrageRateImprovement = initialOffer.demurrageRate * 1.05 <= counterOffer.demurrageRate;
+  const demurrageRateImprovement = initialOffer.demurrageRate * 1.05 <= counterOffer.demurrageRate;
   const freightImprovement = initialOffer.value * 1.05 <= counterOffer.value;
-  const isMinimalImprovementMet = [layTimeImprovement, damurrageRateImprovement, freightImprovement].some(
+  const isMinimalImprovementMet = [layTimeImprovement, demurrageRateImprovement, freightImprovement].some(
     (value) => value
   );
   return isMinimalImprovementMet;
@@ -648,12 +632,12 @@ export const getLineCoordinate = ({ data }) => {
   return [fromPort.coordinates, toPort.coordinates];
 };
 
-export const formatedNumber = (value) => {
+export const formattedNumber = (value) => {
   if (value === null) return '';
   return value?.toFixed(2);
 };
 
-export const formatedDay = (number) => {
+export const formattedDay = (number) => {
   if (number === null || number === undefined) return '';
   const hoursInADay = 24;
   const days = number / hoursInADay;
@@ -775,7 +759,7 @@ export const sessionCookieCleaner = () => {
 };
 
 export const sessionCookieData = (data) => {
-  if (!data) throw new Error('Unathorized');
+  if (!data) throw new Error('Unauthorized');
 
   const { sub, role } = decodedTokenAdapter(data.access_token);
 
@@ -858,17 +842,17 @@ export const getFieldFromKey = (key) => {
   return errorByKey[key];
 };
 
-export const getBrowser = (enviroment) => {
-  if (enviroment.indexOf('Firefox') !== -1) {
+export const getBrowser = (environment) => {
+  if (environment.indexOf('Firefox') !== -1) {
     return 'firefox';
   }
-  if (enviroment.indexOf('Chrome') !== -1) {
+  if (environment.indexOf('Chrome') !== -1) {
     return 'chrome';
   }
-  if (enviroment.indexOf('Safari') !== -1) {
+  if (environment.indexOf('Safari') !== -1) {
     return 'safari';
   }
-  if (enviroment.indexOf('MSIE') !== -1 || enviroment.indexOf('Trident/') !== -1) {
+  if (environment.indexOf('MSIE') !== -1 || environment.indexOf('Trident/') !== -1) {
     return 'internet explorer';
   }
   return 'unknown';

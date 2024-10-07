@@ -50,7 +50,6 @@ const ExpandableCardHeader = ({
     const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length: textLength });
 
     let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
-
     if (data.countdownData && data.isFailed) return null;
 
     if (data.label === 'Status' && !data.isFailed) return null;
@@ -59,8 +58,11 @@ const ExpandableCardHeader = ({
       textContent = <DynamicCountdownTimer {...data.countdownData} />;
     }
 
+    const newId = crypto.randomUUID();
+
     return (
       <div
+        key={newId}
         className={classnames({
           'col-start-1': !lg,
           [`${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`]: !lg,
@@ -106,6 +108,7 @@ const ExpandableCardHeader = ({
             <div className="mt-3 flex justify-end gap-x-2.5 border-t border-purple-light pt-2 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:border-t-0 lg:pt-0">
               {actions.map(({ action, text, variant, size, icon }) => (
                 <ModalWindow
+                  key={action}
                   containerClass="overflow-y-[unset]"
                   buttonProps={{
                     icon,
