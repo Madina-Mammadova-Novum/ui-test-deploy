@@ -8,6 +8,12 @@ trigger:
     exclude:
       - '*'
 
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: openai-key
+
 steps:
   # SonarQube prepare
   - task: SonarQubePrepare@6
