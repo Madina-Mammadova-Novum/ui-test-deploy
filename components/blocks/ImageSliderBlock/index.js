@@ -1,7 +1,6 @@
 'use client';
 
 import delve from 'dlv';
-import PropTypes from 'prop-types';
 import { Autoplay, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -32,11 +31,11 @@ const ImageSliderBlock = ({ gallery }) => {
         >
           {gallery.map((coverImage) => {
             return (
-              <SwiperSlide>
+              <SwiperSlide key={coverImage.id}>
                 <NextImage
                   width={800}
                   height={450}
-                  alt={delve(coverImage, 'alternativeText')}
+                  alt={delve(coverImage, 'alternativeText') || 'Tanker Image'}
                   src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
                   className="h-[450px] w-full rounded-base object-contain object-center"
                   quality={100}
@@ -51,7 +50,7 @@ const ImageSliderBlock = ({ gallery }) => {
 };
 
 ImageSliderBlock.propTypes = {
-  gallery: PropTypes.arrayOf(galleryPropTypes),
+  gallery: galleryPropTypes,
 };
 
 export default ImageSliderBlock;

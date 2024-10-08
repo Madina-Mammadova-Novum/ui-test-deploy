@@ -47,12 +47,18 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       freezedText = 'Deal is frozen';
     }
 
+    const newId = crypto.randomUUID();
+
     return (
-      <Fragment key={rowData?.id}>
+      <Fragment key={newId}>
         {isFreezed && (
-          <span className="absolute left-0 z-50 mt-2.5 whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm sm:left-1/4 lg:left-1/3">
-            {freezedText}
-          </span>
+          <tr>
+            <td colSpan={headerData.length}>
+              <p className="absolute left-0 z-50 mt-2.5 whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm sm:left-1/4 lg:left-1/3">
+                {freezedText}
+              </p>
+            </td>
+          </tr>
         )}
         <TableRow type={type} fleetId={fleetId} rowData={rowData} />
       </Fragment>

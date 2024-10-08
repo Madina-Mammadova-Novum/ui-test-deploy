@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { AccordionPropTypes } from '@/lib/types';
 
@@ -14,7 +14,7 @@ const Accordion = ({ items, isFullWidth, open, onClick, icon }) => {
 
   return items?.map(({ headerContent, bodyContent }) => (
     <div
-      className={classnames(
+      className={classNames(
         open && !isFullWidth && 'relative -mb-2 rounded-base !border-transparent bg-white shadow-xmd',
         'pb-2.5 text-black'
       )}

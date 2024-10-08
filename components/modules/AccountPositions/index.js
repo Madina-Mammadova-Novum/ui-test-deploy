@@ -11,7 +11,7 @@ const AccountPositions = () => {
   const { vessels = [], unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
 
   const printExpandableCard = (fleet) => {
-    return <ExpandableCard className="bg-white" key={fleet.id} data={fleet} expandAll={toggle} />;
+    return <ExpandableCard className="bg-white" key={fleet.fleetId} data={fleet} expandAll={toggle} />;
   };
 
   const printContent = useMemo(() => {

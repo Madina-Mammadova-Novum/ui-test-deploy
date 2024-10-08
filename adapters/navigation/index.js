@@ -1,5 +1,5 @@
 import { ROOT_SLUG } from '@/lib/constants';
-import { setSkipedValue } from '@/utils/helpers';
+import { setSkippedValue } from '@/utils/helpers';
 
 export const navigationItemAdapter = ({ data }) => {
   if (data === null) return null;
@@ -42,7 +42,7 @@ export const basePageNavAdapter = ({ data }) => {
   const { page, perPage } = data;
 
   return {
-    skip: setSkipedValue(page, perPage),
+    skip: setSkippedValue(page, perPage),
     pageSize: perPage,
   };
 };

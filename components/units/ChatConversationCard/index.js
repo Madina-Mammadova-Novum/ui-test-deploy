@@ -58,7 +58,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
     dispatch(resetDealData());
   };
 
-  const printCargoeModal = useMemo(() => {
+  const printCargoModal = useMemo(() => {
     return (
       data?.vessel?.cargoId && (
         <p
@@ -92,7 +92,7 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
           {data?.vessel?.name}
         </Title>
         {data?.subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{data?.subtitle}</p>}
-        {printCargoeModal}
+        {printCargoModal}
         {!contrasted && (
           <ChatAdditional
             isActive={state.setMore}

@@ -62,8 +62,8 @@ export async function chartererSignUp({ data }) {
   };
 }
 
-export async function postVeriffData({ data }) {
-  const response = await postData(`auth/veriffication`, data);
+export async function postVerificationData({ data }) {
+  const response = await postData(`auth/verification`, data);
   return {
     ...response,
   };

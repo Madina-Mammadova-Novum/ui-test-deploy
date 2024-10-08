@@ -2,7 +2,7 @@
 
 import { Controller } from 'react-hook-form';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { CheckBoxInputPropTypes } from '@/lib/types';
 
@@ -26,7 +26,7 @@ const CheckBoxInput = ({ name = '', customStyles = '', labelStyles = '', checked
                 onChange={onChange}
                 checked={checked}
                 error={!!error}
-                className={classnames('h-5 w-5', customStyles)}
+                className={classNames('h-5 w-5', customStyles)}
               />
               {children && (
                 <label htmlFor={name} className={labelStyles}>

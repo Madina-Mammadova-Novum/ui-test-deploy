@@ -1,9 +1,9 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import parse from 'html-react-parser';
 import { notFound } from 'next/navigation';
 import PropTypes from 'prop-types';
 
-import { legalPropAdpater } from '@/adapters';
+import { legalPropAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
@@ -16,14 +16,14 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Home({ params }) {
-  const { legal } = legalPropAdpater({ params });
+  const { legal } = legalPropAdapter({ params });
 
   const { pageData, blocks, content } = await getHomePageData({ params });
 
   if (pageData === null) notFound();
 
   return (
-    <main className={classnames(legal && 'legal-styles')}>
+    <main className={classNames(legal && 'legal-styles')}>
       {/* todo: example to use legal variable */}
       <section className="relative bg-gray-light pb-[195px] pt-[115px]">
         <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">

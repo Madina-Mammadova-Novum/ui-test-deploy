@@ -52,7 +52,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
       return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
     }
 
-    return <DetailsContent data={detailsData} />;
+    return <DetailsContent detailsData={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
   return (

@@ -74,7 +74,6 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
       return (
         <ViewOffer
           setStep={setStep}
-          closeModal={closeModal}
           data={offerDetails}
           offerId={itemId}
           parentId={parentId}

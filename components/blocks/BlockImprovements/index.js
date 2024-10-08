@@ -11,7 +11,7 @@ import { valuesPropTypes } from '@/lib/types';
 // import { ImprovementCard } from '@/collections';
 import { Title } from '@/elements';
 
-const BlockImprovements = ({ title, values }) => {
+const BlockImprovements = ({ title = '', values }) => {
   return (
     <section className="relative mb-28 sm:mb-44 2xl:mb-64">
       {title && <Title level="1">{title}</Title>}
@@ -68,10 +68,6 @@ const BlockImprovements = ({ title, values }) => {
       )}
     </section>
   );
-};
-
-BlockImprovements.defaultProps = {
-  title: '',
 };
 
 BlockImprovements.propTypes = {

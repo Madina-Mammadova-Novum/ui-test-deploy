@@ -192,11 +192,11 @@ export const onSubsDetailsAdapter = ({ data }) => {
         text: chartererName,
       },
       {
-        title: 'Registration Adress',
+        title: 'Registration Address',
         text: `${registrationAddress}, ${registrationCityName}, ${registrationCountry?.name}`,
       },
       {
-        title: 'Correspondence Adress',
+        title: 'Correspondence Address',
         text: `${correspondenceAddress}, ${correspondenceCityName}, ${correspondenceCountry?.name}`,
       },
     ],
@@ -261,7 +261,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Heat',
-          text: heat || 'Not Aplicable',
+          text: heat || 'Not Applicable',
         },
       ],
       products,
@@ -357,7 +357,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
 };
 
 const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
-  if (!data) return [];
+  if (!data) return {};
   const {
     id,
     title,

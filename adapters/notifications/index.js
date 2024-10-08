@@ -7,7 +7,7 @@ export const notificationsResponseAdapter = (data) => {
   return data;
 };
 
-export const readedNotificationResponseAdapter = (data) => {
+export const readNotificationResponseAdapter = (data) => {
   if (!data) return null;
 
   return data;

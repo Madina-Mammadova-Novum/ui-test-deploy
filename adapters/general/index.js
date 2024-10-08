@@ -2,7 +2,7 @@ import { isDocument } from '@/utils/helpers';
 
 export function getGeneralDataAdapter({ data }) {
   return {
-    countires: data.general.data.countries,
+    countries: data.general.data.countries,
     ports: data.general.data.ports,
   };
 }

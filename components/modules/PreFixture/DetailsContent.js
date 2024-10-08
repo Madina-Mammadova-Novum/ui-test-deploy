@@ -10,7 +10,7 @@ import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
 import { Flag, PartyItem } from '@/units';
 
-const DetailsContent = ({ data = {} }) => {
+const DetailsContent = ({ detailsData = {} }) => {
   const { role } = useSelector(getUserDataSelector);
   const { countries } = useSelector(getGeneralDataSelector);
 
@@ -20,7 +20,7 @@ const DetailsContent = ({ data = {} }) => {
     commercialOfferTerms = {},
     voyageDetails = {},
     additionalCharterPartyTerms = [],
-  } = data;
+  } = detailsData;
 
   const { cargoType, products = [] } = cargoDetails;
   const { freight, demurrageRate, laytime, demurragePaymentTerms, paymentTerms } = commercialOfferTerms;

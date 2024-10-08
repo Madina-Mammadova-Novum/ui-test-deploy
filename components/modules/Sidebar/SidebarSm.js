@@ -1,4 +1,4 @@
-import { SidebarSmPropTypes } from '@/lib/types';
+import { SidebarGenericPropTypes } from '@/lib/types';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import Logo from '@/assets/images/logo-sm.svg';
@@ -36,6 +36,6 @@ const SidebarSm = ({ data, isResized, onResize }) => {
   );
 };
 
-SidebarSm.propTypes = SidebarSmPropTypes;
+SidebarSm.propTypes = SidebarGenericPropTypes;
 
 export default SidebarSm;

@@ -19,7 +19,7 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
           </Title>
           <div className="my-2 flex flex-col gap-1.5">
             {data.map(({ title, date, time, sentBy }) => (
-              <Comment title={title} date={date} time={time} sentBy={sentBy} />
+              <Comment key={`${title}-${date}-${time}`} title={title} date={date} time={time} sentBy={sentBy} />
             ))}
           </div>
         </>

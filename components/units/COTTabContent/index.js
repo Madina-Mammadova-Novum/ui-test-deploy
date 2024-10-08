@@ -8,7 +8,9 @@ const COTTabContent = ({ data = {} }) => {
       <Title level="3">Commercial Offer Terms</Title>
       <div className="mt-2.5">
         {data.cargo?.map(({ key, label }) => (
-          <TextRow title={key}>{label}</TextRow>
+          <TextRow key={key} title={key}>
+            {label}
+          </TextRow>
         ))}
       </div>
 
@@ -18,10 +20,12 @@ const COTTabContent = ({ data = {} }) => {
         Products
       </Title>
       <div className="mt-2.5 flex">
-        {data.products?.map((product) => (
-          <div className="w-full">
+        {data.products?.map((product, index) => (
+          <div key={`${product[index]}-group`} className="w-full">
             {product.map(({ key, label }) => (
-              <TextRow title={key}>{label}</TextRow>
+              <TextRow key={key} title={key}>
+                {label}
+              </TextRow>
             ))}
           </div>
         ))}
@@ -30,7 +34,11 @@ const COTTabContent = ({ data = {} }) => {
       <hr className="my-4" />
 
       {data.details?.map(({ key, label }) => (
-        <TextRow title={key} className="[&>span:nth-child(2)]:!inline [&>span:nth-child(2)]:!whitespace-pre-wrap">
+        <TextRow
+          key={key}
+          title={key}
+          className="[&>span:nth-child(2)]:!inline [&>span:nth-child(2)]:!whitespace-pre-wrap"
+        >
           {label}
         </TextRow>
       ))}

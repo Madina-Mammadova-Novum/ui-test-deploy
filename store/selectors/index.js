@@ -78,10 +78,10 @@ export const getNotificationsDataSelector = createDraftSafeSelector(notification
     ...state,
     watchedData: state?.watchedData,
     unwatchedData: state?.unwatchedData,
-    readedCounter: state.readed,
+    readCounter: state.read,
     unreadCounter: state.unread,
-    noReadedMessages: state.readed === 0,
-    noUnreadedMessages: state.unread === 0,
+    noReadMessages: state.read === 0,
+    noUnreadMessages: state.unread === 0,
     deal: state.dealData,
     generating: state.dealFetching,
   };
@@ -100,9 +100,9 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 
 export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   const activeCounter = state?.data?.active.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
-  const archievedCounter = state?.data?.archieved.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
+  const archivedCounter = state?.data?.archieved.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
 
-  const totalMessagesCounter = activeCounter + archievedCounter;
+  const totalMessagesCounter = activeCounter + archivedCounter;
   const newMessages = state?.data?.support?.[0]?.messageCount > 0 ? totalMessagesCounter + 1 : totalMessagesCounter;
 
   return {
@@ -140,7 +140,7 @@ export const getFixtureSelector = createDraftSafeSelector(fixtureSelector, (stat
     totalPages: state.data?.totalPages,
     role: state.role,
     deal: state.deal,
-    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
   };
 });
 
@@ -155,7 +155,7 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     role: state.role,
     deal: state.deal,
     perPage: state?.data?.perPage,
-    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
   };
 });
 
@@ -170,7 +170,7 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
     totalPages: state.data?.totalPages,
     role: state.role,
     deal: state.deal,
-    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
   };
 });
 
@@ -181,7 +181,7 @@ export const getFixtureDataSelector = createDraftSafeSelector(fixtureSelector, (
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
     role: state.role,
-    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })),
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
   };
 });
 
@@ -209,7 +209,7 @@ export const getOnSubsDataSelector = createDraftSafeSelector(onSubsSelector, (st
     loading: state.loading,
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
-    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoeId: offer?.searchedCargo?.id })) || [],
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })) || [],
     offerById: state.data.offerById,
     role: state.role,
     deal: state.deal,

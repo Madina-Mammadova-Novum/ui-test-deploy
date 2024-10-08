@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { PersonalDetailsFormPropTypes } from '@/lib/types';
 
@@ -24,7 +24,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           label="First name"
           labelBadge={
             pendingRequest ? (
-              <p className={classnames('font-bold', pending?.name === firstName ? 'text-green' : 'text-blue')}>
+              <p className={classNames('font-bold', pending?.name === firstName ? 'text-green' : 'text-blue')}>
                 {pending?.name}
               </p>
             ) : null
@@ -38,7 +38,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           label="Last name"
           labelBadge={
             pendingRequest ? (
-              <p className={classnames('font-bold', pending?.surname === lastName ? 'text-green' : 'text-blue')}>
+              <p className={classNames('font-bold', pending?.surname === lastName ? 'text-green' : 'text-blue')}>
                 {pending?.surname}
               </p>
             ) : null
@@ -52,7 +52,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           label="Email"
           labelBadge={
             pendingRequest ? (
-              <p className={classnames('font-bold', pending?.email === email ? 'text-green' : 'text-blue')}>
+              <p className={classNames('font-bold', pending?.email === email ? 'text-green' : 'text-blue')}>
                 {pending?.email}
               </p>
             ) : null

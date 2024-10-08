@@ -12,14 +12,14 @@ import { getUserVesselsSelector } from '@/store/selectors';
 import { ExpandableCard } from '@/units';
 import { urlParser } from '@/utils/helpers';
 
-const AccountPositionsDetails = ({ searchedParms }) => {
+const AccountPositionsDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
   const { vessels, unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
 
-  const assignedResult = vessels?.find((vessel) => vessel?.fleetId === searchedParms?.id);
+  const assignedResult = vessels?.find((vessel) => vessel?.fleetId === searchedParams?.id);
 
-  const assignedData = fleetNotificationAdapter({ data: assignedResult, id: searchedParms?.tankerId });
-  const unassignedData = fleetNotificationAdapter({ data: unassignedVessel, id: urlParser(searchedParms.id) });
+  const assignedData = fleetNotificationAdapter({ data: assignedResult, id: searchedParams?.tankerId });
+  const unassignedData = fleetNotificationAdapter({ data: unassignedVessel, id: urlParser(searchedParams.id) });
 
   useEffect(() => {
     dispatch(setToggle(true));

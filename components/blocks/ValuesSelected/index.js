@@ -41,7 +41,7 @@ const renderValues = (values) => {
   }
 };
 
-const ValuesSelected = ({ title, shortDescription, values }) => {
+const ValuesSelected = ({ title = '', shortDescription = '', values = [] }) => {
   return (
     <section className="mb-28 sm:mb-44 2xl:mb-64">
       {title && <BlockTitle title={title} />}
@@ -49,12 +49,6 @@ const ValuesSelected = ({ title, shortDescription, values }) => {
       {values && renderValues(values)}
     </section>
   );
-};
-
-ValuesSelected.defaultProps = {
-  title: '',
-  shortDescription: '',
-  values: [],
 };
 
 ValuesSelected.propTypes = {

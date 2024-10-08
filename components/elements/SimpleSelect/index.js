@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import { makeId } from '@/utils/helpers';
 
-const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
+const SimpleSelect = ({ label = '', selectableItems, currentItem, onChange }) => {
   const [isOpened, setIsOpened] = useState(false);
 
   const handleChange = (item) => {
@@ -48,11 +48,6 @@ const SimpleSelect = ({ label, selectableItems, currentItem, onChange }) => {
       </div>
     </>
   );
-};
-
-SimpleSelect.defaultProps = {
-  label: '',
-  className: '',
 };
 
 SimpleSelect.propTypes = {

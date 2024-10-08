@@ -1,6 +1,6 @@
 'use client';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { TextWithLabelPropTypes } from '@/lib/types';
 
@@ -20,7 +20,7 @@ const TextWithLabel = ({
 }) => {
   return (
     <div
-      className={classnames(
+      className={classNames(
         'flex min-w-[90px] items-center gap-y-1 text-left font-semibold lg:flex-col lg:items-start',
         customStyles
       )}
@@ -36,14 +36,14 @@ const TextWithLabel = ({
         </Label>
       )}
       <div
-        className={classnames(
+        className={classNames(
           'mx-2 ml-1.5 flex h-5 items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap text-xsm lg:ml-0',
           textGroupStyle
         )}
       >
         {coverImage && coverImage}
         {countryCode && <Flag countryCode={countryCode} />}
-        {text ? <p className={classnames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}
+        {text ? <p className={classNames(textStyles, coverImage && 'ml-0.5')}>{text}</p> : <Placeholder />}
       </div>
     </div>
   );

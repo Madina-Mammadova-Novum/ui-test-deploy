@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import NavTreeHeader from '../NavTreeHeader';
 import NavTreeTitle from '../NavTreeTitle';
+
+import { menuItemPropTypes } from '@/lib/types';
 
 import AnchorSVG from '@/assets/images/anchor.svg';
 import BrowserSVG from '@/assets/images/browser.svg';
@@ -22,7 +24,7 @@ const NavTreeXl = ({ data, active }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
-    const customStyles = classnames(active ? 'fill-white' : 'fill-gray', 'shrink-0');
+    const customStyles = classNames(active ? 'fill-white' : 'fill-gray', 'shrink-0');
 
     switch (data?.variant) {
       case 'search':
@@ -66,16 +68,8 @@ const NavTreeXl = ({ data, active }) => {
 };
 
 NavTreeXl.propTypes = {
-  active: PropTypes.string,
-  opened: PropTypes.bool,
-  onChange: PropTypes.func,
-  data: PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-    title: PropTypes.string,
-    path: PropTypes.string,
-    variant: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
+  active: PropTypes.bool,
+  data: menuItemPropTypes,
 };
 
 export default NavTreeXl;

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Controller } from 'react-hook-form';
 import Phone from 'react-phone-input-2';
 
@@ -9,12 +10,12 @@ import { PhoneInputPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
 
-const PhoneInput = ({ name, label, err, ...rest }) => {
+const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
   if (name) {
     return (
       <Controller
         name={name}
-        render={({ field: { ref, ...field }, formState: { errors, isSubmitting } }) => {
+        render={({ field: { rhfRef, ...field }, formState: { errors, isSubmitting } }) => {
           const error = errors[name];
           return (
             <div className="w-full">
@@ -24,7 +25,7 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
               <Phone
                 {...field}
                 masks={{ ae: '.. .......' }}
-                inputProps={{ ref }}
+                inputProps={{ ref: rhfRef }}
                 id={name}
                 enableSearch
                 enableAreaCodes
@@ -51,6 +52,7 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
       </Label>
       <Phone
         {...rest}
+        inputProps={{ ref }}
         enableSearch
         enableAreaCodes
         masks={{ ae: '.. .......' }}
@@ -60,8 +62,10 @@ const PhoneInput = ({ name, label, err, ...rest }) => {
       {err && <InputErrorMessage message={err?.message} />}
     </div>
   );
-};
+});
 
 PhoneInput.propTypes = PhoneInputPropTypes;
+
+PhoneInput.displayName = 'PhoneInput';
 
 export default PhoneInput;

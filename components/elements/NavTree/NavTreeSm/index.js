@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import NavTreeHeader from '../NavTreeHeader';
@@ -49,7 +49,7 @@ const NavTreeSm = ({ data, active }) => {
   }, []);
 
   const printIcon = useMemo(() => {
-    const customStyles = classnames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
+    const customStyles = classNames('w-5 h-5', active ? 'fill-white' : 'fill-gray');
 
     switch (data?.variant) {
       case 'search':
@@ -82,7 +82,7 @@ const NavTreeSm = ({ data, active }) => {
         <div className="flex flex-col items-center justify-center">
           <Button
             buttonProps={{ icon: { before: printIcon }, variant: 'tertiary', size: 'small' }}
-            customStyles={classnames(
+            customStyles={classNames(
               'flex flex-col text-sm font-semibold capitalize !py-2 rounded-md !px-2 mb-1',
               active ? 'bg-blue' : 'hover:bg-blue-dark',
               showLinks && 'bg-blue-dark'
@@ -93,12 +93,12 @@ const NavTreeSm = ({ data, active }) => {
         </div>
       )}
       {showLinks && (
-        <div
+        <ul
           ref={subTreeRef}
           className="absolute left-12 top-5 h-auto w-auto rounded-br-base rounded-tr-base bg-black py-2 pr-2"
         >
           {data?.items?.length > 0 && data?.items?.map(printSubTree)}
-        </div>
+        </ul>
       )}
     </NavTreeHeader>
   );
@@ -108,7 +108,7 @@ NavTreeSm.propTypes = {
   active: PropTypes.bool,
   onChange: PropTypes.func,
   data: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
     path: PropTypes.string,
     variant: PropTypes.string,

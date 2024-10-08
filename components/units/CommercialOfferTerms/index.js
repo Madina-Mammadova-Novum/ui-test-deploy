@@ -78,7 +78,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
     setPaymentLoader(false);
   };
 
-  const getDemurageData = async () => {
+  const getDemurrageData = async () => {
     setDemurrageLoader(true);
 
     const demurragePaymentTermsData = await getDemurragePaymentTerms();
@@ -89,8 +89,6 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   };
 
   const printProduct = (product, index) => {
-    setValue(`products[${index}].tolerance`, product.tolerance);
-
     return (
       <div className="mt-3 flex items-baseline gap-x-5" key={product.product.value}>
         <FormDropdown
@@ -118,6 +116,14 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (searchData?.products) {
+      searchData.products.forEach((product, index) => {
+        setValue(`products[${index}].tolerance`, product.tolerance);
+      });
+    }
+  }, [searchData]);
 
   useEffect(() => {
     setFreightEstimation({
@@ -200,7 +206,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           options={demurragePaymentTerms}
           disabled={!valid || loading}
           loading={demurrageLoader ?? loading}
-          onFocus={!demurragePaymentTerms?.length && getDemurageData}
+          onFocus={!demurragePaymentTerms?.length && getDemurrageData}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
           asyncCall
