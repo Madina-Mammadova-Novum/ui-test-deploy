@@ -110,7 +110,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
 
           <FieldsetContent label="Ports" className="mt-4">
             {voyagePorts?.map((portGroup, index) => (
-              <div key={portGroup[index]?.title || index} className={index && 'mt-2.5'}>
+              <div key={portGroup?.[index]?.title || index} className={index && 'mt-2.5'}>
                 {portGroup?.map(({ title, text, countryCode }) => (
                   <TextRow key={title} title={title} inlineVariant>
                     <Flag countryCode={countryCode} className="mr-1" /> {text}
