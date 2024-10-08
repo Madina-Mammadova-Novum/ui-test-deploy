@@ -67,10 +67,12 @@ HeroAnimatedTitle.propTypes = {
   title: PropTypes.string,
   shortDescription: PropTypes.string,
   button: linkPropTypes,
-  changeableTitles: PropTypes.arrayOf({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.string.isRequired,
-  }),
+  changeableTitles: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ),
   coverImage: mediaPropTypes,
 };
 

@@ -52,7 +52,7 @@ export const SimpleDropdown = React.forwardRef(
           onMenuClose={handleCloseMenu}
           theme={dropdownTheme}
           isDisabled={isDisabled}
-          className={isDisabled && 'opacity-50'}
+          className={isDisabled ? 'opacity-50' : ''}
           components={{ Option: OptionsList, LoadingIndicator }}
           closeMenuOnSelect
           cacheOptions
@@ -71,7 +71,7 @@ export const SimpleDropdown = React.forwardRef(
         onMenuClose={handleCloseMenu}
         theme={dropdownTheme}
         isDisabled={isDisabled}
-        className={isDisabled && 'opacity-50'}
+        className={isDisabled ? 'opacity-50' : ''}
         components={{ Option: OptionsList, LoadingIndicator }}
         closeMenuOnSelect
       />
