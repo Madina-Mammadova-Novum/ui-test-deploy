@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import ExitSVG from '@/assets/images/exit.svg';
@@ -31,7 +31,7 @@ const ProfileMenu = () => {
       <div className="mx-2.5 flex items-center">
         {session?.user?.name && <span className="text-xsm font-semibold text-black">{session?.user?.name}</span>}
         <AngleDownSVG
-          className={classnames('ml-6 fill-black transition duration-500', showProfileMenu && 'rotate-180 fill-blue')}
+          className={classNames('ml-6 fill-black transition duration-500', showProfileMenu && 'rotate-180 fill-blue')}
         />
       </div>
 

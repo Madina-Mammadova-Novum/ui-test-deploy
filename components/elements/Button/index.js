@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { ButtonPropTypes } from '@/lib/types';
 
@@ -20,7 +20,7 @@ const Button = ({
   return (
     <div className={`flex flex-col items-center justify-center ${customStylesFromWrap}`}>
       <button
-        className={classnames(
+        className={classNames(
           'group flex items-center justify-center rounded-md px-3.5 py-2.5 text-xsm',
           buttonClassNames,
           disabled && 'pointer-events-none opacity-50',

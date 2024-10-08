@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { UisAngleDoubleRight, UisFavorite, UisObjectGroup, UisSchedule } from '@iconscout/react-unicons-solid';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import PaginationComponent from '../PaginationComponent';
 
@@ -165,7 +165,7 @@ const FavoriteSearchList = ({ onClose }) => {
             ) => (
               <div
                 key={id}
-                className={classnames(
+                className={classNames(
                   'flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd',
                   status !== 'Active' && 'bg-gray-darker'
                 )}

@@ -1,6 +1,6 @@
 'use client';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { AccordionHeaderPropTypes } from '@/lib/types';
 
@@ -12,7 +12,7 @@ const AccordionHeader = ({ title, onClick, isActive, isFullWidth }) => {
   return (
     <div
       aria-hidden
-      className={classnames(
+      className={classNames(
         !isFullWidth && 'px-[30px]',
         'flex w-full cursor-pointer justify-between gap-x-5 pb-2.5 pt-5'
       )}

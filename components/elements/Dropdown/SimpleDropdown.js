@@ -22,17 +22,7 @@ const LoadingIndicator = () => (
 
 export const SimpleDropdown = React.forwardRef(
   (
-    {
-      asyncCall = false,
-      options,
-      hardHeight,
-      isDisabled,
-      isOpen,
-      onOpen = () => {},
-      loading,
-      onExpand = () => {},
-      ...rest
-    },
+    { asyncCall = false, options, isDisabled, isOpen, onOpen = () => {}, loading, onExpand = () => {}, ...rest },
     ref
   ) => {
     const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (

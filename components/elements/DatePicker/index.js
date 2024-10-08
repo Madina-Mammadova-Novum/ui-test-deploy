@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Calendar } from 'react-date-range';
 import { Controller } from 'react-hook-form';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { DatePickerPropTypes } from '@/lib/types';
 
@@ -43,7 +43,7 @@ const DatePicker = ({
     <div className={`${containerClass} ${expanded && showPicker ? 'h-[330px]' : 'h-auto'}`}>
       <div
         aria-hidden="true"
-        className={classnames('fixed bottom-0 left-0 right-0 top-0 z-0', !showPicker && 'hidden')}
+        className={classNames('fixed bottom-0 left-0 right-0 top-0 z-0', !showPicker && 'hidden')}
         onClick={() => setShowPicker(false)}
       />
       <Controller
@@ -59,18 +59,18 @@ const DatePicker = ({
               >
                 <Input
                   name={name}
-                  customStyles={classnames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
+                  customStyles={classNames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
                   inputStyles="pr-0"
                   label={label}
                   value={transformDate(value, dateVariant)}
-                  icon={<CalendarSVG className={classnames('fill-black', showPicker && '!fill-blue')} />}
+                  icon={<CalendarSVG className={classNames('fill-black', showPicker && '!fill-blue')} />}
                   error={error}
                   onChange={field.onChange} // Pass onChange to Input
                   {...rest}
                 />
               </div>
               <div
-                className={classnames('absolute bottom-3 left-0 z-10 hidden w-full translate-y-full', {
+                className={classNames('absolute bottom-3 left-0 z-10 hidden w-full translate-y-full', {
                   '!block': showPicker,
                   'opacity-30': disabled,
                 })}

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import NextLink from '../NextLink';
 
@@ -144,7 +144,7 @@ const TableCell = ({ cellProps }) => {
 
   const printFlag = useMemo(() => {
     return (
-      available && <Flag countryCode={countryCode || flagOfRegistry} className={classnames(freezed && 'opacity-50')} />
+      available && <Flag countryCode={countryCode || flagOfRegistry} className={classNames(freezed && 'opacity-50')} />
     );
   }, [countryCode, available, freezed]);
 

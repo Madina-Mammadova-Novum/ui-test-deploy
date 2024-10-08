@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
@@ -63,7 +63,7 @@ const ExpandableCardHeader = ({
     return (
       <div
         key={newId}
-        className={classnames({
+        className={classNames({
           'col-start-1': !lg,
           [`${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`]: !lg,
           [`${!index && 'w-full'}`]: !gridLayout,
@@ -127,7 +127,7 @@ const ExpandableCardHeader = ({
       </div>
       <div className="absolute -right-2.5 self-start rounded-md hover:bg-gray-darker lg:self-auto">
         <TableArrowSVG
-          className={classnames('rounded-md fill-black transition duration-200', toggle && 'rotate-180 !fill-blue')}
+          className={classNames('rounded-md fill-black transition duration-200', toggle && 'rotate-180 !fill-blue')}
         />
       </div>
     </div>

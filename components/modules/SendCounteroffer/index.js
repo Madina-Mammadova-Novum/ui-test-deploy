@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import SendCounterofferFormFields from './SendCounterofferFormFields';
 
@@ -177,7 +177,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
             <div
               ref={scrollingContainerRef}
-              className={classnames(
+              className={classNames(
                 'h-[23.25rem] overflow-y-auto overflow-x-hidden p-5 2xl:h-[30rem]',
                 scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
               )}

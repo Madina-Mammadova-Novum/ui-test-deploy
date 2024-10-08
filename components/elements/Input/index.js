@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { InputPropTypes } from '@/lib/types';
 
@@ -29,11 +29,11 @@ const Input = React.forwardRef(
     useDisableNumberInputScroll();
 
     return (
-      <div className={classnames(disabled && 'pointer-events-none', customStyles, type === 'hidden' && 'hidden')}>
+      <div className={classNames(disabled && 'pointer-events-none', customStyles, type === 'hidden' && 'hidden')}>
         {label && (
           <Label
             name={name}
-            className={classnames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
+            className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
               'flex items-center gap-1 normal-case': labelBadge,
             })}
           >
@@ -41,7 +41,7 @@ const Input = React.forwardRef(
           </Label>
         )}
         <div
-          className={classnames(
+          className={classNames(
             {
               'box-border flex min-h-10 w-full rounded-md border border-gray-darker focus-within:border-blue focus-within:bg-white hover:border-blue hover:bg-transparent':
                 type !== 'checkbox',
@@ -63,7 +63,7 @@ const Input = React.forwardRef(
           <input
             ref={ref}
             id={name}
-            className={classnames(
+            className={classNames(
               {
                 'rounded-md px-4 py-[9px]': type !== 'checkbox',
               },

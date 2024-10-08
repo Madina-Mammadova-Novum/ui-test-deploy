@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { CompanyDetailsPropTypes } from '@/lib/types';
 
@@ -41,7 +41,7 @@ const CompanyDetails = ({ notEditable }) => {
         {...register('companyName')}
         labelBadge={
           pendingRequest ? (
-            <p className={classnames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
+            <p className={classNames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
               {pending?.name}
             </p>
           ) : null

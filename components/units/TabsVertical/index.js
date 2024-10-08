@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { TabsPropTypes } from '@/lib/types';
 
@@ -9,7 +9,7 @@ const TabsVertical = ({ tabs, customStyles = '', activeTab, onClick }) => {
       key={value}
       value={value}
       onClick={onClick}
-      className={classnames(
+      className={classNames(
         'whitespace-nowrap border-l-2 border-transparent pl-2.5 text-sm font-semibold capitalize',
         value === activeTab && 'border-l-2 !border-blue text-blue'
       )}
@@ -17,7 +17,7 @@ const TabsVertical = ({ tabs, customStyles = '', activeTab, onClick }) => {
       {label}
     </button>
   ));
-  return <div className={classnames('flex flex-col items-baseline gap-y-2.5', customStyles)}>{printTab}</div>;
+  return <div className={classNames('flex flex-col items-baseline gap-y-2.5', customStyles)}>{printTab}</div>;
 };
 
 TabsVertical.propTypes = TabsPropTypes;

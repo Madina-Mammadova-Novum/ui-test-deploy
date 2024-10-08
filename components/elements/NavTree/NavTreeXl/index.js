@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import NavTreeHeader from '../NavTreeHeader';
@@ -24,7 +24,7 @@ const NavTreeXl = ({ data, active }) => {
   const hasNestedLinks = Boolean(data?.items?.length);
 
   const printIcon = useMemo(() => {
-    const customStyles = classnames(active ? 'fill-white' : 'fill-gray', 'shrink-0');
+    const customStyles = classNames(active ? 'fill-white' : 'fill-gray', 'shrink-0');
 
     switch (data?.variant) {
       case 'search':
