@@ -54,7 +54,9 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
       <FieldsetContent label="About the Vessel Owner" className="mt-3">
         {ownerInfo.map(({ title, description }) => (
-          <TextRow title={title}>{description}</TextRow>
+          <TextRow key={title} title={title}>
+            {description}
+          </TextRow>
         ))}
       </FieldsetContent>
 
@@ -65,7 +67,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
           <div className="text-xs flex gap-x-5">
             <div className="w-full">
               {tankerInfo.slice(0, 9).map(({ title, description, countryCode }) => (
-                <TextRow title={title}>
+                <TextRow key={title} title={title}>
                   <Flag countryCode={countryCode} className="mr-1" />
                   {description}
                 </TextRow>
@@ -74,7 +76,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
             <div className="w-full">
               {tankerInfo.slice(9).map(({ title, description, countryCode }) => (
-                <TextRow title={title} className={`${countryCode && 'flex flex-col !items-start'}`}>
+                <TextRow key={title} title={title} className={`${countryCode && 'flex flex-col !items-start'}`}>
                   <Flag countryCode={countryCode} className="mr-1" />
                   {description}
                 </TextRow>

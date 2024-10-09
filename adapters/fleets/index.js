@@ -6,7 +6,7 @@ import TrashIcon from '@/assets/images/trashAlt.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { transformToCapitalize } from '@/utils/helpers';
+import { getLocode, transformToCapitalize } from '@/utils/helpers';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -168,7 +168,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const {
     id,
     canSendUpdateRequest,
-    details: { name, summerDwt, q88QuestionnaireFile, tankerLink },
+    details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry },
     imo,
     status: requestStatus,
   } = data;
@@ -188,6 +188,8 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       value: name,
       type: TYPE.SEMIBOLD,
       disabled: additionRequested,
+      flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
+      available: status,
     },
     {
       id,
@@ -258,7 +260,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     canSendUpdateRequest,
     status: requestStatus,
-    details: { summerDwt, name, q88QuestionnaireFile, tankerLink },
+    details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
@@ -275,6 +277,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       id,
       value: name,
       type: TYPE.SEMIBOLD,
+      flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
+      available: status,
     },
     {
       id,
