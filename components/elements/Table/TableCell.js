@@ -126,7 +126,7 @@ const TableCell = ({ cellProps }) => {
     const valueStyles = () => {
       if (disabled) return 'text-gray';
       if (freezed) return 'text-opacity-50 select-none';
-
+      if (flagOfRegistry || icon) return 'font-bold';
       return 'text-inherit';
     };
 
