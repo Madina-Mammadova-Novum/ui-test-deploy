@@ -34,7 +34,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };
 
-  const printTableRow = (rowData = []) => {
+  const printTableRow = (rowData, index) => {
     const isFreezed = rowData?.some((cell) => cell?.freezed);
 
     let freezedText;
@@ -47,7 +47,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       freezedText = 'Deal is frozen';
     }
 
-    const newId = crypto.randomUUID();
+    const newId = index;
 
     return (
       <Fragment key={newId}>

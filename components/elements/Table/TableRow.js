@@ -5,8 +5,8 @@ import { TableRowPropTypes } from '@/lib/types';
 import TableCell from '@/elements/Table/TableCell';
 
 const TableRow = ({ rowData = [], fleetId, urlAction, type }) => {
-  const printTableCell = (props) => {
-    const newId = crypto.randomUUID();
+  const printTableCell = (props, index) => {
+    const newId = index;
     return <TableCell key={newId} cellProps={{ ...props, urlAction, fleetId, type }} />;
   };
 
