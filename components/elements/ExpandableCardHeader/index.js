@@ -58,7 +58,7 @@ const ExpandableCardHeader = ({
       textContent = <DynamicCountdownTimer {...data.countdownData} />;
     }
 
-    const newId = crypto.randomUUID();
+    const newId = `${data?.text}-${index}`;
 
     return (
       <div

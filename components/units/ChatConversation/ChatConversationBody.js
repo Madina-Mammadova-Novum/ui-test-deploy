@@ -34,8 +34,8 @@ const ChatConversationBody = () => {
     }
   };
 
-  const printMessage = ({ sender, message, time, id }) => {
-    const newId = crypto.randomUUID();
+  const printMessage = ({ sender, message, time, id }, index) => {
+    const newId = `${time}-${id}-${index}`;
 
     return (
       <ChatMessage
