@@ -168,7 +168,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const {
     id,
     canSendUpdateRequest,
-    details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry },
+    details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
   } = data;
@@ -177,6 +177,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
+  const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
 
   return [
     {
@@ -185,7 +186,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: name,
+      value: tankerName,
       type: TYPE.SEMIBOLD,
       disabled: additionRequested,
       flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
@@ -260,13 +261,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     canSendUpdateRequest,
     status: requestStatus,
-    details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry },
+    details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
+  const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
 
   return [
     {
@@ -275,7 +277,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: name,
+      value: tankerName,
       type: TYPE.SEMIBOLD,
       flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
       available: status,
