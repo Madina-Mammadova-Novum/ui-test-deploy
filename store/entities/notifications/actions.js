@@ -11,7 +11,7 @@ import { notificationPathGenerator } from '@/utils/helpers';
 export const fetchNotifications = createAsyncThunk(
   NOTIFICATIONS.GET_NOTIFICATIONS,
   async (data, { getState, dispatch }) => {
-    const { data: result, readCount, unreadCount } = await getNotifications({ data });
+    const { data: result, unreadCount } = await getNotifications({ data });
 
     const {
       notifications: {
@@ -40,7 +40,7 @@ export const fetchNotifications = createAsyncThunk(
       dispatch(setUnwatchedData(result));
     }
 
-    return { read: readCount, unread: unreadCount };
+    return { unread: unreadCount };
   }
 );
 

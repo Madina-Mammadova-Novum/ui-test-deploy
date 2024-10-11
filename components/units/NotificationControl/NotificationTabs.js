@@ -9,7 +9,7 @@ import { getNotificationsDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 
 const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
-  const { unreadCounter, readCounter, unwatchedData } = useSelector(getNotificationsDataSelector);
+  const { unreadCounter, unwatchedData } = useSelector(getNotificationsDataSelector);
 
   const options = [
     {
@@ -17,7 +17,7 @@ const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
       value: 'unread',
     },
     {
-      label: `Read (${readCounter || 0})`,
+      label: 'Read',
       value: 'read',
     },
   ];
