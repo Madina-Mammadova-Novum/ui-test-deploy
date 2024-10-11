@@ -642,6 +642,12 @@ export const responseFailedOffersAdapter = ({ data }) => {
   return data;
 };
 
+export const responseOffersAdapter = ({ data }) => {
+  if (!data) return [];
+
+  return data;
+};
+
 export const responseSentCounteroffersAdapter = ({ data }) => {
   if (!data) return [];
 

@@ -77,6 +77,14 @@ export async function sendCounteroffer({ data, role }) {
   };
 }
 
+export async function getAllOffers({ id, role }) {
+  const response = await getData(`vessels/${role}-offers/${id}`);
+
+  return {
+    ...response,
+  };
+}
+
 export async function getIncomingOffers(tankerId) {
   const response = await getData(`vessels/incoming-offers/${tankerId}`);
   return {
@@ -95,6 +103,32 @@ export async function getSentCounteroffers(tankerId) {
   const response = await getData(`vessels/sent-counteroffers/${tankerId}`);
   return {
     ...response,
+  };
+}
+
+export async function getOffers({ id, role }) {
+  const allOffersData = await getAllOffers({ id, role });
+
+  const groupByName = (tabs) => {
+    return tabs.reduce(
+      (acc, tab) => {
+        if (tab.name === 'Incoming') {
+          acc.incoming.push(...tab.items);
+        } else if (tab.name === 'Sent') {
+          acc.sent.push(...tab.items);
+        } else if (tab.name === 'Declined') {
+          acc.failed.push(...tab.items);
+        }
+        return acc;
+      },
+      { incoming: [], sent: [], failed: [] }
+    );
+  };
+
+  const groupedTabs = groupByName(allOffersData?.data?.tabs);
+
+  return {
+    [id]: groupedTabs,
   };
 }
 
@@ -127,11 +161,9 @@ export async function getChartererDetailsOffers({ id }) {
 }
 
 export function* getOffersById({ data, role }) {
-  const { isOwner } = getRoleIdentity({ role });
+  // const fetchOfferDetailsById = isOwner ? getOwnerDetailsOffers : getChartererDetailsOffers;
 
-  const fetchOfferDetailsById = isOwner ? getOwnerDetailsOffers : getChartererDetailsOffers;
-
-  return yield Promise.all(data.map(fetchOfferDetailsById));
+  return yield Promise.all(data.map(({ id }) => getOffers({ id, role })));
 }
 
 export async function getOfferDetails(offerId, role) {
