@@ -23,8 +23,7 @@ const NotificationControl = () => {
 
   const {
     loading,
-    noUnreadedMessages,
-    noReadedMessages,
+    noUnreadMessages,
     filterParams: { sortedValue, activeTab },
   } = useSelector(getNotificationsDataSelector);
 
@@ -33,12 +32,12 @@ const NotificationControl = () => {
   useEffect(() => {
     if (loading) {
       setIsDisabled(true);
-    } else if ((isWatchedTab && noReadedMessages) || (!isWatchedTab && noUnreadedMessages)) {
+    } else if (!isWatchedTab && noUnreadMessages) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
-  }, [isWatchedTab, noReadedMessages, noUnreadedMessages, loading]);
+  }, [isWatchedTab, noUnreadMessages, loading]);
 
   useEffect(() => {
     const debounceDispatch = debounce((value) => {

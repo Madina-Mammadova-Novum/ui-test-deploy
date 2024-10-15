@@ -266,7 +266,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           />
           <FormDropdown
             name="dischargeTerminal"
-            label="dischargee terminal"
+            label="discharge terminal"
             loading={terminals.dischargePortTerminals.loading}
             options={terminals.dischargePortTerminals.data}
             disabled={!terminals.dischargePortTerminals.data.length}

@@ -6,7 +6,7 @@ import TrashIcon from '@/assets/images/trashAlt.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { transformToCapitalize } from '@/utils/helpers';
+import { getLocode, transformToCapitalize } from '@/utils/helpers';
 
 export const fleetsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -168,7 +168,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const {
     id,
     canSendUpdateRequest,
-    details: { name, summerDwt, q88QuestionnarieFile, tankerLink },
+    details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
   } = data;
@@ -177,6 +177,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
+  const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
 
   return [
     {
@@ -185,9 +186,11 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: name,
+      value: tankerName,
       type: TYPE.SEMIBOLD,
       disabled: additionRequested,
+      flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
+      available: status,
     },
     {
       id,
@@ -206,7 +209,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      link: q88QuestionnarieFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnarieFile}`,
+      link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
       disabled: additionRequested,
     },
     {
@@ -258,13 +261,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     canSendUpdateRequest,
     status: requestStatus,
-    details: { summerDwt, name, q88QuestionnarieFile, tankerLink },
+    details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
   const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
+  const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
 
   return [
     {
@@ -273,8 +277,10 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: name,
+      value: tankerName,
       type: TYPE.SEMIBOLD,
+      flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
+      available: status,
     },
     {
       id,
@@ -290,7 +296,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      link: q88QuestionnarieFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnarieFile}`,
+      link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
     },
     {
       id,

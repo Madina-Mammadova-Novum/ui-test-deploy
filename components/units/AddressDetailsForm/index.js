@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { AddressDetailsFormPropTypes } from '@/lib/types';
 
@@ -71,7 +71,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
       const isPending = pending[field] === fieldValue;
       const colorClass = isPending ? 'text-green' : 'text-blue';
 
-      return <p className={classnames('font-bold', colorClass)}>{pending[field]}</p>;
+      return <p className={classNames('font-bold', colorClass)}>{pending[field]}</p>;
     }
     return null;
   };

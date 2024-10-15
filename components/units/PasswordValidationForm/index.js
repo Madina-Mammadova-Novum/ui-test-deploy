@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { PasswordValidationPropTypes } from '@/lib/types';
 
@@ -69,7 +69,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
   };
 
   return (
-    <div className={classnames(customStyles, 'pt-4')}>
+    <div className={classNames(customStyles, 'pt-4')}>
       {title !== '' ?? <Title level="3">{title}</Title>}
       <div className="flex flex-col items-start gap-5 md:min-w-[450px] md:flex-row">
         <div className="flex w-full flex-col justify-between gap-y-5">
@@ -98,7 +98,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
           </Title>
           <ul className="mt-2 text-[12px] text-black">
             {validation.map(({ text, isValidated }, index) => (
-              <li key={text} className={classnames('flex items-center', index && 'mt-1.5')}>
+              <li key={text} className={classNames('flex items-center', index && 'mt-1.5')}>
                 <TickInCircleSVG
                   className={`${isValidated ? 'fill-green' : 'fill-black'} h-5 w-5`}
                   viewBox="0 0 24 24"

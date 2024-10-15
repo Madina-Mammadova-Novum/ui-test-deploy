@@ -9,7 +9,7 @@ import ChatSVG from '@/assets/images/chat.svg';
 import { Badge } from '@/elements';
 
 const ChatButton = ({
-  counter,
+  counter = 0,
   name,
   isOnline,
   onClick,

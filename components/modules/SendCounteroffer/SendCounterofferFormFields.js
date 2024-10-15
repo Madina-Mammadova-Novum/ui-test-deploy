@@ -81,7 +81,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   const printProduct = (_, index) => {
     return (
-      <div className="mt-3 flex items-baseline gap-x-5">
+      <div key={index} className="mt-3 flex items-baseline gap-x-5">
         <FormDropdown
           label={`product #${index + 1}`}
           name={`products[${index}].product`}

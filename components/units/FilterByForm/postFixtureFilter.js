@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { FormDropdown, RangeDatePicker } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const PostFixtureFilter = ({ cargoeCodes = [], tankerNames = [], cargoTypes = [] }) => {
+const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] }) => {
   const { watch, setValue, getValues } = useHookForm();
 
   const handleChange = (key, value) => {
@@ -21,8 +21,8 @@ const PostFixtureFilter = ({ cargoeCodes = [], tankerNames = [], cargoTypes = []
           name="cargoId"
           label="Cargo ID"
           placeholder="TY7621"
-          options={cargoeCodes}
-          disabled={!cargoeCodes?.length}
+          options={cargoCodes}
+          disabled={!cargoCodes?.length}
           onChange={(option) => handleChange('cargoId', option)}
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
@@ -66,7 +66,7 @@ const PostFixtureFilter = ({ cargoeCodes = [], tankerNames = [], cargoTypes = []
 };
 
 PostFixtureFilter.propTypes = {
-  cargoeCodes: PropTypes.arrayOf(PropTypes.shape({})),
+  cargoCodes: PropTypes.arrayOf(PropTypes.shape({})),
   tankerNames: PropTypes.arrayOf(PropTypes.shape({})),
   cargoTypes: PropTypes.arrayOf(PropTypes.shape({})),
 };

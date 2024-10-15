@@ -119,7 +119,7 @@ const OwnerRegistrationForm = ({ countries }) => {
           <TankerSlotsDetails applyHelper />
         </Step>
         <Divider />
-        <Step title="Step #5: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
+        <Step title="Step #5: Company Address" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyAddresses countries={countries} />
         </Step>
         <TermsAndConditions />

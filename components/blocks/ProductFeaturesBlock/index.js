@@ -68,7 +68,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
           <div className="h-full max-h-[25rem] w-[25rem] rounded-base">
             <NextImage
               src={getStrapiMedia(delve(coverImage, 'format.original.url', '?format=webp'))}
-              alt={delve(coverImage, 'alternativeText')}
+              alt={delve(coverImage, 'alternativeText') || 'Tanker Image'}
               className="h-[25rem] w-[25rem] rounded-base object-cover object-center"
               quality={100}
               height={400}

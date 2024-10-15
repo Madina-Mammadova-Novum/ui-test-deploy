@@ -15,7 +15,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
             priority
             width={1440}
             height={410}
-            alt={delve(coverImage, 'alternativeText')}
+            alt={delve(coverImage, 'alternativeText') || 'Default Cover Image'}
             src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
             className="h-full w-full object-cover object-center"
             quality={100}

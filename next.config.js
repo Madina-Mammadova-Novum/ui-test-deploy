@@ -25,9 +25,9 @@ const nextConfig = {
   crossOrigin: 'anonymous',
   reactStrictMode: false,
   swcMinify: true,
-  // compiler: {
-  //   removeConsole: process.env.NODE_ENV === 'production',
-  // },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

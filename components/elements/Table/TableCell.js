@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef } from 'react';
 
+import classNames from 'classnames';
+
 import NextLink from '../NextLink';
 
 import { TableCellPropTypes } from '@/lib/types';
@@ -124,7 +126,7 @@ const TableCell = ({ cellProps }) => {
     const valueStyles = () => {
       if (disabled) return 'text-gray';
       if (freezed) return 'text-opacity-50 select-none';
-
+      if (flagOfRegistry || icon) return 'font-bold';
       return 'text-inherit';
     };
 
@@ -133,16 +135,35 @@ const TableCell = ({ cellProps }) => {
         className="!-top-11 !w-[300px] !-translate-x-[50%] !whitespace-pre-wrap"
         data={{ description: helperData }}
       >
-        <span className={`${disabled && 'text-gray'}`}>{value}</span>
+        <p className={`${disabled && 'text-gray'}`}>{value}</p>
       </HoverTooltip>
     ) : (
-      <span className={valueStyles()}>{value}</span>
+      <p className={valueStyles()}>{value}</p>
     );
   }, [disabled, helperData, freezed, value]);
 
   const printFlag = useMemo(() => {
-    return available && <Flag countryCode={countryCode || flagOfRegistry} className={freezed && 'opacity-50'} />;
+    return (
+      available && <Flag countryCode={countryCode || flagOfRegistry} className={classNames(freezed && 'opacity-50')} />
+    );
   }, [countryCode, available, freezed]);
+
+  const getContainerClass = (action) => {
+    const modalActions = [
+      ACTIONS.TANKER_INFORMATION,
+      ACTIONS.CHARTERER_INFORMATION,
+      ACTIONS.ASSIGN_FLEET,
+      ACTIONS.PORT,
+      ACTIONS.DATE,
+      ACTIONS.TANKER_REACTIVATE,
+      ACTIONS.TANKER_DEACTIVATE,
+      ACTIONS.REQUEST_UPDATE_TANKER_INFO,
+      ACTIONS.DELETE_TANKER,
+      ACTIONS.VIEW_COMMENTS,
+    ];
+
+    return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
+  };
 
   const printModalView = useMemo(() => {
     return actions.map((cell) => {
@@ -157,13 +178,14 @@ const TableCell = ({ cellProps }) => {
 
       return (
         <ModalWindow
-          containerClass="overflow-y-hidden"
+          key={action}
+          containerClass={getContainerClass(action)}
           buttonProps={{
             icon: { before: editIcon },
             variant: actionVariant,
             size: actionSize,
             text: actionText,
-            disabled: actionDisabled || freezed,
+            disabled: actionDisabled || Boolean(freezed),
             className: setStyles(),
           }}
         >
@@ -201,14 +223,12 @@ const TableCell = ({ cellProps }) => {
             {printFlag}
             {printValue}
             {rolled && available && (
-              <span className="mx-2 rounded-md bg-yellow px-1.5 py-1 text-xxs font-bold uppercase text-black">
-                Rolled
-              </span>
+              <p className="mx-2 rounded-md bg-yellow px-1.5 py-1 text-xxs font-bold uppercase text-black">Rolled</p>
             )}
           </div>
         )}
         {link && (
-          <NextLink href={link} target="blank" className="bg-white p-0 text-blue hover:text-blue-darker">
+          <NextLink href={link} target="_blank" className="bg-white p-0 text-blue hover:text-blue-darker">
             View
           </NextLink>
         )}

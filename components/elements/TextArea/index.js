@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { TextAreaPropTypes } from '@/lib/types';
 
@@ -23,7 +23,7 @@ const TextArea = React.forwardRef(
     ref
   ) => {
     return (
-      <div className={classnames(disabled && 'pointer-events-none opacity-50', customStyles)}>
+      <div className={classNames(disabled && 'pointer-events-none opacity-50', customStyles)}>
         {label && (
           <Label name={name} className="text-xs-sm">
             {label}
@@ -37,7 +37,7 @@ const TextArea = React.forwardRef(
           name={name}
           disabled={disabled}
           placeholder={placeholder}
-          className={classnames(
+          className={classNames(
             'box-border min-h-[60px] w-full min-w-[296px] resize-none rounded-md border border-gray-darker px-4 py-2.5 text-xsm outline-none hover:border-blue focus:border-blue',
             inputStyles,
             {

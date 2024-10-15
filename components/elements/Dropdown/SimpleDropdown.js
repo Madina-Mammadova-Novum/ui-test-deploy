@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Select from 'react-select';
 
 import AsyncSelect from 'react-select/async';
@@ -19,67 +20,65 @@ const LoadingIndicator = () => (
   </div>
 );
 
-export const SimpleDropdown = ({
-  asyncCall = false,
-  options,
-  ref,
-  hardHeight,
-  isDisabled,
-  isOpen,
-  onOpen = () => {},
-  loading,
-  onExpand = () => {},
-  ...rest
-}) => {
-  const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
-    <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} />
-  );
+export const SimpleDropdown = React.forwardRef(
+  (
+    { asyncCall = false, options, isDisabled, isOpen, onOpen = () => {}, loading, onExpand = () => {}, ...rest },
+    ref
+  ) => {
+    const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
+      <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} />
+    );
 
-  const handleOpenMenu = () => {
-    onOpen(true);
-    onExpand();
-  };
+    const handleOpenMenu = () => {
+      onOpen(true);
+      onExpand();
+    };
 
-  const handleClose = () => onOpen(false);
+    const handleCloseMenu = () => onOpen(false);
 
-  if (asyncCall) {
-    const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue, options));
+    if (asyncCall) {
+      const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue, options));
+
+      return (
+        <AsyncSelect
+          {...rest}
+          ref={ref}
+          menuIsOpen={isOpen}
+          isLoading={loading}
+          defaultOptions={options}
+          loadOptions={rest?.loadOptions ? rest?.loadOptions : loadOptions}
+          formatOptionLabel={printOptions}
+          onMenuOpen={handleOpenMenu}
+          onMenuClose={handleCloseMenu}
+          theme={dropdownTheme}
+          isDisabled={isDisabled}
+          className={isDisabled ? 'opacity-50' : ''}
+          components={{ Option: OptionsList, LoadingIndicator }}
+          closeMenuOnSelect
+          cacheOptions
+        />
+      );
+    }
 
     return (
-      <AsyncSelect
+      <Select
         {...rest}
+        ref={ref}
         menuIsOpen={isOpen}
-        isLoading={loading}
-        defaultOptions={options}
-        loadOptions={rest?.loadOptions ? rest?.loadOptions : loadOptions}
+        options={options}
         formatOptionLabel={printOptions}
         onMenuOpen={handleOpenMenu}
-        onMenuClose={handleClose}
+        onMenuClose={handleCloseMenu}
         theme={dropdownTheme}
         isDisabled={isDisabled}
-        className={isDisabled && 'opacity-50'}
+        className={isDisabled ? 'opacity-50' : ''}
         components={{ Option: OptionsList, LoadingIndicator }}
         closeMenuOnSelect
-        cacheOptions
       />
     );
   }
-
-  return (
-    <Select
-      {...rest}
-      menuIsOpen={isOpen}
-      options={options}
-      formatOptionLabel={printOptions}
-      onMenuOpen={handleOpenMenu}
-      onMenuClose={handleClose}
-      theme={dropdownTheme}
-      isDisabled={isDisabled}
-      className={isDisabled && 'opacity-50'}
-      components={{ Option: OptionsList, LoadingIndicator }}
-      closeMenuOnSelect
-    />
-  );
-};
+);
 
 SimpleDropdown.propTypes = SimpleDropdownPropTypes;
+
+export default SimpleDropdown;

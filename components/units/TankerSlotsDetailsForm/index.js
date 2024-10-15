@@ -43,7 +43,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     let numberOfTankers = Number(event.target.value);
 
     if (numberOfTankers <= 0) {
-      numberOfTankers = null;
+      numberOfTankers = '';
       unregister('imos');
       setValue('applySlots', false);
       handleChangeState('tankers', []);

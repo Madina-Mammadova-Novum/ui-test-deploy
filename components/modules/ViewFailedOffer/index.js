@@ -55,7 +55,7 @@ const ViewFailedOffer = ({ itemId }) => {
   };
 
   return (
-    <div className="min-h-96 w-[610px]">
+    <div className="flex h-full min-h-96 w-[610px] flex-col">
       <ModalHeader>View Declined Offer</ModalHeader>
       {loading ? (
         <Loader className="absolute top-1/2 h-8 w-8" />
@@ -79,7 +79,7 @@ const ViewFailedOffer = ({ itemId }) => {
           />
           <div
             ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-            className={`mt-2.5 h-[320px] overflow-y-auto overflow-x-hidden px-2.5 ${showScroll && 'shadow-vInset'}`}
+            className={`mt-2.5 h-full overflow-y-auto overflow-x-hidden px-2.5 ${showScroll && 'shadow-vInset'}`}
           >
             {tabContent[currentTab]}
           </div>

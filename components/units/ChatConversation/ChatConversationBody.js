@@ -34,8 +34,19 @@ const ChatConversationBody = () => {
     }
   };
 
-  const printMessage = ({ sender, message, time, id }) => {
-    return <ChatMessage id={id} sender={sender} time={time} message={message} isBroker={ROLES.BROKER === sender} />;
+  const printMessage = ({ sender, message, time, id }, index) => {
+    const newId = `${time}-${id}-${index}`;
+
+    return (
+      <ChatMessage
+        key={newId}
+        id={id}
+        sender={sender}
+        time={time}
+        message={message}
+        isBroker={ROLES.BROKER === sender}
+      />
+    );
   };
 
   const printMessages = ({ data: content, title }) => {

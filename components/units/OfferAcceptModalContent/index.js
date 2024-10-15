@@ -94,7 +94,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   }
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <Title level={2}>Accept the Pre-fixture Offer</Title>
 
       <div className="mt-5 flex items-center text-[12px]">
@@ -119,7 +119,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`mt-3 h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
       </div>

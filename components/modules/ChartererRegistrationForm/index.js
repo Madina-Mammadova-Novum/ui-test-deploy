@@ -107,7 +107,7 @@ const ChartererRegistrationForm = ({ countries }) => {
           <CompanyDetails />
         </Step>
         <Divider className="mt-5" />
-        <Step title="Step #4: Company Addresss" titleClass="pt-5" containerClass="flex flex-col gap-5">
+        <Step title="Step #4: Company Address" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <CompanyAddresses countries={countries} />
         </Step>
         <Divider className="mt-5" />

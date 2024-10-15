@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { LinkAsButtonPropTypes } from '@/lib/types';
 
@@ -18,7 +18,7 @@ const LinkAsButton = ({
   return (
     <NextLink
       href={href}
-      className={classnames(
+      className={classNames(
         'flex items-center justify-center whitespace-nowrap text-xsm',
         buttonClassNames,
         disabled && 'pointer-events-none opacity-50',

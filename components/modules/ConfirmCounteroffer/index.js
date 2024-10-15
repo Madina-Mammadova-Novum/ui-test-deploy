@@ -16,10 +16,10 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
   const { commercialOfferTerms, comment } = confirmCounterofferDetailsAdapter({ data: getValues() });
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`mt-2.5 flex h-[320px] flex-col gap-y-5 overflow-y-auto overflow-x-hidden ${
+        className={`mt-2.5 flex h-[28.375rem] flex-col gap-y-5 overflow-y-auto overflow-x-hidden 3md:h-[33.75rem] lg:h-[40.5rem] ${
           showScroll && 'shadow-vInset'
         }`}
       >

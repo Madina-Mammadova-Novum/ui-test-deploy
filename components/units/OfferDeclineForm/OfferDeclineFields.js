@@ -91,6 +91,7 @@ const OfferDeclineFields = ({ closeModal, title = '', goBack, showCancelButton =
           label="your reason"
           placeholder="Type your reason here ..."
           customStyles="mt-2.5"
+          inputStyles="min-h-40"
           onChange={handleChange}
           {...register('reason')}
         />

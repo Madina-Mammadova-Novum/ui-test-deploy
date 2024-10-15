@@ -30,7 +30,7 @@ export const fetchPostFixtureOffers = createAsyncThunk(
         totalPages: calculateAmountOfPages(recordsTotal, perPage),
         filters: {
           cargoTypes: convertDataToOptions(cargoTypesData, 'id', 'name'),
-          cargoeCodes: options(cargoCodesData.data),
+          cargoCodes: options(cargoCodesData.data),
           tankerNames: options(tankerNamesData.data),
         },
       },

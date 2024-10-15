@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-const Toggle = ({ value, id, disabled, children, className }) => {
+const Toggle = ({ value = false, id, disabled = false, children, className = '' }) => {
   const [toggle, setToggle] = useState(value);
 
   return (
@@ -23,12 +23,6 @@ const Toggle = ({ value, id, disabled, children, className }) => {
       {children}
     </>
   );
-};
-
-Toggle.defaultProps = {
-  value: false,
-  disabled: false,
-  className: '',
 };
 
 Toggle.propTypes = {

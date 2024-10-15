@@ -104,11 +104,11 @@ export const postFixtureDetailsAdapter = ({ data }) => {
         text: chartererName,
       },
       {
-        title: 'Registration Adress',
+        title: 'Registration Address',
         text: `${registrationAddress}, ${registrationCityName}, ${registrationCountry?.name}`,
       },
       {
-        title: 'Correspondence Adress',
+        title: 'Correspondence Address',
         text: `${correspondenceAddress}, ${correspondenceCityName}, ${correspondenceCountry?.name}`,
       },
     ],
@@ -173,7 +173,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Heat',
-          text: heat || 'Not Aplicable',
+          text: heat || 'Not Applicable',
         },
       ],
       products,
@@ -270,11 +270,20 @@ export const postFixtureDetailsAdapter = ({ data }) => {
 };
 
 const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
-  if (!data) return [];
-  const { id, title, comments, name, extention, size, createdAt, status, url, deleted: isDocumentDeleted } = data;
+  if (!data) return {};
+  const {
+    id,
+    title,
+    comments,
+    name: fileName,
+    extention,
+    size,
+    createdAt,
+    status,
+    url,
+    deleted: isDocumentDeleted,
+  } = data;
   const revokeDeletionForbidden = status === 'Active';
-
-  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
 
   return [
     {
@@ -307,7 +316,7 @@ const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: name,
+      value: fileName,
       disabled: isDocumentDeleted,
     },
     {

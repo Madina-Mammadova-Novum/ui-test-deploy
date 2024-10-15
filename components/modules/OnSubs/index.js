@@ -42,7 +42,7 @@ const OnSubs = () => {
           <OnSubsExpandedFooter
             underRecap={!rowData?.isCountdownActive}
             identity={{ isOwner, isCharterer }}
-            status={{ chraterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
+            status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
             offerId={rowData?.id}
             scriveURL={scriveURL || ''}
           />

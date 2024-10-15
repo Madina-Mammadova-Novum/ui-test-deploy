@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import SendCounterofferFormFields from './SendCounterofferFormFields';
 
@@ -120,7 +120,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   }, [currentTab, voyageDetails, comments, counterofferData]);
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <ModalHeader disabled={disabled} goBack={handleBack}>
         {confirmCounteroffer ? 'Confirm Changes to Send Counteroffer' : 'Send Counteroffer'}
         {errorBanner}
@@ -177,8 +177,8 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
             <div
               ref={scrollingContainerRef}
-              className={classnames(
-                'h-[320px] overflow-y-auto overflow-x-hidden p-5',
+              className={classNames(
+                'h-[23.25rem] overflow-y-auto overflow-x-hidden p-5 2xl:h-[30rem]',
                 scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
               )}
             >
