@@ -10,7 +10,6 @@ const ExpandedContent = ({ data }) => {
   const { vesselOwnerData, tankerData, countryData } = data;
 
   const token = getCookieFromBrowser('session-access-token');
-
   const hashedInfo = (text = null) => (token ? text : 'Hidden info');
 
   return (
@@ -24,7 +23,9 @@ const ExpandedContent = ({ data }) => {
               About the Vessel Owner
             </Title>
             {vesselOwnerData.map(({ title, description }) => (
-              <TextRow title={title}>{hashedInfo(description)}</TextRow>
+              <TextRow key={title} title={title}>
+                {hashedInfo(description)}
+              </TextRow>
             ))}
           </div>
         )}
@@ -37,7 +38,9 @@ const ExpandedContent = ({ data }) => {
             {tankerData.length && (
               <div>
                 {tankerData.map(({ title, description }) => (
-                  <TextRow title={title}>{hashedInfo(description)}</TextRow>
+                  <TextRow key={title} title={title}>
+                    {hashedInfo(description)}
+                  </TextRow>
                 ))}
               </div>
             )}
@@ -45,7 +48,7 @@ const ExpandedContent = ({ data }) => {
             {countryData.length && (
               <div>
                 {countryData.map(({ title, description, countryCode }) => (
-                  <TextRow title={title}>
+                  <TextRow key={title} title={title}>
                     <Flag countryCode={countryCode} className="mr-1" />
                     {hashedInfo(description)}
                   </TextRow>

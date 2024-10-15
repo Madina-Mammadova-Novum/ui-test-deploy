@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-date-range';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import Label from '../Label';
 
@@ -63,7 +63,7 @@ const RangeDatePicker = ({ label, onChange, name, value }) => {
     <div
       ref={ref}
       aria-hidden
-      className={classnames(
+      className={classNames(
         'range_date range_date-absolute relative flex h-fit w-min flex-col',
         !showPicker && 'range_date-hidden'
       )}

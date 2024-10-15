@@ -56,7 +56,7 @@ const OnSubsDetails = ({ searchedParams }) => {
             identity={{ isOwner }}
             scriveURL={scriveURL || ''}
             underRecap={!rowData?.isCountdownActive || !rowData?.failedAt || rowData?.isFailed}
-            status={{ chraterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
+            status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
           />
         }
       >

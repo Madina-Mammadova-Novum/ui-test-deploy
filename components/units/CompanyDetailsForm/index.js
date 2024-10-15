@@ -3,12 +3,12 @@
 import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { CompanyDetailsPropTypes } from '@/lib/types';
 
 import { Input } from '@/elements';
-import { disableDefaultBehaviour, disablePlusMinusSymbols } from '@/utils/helpers';
+import { disableDefaultBehavior, disablePlusMinusSymbols } from '@/utils/helpers';
 
 const CompanyDetails = ({ notEditable }) => {
   const inputYearsRef = useRef(null);
@@ -24,7 +24,7 @@ const CompanyDetails = ({ notEditable }) => {
 
   useEffect(() => {
     if (inputYearsRef.current) {
-      inputYearsRef.current.addEventListener('wheel', disableDefaultBehaviour);
+      inputYearsRef.current.addEventListener('wheel', disableDefaultBehavior);
       inputYearsRef.current.addEventListener('keydown', disablePlusMinusSymbols);
       inputYearsRef.current.value = companyYearsOfOperation;
     }
@@ -41,7 +41,7 @@ const CompanyDetails = ({ notEditable }) => {
         {...register('companyName')}
         labelBadge={
           pendingRequest ? (
-            <p className={classnames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
+            <p className={classNames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
               {pending?.name}
             </p>
           ) : null

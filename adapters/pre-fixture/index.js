@@ -204,7 +204,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
   const { country: registrationCountry } = registrationCity || {};
 
   return {
-    releatedCargoeId: data?.searchedCargo?.id,
+    relatedCargoId: data?.searchedCargo?.id,
     partyInformation: {
       operationYears: yearsInOperation,
       chartersPerYear: estimatedNumberOfChartersPerYear || '0',
@@ -295,14 +295,9 @@ export const prefixtureChartererDetailsAdapter = (data) => {
 };
 
 const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
-  if (!data) return [];
+  if (!data) return {};
 
-  const { id, title, comments, name, extention, size, createdAt, url } = data;
-
-  // there was an extention check for the naming which i don't understand here...
-  // const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
-
-  const fileName = name;
+  const { id, title, comments, name: fileName, extention, size, createdAt, url } = data;
 
   return [
     {
@@ -331,7 +326,7 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: name,
+      value: fileName,
     },
     {
       id,

@@ -68,7 +68,7 @@ const ViewCounteroffer = ({ itemId }) => {
   };
 
   return (
-    <div className="w-[610px]">
+    <div className="flex h-full w-[610px] flex-col">
       <ModalHeader>{isOwner ? 'View Counteroffer' : 'View Sent Offer'}</ModalHeader>
 
       {isOwner ? (
@@ -99,7 +99,7 @@ const ViewCounteroffer = ({ itemId }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`mt-3 h-[320px] overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
       </div>

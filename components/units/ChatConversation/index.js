@@ -91,7 +91,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
                   variant: 'tertiary',
                   size: 'small',
                   icon: { before: !data?.deactivated && <PlaneSVG /> },
-                  text: data?.deactivated && 'Request to deactivate',
+                  text: data?.deactivated ? 'Request to deactivate' : '',
                 }}
               />
             </div>

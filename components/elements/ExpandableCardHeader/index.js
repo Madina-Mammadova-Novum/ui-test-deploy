@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
@@ -50,7 +50,6 @@ const ExpandableCardHeader = ({
     const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length: textLength });
 
     let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
-
     if (data.countdownData && data.isFailed) return null;
 
     if (data.label === 'Status' && !data.isFailed) return null;
@@ -59,9 +58,12 @@ const ExpandableCardHeader = ({
       textContent = <DynamicCountdownTimer {...data.countdownData} />;
     }
 
+    const newId = `${data?.text}-${index}`;
+
     return (
       <div
-        className={classnames({
+        key={newId}
+        className={classNames({
           'col-start-1': !lg,
           [`${index <= 3 ? '3md:col-start-1' : '3md:col-start-2'}`]: !lg,
           [`${!index && 'w-full'}`]: !gridLayout,
@@ -106,6 +108,7 @@ const ExpandableCardHeader = ({
             <div className="mt-3 flex justify-end gap-x-2.5 border-t border-purple-light pt-2 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:border-t-0 lg:pt-0">
               {actions.map(({ action, text, variant, size, icon }) => (
                 <ModalWindow
+                  key={action}
                   containerClass="overflow-y-[unset]"
                   buttonProps={{
                     icon,
@@ -124,7 +127,7 @@ const ExpandableCardHeader = ({
       </div>
       <div className="absolute -right-2.5 self-start rounded-md hover:bg-gray-darker lg:self-auto">
         <TableArrowSVG
-          className={classnames('rounded-md fill-black transition duration-200', toggle && 'rotate-180 !fill-blue')}
+          className={classNames('rounded-md fill-black transition duration-200', toggle && 'rotate-180 !fill-blue')}
         />
       </div>
     </div>

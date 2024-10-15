@@ -16,7 +16,7 @@ export const pageAdapter = ({ data }) => {
   };
 };
 
-export const legalPropAdpater = ({ params }) => {
+export const legalPropAdapter = ({ params }) => {
   if (!params) return null;
 
   const { slug } = params;

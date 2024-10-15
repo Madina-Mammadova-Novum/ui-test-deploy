@@ -111,7 +111,7 @@ const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
           <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
             <FavoriteSearchForm
               title="Enable Notifications and Save this Search"
-              message="Would you like to be notified when a tanker becomes available and save this search to your favorite group?" // Updated message
+              message="Would you like to be notified when a tanker becomes available and save this search to your favorite group?"
               state={searchFormData}
               closeModal={handleCloseModal}
             />

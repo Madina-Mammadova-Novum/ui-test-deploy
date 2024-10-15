@@ -74,9 +74,9 @@ function userCompanyDetailsAdapter({ data, role }) {
     numberOfVessels,
   } = data;
 
-  const formattedCarogoesDetails = cargoesDetailsAdapter({ data: cargoesDetails });
+  const formattedCargoDetails = cargoesDetailsAdapter({ data: cargoesDetails });
 
-  const formattedCargoes = companyCargoesAdapter({ data: formattedCarogoesDetails });
+  const formattedCargoes = companyCargoesAdapter({ data: formattedCargoDetails });
   const formattedImos = companyImosAdapter({ data: imos, numberOfVessels });
 
   const getRoleBasedData = () => {
@@ -167,13 +167,13 @@ export function companyCargoesAdapter({ data }) {
 
 export function cargoesDetailsAdapter({ data }) {
   if (Array.isArray(data)) {
-    return data?.map((cargoe) => cargoeAdapter({ data: cargoe }));
+    return data?.map((cargo) => cargoAdapter({ data: cargo }));
   }
 
   return { data };
 }
 
-export function cargoeAdapter({ data }) {
+export function cargoAdapter({ data }) {
   const { billOfLadingDate, loadPort, vesselImo } = data;
 
   return {

@@ -1,4 +1,4 @@
-import { SidebarXlPropTypes } from '@/lib/types';
+import { SidebarGenericPropTypes } from '@/lib/types';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import Logo from '@/assets/images/logo.svg';
@@ -36,6 +36,6 @@ const SidebarXl = ({ data, isResized, onResize }) => {
   );
 };
 
-SidebarXl.propTypes = SidebarXlPropTypes;
+SidebarXl.propTypes = SidebarGenericPropTypes;
 
 export default SidebarXl;

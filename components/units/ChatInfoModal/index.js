@@ -8,7 +8,7 @@ const ChatInfoModal = ({ data }) => {
 
   const country = getCountryById({
     data: countries,
-    id: vessel?.data?.countryOfRegestrationCode,
+    id: vessel?.data?.countryOfRegistrationCode,
   });
 
   return (

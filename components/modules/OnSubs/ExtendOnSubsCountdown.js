@@ -4,6 +4,8 @@
 
 import { useState } from 'react';
 
+import { ExtendOnSubsCountdownPropTypes } from '@/lib/types';
+
 import { Button, Dropdown } from '@/elements';
 import { requestCountdownExtension } from '@/services/offer';
 import { ModalHeader } from '@/units';
@@ -95,6 +97,6 @@ const ExtendOnSubsCountdown = ({ closeModal, offerId, onExtensionSuccess }) => {
   );
 };
 
-ExtendOnSubsCountdown.propTypes = ExtendOnSubsCountdown;
+ExtendOnSubsCountdown.propTypes = ExtendOnSubsCountdownPropTypes;
 
 export default ExtendOnSubsCountdown;

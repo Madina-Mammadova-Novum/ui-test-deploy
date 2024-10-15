@@ -1,5 +1,7 @@
 'use client';
 
+import { PostFixtureResultContentPropTypes } from '@/lib/types';
+
 import {
   postFixtureDetailsAdapter,
   postFixtureDocumentsTabRowsDataAdapter,
@@ -31,6 +33,6 @@ const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
   return <div className="flex flex-col gap-2.5">{data?.map(printExpandableRow)}</div>;
 };
 
-PostFixtureResultContent.propTypes = PostFixtureResultContent;
+PostFixtureResultContent.propTypes = PostFixtureResultContentPropTypes;
 
 export default PostFixtureResultContent;

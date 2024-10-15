@@ -41,8 +41,8 @@ function chatDealDataAdapter({ data }) {
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
         yearsOfOperation: vessel?.company?.details?.yearsInOperation,
-        countryOfRegestration: vessel?.details?.registeredOwner,
-        countryOfRegestrationCode: vessel?.details?.registeredOwnerCountryId,
+        countryOfRegistration: vessel?.details?.registeredOwner,
+        countryOfRegistrationCode: vessel?.details?.registeredOwnerCountryId,
       },
     },
     additional: {
@@ -116,13 +116,13 @@ export function messagesDataAdapter({ data, role, clientId }) {
 export function moreMessagesDataAdapter({ payload, messages }) {
   if (!messages) return [];
 
-  return [...payload, ...messages]?.reduce((accamulator, { title, data }) => {
-    accamulator[title] = {
+  return [...payload, ...messages]?.reduce((accumulator, { title, data }) => {
+    accumulator[title] = {
       title,
-      data: [...(accamulator[title]?.data ?? []), ...data],
+      data: [...(accumulator[title]?.data ?? []), ...data],
     };
 
-    return accamulator;
+    return accumulator;
   }, {});
 }
 

@@ -84,6 +84,8 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Tanker name',
       text: vessel?.details?.name,
       freezed: frozenAt,
+      countryCode:
+        getLocode(vessel?.details?.flagOfRegistry?.codeISO2) || getLocode(vessel?.details?.flagOfRegistry?.codeISO3),
     },
     {
       label: 'Cargo type',
@@ -192,11 +194,11 @@ export const onSubsDetailsAdapter = ({ data }) => {
         text: chartererName,
       },
       {
-        title: 'Registration Adress',
+        title: 'Registration Address',
         text: `${registrationAddress}, ${registrationCityName}, ${registrationCountry?.name}`,
       },
       {
-        title: 'Correspondence Adress',
+        title: 'Correspondence Address',
         text: `${correspondenceAddress}, ${correspondenceCityName}, ${correspondenceCountry?.name}`,
       },
     ],
@@ -261,7 +263,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Heat',
-          text: heat || 'Not Aplicable',
+          text: heat || 'Not Applicable',
         },
       ],
       products,
@@ -357,11 +359,20 @@ export const onSubsDetailsAdapter = ({ data }) => {
 };
 
 const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
-  if (!data) return [];
-  const { id, title, comments, name, extention, size, createdAt, status, url, deleted: isDocumentDeleted } = data;
+  if (!data) return {};
+  const {
+    id,
+    title,
+    comments,
+    name: fileName,
+    extention,
+    size,
+    createdAt,
+    status,
+    url,
+    deleted: isDocumentDeleted,
+  } = data;
   const revokeDeletionForbidden = status === 'Active';
-
-  const fileName = name.split('.').pop() === extention ? name : `${name}${extention}`;
 
   return [
     {
@@ -394,7 +405,7 @@ const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: name,
+      value: fileName,
       disabled: isDocumentDeleted,
     },
     {
@@ -481,10 +492,12 @@ export const onSubsRevokeDocumentDeletionAdapter = ({ data }) => {
 
 export const failTheSubsAdapter = ({ data }) => {
   if (!data) return {};
+
   const { offerId } = data;
+
   return {
     dealId: offerId,
-    reason: 'placeholder',
+    reason: 'Declined per user choice.',
   };
 };
 

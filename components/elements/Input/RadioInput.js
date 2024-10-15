@@ -2,7 +2,7 @@
 
 import { Controller } from 'react-hook-form';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { RadioInputPropTypes } from '@/lib/types';
 
@@ -23,7 +23,7 @@ const RadioInput = ({ onChange, children, customStyles = '', labelStyles = '', c
               disabled={isSubmitting}
               onChange={onChange}
               checked={checked}
-              className={classnames('h-5 w-5', customStyles)}
+              className={classNames('h-5 w-5', customStyles)}
             />
             {children && (
               <label htmlFor={name} className={labelStyles}>

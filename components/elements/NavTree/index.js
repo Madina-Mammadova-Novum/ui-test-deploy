@@ -27,7 +27,7 @@ const NavTree = ({ data, variant }) => {
 NavTree.propTypes = {
   variant: PropTypes.string,
   data: PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
     path: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.shape({})),

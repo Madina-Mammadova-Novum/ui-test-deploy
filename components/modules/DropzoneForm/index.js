@@ -99,7 +99,7 @@ const DropzoneForm = ({ showTextFields = true }) => {
           <Input
             {...register('title')}
             label="title"
-            maxlength={46}
+            maxLength={46}
             helperText="Max: 46 symbols"
             placeholder="Enter the file title"
             error={errors?.title?.message}

@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import { AccountNestedLayoutPropTypes } from '@/lib/types';
 
 import DoubleArrowSVG from '@/assets/images/angleDouble.svg';
-import { Dropdown, Label, NextLink, Title } from '@/elements';
+import { Label, NextLink, Title } from '@/elements';
 import { AccountWrapper } from '@/modules';
 import FleetsActions from '@/modules/FleetsActions';
 import { ComplexPagination, ToggleRows } from '@/units';
@@ -33,13 +33,6 @@ const AccountNestedLayout = ({ children, config }) => {
       return (
         <div className="flex flex-col-reverse items-end gap-x-5 gap-y-5 3md:flex-row 3md:items-center">
           {useExpand && <ToggleRows onToggleClick={onToggle} />}
-          <Dropdown
-            label="Sort by open day:"
-            options={sorting?.options}
-            onChange={sorting?.onChange}
-            defaultValue={sorting?.value}
-            customStyles={dropdownStyles}
-          />
         </div>
       );
     }

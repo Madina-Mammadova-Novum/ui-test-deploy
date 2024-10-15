@@ -46,7 +46,7 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id }) => {
           } `}
         >
           {message?.includes('@') ? message : <Linkify componentDecorator={renderLink}>{message}</Linkify>}
-          <div
+          <span
             className={`triangle ${
               !isBroker
                 ? '-right-[7px] top-3 rotate-90 !border-b-blue-light'

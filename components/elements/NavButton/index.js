@@ -1,6 +1,6 @@
 'use client';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 
 import { NavButtonPropTypes } from '@/lib/types';
@@ -14,7 +14,7 @@ const NavButton = ({ children, path, customStyles, disabled = false, target = nu
   return (
     <NextLink
       href={path}
-      className={classnames(
+      className={classNames(
         'whitespace-nowrap text-xsm font-semibold',
         isActive ? 'text-blue' : 'text-white',
         disabled && 'pointer-events-none opacity-50',

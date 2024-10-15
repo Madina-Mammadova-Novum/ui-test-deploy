@@ -3,8 +3,6 @@
 import { Fragment, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { NotificationContentPropTypes } from '@/lib/types';
-
 import { Loader, NotificationLoader } from '@/elements';
 import { setFilterParams } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
@@ -12,7 +10,7 @@ import { NotificationList, NotificationPlaceholder } from '@/units';
 
 const NotificationContent = () => {
   const dispatch = useDispatch();
-  const { loading, unwatchedData, watchedData, filterParams, readedCounter, unreadCounter } =
+  const { loading, unwatchedData, watchedData, filterParams, unreadCounter } =
     useSelector(getNotificationsDataSelector);
 
   const { take, watched, searchValue, sortedValue } = filterParams;
@@ -27,12 +25,12 @@ const NotificationContent = () => {
     const { clientHeight, scrollHeight, scrollTop } = currentTarget;
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
-    const watchedCondtion = searchValue !== '' || sortedValue.length > 0 || take >= readedCounter;
-    const unwatchedCondtion = searchValue !== '' || sortedValue.length > 0 || take >= unreadCounter;
+    const watchedCondition = searchValue !== '' || sortedValue.length > 0;
+    const unwatchedCondition = searchValue !== '' || sortedValue.length > 0 || take >= unreadCounter;
 
     if (trigger && !loading) {
-      if (watched && watchedCondtion) return;
-      if (!watched && unwatchedCondtion) return;
+      if (watched && watchedCondition) return;
+      if (!watched && unwatchedCondition) return;
 
       dispatch(setFilterParams({ ...filterParams, skip: 0, take: take + take }));
     }
@@ -63,7 +61,5 @@ const NotificationContent = () => {
     </div>
   );
 };
-
-NotificationContent.propTypes = NotificationContentPropTypes;
 
 export default NotificationContent;
