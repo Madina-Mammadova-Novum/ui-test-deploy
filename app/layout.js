@@ -10,11 +10,13 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
+
   return (
     <BaseLayout>
       <Providers loader="page">
         {children}
-        <ClientSidePackages />
+        {!isMaintenanceMode && <ClientSidePackages />}
       </Providers>
     </BaseLayout>
   );
