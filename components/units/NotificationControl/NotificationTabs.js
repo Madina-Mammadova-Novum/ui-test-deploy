@@ -13,7 +13,7 @@ const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
 
   const options = [
     {
-      label: `Unread (${unreadCounter || 0})`,
+      label: `Unread${unreadCounter === '0' ? '' : `(${unreadCounter})`}`,
       value: 'unread',
     },
     {
