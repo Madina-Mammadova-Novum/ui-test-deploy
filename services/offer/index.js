@@ -109,15 +109,25 @@ export async function getSentCounteroffers(tankerId) {
 export async function getOffers({ id, role }) {
   const allOffersData = await getAllOffers({ id, role });
 
-  const groupByName = (tabs) => {
+  const roleBasedMapping = {
+    charterer: {
+      Incoming: 'sent',
+      Sent: 'incoming',
+      Declined: 'failed',
+    },
+    owner: {
+      Incoming: 'incoming',
+      Sent: 'sent',
+      Declined: 'failed',
+    },
+  };
+
+  const groupByName = (tabs, mapping) => {
     return tabs.reduce(
       (acc, tab) => {
-        if (tab.name === 'Incoming') {
-          acc.incoming.push(...tab.items);
-        } else if (tab.name === 'Sent') {
-          acc.sent.push(...tab.items);
-        } else if (tab.name === 'Declined') {
-          acc.failed.push(...tab.items);
+        const targetKey = mapping[tab.name];
+        if (targetKey) {
+          acc[targetKey].push(...tab.items);
         }
         return acc;
       },
@@ -125,7 +135,8 @@ export async function getOffers({ id, role }) {
     );
   };
 
-  const groupedTabs = groupByName(allOffersData?.data?.tabs);
+  const mapping = roleBasedMapping[role] || {};
+  const groupedTabs = groupByName(allOffersData?.data?.tabs, mapping);
 
   return {
     [id]: groupedTabs,
@@ -161,8 +172,6 @@ export async function getChartererDetailsOffers({ id }) {
 }
 
 export function* getOffersById({ data, role }) {
-  // const fetchOfferDetailsById = isOwner ? getOwnerDetailsOffers : getChartererDetailsOffers;
-
   return yield Promise.all(data.map(({ id }) => getOffers({ id, role })));
 }
 
