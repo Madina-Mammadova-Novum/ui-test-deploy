@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchNotifications, getCurrentDealStage, readNotification } from './actions';
 
 const initialState = {
-  unread: 0,
+  unread: '0',
   watchedData: [],
   unwatchedData: [],
   dealData: {},
@@ -63,7 +63,7 @@ const notificationsSlice = createSlice({
       state.dealData = initialState.dealData;
     },
     resetNotificationData: (state) => {
-      state.unread = 0;
+      state.unread = '0';
       state.unwatchedData = [];
       state.watchedData = [];
     },

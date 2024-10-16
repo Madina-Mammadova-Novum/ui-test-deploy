@@ -7,13 +7,22 @@ import { BadgePropTypes } from '@/lib/types';
 import CloseIcon from '@/assets/icons/CloseIcon';
 import { TypingIndicator } from '@/elements';
 
-const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, className = '-top-0.5 right-0' }) => {
+const Badge = ({
+  counter,
+  onClose,
+  hovered,
+  typing,
+  withCancel = false,
+  name,
+  isNotificationBadge = false,
+  className = '-top-0.5 right-0',
+}) => {
   const printAction = useMemo(() => {
-    if (counter > 0 && !hovered && !typing) {
+    if (((isNotificationBadge && counter !== '0') || counter > 0) && !hovered && !typing) {
       return (
         <div
           className={`absolute h-5 w-5 border border-solid border-white p-1 ${className} rounded-full bg-blue ${
-            counter > 100 ? 'text-[6px]' : 'text-xxs'
+            (isNotificationBadge && counter === '99+') || counter > 100 ? 'text-[6px]' : 'text-xxs'
           } flex items-center justify-center font-bold text-white`}
         >
           {counter}
@@ -21,11 +30,11 @@ const Badge = ({ counter, onClose, hovered, typing, withCancel = false, name, cl
       );
     }
 
-    if (counter > 0 && !hovered && !typing) {
+    if (((isNotificationBadge && counter !== '0') || counter > 0) && !hovered && !typing) {
       return (
         <div
           className={`absolute h-5 w-5 border border-solid border-white p-1 ${className} rounded-full bg-blue ${
-            counter > 100 ? 'text-[6px]' : 'text-xxs'
+            (isNotificationBadge && counter === '99+') || counter > 100 ? 'text-[6px]' : 'text-xxs'
           } flex items-center justify-center font-bold text-white`}
         >
           {counter}

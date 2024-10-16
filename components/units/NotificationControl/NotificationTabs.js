@@ -11,9 +11,11 @@ import { Tabs } from '@/units';
 const NotificationTabs = ({ activeTab, onChange, onClick, containerClass }) => {
   const { unreadCounter, unwatchedData } = useSelector(getNotificationsDataSelector);
 
+  const unreadLabel = unreadCounter === '0' ? 'Unread' : `Unread (${unreadCounter})`;
+
   const options = [
     {
-      label: `Unread (${unreadCounter || 0})`,
+      label: unreadLabel,
       value: 'unread',
     },
     {

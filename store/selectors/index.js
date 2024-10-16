@@ -79,7 +79,7 @@ export const getNotificationsDataSelector = createDraftSafeSelector(notification
     watchedData: state?.watchedData,
     unwatchedData: state?.unwatchedData,
     unreadCounter: state.unread,
-    noUnreadMessages: state.unread === 0,
+    noUnreadMessages: state.unread === '0',
     deal: state.dealData,
     generating: state.dealFetching,
   };
