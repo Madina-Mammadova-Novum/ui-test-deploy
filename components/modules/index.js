@@ -24,7 +24,7 @@ import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import GettingStartedSection from '@/modules/GettingStartedSection';
 import GlobalError from '@/modules/GlobalError';
-import { AccountHeader, AuthHeader, PageHeader, MaintenanceHeader } from '@/modules/Header';
+import { AccountHeader, AuthHeader, MaintenanceHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';

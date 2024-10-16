@@ -10,14 +10,14 @@ export default function middleware(req) {
 
   const { isOwner, isCharterer } = getRoleIdentity({ role });
 
-  const charetererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
+  const chartererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
   const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
 
   if (req.nextUrl.pathname.startsWith('/account') && !accessToken) {
     return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
   }
 
-  if (charetererRoutes && !isCharterer) {
+  if (chartererRoutes && !isCharterer) {
     return NextResponse.redirect(new URL(ROUTES.NOT_FOUND, req.url));
   }
 
