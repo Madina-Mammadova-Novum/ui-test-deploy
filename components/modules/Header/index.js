@@ -1,5 +1,6 @@
 import AccountHeader from '@/modules/Header/AccountHeader';
 import AuthHeader from '@/modules/Header/AuthHeader';
+import MaintenanceHeader from '@/modules/Header/MaintenanceHeader';
 import PageHeader from '@/modules/Header/PageHeader';
 
-export { AccountHeader, PageHeader, AuthHeader };
+export { AccountHeader, PageHeader, AuthHeader, MaintenanceHeader };

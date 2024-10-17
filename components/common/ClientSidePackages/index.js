@@ -14,13 +14,14 @@ const ClientSidePackages = () => {
   const pathname = usePathname();
   const token = getCookieFromBrowser('session-access-token');
 
-  const unavailbleChatRoute = pathname === ROUTES.LOGIN || pathname === ROUTES.SIGNUP;
+  const unavailableChatRoute = pathname === ROUTES.LOGIN || pathname === ROUTES.SIGNUP;
+  const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
 
   return (
     <>
       <div id="portal" />
       <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={3500} hideProgressBar />
-      {!unavailbleChatRoute && <Chat token={token} />}
+      {!maintenanceMode && !unavailableChatRoute && <Chat token={token} />}
     </>
   );
 };
