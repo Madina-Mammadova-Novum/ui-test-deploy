@@ -12,8 +12,14 @@ export default function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // If maintenance mode is active, rewrite all requests to the maintenance page,
-  // but keep the original URL in the browser's address bar
-  if (maintenanceMode && !pathname.startsWith(ROUTES.MAINTENANCE)) {
+  // but skip static files like images, CSS, JS, etc.
+  if (
+    maintenanceMode &&
+    !pathname.startsWith(ROUTES.MAINTENANCE) &&
+    !pathname.startsWith('/_next') && // Skip Next.js internal files
+    !pathname.startsWith('/images') && // Skip image files
+    !pathname.startsWith('/favicon.ico')
+  ) {
     req.nextUrl.pathname = ROUTES.MAINTENANCE;
     return NextResponse.rewrite(req.nextUrl);
   }
