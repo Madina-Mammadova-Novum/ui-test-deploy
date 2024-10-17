@@ -15,7 +15,7 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
     return (
       <Controller
         name={name}
-        render={({ field: { rhfRef, ...field }, formState: { errors, isSubmitting } }) => {
+        render={({ field: { ref: rfRef, ...field }, formState: { errors, isSubmitting } }) => {
           const error = errors[name];
           return (
             <div className="w-full">
@@ -25,7 +25,7 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
               <Phone
                 {...field}
                 masks={{ ae: '.. .......' }}
-                inputProps={{ ref: rhfRef }}
+                inputProps={{ ref: rfRef }}
                 id={name}
                 enableSearch
                 enableAreaCodes
