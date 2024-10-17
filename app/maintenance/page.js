@@ -1,4 +1,3 @@
-// app/Maintenance/page.js
 import Maintenance from './Maintenance';
 
 export const metadata = {
