@@ -10,8 +10,7 @@ import { NotificationList, NotificationPlaceholder } from '@/units';
 
 const NotificationContent = () => {
   const dispatch = useDispatch();
-  const { loading, unwatchedData, watchedData, filterParams, unreadCounter } =
-    useSelector(getNotificationsDataSelector);
+  const { loading, unwatchedData, watchedData, filterParams } = useSelector(getNotificationsDataSelector);
 
   const { take, watched, searchValue, sortedValue } = filterParams;
 
@@ -26,7 +25,7 @@ const NotificationContent = () => {
     const trigger = scrollTop + clientHeight >= scrollHeight - 150;
 
     const watchedCondition = searchValue !== '' || sortedValue.length > 0;
-    const unwatchedCondition = searchValue !== '' || sortedValue.length > 0 || take >= unreadCounter;
+    const unwatchedCondition = searchValue !== '' || sortedValue.length > 0;
 
     if (trigger && !loading) {
       if (watched && watchedCondition) return;

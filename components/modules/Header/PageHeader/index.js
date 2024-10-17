@@ -52,13 +52,15 @@ export default async function PageHeader() {
   return (
     <header className="absolute z-10 w-full">
       <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
-        <div className="align-center flex justify-between border-b border-white/10 py-2.5">
+        <div className="flex items-center justify-between border-b border-white/10 py-2.5">
           <NextLink href="/">
             <Logo className="hidden fill-white md:block" />
             <SmallLogo className="fill-white md:hidden" />
           </NextLink>
           <nav className="flex flex-col items-center gap-x-10 md:flex-row">
-            {navigation?.length > 0 && <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>}
+            {Array.isArray(navigation) && navigation.length > 0 && (
+              <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>
+            )}
             {buttons?.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>
         </div>
