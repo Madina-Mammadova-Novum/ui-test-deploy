@@ -11,7 +11,7 @@ const FooterNavBlock = ({ title, items }) => {
       <ul className="space-y-2 text-black">
         {Array.isArray(items) &&
           items.length > 0 &&
-          items?.map((item) => {
+          items.map((item) => {
             return (
               <li key={item.path}>
                 <NextLink href={item.path} className="text-xsm">
