@@ -13,8 +13,8 @@ export default function middleware(req) {
 
   // If maintenance mode is active, rewrite all requests to the maintenance page,
   // but keep the original URL in the browser's address bar
-  if (maintenanceMode && !pathname.startsWith('/maintenance')) {
-    req.nextUrl.pathname = '/maintenance';
+  if (maintenanceMode && !pathname.startsWith(ROUTES.MAINTENANCE)) {
+    req.nextUrl.pathname = ROUTES.MAINTENANCE;
     return NextResponse.rewrite(req.nextUrl);
   }
 
