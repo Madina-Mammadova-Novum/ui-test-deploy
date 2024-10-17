@@ -64,7 +64,11 @@ const Fleets = ({ searchedParams }) => {
 
     if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
 
-    return <Title level="3">There are no available positions</Title>;
+    if (!unassignedData || unassignedData.length === 0) {
+      return <Title level="3">There are no available positions</Title>;
+    }
+
+    return null;
   }, [loading, data, toggle, searchedParams?.id]);
 
   return (
