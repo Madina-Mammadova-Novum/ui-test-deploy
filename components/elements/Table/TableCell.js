@@ -57,9 +57,10 @@ const TableCell = ({ cellProps }) => {
     countdownData,
     notified,
     rolled,
-    isValid = false,
+    isValid = true,
     flagOfRegistry,
   } = cellProps;
+  console.log({ name, value, isValid });
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
