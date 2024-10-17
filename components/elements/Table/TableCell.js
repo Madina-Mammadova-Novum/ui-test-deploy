@@ -160,6 +160,7 @@ const TableCell = ({ cellProps }) => {
       ACTIONS.REQUEST_UPDATE_TANKER_INFO,
       ACTIONS.DELETE_TANKER,
       ACTIONS.VIEW_COMMENTS,
+      ACTIONS.DELETE_TANKER_FROM_FLEET,
     ];
 
     return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
