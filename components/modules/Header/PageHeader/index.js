@@ -58,7 +58,9 @@ export default async function PageHeader() {
             <SmallLogo className="fill-white md:hidden" />
           </NextLink>
           <nav className="flex flex-col items-center gap-x-10 md:flex-row">
-            {navigation?.length > 0 && <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>}
+            {Array.isArray(navigation) && navigation.length > 0 && (
+              <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>
+            )}
             {buttons?.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
           </nav>
         </div>

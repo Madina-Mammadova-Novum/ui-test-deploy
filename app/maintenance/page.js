@@ -8,8 +8,8 @@ export const metadata = {
 export default function MaintenancePage() {
   return (
     <Maintenance
-      title="We're Launching Soon!"
-      description="Our service is currently under development and will be live shortly. We are working hard to bring you an improved and seamless experience. Stay tuned for updates, and thank you for your patience."
+      title="We Will Be Launching Soon"
+      description="Our service is currently under development and will be available shortly. We are diligently working to deliver an enhanced and seamless experience. Please stay tuned for updates, and we appreciate your patience during this time."
       variant="comingSoon"
     />
   );

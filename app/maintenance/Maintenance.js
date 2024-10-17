@@ -40,7 +40,7 @@ export default function Maintenance({
 }
 
 Maintenance.propTypes = {
-  title: PropTypes.string,
-  description: PropTypes.string,
-  variant: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  variant: PropTypes.oneOf(['maintenance', 'comingSoon']).isRequired,
 };
