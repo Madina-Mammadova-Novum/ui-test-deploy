@@ -60,7 +60,6 @@ const TableCell = ({ cellProps }) => {
     isValid = true,
     flagOfRegistry,
   } = cellProps;
-  console.log({ name, value, isValid });
 
   const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
 
