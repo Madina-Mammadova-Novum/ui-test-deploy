@@ -17,6 +17,8 @@ const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x
 const PostFixture = () => {
   const dispatch = useDispatch();
 
+  const [filtersFromForm, setFiltersFromForm] = useState(null); // Store form filters
+
   const [userStore, setUserStore] = useState({
     sortColumnDirectionOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortColumnDirection: '',
@@ -35,11 +37,14 @@ const PostFixture = () => {
   };
 
   const handleSortSelection = (key, sortOption) => {
+    // Merge the existing filters with the form filters (if any)
+    const appliedFilters = filtersFromForm || filters;
+
     dispatch(
       fetchPostFixtureOffers({
         page: 1,
         perPage,
-        filters,
+        filters: appliedFilters, // Use form filters if available
         sorting: {
           sortColumnDirection: sortColumnDirection?.value,
           sortColumn: sortColumn?.value,
@@ -74,9 +79,10 @@ const PostFixture = () => {
 
   return (
     <>
-      <FilterByForm isLoading={loading}>
+      <FilterByForm isLoading={loading} onFilterChange={setFiltersFromForm}>
         <PostFixtureFilter {...filters} />
       </FilterByForm>
+
       <div className="flex items-center justify-end gap-2.5 pt-6">
         <Label className="text-xs-sm font-semibold">Sort cargoes by:</Label>
         <div className="flex">
