@@ -16,12 +16,14 @@ export default function middleware(req) {
   if (
     maintenanceMode &&
     !pathname.startsWith(ROUTES.MAINTENANCE) &&
-    !pathname.startsWith('/_next') && // Skip Next.js internal files
-    !pathname.startsWith('/images') && // Skip image files
+    !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/images') &&
     !pathname.startsWith('/favicon.ico')
   ) {
     req.nextUrl.pathname = ROUTES.MAINTENANCE;
-    return NextResponse.rewrite(req.nextUrl);
+    const response = NextResponse.rewrite(req.nextUrl);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    return response;
   }
 
   // Continue with the original authentication and authorization checks if not in maintenance mode
