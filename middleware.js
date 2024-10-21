@@ -12,10 +12,18 @@ export default function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // If maintenance mode is active, rewrite all requests to the maintenance page,
-  // but keep the original URL in the browser's address bar
-  if (maintenanceMode && !pathname.startsWith(ROUTES.MAINTENANCE)) {
+  // but skip static files like images, CSS, JS, etc.
+  if (
+    maintenanceMode &&
+    !pathname.startsWith(ROUTES.MAINTENANCE) &&
+    !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/images') &&
+    !pathname.startsWith('/favicon.ico')
+  ) {
     req.nextUrl.pathname = ROUTES.MAINTENANCE;
-    return NextResponse.rewrite(req.nextUrl);
+    const response = NextResponse.rewrite(req.nextUrl);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    return response;
   }
 
   // Continue with the original authentication and authorization checks if not in maintenance mode
