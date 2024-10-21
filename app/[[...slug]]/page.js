@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import parse from 'html-react-parser';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import PropTypes from 'prop-types';
 
 import { legalPropAdapter } from '@/adapters';
@@ -16,6 +16,13 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Home({ params }) {
+  const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
+
+  if (maintenanceMode) {
+    redirect('/maintenance'); // Redirect to the maintenance page
+  }
+
+  // Get legal content based on the language and locale provided in the params.params object
   const { legal } = legalPropAdapter({ params });
 
   const { pageData, blocks, content } = await getHomePageData({ params });
