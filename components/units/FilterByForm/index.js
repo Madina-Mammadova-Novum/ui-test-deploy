@@ -13,7 +13,7 @@ import { getPostFixtureDataSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
+const FilterByForm = ({ children, title = 'Filter by', isLoading = false, onFilterChange = () => {} }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({ state: null, schema: null });
 
@@ -21,11 +21,14 @@ const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
 
   const onSubmit = async (formData) => {
     const data = filtersAdapter(formData);
+
+    onFilterChange(data);
     dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters: data, sorting }));
   };
 
   const onReset = () => {
     resetForm(methods, '');
+    onFilterChange(null);
     dispatch(fetchPostFixtureOffers({ page: 1, perPage, sorting }));
   };
 

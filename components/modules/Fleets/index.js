@@ -8,7 +8,7 @@ import FleetsExpandedContent from './FleetsExpandedContent';
 import { UrlPropTypes } from '@/lib/types';
 
 import { fleetsPageHeaderDataAdapter, fleetsPageRowsDataAdapter } from '@/adapters';
-import { DynamicLoader, ExpandableCardHeader, Title } from '@/elements';
+import { DynamicLoader, ExpandableCardHeader } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { getFleetsSelector } from '@/store/selectors';
@@ -64,7 +64,7 @@ const Fleets = ({ searchedParams }) => {
 
     if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
 
-    return <Title level="3">There are no available positions</Title>;
+    return null;
   }, [loading, data, toggle, searchedParams?.id]);
 
   return (
