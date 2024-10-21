@@ -13,7 +13,7 @@ import { getPostFixtureDataSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FilterByForm = ({ children, title = 'Filter by', isLoading = false, onFilterChange }) => {
+const FilterByForm = ({ children, title = 'Filter by', isLoading = false, onFilterChange = () => {} }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({ state: null, schema: null });
 
