@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
 
@@ -33,6 +33,8 @@ import { downloadFile } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
   const tableRef = useRef(null);
+
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const {
     id,
@@ -88,11 +90,11 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.DATE:
         return <EditDateForm title="edit open date" state={{ ...state, action: ACTIONS.DATE }} />;
       case ACTIONS.VIEW_OFFER:
-        return <ViewIncomingOffer itemId={id} cellData={data} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} minimizeModal={setIsMinimized} />;
       case ACTIONS.VIEW_COUNTEROFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
-        return <ViewIncomingOffer itemId={id} cellData={data} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} minimizeModal={setIsMinimized} />;
       case ACTIONS.VIEW_SENT_OFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_FAILED_OFFER:
@@ -161,6 +163,10 @@ const TableCell = ({ cellProps }) => {
       ACTIONS.DELETE_TANKER,
       ACTIONS.VIEW_COMMENTS,
       ACTIONS.DELETE_TANKER_FROM_FLEET,
+      ACTIONS.REQUEST_DOCUMENT_DELETION,
+      ACTIONS.REVOKE_DOCUMENT_DELETION,
+      isMinimized && ACTIONS.VIEW_CHARTERER_COUNTEROFFER,
+      isMinimized && ACTIONS.VIEW_OFFER,
     ];
 
     return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
@@ -194,7 +200,7 @@ const TableCell = ({ cellProps }) => {
         </ModalWindow>
       );
     });
-  }, [actions]);
+  }, [actions, isMinimized]);
 
   const cellColor = useMemo(() => {
     if (freezed) return `${notified ? 'bg-yellow-light' : 'freezed-table'} blur-sm cursor-not-allowed`;

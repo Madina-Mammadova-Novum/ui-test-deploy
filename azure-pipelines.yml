@@ -2,7 +2,7 @@ pool:
   # vmImage: 'ubuntu-latest'
   name: SHAP # Self hosted agent
   demands:
-   - agent.name -equals ubuntu-sha
+    - agent.name -equals ubuntu-sha
 
 trigger:
   - develop
