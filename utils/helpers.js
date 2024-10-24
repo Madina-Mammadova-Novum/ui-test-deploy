@@ -307,11 +307,11 @@ export const filterDataByLowerCase = (inputValue, data = []) => {
   return data?.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
-export const resetObjectFields = (initialObject, resetType = null) => {
+export const resetObjectFields = ({ initialObject, resetType = null }) => {
   if (typeof initialObject !== 'string') {
     Object.keys(initialObject).forEach((key) => {
       if (Array.isArray(initialObject[key])) {
-        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+        initialObject[key].map((arrayItem) => resetObjectFields({ initialObject: arrayItem }));
       } else {
         initialObject[key] = resetType;
       }
@@ -323,7 +323,7 @@ export const resetObjectFields = (initialObject, resetType = null) => {
 
 export const resetForm = (methods, type) => {
   methods.reset((formValues) => {
-    resetObjectFields(formValues, type);
+    resetObjectFields({ initialObject: formValues, resetType: type });
     return formValues;
   });
 };
