@@ -149,6 +149,7 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
     filters: state.data?.filters,
+    searchParams: state.data?.searchParams,
     sorting: state.data?.sorting,
     role: state.role,
     deal: state.deal,

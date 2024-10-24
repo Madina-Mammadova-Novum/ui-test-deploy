@@ -17,8 +17,6 @@ const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x
 const PostFixture = () => {
   const dispatch = useDispatch();
 
-  const [filtersFromForm, setFiltersFromForm] = useState(null); // Store form filters
-
   const [userStore, setUserStore] = useState({
     sortColumnDirectionOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortColumnDirection: '',
@@ -26,7 +24,7 @@ const PostFixture = () => {
     sortColumn: '',
   });
 
-  const { offers, loading, toggle, perPage, filters } = useSelector(getPostFixtureDataSelector);
+  const { offers, loading, toggle, perPage, filters, searchParams } = useSelector(getPostFixtureDataSelector);
   const { sortColumnDirectionOptions, sortColumnDirection, sortColumnOptions, sortColumn } = userStore;
 
   const handleChangeState = (key, value) => {
@@ -37,14 +35,11 @@ const PostFixture = () => {
   };
 
   const handleSortSelection = (key, sortOption) => {
-    // Merge the existing filters with the form filters (if any)
-    const appliedFilters = filtersFromForm || filters;
-
     dispatch(
       fetchPostFixtureOffers({
         page: 1,
         perPage,
-        filters: appliedFilters, // Use form filters if available
+        searchParams,
         sorting: {
           sortColumnDirection: sortColumnDirection?.value,
           sortColumn: sortColumn?.value,
@@ -79,7 +74,7 @@ const PostFixture = () => {
 
   return (
     <>
-      <FilterByForm isLoading={loading} onFilterChange={setFiltersFromForm}>
+      <FilterByForm isLoading={loading}>
         <PostFixtureFilter {...filters} />
       </FilterByForm>
 
