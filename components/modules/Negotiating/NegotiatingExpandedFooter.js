@@ -11,7 +11,7 @@ import SearchSVG from '@/assets/images/search.svg';
 import { Button } from '@/elements';
 import { ROUTES } from '@/lib';
 import { getOfferDetails } from '@/services/offer';
-import { setPrefilledSearchData } from '@/store/entities/search/slice';
+import { setSearchParams } from '@/store/entities/search/slice';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { ExpandableRowFooter } from '@/units';
 import { errorToast } from '@/utils/hooks';
@@ -28,7 +28,7 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, cargoId }) => {
     const { data, errors } = await getOfferDetails(offerId, role);
 
     if (!errors) {
-      dispatch(setPrefilledSearchData(prefilledSearchDataAdapter({ data, isAlternative: true })));
+      dispatch(setSearchParams(prefilledSearchDataAdapter({ data, isAlternative: true })));
       router.push(ROUTES.ACCOUNT_SEARCH);
     } else {
       errorToast(errors?.title, errors?.message);

@@ -11,7 +11,6 @@ const initialState = {
   searchData: null,
   searchParams: null,
   error: null,
-  prefilledSearchData: null,
   sortingData: {
     range: [SORT_OPTIONS.asc, SORT_OPTIONS.dsc],
     directions: [SORT_OPTIONS.ballast, SORT_OPTIONS.arrival],
@@ -37,19 +36,13 @@ const searchSlice = createSlice({
       state.searchParams = payload;
     },
     setSearchData: (state, { payload }) => {
-      const updatedState = { ...state, searchData: payload };
-      state.prefilledSearchData = updatedState.prefilledSearchData;
-      state.searchData = updatedState.searchData;
-    },
-    setPrefilledSearchData: (state, { payload }) => {
-      state.prefilledSearchData = payload;
+      state.searchData = payload;
     },
     onReset: (state) => {
       state.searchParams = initialState.searchParams;
       state.searchData = initialState.searchData;
       state.sortingData = initialState.sortingData;
       state.request = initialState.request;
-      state.prefilledSearchData = initialState.prefilledSearchData;
     },
   },
   extraReducers: (builder) => {
@@ -69,14 +62,6 @@ const searchSlice = createSlice({
   },
 });
 
-export const {
-  onReset,
-  setToggle,
-  setRequest,
-  setSearchData,
-  setSearchParams,
-  setSortingParams,
-  setPrefilledSearchData,
-} = searchSlice.actions;
+export const { onReset, setToggle, setRequest, setSearchData, setSearchParams, setSortingParams } = searchSlice.actions;
 
 export default searchSlice.reducer;

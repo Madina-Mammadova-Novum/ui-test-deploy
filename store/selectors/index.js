@@ -249,7 +249,6 @@ export const getSearchSelector = createDraftSafeSelector(searchSelector, (state)
     searchParams: state.searchParams,
     toggle: state.toggle,
     loading: state.loading,
-    prefilledSearchData: state.prefilledSearchData,
     sorting: state.sortingData,
     request: state.request,
   };
