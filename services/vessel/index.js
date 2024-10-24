@@ -53,7 +53,7 @@ export async function requestUpdateVessel({ data }) {
   const response = await putData(`vessels/update`, body);
 
   if (!response.error) {
-    response.message = 'You have succesfully requested to edit tanker information';
+    response.message = 'You have successfully requested to edit tanker information';
     response.messageDescription = 'You will be notified on the decision within 24 hours.';
   }
 
@@ -69,8 +69,8 @@ export async function getVesselTypes() {
   };
 }
 
-export async function getVesselCategoryOne(vasselTypeId) {
-  const response = await getData(`vessels/category-one/${vasselTypeId}`);
+export async function getVesselCategoryOne(vesselTypeId) {
+  const response = await getData(`vessels/category-one/${vesselTypeId}`);
   return {
     ...response,
   };
