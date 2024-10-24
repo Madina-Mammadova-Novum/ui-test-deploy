@@ -62,6 +62,7 @@ const PostFixtureExpandedContent = ({ detailsData, documentsData, tab, offerId }
             xlMax:-translate-x-1/2
           "
           onClick={() => downloadFile({ url: detailsData?.charterPartyUrl, fileName: detailsData?.charterPartyUrl })}
+          disabled={!detailsData?.charterPartyUrl}
         />
       </div>
       {tabContent}
