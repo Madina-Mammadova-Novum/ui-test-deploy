@@ -10,10 +10,10 @@ import { TankerSearchResults } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
 import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
-import { SearchForm } from '@/units';
+import { SearchForm, SearchNotFound } from '@/units';
 import { errorToast } from '@/utils/hooks';
 
-const TankerSearch = ({ isAccountSearch = false }) => {
+const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
   const dispatch = useDispatch();
 
   const { data, loading, error, sorting, searchParams, request } = useSelector(getSearchSelector);
@@ -70,8 +70,11 @@ const TankerSearch = ({ isAccountSearch = false }) => {
       return <DynamicLoader className="h-56 w-56" />;
     }
 
+    if (isDisabled && !data && !request)
+      return <SearchNotFound isAccountSearch={isAccountSearch} isDisabled={isDisabled} />;
+
     return <TankerSearchResults data={data} request={request} isAccountSearch={isAccountSearch} />;
-  }, [loading, data, request]);
+  }, [loading, data, request, isDisabled]);
 
   return (
     <>
