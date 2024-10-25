@@ -48,20 +48,18 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           onClick={({ target }) => setCurrentTab(target.value)}
           customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
-        {isCharterer && (
-          <ModalWindow
-            buttonProps={{
-              text: 'Request response time extension',
-              variant: 'primary',
-              size: 'small',
-              disabled: !allowCountdownExtension,
-              className:
-                'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-[50%] xlMax:transform xlMax:-translate-x-1/2',
-            }}
-          >
-            <ExtendOnSubsCountdown offerId={offerId} onExtensionSuccess={() => setAllowCountdownExtension(false)} />
-          </ModalWindow>
-        )}
+        <ModalWindow
+          buttonProps={{
+            text: 'Request response time extension',
+            variant: 'primary',
+            size: 'small',
+            disabled: !allowCountdownExtension,
+            className:
+              'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold absolute right-1 -translate-x-5 xlMax:w-fit xlMax:top-14 xlMax:left-[50%] xlMax:transform xlMax:-translate-x-1/2',
+          }}
+        >
+          <ExtendOnSubsCountdown offerId={offerId} onExtensionSuccess={() => setAllowCountdownExtension(false)} />
+        </ModalWindow>
       </div>
       {printContent}
     </>
