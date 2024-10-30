@@ -14,6 +14,7 @@ const initialState = {
     offers: [],
     offerById: {},
   },
+  tab: 'incoming',
 };
 
 const negotiatingSlice = createSlice({
@@ -22,6 +23,9 @@ const negotiatingSlice = createSlice({
   reducers: {
     setToggle: (state, { payload }) => {
       state.toggle = payload;
+    },
+    setTab: (state, { payload }) => {
+      state.tab = payload;
     },
     updateCountdown: (state, action) => {
       const { parentId, offerId, isOwner } = action?.payload;
@@ -55,6 +59,6 @@ const negotiatingSlice = createSlice({
   },
 });
 
-export const { updateCountdown, setToggle } = negotiatingSlice.actions;
+export const { updateCountdown, setToggle, setTab } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

@@ -13,11 +13,11 @@ import { getNegotiatingDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
 const Negotiating = () => {
-  const { offers, loading, toggle, role } = useSelector(getNegotiatingDataSelector);
+  const { offers, loading, toggle, role, initialTab } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
       ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
       : chartererNegotiatingHeaderDataAdapter({ data: rowData });
@@ -33,20 +33,25 @@ const Negotiating = () => {
           />
         }
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
-        expand={toggle}
+        expand={index === 0 || toggle} // Expand the first row by default
       >
-        <NegotiatingExpandedContent data={rowData} tabs={NEGOTIATING_TABS[role]} />
+        <NegotiatingExpandedContent
+          data={rowData}
+          tabs={NEGOTIATING_TABS[role]}
+          tab={index === 0 ? initialTab : null} // Set `tab` prop based on `index`
+        />
       </ExpandableRow>
     );
   };
 
   const printContent = useMemo(() => {
     if (loading) return <DynamicLoader />;
-    if (offers?.length) return offers.map(printExpandableRow);
+    if (offers?.length) return offers.map((rowData, index) => printExpandableRow(rowData, index));
 
-    return <Title level="3">No offers at current stage</Title>;
-  }, [loading, offers, toggle, printExpandableRow]);
+    return <Title level="3">No offers at the current stage</Title>;
+  }, [loading, offers, toggle, initialTab, printExpandableRow]);
 
   return printContent;
 };
+
 export default Negotiating;

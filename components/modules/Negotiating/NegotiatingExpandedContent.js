@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
 
@@ -12,6 +12,7 @@ import {
   offerTabDataByRole,
 } from '@/adapters/negotiating';
 import { Table } from '@/elements';
+import { setTab } from '@/store/entities/negotiating/slice';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -25,6 +26,8 @@ import {
 } from '@/utils/mock';
 
 const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
+  const dispatch = useDispatch();
+
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
   const [currentTab, setCurrentTab] = useState(tabs?.[0]?.value);
 
@@ -35,22 +38,39 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   const failedData = tab ? notifiedNegotiatingDataAdapter({ tab, data: failed, fleetId: data.fleetId }) : failed;
   const incomingData = tab ? notifiedNegotiatingDataAdapter({ tab, data: incoming, fleetId: data.fleetId }) : incoming;
 
-  const tabIdentify = () => {
+  const determineInitialTab = () => {
     const urlParams = new URLSearchParams(window.location.href);
-
     if (tab) {
-      setCurrentTab(tab);
-      if (urlParams.get('status') === 'incoming' && !incoming.length) {
-        setCurrentTab(tabs?.[1]?.value);
-      }
+      const initialTab = urlParams.get('status') === 'incoming' && !incoming.length ? tabs?.[1]?.value : tab;
+      setCurrentTab(initialTab);
     } else {
       setCurrentTab(tabs?.[0]?.value);
     }
   };
 
+  const updateTabBasedOnData = () => {
+    if (!tab) return;
+
+    if (sentData.length > 0 && incomingData.length > 0) {
+      const sentDate = new Date(sentData[0].createdAt);
+      const incomingDate = new Date(incomingData[0].createdAt);
+      dispatch(setTab(sentDate > incomingDate ? 'counteroffers' : 'incoming'));
+    } else if (sentData.length > 0) {
+      dispatch(setTab('counteroffers'));
+    } else if (incomingData.length > 0) {
+      dispatch(setTab('incoming'));
+    } else {
+      dispatch(setTab('failed'));
+    }
+  };
+
   useEffect(() => {
-    tabIdentify();
+    determineInitialTab();
   }, [tab]);
+
+  useEffect(() => {
+    updateTabBasedOnData();
+  }, [data, sentData, incomingData, dispatch, tab]);
 
   const tabContent = {
     counteroffers: (
