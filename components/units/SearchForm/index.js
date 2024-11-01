@@ -67,6 +67,8 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   useEffect(() => {
     if (searchParams) {
       methods.reset(searchParams);
+
+      if (searchParams?.productsByIndex && searchParams?.isSavedSearch) setProductState(searchParams?.productsByIndex);
     }
   }, [searchParams]);
 
