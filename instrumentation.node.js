@@ -1,30 +1,31 @@
-import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { Resource } from '@opentelemetry/resources';
-import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
+import { Resource } from '@opentelemetry/resources';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-node';
+import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
 const otelEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.nr-data.net/v1';
 const apiKey = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY;
-const headers = {
-  'api-key': apiKey,
-};
 
 // Ensure this code runs only on the server
 if (typeof window === 'undefined') {
   // Configure the trace exporter for spans
   const traceExporter = new OTLPTraceExporter({
     url: `${otelEndpoint}/traces`,
-    headers,
+    headers: {
+      'api-key': apiKey,
+    },
   });
 
   // Configure the metrics exporter
   const metricExporter = new OTLPMetricExporter({
     url: `${otelEndpoint}/metrics`,
-    headers,
+    headers: {
+      'api-key': apiKey,
+    },
   });
 
   // Set up the periodic metric reader
