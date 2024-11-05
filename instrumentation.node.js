@@ -26,30 +26,21 @@ const sdk = new NodeSDK({
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
-      '@opentelemetry/instrumentation-fs': { enabled: false },
-      '@opentelemetry/instrumentation-net': { enabled: false },
-      '@opentelemetry/instrumentation-dns': { enabled: false },
+      '@opentelemetry/instrumentation-fs': {
+        enabled: false,
+      },
+      '@opentelemetry/instrumentation-net': {
+        enabled: false,
+      },
+      '@opentelemetry/instrumentation-dns': {
+        enabled: false,
+      },
       '@opentelemetry/instrumentation-http': {
         enabled: true,
-        requestHook: (span, request) => {
-          span.updateName(`${request.method} ${request.url}`);
-        },
       },
     }),
   ],
   spanProcessor: new BatchSpanProcessor(traceExporter),
-  // spanProcessor: batchSpanProcessor,
-  // sampler: new TraceIdRatioBasedSampler(0.7), // Sampling 70% of traces for greater visibility
 });
 
-// Start SDK with error handling for diagnostics
-sdk
-  .start()
-  .then(() => {
-    /* eslint-disable no-console */
-    console.log('OpenTelemetry SDK started successfully');
-  })
-  .catch((error) => {
-    /* eslint-disable no-console */
-    console.error('Error starting OpenTelemetry SDK', error);
-  });
+sdk.start();
