@@ -13,12 +13,12 @@ const traceExporter = new OTLPTraceExporter({
   },
 });
 
-const batchSpanProcessor = new BatchSpanProcessor(traceExporter, {
-  maxExportBatchSize: 200, // Increased batch size for higher throughput and more data per export
-  scheduledDelayMillis: 2000, // Reduced delay for near real-time exporting every 2 seconds
-  exportTimeoutMillis: 30000, // Timeout of 30 seconds remains ideal for reliability
-  maxQueueSize: 4000, // Increased queue size to handle higher traffic spikes
-});
+// const batchSpanProcessor = new BatchSpanProcessor(traceExporter, {
+//   maxExportBatchSize: 200, // Increased batch size for higher throughput and more data per export
+//   scheduledDelayMillis: 2000, // Reduced delay for near real-time exporting every 2 seconds
+//   exportTimeoutMillis: 30000, // Timeout of 30 seconds remains ideal for reliability
+//   maxQueueSize: 4000, // Increased queue size to handle higher traffic spikes
+// });
 
 const sdk = new NodeSDK({
   resource: new Resource({
@@ -37,7 +37,8 @@ const sdk = new NodeSDK({
       },
     }),
   ],
-  spanProcessor: batchSpanProcessor,
+  spanProcessor: new BatchSpanProcessor(traceExporter),
+  // spanProcessor: batchSpanProcessor,
   // sampler: new TraceIdRatioBasedSampler(0.7), // Sampling 70% of traces for greater visibility
 });
 
