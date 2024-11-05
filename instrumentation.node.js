@@ -1,5 +1,6 @@
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+// import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
@@ -20,18 +21,29 @@ const traceExporter = new OTLPTraceExporter({
 //   maxQueueSize: 4000, // Increased queue size to handle higher traffic spikes
 // });
 
-const httpInstrumentation = new HttpInstrumentation({
-  requestHook: (span, request) => {
-    span.updateName(`${request.method} ${request.url}`);
-  },
-});
+// const httpInstrumentation = new HttpInstrumentation({
+//   requestHook: (span, request) => {
+//     span.updateName(`${request.method} ${request.url}`);
+//   },
+// });
 
 const sdk = new NodeSDK({
   resource: new Resource({
     [ATTR_SERVICE_NAME]: serviceName,
   }),
   instrumentations: [
-    httpInstrumentation, // Only HTTP instrumentation with route-based names
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-fs': { enabled: false },
+      '@opentelemetry/instrumentation-net': { enabled: false },
+      '@opentelemetry/instrumentation-dns': { enabled: false },
+      '@opentelemetry/instrumentation-http': {
+        enabled: true,
+        requestHook: (span, request) => {
+          // Customize HTTP span name to include method and route
+          span.updateName(`${request.method} ${request.url}`);
+        },
+      },
+    }),
   ],
   spanProcessor: new BatchSpanProcessor(traceExporter),
 });
