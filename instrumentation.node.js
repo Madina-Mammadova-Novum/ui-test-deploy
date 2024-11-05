@@ -23,15 +23,18 @@ const batchSpanProcessor = new BatchSpanProcessor(traceExporter, {
 const sdk = new NodeSDK({
   resource: new Resource({
     [ATTR_SERVICE_NAME]: serviceName,
-    'deployment.environment': process.env.NODE_ENV,
-    'service.version': process.env.npm_package_version,
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
       '@opentelemetry/instrumentation-fs': { enabled: false },
       '@opentelemetry/instrumentation-net': { enabled: false },
       '@opentelemetry/instrumentation-dns': { enabled: false },
-      '@opentelemetry/instrumentation-http': { enabled: true },
+      '@opentelemetry/instrumentation-http': {
+        enabled: true,
+        requestHook: (span, request) => {
+          span.updateName(`${request.method} ${request.url}`);
+        },
+      },
     }),
   ],
   spanProcessor: batchSpanProcessor,
