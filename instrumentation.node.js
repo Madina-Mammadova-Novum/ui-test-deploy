@@ -2,7 +2,7 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { BatchSpanProcessor, TraceIdRatioBasedSampler } from '@opentelemetry/sdk-trace-node';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
@@ -38,7 +38,7 @@ const sdk = new NodeSDK({
     }),
   ],
   spanProcessor: batchSpanProcessor,
-  sampler: new TraceIdRatioBasedSampler(0.7), // Sampling 70% of traces for greater visibility
+  // sampler: new TraceIdRatioBasedSampler(0.7), // Sampling 70% of traces for greater visibility
 });
 
 // Start SDK with error handling for diagnostics
