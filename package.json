@@ -63,6 +63,7 @@
     "@hookform/resolvers": "2.8.5",
     "@iconscout/react-unicons-solid": "^1.0.2",
     "@microsoft/signalr": "^7.0.9",
+    "@opentelemetry/auto-instrumentations-node": "^0.52.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.53.0",
     "@opentelemetry/resources": "^1.26.0",
     "@opentelemetry/sdk-node": "^0.53.0",
