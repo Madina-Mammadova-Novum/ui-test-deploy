@@ -2,7 +2,7 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
+import { BatchSpanProcessor, TraceIdRatioBasedSampler } from '@opentelemetry/sdk-trace-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
@@ -13,27 +13,39 @@ const traceExporter = new OTLPTraceExporter({
   },
 });
 
+const batchSpanProcessor = new BatchSpanProcessor(traceExporter, {
+  maxExportBatchSize: 200, // Increased batch size for higher throughput and more data per export
+  scheduledDelayMillis: 2000, // Reduced delay for near real-time exporting every 2 seconds
+  exportTimeoutMillis: 30000, // Timeout of 30 seconds remains ideal for reliability
+  maxQueueSize: 4000, // Increased queue size to handle higher traffic spikes
+});
+
 const sdk = new NodeSDK({
   resource: new Resource({
     [ATTR_SERVICE_NAME]: serviceName,
+    'deployment.environment': process.env.NODE_ENV,
+    'service.version': process.env.npm_package_version,
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
-      '@opentelemetry/instrumentation-fs': {
-        enabled: false,
-      },
-      '@opentelemetry/instrumentation-net': {
-        enabled: false,
-      },
-      '@opentelemetry/instrumentation-dns': {
-        enabled: false,
-      },
-      '@opentelemetry/instrumentation-http': {
-        enabled: true,
-      },
+      '@opentelemetry/instrumentation-fs': { enabled: false },
+      '@opentelemetry/instrumentation-net': { enabled: false },
+      '@opentelemetry/instrumentation-dns': { enabled: false },
+      '@opentelemetry/instrumentation-http': { enabled: true },
     }),
   ],
-  spanProcessor: new BatchSpanProcessor(traceExporter),
+  spanProcessor: batchSpanProcessor,
+  sampler: new TraceIdRatioBasedSampler(0.7), // Sampling 70% of traces for greater visibility
 });
 
-sdk.start();
+// Start SDK with error handling for diagnostics
+sdk
+  .start()
+  .then(() => {
+    /* eslint-disable no-console */
+    console.log('OpenTelemetry SDK started successfully');
+  })
+  .catch((error) => {
+    /* eslint-disable no-console */
+    console.error('Error starting OpenTelemetry SDK', error);
+  });
