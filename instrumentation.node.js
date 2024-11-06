@@ -41,33 +41,11 @@ meterProvider.addMetricReader(
   })
 );
 
-// Creating metrics
+// Creating error count metric
 const meter = meterProvider.getMeter('http_metrics');
-
-// Request Duration Metric (Histogram)
-const requestDuration = meter.createHistogram('http_request_duration_seconds', {
-  description: 'The duration of HTTP requests in seconds',
-});
-
-// Error Count Metric (Counter)
 const errorCount = meter.createCounter('http_error_count', {
   description: 'The count of HTTP errors',
 });
-
-// **Test Metric** to verify metric export functionality
-const testMetric = meter.createCounter('test_metric_counter', {
-  description: 'A test counter to verify metrics export',
-});
-
-// Increment the test metric once on startup
-testMetric.add(1);
-requestDuration.record(1);
-
-// Schedule periodic increments to verify continuous export
-setInterval(() => {
-  const testDuration = 0.5; // Example fixed duration
-  testMetric.add(1, { duration: testDuration });
-}, 30000); // Increments every 30 seconds
 
 // NodeSDK setup for OpenTelemetry tracing
 const sdk = new NodeSDK({
@@ -86,18 +64,11 @@ const sdk = new NodeSDK({
           span.updateName(`${request.method} ${request.url || 'UNKNOWN_ROUTE'}`);
         },
         responseHook: (span, response) => {
-          // Calculate duration and record metrics based on response status
-          const duration = span.endTime[0] - span.startTime[0] + (span.endTime[1] - span.startTime[1]) / 1e9;
-          requestDuration.record(duration, {
-            method: response.method,
-            route: response.route,
-            status_code: response.statusCode,
-          });
-
+          // Record an error if the status code is >= 400
           if (response.statusCode >= 400) {
             errorCount.add(1, {
               method: response.method,
-              route: response.route,
+              route: response.route || 'UNKNOWN_ROUTE',
               status_code: response.statusCode,
             });
           }
