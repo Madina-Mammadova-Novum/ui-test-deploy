@@ -37,6 +37,7 @@ const meterProvider = new MeterProvider({
 meterProvider.addMetricReader(
   new PeriodicExportingMetricReader({
     exporter: metricExporter,
+    exportIntervalMillis: 30000, // Exports metrics every 30 seconds for faster verification
   })
 );
 
@@ -52,6 +53,21 @@ const requestDuration = meter.createHistogram('http_request_duration_seconds', {
 const errorCount = meter.createCounter('http_error_count', {
   description: 'The count of HTTP errors',
 });
+
+// **Test Metric** to verify metric export functionality
+const testMetric = meter.createCounter('test_metric_counter', {
+  description: 'A test counter to verify metrics export',
+});
+
+// Increment the test metric once on startup
+testMetric.add(1);
+
+// Schedule periodic increments to verify continuous export
+setInterval(() => {
+  testMetric.add(1);
+  /* eslint-disable no-console */
+  console.log('Test metric incremented');
+}, 30000); // Increments every 30 seconds
 
 // NodeSDK setup for OpenTelemetry tracing
 const sdk = new NodeSDK({
