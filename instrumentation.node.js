@@ -9,6 +9,8 @@ import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
 const otelTraceExporterEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/traces';
+const otelMetricExporterEndpoint =
+  process.env.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/metrics';
 const apiKey = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY;
 const headers = {
   'api-key': apiKey,
@@ -22,7 +24,7 @@ const traceExporter = new OTLPTraceExporter({
 
 // OTLP Metric exporter configuration
 const metricExporter = new OTLPMetricExporter({
-  url: 'https://otlp.eu01.nr-data.net/v1/metrics',
+  url: otelMetricExporterEndpoint,
   headers,
 });
 
@@ -35,7 +37,7 @@ const meterProvider = new MeterProvider({
 meterProvider.addMetricReader(
   new PeriodicExportingMetricReader({
     exporter: metricExporter,
-    exportIntervalMillis: 60000, // Exports metrics every 60 seconds
+    exportIntervalMillis: 30000, // Exports metrics every 30 seconds for faster verification
   })
 );
 
@@ -51,6 +53,21 @@ const requestDuration = meter.createHistogram('http_request_duration_seconds', {
 const errorCount = meter.createCounter('http_error_count', {
   description: 'The count of HTTP errors',
 });
+
+// **Test Metric** to verify metric export functionality
+const testMetric = meter.createCounter('test_metric_counter', {
+  description: 'A test counter to verify metrics export',
+});
+
+// Increment the test metric once on startup
+testMetric.add(1);
+
+// Schedule periodic increments to verify continuous export
+setInterval(() => {
+  testMetric.add(1);
+  /* eslint-disable no-console */
+  console.log('Test metric incremented');
+}, 30000); // Increments every 30 seconds
 
 // NodeSDK setup for OpenTelemetry tracing
 const sdk = new NodeSDK({
