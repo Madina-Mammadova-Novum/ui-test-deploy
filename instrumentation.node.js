@@ -8,21 +8,22 @@ import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
+const otelTraceExporterEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/traces';
+const apiKey = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY;
+const headers = {
+  'api-key': apiKey,
+};
 
 // OTLP Trace exporter configuration
 const traceExporter = new OTLPTraceExporter({
-  url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/traces',
-  headers: {
-    'api-key': process.env.IDENTITY_NEW_RELIC_LICENSE_KEY,
-  },
+  url: otelTraceExporterEndpoint,
+  headers,
 });
 
 // OTLP Metric exporter configuration
 const metricExporter = new OTLPMetricExporter({
   url: 'https://otlp.eu01.nr-data.net/v1/metrics',
-  headers: {
-    'api-key': process.env.IDENTITY_NEW_RELIC_LICENSE_KEY,
-  },
+  headers,
 });
 
 // MeterProvider with PeriodicExportingMetricReader for metrics
