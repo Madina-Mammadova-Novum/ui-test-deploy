@@ -1,6 +1,5 @@
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-// import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
@@ -14,17 +13,12 @@ const traceExporter = new OTLPTraceExporter({
   },
 });
 
+// TODO: BatchSpanProcessor settings
 // const batchSpanProcessor = new BatchSpanProcessor(traceExporter, {
 //   maxExportBatchSize: 200, // Increased batch size for higher throughput and more data per export
 //   scheduledDelayMillis: 2000, // Reduced delay for near real-time exporting every 2 seconds
 //   exportTimeoutMillis: 30000, // Timeout of 30 seconds remains ideal for reliability
 //   maxQueueSize: 4000, // Increased queue size to handle higher traffic spikes
-// });
-
-// const httpInstrumentation = new HttpInstrumentation({
-//   requestHook: (span, request) => {
-//     span.updateName(`${request.method} ${request.url}`);
-//   },
 // });
 
 const sdk = new NodeSDK({
@@ -40,7 +34,7 @@ const sdk = new NodeSDK({
         enabled: true,
         requestHook: (span, request) => {
           // Customize HTTP span name to include method and route
-          span.updateName(`${request.method} ${request.url}`);
+          span.updateName(`${request.method} ${request.url || 'UNKNOWN_ROUTE'}`);
         },
       },
     }),
@@ -48,4 +42,13 @@ const sdk = new NodeSDK({
   spanProcessor: new BatchSpanProcessor(traceExporter),
 });
 
-sdk.start();
+sdk
+  .start()
+  .then(() => {
+    /* eslint-disable no-console */
+    console.log('OpenTelemetry SDK with metrics started successfully');
+  })
+  .catch((error) => {
+    /* eslint-disable no-console */
+    console.error('Error starting OpenTelemetry SDK with metrics', error);
+  });

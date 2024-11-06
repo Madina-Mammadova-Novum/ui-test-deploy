@@ -76,7 +76,6 @@ To use icon:
 2. Determine color by adding classname (`“fill-white”`)
 3. Default size is 24x24px. If you need another size (16x16px)- add classnames (`“w-4 h-4”`) and add `viewBox=“0 0 24 24”`
 
-
 # Branching Strategy
 
 Git-Flow used here with additional branches for each environment develop for dev , stage for stage and main for prod.
