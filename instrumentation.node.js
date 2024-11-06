@@ -9,6 +9,8 @@ import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
 const otelTraceExporterEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/traces';
+const otelMetricExporterEndpoint =
+  process.env.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/metrics';
 const apiKey = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY;
 const headers = {
   'api-key': apiKey,
@@ -22,7 +24,7 @@ const traceExporter = new OTLPTraceExporter({
 
 // OTLP Metric exporter configuration
 const metricExporter = new OTLPMetricExporter({
-  url: 'https://otlp.eu01.nr-data.net/v1/metrics',
+  url: otelMetricExporterEndpoint,
   headers,
 });
 
@@ -35,7 +37,6 @@ const meterProvider = new MeterProvider({
 meterProvider.addMetricReader(
   new PeriodicExportingMetricReader({
     exporter: metricExporter,
-    exportIntervalMillis: 60000, // Exports metrics every 60 seconds
   })
 );
 
