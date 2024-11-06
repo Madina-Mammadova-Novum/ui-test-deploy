@@ -61,12 +61,12 @@ const testMetric = meter.createCounter('test_metric_counter', {
 
 // Increment the test metric once on startup
 testMetric.add(1);
+requestDuration.record(1);
 
 // Schedule periodic increments to verify continuous export
 setInterval(() => {
-  testMetric.add(1);
-  /* eslint-disable no-console */
-  console.log('Test metric incremented');
+  const testDuration = 0.5; // Example fixed duration
+  testMetric.add(1, { duration: testDuration });
 }, 30000); // Increments every 30 seconds
 
 // NodeSDK setup for OpenTelemetry tracing
