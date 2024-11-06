@@ -1,26 +1,57 @@
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
+import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
+
+// OTLP Trace exporter configuration
 const traceExporter = new OTLPTraceExporter({
-  url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.nr-data.net/v1/traces',
+  url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/traces',
   headers: {
     'api-key': process.env.IDENTITY_NEW_RELIC_LICENSE_KEY,
   },
 });
 
-// TODO: BatchSpanProcessor settings
-// const batchSpanProcessor = new BatchSpanProcessor(traceExporter, {
-//   maxExportBatchSize: 200, // Increased batch size for higher throughput and more data per export
-//   scheduledDelayMillis: 2000, // Reduced delay for near real-time exporting every 2 seconds
-//   exportTimeoutMillis: 30000, // Timeout of 30 seconds remains ideal for reliability
-//   maxQueueSize: 4000, // Increased queue size to handle higher traffic spikes
-// });
+// OTLP Metric exporter configuration
+const metricExporter = new OTLPMetricExporter({
+  url: 'https://otlp.eu01.nr-data.net/v1/metrics',
+  headers: {
+    'api-key': process.env.IDENTITY_NEW_RELIC_LICENSE_KEY,
+  },
+});
 
+// MeterProvider with PeriodicExportingMetricReader for metrics
+const meterProvider = new MeterProvider({
+  resource: new Resource({
+    [ATTR_SERVICE_NAME]: serviceName,
+  }),
+});
+meterProvider.addMetricReader(
+  new PeriodicExportingMetricReader({
+    exporter: metricExporter,
+    exportIntervalMillis: 60000, // Exports metrics every 60 seconds
+  })
+);
+
+// Creating metrics
+const meter = meterProvider.getMeter('http_metrics');
+
+// Request Duration Metric (Histogram)
+const requestDuration = meter.createHistogram('http_request_duration_seconds', {
+  description: 'The duration of HTTP requests in seconds',
+});
+
+// Error Count Metric (Counter)
+const errorCount = meter.createCounter('http_error_count', {
+  description: 'The count of HTTP errors',
+});
+
+// NodeSDK setup for OpenTelemetry tracing
 const sdk = new NodeSDK({
   resource: new Resource({
     [ATTR_SERVICE_NAME]: serviceName,
@@ -33,8 +64,25 @@ const sdk = new NodeSDK({
       '@opentelemetry/instrumentation-http': {
         enabled: true,
         requestHook: (span, request) => {
-          // Customize HTTP span name to include method and route
+          // Customize HTTP span name to include method and route, or 'UNKNOWN_ROUTE' if URL is undefined
           span.updateName(`${request.method} ${request.url || 'UNKNOWN_ROUTE'}`);
+        },
+        responseHook: (span, response) => {
+          // Calculate duration and record metrics based on response status
+          const duration = span.endTime[0] - span.startTime[0] + (span.endTime[1] - span.startTime[1]) / 1e9;
+          requestDuration.record(duration, {
+            method: response.method,
+            route: response.route,
+            status_code: response.statusCode,
+          });
+
+          if (response.statusCode >= 400) {
+            errorCount.add(1, {
+              method: response.method,
+              route: response.route,
+              status_code: response.statusCode,
+            });
+          }
         },
       },
     }),
@@ -42,4 +90,5 @@ const sdk = new NodeSDK({
   spanProcessor: new BatchSpanProcessor(traceExporter),
 });
 
+// Start the SDK for tracing and metrics
 sdk.start();
