@@ -42,13 +42,4 @@ const sdk = new NodeSDK({
   spanProcessor: new BatchSpanProcessor(traceExporter),
 });
 
-sdk
-  .start()
-  .then(() => {
-    /* eslint-disable no-console */
-    console.log('OpenTelemetry SDK with metrics started successfully');
-  })
-  .catch((error) => {
-    /* eslint-disable no-console */
-    console.error('Error starting OpenTelemetry SDK with metrics', error);
-  });
+sdk.start();
