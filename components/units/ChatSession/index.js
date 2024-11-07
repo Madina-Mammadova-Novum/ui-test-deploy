@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
-import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
+import ChatBubbleUser from '@/assets/images/chatBubbleUser.svg';
+import { ArchiveButton, Badge, HoverableIcon, ReActivateButton } from '@/elements';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
@@ -94,7 +95,10 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     >
       <ChatConversationCard data={data} />
       <div className="relative flex flex-col justify-end">
-        <Badge className="-top-0.5 right-1 h-5 w-5 p-1" counter={data?.messageCount} />
+        <div>
+          <HoverableIcon icon={<ChatBubbleUser className="fill-black" />} />
+          <Badge counter={data?.messageCount} className="-right-1 -top-1 p-2.5" />
+        </div>
         {actions[tab]}
         {sessionId === data?.chatId && state[tab]}
       </div>
