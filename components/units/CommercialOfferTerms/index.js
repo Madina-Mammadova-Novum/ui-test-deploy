@@ -10,6 +10,7 @@ import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
 import { setDemurragePaymentTerms, setPaymentTerms } from '@/store/entities/offer/slice';
 import { getOfferSelector } from '@/store/selectors';
+import { transformDate } from '@/utils/date';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -19,9 +20,14 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const [freightEstimation, setFreightEstimation] = useState({});
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [demurrageLoader, setDemurrageLoader] = useState(false);
-
   const { ranges, valid, loading, data } = useSelector(getOfferSelector);
-  const { paymentTerms, demurragePaymentTerms, freightFormats } = data;
+  const {
+    paymentTerms,
+    demurragePaymentTerms,
+    freightFormats,
+    laycanEnd: laycanEndAtValidation,
+    laycanStart: laycanStartAtValidation,
+  } = data;
 
   const {
     watch,
@@ -39,6 +45,11 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
     const currentFreightType = parseFloat(currentFreight?.value);
     return freightFormats?.find((format) => parseFloat(format?.value) === currentFreightType);
   };
+
+  const laycanPeriod =
+    laycanStartAtValidation && laycanEndAtValidation
+      ? `${transformDate(laycanStartAtValidation, 'MMM dd, yyyy')} - ${transformDate(laycanEndAtValidation, 'MMM dd, yyyy')}`
+      : '';
 
   const selectedFreight = getFreightValue();
 
@@ -137,6 +148,9 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <Title level="3">Commercial offer terms</Title>
       <div className="mt-3 flex items-center">
         <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-6' }} name="cargoType" />
+        {laycanPeriod && laycanPeriod !== 'Jan 01, 0001 - Jan 01, 0001' && (
+          <Input label="laycan period" customStyles="w-1/2" value={laycanPeriod} disabled />
+        )}
       </div>
       {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
       <div className="mt-3 flex w-1/2 items-baseline gap-x-5 pr-5">

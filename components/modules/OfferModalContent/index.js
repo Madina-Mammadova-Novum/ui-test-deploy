@@ -47,7 +47,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const offer = useSelector(getOfferSelector);
   const { searchParams } = useSelector(getSearchSelector);
-  const { laycanStart, laycanEnd, loadTerminal, dischargeTerminal, products } = searchParams;
+  const { loadTerminal, dischargeTerminal, products } = searchParams;
   const { voyageDetails } = voyageDetailsAdapter({ data: searchParams });
 
   const handleChangeState = (key, value) => {
@@ -77,8 +77,8 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         comment,
         responseCountdown,
         tankerId,
-        laycanStart,
-        laycanEnd,
+        laycanStart: offer?.data?.laycanStart,
+        laycanEnd: offer?.data?.laycanEnd,
         loadTerminal,
         dischargeTerminal,
         products,
