@@ -571,8 +571,14 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
 };
 
 export const downloadFile = ({ url, fileName }) => {
+  const token = getCookieFromBrowser('session-access-token');
   const requestUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
-  fetch(requestUrl)
+
+  fetch(requestUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
     .then((response) => response.blob())
     .then((blob) => {
       const link = document.createElement('a');
