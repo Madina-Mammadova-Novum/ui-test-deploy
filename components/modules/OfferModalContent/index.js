@@ -48,7 +48,11 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const offer = useSelector(getOfferSelector);
   const { searchParams } = useSelector(getSearchSelector);
   const { loadTerminal, dischargeTerminal, products } = searchParams;
-  const { voyageDetails } = voyageDetailsAdapter({ data: searchParams });
+  const { voyageDetails } = voyageDetailsAdapter({
+    data: searchParams,
+    laycanStart: offer?.data?.laycanStart,
+    laycanEnd: offer?.data?.laycanEnd,
+  });
 
   const handleChangeState = (key, value) => {
     setModalStore((prevState) => ({
