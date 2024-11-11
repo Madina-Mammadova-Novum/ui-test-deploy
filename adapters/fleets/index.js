@@ -220,6 +220,11 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
+      value: requestStatus === 'PendingConfirmation' ? 'Pending' : requestStatus,
+      icon: <StatusIndicator status={requestStatus} />,
+    },
+    {
+      id,
       editable: true,
       name,
       fleetName,
@@ -265,7 +270,6 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
-  const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
@@ -318,13 +322,18 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      value: requestStatus === 'PendingConfirmation' ? 'Pending' : requestStatus,
+      icon: <StatusIndicator status={requestStatus} />,
+    },
+    {
+      id,
       editable: true,
       name,
       isValid: canSendUpdateRequest,
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: vesselInProgress ? requestStatus : 'Request to update info',
+          actionText: 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
           disabled: additionRequested,
@@ -333,9 +342,9 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
         },
         {
           action: ACTIONS.DELETE_TANKER,
-          actionText: 'Delete',
           actionVariant: 'delete',
           actionSize: 'medium',
+          editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,
         },
       ],
     },

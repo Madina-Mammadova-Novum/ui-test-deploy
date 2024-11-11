@@ -13,6 +13,7 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
       case 'Counteroffer':
         return 'bg-blue';
       case 'PendingRequest':
+      case 'PendingConfirmation':
         return 'bg-blue';
       case 'Confirmed':
       case 'Active':

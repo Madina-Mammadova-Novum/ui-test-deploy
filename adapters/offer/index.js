@@ -359,9 +359,9 @@ export function offerDetailsAdapter({ data, role }) {
   };
 }
 
-export function voyageDetailsAdapter({ data }) {
+export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
   if (!data) return null;
-  const { laycanStart, laycanEnd, loadPort, loadTerminal, dischargePort, dischargeTerminal } = data;
+  const { loadPort, loadTerminal, dischargePort, dischargeTerminal } = data;
 
   return {
     voyageDetails: {

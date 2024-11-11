@@ -991,6 +991,13 @@ export const fleetsPageHeader = [
     isSortable: true,
     sortType: 'alphabetical',
   },
+  {
+    text: 'Info status',
+    type: 'SIZE',
+    width: 110,
+    isSortable: true,
+    sortType: 'alphabetical',
+  },
 ];
 
 export const unassignedFleetHeader = [
@@ -1038,6 +1045,13 @@ export const unassignedFleetHeader = [
     text: 'Tanker status',
     type: 'SIZE',
     width: 112,
+    isSortable: true,
+    sortType: 'alphabetical',
+  },
+  {
+    text: 'Info status',
+    type: 'SIZE',
+    width: 110,
     isSortable: true,
     sortType: 'alphabetical',
   },
