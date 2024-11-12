@@ -15,7 +15,7 @@ const initialState = {
   isActiveSession: false,
   data: {
     active: [],
-    archieved: [],
+    archived: [],
     searched: [],
     collapsed: [],
     support: [],
@@ -183,7 +183,7 @@ const chatSlice = createSlice({
         return user;
       });
 
-      state.data.archieved = state.data.archieved.map((user) => {
+      state.data.archived = state.data.archived.map((user) => {
         if (user.chatId === payload.id) {
           return {
             ...user,
@@ -207,7 +207,7 @@ const chatSlice = createSlice({
         return user;
       });
 
-      state.data.archieved = state.data.archieved.map((user) => {
+      state.data.archived = state.data.archived.map((user) => {
         if (user.chatId === payload.id) {
           return {
             ...user,
@@ -231,7 +231,7 @@ const chatSlice = createSlice({
         return user;
       });
 
-      const updatedArchievedState = state.data.archieved.map((user) => {
+      const updatedArchivedState = state.data.archived.map((user) => {
         if (user.contentId === payload?.chatId || user.chatId === payload.chatId) {
           return {
             ...user,
@@ -265,7 +265,7 @@ const chatSlice = createSlice({
       }
 
       state.data.active = updatedActiveState;
-      state.data.archieved = updatedArchievedState;
+      state.data.archived = updatedArchivedState;
       state.data.collapsed = updatedCollapsedState;
     },
   },
@@ -279,7 +279,7 @@ const chatSlice = createSlice({
       state.status = payload.status;
       state.updating = payload.updating;
       state.data.active = payload.active;
-      state.data.archieved = payload.archieved;
+      state.data.archived = payload.archived;
       state.data.support = payload.support;
     });
     builder.addCase(getListOfChats.rejected, (state) => {

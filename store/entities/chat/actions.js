@@ -22,12 +22,12 @@ export const getListOfChats = createAsyncThunk(CHAT.GET_CHATS, async (_, { dispa
 
   dispatch(setUpdate(true));
 
-  const activeChats = chatlist?.filter(({ chat }) => !chat?.archieved);
-  const archivedChats = chatlist?.filter(({ chat }) => chat?.archieved);
+  const activeChats = chatlist?.filter(({ chat }) => !chat?.archived);
+  const archivedChats = chatlist?.filter(({ chat }) => chat?.archived);
 
   return {
     active: listOfChatsDataAdapter({ data: activeChats }),
-    archieved: listOfChatsDataAdapter({ data: archivedChats }),
+    archived: listOfChatsDataAdapter({ data: archivedChats }),
     support: helpCenterDataAdapter({ data: support }),
     updating: false,
     status: status || statusSupp,
