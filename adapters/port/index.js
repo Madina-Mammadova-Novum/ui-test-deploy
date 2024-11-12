@@ -8,7 +8,7 @@ export const portAdapter = ({ data }) => {
     id,
     name,
     locode,
-    longtitude,
+    longitude,
     latitude,
     isRegistryPort,
     appearsInSearch,
@@ -27,7 +27,7 @@ export const portAdapter = ({ data }) => {
     name,
     code: locode,
     coordinates: {
-      longtitude,
+      longitude,
       latitude,
     },
     options: {

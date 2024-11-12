@@ -98,7 +98,7 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 
 export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state) => {
   const activeCounter = state?.data?.active.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
-  const archivedCounter = state?.data?.archieved.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
+  const archivedCounter = state?.data?.archived.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
 
   const totalMessagesCounter = activeCounter + archivedCounter;
   const newMessages = state?.data?.support?.[0]?.messageCount > 0 ? totalMessagesCounter + 1 : totalMessagesCounter;
@@ -114,7 +114,7 @@ export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state)
     tab: state.filterParams?.tabValue,
     limit: state.filterParams?.limit,
     totalActive: state.data?.active?.length,
-    totalArchived: state.data?.archieved?.length,
+    totalArchived: state.data?.archived?.length,
     isActive: state.isActiveSession,
     status: state.status,
   };
