@@ -9,8 +9,10 @@ export function userRoleAdapter({ data }) {
 
   switch (data) {
     case 'VesselOwner':
+    case ['VesselOwner', 'Deactivated']:
       return ROLES.OWNER;
     case 'Charterer':
+    case ['Charterer', 'Deactivated']:
       return ROLES.CHARTERER;
     default:
       return ROLES.ANON;
