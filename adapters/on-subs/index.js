@@ -365,7 +365,7 @@ const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
     title,
     comments,
     name: fileName,
-    extention,
+    extension,
     size,
     createdAt,
     status,
@@ -410,7 +410,7 @@ const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: extention,
+      value: extension,
       disabled: isDocumentDeleted,
     },
     {
@@ -469,7 +469,7 @@ export const onSubsAddDocumentAdapter = ({ data }) => {
     name,
     comments: comment,
     size,
-    extention: extension,
+    extension: extension,
     url: file,
   };
 };

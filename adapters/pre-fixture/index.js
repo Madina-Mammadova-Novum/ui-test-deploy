@@ -297,7 +297,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
 const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
   if (!data) return {};
 
-  const { id, title, comments, name: fileName, extention, size, createdAt, url } = data;
+  const { id, title, comments, name: fileName, extension, size, createdAt, url } = data;
 
   return [
     {
@@ -330,7 +330,7 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: extention,
+      value: extension,
     },
     {
       id,
