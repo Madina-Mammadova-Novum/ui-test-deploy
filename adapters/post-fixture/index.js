@@ -276,7 +276,7 @@ const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     title,
     comments,
     name: fileName,
-    extention,
+    extension,
     size,
     createdAt,
     status,
@@ -321,7 +321,7 @@ const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: extention,
+      value: extension,
       disabled: isDocumentDeleted,
     },
     {
