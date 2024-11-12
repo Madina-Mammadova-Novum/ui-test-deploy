@@ -13,6 +13,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     laycanEnd,
     expiresAt,
     frozenAt,
+    isFailed,
   } = data;
 
   const { port: { name: portName, locode } = {} } = loadTerminal || {};
@@ -63,6 +64,13 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
         autoStart: !frozenAt,
       },
     },
+    {
+      label: 'Status',
+      textStyles: 'text-red',
+      freezed: frozenAt,
+      text: 'Failed',
+      isFailed,
+    },
   ];
 };
 
@@ -75,6 +83,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     laycanEnd,
     expiresAt,
     frozenAt,
+    isFailed,
   } = data;
   const { port: { name, locode } = {} } = loadTerminal || {};
 
@@ -117,6 +126,13 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
         date: calculateCountdown(expiresAt, frozenAt),
         autoStart: !frozenAt,
       },
+    },
+    {
+      label: 'Status',
+      textStyles: 'text-red',
+      freezed: frozenAt,
+      text: 'Failed',
+      isFailed,
     },
   ];
 };
