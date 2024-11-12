@@ -469,7 +469,7 @@ export const onSubsAddDocumentAdapter = ({ data }) => {
     name,
     comments: comment,
     size,
-    extension: extension,
+    extension,
     url: file,
   };
 };
