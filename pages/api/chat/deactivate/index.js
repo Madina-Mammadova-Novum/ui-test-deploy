@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getRtURL(`/chat/${req.query.chatId}/archieve`),
+    path: getRtURL(`/chat/${req.query.chatId}/archive`),
     dataAdapter: (data) => data,
     requestMethod: 'POST',
     options: { headers: Authorization(token) },
