@@ -1,25 +1,39 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input } from '@/elements';
-import { forgotPasswordSchema } from '@/lib/schemas';
+import { captchaSchema, forgotPasswordSchema } from '@/lib/schemas';
 import { forgotPassword } from '@/services/user';
+import { Captcha } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ForgotPasswordForm = () => {
-  const schema = yup.object().shape({ ...forgotPasswordSchema() });
+  const [captcha, setCaptcha] = useState('');
+
+  const schema = yup.object().shape({
+    ...forgotPasswordSchema(),
+    ...captchaSchema(),
+  });
 
   const methods = useHookFormParams({ schema });
 
   const {
     reset,
     register,
+    setValue,
+    trigger,
     formState: { isSubmitting, errors },
   } = methods;
+
+  useEffect(() => {
+    setValue('captcha', captcha);
+    trigger('captcha');
+  }, [captcha, setValue, trigger]);
 
   const onSubmit = async (formData) => {
     const { error, message } = await forgotPassword({ data: formData });
@@ -53,6 +67,7 @@ const ForgotPasswordForm = () => {
           disabled={isSubmitting}
           error={errors.email?.message}
         />
+        <Captcha onChange={setCaptcha} />
       </FormManager>
     </FormProvider>
   );
