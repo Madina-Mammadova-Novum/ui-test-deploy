@@ -65,6 +65,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
 
   const productsLimitExceeded = productState?.length >= 3;
+  const isSavedSearch = getValues('isSavedSearch');
 
   const handleMore = () => setPerList((prev) => prev + 100);
 
@@ -200,7 +201,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const isSavedSearch = getValues('isSavedSearch');
       const cargoType = getValues('cargoType');
       const currentProducts = getValues('products');
 
@@ -230,6 +230,47 @@ const SearchFormFields = ({ productState, setProductState }) => {
             density: relatedProducts.data.find(({ id }) => id === product.value).density,
           })),
         });
+
+        const loadPort = getValues('loadPort');
+        const dischargePort = getValues('dischargePort');
+
+        await Promise.all([
+          loadPort?.value &&
+            (async () => {
+              setTerminals((prev) => ({
+                ...prev,
+                loadPortTerminals: { loading: true, data: prev.loadPortTerminals.data },
+              }));
+
+              const loadPortTerminals = await getTerminals(loadPort.value);
+
+              setTerminals((prev) => ({
+                ...prev,
+                loadPortTerminals: {
+                  loading: false,
+                  data: convertDataToOptions(loadPortTerminals, 'id', 'name'),
+                },
+              }));
+            })(),
+
+          dischargePort?.value &&
+            (async () => {
+              setTerminals((prev) => ({
+                ...prev,
+                dischargePortTerminals: { loading: true, data: prev.dischargePortTerminals.data },
+              }));
+
+              const dischargePortTerminals = await getTerminals(dischargePort.value);
+
+              setTerminals((prev) => ({
+                ...prev,
+                dischargePortTerminals: {
+                  loading: false,
+                  data: convertDataToOptions(dischargePortTerminals, 'id', 'name'),
+                },
+              }));
+            })(),
+        ]);
       }
     };
 
@@ -238,7 +279,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
     return () => {
       setValue('isSavedSearch', false);
     };
-  }, []);
+  }, [isSavedSearch]);
 
   return (
     <div className="flex flex-col sm:flex-row">
