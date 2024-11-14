@@ -20,7 +20,7 @@ const ForgotPasswordForm = () => {
     ...captchaSchema(),
   });
 
-  const methods = useHookFormParams({ schema });
+  const methods = useHookFormParams({ schema, mode: 'onSubmit' });
 
   const {
     reset,

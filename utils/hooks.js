@@ -72,10 +72,11 @@ export const useHookForm = () => {
   return { ...methods };
 };
 
-export const useHookFormParams = ({ state = null, schema = null }) => {
+export const useHookFormParams = ({ state = null, schema = null, mode = null }) => {
   const params = useForm({
     defaultValues: state,
     resolver: schema ? yupResolver(schema) : null,
+    mode,
   });
 
   return params;
