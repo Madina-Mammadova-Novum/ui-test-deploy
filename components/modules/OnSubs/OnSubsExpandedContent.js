@@ -9,13 +9,13 @@ import ExtendOnSubsCountdown from './ExtendOnSubsCountdown';
 
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
+import PrintSVG from '@/assets/images/print.svg';
 import { Button } from '@/elements';
 import { getPdfToPrint } from '@/services/offer';
 import { getUserDataSelector } from '@/store/selectors';
 import { ModalWindow, Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
-import PrintSVG from '@/assets/images/print.svg';
 
 const tabs = [
   {
