@@ -9,12 +9,13 @@ Fetches data from the API using the GET method.
   @returns {Promise} A promise that resolves with the response from the API.
   @throws {Error} - Will throw an error if the API request fails.
  */
-export function getData(path, options) {
+export function getData(path, options, responseType = null) {
   // Sends an API request using the GET method with the provided path and options
   return apiHandler({
     path: getApiPublicURL(path),
     requestMethod: 'GET',
     options,
+    ...(responseType && { responseType }), // Include responseType if provided
   });
 }
 
