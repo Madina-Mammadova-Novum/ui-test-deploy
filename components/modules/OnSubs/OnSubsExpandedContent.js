@@ -38,35 +38,51 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
 
   const handlePrint = async () => {
     setIsLoading(true);
+    let pdfUrl;
+    let iframe;
 
     try {
       const response = await getPdfToPrint(offerId);
 
-      if (response?.data) {
-        // Create blob URL
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const pdfUrl = URL.createObjectURL(blob);
+      if (!response?.data) {
+        errorToast('Print Error', 'No PDF data found in response');
+      }
 
-        // Create a temporary iframe
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-        iframe.src = pdfUrl;
+      // Create blob URL
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      pdfUrl = URL.createObjectURL(blob);
 
-        // Wait for iframe to load then print
+      // Create temporary iframe
+      iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.src = pdfUrl;
+
+      // Set up print timeout
+      const printTimeout = setTimeout(() => {
+        errorToast('Print Error', 'Print dialog failed to open - timeout');
+      }, 5000);
+
+      // Wait for iframe to load then print
+      await new Promise((resolve, reject) => {
         iframe.onload = () => {
           try {
+            clearTimeout(printTimeout);
             iframe.contentWindow.print();
+            resolve();
           } catch (error) {
             errorToast('Print Error', 'Failed to open print dialog');
+            reject(new Error('Failed to open print dialog'));
+          } finally {
+            iframe.onload = null;
           }
         };
-      } else {
-        errorToast('PDF Error', 'No PDF data found in response');
-      }
+      });
     } catch (error) {
-      errorToast('PDF Error', 'Failed to fetch PDF data');
+      errorToast('Print Error', error.message);
     } finally {
+      // Cleanup
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
       setIsLoading(false);
     }
   };
@@ -110,7 +126,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
               size: 'large',
               icon: { before: <PrintSVG /> },
             }}
-            customStyles="!border-black !text-black"
+            customStyles="!text-black"
             onClick={handlePrint}
             disabled={isLoading}
           />
