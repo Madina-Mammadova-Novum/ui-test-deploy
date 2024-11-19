@@ -217,3 +217,13 @@ export async function requestCountdownExtension({ data }) {
     ...response,
   };
 }
+
+export async function getPdfToPrint(offerId) {
+  const path = `account/on-subs/recap/${offerId}`;
+
+  const response = await getData(path, null, 'pdf');
+
+  return {
+    ...response,
+  };
+}
