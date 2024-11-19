@@ -46,6 +46,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
 
       if (!response?.data) {
         errorToast('Print Error', 'No PDF data found in response');
+        return;
       }
 
       // Create blob URL
@@ -58,22 +59,22 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
       document.body.appendChild(iframe);
       iframe.src = pdfUrl;
 
-      // Set up print timeout
-      const printTimeout = setTimeout(() => {
-        errorToast('Print Error', 'Print dialog failed to open - timeout');
-      }, 5000);
+      let printTimeout;
 
       // Wait for iframe to load then print
       await new Promise((resolve, reject) => {
         iframe.onload = () => {
           try {
-            clearTimeout(printTimeout);
             iframe.contentWindow.print();
+            printTimeout = setTimeout(() => {
+              errorToast('Print Error', 'Print dialog failed to open - timeout');
+            }, 10000);
             resolve();
           } catch (error) {
             errorToast('Print Error', 'Failed to open print dialog');
             reject(new Error('Failed to open print dialog'));
           } finally {
+            clearTimeout(printTimeout);
             iframe.onload = null;
           }
         };
