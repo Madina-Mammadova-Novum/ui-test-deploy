@@ -17,8 +17,6 @@ const getClientIP = (req) => {
     req.socket?.remoteAddress;
 
   if (!ip || ip === '::1' || ip.startsWith('127.')) {
-    /* eslint-disable no-console */
-    console.warn('Unable to determine client IP address');
     return 'Unknown';
   }
 
