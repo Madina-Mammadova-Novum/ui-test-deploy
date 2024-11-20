@@ -16,7 +16,7 @@ const getClientIP = (req) => {
     req.headers['x-client-ip'] ||
     req.socket?.remoteAddress;
 
-  if (!ip || ip === '::1' || ip.startsWith('127.')) {
+  if (!ip || ip === '::1' || ip.startsWith('127.') || ip.startsWith('::ffff:127.')) {
     return 'Unknown';
   }
 
@@ -35,16 +35,21 @@ export const apiHandler = async (options) => {
 export const responseHandler = async ({ req, res, dataAdapter, ...rest }) => {
   const ip = getClientIP(req);
 
+  const headers = {
+    ...req.headers,
+    'x-forwarded-for': req.headers['x-forwarded-for'] ? `${req.headers['x-forwarded-for']}, ${ip}` : ip,
+  };
+
   const response = await apiHandler({
-    ...rest,
     body: req.body,
     options: {
       ...req.options,
-      headers: {
-        ...req.headers,
-        'x-forwarded-for': ip,
+      options: {
+        ...req.options,
+        headers,
       },
     },
+    ...rest,
   });
 
   const data = await dataAdapter({ data: response.data });
