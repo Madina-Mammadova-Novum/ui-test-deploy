@@ -33,6 +33,7 @@ export const apiHandler = async (options) => {
 };
 
 export const responseHandler = async ({ req, res, dataAdapter, ...rest }) => {
+  // Load Test should be added for checking here DDOS
   const ip = getClientIP(req);
 
   const headers = {
