@@ -14,6 +14,6 @@ export default async function handler(req, res) {
     requestMethod: 'GET',
     path: getApiURL(`v1/${role}/deals/onsubs?Skip=${req.body.skip}&PageSize=${req.body.pageSize}`),
     dataAdapter: responseOwnerPrefixtureAdapter,
-    options: { headers: Authorization(token) },
+    options: { headers: { ...Authorization(token), 'X-Forwarded-For': '172.211.210.40' } },
   });
 }
