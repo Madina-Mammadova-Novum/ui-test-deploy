@@ -46,10 +46,6 @@ export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = 
       url: path,
       data: body,
       ...options,
-      headers: {
-        ...(options?.headers || {}),
-        'X-Forwarded-For': '172.211.210.39',
-      },
     };
   }
 
@@ -57,12 +53,11 @@ export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = 
     method: requestMethod,
     url: path,
     data: null,
-    ...options,
     headers: {
       Accept: responseType === 'pdf' ? 'application/pdf' : '*/*',
       ...(options?.headers || {}),
-      'X-Forwarded-For': '172.211.210.39',
     },
+    ...options,
     ...(responseType === 'pdf' && { responseType: 'blob' }),
   };
 };
