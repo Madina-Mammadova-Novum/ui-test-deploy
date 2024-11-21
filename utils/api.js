@@ -8,21 +8,6 @@ import {
 import { responseAdapter } from '@/adapters/response';
 import { api } from '@/lib/axios';
 
-// Function to get the client IP address
-const getClientIP = (req) => {
-  const ip =
-    req.headers['x-real-ip'] ||
-    req.headers['x-forwarded-for']?.split(',')[0] ||
-    req.headers['x-client-ip'] ||
-    req.socket?.remoteAddress;
-
-  if (!ip || ip === '::1' || ip.startsWith('127.') || ip.startsWith('::ffff:127.')) {
-    return 'Unknown';
-  }
-
-  return ip;
-};
-
 export const apiHandler = async (options) => {
   try {
     const response = await api.request(apiOptionsAdapter(options));
@@ -33,23 +18,9 @@ export const apiHandler = async (options) => {
 };
 
 export const responseHandler = async ({ req, res, dataAdapter, ...rest }) => {
-  // Load Test should be added for checking here DDOS
-  const ip = getClientIP(req);
-
-  const headers = {
-    ...req.headers,
-    'x-forwarded-for': req.headers['x-forwarded-for'] ? `${req.headers['x-forwarded-for']}, ${ip}` : ip,
-  };
-
   const response = await apiHandler({
     body: req.body,
-    options: {
-      ...req.options,
-      options: {
-        ...req.options,
-        headers,
-      },
-    },
+    options: { ...req?.options, headers: { ...req?.options?.headers, 'X-Forwarded-For': '172.211.210.40' } },
     ...rest,
   });
 
