@@ -8,7 +8,7 @@ import { TankerSearchTypes } from '@/lib/types';
 import { Dropdown, DynamicLoader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
-import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
+import { onReset, resetError, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
 import { SearchForm, SearchNotFound } from '@/units';
 import { errorToast } from '@/utils/hooks';
@@ -39,18 +39,17 @@ const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
     if (error) {
       handleRequest(false);
       errorToast(error.title, error.message);
+      dispatch(resetError());
     }
 
     if (data) {
       handleRequest(true);
     }
-  }, [error, data]);
 
-  useEffect(() => {
     return () => {
       handleReset();
     };
-  }, []);
+  }, [error, data]);
 
   useEffect(() => {
     const baseParams = {

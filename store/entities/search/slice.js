@@ -38,6 +38,9 @@ const searchSlice = createSlice({
     setSearchData: (state, { payload }) => {
       state.searchData = payload;
     },
+    resetError: (state) => {
+      state.error = initialState.error;
+    },
     onReset: (state) => {
       state.searchParams = initialState.searchParams;
       state.searchData = initialState.searchData;
@@ -62,6 +65,7 @@ const searchSlice = createSlice({
   },
 });
 
-export const { onReset, setToggle, setRequest, setSearchData, setSearchParams, setSortingParams } = searchSlice.actions;
+export const { onReset, resetError, setToggle, setRequest, setSearchData, setSearchParams, setSortingParams } =
+  searchSlice.actions;
 
 export default searchSlice.reducer;
