@@ -570,23 +570,48 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   return failedByText;
 };
 
-export const downloadFile = ({ url, fileName }) => {
+export const getFileUrl = ({ url }) => {
   const token = getCookieFromBrowser('session-access-token');
-  const requestUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
 
-  fetch(requestUrl, {
+  return {
+    url,
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  })
-    .then((response) => response.blob())
-    .then((blob) => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      link.click();
-    })
-    .catch(console.error);
+  };
+};
+
+export const handleFileView = async (url) => {
+  try {
+    const { url: fileUrl, headers } = getFileUrl({ url });
+    const response = await fetch(fileUrl, { headers });
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    window.open(objectUrl, '_blank');
+    URL.revokeObjectURL(objectUrl);
+  } catch (error) {
+    console.error('Error viewing file:', error);
+  }
+};
+
+export const downloadFile = async ({ url, fileName }) => {
+  try {
+    const { url: requestUrl, headers } = getFileUrl({ url });
+    const response = await fetch(requestUrl, { headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  } catch (error) {
+    console.error('Download failed:', error);
+    // Handle error appropriately
+  }
 };
 
 export const transformBytes = ({ format = 'mb', value }) => {
