@@ -17,6 +17,7 @@ const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
   const dispatch = useDispatch();
 
   const { data, loading, error, sorting, searchParams, request } = useSelector(getSearchSelector);
+
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
 
   const handleReset = () => dispatch(onReset());
@@ -45,11 +46,13 @@ const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
     if (data) {
       handleRequest(true);
     }
+  }, [error, data]);
 
+  useEffect(() => {
     return () => {
       handleReset();
     };
-  }, [error, data]);
+  }, []);
 
   useEffect(() => {
     const baseParams = {

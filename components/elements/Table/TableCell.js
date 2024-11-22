@@ -4,8 +4,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
 
-import NextLink from '../NextLink';
-
 import { TableCellPropTypes } from '@/lib/types';
 
 import { Button, HoverTooltip, Placeholder } from '@/elements';
@@ -29,12 +27,13 @@ import {
   UpdateTankerForm,
   ViewCommentContent,
 } from '@/units';
-import { downloadFile } from '@/utils/helpers';
+import { downloadFile, handleFileView } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
   const tableRef = useRef(null);
 
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     id,
@@ -216,6 +215,15 @@ const TableCell = ({ cellProps }) => {
     }
   }, [notified, tableRef, value]);
 
+  const handleFileViewWithLoading = async (url) => {
+    try {
+      setIsLoading(true);
+      await handleFileView(url);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <td ref={tableRef} className={`${cellColor} table-cell whitespace-nowrap px-4 py-2`}>
       <div
@@ -235,9 +243,16 @@ const TableCell = ({ cellProps }) => {
           </div>
         )}
         {link && (
-          <NextLink href={link} target="_blank" className="bg-white p-0 text-blue hover:text-blue-darker">
-            View
-          </NextLink>
+          <Button
+            buttonProps={{
+              text: isLoading ? 'Loading...' : 'View',
+              size: 'small',
+              variant: 'primary',
+              disabled: isLoading,
+            }}
+            onClick={() => handleFileViewWithLoading(link)}
+            customStyles="bg-white !p-0 text-blue hover:text-blue-darker disabled:opacity-50"
+          />
         )}
         {downloadData && (
           <Button

@@ -570,23 +570,61 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   return failedByText;
 };
 
-export const downloadFile = ({ url, fileName }) => {
+export const getFileUrl = ({ url }) => {
   const token = getCookieFromBrowser('session-access-token');
-  const requestUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
 
-  fetch(requestUrl, {
+  return {
+    url,
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  })
-    .then((response) => response.blob())
-    .then((blob) => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      link.click();
-    })
-    .catch(console.error);
+  };
+};
+
+export const handleFileView = async (url) => {
+  try {
+    const { url: fileUrl, headers } = getFileUrl({ url });
+    const response = await fetch(fileUrl, { headers });
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    window.open(objectUrl, '_blank');
+    URL.revokeObjectURL(objectUrl);
+  } catch (error) {
+    console.error('Error viewing file:', error);
+  }
+};
+
+export const downloadFile = async ({ url, fileName }) => {
+  try {
+    // Extract file API URL to constants
+    const fileApiUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+
+    // Get auth headers and configured URL
+    const { url: requestUrl, headers } = getFileUrl({ url: fileApiUrl });
+
+    const response = await fetch(requestUrl, {
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Download failed with status: ${response.status}`);
+    }
+
+    // Create blob and trigger download
+    const blob = await response.blob();
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = fileName;
+    downloadLink.click();
+
+    // Cleanup
+    URL.revokeObjectURL(downloadLink.href);
+    downloadLink.remove();
+  } catch (error) {
+    // Use standard error handling
+    console.error('File download failed:', error);
+    throw new Error(parseErrorMessage(error));
+  }
 };
 
 export const transformBytes = ({ format = 'mb', value }) => {
