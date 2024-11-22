@@ -595,8 +595,10 @@ export const handleFileView = async (url) => {
 };
 
 export const downloadFile = async ({ url, fileName }) => {
+  const updatedUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+
   try {
-    const { url: requestUrl, headers } = getFileUrl({ url });
+    const { url: requestUrl, headers } = getFileUrl({ updatedUrl });
     const response = await fetch(requestUrl, { headers });
 
     if (!response.ok) {
