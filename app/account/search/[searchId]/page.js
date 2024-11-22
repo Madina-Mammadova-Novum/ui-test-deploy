@@ -11,10 +11,11 @@ import { prefilledSaveSearchDataAdapter } from '@/adapters/negotiating';
 import { DynamicLoader } from '@/elements';
 import TankerSearch from '@/modules/TankerSearch';
 import { getSavedSearchDetail } from '@/services/savedSearch';
-import { setPrefilledSearchData, setSearchParams } from '@/store/entities/search/slice';
+import { setSearchParams } from '@/store/entities/search/slice';
 
 export default function Page({ params }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const router = useRouter();
   const { searchId } = params;
@@ -24,10 +25,18 @@ export default function Page({ params }) {
     if (searchId) {
       const fetchSavedSearch = async () => {
         const { data, status, error } = await getSavedSearchDetail({ searchId });
+
         if (status === 200) {
-          const prefilledData = prefilledSaveSearchDataAdapter({ data, isSavedSearch: true, savedSearchId: searchId });
-          dispatch(setPrefilledSearchData(prefilledData));
-          dispatch(setSearchParams(prefilledData));
+          if (data.status === 'Disabled') {
+            setIsDisabled(true);
+          } else {
+            const prefilledData = prefilledSaveSearchDataAdapter({
+              data,
+              isSavedSearch: true,
+              savedSearchId: searchId,
+            });
+            dispatch(setSearchParams(prefilledData));
+          }
         } else if (error) {
           console.error('Error fetching saved search:', error);
           router.push('/account/search');
@@ -41,7 +50,7 @@ export default function Page({ params }) {
 
   if (isLoading) return <DynamicLoader />;
 
-  return <TankerSearch isAccountSearch />;
+  return <TankerSearch isAccountSearch isDisabled={isDisabled} />;
 }
 
 Page.propTypes = UrlPropTypes;

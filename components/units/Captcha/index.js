@@ -9,13 +9,13 @@ import { useHookForm } from '@/utils/hooks';
 
 const Captcha = ({ onChange }) => {
   const {
-    formState: { errors },
+    formState: { submitCount, errors },
   } = useHookForm();
 
   return (
     <div>
       <ReCAPTCHA sitekey="6LeDBQMpAAAAAEFmHjH00wX_1kkrnUspo8ZG6ZZu" className="my-2.5" onChange={onChange} />
-      {errors?.captcha && <InputErrorMessage message={errors.captcha.message} />}
+      {submitCount > 0 && errors?.captcha && <InputErrorMessage message={errors.captcha.message} />}
     </div>
   );
 };

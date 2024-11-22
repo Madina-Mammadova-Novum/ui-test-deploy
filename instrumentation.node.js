@@ -1,22 +1,83 @@
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
+import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-node';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 const serviceName = process.env.IDENTITY_NEW_RELIC_APP_NAME || 'next-app';
+const otelTraceExporterEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/traces';
+const otelMetricExporterEndpoint =
+  process.env.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT || 'https://otlp.eu01.nr-data.net/v1/metrics';
+const apiKey = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY;
+const headers = {
+  'api-key': apiKey,
+};
+
+// OTLP Trace exporter configuration
 const traceExporter = new OTLPTraceExporter({
-  url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'https://otlp.nr-data.net/v1/traces',
-  headers: {
-    'api-key': process.env.IDENTITY_NEW_RELIC_LICENSE_KEY,
-  },
+  url: otelTraceExporterEndpoint,
+  headers,
 });
 
+// OTLP Metric exporter configuration
+const metricExporter = new OTLPMetricExporter({
+  url: otelMetricExporterEndpoint,
+  headers,
+});
+
+// MeterProvider with PeriodicExportingMetricReader for metrics
+const meterProvider = new MeterProvider({
+  resource: new Resource({
+    [ATTR_SERVICE_NAME]: serviceName,
+  }),
+});
+meterProvider.addMetricReader(
+  new PeriodicExportingMetricReader({
+    exporter: metricExporter,
+    exportIntervalMillis: 30000, // Exports metrics every 30 seconds for faster verification
+  })
+);
+
+// Creating error count metric
+const meter = meterProvider.getMeter('http_metrics');
+const errorCount = meter.createCounter('http_error_count', {
+  description: 'The count of HTTP errors',
+});
+
+// NodeSDK setup for OpenTelemetry tracing
 const sdk = new NodeSDK({
   resource: new Resource({
     [ATTR_SERVICE_NAME]: serviceName,
   }),
-  spanProcessor: new SimpleSpanProcessor(traceExporter),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-fs': { enabled: false },
+      '@opentelemetry/instrumentation-net': { enabled: false },
+      '@opentelemetry/instrumentation-dns': { enabled: false },
+      '@opentelemetry/instrumentation-http': {
+        enabled: true,
+        requestHook: (span, request) => {
+          // Customize HTTP span name to include method and route, or 'UNKNOWN_ROUTE' if URL is undefined
+          span.updateName(`${request.method} ${request.url || 'UNKNOWN_ROUTE'}`);
+        },
+        responseHook: (span, response) => {
+          // Record an error if the status code is >= 400
+          if (response.statusCode >= 400) {
+            errorCount.add(1, {
+              method: response.method,
+              route: response.route || 'UNKNOWN_ROUTE',
+              status_code: response.statusCode,
+            });
+          }
+        },
+      },
+    }),
+  ],
+  spanProcessor: new BatchSpanProcessor(traceExporter),
 });
 
+// Start the SDK for tracing and metrics
 sdk.start();

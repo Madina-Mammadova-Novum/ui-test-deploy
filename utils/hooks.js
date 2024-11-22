@@ -2,15 +2,20 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { getFilledArray, sortByType } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
 import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
+import { ROUTES } from '@/lib';
 import { ROLES, SORT_OPTIONS } from '@/lib/constants';
+import { clearSession } from '@/store/entities/auth/slice';
+import { resetChat } from '@/store/entities/chat/slice';
+import { resetNotificationData } from '@/store/entities/notifications/slice';
 import { notificationToastFunc, toastFunc } from '@/utils/index';
 
 export const successToast = (title, description = '') => {
@@ -67,10 +72,11 @@ export const useHookForm = () => {
   return { ...methods };
 };
 
-export const useHookFormParams = ({ state = null, schema = null }) => {
+export const useHookFormParams = ({ state = null, schema = null, mode = null }) => {
   const params = useForm({
     defaultValues: state,
     resolver: schema ? yupResolver(schema) : null,
+    mode,
   });
 
   return params;
@@ -246,23 +252,20 @@ export const useDisableNumberInputScroll = () => {
   }, []);
 };
 
-// export const useRefreshSession = () => {
-//   const { data, update } = useSession();
+export const useHandleLogout = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-//   const trigger = Date.now() >= data?.expires;
+  const handleLogout = () => {
+    // Perform logout actions
+    dispatch(clearSession());
+    dispatch(resetNotificationData());
+    dispatch(resetChat());
 
-//   const updateSession = async () => {
-//     try {
-//       const { data: token } = await refreshAccessToken({ token: data?.refreshToken });
-//       await update(tokenAdapter({ data: token }));
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
+    // Redirect to login page
+    router.replace(ROUTES.LOGIN);
+    router.refresh();
+  };
 
-//   useEffect(() => {
-//     if (trigger) {
-//       updateSession();
-//     }
-//   }, [trigger]);
-// };
+  return handleLogout;
+};

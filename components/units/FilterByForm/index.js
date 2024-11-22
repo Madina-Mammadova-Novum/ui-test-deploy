@@ -21,7 +21,8 @@ const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
 
   const onSubmit = async (formData) => {
     const data = filtersAdapter(formData);
-    dispatch(fetchPostFixtureOffers({ page: 1, perPage, filters: data, sorting }));
+
+    dispatch(fetchPostFixtureOffers({ page: 1, perPage, searchParams: data, sorting }));
   };
 
   const onReset = () => {

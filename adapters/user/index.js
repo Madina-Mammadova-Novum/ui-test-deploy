@@ -7,14 +7,17 @@ import { formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/
 export function userRoleAdapter({ data }) {
   if (!data) return null;
 
-  switch (data) {
-    case 'VesselOwner':
-      return ROLES.OWNER;
-    case 'Charterer':
-      return ROLES.CHARTERER;
-    default:
-      return ROLES.ANON;
+  const roles = Array.isArray(data) ? data : [data];
+
+  if (roles.includes('VesselOwner')) {
+    return ROLES.OWNER;
   }
+
+  if (roles.includes('Charterer')) {
+    return ROLES.CHARTERER;
+  }
+
+  return ROLES.ANON;
 }
 
 export function listOfImosAdapter({ data }) {

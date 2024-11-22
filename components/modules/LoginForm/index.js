@@ -46,7 +46,7 @@ const LoginForm = () => {
 
   const handleResetFields = () => {
     methods.reset((formValues) => {
-      resetObjectFields(formValues, '');
+      resetObjectFields({ initialObject: formValues, resetType: '' });
       return formValues;
     });
   };

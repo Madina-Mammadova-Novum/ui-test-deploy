@@ -29,7 +29,8 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
 
   const handleResetFields = () => {
     methods.reset((formValues) => {
-      resetObjectFields(formValues);
+      resetObjectFields({ initialObject: formValues });
+
       return formValues;
     });
   };

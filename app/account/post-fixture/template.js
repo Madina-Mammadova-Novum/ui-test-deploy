@@ -16,7 +16,7 @@ export default function PostFixtureLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages, filters, sorting } = useSelector(getPostFixtureDataSelector);
+  const { offers, totalPages, searchParams, sorting } = useSelector(getPostFixtureDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -30,7 +30,7 @@ export default function PostFixtureLayout({ children }) {
       fetchPostFixtureOffers({
         page: paginationParams.currentPage,
         perPage: paginationParams.perPage,
-        filters,
+        searchParams,
         sorting,
       })
     );
@@ -38,7 +38,7 @@ export default function PostFixtureLayout({ children }) {
 
   useEffect(() => {
     if (paginationParams.currentPage > 1) paginationParams.handlePageChange({ selected: 0 });
-  }, [JSON.stringify({ ...filters, ...sorting })]);
+  }, [JSON.stringify({ ...searchParams, ...sorting })]);
 
   const layoutConfig = {
     withActions: false,

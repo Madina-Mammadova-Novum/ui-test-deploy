@@ -24,7 +24,7 @@ const PostFixture = () => {
     sortColumn: '',
   });
 
-  const { offers, loading, toggle, perPage, filters } = useSelector(getPostFixtureDataSelector);
+  const { offers, loading, toggle, perPage, filters, searchParams } = useSelector(getPostFixtureDataSelector);
   const { sortColumnDirectionOptions, sortColumnDirection, sortColumnOptions, sortColumn } = userStore;
 
   const handleChangeState = (key, value) => {
@@ -39,7 +39,7 @@ const PostFixture = () => {
       fetchPostFixtureOffers({
         page: 1,
         perPage,
-        filters,
+        searchParams,
         sorting: {
           sortColumnDirection: sortColumnDirection?.value,
           sortColumn: sortColumn?.value,
@@ -77,6 +77,7 @@ const PostFixture = () => {
       <FilterByForm isLoading={loading}>
         <PostFixtureFilter {...filters} />
       </FilterByForm>
+
       <div className="flex items-center justify-end gap-2.5 pt-6">
         <Label className="text-xs-sm font-semibold">Sort cargoes by:</Label>
         <div className="flex">

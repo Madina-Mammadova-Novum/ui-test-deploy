@@ -18,7 +18,9 @@ const AccountPositions = () => {
     if (loading) return <DynamicLoader />;
     if (vessels?.length > 0) return vessels.map(printExpandableCard);
 
-    return <Title level="3">No opened positions</Title>;
+    if (unassignedVessel?.tankers?.length === 0) return <Title level="3">No opened positions</Title>;
+
+    return null;
   }, [loading, vessels, toggle]);
 
   return (

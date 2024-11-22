@@ -12,8 +12,8 @@ import { calculateAmountOfPages, convertDataToOptions, options } from '@/utils/h
 
 export const fetchPostFixtureOffers = createAsyncThunk(
   POST_FIXTURE.GET_POST_FIXTURE_OFFERS,
-  async ({ page = 1, perPage = 5, filters = {}, sorting = {} }, { rejectWithValue }) => {
-    const { data, recordsTotal } = await getPostFixtureOffers({ page, perPage, filters, sorting });
+  async ({ page = 1, perPage = 5, searchParams = {}, sorting = {} }, { rejectWithValue }) => {
+    const { data, recordsTotal } = await getPostFixtureOffers({ page, perPage, filters: searchParams, sorting });
     const cargoTypesData = await getCargoTypes();
     const cargoCodesData = await getPostFixtureCargoCodes();
     const tankerNamesData = await getPostFixtureTankerNames();
@@ -33,6 +33,7 @@ export const fetchPostFixtureOffers = createAsyncThunk(
           cargoCodes: options(cargoCodesData.data),
           tankerNames: options(tankerNamesData.data),
         },
+        searchParams,
       },
     };
   }

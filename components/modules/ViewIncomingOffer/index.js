@@ -14,7 +14,7 @@ import { getUserDataSelector } from '@/store/selectors';
 import { OfferDeclineForm } from '@/units';
 import { errorToast } from '@/utils/hooks';
 
-const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
+const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
   const [step, setStep] = useState('view_offer');
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
@@ -38,6 +38,14 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData }) => {
   useEffect(() => {
     initActions();
   }, []);
+
+  useEffect(() => {
+    if (step === 'offer_decline') minimizeModal(true);
+
+    return () => {
+      minimizeModal(false);
+    };
+  }, [step]);
 
   if (loading) {
     return (

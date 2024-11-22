@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { addDays } from 'date-fns';
 import PropTypes from 'prop-types';
@@ -15,17 +16,21 @@ import { getCargoTypes } from '@/services/cargoTypes';
 import { getPortsForSearchForm } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
+import { setSearchParams } from '@/store/entities/search/slice';
+import { getSearchSelector } from '@/store/selectors';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = ({ productState, setProductState }) => {
+  const dispatch = useDispatch();
+  const { searchParams } = useSelector(getSearchSelector);
+
   const {
     register,
     clearErrors,
     formState: { errors, isSubmitting },
     setValue,
     getValues,
-    unregister,
     control,
   } = useHookForm();
 
@@ -60,6 +65,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
 
   const productsLimitExceeded = productState?.length >= 3;
+  const isSavedSearch = getValues('isSavedSearch');
 
   const handleMore = () => setPerList((prev) => prev + 100);
 
@@ -123,13 +129,47 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const handleAddProduct = () => {
     const availableProductIds = [0, 1, 2];
-    setProductState((prevState) => [...prevState, availableProductIds.filter((el) => !prevState.includes(el))[0]]);
+    const currentProductIndexes = productState;
+
+    const newProductId = availableProductIds.find((el) => !currentProductIndexes.includes(el));
+
+    if (newProductId !== undefined) {
+      setProductState((prevState) => [...prevState, newProductId]);
+
+      const updatedProductsByIndex = [...(searchParams?.productsByIndex || [0]), newProductId];
+      const updatedSearchParams = {
+        ...searchParams,
+        productsByIndex: updatedProductsByIndex,
+      };
+
+      dispatch(setSearchParams(updatedSearchParams));
+    }
   };
 
   const handleRemoveProduct = (id) => {
     clearErrors(`products[${id}]`);
-    unregister(`products[${id}]`);
-    setProductState((prevState) => prevState.filter((product) => product !== id));
+    const currentProducts = getValues('products');
+
+    const updatedProducts = currentProducts.filter((_, index) => index !== id);
+
+    setValue('products', updatedProducts);
+
+    setProductState((prevState) => (id === 0 ? prevState.slice(0, -1) : prevState.filter((product) => product !== id)));
+
+    const updatedProductsByIndex =
+      id === 0
+        ? (searchParams?.productsByIndex || []).slice(0, -1) // remove last if `id` is `0`
+        : searchParams?.productsByIndex.filter((_, index) => index !== id); // remove by `id` otherwise
+
+    const updatedSearchParamsProducts = searchParams?.products.filter((_, index) => index !== id);
+
+    const updatedSearchParams = {
+      ...searchParams,
+      products: updatedSearchParamsProducts,
+      productsByIndex: updatedProductsByIndex,
+    };
+
+    dispatch(setSearchParams(updatedSearchParams));
   };
 
   const getCargoes = async () => {
@@ -161,7 +201,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const isSavedSearch = getValues('isSavedSearch');
       const cargoType = getValues('cargoType');
       const currentProducts = getValues('products');
 
@@ -191,6 +230,47 @@ const SearchFormFields = ({ productState, setProductState }) => {
             density: relatedProducts.data.find(({ id }) => id === product.value).density,
           })),
         });
+
+        const loadPort = getValues('loadPort');
+        const dischargePort = getValues('dischargePort');
+
+        await Promise.all([
+          loadPort?.value &&
+            (async () => {
+              setTerminals((prev) => ({
+                ...prev,
+                loadPortTerminals: { loading: true, data: prev.loadPortTerminals.data },
+              }));
+
+              const loadPortTerminals = await getTerminals(loadPort.value);
+
+              setTerminals((prev) => ({
+                ...prev,
+                loadPortTerminals: {
+                  loading: false,
+                  data: convertDataToOptions(loadPortTerminals, 'id', 'name'),
+                },
+              }));
+            })(),
+
+          dischargePort?.value &&
+            (async () => {
+              setTerminals((prev) => ({
+                ...prev,
+                dischargePortTerminals: { loading: true, data: prev.dischargePortTerminals.data },
+              }));
+
+              const dischargePortTerminals = await getTerminals(dischargePort.value);
+
+              setTerminals((prev) => ({
+                ...prev,
+                dischargePortTerminals: {
+                  loading: false,
+                  data: convertDataToOptions(dischargePortTerminals, 'id', 'name'),
+                },
+              }));
+            })(),
+        ]);
       }
     };
 
@@ -199,7 +279,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
     return () => {
       setValue('isSavedSearch', false);
     };
-  }, []);
+  }, [isSavedSearch]);
 
   return (
     <div className="flex flex-col sm:flex-row">

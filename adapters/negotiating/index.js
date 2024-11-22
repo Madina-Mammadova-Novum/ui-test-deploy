@@ -662,11 +662,13 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType: { id: cargoId, name: cargoName } = {} } = {},
     products,
   } = data;
+
   const {
     id: loadTerminalId,
     name: loadTerminalName,
     port: { id: loadPortId, name: loadPortName, locode: loadPortLocode } = {},
   } = loadTerminal;
+
   const {
     id: dischargeTerminalId,
     name: dischargeTerminalName,
@@ -685,6 +687,8 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     productsByIndex: Array.from({ length: products.length }, (_, index) => index),
     products: products.map((product) => ({
       density: product.density,
+      quantity: product.minQuantity,
+      tolerance: product.tolerance,
       product: {
         label: product.productName,
         value: product.id,

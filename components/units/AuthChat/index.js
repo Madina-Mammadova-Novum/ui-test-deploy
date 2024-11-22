@@ -43,7 +43,7 @@ const AuthChat = ({ opened, token }) => {
     isActive,
     totalActive,
     totalArchived,
-    chats: { active, archieved, searched, user },
+    chats: { active, archived, searched, user },
   } = useSelector(getAuthChatSelector);
 
   const getChatNotifications = async () => {
@@ -101,9 +101,9 @@ const AuthChat = ({ opened, token }) => {
     } else if (tab === 'active') {
       setDataByTab(active);
     } else {
-      setDataByTab(archieved);
+      setDataByTab(archived);
     }
-  }, [tab, searched, search, active, archieved]);
+  }, [tab, searched, search, active, archived]);
 
   useEffect(() => {
     if (mdScreen && isActive) {

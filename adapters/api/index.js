@@ -39,7 +39,7 @@ export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
   };
 };
 
-export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = null }) => {
+export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = null, responseType = null }) => {
   if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(requestMethod)) {
     return {
       method: requestMethod,
@@ -54,9 +54,10 @@ export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = 
     url: path,
     data: null,
     headers: {
-      Accept: '*/*',
-      'Content-Type': 'application/json',
+      Accept: responseType === 'pdf' ? 'application/pdf' : '*/*',
+      ...(options?.headers || {}),
     },
     ...options,
+    ...(responseType === 'pdf' && { responseType: 'blob' }),
   };
 };

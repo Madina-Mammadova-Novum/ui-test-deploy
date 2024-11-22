@@ -153,6 +153,8 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       clearErrors(key);
     }
 
+    setValue(key, value);
+
     if (key === 'tankerType') {
       handleTankerOptionsChange('tankerCategoryOne', { loading: true });
       const {
@@ -187,8 +189,6 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
       }
       if (categoryTwoError) console.error(categoryTwoError);
     }
-
-    setValue(key, value);
   };
 
   useEffect(() => {
@@ -310,7 +310,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerCategoryOne.options}
                 loading={tankerCategoryOne.loading}
                 asyncCall
-                disabled={!tankerCategoryOne.options.length}
+                disabled={!tankerCategoryOne.options.length || watch('tankerCategoryOne.value')}
                 name="tankerCategoryOne"
                 onChange={(option) => handleChange('tankerCategoryOne', option)}
               />
@@ -319,7 +319,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 options={tankerCategoryTwo.options}
                 loading={tankerCategoryTwo.loading}
                 asyncCall
-                disabled={!tankerCategoryTwo.options.length}
+                disabled={!tankerCategoryTwo.options.length || watch('tankerCategoryTwo.value')}
                 name="tankerCategoryTwo"
                 onChange={(option) => handleChange('tankerCategoryTwo', option)}
               />

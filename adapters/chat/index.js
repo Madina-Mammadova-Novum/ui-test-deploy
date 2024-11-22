@@ -11,13 +11,13 @@ export function chatSessionResponseAdapter({ data }) {
 function chatSessionDataAdapter({ data }) {
   if (!data) return {};
 
-  const { id, contentId, archieved, messageCount, deactivated, isOnline } = data;
+  const { id, contentId, archived, messageCount, deactivated, isOnline } = data;
 
   return {
-    key: `${archieved ? 'archieved' : 'active'}`,
+    key: `${archived ? 'archived' : 'active'}`,
     chatId: id,
     contentId,
-    archieved,
+    archived,
     messageCount,
     deactivated,
     isTyping: false,
@@ -63,7 +63,7 @@ export function helpCenterDataAdapter({ data }) {
 
   return [
     {
-      archieved: false,
+      archived: false,
       chatId: data?.chat?.id,
       created: data?.createdAt,
       messageCount: data?.chat?.messageCount,
