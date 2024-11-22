@@ -595,24 +595,35 @@ export const handleFileView = async (url) => {
 };
 
 export const downloadFile = async ({ url, fileName }) => {
-  const updatedUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
-
   try {
-    const { url: requestUrl, headers } = getFileUrl({ updatedUrl });
-    const response = await fetch(requestUrl, { headers });
+    // Extract file API URL to constants
+    const fileApiUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+
+    // Get auth headers and configured URL
+    const { url: requestUrl, headers } = getFileUrl({ url: fileApiUrl });
+
+    const response = await fetch(requestUrl, {
+      headers,
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`Download failed with status: ${response.status}`);
     }
 
+    // Create blob and trigger download
     const blob = await response.blob();
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    link.click();
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = fileName;
+    downloadLink.click();
+
+    // Cleanup
+    URL.revokeObjectURL(downloadLink.href);
+    downloadLink.remove();
   } catch (error) {
-    console.error('Download failed:', error);
-    // Handle error appropriately
+    // Use standard error handling
+    console.error('File download failed:', error);
+    throw new Error(parseErrorMessage(error));
   }
 };
 
