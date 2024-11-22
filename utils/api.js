@@ -11,6 +11,7 @@ import { api } from '@/lib/axios';
 export const apiHandler = async (options) => {
   try {
     const response = await api.request(apiOptionsAdapter(options));
+
     return apiSuccessAdapter(successResponseAdapter(response));
   } catch (error) {
     return apiErrorAdapter(errorResponseAdapter(error));
@@ -18,11 +19,7 @@ export const apiHandler = async (options) => {
 };
 
 export const responseHandler = async ({ req, res, dataAdapter, ...rest }) => {
-  const response = await apiHandler({
-    body: req.body,
-    options: { ...req?.options, headers: { ...req?.options?.headers, 'X-Forwarded-For': '172.211.210.40' } },
-    ...rest,
-  });
+  const response = await apiHandler({ body: req.body, options: req.options, ...rest });
 
   const data = await dataAdapter({ data: response.data });
 
