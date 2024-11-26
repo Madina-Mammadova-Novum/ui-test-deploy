@@ -126,21 +126,6 @@ export function getNumbersFromString(str) {
 }
 
 /**
- *
- * @param {string} inputString
- * @returns {string}
- */
-export function getValueAfterComma(inputString) {
-  const parts = inputString.split(',');
-
-  if (parts.length < 2) {
-    return '';
-  }
-
-  return parts[1].trim();
-}
-
-/**
  * Getting middle element of the array
  *
  * @param {Array} array
