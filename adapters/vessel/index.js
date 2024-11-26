@@ -338,11 +338,7 @@ export function responseGetVesselCategoryTwoAdapter({ data }) {
 
   return data;
 }
-export function responseGetVesselFreightFormatsAdapter({ data }) {
-  if (!data) return null;
 
-  return data;
-}
 export function responseDeleteVesselFromFleetAdapter({ data }) {
   if (!data) return null;
 
