@@ -22,9 +22,9 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, cargoId }) => {
 
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
   const { incoming, sent, failed } = offerById[cargoId];
+  const offerId = [...incoming, ...sent, ...failed][0]?.id;
 
   const handleSearchForAlternatives = async () => {
-    const offerId = [...incoming, ...sent, ...failed][0]?.id;
     const { data, errors } = await getOfferDetails(offerId, role);
 
     if (!errors) {
@@ -37,7 +37,7 @@ const NegotiatingExpandedFooter = ({ isCharterer = false, cargoId }) => {
 
   return (
     <ExpandableRowFooter>
-      {isCharterer && (
+      {isCharterer && offerId && (
         <Button
           customStyles="text-xsm ml-auto"
           buttonProps={{
