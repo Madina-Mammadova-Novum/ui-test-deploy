@@ -131,7 +131,12 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   useEffect(() => {
     if (offer?.valid) {
       fetchCountdownData();
-      dispatch(fetchOfferOptions(tankerId));
+      dispatch(
+        fetchOfferOptions({
+          isCounterOffer: false,
+          freightFormats: offer?.ranges?.freightFormats?.map(({ id, value }) => ({ value: id, label: value })) || [],
+        })
+      );
     }
   }, [offer?.valid]);
 

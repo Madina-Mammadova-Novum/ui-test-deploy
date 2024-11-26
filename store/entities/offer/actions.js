@@ -6,30 +6,31 @@ import { OFFER } from '@/store/entities/offer/types';
 /* Services */
 import { sendCounterOfferValidation, sendOfferValidation } from '@/services/offer';
 import { getDemurragePaymentTerms, getPaymentTerms } from '@/services/paymentTerms';
-import { getVesselFreightFormats } from '@/services/vessel';
 import { convertDataToOptions } from '@/utils/helpers';
 
-export const fetchOfferOptions = createAsyncThunk(OFFER.GET_OFFER_OPTIONS, async (tankerId, isCounterOffer = false) => {
-  const paymentTermsData = await getPaymentTerms();
-  const demurragePaymentTermsData = await getDemurragePaymentTerms();
-  const freightFormatsData = await getVesselFreightFormats(tankerId);
+export const fetchOfferOptions = createAsyncThunk(
+  OFFER.GET_OFFER_OPTIONS,
+  async ({ isCounterOffer = false, freightFormats = [] }) => {
+    const paymentTermsData = await getPaymentTerms();
+    const demurragePaymentTermsData = await getDemurragePaymentTerms();
 
-  if (isCounterOffer) {
+    if (isCounterOffer) {
+      return {
+        data: {
+          freightFormats,
+        },
+      };
+    }
+
     return {
       data: {
-        freightFormats: convertDataToOptions(freightFormatsData, 'id', 'value'),
+        paymentTerms: convertDataToOptions(paymentTermsData, 'id', 'name'),
+        demurragePaymentTerms: convertDataToOptions(demurragePaymentTermsData, 'id', 'name'),
+        freightFormats,
       },
     };
   }
-
-  return {
-    data: {
-      paymentTerms: convertDataToOptions(paymentTermsData, 'id', 'name'),
-      demurragePaymentTerms: convertDataToOptions(demurragePaymentTermsData, 'id', 'name'),
-      freightFormats: convertDataToOptions(freightFormatsData, 'id', 'value'),
-    },
-  };
-});
+);
 
 export const fetchOfferValidation = createAsyncThunk(OFFER.GET_OFFER_VALIDATION, async (data, { rejectWithValue }) => {
   const result = await sendOfferValidation({ data });
@@ -40,6 +41,7 @@ export const fetchOfferValidation = createAsyncThunk(OFFER.GET_OFFER_VALIDATION,
 
   return {
     ...result?.data,
+    freightFormats: result?.data?.ranges?.freightFormats || [],
   };
 });
 
@@ -54,6 +56,7 @@ export const fetchСounterOfferValidation = createAsyncThunk(
 
     return {
       ...result?.data,
+      freightFormats: result?.data?.ranges?.freightFormats || [],
     };
   }
 );

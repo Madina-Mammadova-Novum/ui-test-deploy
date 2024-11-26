@@ -68,7 +68,8 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     if (searchParams) {
       methods.reset(searchParams);
 
-      if (searchParams?.productsByIndex && searchParams?.isSavedSearch) setProductState(searchParams?.productsByIndex);
+      if (searchParams?.productsByIndex && (searchParams?.isSavedSearch || searchParams?.isAlternative))
+        setProductState(searchParams?.productsByIndex);
     }
   }, [searchParams]);
 

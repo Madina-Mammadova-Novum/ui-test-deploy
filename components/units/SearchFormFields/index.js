@@ -66,6 +66,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const productsLimitExceeded = productState?.length >= 3;
   const isSavedSearch = getValues('isSavedSearch');
+  const isAlternative = getValues('isAlternative');
 
   const handleMore = () => setPerList((prev) => prev + 100);
 
@@ -204,7 +205,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
       const cargoType = getValues('cargoType');
       const currentProducts = getValues('products');
 
-      if (isSavedSearch) {
+      if (isSavedSearch || isAlternative) {
         const relatedProducts = await getProducts(cargoType.value);
 
         const relatedProductsMap = relatedProducts?.data?.reduce((map, product) => {
