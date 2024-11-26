@@ -26,6 +26,9 @@ const postFixtureSlice = createSlice({
     setFilter: (state, { payload }) => {
       state.data.filters = payload;
     },
+    setSearchParams: (state, { payload }) => {
+      state.data.searchParams = payload;
+    },
     updateDocumentStatus: (state, action) => {
       const { documentId, status } = action?.payload;
       state.data.offers = state.data.offers.map((offer) => ({
@@ -60,6 +63,7 @@ const postFixtureSlice = createSlice({
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList, setToggle, setFilter } = postFixtureSlice.actions;
+export const { updateDocumentStatus, updateDocumentList, setToggle, setFilter, setSearchParams } =
+  postFixtureSlice.actions;
 
 export default postFixtureSlice.reducer;

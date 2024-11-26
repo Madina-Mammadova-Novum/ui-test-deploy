@@ -49,6 +49,7 @@ const FixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
           buttonProps={{ text: 'Charter party (generate pdf)', variant: 'tertiary', size: 'medium' }}
           customStyles="tab-btn"
           onClick={handleDownload}
+          disabled={!detailsData?.charterPartyUrl}
         />
       </div>
 

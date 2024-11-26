@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
-
-import NextLink from '../NextLink';
 
 import { TableCellPropTypes } from '@/lib/types';
 
@@ -29,10 +27,13 @@ import {
   UpdateTankerForm,
   ViewCommentContent,
 } from '@/units';
-import { downloadFile } from '@/utils/helpers';
+import { downloadFile, handleFileView } from '@/utils/helpers';
 
 const TableCell = ({ cellProps }) => {
   const tableRef = useRef(null);
+
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     id,
@@ -57,7 +58,7 @@ const TableCell = ({ cellProps }) => {
     countdownData,
     notified,
     rolled,
-    isValid = false,
+    isValid = true,
     flagOfRegistry,
   } = cellProps;
 
@@ -88,11 +89,11 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.DATE:
         return <EditDateForm title="edit open date" state={{ ...state, action: ACTIONS.DATE }} />;
       case ACTIONS.VIEW_OFFER:
-        return <ViewIncomingOffer itemId={id} cellData={data} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} minimizeModal={setIsMinimized} />;
       case ACTIONS.VIEW_COUNTEROFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_CHARTERER_COUNTEROFFER:
-        return <ViewIncomingOffer itemId={id} cellData={data} />;
+        return <ViewIncomingOffer itemId={id} cellData={data} minimizeModal={setIsMinimized} />;
       case ACTIONS.VIEW_SENT_OFFER:
         return <ViewCounteroffer itemId={id} />;
       case ACTIONS.VIEW_FAILED_OFFER:
@@ -160,6 +161,11 @@ const TableCell = ({ cellProps }) => {
       ACTIONS.REQUEST_UPDATE_TANKER_INFO,
       ACTIONS.DELETE_TANKER,
       ACTIONS.VIEW_COMMENTS,
+      ACTIONS.DELETE_TANKER_FROM_FLEET,
+      ACTIONS.REQUEST_DOCUMENT_DELETION,
+      ACTIONS.REVOKE_DOCUMENT_DELETION,
+      isMinimized && ACTIONS.VIEW_CHARTERER_COUNTEROFFER,
+      isMinimized && ACTIONS.VIEW_OFFER,
     ];
 
     return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
@@ -193,7 +199,7 @@ const TableCell = ({ cellProps }) => {
         </ModalWindow>
       );
     });
-  }, [actions]);
+  }, [actions, isMinimized]);
 
   const cellColor = useMemo(() => {
     if (freezed) return `${notified ? 'bg-yellow-light' : 'freezed-table'} blur-sm cursor-not-allowed`;
@@ -208,6 +214,15 @@ const TableCell = ({ cellProps }) => {
       tableRef?.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [notified, tableRef, value]);
+
+  const handleFileViewWithLoading = async (url) => {
+    try {
+      setIsLoading(true);
+      await handleFileView(url);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <td ref={tableRef} className={`${cellColor} table-cell whitespace-nowrap px-4 py-2`}>
@@ -228,9 +243,16 @@ const TableCell = ({ cellProps }) => {
           </div>
         )}
         {link && (
-          <NextLink href={link} target="_blank" className="bg-white p-0 text-blue hover:text-blue-darker">
-            View
-          </NextLink>
+          <Button
+            buttonProps={{
+              text: isLoading ? 'Loading...' : 'View',
+              size: 'small',
+              variant: 'primary',
+              disabled: isLoading,
+            }}
+            onClick={() => handleFileViewWithLoading(link)}
+            customStyles="bg-white !p-0 text-blue hover:text-blue-darker disabled:opacity-50"
+          />
         )}
         {downloadData && (
           <Button

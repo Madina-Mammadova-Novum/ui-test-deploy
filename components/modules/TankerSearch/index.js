@@ -8,15 +8,16 @@ import { TankerSearchTypes } from '@/lib/types';
 import { Dropdown, DynamicLoader, Title } from '@/elements';
 import { TankerSearchResults } from '@/modules';
 import { fetchVesselsBySearch } from '@/store/entities/search/actions';
-import { onReset, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
+import { onReset, resetError, setRequest, setSearchParams, setSortingParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
-import { SearchForm } from '@/units';
+import { SearchForm, SearchNotFound } from '@/units';
 import { errorToast } from '@/utils/hooks';
 
-const TankerSearch = ({ isAccountSearch = false }) => {
+const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
   const dispatch = useDispatch();
 
-  const { data, loading, error, sorting, searchParams, request, prefilledSearchData } = useSelector(getSearchSelector);
+  const { data, loading, error, sorting, searchParams, request } = useSelector(getSearchSelector);
+
   const dropdownStyles = { dropdownWidth: 100, className: 'flex items-center gap-x-2.5' };
 
   const handleReset = () => dispatch(onReset());
@@ -39,6 +40,7 @@ const TankerSearch = ({ isAccountSearch = false }) => {
     if (error) {
       handleRequest(false);
       errorToast(error.title, error.message);
+      dispatch(resetError());
     }
 
     if (data) {
@@ -58,28 +60,23 @@ const TankerSearch = ({ isAccountSearch = false }) => {
       rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
     };
 
-    if (prefilledSearchData?.isSavedSearch) {
-      const savedSearchParams = {
-        ...prefilledSearchData,
-        ...baseParams,
-      };
-      dispatch(fetchVesselsBySearch(savedSearchParams));
-    } else {
-      const searchParamsWithSorting = {
-        ...searchParams,
-        ...baseParams,
-      };
-      dispatch(fetchVesselsBySearch(searchParamsWithSorting));
-    }
-  }, [searchParams, sorting, prefilledSearchData, dispatch]);
+    const searchParamsWithSorting = {
+      ...searchParams,
+      ...baseParams,
+    };
+    dispatch(fetchVesselsBySearch(searchParamsWithSorting));
+  }, [searchParams, sorting, dispatch]);
 
   const printResult = useMemo(() => {
     if (loading) {
       return <DynamicLoader className="h-56 w-56" />;
     }
 
+    if (isDisabled && !data && !request)
+      return <SearchNotFound isAccountSearch={isAccountSearch} isDisabled={isDisabled} />;
+
     return <TankerSearchResults data={data} request={request} isAccountSearch={isAccountSearch} />;
-  }, [loading, data, request]);
+  }, [loading, data, request, isDisabled]);
 
   return (
     <>

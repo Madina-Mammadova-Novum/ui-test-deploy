@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatSessionPropTypes } from '@/lib/types';
 
-import { ArchiveButton, Badge, ReActivateButton } from '@/elements';
+import ChatBubbleUserSVG from '@/assets/images/chatBubbleUser.svg';
+import { ArchiveButton, Badge, HoverableIcon, HoverTooltip, ReActivateButton } from '@/elements';
 import { deactivateUserChat, reactivateUserChat } from '@/store/entities/chat/actions';
 import { removeCollapsedChat, resetUser, setConversation, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
@@ -60,8 +61,16 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
   };
 
   const actions = {
-    active: <ArchiveButton onClick={(e) => handleModal(e, data?.chatId)} />,
-    archived: <ReActivateButton onClick={(e) => handleModal(e, data?.chatId)} />,
+    active: (
+      <HoverTooltip className="!-left-20 !-top-[0.375rem]" data={{ description: 'Archive' }}>
+        <ArchiveButton onClick={(e) => handleModal(e, data?.chatId)} />
+      </HoverTooltip>
+    ),
+    archived: (
+      <HoverTooltip className="!-left-[6.25rem] !-top-[0.375rem]" data={{ description: 'Reactivate' }}>
+        <ReActivateButton onClick={(e) => handleModal(e, data?.chatId)} />
+      </HoverTooltip>
+    ),
     deactivate: (
       <ChatSubModal
         tab={tab}
@@ -94,7 +103,12 @@ const ChatSession = ({ data, tab, sessionId, setSessionId }) => {
     >
       <ChatConversationCard data={data} />
       <div className="relative flex flex-col justify-end">
-        <Badge className="-top-0.5 right-1 h-5 w-5 p-1" counter={data?.messageCount} />
+        <HoverTooltip className="!-left-[7.5rem] !-top-[0.375rem]" data={{ description: 'Conversation' }}>
+          <div>
+            <HoverableIcon icon={<ChatBubbleUserSVG className="fill-black" />} />
+            <Badge counter={data?.messageCount} className="-right-1 -top-1 p-2.5" />
+          </div>
+        </HoverTooltip>
         {actions[tab]}
         {sessionId === data?.chatId && state[tab]}
       </div>

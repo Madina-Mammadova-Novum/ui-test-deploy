@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   return responseHandler({
     req,
     res,
-    path: getRtURL(`/chat/${chatId}/unarchieve`),
+    path: getRtURL(`/chat/${chatId}/unarchive`),
     dataAdapter: (data) => data,
     requestMethod: 'POST',
     options: { headers: Authorization(token) },

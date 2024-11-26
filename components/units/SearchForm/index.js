@@ -13,25 +13,21 @@ import { Button, Modal } from '@/elements';
 import { searchForTankerSchema } from '@/lib/schemas';
 import { getSearchSelector } from '@/store/selectors';
 import { FavoriteSearchForm, FavoriteSearchList, SearchFormFields } from '@/units';
-import { resetObjectFields } from '@/utils/helpers';
+import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = false }) => {
-  const { prefilledSearchData } = useSelector(getSearchSelector);
+  const { searchParams } = useSelector(getSearchSelector);
 
-  const [productState, setProductState] = useState(prefilledSearchData?.productsByIndex || [0]);
+  const [productState, setProductState] = useState(searchParams?.productsByIndex || [0]);
   const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
   const [isViewFavoriteSearchesOpened, setIsViewFavoriteSearchesOpened] = useState(false);
 
   const schema = yup.object({ ...searchForTankerSchema() });
-  const methods = useHookFormParams({ schema, state: prefilledSearchData });
+  const methods = useHookFormParams({ schema, state: searchParams });
 
   const handleResetFields = () => {
-    methods.reset((formValues) => {
-      resetObjectFields(formValues);
-      return formValues;
-    });
-
+    resetForm(methods);
     onReset();
     setProductState([0]);
   };
@@ -69,10 +65,12 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   };
 
   useEffect(() => {
-    if (prefilledSearchData) {
-      methods.reset(prefilledSearchData);
+    if (searchParams) {
+      methods.reset(searchParams);
+
+      if (searchParams?.productsByIndex && searchParams?.isSavedSearch) setProductState(searchParams?.productsByIndex);
     }
-  }, [prefilledSearchData]);
+  }, [searchParams]);
 
   return (
     <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">

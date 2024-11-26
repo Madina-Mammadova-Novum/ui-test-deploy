@@ -56,22 +56,24 @@ export const estimationResponseDataAdapter = ({ data }) => {
 export const successEstimationAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { perTonnage, total } = data;
+  const { perTonnage, total, route } = data;
 
   return {
     resultOne: perTonnage,
     resultTwo: total,
+    route,
   };
 };
 
 export const successDistanceAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { distance, duration } = data;
+  const { distance, duration, route } = data;
 
   return {
     resultOne: distance,
     resultTwo: duration,
+    route,
   };
 };
 

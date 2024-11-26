@@ -20,6 +20,7 @@ export const apiHandler = async (options) => {
 
 export const responseHandler = async ({ req, res, dataAdapter, ...rest }) => {
   const response = await apiHandler({ body: req.body, options: req.options, ...rest });
+
   const data = await dataAdapter({ data: response.data });
 
   return res.status(response.status).json({ ...response, ...responseAdapter(data) });

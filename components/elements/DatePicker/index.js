@@ -48,7 +48,7 @@ const DatePicker = ({
       />
       <Controller
         name={name}
-        render={({ field }) => {
+        render={({ field: { ref, ...field } }) => {
           const value = field.value || dateValue || null;
 
           return (
@@ -66,6 +66,7 @@ const DatePicker = ({
                   icon={<CalendarSVG className={classNames('fill-black', showPicker && '!fill-blue')} />}
                   error={error}
                   onChange={field.onChange} // Pass onChange to Input
+                  ref={ref}
                   {...rest}
                 />
               </div>

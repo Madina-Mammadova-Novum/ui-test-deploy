@@ -97,8 +97,8 @@ export const getUserVesselsSelector = createDraftSafeSelector(vesselsSelector, (
 });
 
 export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state) => {
-  const activeCounter = state?.data?.active.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
-  const archivedCounter = state?.data?.archieved.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
+  const activeCounter = state?.data?.active?.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
+  const archivedCounter = state?.data?.archived?.reduce((count, chat) => count + (chat.messageCount > 0 ? 1 : 0), 0);
 
   const totalMessagesCounter = activeCounter + archivedCounter;
   const newMessages = state?.data?.support?.[0]?.messageCount > 0 ? totalMessagesCounter + 1 : totalMessagesCounter;
@@ -114,7 +114,7 @@ export const getAuthChatSelector = createDraftSafeSelector(chatSelector, (state)
     tab: state.filterParams?.tabValue,
     limit: state.filterParams?.limit,
     totalActive: state.data?.active?.length,
-    totalArchived: state.data?.archieved?.length,
+    totalArchived: state.data?.archived?.length,
     isActive: state.isActiveSession,
     status: state.status,
   };
@@ -149,6 +149,7 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
     filters: state.data?.filters,
+    searchParams: state.data?.searchParams,
     sorting: state.data?.sorting,
     role: state.role,
     deal: state.deal,
@@ -195,6 +196,7 @@ export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSel
     offers: state.data.offers,
     offerById: state.data.offerById,
     role: state.role,
+    initialTab: state.tab,
   };
 });
 
@@ -249,7 +251,6 @@ export const getSearchSelector = createDraftSafeSelector(searchSelector, (state)
     searchParams: state.searchParams,
     toggle: state.toggle,
     loading: state.loading,
-    prefilledSearchData: state.prefilledSearchData,
     sorting: state.sortingData,
     request: state.request,
   };

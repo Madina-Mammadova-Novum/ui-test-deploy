@@ -126,21 +126,6 @@ export function getNumbersFromString(str) {
 }
 
 /**
- *
- * @param {string} inputString
- * @returns {string}
- */
-export function getValueAfterComma(inputString) {
-  const parts = inputString.split(',');
-
-  if (parts.length < 2) {
-    return '';
-  }
-
-  return parts[1].trim();
-}
-
-/**
  * Getting middle element of the array
  *
  * @param {Array} array
@@ -307,11 +292,11 @@ export const filterDataByLowerCase = (inputValue, data = []) => {
   return data?.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
 };
 
-export const resetObjectFields = (initialObject, resetType = null) => {
+export const resetObjectFields = ({ initialObject, resetType = null }) => {
   if (typeof initialObject !== 'string') {
     Object.keys(initialObject).forEach((key) => {
       if (Array.isArray(initialObject[key])) {
-        initialObject[key].map((arrayItem) => resetObjectFields(arrayItem));
+        initialObject[key].map((arrayItem) => resetObjectFields({ initialObject: arrayItem }));
       } else {
         initialObject[key] = resetType;
       }
@@ -323,7 +308,7 @@ export const resetObjectFields = (initialObject, resetType = null) => {
 
 export const resetForm = (methods, type) => {
   methods.reset((formValues) => {
-    resetObjectFields(formValues, type);
+    resetObjectFields({ initialObject: formValues, resetType: type });
     return formValues;
   });
 };
@@ -570,17 +555,61 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   return failedByText;
 };
 
-export const downloadFile = ({ url, fileName }) => {
-  const requestUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
-  fetch(requestUrl)
-    .then((response) => response.blob())
-    .then((blob) => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      link.click();
-    })
-    .catch(console.error);
+export const getFileUrl = ({ url }) => {
+  const token = getCookieFromBrowser('session-access-token');
+
+  return {
+    url,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
+export const handleFileView = async (url) => {
+  try {
+    const { url: fileUrl, headers } = getFileUrl({ url });
+    const response = await fetch(fileUrl, { headers });
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    window.open(objectUrl, '_blank');
+    URL.revokeObjectURL(objectUrl);
+  } catch (error) {
+    console.error('Error viewing file:', error);
+  }
+};
+
+export const downloadFile = async ({ url, fileName }) => {
+  try {
+    // Extract file API URL to constants
+    const fileApiUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+
+    // Get auth headers and configured URL
+    const { url: requestUrl, headers } = getFileUrl({ url: fileApiUrl });
+
+    const response = await fetch(requestUrl, {
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Download failed with status: ${response.status}`);
+    }
+
+    // Create blob and trigger download
+    const blob = await response.blob();
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = fileName;
+    downloadLink.click();
+
+    // Cleanup
+    URL.revokeObjectURL(downloadLink.href);
+    downloadLink.remove();
+  } catch (error) {
+    // Use standard error handling
+    console.error('File download failed:', error);
+    throw new Error(parseErrorMessage(error));
+  }
 };
 
 export const transformBytes = ({ format = 'mb', value }) => {

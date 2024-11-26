@@ -11,7 +11,7 @@ import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, DatePicker, FormDropdown, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { getPorts } from '@/services';
+import { getPortsForSearchForm } from '@/services/port';
 import { getFilledArray, removeByIndex } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -98,13 +98,13 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
 
   const getPortsData = async () => {
     handleChangeState('loading', true);
-    const result = await getPorts({ query: '', pageSize: perList });
+    const result = await getPortsForSearchForm({ query: '', pageSize: perList });
     handleChangeState('ports', dropDownOptionsAdapter({ data: result?.data }));
     handleChangeState('loading', false);
   };
 
   const loadOptions = async (query, callback) => {
-    const result = await getPorts({ query, pageSize: perList });
+    const result = await getPortsForSearchForm({ query, pageSize: perList });
     callback(dropDownOptionsAdapter({ data: result?.data }));
   };
 
