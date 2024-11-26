@@ -7,6 +7,7 @@ import { legalPropAdapter } from '@/adapters';
 import { metaData } from '@/adapters/metaData';
 import { BlockManager } from '@/common';
 import { NextImage } from '@/elements';
+import { ROUTES } from '@/lib';
 import { getHomePageData } from '@/services';
 import { getEntityData } from '@/services/collectionType';
 
@@ -18,7 +19,16 @@ export async function generateMetadata({ params }) {
 export default async function Home({ params }) {
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
 
-  if (maintenanceMode) {
+  // Get the current pathname from params.slug
+  const pathname = params?.slug ? `/${params.slug.join('/')}` : '/';
+
+  // Only redirect to maintenance if not on contact-us or privacy-policy pages
+  if (
+    maintenanceMode &&
+    pathname !== ROUTES.CONTACT_US &&
+    pathname !== ROUTES.PRIVACY_POLICY &&
+    !pathname.startsWith('/_next')
+  ) {
     redirect('/maintenance'); // Redirect to the maintenance page
   }
 

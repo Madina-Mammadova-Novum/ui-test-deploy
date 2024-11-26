@@ -69,7 +69,7 @@ export const redirectAfterToast = (message, url) => {
 export const useHookForm = () => {
   const methods = useFormContext();
 
-  return { ...methods };
+  return { ...methods, isSubmitting: methods.formState.isSubmitting };
 };
 
 export const useHookFormParams = ({ state = null, schema = null, mode = null }) => {
