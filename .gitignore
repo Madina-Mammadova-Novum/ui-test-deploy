@@ -44,3 +44,8 @@ next-env.d.ts
 
 # cursor rules
 .cursorrules
+
+# Changelog and logs
+/logs
+/logs/deniz-changelog
+/logs/deniz-changelog/**/*
