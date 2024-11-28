@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import debounce from 'lodash/debounce';
+
 import { PortDetailsFormPropTypes } from '@/lib/types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
@@ -24,9 +26,17 @@ const PortDetailsForm = ({ portName = '' }) => {
     setPortsLoader(false);
   };
 
-  const loadOptions = async (inputValue, callback) => {
+  const debouncedLoadOptions = debounce(async (inputValue, callback) => {
     const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(inputValue, callback);
   };
 
   const handleMore = () => setPerList((prev) => prev + 50);
@@ -39,6 +49,12 @@ const PortDetailsForm = ({ portName = '' }) => {
   useEffect(() => {
     getPorts();
   }, [perList]);
+
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
 
   return (
     <div className="relative flex flex-col gap-y-5">

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
+import debounce from 'lodash/debounce';
 import * as yup from 'yup';
 
 import { AddTankerManuallyFormPropTypes } from '@/lib/types';
@@ -142,9 +143,17 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     setPortsLoading(false);
   };
 
-  const loadOptions = async (query, callback) => {
+  const debouncedLoadOptions = debounce(async (query, callback) => {
     const { data } = await getPorts({ query, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (query, callback) => {
+    if (!query) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(query, callback);
   };
 
   const handleMore = () => setPerList((prev) => prev + 50);
@@ -209,6 +218,12 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
   useEffect(() => {
     getPortsData();
   }, [perList]);
+
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
 
   return (
     <FormProvider {...methods}>

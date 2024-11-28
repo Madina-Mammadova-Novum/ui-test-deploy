@@ -5,6 +5,7 @@ import { useWatch } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addDays } from 'date-fns';
+import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
@@ -187,10 +188,24 @@ const SearchFormFields = ({ productState, setProductState }) => {
     setPortsLoader(false);
   };
 
-  const loadOptions = async (inputValue, callback) => {
+  const debouncedLoadOptions = debounce(async (inputValue, callback) => {
     const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(inputValue, callback);
   };
+
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
 
   useEffect(() => {
     getCargoes();
