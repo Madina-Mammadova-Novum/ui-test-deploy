@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import debounce from 'lodash/debounce';
+
 import { CalculatedDetailsPropTypes } from '@/lib/types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
@@ -28,10 +30,24 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
     setPortsLoader(false);
   };
 
-  const loadOptions = async (inputValue, callback) => {
+  const debouncedLoadOptions = debounce(async (inputValue, callback) => {
     const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(inputValue, callback);
   };
+
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
 
   const printOptionalProps = useMemo(() => {
     return isFreight ? (
