@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
+import debounce from 'lodash/debounce';
 import * as yup from 'yup';
 
 import { UpdateTankerFormPropTypes } from '@/lib/types';
@@ -93,9 +94,17 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     setPortsLoading(false);
   };
 
-  const loadOptions = async (query, callback) => {
+  const debouncedLoadOptions = debounce(async (query, callback) => {
     const { data } = await getPorts({ query, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (query, callback) => {
+    if (!query) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(query, callback);
   };
 
   const handleMore = () => setPerList((prev) => prev + 50);
@@ -206,10 +215,16 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     return () => dispatch(clearPrefilledState());
   }, []);
 
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
+
   if (initialLoading) {
     return (
-      <div className="h-72 w-72">
-        <Loader className="absolute top-1/2 h-8 w-8" />
+      <div className="relative flex h-72 w-72 items-center justify-center">
+        <Loader className="h-8 w-8" />
       </div>
     );
   }

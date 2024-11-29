@@ -28,7 +28,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const { ranges, valid, loading, data: helperData } = useSelector(getOfferSelector);
   const { paymentTerms, demurragePaymentTerms, freightFormats } = helperData;
 
-  const { tankerId, products } = data;
+  const { products } = data;
 
   const currentFreight = watch('freight');
 
@@ -75,9 +75,14 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   useEffect(() => {
     if (valid) {
-      dispatch(fetchOfferOptions(tankerId, true));
+      dispatch(
+        fetchOfferOptions({
+          isCounterOffer: true,
+          freightFormats: ranges?.freightFormats?.map(({ id, value }) => ({ value: id, label: value })) || [],
+        })
+      );
     }
-  }, [tankerId, valid]);
+  }, [ranges, valid]);
 
   const printProduct = (_, index) => {
     return (
