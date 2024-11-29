@@ -36,7 +36,7 @@ const NegotiatingChartererInformation = ({ offerId }) => {
 
   if (loading) {
     return (
-      <div className="h-72 w-72 relative flex items-center justify-center">
+      <div className="relative flex h-72 w-72 items-center justify-center">
         <Loader className="h-8 w-8" />
       </div>
     );
