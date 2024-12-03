@@ -178,8 +178,9 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             <div
               ref={scrollingContainerRef}
               className={classNames(
-                `h-[calc(98vh-${!confirmCounteroffer && valid ? '424.2px' : '292.2px'})] overflow-y-auto overflow-x-hidden p-5`,
-                scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
+                'overflow-y-auto overflow-x-hidden p-5',
+                scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset',
+                !confirmCounteroffer && valid ? 'h-[calc(98vh-424.2px)]' : 'h-[calc(98vh-292.2px)]'
               )}
             >
               {tabContent}
