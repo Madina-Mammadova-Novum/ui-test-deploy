@@ -10,7 +10,7 @@ const CommentsContent = ({ data = [], areaDisabled = false }) => {
   const { register, formState } = useHookForm();
 
   return (
-    <div>
+    <div className="py-2">
       <Title level="3">Comments</Title>
       {!!data.length && (
         <>
