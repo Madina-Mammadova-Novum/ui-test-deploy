@@ -50,6 +50,9 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
 
+  const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
+  const containerHeight = !confirmCounteroffer && valid ? 'h-[calc(98vh-424.2px)]' : 'h-[calc(98vh-292.2px)]';
+
   const errorBanner = useMemo(() => {
     return (
       message &&
@@ -178,8 +181,9 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             <div
               ref={scrollingContainerRef}
               className={classNames(
-                `h-[calc(98vh-${!confirmCounteroffer && valid ? '424.2px' : '292.2px'})] overflow-y-auto overflow-x-hidden p-5`,
-                scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
+                'overflow-y-auto overflow-x-hidden p-5',
+                shouldShowShadow && 'shadow-vInset',
+                containerHeight
               )}
             >
               {tabContent}
