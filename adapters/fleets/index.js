@@ -167,7 +167,6 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
 
   const {
     id,
-    canSendUpdateRequest,
     details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
@@ -220,7 +219,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: requestStatus === 'PendingConfirmation' ? 'Pending' : requestStatus,
+      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
     },
     {
@@ -229,7 +228,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       name,
       fleetName,
       disabled: additionRequested,
-      isValid: canSendUpdateRequest,
+      isValid: requestStatus !== 'Update Requested',
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
@@ -264,7 +263,6 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    canSendUpdateRequest,
     status: requestStatus,
     details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
@@ -322,14 +320,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: requestStatus === 'PendingConfirmation' ? 'Pending' : requestStatus,
+      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
     },
     {
       id,
       editable: true,
       name,
-      isValid: canSendUpdateRequest,
+      isValid: requestStatus !== 'Update Requested',
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
