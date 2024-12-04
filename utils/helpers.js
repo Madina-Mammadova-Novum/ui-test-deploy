@@ -886,3 +886,22 @@ export const getBrowser = (environment) => {
   }
   return 'unknown';
 };
+
+/**
+ * Ensures a filename has the correct extension
+ * @param {string} fileName - The name of the file
+ * @param {string} extension - The desired extension (with or without dot)
+ * @returns {string} Filename with proper extension
+ */
+export const ensureFileExtension = (fileName, extension) => {
+  // Normalize the extension to include the dot
+  const normalizedExtension = extension.startsWith('.') ? extension : `.${extension}`;
+
+  // Check if filename already ends with the extension
+  if (fileName.toLowerCase().endsWith(normalizedExtension.toLowerCase())) {
+    return fileName;
+  }
+
+  // Add the extension and return
+  return `${fileName}${normalizedExtension}`;
+};
