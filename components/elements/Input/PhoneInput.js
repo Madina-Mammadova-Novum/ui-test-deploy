@@ -52,7 +52,7 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
       </Label>
       <Phone
         {...rest}
-        inputProps={{ ref }}
+        inputProps={ref ? { ref } : undefined}
         enableSearch
         enableAreaCodes
         masks={{ ae: '.. .......' }}
@@ -65,7 +65,6 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
 });
 
 PhoneInput.propTypes = PhoneInputPropTypes;
-
 PhoneInput.displayName = 'PhoneInput';
 
 export default PhoneInput;
