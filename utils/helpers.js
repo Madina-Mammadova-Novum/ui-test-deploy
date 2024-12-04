@@ -897,11 +897,10 @@ export const ensureFileExtension = (fileName, extension) => {
   // Normalize the extension to include the dot
   const normalizedExtension = extension.startsWith('.') ? extension : `.${extension}`;
 
-  // Check if filename already ends with the extension
-  if (fileName.toLowerCase().endsWith(normalizedExtension.toLowerCase())) {
-    return fileName;
-  }
+  // Get the base name without any extensions
+  const lastDotIndex = fileName.lastIndexOf('.');
+  const baseName = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex);
 
-  // Add the extension and return
-  return `${fileName}${normalizedExtension}`;
+  // Return the base name with the new extension
+  return `${baseName}${normalizedExtension}`;
 };
