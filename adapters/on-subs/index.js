@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -432,12 +432,12 @@ const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       editable: !isDocumentDeleted,
-      value: true,
       disabled: isDocumentDeleted,
+      value: true,
       downloadData: !isDocumentDeleted &&
         url && {
           url,
-          fileName,
+          fileName: ensureFileExtension(fileName, extension),
         },
       actions: [
         {
