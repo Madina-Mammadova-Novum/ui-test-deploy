@@ -491,7 +491,6 @@ export function vesselDetailsAdapter({ data }) {
   if (!data) return {};
 
   const {
-    canSendUpdateRequest,
     details: {
       name,
       q88UpdateDate,
@@ -523,7 +522,6 @@ export function vesselDetailsAdapter({ data }) {
   } = data;
 
   return {
-    canSendUpdateRequest,
     tankerName: name,
     imo,
     updateDate: q88UpdateDate,

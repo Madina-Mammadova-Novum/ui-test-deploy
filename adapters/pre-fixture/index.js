@@ -2,7 +2,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -361,7 +361,7 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD_BLUE,
       downloadData: url && {
         url,
-        fileName,
+        fileName: ensureFileExtension(fileName, extension),
       },
     },
   ];
