@@ -173,7 +173,6 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
-  const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
@@ -232,12 +231,12 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: vesselInProgress ? requestStatus : 'Request to update info',
+          actionText: 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
           disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-blue" />,
-          actionStyles: '!w-[165px]',
+          actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
         },
         {
           action: ACTIONS.DELETE_TANKER_FROM_FLEET,
@@ -336,7 +335,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
           actionSize: 'medium',
           disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-blue" />,
-          actionStyles: '!w-[165px]',
+          actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
         },
         {
           action: ACTIONS.DELETE_TANKER,
