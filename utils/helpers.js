@@ -135,7 +135,7 @@ export function getMiddleElementFromArray(array) {
   const { length } = array;
 
   if (length === 0) {
-    return null;
+    return [48.3794, 31.1656];
   }
 
   const middleIndex = Math.floor(length / 2);
