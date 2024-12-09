@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
-import { Button, DatePicker, FormDropdown, Input } from '@/elements';
+import { Button, CheckBoxInput, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
 import { getPortsForSearchForm } from '@/services/port';
@@ -56,6 +56,10 @@ const SearchFormFields = ({ productState, setProductState }) => {
       data: [],
     },
   });
+
+  // Add state for selected countries
+  const [selectedCountries, setSelectedCountries] = useState([]);
+  const [includeInternationalSanctions, setIncludeInternationalSanctions] = useState(false);
 
   const laycanStart = useWatch({
     control,
@@ -297,6 +301,48 @@ const SearchFormFields = ({ productState, setProductState }) => {
     };
   }, [isSavedSearch]);
 
+  const mockCountries = [
+    { value: 'us', label: 'United States', countryFlag: 'us' },
+    { value: 'gb', label: 'United Kingdom', countryFlag: 'gb' },
+    { value: 'de', label: 'Germany', countryFlag: 'de' },
+    { value: 'fr', label: 'France', countryFlag: 'fr' },
+    { value: 'es', label: 'Spain', countryFlag: 'es' },
+    { value: 'it', label: 'Italy', countryFlag: 'it' },
+    { value: 'nl', label: 'Netherlands', countryFlag: 'nl' },
+    { value: 'sg', label: 'Singapore', countryFlag: 'sg' },
+    { value: 'jp', label: 'Japan', countryFlag: 'jp' },
+    { value: 'au', label: 'Australia', countryFlag: 'au' },
+    { value: 'ca', label: 'Canada', countryFlag: 'ca' },
+    { value: 'br', label: 'Brazil', countryFlag: 'br' },
+    { value: 'in', label: 'India', countryFlag: 'in' },
+    { value: 'za', label: 'South Africa', countryFlag: 'za' },
+    { value: 'ae', label: 'UAE', countryFlag: 'ae' },
+    { value: 'sa', label: 'Saudi Arabia', countryFlag: 'sa' },
+    { value: 'tr', label: 'Turkey', countryFlag: 'tr' },
+    { value: 'my', label: 'Malaysia', countryFlag: 'my' },
+    { value: 'id', label: 'Indonesia', countryFlag: 'id' },
+    { value: 'th', label: 'Thailand', countryFlag: 'th' },
+    { value: 'eg', label: 'Egypt', countryFlag: 'eg' },
+    { value: 'gr', label: 'Greece', countryFlag: 'gr' },
+    { value: 'no', label: 'Norway', countryFlag: 'no' },
+    { value: 'dk', label: 'Denmark', countryFlag: 'dk' },
+    { value: 'fi', label: 'Finland', countryFlag: 'fi' },
+  ];
+
+  // Handle country selection changes
+  const handleCountryChange = (selectedOptions) => {
+    setSelectedCountries(selectedOptions || []);
+
+    /* eslint-disable no-console */
+    console.log('Selected countries to exclude:', selectedOptions);
+  };
+
+  // Handle checkbox change
+  const handleSanctionCheckboxChange = (e) => {
+    setIncludeInternationalSanctions(e.target.checked);
+    console.log('Include internationally sanctioned countries:', e.target.checked);
+  };
+
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
@@ -455,6 +501,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             </div>
           );
         })}
+
         <Button
           disabled={productsLimitExceeded}
           buttonProps={{
@@ -466,6 +513,28 @@ const SearchFormFields = ({ productState, setProductState }) => {
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
         />
+
+        <div className="flex flex-col gap-2 border-t py-4">
+          <FormDropdown
+            label="Exclude Sanctioned Countries"
+            name="excludedCountries"
+            options={mockCountries}
+            value={selectedCountries}
+            isMulti
+            closeMenuOnSelect={false}
+            customStyles={{ className: 'w-full' }}
+            onChange={handleCountryChange}
+            placeholder="Select countries to exclude from search..."
+          />
+          <CheckBoxInput
+            name="includeInternationalSanctions"
+            checked={includeInternationalSanctions}
+            onChange={handleSanctionCheckboxChange}
+            customStyles="accent-blue"
+          >
+            <span className="text-xsm">Include internationally sanctioned countries in search results</span>
+          </CheckBoxInput>
+        </div>
       </div>
     </div>
   );
