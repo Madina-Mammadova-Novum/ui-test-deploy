@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
-import { Button, DatePicker, FormDropdown, Input } from '@/elements';
+import { Button, CheckBoxInput, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
 import { getPortsForSearchForm } from '@/services/port';
@@ -59,8 +59,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   // Add state for selected countries
   const [selectedCountries, setSelectedCountries] = useState([]);
-
-  console.log({ ports });
+  const [includeInternationalSanctions, setIncludeInternationalSanctions] = useState(false);
 
   const laycanStart = useWatch({
     control,
@@ -338,6 +337,12 @@ const SearchFormFields = ({ productState, setProductState }) => {
     console.log('Selected countries to exclude:', selectedOptions);
   };
 
+  // Handle checkbox change
+  const handleSanctionCheckboxChange = (e) => {
+    setIncludeInternationalSanctions(e.target.checked);
+    console.log('Include internationally sanctioned countries:', e.target.checked);
+  };
+
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
@@ -509,17 +514,27 @@ const SearchFormFields = ({ productState, setProductState }) => {
           onClick={handleAddProduct}
         />
 
-        <FormDropdown
-          label="Exclude Sanctioned Countries"
-          name="excludedCountries"
-          options={mockCountries}
-          value={selectedCountries}
-          isMulti
-          closeMenuOnSelect={false}
-          customStyles={{ className: 'w-full' }}
-          onChange={handleCountryChange}
-          placeholder="Select countries to exclude from search..."
-        />
+        <div className="flex flex-col gap-2 border-t py-4">
+          <FormDropdown
+            label="Exclude Sanctioned Countries"
+            name="excludedCountries"
+            options={mockCountries}
+            value={selectedCountries}
+            isMulti
+            closeMenuOnSelect={false}
+            customStyles={{ className: 'w-full' }}
+            onChange={handleCountryChange}
+            placeholder="Select countries to exclude from search..."
+          />
+          <CheckBoxInput
+            name="includeInternationalSanctions"
+            checked={includeInternationalSanctions}
+            onChange={handleSanctionCheckboxChange}
+            customStyles="accent-blue"
+          >
+            <span className="text-xsm">Include internationally sanctioned countries in search results</span>
+          </CheckBoxInput>
+        </div>
       </div>
     </div>
   );
