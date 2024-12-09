@@ -57,6 +57,11 @@ const SearchFormFields = ({ productState, setProductState }) => {
     },
   });
 
+  // Add state for selected countries
+  const [selectedCountries, setSelectedCountries] = useState([]);
+
+  console.log({ ports });
+
   const laycanStart = useWatch({
     control,
     name: 'laycanStart',
@@ -297,6 +302,42 @@ const SearchFormFields = ({ productState, setProductState }) => {
     };
   }, [isSavedSearch]);
 
+  const mockCountries = [
+    { value: 'us', label: 'United States', countryFlag: 'us' },
+    { value: 'gb', label: 'United Kingdom', countryFlag: 'gb' },
+    { value: 'de', label: 'Germany', countryFlag: 'de' },
+    { value: 'fr', label: 'France', countryFlag: 'fr' },
+    { value: 'es', label: 'Spain', countryFlag: 'es' },
+    { value: 'it', label: 'Italy', countryFlag: 'it' },
+    { value: 'nl', label: 'Netherlands', countryFlag: 'nl' },
+    { value: 'sg', label: 'Singapore', countryFlag: 'sg' },
+    { value: 'jp', label: 'Japan', countryFlag: 'jp' },
+    { value: 'au', label: 'Australia', countryFlag: 'au' },
+    { value: 'ca', label: 'Canada', countryFlag: 'ca' },
+    { value: 'br', label: 'Brazil', countryFlag: 'br' },
+    { value: 'in', label: 'India', countryFlag: 'in' },
+    { value: 'za', label: 'South Africa', countryFlag: 'za' },
+    { value: 'ae', label: 'UAE', countryFlag: 'ae' },
+    { value: 'sa', label: 'Saudi Arabia', countryFlag: 'sa' },
+    { value: 'tr', label: 'Turkey', countryFlag: 'tr' },
+    { value: 'my', label: 'Malaysia', countryFlag: 'my' },
+    { value: 'id', label: 'Indonesia', countryFlag: 'id' },
+    { value: 'th', label: 'Thailand', countryFlag: 'th' },
+    { value: 'eg', label: 'Egypt', countryFlag: 'eg' },
+    { value: 'gr', label: 'Greece', countryFlag: 'gr' },
+    { value: 'no', label: 'Norway', countryFlag: 'no' },
+    { value: 'dk', label: 'Denmark', countryFlag: 'dk' },
+    { value: 'fi', label: 'Finland', countryFlag: 'fi' },
+  ];
+
+  // Handle country selection changes
+  const handleCountryChange = (selectedOptions) => {
+    setSelectedCountries(selectedOptions || []);
+
+    /* eslint-disable no-console */
+    console.log('Selected countries to exclude:', selectedOptions);
+  };
+
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
@@ -455,6 +496,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             </div>
           );
         })}
+
         <Button
           disabled={productsLimitExceeded}
           buttonProps={{
@@ -465,6 +507,18 @@ const SearchFormFields = ({ productState, setProductState }) => {
           }}
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
+        />
+
+        <FormDropdown
+          label="Exclude Sanctioned Countries"
+          name="excludedCountries"
+          options={mockCountries}
+          value={selectedCountries}
+          isMulti
+          closeMenuOnSelect={false}
+          customStyles={{ className: 'w-full' }}
+          onChange={handleCountryChange}
+          placeholder="Select countries to exclude from search..."
         />
       </div>
     </div>

@@ -62,6 +62,7 @@ export const SimpleDropdown = React.forwardRef(
 
     return (
       <Select
+        closeMenuOnSelect
         {...rest}
         ref={ref}
         menuIsOpen={isOpen}
@@ -73,7 +74,6 @@ export const SimpleDropdown = React.forwardRef(
         isDisabled={isDisabled}
         className={isDisabled ? 'opacity-50' : ''}
         components={{ Option: OptionsList, LoadingIndicator }}
-        closeMenuOnSelect
       />
     );
   }
