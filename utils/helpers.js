@@ -904,3 +904,33 @@ export const ensureFileExtension = (fileName, extension) => {
   // Return the base name with the new extension
   return `${baseName}${normalizedExtension}`;
 };
+
+export const fixLongitudeWrapping = (coordinates) => {
+  if (!coordinates || coordinates.length < 2) return coordinates;
+
+  const result = [];
+  let previousLon = coordinates[0][1];
+  let offset = 0;
+
+  coordinates.forEach((coord) => {
+    const [lat, lon] = coord;
+    const diff = lon - previousLon;
+
+    // If there's a large jump in longitude (crossing meridian)
+    if (Math.abs(diff) > 180) {
+      // If moving from negative to positive (e.g., -179 to 179)
+      if (diff > 0) {
+        offset -= 360;
+      }
+      // If moving from positive to negative (e.g., 179 to -179)
+      else {
+        offset += 360;
+      }
+    }
+
+    result.push([lat, lon + offset]);
+    previousLon = lon;
+  });
+
+  return result;
+};
