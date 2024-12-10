@@ -626,15 +626,11 @@ const SearchFormFields = ({ productState, setProductState }) => {
   // Handle country selection changes
   const handleCountryChange = (selectedOptions) => {
     setSelectedCountries(selectedOptions || []);
-
-    /* eslint-disable no-console */
-    console.log('Selected countries to exclude:', selectedOptions);
   };
 
   // Handle checkbox change
   const handleSanctionCheckboxChange = (e) => {
     setIncludeInternationalSanctions(e.target.checked);
-    console.log('Include internationally sanctioned countries:', e.target.checked);
   };
 
   // Add function to handle basin updates
@@ -929,7 +925,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
               onChange={handleSanctionCheckboxChange}
               customStyles="accent-blue"
             >
-              <span className="text-xsm">Include internationally sanctioned countries in search results</span>
+              <span className="text-xsm">Exclude internationally sanctioned countries in search results</span>
             </CheckBoxInput>
 
             <div className="mt-4 border-t pt-4">
