@@ -9,7 +9,7 @@ import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
-import MinusCircleSVG from '@/assets/images/minusCircle.svg';
+import AngleDownSVG from '@/assets/images/angleDown.svg';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, CheckBoxInput, DatePicker, FormDropdown, Input } from '@/elements';
@@ -20,6 +20,7 @@ import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
+import { Flag } from '@/units';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -77,31 +78,37 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '101',
               name: 'TURKEY',
+              code: 'tr',
               selected: false,
             },
             {
               id: '102',
               name: 'BULGARIA',
+              code: 'bg',
               selected: false,
             },
             {
               id: '103',
               name: 'ROMANIA',
+              code: 'ro',
               selected: false,
             },
             {
               id: '104',
               name: 'UKRAINE',
+              code: 'ua',
               selected: false,
             },
             {
               id: '105',
               name: 'RUSSIA',
+              code: 'ru',
               selected: false,
             },
             {
               id: '106',
               name: 'GEORGIA',
+              code: 'ge',
               selected: false,
             },
           ],
@@ -114,11 +121,13 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '107',
               name: 'TURKEY',
+              code: 'tr',
               selected: false,
             },
             {
               id: '108',
               name: 'GREECE',
+              code: 'gr',
               selected: false,
             },
           ],
@@ -131,26 +140,31 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '109',
               name: 'ITALY',
+              code: 'it',
               selected: false,
             },
             {
               id: '110',
               name: 'CROATIA',
+              code: 'hr',
               selected: false,
             },
             {
               id: '111',
               name: 'ALBANIA',
+              code: 'al',
               selected: false,
             },
             {
               id: '112',
               name: 'MONTENEGRO',
+              code: 'me',
               selected: false,
             },
             {
               id: '113',
               name: 'SLOVENIA',
+              code: 'si',
               selected: false,
             },
           ],
@@ -163,11 +177,13 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '114',
               name: 'ITALY',
+              code: 'it',
               selected: false,
             },
             {
               id: '115',
               name: 'FRANCE',
+              code: 'fr',
               selected: false,
             },
           ],
@@ -187,31 +203,37 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '116',
               name: 'NORWAY',
+              code: 'no',
               selected: false,
             },
             {
               id: '117',
               name: 'UNITED KINGDOM',
+              code: 'gb',
               selected: false,
             },
             {
               id: '118',
               name: 'NETHERLANDS',
+              code: 'nl',
               selected: false,
             },
             {
               id: '119',
               name: 'BELGIUM',
+              code: 'be',
               selected: false,
             },
             {
               id: '120',
               name: 'GERMANY',
+              code: 'de',
               selected: false,
             },
             {
               id: '121',
               name: 'DENMARK',
+              code: 'dk',
               selected: false,
             },
           ],
@@ -224,36 +246,43 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '122',
               name: 'VENEZUELA',
+              code: 've',
               selected: false,
             },
             {
               id: '123',
               name: 'COLOMBIA',
+              code: 'co',
               selected: false,
             },
             {
               id: '124',
               name: 'PANAMA',
+              code: 'pa',
               selected: false,
             },
             {
               id: '125',
               name: 'JAMAICA',
+              code: 'jm',
               selected: false,
             },
             {
               id: '126',
               name: 'CUBA',
+              code: 'cu',
               selected: false,
             },
             {
               id: '127',
               name: 'DOMINICAN REPUBLIC',
+              code: 'do',
               selected: false,
             },
             {
               id: '128',
               name: 'TRINIDAD AND TOBAGO',
+              code: 'tt',
               selected: false,
             },
           ],
@@ -266,16 +295,19 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '129',
               name: 'FRANCE',
+              code: 'fr',
               selected: false,
             },
             {
               id: '130',
               name: 'SPAIN',
+              code: 'es',
               selected: false,
             },
             {
               id: '131',
               name: 'PORTUGAL',
+              code: 'pt',
               selected: false,
             },
           ],
@@ -295,26 +327,31 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '132',
               name: 'INDIA',
+              code: 'in',
               selected: false,
             },
             {
               id: '133',
               name: 'PAKISTAN',
+              code: 'pk',
               selected: false,
             },
             {
               id: '134',
               name: 'OMAN',
+              code: 'om',
               selected: false,
             },
             {
               id: '135',
               name: 'YEMEN',
+              code: 'ye',
               selected: false,
             },
             {
               id: '136',
               name: 'UAE',
+              code: 'ae',
               selected: false,
             },
           ],
@@ -327,26 +364,31 @@ const SearchFormFields = ({ productState, setProductState }) => {
             {
               id: '137',
               name: 'INDIA',
+              code: 'in',
               selected: false,
             },
             {
               id: '138',
               name: 'BANGLADESH',
+              code: 'bd',
               selected: false,
             },
             {
               id: '139',
               name: 'MYANMAR',
+              code: 'mm',
               selected: false,
             },
             {
               id: '140',
               name: 'THAILAND',
+              code: 'th',
               selected: false,
             },
             {
               id: '141',
               name: 'SRI LANKA',
+              code: 'lk',
               selected: false,
             },
           ],
@@ -649,6 +691,22 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
   const [isDataExpanded, setIsDataExpanded] = useState(false);
+  const [expandedBasins, setExpandedBasins] = useState(() => {
+    return basins.reduce(
+      (acc, basin) => ({
+        ...acc,
+        [basin.id]: true,
+      }),
+      {}
+    );
+  });
+
+  const toggleBasin = (basinId) => {
+    setExpandedBasins((prev) => ({
+      ...prev,
+      [basinId]: !prev[basinId],
+    }));
+  };
 
   return (
     <div className="flex flex-col sm:flex-row">
@@ -725,30 +783,20 @@ const SearchFormFields = ({ productState, setProductState }) => {
           />
         </div>
 
-        <Button
-          buttonProps={{
-            text: showAdditionalDischarge
-              ? 'Hide additional discharge countries'
-              : 'Add additional discharge countries',
-            variant: 'primary',
-            size: 'small',
-            icon: {
-              before: showAdditionalDischarge ? (
-                <MinusCircleSVG className="fill-blue group-hover:fill-blue-darker" />
-              ) : (
-                <PlusCircleSVG className="fill-blue group-hover:fill-blue-darker" />
-              ),
-            },
-          }}
-          customStyles="self-start text-xsm !px-0 !py-0 mt-4"
-          onClick={() => setShowAdditionalDischarge(!showAdditionalDischarge)}
-        />
+        <CheckBoxInput
+          name="showAdditionalDischarge"
+          checked={showAdditionalDischarge}
+          onChange={(e) => setShowAdditionalDischarge(e.target.checked)}
+          labelStyles="text-black text-xsm"
+        >
+          Add additional discharge options
+        </CheckBoxInput>
 
         {showAdditionalDischarge && (
           <>
-            <div className="mb-4 mt-4">
+            <div className="mb-4">
               <div className="mb-2 flex items-center justify-between">
-                <h4 className="text-sm font-medium">Additional Discharge Regions</h4>
+                <h4 className="text-sm font-medium">Additional Discharge Options</h4>
                 <Button
                   customStyles="text-blue hover:text-blue-darker"
                   buttonProps={{
@@ -776,133 +824,150 @@ const SearchFormFields = ({ productState, setProductState }) => {
               <div className="max-h-80 overflow-y-auto rounded border p-4">
                 {basins.map((basin) => (
                   <div key={basin.id} className="mb-4 last:mb-0">
-                    <label className="flex items-center font-medium">
-                      <input
-                        type="checkbox"
-                        className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                        checked={basin.selected}
-                        ref={(el) => {
-                          if (el) {
-                            el.indeterminate =
-                              !basin.selected &&
-                              basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
-                          }
-                        }}
-                        onChange={(e) => {
-                          const isChecked = e.target.checked;
-                          const updatedBasins = basins.map((b) => {
-                            if (b.id === basin.id) {
-                              return {
-                                ...b,
-                                selected: isChecked,
-                                subBasins: b.subBasins.map((sb) => ({
-                                  ...sb,
-                                  selected: isChecked,
-                                  countries: sb.countries.map((c) => ({
-                                    ...c,
-                                    selected: isChecked,
-                                  })),
-                                })),
-                              };
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center font-medium">
+                        <input
+                          type="checkbox"
+                          className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
+                          checked={basin.selected}
+                          ref={(el) => {
+                            if (el) {
+                              el.indeterminate =
+                                !basin.selected &&
+                                basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
                             }
-                            return b;
-                          });
-                          updateBasins(updatedBasins);
-                        }}
-                      />
-                      {basin.name}
-                    </label>
-                    <div className="ml-6 mt-2">
-                      {basin.subBasins.map((subBasin) => (
-                        <div key={subBasin.id} className="mb-2 last:mb-0">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                              checked={subBasin.selected}
-                              ref={(el) => {
-                                if (el) {
-                                  el.indeterminate = !subBasin.selected && subBasin.countries.some((c) => c.selected);
-                                }
-                              }}
-                              onChange={(e) => {
-                                const isChecked = e.target.checked;
-                                const updatedBasins = basins.map((b) => {
-                                  if (b.id === basin.id) {
-                                    const updatedSubBasins = b.subBasins.map((sb) => {
-                                      if (sb.id === subBasin.id) {
+                          }}
+                          onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            const updatedBasins = basins.map((b) => {
+                              if (b.id === basin.id) {
+                                return {
+                                  ...b,
+                                  selected: isChecked,
+                                  subBasins: b.subBasins.map((sb) => ({
+                                    ...sb,
+                                    selected: isChecked,
+                                    countries: sb.countries.map((c) => ({
+                                      ...c,
+                                      selected: isChecked,
+                                    })),
+                                  })),
+                                };
+                              }
+                              return b;
+                            });
+                            updateBasins(updatedBasins);
+                          }}
+                        />
+                        {basin.name}
+                      </label>
+                      <button type="button" onClick={() => toggleBasin(basin.id)} className="flex items-center p-1">
+                        <AngleDownSVG
+                          className={`h-5 w-5 transform fill-blue transition-transform duration-200 ${
+                            expandedBasins[basin.id] ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                    </div>
+                    {expandedBasins[basin.id] && (
+                      <div className="ml-6 mt-2">
+                        {basin.subBasins.map((subBasin) => (
+                          <div key={subBasin.id} className="mb-3 last:mb-0">
+                            <div className="flex items-center">
+                              <label className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
+                                  checked={subBasin.selected}
+                                  ref={(el) => {
+                                    if (el) {
+                                      el.indeterminate =
+                                        !subBasin.selected && subBasin.countries.some((c) => c.selected);
+                                    }
+                                  }}
+                                  onChange={(e) => {
+                                    const isChecked = e.target.checked;
+                                    const updatedBasins = basins.map((b) => {
+                                      if (b.id === basin.id) {
+                                        const updatedSubBasins = b.subBasins.map((sb) => {
+                                          if (sb.id === subBasin.id) {
+                                            return {
+                                              ...sb,
+                                              selected: isChecked,
+                                              countries: sb.countries.map((c) => ({
+                                                ...c,
+                                                selected: isChecked,
+                                              })),
+                                            };
+                                          }
+                                          return sb;
+                                        });
+
                                         return {
-                                          ...sb,
-                                          selected: isChecked,
-                                          countries: sb.countries.map((c) => ({
-                                            ...c,
-                                            selected: isChecked,
-                                          })),
+                                          ...b,
+                                          selected: updatedSubBasins.every((sb) => sb.selected),
+                                          subBasins: updatedSubBasins,
                                         };
                                       }
-                                      return sb;
+                                      return b;
                                     });
+                                    updateBasins(updatedBasins);
+                                  }}
+                                />
+                                {subBasin.name}
+                              </label>
+                            </div>
+                            <div className="mt-2 space-y-1.5 pl-6">
+                              {subBasin.countries.map((country) => (
+                                <div key={country.id}>
+                                  <label className="flex items-center text-sm">
+                                    <input
+                                      type="checkbox"
+                                      className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
+                                      checked={country.selected}
+                                      onChange={(e) => {
+                                        const isChecked = e.target.checked;
+                                        const updatedBasins = basins.map((b) => {
+                                          if (b.id === basin.id) {
+                                            const updatedSubBasins = b.subBasins.map((sb) => {
+                                              if (sb.id === subBasin.id) {
+                                                const updatedCountries = sb.countries.map((c) => ({
+                                                  ...c,
+                                                  selected: c.id === country.id ? isChecked : c.selected,
+                                                }));
 
-                                    return {
-                                      ...b,
-                                      selected: updatedSubBasins.every((sb) => sb.selected),
-                                      subBasins: updatedSubBasins,
-                                    };
-                                  }
-                                  return b;
-                                });
-                                updateBasins(updatedBasins);
-                              }}
-                            />
-                            {subBasin.name}
-                          </label>
-                          <div className="ml-6 mt-1">
-                            {subBasin.countries.map((country) => (
-                              <div key={country.id} className="mb-1 last:mb-0">
-                                <label className="flex items-center text-sm">
-                                  <input
-                                    type="checkbox"
-                                    className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                                    checked={country.selected}
-                                    onChange={(e) => {
-                                      const isChecked = e.target.checked;
-                                      const updatedBasins = basins.map((b) => {
-                                        if (b.id === basin.id) {
-                                          const updatedSubBasins = b.subBasins.map((sb) => {
-                                            if (sb.id === subBasin.id) {
-                                              const updatedCountries = sb.countries.map((c) => ({
-                                                ...c,
-                                                selected: c.id === country.id ? isChecked : c.selected,
-                                              }));
+                                                return {
+                                                  ...sb,
+                                                  selected: updatedCountries.every((c) => c.selected),
+                                                  countries: updatedCountries,
+                                                };
+                                              }
+                                              return sb;
+                                            });
 
-                                              return {
-                                                ...sb,
-                                                selected: updatedCountries.every((c) => c.selected),
-                                                countries: updatedCountries,
-                                              };
-                                            }
-                                            return sb;
-                                          });
-
-                                          return {
-                                            ...b,
-                                            selected: updatedSubBasins.every((sb) => sb.selected),
-                                            subBasins: updatedSubBasins,
-                                          };
-                                        }
-                                        return b;
-                                      });
-                                      updateBasins(updatedBasins);
-                                    }}
-                                  />
-                                  {country.name}
-                                </label>
-                              </div>
-                            ))}
+                                            return {
+                                              ...b,
+                                              selected: updatedSubBasins.every((sb) => sb.selected),
+                                              subBasins: updatedSubBasins,
+                                            };
+                                          }
+                                          return b;
+                                        });
+                                        updateBasins(updatedBasins);
+                                      }}
+                                    />
+                                    <div className="flex items-center">
+                                      <Flag countryCode={country.code} className="mr-1.5" />
+                                      {country.name}
+                                    </div>
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -924,8 +989,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
               checked={includeInternationalSanctions}
               onChange={handleSanctionCheckboxChange}
               customStyles="accent-blue"
+              labelStyles="text-black text-xsm"
             >
-              <span className="text-xsm">Exclude internationally sanctioned countries in search results</span>
+              Exclude internationally sanctioned countries in search results
             </CheckBoxInput>
 
             <div className="mt-4 border-t pt-4">
