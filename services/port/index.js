@@ -16,3 +16,11 @@ export const getPortsForSearchForm = async ({ query = '', skip = 0, pageSize = 1
     ...response,
   };
 };
+
+export const getAdditionalDischargeOptions = async ({ query = '' }) => {
+  const response = await getData(`ports/additional-discharge-options?SearchValue=${query}`);
+
+  return {
+    ...response,
+  };
+};
