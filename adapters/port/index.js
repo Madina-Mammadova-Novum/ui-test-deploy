@@ -56,3 +56,8 @@ export const portOptionsAdapter = ({ data }) => {
 
   return data.map((port) => ({ value: port?.id, label: port.label, countryFlag: port?.countryFlag }));
 };
+
+export const dischargeOptionsAdapter = ({ data }) => {
+  if (!data) return [];
+  return data;
+};
