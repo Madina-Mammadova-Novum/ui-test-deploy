@@ -32,7 +32,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const {
     register,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, submitCount },
     setValue,
     getValues,
     control,
@@ -59,10 +59,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
       data: [],
     },
   });
-
-  // Add state for selected countries
-  const [selectedCountries, setSelectedCountries] = useState([]);
-  const [includeInternationalSanctions, setIncludeInternationalSanctions] = useState(false);
 
   // Add basins state
   const [basins, setBasins] = useState([]);
@@ -309,6 +305,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const [countries, setCountries] = useState([]);
   const [countriesLoading, setCountriesLoading] = useState(false);
+  const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
 
   const fetchCountries = async () => {
     setCountriesLoading(true);
@@ -328,32 +325,67 @@ const SearchFormFields = ({ productState, setProductState }) => {
     fetchCountries();
   }, []);
 
+  // Add watch for additional discharge fields
+  const excludedCountries = useWatch({
+    control,
+    name: 'excludedCountries',
+    defaultValue: [],
+  });
+
+  const excludeInternationallySanctioned = useWatch({
+    control,
+    name: 'excludeInternationallySanctioned',
+    defaultValue: false,
+  });
+
+  // Update function to handle basin updates
+  const updateBasins = (newBasins) => {
+    setBasins(newBasins);
+
+    // Format data for backend
+    const additionalDischargeOptions = newBasins
+      .filter(
+        (basin) => basin.selected || basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected))
+      )
+      .map((basin) => ({
+        basinId: basin.id,
+        subBasins: basin.subBasins
+          .filter((sb) => sb.selected || sb.countries.some((c) => c.selected))
+          .map((subBasin) => ({
+            id: subBasin.id,
+            countryIds: subBasin.countries.filter((country) => country.selected).map((country) => country.id),
+          }))
+          .filter((sb) => sb.countryIds.length > 0),
+      }))
+      .filter((basin) => basin.subBasins.length > 0);
+
+    setValue('additionalDischargeOptions', additionalDischargeOptions, {
+      shouldValidate: false,
+    });
+
+    // Clear error if there are any selections
+    if (additionalDischargeOptions.length > 0) {
+      clearErrors('additionalDischargeOptions');
+    }
+  };
+
   // Handle country selection changes
   const handleCountryChange = (selectedOptions) => {
-    setSelectedCountries(selectedOptions || []);
+    setValue('excludedCountries', selectedOptions || []);
+    // Format sanctioned country ids for backend
+    setValue(
+      'sanctionedCountryIds',
+      (selectedOptions || []).map((option) => option.value)
+    );
   };
 
   // Handle checkbox change
   const handleSanctionCheckboxChange = (e) => {
-    setIncludeInternationalSanctions(e.target.checked);
+    setValue('excludeInternationallySanctioned', e.target.checked);
   };
 
-  // Add function to handle basin updates
-  const updateBasins = (newBasins) => {
-    setBasins(newBasins);
-    // Here you can also update form values or dispatch actions if needed
-    const selectedRegions = {
-      basins: newBasins.filter((b) => b.selected).map((b) => b.id),
-      subBasins: newBasins.flatMap((b) => b.subBasins.filter((sb) => sb.selected).map((sb) => sb.id)),
-      countries: newBasins.flatMap((b) =>
-        b.subBasins.flatMap((sb) => sb.countries.filter((c) => c.selected).map((c) => c.id))
-      ),
-    };
-    setValue('selectedRegions', selectedRegions);
-  };
-
-  const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
-  const [isDataExpanded, setIsDataExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
   const [expandedBasins, setExpandedBasins] = useState({});
 
   const toggleBasin = (basinId) => {
@@ -362,9 +394,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
       [basinId]: !prev[basinId],
     }));
   };
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchLoading, setSearchLoading] = useState(false);
 
   const fetchInitialBasins = async () => {
     setSearchLoading(true);
@@ -416,6 +445,36 @@ const SearchFormFields = ({ productState, setProductState }) => {
     const value = e.target.value;
     setSearchQuery(value);
     debouncedSearchBasins(value);
+  };
+
+  useEffect(() => {
+    if (showAdditionalDischarge) {
+      setValue('additionalDischargeOptions', [], {
+        shouldValidate: false,
+      });
+    } else {
+      setValue('additionalDischargeOptions', undefined);
+      clearErrors('additionalDischargeOptions');
+    }
+  }, [showAdditionalDischarge]);
+
+  const handleShowAdditionalDischargeChange = (e) => {
+    const isChecked = e.target.checked;
+    setShowAdditionalDischarge(isChecked);
+
+    if (!isChecked) {
+      setValue('additionalDischargeOptions', undefined, { shouldValidate: false });
+      setValue('sanctionedCountryIds', []);
+      setValue('excludeInternationallySanctioned', false);
+      clearErrors('additionalDischargeOptions');
+    } else {
+      setValue('additionalDischargeOptions', [], { shouldValidate: false });
+    }
+  };
+
+  // Add this function to check if we should show the error
+  const shouldShowError = () => {
+    return submitCount > 0 && showAdditionalDischarge && errors.additionalDischargeOptions;
   };
 
   return (
@@ -496,7 +555,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
         <CheckBoxInput
           name="showAdditionalDischarge"
           checked={showAdditionalDischarge}
-          onChange={(e) => setShowAdditionalDischarge(e.target.checked)}
+          onChange={handleShowAdditionalDischargeChange}
           labelStyles="text-black text-xsm"
         >
           Add additional discharge options
@@ -506,7 +565,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <>
             <div className="mb-4">
               <div className="mb-2 flex flex-col gap-2">
-                <h4 className="text-sm font-medium">Additional Discharge Options</h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-medium">Additional Discharge Options</h4>
+                </div>
                 <div className="flex items-center justify-between gap-x-2">
                   <Input
                     type="text"
@@ -538,12 +599,18 @@ const SearchFormFields = ({ productState, setProductState }) => {
                         })),
                       }));
                       updateBasins(resetBasins);
+                      setValue('additionalDischargeOptions', []);
+                      setValue('sanctionedCountryIds', []);
+                      setValue('excludedCountries', []);
+                      setValue('excludeInternationallySanctioned', false);
                       fetchInitialBasins();
                     }}
                   />
                 </div>
               </div>
-              <div className="max-h-80 overflow-y-auto rounded border p-4">
+              <div
+                className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}
+              >
                 {basins.length > 0 ? (
                   basins.map((basin) => (
                     <div key={basin.id} className="mb-4 last:mb-0">
@@ -703,13 +770,17 @@ const SearchFormFields = ({ productState, setProductState }) => {
                   </div>
                 )}
               </div>
+
+              {shouldShowError() && (
+                <span className="text-sm text-red-500">{errors.additionalDischargeOptions.message}</span>
+              )}
             </div>
 
             <FormDropdown
               label="Exclude Sanctioned Countries"
               name="excludedCountries"
               options={countries}
-              value={selectedCountries}
+              value={excludedCountries}
               isMulti
               loading={countriesLoading}
               closeMenuOnSelect={false}
@@ -718,65 +789,14 @@ const SearchFormFields = ({ productState, setProductState }) => {
               placeholder="Select countries to exclude from search..."
             />
             <CheckBoxInput
-              name="includeInternationalSanctions"
-              checked={includeInternationalSanctions}
+              name="excludeInternationallySanctioned"
+              checked={excludeInternationallySanctioned}
               onChange={handleSanctionCheckboxChange}
               customStyles="accent-blue"
               labelStyles="text-black text-xsm"
             >
               Exclude internationally sanctioned countries in search results
             </CheckBoxInput>
-
-            <div className="mt-4 border-t pt-4">
-              <div className="mb-2 flex w-full items-center justify-between">
-                <h4 className="text-sm font-medium">Selected Data (We will remove this section)</h4>
-                <Button
-                  buttonProps={{
-                    text: isDataExpanded ? 'Hide' : 'Show',
-                    variant: 'tertiary',
-                    size: 'small',
-                  }}
-                  onClick={() => setIsDataExpanded(!isDataExpanded)}
-                  customStyles="text-blue hover:text-blue-darker"
-                />
-              </div>
-              {isDataExpanded && (
-                <pre className="text-xs overflow-auto rounded border bg-gray-50 p-4">
-                  {JSON.stringify(
-                    {
-                      basins: basins
-                        .filter(
-                          (b) =>
-                            b.selected || b.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected))
-                        )
-                        .map((basin) => ({
-                          id: basin.id,
-                          name: basin.name,
-                          subBasins: basin.subBasins
-                            .filter((sb) => sb.selected || sb.countries.some((c) => c.selected))
-                            .map((subBasin) => ({
-                              id: subBasin.id,
-                              name: subBasin.name,
-                              countries: subBasin.countries
-                                .filter((c) => c.selected)
-                                .map((country) => ({
-                                  id: country.id,
-                                  name: country.name,
-                                })),
-                            })),
-                        })),
-                      sanctionedCountries: selectedCountries.map((country) => ({
-                        id: country.value,
-                        name: country.label,
-                      })),
-                      excludeInternationallySanctioned: includeInternationalSanctions,
-                    },
-                    null,
-                    2
-                  )}
-                </pre>
-              )}
-            </div>
           </>
         )}
       </div>
