@@ -18,7 +18,7 @@ export const getPortsForSearchForm = async ({ query = '', skip = 0, pageSize = 1
 };
 
 export const getAdditionalDischargeOptions = async ({ query = '' }) => {
-  const response = await getData(`ports/additional-discharge-options?SearchValue=${query}`);
+  const response = await getData(`ports/additional-discharge-options?query=${query}`);
 
   return {
     ...response,
