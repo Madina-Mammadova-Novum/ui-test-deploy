@@ -372,15 +372,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
       const response = await getAdditionalDischargeOptions({ query: '' });
       if (response?.data) {
         setBasins(response.data);
-        // Set all basins as expanded
-        const initialExpandedState = response.data.reduce(
-          (acc, basin) => ({
-            ...acc,
-            [basin.id]: true,
-          }),
-          {}
-        );
-        setExpandedBasins(initialExpandedState);
       }
     } catch (error) {
       console.error('Error fetching initial basins:', error);
@@ -399,15 +390,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
       const response = await getAdditionalDischargeOptions({ query });
       if (response?.data) {
         setBasins(response.data);
-        // Set all basins as expanded for search results too
-        const newExpandedState = response.data.reduce(
-          (acc, basin) => ({
-            ...acc,
-            [basin.id]: true,
-          }),
-          {}
-        );
-        setExpandedBasins(newExpandedState);
       }
     } catch (error) {
       console.error('Error searching basins:', error);
