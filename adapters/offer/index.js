@@ -30,6 +30,9 @@ export function sendOfferAdapter({ data }) {
     minOfferQuantity,
     ballastLeg,
     estimatedArrivalTime,
+    additionalDischargeOptions,
+    sanctionedCountryIds,
+    excludeInternationallySanctioned,
   } = data;
   return {
     laycanStart,
@@ -50,6 +53,9 @@ export function sendOfferAdapter({ data }) {
     paymentTermId: paymentTerms.value,
     countDownTimerSettingId: responseCountdown.value,
     cargoes: postProductsAdapter({ data: products }),
+    additionalDischargeOptions,
+    sanctionedCountryIds,
+    excludeInternationallySanctioned,
   };
 }
 
@@ -361,7 +367,15 @@ export function offerDetailsAdapter({ data, role }) {
 
 export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
   if (!data) return null;
-  const { loadPort, loadTerminal, dischargePort, dischargeTerminal } = data;
+  const {
+    loadPort,
+    loadTerminal,
+    dischargePort,
+    dischargeTerminal,
+    additionalDischargeOptions = [],
+    sanctionedCountryIds = [],
+    excludeInternationallySanctioned,
+  } = data;
 
   return {
     voyageDetails: {
@@ -401,6 +415,9 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
           },
         ],
       ],
+      additionalDischargeOptions,
+      sanctionedCountryIds,
+      excludeInternationallySanctioned,
     },
   };
 }
