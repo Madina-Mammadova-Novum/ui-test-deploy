@@ -67,6 +67,7 @@ import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
 import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
+import NestedCheckboxList from '@/units/NestedCheckboxList';
 import NegotiatingChartererInformation from '@/units/NegotiatingChartererInformation';
 import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
 import Notes from '@/units/Notes';
@@ -219,4 +220,5 @@ export {
   FavoriteSearchForm,
   FavoriteSearchList,
   ConfirmModal,
+  NestedCheckboxList,
 };
