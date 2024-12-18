@@ -13,11 +13,10 @@ import { useWatch } from 'react-hook-form';
 import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
-import AngleDownSVG from '@/assets/images/angleDown.svg';
-import { Button, CheckBoxInput, FormDropdown, Input } from '@/elements';
+import { Button, CheckBoxInput, FormDropdown, Input, Label } from '@/elements';
 import { getCountries } from '@/services/country';
 import { getAdditionalDischargeOptions } from '@/services/port';
-import { Flag } from '@/units';
+import { Flag, NestedCheckboxList } from '@/units';
 import { countriesOptions } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -32,54 +31,27 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
   const [countries, setCountries] = useState([]);
   const [countriesLoading, setCountriesLoading] = useState(false);
 
-  // Local state for when form context isn't available
-  const [localExcludedCountries, setLocalExcludedCountries] = useState(data?.sanctionedCountryIds || []);
-  const [localExcludeInternationallySanctioned, setLocalExcludeInternationallySanctioned] = useState(
-    data?.excludeInternationallySanctioned || false
-  );
+  const formExcludedCountries = useWatch({
+    control,
+    name: 'excludedCountries',
+    defaultValue: [],
+  });
 
-  // Form values when form context is available
-  /* eslint-disable */
-  const formExcludedCountries = control
-    ? useWatch({
-        control,
-        name: 'excludedCountries',
-        defaultValue: data?.sanctionedCountryIds || [],
-      })
-    : [];
-
-  const formExcludeInternationallySanctioned = control
-    ? useWatch({
-        control,
-        name: 'excludeInternationallySanctioned',
-        defaultValue: data?.excludeInternationallySanctioned || false,
-      })
-    : false;
-
-  // Use form values if available, otherwise use local state
-  const excludedCountries = control ? formExcludedCountries : localExcludedCountries;
-  const excludeInternationallySanctioned = control
-    ? formExcludeInternationallySanctioned
-    : localExcludeInternationallySanctioned;
-
-  const toggleBasin = (basinId) => {
-    setExpandedBasins((prev) => ({
-      ...prev,
-      [basinId]: !prev[basinId],
-    }));
-  };
+  const formExcludeInternationallySanctioned = useWatch({
+    control,
+    name: 'excludeInternationallySanctioned',
+    defaultValue: false,
+  });
 
   const updateBasins = (newBasins) => {
     setBasins(newBasins);
 
     const additionalDischargeOptions = newBasins
-      .filter(
-        (basin) => basin.selected || basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected))
-      )
+      .filter((basin) => basin.subBasins.some((sb) => sb.countries.some((c) => c.selected)))
       .map((basin) => ({
         basinId: basin.id,
         subBasins: basin.subBasins
-          .filter((sb) => sb.selected || sb.countries.some((c) => c.selected))
+          .filter((sb) => sb.countries.some((c) => c.selected))
           .map((subBasin) => ({
             id: subBasin.id,
             countryIds: subBasin.countries.filter((country) => country.selected).map((country) => country.id),
@@ -88,34 +60,25 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
       }))
       .filter((basin) => basin.subBasins.length > 0);
 
-    setValue?.('additionalDischargeOptions', additionalDischargeOptions, {
+    setValue('additionalDischargeOptions', additionalDischargeOptions, {
       shouldValidate: false,
     });
 
     if (additionalDischargeOptions.length > 0) {
-      clearErrors?.('additionalDischargeOptions');
+      clearErrors('additionalDischargeOptions');
     }
   };
 
   const handleCountryChange = (selectedOptions) => {
-    if (control) {
-      setValue?.('excludedCountries', selectedOptions || []);
-      setValue?.(
-        'sanctionedCountryIds',
-        (selectedOptions || []).map((option) => option.value)
-      );
-    } else {
-      setLocalExcludedCountries(selectedOptions || []);
-    }
+    setValue('excludedCountries', selectedOptions || []);
+    setValue(
+      'sanctionedCountryIds',
+      (selectedOptions || []).map((option) => option.value)
+    );
   };
 
   const handleSanctionCheckboxChange = (e) => {
-    const isChecked = e.target.checked;
-    if (control) {
-      setValue?.('excludeInternationallySanctioned', isChecked);
-    } else {
-      setLocalExcludeInternationallySanctioned(isChecked);
-    }
+    setValue('excludeInternationallySanctioned', e.target.checked);
   };
 
   const fetchInitialBasins = async () => {
@@ -123,56 +86,42 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
     try {
       const response = await getAdditionalDischargeOptions({ query: '' });
       if (response?.data) {
-        // First, create a map of selected options for easier lookup
         const selectedBasinsMap = new Map();
         const selectedSubBasinsMap = new Map();
-        const selectedCountryIds = new Set();
 
         data?.additionalDischargeOptions?.forEach((opt) => {
           selectedBasinsMap.set(opt.basinId, opt);
           opt.subBasins.forEach((subBasin) => {
             selectedSubBasinsMap.set(subBasin.id, subBasin);
-            subBasin.countryIds.forEach((id) => selectedCountryIds.add(id));
           });
         });
 
-        // Update basins with selected state
-        const updatedBasins = response.data.map((basin) => ({
-          ...basin,
-          selected: false, // Will be updated based on subBasins
-          subBasins: basin.subBasins.map((subBasin) => {
+        const updatedBasins = response.data.map((basin) => {
+          const updatedSubBasins = basin.subBasins.map((subBasin) => {
             const matchingSubBasin = selectedSubBasinsMap.get(subBasin.id);
             const updatedCountries = subBasin.countries.map((country) => ({
               ...country,
               selected: matchingSubBasin?.countryIds.includes(country.id) || false,
             }));
 
-            // Only mark subBasin as selected if it has matching countries and all of them are selected
-            const hasSelectedCountries = updatedCountries.some((country) => country.selected);
-            const allMatchingCountriesSelected =
-              hasSelectedCountries &&
-              updatedCountries
-                .filter((country) => matchingSubBasin?.countryIds.includes(country.id))
-                .every((country) => country.selected);
-
+            const hasSelectedCountries = updatedCountries.some((c) => c.selected);
             return {
               ...subBasin,
-              selected: allMatchingCountriesSelected,
+              selected: hasSelectedCountries && updatedCountries.every((c) => c.selected),
               countries: updatedCountries,
             };
-          }),
-        }));
+          });
 
-        // Update basin selected state based on subBasins that have selected countries
-        const finalBasins = updatedBasins.map((basin) => ({
-          ...basin,
-          selected: basin.subBasins.some(
-            (subBasin) => subBasin.selected && subBasin.countries.some((country) => country.selected)
-          ),
-        }));
+          const hasSelectedSubBasins = updatedSubBasins.some((sb) => sb.countries.some((c) => c.selected));
+          return {
+            ...basin,
+            selected: hasSelectedSubBasins && updatedSubBasins.every((sb) => sb.selected),
+            subBasins: updatedSubBasins,
+          };
+        });
 
-        setBasins(finalBasins);
-        setValue?.('additionalDischargeOptions', data?.additionalDischargeOptions || []);
+        setBasins(updatedBasins);
+        setValue('additionalDischargeOptions', data?.additionalDischargeOptions || []);
       }
     } catch (error) {
       console.error('Error fetching initial basins:', error);
@@ -219,14 +168,13 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
         const formattedCountries = countriesOptions(response.data);
         setCountries(formattedCountries);
 
-        // Set initial excluded countries after countries are loaded
         if (data?.sanctionedCountryIds?.length > 0) {
           const initialSelectedCountries = data.sanctionedCountryIds
             .map((id) => formattedCountries.find((country) => country.value === id))
             .filter(Boolean);
 
-          setValue?.('excludedCountries', initialSelectedCountries);
-          setValue?.('sanctionedCountryIds', data.sanctionedCountryIds);
+          setValue('excludedCountries', initialSelectedCountries);
+          setValue('sanctionedCountryIds', data.sanctionedCountryIds);
         }
       }
     } catch (error) {
@@ -239,18 +187,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
   useEffect(() => {
     fetchInitialBasins();
     fetchCountries();
-
-    // Set initial excluded countries with proper format
-    if (data?.sanctionedCountryIds?.length > 0) {
-      setValue?.(
-        'excludedCountries',
-        data.sanctionedCountryIds.map((id) => ({ value: id, label: id }))
-      );
-      setValue?.('sanctionedCountryIds', data.sanctionedCountryIds);
-    }
-
-    // Set initial excludeInternationallySanctioned value
-    setValue?.('excludeInternationallySanctioned', data?.excludeInternationallySanctioned || false);
+    setValue('excludeInternationallySanctioned', data?.excludeInternationallySanctioned || false);
   }, []);
 
   useEffect(() => {
@@ -259,16 +196,126 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
     };
   }, []);
 
+  const handleBasinChange = useCallback(
+    (item, checked, itemType) => {
+      const updatedBasins = basins.map((basin) => {
+        if (itemType === 'basin' && basin.id === item.id) {
+          // Handle basin selection
+          return {
+            ...basin,
+            selected: checked,
+            subBasins: basin.subBasins.map((sb) => ({
+              ...sb,
+              selected: checked,
+              countries: sb.countries.map((c) => ({
+                ...c,
+                selected: checked,
+              })),
+            })),
+          };
+        }
+        if (itemType === 'subBasin') {
+          // Handle sub-basin selection
+          if (basin.subBasins.some((sb) => sb.id === item.id)) {
+            const updatedSubBasins = basin.subBasins.map((sb) => {
+              if (sb.id === item.id) {
+                return {
+                  ...sb,
+                  selected: checked,
+                  countries: sb.countries.map((c) => ({
+                    ...c,
+                    selected: checked,
+                  })),
+                };
+              }
+              return sb;
+            });
+
+            return {
+              ...basin,
+              subBasins: updatedSubBasins,
+              selected: updatedSubBasins.every((sb) => sb.selected),
+            };
+          }
+        }
+        if (itemType === 'country') {
+          // Handle country selection
+          const updatedSubBasins = basin.subBasins.map((sb) => {
+            const countryInSubBasin = sb.countries.find((c) => c.id === item.id);
+            if (countryInSubBasin && item.subBasinId === sb.id) {
+              const updatedCountries = sb.countries.map((c) => ({
+                ...c,
+                selected: c.id === item.id ? checked : c.selected,
+              }));
+
+              return {
+                ...sb,
+                selected: updatedCountries.every((c) => c.selected),
+                countries: updatedCountries,
+              };
+            }
+            return sb;
+          });
+
+          return {
+            ...basin,
+            subBasins: updatedSubBasins,
+            selected: updatedSubBasins.every((sb) => sb.selected),
+          };
+        }
+        return basin;
+      });
+
+      updateBasins(updatedBasins);
+    },
+    [basins]
+  );
+
+  const getSubItems = useCallback((item) => {
+    if (item.subBasins) return item.subBasins;
+    if (item.countries) return item.countries;
+    return [];
+  }, []);
+
+  const isSelected = useCallback((item) => {
+    return item.selected || false;
+  }, []);
+
+  const hasIndeterminate = useCallback((item) => {
+    if (item.subBasins) {
+      return !item.selected && item.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
+    }
+    if (item.countries) {
+      return !item.selected && item.countries.some((c) => c.selected);
+    }
+    return false;
+  }, []);
+
+  const renderItem = useCallback((item) => {
+    if (item.countries) {
+      return item.name;
+    }
+    if (item.codeISO2) {
+      return (
+        <div className="flex items-center">
+          <Flag countryCode={item.codeISO2} className="mr-1.5" />
+          {item.name}
+        </div>
+      );
+    }
+    return item.name;
+  }, []);
+
   const shouldShowError = () => {
     return showError && submitCount > 0 && errors?.additionalDischargeOptions;
   };
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-y-4">
       <div>
-        <div className="mb-2 flex flex-col gap-2">
+        <div className="mb-2 flex flex-col">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-medium">Additional Discharge Options</h4>
+            <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
           </div>
           <div className="flex items-center justify-between gap-x-2">
             <Input
@@ -301,10 +348,10 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
                   })),
                 }));
                 updateBasins(resetBasins);
-                setValue?.('additionalDischargeOptions', []);
-                setValue?.('sanctionedCountryIds', []);
-                setValue?.('excludedCountries', []);
-                setValue?.('excludeInternationallySanctioned', false);
+                setValue('additionalDischargeOptions', []);
+                setValue('sanctionedCountryIds', []);
+                setValue('excludedCountries', []);
+                setValue('excludeInternationallySanctioned', false);
                 fetchInitialBasins();
               }}
             />
@@ -312,153 +359,20 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
           {basins.length > 0 ? (
-            basins.map((basin) => (
-              <div key={basin.id} className="mb-4 last:mb-0">
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center font-medium">
-                    <input
-                      type="checkbox"
-                      className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                      checked={basin.selected}
-                      ref={(el) => {
-                        if (el) {
-                          el.indeterminate =
-                            !basin.selected &&
-                            basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
-                        }
-                      }}
-                      onChange={(e) => {
-                        const isChecked = e.target.checked;
-                        const updatedBasins = basins.map((b) => {
-                          if (b.id === basin.id) {
-                            return {
-                              ...b,
-                              selected: isChecked,
-                              subBasins: b.subBasins.map((sb) => ({
-                                ...sb,
-                                selected: isChecked,
-                                countries: sb.countries.map((c) => ({
-                                  ...c,
-                                  selected: isChecked,
-                                })),
-                              })),
-                            };
-                          }
-                          return b;
-                        });
-                        updateBasins(updatedBasins);
-                      }}
-                    />
-                    {basin.name}
-                  </label>
-                  <button type="button" onClick={() => toggleBasin(basin.id)} className="flex items-center p-1">
-                    <AngleDownSVG
-                      className={`h-5 w-5 transform fill-blue transition-transform duration-200 ${
-                        expandedBasins[basin.id] ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                </div>
-                {expandedBasins[basin.id] && (
-                  <div className="ml-6 mt-2">
-                    {basin.subBasins.map((subBasin) => (
-                      <div key={subBasin.id} className="mb-3 last:mb-0">
-                        <div className="flex items-center">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                              checked={subBasin.selected}
-                              ref={(el) => {
-                                if (el) {
-                                  el.indeterminate = !subBasin.selected && subBasin.countries.some((c) => c.selected);
-                                }
-                              }}
-                              onChange={(e) => {
-                                const isChecked = e.target.checked;
-                                const updatedBasins = basins.map((b) => {
-                                  if (b.id === basin.id) {
-                                    const updatedSubBasins = b.subBasins.map((sb) => {
-                                      if (sb.id === subBasin.id) {
-                                        return {
-                                          ...sb,
-                                          selected: isChecked,
-                                          countries: sb.countries.map((c) => ({
-                                            ...c,
-                                            selected: isChecked,
-                                          })),
-                                        };
-                                      }
-                                      return sb;
-                                    });
-
-                                    return {
-                                      ...b,
-                                      selected: updatedSubBasins.every((sb) => sb.selected),
-                                      subBasins: updatedSubBasins,
-                                    };
-                                  }
-                                  return b;
-                                });
-                                updateBasins(updatedBasins);
-                              }}
-                            />
-                            {subBasin.name}
-                          </label>
-                        </div>
-                        <div className="mt-2 space-y-1.5 pl-6">
-                          {subBasin.countries.map((country) => (
-                            <div key={country.id}>
-                              <label className="flex items-center text-sm">
-                                <input
-                                  type="checkbox"
-                                  className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                                  checked={country.selected}
-                                  onChange={(e) => {
-                                    const isChecked = e.target.checked;
-                                    const updatedBasins = basins.map((b) => {
-                                      if (b.id === basin.id) {
-                                        const updatedSubBasins = b.subBasins.map((sb) => {
-                                          if (sb.id === subBasin.id) {
-                                            const updatedCountries = sb.countries.map((c) => ({
-                                              ...c,
-                                              selected: c.id === country.id ? isChecked : c.selected,
-                                            }));
-
-                                            return {
-                                              ...sb,
-                                              selected: updatedCountries.every((c) => c.selected),
-                                              countries: updatedCountries,
-                                            };
-                                          }
-                                          return sb;
-                                        });
-
-                                        return {
-                                          ...b,
-                                          selected: updatedSubBasins.every((sb) => sb.selected),
-                                          subBasins: updatedSubBasins,
-                                        };
-                                      }
-                                      return b;
-                                    });
-                                    updateBasins(updatedBasins);
-                                  }}
-                                />
-                                <div className="flex items-center">
-                                  <Flag countryCode={country.codeISO2} className="mr-1.5" />
-                                  {country.name}
-                                </div>
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))
+            <NestedCheckboxList
+              items={basins}
+              expanded={expandedBasins}
+              onToggleExpand={(key) => setExpandedBasins((prev) => ({ ...prev, [key]: !prev[key] }))}
+              onChange={handleBasinChange}
+              renderItem={renderItem}
+              getSubItems={getSubItems}
+              isSelected={isSelected}
+              hasIndeterminate={hasIndeterminate}
+              customStyles={{
+                container: 'space-y-1.5',
+                subItems: 'space-y-0.5',
+              }}
+            />
           ) : (
             <div className="flex items-center justify-center py-8 text-gray-500">
               {searchLoading ? (
@@ -477,7 +391,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
         label="Exclude Sanctioned Countries"
         name="excludedCountries"
         options={countries}
-        value={excludedCountries}
+        value={formExcludedCountries}
         isMulti
         loading={countriesLoading}
         closeMenuOnSelect={false}
@@ -487,7 +401,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
       />
       <CheckBoxInput
         name="excludeInternationallySanctioned"
-        checked={excludeInternationallySanctioned}
+        checked={formExcludeInternationallySanctioned}
         onChange={handleSanctionCheckboxChange}
         customStyles="accent-blue"
         labelStyles="text-black text-xsm"
@@ -498,19 +412,19 @@ const AdditionalDischargeForm = ({ data = {}, showError = false }) => {
   );
 };
 
+const SubBasinShape = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  countryIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+});
+
+const AdditionalDischargeOptionShape = PropTypes.shape({
+  basinId: PropTypes.string.isRequired,
+  subBasins: PropTypes.arrayOf(SubBasinShape).isRequired,
+});
+
 AdditionalDischargeForm.propTypes = {
   data: PropTypes.shape({
-    additionalDischargeOptions: PropTypes.arrayOf(
-      PropTypes.shape({
-        basinId: PropTypes.string,
-        subBasins: PropTypes.arrayOf(
-          PropTypes.shape({
-            id: PropTypes.string,
-            countryIds: PropTypes.arrayOf(PropTypes.string),
-          })
-        ),
-      })
-    ),
+    additionalDischargeOptions: PropTypes.arrayOf(AdditionalDischargeOptionShape),
     sanctionedCountryIds: PropTypes.arrayOf(PropTypes.string),
     excludeInternationallySanctioned: PropTypes.bool,
   }),
