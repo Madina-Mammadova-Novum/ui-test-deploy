@@ -69,6 +69,7 @@ import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import NegotiatingChartererInformation from '@/units/NegotiatingChartererInformation';
 import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
+import NestedCheckboxList from '@/units/NestedCheckboxList';
 import Notes from '@/units/Notes';
 import NotificationCard from '@/units/NotificationCard';
 import NotificationContent from '@/units/NotificationContent';
@@ -219,4 +220,5 @@ export {
   FavoriteSearchForm,
   FavoriteSearchList,
   ConfirmModal,
+  NestedCheckboxList,
 };
