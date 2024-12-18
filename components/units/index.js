@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Accordion from '@/units/Accordion';
 import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
+import AdditionalDischargeForm from '@/units/AdditionalDischargeForm';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
@@ -113,6 +114,7 @@ export * from '@/units/Account';
 export {
   AnonChat,
   AuthChat,
+  AdditionalDischargeForm,
   AddressDetails,
   CalculatedForm,
   CalculatedResult,

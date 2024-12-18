@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,20 +9,18 @@ import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
-import AngleDownSVG from '@/assets/images/angleDown.svg';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import { Button, CheckBoxInput, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
-import { getCountries } from '@/services/country';
-import { getAdditionalDischargeOptions, getPortsForSearchForm } from '@/services/port';
+import { getPortsForSearchForm } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
-import { Flag } from '@/units';
-import { convertDataToOptions, countriesOptions, getValueWithPath } from '@/utils/helpers';
+import { AdditionalDischargeForm } from '@/units';
+import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = ({ productState, setProductState }) => {
@@ -40,6 +38,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const [initialLoading, setInitialLoading] = useState(false);
   const [portsLoader, setPortsLoader] = useState(false);
+  const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
 
   const [ports, setPorts] = useState([]);
   const [perList, setPerList] = useState(100);
@@ -60,9 +59,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
     },
   });
 
-  // Add basins state
-  const [basins, setBasins] = useState([]);
-
   const laycanStart = useWatch({
     control,
     name: 'laycanStart',
@@ -76,6 +72,16 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const isAlternative = getValues('isAlternative');
 
   const handleMore = () => setPerList((prev) => prev + 100);
+
+  const handleShowAdditionalDischargeChange = (e) => {
+    setShowAdditionalDischarge(e.target.checked);
+    if (!e.target.checked) {
+      setValue('additionalDischargeOptions', []);
+      setValue('sanctionedCountryIds', []);
+      setValue('excludedCountries', []);
+      setValue('excludeInternationallySanctioned', false);
+    }
+  };
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -303,180 +309,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
     };
   }, [isSavedSearch]);
 
-  const [countries, setCountries] = useState([]);
-  const [countriesLoading, setCountriesLoading] = useState(false);
-  const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
-
-  const fetchCountries = async () => {
-    setCountriesLoading(true);
-    try {
-      const response = await getCountries();
-      if (response?.data) {
-        setCountries(countriesOptions(response.data));
-      }
-    } catch (error) {
-      console.error('Error fetching countries:', error);
-    } finally {
-      setCountriesLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCountries();
-  }, []);
-
-  // Add watch for additional discharge fields
-  const excludedCountries = useWatch({
-    control,
-    name: 'excludedCountries',
-    defaultValue: [],
-  });
-
-  const excludeInternationallySanctioned = useWatch({
-    control,
-    name: 'excludeInternationallySanctioned',
-    defaultValue: false,
-  });
-
-  // Update function to handle basin updates
-  const updateBasins = (newBasins) => {
-    setBasins(newBasins);
-
-    // Format data for backend
-    const additionalDischargeOptions = newBasins
-      .filter(
-        (basin) => basin.selected || basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected))
-      )
-      .map((basin) => ({
-        basinId: basin.id,
-        subBasins: basin.subBasins
-          .filter((sb) => sb.selected || sb.countries.some((c) => c.selected))
-          .map((subBasin) => ({
-            id: subBasin.id,
-            countryIds: subBasin.countries.filter((country) => country.selected).map((country) => country.id),
-          }))
-          .filter((sb) => sb.countryIds.length > 0),
-      }))
-      .filter((basin) => basin.subBasins.length > 0);
-
-    setValue('additionalDischargeOptions', additionalDischargeOptions, {
-      shouldValidate: false,
-    });
-
-    // Clear error if there are any selections
-    if (additionalDischargeOptions.length > 0) {
-      clearErrors('additionalDischargeOptions');
-    }
-  };
-
-  // Handle country selection changes
-  const handleCountryChange = (selectedOptions) => {
-    setValue('excludedCountries', selectedOptions || []);
-    // Format sanctioned country ids for backend
-    setValue(
-      'sanctionedCountryIds',
-      (selectedOptions || []).map((option) => option.value)
-    );
-  };
-
-  // Handle checkbox change
-  const handleSanctionCheckboxChange = (e) => {
-    setValue('excludeInternationallySanctioned', e.target.checked);
-  };
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [expandedBasins, setExpandedBasins] = useState({});
-
-  const toggleBasin = (basinId) => {
-    setExpandedBasins((prev) => ({
-      ...prev,
-      [basinId]: !prev[basinId],
-    }));
-  };
-
-  const fetchInitialBasins = async () => {
-    setSearchLoading(true);
-    try {
-      const response = await getAdditionalDischargeOptions({ query: '' });
-      if (response?.data) {
-        setBasins(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching initial basins:', error);
-    } finally {
-      setSearchLoading(false);
-    }
-  };
-
-  const searchBasins = async (query) => {
-    if (!query) {
-      await fetchInitialBasins();
-      return;
-    }
-    setSearchLoading(true);
-    try {
-      const response = await getAdditionalDischargeOptions({ query });
-      if (response?.data) {
-        setBasins(response.data);
-      }
-    } catch (error) {
-      console.error('Error searching basins:', error);
-    } finally {
-      setSearchLoading(false);
-    }
-  };
-
-  const debouncedSearchBasins = useCallback(
-    debounce((query) => searchBasins(query), 400),
-    []
-  );
-
-  useEffect(() => {
-    fetchInitialBasins();
-    return () => {
-      debouncedSearchBasins.cancel();
-    };
-  }, []);
-
-  // Update search input handler
-  const handleSearchChange = (e) => {
-    /* eslint-disable prefer-destructuring */
-    const value = e.target.value;
-    setSearchQuery(value);
-    debouncedSearchBasins(value);
-  };
-
-  useEffect(() => {
-    if (showAdditionalDischarge) {
-      setValue('additionalDischargeOptions', [], {
-        shouldValidate: false,
-      });
-    } else {
-      setValue('additionalDischargeOptions', undefined);
-      clearErrors('additionalDischargeOptions');
-    }
-  }, [showAdditionalDischarge]);
-
-  const handleShowAdditionalDischargeChange = (e) => {
-    const isChecked = e.target.checked;
-    setShowAdditionalDischarge(isChecked);
-
-    if (!isChecked) {
-      setValue('additionalDischargeOptions', undefined, { shouldValidate: false });
-      setValue('sanctionedCountryIds', []);
-      setValue('excludeInternationallySanctioned', false);
-      clearErrors('additionalDischargeOptions');
-    } else {
-      setValue('additionalDischargeOptions', [], { shouldValidate: false });
-    }
-  };
-
-  // Add this function to check if we should show the error
-  const shouldShowError = () => {
-    return submitCount > 0 && showAdditionalDischarge && errors.additionalDischargeOptions;
-  };
-
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
@@ -561,244 +393,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           Add additional discharge options
         </CheckBoxInput>
 
-        {showAdditionalDischarge && (
-          <>
-            <div className="mb-4">
-              <div className="mb-2 flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-medium">Additional Discharge Options</h4>
-                </div>
-                <div className="flex items-center justify-between gap-x-2">
-                  <Input
-                    type="text"
-                    placeholder="Search discharge options..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    customStyles="max-w-72 w-full"
-                    disabled={searchLoading}
-                  />
-                  <Button
-                    customStyles="text-blue hover:text-blue-darker"
-                    buttonProps={{
-                      text: 'Reset All',
-                      variant: 'tertiary',
-                      size: 'small',
-                    }}
-                    onClick={() => {
-                      setSearchQuery('');
-                      const resetBasins = basins.map((basin) => ({
-                        ...basin,
-                        selected: false,
-                        subBasins: basin.subBasins.map((subBasin) => ({
-                          ...subBasin,
-                          selected: false,
-                          countries: subBasin.countries.map((country) => ({
-                            ...country,
-                            selected: false,
-                          })),
-                        })),
-                      }));
-                      updateBasins(resetBasins);
-                      setValue('additionalDischargeOptions', []);
-                      setValue('sanctionedCountryIds', []);
-                      setValue('excludedCountries', []);
-                      setValue('excludeInternationallySanctioned', false);
-                      fetchInitialBasins();
-                    }}
-                  />
-                </div>
-              </div>
-              <div
-                className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}
-              >
-                {basins.length > 0 ? (
-                  basins.map((basin) => (
-                    <div key={basin.id} className="mb-4 last:mb-0">
-                      <div className="flex items-center justify-between">
-                        <label className="flex items-center font-medium">
-                          <input
-                            type="checkbox"
-                            className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                            checked={basin.selected}
-                            ref={(el) => {
-                              if (el) {
-                                el.indeterminate =
-                                  !basin.selected &&
-                                  basin.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
-                              }
-                            }}
-                            onChange={(e) => {
-                              const isChecked = e.target.checked;
-                              const updatedBasins = basins.map((b) => {
-                                if (b.id === basin.id) {
-                                  return {
-                                    ...b,
-                                    selected: isChecked,
-                                    subBasins: b.subBasins.map((sb) => ({
-                                      ...sb,
-                                      selected: isChecked,
-                                      countries: sb.countries.map((c) => ({
-                                        ...c,
-                                        selected: isChecked,
-                                      })),
-                                    })),
-                                  };
-                                }
-                                return b;
-                              });
-                              updateBasins(updatedBasins);
-                            }}
-                          />
-                          {basin.name}
-                        </label>
-                        <button type="button" onClick={() => toggleBasin(basin.id)} className="flex items-center p-1">
-                          <AngleDownSVG
-                            className={`h-5 w-5 transform fill-blue transition-transform duration-200 ${
-                              expandedBasins[basin.id] ? 'rotate-180' : ''
-                            }`}
-                          />
-                        </button>
-                      </div>
-                      {expandedBasins[basin.id] && (
-                        <div className="ml-6 mt-2">
-                          {basin.subBasins.map((subBasin) => (
-                            <div key={subBasin.id} className="mb-3 last:mb-0">
-                              <div className="flex items-center">
-                                <label className="flex items-center">
-                                  <input
-                                    type="checkbox"
-                                    className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                                    checked={subBasin.selected}
-                                    ref={(el) => {
-                                      if (el) {
-                                        el.indeterminate =
-                                          !subBasin.selected && subBasin.countries.some((c) => c.selected);
-                                      }
-                                    }}
-                                    onChange={(e) => {
-                                      const isChecked = e.target.checked;
-                                      const updatedBasins = basins.map((b) => {
-                                        if (b.id === basin.id) {
-                                          const updatedSubBasins = b.subBasins.map((sb) => {
-                                            if (sb.id === subBasin.id) {
-                                              return {
-                                                ...sb,
-                                                selected: isChecked,
-                                                countries: sb.countries.map((c) => ({
-                                                  ...c,
-                                                  selected: isChecked,
-                                                })),
-                                              };
-                                            }
-                                            return sb;
-                                          });
-
-                                          return {
-                                            ...b,
-                                            selected: updatedSubBasins.every((sb) => sb.selected),
-                                            subBasins: updatedSubBasins,
-                                          };
-                                        }
-                                        return b;
-                                      });
-                                      updateBasins(updatedBasins);
-                                    }}
-                                  />
-                                  {subBasin.name}
-                                </label>
-                              </div>
-                              <div className="mt-2 space-y-1.5 pl-6">
-                                {subBasin.countries.map((country) => (
-                                  <div key={country.id}>
-                                    <label className="flex items-center text-sm">
-                                      <input
-                                        type="checkbox"
-                                        className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
-                                        checked={country.selected}
-                                        onChange={(e) => {
-                                          const isChecked = e.target.checked;
-                                          const updatedBasins = basins.map((b) => {
-                                            if (b.id === basin.id) {
-                                              const updatedSubBasins = b.subBasins.map((sb) => {
-                                                if (sb.id === subBasin.id) {
-                                                  const updatedCountries = sb.countries.map((c) => ({
-                                                    ...c,
-                                                    selected: c.id === country.id ? isChecked : c.selected,
-                                                  }));
-
-                                                  return {
-                                                    ...sb,
-                                                    selected: updatedCountries.every((c) => c.selected),
-                                                    countries: updatedCountries,
-                                                  };
-                                                }
-                                                return sb;
-                                              });
-
-                                              return {
-                                                ...b,
-                                                selected: updatedSubBasins.every((sb) => sb.selected),
-                                                subBasins: updatedSubBasins,
-                                              };
-                                            }
-                                            return b;
-                                          });
-                                          updateBasins(updatedBasins);
-                                        }}
-                                      />
-                                      <div className="flex items-center">
-                                        <Flag countryCode={country.codeISO2} className="mr-1.5" />
-                                        {country.name}
-                                      </div>
-                                    </label>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="flex items-center justify-center py-8 text-gray-500">
-                    {searchLoading ? (
-                      <span>Loading discharge options...</span>
-                    ) : (
-                      <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {shouldShowError() && (
-                <span className="text-sm text-red-500">{errors.additionalDischargeOptions.message}</span>
-              )}
-            </div>
-
-            <FormDropdown
-              label="Exclude Sanctioned Countries"
-              name="excludedCountries"
-              options={countries}
-              value={excludedCountries}
-              isMulti
-              loading={countriesLoading}
-              closeMenuOnSelect={false}
-              customStyles={{ className: 'w-full' }}
-              onChange={handleCountryChange}
-              placeholder="Select countries to exclude from search..."
-            />
-            <CheckBoxInput
-              name="excludeInternationallySanctioned"
-              checked={excludeInternationallySanctioned}
-              onChange={handleSanctionCheckboxChange}
-              customStyles="accent-blue"
-              labelStyles="text-black text-xsm"
-            >
-              Exclude internationally sanctioned countries in search results
-            </CheckBoxInput>
-          </>
-        )}
+        {showAdditionalDischarge && <AdditionalDischargeForm showError={submitCount > 0} />}
       </div>
 
       <div className="flex w-full flex-col gap-y-4">
