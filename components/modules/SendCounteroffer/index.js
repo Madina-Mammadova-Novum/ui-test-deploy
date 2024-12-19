@@ -25,6 +25,10 @@ const tabs = [
     label: 'Commercial offer terms',
   },
   {
+    value: 'voyage_details',
+    label: 'Voyage details',
+  },
+  {
     value: 'comments',
     label: 'Comments',
   },
@@ -110,15 +114,12 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
     };
 
     switch (currentTab) {
+      case 'voyage_details':
+        return <VoyageDetailsTabContent data={voyageDetails} />;
       case 'comments':
         return <CommentsContent data={comments} />;
       default:
-        return (
-          <>
-            <VoyageDetailsTabContent data={voyageDetails} inlineVariant />
-            <SendCounterofferFormFields data={counterofferData} scrollToBottom={scrollToBottom} />
-          </>
-        );
+        return <SendCounterofferFormFields data={counterofferData} scrollToBottom={scrollToBottom} />;
     }
   }, [currentTab, voyageDetails, comments, counterofferData]);
 
