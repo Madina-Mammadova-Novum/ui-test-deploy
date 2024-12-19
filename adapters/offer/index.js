@@ -215,6 +215,9 @@ export function offerDetailsAdapter({ data, role }) {
     isCountdownExtendedByCharterer,
     isCountdownActive,
     hasUnreadComment,
+    additionalDischargeOptions = [],
+    sanctionedCountryIds = [],
+    excludeInternationallySanctioned,
   } = data;
 
   const { isOwner } = getRoleIdentity({ role });
@@ -269,6 +272,9 @@ export function offerDetailsAdapter({ data, role }) {
           },
         ],
       ],
+      additionalDischargeOptions,
+      sanctionedCountryIds,
+      excludeInternationallySanctioned,
     },
 
     commercialOfferTerms: {
