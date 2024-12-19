@@ -48,6 +48,12 @@ const NestedCheckboxList = ({
     [onChange, parentId]
   );
 
+  const getLabelClass = useCallback((item) => {
+    if (item.countries) return 'text-sm font-medium';
+    if (item.codeISO2) return 'text-xs';
+    return 'text-sm font-bold';
+  }, []);
+
   const getExpandedKey = useCallback((item) => {
     const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : 'basin';
     return `${itemType}-${item.id}`;
@@ -65,8 +71,8 @@ const NestedCheckboxList = ({
 
         return (
           <div key={item.id} className={customStyles.item || ''}>
-            <div className="flex items-center justify-between">
-              <label className="flex items-center font-medium">
+            <div className="mb-1 flex items-center justify-between">
+              <label className={`flex items-center ${getLabelClass(item)}`}>
                 <input
                   type="checkbox"
                   className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
@@ -91,7 +97,7 @@ const NestedCheckboxList = ({
               )}
             </div>
             {hasSubItems && isExpanded && (
-              <div className={`ml-6 mt-2 ${customStyles.subItems || ''}`}>
+              <div className={`ml-6 ${customStyles.subItems || ''}`}>
                 <NestedCheckboxList
                   items={subItems}
                   config={config}
