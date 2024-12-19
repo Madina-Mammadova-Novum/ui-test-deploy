@@ -62,7 +62,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
       {hasAdditionalDischargeOptions && (
         <>
           <hr className="my-4" />
-          <AdditionalDischargeForm data={data} />
+          <AdditionalDischargeForm data={data} showResetButton={false} />
         </>
       )}
     </div>

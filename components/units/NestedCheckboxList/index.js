@@ -49,9 +49,9 @@ const NestedCheckboxList = ({
   );
 
   const getLabelClass = useCallback((item) => {
-    if (item.countries) return 'text-sm font-medium'; // 14px
-    if (item.codeISO2) return 'text-xs'; // 12px
-    return 'text-base font-semibold'; // 16px
+    if (item.countries) return 'text-sm font-medium';
+    if (item.codeISO2) return 'text-xs';
+    return 'text-sm font-bold';
   }, []);
 
   const getExpandedKey = useCallback((item) => {
