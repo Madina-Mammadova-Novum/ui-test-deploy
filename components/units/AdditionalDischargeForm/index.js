@@ -224,20 +224,28 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
   );
 };
 
+const CountryShape = PropTypes.shape({
+  countryId: PropTypes.string.isRequired,
+  countryName: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+});
+
 const SubBasinShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  countryIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  name: PropTypes.string.isRequired,
+  countries: PropTypes.arrayOf(CountryShape).isRequired,
 });
 
 const AdditionalDischargeOptionShape = PropTypes.shape({
-  basinId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   subBasins: PropTypes.arrayOf(SubBasinShape).isRequired,
 });
 
 AdditionalDischargeForm.propTypes = {
   data: PropTypes.shape({
     additionalDischargeOptions: PropTypes.arrayOf(AdditionalDischargeOptionShape),
-    sanctionedCountryIds: PropTypes.arrayOf(PropTypes.string),
+    sanctionedCountries: PropTypes.arrayOf(CountryShape),
     excludeInternationallySanctioned: PropTypes.bool,
   }),
   showError: PropTypes.bool,
