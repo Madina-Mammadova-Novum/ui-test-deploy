@@ -110,6 +110,12 @@ const mockAdditionalDischargeData = {
     { id: 'sy', name: 'Syria', codeISO2: 'SY' },
     { id: 've', name: 'Venezuela', codeISO2: 'VE' },
   ],
+  sanctionedCountries: [
+    { countryId: 'ru', countryName: 'Russia', countryCode: 'RU' },
+    { countryId: 'ir', countryName: 'Iran', countryCode: 'IR' },
+    { countryId: 'sy', countryName: 'Syria', countryCode: 'SY' },
+    { countryId: 've', countryName: 'Venezuela', countryCode: 'VE' },
+  ],
   excludeInternationallySanctioned: true,
 };
 

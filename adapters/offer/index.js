@@ -31,7 +31,7 @@ export function sendOfferAdapter({ data }) {
     ballastLeg,
     estimatedArrivalTime,
     additionalDischargeOptions,
-    sanctionedCountryIds,
+    sanctionedCountries,
     excludeInternationallySanctioned,
   } = data;
   return {
@@ -54,7 +54,7 @@ export function sendOfferAdapter({ data }) {
     countDownTimerSettingId: responseCountdown.value,
     cargoes: postProductsAdapter({ data: products }),
     additionalDischargeOptions,
-    sanctionedCountryIds,
+    sanctionedCountries,
     excludeInternationallySanctioned,
   };
 }
@@ -216,7 +216,7 @@ export function offerDetailsAdapter({ data, role }) {
     isCountdownActive,
     hasUnreadComment,
     additionalDischargeOptions = [],
-    sanctionedCountryIds = [],
+    sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
 
@@ -273,7 +273,7 @@ export function offerDetailsAdapter({ data, role }) {
         ],
       ],
       additionalDischargeOptions,
-      sanctionedCountryIds,
+      sanctionedCountries,
       excludeInternationallySanctioned,
     },
 
@@ -379,7 +379,7 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
     dischargePort,
     dischargeTerminal,
     additionalDischargeOptions = [],
-    sanctionedCountryIds = [],
+    sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
 
@@ -422,7 +422,7 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
         ],
       ],
       additionalDischargeOptions,
-      sanctionedCountryIds,
+      sanctionedCountries,
       excludeInternationallySanctioned,
     },
   };

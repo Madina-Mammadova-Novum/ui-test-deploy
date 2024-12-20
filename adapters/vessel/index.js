@@ -18,7 +18,7 @@ export function requestSearchVesselAdapter({ data }) {
     rangeBy,
     savedSearchId,
     additionalDischargeOptions,
-    sanctionedCountryIds,
+    sanctionedCountries,
     excludeInternationallySanctioned,
   } = data;
 
@@ -35,7 +35,7 @@ export function requestSearchVesselAdapter({ data }) {
     cargoes: postProductsAdapter({ data: products }),
     savedSearchId,
     additionalDischargeOptions,
-    sanctionedCountryIds,
+    sanctionedCountries,
     excludeInternationallySanctioned,
   };
 }

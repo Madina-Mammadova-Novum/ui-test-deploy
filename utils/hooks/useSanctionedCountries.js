@@ -21,8 +21,12 @@ export const useSanctionedCountries = (setValue, initialData) => {
     const options = selectedOptions || [];
     setValueRef.current('excludedCountries', options);
     setValueRef.current(
-      'sanctionedCountryIds',
-      options.map((option) => option.value)
+      'sanctionedCountries',
+      options.map((option) => ({
+        countryId: option.value,
+        countryName: option.label,
+        countryCode: option.countryFlag?.toUpperCase(),
+      }))
     );
   }, []); // No dependencies needed as we use refs
 
@@ -40,14 +44,14 @@ export const useSanctionedCountries = (setValue, initialData) => {
         const formattedCountries = countriesOptions(data);
         setCountries(formattedCountries);
 
-        const { sanctionedCountryIds } = initialDataRef.current || {};
-        if (sanctionedCountryIds?.length > 0) {
-          const initialSelectedCountries = sanctionedCountryIds
-            .map((id) => formattedCountries.find((country) => country.value === id))
+        const { sanctionedCountries } = initialDataRef.current || {};
+        if (sanctionedCountries?.length > 0) {
+          const initialSelectedCountries = sanctionedCountries
+            .map((country) => formattedCountries.find((option) => option.value === country.countryId))
             .filter(Boolean);
 
           setValueRef.current('excludedCountries', initialSelectedCountries);
-          setValueRef.current('sanctionedCountryIds', sanctionedCountryIds);
+          setValueRef.current('sanctionedCountries', sanctionedCountries);
         }
       }
     } catch (error) {
@@ -58,7 +62,7 @@ export const useSanctionedCountries = (setValue, initialData) => {
   }, []); // No dependencies needed as we use refs
 
   const resetSanctionedCountries = useCallback(() => {
-    setValueRef.current('sanctionedCountryIds', []);
+    setValueRef.current('sanctionedCountries', []);
     setValueRef.current('excludedCountries', []);
     setValueRef.current('excludeInternationallySanctioned', false);
   }, []); // No dependencies needed as we use refs

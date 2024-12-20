@@ -26,14 +26,22 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
     const additionalDischargeOptions = newBasins
       .filter((basin) => basin.subBasins.some((sb) => sb.countries.some((c) => c.selected)))
       .map((basin) => ({
-        basinId: basin.id,
+        id: basin.id,
+        name: basin.name,
         subBasins: basin.subBasins
           .filter((sb) => sb.countries.some((c) => c.selected))
           .map((subBasin) => ({
             id: subBasin.id,
-            countryIds: subBasin.countries.filter((country) => country.selected).map((country) => country.id),
+            name: subBasin.name,
+            countries: subBasin.countries
+              .filter((country) => country.selected)
+              .map((country) => ({
+                id: country.id,
+                name: country.name,
+                codeISO2: country.codeISO2,
+              })),
           }))
-          .filter((sb) => sb.countryIds.length > 0),
+          .filter((sb) => sb.countries.length > 0),
       }))
       .filter((basin) => basin.subBasins.length > 0);
 
@@ -57,7 +65,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         const selectedSubBasinsMap = new Map();
 
         initialDataRef.current?.additionalDischargeOptions?.forEach((opt) => {
-          selectedBasinsMap.set(opt.basinId, opt);
+          selectedBasinsMap.set(opt.id, opt);
           opt.subBasins.forEach((subBasin) => {
             selectedSubBasinsMap.set(subBasin.id, subBasin);
           });
@@ -68,7 +76,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
             const matchingSubBasin = selectedSubBasinsMap.get(subBasin.id);
             const updatedCountries = subBasin.countries.map((country) => ({
               ...country,
-              selected: matchingSubBasin?.countryIds.includes(country.id) || false,
+              selected: matchingSubBasin?.countries?.some((c) => c.id === country.id) || false,
             }));
 
             const hasSelectedCountries = updatedCountries.some((c) => c.selected);

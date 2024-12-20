@@ -77,7 +77,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
     setShowAdditionalDischarge(e.target.checked);
     if (!e.target.checked) {
       setValue('additionalDischargeOptions', []);
-      setValue('sanctionedCountryIds', []);
+      setValue('sanctionedCountries', []);
       setValue('excludedCountries', []);
       setValue('excludeInternationallySanctioned', false);
     }
