@@ -189,7 +189,7 @@ const AdditionalDischargeDetails = ({ data = mockAdditionalDischargeData }) => {
 
           <div className="mt-2.5">
             {data.excludedCountries?.length > 0 && (
-              <TextRow title="Specific Countries">
+              <TextRow title="Specific Destinations">
                 <div className="flex flex-wrap gap-x-4">
                   {data.excludedCountries.map((country) => (
                     <div key={country.id} className="flex items-center">
@@ -201,9 +201,10 @@ const AdditionalDischargeDetails = ({ data = mockAdditionalDischargeData }) => {
               </TextRow>
             )}
 
-            {data.excludeInternationallySanctioned && (
-              <TextRow title="Sanctioned">Internationally sanctioned countries are excluded</TextRow>
-            )}
+            <span className="inline-flex items-center whitespace-nowrap font-bold">
+              Internationally sanctioned countries are{' '}
+              {data.excludeInternationallySanctioned ? 'excluded' : 'not excluded'}
+            </span>
           </div>
         </div>
       )}
