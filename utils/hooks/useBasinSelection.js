@@ -39,6 +39,12 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
                 id: country.id,
                 name: country.name,
                 codeISO2: country.codeISO2,
+                ports:
+                  country.ports?.map((port) => ({
+                    id: port.id,
+                    name: port.name,
+                    code: port.code,
+                  })) || [],
               })),
           }))
           .filter((sb) => sb.countries.length > 0),
@@ -139,6 +145,11 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
               countries: sb.countries.map((c) => ({
                 ...c,
                 selected: checked,
+                ports:
+                  c.ports?.map((port) => ({
+                    ...port,
+                    selected: checked,
+                  })) || [],
               })),
             })),
           };
@@ -152,6 +163,11 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
                 countries: sb.countries.map((c) => ({
                   ...c,
                   selected: checked,
+                  ports:
+                    c.ports?.map((port) => ({
+                      ...port,
+                      selected: checked,
+                    })) || [],
                 })),
               };
             }
@@ -171,6 +187,11 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
               const updatedCountries = sb.countries.map((c) => ({
                 ...c,
                 selected: c.id === item.id ? checked : c.selected,
+                ports:
+                  c.ports?.map((port) => ({
+                    ...port,
+                    selected: c.id === item.id ? checked : port.selected,
+                  })) || [],
               }));
 
               return {
@@ -180,6 +201,36 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
               };
             }
             return sb;
+          });
+
+          return {
+            ...basin,
+            subBasins: updatedSubBasins,
+            selected: updatedSubBasins.every((sb) => sb.selected),
+          };
+        }
+        if (itemType === 'port') {
+          const updatedSubBasins = basin.subBasins.map((sb) => {
+            const updatedCountries = sb.countries.map((c) => {
+              if (c.id === item.countryId) {
+                const updatedPorts = (c.ports || []).map((port) => ({
+                  ...port,
+                  selected: port.id === item.id ? checked : port.selected,
+                }));
+                return {
+                  ...c,
+                  selected: updatedPorts.every((p) => p.selected),
+                  ports: updatedPorts,
+                };
+              }
+              return c;
+            });
+
+            return {
+              ...sb,
+              selected: updatedCountries.every((c) => c.selected),
+              countries: updatedCountries,
+            };
           });
 
           return {

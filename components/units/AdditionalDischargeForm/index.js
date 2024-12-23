@@ -228,6 +228,13 @@ const CountryShape = PropTypes.shape({
   countryId: PropTypes.string.isRequired,
   countryName: PropTypes.string.isRequired,
   countryCode: PropTypes.string.isRequired,
+  ports: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      code: PropTypes.string.isRequired,
+    })
+  ),
 });
 
 const SubBasinShape = PropTypes.shape({

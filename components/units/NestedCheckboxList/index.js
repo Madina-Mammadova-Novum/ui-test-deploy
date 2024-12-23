@@ -31,12 +31,22 @@ const NestedCheckboxList = ({
   const handleItemChange = useCallback(
     (item, checked) => {
       /* eslint-disable no-nested-ternary */
-      const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : 'basin';
+      const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : item.code ? 'port' : 'basin';
+
       if (itemType === 'country') {
         onChange?.(
           {
             ...item,
             subBasinId: parentId,
+          },
+          checked,
+          itemType
+        );
+      } else if (itemType === 'port') {
+        onChange?.(
+          {
+            ...item,
+            countryId: parentId,
           },
           checked,
           itemType
@@ -51,11 +61,12 @@ const NestedCheckboxList = ({
   const getLabelClass = useCallback((item) => {
     if (item.countries) return 'text-sm font-medium';
     if (item.codeISO2) return 'text-xs';
+    if (item.code) return 'text-xs italic';
     return 'text-sm font-bold';
   }, []);
 
   const getExpandedKey = useCallback((item) => {
-    const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : 'basin';
+    const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : item.code ? 'port' : 'basin';
     return `${itemType}-${item.id}`;
   }, []);
 
