@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { OfferDetailsPropTypes } from '@/lib/types';
 
-import { TextRow, Title } from '@/elements';
+import { Title } from '@/elements';
 import { COTTabContent, Flag, VoyageDetailsTabContent } from '@/units';
 
 // Mock data structure - In real implementation, this would come from the API
@@ -18,11 +18,26 @@ const mockAdditionalDischargeData = {
           name: 'East Mediterranean',
           selected: true,
           countries: [
-            { id: 'gr', name: 'Greece', codeISO2: 'GR', selected: true },
-            { id: 'tr', name: 'Turkey', codeISO2: 'TR', selected: true },
-            { id: 'cy', name: 'Cyprus', codeISO2: 'CY', selected: true },
-            { id: 'lb', name: 'Lebanon', codeISO2: 'LB', selected: true },
-            { id: 'il', name: 'Israel', codeISO2: 'IL', selected: true },
+            {
+              id: 'gr',
+              name: 'Greece',
+              codeISO2: 'GR',
+              selected: true,
+              ports: [
+                { id: 'pir', name: 'Piraeus', code: 'GRPIR', selected: true },
+                { id: 'thes', name: 'Thessaloniki', code: 'GRTHS', selected: true },
+              ],
+            },
+            {
+              id: 'tr',
+              name: 'Turkey',
+              codeISO2: 'TR',
+              selected: true,
+              ports: [
+                { id: 'ist', name: 'Istanbul', code: 'TRIST', selected: true },
+                { id: 'izm', name: 'Izmir', code: 'TRIZM', selected: true },
+              ],
+            },
           ],
         },
         {
@@ -30,21 +45,26 @@ const mockAdditionalDischargeData = {
           name: 'West Mediterranean',
           selected: true,
           countries: [
-            { id: 'es', name: 'Spain', codeISO2: 'ES', selected: true },
-            { id: 'fr', name: 'France', codeISO2: 'FR', selected: true },
-            { id: 'it', name: 'Italy', codeISO2: 'IT', selected: true },
-            { id: 'mt', name: 'Malta', codeISO2: 'MT', selected: true },
-          ],
-        },
-        {
-          id: 'central_med',
-          name: 'Central Mediterranean',
-          selected: true,
-          countries: [
-            { id: 'it', name: 'Italy', codeISO2: 'IT', selected: true },
-            { id: 'mt', name: 'Malta', codeISO2: 'MT', selected: true },
-            { id: 'tn', name: 'Tunisia', codeISO2: 'TN', selected: true },
-            { id: 'ly', name: 'Libya', codeISO2: 'LY', selected: true },
+            {
+              id: 'es',
+              name: 'Spain',
+              codeISO2: 'ES',
+              selected: true,
+              ports: [
+                { id: 'bcn', name: 'Barcelona', code: 'ESBCN', selected: true },
+                { id: 'vlc', name: 'Valencia', code: 'ESVLC', selected: true },
+              ],
+            },
+            {
+              id: 'fr',
+              name: 'France',
+              codeISO2: 'FR',
+              selected: true,
+              ports: [
+                { id: 'mrs', name: 'Marseille', code: 'FRMRS', selected: true },
+                { id: 'tln', name: 'Toulon', code: 'FRTLN', selected: true },
+              ],
+            },
           ],
         },
       ],
@@ -59,9 +79,26 @@ const mockAdditionalDischargeData = {
           name: 'West Black Sea',
           selected: true,
           countries: [
-            { id: 'bg', name: 'Bulgaria', codeISO2: 'BG', selected: true },
-            { id: 'ro', name: 'Romania', codeISO2: 'RO', selected: true },
-            { id: 'tr', name: 'Turkey', codeISO2: 'TR', selected: true },
+            {
+              id: 'bg',
+              name: 'Bulgaria',
+              codeISO2: 'BG',
+              selected: true,
+              ports: [
+                { id: 'var', name: 'Varna', code: 'BGVAR', selected: true },
+                { id: 'bgs', name: 'Burgas', code: 'BGBGS', selected: true },
+              ],
+            },
+            {
+              id: 'ro',
+              name: 'Romania',
+              codeISO2: 'RO',
+              selected: true,
+              ports: [
+                { id: 'cnd', name: 'Constanta', code: 'ROCND', selected: true },
+                { id: 'mng', name: 'Mangalia', code: 'ROMNG', selected: true },
+              ],
+            },
           ],
         },
         {
@@ -69,36 +106,26 @@ const mockAdditionalDischargeData = {
           name: 'East Black Sea',
           selected: true,
           countries: [
-            { id: 'ge', name: 'Georgia', codeISO2: 'GE', selected: true },
-            { id: 'tr', name: 'Turkey', codeISO2: 'TR', selected: true },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'baltic',
-      name: 'Baltic Sea',
-      selected: true,
-      subBasins: [
-        {
-          id: 'north_baltic',
-          name: 'North Baltic',
-          selected: true,
-          countries: [
-            { id: 'se', name: 'Sweden', codeISO2: 'SE', selected: true },
-            { id: 'fi', name: 'Finland', codeISO2: 'FI', selected: true },
-            { id: 'ee', name: 'Estonia', codeISO2: 'EE', selected: true },
-          ],
-        },
-        {
-          id: 'south_baltic',
-          name: 'South Baltic',
-          selected: true,
-          countries: [
-            { id: 'pl', name: 'Poland', codeISO2: 'PL', selected: true },
-            { id: 'de', name: 'Germany', codeISO2: 'DE', selected: true },
-            { id: 'lt', name: 'Lithuania', codeISO2: 'LT', selected: true },
-            { id: 'lv', name: 'Latvia', codeISO2: 'LV', selected: true },
+            {
+              id: 'ge',
+              name: 'Georgia',
+              codeISO2: 'GE',
+              selected: true,
+              ports: [
+                { id: 'bat', name: 'Batumi', code: 'GEBAT', selected: true },
+                { id: 'pot', name: 'Poti', code: 'GEPOT', selected: true },
+              ],
+            },
+            {
+              id: 'tr_black',
+              name: 'Turkey',
+              codeISO2: 'TR',
+              selected: true,
+              ports: [
+                { id: 'sam', name: 'Samsun', code: 'TRSAM', selected: true },
+                { id: 'tra', name: 'Trabzon', code: 'TRTRA', selected: true },
+              ],
+            },
           ],
         },
       ],
@@ -142,68 +169,90 @@ const BasinShape = PropTypes.shape({
 });
 
 const AdditionalDischargeDetails = ({ data = mockAdditionalDischargeData }) => {
+  const renderPorts = (ports) => {
+    if (!ports?.length) return null;
+
+    return (
+      <div className="ml-8 flex flex-wrap gap-2">
+        {ports.map((port) => (
+          <div key={port.id} className="text-xs flex items-center rounded-md bg-gray-50 px-2 py-1">
+            <span className="mr-1">📍</span> {/* Port icon */}
+            <span>{port.name}</span>
+            <span className="ml-1 text-gray-500">({port.code})</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderCountry = (country) => {
+    return (
+      <div key={country.id} className="mb-2">
+        <div className="flex items-center">
+          <Flag countryCode={country.codeISO2} className="mr-1.5" />
+          <span className="font-medium">{country.name}</span>
+        </div>
+        {renderPorts(country.ports)}
+      </div>
+    );
+  };
+
   const renderBasin = (basin) => {
     return (
-      <div key={basin.id}>
-        <Title level="5" className="text-[12px] font-semibold uppercase text-gray">
+      <div key={basin.id} className="mb-6 rounded-lg border border-gray-200 p-4">
+        <Title level="5" className="mb-4 text-[14px] font-semibold uppercase text-blue-600">
           {basin.name}
         </Title>
-        <div className="mt-2.5">
+
+        <div className="space-y-4">
           {basin.subBasins?.map((subBasin) => (
-            <div key={subBasin.id} className="mb-2.5">
-              <TextRow title={subBasin.name}>
-                <div className="flex flex-wrap gap-x-4">
-                  {subBasin.countries?.map((country) => (
-                    <div key={country.id} className="flex items-center">
-                      <Flag countryCode={country.codeISO2} className="mr-1.5" />
-                      {country.name}
-                    </div>
-                  ))}
-                </div>
-              </TextRow>
+            <div key={subBasin.id} className="rounded-md bg-gray-50 p-3">
+              <div className="mb-3 font-medium text-gray-700">{subBasin.name}</div>
+              <div className="space-y-3">{subBasin.countries?.map(renderCountry)}</div>
             </div>
           ))}
-          {basin.countries?.map((country) => (
-            <TextRow key={country.id} title={country.name}>
-              <Flag countryCode={country.codeISO2} className="mr-1.5" />
-              {country.name}
-            </TextRow>
-          ))}
         </div>
-        <hr className="my-4" />
       </div>
     );
   };
 
   return (
-    <div className="text-xsm">
-      <Title level="3">Additional Discharge Options</Title>
+    <div>
+      <Title level="3" className="mb-4">
+        Additional Discharge Options
+      </Title>
 
-      <div className="mt-2.5">{data.basins.map((basin, index) => renderBasin(basin, index, data.basins.length))}</div>
+      <div className="space-y-4">{data.basins.map(renderBasin)}</div>
 
       {(data.excludedCountries?.length > 0 || data.excludeInternationallySanctioned) && (
-        <div className="mt-2.5">
-          <Title level="5" className="text-[12px] font-semibold uppercase text-gray">
+        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4">
+          <Title level="5" className="text-[14px] font-semibold uppercase text-red-600">
             Excluded Areas
           </Title>
 
-          <div className="mt-2.5">
+          <div className="mt-3">
             {data.excludedCountries?.length > 0 && (
-              <TextRow title="Specific Countries">
-                <div className="flex flex-wrap gap-x-4">
+              <div className="mb-3">
+                <div className="mb-2 font-medium text-gray-700">Specific Destinations</div>
+                <div className="flex flex-wrap gap-2">
                   {data.excludedCountries.map((country) => (
-                    <div key={country.id} className="flex items-center">
+                    <div key={country.id} className="flex items-center rounded bg-white px-2 py-1">
                       <Flag countryCode={country.codeISO2} className="mr-1.5" />
                       {country.name}
                     </div>
                   ))}
                 </div>
-              </TextRow>
+              </div>
             )}
 
-            {data.excludeInternationallySanctioned && (
-              <TextRow title="Sanctioned">Internationally sanctioned countries are excluded</TextRow>
-            )}
+            <div className="flex items-center rounded bg-white px-3 py-2 text-sm">
+              <span className="font-medium">
+                Internationally sanctioned countries are{' '}
+                <span className={data.excludeInternationallySanctioned ? 'text-red-600' : 'text-green-600'}>
+                  {data.excludeInternationallySanctioned ? 'excluded' : 'not excluded'}
+                </span>
+              </span>
+            </div>
           </div>
         </div>
       )}

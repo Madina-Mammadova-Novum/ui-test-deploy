@@ -200,7 +200,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       </div>
 
       <FormDropdown
-        label="Exclude Sanctioned Countries"
+        label="Excluded Destinations"
         name="excludedCountries"
         options={countries}
         value={formExcludedCountries}
@@ -209,7 +209,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         closeMenuOnSelect={false}
         customStyles={{ className: 'w-full' }}
         onChange={handleCountryChange}
-        placeholder="Select countries to exclude from search..."
+        placeholder="Select one or more countries..."
       />
       <CheckBoxInput
         name="excludeInternationallySanctioned"
@@ -218,7 +218,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         customStyles="accent-blue"
         labelStyles="text-black text-xsm"
       >
-        Exclude internationally sanctioned countries in search results
+        Exclude internationally sanctioned countries
       </CheckBoxInput>
     </div>
   );
@@ -228,6 +228,13 @@ const CountryShape = PropTypes.shape({
   countryId: PropTypes.string.isRequired,
   countryName: PropTypes.string.isRequired,
   countryCode: PropTypes.string.isRequired,
+  ports: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      code: PropTypes.string.isRequired,
+    })
+  ),
 });
 
 const SubBasinShape = PropTypes.shape({
