@@ -109,7 +109,15 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         const selectedBasinsMap = new Map();
         const selectedSubBasinsMap = new Map();
 
-        initialDataRef.current?.additionalDischargeOptions?.forEach((opt) => {
+        // Handle both old array format and new object format
+        const initialOptions =
+          initialDataRef.current?.additionalDischargeOptions?.basins ||
+          initialDataRef.current?.additionalDischargeOptions ||
+          [];
+
+        const shouldSelectAll = initialDataRef.current?.additionalDischargeOptions?.isAllSelected || false;
+
+        initialOptions.forEach((opt) => {
           selectedBasinsMap.set(opt.id, opt);
           opt.subBasins.forEach((subBasin) => {
             selectedSubBasinsMap.set(subBasin.id, subBasin);
@@ -119,12 +127,21 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         const updatedBasins = response.data.map((basin) => {
           const updatedSubBasins = basin.subBasins.map((subBasin) => {
             const matchingSubBasin = selectedSubBasinsMap.get(subBasin.id);
-            const updatedCountries = subBasin.countries.map((country) => ({
-              ...country,
-              selected: matchingSubBasin?.countries?.some((c) => c.id === country.id) || false,
-            }));
+            const updatedCountries = subBasin.countries.map((country) => {
+              const matchingCountry = matchingSubBasin?.countries?.find((c) => c.id === country.id);
+              return {
+                ...country,
+                selected: shouldSelectAll || !!matchingCountry,
+                ports: (country.ports || []).map((port) => ({
+                  ...port,
+                  selected: shouldSelectAll || matchingCountry?.ports?.some((p) => p.id === port.id) || false,
+                })),
+              };
+            });
 
-            const hasSelectedCountries = updatedCountries.some((c) => c.selected);
+            const hasSelectedCountries = updatedCountries.some(
+              (c) => c.selected || (c.ports || []).some((p) => p.selected)
+            );
             return {
               ...subBasin,
               selected: hasSelectedCountries && updatedCountries.every((c) => c.selected),
@@ -132,7 +149,9 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
             };
           });
 
-          const hasSelectedSubBasins = updatedSubBasins.some((sb) => sb.countries.some((c) => c.selected));
+          const hasSelectedSubBasins = updatedSubBasins.some((sb) =>
+            sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected))
+          );
           return {
             ...basin,
             selected: hasSelectedSubBasins && updatedSubBasins.every((sb) => sb.selected),
@@ -141,7 +160,12 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         });
 
         setBasins(updatedBasins);
-        setValueRef.current('additionalDischargeOptions', initialDataRef.current?.additionalDischargeOptions || []);
+        setIsAllSelected(shouldSelectAll);
+
+        setValueRef.current('additionalDischargeOptions', {
+          isAllSelected: shouldSelectAll,
+          basins: shouldSelectAll ? [] : initialOptions,
+        });
       }
     } catch (error) {
       console.error('Error fetching initial basins:', error);
