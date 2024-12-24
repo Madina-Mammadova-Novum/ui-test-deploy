@@ -34,6 +34,8 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     searchBasins,
     fetchInitialBasins,
     resetBasins,
+    isAllSelected,
+    handleSelectAll,
   } = useBasinSelection(setValue, clearErrors, data);
 
   const {
@@ -104,6 +106,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
   const getSubItems = useCallback((item) => {
     if (item.subBasins) return item.subBasins;
     if (item.countries) return item.countries;
+    if (item.ports) return item.ports;
     return [];
   }, []);
 
@@ -113,10 +116,18 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 
   const hasIndeterminate = useCallback((item) => {
     if (item.subBasins) {
-      return !item.selected && item.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
+      return (
+        !item.selected &&
+        item.subBasins.some(
+          (sb) => sb.selected || sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected))
+        )
+      );
     }
     if (item.countries) {
-      return !item.selected && item.countries.some((c) => c.selected);
+      return !item.selected && item.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected));
+    }
+    if (item.ports) {
+      return !item.selected && item.ports.some((p) => p.selected);
     }
     return false;
   }, []);
@@ -133,6 +144,9 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         </div>
       );
     }
+    if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
+      return <span className="text-gray-600">{item.name}</span>;
+    }
     return item.name;
   }, []);
 
@@ -144,8 +158,30 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     <div className="flex flex-col gap-y-4">
       <div>
         <div className="mb-2 flex flex-col">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between">
             <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
+            <div className="flex items-center gap-x-2">
+              <CheckBoxInput
+                name="isAllSelected"
+                checked={isAllSelected}
+                onChange={(e) => handleSelectAll(e.target.checked)}
+                customStyles="accent-blue"
+                labelStyles="text-black text-xsm"
+              >
+                Select All
+              </CheckBoxInput>
+              {showResetButton && (
+                <Button
+                  customStyles="text-blue hover:text-blue-darker"
+                  buttonProps={{
+                    text: 'Reset All',
+                    variant: 'tertiary',
+                    size: 'small',
+                  }}
+                  onClick={handleReset}
+                />
+              )}
+            </div>
           </div>
           <div className="flex items-center justify-between gap-x-2">
             <Input
@@ -156,17 +192,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
               customStyles="max-w-72 w-full"
               disabled={searchLoading}
             />
-            {showResetButton && (
-              <Button
-                customStyles="text-blue hover:text-blue-darker"
-                buttonProps={{
-                  text: 'Reset All',
-                  variant: 'tertiary',
-                  size: 'small',
-                }}
-                onClick={handleReset}
-              />
-            )}
           </div>
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>

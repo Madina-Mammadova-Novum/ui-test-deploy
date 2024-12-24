@@ -31,7 +31,13 @@ const NestedCheckboxList = ({
   const handleItemChange = useCallback(
     (item, checked) => {
       /* eslint-disable no-nested-ternary */
-      const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : item.code ? 'port' : 'basin';
+      const itemType = item.countries
+        ? 'subBasin'
+        : item.codeISO2
+          ? 'country'
+          : !item.countries && !item.codeISO2 && !item.subBasins && !item.ports
+            ? 'port'
+            : 'basin';
 
       if (itemType === 'country') {
         onChange?.(
@@ -61,12 +67,19 @@ const NestedCheckboxList = ({
   const getLabelClass = useCallback((item) => {
     if (item.countries) return 'text-sm font-medium';
     if (item.codeISO2) return 'text-xs';
-    if (item.code) return 'text-xs italic';
-    return 'text-sm font-bold';
+    if (item.subBasins) return 'text-sm font-bold';
+    if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) return 'text-xs italic';
+    return 'text-sm';
   }, []);
 
   const getExpandedKey = useCallback((item) => {
-    const itemType = item.countries ? 'subBasin' : item.codeISO2 ? 'country' : item.code ? 'port' : 'basin';
+    const itemType = item.countries
+      ? 'subBasin'
+      : item.codeISO2
+        ? 'country'
+        : !item.countries && !item.codeISO2 && !item.subBasins && !item.ports
+          ? 'port'
+          : 'basin';
     return `${itemType}-${item.id}`;
   }, []);
 
@@ -82,7 +95,7 @@ const NestedCheckboxList = ({
 
         return (
           <div key={item.id} className={customStyles.item || ''}>
-            <div className="mb-1 flex items-center justify-between">
+            <div className="mb-1 flex flex-wrap items-center justify-between">
               <label className={`flex items-center ${getLabelClass(item)}`}>
                 <input
                   type="checkbox"
