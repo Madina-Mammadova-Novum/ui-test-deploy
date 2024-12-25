@@ -10,7 +10,9 @@ import { TextRow, Title } from '@/elements';
 import { AdditionalDischargeForm, Flag } from '@/units';
 
 const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
-  const hasAdditionalDischargeOptions = data?.additionalDischargeOptions?.length > 0;
+  const hasAdditionalDischargeOptions =
+    data?.additionalDischargeOptions?.isAllSelected ||
+    (data?.additionalDischargeOptions?.basins && data?.additionalDischargeOptions?.basins.length > 0);
 
   const printPairDates = (detail) => (
     <TextRow key={detail.key} title={detail.key}>

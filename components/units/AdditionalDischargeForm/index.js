@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { debounce } from 'lodash';
@@ -34,6 +34,8 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     searchBasins,
     fetchInitialBasins,
     resetBasins,
+    isAllSelected,
+    handleSelectAll,
   } = useBasinSelection(setValue, clearErrors, data);
 
   const {
@@ -45,11 +47,45 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     resetSanctionedCountries,
   } = useSanctionedCountries(setValue, data);
 
+  // Function to check if country or its ports are selected in basins
+  const isCountrySelectedInBasins = useCallback(
+    (countryId) => {
+      return basins.some((basin) =>
+        basin.subBasins?.some((subBasin) =>
+          subBasin.countries?.some((country) => {
+            if (country.id === countryId) {
+              return country.selected || country.ports?.some((port) => port.selected);
+            }
+            return false;
+          })
+        )
+      );
+    },
+    [basins]
+  );
+
+  // Filter and prepare countries with disabled state
+  const countriesWithDisabled = useMemo(() => {
+    return countries.map((country) => ({
+      ...country,
+      isDisabled: isCountrySelectedInBasins(country.value),
+    }));
+  }, [countries, isCountrySelectedInBasins]);
+
   const formExcludedCountries = useWatch({
     control,
     name: 'excludedCountries',
     defaultValue: [],
   });
+
+  // Update excluded countries when basin selection changes
+  useEffect(() => {
+    const newExcludedCountries = formExcludedCountries.filter((country) => !isCountrySelectedInBasins(country.value));
+
+    if (newExcludedCountries.length !== formExcludedCountries.length) {
+      setValue('excludedCountries', newExcludedCountries);
+    }
+  }, [basins, formExcludedCountries, setValue, isCountrySelectedInBasins]);
 
   const formExcludeInternationallySanctioned = useWatch({
     control,
@@ -104,6 +140,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
   const getSubItems = useCallback((item) => {
     if (item.subBasins) return item.subBasins;
     if (item.countries) return item.countries;
+    if (item.ports) return item.ports;
     return [];
   }, []);
 
@@ -113,10 +150,18 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 
   const hasIndeterminate = useCallback((item) => {
     if (item.subBasins) {
-      return !item.selected && item.subBasins.some((sb) => sb.selected || sb.countries.some((c) => c.selected));
+      return (
+        !item.selected &&
+        item.subBasins.some(
+          (sb) => sb.selected || sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected))
+        )
+      );
     }
     if (item.countries) {
-      return !item.selected && item.countries.some((c) => c.selected);
+      return !item.selected && item.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected));
+    }
+    if (item.ports) {
+      return !item.selected && item.ports.some((p) => p.selected);
     }
     return false;
   }, []);
@@ -133,6 +178,9 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         </div>
       );
     }
+    if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
+      return <span className="text-gray-600">{item.name}</span>;
+    }
     return item.name;
   }, []);
 
@@ -140,12 +188,63 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     return showError && submitCount > 0 && errors?.additionalDischargeOptions;
   }, [showError, submitCount, errors]);
 
+  const isDisabled = useCallback(
+    (item) => {
+      // If item has countries, it's a sub-basin
+      if (item.countries) {
+        // Check if all countries in this sub-basin are in excluded list
+        return item.countries.every((country) =>
+          formExcludedCountries.some((excluded) => excluded.value === country.id)
+        );
+      }
+      // If item has codeISO2, it's a country
+      if (item.codeISO2) {
+        return formExcludedCountries.some((country) => country.value === item.id);
+      }
+      // For ports, check if parent country is excluded
+      if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
+        const parentCountry = basins.find((basin) =>
+          basin.subBasins?.some((subBasin) =>
+            subBasin.countries?.some((country) => country.ports?.some((port) => port.id === item.id))
+          )
+        );
+        if (parentCountry) {
+          return formExcludedCountries.some((country) => country.value === parentCountry.id);
+        }
+      }
+      return false;
+    },
+    [formExcludedCountries, basins]
+  );
+
   return (
     <div className="flex flex-col gap-y-4">
       <div>
         <div className="mb-2 flex flex-col">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between">
             <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
+            <div className="flex items-center gap-x-2">
+              <CheckBoxInput
+                name="isAllSelected"
+                checked={isAllSelected}
+                onChange={(e) => handleSelectAll(e.target.checked)}
+                customStyles="accent-blue"
+                labelStyles="text-black text-xsm"
+              >
+                Select All
+              </CheckBoxInput>
+              {showResetButton && (
+                <Button
+                  customStyles="text-blue hover:text-blue-darker"
+                  buttonProps={{
+                    text: 'Reset All',
+                    variant: 'tertiary',
+                    size: 'small',
+                  }}
+                  onClick={handleReset}
+                />
+              )}
+            </div>
           </div>
           <div className="flex items-center justify-between gap-x-2">
             <Input
@@ -156,17 +255,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
               customStyles="max-w-72 w-full"
               disabled={searchLoading}
             />
-            {showResetButton && (
-              <Button
-                customStyles="text-blue hover:text-blue-darker"
-                buttonProps={{
-                  text: 'Reset All',
-                  variant: 'tertiary',
-                  size: 'small',
-                }}
-                onClick={handleReset}
-              />
-            )}
           </div>
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
@@ -180,6 +268,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
               getSubItems={getSubItems}
               isSelected={isSelected}
               hasIndeterminate={hasIndeterminate}
+              isDisabled={isDisabled}
               customStyles={{
                 container: 'space-y-1.5',
                 subItems: 'space-y-0.5',
@@ -202,7 +291,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       <FormDropdown
         label="Excluded Destinations"
         name="excludedCountries"
-        options={countries}
+        options={countriesWithDisabled}
         value={formExcludedCountries}
         isMulti
         loading={countriesLoading}
