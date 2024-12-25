@@ -25,8 +25,8 @@ export const SimpleDropdown = React.forwardRef(
     { asyncCall = false, options, isDisabled, isOpen, onOpen = () => {}, loading, onExpand = () => {}, ...rest },
     ref
   ) => {
-    const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
-      <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} />
+    const printOptions = ({ countryFlag, label: labelValue, coverImage, isDisabled: optionDisabled }) => (
+      <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} isDisabled={optionDisabled} />
     );
 
     const handleOpenMenu = () => {
@@ -53,9 +53,13 @@ export const SimpleDropdown = React.forwardRef(
           theme={dropdownTheme}
           isDisabled={isDisabled}
           className={isDisabled ? 'opacity-50' : ''}
-          components={{ Option: OptionsList, LoadingIndicator }}
+          components={{
+            Option: OptionsList,
+            LoadingIndicator,
+          }}
           closeMenuOnSelect
           cacheOptions
+          isOptionDisabled={(option) => option.isDisabled}
         />
       );
     }
@@ -73,7 +77,11 @@ export const SimpleDropdown = React.forwardRef(
         theme={dropdownTheme}
         isDisabled={isDisabled}
         className={isDisabled ? 'opacity-50' : ''}
-        components={{ Option: OptionsList, LoadingIndicator }}
+        components={{
+          Option: OptionsList,
+          LoadingIndicator,
+        }}
+        isOptionDisabled={(option) => option.isDisabled}
       />
     );
   }
