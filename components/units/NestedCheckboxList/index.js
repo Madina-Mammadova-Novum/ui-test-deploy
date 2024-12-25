@@ -24,6 +24,7 @@ const NestedCheckboxList = ({
   getSubItems,
   isSelected,
   hasIndeterminate,
+  isDisabled,
   customStyles = {},
   level = 0,
   parentId = null,
@@ -92,26 +93,38 @@ const NestedCheckboxList = ({
         const isExpanded = expanded[expandedKey];
         const isItemSelected = isSelected?.(item) || false;
         const isIndeterminate = hasIndeterminate?.(item) || false;
+        const isItemDisabled = isDisabled?.(item) || false;
 
         return (
           <div key={item.id} className={customStyles.item || ''}>
             <div className="mb-1 flex flex-wrap items-center justify-between">
-              <label className={`flex items-center ${getLabelClass(item)}`}>
+              <label
+                className={`flex items-center ${getLabelClass(item)} ${isItemDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+              >
                 <input
                   type="checkbox"
-                  className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600"
+                  className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                   checked={isItemSelected}
+                  disabled={isItemDisabled}
                   ref={(el) => {
                     if (el) {
                       el.indeterminate = isIndeterminate;
                     }
                   }}
-                  onChange={(e) => handleItemChange(item, e.target.checked)}
+                  onChange={(e) => !isItemDisabled && handleItemChange(item, e.target.checked)}
                 />
-                {renderItem?.(item)}
+                <div className="flex items-center gap-x-1">
+                  {renderItem?.(item)}
+                  {isItemDisabled && <span className="text-xs text-gray-500">(Disabled)</span>}
+                </div>
               </label>
               {hasSubItems && (
-                <button type="button" onClick={() => onToggleExpand?.(expandedKey)} className="flex items-center p-1">
+                <button
+                  type="button"
+                  onClick={() => onToggleExpand?.(expandedKey)}
+                  className={`flex items-center p-1 ${isItemDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                  disabled={isItemDisabled}
+                >
                   <AngleDownSVG
                     className={`h-5 w-5 transform fill-blue transition-transform duration-200 ${
                       isExpanded ? 'rotate-180' : ''
@@ -132,6 +145,7 @@ const NestedCheckboxList = ({
                   getSubItems={getSubItems}
                   isSelected={isSelected}
                   hasIndeterminate={hasIndeterminate}
+                  isDisabled={isDisabled}
                   customStyles={customStyles}
                   level={level + 1}
                   parentId={item.id}
@@ -165,6 +179,7 @@ NestedCheckboxList.propTypes = {
   getSubItems: PropTypes.func,
   isSelected: PropTypes.func,
   hasIndeterminate: PropTypes.func,
+  isDisabled: PropTypes.func,
   customStyles: PropTypes.shape({
     container: PropTypes.string,
     item: PropTypes.string,

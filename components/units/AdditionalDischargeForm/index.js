@@ -188,6 +188,28 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     return showError && submitCount > 0 && errors?.additionalDischargeOptions;
   }, [showError, submitCount, errors]);
 
+  const isDisabled = useCallback(
+    (item) => {
+      // If item has a codeISO2, it's a country
+      if (item.codeISO2) {
+        return formExcludedCountries.some((country) => country.value === item.id);
+      }
+      // For ports, check if parent country is excluded
+      if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
+        const parentCountry = basins.find((basin) =>
+          basin.subBasins?.some((subBasin) =>
+            subBasin.countries?.some((country) => country.ports?.some((port) => port.id === item.id))
+          )
+        );
+        if (parentCountry) {
+          return formExcludedCountries.some((country) => country.value === parentCountry.id);
+        }
+      }
+      return false;
+    },
+    [formExcludedCountries, basins]
+  );
+
   return (
     <div className="flex flex-col gap-y-4">
       <div>
@@ -239,6 +261,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
               getSubItems={getSubItems}
               isSelected={isSelected}
               hasIndeterminate={hasIndeterminate}
+              isDisabled={isDisabled}
               customStyles={{
                 container: 'space-y-1.5',
                 subItems: 'space-y-0.5',
