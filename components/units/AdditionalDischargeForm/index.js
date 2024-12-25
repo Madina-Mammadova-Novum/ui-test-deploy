@@ -190,7 +190,14 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 
   const isDisabled = useCallback(
     (item) => {
-      // If item has a codeISO2, it's a country
+      // If item has countries, it's a sub-basin
+      if (item.countries) {
+        // Check if all countries in this sub-basin are in excluded list
+        return item.countries.every((country) =>
+          formExcludedCountries.some((excluded) => excluded.value === country.id)
+        );
+      }
+      // If item has codeISO2, it's a country
       if (item.codeISO2) {
         return formExcludedCountries.some((country) => country.value === item.id);
       }
