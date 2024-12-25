@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { debounce } from 'lodash';
@@ -47,11 +47,45 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     resetSanctionedCountries,
   } = useSanctionedCountries(setValue, data);
 
+  // Function to check if country or its ports are selected in basins
+  const isCountrySelectedInBasins = useCallback(
+    (countryId) => {
+      return basins.some((basin) =>
+        basin.subBasins?.some((subBasin) =>
+          subBasin.countries?.some((country) => {
+            if (country.id === countryId) {
+              return country.selected || country.ports?.some((port) => port.selected);
+            }
+            return false;
+          })
+        )
+      );
+    },
+    [basins]
+  );
+
+  // Filter and prepare countries with disabled state
+  const countriesWithDisabled = useMemo(() => {
+    return countries.map((country) => ({
+      ...country,
+      isDisabled: isCountrySelectedInBasins(country.value),
+    }));
+  }, [countries, isCountrySelectedInBasins]);
+
   const formExcludedCountries = useWatch({
     control,
     name: 'excludedCountries',
     defaultValue: [],
   });
+
+  // Update excluded countries when basin selection changes
+  useEffect(() => {
+    const newExcludedCountries = formExcludedCountries.filter((country) => !isCountrySelectedInBasins(country.value));
+
+    if (newExcludedCountries.length !== formExcludedCountries.length) {
+      setValue('excludedCountries', newExcludedCountries);
+    }
+  }, [basins, formExcludedCountries, setValue, isCountrySelectedInBasins]);
 
   const formExcludeInternationallySanctioned = useWatch({
     control,
@@ -227,7 +261,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       <FormDropdown
         label="Excluded Destinations"
         name="excludedCountries"
-        options={countries}
+        options={countriesWithDisabled}
         value={formExcludedCountries}
         isMulti
         loading={countriesLoading}
