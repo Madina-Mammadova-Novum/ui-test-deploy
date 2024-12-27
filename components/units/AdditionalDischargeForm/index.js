@@ -175,6 +175,13 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 
   const isDisabled = useCallback(
     (item) => {
+      // If item is a basin
+      if (item.subBasins) {
+        // Check if all countries in all sub-basins are in excluded list
+        return item.subBasins.every((subBasin) =>
+          subBasin.countries.every((country) => formExcludedCountries.some((excluded) => excluded.value === country.id))
+        );
+      }
       // If item has countries, it's a sub-basin
       if (item.countries) {
         // Check if all countries in this sub-basin are in excluded list
