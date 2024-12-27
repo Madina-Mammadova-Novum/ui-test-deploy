@@ -10,7 +10,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
 import { Button, CheckBoxInput, FormDropdown, Input, Label } from '@/elements';
@@ -99,25 +98,18 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     searchBasinsRef.current = searchBasins;
   }, [searchBasins]);
 
-  const debouncedSearchBasins = useCallback(
-    debounce((query) => searchBasinsRef.current(query), 400),
-    [] // No dependencies needed as we use ref
-  );
-
   const handleSearchChange = useCallback(
-    (e) => {
-      /* eslint-disable prefer-destructuring */
-      const value = e.target.value;
+    ({ target: { value } }) => {
       setSearchQuery(value);
-      debouncedSearchBasins(value);
+      searchBasins(value);
     },
-    [setSearchQuery, debouncedSearchBasins]
+    [setSearchQuery, searchBasins]
   );
 
-  const handleReset = useCallback(() => {
+  const handleReset = useCallback(async () => {
     resetBasins();
     resetSanctionedCountries();
-    fetchInitialBasins();
+    await fetchInitialBasins();
   }, [resetBasins, resetSanctionedCountries, fetchInitialBasins]);
 
   // Initialize data only once on mount
@@ -129,13 +121,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 
     initializeData();
   }, []); // Empty dependency array as we want this to run only once on mount
-
-  // Cleanup debounce on unmount
-  useEffect(() => {
-    return () => {
-      debouncedSearchBasins.cancel();
-    };
-  }, [debouncedSearchBasins]);
 
   const getSubItems = useCallback((item) => {
     if (item.subBasins) return item.subBasins;
@@ -230,6 +215,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                 onChange={(e) => handleSelectAll(e.target.checked)}
                 customStyles="accent-blue"
                 labelStyles="text-black text-xsm"
+                disabled={searchLoading}
               >
                 Select All
               </CheckBoxInput>
@@ -242,6 +228,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                     size: 'small',
                   }}
                   onClick={handleReset}
+                  disabled={searchLoading}
                 />
               )}
             </div>
@@ -258,7 +245,12 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
           </div>
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
-          {basins.length > 0 ? (
+          {searchLoading && (
+            <div className="flex items-center justify-center py-8 text-gray-500">
+              <span>Loading discharge options...</span>
+            </div>
+          )}
+          {!searchLoading && basins.length > 0 && (
             <NestedCheckboxList
               items={basins}
               expanded={expandedBasins}
@@ -274,13 +266,10 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                 subItems: 'space-y-0.5',
               }}
             />
-          ) : (
+          )}
+          {!searchLoading && basins.length === 0 && (
             <div className="flex items-center justify-center py-8 text-gray-500">
-              {searchLoading ? (
-                <span>Loading discharge options...</span>
-              ) : (
-                <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
-              )}
+              <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
             </div>
           )}
         </div>

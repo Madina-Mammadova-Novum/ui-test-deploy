@@ -8,6 +8,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [expandedBasins, setExpandedBasins] = useState({});
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const [initialBasins, setInitialBasins] = useState([]);
 
   // Use refs for stable references to props
   const setValueRef = useRef(setValue);
@@ -100,8 +101,6 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
   );
 
   const fetchInitialBasins = useCallback(async () => {
-    if (searchLoading) return; // Prevent concurrent fetches
-
     setSearchLoading(true);
     try {
       const response = await getAdditionalDischargeOptions({ query: '' });
@@ -160,6 +159,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         });
 
         setBasins(updatedBasins);
+        setInitialBasins(updatedBasins);
         setIsAllSelected(shouldSelectAll);
 
         setValueRef.current('additionalDischargeOptions', {
@@ -175,24 +175,62 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
   }, []); // No dependencies needed as we use refs
 
   const searchBasins = useCallback(
-    async (query) => {
+    (query) => {
       if (!query) {
-        await fetchInitialBasins();
+        setBasins(initialBasins);
         return;
       }
-      setSearchLoading(true);
-      try {
-        const response = await getAdditionalDischargeOptions({ query });
-        if (response?.data) {
-          setBasins(response.data);
-        }
-      } catch (error) {
-        console.error('Error searching basins:', error);
-      } finally {
-        setSearchLoading(false);
-      }
+
+      const searchTerm = query.toLowerCase();
+      const filteredBasins = initialBasins
+        .map((basin) => {
+          if (!basin?.name) return null;
+
+          const matchedSubBasins = (basin.subBasins || [])
+            .map((subBasin) => {
+              if (!subBasin?.name) return null;
+
+              const matchedCountries = (subBasin.countries || [])
+                .map((country) => {
+                  if (!country?.name) return null;
+
+                  const matchedPorts = (country.ports || []).filter((port) =>
+                    port?.name?.toLowerCase().includes(searchTerm)
+                  );
+
+                  if (matchedPorts.length > 0 || country.name.toLowerCase().includes(searchTerm)) {
+                    return {
+                      ...country,
+                      ports: matchedPorts.length > 0 ? matchedPorts : country.ports,
+                    };
+                  }
+                  return null;
+                })
+                .filter(Boolean);
+
+              if (matchedCountries.length > 0 || subBasin.name.toLowerCase().includes(searchTerm)) {
+                return {
+                  ...subBasin,
+                  countries: matchedCountries,
+                };
+              }
+              return null;
+            })
+            .filter(Boolean);
+
+          if (matchedSubBasins.length > 0 || basin.name.toLowerCase().includes(searchTerm)) {
+            return {
+              ...basin,
+              subBasins: matchedSubBasins,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      setBasins(filteredBasins);
     },
-    [fetchInitialBasins]
+    [initialBasins]
   );
 
   const handleBasinChange = useCallback(
@@ -309,6 +347,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
   const resetBasins = useCallback(() => {
     setSearchQuery('');
     setIsAllSelected(false);
+    setSearchLoading(true);
     const updatedBasins = basins.map((basin) => ({
       ...basin,
       selected: false,
@@ -330,6 +369,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
       isAllSelected: false,
       basins: [],
     });
+    setSearchLoading(false);
   }, [basins, updateBasins]);
 
   return {
