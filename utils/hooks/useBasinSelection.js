@@ -78,10 +78,6 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
   const handleSelectAll = useCallback(
     (checked) => {
-      // Only allow select all when there's no search
-      if (searchQuery) return;
-
-      setIsAllSelected(checked);
       const updatedBasins = basins.map((basin) => ({
         ...basin,
         selected: checked,
@@ -101,7 +97,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
       updateBasins(updatedBasins);
     },
-    [basins, updateBasins, searchQuery]
+    [basins, updateBasins]
   );
 
   const fetchInitialBasins = useCallback(async () => {
@@ -127,40 +123,49 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
           });
         });
 
-        const updatedBasins = response.data.map((basin) => {
-          const updatedSubBasins = basin.subBasins.map((subBasin) => {
-            const matchingSubBasin = selectedSubBasinsMap.get(subBasin.id);
-            const updatedCountries = subBasin.countries.map((country) => {
-              const matchingCountry = matchingSubBasin?.countries?.find((c) => c.id === country.id);
-              return {
-                ...country,
-                selected: shouldSelectAll || !!matchingCountry,
-                ports: (country.ports || []).map((port) => ({
-                  ...port,
-                  selected: shouldSelectAll || matchingCountry?.ports?.some((p) => p.id === port.id) || false,
-                })),
-              };
-            });
+        // Filter and process the basins
+        const updatedBasins = response.data
+          .filter((basin) => basin?.subBasins?.length > 0) // Filter basins with no sub-basins
+          .map((basin) => {
+            const updatedSubBasins = basin.subBasins
+              .filter((subBasin) => subBasin?.countries?.length > 0) // Filter sub-basins with no countries
+              .map((subBasin) => {
+                const matchingSubBasin = selectedSubBasinsMap.get(subBasin.id);
+                const updatedCountries = subBasin.countries
+                  .filter((country) => country?.ports?.length > 0) // Filter countries with no ports
+                  .map((country) => {
+                    const matchingCountry = matchingSubBasin?.countries?.find((c) => c.id === country.id);
+                    return {
+                      ...country,
+                      selected: shouldSelectAll || !!matchingCountry,
+                      ports: (country.ports || []).map((port) => ({
+                        ...port,
+                        selected: shouldSelectAll || matchingCountry?.ports?.some((p) => p.id === port.id) || false,
+                      })),
+                    };
+                  });
 
-            const hasSelectedCountries = updatedCountries.some(
-              (c) => c.selected || (c.ports || []).some((p) => p.selected)
+                const hasSelectedCountries = updatedCountries.some(
+                  (c) => c.selected || (c.ports || []).some((p) => p.selected)
+                );
+                return {
+                  ...subBasin,
+                  selected: hasSelectedCountries && updatedCountries.every((c) => c.selected),
+                  countries: updatedCountries,
+                };
+              })
+              .filter((subBasin) => subBasin.countries.length > 0); // Filter out sub-basins if all countries were filtered
+
+            const hasSelectedSubBasins = updatedSubBasins.some((sb) =>
+              sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected))
             );
             return {
-              ...subBasin,
-              selected: hasSelectedCountries && updatedCountries.every((c) => c.selected),
-              countries: updatedCountries,
+              ...basin,
+              selected: hasSelectedSubBasins && updatedSubBasins.every((sb) => sb.selected),
+              subBasins: updatedSubBasins,
             };
-          });
-
-          const hasSelectedSubBasins = updatedSubBasins.some((sb) =>
-            sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected))
-          );
-          return {
-            ...basin,
-            selected: hasSelectedSubBasins && updatedSubBasins.every((sb) => sb.selected),
-            subBasins: updatedSubBasins,
-          };
-        });
+          })
+          .filter((basin) => basin.subBasins.length > 0); // Filter out basins if all sub-basins were filtered
 
         setBasins(updatedBasins);
         setInitialBasins(updatedBasins);
@@ -206,11 +211,6 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
   const searchBasins = useCallback(
     (query) => {
-      // Reset isAllSelected when searching
-      if (query) {
-        setIsAllSelected(false);
-      }
-
       if (!query) {
         const updatedBasins = recalculateParentStates(initialBasins);
         setBasins(updatedBasins);
@@ -243,7 +243,8 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
                   }
                   return null;
                 })
-                .filter(Boolean);
+                .filter(Boolean)
+                .filter((country) => country.ports?.length > 0); // Filter out countries with no ports
 
               if (matchedCountries.length > 0 || subBasin.name.toLowerCase().includes(searchTerm)) {
                 return {
@@ -254,7 +255,8 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
               }
               return null;
             })
-            .filter(Boolean);
+            .filter(Boolean)
+            .filter((subBasin) => subBasin.countries?.length > 0); // Filter out sub-basins with no countries
 
           if (matchedSubBasins.length > 0 || basin.name.toLowerCase().includes(searchTerm)) {
             return {
@@ -265,7 +267,8 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
           }
           return null;
         })
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter((basin) => basin.subBasins?.length > 0); // Filter out basins with no sub-basins
 
       // Recalculate parent states based on visible children
       const updatedBasins = recalculateParentStates(filteredBasins);
@@ -276,9 +279,6 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
   const handleBasinChange = useCallback(
     (item, checked, itemType) => {
-      // Reset isAllSelected when making individual selections
-      setIsAllSelected(false);
-
       // Function to update initialBasins state
       const updateInitialBasinsState = (updateFn) => {
         setInitialBasins((prevInitialBasins) => {
@@ -445,57 +445,54 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         }
         if (itemType === 'port') {
           const updatedSubBasins = basin.subBasins.map((sb) => {
-            if (sb.id === item.subBasinId) {
-              const updatedCountries = sb.countries.map((c) => {
-                if (c.id === item.countryId) {
-                  const updatedPorts = (c.ports || []).map((port) => {
-                    if (port.id === item.id) {
-                      // Update the same port in initialBasins
-                      updateInitialBasinsState((prevBasins) =>
-                        prevBasins.map((b) => ({
-                          ...b,
-                          subBasins: b.subBasins.map((subB) => ({
-                            ...subB,
-                            countries:
-                              subB.id === item.subBasinId
-                                ? subB.countries.map((country) => ({
-                                    ...country,
-                                    ports:
-                                      country.id === item.countryId
-                                        ? (country.ports || []).map((p) =>
-                                            p.id === item.id ? { ...p, selected: checked } : p
-                                          )
-                                        : country.ports,
-                                  }))
-                                : subB.countries,
-                          })),
-                        }))
-                      );
+            const updatedCountries = sb.countries.map((c) => {
+              if (c.id === item.countryId) {
+                const updatedPorts = (c.ports || []).map((port) =>
+                  port.id === item.id ? { ...port, selected: checked } : port
+                );
 
-                      return { ...port, selected: checked };
-                    }
-                    return port;
-                  });
+                // Update the same port in initialBasins
+                updateInitialBasinsState((prevBasins) =>
+                  prevBasins.map((b) => ({
+                    ...b,
+                    subBasins: b.subBasins.map((subB) => ({
+                      ...subB,
+                      countries: subB.countries.map((country) => ({
+                        ...country,
+                        ports:
+                          country.id === item.countryId
+                            ? (country.ports || []).map((p) => (p.id === item.id ? { ...p, selected: checked } : p))
+                            : country.ports,
+                      })),
+                    })),
+                  }))
+                );
 
-                  const allPortsSelected = updatedPorts.every((p) => p.selected);
-                  return {
-                    ...c,
-                    selected: allPortsSelected,
-                    ports: updatedPorts,
-                  };
-                }
-                return c;
-              });
+                // Check if all ports are selected to update country state
+                const allPortsSelected = updatedPorts.every((p) => p.selected);
 
-              return {
-                ...sb,
-                selected: updatedCountries.every((c) => c.selected),
-                countries: updatedCountries,
-              };
-            }
-            return sb;
+                return {
+                  ...c,
+                  selected: allPortsSelected,
+                  ports: updatedPorts,
+                };
+              }
+              return c;
+            });
+
+            // Update sub-basin selected state based on countries
+            const allCountriesSelected = updatedCountries.every(
+              (c) => c.selected || (c.ports || []).every((p) => p.selected)
+            );
+
+            return {
+              ...sb,
+              selected: allCountriesSelected,
+              countries: updatedCountries,
+            };
           });
 
+          // Update basin selected state based on sub-basins
           return {
             ...basin,
             selected: updatedSubBasins.every((sb) => sb.selected),

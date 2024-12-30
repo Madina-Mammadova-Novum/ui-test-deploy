@@ -69,7 +69,7 @@ const NestedCheckboxList = ({
     if (item.countries) return 'text-sm font-medium';
     if (item.codeISO2) return 'text-xs';
     if (item.subBasins) return 'text-sm font-bold';
-    if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) return 'text-xs italic';
+    if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) return 'text-xs';
     return 'text-sm';
   }, []);
 
