@@ -195,11 +195,13 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       }
       // For ports, check if parent country is excluded
       if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
-        const parentCountry = basins.find((basin) =>
-          basin.subBasins?.some((subBasin) =>
-            subBasin.countries?.some((country) => country.ports?.some((port) => port.id === item.id))
-          )
-        );
+        // Find the parent country of this port
+        const parentCountry = basins
+          .flatMap((basin) => basin.subBasins)
+          .flatMap((subBasin) => subBasin.countries)
+          .find((country) => country.ports?.some((port) => port.id === item.id));
+
+        // Port is disabled if its parent country is disabled
         if (parentCountry) {
           return formExcludedCountries.some((country) => country.value === parentCountry.id);
         }
