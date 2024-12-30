@@ -56,7 +56,10 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat = freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
+  const helperFreightFormat =
+    selectedFreight?.label === 'WS'
+      ? freightEstimation?.min && `${minValue}WS - ${maxValue}WS`
+      : freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
 
   const helperRangeFormat =
     ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start}$ - ${ranges?.demurrageRate?.max?.end}$`;
@@ -137,9 +140,11 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   }, [searchData]);
 
   useEffect(() => {
+    const selectedValue = selectedFreight?.label === 'WS' ? 2 : selectedFreight?.value - 1;
+
     setFreightEstimation({
-      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
-      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+      min: selectedFreight && ranges?.freightFormats[selectedValue]?.ranges?.min?.start,
+      max: selectedFreight && ranges?.freightFormats[selectedValue]?.ranges?.max?.end,
     });
   }, [selectedFreight, ranges]);
 
