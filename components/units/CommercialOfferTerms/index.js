@@ -58,7 +58,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
 
   const helperFreightFormat =
     selectedFreight?.label === 'WS'
-      ? freightEstimation?.min && `${minValue}WS - ${maxValue}WS`
+      ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
       : freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
 
   const helperRangeFormat =
@@ -140,11 +140,11 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   }, [searchData]);
 
   useEffect(() => {
-    const selectedValue = selectedFreight?.label === 'WS' ? 2 : selectedFreight?.value - 1;
+    const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
 
     setFreightEstimation({
-      min: selectedFreight && ranges?.freightFormats[selectedValue]?.ranges?.min?.start,
-      max: selectedFreight && ranges?.freightFormats[selectedValue]?.ranges?.max?.end,
+      min: selectedFormat?.ranges?.min?.start,
+      max: selectedFormat?.ranges?.max?.end,
     });
   }, [selectedFreight, ranges]);
 
