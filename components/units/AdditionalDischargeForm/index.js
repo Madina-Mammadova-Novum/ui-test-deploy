@@ -224,7 +224,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                 onChange={(e) => handleSelectAll(e.target.checked)}
                 customStyles="accent-blue"
                 labelStyles="text-black text-xsm"
-                disabled={searchLoading}
+                disabled={searchLoading || !!searchQuery}
               >
                 Select All
               </CheckBoxInput>

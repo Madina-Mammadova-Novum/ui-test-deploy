@@ -34,10 +34,21 @@ const CheckBoxInput = ({
                 onChange={onChange}
                 checked={checked}
                 error={!!error}
-                className={classNames('h-5 w-5', customStyles)}
+                className={classNames(
+                  'h-5 w-5',
+                  {
+                    'cursor-not-allowed': disabled,
+                  },
+                  customStyles
+                )}
               />
               {children && (
-                <label htmlFor={name} className={labelStyles}>
+                <label
+                  htmlFor={!disabled ? name : undefined}
+                  className={classNames(labelStyles, {
+                    'cursor-not-allowed': disabled,
+                  })}
+                >
                   {children}
                 </label>
               )}
