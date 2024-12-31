@@ -22,59 +22,102 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
     initialDataRef.current = initialData;
   }, [setValue, clearErrors, initialData]);
 
-  const updateBasins = useCallback((newBasins) => {
-    setBasins(newBasins);
+  const updateBasins = useCallback(
+    (newBasins) => {
+      setBasins(newBasins);
 
-    // Check if all basins are selected
-    const allBasinsSelected = newBasins.every((basin) =>
-      basin.subBasins.every((sb) => sb.countries.every((c) => (c.ports || []).every((p) => p.selected)))
-    );
+      // Update initialBasins with new selections
+      const updatedInitialBasins = initialBasins.map((basin) => {
+        const matchingBasin = newBasins.find((b) => b.id === basin.id);
+        if (!matchingBasin) return basin;
 
-    setIsAllSelected(allBasinsSelected);
+        return {
+          ...basin,
+          selected: matchingBasin.selected,
+          subBasins: basin.subBasins.map((sb) => {
+            const matchingSubBasin = matchingBasin.subBasins.find((msb) => msb.id === sb.id);
+            if (!matchingSubBasin) return sb;
 
-    const selectedBasins = newBasins
-      .filter((basin) =>
-        basin.subBasins.some((sb) => sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected)))
-      )
-      .map((basin) => ({
-        id: basin.id,
-        name: basin.name,
-        subBasins: basin.subBasins
-          .filter((sb) => sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected)))
-          .map((subBasin) => ({
-            id: subBasin.id,
-            name: subBasin.name,
-            countries: subBasin.countries
-              .filter((country) => country.selected || (country.ports || []).some((p) => p.selected))
-              .map((country) => ({
-                id: country.id,
-                name: country.name,
-                codeISO2: country.codeISO2,
-                ports: (country.ports || [])
-                  .filter((port) => port.selected)
-                  .map((port) => ({
-                    id: port.id,
-                    name: port.name,
-                  })),
-              })),
-          })),
-      }));
+            return {
+              ...sb,
+              selected: matchingSubBasin.selected,
+              countries: sb.countries.map((country) => {
+                const matchingCountry = matchingSubBasin.countries.find((mc) => mc.id === country.id);
+                if (!matchingCountry) return country;
 
-    setValueRef.current(
-      'additionalDischargeOptions',
-      {
-        isAllSelected: allBasinsSelected,
-        basins: allBasinsSelected ? [] : selectedBasins,
-      },
-      {
-        shouldValidate: false,
+                return {
+                  ...country,
+                  selected: matchingCountry.selected,
+                  ports: (country.ports || []).map((port) => {
+                    const matchingPort = (matchingCountry.ports || []).find((mp) => mp.id === port.id);
+                    if (!matchingPort) return port;
+
+                    return {
+                      ...port,
+                      selected: matchingPort.selected,
+                    };
+                  }),
+                };
+              }),
+            };
+          }),
+        };
+      });
+
+      setInitialBasins(updatedInitialBasins);
+
+      // Calculate selections using updated initialBasins
+      const allBasinsSelected = updatedInitialBasins.every((basin) =>
+        basin.subBasins.every((sb) => sb.countries.every((c) => (c.ports || []).every((p) => p.selected)))
+      );
+
+      setIsAllSelected(allBasinsSelected);
+
+      const selectedBasins = updatedInitialBasins
+        .filter((basin) =>
+          basin.subBasins.some((sb) => sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected)))
+        )
+        .map((basin) => ({
+          id: basin.id,
+          name: basin.name,
+          subBasins: basin.subBasins
+            .filter((sb) => sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected)))
+            .map((subBasin) => ({
+              id: subBasin.id,
+              name: subBasin.name,
+              countries: subBasin.countries
+                .filter((country) => country.selected || (country.ports || []).some((p) => p.selected))
+                .map((country) => ({
+                  id: country.id,
+                  name: country.name,
+                  codeISO2: country.codeISO2,
+                  ports: (country.ports || [])
+                    .filter((port) => port.selected)
+                    .map((port) => ({
+                      id: port.id,
+                      name: port.name,
+                    })),
+                })),
+            })),
+        }));
+
+      setValueRef.current(
+        'additionalDischargeOptions',
+        {
+          isAllSelected: allBasinsSelected,
+          basins: allBasinsSelected ? [] : selectedBasins,
+        },
+        {
+          shouldValidate: false,
+        }
+      );
+
+      if (allBasinsSelected || selectedBasins.length > 0) {
+        clearErrorsRef.current('additionalDischargeOptions');
       }
-    );
-
-    if (allBasinsSelected || selectedBasins.length > 0) {
-      clearErrorsRef.current('additionalDischargeOptions');
-    }
-  }, []); // No dependencies needed as we use refs
+    },
+    [initialBasins]
+  ); // Keep initialBasins in dependencies
 
   const handleSelectAll = useCallback(
     (checked) => {
@@ -234,43 +277,46 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
                     port?.name?.toLowerCase().includes(searchTerm)
                   );
 
+                  // Keep selection state even if not matched
                   if (matchedPorts.length > 0 || country.name.toLowerCase().includes(searchTerm)) {
                     return {
                       ...country,
                       ports: matchedPorts.length > 0 ? matchedPorts : country.ports,
-                      selected: country.selected,
+                      selected: country.selected, // Preserve selection
                     };
                   }
                   return null;
                 })
                 .filter(Boolean)
-                .filter((country) => country.ports?.length > 0); // Filter out countries with no ports
+                .filter((country) => country.ports?.length > 0);
 
+              // Keep selection state even if not matched
               if (matchedCountries.length > 0 || subBasin.name.toLowerCase().includes(searchTerm)) {
                 return {
                   ...subBasin,
                   countries: matchedCountries,
-                  selected: subBasin.selected,
+                  selected: subBasin.selected, // Preserve selection
                 };
               }
               return null;
             })
             .filter(Boolean)
-            .filter((subBasin) => subBasin.countries?.length > 0); // Filter out sub-basins with no countries
+            .filter((subBasin) => subBasin.countries?.length > 0);
 
+          // Keep selection state even if not matched
           if (matchedSubBasins.length > 0 || basin.name.toLowerCase().includes(searchTerm)) {
             return {
               ...basin,
               subBasins: matchedSubBasins,
-              selected: basin.selected,
+              selected: basin.selected, // Preserve selection
             };
           }
           return null;
         })
         .filter(Boolean)
-        .filter((basin) => basin.subBasins?.length > 0); // Filter out basins with no sub-basins
+        .filter((basin) => basin.subBasins?.length > 0);
 
-      // Recalculate parent states based on visible children
+      // Recalculate parent states based on visible children while preserving selections
       const updatedBasins = recalculateParentStates(filteredBasins);
       setBasins(updatedBasins);
     },
