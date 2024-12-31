@@ -29,7 +29,7 @@ const Input = React.forwardRef(
     useDisableNumberInputScroll();
 
     return (
-      <div className={classNames(disabled && 'pointer-events-none', customStyles, type === 'hidden' && 'hidden')}>
+      <div className={classNames(disabled && 'cursor-not-allowed', customStyles, type === 'hidden' && 'hidden')}>
         {label && (
           <Label
             name={name}
@@ -56,7 +56,7 @@ const Input = React.forwardRef(
               '!border-red': error,
             },
             {
-              'bg-purple-light opacity-80': disabled,
+              'cursor-not-allowed bg-purple-light opacity-80': disabled,
             }
           )}
         >
@@ -66,6 +66,7 @@ const Input = React.forwardRef(
             className={classNames(
               {
                 'rounded-md px-4 py-[9px]': type !== 'checkbox',
+                'cursor-not-allowed': disabled,
               },
               'flex h-[38px] w-full items-center bg-transparent text-xsm outline-none',
               inputStyles
@@ -73,6 +74,7 @@ const Input = React.forwardRef(
             readOnly={disabled}
             type={type}
             name={name}
+            disabled={disabled}
             {...rest}
           />
           {icon && <span className="my-auto ml-2.5 mr-4">{icon}</span>}
