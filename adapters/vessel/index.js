@@ -1,4 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
+import { countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import { getLocode, trimTonValue } from '@/utils/helpers';
 
@@ -35,7 +36,7 @@ export function requestSearchVesselAdapter({ data }) {
     cargoes: postProductsAdapter({ data: products }),
     savedSearchId,
     additionalDischargeOptions,
-    sanctionedCountries,
+    sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
   };
 }
