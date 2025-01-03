@@ -46,6 +46,18 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     resetSanctionedCountries,
   } = useSanctionedCountries(setValue, data);
 
+  const formExcludeInternationallySanctioned = useWatch({
+    control,
+    name: 'excludeInternationallySanctioned',
+    defaultValue: false,
+  });
+
+  const formExcludedCountries = useWatch({
+    control,
+    name: 'excludedCountries',
+    defaultValue: [],
+  });
+
   // Function to check if country or its ports are selected in basins
   const isCountrySelectedInBasins = useCallback(
     (countryId) => {
@@ -71,12 +83,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     }));
   }, [countries, isCountrySelectedInBasins]);
 
-  const formExcludedCountries = useWatch({
-    control,
-    name: 'excludedCountries',
-    defaultValue: [],
-  });
-
   // Update excluded countries when basin selection changes
   useEffect(() => {
     const newExcludedCountries = formExcludedCountries.filter((country) => !isCountrySelectedInBasins(country.value));
@@ -85,12 +91,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       setValue('excludedCountries', newExcludedCountries);
     }
   }, [basins, formExcludedCountries, setValue, isCountrySelectedInBasins]);
-
-  const formExcludeInternationallySanctioned = useWatch({
-    control,
-    name: 'excludeInternationallySanctioned',
-    defaultValue: false,
-  });
 
   // Use ref to maintain stable reference to searchBasins
   const searchBasinsRef = useRef(searchBasins);
