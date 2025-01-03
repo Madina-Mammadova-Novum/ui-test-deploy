@@ -1,4 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
+import { countriesAdapter, countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import {
   addLocalDateFlag,
@@ -31,7 +32,7 @@ export function sendOfferAdapter({ data }) {
     ballastLeg,
     estimatedArrivalTime,
     additionalDischargeOptions,
-    sanctionedCountries,
+    sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
   return {
@@ -54,38 +55,10 @@ export function sendOfferAdapter({ data }) {
     countDownTimerSettingId: responseCountdown.value,
     cargoes: postProductsAdapter({ data: products }),
     additionalDischargeOptions,
-    sanctionedCountries,
+    sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
   };
 }
-
-// {
-//   "laycanStart": "2024-03-07T17:24:55.536Z",
-//   "laycanEnd": "2024-03-07T17:24:55.536Z",
-//   "comment": "string",
-//   "cargoTypeId": "string",
-//   "loadTerminalId": "string",
-//   "dischargeTerminalId": "string",
-//   "vesselId": "string",
-//   "estimatedArrivalTime": "2024-03-07T17:24:55.536Z",
-//   "ballastLeg": "string",
-//   "freightFormatId": "string",
-//   "freight": 0,
-//   "minOfferQuantity": 0,
-//   "demurrageRate": 0,
-//   "laytime": 100,
-//   "demurragePaymentTermId": "string",
-//   "paymentTermId": "string",
-//   "countDownTimerSettingId": "string",
-//   "cargoes": [
-//     {
-//       "productId": "string",
-//       "referenceDensity": 0,
-//       "quantity": 0,
-//       "tolerance": 20
-//     }
-//   ]
-// }
 
 export function sendCounterofferAdapter({ data }) {
   if (!data) return null;
@@ -273,7 +246,7 @@ export function offerDetailsAdapter({ data, role }) {
         ],
       ],
       additionalDischargeOptions,
-      sanctionedCountries,
+      sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
       excludeInternationallySanctioned,
     },
 
@@ -422,6 +395,7 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
         ],
       ],
       additionalDischargeOptions,
+      // sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
       sanctionedCountries,
       excludeInternationallySanctioned,
     },
