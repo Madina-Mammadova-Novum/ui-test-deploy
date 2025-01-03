@@ -8,29 +8,19 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { FormProvider, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
 import { Button, CheckBoxInput, FormDropdown, Input, Label } from '@/elements';
 import { Flag, NestedCheckboxList } from '@/units';
-import { useHookFormParams } from '@/utils/hooks';
+import { useHookForm } from '@/utils/hooks';
 import { useBasinSelection } from '@/utils/hooks/useBasinSelection';
 import { useSanctionedCountries } from '@/utils/hooks/useSanctionedCountries';
 
 const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton = true }) => {
-  const methods = useHookFormParams({
-    defaultValues: {
-      additionalDischargeOptions: {
-        isAllSelected: false,
-        selected: [],
-      },
-      excludedCountries: [],
-      excludeInternationallySanctioned: false,
-    },
-  });
-
-  const { formState: { errors, submitCount } = {}, setValue, clearErrors, control } = methods;
+  const form = useHookForm() || {};
+  const { formState: { errors, submitCount } = {}, setValue, clearErrors, control } = form;
 
   const {
     basins,
@@ -81,19 +71,11 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     }));
   }, [countries, isCountrySelectedInBasins]);
 
-  const formExcludedCountries =
-    useWatch({
-      control,
-      name: 'excludedCountries',
-      defaultValue: [],
-    }) || [];
-
-  const formExcludeInternationallySanctioned =
-    useWatch({
-      control,
-      name: 'excludeInternationallySanctioned',
-      defaultValue: false,
-    }) || false;
+  const formExcludedCountries = useWatch({
+    control,
+    name: 'excludedCountries',
+    defaultValue: [],
+  });
 
   // Update excluded countries when basin selection changes
   useEffect(() => {
@@ -103,6 +85,12 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       setValue('excludedCountries', newExcludedCountries);
     }
   }, [basins, formExcludedCountries, setValue, isCountrySelectedInBasins]);
+
+  const formExcludeInternationallySanctioned = useWatch({
+    control,
+    name: 'excludeInternationallySanctioned',
+    defaultValue: false,
+  });
 
   // Use ref to maintain stable reference to searchBasins
   const searchBasinsRef = useRef(searchBasins);
@@ -224,106 +212,102 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
   );
 
   return (
-    <FormProvider {...methods}>
-      <div className="flex flex-col gap-y-4">
-        <div>
-          <div className="mb-2 flex flex-col">
-            <div className="flex flex-wrap items-center justify-between">
-              <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
-              <div className="flex items-center gap-x-2">
-                <CheckBoxInput
-                  name="isAllSelected"
-                  checked={isAllSelected}
-                  onChange={(e) => handleSelectAll(e.target.checked)}
-                  customStyles="accent-blue"
-                  labelStyles="text-black text-xsm"
-                  disabled={searchLoading || !!searchQuery}
-                >
-                  Select All
-                </CheckBoxInput>
-                {showResetButton && (
-                  <Button
-                    customStyles="text-blue hover:text-blue-darker"
-                    buttonProps={{
-                      text: 'Reset All',
-                      variant: 'tertiary',
-                      size: 'small',
-                    }}
-                    onClick={handleReset}
-                    disabled={searchLoading}
-                  />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-between gap-x-2">
-              <Input
-                type="text"
-                placeholder="Search discharge options..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                customStyles="max-w-72 w-full"
-                disabled={searchLoading}
-              />
+    <div className="flex flex-col gap-y-4">
+      <div>
+        <div className="mb-2 flex flex-col">
+          <div className="flex flex-wrap items-center justify-between">
+            <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
+            <div className="flex items-center gap-x-2">
+              <CheckBoxInput
+                name="isAllSelected"
+                checked={isAllSelected}
+                onChange={(e) => handleSelectAll(e.target.checked)}
+                customStyles="accent-blue"
+                labelStyles="text-black text-xsm"
+                disabled={searchLoading || !!searchQuery}
+              >
+                Select All
+              </CheckBoxInput>
+              {showResetButton && (
+                <Button
+                  customStyles="text-blue hover:text-blue-darker"
+                  buttonProps={{
+                    text: 'Reset All',
+                    variant: 'tertiary',
+                    size: 'small',
+                  }}
+                  onClick={handleReset}
+                  disabled={searchLoading}
+                />
+              )}
             </div>
           </div>
-          <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
-            {searchLoading && (
-              <div className="flex items-center justify-center py-8 text-gray-500">
-                <span>Loading discharge options...</span>
-              </div>
-            )}
-            {!searchLoading && basins.length > 0 && (
-              <NestedCheckboxList
-                items={basins}
-                expanded={expandedBasins}
-                onToggleExpand={(key) => setExpandedBasins((prev) => ({ ...prev, [key]: !prev[key] }))}
-                onChange={handleBasinChange}
-                renderItem={renderItem}
-                getSubItems={getSubItems}
-                isSelected={isSelected}
-                hasIndeterminate={hasIndeterminate}
-                isDisabled={isDisabled}
-                customStyles={{
-                  container: 'space-y-1.5',
-                  subItems: 'space-y-0.5',
-                }}
-              />
-            )}
-            {!searchLoading && basins.length === 0 && (
-              <div className="flex items-center justify-center py-8 text-gray-500">
-                <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
-              </div>
-            )}
+          <div className="flex items-center justify-between gap-x-2">
+            <Input
+              type="text"
+              placeholder="Search discharge options..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              customStyles="max-w-72 w-full"
+              disabled={searchLoading}
+            />
           </div>
-
-          {shouldShowError() && (
-            <span className="text-sm text-red-500">{errors.additionalDischargeOptions.message}</span>
+        </div>
+        <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
+          {searchLoading && (
+            <div className="flex items-center justify-center py-8 text-gray-500">
+              <span>Loading discharge options...</span>
+            </div>
+          )}
+          {!searchLoading && basins.length > 0 && (
+            <NestedCheckboxList
+              items={basins}
+              expanded={expandedBasins}
+              onToggleExpand={(key) => setExpandedBasins((prev) => ({ ...prev, [key]: !prev[key] }))}
+              onChange={handleBasinChange}
+              renderItem={renderItem}
+              getSubItems={getSubItems}
+              isSelected={isSelected}
+              hasIndeterminate={hasIndeterminate}
+              isDisabled={isDisabled}
+              customStyles={{
+                container: 'space-y-1.5',
+                subItems: 'space-y-0.5',
+              }}
+            />
+          )}
+          {!searchLoading && basins.length === 0 && (
+            <div className="flex items-center justify-center py-8 text-gray-500">
+              <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
+            </div>
           )}
         </div>
 
-        <FormDropdown
-          label="Excluded Destinations"
-          name="excludedCountries"
-          options={countriesWithDisabled}
-          value={formExcludedCountries}
-          isMulti
-          loading={countriesLoading}
-          closeMenuOnSelect={false}
-          customStyles={{ className: 'w-full' }}
-          onChange={handleCountryChange}
-          placeholder="Select one or more countries..."
-        />
-        <CheckBoxInput
-          name="excludeInternationallySanctioned"
-          checked={formExcludeInternationallySanctioned}
-          onChange={handleSanctionCheckboxChange}
-          customStyles="accent-blue"
-          labelStyles="text-black text-xsm"
-        >
-          Exclude internationally sanctioned countries
-        </CheckBoxInput>
+        {shouldShowError() && <span className="text-sm text-red-500">{errors.additionalDischargeOptions.message}</span>}
       </div>
-    </FormProvider>
+
+      <FormDropdown
+        label="Excluded Destinations"
+        name="excludedCountries"
+        options={countriesWithDisabled}
+        value={formExcludedCountries}
+        isMulti
+        loading={countriesLoading}
+        closeMenuOnSelect={false}
+        customStyles={{ className: 'w-full' }}
+        onChange={handleCountryChange}
+        placeholder="Select one or more countries..."
+      />
+      <CheckBoxInput
+        name="excludeInternationallySanctioned"
+        checked={formExcludeInternationallySanctioned}
+        onChange={handleSanctionCheckboxChange}
+        customStyles="accent-blue"
+        labelStyles="text-black text-xsm"
+      >
+        Exclude internationally sanctioned countries
+      </CheckBoxInput>
+    </div>
   );
 };
 
@@ -354,10 +338,7 @@ const AdditionalDischargeOptionShape = PropTypes.shape({
 
 AdditionalDischargeForm.propTypes = {
   data: PropTypes.shape({
-    additionalDischargeOptions: PropTypes.shape({
-      isAllSelected: PropTypes.bool,
-      selected: PropTypes.arrayOf(AdditionalDischargeOptionShape),
-    }),
+    additionalDischargeOptions: PropTypes.arrayOf(AdditionalDischargeOptionShape),
     sanctionedCountries: PropTypes.arrayOf(CountryShape),
     excludeInternationallySanctioned: PropTypes.bool,
   }),
