@@ -19,7 +19,7 @@ export function requestSearchVesselAdapter({ data }) {
     rangeBy,
     savedSearchId,
     additionalDischargeOptions,
-    sanctionedCountries,
+    sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
 

@@ -1,5 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
-import { countriesReverseAdapter } from '@/adapters/country';
+import { countriesAdapter, countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import {
   addLocalDateFlag,
@@ -32,7 +32,7 @@ export function sendOfferAdapter({ data }) {
     ballastLeg,
     estimatedArrivalTime,
     additionalDischargeOptions,
-    sanctionedCountries,
+    sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
   return {
@@ -246,7 +246,7 @@ export function offerDetailsAdapter({ data, role }) {
         ],
       ],
       additionalDischargeOptions,
-      sanctionedCountries,
+      sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
       excludeInternationallySanctioned,
     },
 
@@ -395,6 +395,7 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
         ],
       ],
       additionalDischargeOptions,
+      // sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
       sanctionedCountries,
       excludeInternationallySanctioned,
     },
