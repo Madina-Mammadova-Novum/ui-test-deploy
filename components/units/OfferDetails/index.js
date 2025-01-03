@@ -19,7 +19,7 @@ const OfferDetails = ({ voyageDetails, commercialOfferTerms }) => {
 
   return (
     <div className="flex flex-col gap-y-5 py-4">
-      <VoyageDetailsTabContent data={voyageDetails} />
+      <VoyageDetailsTabContent data={voyageDetails} isViewing />
       <AdditionalDischargeDetails data={additionalDischargeData} />
       <COTTabContent data={commercialOfferTerms} />
     </div>
