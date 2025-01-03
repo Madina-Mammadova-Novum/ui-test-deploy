@@ -105,7 +105,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         'additionalDischargeOptions',
         {
           isAllSelected: allBasinsSelected,
-          basins: allBasinsSelected ? [] : selectedBasins,
+          selected: allBasinsSelected ? [] : selectedBasins,
         },
         {
           shouldValidate: false,
@@ -153,7 +153,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
         // Handle both old array format and new object format
         const initialOptions =
-          initialDataRef.current?.additionalDischargeOptions?.basins ||
+          initialDataRef.current?.additionalDischargeOptions?.selected ||
           initialDataRef.current?.additionalDischargeOptions ||
           [];
 
@@ -216,7 +216,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
         setValueRef.current('additionalDischargeOptions', {
           isAllSelected: shouldSelectAll,
-          basins: shouldSelectAll ? [] : initialOptions,
+          selected: shouldSelectAll ? [] : initialOptions,
         });
       }
     } catch (error) {
@@ -578,7 +578,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
     updateBasins(updatedBasins);
     setValueRef.current('additionalDischargeOptions', {
       isAllSelected: false,
-      basins: [],
+      selected: [],
     });
     setSearchLoading(false);
   }, [basins, updateBasins]);

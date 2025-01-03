@@ -9,10 +9,10 @@ import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 import { TextRow, Title } from '@/elements';
 import { AdditionalDischargeForm, Flag } from '@/units';
 
-const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
+const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing = false }) => {
   const hasAdditionalDischargeOptions =
     data?.additionalDischargeOptions?.isAllSelected ||
-    (data?.additionalDischargeOptions?.basins && data?.additionalDischargeOptions?.basins.length > 0);
+    (data?.additionalDischargeOptions?.selected && data?.additionalDischargeOptions?.selected.length > 0);
 
   const printPairDates = (detail) => (
     <TextRow key={detail.key} title={detail.key}>
@@ -61,7 +61,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
       </div>
       {!!inlineVariant && <hr className="my-4" />}
 
-      {hasAdditionalDischargeOptions && (
+      {hasAdditionalDischargeOptions && !isViewing && (
         <>
           <hr className="my-4" />
           <AdditionalDischargeForm data={data} showResetButton={false} />
@@ -74,6 +74,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
 VoyageDetailsTabContent.propTypes = {
   ...VoyageDetailsTabContentPropTypes,
   inlineVariant: PropTypes.bool,
+  isViewing: PropTypes.bool,
 };
 
 export default VoyageDetailsTabContent;
