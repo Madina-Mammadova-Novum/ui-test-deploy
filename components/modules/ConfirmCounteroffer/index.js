@@ -15,6 +15,15 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
   const { voyageDetails, comments } = offerDetails;
   const { commercialOfferTerms, comment } = confirmCounterofferDetailsAdapter({ data: getValues() });
 
+  const formData = getValues();
+  const nextVoyageDetails = {
+    ...voyageDetails,
+    additionalDischargeOptions: {
+      ...voyageDetails?.additionalDischargeOptions,
+      ...formData?.additionalDischargeOptions,
+    },
+  };
+
   return (
     <div className="flex h-full w-[610px] flex-col">
       <div
@@ -24,7 +33,7 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
         }`}
       >
         <COTTabContent data={commercialOfferTerms} />
-        <VoyageDetailsTabContent data={voyageDetails} />
+        <VoyageDetailsTabContent data={nextVoyageDetails} isCounteroffer isViewing />
         <CommentsContent data={[...comments, comment]} areaDisabled />
       </div>
     </div>

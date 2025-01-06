@@ -115,7 +115,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetails} />;
+        return <VoyageDetailsTabContent data={voyageDetails} isCounteroffer />;
       case 'comments':
         return <CommentsContent data={comments} />;
       default:

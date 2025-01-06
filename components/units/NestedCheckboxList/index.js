@@ -4,6 +4,7 @@
  * @props {Array} items - Array of items to display in tree structure
  * @props {Object} config - Configuration for item rendering and structure
  * @props {Function} onChange - Callback when any checkbox state changes
+ * @props {Boolean} isCounteroffer - Whether this is a counteroffer view (disables unselected items)
  */
 
 'use client';
@@ -13,6 +14,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const NestedCheckboxList = ({
   items = [],
@@ -28,7 +30,10 @@ const NestedCheckboxList = ({
   customStyles = {},
   level = 0,
   parentId = null,
+  isCounteroffer = false,
 }) => {
+  const role = getCookieFromBrowser('session-user-role');
+
   const handleItemChange = useCallback(
     (item, checked) => {
       /* eslint-disable no-nested-ternary */
@@ -62,7 +67,7 @@ const NestedCheckboxList = ({
         onChange?.(item, checked, itemType);
       }
     },
-    [onChange, parentId]
+    [onChange, parentId, isCounteroffer, role]
   );
 
   const getLabelClass = useCallback((item) => {
@@ -84,6 +89,23 @@ const NestedCheckboxList = ({
     return `${itemType}-${item.id}`;
   }, []);
 
+  const getIsItemDisabled = useCallback(
+    (item, isItemSelected, isIndeterminate) => {
+      const baseDisabled = isDisabled?.(item) || false;
+      if (baseDisabled) return true;
+
+      // For owner in counteroffer mode:
+      // - Disable if item is not selected and not indeterminate
+      // - Enable if item is selected or indeterminate (allowing unselection)
+      if (isCounteroffer && role === 'owner') {
+        return !isItemSelected && !isIndeterminate;
+      }
+
+      return false;
+    },
+    [isDisabled, isCounteroffer, role]
+  );
+
   return (
     <div className={`flex flex-col ${customStyles.container || ''}`}>
       {items.map((item) => {
@@ -93,7 +115,7 @@ const NestedCheckboxList = ({
         const isExpanded = expanded[expandedKey];
         const isItemSelected = isSelected?.(item) || false;
         const isIndeterminate = hasIndeterminate?.(item) || false;
-        const isItemDisabled = isDisabled?.(item) || false;
+        const isItemDisabled = getIsItemDisabled(item, isItemSelected, isIndeterminate);
 
         return (
           <div key={item.id} className={customStyles.item || ''}>
@@ -149,6 +171,7 @@ const NestedCheckboxList = ({
                   customStyles={customStyles}
                   level={level + 1}
                   parentId={item.id}
+                  isCounteroffer={isCounteroffer}
                 />
               </div>
             )}
@@ -187,6 +210,7 @@ NestedCheckboxList.propTypes = {
   }),
   level: PropTypes.number,
   parentId: PropTypes.string,
+  isCounteroffer: PropTypes.bool,
 };
 
 export default NestedCheckboxList;
