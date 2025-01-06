@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
-import { AdditionalDischargeForm, Flag } from '@/units';
+import { AdditionalDischargeDetails, AdditionalDischargeForm, Flag } from '@/units';
 
-const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing = false }) => {
+const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing = false, isCounteroffer = false }) => {
   const hasAdditionalDischargeOptions =
     data?.additionalDischargeOptions?.isAllSelected ||
     (data?.additionalDischargeOptions?.selected && data?.additionalDischargeOptions?.selected.length > 0);
@@ -61,10 +61,14 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing =
       </div>
       {!!inlineVariant && <hr className="my-4" />}
 
-      {hasAdditionalDischargeOptions && !isViewing && (
+      {hasAdditionalDischargeOptions && (
         <>
           <hr className="my-4" />
-          <AdditionalDischargeForm data={data} showResetButton={false} />
+          {!isViewing ? (
+            <AdditionalDischargeForm data={data} showResetButton={!isCounteroffer} isCounteroffer={isCounteroffer} />
+          ) : (
+            <AdditionalDischargeDetails data={data} />
+          )}
         </>
       )}
     </div>
@@ -75,6 +79,7 @@ VoyageDetailsTabContent.propTypes = {
   ...VoyageDetailsTabContentPropTypes,
   inlineVariant: PropTypes.bool,
   isViewing: PropTypes.bool,
+  isCounteroffer: PropTypes.bool,
 };
 
 export default VoyageDetailsTabContent;

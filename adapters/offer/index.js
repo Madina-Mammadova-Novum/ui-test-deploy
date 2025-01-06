@@ -73,6 +73,9 @@ export function sendCounterofferAdapter({ data }) {
     comment,
     freight,
     products,
+    additionalDischargeOptions,
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
   } = data;
 
   return {
@@ -91,6 +94,9 @@ export function sendCounterofferAdapter({ data }) {
       quantity: +quantity,
       tolerance: data[`products[${index}].tolerance`],
     })),
+    additionalDischargeOptions,
+    sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 }
 

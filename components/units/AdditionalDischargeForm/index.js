@@ -18,7 +18,7 @@ import { useHookForm } from '@/utils/hooks';
 import { useBasinSelection } from '@/utils/hooks/useBasinSelection';
 import { useSanctionedCountries } from '@/utils/hooks/useSanctionedCountries';
 
-const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton = true }) => {
+const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton = true, isCounteroffer = false }) => {
   const form = useHookForm() || {};
   const { formState: { errors, submitCount } = {}, setValue, clearErrors, control } = form;
 
@@ -217,30 +217,32 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         <div className="mb-2 flex flex-col">
           <div className="flex flex-wrap items-center justify-between">
             <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
-            <div className="flex items-center gap-x-2">
-              <CheckBoxInput
-                name="isAllSelected"
-                checked={isAllSelected}
-                onChange={(e) => handleSelectAll(e.target.checked)}
-                customStyles="accent-blue"
-                labelStyles="text-black text-xsm"
-                disabled={searchLoading || !!searchQuery}
-              >
-                Select All
-              </CheckBoxInput>
-              {showResetButton && (
-                <Button
-                  customStyles="text-blue hover:text-blue-darker"
-                  buttonProps={{
-                    text: 'Reset All',
-                    variant: 'tertiary',
-                    size: 'small',
-                  }}
-                  onClick={handleReset}
-                  disabled={searchLoading}
-                />
-              )}
-            </div>
+            {!isCounteroffer && (
+              <div className="flex items-center gap-x-2">
+                <CheckBoxInput
+                  name="isAllSelected"
+                  checked={isAllSelected}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  customStyles="accent-blue"
+                  labelStyles="text-black text-xsm"
+                  disabled={searchLoading || !!searchQuery}
+                >
+                  Select All
+                </CheckBoxInput>
+                {showResetButton && (
+                  <Button
+                    customStyles="text-blue hover:text-blue-darker"
+                    buttonProps={{
+                      text: 'Reset All',
+                      variant: 'tertiary',
+                      size: 'small',
+                    }}
+                    onClick={handleReset}
+                    disabled={searchLoading}
+                  />
+                )}
+              </div>
+            )}
           </div>
           <div className="flex items-center justify-between gap-x-2">
             <Input
@@ -274,6 +276,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                 container: 'space-y-1.5',
                 subItems: 'space-y-0.5',
               }}
+              isCounteroffer={isCounteroffer}
             />
           )}
           {!searchLoading && basins.length === 0 && (
@@ -297,6 +300,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         customStyles={{ className: 'w-full' }}
         onChange={handleCountryChange}
         placeholder="Select one or more countries..."
+        disabled={isCounteroffer}
       />
       <CheckBoxInput
         name="excludeInternationallySanctioned"
@@ -304,6 +308,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         onChange={handleSanctionCheckboxChange}
         customStyles="accent-blue"
         labelStyles="text-black text-xsm"
+        disabled={isCounteroffer}
       >
         Exclude internationally sanctioned countries
       </CheckBoxInput>
@@ -344,6 +349,7 @@ AdditionalDischargeForm.propTypes = {
   }),
   showError: PropTypes.bool,
   showResetButton: PropTypes.bool,
+  isCounteroffer: PropTypes.bool,
 };
 
 export default AdditionalDischargeForm;
