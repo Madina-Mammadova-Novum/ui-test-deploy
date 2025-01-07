@@ -8,18 +8,22 @@ import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
-import { Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const { role } = useSelector(getUserDataSelector);
   const { countries } = useSelector(getGeneralDataSelector);
 
+  console.log({ detailsData });
   const {
     partyInformation = {},
     cargoDetails = {},
     commercialOfferTerms = {},
     voyageDetails = {},
     additionalCharterPartyTerms = [],
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
   } = detailsData;
 
   const { cargoType, products = [] } = cargoDetails;
@@ -39,6 +43,12 @@ const DetailsContent = ({ detailsData = {} }) => {
   const roleBasedSection = {
     owner: <DetailsOwnerContent title="Charterer Information" data={partyInformation} countries={countries} />,
     charterer: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
+  };
+
+  const additionalDischargeData = {
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
   };
 
   return (
@@ -105,6 +115,10 @@ const DetailsContent = ({ detailsData = {} }) => {
               </TextRow>
               <TextRow title="Discharge terminal">{dischargeTerminal}</TextRow>
             </div>
+          </FieldsetContent>
+
+          <FieldsetContent label="Additional Discharge Options" className="mt-4">
+            <AdditionalDischargeDetails data={additionalDischargeData} />
           </FieldsetContent>
         </FieldsetWrapper>
       </div>

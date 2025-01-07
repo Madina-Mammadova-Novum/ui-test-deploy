@@ -70,7 +70,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation, offerId, offerAccepted }) 
           </>
         )}
       </div>
-      <Modal opened={modalOptions.opened} onClose={handleCloseModal}>
+      <Modal containerClass="h-full" opened={modalOptions.opened} onClose={handleCloseModal}>
         {modalContent()}
       </Modal>
     </ExpandableRowFooter>
