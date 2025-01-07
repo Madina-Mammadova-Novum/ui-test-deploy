@@ -218,7 +218,6 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
     additionalCharterPartyTerms,
-
     lastOffer,
   } = data;
   const { country: registrationCountry } = registrationCity || {};
@@ -228,6 +227,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = lastOffer || {};
+  
   return {
     relatedCargoId: data?.searchedCargo?.id,
     partyInformation: {
