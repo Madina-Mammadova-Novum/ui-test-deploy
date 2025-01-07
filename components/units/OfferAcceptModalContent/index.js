@@ -81,7 +81,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
       case 'commercial_offer_terms':
         return <COTTabContent data={commercialOfferTerms} />;
       default:
-        return <VoyageDetailsTabContent data={voyageDetails} />;
+        return <VoyageDetailsTabContent data={voyageDetails} isViewing isCounteroffer />;
     }
   };
 
@@ -119,7 +119,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`mt-3 h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
+        className={`mt-3 h-full overflow-y-auto overflow-x-hidden py-4 ${showScroll && 'shadow-vInset'}`}
       >
         {tabContent()}
       </div>

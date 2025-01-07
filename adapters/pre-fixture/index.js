@@ -1,3 +1,4 @@
+import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
@@ -203,6 +204,7 @@ export const prefixtureRowsDataAdapter = ({ data }) => {
 
 export const prefixtureOwnerDetailsAdapter = (data) => {
   if (!data) return {};
+
   const {
     searchedCargo: { cargoType } = {},
     products = [],
@@ -216,8 +218,15 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
     additionalCharterPartyTerms,
+    lastOffer,
   } = data;
   const { country: registrationCountry } = registrationCity || {};
+
+  const {
+    additionalDischargeOptions = [],
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
+  } = lastOffer || {};
 
   return {
     relatedCargoId: data?.searchedCargo?.id,
@@ -255,6 +264,9 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     },
     additionalCharterPartyTerms,
     allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByOwner,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 
@@ -275,7 +287,14 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal },
     additionalCharterPartyTerms,
     charterer,
+    lastOffer,
   } = data;
+
+  const {
+    additionalDischargeOptions = [],
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
+  } = lastOffer || {};
 
   return {
     partyInformation: {
@@ -307,6 +326,9 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     },
     additionalCharterPartyTerms,
     allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByCharterer,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 

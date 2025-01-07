@@ -3,7 +3,7 @@
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const {
@@ -13,12 +13,20 @@ const DetailsContent = ({ detailsData = {} }) => {
     voyageDetails,
     commercialOfferTerms,
     additionalCharterPartyTerms,
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
   } = detailsData || {};
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
   const { generalOfferTerms, bankInfo } = commercialOfferTerms || {};
+  const additionalDischargeData = {
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
+  };
 
   return (
     <div className="mb-5 flex flex-col gap-y-5">
@@ -119,6 +127,10 @@ const DetailsContent = ({ detailsData = {} }) => {
                 ))}
               </div>
             ))}
+          </FieldsetContent>
+
+          <FieldsetContent label="Additional Discharge Options" className="mt-4">
+            <AdditionalDischargeDetails data={additionalDischargeData} />
           </FieldsetContent>
         </FieldsetWrapper>
       </div>

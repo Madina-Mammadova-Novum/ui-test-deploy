@@ -64,11 +64,12 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing =
       {hasAdditionalDischargeOptions && (
         <>
           <hr className="my-4" />
+          {/* eslint-disable-next-line no-nested-ternary */}
           {!isViewing ? (
             <AdditionalDischargeForm data={data} showResetButton={!isCounteroffer} isCounteroffer={isCounteroffer} />
-          ) : (
+          ) : isCounteroffer ? (
             <AdditionalDischargeDetails data={data} />
-          )}
+          ) : null}
         </>
       )}
     </div>
