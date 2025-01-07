@@ -6,7 +6,6 @@ import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/ele
 import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
-  console.log({ detailsData });
   const {
     chartererInformation,
     tankerInformation,

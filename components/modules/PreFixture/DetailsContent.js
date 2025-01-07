@@ -14,7 +14,6 @@ const DetailsContent = ({ detailsData = {} }) => {
   const { role } = useSelector(getUserDataSelector);
   const { countries } = useSelector(getGeneralDataSelector);
 
-  console.log({ detailsData });
   const {
     partyInformation = {},
     cargoDetails = {},
