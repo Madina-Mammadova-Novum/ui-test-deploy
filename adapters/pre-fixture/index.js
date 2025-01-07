@@ -227,7 +227,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = lastOffer || {};
-  
+
   return {
     relatedCargoId: data?.searchedCargo?.id,
     partyInformation: {
