@@ -14,7 +14,6 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
-import { getCookieFromBrowser } from '@/utils/helpers';
 
 const NestedCheckboxList = ({
   items = [],
@@ -32,8 +31,6 @@ const NestedCheckboxList = ({
   parentId = null,
   isCounteroffer = false,
 }) => {
-  const role = getCookieFromBrowser('session-user-role');
-
   const handleItemChange = useCallback(
     (item, checked) => {
       /* eslint-disable no-nested-ternary */
@@ -67,7 +64,7 @@ const NestedCheckboxList = ({
         onChange?.(item, checked, itemType);
       }
     },
-    [onChange, parentId, isCounteroffer, role]
+    [onChange, parentId, isCounteroffer]
   );
 
   const getLabelClass = useCallback((item) => {
@@ -94,16 +91,16 @@ const NestedCheckboxList = ({
       const baseDisabled = isDisabled?.(item) || false;
       if (baseDisabled) return true;
 
-      // For owner in counteroffer mode:
-      // - Disable if item is not selected and not indeterminate
-      // - Enable if item is selected or indeterminate (allowing unselection)
-      if (isCounteroffer && role === 'owner') {
+      // In counteroffer mode:
+      // - Only disable items that were not initially selected
+      // - Once an item was selected in the initial state, it should remain enabled
+      if (isCounteroffer) {
         return !isItemSelected && !isIndeterminate;
       }
 
       return false;
     },
-    [isDisabled, isCounteroffer, role]
+    [isDisabled, isCounteroffer]
   );
 
   return (
