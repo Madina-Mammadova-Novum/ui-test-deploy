@@ -1,3 +1,4 @@
+import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
@@ -52,6 +53,7 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
 
 export const fixtureDetailsAdapter = ({ data }) => {
   if (!data) return {};
+
   const {
     charterer: {
       name: chartererName,
@@ -91,11 +93,17 @@ export const fixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
+    lastOffer,
   } = data;
 
   const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;
   const { name: correspondenceCityName = '', country: correspondenceCountry = '' } = correspondenceCity;
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails;
+  const {
+    additionalDischargeOptions = [],
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
+  } = lastOffer || {};
 
   return {
     chartererInformation: [
@@ -266,6 +274,9 @@ export const fixtureDetailsAdapter = ({ data }) => {
     additionalCharterPartyTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 
