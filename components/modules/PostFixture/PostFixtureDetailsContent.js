@@ -1,7 +1,7 @@
 import { PostFixtureDetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
 
 const PostFixtureDetailsContent = ({ detailsData }) => {
   const {
@@ -11,6 +11,9 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
     voyageDetails,
     commercialOfferTerms,
     additionalCharterPartyTerms,
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
   } = detailsData;
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
@@ -21,6 +24,12 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
     generalOfferTerms,
     bankInfo: { bankName, bankDetails },
   } = commercialOfferTerms || {};
+
+  const additionalDischargeData = {
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
+  };
 
   return (
     <div className="mb-5 flex flex-col gap-y-2.5">
@@ -119,6 +128,10 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
                 ))}
               </div>
             ))}
+          </FieldsetContent>
+
+          <FieldsetContent label="Additional Discharge Options" className="mt-4">
+            <AdditionalDischargeDetails data={additionalDischargeData} />
           </FieldsetContent>
         </FieldsetWrapper>
       </div>
