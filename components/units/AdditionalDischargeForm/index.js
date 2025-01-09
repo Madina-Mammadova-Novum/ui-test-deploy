@@ -17,6 +17,7 @@ import { Flag, NestedCheckboxList } from '@/units';
 import { useHookForm } from '@/utils/hooks';
 import { useBasinSelection } from '@/utils/hooks/useBasinSelection';
 import { useSanctionedCountries } from '@/utils/hooks/useSanctionedCountries';
+import classNames from 'classnames';
 
 const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton = true, isCounteroffer = false }) => {
   const form = useHookForm() || {};
@@ -222,9 +223,9 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
   return (
     <div className="flex flex-col gap-y-4">
       <div>
-        <div className="mb-2 flex flex-col">
+        <div className={classNames('mb-2 flex flex-col', { 'gap-y-2.5': isCounteroffer })}>
           <div className="flex flex-wrap items-center justify-between">
-            <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
+            <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options</Label>
             {!isCounteroffer && (
               <div className="flex items-center gap-x-2">
                 <CheckBoxInput
