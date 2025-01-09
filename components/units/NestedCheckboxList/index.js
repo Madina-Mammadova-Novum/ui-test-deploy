@@ -68,11 +68,9 @@ const NestedCheckboxList = ({
   );
 
   const getLabelClass = useCallback((item) => {
-    if (item.countries) return 'text-sm font-medium';
-    if (item.codeISO2) return 'text-xs';
-    if (item.subBasins) return 'text-sm font-bold';
-    if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) return 'text-xs';
-    return 'text-sm';
+    if (item.countries) return 'text-xsm font-medium';
+    if (item.subBasins) return 'text-xsm font-bold';
+    return 'text-xsm';
   }, []);
 
   const getExpandedKey = useCallback((item) => {
@@ -122,7 +120,7 @@ const NestedCheckboxList = ({
               >
                 <input
                   type="checkbox"
-                  className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mr-1.5 h-4 w-4 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                   checked={isItemSelected}
                   disabled={isItemDisabled}
                   ref={(el) => {
@@ -132,10 +130,7 @@ const NestedCheckboxList = ({
                   }}
                   onChange={(e) => !isItemDisabled && handleItemChange(item, e.target.checked)}
                 />
-                <div className="flex items-center gap-x-1">
-                  {renderItem?.(item)}
-                  {isItemDisabled && <span className="text-xs text-gray-500">(Disabled)</span>}
-                </div>
+                <div className="flex items-center">{renderItem?.(item)}</div>
               </label>
               {hasSubItems && (
                 <button

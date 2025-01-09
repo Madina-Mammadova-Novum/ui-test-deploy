@@ -164,7 +164,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       );
     }
     if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
-      return <span className="text-gray-600">{item.name}</span>;
+      return <span className="text-xsm text-gray-600">{item.name}</span>;
     }
     return item.name;
   }, []);
@@ -226,6 +226,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                   customStyles="accent-blue"
                   labelStyles="text-black text-xsm"
                   disabled={searchLoading || !!searchQuery}
+                  boxStyles="!gap-1.5"
                 >
                   Select All
                 </CheckBoxInput>
@@ -257,7 +258,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
           {searchLoading && (
-            <div className="flex items-center justify-center py-8 text-gray-500">
+            <div className="flex items-center justify-center py-8 text-xsm text-gray-500">
               <span>Loading discharge options...</span>
             </div>
           )}
@@ -272,21 +273,19 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
               isSelected={isSelected}
               hasIndeterminate={hasIndeterminate}
               isDisabled={isDisabled}
-              customStyles={{
-                container: 'space-y-1.5',
-                subItems: 'space-y-0.5',
-              }}
               isCounteroffer={isCounteroffer}
             />
           )}
           {!searchLoading && basins.length === 0 && (
-            <div className="flex items-center justify-center py-8 text-gray-500">
+            <div className="flex items-center justify-center py-8 text-xsm text-gray-500">
               <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
             </div>
           )}
         </div>
 
-        {shouldShowError() && <span className="text-sm text-red-500">{errors.additionalDischargeOptions.message}</span>}
+        {shouldShowError() && (
+          <span className="text-xsm text-red-500">{errors.additionalDischargeOptions.message}</span>
+        )}
       </div>
 
       <FormDropdown
@@ -309,6 +308,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         customStyles="accent-blue"
         labelStyles="text-black text-xsm"
         disabled={isCounteroffer}
+        boxStyles="!gap-1.5"
       >
         Exclude internationally sanctioned countries
       </CheckBoxInput>
