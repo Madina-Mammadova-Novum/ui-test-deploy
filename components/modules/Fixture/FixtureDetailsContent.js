@@ -128,9 +128,7 @@ const FixtureDetailsContent = ({ detailsData }) => {
             ))}
           </FieldsetContent>
 
-          <FieldsetContent label="Additional Discharge Options" className="mt-4">
-            <AdditionalDischargeDetails data={additionalDischargeData} />
-          </FieldsetContent>
+          <AdditionalDischargeDetails data={additionalDischargeData} classNames="mt-4" />
         </FieldsetWrapper>
       </div>
       <div className="flex flex-col gap-y-2.5 3md:flex-row 3md:gap-x-2.5 3md:gap-y-0">

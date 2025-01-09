@@ -10,9 +10,10 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
 
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-import { Button, CheckBoxInput, FormDropdown, Input, Label } from '@/elements';
+import { Button, CheckBoxInput, FormDropdown, Input, Label, Loader } from '@/elements';
 import { Flag, NestedCheckboxList } from '@/units';
 import { useHookForm } from '@/utils/hooks';
 import { useBasinSelection } from '@/utils/hooks/useBasinSelection';
@@ -164,7 +165,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
       );
     }
     if (!item.countries && !item.codeISO2 && !item.subBasins && !item.ports) {
-      return <span className="text-gray-600">{item.name}</span>;
+      return <span className="text-xsm text-gray-600">{item.name}</span>;
     }
     return item.name;
   }, []);
@@ -211,12 +212,20 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     [formExcludedCountries, basins]
   );
 
+  if (searchLoading) {
+    return (
+      <div className="relative flex h-72 w-full items-center justify-center">
+        <Loader className="h-8 w-8" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-y-4">
       <div>
-        <div className="mb-2 flex flex-col">
+        <div className={classNames('mb-2 flex flex-col', { 'gap-y-2.5': isCounteroffer })}>
           <div className="flex flex-wrap items-center justify-between">
-            <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options </Label>
+            <Label className="mb-0.5 block whitespace-nowrap text-xs-sm">Additional Discharge Options</Label>
             {!isCounteroffer && (
               <div className="flex items-center gap-x-2">
                 <CheckBoxInput
@@ -226,6 +235,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
                   customStyles="accent-blue"
                   labelStyles="text-black text-xsm"
                   disabled={searchLoading || !!searchQuery}
+                  boxStyles="!gap-1.5"
                 >
                   Select All
                 </CheckBoxInput>
@@ -256,11 +266,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
           </div>
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
-          {searchLoading && (
-            <div className="flex items-center justify-center py-8 text-gray-500">
-              <span>Loading discharge options...</span>
-            </div>
-          )}
           {!searchLoading && basins.length > 0 && (
             <NestedCheckboxList
               items={basins}
@@ -272,21 +277,19 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
               isSelected={isSelected}
               hasIndeterminate={hasIndeterminate}
               isDisabled={isDisabled}
-              customStyles={{
-                container: 'space-y-1.5',
-                subItems: 'space-y-0.5',
-              }}
               isCounteroffer={isCounteroffer}
             />
           )}
           {!searchLoading && basins.length === 0 && (
-            <div className="flex items-center justify-center py-8 text-gray-500">
+            <div className="flex items-center justify-center py-8 text-xsm text-gray-500">
               <span>No discharge options found{searchQuery ? ` for "${searchQuery}"` : ''}</span>
             </div>
           )}
         </div>
 
-        {shouldShowError() && <span className="text-sm text-red-500">{errors.additionalDischargeOptions.message}</span>}
+        {shouldShowError() && (
+          <span className="text-xsm text-red-500">{errors.additionalDischargeOptions.message}</span>
+        )}
       </div>
 
       <FormDropdown
@@ -309,6 +312,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
         customStyles="accent-blue"
         labelStyles="text-black text-xsm"
         disabled={isCounteroffer}
+        boxStyles="!gap-1.5"
       >
         Exclude internationally sanctioned countries
       </CheckBoxInput>

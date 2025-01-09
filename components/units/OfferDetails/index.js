@@ -6,21 +6,12 @@
 
 import { OfferDetailsPropTypes } from '@/lib/types';
 
-import { AdditionalDischargeDetails, COTTabContent, VoyageDetailsTabContent } from '@/units';
+import { COTTabContent, VoyageDetailsTabContent } from '@/units';
 
 const OfferDetails = ({ voyageDetails, commercialOfferTerms }) => {
-  const { additionalDischargeOptions, sanctionedCountries, excludeInternationallySanctioned } = voyageDetails;
-
-  const additionalDischargeData = {
-    additionalDischargeOptions,
-    sanctionedCountries,
-    excludeInternationallySanctioned,
-  };
-
   return (
     <div className="flex flex-col gap-y-5 py-4">
       <VoyageDetailsTabContent data={voyageDetails} isViewing />
-      <AdditionalDischargeDetails data={additionalDischargeData} />
       <COTTabContent data={commercialOfferTerms} />
     </div>
   );

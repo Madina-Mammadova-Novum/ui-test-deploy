@@ -12,7 +12,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
-import { Title } from '@/elements';
+import { FieldsetContent, Title } from '@/elements';
 import { Flag } from '@/units';
 
 const AdditionalDischargeDetails = ({
@@ -24,6 +24,7 @@ const AdditionalDischargeDetails = ({
     sanctionedCountries: [],
     excludeInternationallySanctioned: false,
   },
+  classNames = '',
 }) => {
   const [expandedSections, setExpandedSections] = useState({});
 
@@ -38,9 +39,9 @@ const AdditionalDischargeDetails = ({
     if (!ports?.length) return null;
 
     return (
-      <div className="ml-8 flex flex-wrap gap-2">
+      <div className="ml-2 flex flex-wrap gap-2">
         {ports.map((port) => (
-          <div key={port.id} className="text-xs flex items-center rounded-md bg-gray-50 px-2 py-1">
+          <div key={port.id} className="flex items-center rounded-md bg-gray-50 px-2 py-1 text-xsm">
             <span className="mr-1">📍</span>
             <span>{port.name}</span>
           </div>
@@ -53,10 +54,10 @@ const AdditionalDischargeDetails = ({
     if (!country?.ports?.length) return null;
 
     return (
-      <div key={country.id} className="mb-2">
+      <div key={country.id}>
         <div className="flex items-center">
           <Flag countryCode={country.codeISO2} className="mr-1.5" />
-          <span className="font-medium">{country.name}</span>
+          <span>{country.name}</span>
         </div>
         {renderPorts(country.ports)}
       </div>
@@ -70,19 +71,19 @@ const AdditionalDischargeDetails = ({
     const isExpanded = expandedSections[subBasinId];
 
     return (
-      <div key={subBasin.id} className="rounded-md bg-gray-50 p-3">
-        <div className="mb-3 flex items-center justify-between">
+      <div key={subBasin.id} className="rounded-md bg-gray-50 p-2">
+        <div className="flex items-center justify-between">
           <span className="font-medium text-gray-700">{subBasin.name}</span>
           <button type="button" onClick={() => toggleSection(subBasinId)} className="flex items-center p-1">
             <AngleDownSVG
-              className={`h-4 w-4 transform fill-gray-500 transition-transform duration-200 ${
+              className={`h-5 w-5 transform fill-gray-500 transition-transform duration-200 ${
                 isExpanded ? 'rotate-180' : ''
               }`}
             />
           </button>
         </div>
         {isExpanded && (
-          <div className="space-y-3">
+          <div className="ml-2 mt-2 space-y-2">
             {subBasin.countries.filter((country) => country.ports?.length > 0).map(renderCountry)}
           </div>
         )}
@@ -97,9 +98,9 @@ const AdditionalDischargeDetails = ({
     const isExpanded = expandedSections[basinId];
 
     return (
-      <div key={basin.id} className="mb-6 rounded-lg border border-gray-200 p-4">
-        <div className="mb-4 flex items-center justify-between">
-          <Title level="5" className="text-[14px] font-semibold uppercase text-blue-600">
+      <div key={basin.id} className="rounded-lg border border-gray-200 p-2">
+        <div className="flex items-center justify-between">
+          <Title level="5" className="text-xsm font-semibold uppercase text-blue-600">
             {basin.name}
           </Title>
           <button type="button" onClick={() => toggleSection(basinId)} className="flex items-center p-1">
@@ -112,7 +113,7 @@ const AdditionalDischargeDetails = ({
         </div>
 
         {isExpanded && (
-          <div className="space-y-4">
+          <div className="space-y-2">
             {basin.subBasins
               .filter((subBasin) => subBasin.countries?.some((country) => country.ports?.length > 0))
               .map(renderSubBasin)}
@@ -129,10 +130,10 @@ const AdditionalDischargeDetails = ({
     const isExpanded = expandedSections[sectionId];
 
     return (
-      <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4">
+      <div className="mt-2.5 rounded-lg border border-red-200 bg-red-50 p-2">
         <div className="flex items-center justify-between">
-          <Title level="5" className="text-[14px] font-semibold uppercase text-red-600">
-            Excluded Areas
+          <Title level="5" className="text-xsm font-semibold uppercase text-red-600">
+            Excluded Destinations
           </Title>
           <button type="button" onClick={() => toggleSection(sectionId)} className="flex items-center p-1">
             <AngleDownSVG
@@ -144,7 +145,7 @@ const AdditionalDischargeDetails = ({
         </div>
 
         {isExpanded && (
-          <div className="mt-3">
+          <div className="mt-3 text-xsm">
             {data.sanctionedCountries?.length > 0 && (
               <div className="mb-3">
                 <div className="mb-2 font-medium text-gray-700">Specific Destinations</div>
@@ -160,10 +161,10 @@ const AdditionalDischargeDetails = ({
             )}
 
             {data.excludeInternationallySanctioned && (
-              <div className="flex items-center rounded bg-white px-3 py-2 text-sm">
-                <span className="font-medium">
+              <div className="flex items-center rounded bg-white px-2 py-1 text-xsm">
+                <p className="font-medium">
                   Internationally sanctioned countries are <span className="text-red-600">excluded</span>
-                </span>
+                </p>
               </div>
             )}
           </div>
@@ -173,14 +174,10 @@ const AdditionalDischargeDetails = ({
   };
 
   return (
-    <div>
-      <Title level="3" className="mb-4">
-        Additional Discharge Options
-      </Title>
-
+    <FieldsetContent label="Additional Discharge Options" className={classNames}>
       {data.additionalDischargeOptions?.selected?.length > 0 ? (
         <>
-          <div className="space-y-4">{data.additionalDischargeOptions.selected.map(renderBasin)}</div>
+          <div className="space-y-2 text-xsm">{data.additionalDischargeOptions.selected.map(renderBasin)}</div>
           {renderExcludedCountries()}
         </>
       ) : (
@@ -190,7 +187,7 @@ const AdditionalDischargeDetails = ({
             : 'No discharge options selected'}
         </div>
       )}
-    </div>
+    </FieldsetContent>
   );
 };
 
@@ -231,6 +228,7 @@ AdditionalDischargeDetails.propTypes = {
     ),
     excludeInternationallySanctioned: PropTypes.bool,
   }),
+  classNames: PropTypes.string,
 };
 
 export default AdditionalDischargeDetails;

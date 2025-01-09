@@ -116,9 +116,7 @@ const DetailsContent = ({ detailsData = {} }) => {
             </div>
           </FieldsetContent>
 
-          <FieldsetContent label="Additional Discharge Options" className="mt-4">
-            <AdditionalDischargeDetails data={additionalDischargeData} />
-          </FieldsetContent>
+          <AdditionalDischargeDetails data={additionalDischargeData} classNames="mt-4" />
         </FieldsetWrapper>
       </div>
       {!!additionalCharterPartyTerms.length && (

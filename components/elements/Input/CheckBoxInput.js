@@ -11,6 +11,7 @@ import { Input, InputErrorMessage } from '@/elements';
 const CheckBoxInput = ({
   name = '',
   disabled = false,
+  boxStyles = '',
   customStyles = '',
   labelStyles = '',
   checked = false,
@@ -25,7 +26,7 @@ const CheckBoxInput = ({
 
         return (
           <div className="flex flex-col">
-            <div className="flex items-center gap-2.5">
+            <div className={classNames('flex items-center gap-2.5', boxStyles)}>
               <Input
                 {...field}
                 ref={ref}

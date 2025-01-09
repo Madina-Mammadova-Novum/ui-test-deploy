@@ -388,7 +388,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
           name="showAdditionalDischarge"
           checked={showAdditionalDischarge}
           onChange={handleShowAdditionalDischargeChange}
-          labelStyles="text-black text-xsm"
+          labelStyles="text-blue hover:text-blue-darker text-xsm"
+          boxStyles="!gap-1.5"
         >
           Add additional discharge options
         </CheckBoxInput>
