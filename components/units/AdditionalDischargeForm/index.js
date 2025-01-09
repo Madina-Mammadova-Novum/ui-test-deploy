@@ -12,7 +12,7 @@ import { useWatch } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 
-import { Button, CheckBoxInput, FormDropdown, Input, Label } from '@/elements';
+import { Button, CheckBoxInput, FormDropdown, Input, Label, Loader } from '@/elements';
 import { Flag, NestedCheckboxList } from '@/units';
 import { useHookForm } from '@/utils/hooks';
 import { useBasinSelection } from '@/utils/hooks/useBasinSelection';
@@ -211,6 +211,14 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     [formExcludedCountries, basins]
   );
 
+  if (searchLoading) {
+    return (
+      <div className="relative flex h-72 w-full items-center justify-center">
+        <Loader className="h-8 w-8" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-y-4">
       <div>
@@ -257,11 +265,6 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
           </div>
         </div>
         <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
-          {searchLoading && (
-            <div className="flex items-center justify-center py-8 text-xsm text-gray-500">
-              <span>Loading discharge options...</span>
-            </div>
-          )}
           {!searchLoading && basins.length > 0 && (
             <NestedCheckboxList
               items={basins}

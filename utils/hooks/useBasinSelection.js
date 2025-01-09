@@ -5,7 +5,7 @@ import { getAdditionalDischargeOptions } from '@/services/port';
 export const useBasinSelection = (setValue, clearErrors, initialData) => {
   const [basins, setBasins] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(true);
   const [expandedBasins, setExpandedBasins] = useState({});
   const [isAllSelected, setIsAllSelected] = useState(false);
   const [initialBasins, setInitialBasins] = useState([]);
