@@ -93,17 +93,14 @@ export const fixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
-    lastOffer,
+    additionalDischargeOptions = [],
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
   } = data;
 
   const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;
   const { name: correspondenceCityName = '', country: correspondenceCountry = '' } = correspondenceCity;
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails;
-  const {
-    additionalDischargeOptions = [],
-    sanctionedCountries = [],
-    excludeInternationallySanctioned,
-  } = lastOffer || {};
 
   return {
     chartererInformation: [

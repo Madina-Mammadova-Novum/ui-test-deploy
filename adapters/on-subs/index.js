@@ -183,17 +183,14 @@ export const onSubsDetailsAdapter = ({ data }) => {
     bankDetails,
     canRequestForCountdownExtension,
     isCountdownActive,
-    lastOffer,
+    additionalDischargeOptions = [],
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
-  const {
-    additionalDischargeOptions = [],
-    sanctionedCountries = [],
-    excludeInternationallySanctioned,
-  } = lastOffer || {};
 
   return {
     chartererInformation: [
