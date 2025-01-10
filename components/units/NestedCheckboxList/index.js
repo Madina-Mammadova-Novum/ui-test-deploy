@@ -96,25 +96,17 @@ const NestedCheckboxList = ({
       if (baseDisabled) return true;
 
       // In counteroffer mode:
-      // - Only disable items on initial render if they're not selected
-      // - Once an item has been interacted with, it should remain enabled
+      // - Always disable basins and subbasins regardless of their state
       if (isCounteroffer) {
-        const isItemSelected = isSelected?.(item) || false;
-        const isIndeterminate = hasIndeterminate?.(item) || false;
-        const hasBeenInteracted = interactedItems.current.has(item.id);
-
-        // If item has been interacted with, don't disable it
-        if (hasBeenInteracted) {
-          return false;
-        }
-
-        // On initial render, disable if not selected and not indeterminate
-        return !isItemSelected && !isIndeterminate;
+        // If item has subBasins, it's a basin
+        if (item.subBasins) return true;
+        // If item has countries, it's a subBasin
+        if (item.countries) return true;
       }
 
       return false;
     },
-    [isDisabled, isCounteroffer, isSelected, hasIndeterminate]
+    [isDisabled, isCounteroffer]
   );
 
   return (
@@ -132,7 +124,9 @@ const NestedCheckboxList = ({
           <div key={item.id} className={customStyles.item || ''}>
             <div className="mb-1 flex flex-wrap items-center justify-between">
               <label
-                className={`flex items-center ${getLabelClass(item)} ${isItemDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                className={`flex items-center ${getLabelClass(item)} ${
+                  isItemDisabled && !isItemSelected ? 'cursor-not-allowed opacity-50' : ''
+                }`}
               >
                 <input
                   type="checkbox"
@@ -149,12 +143,7 @@ const NestedCheckboxList = ({
                 <div className="flex items-center">{renderItem?.(item)}</div>
               </label>
               {hasSubItems && (
-                <button
-                  type="button"
-                  onClick={() => onToggleExpand?.(expandedKey)}
-                  className={`flex items-center p-1 ${isItemDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
-                  disabled={isItemDisabled}
-                >
+                <button type="button" onClick={() => onToggleExpand?.(expandedKey)} className="flex items-center p-1">
                   <AngleDownSVG
                     className={`h-5 w-5 transform fill-blue transition-transform duration-200 ${
                       isExpanded ? 'rotate-180' : ''
