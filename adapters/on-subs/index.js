@@ -183,7 +183,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     bankDetails,
     canRequestForCountdownExtension,
     isCountdownActive,
-    additionalDischargeOptions = [],
+    additionalDischargeOptions,
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;

@@ -93,7 +93,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
-    additionalDischargeOptions = [],
+    additionalDischargeOptions,
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;

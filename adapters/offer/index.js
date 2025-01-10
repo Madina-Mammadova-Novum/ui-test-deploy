@@ -194,7 +194,7 @@ export function offerDetailsAdapter({ data, role }) {
     isCountdownExtendedByCharterer,
     isCountdownActive,
     hasUnreadComment,
-    additionalDischargeOptions = [],
+    additionalDischargeOptions,
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
@@ -357,7 +357,7 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
     loadTerminal,
     dischargePort,
     dischargeTerminal,
-    additionalDischargeOptions = [],
+    additionalDischargeOptions,
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
