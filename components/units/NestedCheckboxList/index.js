@@ -4,12 +4,12 @@
  * @props {Array} items - Array of items to display in tree structure
  * @props {Object} config - Configuration for item rendering and structure
  * @props {Function} onChange - Callback when any checkbox state changes
- * @props {Boolean} isCounteroffer - Whether this is a counteroffer view (disables unselected items)
+ * @props {Boolean} isCounteroffer - Whether this is a counteroffer view
  */
 
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -31,8 +31,14 @@ const NestedCheckboxList = ({
   parentId = null,
   isCounteroffer = false,
 }) => {
+  // Keep track of items that have been interacted with
+  const interactedItems = useRef(new Set());
+
   const handleItemChange = useCallback(
     (item, checked) => {
+      // Mark item as interacted when user changes its state
+      interactedItems.current.add(item.id);
+
       /* eslint-disable no-nested-ternary */
       const itemType = item.countries
         ? 'subBasin'
@@ -64,7 +70,7 @@ const NestedCheckboxList = ({
         onChange?.(item, checked, itemType);
       }
     },
-    [onChange, parentId, isCounteroffer]
+    [onChange, parentId]
   );
 
   const getLabelClass = useCallback((item) => {
@@ -85,20 +91,30 @@ const NestedCheckboxList = ({
   }, []);
 
   const getIsItemDisabled = useCallback(
-    (item, isItemSelected, isIndeterminate) => {
+    (item) => {
       const baseDisabled = isDisabled?.(item) || false;
       if (baseDisabled) return true;
 
       // In counteroffer mode:
-      // - Only disable items that were not initially selected
-      // - Once an item was selected in the initial state, it should remain enabled
+      // - Only disable items on initial render if they're not selected
+      // - Once an item has been interacted with, it should remain enabled
       if (isCounteroffer) {
+        const isItemSelected = isSelected?.(item) || false;
+        const isIndeterminate = hasIndeterminate?.(item) || false;
+        const hasBeenInteracted = interactedItems.current.has(item.id);
+
+        // If item has been interacted with, don't disable it
+        if (hasBeenInteracted) {
+          return false;
+        }
+
+        // On initial render, disable if not selected and not indeterminate
         return !isItemSelected && !isIndeterminate;
       }
 
       return false;
     },
-    [isDisabled, isCounteroffer]
+    [isDisabled, isCounteroffer, isSelected, hasIndeterminate]
   );
 
   return (
@@ -110,7 +126,7 @@ const NestedCheckboxList = ({
         const isExpanded = expanded[expandedKey];
         const isItemSelected = isSelected?.(item) || false;
         const isIndeterminate = hasIndeterminate?.(item) || false;
-        const isItemDisabled = getIsItemDisabled(item, isItemSelected, isIndeterminate);
+        const isItemDisabled = getIsItemDisabled(item);
 
         return (
           <div key={item.id} className={customStyles.item || ''}>
