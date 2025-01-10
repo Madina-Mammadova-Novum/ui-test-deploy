@@ -4,12 +4,12 @@
  * @props {Array} items - Array of items to display in tree structure
  * @props {Object} config - Configuration for item rendering and structure
  * @props {Function} onChange - Callback when any checkbox state changes
- * @props {Boolean} isCounteroffer - Whether this is a counteroffer view (disables unselected items)
+ * @props {Boolean} isCounteroffer - Whether this is a counteroffer view
  */
 
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -31,8 +31,14 @@ const NestedCheckboxList = ({
   parentId = null,
   isCounteroffer = false,
 }) => {
+  // Keep track of items that have been interacted with
+  const interactedItems = useRef(new Set());
+
   const handleItemChange = useCallback(
     (item, checked) => {
+      // Mark item as interacted when user changes its state
+      interactedItems.current.add(item.id);
+
       /* eslint-disable no-nested-ternary */
       const itemType = item.countries
         ? 'subBasin'
@@ -64,7 +70,7 @@ const NestedCheckboxList = ({
         onChange?.(item, checked, itemType);
       }
     },
-    [onChange, parentId, isCounteroffer]
+    [onChange, parentId]
   );
 
   const getLabelClass = useCallback((item) => {
@@ -85,15 +91,17 @@ const NestedCheckboxList = ({
   }, []);
 
   const getIsItemDisabled = useCallback(
-    (item, isItemSelected, isIndeterminate) => {
+    (item) => {
       const baseDisabled = isDisabled?.(item) || false;
       if (baseDisabled) return true;
 
       // In counteroffer mode:
-      // - Only disable items that were not initially selected
-      // - Once an item was selected in the initial state, it should remain enabled
+      // - Always disable basins and subbasins regardless of their state
       if (isCounteroffer) {
-        return !isItemSelected && !isIndeterminate;
+        // If item has subBasins, it's a basin
+        if (item.subBasins) return true;
+        // If item has countries, it's a subBasin
+        if (item.countries) return true;
       }
 
       return false;
@@ -110,13 +118,15 @@ const NestedCheckboxList = ({
         const isExpanded = expanded[expandedKey];
         const isItemSelected = isSelected?.(item) || false;
         const isIndeterminate = hasIndeterminate?.(item) || false;
-        const isItemDisabled = getIsItemDisabled(item, isItemSelected, isIndeterminate);
+        const isItemDisabled = getIsItemDisabled(item);
 
         return (
           <div key={item.id} className={customStyles.item || ''}>
             <div className="mb-1 flex flex-wrap items-center justify-between">
               <label
-                className={`flex items-center ${getLabelClass(item)} ${isItemDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                className={`flex items-center ${getLabelClass(item)} ${
+                  isItemDisabled && !isItemSelected ? 'cursor-not-allowed opacity-50' : ''
+                }`}
               >
                 <input
                   type="checkbox"
@@ -133,12 +143,7 @@ const NestedCheckboxList = ({
                 <div className="flex items-center">{renderItem?.(item)}</div>
               </label>
               {hasSubItems && (
-                <button
-                  type="button"
-                  onClick={() => onToggleExpand?.(expandedKey)}
-                  className={`flex items-center p-1 ${isItemDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
-                  disabled={isItemDisabled}
-                >
+                <button type="button" onClick={() => onToggleExpand?.(expandedKey)} className="flex items-center p-1">
                   <AngleDownSVG
                     className={`h-5 w-5 transform fill-blue transition-transform duration-200 ${
                       isExpanded ? 'rotate-180' : ''

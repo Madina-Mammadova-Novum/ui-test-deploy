@@ -64,6 +64,16 @@ const SearchFormFields = ({ productState, setProductState }) => {
     name: 'laycanStart',
   });
 
+  const showAdditionalDischargeValue = useWatch({
+    control,
+    name: 'showAdditionalDischarge',
+  });
+
+  // Sync local state with form value
+  useEffect(() => {
+    setShowAdditionalDischarge(showAdditionalDischargeValue || false);
+  }, [showAdditionalDischargeValue]);
+
   const minDateForLaycanEnd = laycanStart ? new Date(laycanStart) : new Date();
   const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
 
@@ -74,9 +84,11 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const handleMore = () => setPerList((prev) => prev + 100);
 
   const handleShowAdditionalDischargeChange = (e) => {
+    setValue('showAdditionalDischarge', e.target.checked);
     setShowAdditionalDischarge(e.target.checked);
     if (!e.target.checked) {
-      setValue('additionalDischargeOptions', []);
+      // Set empty initial values instead of null to prevent "some" errors
+      setValue('additionalDischargeOptions', {});
       setValue('sanctionedCountries', []);
       setValue('excludedCountries', []);
       setValue('excludeInternationallySanctioned', false);

@@ -293,24 +293,43 @@ export const filterDataByLowerCase = (inputValue, data = []) => {
 };
 
 export const resetObjectFields = ({ initialObject, resetType = null }) => {
-  if (typeof initialObject !== 'string') {
-    Object.keys(initialObject).forEach((key) => {
-      if (Array.isArray(initialObject[key])) {
-        initialObject[key].map((arrayItem) => resetObjectFields({ initialObject: arrayItem }));
-      } else {
-        initialObject[key] = resetType;
-      }
-    });
-  }
+  if (!initialObject || typeof initialObject !== 'object') return initialObject;
 
-  return initialObject;
+  const result = { ...initialObject };
+  Object.keys(result).forEach((key) => {
+    if (result[key] === null || result[key] === undefined) {
+      return;
+    }
+
+    // Special handling for products array
+    if (key === 'products' && Array.isArray(result[key])) {
+      result[key] = result[key].map((item) => resetObjectFields({ initialObject: item, resetType }));
+    }
+    // Special handling for additional discharge form fields
+    else if (['sanctionedCountries', 'excludedCountries'].includes(key)) {
+      result[key] = [];
+    }
+    // For all other fields that are objects or arrays, just set to null
+    else if (typeof result[key] === 'object') {
+      result[key] = null;
+    }
+    // For primitive values
+    else {
+      result[key] = resetType;
+    }
+  });
+
+  return result;
 };
 
 export const resetForm = (methods, type) => {
-  methods.reset((formValues) => {
-    resetObjectFields({ initialObject: formValues, resetType: type });
-    return formValues;
-  });
+  if (!methods) return;
+
+  const formValues = methods.getValues();
+  const resetValues = resetObjectFields({ initialObject: formValues, resetType: type });
+
+  // Reset the form with the cleaned values
+  methods.reset(resetValues);
 };
 
 export const sleep = (ms) => {

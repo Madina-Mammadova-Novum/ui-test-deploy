@@ -93,7 +93,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
-    additionalDischargeOptions = [],
+    additionalDischargeOptions,
     sanctionedCountries = [],
     excludeInternationallySanctioned,
   } = data;
