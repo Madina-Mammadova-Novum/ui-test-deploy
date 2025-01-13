@@ -1,3 +1,4 @@
+import { countriesAdapter } from '@/adapters/country';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
@@ -661,6 +662,9 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     laycanEnd,
     searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType: { id: cargoId, name: cargoName } = {} } = {},
     products,
+    additionalDischargeOptions,
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
   } = data;
 
   const {
@@ -694,6 +698,10 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
         value: product.id,
       },
     })),
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
+    showAdditionalDischarge: !!additionalDischargeOptions,
     isAlternative,
   };
 };
@@ -708,6 +716,9 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
     dischargeTerminal = {},
     cargoType: { id: cargoId, name: cargoName } = {},
     cargoes: products,
+    additionalDischargeOptions,
+    sanctionedCountries = [],
+    excludeInternationallySanctioned,
   } = data;
 
   const {
@@ -741,6 +752,10 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
         value: product.productId,
       },
     })),
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
+    showAdditionalDischarge: !!additionalDischargeOptions,
     isSavedSearch,
     savedSearchId,
   };

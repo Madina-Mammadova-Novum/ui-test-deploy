@@ -265,7 +265,9 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
             />
           </div>
         </div>
-        <div className={`max-h-80 overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}>
+        <div
+          className={`max-h-[20.5rem] overflow-y-auto rounded border p-4 ${shouldShowError() ? 'border-red-500' : ''}`}
+        >
           {!searchLoading && basins.length > 0 && (
             <NestedCheckboxList
               items={basins}

@@ -39,6 +39,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const [initialLoading, setInitialLoading] = useState(false);
   const [portsLoader, setPortsLoader] = useState(false);
   const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
+  const [additionalDischargeOptions, setAdditionalDischargeOptions] = useState({});
 
   const [ports, setPorts] = useState([]);
   const [perList, setPerList] = useState(100);
@@ -68,11 +69,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
     control,
     name: 'showAdditionalDischarge',
   });
-
-  // Sync local state with form value
-  useEffect(() => {
-    setShowAdditionalDischarge(showAdditionalDischargeValue || false);
-  }, [showAdditionalDischargeValue]);
 
   const minDateForLaycanEnd = laycanStart ? new Date(laycanStart) : new Date();
   const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
@@ -224,6 +220,17 @@ const SearchFormFields = ({ productState, setProductState }) => {
     }
     debouncedLoadOptions(inputValue, callback);
   };
+
+  // Sync local state with form value
+  useEffect(() => {
+    setShowAdditionalDischarge(showAdditionalDischargeValue || false);
+    if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams });
+
+    return () => {
+      setShowAdditionalDischarge(false);
+      setAdditionalDischargeOptions({});
+    };
+  }, [showAdditionalDischargeValue]);
 
   useEffect(() => {
     return () => {
@@ -406,7 +413,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
           Add additional discharge options
         </CheckBoxInput>
 
-        {showAdditionalDischarge && <AdditionalDischargeForm showError={submitCount > 0} />}
+        {showAdditionalDischarge && (
+          <AdditionalDischargeForm showError={submitCount > 0} data={additionalDischargeOptions} />
+        )}
       </div>
 
       <div className="flex w-full flex-col gap-y-4">

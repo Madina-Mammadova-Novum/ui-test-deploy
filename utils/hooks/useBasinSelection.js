@@ -159,7 +159,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
 
         const shouldSelectAll = initialDataRef.current?.additionalDischargeOptions?.isAllSelected || false;
 
-        initialOptions.forEach((opt) => {
+        initialOptions?.forEach((opt) => {
           selectedBasinsMap.set(opt.id, opt);
           opt.subBasins.forEach((subBasin) => {
             selectedSubBasinsMap.set(subBasin.id, subBasin);
