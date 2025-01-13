@@ -224,7 +224,12 @@ const SearchFormFields = ({ productState, setProductState }) => {
   // Sync local state with form value
   useEffect(() => {
     setShowAdditionalDischarge(showAdditionalDischargeValue || false);
-    if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams } || {});
+    if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams });
+
+    return () => {
+      setShowAdditionalDischarge(false);
+      setAdditionalDischargeOptions({});
+    };
   }, [showAdditionalDischargeValue]);
 
   useEffect(() => {

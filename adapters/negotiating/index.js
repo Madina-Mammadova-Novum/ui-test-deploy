@@ -701,7 +701,7 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
-    showAdditionalDischarge: !!additionalDischargeOptions || false,
+    showAdditionalDischarge: !!additionalDischargeOptions,
     isAlternative,
   };
 };
@@ -755,7 +755,7 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
-    showAdditionalDischarge: !!additionalDischargeOptions || false,
+    showAdditionalDischarge: !!additionalDischargeOptions,
     isSavedSearch,
     savedSearchId,
   };
