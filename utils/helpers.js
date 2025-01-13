@@ -732,6 +732,7 @@ export const freightFormatter = ({ value, format }) => {
   const response = {
     Lumpsum: `${format} $${value}`,
     '$/mt': `${value} ${format}`,
+    WS: `${format} ${value}`,
   };
 
   return response[format];

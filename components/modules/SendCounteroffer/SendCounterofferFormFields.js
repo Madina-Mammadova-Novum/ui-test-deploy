@@ -43,7 +43,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat = freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
+  const helperFreightFormat =
+    selectedFreight?.label === 'WS'
+      ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
+      : freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
 
   const helperRangeFormat =
     ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start}$ - ${ranges?.demurrageRate?.max?.end}$`;
@@ -67,9 +70,11 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   };
 
   useEffect(() => {
+    const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
+
     setFreightEstimation({
-      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
-      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+      min: selectedFormat?.ranges?.min?.start,
+      max: selectedFormat?.ranges?.max?.end,
     });
   }, [selectedFreight, ranges]);
 
