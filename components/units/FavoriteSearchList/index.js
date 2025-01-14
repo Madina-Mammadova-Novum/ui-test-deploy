@@ -211,7 +211,7 @@ const FavoriteSearchList = ({ onClose }) => {
                     customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
                     buttonProps={{ text: 'Use Search', size: 'medium', variant: 'primary' }}
                     onClick={() => searchUseHandler(id)}
-                    disabled={isLoading}
+                    disabled={isLoading || status === 'Disabled'}
                   />
                   <Button
                     customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
@@ -239,7 +239,7 @@ const FavoriteSearchList = ({ onClose }) => {
                         onConfirm: () => updateSearchHandler(id, index),
                       })
                     }
-                    disabled={isLoading}
+                    disabled={isLoading || status === 'Disabled'}
                   />
 
                   <ConfirmModal
