@@ -305,9 +305,17 @@ export const resetObjectFields = ({ initialObject, resetType = null }) => {
     if (key === 'products' && Array.isArray(result[key])) {
       result[key] = result[key].map((item) => resetObjectFields({ initialObject: item, resetType }));
     }
-    // Special handling for additional discharge form fields
+    // Special handling for additional discharge form fields sanctionedCountries and excludedCountries
     else if (['sanctionedCountries', 'excludedCountries'].includes(key)) {
       result[key] = [];
+    }
+    // Special handling for additional discharge form fields additionalDischargeOptions
+    else if (key === 'additionalDischargeOptions') {
+      result[key] = {};
+    }
+    // Special handling for additional discharge form fields excludeInternationallySanctioned
+    else if (key === 'excludeInternationallySanctioned') {
+      result[key] = false;
     }
     // For all other fields that are objects or arrays, just set to null
     else if (typeof result[key] === 'object') {
