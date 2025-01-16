@@ -314,7 +314,7 @@ export const resetObjectFields = ({ initialObject, resetType = null }) => {
       result[key] = {};
     }
     // Special handling for additional discharge form fields excludeInternationallySanctioned
-    else if (key === 'excludeInternationallySanctioned') {
+    else if (['excludeInternationallySanctioned', 'showAdditionalDischarge'].includes(key)) {
       result[key] = false;
     }
     // For all other fields that are objects or arrays, just set to null
