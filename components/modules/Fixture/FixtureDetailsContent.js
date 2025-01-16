@@ -11,9 +11,9 @@ const FixtureDetailsContent = ({ detailsData }) => {
     voyageDetails,
     commercialOfferTerms,
     additionalCharterPartyTerms,
-    additionalDischargeOptions,
-    sanctionedCountries,
-    excludeInternationallySanctioned,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = detailsData;
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};

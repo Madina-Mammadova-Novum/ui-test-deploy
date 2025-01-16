@@ -31,9 +31,9 @@ export function sendOfferAdapter({ data }) {
     minOfferQuantity,
     ballastLeg,
     estimatedArrivalTime,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
   return {
     laycanStart,
@@ -73,9 +73,9 @@ export function sendCounterofferAdapter({ data }) {
     comment,
     freight,
     products,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   return {
@@ -194,9 +194,9 @@ export function offerDetailsAdapter({ data, role }) {
     isCountdownExtendedByCharterer,
     isCountdownActive,
     hasUnreadComment,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const { isOwner } = getRoleIdentity({ role });
@@ -357,9 +357,9 @@ export function voyageDetailsAdapter({ data, laycanStart, laycanEnd }) {
     loadTerminal,
     dischargePort,
     dischargeTerminal,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   return {

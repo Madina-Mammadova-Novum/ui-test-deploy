@@ -662,9 +662,9 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     laycanEnd,
     searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType: { id: cargoId, name: cargoName } = {} } = {},
     products,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const {
@@ -716,9 +716,9 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
     dischargeTerminal = {},
     cargoType: { id: cargoId, name: cargoName } = {},
     cargoes: products,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const {

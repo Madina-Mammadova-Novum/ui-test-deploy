@@ -20,9 +20,9 @@ const DetailsContent = ({ detailsData = {} }) => {
     commercialOfferTerms = {},
     voyageDetails = {},
     additionalCharterPartyTerms = [],
-    additionalDischargeOptions,
-    sanctionedCountries,
-    excludeInternationallySanctioned,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = detailsData;
 
   const { cargoType, products = [] } = cargoDetails;

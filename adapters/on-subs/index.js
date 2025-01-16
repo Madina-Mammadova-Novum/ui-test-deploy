@@ -183,9 +183,9 @@ export const onSubsDetailsAdapter = ({ data }) => {
     bankDetails,
     canRequestForCountdownExtension,
     isCountdownActive,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
