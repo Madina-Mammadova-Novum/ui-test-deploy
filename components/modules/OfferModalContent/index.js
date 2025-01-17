@@ -69,6 +69,11 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const handleSubmit = async (formData) => {
     const comment = formData?.comment || null;
+    const additionalDischargeOptions =
+      formData?.additionalDischargeOptions || searchParams?.additionalDischargeOptions || {};
+    const sanctionedCountries = formData?.sanctionedCountries || searchParams?.sanctionedCountries || [];
+    const excludeInternationallySanctioned =
+      formData?.excludeInternationallySanctioned || searchParams?.excludeInternationallySanctioned || false;
 
     const {
       status,
@@ -86,6 +91,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         loadTerminal,
         dischargeTerminal,
         products,
+        additionalDischargeOptions,
+        sanctionedCountries,
+        excludeInternationallySanctioned,
       },
     });
 

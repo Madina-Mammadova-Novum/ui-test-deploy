@@ -317,7 +317,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
     if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams });
 
     fetchProducts();
-    // console.log({ isSavedSearch });
     return () => {
       setValue('isSavedSearch', false);
     };
