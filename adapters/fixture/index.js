@@ -93,9 +93,9 @@ export const fixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;

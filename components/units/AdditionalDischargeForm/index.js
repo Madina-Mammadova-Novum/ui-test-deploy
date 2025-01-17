@@ -36,7 +36,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     resetBasins,
     isAllSelected,
     handleSelectAll,
-  } = useBasinSelection(setValue, clearErrors, data);
+  } = useBasinSelection(setValue, clearErrors, data, isCounteroffer);
 
   const {
     countries,
@@ -121,7 +121,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     };
 
     initializeData();
-  }, []); // Empty dependency array as we want this to run only once on mount
+  }, [data]);
 
   const getSubItems = useCallback((item) => {
     if (item.subBasins) return item.subBasins;
@@ -323,33 +323,36 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 };
 
 const CountryShape = PropTypes.shape({
-  countryId: PropTypes.string.isRequired,
-  countryName: PropTypes.string.isRequired,
-  countryCode: PropTypes.string.isRequired,
+  countryId: PropTypes.string,
+  countryName: PropTypes.string,
+  countryCode: PropTypes.string,
   ports: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      code: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      name: PropTypes.string,
+      code: PropTypes.string,
     })
   ),
 });
 
 const SubBasinShape = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  countries: PropTypes.arrayOf(CountryShape).isRequired,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  countries: PropTypes.arrayOf(CountryShape),
 });
 
 const AdditionalDischargeOptionShape = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  subBasins: PropTypes.arrayOf(SubBasinShape).isRequired,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  subBasins: PropTypes.arrayOf(SubBasinShape),
 });
 
 AdditionalDischargeForm.propTypes = {
   data: PropTypes.shape({
-    additionalDischargeOptions: PropTypes.arrayOf(AdditionalDischargeOptionShape),
+    additionalDischargeOptions: PropTypes.shape({
+      isAllSelected: PropTypes.bool,
+      selected: PropTypes.arrayOf(AdditionalDischargeOptionShape),
+    }),
     sanctionedCountries: PropTypes.arrayOf(CountryShape),
     excludeInternationallySanctioned: PropTypes.bool,
   }),

@@ -12,9 +12,9 @@ export const addToSavedSearchAdapter = ({ data }) => {
     laycanEnd,
     products,
     isNotification,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const cargoes = products.map((product) => ({
@@ -51,9 +51,9 @@ export const updateSavedSearchAdapter = ({ data }) => {
     laycanEnd,
     cargoes,
     isNotification,
-    additionalDischargeOptions,
-    sanctionedCountries,
-    excludeInternationallySanctioned,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   return {

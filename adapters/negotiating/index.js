@@ -662,9 +662,6 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     laycanEnd,
     searchedCargo: { loadTerminal = {}, dischargeTerminal = {}, cargoType: { id: cargoId, name: cargoName } = {} } = {},
     products,
-    additionalDischargeOptions,
-    sanctionedCountries = [],
-    excludeInternationallySanctioned,
   } = data;
 
   const {
@@ -698,10 +695,7 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
         value: product.id,
       },
     })),
-    additionalDischargeOptions,
-    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
-    excludeInternationallySanctioned,
-    showAdditionalDischarge: !!additionalDischargeOptions,
+    showAdditionalDischarge: false,
     isAlternative,
   };
 };
@@ -716,9 +710,9 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
     dischargeTerminal = {},
     cargoType: { id: cargoId, name: cargoName } = {},
     cargoes: products,
-    additionalDischargeOptions,
+    additionalDischargeOptions = {},
     sanctionedCountries = [],
-    excludeInternationallySanctioned,
+    excludeInternationallySanctioned = false,
   } = data;
 
   const {

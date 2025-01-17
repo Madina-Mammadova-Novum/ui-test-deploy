@@ -38,9 +38,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const [initialLoading, setInitialLoading] = useState(false);
   const [portsLoader, setPortsLoader] = useState(false);
-  const [showAdditionalDischarge, setShowAdditionalDischarge] = useState(false);
   const [additionalDischargeOptions, setAdditionalDischargeOptions] = useState({});
-
   const [ports, setPorts] = useState([]);
   const [perList, setPerList] = useState(100);
   const [cargoTypes, setCargoTypes] = useState([]);
@@ -81,13 +79,15 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const handleShowAdditionalDischargeChange = (e) => {
     setValue('showAdditionalDischarge', e.target.checked);
-    setShowAdditionalDischarge(e.target.checked);
+
+    // setShowAdditionalDischarge(e.target.checked);
     if (!e.target.checked) {
       // Set empty initial values instead of null to prevent "some" errors
       setValue('additionalDischargeOptions', {});
       setValue('sanctionedCountries', []);
       setValue('excludedCountries', []);
       setValue('excludeInternationallySanctioned', false);
+      setAdditionalDischargeOptions({});
     }
   };
 
@@ -221,17 +221,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
     debouncedLoadOptions(inputValue, callback);
   };
 
-  // Sync local state with form value
-  useEffect(() => {
-    setShowAdditionalDischarge(showAdditionalDischargeValue || false);
-    if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams });
-
-    return () => {
-      setShowAdditionalDischarge(false);
-      setAdditionalDischargeOptions({});
-    };
-  }, [showAdditionalDischargeValue]);
-
   useEffect(() => {
     return () => {
       debouncedLoadOptions.cancel();
@@ -245,6 +234,10 @@ const SearchFormFields = ({ productState, setProductState }) => {
   useEffect(() => {
     getPorts();
   }, [perList]);
+
+  useEffect(() => {
+    if (!showAdditionalDischargeValue) setAdditionalDischargeOptions({});
+  }, [showAdditionalDischargeValue]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -321,8 +314,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
       }
     };
 
-    fetchProducts();
+    if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams });
 
+    fetchProducts();
     return () => {
       setValue('isSavedSearch', false);
     };
@@ -405,7 +399,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
         <CheckBoxInput
           name="showAdditionalDischarge"
-          checked={showAdditionalDischarge}
+          checked={showAdditionalDischargeValue}
           onChange={handleShowAdditionalDischargeChange}
           labelStyles="text-blue hover:text-blue-darker text-xsm"
           boxStyles="!gap-1.5"
@@ -413,7 +407,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           Add additional discharge options
         </CheckBoxInput>
 
-        {showAdditionalDischarge && (
+        {showAdditionalDischargeValue && (
           <AdditionalDischargeForm showError={submitCount > 0} data={additionalDischargeOptions} />
         )}
       </div>

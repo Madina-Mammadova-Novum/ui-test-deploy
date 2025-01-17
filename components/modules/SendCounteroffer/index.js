@@ -54,6 +54,12 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
 
+  const additionalDischargeValue = {
+    additionalDischargeOptions: voyageDetails?.additionalDischargeOptions || {},
+    excludeInternationallySanctioned: voyageDetails?.excludeInternationallySanctioned || false,
+    sanctionedCountries: voyageDetails?.sanctionedCountries || [],
+  };
+
   const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
   const containerHeight = !confirmCounteroffer && valid ? 'h-[calc(98vh-424.2px)]' : 'h-[calc(98vh-292.2px)]';
 
@@ -168,7 +174,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
         allowSubmit={confirmCounteroffer}
         handleConfirmCounteroffer={handleConfirmCounteroffer}
         handleValidationError={handleValidationError}
-        data={{ ...counterofferData, responseCountdown }}
+        data={{ ...counterofferData, ...additionalDischargeValue, responseCountdown }}
       >
         {!confirmCounteroffer ? (
           <>

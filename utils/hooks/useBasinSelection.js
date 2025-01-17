@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getAdditionalDischargeOptions } from '@/services/port';
 
-export const useBasinSelection = (setValue, clearErrors, initialData) => {
+export const useBasinSelection = (setValue, clearErrors, initialData, isCounteroffer = false) => {
   const [basins, setBasins] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchLoading, setSearchLoading] = useState(true);
@@ -14,13 +14,15 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
   const setValueRef = useRef(setValue);
   const clearErrorsRef = useRef(clearErrors);
   const initialDataRef = useRef(initialData);
+  const isCounterofferRef = useRef(isCounteroffer);
 
   // Update refs when props change
   useEffect(() => {
     setValueRef.current = setValue;
     clearErrorsRef.current = clearErrors;
     initialDataRef.current = initialData;
-  }, [setValue, clearErrors, initialData]);
+    isCounterofferRef.current = isCounteroffer;
+  }, [setValue, clearErrors, initialData, isCounteroffer]);
 
   const updateBasins = useCallback(
     (newBasins) => {
@@ -117,10 +119,12 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
       }
     },
     [initialBasins]
-  ); // Keep initialBasins in dependencies
+  );
 
   const handleSelectAll = useCallback(
     (checked) => {
+      if (isCounterofferRef.current) return;
+
       const updatedBasins = basins.map((basin) => ({
         ...basin,
         selected: checked,
@@ -167,20 +171,21 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
         });
 
         // Filter and process the basins
-        const updatedBasins = response.data
-          .filter((basin) => basin?.subBasins?.length > 0) // Filter basins with no sub-basins
+        let updatedBasins = response.data
+          .filter((basin) => basin?.subBasins?.length > 0)
           .map((basin) => {
             const updatedSubBasins = basin.subBasins
-              .filter((subBasin) => subBasin?.countries?.length > 0) // Filter sub-basins with no countries
+              .filter((subBasin) => subBasin?.countries?.length > 0)
               .map((subBasin) => {
                 const matchingSubBasin = selectedSubBasinsMap.get(subBasin.id);
                 const updatedCountries = subBasin.countries
-                  .filter((country) => country?.ports?.length > 0) // Filter countries with no ports
+                  .filter((country) => country?.ports?.length > 0)
                   .map((country) => {
                     const matchingCountry = matchingSubBasin?.countries?.find((c) => c.id === country.id);
+                    const isSelected = shouldSelectAll || !!matchingCountry;
                     return {
                       ...country,
-                      selected: shouldSelectAll || !!matchingCountry,
+                      selected: isSelected,
                       ports: (country.ports || []).map((port) => ({
                         ...port,
                         selected: shouldSelectAll || matchingCountry?.ports?.some((p) => p.id === port.id) || false,
@@ -197,7 +202,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
                   countries: updatedCountries,
                 };
               })
-              .filter((subBasin) => subBasin.countries.length > 0); // Filter out sub-basins if all countries were filtered
+              .filter((subBasin) => subBasin.countries.length > 0);
 
             const hasSelectedSubBasins = updatedSubBasins.some((sb) =>
               sb.countries.some((c) => c.selected || (c.ports || []).some((p) => p.selected))
@@ -208,7 +213,47 @@ export const useBasinSelection = (setValue, clearErrors, initialData) => {
               subBasins: updatedSubBasins,
             };
           })
-          .filter((basin) => basin.subBasins.length > 0); // Filter out basins if all sub-basins were filtered
+          .filter((basin) => basin.subBasins.length > 0);
+
+        // If it's a counteroffer, filter basins to only show those from initialData
+        if (isCounterofferRef.current && initialOptions?.length > 0) {
+          updatedBasins = updatedBasins
+            .map((basin) => {
+              const matchingBasin = selectedBasinsMap.get(basin.id);
+              if (!matchingBasin) return null;
+
+              return {
+                ...basin,
+                subBasins: basin.subBasins
+                  .map((subBasin) => {
+                    const matchingSubBasin = matchingBasin.subBasins.find((sb) => sb.id === subBasin.id);
+                    if (!matchingSubBasin) return null;
+
+                    return {
+                      ...subBasin,
+                      countries: subBasin.countries
+                        .map((country) => {
+                          const matchingCountry = matchingSubBasin.countries.find((c) => c.id === country.id);
+                          if (!matchingCountry) return null;
+
+                          return {
+                            ...country,
+                            ports: (country.ports || [])
+                              .map((port) => {
+                                const isPortSelected = matchingCountry.ports?.some((p) => p.id === port.id);
+                                return isPortSelected ? { ...port, selected: true } : null;
+                              })
+                              .filter(Boolean),
+                          };
+                        })
+                        .filter(Boolean),
+                    };
+                  })
+                  .filter(Boolean),
+              };
+            })
+            .filter((basin) => basin && basin.subBasins.length > 0);
+        }
 
         setBasins(updatedBasins);
         setInitialBasins(updatedBasins);
