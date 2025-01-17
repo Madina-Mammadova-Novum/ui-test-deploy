@@ -98,7 +98,7 @@ const NestedCheckboxList = ({
   const getIsItemDisabled = useCallback(
     (item) => {
       const baseDisabled = isDisabled?.(item) || false;
-      if (baseDisabled || isCharterer) return true;
+      if (baseDisabled || (isCharterer && isCounteroffer)) return true;
 
       return false;
     },
