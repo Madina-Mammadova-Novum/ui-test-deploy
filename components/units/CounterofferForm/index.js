@@ -56,7 +56,15 @@ const CounterofferForm = ({
     const comment = formData?.comment || null;
 
     const { message: successMessage, error } = await sendCounteroffer({
-      data: { ...formData, comment, offerId: data?.offerId, responseCountdown: data?.responseCountdown },
+      data: {
+        ...formData,
+        comment,
+        additionalDischargeOptions: data?.additionalDischargeOptions,
+        excludeInternationallySanctioned: data?.excludeInternationallySanctioned,
+        sanctionedCountries: data?.sanctionedCountries,
+        offerId: data?.offerId,
+        responseCountdown: data?.responseCountdown,
+      },
       role,
     });
 
