@@ -14,6 +14,7 @@ import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import AngleDownSVG from '@/assets/images/angleDown.svg';
+import { getCookieFromBrowser, getRoleIdentity } from '@/utils/helpers';
 
 const NestedCheckboxList = ({
   items = [],
@@ -31,6 +32,10 @@ const NestedCheckboxList = ({
   parentId = null,
   isCounteroffer = false,
 }) => {
+  const role = getCookieFromBrowser('session-user-role');
+
+  const { isCharterer } = getRoleIdentity({ role });
+
   // Keep track of items that have been interacted with
   const interactedItems = useRef(new Set());
 
@@ -93,20 +98,11 @@ const NestedCheckboxList = ({
   const getIsItemDisabled = useCallback(
     (item) => {
       const baseDisabled = isDisabled?.(item) || false;
-      if (baseDisabled) return true;
-
-      // In counteroffer mode:
-      // - Always disable basins and subbasins regardless of their state
-      if (isCounteroffer) {
-        // If item has subBasins, it's a basin
-        if (item.subBasins) return true;
-        // If item has countries, it's a subBasin
-        if (item.countries) return true;
-      }
+      if (baseDisabled || isCharterer) return true;
 
       return false;
     },
-    [isDisabled, isCounteroffer]
+    [isDisabled]
   );
 
   return (

@@ -36,7 +36,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     resetBasins,
     isAllSelected,
     handleSelectAll,
-  } = useBasinSelection(setValue, clearErrors, data);
+  } = useBasinSelection(setValue, clearErrors, data, isCounteroffer);
 
   const {
     countries,

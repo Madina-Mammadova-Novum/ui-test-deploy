@@ -57,11 +57,11 @@ const CounterofferForm = ({
 
     const { message: successMessage, error } = await sendCounteroffer({
       data: {
-        ...formData,
-        comment,
         additionalDischargeOptions: data?.additionalDischargeOptions,
         excludeInternationallySanctioned: data?.excludeInternationallySanctioned,
         sanctionedCountries: data?.sanctionedCountries,
+        ...formData,
+        comment,
         offerId: data?.offerId,
         responseCountdown: data?.responseCountdown,
       },
