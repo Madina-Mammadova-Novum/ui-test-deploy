@@ -110,8 +110,7 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
   const handleReset = useCallback(async () => {
     resetBasins();
     resetSanctionedCountries();
-    await fetchInitialBasins();
-  }, [resetBasins, resetSanctionedCountries, fetchInitialBasins]);
+  }, [resetBasins, resetSanctionedCountries]);
 
   // Initialize data only once on mount
   useEffect(() => {
