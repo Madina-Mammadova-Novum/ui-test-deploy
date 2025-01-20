@@ -65,11 +65,10 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
   const errorBanner = useMemo(() => {
     return (
-      message &&
-      !valid && (
-        <div className="w-full rounded-base bg-red-light px-5 py-2.5 pb-3">
+      message && (
+        <div className={`${!valid ? 'bg-red-light' : 'bg-orange-300'} w-full rounded-base px-5 py-2.5 pb-3`}>
           <div className="mt-1.5 text-xsm">
-            <span className="font-bold">Declined: </span>
+            <span className="font-bold">{valid ? 'Declined: ' : 'Warning: '}</span>
             <span className="ml-1.5">{message}</span>
           </div>
         </div>
