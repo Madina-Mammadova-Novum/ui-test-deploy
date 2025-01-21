@@ -62,18 +62,20 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
   /* eslint-disable no-nested-ternary */
   const containerHeight =
-    !confirmCounteroffer && valid
-      ? 'h-[calc(98vh-424.2px)]'
-      : !valid
-        ? 'h-[calc(98vh-354.2px)]'
-        : 'h-[calc(98vh-292.2px)]';
+    !confirmCounteroffer && valid && message
+      ? 'h-[calc(98vh-470.4px)]'
+      : !confirmCounteroffer && valid
+        ? 'h-[calc(98vh-424.2px)]'
+        : !valid
+          ? 'h-[calc(98vh-354.2px)]'
+          : 'h-[calc(98vh-292.2px)]';
 
   const errorBanner = useMemo(() => {
     return (
       message && (
         <div className={`${!valid ? 'bg-red-light' : 'bg-orange-300'} w-full rounded-base px-5 py-2.5 pb-3`}>
           <div className="mt-1.5 text-xsm">
-            <span className="font-bold">{valid ? 'Declined: ' : 'Warning: '}</span>
+            <span className="font-bold">{valid ? 'Warning: ' : 'Declined: '}</span>
             <span className="ml-1.5">{message}</span>
           </div>
         </div>
