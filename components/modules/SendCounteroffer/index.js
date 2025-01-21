@@ -38,7 +38,6 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const dispatch = useDispatch();
 
   const { valid, message } = useSelector(getOfferSelector);
-
   const scrollingContainerRef = useRef(null);
 
   const [disabled, setDisabled] = useState(false);
@@ -61,14 +60,28 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   };
 
   const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
-  const containerHeight = !confirmCounteroffer && valid ? 'h-[calc(98vh-424.2px)]' : 'h-[calc(98vh-292.2px)]';
+
+  const calculateContainerHeight = () => {
+    if (!confirmCounteroffer && valid && message) {
+      return 'h-[calc(98vh-470.4px)]';
+    }
+    if (!confirmCounteroffer && valid) {
+      return 'h-[calc(98vh-424.2px)]';
+    }
+    if (!valid) {
+      return 'h-[calc(98vh-354.2px)]';
+    }
+    return 'h-[calc(98vh-292.2px)]';
+  };
+
+  const containerHeight = calculateContainerHeight();
 
   const errorBanner = useMemo(() => {
     return (
       message && (
         <div className={`${!valid ? 'bg-red-light' : 'bg-orange-300'} w-full rounded-base px-5 py-2.5 pb-3`}>
           <div className="mt-1.5 text-xsm">
-            <span className="font-bold">{valid ? 'Declined: ' : 'Warning: '}</span>
+            <span className="font-bold">{valid ? 'Warning: ' : 'Declined: '}</span>
             <span className="ml-1.5">{message}</span>
           </div>
         </div>
@@ -160,7 +173,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             options={responseCountdownOptions}
             loading={loading}
             asyncCall
-            disabled={!responseCountdownOptions.length || confirmCounteroffer}
+            disabled={!responseCountdownOptions.length || confirmCounteroffer || !valid}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
