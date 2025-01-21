@@ -60,15 +60,21 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   };
 
   const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
-  /* eslint-disable no-nested-ternary */
-  const containerHeight =
-    !confirmCounteroffer && valid && message
-      ? 'h-[calc(98vh-470.4px)]'
-      : !confirmCounteroffer && valid
-        ? 'h-[calc(98vh-424.2px)]'
-        : !valid
-          ? 'h-[calc(98vh-354.2px)]'
-          : 'h-[calc(98vh-292.2px)]';
+
+  const calculateContainerHeight = () => {
+    if (!confirmCounteroffer && valid && message) {
+      return 'h-[calc(98vh-470.4px)]';
+    }
+    if (!confirmCounteroffer && valid) {
+      return 'h-[calc(98vh-424.2px)]';
+    }
+    if (!valid) {
+      return 'h-[calc(98vh-354.2px)]';
+    }
+    return 'h-[calc(98vh-292.2px)]';
+  };
+
+  const containerHeight = calculateContainerHeight();
 
   const errorBanner = useMemo(() => {
     return (
