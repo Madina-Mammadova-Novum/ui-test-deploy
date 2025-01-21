@@ -38,7 +38,6 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const dispatch = useDispatch();
 
   const { valid, message } = useSelector(getOfferSelector);
-
   const scrollingContainerRef = useRef(null);
 
   const [disabled, setDisabled] = useState(false);
@@ -61,7 +60,13 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   };
 
   const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
-  const containerHeight = !confirmCounteroffer && valid ? 'h-[calc(98vh-424.2px)]' : 'h-[calc(98vh-292.2px)]';
+  /* eslint-disable no-nested-ternary */
+  const containerHeight =
+    !confirmCounteroffer && valid
+      ? 'h-[calc(98vh-424.2px)]'
+      : !valid
+        ? 'h-[calc(98vh-354.2px)]'
+        : 'h-[calc(98vh-292.2px)]';
 
   const errorBanner = useMemo(() => {
     return (
@@ -160,7 +165,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             options={responseCountdownOptions}
             loading={loading}
             asyncCall
-            disabled={!responseCountdownOptions.length || confirmCounteroffer}
+            disabled={!responseCountdownOptions.length || confirmCounteroffer || !valid}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />

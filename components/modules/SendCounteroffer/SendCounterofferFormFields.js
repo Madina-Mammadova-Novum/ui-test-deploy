@@ -132,7 +132,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
-          disabled={loading}
+          disabled={loading || !valid}
           loading={loading}
           onChange={(option) => handleChange('freight', option)}
           asyncCall
@@ -146,7 +146,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           customStyles="w-1/2 whitespace-nowrap"
           helperText={helperFreightFormat}
           error={errors.value?.message}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !valid}
           step="0.001"
         />
       </div>
@@ -160,7 +160,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         customStyles="w-1/2 mt-3 pr-5 whitespace-nowrap"
         helperText={helperRangeFormat}
         error={errors.demurrageRate?.message}
-        disabled={isSubmitting}
+        disabled={isSubmitting || !valid}
       />
 
       <div className="flex">
@@ -171,7 +171,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           type="number"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !valid}
           error={errors.layTime?.message}
           helperText={helperLaytimeFormat}
         />
@@ -192,7 +192,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           label="undisputed demurrage payment terms"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
-          disabled={loading}
+          disabled={loading || !valid}
           loading={loading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
@@ -204,7 +204,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
-          disabled={loading}
+          disabled={loading || !valid}
           loading={loading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}
