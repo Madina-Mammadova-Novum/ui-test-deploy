@@ -34,7 +34,7 @@ export const useSanctionedCountries = (setValue, initialData) => {
     setValueRef.current('excludeInternationallySanctioned', e.target.checked);
   }, []); // No dependencies needed as we use refs
 
-  const fetchCountries = useCallback(async () => {
+  const fetchCountries = useCallback(async (isFirstRender = true) => {
     if (countriesLoading) return; // Prevent concurrent fetches
 
     setCountriesLoading(true);
@@ -44,14 +44,16 @@ export const useSanctionedCountries = (setValue, initialData) => {
         const formattedCountries = countriesOptions(data);
         setCountries(formattedCountries);
 
-        const { sanctionedCountries } = initialDataRef.current || {};
-        if (sanctionedCountries?.length > 0) {
-          const initialSelectedCountries = sanctionedCountries
-            .map((country) => formattedCountries.find((option) => option.value === country.countryId))
-            .filter(Boolean);
+        if (isFirstRender) {
+          const { sanctionedCountries } = initialDataRef.current || {};
+          if (sanctionedCountries?.length > 0) {
+            const initialSelectedCountries = sanctionedCountries
+              .map((country) => formattedCountries.find((option) => option.value === country.countryId))
+              .filter(Boolean);
 
-          setValueRef.current('excludedCountries', initialSelectedCountries);
-          setValueRef.current('sanctionedCountries', sanctionedCountries);
+            setValueRef.current('excludedCountries', initialSelectedCountries);
+            setValueRef.current('sanctionedCountries', sanctionedCountries);
+          }
         }
       }
     } catch (error) {
