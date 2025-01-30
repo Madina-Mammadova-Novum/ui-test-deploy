@@ -59,6 +59,12 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     defaultValue: [],
   });
 
+  const isFirstRender = useWatch({
+    control,
+    name: 'isFirstRender',
+    defaultValue: true,
+  });
+
   // Function to check if country or its ports are selected in basins
   const isCountrySelectedInBasins = useCallback(
     (countryId) => {
@@ -114,12 +120,17 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
 
   // Initialize data only once on mount
   useEffect(() => {
-    const initializeData = async () => {
-      await Promise.all([fetchInitialBasins(), fetchCountries()]);
-      setValue('excludeInternationallySanctioned', data?.excludeInternationallySanctioned || false);
+    const initializeData = async (firstRender = true) => {
+      await Promise.all([fetchInitialBasins(), fetchCountries(firstRender)]);
     };
 
-    initializeData();
+    if (isFirstRender) {
+      initializeData();
+      setValue('excludeInternationallySanctioned', data?.excludeInternationallySanctioned || false);
+      setValue('isFirstRender', false);
+    } else {
+      initializeData(false);
+    }
   }, [data]);
 
   const getSubItems = useCallback((item) => {

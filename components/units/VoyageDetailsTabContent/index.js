@@ -61,7 +61,7 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing =
       </div>
       {!!inlineVariant && <hr className="my-4" />}
 
-      {hasAdditionalDischargeOptions && (
+      {(!isCounteroffer || hasAdditionalDischargeOptions) && (
         <>
           <hr className="my-4" />
           {!isViewing ? (
