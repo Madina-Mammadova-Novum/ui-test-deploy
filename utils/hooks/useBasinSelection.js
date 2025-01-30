@@ -156,10 +156,7 @@ export const useBasinSelection = (setValue, clearErrors, initialData, isCountero
         const selectedSubBasinsMap = new Map();
 
         // Handle both old array format and new object format
-        const initialOptions =
-          initialDataRef.current?.additionalDischargeOptions?.selected ||
-          initialDataRef.current?.additionalDischargeOptions ||
-          [];
+        const initialOptions = initialDataRef.current?.additionalDischargeOptions?.selected || [];
 
         const shouldSelectAll = initialDataRef.current?.additionalDischargeOptions?.isAllSelected || false;
 
