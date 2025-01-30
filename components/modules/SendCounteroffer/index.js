@@ -44,6 +44,9 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
 
+  const [formMethods, setFormMethods] = useState(null);
+  const [additionalDischargeNextValue, setAdditionalDischargeNextValue] = useState(null);
+
   const [countdownState, setCountdownState] = useState({
     responseCountdownOptions: [],
     responseCountdown: {},
@@ -54,7 +57,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
 
   const additionalDischargeValue = {
-    additionalDischargeOptions: voyageDetails?.additionalDischargeOptions || {},
+    additionalDischargeOptions: additionalDischargeNextValue || voyageDetails?.additionalDischargeOptions || {},
     excludeInternationallySanctioned: voyageDetails?.excludeInternationallySanctioned || false,
     sanctionedCountries: voyageDetails?.sanctionedCountries || [],
   };
@@ -126,6 +129,16 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
     initActions();
   }, []);
 
+  const handleChangeTab = ({ target }) => {
+    if (formMethods?.getValues) {
+      const formValues = formMethods.getValues();
+      const nextAdditionalDischargeOptions = formValues?.additionalDischargeOptions;
+
+      setAdditionalDischargeNextValue(nextAdditionalDischargeOptions);
+    }
+    setCurrentTab(target.value);
+  };
+
   const tabContent = useMemo(() => {
     const scrollToBottom = () => {
       setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
@@ -133,7 +146,15 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
     switch (currentTab) {
       case 'voyage_details':
-        return <VoyageDetailsTabContent data={voyageDetails} isCounteroffer />;
+        return (
+          <VoyageDetailsTabContent
+            data={{
+              ...voyageDetails,
+              additionalDischargeOptions: additionalDischargeNextValue || voyageDetails?.additionalDischargeOptions,
+            }}
+            isCounteroffer
+          />
+        );
       case 'comments':
         return <CommentsContent data={comments} />;
       default:
@@ -187,15 +208,11 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
         handleConfirmCounteroffer={handleConfirmCounteroffer}
         handleValidationError={handleValidationError}
         data={{ ...counterofferData, ...additionalDischargeValue, responseCountdown }}
+        onFormChange={setFormMethods}
       >
         {!confirmCounteroffer ? (
           <>
-            <Tabs
-              customStyles="mx-auto mt-5 mb-3"
-              tabs={tabs}
-              activeTab={currentTab}
-              onClick={({ target }) => setCurrentTab(target.value)}
-            />
+            <Tabs customStyles="mx-auto mt-5 mb-3" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
 
             <div
               ref={scrollingContainerRef}

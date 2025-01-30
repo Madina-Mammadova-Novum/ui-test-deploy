@@ -27,6 +27,7 @@ const CounterofferForm = ({
   handleValidationError,
   disabled,
   setDisabled,
+  onFormChange = () => {},
 }) => {
   const dispatch = useDispatch();
   const role = getCookieFromBrowser('session-user-role');
@@ -40,6 +41,11 @@ const CounterofferForm = ({
 
   const freightType = methods.watch('freight');
   const freightValue = methods.watch('value');
+
+  // Pass form methods to parent
+  useEffect(() => {
+    onFormChange(methods);
+  }, [methods]);
 
   useEffect(() => {
     setFreightState({ type: freightType?.value, value: freightValue });
