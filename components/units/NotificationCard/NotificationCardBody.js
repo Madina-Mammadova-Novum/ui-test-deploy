@@ -18,9 +18,7 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
   const dispatch = useDispatch();
 
   const role = getCookieFromBrowser('session-user-role');
-  const { deal, filterParams } = useSelector(getNotificationsDataSelector);
-  /* eslint-disable no-console */
-  console.log({ deal });
+  const { filterParams } = useSelector(getNotificationsDataSelector);
 
   const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
@@ -35,9 +33,10 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
     if (isDealPath) {
       const id = getIdFromUrl(url);
       dispatch(getCurrentDealStage({ id, role }))
-        .then(() => {
-          if (deal?.route) {
-            window.open(deal.route, '_blank');
+        .unwrap()
+        .then((dealData) => {
+          if (dealData?.route) {
+            window.open(dealData.route, '_blank');
           }
           handleClose();
           dispatch(setIsOpened(false));
@@ -54,7 +53,7 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
       dispatch(setIsOpened(false));
       dispatch(resetParams());
     }
-  }, [urlId, setDisabled, filterParams, isDealPath, deal?.route, url, dispatch, role, handleClose]);
+  }, [urlId, setDisabled, filterParams, isDealPath, url, dispatch, role, handleClose]);
 
   return (
     <div className="flex flex-col items-start">
