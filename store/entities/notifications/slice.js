@@ -75,7 +75,6 @@ const notificationsSlice = createSlice({
     builder.addCase(fetchNotifications.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.unread = payload.unread;
-      state.dealData = initialState.dealData;
     });
     builder.addCase(fetchNotifications.rejected, (state, { payload }) => {
       state.loading = false;
