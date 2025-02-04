@@ -23,6 +23,7 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
                 {label}
               </Label>
               <Phone
+                {...rest}
                 {...field}
                 masks={{ ae: '.. .......' }}
                 inputProps={{ ref: rfRef }}

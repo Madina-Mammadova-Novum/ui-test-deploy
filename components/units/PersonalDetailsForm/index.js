@@ -71,6 +71,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
             label="Primary phone number"
             disabled={isSubmitting}
             error={errors.primaryPhone?.message}
+            dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
           />
           <PhoneInput
             onBlur={() => {}}
@@ -78,6 +79,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
             label="Secondary phone number (optional)"
             disabled={isSubmitting}
             error={errors.secondaryPhone?.message}
+            dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
           />
         </div>
       </div>
