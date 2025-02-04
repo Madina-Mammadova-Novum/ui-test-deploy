@@ -93,17 +93,21 @@ export class NotificationController extends SignalRController {
 
         const newestNotification = unwatchedData?.[0]?.data?.[0] || false;
 
+        const soundEnabled = localStorage.getItem('notificationSound');
+        const isSoundEnabled = soundEnabled === null ? true : soundEnabled === 'true';
+
         const hornSound = new Howl({
           src: NotificationHorn,
           loop: false,
           preload: true,
           autoplay: true,
-          volume: 0.7,
+          volume: isSoundEnabled ? 0.7 : 0,
         });
 
-        //  TODO: pause case should be added to make horn loop true also mute button should be added
         if (newestNotification) {
-          hornSound.play();
+          if (isSoundEnabled) {
+            hornSound.play();
+          }
           useNotificationToast([newestNotification]);
         }
       });
