@@ -55,6 +55,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         {...register('cargoQuantity')}
         error={errors?.cargoQuantity?.message}
         label="Cargo quantity"
+        labelBadge="*"
         placeholder="Enter the cargo quantity"
         type="number"
         helperText="Min value: 1000"
@@ -109,6 +110,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         onChange={(option) => onChange('calculator', option)}
         options={toolsCalculatorOptions}
         label="Choose a calculator"
+        labelBadge="*"
       />
       <FormDropdown
         asyncCall
@@ -120,6 +122,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         loadOptions={loadOptions}
         disabled={!ports.length}
         label="From which port"
+        labelBadge="*"
         placeholder="Select port"
       />
       <FormDropdown
@@ -132,9 +135,11 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         loadOptions={loadOptions}
         disabled={!ports.length}
         label="To which port"
+        labelBadge="*"
         placeholder="Select port"
       />
       {printAdditionalPorts.length > 0 && printAdditionalPorts}
+
       <Button
         buttonProps={{
           text: 'Add more ports',

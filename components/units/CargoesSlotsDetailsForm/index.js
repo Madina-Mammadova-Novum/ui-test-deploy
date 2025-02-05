@@ -135,6 +135,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
       <div className="relative md:w-full">
         <Input
           label="Number of cargoes chartered in the last 6 months"
+          labelBadge="*"
           disabled={isSubmitting}
           value={cargoesCount}
           type="number"
@@ -170,6 +171,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
                 },
               })}
               label={`Imo #${index + 1}`}
+              labelBadge="*"
               placeholder="Enter IMO"
               error={error?.imo?.message}
               disabled={isSubmitting}
@@ -179,6 +181,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
             <FormDropdown
               name={`${fieldName}.port`}
               label="Load port"
+              labelBadge="*"
               errorMsg={error?.port?.message}
               loading={loading}
               options={ports}
@@ -197,6 +200,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
               name={`${fieldName}.date`}
               inputClass="w-full min-w-[150px]"
               label="Bill of lading date"
+              labelBadge="*"
               error={error?.date?.message}
               onChange={(value) => handleChangeValue({ option: value, index, key: 'date' })}
             />

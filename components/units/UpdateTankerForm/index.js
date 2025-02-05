@@ -277,12 +277,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`tankerName`)}
                 label="Tanker name"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.tankerName?.message}
               />
               <Input {...register(`imo`)} label="IMO" disabled customStyles="w-full" maxLength={7} />
               <DatePicker
                 label="Last Q88 update date"
+                labelBadge="*"
                 name="updateDate"
                 maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
@@ -300,6 +302,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <FormDropdown
                 label="Port of registry"
+                labelBadge="*"
                 options={ports}
                 loading={portsLoading}
                 loadOptions={loadOptions}
@@ -438,9 +441,11 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`registeredOwner`)}
                 label="Registered owner"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.registeredOwner?.message}
               />
+
               <FormDropdown
                 label="Country"
                 options={countries}
@@ -453,6 +458,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`technicalOperator`)}
                 label="Technical operator"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.technicalOperator?.message}
               />
@@ -468,9 +474,11 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`commercialOperator`)}
                 label="Commercial operator"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.commercialOperator?.message}
               />
+
               <FormDropdown
                 label="Country"
                 options={countries}
@@ -498,7 +506,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
             </div>
             <div>
               <Title level="4" className="mb-2.5">
-                Upload your Q88 questionnaire file
+                Upload your Q88 questionnaire file *
               </Title>
               <DropzoneForm showTextFields={false} />
             </div>

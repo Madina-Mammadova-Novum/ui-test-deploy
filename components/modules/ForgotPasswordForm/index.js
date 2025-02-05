@@ -61,6 +61,7 @@ const ForgotPasswordForm = () => {
         <Input
           {...register('email')}
           label="Email"
+          labelBadge="*"
           placeholder="Enter your email"
           customStyles="mt-4"
           type="email"

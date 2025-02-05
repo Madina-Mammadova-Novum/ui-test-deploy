@@ -67,6 +67,7 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
           <FormDropdown
             name="fleet"
             label="Fleet name"
+            labelBadge="*"
             options={convertDataToOptions({ data }, 'id', 'name')}
             customStyles={{ dropdownExpanded: true }}
             onChange={(option) => handleChange('fleet', option)}

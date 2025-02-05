@@ -79,6 +79,7 @@ const LoginForm = () => {
         <Input
           {...register('email')}
           label="Email"
+          labelBadge="*"
           placeholder="Enter your email"
           type="email"
           disabled={isSubmitting}

@@ -243,12 +243,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`tankerName`)}
                 label="Tanker name"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.tankerName?.message}
               />
               <Input
                 {...register(`imo`)}
                 label="IMO"
+                labelBadge="*"
                 disabled
                 value={q88State.imo}
                 customStyles="w-full"
@@ -256,6 +258,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               />
               <DatePicker
                 label="Last Q88 update date"
+                labelBadge="*"
                 name="updateDate"
                 maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
@@ -265,6 +268,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 {...register(`built`)}
                 type="number"
                 label="Built"
+                labelBadge="*"
                 placeholder="YYYY"
                 customStyles="w-full"
                 disabled={q88State.built}
@@ -275,6 +279,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 options={ports}
                 name="portOfRegistry"
                 label="Port of registry"
+                labelBadge="*"
                 loadOptions={loadOptions}
                 onMenuScrollToBottom={handleMore}
                 loading={!q88State?.portOfRegistry?.value && portsLoading}
@@ -285,6 +290,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <FormDropdown
                 asyncCall
                 label="Tanker type"
+                labelBadge="*"
                 options={tankerType.options}
                 loading={!q88State?.tankerType?.value && initialLoading}
                 disabled={!tankerType.options.length || q88State.tankerType}
@@ -294,6 +300,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <FormDropdown
                 asyncCall
                 label="Tanker category #1"
+                labelBadge="*"
                 options={tankerCategoryOne.options}
                 loading={tankerCategoryOne.loading}
                 disabled={!tankerCategoryOne.options.length || q88State.tankerCategoryOne}
@@ -311,6 +318,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               />
               <FormDropdown
                 label="Hull type"
+                labelBadge="*"
                 options={hullTypeOptions}
                 name="hullType"
                 onChange={(option) => handleChange('hullType', option)}
@@ -322,6 +330,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`loa`)}
                 label="LOA"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -332,6 +341,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`beam`)}
                 label="Beam"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -342,6 +352,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`summerDWT`)}
                 label="Summer DWT"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -352,6 +363,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`summerDraft`)}
                 label="Summer draft"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -362,6 +374,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`normalBallastDWT`)}
                 label="Normal ballast DWT"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -372,6 +385,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`normalBallastDraft`)}
                 label="Normal ballast draft"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -382,6 +396,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`cubicCapacity`)}
                 label="cubic capacity 98%"
+                labelBadge="*"
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -391,6 +406,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               />
               <FormDropdown
                 label="IMO class"
+                labelBadge="*"
                 options={imoClassOptions}
                 name="imoClass"
                 disabled={q88State.imoClass}
@@ -399,6 +415,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`grades`)}
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
+                labelBadge="*"
                 type="number"
                 customStyles="col-span-4"
                 disabled={q88State.grades}
@@ -409,11 +426,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`registeredOwner`)}
                 label="Registered owner"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.registeredOwner?.message}
               />
+
               <FormDropdown
                 label="Country"
+                labelBadge="*"
                 options={countries}
                 loading={initialLoading}
                 asyncCall
@@ -424,11 +444,13 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`technicalOperator`)}
                 label="Technical operator"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.technicalOperator?.message}
               />
               <FormDropdown
                 label="Country"
+                labelBadge="*"
                 options={countries}
                 loading={initialLoading}
                 disabled={!countries.length || q88State.technicalOperatorCountry || !watch('technicalOperator')}
@@ -439,11 +461,14 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
               <Input
                 {...register(`commercialOperator`)}
                 label="Commercial operator"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.commercialOperator?.message}
               />
+
               <FormDropdown
                 label="Country"
+                labelBadge="*"
                 options={countries}
                 loading={initialLoading}
                 disabled={!countries.length || q88State.commercialOperatorCountry || !watch('commercialOperator')}

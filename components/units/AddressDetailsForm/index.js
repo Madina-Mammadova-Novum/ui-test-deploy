@@ -84,12 +84,14 @@ const AddressDetails = ({ title, type, countries = [] }) => {
           <FormDropdown
             name={`${type}Country`}
             label="Country"
+            labelBadge="*"
             disabled={countries?.length === 0}
             options={countries}
             onChange={handleCountryChange}
           />
           <FormDropdown
             label="City"
+            labelBadge="*"
             name={`${type}City`}
             options={cities}
             onChange={handleCityChange}

@@ -140,6 +140,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
           <FormDropdown
             name="port"
             label="Port search"
+            labelBadge="*"
             errorMsg={errors?.port?.message}
             loading={loading}
             options={listOfPorts}
@@ -154,6 +155,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
             name="date"
             inputClass="w-full"
             label="Open date"
+            labelBadge="*"
             error={errors?.date?.message}
             onChange={(value) => handleChangeValue({ option: value, key: 'date' })}
             calendarClass="absolute top-5 left-0"

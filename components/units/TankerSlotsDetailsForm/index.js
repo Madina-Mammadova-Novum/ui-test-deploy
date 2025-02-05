@@ -105,6 +105,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           type="number"
           value={tankersCount}
           label="Number of tankers"
+          labelBadge="*"
           customStyles="z-10 w-full"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
@@ -134,6 +135,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                   },
                 })}
                 label={`Imo #${index + 1}`}
+                labelBadge="*"
                 placeholder="Enter IMO"
                 error={error?.message}
                 disabled={isSubmitting}
