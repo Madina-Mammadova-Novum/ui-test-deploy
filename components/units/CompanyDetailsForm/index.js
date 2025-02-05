@@ -44,7 +44,9 @@ const CompanyDetails = ({ notEditable }) => {
             <p className={classNames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
               {pending?.name}
             </p>
-          ) : null
+          ) : (
+            '*'
+          )
         }
         label="Company name"
         placeholder="Company"
@@ -56,6 +58,7 @@ const CompanyDetails = ({ notEditable }) => {
         type="number"
         name="companyYearsOfOperation"
         label="Years in operation"
+        labelBadge="*"
         placeholder="Years"
         value={inputYearsRef.current?.value ?? ''}
         onChange={handleNumberOfOperation}

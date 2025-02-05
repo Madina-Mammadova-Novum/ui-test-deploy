@@ -328,6 +328,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
         <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <DatePicker
             label="laycan start"
+            labelBadge="*"
             inputClass="w-full"
             containerClass="w-full"
             name="laycanStart"
@@ -337,6 +338,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           />
           <DatePicker
             label="laycan end"
+            labelBadge="*"
             inputClass="w-full"
             containerClass="w-full"
             name="laycanEnd"
@@ -353,6 +355,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             id="loadPort"
             name="loadPort"
             label="load port"
+            labelBadge="*"
             options={ports}
             loading={portsLoader}
             onMenuScrollToBottom={handleMore}
@@ -367,6 +370,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             options={terminals.loadPortTerminals.data}
             disabled={!terminals.loadPortTerminals.data.length}
             label="load terminal"
+            labelBadge="*"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
             asyncCall
@@ -376,6 +380,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <FormDropdown
             name="dischargePort"
             label="discharge port"
+            labelBadge="*"
             options={ports}
             loading={portsLoader}
             loadOptions={loadOptions}
@@ -388,6 +393,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <FormDropdown
             name="dischargeTerminal"
             label="discharge terminal"
+            labelBadge="*"
             loading={terminals.dischargePortTerminals.loading}
             options={terminals.dischargePortTerminals.data}
             disabled={!terminals.dischargePortTerminals.data.length}
@@ -415,6 +421,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
       <div className="flex w-full flex-col gap-y-4">
         <FormDropdown
           label="cargo type"
+          labelBadge="*"
           name="cargoType"
           id="cargoType"
           options={cargoTypes}
@@ -445,11 +452,13 @@ const SearchFormFields = ({ productState, setProductState }) => {
                   options={products.data}
                   disabled={!products.data.length}
                   label={`product #${index + 1}`}
+                  labelBadge="*"
                   customStyles={{ className: 'w-full 3md:w-1/2' }}
                 />
                 <Input
                   {...register(`products[${productId}].density`)}
                   label="density"
+                  labelBadge="*"
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
@@ -463,6 +472,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                 <Input
                   {...register(`products[${productId}].quantity`)}
                   label="Quantity"
+                  labelBadge="*"
                   type="number"
                   placeholder="tons"
                   customStyles="w-full sm:w-[45%] 3md:w-2/5"
@@ -472,6 +482,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                 <Input
                   {...register(`products[${productId}].tolerance`)}
                   label="Tolerance"
+                  labelBadge="*"
                   type="number"
                   placeholder="%"
                   customStyles="w-full sm:w-[45%] 3md:w-1/5"

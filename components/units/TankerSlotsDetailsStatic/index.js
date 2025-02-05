@@ -14,6 +14,7 @@ const TankerSlotsDetailsStatic = ({ data, helperText = null }) => {
         type="number"
         value={countOfTankers}
         label="Number of tankers"
+        labelBadge="*"
         placeholder={`Please enter no more than ${SETTINGS.MAX_NUMBER_OF_TANKERS} tankers.`}
         customStyles="z-10 w-full"
         helperText={helperText}

@@ -4,13 +4,14 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import Phone from 'react-phone-input-2';
 
+import classNames from 'classnames';
 import 'react-phone-input-2/lib/style.css';
 
 import { PhoneInputPropTypes } from '@/lib/types';
 
 import { InputErrorMessage, Label } from '@/elements';
 
-const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
+const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...rest }, ref) => {
   if (name) {
     return (
       <Controller
@@ -19,8 +20,13 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
           const error = errors[name];
           return (
             <div className="w-full">
-              <Label name={name} className="mb-0.5 block whitespace-nowrap text-left text-xs-sm">
-                {label}
+              <Label
+                name={name}
+                className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
+                  'flex items-center gap-1': labelBadge,
+                })}
+              >
+                {label} {labelBadge}
               </Label>
               <Phone
                 {...rest}
@@ -48,8 +54,13 @@ const PhoneInput = React.forwardRef(({ name, label, err, ...rest }, ref) => {
 
   return (
     <div className="w-full">
-      <Label name={name} className="mb-0.5 block whitespace-nowrap text-left text-xs-sm">
-        {label}
+      <Label
+        name={name}
+        className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
+          'flex items-center gap-1': labelBadge,
+        })}
+      >
+        {label} {labelBadge}
       </Label>
       <Phone
         {...rest}

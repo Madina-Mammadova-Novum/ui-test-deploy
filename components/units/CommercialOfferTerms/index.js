@@ -161,6 +161,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <div className="mt-3 flex w-1/2 items-baseline gap-x-5 pr-5">
         <FormDropdown
           label="Freight"
+          labelBadge="*"
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
@@ -172,6 +173,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
         <Input
           {...register('value')}
           label="Value"
+          labelBadge="*"
           name="value"
           type="number"
           placeholder={freightValuePlaceholder}
@@ -186,6 +188,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <Input
         {...register('demurrageRate')}
         label="Demurrage rate"
+        labelBadge="*"
         name="demurrageRate"
         type="number"
         placeholder="$ per day"
@@ -199,6 +202,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
         <Input
           {...register('layTime')}
           label="lay time"
+          labelBadge="*"
           name="layTime"
           type="number"
           placeholder="Hours"
@@ -221,6 +225,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <div className="pt-4">
         <FormDropdown
           label="undisputed demurrage payment terms"
+          labelBadge="*"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
           disabled={!valid || loading}
@@ -233,6 +238,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
 
         <FormDropdown
           label="payment terms"
+          labelBadge="*"
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
