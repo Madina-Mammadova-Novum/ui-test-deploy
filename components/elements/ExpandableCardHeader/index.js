@@ -60,6 +60,8 @@ const ExpandableCardHeader = ({
 
     const newId = `${data?.text}-${index}`;
 
+    if (data?.isHidden) return null;
+
     return (
       <div
         key={newId}

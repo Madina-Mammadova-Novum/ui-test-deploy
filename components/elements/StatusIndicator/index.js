@@ -18,6 +18,8 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
       case 'Confirmed':
       case 'Active':
         return 'bg-green';
+      case 'Failed':
+        return 'bg-red';
       case 'Inactive':
       default:
         return 'bg-gray';

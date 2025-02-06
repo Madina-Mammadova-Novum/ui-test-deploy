@@ -73,6 +73,7 @@ export function responseSearchVesselAdapter({ data }) {
     technicalOperatorCountry,
     commercialOperatorCountry,
     searchResultFlag,
+    hasFailedOffer,
   } = data;
 
   return {
@@ -149,6 +150,7 @@ export function responseSearchVesselAdapter({ data }) {
       ],
     },
     searchResultFlag,
+    hasFailedOffer,
   };
 }
 
