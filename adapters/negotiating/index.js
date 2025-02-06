@@ -749,7 +749,8 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
-    showAdditionalDischarge: !!additionalDischargeOptions,
+    showAdditionalDischarge:
+      additionalDischargeOptions?.isAllSelected || additionalDischargeOptions?.selected?.length > 0,
     isSavedSearch,
     savedSearchId,
   };
