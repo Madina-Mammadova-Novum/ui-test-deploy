@@ -46,6 +46,11 @@ export const ownerSidebarAdapter = ({ role }) => {
           title: 'Post-fixture',
           path: ROUTES.ACCOUNT_POSTFIXTURE,
         },
+        {
+          id: 6,
+          title: 'Failed Offers',
+          path: ROUTES.ACCOUNT_FAILED_OFFERS,
+        },
       ],
     },
     {
@@ -117,6 +122,11 @@ export const chartererSidebarAdapter = ({ role }) => {
           label: 'offer stage #5',
           title: 'Post-fixture',
           path: ROUTES.ACCOUNT_POSTFIXTURE,
+        },
+        {
+          id: 6,
+          title: 'Failed Offers',
+          path: ROUTES.ACCOUNT_FAILED_OFFERS,
         },
       ],
     },
