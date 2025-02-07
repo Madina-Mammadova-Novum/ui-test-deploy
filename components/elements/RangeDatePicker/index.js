@@ -64,7 +64,7 @@ const RangeDatePicker = ({ label, onChange, name, value }) => {
       ref={ref}
       aria-hidden
       className={classNames(
-        'range_date range_date-absolute relative flex h-fit w-min flex-col',
+        'range_date range_date-absolute relative flex h-fit flex-col',
         !showPicker && 'range_date-hidden'
       )}
     >
