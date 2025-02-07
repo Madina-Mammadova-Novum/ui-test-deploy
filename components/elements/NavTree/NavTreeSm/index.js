@@ -69,8 +69,6 @@ const NavTreeSm = ({ data, active }) => {
     }
   }, [data?.variant, active]);
 
-  const printSubTree = (link) => <NavTreeSubBody key={link.id} data={link} collapsed onClick={handleClick} />;
-
   return (
     <NavTreeHeader
       href={data?.path}
@@ -97,7 +95,16 @@ const NavTreeSm = ({ data, active }) => {
           ref={subTreeRef}
           className="absolute left-12 top-5 h-auto w-auto rounded-br-base rounded-tr-base bg-black py-2 pr-2"
         >
-          {data?.items?.length > 0 && data?.items?.map(printSubTree)}
+          {data?.items?.length > 0 &&
+            data?.items?.map((item, index, array) => (
+              <NavTreeSubBody
+                key={item.id}
+                data={item}
+                onClick={handleClick}
+                collapsed={showLinks}
+                isSecondToLast={index === array.length - 2}
+              />
+            ))}
         </ul>
       )}
     </NavTreeHeader>

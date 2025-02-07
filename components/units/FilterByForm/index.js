@@ -47,7 +47,7 @@ const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
               text: 'Show results',
               variant: 'secondary',
               size: 'large',
-              buttonContainerClassName: 'absolute right-10 bottom-5',
+              buttonContainerClassName: 'absolute flex-col md:flex-row top-5 2md:right-10 2md:bottom-5 2md:top-auto',
               disabled: isLoading,
             }}
           >

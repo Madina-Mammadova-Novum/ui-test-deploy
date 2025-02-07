@@ -205,11 +205,11 @@
   }
 
   .range_date .rdrCalendarWrapper {
-    @apply w-[450px];
+    @apply w-full max-w-[450px] 2md:w-[450px] 2md:max-w-none;
   }
 
   .range_date .rdrMonths {
-    @apply w-[450px] rounded-b-lg border border-t-0 border-purple-light shadow-2xmd;
+    @apply w-full max-w-[450px] rounded-b-lg border border-t-0 border-purple-light shadow-2xmd 2md:w-[450px] 2md:max-w-none;
   }
 
   .range_date .rdrMonth {
@@ -217,7 +217,7 @@
   }
 
   .range_date .rdrMonthAndYearWrapper {
-    @apply w-[450px] rounded-t-lg border border-purple-light pt-0 shadow-2xmd;
+    @apply w-full max-w-[450px] rounded-t-lg border border-purple-light pt-0 shadow-2xmd 2md:w-[450px] 2md:max-w-none;
   }
 
   .range_date .rdrDateDisplayWrapper {

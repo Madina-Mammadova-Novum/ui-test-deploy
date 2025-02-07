@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { FormDropdown, RangeDatePicker } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] }) => {
+const FailedOffersFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] }) => {
   const { watch, setValue, getValues } = useHookForm();
 
   const handleChange = (key, value) => {
@@ -17,6 +17,17 @@ const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] 
   return (
     <div className="flex min-h-[124px] w-full flex-col gap-2.5 2md:flex-row">
       <div className="grid w-1/2 grid-cols-1 gap-2.5 2md:!w-[calc(100%-450px)] 2md:grid-cols-2 lg:grid-cols-3">
+        <FormDropdown
+          name="stage"
+          label="Offer stage"
+          placeholder="Negotiating"
+          options={cargoCodes}
+          disabled={!cargoCodes?.length}
+          onChange={(option) => handleChange('stage', option)}
+          classNames={{
+            placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
+          }}
+        />
         <FormDropdown
           name="cargoId"
           label="Cargo ID"
@@ -49,9 +60,6 @@ const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] 
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
-          customStyles={{
-            className: '2md:col-span-2 lg:col-span-1',
-          }}
         />
       </div>
 
@@ -65,10 +73,10 @@ const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] 
   );
 };
 
-PostFixtureFilter.propTypes = {
+FailedOffersFilter.propTypes = {
   cargoCodes: PropTypes.arrayOf(PropTypes.shape({})),
   tankerNames: PropTypes.arrayOf(PropTypes.shape({})),
   cargoTypes: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
-export default PostFixtureFilter;
+export default FailedOffersFilter;
