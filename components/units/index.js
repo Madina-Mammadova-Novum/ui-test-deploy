@@ -60,7 +60,7 @@ import UploadForm from '@/units/FileUpload';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import File from '@/units/FileUpload/File';
 import FilterByForm from '@/units/FilterByForm';
-import FailedOffersFilter from '@/units/FilterByForm/failedOfferFilter';
+import FailedOffersFilter from '@/units/FilterByForm/failedOffersFilter';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import Flag from '@/units/Flag';
 import FooterNavBlock from '@/units/FooterNavBlock';
