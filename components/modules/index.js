@@ -16,6 +16,7 @@ import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import DropzoneForm from '@/modules/DropzoneForm';
 import ExpandableRow from '@/modules/ExpandableRow';
+import FailedOffers from '@/modules/FailedOffers';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
 import FixtureDetails from '@/modules/Fixture/FixtureDetails';
@@ -122,4 +123,5 @@ export {
   PostFixtureDetails,
   FixtureDetails,
   GlobalError,
+  FailedOffers,
 };
