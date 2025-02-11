@@ -21,8 +21,9 @@ export async function getCargoFailedOffers(cargoId) {
   };
 }
 
-export async function getPostFixtureCargoCodes() {
-  const response = await getData(`account/post-fixture/get-cargocodes`);
+export async function getCargoCodes({ stage = null }) {
+  const response = await getData(`account/get-cargocodes${stage ? `?stage=${stage}` : ''}`);
+
   return {
     ...response,
   };

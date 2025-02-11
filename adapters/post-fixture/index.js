@@ -378,12 +378,13 @@ export const postFixtureDocumentsTabRowsDataAdapter = ({ data }) => {
 };
 
 export const filtersAdapter = (formData = {}) => {
-  const { cargoId, cargoType, tankerName, rangeDate } = formData || {};
+  const { cargoId, cargoType, tankerName, rangeDate, stage } = formData || {};
 
   return {
     CargoCode: cargoId?.value,
     CargoTypeId: cargoType?.value,
     TankerName: tankerName?.value,
+    Stage: stage?.value,
     FixtureDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
     FixtureDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
   };

@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
+import { fetchCargoCodes, fetchCargoTypes, fetchVesselNames } from '@/store/entities/cargo-vessel/actions';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
 import { setToggle } from '@/store/entities/post-fixture/slice';
 import { getPostFixtureDataSelector } from '@/store/selectors';
@@ -26,6 +27,11 @@ export default function PostFixtureLayout({ children }) {
   });
 
   useEffect(() => {
+    // Fetch cargo and vessel data
+    dispatch(fetchCargoTypes());
+    dispatch(fetchCargoCodes({ stage: 'post-fixture' }));
+    dispatch(fetchVesselNames({ stage: 'post-fixture' }));
+
     dispatch(
       fetchPostFixtureOffers({
         page: paginationParams.currentPage,

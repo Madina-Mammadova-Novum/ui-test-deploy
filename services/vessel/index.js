@@ -146,8 +146,9 @@ export async function removeVessel(data) {
   };
 }
 
-export async function getPostFixtureTankerNames() {
-  const response = await getData(`account/post-fixture/get-tankernames`);
+export async function getVesselNames({ stage = null }) {
+  const response = await getData(`account/get-vesselnames${stage ? `?stage=${stage}` : ''}`);
+
   return {
     ...response,
   };

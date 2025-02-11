@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 import { FormDropdown, RangeDatePicker } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] }) => {
+const PostFixtureFilter = ({
+  cargoCodes = [],
+  tankerNames = [],
+  cargoTypes = [],
+  loading = { cargoCodes: false, cargoTypes: false, vesselNames: false },
+}) => {
   const { watch, setValue, getValues } = useHookForm();
 
   const handleChange = (key, value) => {
@@ -22,7 +27,7 @@ const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] 
           label="Cargo ID"
           placeholder="TY7621"
           options={cargoCodes}
-          disabled={!cargoCodes?.length}
+          disabled={!cargoCodes?.length || loading.cargoCodes}
           onChange={(option) => handleChange('cargoId', option)}
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
@@ -33,7 +38,7 @@ const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] 
           label="Tanker name"
           placeholder="Harvey Deep Sea"
           options={tankerNames}
-          disabled={!tankerNames?.length}
+          disabled={!tankerNames?.length || loading.vesselNames}
           onChange={(option) => handleChange('tankerName', option)}
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
@@ -44,7 +49,7 @@ const PostFixtureFilter = ({ cargoCodes = [], tankerNames = [], cargoTypes = [] 
           label="cargo type"
           placeholder="Select cargo type"
           options={cargoTypes}
-          disabled={!cargoTypes?.length}
+          disabled={!cargoTypes?.length || loading.cargoTypes}
           onChange={(option) => handleChange('cargoType', option)}
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
@@ -69,6 +74,11 @@ PostFixtureFilter.propTypes = {
   cargoCodes: PropTypes.arrayOf(PropTypes.shape({})),
   tankerNames: PropTypes.arrayOf(PropTypes.shape({})),
   cargoTypes: PropTypes.arrayOf(PropTypes.shape({})),
+  loading: PropTypes.shape({
+    cargoCodes: PropTypes.bool,
+    cargoTypes: PropTypes.bool,
+    vesselNames: PropTypes.bool,
+  }),
 };
 
 export default PostFixtureFilter;
