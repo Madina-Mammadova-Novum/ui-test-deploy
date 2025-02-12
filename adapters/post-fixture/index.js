@@ -102,6 +102,16 @@ export const postFixtureDetailsAdapter = ({ data }) => {
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
+  const registrationAddressText =
+    registrationAddress || registrationCityName || registrationCountry?.name
+      ? `${registrationAddress ?? '-'}, ${registrationCityName ?? '-'}, ${registrationCountry?.name ?? '-'}`
+      : null;
+
+  const correspondenceAddressText =
+    correspondenceAddress || correspondenceCityName || correspondenceCountry?.name
+      ? `${correspondenceAddress ?? '-'}, ${correspondenceCityName ?? '-'}, ${correspondenceCountry?.name ?? '-'}`
+      : null;
+
   return {
     chartererInformation: [
       {
@@ -110,11 +120,11 @@ export const postFixtureDetailsAdapter = ({ data }) => {
       },
       {
         title: 'Registration Address',
-        text: `${registrationAddress}, ${registrationCityName}, ${registrationCountry?.name}`,
+        text: registrationAddressText,
       },
       {
         title: 'Correspondence Address',
-        text: `${correspondenceAddress}, ${correspondenceCityName}, ${correspondenceCountry?.name}`,
+        text: correspondenceAddressText,
       },
     ],
     tankerInformation: {
