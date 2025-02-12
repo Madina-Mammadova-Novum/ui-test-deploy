@@ -44,6 +44,7 @@ export const basePageNavAdapter = ({ data }) => {
   return {
     skip: setSkippedValue(page, perPage),
     pageSize: perPage,
+    IsFailed: true,
   };
 };
 

@@ -8,17 +8,16 @@ import { useParams } from 'next/navigation';
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
 import { fetchCargoCodes, fetchCargoTypes, fetchVesselNames } from '@/store/entities/cargo-vessel/actions';
-import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { setToggle } from '@/store/entities/post-fixture/slice';
-import { getPostFixtureDataSelector } from '@/store/selectors';
+import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
+import { setToggle } from '@/store/entities/failed-offers/slice';
+import { getFailedOffersDataSelector } from '@/store/selectors';
 import { useFilters } from '@/utils/hooks';
 
-export default function PostFixtureLayout({ children }) {
+export default function FailedOffersLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages, searchParams, sorting } = useSelector(getPostFixtureDataSelector);
-
+  const { offers, totalPages, searchParams, sorting } = useSelector(getFailedOffersDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -34,7 +33,7 @@ export default function PostFixtureLayout({ children }) {
     dispatch(fetchVesselNames());
 
     dispatch(
-      fetchPostFixtureOffers({
+      fetchFailedOffers({
         page: paginationParams.currentPage,
         perPage: paginationParams.perPage,
         searchParams,

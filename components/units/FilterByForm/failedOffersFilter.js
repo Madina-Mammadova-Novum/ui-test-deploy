@@ -75,7 +75,7 @@ const FailedOffersFilter = ({
       </div>
 
       <RangeDatePicker
-        label="Fixture date"
+        label="Laycan date"
         name="rangeDate"
         onChange={(date) => handleChange('rangeDate', date)}
         value={watch('rangeDate')}

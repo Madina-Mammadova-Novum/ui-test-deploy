@@ -6,6 +6,7 @@ import {
   auth,
   cargoVessel,
   chat,
+  failedOffers,
   fixture,
   fleets,
   general,
@@ -36,4 +37,5 @@ export const reducer = combineReducers({
   postFixture,
   fixture,
   cargoVessel,
+  failedOffers,
 });

@@ -266,6 +266,20 @@ export async function getPostFixtureOffers({ page, perPage, filters, sorting }) 
   };
 }
 
+export async function getFailedOffers({ page, perPage, filters, sorting }) {
+  const body = basePageNavAdapter({ data: { page, perPage } });
+
+  const response = await postData(`account/failed-offers?page=${page}&perPage=${perPage}`, {
+    ...body,
+    filters,
+    sorting,
+  });
+
+  return {
+    ...response,
+  };
+}
+
 export async function getFixtureOffers({ page, perPage }) {
   const body = basePageNavAdapter({ data: { page, perPage } });
 

@@ -1,0 +1,23 @@
+import { transformDate } from '@/utils/date';
+
+export const responseFailedOffersAdapter = ({ data, recordsTotal }) => {
+  if (!data) return { data: [], recordsTotal: 0 };
+
+  return {
+    data,
+    recordsTotal,
+  };
+};
+
+export const filtersAdapter = (formData = {}) => {
+  const { cargoId, cargoType, tankerName, rangeDate, stage } = formData || {};
+
+  return {
+    CargoCode: cargoId?.value,
+    CargoTypeId: cargoType?.value,
+    TankerName: tankerName?.value,
+    Stage: stage?.value,
+    LaycanDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
+    LaycanDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
+  };
+};

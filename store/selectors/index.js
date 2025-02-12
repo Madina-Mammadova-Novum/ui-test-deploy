@@ -39,6 +39,12 @@ export const postFixtureSelector = ({ postFixture, notifications, auth }) => ({
 });
 export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
 
+export const failedOffersSelector = ({ failedOffers, notifications, auth }) => ({
+  ...failedOffers,
+  role: auth?.session?.role,
+  deal: notifications?.dealData,
+});
+
 export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
   error: state.error,
   loading: state.loading,
@@ -275,3 +281,18 @@ export const getVesselNamesSelector = (state) => getCargoVesselDataSelector(stat
 
 export const getCargoVesselLoadingSelector = (state) => getCargoVesselSelector(state).loading;
 export const getCargoVesselErrorSelector = (state) => getCargoVesselSelector(state).error;
+
+export const getFailedOffersDataSelector = createDraftSafeSelector(failedOffersSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    searchParams: state.data?.searchParams,
+    sorting: state.data?.sorting,
+    role: state.role,
+    deal: state.deal,
+    perPage: state?.data?.perPage,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
+  };
+});

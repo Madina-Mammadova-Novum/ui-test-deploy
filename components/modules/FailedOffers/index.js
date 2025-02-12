@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UrlPropTypes } from '@/lib/types';
 
 import { Dropdown, DynamicLoader, Label, Title } from '@/elements';
-import { NAVIGATION_PARAMS, POST_FIXTURE_SORT_COLUMN_OPTIONS } from '@/lib/constants';
+import { NAVIGATION_PARAMS, FAILED_OFFERS_SORT_COLUMN_OPTIONS } from '@/lib/constants';
 import { PostFixtureResultContent } from '@/modules';
-import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { getCargoVesselDataSelector, getPostFixtureDataSelector } from '@/store/selectors';
+import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
+import { getCargoVesselDataSelector, getFailedOffersDataSelector } from '@/store/selectors';
 import { FailedOffersFilter, FilterByForm } from '@/units';
 import { convertDataToOptions, options } from '@/utils/helpers';
 
@@ -21,11 +21,11 @@ const FailedOffers = () => {
   const [userStore, setUserStore] = useState({
     sortColumnDirectionOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortColumnDirection: '',
-    sortColumnOptions: POST_FIXTURE_SORT_COLUMN_OPTIONS,
+    sortColumnOptions: FAILED_OFFERS_SORT_COLUMN_OPTIONS,
     sortColumn: '',
   });
 
-  const { offers, loading, toggle, perPage, searchParams } = useSelector(getPostFixtureDataSelector);
+  const { offers, loading, toggle, perPage, searchParams } = useSelector(getFailedOffersDataSelector);
   const { cargoTypes, cargoCodes, vesselNames, loading: cargoVesselLoading } = useSelector(getCargoVesselDataSelector);
   const { sortColumnDirectionOptions, sortColumnDirection, sortColumnOptions, sortColumn } = userStore;
 
@@ -45,7 +45,7 @@ const FailedOffers = () => {
 
   const handleSortSelection = (key, sortOption) => {
     dispatch(
-      fetchPostFixtureOffers({
+      fetchFailedOffers({
         page: 1,
         perPage,
         searchParams,
@@ -84,6 +84,7 @@ const FailedOffers = () => {
   return (
     <>
       <FilterByForm
+        type="failed-offers"
         isLoading={
           loading || cargoVesselLoading.cargoCodes || cargoVesselLoading.cargoTypes || cargoVesselLoading.vesselNames
         }
