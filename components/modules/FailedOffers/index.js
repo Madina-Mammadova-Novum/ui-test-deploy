@@ -7,7 +7,7 @@ import { UrlPropTypes } from '@/lib/types';
 
 import { Dropdown, DynamicLoader, Label, Title } from '@/elements';
 import { FAILED_OFFERS_SORT_COLUMN_OPTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
-import { PostFixtureResultContent } from '@/modules';
+import { FailedOffersResultContent } from '@/modules';
 import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
 import { getCargoVesselDataSelector, getFailedOffersDataSelector } from '@/store/selectors';
 import { FailedOffersFilter, FilterByForm } from '@/units';
@@ -74,7 +74,7 @@ const FailedOffers = () => {
     if (offers?.length)
       return (
         <div className="flex flex-col gap-y-5">
-          <PostFixtureResultContent data={offers} toggle={toggle} />
+          <FailedOffersResultContent data={offers} toggle={toggle} />
         </div>
       );
 
