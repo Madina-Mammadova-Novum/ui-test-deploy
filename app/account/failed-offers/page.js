@@ -7,7 +7,7 @@ export function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Failed Offers',
+        metaTitle: 'Failed/Declined Offers',
       },
     },
   });

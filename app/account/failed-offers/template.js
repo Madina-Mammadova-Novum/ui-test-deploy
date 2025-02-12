@@ -48,7 +48,7 @@ export default function FailedOffersLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
-    data: { label: 'In progress', title: 'Failed Offers' },
+    data: { label: 'Offers', title: 'Failed/Declined' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
     isDetailsPage: Boolean(searchedParams.id),
