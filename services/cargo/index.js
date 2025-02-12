@@ -21,8 +21,8 @@ export async function getCargoFailedOffers(cargoId) {
   };
 }
 
-export async function getCargoCodes({ stage = null }) {
-  const response = await getData(`account/get-cargocodes${stage ? `?stage=${stage}` : ''}`);
+export async function getCargoCodes({ stages = null }) {
+  const response = await getData(`account/get-cargocodes${stages ? `?stages=${stages}` : ''}`);
 
   return {
     ...response,

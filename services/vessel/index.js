@@ -146,8 +146,8 @@ export async function removeVessel(data) {
   };
 }
 
-export async function getVesselNames({ stage = null }) {
-  const response = await getData(`account/get-vesselnames${stage ? `?stage=${stage}` : ''}`);
+export async function getVesselNames({ stages = null }) {
+  const response = await getData(`account/get-vesselnames${stages ? `?stages=${stages}` : ''}`);
 
   return {
     ...response,

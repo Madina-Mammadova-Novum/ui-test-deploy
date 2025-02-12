@@ -7,12 +7,12 @@ import { getCookieFromServer } from '@/utils/helpers';
 export default async function handler(req, res) {
   const role = getCookieFromServer('session-user-role', req);
   const token = getCookieFromServer('session-access-token', req);
-  const { stage } = req.query;
+  const { stages } = req.query;
 
   return responseHandler({
     req,
     res,
-    path: getApiURL(`v1/${role}/deals/cargocodes${stage ? `?stage=${stage}` : ''}`),
+    path: getApiURL(`v1/${role}/deals/cargocodes${stages ? `?stages=${stages}` : ''}`),
     dataAdapter: responseOwnerPrefixtureAdapter,
     requestMethod: 'GET',
 

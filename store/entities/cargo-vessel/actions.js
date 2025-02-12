@@ -11,12 +11,12 @@ export const fetchCargoTypes = createAsyncThunk(CARGO_VESSEL.FETCH_CARGO_TYPES, 
   return response;
 });
 
-export const fetchCargoCodes = createAsyncThunk(CARGO_VESSEL.FETCH_CARGO_CODES, async ({ stage = null } = {}) => {
-  const response = await getCargoCodes({ stage });
+export const fetchCargoCodes = createAsyncThunk(CARGO_VESSEL.FETCH_CARGO_CODES, async ({ stages = null } = {}) => {
+  const response = await getCargoCodes({ stages });
   return response;
 });
 
-export const fetchVesselNames = createAsyncThunk(CARGO_VESSEL.FETCH_VESSEL_NAMES, async ({ stage = null } = {}) => {
-  const response = await getVesselNames({ stage });
+export const fetchVesselNames = createAsyncThunk(CARGO_VESSEL.FETCH_VESSEL_NAMES, async ({ stages = null } = {}) => {
+  const response = await getVesselNames({ stages });
   return response;
 });
