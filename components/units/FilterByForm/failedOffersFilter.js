@@ -14,13 +14,22 @@ const FailedOffersFilter = ({
   const { watch, setValue, getValues } = useHookForm();
 
   const stageList = [
-    { label: 'Negotiating', value: 'negotiating' },
-    { label: 'Pre-fixture', value: 'pre-fixture' },
-    { label: 'On-subs', value: 'on-subs' },
+    { label: 'Negotiating', value: 'Negotiating' },
+    { label: 'Pre-fixture', value: 'Pre_Fixture' },
+    { label: 'On-subs', value: 'On_Subs' },
   ];
+
+  const selectedStages =
+    watch('stages')?.value?.map((value) => stageList.find((option) => option.value === value)) || [];
 
   const handleChange = (key, value) => {
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
+
+    if (key === 'stages') {
+      const stages = value ? value.map((option) => option.value) : [];
+      setValue(key, { value: stages });
+      return;
+    }
 
     setValue(key, value);
   };
@@ -29,12 +38,14 @@ const FailedOffersFilter = ({
     <div className="flex min-h-[124px] w-full flex-col gap-2.5 2md:flex-row">
       <div className="grid w-1/2 grid-cols-1 gap-2.5 2md:!w-[calc(100%-450px)] 2md:grid-cols-2 lg:grid-cols-3">
         <FormDropdown
-          name="stage"
+          name="stages"
           label="Offer stage"
-          placeholder="Select stages"
+          placeholder="Select one or more stages"
           options={stageList}
-          // closeMenuOnSelect={false}
-          onChange={(option) => handleChange('stage', option)}
+          isMulti
+          closeMenuOnSelect={false}
+          value={selectedStages}
+          onChange={(options) => handleChange('stages', options)}
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
