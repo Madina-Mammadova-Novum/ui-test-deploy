@@ -3,7 +3,7 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { ensureFileExtension, formatStageText, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const failedOffersHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
@@ -13,7 +13,7 @@ export const failedOffersHeaderDataAdapter = ({ data }) => {
   return [
     {
       label: 'Offer Stage',
-      text: stage,
+      text: formatStageText(stage),
     },
     {
       label: 'Cargo id',

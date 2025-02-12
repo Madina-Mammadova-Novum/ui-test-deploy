@@ -962,3 +962,8 @@ export const fixLongitudeWrapping = (coordinates) => {
 
   return result;
 };
+
+export const formatStageText = (stage) => {
+  if (!stage) return '';
+  return stage.replace(/_/g, ' ');
+};
