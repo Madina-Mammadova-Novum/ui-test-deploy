@@ -1,11 +1,10 @@
 import { transformDate } from '@/utils/date';
 
-export const responseFailedOffersAdapter = ({ data, recordsTotal }) => {
-  if (!data) return { data: [], recordsTotal: 0 };
+export const responseFailedOffersAdapter = ({ data }) => {
+  if (!data) return { data: [] };
 
   return {
     data,
-    recordsTotal,
   };
 };
 

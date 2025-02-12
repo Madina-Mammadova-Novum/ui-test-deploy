@@ -11,7 +11,12 @@ export const fetchPostFixtureOffers = createAsyncThunk(
   POST_FIXTURE.GET_POST_FIXTURE_OFFERS,
   async ({ page = 1, perPage = 5, searchParams = {}, sorting = {} }, { rejectWithValue }) => {
     try {
-      const { data, recordsTotal } = await getPostFixtureOffers({ page, perPage, filters: searchParams, sorting });
+      const { data, recordsTotal } = await getPostFixtureOffers({
+        page,
+        perPage,
+        filters: { ...searchParams, Stages: ['Post_Fixture'] },
+        sorting,
+      });
 
       return {
         data: {

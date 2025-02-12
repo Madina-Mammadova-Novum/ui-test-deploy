@@ -11,7 +11,13 @@ export const fetchFailedOffers = createAsyncThunk(
   FAILED_OFFERS.GET_FAILED_OFFERS,
   async ({ page = 1, perPage = 5, searchParams = {}, sorting = {} }, { rejectWithValue }) => {
     try {
-      const { data, recordsTotal } = await getFailedOffers({ page, perPage, filters: searchParams, sorting });
+      const { data, recordsTotal } = await getFailedOffers({
+        page,
+        perPage,
+        filters: searchParams,
+        sorting,
+        isFailed: true,
+      });
 
       return {
         data: {

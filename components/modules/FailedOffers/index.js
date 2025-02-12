@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UrlPropTypes } from '@/lib/types';
 
 import { Dropdown, DynamicLoader, Label, Title } from '@/elements';
-import { NAVIGATION_PARAMS, FAILED_OFFERS_SORT_COLUMN_OPTIONS } from '@/lib/constants';
+import { FAILED_OFFERS_SORT_COLUMN_OPTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
 import { PostFixtureResultContent } from '@/modules';
 import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
 import { getCargoVesselDataSelector, getFailedOffersDataSelector } from '@/store/selectors';
