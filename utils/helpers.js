@@ -874,10 +874,10 @@ export const notificationPathGenerator = ({ data, role }) => {
     Negotiating: `${initialPath}/${isOwner ? data?.vessel?.id : data?.searchedCargo?.id}?fleetId=${
       data.id
     }&status=${statusTab}`,
-    Pre_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
-    On_Subs: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
-    Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
-    Post_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
+    Pre_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
+    On_Subs: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
+    Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
+    Post_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
   };
 
   return routeByStage[data.stage];

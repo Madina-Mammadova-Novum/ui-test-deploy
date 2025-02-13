@@ -86,7 +86,7 @@ const FailedOffers = () => {
       <FilterByForm
         type="failed-offers"
         isLoading={
-          loading || cargoVesselLoading.cargoCodes || cargoVesselLoading.cargoTypes || cargoVesselLoading.vesselNames
+          loading || cargoVesselLoading?.cargoCodes || cargoVesselLoading?.cargoTypes || cargoVesselLoading?.vesselNames
         }
       >
         <FailedOffersFilter {...filterData} />
