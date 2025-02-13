@@ -39,6 +39,12 @@ export const postFixtureSelector = ({ postFixture, notifications, auth }) => ({
 });
 export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
 
+export const failedOffersSelector = ({ failedOffers, notifications, auth }) => ({
+  ...failedOffers,
+  role: auth?.session?.role,
+  deal: notifications?.dealData,
+});
+
 export const getAuthSelector = createDraftSafeSelector(authSelector, (state) => ({
   error: state.error,
   loading: state.loading,
@@ -148,7 +154,6 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
     loading: state.loading,
     toggle: state.toggle,
     totalPages: state.data?.totalPages,
-    filters: state.data?.filters,
     searchParams: state.data?.searchParams,
     sorting: state.data?.sorting,
     role: state.role,
@@ -253,5 +258,41 @@ export const getSearchSelector = createDraftSafeSelector(searchSelector, (state)
     loading: state.loading,
     sorting: state.sortingData,
     request: state.request,
+  };
+});
+
+/* Cargo Vessel Selectors */
+export const getCargoVesselSelector = (state) => state.cargoVessel;
+
+export const getCargoVesselDataSelector = createDraftSafeSelector(getCargoVesselSelector, (state) => {
+  return {
+    loading: state.loading,
+    error: state.error,
+    cargoTypes: state.cargoTypes,
+    cargoCodes: state.cargoCodes,
+    vesselNames: state.vesselNames,
+  };
+});
+
+// Specific data selectors that use the main selector
+export const getCargoTypesSelector = (state) => getCargoVesselDataSelector(state).cargoTypes;
+export const getCargoCodesSelector = (state) => getCargoVesselDataSelector(state).cargoCodes;
+export const getVesselNamesSelector = (state) => getCargoVesselDataSelector(state).vesselNames;
+
+export const getCargoVesselLoadingSelector = (state) => getCargoVesselSelector(state).loading;
+export const getCargoVesselErrorSelector = (state) => getCargoVesselSelector(state).error;
+
+export const getFailedOffersDataSelector = createDraftSafeSelector(failedOffersSelector, (state) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    toggle: state.toggle,
+    totalPages: state.data?.totalPages,
+    searchParams: state.data?.searchParams,
+    sorting: state.data?.sorting,
+    role: state.role,
+    deal: state.deal,
+    perPage: state?.data?.perPage,
+    offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
   };
 });

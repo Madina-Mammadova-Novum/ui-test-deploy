@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UrlPropTypes } from '@/lib/types';
 
 import { Dropdown, DynamicLoader, Label, Title } from '@/elements';
-import { NAVIGATION_PARAMS, POST_FIXTURE_SORT_COLUMN_OPTIONS } from '@/lib/constants';
-import { PostFixtureResultContent } from '@/modules';
-import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { getPostFixtureDataSelector } from '@/store/selectors';
+import { FAILED_OFFERS_SORT_COLUMN_OPTIONS, NAVIGATION_PARAMS } from '@/lib/constants';
+import { FailedOffersResultContent } from '@/modules';
+import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
+import { getCargoVesselDataSelector, getFailedOffersDataSelector } from '@/store/selectors';
 import { FailedOffersFilter, FilterByForm } from '@/units';
+import { convertDataToOptions, options } from '@/utils/helpers';
 
 const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
@@ -20,12 +21,20 @@ const FailedOffers = () => {
   const [userStore, setUserStore] = useState({
     sortColumnDirectionOptions: NAVIGATION_PARAMS.DATA_SORT_OPTIONS,
     sortColumnDirection: '',
-    sortColumnOptions: POST_FIXTURE_SORT_COLUMN_OPTIONS,
+    sortColumnOptions: FAILED_OFFERS_SORT_COLUMN_OPTIONS,
     sortColumn: '',
   });
 
-  const { offers, loading, toggle, perPage, filters, searchParams } = useSelector(getPostFixtureDataSelector);
+  const { offers, loading, toggle, perPage, searchParams } = useSelector(getFailedOffersDataSelector);
+  const { cargoTypes, cargoCodes, vesselNames, loading: cargoVesselLoading } = useSelector(getCargoVesselDataSelector);
   const { sortColumnDirectionOptions, sortColumnDirection, sortColumnOptions, sortColumn } = userStore;
+
+  const filterData = {
+    cargoTypes: convertDataToOptions(cargoTypes, 'id', 'name'),
+    cargoCodes: options(cargoCodes?.data || []),
+    tankerNames: options(vesselNames?.data || []),
+    loading: cargoVesselLoading,
+  };
 
   const handleChangeState = (key, value) => {
     setUserStore((prevState) => ({
@@ -36,7 +45,7 @@ const FailedOffers = () => {
 
   const handleSortSelection = (key, sortOption) => {
     dispatch(
-      fetchPostFixtureOffers({
+      fetchFailedOffers({
         page: 1,
         perPage,
         searchParams,
@@ -65,7 +74,7 @@ const FailedOffers = () => {
     if (offers?.length)
       return (
         <div className="flex flex-col gap-y-5">
-          <PostFixtureResultContent data={offers} toggle={toggle} />
+          <FailedOffersResultContent data={offers} toggle={toggle} />
         </div>
       );
 
@@ -74,8 +83,13 @@ const FailedOffers = () => {
 
   return (
     <>
-      <FilterByForm isLoading={loading}>
-        <FailedOffersFilter {...filters} />
+      <FilterByForm
+        type="failed-offers"
+        isLoading={
+          loading || cargoVesselLoading?.cargoCodes || cargoVesselLoading?.cargoTypes || cargoVesselLoading?.vesselNames
+        }
+      >
+        <FailedOffersFilter {...filterData} />
       </FilterByForm>
 
       <div className="flex items-center justify-end gap-2.5 pt-6">

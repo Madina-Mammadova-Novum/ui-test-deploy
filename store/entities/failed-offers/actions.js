@@ -1,21 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 /* Types */
-import { POST_FIXTURE } from './types';
+import { FAILED_OFFERS } from './types';
 
 /* Services */
-import { getPostFixtureOffers } from '@/services';
+import { getFailedOffers } from '@/services/user';
 import { calculateAmountOfPages } from '@/utils/helpers';
 
-export const fetchPostFixtureOffers = createAsyncThunk(
-  POST_FIXTURE.GET_POST_FIXTURE_OFFERS,
+export const fetchFailedOffers = createAsyncThunk(
+  FAILED_OFFERS.GET_FAILED_OFFERS,
   async ({ page = 1, perPage = 5, searchParams = {}, sorting = {} }, { rejectWithValue }) => {
     try {
-      const { data, recordsTotal } = await getPostFixtureOffers({
+      const { data, recordsTotal } = await getFailedOffers({
         page,
         perPage,
-        filters: { ...searchParams, Stages: ['Post_Fixture'] },
+        filters: searchParams,
         sorting,
+        isFailed: true,
       });
 
       return {
@@ -28,7 +29,7 @@ export const fetchPostFixtureOffers = createAsyncThunk(
         },
       };
     } catch (error) {
-      return rejectWithValue('Failed to fetch post fixture offers');
+      return rejectWithValue('Failed to fetch failed offers');
     }
   }
 );

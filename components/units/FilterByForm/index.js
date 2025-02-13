@@ -5,29 +5,35 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { FilterByFormPropTypes } from '@/lib/types';
 
-import { filtersAdapter } from '@/adapters/post-fixture';
+import { filtersAdapter as failedOffersFiltersAdapter } from '@/adapters/failed-offers';
+import { filtersAdapter as postFixtureFiltersAdapter } from '@/adapters/post-fixture';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
+import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { getPostFixtureDataSelector } from '@/store/selectors';
+import { getFailedOffersDataSelector, getPostFixtureDataSelector } from '@/store/selectors';
 import { resetForm } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FilterByForm = ({ children, title = 'Filter by', isLoading = false }) => {
+const FilterByForm = ({ children, title = 'Filter by', isLoading = false, type = 'post-fixture' }) => {
   const dispatch = useDispatch();
   const methods = useHookFormParams({ state: null, schema: null });
 
-  const { sorting, perPage } = useSelector(getPostFixtureDataSelector);
+  const isFailedOffers = type === 'failed-offers';
+  const selector = isFailedOffers ? getFailedOffersDataSelector : getPostFixtureDataSelector;
+  const { sorting, perPage } = useSelector(selector);
 
   const onSubmit = async (formData) => {
-    const data = filtersAdapter(formData);
+    const data = isFailedOffers ? failedOffersFiltersAdapter(formData) : postFixtureFiltersAdapter(formData);
 
-    dispatch(fetchPostFixtureOffers({ page: 1, perPage, searchParams: data, sorting }));
+    const action = isFailedOffers ? fetchFailedOffers : fetchPostFixtureOffers;
+    dispatch(action({ page: 1, perPage, searchParams: data, sorting }));
   };
 
   const onReset = () => {
     resetForm(methods, '');
-    dispatch(fetchPostFixtureOffers({ page: 1, perPage, sorting }));
+    const action = isFailedOffers ? fetchFailedOffers : fetchPostFixtureOffers;
+    dispatch(action({ page: 1, perPage, sorting }));
   };
 
   return (

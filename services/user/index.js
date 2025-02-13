@@ -253,12 +253,17 @@ export async function getRoleBasedOnSubs({ page, perPage }) {
 }
 
 export async function getPostFixtureOffers({ page, perPage, filters, sorting }) {
+  return getFailedOffers({ page, perPage, filters, sorting });
+}
+
+export async function getFailedOffers({ page, perPage, filters, sorting, isFailed = false }) {
   const body = basePageNavAdapter({ data: { page, perPage } });
 
-  const response = await postData(`account/post-fixture?page=${page}&perPage=${perPage}`, {
+  const response = await postData(`account/failed-offers?page=${page}&perPage=${perPage}`, {
     ...body,
     filters,
     sorting,
+    IsFailed: isFailed,
   });
 
   return {

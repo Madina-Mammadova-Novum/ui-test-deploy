@@ -48,7 +48,8 @@ export const ownerSidebarAdapter = ({ role }) => {
         },
         {
           id: 6,
-          title: 'Failed Offers',
+          label: 'Offers',
+          title: 'Failed/Declined',
           path: ROUTES.ACCOUNT_FAILED_OFFERS,
         },
       ],
@@ -125,7 +126,8 @@ export const chartererSidebarAdapter = ({ role }) => {
         },
         {
           id: 6,
-          title: 'Failed Offers',
+          label: 'Offers',
+          title: 'Failed/Declined',
           path: ROUTES.ACCOUNT_FAILED_OFFERS,
         },
       ],

@@ -3,14 +3,18 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { ensureFileExtension, formatStageText, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
-export const postFixtureHeaderDataAdapter = ({ data }) => {
+export const failedOffersHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, stage, failedBy } = data;
 
   return [
+    {
+      label: 'Offer Stage',
+      text: formatStageText(stage),
+    },
     {
       label: 'Cargo id',
       text: searchedCargo?.code,
@@ -45,13 +49,21 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
-      label: 'Fixture date',
-      text: transformDate(fixtureDate, 'MMM dd, yyyy'),
+      label: 'Reason',
+      text: failedBy,
     },
   ];
 };
 
-export const postFixtureDetailsAdapter = ({ data }) => {
+export const responseFailedOffersAdapter = ({ data }) => {
+  if (!data) return { data: [] };
+
+  return {
+    data,
+  };
+};
+
+export const failedOffersDetailsAdapter = ({ data }) => {
   if (!data) return {};
 
   const {
@@ -96,6 +108,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    failureReason,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -284,10 +297,11 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
+    failureReason,
   };
 };
 
-const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
+const failedOffersDocumentsTabRowDataAdapter = ({ data, index }) => {
   if (!data) return {};
   const {
     id,
@@ -381,10 +395,10 @@ const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const postFixtureDocumentsTabRowsDataAdapter = ({ data }) => {
+export const failedOffersDocumentsTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  return data.map((rowData, index) => postFixtureDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
+  return data.map((rowData, index) => failedOffersDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
 export const filtersAdapter = (formData = {}) => {
@@ -395,7 +409,7 @@ export const filtersAdapter = (formData = {}) => {
     CargoTypeId: cargoType?.value,
     TankerName: tankerName?.value,
     Stages: stages?.value,
-    FixtureDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
-    FixtureDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
+    LaycanDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
+    LaycanDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
   };
 };

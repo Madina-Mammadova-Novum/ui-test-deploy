@@ -7,16 +7,17 @@ import { useParams } from 'next/navigation';
 
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
-import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { setToggle } from '@/store/entities/post-fixture/slice';
-import { getPostFixtureDataSelector } from '@/store/selectors';
+import { fetchCargoCodes, fetchCargoTypes, fetchVesselNames } from '@/store/entities/cargo-vessel/actions';
+import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
+import { setToggle } from '@/store/entities/failed-offers/slice';
+import { getFailedOffersDataSelector } from '@/store/selectors';
 import { useFilters } from '@/utils/hooks';
 
-export default function PostFixtureLayout({ children }) {
+export default function FailedOffersLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages, searchParams, sorting } = useSelector(getPostFixtureDataSelector);
+  const { offers, totalPages, searchParams, sorting } = useSelector(getFailedOffersDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -26,8 +27,13 @@ export default function PostFixtureLayout({ children }) {
   });
 
   useEffect(() => {
+    // Fetch cargo and vessel data
+    dispatch(fetchCargoTypes());
+    dispatch(fetchCargoCodes());
+    dispatch(fetchVesselNames());
+
     dispatch(
-      fetchPostFixtureOffers({
+      fetchFailedOffers({
         page: paginationParams.currentPage,
         perPage: paginationParams.perPage,
         searchParams,
@@ -42,7 +48,7 @@ export default function PostFixtureLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
-    data: { label: 'In progress', title: 'Failed Offers' },
+    data: { label: 'Offers', title: 'Failed/Declined' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
     isDetailsPage: Boolean(searchedParams.id),
