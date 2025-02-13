@@ -15,9 +15,12 @@ export default async function handler(req, res) {
   const isFailedQuery = isFailed ? '&IsFailed=true' : '';
 
   const queryParams = Object.keys(queryData).reduce((result, curr) => {
-    // eslint-disable-next-line no-param-reassign
-    result += queryData[curr] ? `&${curr}=${queryData[curr]}` : '';
-    return result;
+    // Handle stages array specially
+    if (curr === 'Stages' && Array.isArray(queryData[curr])) {
+      return `${result}${queryData[curr].reduce((stagesQuery, stage) => `${stagesQuery}&Stages=${stage}`, '')}`;
+    }
+    // Handle other params as before
+    return `${result}${queryData[curr] ? `&${curr}=${queryData[curr]}` : ''}`;
   }, '');
 
   return responseHandler({
