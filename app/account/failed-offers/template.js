@@ -26,12 +26,14 @@ export default function FailedOffersLayout({ children }) {
     data: offers,
   });
 
+  // Fetch initial data
   useEffect(() => {
-    // Fetch cargo and vessel data
     dispatch(fetchCargoTypes());
     dispatch(fetchCargoCodes());
     dispatch(fetchVesselNames());
+  }, []);
 
+  useEffect(() => {
     dispatch(
       fetchFailedOffers({
         page: paginationParams.currentPage,

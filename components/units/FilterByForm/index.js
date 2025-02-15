@@ -9,6 +9,7 @@ import { filtersAdapter as failedOffersFiltersAdapter } from '@/adapters/failed-
 import { filtersAdapter as postFixtureFiltersAdapter } from '@/adapters/post-fixture';
 import { FormManager } from '@/common';
 import { Title } from '@/elements';
+import { fetchCargoCodes, fetchVesselNames } from '@/store/entities/cargo-vessel/actions';
 import { fetchFailedOffers } from '@/store/entities/failed-offers/actions';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
 import { getFailedOffersDataSelector, getPostFixtureDataSelector } from '@/store/selectors';
@@ -25,7 +26,6 @@ const FilterByForm = ({ children, title = 'Filter by', isLoading = false, type =
 
   const onSubmit = async (formData) => {
     const data = isFailedOffers ? failedOffersFiltersAdapter(formData) : postFixtureFiltersAdapter(formData);
-
     const action = isFailedOffers ? fetchFailedOffers : fetchPostFixtureOffers;
     dispatch(action({ page: 1, perPage, searchParams: data, sorting }));
   };
@@ -34,6 +34,12 @@ const FilterByForm = ({ children, title = 'Filter by', isLoading = false, type =
     resetForm(methods, '');
     const action = isFailedOffers ? fetchFailedOffers : fetchPostFixtureOffers;
     dispatch(action({ page: 1, perPage, sorting }));
+
+    if (isFailedOffers) {
+      // Fetch initial lists for failed offers
+      dispatch(fetchCargoCodes());
+      dispatch(fetchVesselNames());
+    }
   };
 
   return (
