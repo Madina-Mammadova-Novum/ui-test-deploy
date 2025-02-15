@@ -27,11 +27,16 @@ export default function FailedOffersLayout({ children }) {
   });
 
   useEffect(() => {
-    // Fetch cargo and vessel data
     dispatch(fetchCargoTypes());
-    dispatch(fetchCargoCodes());
-    dispatch(fetchVesselNames());
+    dispatch(
+      fetchCargoCodes({
+        stages: searchParams?.Stages?.length > 0 ? searchParams.Stages : null,
+      })
+    );
+    dispatch(fetchVesselNames({ stages: searchParams?.Stages?.length > 0 ? searchParams.Stages : null }));
+  }, [searchParams.Stages]);
 
+  useEffect(() => {
     dispatch(
       fetchFailedOffers({
         page: paginationParams.currentPage,

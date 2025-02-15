@@ -1,8 +1,11 @@
 'use client';
 
+import { useDispatch } from 'react-redux';
+
 import PropTypes from 'prop-types';
 
 import { FormDropdown, RangeDatePicker } from '@/elements';
+import { updateSearchParams } from '@/store/entities/failed-offers/slice';
 import { useHookForm } from '@/utils/hooks';
 
 const FailedOffersFilter = ({
@@ -11,7 +14,8 @@ const FailedOffersFilter = ({
   cargoTypes = [],
   loading = { cargoCodes: false, cargoTypes: false, vesselNames: false },
 }) => {
-  const { watch, setValue, getValues } = useHookForm();
+  const dispatch = useDispatch();
+  const { watch, setValue, getValues, reset } = useHookForm();
 
   const stageList = [
     { label: 'Negotiating', value: 'Negotiating' },
@@ -27,7 +31,28 @@ const FailedOffersFilter = ({
 
     if (key === 'stages') {
       const stages = value ? value.map((option) => option.value) : [];
-      setValue(key, { value: stages });
+      const currentValues = getValues();
+
+      // Reset form values but preserve cargoType and rangeDate
+      reset({
+        stages: { value: stages },
+        cargoId: null,
+        tankerName: null,
+        cargoType: currentValues.cargoType,
+        rangeDate: currentValues.rangeDate,
+      });
+
+      // Update Redux with stages and reset cargo/tanker, but preserve dates and cargo type
+      dispatch(
+        updateSearchParams({
+          Stages: stages,
+          CargoCode: null,
+          TankerName: null,
+          LaycanDateFrom: currentValues.LaycanDateFrom,
+          LaycanDateTo: currentValues.LaycanDateTo,
+          CargoTypeId: currentValues.CargoTypeId,
+        })
+      );
       return;
     }
 
@@ -45,6 +70,7 @@ const FailedOffersFilter = ({
           isMulti
           closeMenuOnSelect={false}
           value={selectedStages}
+          disabled={loading.cargoCodes || loading.cargoTypes || loading.vesselNames}
           onChange={(options) => handleChange('stages', options)}
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',

@@ -19,6 +19,7 @@ const FailedOffersResultContent = ({ data, toggle, isOpened, tab }) => {
 
     return (
       <ExpandableRow
+        key={rowData?.id}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={gridStyles} />}
         expand={toggle}

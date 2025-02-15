@@ -22,6 +22,12 @@ const failedOffersSlice = createSlice({
     setToggle: (state, { payload }) => {
       state.toggle = payload;
     },
+    updateSearchParams: (state, { payload }) => {
+      state.data.searchParams = {
+        ...state.data.searchParams,
+        ...payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,5 +46,5 @@ const failedOffersSlice = createSlice({
   },
 });
 
-export const { setToggle } = failedOffersSlice.actions;
+export const { setToggle, updateSearchParams } = failedOffersSlice.actions;
 export default failedOffersSlice.reducer;
