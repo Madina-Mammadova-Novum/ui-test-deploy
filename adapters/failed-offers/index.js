@@ -315,7 +315,6 @@ const failedOffersDocumentsTabRowDataAdapter = ({ data, index }) => {
     url,
     deleted: isDocumentDeleted,
   } = data;
-  const revokeDeletionForbidden = status === 'Active';
 
   return [
     {
@@ -382,15 +381,6 @@ const failedOffersDocumentsTabRowDataAdapter = ({ data, index }) => {
           url,
           fileName: ensureFileExtension(fileName, extension),
         },
-      actions: [
-        {
-          action: revokeDeletionForbidden ? ACTIONS.REQUEST_DOCUMENT_DELETION : ACTIONS.REVOKE_DOCUMENT_DELETION,
-          actionText: revokeDeletionForbidden ? 'Delete' : 'Revoke',
-          actionVariant: revokeDeletionForbidden ? 'delete' : 'primary',
-          actionSize: 'medium',
-          actionStyles: 'ml-2.5 w-[68px]',
-        },
-      ],
     },
   ];
 };
