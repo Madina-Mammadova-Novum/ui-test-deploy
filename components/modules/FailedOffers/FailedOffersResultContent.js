@@ -13,11 +13,14 @@ import { ExpandableRow, FailedOffersExpandedContent } from '@/modules';
 const FailedOffersResultContent = ({ data, toggle, isOpened, tab }) => {
   const printExpandableRow = (rowData) => {
     const rowHeader = failedOffersHeaderDataAdapter({ data: rowData });
+    const cargoTypeData = rowHeader.find((item) => item.label === 'Cargo type');
+    const isChemicals = cargoTypeData?.text?.toLowerCase().includes('chemicals');
+    const gridStyles = `1fr 1fr 2fr ${isChemicals ? '2fr' : '1fr'} 1fr 2fr 1fr 1fr 1fr`;
 
     return (
       <ExpandableRow
         className="px-5"
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles={gridStyles} />}
         expand={toggle}
         isOpened={isOpened}
       >
