@@ -26,15 +26,12 @@ export default function FailedOffersLayout({ children }) {
     data: offers,
   });
 
+  // Fetch initial data
   useEffect(() => {
     dispatch(fetchCargoTypes());
-    dispatch(
-      fetchCargoCodes({
-        stages: searchParams?.Stages?.length > 0 ? searchParams.Stages : null,
-      })
-    );
-    dispatch(fetchVesselNames({ stages: searchParams?.Stages?.length > 0 ? searchParams.Stages : null }));
-  }, [searchParams.Stages]);
+    dispatch(fetchCargoCodes());
+    dispatch(fetchVesselNames());
+  }, []);
 
   useEffect(() => {
     dispatch(

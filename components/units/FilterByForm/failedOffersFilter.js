@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { FormDropdown, RangeDatePicker } from '@/elements';
+import { fetchCargoCodes, fetchVesselNames } from '@/store/entities/cargo-vessel/actions';
 import { updateSearchParams } from '@/store/entities/failed-offers/slice';
 import { useHookForm } from '@/utils/hooks';
 
@@ -53,6 +54,13 @@ const FailedOffersFilter = ({
           CargoTypeId: currentValues.CargoTypeId,
         })
       );
+
+      // Fetch dependent data based on stages
+      Promise.all([
+        dispatch(fetchCargoCodes({ stages: stages.length > 0 ? stages : null })),
+        dispatch(fetchVesselNames({ stages: stages.length > 0 ? stages : null })),
+      ]);
+
       return;
     }
 
