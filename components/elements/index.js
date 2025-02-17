@@ -49,6 +49,7 @@ import ReActivateButton from '@/elements/ReActivateButton';
 import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
 import { ChatHelpLoader, ChatListLoader, ChatLoader, ChatTabLoader, NotificationLoader } from '@/elements/Skeletons';
+import StatusIndicator from '@/elements/StatusIndicator';
 import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
@@ -122,4 +123,5 @@ export {
   DynamicLoader,
   MapLoader,
   NotificationAlert,
+  StatusIndicator,
 };
