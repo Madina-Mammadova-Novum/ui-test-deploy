@@ -11,6 +11,7 @@ import {
   TextRow,
   Title,
 } from '@/elements';
+import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { ExpandableRowFooter } from '@/units';
 
@@ -38,6 +39,21 @@ const CharterPartyContent = ({ charterPartyData = {} }) => {
           {status}
         </span>
       ),
+    },
+  ];
+
+  const actions = [
+    {
+      action: ACTIONS.APPROVE_CP,
+      text: 'Approve',
+      variant: 'primary',
+      size: 'medium',
+    },
+    {
+      action: ACTIONS.UPDATE_CP,
+      text: 'Update CP',
+      variant: 'primary',
+      size: 'medium',
     },
   ];
 
@@ -107,7 +123,14 @@ const CharterPartyContent = ({ charterPartyData = {} }) => {
   return (
     <ExpandableRow
       className="px-5"
-      header={<ExpandableCardHeader headerData={headerData} gridStyles="1fr 1fr 1fr 1fr" />}
+      header={
+        <ExpandableCardHeader
+          headerData={headerData}
+          actions={actions}
+          itemsContainerStyles="lg:grid-cols-2"
+          gridStyles="1fr 1fr 1fr 1fr"
+        />
+      }
       footer={
         baseCharterParty ? (
           <ExpandableRowFooter>
