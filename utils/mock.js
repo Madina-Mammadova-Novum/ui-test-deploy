@@ -1218,11 +1218,21 @@ export const steps = {
 
 export const charterPartyData = {
   pdfUrl: 'https://www.google.com',
+  createdDate: '2021-01-01',
+  status: 'Active',
   charterParty: {
     baseCharterParty: 'GENCON',
-    baseCharterPartyList: ['GENCON', 'SHELLTIME', 'ASBATANKVOY', 'BIMCHEM', 'NYPE', 'HEAVYLIFTVOY'],
+    baseCharterPartyList: [
+      { id: 1, name: 'GENCON' },
+      { id: 2, name: 'SHELLTIME' },
+      { id: 3, name: 'ASBATANKVOY' },
+      { id: 4, name: 'BIMCHEM' },
+      { id: 5, name: 'NYPE' },
+      { id: 6, name: 'HEAVYLIFTVOY' },
+    ],
     createdDate: '2021-01-01',
     status: 'Active',
+    baseCharterPartyPdfUrl: 'https://www.google.com',
   },
   riderClauses: [
     {
