@@ -22,7 +22,17 @@ const LoadingIndicator = () => (
 
 export const SimpleDropdown = React.forwardRef(
   (
-    { asyncCall = false, options, isDisabled, isOpen, onOpen = () => {}, loading, onExpand = () => {}, ...rest },
+    {
+      asyncCall = false,
+      options,
+      isDisabled,
+      isOpen,
+      onOpen = () => {},
+      loading,
+      onExpand = () => {},
+      components: customComponents,
+      ...rest
+    },
     ref
   ) => {
     const printOptions = ({ countryFlag, label: labelValue, coverImage, isDisabled: optionDisabled }) => (
@@ -35,6 +45,16 @@ export const SimpleDropdown = React.forwardRef(
     };
 
     const handleCloseMenu = () => onOpen(false);
+
+    const defaultComponents = {
+      Option: OptionsList,
+      LoadingIndicator,
+    };
+
+    const mergedComponents = {
+      ...defaultComponents,
+      ...customComponents,
+    };
 
     if (asyncCall) {
       const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue, options));
@@ -53,10 +73,7 @@ export const SimpleDropdown = React.forwardRef(
           theme={dropdownTheme}
           isDisabled={isDisabled}
           className={isDisabled ? 'opacity-50' : ''}
-          components={{
-            Option: OptionsList,
-            LoadingIndicator,
-          }}
+          components={mergedComponents}
           closeMenuOnSelect
           cacheOptions
           isOptionDisabled={(option) => option.isDisabled}
@@ -77,10 +94,7 @@ export const SimpleDropdown = React.forwardRef(
         theme={dropdownTheme}
         isDisabled={isDisabled}
         className={isDisabled ? 'opacity-50' : ''}
-        components={{
-          Option: OptionsList,
-          LoadingIndicator,
-        }}
+        components={mergedComponents}
         isOptionDisabled={(option) => option.isDisabled}
       />
     );
