@@ -4,14 +4,13 @@ import { CommentPropTypes } from '@/lib/types';
 
 import { DateTimeRow, Title } from '@/elements';
 import { getUserDataSelector } from '@/store/selectors';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getRoleIdentity, getUserType } from '@/utils/helpers';
 
 const Comment = ({ title = '', date = '', time = '', sentBy = '' }) => {
   const { role } = useSelector(getUserDataSelector);
   const { isCharterer, isOwner } = getRoleIdentity({ role });
 
-  const userType = sentBy || (isCharterer ? 'Charterer' : isOwner ? 'Owner' : '');
-
+  const userType = sentBy || getUserType(isCharterer, isOwner);
   const isOwnMessage = (isCharterer && userType === 'Charterer') || (isOwner && userType === 'Owner');
 
   const borderColor = isOwnMessage ? 'border-green-600' : 'border-blue-600';

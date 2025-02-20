@@ -425,6 +425,12 @@ export const findValueById = ({ data, id }) => {
   return [result];
 };
 
+export const getUserType = (isCharterer, isOwner) => {
+  if (isCharterer) return 'Charterer';
+  if (isOwner) return 'Owner';
+  return '';
+};
+
 export const getRoleIdentity = ({ role }) => {
   if (!role) return '';
 
