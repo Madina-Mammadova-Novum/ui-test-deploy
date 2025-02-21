@@ -48,12 +48,12 @@ export const SimpleDropdown = React.forwardRef(
 
     const defaultComponents = {
       Option: OptionsList,
-      LoadingIndicator,
     };
 
     const mergedComponents = {
       ...defaultComponents,
       ...customComponents,
+      LoadingIndicator,
     };
 
     if (asyncCall) {

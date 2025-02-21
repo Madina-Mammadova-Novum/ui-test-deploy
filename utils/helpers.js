@@ -612,6 +612,34 @@ export const handleFileView = async (url) => {
   }
 };
 
+export const handleViewDocument = async (url) => {
+  if (!url) return;
+  let pdfBlobUrl;
+
+  try {
+    const fileApiUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+    const { url: requestUrl, headers } = getFileUrl({ url: fileApiUrl });
+
+    const response = await fetch(requestUrl, { headers });
+
+    if (!response.ok) {
+      throw new Error(`Download failed with status: ${response.status}`);
+    }
+
+    // Create blob and open in new tab
+    const blob = await response.blob();
+    pdfBlobUrl = URL.createObjectURL(blob);
+    window.open(pdfBlobUrl, '_blank');
+  } catch (error) {
+    console.error('View Error:', error.message);
+    throw error;
+  } finally {
+    if (pdfBlobUrl) {
+      URL.revokeObjectURL(pdfBlobUrl);
+    }
+  }
+};
+
 export const downloadFile = async ({ url, fileName }) => {
   try {
     // Extract file API URL to constants

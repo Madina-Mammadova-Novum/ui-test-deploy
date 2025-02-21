@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import AgreementProcessStep from './AgreementProcessStep';
 import FinalReviewStep from './FinalReviewStep';
 import InitialRequestStep from './InitialRequestStep';
@@ -9,11 +11,25 @@ import { Button, ExpandableCardHeader, StatusIndicator } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { ExpandableRowFooter } from '@/units';
+import { handleViewDocument } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const STATUS = 'Active';
 
 const CharterPartyContent = ({ charterPartyData = {} }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { baseCharterParty, riderClauses = [], additionalClauses = [], pdfUrl } = charterPartyData;
+
+  const handleReviewClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleViewDocument(baseCharterParty?.url);
+    } catch (error) {
+      errorToast('View Error', error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!baseCharterParty) {
     return <InitialRequestStep />;
@@ -49,7 +65,7 @@ const CharterPartyContent = ({ charterPartyData = {} }) => {
       <AgreementProcessStep />
       <hr />
       <FinalReviewStep
-        baseCharterParty={baseCharterParty.name}
+        baseCharterParty={baseCharterParty}
         status={STATUS}
         pdfUrl={pdfUrl}
         riderClauses={riderClauses}
@@ -76,11 +92,13 @@ const CharterPartyContent = ({ charterPartyData = {} }) => {
               <div className="w-full grow">
                 <Button
                   buttonProps={{
-                    text: 'Review',
+                    text: isLoading ? 'Loading...' : 'Review',
                     icon: { before: <FileInfoAlt className="h-6 w-6 fill-black" /> },
                     variant: 'tertiary',
                     size: 'large',
                   }}
+                  onClick={handleReviewClick}
+                  disabled={!baseCharterParty?.url || isLoading}
                   customStyles="w-1/4 whitespace-nowrap 3md:grow"
                 />
               </div>
