@@ -10,23 +10,24 @@ import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
 import { ExpandableRowFooter } from '@/units';
 
+const STATUS = 'Active';
+
 const CharterPartyContent = ({ charterPartyData = {} }) => {
-  const { charterParty, riderClauses = [], additionalClauses = [], pdfUrl } = charterPartyData;
-  const { baseCharterParty, status = 'Active' } = charterParty || {};
+  const { baseCharterParty, riderClauses = [], additionalClauses = [], pdfUrl } = charterPartyData;
 
   if (!baseCharterParty) {
     return <InitialRequestStep />;
   }
 
   const headerData = [
-    { text: baseCharterParty, label: 'Charter Party' },
+    { text: baseCharterParty.name, label: 'Charter Party' },
     { text: `${riderClauses.length + additionalClauses.length} clauses`, label: 'Total Clauses' },
     {
       label: 'Charter Party Status',
       text: (
         <span className="flex items-center gap-1">
-          <StatusIndicator status={status} />
-          {status}
+          <StatusIndicator status={STATUS} />
+          {STATUS}
         </span>
       ),
     },
@@ -48,8 +49,8 @@ const CharterPartyContent = ({ charterPartyData = {} }) => {
       <AgreementProcessStep />
       <hr />
       <FinalReviewStep
-        baseCharterParty={baseCharterParty}
-        status={status}
+        baseCharterParty={baseCharterParty.name}
+        status={STATUS}
         pdfUrl={pdfUrl}
         riderClauses={riderClauses}
         additionalClauses={additionalClauses}

@@ -1218,39 +1218,28 @@ export const steps = {
 
 export const charterPartyData = {
   pdfUrl: 'https://www.google.com',
-  createdDate: '2021-01-01',
-  status: 'Active',
-  charterParty: {
-    baseCharterParty: 'GENCON',
-    baseCharterPartyList: [
-      { id: 1, name: 'GENCON' },
-      { id: 2, name: 'SHELLTIME' },
-      { id: 3, name: 'ASBATANKVOY' },
-      { id: 4, name: 'BIMCHEM' },
-      { id: 5, name: 'NYPE' },
-      { id: 6, name: 'HEAVYLIFTVOY' },
-    ],
-    createdDate: '2021-01-01',
-    status: 'Active',
-    baseCharterPartyPdfUrl: 'https://www.google.com',
+  baseCharterParty: {
+    id: 'e5bb53e9-c959-4910-9ed6-8ce0d848b34a',
+    name: 'test-salih',
+    url: 'efa3c8af286d465a87dd8b74b32d1fea.pdf',
   },
   riderClauses: [
     {
-      clauseNumber: 1,
-      title: 'Bunker Quality and Liability',
-      text: "Charterers shall supply bunkers of a quality suitable for burning in the vessel's engines and auxiliaries and which conform to the agreed specifications.",
+      name: 'sample',
+      url: 'e8bb6bb98a304961a934cb25b443329c.pdf',
+      order: 0,
     },
     {
-      clauseNumber: 2,
-      title: 'Hull Cleaning Responsibility',
-      text: 'Should the vessel stay in a port or place in tropical waters for any period exceeding 25 consecutive days, owners are not to be held responsible for any deficiency in speed or consumption due to bottom fouling by marine growth.',
+      name: 'sample_deniz',
+      url: 'e18c45c3c659427d9c6ad7b21fb66906.pdf',
+      order: 0,
     },
   ],
   additionalClauses: [
     {
-      clauseNumber: 1,
-      title: 'War Risks',
-      text: 'The vessel shall have the liberty to comply with any orders, directions, recommendations, or advice...',
+      name: 'srediste clause',
+      url: '7b57bcda90cf4b2eab384f78457eb792.docx',
+      order: 0,
     },
   ],
 };

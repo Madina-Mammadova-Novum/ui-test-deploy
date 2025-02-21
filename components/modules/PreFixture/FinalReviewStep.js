@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-import { Divider, FieldsetContent, FieldsetWrapper, StatusIndicator, TextRow, Title } from '@/elements';
+import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 
-const FinalReviewStep = ({ baseCharterParty, status, pdfUrl, riderClauses = [], additionalClauses = [] }) => (
+const FinalReviewStep = ({ baseCharterParty, pdfUrl, riderClauses = [], additionalClauses = [] }) => (
   <div className="mb-5 flex flex-col gap-y-5">
     <Title level="2">Third Step: Review Charter Party</Title>
     <FieldsetWrapper>
@@ -10,12 +10,6 @@ const FinalReviewStep = ({ baseCharterParty, status, pdfUrl, riderClauses = [], 
       <FieldsetContent className="mt-2.5">
         <TextRow title="Selected Charter Party" inlineVariant>
           {baseCharterParty}
-        </TextRow>
-        <TextRow title="Status" inlineVariant className="flex items-center">
-          <span className="flex items-center gap-1">
-            <StatusIndicator status={status} />
-            {status}
-          </span>
         </TextRow>
         {pdfUrl && (
           <TextRow title="PDF Document" inlineVariant>
@@ -31,13 +25,17 @@ const FinalReviewStep = ({ baseCharterParty, status, pdfUrl, riderClauses = [], 
       <FieldsetWrapper>
         <Title level="3">Rider Clauses</Title>
         <FieldsetContent className="mt-2.5">
-          {riderClauses.map(({ clauseNumber, title, text }) => (
-            <div key={clauseNumber} className="mb-4 last:mb-0">
-              <TextRow title={`Clause ${clauseNumber}`} className="mb-1 font-semibold">
-                {title}
+          {riderClauses.map(({ name, url }, index) => (
+            <div key={`${name}-${url}`} className="mb-4 last:mb-0">
+              <TextRow title={`Clause ${index + 1}`} className="mb-1 font-semibold">
+                {name}
               </TextRow>
-              <p className="pl-4 text-xsm text-black">{text}</p>
-              {clauseNumber < riderClauses.length && <Divider className="mt-4" />}
+              <TextRow title="PDF Document" inlineVariant>
+                <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue hover:underline">
+                  View Document
+                </a>
+              </TextRow>
+              {index < riderClauses.length - 1 && <Divider className="mt-4" />}
             </div>
           ))}
         </FieldsetContent>
@@ -48,13 +46,17 @@ const FinalReviewStep = ({ baseCharterParty, status, pdfUrl, riderClauses = [], 
       <FieldsetWrapper>
         <Title level="3">Additional Clauses</Title>
         <FieldsetContent className="mt-2.5">
-          {additionalClauses.map(({ clauseNumber, title, text }) => (
-            <div key={clauseNumber} className="mb-4 last:mb-0">
-              <TextRow title={`Clause ${clauseNumber}`} className="mb-1 font-semibold">
-                {title}
+          {additionalClauses.map(({ name, url }, index) => (
+            <div key={`${name}-${url}`} className="mb-4 last:mb-0">
+              <TextRow title={`Clause ${index + 1}`} className="mb-1 font-semibold">
+                {name}
               </TextRow>
-              <p className="pl-4 text-xsm text-black">{text}</p>
-              {clauseNumber < additionalClauses.length && <Divider className="mt-4" />}
+              <TextRow title="PDF Document" inlineVariant>
+                <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue hover:underline">
+                  View Document
+                </a>
+              </TextRow>
+              {index < additionalClauses.length - 1 && <Divider className="mt-4" />}
             </div>
           ))}
         </FieldsetContent>
@@ -65,20 +67,19 @@ const FinalReviewStep = ({ baseCharterParty, status, pdfUrl, riderClauses = [], 
 
 FinalReviewStep.propTypes = {
   baseCharterParty: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
   pdfUrl: PropTypes.string,
   riderClauses: PropTypes.arrayOf(
     PropTypes.shape({
-      clauseNumber: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      order: PropTypes.number,
     })
   ),
   additionalClauses: PropTypes.arrayOf(
     PropTypes.shape({
-      clauseNumber: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      order: PropTypes.number,
     })
   ),
 };
