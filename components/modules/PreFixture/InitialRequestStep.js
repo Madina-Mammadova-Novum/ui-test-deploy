@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
+
 import { FieldsetContent, FieldsetWrapper, Title } from '@/elements';
 import { ModalWindow } from '@/units';
 import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
 
-const InitialRequestStep = () => (
+const InitialRequestStep = ({ offerId = null }) => (
   <div className="flex h-full w-full flex-col gap-y-5 p-8">
     <Title level="2">First Step: Request Base Charter Party</Title>
     <FieldsetWrapper>
@@ -22,12 +24,16 @@ const InitialRequestStep = () => (
               size: 'large',
             }}
           >
-            <RequestCharterPartyForm />
+            <RequestCharterPartyForm offerId={offerId} />
           </ModalWindow>
         </div>
       </FieldsetContent>
     </FieldsetWrapper>
   </div>
 );
+
+InitialRequestStep.propTypes = {
+  offerId: PropTypes.string,
+};
 
 export default InitialRequestStep;

@@ -12,9 +12,9 @@ import { RequestCharterPartyFormPropTypes } from '@/lib/types';
 import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { ModalFormManager } from '@/common';
 import { Button, FormDropdown, Title } from '@/elements';
-import { getBaseCharterPartyTemplates } from '@/services';
+import { getBaseCharterPartyTemplates, proposeBaseCharterParty } from '@/services';
 import { handleViewDocument } from '@/utils/helpers';
-import { errorToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CustomOption = ({ data, children, ...props }) => {
   const { url } = data;
@@ -60,9 +60,10 @@ const schema = yup.object({
   baseCharterParty: yup.object().required('Please select a base charter party'),
 });
 
-const RequestCharterPartyForm = ({ closeModal }) => {
+const RequestCharterPartyForm = ({ closeModal, offerId }) => {
   const [charterPartyOptions, setCharterPartyOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const methods = useHookFormParams({ schema });
   const { setValue, getValues } = methods;
@@ -99,9 +100,26 @@ const RequestCharterPartyForm = ({ closeModal }) => {
   };
 
   const onSubmit = async (formData) => {
-    // TODO: Implement request charter party API call
-    console.info('Requesting charter party:', formData);
-    closeModal();
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await proposeBaseCharterParty({
+        dealId: offerId,
+        baseCPTemplateId: formData.baseCharterParty.value,
+      });
+
+      if (!error) {
+        successToast('Success', 'Base charter party request submitted');
+        closeModal();
+      } else {
+        errorToast(error?.title, error?.message);
+      }
+    } catch (error) {
+      console.error('Error submitting charter party request:', error);
+      errorToast('Error', 'Failed to submit charter party request');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -109,7 +127,12 @@ const RequestCharterPartyForm = ({ closeModal }) => {
       <ModalFormManager
         onClose={closeModal}
         submitAction={onSubmit}
-        submitButton={{ text: 'Submit Base Charter Party Request', variant: 'primary', size: 'large' }}
+        submitButton={{
+          text: 'Submit Base Charter Party Request',
+          variant: 'primary',
+          size: 'large',
+          loading: isSubmitting || isLoading,
+        }}
       >
         <div className="w-[400px]">
           <Title level="2">Request Base Charter Party</Title>
@@ -123,6 +146,7 @@ const RequestCharterPartyForm = ({ closeModal }) => {
             error={methods.formState.errors?.baseCharterParty?.message}
             onChange={handleChange}
             loading={isLoading}
+            disabled={isSubmitting || isLoading}
             customStyles={{
               dropdownExpanded: true,
               className: 'mb-4 mt-2',
@@ -141,6 +165,9 @@ const RequestCharterPartyForm = ({ closeModal }) => {
   );
 };
 
-RequestCharterPartyForm.propTypes = RequestCharterPartyFormPropTypes;
+RequestCharterPartyForm.propTypes = {
+  ...RequestCharterPartyFormPropTypes,
+  offerId: PropTypes.string,
+};
 
 export default RequestCharterPartyForm;

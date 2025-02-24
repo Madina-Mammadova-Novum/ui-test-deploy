@@ -16,7 +16,7 @@ import { errorToast } from '@/utils/hooks';
 
 const STATUS = 'Active';
 
-const CharterPartyContent = ({ charterPartyData = {} }) => {
+const CharterPartyContent = ({ charterPartyData = {}, offerId = null }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { baseCharterParty, riderClauses = [], additionalClauses = [], pdfUrl } = charterPartyData;
 
@@ -60,7 +60,7 @@ const CharterPartyContent = ({ charterPartyData = {} }) => {
 
   const content = (
     <div className="flex flex-col gap-4">
-      <InitialRequestStep />
+      <InitialRequestStep offerId={offerId} />
       <hr />
       <AgreementProcessStep />
       <hr />
