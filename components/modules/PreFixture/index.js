@@ -18,7 +18,6 @@ import { DynamicLoader, ExpandableCardHeader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
-import { charterPartyData } from '@/utils/mock';
 
 const PreFixture = () => {
   const { loading, offers, role, toggle } = useSelector(getPreFixtureDataSelector);
@@ -52,7 +51,7 @@ const PreFixture = () => {
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
-          charterPartyData={charterPartyData}
+          charterPartyData={rowData?.charterPartyOptions}
           offerId={rowData?.id}
         />
       </ExpandableRow>

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 import AgreementProcessStep from './AgreementProcessStep';
 import FinalReviewStep from './FinalReviewStep';
 import InitialRequestStep from './InitialRequestStep';
@@ -14,16 +16,49 @@ import { ExpandableRowFooter } from '@/units';
 import { handleViewDocument } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
-const STATUS = 'Active';
+const getCharterPartyStatus = ({ charterPartyOptions, proposedBaseCharterParty }) => {
+  if (charterPartyOptions) {
+    return {
+      status: 'Final',
+      step: 'final-review',
+    };
+  }
 
-const CharterPartyContent = ({ charterPartyData = {}, offerId = null }) => {
+  if (proposedBaseCharterParty) {
+    return {
+      status: proposedBaseCharterParty.status,
+      step: 'agreement-process',
+      proposedBy: proposedBaseCharterParty.proposedBy,
+    };
+  }
+
+  return {
+    status: 'Initial',
+    step: 'initial-request',
+  };
+};
+
+const CharterPartyContent = ({
+  charterPartyData = null,
+  offerId = null,
+  proposedBaseCharterParty = {
+    id: '0d83ee52-56fe-427d-18fb-08dd51a2088d',
+    charterPartyTemplate: null,
+    proposedBy: 'Owner',
+    status: 'Proposed',
+  },
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { baseCharterParty, riderClauses = [], additionalClauses = [], pdfUrl } = charterPartyData;
+
+  // Safe destructuring with default values
+  const { baseCharterParty = null, riderClauses = [], additionalClauses = [], pdfUrl = null } = charterPartyData || {};
 
   const handleReviewClick = async () => {
+    if (!baseCharterParty?.url) return;
+
     setIsLoading(true);
     try {
-      await handleViewDocument(baseCharterParty?.url);
+      await handleViewDocument(baseCharterParty.url);
     } catch (error) {
       errorToast('View Error', error.message);
     } finally {
@@ -31,19 +66,51 @@ const CharterPartyContent = ({ charterPartyData = {}, offerId = null }) => {
     }
   };
 
-  if (!baseCharterParty) {
-    return <InitialRequestStep />;
-  }
+  const charterPartyStatus = getCharterPartyStatus({
+    charterPartyOptions: charterPartyData?.charterPartyOptions,
+    proposedBaseCharterParty,
+  });
+
+  const renderContent = () => {
+    switch (charterPartyStatus.step) {
+      case 'final-review':
+        return (
+          <FinalReviewStep
+            baseCharterParty={baseCharterParty}
+            status={charterPartyStatus.status}
+            pdfUrl={pdfUrl}
+            riderClauses={riderClauses}
+            additionalClauses={additionalClauses}
+          />
+        );
+      case 'agreement-process':
+        return (
+          <AgreementProcessStep
+            proposedBaseCharterParty={proposedBaseCharterParty}
+            charterPartyData={charterPartyData}
+          />
+        );
+      case 'initial-request':
+      default:
+        return <InitialRequestStep offerId={offerId} />;
+    }
+  };
 
   const headerData = [
-    { text: baseCharterParty.name, label: 'Charter Party' },
-    { text: `${riderClauses.length + additionalClauses.length} clauses`, label: 'Total Clauses' },
+    {
+      text: baseCharterParty?.name || proposedBaseCharterParty?.charterPartyTemplate?.name || 'N/A',
+      label: 'Charter Party',
+    },
+    {
+      text: `${(riderClauses?.length || 0) + (additionalClauses?.length || 0)} clauses`,
+      label: 'Total Clauses',
+    },
     {
       label: 'Charter Party Status',
       text: (
         <span className="flex items-center gap-1">
-          <StatusIndicator status={STATUS} />
-          {STATUS}
+          <StatusIndicator status={charterPartyStatus.status} />
+          {charterPartyStatus.status}
         </span>
       ),
     },
@@ -57,22 +124,6 @@ const CharterPartyContent = ({ charterPartyData = {}, offerId = null }) => {
       size: 'medium',
     },
   ];
-
-  const content = (
-    <div className="flex flex-col gap-4">
-      <InitialRequestStep offerId={offerId} />
-      <hr />
-      <AgreementProcessStep />
-      <hr />
-      <FinalReviewStep
-        baseCharterParty={baseCharterParty}
-        status={STATUS}
-        pdfUrl={pdfUrl}
-        riderClauses={riderClauses}
-        additionalClauses={additionalClauses}
-      />
-    </div>
-  );
 
   return (
     <ExpandableRow
@@ -107,11 +158,22 @@ const CharterPartyContent = ({ charterPartyData = {}, offerId = null }) => {
         ) : null
       }
     >
-      {content}
+      <div className="flex flex-col gap-4">{renderContent()}</div>
     </ExpandableRow>
   );
 };
 
-CharterPartyContent.propTypes = charterPartyContentPropTypes;
+CharterPartyContent.propTypes = {
+  ...charterPartyContentPropTypes,
+  proposedBaseCharterParty: PropTypes.shape({
+    id: PropTypes.string,
+    charterPartyTemplate: PropTypes.shape({
+      name: PropTypes.string,
+      url: PropTypes.string,
+    }),
+    proposedBy: PropTypes.string,
+    status: PropTypes.string,
+  }),
+};
 
 export default CharterPartyContent;

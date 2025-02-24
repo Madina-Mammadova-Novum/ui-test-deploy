@@ -1215,31 +1215,3 @@ export const steps = {
     userProps: null,
   },
 };
-
-export const charterPartyData = {
-  pdfUrl: 'https://www.google.com',
-  baseCharterParty: {
-    id: 'e5bb53e9-c959-4910-9ed6-8ce0d848b34a',
-    name: 'test-salih',
-    url: 'efa3c8af286d465a87dd8b74b32d1fea.pdf',
-  },
-  riderClauses: [
-    {
-      name: 'sample',
-      url: 'e8bb6bb98a304961a934cb25b443329c.pdf',
-      order: 0,
-    },
-    {
-      name: 'sample_deniz',
-      url: 'e18c45c3c659427d9c6ad7b21fb66906.pdf',
-      order: 0,
-    },
-  ],
-  additionalClauses: [
-    {
-      name: 'srediste clause',
-      url: '7b57bcda90cf4b2eab384f78457eb792.docx',
-      order: 0,
-    },
-  ],
-};
