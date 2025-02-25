@@ -11,12 +11,15 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
       case 'New offer':
         return 'bg-yellow';
       case 'Counteroffer':
-        return 'bg-blue';
       case 'PendingRequest':
       case 'Update Requested':
+      case 'Proposed':
+      case 'Proposed Charter Party - Pending Review':
         return 'bg-blue';
       case 'Confirmed':
       case 'Active':
+      case 'Accepted':
+      case 'Broker Finalized Charter Party':
         return 'bg-green';
       case 'Failed':
         return 'bg-red';

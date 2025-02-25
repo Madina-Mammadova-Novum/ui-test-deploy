@@ -38,19 +38,9 @@ const getCharterPartyStatus = ({ charterPartyOptions, proposedBaseCharterParty }
   };
 };
 
-const CharterPartyContent = ({
-  charterPartyData = null,
-  offerId = null,
-  proposedBaseCharterParty = {
-    id: '0d83ee52-56fe-427d-18fb-08dd51a2088d',
-    charterPartyTemplate: null,
-    proposedBy: 'Owner',
-    status: 'Proposed',
-  },
-}) => {
+const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposedBaseCharterParty = null }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  // Safe destructuring with default values
   const { baseCharterParty = null, riderClauses = [], additionalClauses = [], pdfUrl = null } = charterPartyData || {};
 
   const handleReviewClick = async () => {
@@ -67,9 +57,40 @@ const CharterPartyContent = ({
   };
 
   const charterPartyStatus = getCharterPartyStatus({
-    charterPartyOptions: charterPartyData?.charterPartyOptions,
+    charterPartyOptions: baseCharterParty,
     proposedBaseCharterParty,
   });
+
+  const getStatusDisplayText = (status, step) => {
+    switch (step) {
+      case 'final-review':
+        return 'Broker Finalized Charter Party';
+
+      case 'agreement-process':
+        if (status === 'Accepted') {
+          return 'Awaiting Broker Finalization';
+        }
+        return 'Proposed Charter Party - Pending Review';
+
+      case 'initial-request':
+        return 'Awaiting Charter Party Request';
+
+      default:
+        // Fallback to status-based description if step logic doesn't apply
+        switch (status) {
+          case 'Proposed':
+            return 'Proposed Charter Party - Pending Review';
+          case 'Accepted':
+            return 'Awaiting Broker Finalization';
+          case 'Final':
+            return 'Broker Finalized Charter Party';
+          case 'Initial':
+            return 'Awaiting Charter Party Request';
+          default:
+            return status;
+        }
+    }
+  };
 
   const renderContent = () => {
     switch (charterPartyStatus.step) {
@@ -86,8 +107,10 @@ const CharterPartyContent = ({
       case 'agreement-process':
         return (
           <AgreementProcessStep
-            proposedBaseCharterParty={proposedBaseCharterParty}
-            charterPartyData={charterPartyData}
+            proposedBaseCharterParty={{
+              ...proposedBaseCharterParty,
+              dealId: offerId,
+            }}
           />
         );
       case 'initial-request':
@@ -109,8 +132,14 @@ const CharterPartyContent = ({
       label: 'Charter Party Status',
       text: (
         <span className="flex items-center gap-1">
-          <StatusIndicator status={charterPartyStatus.status} />
-          {charterPartyStatus.status}
+          <StatusIndicator
+            status={getStatusDisplayText(
+              charterPartyStatus.status,
+              charterPartyStatus.proposedBy,
+              charterPartyStatus.step
+            )}
+          />
+          {getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.proposedBy, charterPartyStatus.step)}
         </span>
       ),
     },
@@ -133,7 +162,7 @@ const CharterPartyContent = ({
           headerData={headerData}
           actions={actions}
           itemsContainerStyles="lg:grid-cols-2"
-          gridStyles="1fr 1fr 1fr"
+          gridStyles="1fr 1fr 2fr"
         />
       }
       footer={
@@ -149,7 +178,7 @@ const CharterPartyContent = ({
                     size: 'large',
                   }}
                   onClick={handleReviewClick}
-                  disabled={!baseCharterParty?.url || isLoading}
+                  disabled={!pdfUrl || isLoading}
                   customStyles="w-1/4 whitespace-nowrap 3md:grow"
                 />
               </div>

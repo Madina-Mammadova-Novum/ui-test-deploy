@@ -6,7 +6,6 @@ import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
 
 const InitialRequestStep = ({ offerId = null }) => (
   <div className="flex h-full w-full flex-col gap-y-5 p-8">
-    <Title level="2">First Step: Request Base Charter Party</Title>
     <FieldsetWrapper>
       <Title level="3" className="text-center">
         Charter Party Not Available

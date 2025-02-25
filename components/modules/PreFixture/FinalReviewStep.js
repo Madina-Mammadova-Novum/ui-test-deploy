@@ -21,8 +21,7 @@ const FinalReviewStep = ({ baseCharterParty = {}, riderClauses = [], additionalC
   };
 
   return (
-    <div className="mb-5 flex flex-col gap-y-5">
-      <Title level="2">Third Step: Review Charter Party</Title>
+    <div className="mb-5 flex flex-col gap-y-5 pt-5">
       <FieldsetWrapper>
         <Title level="3">Base Charter Party</Title>
         <FieldsetContent className="mt-2.5">
