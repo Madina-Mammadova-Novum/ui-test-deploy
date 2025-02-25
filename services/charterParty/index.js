@@ -18,3 +18,26 @@ export const proposeBaseCharterParty = async ({ dealId, baseCPTemplateId }) => {
     ...response,
   };
 };
+
+export const acceptBaseCharterParty = async ({ dealId, proposalId }) => {
+  const response = await postData(`base-cp-templates/accept`, {
+    dealId,
+    proposalId,
+  });
+
+  return {
+    ...response,
+  };
+};
+
+export const counterproposeBaseCharterParty = async ({ dealId, newBaseCPTemplateId, proposalId }) => {
+  const response = await postData(`base-cp-templates/counterpropose`, {
+    dealId,
+    newBaseCPTemplateId,
+    proposalId,
+  });
+
+  return {
+    ...response,
+  };
+};
