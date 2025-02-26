@@ -50,7 +50,7 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
     try {
       await handleViewDocument(baseCharterParty.url);
     } catch (error) {
-      errorToast('View Error', error.message);
+      errorToast('View Error', error?.message);
     } finally {
       setIsLoading(false);
     }
@@ -132,14 +132,8 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
       label: 'Charter Party Status',
       text: (
         <span className="flex items-center gap-1">
-          <StatusIndicator
-            status={getStatusDisplayText(
-              charterPartyStatus.status,
-              charterPartyStatus.proposedBy,
-              charterPartyStatus.step
-            )}
-          />
-          {getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.proposedBy, charterPartyStatus.step)}
+          <StatusIndicator status={getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.step)} />
+          {getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.step)}
         </span>
       ),
     },
