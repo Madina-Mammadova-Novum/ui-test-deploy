@@ -7,7 +7,7 @@ import { Button, FieldsetContent, FieldsetWrapper, StatusIndicator, TextRow, Tit
 import { acceptBaseCharterParty } from '@/services/charterParty';
 import { ConfirmModal, ModalWindow, Notes } from '@/units';
 import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
-import { getCookieFromBrowser } from '@/utils/helpers';
+import { getCookieFromBrowser, handleViewDocument } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 /**
@@ -50,11 +50,31 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
   }, [initialProposedBaseCharterParty]);
 
   // Handlers
-  const handleViewDocument = async () => {
-    if (templateUrl) {
-      window.open(templateUrl, '_blank');
-    } else {
-      errorToast('View Error', 'Document URL is not available');
+  /**
+   * @function viewDocument
+   * @description Handles the viewing of charter party template documents
+   * @maritime Opens the charter party document in a new tab for review
+   * @returns {Promise<void>} A promise that resolves when the document is opened or an error occurs
+   */
+  const viewDocument = async () => {
+    if (!templateUrl) {
+      const errorMessage = 'Document URL is not available';
+
+      errorToast('View Error', errorMessage);
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await handleViewDocument(templateUrl);
+    } catch (error) {
+      console.error('Document view error:', error);
+      const errorMessage = error.message || 'Failed to load document';
+
+      errorToast('View Error', errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,13 +157,13 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
     <Button
       key="view"
       buttonProps={{
-        text: 'View Document',
+        text: isLoading ? 'Loading...' : 'View Document',
         icon: { before: <FileInfoAlt className="h-6 w-6 fill-black" /> },
         variant: 'tertiary',
         size: 'large',
       }}
-      onClick={handleViewDocument}
-      disabled={!templateUrl}
+      onClick={viewDocument}
+      disabled={!templateUrl || isLoading}
       customStyles="whitespace-nowrap"
     />
   );
@@ -173,6 +193,7 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
             loading: isLoading,
           }}
           onClick={openConfirmModal}
+          disabled={isLoading}
           customStyles="whitespace-nowrap"
         />,
         <ModalWindow
@@ -181,6 +202,7 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
             text: 'Propose a Different CP',
             variant: 'secondary',
             size: 'large',
+            disabled: isLoading,
           }}
         >
           <RequestCharterPartyForm
