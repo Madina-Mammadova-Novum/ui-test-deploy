@@ -8,3 +8,4 @@ export * from '@/services/homePage';
 export * from '@/services/tools';
 export * from '@/services/session';
 export * from '@/services/savedSearch';
+export * from '@/services/charterParty';

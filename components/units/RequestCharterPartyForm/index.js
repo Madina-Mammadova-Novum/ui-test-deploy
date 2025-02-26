@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { components } from 'react-select';
 
@@ -11,30 +12,36 @@ import { RequestCharterPartyFormPropTypes } from '@/lib/types';
 import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { ModalFormManager } from '@/common';
 import { Button, FormDropdown, Title } from '@/elements';
-import { useHookFormParams } from '@/utils/hooks';
+import { counterproposeBaseCharterParty, getBaseCharterPartyTemplates, proposeBaseCharterParty } from '@/services';
+import { handleViewDocument } from '@/utils/helpers';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const CustomOption = ({ data, children, ...props }) => {
-  const { pdfUrl } = data;
+  const { url } = data;
 
-  const handleViewPdf = (e) => {
+  const handleViewPdf = async (e) => {
     e.stopPropagation(); // Prevent dropdown from closing
-    console.info('View PDF URL:', pdfUrl);
+    try {
+      await handleViewDocument(url);
+    } catch (error) {
+      errorToast('View Error', error.message);
+    }
   };
 
   return (
     <components.Option data={data} {...props}>
       <div className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-1 hover:bg-gray-darker">
         <span className="grow">{children}</span>
-        {pdfUrl && (
+        {url && (
           <Button
             buttonProps={{
               text: 'View',
-              icon: { before: <FileInfoAlt className="h-5 w-5 fill-gray-600" /> },
+              icon: { before: <FileInfoAlt className="h-6 w-6 fill-gray-600" /> },
               variant: 'tertiary',
               size: 'small',
             }}
             onClick={handleViewPdf}
-            customStyles="ml-2 !p-1 min-w-0"
+            customStyles="ml-2 !p-1 min-w-0 hover:bg-gray-light"
           />
         )}
       </div>
@@ -45,7 +52,7 @@ const CustomOption = ({ data, children, ...props }) => {
 CustomOption.propTypes = {
   children: PropTypes.node.isRequired,
   data: PropTypes.shape({
-    pdfUrl: PropTypes.string,
+    url: PropTypes.string,
   }).isRequired,
 };
 
@@ -53,27 +60,49 @@ const schema = yup.object({
   baseCharterParty: yup.object().required('Please select a base charter party'),
 });
 
-const RequestCharterPartyForm = ({ closeModal }) => {
+/**
+ * @component RequestCharterPartyForm
+ * @description Form for requesting or counterproposing a base charter party
+ * @props {Function} closeModal - Function to close the modal
+ * @props {String} offerId - ID of the deal
+ * @props {String} proposalId - ID of the proposal (for counterproposals)
+ * @props {Boolean} isCounterproposal - Whether this is a counterproposal
+ * @props {Function} onSuccess - Callback function to be called after successful submission
+ * @maritime Handles charter party template selection for maritime contracts
+ */
+const RequestCharterPartyForm = ({ closeModal, offerId, proposalId, isCounterproposal, onSuccess }) => {
+  const [charterPartyOptions, setCharterPartyOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const methods = useHookFormParams({ schema });
   const { setValue, getValues } = methods;
 
-  const baseCharterPartyData = {
-    data: [
-      { id: '1', name: 'GENCON 1994', pdfUrl: 'https://example.com/gencon1994.pdf' },
-      { id: '2', name: 'GENCON 2022', pdfUrl: 'https://example.com/gencon2022.pdf' },
-      { id: '3', name: 'SHELLTIME 4', pdfUrl: 'https://example.com/shelltime4.pdf' },
-      { id: '4', name: 'NYPE 1946', pdfUrl: 'https://example.com/nype1946.pdf' },
-      { id: '5', name: 'NYPE 1993', pdfUrl: 'https://example.com/nype1993.pdf' },
-      { id: '6', name: 'NYPE 2015', pdfUrl: 'https://example.com/nype2015.pdf' },
-      { id: '7', name: 'ASBATANKVOY', pdfUrl: 'https://example.com/asbatankvoy.pdf' },
-    ],
-  };
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getBaseCharterPartyTemplates({});
 
-  const charterPartyOptions = baseCharterPartyData.data.map((item) => ({
-    value: item.id,
-    label: item.name,
-    pdfUrl: item.pdfUrl,
-  }));
+        if (response?.data) {
+          const options = response.data.map((item) => ({
+            value: item?.id,
+            label: item?.name,
+            url: item?.url,
+          }));
+
+          setCharterPartyOptions(options);
+        }
+      } catch (error) {
+        console.error('Error fetching charter party templates:', error);
+        errorToast('Error', 'Failed to load charter party templates');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
 
   const handleChange = (value) => {
     if (JSON.stringify(getValues('baseCharterParty')) === JSON.stringify(value)) return;
@@ -81,9 +110,55 @@ const RequestCharterPartyForm = ({ closeModal }) => {
   };
 
   const onSubmit = async (formData) => {
-    // TODO: Implement request charter party API call
-    console.info('Requesting charter party:', formData);
-    closeModal();
+    setIsSubmitting(true);
+
+    try {
+      let response;
+
+      if (isCounterproposal) {
+        response = await counterproposeBaseCharterParty({
+          dealId: offerId,
+          newBaseCPTemplateId: formData.baseCharterParty.value,
+          proposalId,
+        });
+      } else {
+        response = await proposeBaseCharterParty({
+          dealId: offerId,
+          baseCPTemplateId: formData.baseCharterParty.value,
+        });
+      }
+
+      const { error } = response;
+
+      if (!error) {
+        const message = isCounterproposal
+          ? 'Counter proposal submitted successfully'
+          : 'Base charter party request submitted';
+        successToast('Success', message);
+
+        // Call onSuccess callback if provided
+        if (onSuccess && typeof onSuccess === 'function') {
+          onSuccess(response);
+        }
+
+        closeModal();
+      } else {
+        errorToast(error?.title, error?.message);
+      }
+    } catch (error) {
+      console.error('Error submitting charter party request:', error);
+      errorToast('Error', 'Failed to submit charter party request');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const getFormTitle = () => {
+    return isCounterproposal ? 'Propose Different Charter Party' : 'Request Base Charter Party';
+  };
+
+  const getSubmitButtonText = () => {
+    return isCounterproposal ? 'Submit Counter Proposal' : 'Submit Base Charter Party Request';
   };
 
   return (
@@ -91,14 +166,16 @@ const RequestCharterPartyForm = ({ closeModal }) => {
       <ModalFormManager
         onClose={closeModal}
         submitAction={onSubmit}
-        submitButton={{ text: 'Submit Base Charter Party Request', variant: 'primary', size: 'large' }}
+        submitButton={{
+          text: getSubmitButtonText(),
+          variant: 'primary',
+          size: 'large',
+          loading: isSubmitting || isLoading,
+        }}
       >
         <div className="w-[400px]">
-          <Title level="2">Request Base Charter Party</Title>
-          <p className="mb-4 mt-2 text-sm text-gray-600">
-            Base charter parties define the standard terms of agreement between vessel owners and charterers. Please
-            select the most suitable base charter party for your contract.
-          </p>
+          <Title level="2">{getFormTitle()}</Title>
+
           <FormDropdown
             label="Base Charter Party"
             labelBadge="*"
@@ -107,19 +184,38 @@ const RequestCharterPartyForm = ({ closeModal }) => {
             placeholder="Select a base charter party"
             error={methods.formState.errors?.baseCharterParty?.message}
             onChange={handleChange}
+            loading={isLoading}
+            disabled={isSubmitting || isLoading}
             customStyles={{
               dropdownExpanded: true,
-              className: 'mb-4',
+              className: 'mb-4 mt-2',
             }}
             maxMenuHeight={112}
             components={{ Option: CustomOption }}
           />
+
+          <p className="mb-4 text-sm text-gray-600">
+            {isCounterproposal
+              ? 'Propose a different base charter party that better suits your requirements. The counterparty will review your proposal.'
+              : 'Base charter parties define the standard terms of agreement between vessel owners and charterers. Please select the most suitable base charter party for your contract.'}
+          </p>
         </div>
       </ModalFormManager>
     </FormProvider>
   );
 };
 
-RequestCharterPartyForm.propTypes = RequestCharterPartyFormPropTypes;
+RequestCharterPartyForm.propTypes = {
+  ...RequestCharterPartyFormPropTypes,
+  offerId: PropTypes.string,
+  proposalId: PropTypes.string,
+  isCounterproposal: PropTypes.bool,
+  onSuccess: PropTypes.func,
+};
+
+RequestCharterPartyForm.defaultProps = {
+  isCounterproposal: false,
+  onSuccess: null,
+};
 
 export default RequestCharterPartyForm;

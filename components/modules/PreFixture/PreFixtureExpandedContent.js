@@ -58,7 +58,7 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, charterPartyDat
     }
 
     if (currentTab === 'charter-party') {
-      return <CharterPartyContent charterPartyData={charterPartyData} />;
+      return <CharterPartyContent charterPartyData={charterPartyData} offerId={offerId} />;
     }
 
     return <DetailsContent detailsData={detailsData} />;
