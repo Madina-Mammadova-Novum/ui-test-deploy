@@ -52,6 +52,7 @@ const PreFixture = () => {
           detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
           charterPartyData={rowData?.charterPartyOptions}
+          proposedBaseCharterParty={rowData?.proposedBaseCharterParty}
           offerId={rowData?.id}
         />
       </ExpandableRow>

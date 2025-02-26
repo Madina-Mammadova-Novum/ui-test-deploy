@@ -31,7 +31,14 @@ const tabs = [
   },
 ];
 
-const PreFixtureExpandedContent = ({ detailsData, documentsData, charterPartyData, offerId, tab = 'details' }) => {
+const PreFixtureExpandedContent = ({
+  detailsData,
+  documentsData,
+  charterPartyData,
+  proposedBaseCharterParty,
+  offerId,
+  tab = 'details',
+}) => {
   const dispatch = useDispatch();
 
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
@@ -58,7 +65,13 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, charterPartyDat
     }
 
     if (currentTab === 'charter-party') {
-      return <CharterPartyContent charterPartyData={charterPartyData} offerId={offerId} />;
+      return (
+        <CharterPartyContent
+          charterPartyData={charterPartyData}
+          proposedBaseCharterParty={proposedBaseCharterParty}
+          offerId={offerId}
+        />
+      );
     }
 
     return <DetailsContent detailsData={detailsData} />;
