@@ -62,6 +62,8 @@ const PreFixtureDetails = ({ searchedParams }) => {
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          charterPartyData={rowData?.charterPartyOptions}
+          proposedBaseCharterParty={rowData?.proposedBaseCharterParty}
           tab={searchedParams?.status}
           offerId={rowData?.id}
         />

@@ -897,18 +897,25 @@ const urlStatusFormatter = ({ isFailed }) => {
   return 'incoming';
 };
 
+const urlStatusFormatterForPreFixture = ({ data }) => {
+  if (data?.proposedBaseCharterParty || data?.charterPartyOptions) return '&status=charter-party';
+
+  return '';
+};
+
 export const notificationPathGenerator = ({ data, role }) => {
   if (!data?.stage) return null;
 
   const { isOwner } = getRoleIdentity({ role });
   const initialPath = stageFormatter(data.stage);
   const statusTab = urlStatusFormatter({ isFailed: data.isFailed });
+  const preFixtureTab = urlStatusFormatterForPreFixture({ data });
 
   const routeByStage = {
     Negotiating: `${initialPath}/${isOwner ? data?.vessel?.id : data?.searchedCargo?.id}?fleetId=${
       data.id
     }&status=${statusTab}`,
-    Pre_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
+    Pre_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}${preFixtureTab}`,
     On_Subs: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
     Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
     Post_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
