@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
@@ -12,6 +13,8 @@ import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { Button, ExpandableCardHeader, StatusIndicator } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
+import { removeCollapsedChat, resetUser, setConversation, setOpenedChat, setUser } from '@/store/entities/chat/slice';
+import { getAuthChatSelector } from '@/store/selectors';
 import { ExpandableRowFooter } from '@/units';
 import { handleViewDocument } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
@@ -40,6 +43,8 @@ const getCharterPartyStatus = ({ charterPartyOptions, proposedBaseCharterParty }
 
 const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposedBaseCharterParty = null }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { chats, isActive } = useSelector(getAuthChatSelector);
 
   const { baseCharterParty = null, riderClauses = [], additionalClauses = [], pdfUrl = null } = charterPartyData || {};
 
@@ -53,6 +58,40 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
       errorToast('View Error', error?.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleChatWithBroker = () => {
+    // First, try to find a chat with matching dealId in active chats
+    const dealChat = chats?.active?.find((chat) => chat.dealId === offerId);
+
+    // If we found a matching deal chat, use it
+    if (dealChat) {
+      // If the chat is already active, don't do anything
+      if (isActive && chats?.user?.data?.chatId === dealChat.chatId) return;
+
+      // Remove any existing chat and activate the deal chat
+      dispatch(resetUser());
+      dispatch(removeCollapsedChat(dealChat.chatId));
+      dispatch(setUser(dealChat));
+      dispatch(setOpenedChat(true));
+      dispatch(setConversation(true));
+      return;
+    }
+
+    // If no matching deal chat found, fall back to support chat
+    if (chats?.support?.length > 0) {
+      const supportChat = chats.support[0];
+
+      // If the chat is already active, don't do anything
+      if (isActive && chats?.user?.data?.chatId === supportChat.chatId) return;
+
+      // Remove any existing chat and activate the support chat
+      dispatch(resetUser());
+      dispatch(removeCollapsedChat(supportChat.chatId));
+      dispatch(setUser(supportChat));
+      dispatch(setOpenedChat(true));
+      dispatch(setConversation(true));
     }
   };
 
@@ -141,10 +180,11 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
 
   const actions = [
     {
-      action: ACTIONS.APPROVE_CP,
+      action: ACTIONS.CHAT_FOR_CP,
       text: 'Need Help? Talk to the Broker',
       variant: 'primary',
       size: 'medium',
+      onClick: handleChatWithBroker,
     },
   ];
 
@@ -156,7 +196,7 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
           headerData={headerData}
           actions={actions}
           itemsContainerStyles="lg:grid-cols-2"
-          gridStyles="1fr 1fr 2fr"
+          gridStyles="1fr 1fr 3fr"
         />
       }
       footer={
