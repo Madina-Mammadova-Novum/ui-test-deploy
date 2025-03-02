@@ -21,7 +21,6 @@ const InitialRequestStep = ({ offerId = null }) => {
 
   const { isDetails } = useSelector(getPreFixtureDataSelector);
 
-  console.log('isDetails', isDetails);
   const { page, pageSize } = PAGE_STATE;
   const userRole = getCookieFromBrowser('session-user-role');
 

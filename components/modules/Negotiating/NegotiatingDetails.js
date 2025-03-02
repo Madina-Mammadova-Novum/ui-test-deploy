@@ -23,9 +23,6 @@ const NegotiatingDetails = ({ searchedParams }) => {
 
   const { isOwner } = getRoleIdentity({ role });
 
-  /* eslint-disable no-console */
-  console.log({ offers });
-
   useEffect(() => {
     dispatch(setToggle(true));
   }, []);
