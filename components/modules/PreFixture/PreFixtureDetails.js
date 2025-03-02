@@ -16,7 +16,7 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { setToggle } from '@/store/entities/pre-fixture/slice';
+import { setIsDetails, setToggle } from '@/store/entities/pre-fixture/slice';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
@@ -32,6 +32,12 @@ const PreFixtureDetails = ({ searchedParams }) => {
 
   useEffect(() => {
     dispatch(setToggle(true));
+    dispatch(setIsDetails(true));
+
+    return () => {
+      dispatch(setToggle(false));
+      dispatch(setIsDetails(false));
+    };
   }, []);
 
   const printExpandableRow = (rowData) => {

@@ -9,6 +9,7 @@ const initialState = {
   loading: true,
   error: null,
   toggle: false,
+  isDetails: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -21,6 +22,9 @@ const preFixtureSlice = createSlice({
   reducers: {
     setToggle: (state, { payload }) => {
       state.toggle = payload;
+    },
+    setIsDetails: (state, { payload }) => {
+      state.isDetails = payload;
     },
     updateConfirmationStatus: (state, action) => {
       const { offerId, isOwner } = action?.payload;
@@ -63,6 +67,6 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus, updateCountdown, setToggle } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, updateCountdown, setToggle, setIsDetails } = preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;

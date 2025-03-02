@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
 import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { Button, FieldsetContent, FieldsetWrapper, StatusIndicator, TextRow, Title } from '@/elements';
+import { PAGE_STATE } from '@/lib/constants';
 import { acceptBaseCharterParty } from '@/services/charterParty';
+import { getCurrentDealStage } from '@/store/entities/notifications/actions';
+import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ConfirmModal, ModalWindow, Notes } from '@/units';
 import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
 import { getCookieFromBrowser, handleViewDocument } from '@/utils/helpers';
@@ -16,18 +21,23 @@ import { errorToast, successToast } from '@/utils/hooks';
  * @props {Object} proposedBaseCharterParty - Charter party proposal details
  * @maritime Manages charter party template proposals between Owner and Charterer
  */
-const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCharterParty }) => {
+const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
+  const dispatch = useDispatch();
+
+  const { isDetails } = useSelector(getPreFixtureDataSelector);
+
   // State
   const [userRole, setUserRole] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [proposedBaseCharterParty, setProposedBaseCharterParty] = useState(initialProposedBaseCharterParty);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   // Extract common properties
   const { proposedBy, status, charterPartyTemplate, dealId, id: proposalId } = proposedBaseCharterParty || {};
+  const { page, pageSize } = PAGE_STATE;
 
   const templateName = charterPartyTemplate?.name;
   const templateUrl = charterPartyTemplate?.url;
+  const templateId = charterPartyTemplate?.id;
 
   // Derived state
   const isOwnerProposed = proposedBy === 'Owner';
@@ -43,11 +53,6 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
     const role = getCookieFromBrowser('session-user-role');
     setUserRole(role);
   }, []);
-
-  // Update local state when props change
-  useEffect(() => {
-    setProposedBaseCharterParty(initialProposedBaseCharterParty);
-  }, [initialProposedBaseCharterParty]);
 
   // Handlers
   /**
@@ -98,11 +103,12 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
       if (response.error) {
         errorToast('Error', response.message || 'Failed to accept charter party');
       } else {
-        // Update local state instead of reloading the page
-        setProposedBaseCharterParty({
-          ...proposedBaseCharterParty,
-          status: 'Accepted',
-        });
+        if (isDetails) {
+          dispatch(getCurrentDealStage({ id: dealId, role: userRole }));
+        } else {
+          // Refresh the prefixture data with default pagination
+          dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+        }
 
         // Show success message
         successToast('Success', 'Charter party accepted successfully');
@@ -116,6 +122,9 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
   };
 
   const handleCounterproposalSubmit = () => {
+    // Refresh the prefixture data with default pagination
+    dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+
     successToast('Success', 'Counter proposal submitted successfully');
   };
 
@@ -199,7 +208,7 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
         <ModalWindow
           key="change"
           buttonProps={{
-            text: 'Propose a Different CP',
+            text: 'Propose Different Charter Party',
             variant: 'secondary',
             size: 'large',
             disabled: isLoading,
@@ -210,6 +219,7 @@ const AgreementProcessStep = ({ proposedBaseCharterParty: initialProposedBaseCha
             proposalId={proposalId}
             isCounterproposal
             onSuccess={handleCounterproposalSubmit}
+            templateId={templateId}
           />
         </ModalWindow>,
       ];

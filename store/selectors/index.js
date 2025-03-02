@@ -77,9 +77,6 @@ export const getGeneralDataSelector = createDraftSafeSelector(generalSelector, (
 });
 
 export const getNotificationsDataSelector = createDraftSafeSelector(notificationsSelector, (state) => {
-  /* eslint-disable no-console */
-  console.log('notificationsSelector State: ', state);
-
   return {
     ...state,
     watchedData: state?.watchedData,
@@ -164,9 +161,6 @@ export const getPostFixtureDataSelector = createDraftSafeSelector(postFixtureSel
 });
 
 export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelector, (state) => {
-  /* eslint-disable no-console */
-  console.log('preFixtureSelector State: ', state);
-
   return {
     error: state.error,
     loading: state.loading,
@@ -175,6 +169,7 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
     role: state.role,
     deal: state.deal,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
+    isDetails: state.isDetails,
   };
 });
 
@@ -190,9 +185,6 @@ export const getFixtureDataSelector = createDraftSafeSelector(fixtureSelector, (
 });
 
 export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSelector, (state) => {
-  /* eslint-disable no-console */
-  console.log('negotiatingSelector State: ', state);
-
   return {
     error: state.error,
     loading: state.loading,
@@ -206,9 +198,6 @@ export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSel
 });
 
 export const getOnSubsDataSelector = createDraftSafeSelector(onSubsSelector, (state) => {
-  /* eslint-disable no-console */
-  console.log('onSubsSelector State: ', state);
-
   return {
     error: state.error,
     loading: state.loading,

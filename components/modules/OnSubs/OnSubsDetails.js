@@ -25,9 +25,6 @@ const OnSubsDetails = ({ searchedParams }) => {
   const { loading, role, toggle, deal } = useSelector(getOnSubsDataSelector);
   const { isOwner } = getRoleIdentity({ role });
 
-  /* eslint-disable no-console */
-  console.log({ deal });
-
   useEffect(() => {
     dispatch(setToggle(true));
   }, [dispatch]);
