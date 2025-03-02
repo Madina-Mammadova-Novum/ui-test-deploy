@@ -46,7 +46,12 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
   const dispatch = useDispatch();
   const { chats, isActive } = useSelector(getAuthChatSelector);
 
-  const { baseCharterParty = null, riderClauses = [], additionalClauses = [], pdfUrl = null } = charterPartyData || {};
+  const {
+    baseCharterParty = null,
+    riderClauses = [],
+    additionalClauses = [],
+    url: pdfUrl = null,
+  } = charterPartyData || {};
 
   const handleReviewClick = async () => {
     if (!baseCharterParty?.url) return;

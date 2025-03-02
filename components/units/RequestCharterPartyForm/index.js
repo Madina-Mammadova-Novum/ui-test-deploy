@@ -70,7 +70,14 @@ const schema = yup.object({
  * @props {Function} onSuccess - Callback function to be called after successful submission
  * @maritime Handles charter party template selection for maritime contracts
  */
-const RequestCharterPartyForm = ({ closeModal, offerId, proposalId, isCounterproposal, onSuccess }) => {
+const RequestCharterPartyForm = ({
+  closeModal,
+  offerId,
+  proposalId,
+  isCounterproposal = false,
+  onSuccess = null,
+  templateId = null,
+}) => {
   const [charterPartyOptions, setCharterPartyOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,11 +92,15 @@ const RequestCharterPartyForm = ({ closeModal, offerId, proposalId, isCounterpro
         const response = await getBaseCharterPartyTemplates({});
 
         if (response?.data) {
-          const options = response.data.map((item) => ({
+          let options = response.data.map((item) => ({
             value: item?.id,
             label: item?.name,
             url: item?.url,
           }));
+
+          if (templateId) {
+            options = options.filter((option) => option.value !== templateId);
+          }
 
           setCharterPartyOptions(options);
         }
@@ -102,7 +113,7 @@ const RequestCharterPartyForm = ({ closeModal, offerId, proposalId, isCounterpro
     };
 
     fetchTemplates();
-  }, []);
+  }, [templateId]);
 
   const handleChange = (value) => {
     if (JSON.stringify(getValues('baseCharterParty')) === JSON.stringify(value)) return;
@@ -211,11 +222,7 @@ RequestCharterPartyForm.propTypes = {
   proposalId: PropTypes.string,
   isCounterproposal: PropTypes.bool,
   onSuccess: PropTypes.func,
-};
-
-RequestCharterPartyForm.defaultProps = {
-  isCounterproposal: false,
-  onSuccess: null,
+  templateId: PropTypes.string,
 };
 
 export default RequestCharterPartyForm;
