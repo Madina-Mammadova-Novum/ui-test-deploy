@@ -1,13 +1,15 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
 import { FieldsetContent, FieldsetWrapper, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
+import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ModalWindow } from '@/units';
 import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
-
+import { getCookieFromBrowser } from '@/utils/helpers';
 /**
  * @component InitialRequestStep
  * @description Initial step for requesting a charter party when none is available
@@ -17,11 +19,19 @@ import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
 const InitialRequestStep = ({ offerId = null }) => {
   const dispatch = useDispatch();
 
-  // Function to refresh prefixture data after successful charter party request
+  const { isDetails } = useSelector(getPreFixtureDataSelector);
+
+  console.log('isDetails', isDetails);
+  const { page, pageSize } = PAGE_STATE;
+  const userRole = getCookieFromBrowser('session-user-role');
+
   const handleRequestSuccess = () => {
-    // Refresh the prefixture data with default pagination
-    const { page, pageSize } = PAGE_STATE;
-    dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+    if (isDetails) {
+      dispatch(getCurrentDealStage({ id: offerId, role: userRole }));
+    } else {
+      // Refresh the prefixture data with default pagination
+      dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+    }
   };
 
   return (

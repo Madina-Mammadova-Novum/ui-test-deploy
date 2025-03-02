@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,9 @@ import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { Button, FieldsetContent, FieldsetWrapper, StatusIndicator, TextRow, Title } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { acceptBaseCharterParty } from '@/services/charterParty';
+import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
+import { getPreFixtureDataSelector } from '@/store/selectors';
 import { ConfirmModal, ModalWindow, Notes } from '@/units';
 import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
 import { getCookieFromBrowser, handleViewDocument } from '@/utils/helpers';
@@ -21,6 +23,8 @@ import { errorToast, successToast } from '@/utils/hooks';
  */
 const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
   const dispatch = useDispatch();
+
+  const { isDetails } = useSelector(getPreFixtureDataSelector);
 
   // State
   const [userRole, setUserRole] = useState(null);
@@ -99,8 +103,12 @@ const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
       if (response.error) {
         errorToast('Error', response.message || 'Failed to accept charter party');
       } else {
-        // Refresh the prefixture data with default pagination
-        dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+        if (isDetails) {
+          dispatch(getCurrentDealStage({ id: dealId, role: userRole }));
+        } else {
+          // Refresh the prefixture data with default pagination
+          dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+        }
 
         // Show success message
         successToast('Success', 'Charter party accepted successfully');
