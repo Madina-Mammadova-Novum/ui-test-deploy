@@ -169,7 +169,6 @@ export const getPreFixtureDataSelector = createDraftSafeSelector(preFixtureSelec
     role: state.role,
     deal: state.deal,
     offers: state.data?.offers?.map((offer) => ({ ...offer, cargoId: offer?.searchedCargo?.id })),
-    isDetails: state.isDetails,
   };
 });
 
