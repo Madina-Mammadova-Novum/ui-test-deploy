@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
 import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { Button, FieldsetContent, FieldsetWrapper, StatusIndicator, TextRow, Title } from '@/elements';
-import { PAGE_STATE } from '@/lib/constants';
 import { acceptBaseCharterParty } from '@/services/charterParty';
-import { getCurrentDealStage } from '@/store/entities/notifications/actions';
-import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
-import { getPreFixtureDataSelector } from '@/store/selectors';
+import { updateDealData } from '@/store/entities/notifications/slice';
+import { updateSpecificOffer } from '@/store/entities/pre-fixture/slice';
 import { ConfirmModal, ModalWindow, Notes } from '@/units';
 import RequestCharterPartyForm from '@/units/RequestCharterPartyForm';
 import { getCookieFromBrowser, handleViewDocument } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
-
 /**
  * @component AgreementProcessStep
  * @description Handles the charter party agreement process with role-based actions
@@ -24,8 +21,6 @@ import { errorToast, successToast } from '@/utils/hooks';
 const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
   const dispatch = useDispatch();
 
-  const { isDetails } = useSelector(getPreFixtureDataSelector);
-
   // State
   const [userRole, setUserRole] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +28,6 @@ const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
 
   // Extract common properties
   const { proposedBy, status, charterPartyTemplate, dealId, id: proposalId } = proposedBaseCharterParty || {};
-  const { page, pageSize } = PAGE_STATE;
 
   const templateName = charterPartyTemplate?.name;
   const templateUrl = charterPartyTemplate?.url;
@@ -103,12 +97,27 @@ const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
       if (response.error) {
         errorToast('Error', response.message || 'Failed to accept charter party');
       } else {
-        if (isDetails) {
-          dispatch(getCurrentDealStage({ id: dealId, role: userRole }));
-        } else {
-          // Refresh the prefixture data with default pagination
-          dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
-        }
+        const updatedProposedBaseCharterParty = {
+          ...proposedBaseCharterParty,
+          status: 'Accepted',
+        };
+
+        dispatch(
+          updateSpecificOffer({
+            offerId: dealId,
+            data: {
+              proposedBaseCharterParty: {
+                ...updatedProposedBaseCharterParty,
+              },
+            },
+          })
+        );
+
+        dispatch(
+          updateDealData({
+            proposedBaseCharterParty: updatedProposedBaseCharterParty,
+          })
+        );
 
         // Show success message
         successToast('Success', 'Charter party accepted successfully');
@@ -121,9 +130,22 @@ const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
     }
   };
 
-  const handleCounterproposalSubmit = () => {
-    // Refresh the prefixture data with default pagination
-    dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+  const handleCounterproposalSubmit = (response) => {
+    dispatch(
+      updateSpecificOffer({
+        offerId: dealId,
+        data: {
+          proposedBaseCharterParty: {
+            ...response?.data,
+          },
+        },
+      })
+    );
+    dispatch(
+      updateDealData({
+        proposedBaseCharterParty: response?.data,
+      })
+    );
 
     successToast('Success', 'Counter proposal submitted successfully');
   };

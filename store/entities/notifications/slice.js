@@ -40,6 +40,9 @@ const notificationsSlice = createSlice({
     updateUnwatchedData: (state, action) => {
       state.unwatchedData = [...state.unwatchedData, ...action.payload];
     },
+    updateDealData: (state, action) => {
+      state.dealData = { ...state.dealData, ...action.payload };
+    },
     setFilterParams: (state, action) => {
       state.filterParams = {
         ...state.filterParams,
@@ -119,6 +122,7 @@ export const {
   resetParams,
   resetNotificationData,
   resetDealData,
+  updateDealData,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

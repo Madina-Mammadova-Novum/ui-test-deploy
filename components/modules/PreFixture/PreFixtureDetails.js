@@ -16,7 +16,7 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
-import { setIsDetails, setToggle } from '@/store/entities/pre-fixture/slice';
+import { setToggle } from '@/store/entities/pre-fixture/slice';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
@@ -25,18 +25,13 @@ const PreFixtureDetails = ({ searchedParams }) => {
 
   const { loading, role, toggle, deal } = useSelector(getPreFixtureDataSelector);
 
-  /* eslint-disable no-console */
-  console.log({ deal });
-
   const { isOwner } = getRoleIdentity({ role });
 
   useEffect(() => {
     dispatch(setToggle(true));
-    dispatch(setIsDetails(true));
 
     return () => {
       dispatch(setToggle(false));
-      dispatch(setIsDetails(false));
     };
   }, []);
 

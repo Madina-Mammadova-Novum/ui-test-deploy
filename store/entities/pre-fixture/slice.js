@@ -9,7 +9,6 @@ const initialState = {
   loading: true,
   error: null,
   toggle: false,
-  isDetails: false,
   data: {
     offers: [],
     totalPages: 0,
@@ -22,9 +21,6 @@ const preFixtureSlice = createSlice({
   reducers: {
     setToggle: (state, { payload }) => {
       state.toggle = payload;
-    },
-    setIsDetails: (state, { payload }) => {
-      state.isDetails = payload;
     },
     updateConfirmationStatus: (state, action) => {
       const { offerId, isOwner } = action?.payload;
@@ -51,6 +47,17 @@ const preFixtureSlice = createSlice({
           : offer
       );
     },
+    updateSpecificOffer: (state, action) => {
+      const { offerId, data } = action?.payload;
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              ...data,
+            }
+          : offer
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPrefixtureOffers.pending, (state) => {
@@ -67,6 +74,6 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus, updateCountdown, setToggle, setIsDetails } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, updateCountdown, updateSpecificOffer, setToggle } = preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;

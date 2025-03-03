@@ -221,6 +221,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    isCountdownActive,
   } = data;
   const { country: registrationCountry } = registrationCity || {};
 
@@ -263,6 +264,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
+    isCountdownActive,
   };
 };
 
@@ -283,6 +285,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal },
     additionalCharterPartyTerms,
     charterer,
+    isCountdownActive,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
@@ -316,6 +319,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
       dischargeTerminal: dischargeTerminal?.name,
     },
+    isCountdownActive,
     additionalCharterPartyTerms,
     allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByCharterer,
     additionalDischargeOptions,

@@ -70,6 +70,7 @@ const PreFixtureExpandedContent = ({
           charterPartyData={charterPartyData}
           proposedBaseCharterParty={proposedBaseCharterParty}
           offerId={offerId}
+          isCountdownActive={detailsData?.isCountdownActive}
         />
       );
     }

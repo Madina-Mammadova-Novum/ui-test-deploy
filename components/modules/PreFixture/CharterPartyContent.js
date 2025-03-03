@@ -41,7 +41,12 @@ const getCharterPartyStatus = ({ charterPartyOptions, proposedBaseCharterParty }
   };
 };
 
-const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposedBaseCharterParty = null }) => {
+const CharterPartyContent = ({
+  charterPartyData = null,
+  offerId = null,
+  proposedBaseCharterParty = null,
+  isCountdownActive = false,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { chats, isActive } = useSelector(getAuthChatSelector);
@@ -105,10 +110,10 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
     proposedBaseCharterParty,
   });
 
-  const getStatusDisplayText = (status, step) => {
+  const getStatusDisplayText = (status, step, countdownActive) => {
     switch (step) {
       case 'final-review':
-        return 'Broker Finalized Charter Party';
+        return countdownActive ? 'Broker Finalized Charter Party' : 'Awaiting Broker Finalization';
 
       case 'agreement-process':
         if (status === 'Accepted') {
@@ -127,7 +132,7 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
           case 'Accepted':
             return 'Awaiting Broker Finalization';
           case 'Final':
-            return 'Broker Finalized Charter Party';
+            return countdownActive ? 'Broker Finalized Charter Party' : 'Awaiting Broker Finalization';
           case 'Initial':
             return 'Awaiting Charter Party Request';
           default:
@@ -176,8 +181,10 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
       label: 'Charter Party Status',
       text: (
         <span className="flex items-center gap-1">
-          <StatusIndicator status={getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.step)} />
-          {getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.step)}
+          <StatusIndicator
+            status={getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.step, isCountdownActive)}
+          />
+          {getStatusDisplayText(charterPartyStatus.status, charterPartyStatus.step, isCountdownActive)}
         </span>
       ),
     },
@@ -211,7 +218,7 @@ const CharterPartyContent = ({ charterPartyData = null, offerId = null, proposed
               <div className="w-full grow">
                 <Button
                   buttonProps={{
-                    text: isLoading ? 'Loading...' : 'Review',
+                    text: isLoading ? 'Loading...' : 'Preview',
                     icon: { before: <FileInfoAlt className="h-6 w-6 fill-black" /> },
                     variant: 'tertiary',
                     size: 'large',
