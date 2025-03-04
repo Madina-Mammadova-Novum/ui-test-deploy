@@ -41,3 +41,21 @@ export const counterproposeBaseCharterParty = async ({ dealId, newBaseCPTemplate
     ...response,
   };
 };
+
+/**
+ * @service getCharterPartyPreview
+ * @description Gets the preview URL for a charter party document
+ * @param {Object} params - The parameters for the request
+ * @param {string} params.dealId - The ID of the deal
+ * @returns {Promise<Object>} A promise that resolves with the preview URL
+ * @maritime Retrieves the charter party document URL for viewing
+ */
+export const getCharterPartyPreview = async ({ dealId }) => {
+  const response = await postData(`base-cp-templates/preview`, {
+    dealId,
+  });
+
+  return {
+    ...response,
+  };
+};

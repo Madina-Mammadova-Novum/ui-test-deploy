@@ -13,6 +13,7 @@ import FileInfoAlt from '@/assets/images/fileInfoAlt.svg';
 import { Button, ExpandableCardHeader, StatusIndicator } from '@/elements';
 import { ACTIONS } from '@/lib/constants';
 import { ExpandableRow } from '@/modules';
+import { getCharterPartyPreview } from '@/services/charterParty';
 import { removeCollapsedChat, resetUser, setConversation, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
 import { ExpandableRowFooter } from '@/units';
@@ -51,19 +52,25 @@ const CharterPartyContent = ({
   const dispatch = useDispatch();
   const { chats, isActive } = useSelector(getAuthChatSelector);
 
-  const {
-    baseCharterParty = null,
-    riderClauses = [],
-    additionalClauses = [],
-    url: pdfUrl = null,
-  } = charterPartyData || {};
+  const { baseCharterParty = null, riderClauses = [], additionalClauses = [] } = charterPartyData || {};
 
   const handleReviewClick = async () => {
-    if (!baseCharterParty?.url) return;
+    if (!offerId) return;
 
     setIsLoading(true);
     try {
-      await handleViewDocument(baseCharterParty.url);
+      // Get the charter party preview URL from the API
+      const response = await getCharterPartyPreview({ dealId: offerId });
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to get charter party preview');
+      }
+
+      if (!response.data?.url) {
+        throw new Error('Charter party preview URL not available');
+      }
+
+      // Open the document using the URL from the API response
+      await handleViewDocument(response.data.url);
     } catch (error) {
       errorToast('View Error', error?.message);
     } finally {
@@ -148,7 +155,6 @@ const CharterPartyContent = ({
           <FinalReviewStep
             baseCharterParty={baseCharterParty}
             status={charterPartyStatus.status}
-            pdfUrl={pdfUrl}
             riderClauses={riderClauses}
             additionalClauses={additionalClauses}
           />
@@ -224,7 +230,7 @@ const CharterPartyContent = ({
                     size: 'large',
                   }}
                   onClick={handleReviewClick}
-                  disabled={!pdfUrl || isLoading}
+                  disabled={!offerId || isLoading}
                   customStyles="w-1/4 whitespace-nowrap 3md:grow"
                 />
               </div>
