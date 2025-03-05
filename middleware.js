@@ -21,7 +21,9 @@ export default function middleware(req) {
     !pathname.startsWith('/api') &&
     !pathname.startsWith(ROUTES.MAINTENANCE) &&
     pathname !== ROUTES.CONTACT_US &&
-    pathname !== ROUTES.PRIVACY_POLICY
+    pathname !== ROUTES.PRIVACY_POLICY &&
+    pathname !== ROUTES.SIGNUP &&
+    pathname !== ROUTES.GETTING_STARTED
   ) {
     req.nextUrl.pathname = ROUTES.MAINTENANCE;
     const response = NextResponse.rewrite(req.nextUrl);
