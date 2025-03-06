@@ -13,8 +13,8 @@ import { setConversation, setOpenedChat } from '@/store/entities/chat/slice';
 import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { resetDealData } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
-import { ChatAdditional } from '@/units';
-import { getCookieFromBrowser } from '@/utils/helpers';
+import { ChatAdditional, Flag } from '@/units';
+import { convertToKilotons, getCookieFromBrowser, getLocode } from '@/utils/helpers';
 
 const ChatConversationCard = ({ data, contrasted = false }) => {
   const router = useRouter();
@@ -24,6 +24,8 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   const role = getCookieFromBrowser('session-user-role');
 
   const { deal } = useSelector(getNotificationsDataSelector);
+
+  const cargoProduct = `${data?.vessel?.type} (${convertToKilotons(data?.additional?.totalQuantity)})`;
 
   const handleChangeState = (key, value) => {
     setState((prevState) => ({
@@ -87,11 +89,17 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
       <div className="flex flex-col">
         <Title
           level="6"
-          className={`text-sm font-semibold capitalize ${contrasted ? 'text-white' : 'text-black hover:text-blue'}`}
+          className={`flex items-center text-sm font-semibold capitalize ${contrasted ? 'text-white' : 'text-black hover:text-blue'}`}
         >
-          {data?.vessel?.name}
+          <Flag countryCode={getLocode(data?.vessel?.flagOfRegistry)} className="mr-1" /> {data?.vessel?.name}
         </Title>
         {data?.subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{data?.subtitle}</p>}
+        {contrasted && (
+          <p className="flex gap-x-1.5 text-xs-sm font-semibold uppercase text-white">
+            cargo product:
+            <span className="text-xs-sm font-bold uppercase text-white">{cargoProduct}</span>
+          </p>
+        )}
         {printCargoModal}
         {!contrasted && (
           <ChatAdditional

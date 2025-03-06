@@ -71,7 +71,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
           onClose={onCloseSession}
           onCollapse={onCollapseSession}
         />
-
         <div className="flex flex-col p-2.5">
           <ChatConversationBody />
           <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>

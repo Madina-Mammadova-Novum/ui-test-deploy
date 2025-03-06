@@ -38,6 +38,7 @@ function chatDealDataAdapter({ data }) {
       type: searchedCargo?.cargoType?.name?.toLowerCase(),
       cargoId: searchedCargo?.code.toLowerCase(),
       products: products?.map((product) => ({ id: product?.id, name: product?.productName?.toLowerCase() })),
+      flagOfRegistry: vessel?.details?.flagOfRegistry?.codeISO2 || vessel?.details?.flagOfRegistry?.codeISO3,
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
         yearsOfOperation: vessel?.company?.details?.yearsInOperation,
