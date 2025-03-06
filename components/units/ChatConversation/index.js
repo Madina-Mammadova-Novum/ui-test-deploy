@@ -75,6 +75,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     onDrop: handleFileUpload,
     noClick: true, // Disable click behavior on the root
     multiple: true,
+    maxFiles: 5,
     maxSize: 10 * 1024 * 1024, // 10MB
     accept: acceptFormats,
   });
