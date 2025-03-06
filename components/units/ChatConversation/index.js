@@ -9,6 +9,7 @@ import СhatConversationHeader from './СhatConversationHeader';
 
 import { ChatConversationPropTypes } from '@/lib/types';
 
+import FileUploadSVG from '@/assets/images/fileUpload.svg';
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
@@ -70,7 +71,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     // You can implement file upload logic similar to what's in DropzoneForm
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     onDrop: handleFileUpload,
     noClick: true, // Disable click behavior on the root
     multiple: true,
@@ -112,10 +113,18 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     return 'right-[480px]';
   }, [isMediumScreen, isOpened]);
 
+  // Get the appropriate border color based on drag state
+  const getBorderColor = () => {
+    if (isDragAccept) return 'border-green-500';
+    if (isDragReject) return 'border-red-500';
+    if (isDragActive) return 'border-blue-500';
+    return 'border-gray-light';
+  };
+
   return (
     isOpened && (
       <div
-        className={`fixed border border-gray-light bg-white ${setConversationPosition} bottom-6 z-10 h-auto w-[360px] rounded-base shadow-xmd`}
+        className={`fixed border ${getBorderColor()} bg-white ${setConversationPosition} bottom-6 z-10 h-auto w-[360px] rounded-base shadow-xmd transition-colors duration-200`}
       >
         <СhatConversationHeader
           data={data}
@@ -124,10 +133,23 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
           onClose={onCloseSession}
           onCollapse={onCollapseSession}
         />
-        <div className="flex flex-col p-2.5">
+        <div className="flex flex-col p-2.5" {...getRootProps()}>
+          {isDragActive && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-base bg-blue-50 bg-opacity-90 p-4">
+              <FileUploadSVG className="mb-2 fill-blue-500" />
+              <p className="mb-12 text-center text-blue-700">
+                {isDragReject ? 'Some files are not supported' : 'Drop your files here to upload'}
+              </p>
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-blue-500">Supported formats: {AVAILABLE_FORMATS.DOCS.join(', ')}</p>
+                <p className="text-sm text-blue-500">Max file size: 10MB</p>
+              </div>
+            </div>
+          )}
+
           <ChatConversationBody />
           <form className="flex w-full grow items-end gap-x-2.5" onSubmit={handleSubmit}>
-            <div {...getRootProps()} className={`flex w-full gap-2.5 ${data?.deactivated ? 'flex-col' : 'flex-row'}`}>
+            <div className={`flex w-full gap-2.5 ${data?.deactivated ? 'flex-col' : 'flex-row'}`}>
               <div className="relative flex w-full items-center">
                 <Input
                   type="text"

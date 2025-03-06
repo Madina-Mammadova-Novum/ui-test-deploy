@@ -5,12 +5,11 @@ import { useRef } from 'react';
 import { IconUploadPropTypes } from '@/lib/types';
 
 import FileUploadSVG from '@/assets/images/fileUpload.svg';
-import { Button, Input } from '@/elements';
+import { Button, HoverableIcon, HoverTooltip, Input } from '@/elements';
 
 /**
  * @component IconUpload
  * @description Simple icon button for file uploads with form integration
- * @props {Object} getRootProps - Props from useDropzone for the root element
  * @props {Object} getInputProps - Props from useDropzone for the input element
  * @props {Function} onClick - Function to handle button click
  * @maritime Handles document uploads for maritime communications
@@ -31,18 +30,29 @@ const IconUpload = ({ getInputProps, onClick }) => {
 
   return (
     <div className="relative">
-      <Input {...getInputProps()} ref={fileInputRef} className="hidden" />
-      <Button
-        type="button"
-        onClick={handleButtonClick}
-        customStyles="flex items-center justify-center rounded-full !px-1 !py-1 transition-colors hover:bg-gray-100"
-        buttonProps={{
-          variant: 'tertiary',
-          size: 'small',
-          icon: { before: <FileUploadSVG className="fill-gray-darker hover:fill-blue" /> },
-        }}
-        aria-label="Upload file"
-      />
+      <Input {...getInputProps()} ref={fileInputRef} customStyles="hidden" />
+      <div className="group relative">
+        <Button
+          type="button"
+          onClick={handleButtonClick}
+          customStyles="flex items-center justify-center rounded-full !px-1 !py-1 transition-colors hover:bg-gray-100"
+          buttonProps={{
+            variant: 'tertiary',
+            size: 'small',
+            icon: {
+              before: (
+                <HoverTooltip className="!-left-[7rem] !-top-[0.375rem]" data={{ description: 'Upload files' }}>
+                  <HoverableIcon
+                    className="!p-0"
+                    icon={<FileUploadSVG className="fill-gray-darker group-hover:fill-blue" />}
+                  />
+                </HoverTooltip>
+              ),
+            },
+          }}
+          aria-label="Upload file"
+        />
+      </div>
     </div>
   );
 };
