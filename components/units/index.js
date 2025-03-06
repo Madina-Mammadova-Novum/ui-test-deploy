@@ -64,6 +64,7 @@ import FailedOffersFilter from '@/units/FilterByForm/failedOffersFilter';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import Flag from '@/units/Flag';
 import FooterNavBlock from '@/units/FooterNavBlock';
+import IconUpload from '@/units/IconUpload';
 import IconWrapper from '@/units/IconWrapper';
 import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
@@ -225,4 +226,5 @@ export {
   ConfirmModal,
   NestedCheckboxList,
   FailedOffersFilter,
+  IconUpload,
 };

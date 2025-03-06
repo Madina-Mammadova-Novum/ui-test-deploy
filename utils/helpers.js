@@ -1008,3 +1008,25 @@ export const formatStageText = (stage) => {
   if (!stage) return '';
   return stage.replace(/_/g, ' ');
 };
+
+/**
+ * @util convertToKilotons
+ * @description Formats tonnage values to kilotons (kt) with one decimal place
+ * @param {number|string} tons - Weight value
+ * @returns {string} Weight formatted with kt unit
+ * @example convertToKilotons(45) // returns "45.0 kt"
+ */
+export const convertToKilotons = (tons) => {
+  if (!tons) return '0.0 kt';
+
+  // Convert to number if it's a string
+  const numericValue = typeof tons === 'string' ? parseFloat(tons.replace(/,/g, '')) : tons;
+
+  // Check if it's a valid number
+  if (Number.isNaN(numericValue)) return '0.0 kt';
+
+  // Format to 1 decimal place
+  const formattedValue = numericValue.toFixed(1);
+
+  return `${formattedValue} kt`;
+};
