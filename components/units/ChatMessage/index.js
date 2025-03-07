@@ -8,8 +8,8 @@ import Link from 'next/link';
 import { ChatConversationMessagePropTypes } from '@/lib/types';
 
 import FileInfoAltSVG from '@/assets/images/fileInfoAlt.svg';
-import { ROLES } from '@/lib';
 import { Button } from '@/elements';
+import { ROLES } from '@/lib';
 import { extractTimeFromDate, handleViewDocument } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 

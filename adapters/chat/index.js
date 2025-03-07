@@ -90,10 +90,11 @@ export function listOfChatsDataAdapter({ data }) {
 export function messageDataAdapter({ data, clientId, role }) {
   if (!data) return null;
 
-  const { body, senderId, createdAt, id } = data;
+  const { body, senderId, createdAt, id, type } = data;
 
   return {
     id,
+    type,
     message: body,
     time: addLocalDateFlag(createdAt),
     sender: clientIdentification({ senderId, clientId, role }),
@@ -129,7 +130,6 @@ export function moreMessagesDataAdapter({ payload, messages }) {
 
 export function chatHistoryResponseAdapter({ data, clientId, role }) {
   if (!data) return null;
-
   const { messages = [], created, isLast } = data;
 
   return {
