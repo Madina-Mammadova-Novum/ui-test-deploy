@@ -9,6 +9,7 @@ import СhatConversationHeader from './СhatConversationHeader';
 
 import { ChatConversationPropTypes } from '@/lib/types';
 
+import { fileErrorAdapter, fileReaderAdapter } from '@/adapters/fileAdapter';
 import FileUploadSVG from '@/assets/images/fileUpload.svg';
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
@@ -18,11 +19,13 @@ import { getChatHistory } from '@/store/entities/chat/actions';
 import { getAuthChatSelector } from '@/store/selectors';
 import { IconUpload } from '@/units';
 import { getCookieFromBrowser } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const token = getCookieFromBrowser('session-access-token');
 
@@ -64,11 +67,47 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     }
   });
 
-  const handleFileUpload = useCallback((acceptedFiles) => {
-    // Handle file upload logic here
-    /* eslint-disable no-console */
-    console.log('Files uploaded:', acceptedFiles);
-    // You can implement file upload logic similar to what's in DropzoneForm
+  const handleFileUpload = useCallback(async (acceptedFiles, rejections) => {
+    if (rejections && rejections.length > 0) {
+      // Handle rejected files
+      const errorMessage = fileErrorAdapter({ data: rejections[0]?.errors });
+      errorToast('File Upload Error', errorMessage.message);
+      return;
+    }
+
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      // Set uploading state
+      setUploading(true);
+
+      // Process files one by one (fileReaderAdapter is designed for single file)
+      for (const file of acceptedFiles) {
+        try {
+          // Create setValue and setError functions that work with our component
+          const setValue = (key, value) => {
+            if (key === 'file' && value) {
+              // Send the file URL using the sendFile method
+              сhatSessionService.sendFile({
+                fileUrl: value,
+                fileName: file.name,
+              });
+            }
+          };
+
+          const setError = (key, error) => {
+            if (key === 'file' && error) {
+              console.error('File upload failed:', error);
+              errorToast('Upload Failed', error.message || 'Failed to upload file');
+            }
+          };
+
+          // Use fileReaderAdapter with our custom setValue and setError functions
+          fileReaderAdapter(file, setValue, setError, setUploading);
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          errorToast('Upload Error', 'An unexpected error occurred while uploading the file');
+        }
+      }
+    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
@@ -156,18 +195,19 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
                   type="text"
                   value={message}
                   onChange={handleMessage}
-                  placeholder="Message ..."
+                  placeholder={uploading ? 'Uploading files...' : 'Message ...'}
+                  disabled={uploading}
                   customStyles="!border-gray-darker !w-full"
                 />
                 {!data?.deactivated && (
                   <div className="absolute right-2">
-                    <IconUpload getInputProps={getInputProps} onClick={() => {}} />
+                    <IconUpload getInputProps={getInputProps} onClick={() => {}} disabled={uploading} />
                   </div>
                 )}
               </div>
               <Button
                 type="submit"
-                disabled={disabled}
+                disabled={disabled || uploading}
                 customStyles="border border-gray-darker w-full !p-2.5"
                 buttonProps={{
                   variant: 'tertiary',
