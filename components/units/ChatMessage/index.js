@@ -61,20 +61,19 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id, type = '
         return (
           <Button
             disabled={isLoading}
-            customStyles="max-w-[250px] overflow-hidden text-ellipsis whitespace-nowrap"
+            customStyles="max-w-[250px] overflow-hidden text-ellipsis whitespace-nowrap !px-2.5 !py-1"
+            onClick={() => handleDocumentView(message)}
             buttonProps={{
               variant: 'tertiary',
-              size: 'small',
-              icon: { before: <FileInfoAltSVG className="mr-2 h-4 w-4" /> },
-              text: message,
-              onClick: () => handleDocumentView(message),
+              size: 'large',
+              icon: { before: <FileInfoAltSVG className="fill-black" /> },
+              text: 'Document',
             }}
           />
         );
       }
     }
 
-    // Default message rendering (without "keke" text)
     return message?.includes('@') ? message : <Linkify componentDecorator={renderLink}>{message}</Linkify>;
   };
 

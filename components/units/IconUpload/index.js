@@ -45,7 +45,7 @@ const IconUpload = ({ getInputProps, onClick, disabled = false }) => {
                 <HoverTooltip className="!-left-[7rem] !-top-[0.375rem]" data={{ description: 'Upload files' }}>
                   <HoverableIcon
                     className="!p-0"
-                    icon={<FileUploadSVG className="fill-gray-darker group-hover:fill-blue" />}
+                    icon={<FileUploadSVG className="fill-black group-hover:fill-blue" />}
                   />
                 </HoverTooltip>
               ),

@@ -168,7 +168,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
       >
         <СhatConversationHeader
           data={data}
-          updating={updating}
+          updating={updating || uploading}
           typing={data?.isTyping}
           onClose={onCloseSession}
           onCollapse={onCollapseSession}
