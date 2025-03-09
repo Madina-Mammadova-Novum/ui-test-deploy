@@ -7,12 +7,12 @@ import { useRouter } from 'next/navigation';
 
 import { ChatConversationCardPropTypes } from '@/lib/types';
 
-import ShipIcon from '@/assets/icons/ShipIcon';
+import { ShipIcon, UserIcon } from '@/assets/icons';
 import { Title } from '@/elements';
 import { setConversation, setOpenedChat } from '@/store/entities/chat/slice';
 import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { resetDealData } from '@/store/entities/notifications/slice';
-import { getNotificationsDataSelector } from '@/store/selectors';
+import { getAuthChatSelector, getNotificationsDataSelector } from '@/store/selectors';
 import { ChatAdditional, Flag } from '@/units';
 import { convertToKilotons, getCookieFromBrowser, getLocode } from '@/utils/helpers';
 
@@ -24,8 +24,11 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   const role = getCookieFromBrowser('session-user-role');
 
   const { deal } = useSelector(getNotificationsDataSelector);
+  const { chats } = useSelector(getAuthChatSelector);
+  const { user } = chats;
 
   const cargoProduct = `${data?.vessel?.type} (${convertToKilotons(data?.additional?.totalQuantity)})`;
+  const isHelpCenter = contrasted && user?.data?.key === 'support';
 
   const handleChangeState = (key, value) => {
     setState((prevState) => ({
@@ -84,8 +87,8 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   }, [data?.vessel?.cargoId, getDealStage, resetDealStage, handleRedirect]);
 
   return (
-    <div className="flex w-auto items-start gap-x-1.5 text-black">
-      <ShipIcon isOnline={data?.isOnline} />
+    <div className={`flex w-auto gap-x-1.5 text-black ${isHelpCenter ? 'items-center' : 'items-start'}`}>
+      {isHelpCenter ? <UserIcon isOnline={data?.isOnline} /> : <ShipIcon isOnline={data?.isOnline} />}
       <div className="flex flex-col">
         <Title
           level="6"
@@ -93,8 +96,9 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
         >
           <Flag countryCode={getLocode(data?.vessel?.flagOfRegistry)} className="mr-1" /> {data?.vessel?.name}
         </Title>
+
         {data?.subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{data?.subtitle}</p>}
-        {contrasted && (
+        {!isHelpCenter && contrasted && (
           <p className="flex gap-x-1.5 text-xs-sm font-semibold uppercase text-white">
             cargo product:
             <span className="text-xs-sm font-bold uppercase text-white">{cargoProduct}</span>

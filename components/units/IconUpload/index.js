@@ -14,7 +14,7 @@ import { Button, HoverableIcon, HoverTooltip, Input } from '@/elements';
  * @props {Function} onClick - Function to handle button click
  * @maritime Handles document uploads for maritime communications
  */
-const IconUpload = ({ getInputProps, onClick }) => {
+const IconUpload = ({ getInputProps, onClick, disabled = false }) => {
   const fileInputRef = useRef(null);
 
   const handleButtonClick = (e) => {
@@ -36,6 +36,7 @@ const IconUpload = ({ getInputProps, onClick }) => {
           type="button"
           onClick={handleButtonClick}
           customStyles="flex items-center justify-center rounded-full !px-1 !py-1 transition-colors hover:bg-gray-100"
+          disabled={disabled}
           buttonProps={{
             variant: 'tertiary',
             size: 'small',
@@ -44,7 +45,7 @@ const IconUpload = ({ getInputProps, onClick }) => {
                 <HoverTooltip className="!-left-[7rem] !-top-[0.375rem]" data={{ description: 'Upload files' }}>
                   <HoverableIcon
                     className="!p-0"
-                    icon={<FileUploadSVG className="fill-gray-darker group-hover:fill-blue" />}
+                    icon={<FileUploadSVG className="fill-black group-hover:fill-blue" />}
                   />
                 </HoverTooltip>
               ),
