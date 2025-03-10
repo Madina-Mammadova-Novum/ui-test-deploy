@@ -13,3 +13,4 @@ export * from '@/adapters/api';
 export * from '@/adapters/savedSearch';
 export * from '@/adapters/failed-offers';
 export * from '@/adapters/charterParty';
+export * from '@/adapters/offer';

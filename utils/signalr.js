@@ -6,7 +6,8 @@ import { getRtURL } from '.';
 import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
 import { useNotificationToast } from './hooks';
 
-import { messageDataAdapter } from '@/adapters';
+import { listOfChatsDataAdapter, messageDataAdapter } from '@/adapters';
+import { getOfferDetails } from '@/services/offer';
 import {
   messageAlert,
   offlineStatus,
@@ -17,7 +18,6 @@ import {
   updateUserConversation,
 } from '@/store/entities/chat/slice';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
-
 import 'react-toastify/dist/ReactToastify.css';
 
 export class SignalRController {
@@ -202,6 +202,37 @@ export class ChatNotificationController extends SignalRController {
         this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: 0 }));
       } else {
         this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: chat.messageCount }));
+      }
+    });
+
+    this.connection.on('NewChat', async (chatData) => {
+      try {
+        // Get the user role from cookie
+        const role = getCookieFromBrowser('session-user-role');
+
+        // Fetch offer details using contentId from chatData
+        const { data: offerData } = await getOfferDetails(chatData?.contentId, role);
+
+        // Format the chat data for the state update
+        const formattedChat = listOfChatsDataAdapter({
+          data: [{ chat: chatData, deal: offerData }],
+        });
+
+        if (formattedChat && formattedChat.length > 0) {
+          // Dispatch action to add the new chat to the state
+          this.store.dispatch({
+            type: 'chat/addNewChat',
+            payload: formattedChat[0],
+          });
+        } else {
+          // If we couldn't format the chat data properly, fall back to refreshing the entire list
+          this.store.dispatch({ type: 'chat/getListOfChats' });
+        }
+      } catch (error) {
+        console.error('Error processing new chat:', error);
+
+        // If there's an error fetching the offer details, fall back to refreshing the entire chat list
+        this.store.dispatch({ type: 'chat/getListOfChats' });
       }
     });
 
