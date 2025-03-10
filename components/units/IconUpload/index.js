@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { IconUploadPropTypes } from '@/lib/types';
 
 import FileUploadSVG from '@/assets/images/fileUpload.svg';
-import { Button, HoverableIcon, HoverTooltip, Input } from '@/elements';
+import { Button, HoverableIcon, Input } from '@/elements';
 
 /**
  * @component IconUpload
@@ -42,12 +42,7 @@ const IconUpload = ({ getInputProps, onClick, disabled = false }) => {
             size: 'small',
             icon: {
               before: (
-                <HoverTooltip className="!-left-[7rem] !-top-[0.375rem]" data={{ description: 'Upload files' }}>
-                  <HoverableIcon
-                    className="!p-0"
-                    icon={<FileUploadSVG className="fill-black group-hover:fill-blue" />}
-                  />
-                </HoverTooltip>
+                <HoverableIcon className="!p-0" icon={<FileUploadSVG className="fill-black group-hover:fill-blue" />} />
               ),
             },
           }}
