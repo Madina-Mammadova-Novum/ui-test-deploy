@@ -209,6 +209,7 @@ const CharterPartyContent = ({
   return (
     <ExpandableRow
       className="px-5"
+      isOpened
       header={
         <ExpandableCardHeader
           headerData={headerData}
