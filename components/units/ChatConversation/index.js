@@ -165,7 +165,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed border ${getBorderColor()} bg-white ${setConversationPosition} z-100 bottom-6 h-auto w-[360px] rounded-base shadow-xmd transition-colors duration-200 md:z-10`}
+        className={`fixed border ${getBorderColor()} bg-white ${setConversationPosition} bottom-6 z-100 h-auto w-[360px] rounded-base shadow-xmd transition-colors duration-200 md:z-10`}
       >
         <СhatConversationHeader
           data={data}
@@ -176,7 +176,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         />
         <div className="flex flex-col p-2.5" {...getRootProps()}>
           {isDragActive && (
-            <div className="z-100 absolute inset-0 flex flex-col items-center justify-center rounded-base bg-blue-50 bg-opacity-90 p-4 md:z-10">
+            <div className="absolute inset-0 z-100 flex flex-col items-center justify-center rounded-base bg-blue-50 bg-opacity-90 p-4 md:z-10">
               <FileUploadSVG className="mb-2 fill-blue-500" />
               <p className="mb-12 text-center text-blue-700">
                 {isDragReject ? 'Some files are not supported' : 'Drop your files here to upload'}
