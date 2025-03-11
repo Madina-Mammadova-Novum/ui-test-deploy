@@ -21,7 +21,7 @@ import { IconUpload } from '@/units';
 import { getCookieFromBrowser } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
-const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession }) => {
+const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession, isChatModalOpened }) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -150,8 +150,9 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const setConversationPosition = useMemo(() => {
     if (isMediumScreen && isOpened) return 'right-24';
+    if (!isChatModalOpened && isOpened) return 'right-24';
     return 'right-[480px]';
-  }, [isMediumScreen, isOpened]);
+  }, [isMediumScreen, isOpened, isChatModalOpened]);
 
   // Get the appropriate border color based on drag state
   const getBorderColor = () => {
@@ -164,7 +165,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   return (
     isOpened && (
       <div
-        className={`fixed border ${getBorderColor()} bg-white ${setConversationPosition} bottom-6 z-10 h-auto w-[360px] rounded-base shadow-xmd transition-colors duration-200`}
+        className={`fixed border ${getBorderColor()} bg-white ${setConversationPosition} bottom-6 z-100 h-auto w-[360px] rounded-base shadow-xmd transition-colors duration-200 md:z-10`}
       >
         <СhatConversationHeader
           data={data}
@@ -175,7 +176,7 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         />
         <div className="flex flex-col p-2.5" {...getRootProps()}>
           {isDragActive && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-base bg-blue-50 bg-opacity-90 p-4">
+            <div className="absolute inset-0 z-100 flex flex-col items-center justify-center rounded-base bg-blue-50 bg-opacity-90 p-4 md:z-10">
               <FileUploadSVG className="mb-2 fill-blue-500" />
               <p className="mb-12 text-center text-blue-700">
                 {isDragReject ? 'Some files are not supported' : 'Drop your files here to upload'}
