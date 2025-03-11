@@ -7,7 +7,7 @@ import { ChatModalHeader } from '@/units';
 const ChatModal = ({ isOpened, useCollapse, loading, children, onClose, onCollapse }) => {
   return (
     isOpened && (
-      <div className="fixed bottom-6 right-24 z-10 h-auto w-[360px] rounded-base bg-white shadow-xmd">
+      <div className="z-100 fixed bottom-6 right-24 h-auto w-[360px] rounded-base bg-white shadow-xmd md:z-10">
         <ChatModalHeader useCollapse={useCollapse} loading={loading} onClose={onClose} onCollapse={onCollapse} />
         {children}
       </div>
