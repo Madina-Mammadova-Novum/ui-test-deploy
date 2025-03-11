@@ -21,7 +21,9 @@ import { useSanctionedCountries } from '@/utils/hooks/useSanctionedCountries';
 
 const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton = true, isCounteroffer = false }) => {
   const form = useHookForm() || {};
-  const { formState: { errors, submitCount } = {}, setValue, clearErrors, control } = form;
+  const { formState: { errors, submitCount } = {}, setValue, getValues, clearErrors, control } = form;
+
+  const { dischargePort, loadPort } = getValues();
 
   const {
     basins,
@@ -82,22 +84,40 @@ const AdditionalDischargeForm = ({ data = {}, showError = false, showResetButton
     [basins]
   );
 
+  // Function to check if country matches the countryFlag from loadPort or dischargePort
+  const isCountryMatchingPorts = useCallback(
+    (countryCode) => {
+      if (!countryCode) return false;
+
+      const loadPortFlag = loadPort?.countryFlag;
+      const dischargePortFlag = dischargePort?.countryFlag;
+
+      return (
+        (loadPortFlag && loadPortFlag.toLowerCase() === countryCode.toLowerCase()) ||
+        (dischargePortFlag && dischargePortFlag.toLowerCase() === countryCode.toLowerCase())
+      );
+    },
+    [loadPort, dischargePort]
+  );
+
   // Filter and prepare countries with disabled state
   const countriesWithDisabled = useMemo(() => {
     return countries.map((country) => ({
       ...country,
-      isDisabled: isCountrySelectedInBasins(country.value),
+      isDisabled: isCountrySelectedInBasins(country.value) || isCountryMatchingPorts(country.countryFlag),
     }));
-  }, [countries, isCountrySelectedInBasins]);
+  }, [countries, isCountrySelectedInBasins, isCountryMatchingPorts]);
 
   // Update excluded countries when basin selection changes
   useEffect(() => {
-    const newExcludedCountries = formExcludedCountries.filter((country) => !isCountrySelectedInBasins(country.value));
+    const newExcludedCountries = formExcludedCountries.filter(
+      (country) => !isCountrySelectedInBasins(country.value) && !isCountryMatchingPorts(country.countryFlag)
+    );
 
     if (newExcludedCountries.length !== formExcludedCountries.length) {
       setValue('excludedCountries', newExcludedCountries);
     }
-  }, [basins, formExcludedCountries, setValue, isCountrySelectedInBasins]);
+  }, [basins, formExcludedCountries, setValue, isCountrySelectedInBasins, isCountryMatchingPorts]);
 
   // Use ref to maintain stable reference to searchBasins
   const searchBasinsRef = useRef(searchBasins);
