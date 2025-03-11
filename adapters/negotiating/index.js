@@ -731,9 +731,17 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
   return {
     laycanStart,
     laycanEnd,
-    loadPort: { label: `${loadPortName}, ${loadPortLocode}`, value: loadPortId },
+    loadPort: {
+      label: `${loadPortName}, ${loadPortLocode}`,
+      value: loadPortId,
+      countryFlag: getLocode(loadPortLocode),
+    },
     loadTerminal: { label: loadTerminalName, value: loadTerminalId },
-    dischargePort: { label: `${dischargePortName}, ${dischargePortLocode}`, value: dischargePortId },
+    dischargePort: {
+      label: `${dischargePortName}, ${dischargePortLocode}`,
+      value: dischargePortId,
+      countryFlag: getLocode(dischargePortLocode),
+    },
     dischargeTerminal: { label: dischargeTerminalName, value: dischargeTerminalId },
     cargoType: { label: cargoName, value: cargoId },
     productsByIndex: Array.from({ length: products.length }, (_, index) => index),
