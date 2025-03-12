@@ -3,7 +3,7 @@
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const {
@@ -12,7 +12,6 @@ const DetailsContent = ({ detailsData = {} }) => {
     cargoDetails,
     voyageDetails,
     commercialOfferTerms,
-    additionalCharterPartyTerms,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
@@ -154,16 +153,6 @@ const DetailsContent = ({ detailsData = {} }) => {
                 </TextRow>
               ))}
             </div>
-          </FieldsetContent>
-        </FieldsetWrapper>
-
-        <FieldsetWrapper>
-          <Title level={3}>Additional Charter Party Terms</Title>
-
-          <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {additionalCharterPartyTerms?.map(({ title, body }) => (
-              <PartyItem key={title} buttonText={title} modalTitle="Tanker Voyage Charter Party" body={body} />
-            ))}
           </FieldsetContent>
         </FieldsetWrapper>
       </div>

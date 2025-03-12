@@ -8,7 +8,7 @@ import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
-import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const { role } = useSelector(getUserDataSelector);
@@ -19,7 +19,6 @@ const DetailsContent = ({ detailsData = {} }) => {
     cargoDetails = {},
     commercialOfferTerms = {},
     voyageDetails = {},
-    additionalCharterPartyTerms = [],
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
@@ -119,18 +118,6 @@ const DetailsContent = ({ detailsData = {} }) => {
           <AdditionalDischargeDetails data={additionalDischargeData} classNames="mt-4" />
         </FieldsetWrapper>
       </div>
-      {!!additionalCharterPartyTerms.length && (
-        <FieldsetWrapper>
-          <Title level="3">Additional Charter Party Terms</Title>
-
-          <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {additionalCharterPartyTerms.map(({ title, body }, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <PartyItem key={index} buttonText={title} modalTitle="All Additional Information" body={body} />
-            ))}
-          </FieldsetContent>
-        </FieldsetWrapper>
-      )}
     </div>
   );
 };

@@ -54,7 +54,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
         }
         footer={
           <PreFixtureExpandedFooter
-            underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
+            underNegotiation={!rowData?.isCountdownActive}
             offerId={rowData.id}
             offerAccepted={setAccepted}
           />
