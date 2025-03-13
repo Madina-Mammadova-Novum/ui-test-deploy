@@ -28,7 +28,7 @@ function chatSessionDataAdapter({ data }) {
 function chatDealDataAdapter({ data }) {
   if (!data) return {};
 
-  const { searchedCargo, products, vessel, id } = data;
+  const { searchedCargo, products, vessel, id, laycanEnd, laycanStart } = data;
 
   return {
     dealId: id,
@@ -53,8 +53,8 @@ function chatDealDataAdapter({ data }) {
         countryId: searchedCargo?.loadTerminal?.port?.countryId,
       },
       totalQuantity: searchedCargo?.totalQuantity?.toLocaleString(),
-      laycanStart: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
-      laycanEnd: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
+      laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
   };
 }

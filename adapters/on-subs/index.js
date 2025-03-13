@@ -8,7 +8,7 @@ import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, t
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed, laycanEnd, laycanStart } = data;
 
   return [
     {
@@ -43,12 +43,12 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Laycan start',
-      text: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
       label: 'Laycan end',
-      text: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
@@ -73,7 +73,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed, laycanEnd, laycanStart } = data;
 
   return [
     {
@@ -108,12 +108,12 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Laycan start',
-      text: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
       label: 'Laycan end',
-      text: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
