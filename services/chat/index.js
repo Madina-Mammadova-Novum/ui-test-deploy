@@ -47,6 +47,26 @@ export const reactivateChatById = async ({ data }) => {
   };
 };
 
+export const sendChatMessage = async ({ chatId, message }) => {
+  const body = { chatId, message };
+
+  const response = await postData('chat/send-message', body);
+
+  return {
+    ...response,
+  };
+};
+
+export const sendChatFile = async ({ chatId, message }) => {
+  const body = { chatId, message };
+
+  const response = await postData('chat/send-file', body);
+
+  return {
+    ...response,
+  };
+};
+
 export const getChatToken = async ({ data: tokenData }) => {
   const body = chatTokenAdapter({ data: tokenData });
   const response = await postData('chat/token', body);
