@@ -154,14 +154,6 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setConversation(opened));
   }
 
-  async sendMessage({ message }) {
-    this.connection?.invoke('SendMessage', message);
-  }
-
-  async sendFile({ fileUrl }) {
-    this.connection?.invoke('SendFile', fileUrl);
-  }
-
   async readMessage({ id }) {
     this.connection?.invoke('ReadMessage', id);
   }

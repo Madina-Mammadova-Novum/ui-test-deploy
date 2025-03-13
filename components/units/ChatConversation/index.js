@@ -14,6 +14,7 @@ import FileUploadSVG from '@/assets/images/fileUpload.svg';
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Input } from '@/elements';
 import { AVAILABLE_FORMATS } from '@/lib/constants';
+import { sendChatFile, sendChatMessage } from '@/services/chat';
 import { сhatSessionService } from '@/services/signalR';
 import { getChatHistory } from '@/store/entities/chat/actions';
 import { getAuthChatSelector } from '@/store/selectors';
@@ -67,48 +68,53 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
     }
   });
 
-  const handleFileUpload = useCallback(async (acceptedFiles, rejections) => {
-    if (rejections && rejections.length > 0) {
-      // Handle rejected files
-      const errorMessage = fileErrorAdapter({ data: rejections[0]?.errors });
-      errorToast('File Upload Error', errorMessage.message);
-      return;
-    }
+  const handleFileUpload = useCallback(
+    async (acceptedFiles, rejections) => {
+      if (rejections && rejections.length > 0) {
+        // Handle rejected files
+        const errorMessage = fileErrorAdapter({ data: rejections[0]?.errors });
+        errorToast('File Upload Error', errorMessage.message);
+        return;
+      }
 
-    if (acceptedFiles && acceptedFiles.length > 0) {
-      // Set uploading state
-      setUploading(true);
+      if (acceptedFiles && acceptedFiles.length > 0) {
+        // Set uploading state
+        setUploading(true);
 
-      // Process files one by one (fileReaderAdapter is designed for single file)
-      for (const file of acceptedFiles) {
-        try {
-          // Create setValue and setError functions that work with our component
-          const setValue = (key, value) => {
-            if (key === 'file' && value) {
-              // Send the file URL using the sendFile method
-              сhatSessionService.sendFile({
-                fileUrl: value,
-                fileName: file.name,
-              });
-            }
-          };
+        // Process files one by one (fileReaderAdapter is designed for single file)
+        for (const file of acceptedFiles) {
+          try {
+            // Create setValue and setError functions that work with our component
+            const setValue = (key, value) => {
+              if (key === 'file' && value) {
+                const chatId = data?.chatId;
 
-          const setError = (key, error) => {
-            if (key === 'file' && error) {
-              console.error('File upload failed:', error);
-              errorToast('Upload Failed', error.message || 'Failed to upload file');
-            }
-          };
+                // Send the file URL using the sendChatFile method
+                sendChatFile({
+                  chatId,
+                  message: value,
+                });
+              }
+            };
 
-          // Use fileReaderAdapter with our custom setValue and setError functions
-          fileReaderAdapter(file, setValue, setError, setUploading);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          errorToast('Upload Error', 'An unexpected error occurred while uploading the file');
+            const setError = (key, error) => {
+              if (key === 'file' && error) {
+                console.error('File upload failed:', error);
+                errorToast('Upload Failed', error.message || 'Failed to upload file');
+              }
+            };
+
+            // Use fileReaderAdapter with our custom setValue and setError functions
+            fileReaderAdapter(file, setValue, setError, setUploading);
+          } catch (error) {
+            console.error('Error uploading file:', error);
+            errorToast('Upload Error', 'An unexpected error occurred while uploading the file');
+          }
         }
       }
-    }
-  }, []);
+    },
+    [data]
+  );
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     onDrop: handleFileUpload,
@@ -142,7 +148,10 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    сhatSessionService.sendMessage({ message });
+
+    const chatId = data?.chatId;
+
+    sendChatMessage({ chatId, message });
     setMessage('');
   };
 
