@@ -26,8 +26,6 @@ const OnSubs = () => {
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
-    const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
-
     return (
       <ExpandableRow
         className="px-5"
@@ -44,7 +42,6 @@ const OnSubs = () => {
             identity={{ isOwner, isCharterer }}
             status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
             offerId={rowData?.id}
-            scriveURL={scriveURL || ''}
           />
         }
       >
