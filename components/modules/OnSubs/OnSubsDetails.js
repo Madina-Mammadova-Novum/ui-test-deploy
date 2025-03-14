@@ -34,8 +34,6 @@ const OnSubsDetails = ({ searchedParams }) => {
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
-    const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
-
     return (
       <ExpandableRow
         key={rowData?.id}
@@ -51,7 +49,6 @@ const OnSubsDetails = ({ searchedParams }) => {
           <OnSubsExpandedFooter
             offerId={rowData?.id}
             identity={{ isOwner }}
-            scriveURL={scriveURL || ''}
             underRecap={!rowData?.isCountdownActive || !rowData?.failedAt || rowData?.isFailed}
             status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
           />

@@ -3,20 +3,24 @@ import FailTheSubsModalContent from './FailTheSubsModalContent';
 import { OnSubsExpandedFooterPropTypes } from '@/lib/types';
 
 import ClockSVG from '@/assets/images/clock.svg';
+import MobileSVG from '@/assets/images/mobile.svg';
 import CircleArrowsSVG from '@/assets/images/process.svg';
-import { Button, Divider, NextLink } from '@/elements';
+import { Button, Divider } from '@/elements';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 
-const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, scriveURL = '' }) => {
-  const owner = identity.isOwner && status.owner === 'Confirmed' && status.charterer !== 'Confirmed';
-  const charterer = identity.isCharterer && status.charterer === 'Confirmed' && status.owner !== 'Confirmed';
+const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity }) => {
+  const isOwnerConfirmed = identity.isOwner && status.owner === 'Confirmed';
+  const isChartererConfirmed = identity.isCharterer && status.charterer === 'Confirmed';
+
+  const isCounterpartyPending =
+    (isOwnerConfirmed && status.charterer !== 'Confirmed') || (isChartererConfirmed && status.owner !== 'Confirmed');
 
   const printCta = () => {
-    if (owner)
+    if (isOwnerConfirmed && isCounterpartyPending)
       return (
         <Button
           buttonProps={{
-            text: 'You have lifted the subs. We are waiting for your counterparty’s decision. You will be notified soon',
+            text: "You have lifted the subs. We are waiting for your counterparty's decision. You will be notified soon",
             icon: { before: <ClockSVG /> },
             variant: 'tertiary',
             size: 'large',
@@ -26,11 +30,11 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
         />
       );
 
-    if (charterer)
+    if (isChartererConfirmed && isCounterpartyPending)
       return (
         <Button
           buttonProps={{
-            text: 'You have lifted the subs. We are waiting for your counterparty’s decision. You will be notified soon',
+            text: "You have lifted the subs. We are waiting for your counterparty's decision. You will be notified soon",
             icon: { before: <ClockSVG /> },
             variant: 'tertiary',
             size: 'large',
@@ -42,12 +46,12 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
 
     return (
       <div className={`flex gap-x-5 ${underRecap ? 'justify-between' : 'justify-end'} pt-2.5`}>
-        {underRecap && (
+        {!isOwnerConfirmed && !isChartererConfirmed && (
           <div className="w-full grow">
             <Button
               buttonProps={{
-                text: 'The recap is being finalized',
-                icon: { before: <CircleArrowsSVG /> },
+                text: underRecap ? 'The recap is being finalized' : 'To lift the subs, please use our mobile app',
+                icon: { before: underRecap ? <CircleArrowsSVG /> : <MobileSVG className="h-5 w-5 fill-gray" /> },
                 variant: 'tertiary',
                 size: 'large',
               }}
@@ -71,17 +75,6 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity, sc
             >
               <FailTheSubsModalContent offerId={offerId} />
             </ModalWindow>
-          </div>
-          <div className="w-full">
-            <NextLink
-              href={scriveURL}
-              target="_blank"
-              className={`block h-10 whitespace-nowrap rounded-md bg-blue px-5 py-2.5 text-xsm text-white hover:bg-blue-darker ${
-                underRecap && 'pointer-events-none opacity-50'
-              }`}
-            >
-              Lift the Subs
-            </NextLink>
           </div>
         </div>
       </div>
