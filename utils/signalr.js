@@ -155,11 +155,15 @@ export class ChatSessionController extends SignalRController {
   }
 
   async readMessage({ id }) {
-    this.connection?.invoke('ReadMessage', id);
+    if (this.connection?.state === 'Connected') {
+      this.connection?.invoke('ReadMessage', id);
+    }
   }
 
   updateMessage({ message, clientId, role }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
+    if (this.connection?.state === 'Connected') {
+      this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
+    }
   }
 
   stop() {
