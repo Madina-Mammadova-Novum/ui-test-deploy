@@ -437,6 +437,7 @@ export const getRoleIdentity = ({ role }) => {
   return {
     isOwner: role === ROLES.OWNER,
     isCharterer: role === ROLES.CHARTERER,
+    isAnon: role === ROLES.ANON,
   };
 };
 

@@ -10,7 +10,7 @@ import { setOpenedChat } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthChatSelector } from '@/store/selectors';
 import { AnonChat, AuthChat } from '@/units';
 
-const Chat = ({ token }) => {
+const Chat = ({ token, isAnon = true }) => {
   const dispatch = useDispatch();
   const { opened, messageCount } = useSelector(token ? getAuthChatSelector : getAnonChatSelector);
 
@@ -25,10 +25,10 @@ const Chat = ({ token }) => {
           counter={messageCount}
           className="fixed bottom-3 right-3 z-100 block md:z-10"
         />
-        {token ? <AuthChat opened={opened} token={token} /> : <AnonChat opened={opened} />}
+        {isAnon ? <AnonChat opened={opened} /> : <AuthChat opened={opened} token={token} />}
       </>
     );
-  }, [token, opened, messageCount, handleOpen]);
+  }, [token, opened, messageCount, handleOpen, isAnon]);
 
   return memoizedChatButton;
 };
