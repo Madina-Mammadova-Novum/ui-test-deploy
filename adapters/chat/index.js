@@ -119,9 +119,19 @@ export function moreMessagesDataAdapter({ payload, messages }) {
   if (!messages) return [];
 
   return [...payload, ...messages]?.reduce((accumulator, { title, data }) => {
+    // Get existing data for this title/day if it exists
+    const existingData = accumulator[title]?.data || [];
+
+    // Track existing message IDs to avoid duplicates
+    const existingIds = new Set(existingData.map((msg) => msg.id));
+
+    // Filter out duplicates from the new data
+    const uniqueNewData = data.filter((msg) => !existingIds.has(msg.id));
+
+    console.log({ existingData, uniqueNewData });
     accumulator[title] = {
       title,
-      data: [...(accumulator[title]?.data ?? []), ...data],
+      data: [...existingData, ...uniqueNewData],
     };
 
     return accumulator;
