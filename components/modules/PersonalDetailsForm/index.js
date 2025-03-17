@@ -49,7 +49,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
         onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{
-          text: 'Edit personal details',
+          text: 'Submit',
           variant: 'primary',
           size: 'large',
           disabled: !methods.formState.isDirty,
