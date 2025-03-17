@@ -123,15 +123,14 @@ export function moreMessagesDataAdapter({ payload, messages }) {
     const existingData = accumulator[title]?.data || [];
 
     // Track existing message IDs to avoid duplicates
-    const existingIds = new Set(existingData.map((msg) => msg.id));
+    const existingIds = new Set(existingData.map((msg) => msg?.id));
 
     // Filter out duplicates from the new data
-    const uniqueNewData = data.filter((msg) => !existingIds.has(msg.id));
+    const updatedData = data.filter((msg) => !existingIds.has(msg?.id));
 
-    console.log({ existingData, uniqueNewData });
     accumulator[title] = {
       title,
-      data: [...existingData, ...uniqueNewData],
+      data: [...existingData, ...updatedData],
     };
 
     return accumulator;
