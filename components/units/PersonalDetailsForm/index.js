@@ -16,21 +16,27 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
 
   const { pending, pendingRequest, firstName, lastName, email } = values;
 
+  // Helper function to render label badge based on conditions
+  const renderLabelBadge = (pendingValue, currentValue, fieldName) => {
+    if (pendingRequest) {
+      const isPending = pendingValue === currentValue;
+      return <p className={classNames('font-bold', isPending ? 'text-green' : 'text-blue')}>{pendingValue}</p>;
+    }
+
+    if (onUpdatePage && fieldName !== 'email') {
+      return '';
+    }
+
+    return '*';
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 gap-5">
         <Input
           {...register('firstName')}
           label="First name"
-          labelBadge={
-            pendingRequest ? (
-              <p className={classNames('font-bold', pending?.name === firstName ? 'text-green' : 'text-blue')}>
-                {pending?.name}
-              </p>
-            ) : (
-              '*'
-            )
-          }
+          labelBadge={renderLabelBadge(pending?.name, firstName, 'firstName')}
           placeholder="John"
           error={errors.firstName?.message}
           disabled={isSubmitting || onUpdatePage}
@@ -38,15 +44,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         <Input
           {...register('lastName')}
           label="Last name"
-          labelBadge={
-            pendingRequest ? (
-              <p className={classNames('font-bold', pending?.surname === lastName ? 'text-green' : 'text-blue')}>
-                {pending?.surname}
-              </p>
-            ) : (
-              '*'
-            )
-          }
+          labelBadge={renderLabelBadge(pending?.surname, lastName, 'lastName')}
           placeholder="Doe"
           error={errors.lastName?.message}
           disabled={isSubmitting || onUpdatePage}
@@ -54,15 +52,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         <Input
           {...register('email')}
           label="Email"
-          labelBadge={
-            pendingRequest ? (
-              <p className={classNames('font-bold', pending?.email === email ? 'text-green' : 'text-blue')}>
-                {pending?.email}
-              </p>
-            ) : (
-              '*'
-            )
-          }
+          labelBadge={renderLabelBadge(pending?.email, email, 'email')}
           placeholder="Enter your email"
           error={errors.email?.message}
           disabled={isSubmitting}
