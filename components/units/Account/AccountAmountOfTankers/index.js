@@ -12,7 +12,7 @@ import { getRoleIdentity } from '@/utils/helpers';
 const AccountAmountOfTankers = ({ data, total }) => {
   const { role } = useSelector(getUserDataSelector);
 
-  const { isCharterer, isOwner } = getRoleIdentity({ role });
+  const { isCharterer } = getRoleIdentity({ role });
 
   const printRoleBasedInfoInfo = useMemo(() => {
     if (isCharterer) {
@@ -32,9 +32,8 @@ const AccountAmountOfTankers = ({ data, total }) => {
         </TextRow>
       );
     }
-    if (isOwner) return <TextRow title="Number of tankers">{total} tankers</TextRow>;
     return null;
-  }, [data, isCharterer, isOwner, total]);
+  }, [data, isCharterer, total]);
 
   return printRoleBasedInfoInfo;
 };

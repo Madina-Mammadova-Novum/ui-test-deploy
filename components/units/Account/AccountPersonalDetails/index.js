@@ -43,7 +43,7 @@ const AccountPersonalDetails = ({ user = {} }) => {
 
   return (
     <FieldsetWrapper>
-      <FieldsetHeader title="Personal Details">
+      <FieldsetHeader title="User Details">
         <div className="flex gap-2">
           {pendingRequest ? (
             <Button
@@ -60,7 +60,7 @@ const AccountPersonalDetails = ({ user = {} }) => {
           <ModalWindow
             containerClass="w-[672px]"
             buttonProps={{
-              text: 'Edit personal details',
+              text: 'Edit',
               variant: 'primary',
               size: 'medium',
               className: '!px-2.5 !py-0.5 text-xsm',
