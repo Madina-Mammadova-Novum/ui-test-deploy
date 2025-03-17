@@ -15,7 +15,7 @@ import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
 import { updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
-import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes, TankerSlotsDetailsStatic } from '@/units';
+import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
@@ -32,7 +32,7 @@ const CompanyInfoForm = ({ closeModal }) => {
     ...companyAddressesSchema(sameAddress),
   });
 
-  const { isCharterer, isOwner } = getRoleIdentity({ role });
+  const { isCharterer } = getRoleIdentity({ role });
 
   const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
@@ -58,7 +58,7 @@ const CompanyInfoForm = ({ closeModal }) => {
     {
       id: 1,
       label: 'Сompany information',
-      list: ['Company Name', 'Years of Operation'],
+      list: ['Company Name'],
     },
     {
       id: 2,
@@ -80,7 +80,7 @@ const CompanyInfoForm = ({ closeModal }) => {
         </Title>
         <Notes
           title="Please note!"
-          subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
+          subtitle="Please note that any changes to these fields will require verification by ShipLink."
           data={noteList}
         />
         <div className="flex h-[480px] flex-col gap-5 overflow-y-scroll px-2.5 py-2.5">
@@ -88,7 +88,6 @@ const CompanyInfoForm = ({ closeModal }) => {
             Сompany information
           </Title>
           <CompanyDetails notEditable />
-          {isOwner && <TankerSlotsDetailsStatic data={data?.companyDetails.imos} />}
           <CompanyAddresses countries={dropDownOptionsAdapter({ data: countries })} />
           {isCharterer && <CargoesSlotsDetailsStatic data={data?.companyDetails.cargoes} />}
         </div>
