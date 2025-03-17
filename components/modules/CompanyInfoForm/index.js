@@ -83,7 +83,7 @@ const CompanyInfoForm = ({ closeModal }) => {
           subtitle="Please note that any changes to these fields will require verification by ShipLink."
           data={noteList}
         />
-        <div className="flex h-[480px] flex-col gap-5 overflow-y-scroll px-2.5 py-2.5">
+        <div className="flex flex-col gap-5 overflow-y-scroll px-2.5 py-2.5">
           <Title level="4" className="text-sm !text-black">
             Сompany information
           </Title>
