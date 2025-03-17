@@ -16,7 +16,7 @@ import { deactivateAccount } from '@/services/account';
 import { clearSession } from '@/store/entities/auth/slice';
 import { resetChat } from '@/store/entities/chat/slice';
 import { resetNotificationData } from '@/store/entities/notifications/slice';
-import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const DeactivateAccountForm = ({ title, closeModal }) => {
   const router = useRouter();
@@ -39,10 +39,9 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
   };
 
   const onSubmit = async (data) => {
-    const { error, message } = await deactivateAccount({ data });
+    const { error } = await deactivateAccount({ data });
 
     if (!error) {
-      successToast(message);
       closeModal();
       router.replace(ROUTES.LOGIN);
       dispatch(clearSession());
