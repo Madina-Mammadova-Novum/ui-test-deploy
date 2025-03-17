@@ -98,10 +98,6 @@ const DeleteAccountForm = ({ title, closeModal }) => {
             error={errors.password?.message}
           />
         </div>
-        <p className="text-xsm font-semibold text-red">
-          If you send a request to delete your account, but then change your mind, it will be impossible to suspend the
-          process of considering your request.
-        </p>
       </ModalFormManager>
     </FormProvider>
   );
