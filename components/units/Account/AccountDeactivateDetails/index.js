@@ -11,6 +11,7 @@ const AccountDeactivateDetails = () => {
         variant: 'delete',
         size: 'small',
         className: '!py-0',
+        'data-deactivate-account-action': 'deactivate-account-button',
       }}
     >
       <DeactivateAccountForm title="Deactivation of your account" />
