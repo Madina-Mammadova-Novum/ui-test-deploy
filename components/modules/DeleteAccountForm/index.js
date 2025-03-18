@@ -53,7 +53,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
       dispatch(resetChat());
       router.refresh();
     } else {
-      errorToast('Bad request', error.title);
+      errorToast(error.title, error.message);
     }
   };
 
