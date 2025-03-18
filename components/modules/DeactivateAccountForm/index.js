@@ -49,7 +49,7 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
       dispatch(resetChat());
       router.refresh();
     } else {
-      errorToast('Bad request', error.message);
+      errorToast(error.title, error.message);
     }
   };
 
