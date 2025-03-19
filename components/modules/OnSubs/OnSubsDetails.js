@@ -34,13 +34,20 @@ const OnSubsDetails = ({ searchedParams }) => {
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
+    const { frozenAt, isFailed } = rowData;
+    const isStatusSectionActive = isFailed || frozenAt;
+
     return (
       <ExpandableRow
         key={rowData?.id}
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr'}
+            gridStyles={
+              isOwner
+                ? `1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+                : `1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+            }
           />
         }
         expand={toggle}
