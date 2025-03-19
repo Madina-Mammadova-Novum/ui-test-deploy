@@ -29,7 +29,7 @@ const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
   // Extract common properties
   const { proposedBy, status, charterPartyTemplate, dealId, id: proposalId } = proposedBaseCharterParty || {};
 
-  const templateName = charterPartyTemplate?.name;
+  const templateName = charterPartyTemplate?.name || '';
   const templateUrl = charterPartyTemplate?.url;
   const templateId = charterPartyTemplate?.id;
 
