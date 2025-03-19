@@ -14,14 +14,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  const ownerImage = isProduction
-    ? 'https://shiplink-backend.azurewebsites.net/uploads/Owner_8442395a9c.png?format=webp'
-    : 'https://app-shiplink-backend-ui-dev-001.azurewebsites.net/uploads/Owner_049a264732.png?format=webp';
-  const chartererImage = isProduction
-    ? 'https://shiplink-backend.azurewebsites.net/uploads/Charterer_8311a8609d.png?format=webp'
-    : 'https://app-shiplink-backend-ui-dev-001.azurewebsites.net/uploads/Charterer_f47da41fa3.png?format=webp';
+  const ownerImage = '/images/owner.png';
+  const chartererImage = '/images/charterer.png';
 
   const tabs = ctaList.map((ctaBlock) => {
     return {
@@ -76,15 +70,11 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
             <NextImage
               src={currentTab === 'For Vessel Owner' ? ownerImage : chartererImage}
               alt="Cover Image for User"
-              className="h-[20rem] w-full rounded-base object-cover object-center"
+              className="w-full rounded-base object-cover object-center"
               quality={100}
               height={320}
               width={400}
             />
-            {/* Preload charterer image */}
-            {currentTab === 'For Vessel Owner' && (
-              <link rel="preload" href={chartererImage} as="image" type="image/webp" />
-            )}
           </div>
         )}
       </div>
