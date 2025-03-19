@@ -42,7 +42,9 @@ export default async function Home({ params }) {
   return (
     <main className={classNames(legal && 'legal-styles')}>
       {/* todo: example to use legal variable */}
-      <section className="relative bg-gray-light pb-[195px] pt-[115px]">
+      <section
+        className={`relative bg-gray-light pt-[115px] ${pathname === '/about-us' ? 'pb-[100px]' : 'pb-[195px]'}`}
+      >
         <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
           <NextImage
             alt="waves"
