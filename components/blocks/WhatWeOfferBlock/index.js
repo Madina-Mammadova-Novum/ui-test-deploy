@@ -9,7 +9,10 @@ import { makeId } from '@/utils/helpers';
 
 const Offer = ({ item, index }) => {
   return (
-    <div key={index} className="flex flex-col items-center gap-5 sm:flex-row sm:gap-10 sm:even:flex-row-reverse">
+    <div
+      key={index}
+      className="flex flex-col items-center gap-5 sm:flex-row sm:gap-10 sm:even:flex-row-reverse xl:gap-14"
+    >
       {item.coverImage && (
         <div className="size-72 shrink-0 rounded-base md:h-[350px] md:w-[380px]">
           <NextImage
@@ -22,7 +25,7 @@ const Offer = ({ item, index }) => {
           />
         </div>
       )}
-      <div>
+      <div className="flex flex-col items-center">
         {item.title && (
           <Title level="2" className="mb-2.5 text-black">
             {item.title}
@@ -45,7 +48,7 @@ Offer.propTypes = {
 
 const WhatWeOfferBlock = ({ title, values }) => {
   return (
-    <section id="what-we-offer">
+    <section id="what-we-offer" className="pt-[100px]">
       <div className="container mx-auto max-w-[960px]">
         {title && (
           <Title level="1" className="mb-5 text-center text-black">
