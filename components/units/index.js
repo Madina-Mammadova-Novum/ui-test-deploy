@@ -41,6 +41,7 @@ import ComplexPagination from '@/units/ComplexPagination';
 import ConfirmModal from '@/units/ConfirmModal';
 import COTTabContent from '@/units/COTTabContent';
 import Countdown from '@/units/Countdown';
+import CountdownTimer from '@/units/CountdownTimer';
 import CounterofferForm from '@/units/CounterofferForm';
 import CreateFleetForm from '@/units/CreateFleetForm';
 import DateDetailsForm from '@/units/DateDetailsForm';
@@ -225,4 +226,5 @@ export {
   NestedCheckboxList,
   FailedOffersFilter,
   IconUpload,
+  CountdownTimer,
 };
