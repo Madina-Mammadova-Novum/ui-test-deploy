@@ -33,7 +33,6 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
             loop={false}
             muted
             preload="auto"
-            poster={coverImage ? getStrapiMedia(delve(coverImage, 'format.thumbnail.url'), '') : ''}
             className="w-full"
           />
         </div>
