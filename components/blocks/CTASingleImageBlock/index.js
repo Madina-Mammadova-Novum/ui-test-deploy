@@ -29,9 +29,11 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
             src="/videos/intro.mp4"
             controls
             autoPlay={false}
+            autoPlayOnScroll
             loop={false}
-            muted={false}
+            muted
             preload="auto"
+            poster={coverImage ? getStrapiMedia(delve(coverImage, 'format.thumbnail.url'), '') : ''}
             className="w-full"
           />
         </div>
