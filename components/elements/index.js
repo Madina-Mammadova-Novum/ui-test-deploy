@@ -58,6 +58,7 @@ import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
 import Toggle from '@/elements/Toggle';
 import TypingIndicator from '@/elements/TypingIndicator';
+import VideoPlayer from '@/elements/VideoPlayer';
 
 export {
   AccordionBody,
@@ -124,4 +125,5 @@ export {
   MapLoader,
   NotificationAlert,
   StatusIndicator,
+  VideoPlayer,
 };
