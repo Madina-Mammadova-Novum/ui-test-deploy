@@ -72,6 +72,7 @@ const VideoPlayer = ({
       preload={preload}
       className={`w-full ${className}`}
       poster={poster}
+      controlsList="nodownload"
       {...rest}
     >
       <source src={src} type={type} />
