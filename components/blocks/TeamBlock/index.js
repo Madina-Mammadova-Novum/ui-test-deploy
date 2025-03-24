@@ -9,10 +9,21 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { authorPropTypes } from '@/lib/types';
 
 import { HoverableIcon, NextImage, NextLink, Title } from '@/elements';
+import { SCREENS } from '@/lib/constants';
 import { getStrapiMedia } from '@/utils';
 import { makeId } from '@/utils/helpers';
+import { useMediaQuery } from '@/utils/hooks';
 
 const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
+  const smdScreen = useMediaQuery(SCREENS.SMD);
+  const smScreen = useMediaQuery(SCREENS.SM);
+
+  const getSlidesPerView = () => {
+    if (smScreen) return 1;
+    if (smdScreen) return 2;
+    return 3;
+  };
+
   const printSocialLink = (link) => (
     <NextLink key={link} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
@@ -34,7 +45,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
       <div className="mt-[60px] flex max-w-full grow flex-col items-center rounded-base bg-white px-[30px] pb-[30px] text-black shadow-2xmd">
         {coverImage && (
           <NextImage
-            alt={delve(coverImage, 'alternativeText')}
+            alt={delve(coverImage, 'alternativeText') || 'User Avatar'}
             src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
             height={120}
             width={120}
@@ -69,7 +80,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
         {shortDescription && shortDescription}
         {members.length ? (
           <Swiper
-            slidesPerView="3"
+            slidesPerView={getSlidesPerView()}
             spaceBetween={0}
             pagination={{
               clickable: true,
