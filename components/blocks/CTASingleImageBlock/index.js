@@ -8,7 +8,7 @@ import { getStrapiMedia } from '@/utils';
 
 const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) => {
   return (
-    <section className="relative py-24">
+    <section className="relative pb-20">
       {coverImage && (
         <div className="absolute inset-0 -z-10 h-full w-full">
           <NextImage
@@ -22,9 +22,8 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
           />
         </div>
       )}
-
-      <div className="mx-auto max-w-[690px] rounded-base">
-        <div className="mb-10 w-full overflow-hidden rounded-lg shadow-xl">
+      <div className="mx-auto max-w-[1258px] gap-8 rounded-b-base px-6 3md:px-14">
+        <div className="mb-10 w-full overflow-hidden rounded-b-base shadow-xl">
           <VideoPlayer
             src="/videos/intro.mp4"
             controls
