@@ -26,7 +26,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: false,
   },
   eslint: {
     ignoreDuringBuilds: true,
