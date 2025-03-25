@@ -4,8 +4,13 @@ import { useEffect } from 'react';
 
 const NewRelicBrowser = () => {
   const test = process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY;
+  const test2 = process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID;
+  const test3 = process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID;
+  const test4 = process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY;
+  const test5 = process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID;
+  const backendApiUrl = process.env.BACKEND_API_URL;
   // eslint-disable-next-line no-console
-  console.log({ test });
+  console.log({ test, test2, test3, test4, test5, backendApiUrl });
 
   useEffect(() => {
     // eslint-disable-next-line no-console
