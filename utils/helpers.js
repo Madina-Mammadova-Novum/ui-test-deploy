@@ -534,7 +534,7 @@ export const getListOfDataByDays = (data) => {
 };
 
 export const calculateCountdown = (expiresAt, frozenAt) => {
-  const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
+  const currentUTCtime = Date.now();
 
   let millisecondsUntilExpiration = 0;
   if (frozenAt) {
