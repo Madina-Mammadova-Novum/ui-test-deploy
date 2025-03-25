@@ -3,7 +3,13 @@
 import { useEffect } from 'react';
 
 const NewRelicBrowser = () => {
+  const test = process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY;
+  // eslint-disable-next-line no-console
+  console.log({ test });
+
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('NewRelicBrowser');
     // Only run in browser
     if (typeof window !== 'undefined') {
       // Correctly import the New Relic browser agent
@@ -55,6 +61,8 @@ const NewRelicBrowser = () => {
                 applicationID: process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID,
               },
             });
+            // eslint-disable-next-line no-console
+            console.log('New Relic Browser initialized successfully: ', agent);
           } catch (error) {
             console.error('Failed to initialize New Relic Browser:', error);
           }
