@@ -63,6 +63,7 @@
     "@hookform/resolvers": "2.8.5",
     "@iconscout/react-unicons-solid": "^1.0.2",
     "@microsoft/signalr": "^7.0.9",
+    "@newrelic/browser-agent": "^1.285.0",
     "@opentelemetry/auto-instrumentations-node": "^0.52.0",
     "@opentelemetry/exporter-metrics-otlp-http": "^0.54.1",
     "@opentelemetry/exporter-trace-otlp-http": "^0.54.1",
