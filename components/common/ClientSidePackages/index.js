@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 import { usePathname } from 'next/navigation';
 
-import { NewRelicBrowser } from '@/common';
+import { MatomoAnalytics, NewRelicBrowser } from '@/common';
 import { ROUTES } from '@/lib';
 import { Chat } from '@/modules';
 import { getCookieFromBrowser, getRoleIdentity } from '@/utils/helpers';
@@ -28,6 +28,7 @@ const ClientSidePackages = () => {
       <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={3500} hideProgressBar />
       {isChatAvailable && <Chat token={token} />}
       <NewRelicBrowser />
+      <MatomoAnalytics />
     </>
   );
 };
