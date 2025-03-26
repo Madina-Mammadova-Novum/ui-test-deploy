@@ -17,34 +17,52 @@ const NewRelicBrowser = () => {
               return;
             }
 
-            // Create a new instance of BrowserAgent - just creating it is enough
-            // The instance automatically hooks into browser events and starts monitoring
+            // Initialize config object
+            const initConfig = {
+              distributed_tracing: {
+                enabled: true,
+              },
+              privacy: {
+                cookies_enabled: true,
+              },
+              ajax: {
+                deny_list: ['bam.eu01.nr-data.net'],
+              },
+              page_view_timing: {
+                enabled: true,
+              },
+              spa: {
+                enabled: true,
+              },
+            };
+
+            // Add session_replay config only in production environment
+            if (process.env.NODE_ENV === 'production') {
+              initConfig.session_replay = {
+                enabled: true,
+                block_selector: '',
+                mask_text_selector: '*',
+                sampling_rate: 10.0,
+                error_sampling_rate: 100.0,
+                mask_all_inputs: true,
+                collect_fonts: true,
+                inline_images: false,
+                inline_stylesheet: true,
+                fix_stylesheets: true,
+                preload: false,
+                mask_input_options: {},
+              };
+            }
+
+            // Create a new instance of BrowserAgent
             // eslint-disable-next-line no-unused-vars
             const agent = new BrowserAgent({
-              init: {
-                distributed_tracing: {
-                  enabled: true,
-                },
-                privacy: {
-                  cookies_enabled: true,
-                },
-                ajax: {
-                  deny_list: ['bam.eu01.nr-data.net'],
-                },
-                page_view_timing: {
-                  enabled: true,
-                },
-                spa: {
-                  enabled: true,
-                },
-              },
+              init: initConfig,
               info: {
                 beacon: 'bam.eu01.nr-data.net',
                 errorBeacon: 'bam.eu01.nr-data.net',
                 licenseKey: process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY,
                 applicationID: process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID,
-                agentID: process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID,
-                trustKey: process.env.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY,
                 sa: 1,
               },
               loader_config: {
