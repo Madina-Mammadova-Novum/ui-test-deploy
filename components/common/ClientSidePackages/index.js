@@ -22,9 +22,6 @@ const ClientSidePackages = () => {
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
   const isChatAvailable = !maintenanceMode && !unavailableChatRoute && !isAnon;
 
-  // eslint-disable-next-line no-console
-  console.log('ClientSidePackages');
-
   return (
     <>
       <div id="portal" />
