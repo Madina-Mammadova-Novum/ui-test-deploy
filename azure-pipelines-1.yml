@@ -9,10 +9,10 @@ trigger:
       - '*'
 
 pool:
-  # vmImage: 'ubuntu-latest'
-  name: SHAP # Self hosted agent
-  demands:
-    - agent.name -equals ubuntu-sha
+  vmImage: 'ubuntu-latest'
+  # name: SHAP # Self hosted agent
+  # demands:
+  #   - agent.name -equals ubuntu-sha
 
 variables:
   - group: openai-key
