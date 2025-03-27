@@ -17,6 +17,31 @@ const MatomoAnalytics = () => {
 
   // eslint-disable-next-line no-console
   console.log('MatomoAnalytics init');
+
+  // Initialize Matomo Tag Manager
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isMatomoEnabled) {
+      // Initialize Matomo Tag Manager
+      window._mtm = window._mtm || [];
+      window._mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://cdn.matomo.cloud/shiplink.matomo.cloud/container_DIxEkjyv.js';
+
+      const firstScript = document.getElementsByTagName('script')[0];
+      if (firstScript && firstScript.parentNode) {
+        firstScript.parentNode.insertBefore(script, firstScript);
+      } else {
+        document.head.appendChild(script);
+      }
+
+      // eslint-disable-next-line no-console
+      console.log('Matomo Tag Manager initialized');
+    }
+  }, [isMatomoEnabled]);
+
+  // Initialize Matomo Analytics
   useEffect(() => {
     // Initialize Matomo if enabled
     if (typeof window !== 'undefined' && isMatomoEnabled) {
