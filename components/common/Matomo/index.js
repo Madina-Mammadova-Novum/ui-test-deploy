@@ -10,7 +10,7 @@ const MatomoAnalytics = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const isMatomoEnabled = process.env.NODE_ENV === 'production';
+  const isMatomoEnabled = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_ENABLE_MATOMO === 'true';
 
   // Initialize Matomo Tag Manager
   useEffect(() => {
