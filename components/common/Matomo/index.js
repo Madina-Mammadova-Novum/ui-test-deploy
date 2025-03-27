@@ -10,11 +10,29 @@ const MatomoAnalytics = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Check if Matomo should be enabled
-  // Enable in production OR if explicitly enabled for dev testing
-  // const isMatomoEnabled = process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_MATOMO === 'true';
-  const isMatomoEnabled = true;
+  const isMatomoEnabled = process.env.NODE_ENV === 'production';
 
+  // Initialize Matomo Tag Manager
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isMatomoEnabled) {
+      // Initialize Matomo Tag Manager
+      window._mtm = window._mtm || [];
+      window._mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://cdn.matomo.cloud/shiplink.matomo.cloud/container_DIxEkjyv.js';
+
+      const firstScript = document.getElementsByTagName('script')[0];
+      if (firstScript && firstScript.parentNode) {
+        firstScript.parentNode.insertBefore(script, firstScript);
+      } else {
+        document.head.appendChild(script);
+      }
+    }
+  }, [isMatomoEnabled]);
+
+  // Initialize Matomo Analytics
   useEffect(() => {
     // Initialize Matomo if enabled
     if (typeof window !== 'undefined' && isMatomoEnabled) {
@@ -22,10 +40,6 @@ const MatomoAnalytics = () => {
 
       // Set document title
       window._paq.push(['setDocumentTitle', `${document.domain}/${document.title}`]);
-
-      // Set cookie domain
-      window._paq.push(['setCookieDomain', '*.ship.link']);
-      window._paq.push(['setDomains', ['*.ship.link']]);
 
       // Initial page view tracking removed from here to avoid duplication
       window._paq.push(['enableLinkTracking']);
@@ -46,12 +60,6 @@ const MatomoAnalytics = () => {
       } else {
         document.head.appendChild(script);
       }
-
-      // Log for testing in development
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.log('Matomo Analytics initialized for testing');
-      }
     }
   }, [isMatomoEnabled]);
 
@@ -67,12 +75,6 @@ const MatomoAnalytics = () => {
         window._paq.push(['setCustomUrl', url]);
         window._paq.push(['setDocumentTitle', `${document.domain}/${document.title}`]);
         window._paq.push(['trackPageView']);
-
-        // Log for testing in development
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.log('Matomo page view tracked:', url);
-        }
       }
     }
   }, [pathname, searchParams, isMatomoEnabled]);
