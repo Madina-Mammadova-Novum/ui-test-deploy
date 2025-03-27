@@ -22,6 +22,17 @@ const preFixtureSlice = createSlice({
     setToggle: (state, { payload }) => {
       state.toggle = payload;
     },
+    updateDocumentList: (state, action) => {
+      const { offerId, newDocument } = action?.payload;
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              documents: [...offer.documents, newDocument],
+            }
+          : offer
+      );
+    },
     updateConfirmationStatus: (state, action) => {
       const { offerId, isOwner } = action?.payload;
       state.data.offers = state.data.offers.map((offer) =>
@@ -74,6 +85,7 @@ const preFixtureSlice = createSlice({
   },
 });
 
-export const { updateConfirmationStatus, updateCountdown, updateSpecificOffer, setToggle } = preFixtureSlice.actions;
+export const { updateConfirmationStatus, updateCountdown, updateDocumentList, updateSpecificOffer, setToggle } =
+  preFixtureSlice.actions;
 
 export default preFixtureSlice.reducer;
