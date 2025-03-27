@@ -36,17 +36,6 @@ const postFixtureSlice = createSlice({
         documents: offer.documents.map((document) => (document.id === documentId ? { ...document, status } : document)),
       }));
     },
-    updateDocumentList: (state, action) => {
-      const { offerId, newDocument } = action?.payload;
-      state.data.offers = state.data.offers.map((offer) =>
-        offer.id === offerId
-          ? {
-              ...offer,
-              documents: [...offer.documents, newDocument],
-            }
-          : offer
-      );
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPostFixtureOffers.pending, (state) => {
@@ -63,7 +52,6 @@ const postFixtureSlice = createSlice({
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList, setToggle, setFilter, setSearchParams } =
-  postFixtureSlice.actions;
+export const { updateDocumentStatus, setToggle, setFilter, setSearchParams } = postFixtureSlice.actions;
 
 export default postFixtureSlice.reducer;

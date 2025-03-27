@@ -22,7 +22,6 @@ const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
         isOpened={isOpened}
       >
         <PostFixtureExpandedContent
-          offerId={rowData?.id}
           tab={tab}
           detailsData={postFixtureDetailsAdapter({ data: rowData })}
           documentsData={postFixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
