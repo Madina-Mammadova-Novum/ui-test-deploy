@@ -15,6 +15,8 @@ const MatomoAnalytics = () => {
   // const isMatomoEnabled = process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_MATOMO === 'true';
   const isMatomoEnabled = true;
 
+  // eslint-disable-next-line no-console
+  console.log('MatomoAnalytics init');
   useEffect(() => {
     // Initialize Matomo if enabled
     if (typeof window !== 'undefined' && isMatomoEnabled) {
@@ -47,11 +49,9 @@ const MatomoAnalytics = () => {
         document.head.appendChild(script);
       }
 
+      // eslint-disable-next-line no-console
+      console.log('Matomo Analytics initialized for testing');
       // Log for testing in development
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.log('Matomo Analytics initialized for testing');
-      }
     }
   }, [isMatomoEnabled]);
 
@@ -67,12 +67,8 @@ const MatomoAnalytics = () => {
         window._paq.push(['setCustomUrl', url]);
         window._paq.push(['setDocumentTitle', `${document.domain}/${document.title}`]);
         window._paq.push(['trackPageView']);
-
-        // Log for testing in development
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.log('Matomo page view tracked:', url);
-        }
+        // eslint-disable-next-line no-console
+        console.log('Matomo page view tracked:', url);
       }
     }
   }, [pathname, searchParams, isMatomoEnabled]);
