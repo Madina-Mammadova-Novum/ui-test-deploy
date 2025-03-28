@@ -32,9 +32,11 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
   };
 
   return (
-    <div className="table-scroll pt-2.5">
+    <div className="mb-5 flex flex-col gap-y-5">
       <UploadForm onSubmit={onSubmit} />
-      <Table headerData={prefixtureHeader} rows={rowsData} noDataMessage="No Documents Provided" />
+      <div className="table-scroll">
+        <Table headerData={prefixtureHeader} rows={rowsData} noDataMessage="No Documents Provided" />
+      </div>
     </div>
   );
 };
