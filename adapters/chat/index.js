@@ -90,7 +90,7 @@ export function listOfChatsDataAdapter({ data }) {
 export function messageDataAdapter({ data, clientId, role }) {
   if (!data) return null;
 
-  const { body, senderId, createdAt, id, type } = data;
+  const { body, senderId, createdAt, id, type, fileName, fileUrl } = data;
 
   return {
     id,
@@ -98,6 +98,8 @@ export function messageDataAdapter({ data, clientId, role }) {
     message: body,
     time: addLocalDateFlag(createdAt),
     sender: clientIdentification({ senderId, clientId, role }),
+    fileName,
+    fileUrl,
   };
 }
 

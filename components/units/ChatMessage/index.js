@@ -13,9 +13,21 @@ import { ROLES } from '@/lib';
 import { extractTimeFromDate, handleViewDocument } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
-const ChatConversationMessage = ({ sender, message, time, isBroker, id, type = 'Message' }) => {
+const ChatConversationMessage = ({
+  sender,
+  message,
+  time,
+  isBroker,
+  id,
+  type = 'Message',
+  fileName = 'Document',
+  fileUrl = '',
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const nextTime = extractTimeFromDate(time);
+
+  // Check if it's a file message by type
+  const isFileMessage = type === 'File';
 
   const senderTitle = useMemo(() => {
     switch (sender) {
@@ -53,21 +65,18 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id, type = '
 
   // Render message content based on type
   const renderMessageContent = () => {
-    // Check if it's a file message by type
-    const isFileMessage = type === 'File' && message;
-
     if (isFileMessage) {
-      if (message) {
+      if (fileUrl) {
         return (
           <Button
             disabled={isLoading}
-            customStyles="max-w-[250px] overflow-hidden text-ellipsis whitespace-nowrap !px-2.5 !py-1"
-            onClick={() => handleDocumentView(message)}
+            customStyles="max-w-[250px] overflow-hidden break-all whitespace-normal !px-2.5 !py-1 text-left"
+            onClick={() => handleDocumentView(fileUrl)}
             buttonProps={{
               variant: 'tertiary',
               size: 'large',
               icon: { before: <FileInfoAltSVG className="fill-black" /> },
-              text: 'Document',
+              text: fileName,
             }}
           />
         );
@@ -77,17 +86,14 @@ const ChatConversationMessage = ({ sender, message, time, isBroker, id, type = '
     return message?.includes('@') ? message : <Linkify componentDecorator={renderLink}>{message}</Linkify>;
   };
 
-  // Check if it's a file message
-  const isFileMessage = type === 'File' || (message && message.match(/\[File: (.*?)\]\((.*?)\)/));
-
   return (
     <div key={id} className={`flex w-full flex-col py-2.5 ${isBroker ? 'items-start' : 'items-end pr-2.5'}`}>
       <div className="flex flex-col gap-y-1">
         <p className="text-xs-sm font-semibold uppercase text-black">{senderTitle}</p>
         <div
-          className={`relative rounded-base px-2.5 py-1.5 text-xsm ${
+          className={`relative break-words rounded-base px-2.5 py-1.5 text-xsm ${
             isBroker ? 'self-start bg-gray-darker bg-opacity-40' : 'self-end bg-blue-light'
-          } ${isFileMessage ? 'break-normal' : 'break-words'}`}
+          }`}
         >
           {renderMessageContent()}
           <span
