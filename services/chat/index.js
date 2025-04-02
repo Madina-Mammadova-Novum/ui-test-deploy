@@ -57,8 +57,8 @@ export const sendChatMessage = async ({ chatId, message }) => {
   };
 };
 
-export const sendChatFile = async ({ chatId, message }) => {
-  const body = { chatId, message };
+export const sendChatFile = async ({ chatId, url, name }) => {
+  const body = { chatId, url, name };
 
   const response = await postData('chat/send-file', body);
 

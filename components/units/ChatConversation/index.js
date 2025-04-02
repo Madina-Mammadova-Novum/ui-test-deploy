@@ -85,14 +85,15 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
         for (const file of acceptedFiles) {
           try {
             // Create setValue and setError functions that work with our component
-            const setValue = (key, value) => {
+            const setValue = (key, value, fileDetails) => {
               if (key === 'file' && value) {
                 const chatId = data?.chatId;
-
+                const { name = '', path = '' } = fileDetails;
                 // Send the file URL using the sendChatFile method
                 sendChatFile({
                   chatId,
-                  message: value,
+                  url: value,
+                  name: name || path,
                 });
               }
             };
