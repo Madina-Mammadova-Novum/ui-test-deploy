@@ -33,6 +33,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
             muted
             preload="auto"
             className="w-full"
+            captionSrc="/captions/shiplink.vtt"
           />
         </div>
 
