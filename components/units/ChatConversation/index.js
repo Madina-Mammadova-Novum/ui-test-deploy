@@ -101,7 +101,6 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
             const setError = (key, error) => {
               if (key === 'file' && error) {
                 console.error('File upload failed:', error);
-                errorToast('Upload Failed', error.message || 'Failed to upload file');
               }
             };
 
