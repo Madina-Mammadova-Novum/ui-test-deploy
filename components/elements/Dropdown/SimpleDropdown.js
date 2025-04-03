@@ -22,11 +22,21 @@ const LoadingIndicator = () => (
 
 export const SimpleDropdown = React.forwardRef(
   (
-    { asyncCall = false, options, isDisabled, isOpen, onOpen = () => {}, loading, onExpand = () => {}, ...rest },
+    {
+      asyncCall = false,
+      options,
+      isDisabled,
+      isOpen,
+      onOpen = () => {},
+      loading,
+      onExpand = () => {},
+      components: customComponents,
+      ...rest
+    },
     ref
   ) => {
-    const printOptions = ({ countryFlag, label: labelValue, coverImage }) => (
-      <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} />
+    const printOptions = ({ countryFlag, label: labelValue, coverImage, isDisabled: optionDisabled }) => (
+      <OptionRow countryFlag={countryFlag} value={labelValue} coverImage={coverImage} isDisabled={optionDisabled} />
     );
 
     const handleOpenMenu = () => {
@@ -35,6 +45,16 @@ export const SimpleDropdown = React.forwardRef(
     };
 
     const handleCloseMenu = () => onOpen(false);
+
+    const defaultComponents = {
+      Option: OptionsList,
+    };
+
+    const mergedComponents = {
+      ...defaultComponents,
+      ...customComponents,
+      LoadingIndicator,
+    };
 
     if (asyncCall) {
       const loadOptions = (inputValue, callback) => callback(filterDataByLowerCase(inputValue, options));
@@ -53,15 +73,17 @@ export const SimpleDropdown = React.forwardRef(
           theme={dropdownTheme}
           isDisabled={isDisabled}
           className={isDisabled ? 'opacity-50' : ''}
-          components={{ Option: OptionsList, LoadingIndicator }}
+          components={mergedComponents}
           closeMenuOnSelect
           cacheOptions
+          isOptionDisabled={(option) => option.isDisabled}
         />
       );
     }
 
     return (
       <Select
+        closeMenuOnSelect
         {...rest}
         ref={ref}
         menuIsOpen={isOpen}
@@ -72,8 +94,8 @@ export const SimpleDropdown = React.forwardRef(
         theme={dropdownTheme}
         isDisabled={isDisabled}
         className={isDisabled ? 'opacity-50' : ''}
-        components={{ Option: OptionsList, LoadingIndicator }}
-        closeMenuOnSelect
+        components={mergedComponents}
+        isOptionDisabled={(option) => option.isDisabled}
       />
     );
   }

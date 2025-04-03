@@ -8,7 +8,16 @@ import { CheckBoxInputPropTypes } from '@/lib/types';
 
 import { Input, InputErrorMessage } from '@/elements';
 
-const CheckBoxInput = ({ name = '', customStyles = '', labelStyles = '', checked = false, onChange, children }) => {
+const CheckBoxInput = ({
+  name = '',
+  disabled = false,
+  boxStyles = '',
+  customStyles = '',
+  labelStyles = '',
+  checked = false,
+  onChange,
+  children,
+}) => {
   return (
     <Controller
       name={name}
@@ -17,19 +26,30 @@ const CheckBoxInput = ({ name = '', customStyles = '', labelStyles = '', checked
 
         return (
           <div className="flex flex-col">
-            <div className="flex items-center gap-2.5">
+            <div className={classNames('flex items-center gap-2.5', boxStyles)}>
               <Input
                 {...field}
                 ref={ref}
                 type="checkbox"
-                disabled={isSubmitting}
+                disabled={isSubmitting || disabled}
                 onChange={onChange}
                 checked={checked}
                 error={!!error}
-                className={classNames('h-5 w-5', customStyles)}
+                className={classNames(
+                  'h-5 w-5',
+                  {
+                    'cursor-not-allowed': disabled,
+                  },
+                  customStyles
+                )}
               />
               {children && (
-                <label htmlFor={name} className={labelStyles}>
+                <label
+                  htmlFor={!disabled ? name : undefined}
+                  className={classNames(labelStyles, {
+                    'cursor-not-allowed': disabled,
+                  })}
+                >
                   {children}
                 </label>
               )}

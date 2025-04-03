@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
-import { Button, DatePicker, FormDropdown, Input } from '@/elements';
+import { Button, CheckBoxInput, DatePicker, FormDropdown, Input } from '@/elements';
 import { CARGO_TYPE_KEY } from '@/lib/constants';
 import { getCargoTypes } from '@/services/cargoTypes';
 import { getPortsForSearchForm } from '@/services/port';
@@ -19,6 +19,7 @@ import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
+import { AdditionalDischargeForm } from '@/units';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
@@ -29,7 +30,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const {
     register,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, submitCount },
     setValue,
     getValues,
     control,
@@ -37,7 +38,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
 
   const [initialLoading, setInitialLoading] = useState(false);
   const [portsLoader, setPortsLoader] = useState(false);
-
+  const [additionalDischargeOptions, setAdditionalDischargeOptions] = useState({});
   const [ports, setPorts] = useState([]);
   const [perList, setPerList] = useState(100);
   const [cargoTypes, setCargoTypes] = useState([]);
@@ -62,6 +63,11 @@ const SearchFormFields = ({ productState, setProductState }) => {
     name: 'laycanStart',
   });
 
+  const showAdditionalDischargeValue = useWatch({
+    control,
+    name: 'showAdditionalDischarge',
+  });
+
   const minDateForLaycanEnd = laycanStart ? new Date(laycanStart) : new Date();
   const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
 
@@ -70,6 +76,20 @@ const SearchFormFields = ({ productState, setProductState }) => {
   const isAlternative = getValues('isAlternative');
 
   const handleMore = () => setPerList((prev) => prev + 100);
+
+  const handleShowAdditionalDischargeChange = (e) => {
+    setValue('showAdditionalDischarge', e.target.checked);
+
+    // setShowAdditionalDischarge(e.target.checked);
+    if (!e.target.checked) {
+      // Set empty initial values instead of null to prevent "some" errors
+      setValue('additionalDischargeOptions', {});
+      setValue('sanctionedCountries', []);
+      setValue('excludedCountries', []);
+      setValue('excludeInternationallySanctioned', false);
+      setAdditionalDischargeOptions({});
+    }
+  };
 
   const handleChange = async (key, value) => {
     const error = getValueWithPath(errors, key);
@@ -216,6 +236,10 @@ const SearchFormFields = ({ productState, setProductState }) => {
   }, [perList]);
 
   useEffect(() => {
+    if (!showAdditionalDischargeValue) setAdditionalDischargeOptions({});
+  }, [showAdditionalDischargeValue]);
+
+  useEffect(() => {
     const fetchProducts = async () => {
       const cargoType = getValues('cargoType');
       const currentProducts = getValues('products');
@@ -290,8 +314,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
       }
     };
 
-    fetchProducts();
+    if (isSavedSearch) setAdditionalDischargeOptions({ ...searchParams });
 
+    fetchProducts();
     return () => {
       setValue('isSavedSearch', false);
     };
@@ -303,6 +328,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
         <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <DatePicker
             label="laycan start"
+            labelBadge="*"
             inputClass="w-full"
             containerClass="w-full"
             name="laycanStart"
@@ -312,6 +338,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           />
           <DatePicker
             label="laycan end"
+            labelBadge="*"
             inputClass="w-full"
             containerClass="w-full"
             name="laycanEnd"
@@ -328,6 +355,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             id="loadPort"
             name="loadPort"
             label="load port"
+            labelBadge="*"
             options={ports}
             loading={portsLoader}
             onMenuScrollToBottom={handleMore}
@@ -342,6 +370,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             options={terminals.loadPortTerminals.data}
             disabled={!terminals.loadPortTerminals.data.length}
             label="load terminal"
+            labelBadge="*"
             customStyles={{ className: 'w-full' }}
             onChange={(option) => handleChange('loadTerminal', option)}
             asyncCall
@@ -351,6 +380,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <FormDropdown
             name="dischargePort"
             label="discharge port"
+            labelBadge="*"
             options={ports}
             loading={portsLoader}
             loadOptions={loadOptions}
@@ -363,6 +393,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           <FormDropdown
             name="dischargeTerminal"
             label="discharge terminal"
+            labelBadge="*"
             loading={terminals.dischargePortTerminals.loading}
             options={terminals.dischargePortTerminals.data}
             disabled={!terminals.dischargePortTerminals.data.length}
@@ -371,11 +402,26 @@ const SearchFormFields = ({ productState, setProductState }) => {
             asyncCall
           />
         </div>
+
+        <CheckBoxInput
+          name="showAdditionalDischarge"
+          checked={showAdditionalDischargeValue}
+          onChange={handleShowAdditionalDischargeChange}
+          labelStyles="text-blue hover:text-blue-darker text-xsm"
+          boxStyles="!gap-1.5"
+        >
+          Add additional discharge options
+        </CheckBoxInput>
+
+        {showAdditionalDischargeValue && (
+          <AdditionalDischargeForm showError={submitCount > 0} data={additionalDischargeOptions} />
+        )}
       </div>
 
       <div className="flex w-full flex-col gap-y-4">
         <FormDropdown
           label="cargo type"
+          labelBadge="*"
           name="cargoType"
           id="cargoType"
           options={cargoTypes}
@@ -406,11 +452,13 @@ const SearchFormFields = ({ productState, setProductState }) => {
                   options={products.data}
                   disabled={!products.data.length}
                   label={`product #${index + 1}`}
+                  labelBadge="*"
                   customStyles={{ className: 'w-full 3md:w-1/2' }}
                 />
                 <Input
                   {...register(`products[${productId}].density`)}
                   label="density"
+                  labelBadge="*"
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
@@ -424,6 +472,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                 <Input
                   {...register(`products[${productId}].quantity`)}
                   label="Quantity"
+                  labelBadge="*"
                   type="number"
                   placeholder="tons"
                   customStyles="w-full sm:w-[45%] 3md:w-2/5"
@@ -433,6 +482,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
                 <Input
                   {...register(`products[${productId}].tolerance`)}
                   label="Tolerance"
+                  labelBadge="*"
                   type="number"
                   placeholder="%"
                   customStyles="w-full sm:w-[45%] 3md:w-1/5"
@@ -455,6 +505,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             </div>
           );
         })}
+
         <Button
           disabled={productsLimitExceeded}
           buttonProps={{

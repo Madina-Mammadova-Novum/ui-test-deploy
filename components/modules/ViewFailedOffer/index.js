@@ -28,6 +28,7 @@ const ViewFailedOffer = ({ itemId }) => {
   const [showScroll, setShowScroll] = useState(false);
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
+
   const {
     comments,
     voyageDetails,

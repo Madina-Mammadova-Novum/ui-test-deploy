@@ -135,7 +135,7 @@ export function getMiddleElementFromArray(array) {
   const { length } = array;
 
   if (length === 0) {
-    return null;
+    return [48.3794, 31.1656];
   }
 
   const middleIndex = Math.floor(length / 2);
@@ -293,24 +293,51 @@ export const filterDataByLowerCase = (inputValue, data = []) => {
 };
 
 export const resetObjectFields = ({ initialObject, resetType = null }) => {
-  if (typeof initialObject !== 'string') {
-    Object.keys(initialObject).forEach((key) => {
-      if (Array.isArray(initialObject[key])) {
-        initialObject[key].map((arrayItem) => resetObjectFields({ initialObject: arrayItem }));
-      } else {
-        initialObject[key] = resetType;
-      }
-    });
-  }
+  if (!initialObject || typeof initialObject !== 'object') return initialObject;
 
-  return initialObject;
+  const result = { ...initialObject };
+  Object.keys(result).forEach((key) => {
+    if (result[key] === null || result[key] === undefined) {
+      return;
+    }
+
+    // Special handling for products array
+    if (key === 'products' && Array.isArray(result[key])) {
+      result[key] = result[key].map((item) => resetObjectFields({ initialObject: item, resetType }));
+    }
+    // Special handling for additional discharge form fields sanctionedCountries and excludedCountries
+    else if (['sanctionedCountries', 'excludedCountries'].includes(key)) {
+      result[key] = [];
+    }
+    // Special handling for additional discharge form fields additionalDischargeOptions
+    else if (key === 'additionalDischargeOptions') {
+      result[key] = {};
+    }
+    // Special handling for additional discharge form fields excludeInternationallySanctioned
+    else if (['excludeInternationallySanctioned', 'showAdditionalDischarge'].includes(key)) {
+      result[key] = false;
+    }
+    // For all other fields that are objects or arrays, just set to null
+    else if (typeof result[key] === 'object') {
+      result[key] = null;
+    }
+    // For primitive values
+    else {
+      result[key] = resetType;
+    }
+  });
+
+  return result;
 };
 
 export const resetForm = (methods, type) => {
-  methods.reset((formValues) => {
-    resetObjectFields({ initialObject: formValues, resetType: type });
-    return formValues;
-  });
+  if (!methods) return;
+
+  const formValues = methods.getValues();
+  const resetValues = resetObjectFields({ initialObject: formValues, resetType: type });
+
+  // Reset the form with the cleaned values
+  methods.reset(resetValues);
 };
 
 export const sleep = (ms) => {
@@ -398,12 +425,19 @@ export const findValueById = ({ data, id }) => {
   return [result];
 };
 
+export const getUserType = (isCharterer, isOwner) => {
+  if (isCharterer) return 'Charterer';
+  if (isOwner) return 'Owner';
+  return '';
+};
+
 export const getRoleIdentity = ({ role }) => {
   if (!role) return '';
 
   return {
     isOwner: role === ROLES.OWNER,
     isCharterer: role === ROLES.CHARTERER,
+    isAnon: role === ROLES.ANON,
   };
 };
 
@@ -500,7 +534,7 @@ export const getListOfDataByDays = (data) => {
 };
 
 export const calculateCountdown = (expiresAt, frozenAt) => {
-  const currentUTCtime = Date.parse(new Date().toLocaleString('en', { hour12: false, timeZone: 'UTC' }));
+  const currentUTCtime = Date.now();
 
   let millisecondsUntilExpiration = 0;
   if (frozenAt) {
@@ -576,6 +610,34 @@ export const handleFileView = async (url) => {
     URL.revokeObjectURL(objectUrl);
   } catch (error) {
     console.error('Error viewing file:', error);
+  }
+};
+
+export const handleViewDocument = async (url) => {
+  if (!url) return;
+  let pdfBlobUrl;
+
+  try {
+    const fileApiUrl = `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${url}`;
+    const { url: requestUrl, headers } = getFileUrl({ url: fileApiUrl });
+
+    const response = await fetch(requestUrl, { headers });
+
+    if (!response.ok) {
+      throw new Error(`Download failed with status: ${response.status}`);
+    }
+
+    // Create blob and open in new tab
+    const blob = await response.blob();
+    pdfBlobUrl = URL.createObjectURL(blob);
+    window.open(pdfBlobUrl, '_blank');
+  } catch (error) {
+    console.error('View Error:', error.message);
+    throw error;
+  } finally {
+    if (pdfBlobUrl) {
+      URL.revokeObjectURL(pdfBlobUrl);
+    }
   }
 };
 
@@ -713,6 +775,7 @@ export const freightFormatter = ({ value, format }) => {
   const response = {
     Lumpsum: `${format} $${value}`,
     '$/mt': `${value} ${format}`,
+    WS: `${format} ${value}`,
   };
 
   return response[format];
@@ -835,21 +898,28 @@ const urlStatusFormatter = ({ isFailed }) => {
   return 'incoming';
 };
 
+const urlStatusFormatterForPreFixture = ({ data }) => {
+  if (data?.proposedBaseCharterParty || data?.charterPartyOptions) return '&status=charter-party';
+
+  return '';
+};
+
 export const notificationPathGenerator = ({ data, role }) => {
   if (!data?.stage) return null;
 
   const { isOwner } = getRoleIdentity({ role });
   const initialPath = stageFormatter(data.stage);
   const statusTab = urlStatusFormatter({ isFailed: data.isFailed });
+  const preFixtureTab = urlStatusFormatterForPreFixture({ data });
 
   const routeByStage = {
     Negotiating: `${initialPath}/${isOwner ? data?.vessel?.id : data?.searchedCargo?.id}?fleetId=${
       data.id
     }&status=${statusTab}`,
-    Pre_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
-    On_Subs: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
-    Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
-    Post_Fixture: `${initialPath}/${data.searchedCargo.id}?code=${data.searchedCargo.code}`,
+    Pre_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}${preFixtureTab}`,
+    On_Subs: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
+    Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
+    Post_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
   };
 
   return routeByStage[data.stage];
@@ -885,4 +955,79 @@ export const getBrowser = (environment) => {
     return 'internet explorer';
   }
   return 'unknown';
+};
+
+/**
+ * Ensures a filename has the correct extension
+ * @param {string} fileName - The name of the file
+ * @param {string} extension - The desired extension (with or without dot)
+ * @returns {string} Filename with proper extension
+ */
+export const ensureFileExtension = (fileName, extension) => {
+  // Normalize the extension to include the dot
+  const normalizedExtension = extension.startsWith('.') ? extension : `.${extension}`;
+
+  // Get the base name without any extensions
+  const lastDotIndex = fileName.lastIndexOf('.');
+  const baseName = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex);
+
+  // Return the base name with the new extension
+  return `${baseName}${normalizedExtension}`;
+};
+
+export const fixLongitudeWrapping = (coordinates) => {
+  if (!coordinates || coordinates.length < 2) return coordinates;
+
+  const result = [];
+  let previousLon = coordinates[0][1];
+  let offset = 0;
+
+  coordinates.forEach((coord) => {
+    const [lat, lon] = coord;
+    const diff = lon - previousLon;
+
+    // If there's a large jump in longitude (crossing meridian)
+    if (Math.abs(diff) > 180) {
+      // If moving from negative to positive (e.g., -179 to 179)
+      if (diff > 0) {
+        offset -= 360;
+      }
+      // If moving from positive to negative (e.g., 179 to -179)
+      else {
+        offset += 360;
+      }
+    }
+
+    result.push([lat, lon + offset]);
+    previousLon = lon;
+  });
+
+  return result;
+};
+
+export const formatStageText = (stage) => {
+  if (!stage) return '';
+  return stage.replace(/_/g, ' ');
+};
+
+/**
+ * @util convertToKilotons
+ * @description Formats tonnage values to kilotons (kt) with one decimal place
+ * @param {number|string} tons - Weight value
+ * @returns {string} Weight formatted with kt unit
+ * @example convertToKilotons(45) // returns "45.0 kt"
+ */
+export const convertToKilotons = (tons) => {
+  if (!tons) return '0.0 kt';
+
+  // Convert to number if it's a string
+  const numericValue = typeof tons === 'string' ? parseFloat(tons.replace(/,/g, '')) : tons;
+
+  // Check if it's a valid number
+  if (Number.isNaN(numericValue)) return '0.0 kt';
+
+  // Format to 1 decimal place
+  const formattedValue = numericValue.toFixed(1);
+
+  return `${formattedValue} kt`;
 };

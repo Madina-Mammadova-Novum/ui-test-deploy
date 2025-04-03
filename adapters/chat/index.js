@@ -28,7 +28,7 @@ function chatSessionDataAdapter({ data }) {
 function chatDealDataAdapter({ data }) {
   if (!data) return {};
 
-  const { searchedCargo, products, vessel, id } = data;
+  const { searchedCargo, products, vessel, id, laycanEnd, laycanStart } = data;
 
   return {
     dealId: id,
@@ -38,6 +38,7 @@ function chatDealDataAdapter({ data }) {
       type: searchedCargo?.cargoType?.name?.toLowerCase(),
       cargoId: searchedCargo?.code.toLowerCase(),
       products: products?.map((product) => ({ id: product?.id, name: product?.productName?.toLowerCase() })),
+      flagOfRegistry: vessel?.details?.flagOfRegistry?.codeISO2 || vessel?.details?.flagOfRegistry?.codeISO3,
       data: {
         tankersPerYear: vessel?.company?.estimatedAverageTankerDWT,
         yearsOfOperation: vessel?.company?.details?.yearsInOperation,
@@ -52,8 +53,8 @@ function chatDealDataAdapter({ data }) {
         countryId: searchedCargo?.loadTerminal?.port?.countryId,
       },
       totalQuantity: searchedCargo?.totalQuantity?.toLocaleString(),
-      laycanStart: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
-      laycanEnd: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      laycanStart: transformDate(laycanStart, 'MMM dd, yyyy'),
+      laycanEnd: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
   };
 }
@@ -89,13 +90,16 @@ export function listOfChatsDataAdapter({ data }) {
 export function messageDataAdapter({ data, clientId, role }) {
   if (!data) return null;
 
-  const { body, senderId, createdAt, id } = data;
+  const { body, senderId, createdAt, id, type, fileName, fileUrl } = data;
 
   return {
     id,
+    type,
     message: body,
     time: addLocalDateFlag(createdAt),
     sender: clientIdentification({ senderId, clientId, role }),
+    fileName,
+    fileUrl,
   };
 }
 
@@ -117,9 +121,18 @@ export function moreMessagesDataAdapter({ payload, messages }) {
   if (!messages) return [];
 
   return [...payload, ...messages]?.reduce((accumulator, { title, data }) => {
+    // Get existing data for this title/day if it exists
+    const existingData = accumulator[title]?.data || [];
+
+    // Track existing message IDs to avoid duplicates
+    const existingIds = new Set(existingData.map((msg) => msg?.id));
+
+    // Filter out duplicates from the new data
+    const updatedData = data.filter((msg) => !existingIds.has(msg?.id));
+
     accumulator[title] = {
       title,
-      data: [...(accumulator[title]?.data ?? []), ...data],
+      data: [...existingData, ...updatedData],
     };
 
     return accumulator;
@@ -128,7 +141,6 @@ export function moreMessagesDataAdapter({ payload, messages }) {
 
 export function chatHistoryResponseAdapter({ data, clientId, role }) {
   if (!data) return null;
-
   const { messages = [], created, isLast } = data;
 
   return {

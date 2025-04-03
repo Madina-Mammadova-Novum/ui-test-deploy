@@ -1,13 +1,14 @@
+import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed, laycanEnd, laycanStart } = data;
 
   return [
     {
@@ -42,12 +43,12 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Laycan start',
-      text: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
       label: 'Laycan end',
-      text: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
@@ -61,10 +62,10 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Status',
-      textStyles: 'text-red',
+      textStyles: isFailed ? 'text-red' : 'text-yellow',
       freezed: frozenAt,
-      text: 'Failed',
-      isFailed,
+      text: isFailed ? 'Failed' : 'Countdown freezed',
+      isFailed: isFailed || frozenAt,
     },
   ];
 };
@@ -72,7 +73,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed, laycanEnd, laycanStart } = data;
 
   return [
     {
@@ -107,12 +108,12 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Laycan start',
-      text: transformDate(searchedCargo?.laycanStart, 'MMM dd, yyyy'),
+      text: transformDate(laycanStart, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
       label: 'Laycan end',
-      text: transformDate(searchedCargo?.laycanEnd, 'MMM dd, yyyy'),
+      text: transformDate(laycanEnd, 'MMM dd, yyyy'),
       freezed: frozenAt,
     },
     {
@@ -132,16 +133,17 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Status',
-      textStyles: 'text-red',
+      textStyles: isFailed ? 'text-red' : 'text-yellow',
       freezed: frozenAt,
-      text: 'Failed',
-      isFailed,
+      text: isFailed ? 'Failed' : 'Countdown freezed',
+      isFailed: isFailed || frozenAt,
     },
   ];
 };
 
 export const onSubsDetailsAdapter = ({ data }) => {
   if (!data) return {};
+
   const {
     charterer: {
       name: chartererName,
@@ -165,7 +167,6 @@ export const onSubsDetailsAdapter = ({ data }) => {
     products,
     laycanStart,
     laycanEnd,
-    additionalCharterPartyTerms,
     freightFormat,
     freight,
     demurrageRate,
@@ -181,6 +182,9 @@ export const onSubsDetailsAdapter = ({ data }) => {
     bankDetails,
     canRequestForCountdownExtension,
     isCountdownActive,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -353,8 +357,10 @@ export const onSubsDetailsAdapter = ({ data }) => {
         ],
       },
     },
-    additionalCharterPartyTerms,
     allowExtension: canRequestForCountdownExtension && isCountdownActive,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 
@@ -432,12 +438,12 @@ const onSubsDocumentsTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       editable: !isDocumentDeleted,
-      value: true,
       disabled: isDocumentDeleted,
+      value: true,
       downloadData: !isDocumentDeleted &&
         url && {
           url,
-          fileName,
+          fileName: ensureFileExtension(fileName, extension),
         },
       actions: [
         {

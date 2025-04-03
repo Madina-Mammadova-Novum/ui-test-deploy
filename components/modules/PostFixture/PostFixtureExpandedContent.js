@@ -22,13 +22,13 @@ const tabs = [
   },
 ];
 
-const PostFixtureExpandedContent = ({ detailsData, documentsData, tab, offerId }) => {
+const PostFixtureExpandedContent = ({ detailsData, documentsData, tab }) => {
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
 
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
-        return <PostFixtureDocumentsContent rowsData={documentsData} offerId={offerId} />;
+        return <PostFixtureDocumentsContent rowsData={documentsData} />;
       default:
         return <PostFixtureDetailsContent detailsData={detailsData} />;
     }

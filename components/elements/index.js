@@ -49,6 +49,7 @@ import ReActivateButton from '@/elements/ReActivateButton';
 import ResetButton from '@/elements/ResetButton';
 import SimpleSelect from '@/elements/SimpleSelect';
 import { ChatHelpLoader, ChatListLoader, ChatLoader, ChatTabLoader, NotificationLoader } from '@/elements/Skeletons';
+import StatusIndicator from '@/elements/StatusIndicator';
 import SubmitButton from '@/elements/SubmitButton';
 import Table from '@/elements/Table';
 import TextArea from '@/elements/TextArea';
@@ -57,6 +58,7 @@ import TextWithLabel from '@/elements/TextWithLabel';
 import Title from '@/elements/Title';
 import Toggle from '@/elements/Toggle';
 import TypingIndicator from '@/elements/TypingIndicator';
+import VideoPlayer from '@/elements/VideoPlayer';
 
 export {
   AccordionBody,
@@ -122,4 +124,6 @@ export {
   DynamicLoader,
   MapLoader,
   NotificationAlert,
+  StatusIndicator,
+  VideoPlayer,
 };

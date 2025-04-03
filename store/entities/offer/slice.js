@@ -60,6 +60,7 @@ const offerSlice = createSlice({
       state.validating = true;
     });
     builder.addCase(fetchOfferValidation.fulfilled, (state, { payload }) => {
+      state.loading = false;
       state.validating = false;
       state.valid = payload?.canProceed;
       state.data.ranges = payload?.ranges;
@@ -78,6 +79,7 @@ const offerSlice = createSlice({
       state.validating = true;
     });
     builder.addCase(fetchСounterOfferValidation.fulfilled, (state, { payload }) => {
+      state.loading = false;
       state.validating = false;
       state.valid = payload?.canProceed;
       state.data.ranges = payload?.ranges;

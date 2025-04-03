@@ -6,23 +6,28 @@ import { NextImage, Title } from '@/elements';
 import { makeId } from '@/utils/helpers';
 
 const WhyWeAreBetterBlock = ({ values }) => {
-  const printItem = ({ title, subTitle, shortDescription }) => {
+  const printItem = ({ title, shortDescription }) => {
     return (
-      <div key={makeId()}>
+      <div key={makeId()} className="flex flex-col items-center justify-center">
         {title && (
-          <Title level="1" className="mb-2.5 text-center text-white">
+          <Title level="2" className="mb-2.5 text-center text-3xl text-white md:text-4xl">
             {title}
           </Title>
         )}
-        {subTitle && (
-          <Title level="3" className="mb-2 text-center text-white">
-            {subTitle}
-          </Title>
+
+        {shortDescription && (
+          <div className="text-xsm text-white">
+            {shortDescription.split('. ').map((sentence, index, array) => (
+              <p key={makeId()} className="mb-1 text-white">
+                {sentence.trim() + (sentence.endsWith('.') || index === array.length - 1 ? '' : '.')}
+              </p>
+            ))}
+          </div>
         )}
-        {shortDescription && <p className="text-center text-xsm text-white">{shortDescription}</p>}
       </div>
     );
   };
+
   return (
     <section className="relative py-[100px]">
       <NextImage
@@ -33,8 +38,11 @@ const WhyWeAreBetterBlock = ({ values }) => {
         width={1440}
         quality={100}
       />
-      <div className="container mx-auto grid max-w-[960px] gap-10 sm:grid-cols-2">
-        {values && values.map(printItem)}
+      <div className="container mx-auto grid max-w-[960px] gap-10 sm:grid-cols-3">
+        <div className="flex items-center justify-center sm:col-span-1">
+          {values && values.length > 0 && printItem(values[0])}
+        </div>
+        <div className="sm:col-span-2">{values && values.length > 1 && printItem(values[1])}</div>
       </div>
     </section>
   );

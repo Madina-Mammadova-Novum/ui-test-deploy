@@ -36,6 +36,8 @@ const tabs = [
 const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const dispatch = useDispatch();
   const scrollingContainerRef = useRef(null);
+  const [formMethods, setFormMethods] = useState(null);
+  const [additionalDischargeNextValue, setAdditionalDischargeNextValue] = useState(null);
 
   const [modalStore, setModalStore] = useState({
     currentTab: tabs[0].value,
@@ -49,7 +51,10 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const { searchParams } = useSelector(getSearchSelector);
   const { loadTerminal, dischargeTerminal, products } = searchParams;
   const { voyageDetails } = voyageDetailsAdapter({
-    data: searchParams,
+    data: {
+      ...searchParams,
+      additionalDischargeOptions: additionalDischargeNextValue || searchParams?.additionalDischargeOptions,
+    },
     laycanStart: offer?.data?.laycanStart,
     laycanEnd: offer?.data?.laycanEnd,
   });
@@ -62,13 +67,26 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   };
 
   const handleChangeOption = (option) => handleChangeState('responseCountdown', option);
-  const handleChangeTab = ({ target }) => handleChangeState('currentTab', target.value);
+  const handleChangeTab = ({ target }) => {
+    if (formMethods?.getValues) {
+      const formValues = formMethods.getValues();
+      const nextAdditionalDischargeOptions = formValues?.additionalDischargeOptions;
+
+      setAdditionalDischargeNextValue(nextAdditionalDischargeOptions);
+    }
+    handleChangeState('currentTab', target.value);
+  };
   const handleValidationError = () => handleChangeState('currentTab', tabs[0].value);
 
   const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
 
   const handleSubmit = async (formData) => {
     const comment = formData?.comment || null;
+    const additionalDischargeOptions =
+      formData?.additionalDischargeOptions || searchParams?.additionalDischargeOptions || {};
+    const sanctionedCountries = formData?.sanctionedCountries || searchParams?.sanctionedCountries || [];
+    const excludeInternationallySanctioned =
+      formData?.excludeInternationallySanctioned || searchParams?.excludeInternationallySanctioned || false;
 
     const {
       status,
@@ -86,6 +104,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         loadTerminal,
         dischargeTerminal,
         products,
+        additionalDischargeOptions,
+        sanctionedCountries,
+        excludeInternationallySanctioned,
       },
     });
 
@@ -195,7 +216,12 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         className={`h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}
       >
         <div className="p-2.5">
-          <OfferForm disabled={!offer.valid} handleSubmit={handleSubmit} handleValidationError={handleValidationError}>
+          <OfferForm
+            disabled={!offer.valid}
+            handleSubmit={handleSubmit}
+            handleValidationError={handleValidationError}
+            onFormChange={setFormMethods}
+          >
             {tabContent}
           </OfferForm>
         </div>

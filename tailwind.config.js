@@ -140,6 +140,9 @@ module.exports = {
         '2xmd': '0 2px 6px #CED5E7;',
         vInset: '0 -6px 7px -7px #C4C4C4 inset , 0 6px 7px -7px #C4C4C4 inset',
       },
+      zIndex: {
+        100: '100',
+      },
     },
   },
   variants: {

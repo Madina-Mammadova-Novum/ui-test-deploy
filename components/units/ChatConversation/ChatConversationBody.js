@@ -34,7 +34,7 @@ const ChatConversationBody = () => {
     }
   };
 
-  const printMessage = ({ sender, message, time, id }, index) => {
+  const printMessage = ({ sender, message, time, id, type, fileName, fileUrl }, index) => {
     const newId = `${time}-${id}-${index}`;
 
     return (
@@ -45,6 +45,9 @@ const ChatConversationBody = () => {
         time={time}
         message={message}
         isBroker={ROLES.BROKER === sender}
+        type={type}
+        fileName={fileName}
+        fileUrl={fileUrl}
       />
     );
   };

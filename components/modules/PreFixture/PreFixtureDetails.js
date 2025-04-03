@@ -25,13 +25,14 @@ const PreFixtureDetails = ({ searchedParams }) => {
 
   const { loading, role, toggle, deal } = useSelector(getPreFixtureDataSelector);
 
-  /* eslint-disable no-console */
-  console.log({ deal });
-
   const { isOwner } = getRoleIdentity({ role });
 
   useEffect(() => {
     dispatch(setToggle(true));
+
+    return () => {
+      dispatch(setToggle(false));
+    };
   }, []);
 
   const printExpandableRow = (rowData) => {
@@ -53,7 +54,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
         }
         footer={
           <PreFixtureExpandedFooter
-            underNegotiation={!rowData?.additionalCharterPartyTerms?.length}
+            underNegotiation={!rowData?.isCountdownActive}
             offerId={rowData.id}
             offerAccepted={setAccepted}
           />
@@ -62,6 +63,8 @@ const PreFixtureDetails = ({ searchedParams }) => {
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          charterPartyData={rowData?.charterPartyOptions}
+          proposedBaseCharterParty={rowData?.proposedBaseCharterParty}
           tab={searchedParams?.status}
           offerId={rowData?.id}
         />

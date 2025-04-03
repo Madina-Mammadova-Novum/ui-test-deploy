@@ -25,9 +25,6 @@ const OnSubsDetails = ({ searchedParams }) => {
   const { loading, role, toggle, deal } = useSelector(getOnSubsDataSelector);
   const { isOwner } = getRoleIdentity({ role });
 
-  /* eslint-disable no-console */
-  console.log({ deal });
-
   useEffect(() => {
     dispatch(setToggle(true));
   }, [dispatch]);
@@ -37,7 +34,8 @@ const OnSubsDetails = ({ searchedParams }) => {
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
-    const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
+    const { frozenAt, isFailed } = rowData;
+    const isStatusSectionActive = isFailed || frozenAt;
 
     return (
       <ExpandableRow
@@ -45,7 +43,11 @@ const OnSubsDetails = ({ searchedParams }) => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr'}
+            gridStyles={
+              isOwner
+                ? `1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+                : `1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+            }
           />
         }
         expand={toggle}
@@ -54,7 +56,6 @@ const OnSubsDetails = ({ searchedParams }) => {
           <OnSubsExpandedFooter
             offerId={rowData?.id}
             identity={{ isOwner }}
-            scriveURL={scriveURL || ''}
             underRecap={!rowData?.isCountdownActive || !rowData?.failedAt || rowData?.isFailed}
             status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
           />

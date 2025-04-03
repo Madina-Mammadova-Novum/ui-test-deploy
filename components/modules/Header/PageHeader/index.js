@@ -9,11 +9,12 @@ import { NavButton, NextLink } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { AuthNavButtons } from '@/units';
+import { getRoleIdentity } from '@/utils/helpers';
 
-const getServerToken = async () => {
-  const token = cookies()?.get('session-access-token')?.value;
+const getUserRole = async () => {
+  const role = cookies()?.get('session-user-role')?.value;
 
-  return { token };
+  return { role };
 };
 
 const getHeaderData = async (headerData) => {
@@ -38,8 +39,10 @@ const getHeaderData = async (headerData) => {
 export default async function PageHeader() {
   const headerData = await getSingleType('header', 'en');
 
-  const { token } = await getServerToken();
+  const { role } = await getUserRole();
   const { buttons, navigation } = await getHeaderData(headerData);
+
+  const { isAnon = true } = getRoleIdentity({ role });
 
   const printNavigation = ({ path, title }) => {
     return (
@@ -61,7 +64,7 @@ export default async function PageHeader() {
             {Array.isArray(navigation) && navigation.length > 0 && (
               <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>
             )}
-            {buttons?.length > 0 && <AuthNavButtons authorized={token} data={buttons} />}
+            {buttons?.length > 0 && <AuthNavButtons authorized={!isAnon} data={buttons} />}
           </nav>
         </div>
       </div>

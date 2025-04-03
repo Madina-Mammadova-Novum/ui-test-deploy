@@ -72,7 +72,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
           <ModalWindow
             containerClass="w-[672px] h-full"
             buttonProps={{
-              text: 'Edit company details',
+              text: 'Edit',
               variant: 'primary',
               size: 'medium',
               className: '!px-2.5 !py-0.5 text-xsm',
@@ -89,9 +89,6 @@ const AccountCompanyDetails = ({ company = {} }) => {
       <FieldsetContentWrapper>
         <FieldsetContent label="Company information" className="pt-5">
           {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
-          {company?.companyYearsOfOperation ? (
-            <TextRow title="Years in operation">{company?.companyYearsOfOperation}</TextRow>
-          ) : null}
           {company?.totalTankers ? (
             <AccountAmountOfTankers data={company?.cargoes?.listOfCargoes} total={company?.totalTankers} />
           ) : null}

@@ -1,12 +1,19 @@
 'use client';
 
-import Flag from '../Flag';
+import React from 'react';
+
+import PropTypes from 'prop-types';
 
 import { VoyageDetailsTabContentPropTypes } from '@/lib/types';
 
 import { TextRow, Title } from '@/elements';
+import { AdditionalDischargeDetails, AdditionalDischargeForm, Flag } from '@/units';
 
-const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
+const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false, isViewing = false, isCounteroffer = false }) => {
+  const hasAdditionalDischargeOptions =
+    data?.additionalDischargeOptions?.isAllSelected ||
+    (data?.additionalDischargeOptions?.selected && data?.additionalDischargeOptions?.selected.length > 0);
+
   const printPairDates = (detail) => (
     <TextRow key={detail.key} title={detail.key}>
       {detail.label}
@@ -53,10 +60,26 @@ const VoyageDetailsTabContent = ({ data = {}, inlineVariant = false }) => {
         </div>
       </div>
       {!!inlineVariant && <hr className="my-4" />}
+
+      {(!isCounteroffer || hasAdditionalDischargeOptions) && (
+        <>
+          <hr className="my-4" />
+          {!isViewing ? (
+            <AdditionalDischargeForm data={data} showResetButton={!isCounteroffer} isCounteroffer={isCounteroffer} />
+          ) : (
+            <AdditionalDischargeDetails data={data} />
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-VoyageDetailsTabContent.propTypes = VoyageDetailsTabContentPropTypes;
+VoyageDetailsTabContent.propTypes = {
+  ...VoyageDetailsTabContentPropTypes,
+  inlineVariant: PropTypes.bool,
+  isViewing: PropTypes.bool,
+  isCounteroffer: PropTypes.bool,
+};
 
 export default VoyageDetailsTabContent;

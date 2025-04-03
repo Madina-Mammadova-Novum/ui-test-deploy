@@ -52,7 +52,7 @@ const ViewCounteroffer = ({ itemId }) => {
 
   if (loading) {
     return (
-      <div className="relative flex h-72 w-72 items-center justify-center">
+      <div className="relative flex h-full w-72 items-center justify-center">
         <Loader className="h-8 w-8" />
       </div>
     );

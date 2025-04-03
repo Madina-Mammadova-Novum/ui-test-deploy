@@ -26,7 +26,8 @@ const OnSubs = () => {
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
 
-    const scriveURL = isOwner ? rowData?.ownerDocumentSignUrl : rowData?.chartererDocumentSignUrl;
+    const { frozenAt, isFailed } = rowData;
+    const isStatusSectionActive = isFailed || frozenAt;
 
     return (
       <ExpandableRow
@@ -34,7 +35,11 @@ const OnSubs = () => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr'}
+            gridStyles={
+              isOwner
+                ? `1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+                : `1.5fr 2fr 2.5fr 1fr 2.5fr 1fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+            }
           />
         }
         expand={toggle}
@@ -44,7 +49,6 @@ const OnSubs = () => {
             identity={{ isOwner, isCharterer }}
             status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
             offerId={rowData?.id}
-            scriveURL={scriveURL || ''}
           />
         }
       >

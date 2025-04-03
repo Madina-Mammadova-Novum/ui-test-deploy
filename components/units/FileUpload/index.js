@@ -23,7 +23,7 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
   const methods = useHookFormParams({ schema });
 
   const contentRef = useRef(null);
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(true);
 
   const handleToggle = () => setToggle((prev) => !prev);
 

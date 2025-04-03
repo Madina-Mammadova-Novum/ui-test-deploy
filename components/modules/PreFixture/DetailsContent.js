@@ -8,7 +8,7 @@ import { FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
 import DetailsChartererContent from '@/modules/PreFixture/DetailsChartererContent';
 import DetailsOwnerContent from '@/modules/PreFixture/DetailsOwnerContent';
 import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
-import { Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const { role } = useSelector(getUserDataSelector);
@@ -19,7 +19,9 @@ const DetailsContent = ({ detailsData = {} }) => {
     cargoDetails = {},
     commercialOfferTerms = {},
     voyageDetails = {},
-    additionalCharterPartyTerms = [],
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = detailsData;
 
   const { cargoType, products = [] } = cargoDetails;
@@ -39,6 +41,12 @@ const DetailsContent = ({ detailsData = {} }) => {
   const roleBasedSection = {
     owner: <DetailsOwnerContent title="Charterer Information" data={partyInformation} countries={countries} />,
     charterer: <DetailsChartererContent title="Tanker Information" data={partyInformation} />,
+  };
+
+  const additionalDischargeData = {
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
   };
 
   return (
@@ -106,20 +114,10 @@ const DetailsContent = ({ detailsData = {} }) => {
               <TextRow title="Discharge terminal">{dischargeTerminal}</TextRow>
             </div>
           </FieldsetContent>
+
+          <AdditionalDischargeDetails data={additionalDischargeData} classNames="mt-4" />
         </FieldsetWrapper>
       </div>
-      {!!additionalCharterPartyTerms.length && (
-        <FieldsetWrapper>
-          <Title level="3">Additional Charter Party Terms</Title>
-
-          <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {additionalCharterPartyTerms.map(({ title, body }, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <PartyItem key={index} buttonText={title} modalTitle="All Additional Information" body={body} />
-            ))}
-          </FieldsetContent>
-        </FieldsetWrapper>
-      )}
     </div>
   );
 };

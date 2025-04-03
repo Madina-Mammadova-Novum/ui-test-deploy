@@ -43,7 +43,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat = freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
+  const helperFreightFormat =
+    selectedFreight?.label === 'WS'
+      ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
+      : freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
 
   const helperRangeFormat =
     ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start}$ - ${ranges?.demurrageRate?.max?.end}$`;
@@ -67,9 +70,11 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   };
 
   useEffect(() => {
+    const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
+
     setFreightEstimation({
-      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
-      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+      min: selectedFormat?.ranges?.min?.start,
+      max: selectedFormat?.ranges?.max?.end,
     });
   }, [selectedFreight, ranges]);
 
@@ -89,6 +94,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
       <div key={index} className="mt-3 flex items-baseline gap-x-5">
         <FormDropdown
           label={`product #${index + 1}`}
+          labelBadge="*"
           name={`products[${index}].product`}
           disabled
           customStyles={{ className: 'w-1/2' }}
@@ -96,6 +102,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         <Input
           {...register(`products[${index}].density`)}
           label="Density"
+          labelBadge="*"
           placeholder="mt/m³"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.density?.message : null}
@@ -105,6 +112,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         <Input
           {...register(`products[${index}].minQuantity`)}
           label="min quantity"
+          labelBadge="*"
           placeholder="tons"
           customStyles="max-w-[138px]"
           error={errors.products ? errors.products[index]?.minQuantity?.message : null}
@@ -118,16 +126,23 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     <>
       <Title level="3">Commercial offer terms</Title>
       <div className="mt-3 flex items-center">
-        <FormDropdown label="cargo type" disabled customStyles={{ className: 'w-1/2 pr-4' }} name="cargoType" />
+        <FormDropdown
+          label="cargo type"
+          labelBadge="*"
+          disabled
+          customStyles={{ className: 'w-1/2 pr-4' }}
+          name="cargoType"
+        />
       </div>
       {products?.filter((product) => product).map(printProduct)}
       <div className="mt-3 flex w-1/2 items-baseline gap-x-5 pr-5">
         <FormDropdown
           label="Freight"
+          labelBadge="*"
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
-          disabled={loading}
+          disabled={loading || !valid}
           loading={loading}
           onChange={(option) => handleChange('freight', option)}
           asyncCall
@@ -135,13 +150,14 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         <Input
           {...register('value')}
           label="Value"
+          labelBadge="*"
           name="value"
           type="number"
           placeholder={freightValuePlaceholder}
           customStyles="w-1/2 whitespace-nowrap"
           helperText={helperFreightFormat}
           error={errors.value?.message}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !valid}
           step="0.001"
         />
       </div>
@@ -149,24 +165,26 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
       <Input
         {...register('demurrageRate')}
         label="Demurrage rate"
+        labelBadge="*"
         name="demurrageRate"
         type="number"
         placeholder="$ per day"
         customStyles="w-1/2 mt-3 pr-5 whitespace-nowrap"
         helperText={helperRangeFormat}
         error={errors.demurrageRate?.message}
-        disabled={isSubmitting}
+        disabled={isSubmitting || !valid}
       />
 
       <div className="flex">
         <Input
           {...register('layTime')}
           label="lay time"
+          labelBadge="*"
           name="layTime"
           type="number"
           placeholder="Hours"
           customStyles="w-1/2 mt-3 pr-5"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !valid}
           error={errors.layTime?.message}
           helperText={helperLaytimeFormat}
         />
@@ -185,9 +203,10 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
       <div className="pt-4">
         <FormDropdown
           label="undisputed demurrage payment terms"
+          labelBadge="*"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
-          disabled={loading}
+          disabled={loading || !valid}
           loading={loading}
           onChange={(option) => handleChange('undisputedDemurrage', option)}
           onExpand={scrollToBottom}
@@ -196,10 +215,11 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
         <FormDropdown
           label="payment terms"
+          labelBadge="*"
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}
-          disabled={loading}
+          disabled={loading || !valid}
           loading={loading}
           onChange={(option) => handleChange('paymentTerms', option)}
           onExpand={scrollToBottom}

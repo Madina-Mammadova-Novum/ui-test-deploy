@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import delve from 'dlv';
 import PropTypes from 'prop-types';
 
 import { ctaListPropTypes, mediaPropTypes } from '@/lib/types';
@@ -10,12 +9,14 @@ import { ctaListPropTypes, mediaPropTypes } from '@/lib/types';
 import Item from '@/blocks/ProductFeaturesBlock/Item';
 import { NextImage, Title } from '@/elements';
 import { Tabs } from '@/units';
-import { getStrapiMedia } from '@/utils';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
+  const ownerImage = '/images/owner.png';
+  const chartererImage = '/images/charterer.png';
+
   const tabs = ctaList.map((ctaBlock) => {
     return {
       label: ctaBlock.title,
@@ -65,13 +66,13 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         </div>
 
         {coverImage && (
-          <div className="h-full max-h-[25rem] w-[25rem] rounded-base">
+          <div className="h-full w-full rounded-base md:w-1/2">
             <NextImage
-              src={getStrapiMedia(delve(coverImage, 'format.original.url', '?format=webp'))}
-              alt={delve(coverImage, 'alternativeText') || 'Tanker Image'}
-              className="h-[25rem] w-[25rem] rounded-base object-cover object-center"
+              src={currentTab === 'For Vessel Owner' ? ownerImage : chartererImage}
+              alt="Cover Image for User"
+              className="w-full rounded-base object-cover object-center"
               quality={100}
-              height={400}
+              height={320}
               width={400}
             />
           </div>

@@ -16,6 +16,11 @@ import DeactivateAccountForm from '@/modules/DeactivateAccountForm';
 import DeleteAccountForm from '@/modules/DeleteAccountForm';
 import DropzoneForm from '@/modules/DropzoneForm';
 import ExpandableRow from '@/modules/ExpandableRow';
+import FailedOffers from '@/modules/FailedOffers';
+import FailedOffersDetailsContent from '@/modules/FailedOffers/FailedOffersDetailsContent';
+import FailedOffersDocumentsContent from '@/modules/FailedOffers/FailedOffersDocumentsContent';
+import FailedOffersExpandedContent from '@/modules/FailedOffers/FailedOffersExpandedContent';
+import FailedOffersResultContent from '@/modules/FailedOffers/FailedOffersResultContent';
 import FAQByType from '@/modules/FAQByType';
 import Fixture from '@/modules/Fixture';
 import FixtureDetails from '@/modules/Fixture/FixtureDetails';
@@ -122,4 +127,9 @@ export {
   PostFixtureDetails,
   FixtureDetails,
   GlobalError,
+  FailedOffers,
+  FailedOffersResultContent,
+  FailedOffersExpandedContent,
+  FailedOffersDetailsContent,
+  FailedOffersDocumentsContent,
 };

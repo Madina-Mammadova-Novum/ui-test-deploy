@@ -3,15 +3,21 @@ import { ChatAdditionalPropTypes } from '@/lib/types';
 import ArrowSVG from '@/assets/images/small-arrow.svg';
 import { TextRow } from '@/elements';
 import { Flag } from '@/units';
+import { getLocode } from '@/utils/helpers';
 
 const ChatAdditional = ({ data, isActive, onClick }) => {
-  const { vessel, countries, additional } = data;
+  const { vessel, additional } = data;
 
   const printAdditionalProducts = ({ id, name }, index) => (
     <TextRow key={id} title={`Product #${index + 1}`} className="!text-xs-sm normal-case">
       {name.charAt(0).toUpperCase() + name.slice(1) || '-'}
     </TextRow>
   );
+
+  const terminalText =
+    additional?.terminal?.name || additional?.terminal?.code
+      ? `${additional?.terminal?.name} ${additional?.terminal?.code ? ` , ${additional?.terminal?.code}` : ''}`
+      : '';
 
   return (
     additional && (
@@ -29,9 +35,9 @@ const ChatAdditional = ({ data, isActive, onClick }) => {
         {isActive && (
           <div className="h-auto pt-1.5">
             <TextRow title="Load terminal" className="!text-xs-sm">
-              <span className="flex gap-x-1">
-                <Flag data={countries} id={additional?.terminal?.countryId} />
-                {additional?.terminal?.name || '-'}
+              <span className="flex items-center gap-x-1">
+                <Flag countryCode={getLocode(additional?.terminal?.code)} />
+                {terminalText || '-'}
               </span>
             </TextRow>
             <TextRow title="Laycan" className="whitespace-nowrap pb-2.5 !text-xs-sm">

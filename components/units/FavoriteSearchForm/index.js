@@ -60,6 +60,7 @@ const FavoriteSearchForm = ({
           {...methods.register('searchName')}
           error={methods.formState.errors?.searchName?.message}
           label="search name"
+          labelBadge="*"
           placeholder="Enter name of the search"
           customStyles="w-full"
         />

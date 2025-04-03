@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
+import classNames from 'classnames';
+
 import { SimpleDropdown } from './SimpleDropdown';
 
 import { DropdownPropTypes } from '@/lib/types';
@@ -17,6 +19,7 @@ const FormDropdown = ({
   onChange,
   name,
   label = '',
+  labelBadge = null,
   disabled = false,
   asyncCall = false,
   customStyles = {},
@@ -42,8 +45,13 @@ const FormDropdown = ({
 
         return (
           <div className={`relative ${className}`}>
-            <Label name={name} className="mb-0.5 block whitespace-nowrap text-xs-sm">
-              {label}
+            <Label
+              name={name}
+              className={classNames('mb-0.5 block whitespace-nowrap text-xs-sm', {
+                'flex items-center gap-1': labelBadge,
+              })}
+            >
+              {label} {labelBadge}
             </Label>
             <SimpleDropdown
               {...field}

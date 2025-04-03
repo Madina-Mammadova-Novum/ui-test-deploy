@@ -43,7 +43,7 @@ const PreFixture = () => {
         footer={
           <PreFixtureExpandedFooter
             offerId={rowData.id}
-            underNegotiation={!rowData?.additionalCharterPartyTerms?.length || !rowData?.isCountdownActive}
+            underNegotiation={!rowData?.isCountdownActive}
             offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
           />
         }
@@ -51,6 +51,8 @@ const PreFixture = () => {
         <PreFixtureExpandedContent
           detailsData={prefixtureDetailsAdapter({ data: rowData, role })}
           documentsData={prefixtureDocumentsTabRowsDataAdapter({ data: rowData?.documents })}
+          charterPartyData={rowData?.charterPartyOptions}
+          proposedBaseCharterParty={rowData?.proposedBaseCharterParty}
           offerId={rowData?.id}
         />
       </ExpandableRow>

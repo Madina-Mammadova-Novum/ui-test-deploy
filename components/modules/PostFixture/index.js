@@ -9,8 +9,9 @@ import { Dropdown, DynamicLoader, Label, Title } from '@/elements';
 import { NAVIGATION_PARAMS, POST_FIXTURE_SORT_COLUMN_OPTIONS } from '@/lib/constants';
 import { PostFixtureResultContent } from '@/modules';
 import { fetchPostFixtureOffers } from '@/store/entities/post-fixture/actions';
-import { getPostFixtureDataSelector } from '@/store/selectors';
+import { getCargoVesselDataSelector, getPostFixtureDataSelector } from '@/store/selectors';
 import { FilterByForm, PostFixtureFilter } from '@/units';
+import { convertDataToOptions, options } from '@/utils/helpers';
 
 const dropdownStyles = { dropdownWidth: 120, className: 'flex items-center gap-x-5' };
 
@@ -24,8 +25,16 @@ const PostFixture = () => {
     sortColumn: '',
   });
 
-  const { offers, loading, toggle, perPage, filters, searchParams } = useSelector(getPostFixtureDataSelector);
+  const { offers, loading, toggle, perPage, searchParams } = useSelector(getPostFixtureDataSelector);
+  const { cargoTypes, cargoCodes, vesselNames, loading: cargoVesselLoading } = useSelector(getCargoVesselDataSelector);
   const { sortColumnDirectionOptions, sortColumnDirection, sortColumnOptions, sortColumn } = userStore;
+
+  const filterData = {
+    cargoTypes: convertDataToOptions(cargoTypes, 'id', 'name'),
+    cargoCodes: options(cargoCodes?.data || []),
+    tankerNames: options(vesselNames?.data || []),
+    loading: cargoVesselLoading,
+  };
 
   const handleChangeState = (key, value) => {
     setUserStore((prevState) => ({
@@ -74,8 +83,12 @@ const PostFixture = () => {
 
   return (
     <>
-      <FilterByForm isLoading={loading}>
-        <PostFixtureFilter {...filters} />
+      <FilterByForm
+        isLoading={
+          loading || cargoVesselLoading.cargoCodes || cargoVesselLoading.cargoTypes || cargoVesselLoading.vesselNames
+        }
+      >
+        <PostFixtureFilter {...filterData} />
       </FilterByForm>
 
       <div className="flex items-center justify-end gap-2.5 pt-6">

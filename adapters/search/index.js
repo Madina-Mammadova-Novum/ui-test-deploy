@@ -1,9 +1,10 @@
+import StatusIndicator from '@/elements/StatusIndicator';
 import { trimTonValue } from '@/utils/helpers';
 
 export const searchHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { tankerName, imo, flagOfRegistry, dwt, estimatedArrival, ballastLeg } = data;
+  const { tankerName, imo, flagOfRegistry, dwt, estimatedArrival, ballastLeg, hasFailedOffer } = data;
 
   return [
     {
@@ -22,6 +23,16 @@ export const searchHeaderDataAdapter = ({ data }) => {
     {
       label: 'Dwt',
       text: dwt && `${trimTonValue(dwt)} tons`,
+    },
+    {
+      label: 'Offer status',
+      text: (
+        <span className="flex items-center gap-1">
+          <StatusIndicator status="Failed" />
+          Offer already failed
+        </span>
+      ),
+      isHidden: !hasFailedOffer,
     },
     {
       label: 'Estimated arrival',

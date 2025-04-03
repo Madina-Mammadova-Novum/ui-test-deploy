@@ -115,7 +115,7 @@ const OwnerRegistrationForm = ({ countries }) => {
           <CompanyDetails />
         </Step>
         <Divider className="mt-5" />
-        <Step title="Step #4: Number of tankers under operation" titleClass="pt-5" containerClass="flex flex-col gap-5">
+        <Step title="Step #4: How many tankers do you operate" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <TankerSlotsDetails applyHelper />
         </Step>
         <Divider />
