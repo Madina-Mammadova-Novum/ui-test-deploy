@@ -144,7 +144,7 @@ export const signUpTab = {
   tabs: [
     {
       id: 1,
-      label: 'I am vessel owner',
+      label: 'I am a vessel owner',
       value: 'owner',
     },
     {

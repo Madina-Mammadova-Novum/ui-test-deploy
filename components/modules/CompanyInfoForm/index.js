@@ -54,19 +54,6 @@ const CompanyInfoForm = ({ closeModal }) => {
     }
   };
 
-  const noteList = [
-    {
-      id: 1,
-      label: 'Сompany information',
-      list: ['Company Name'],
-    },
-    {
-      id: 2,
-      label: 'Company Registration Address',
-      list: ['Address line #1', 'Address line #2', 'City', 'State / Province / Region', 'Zip / Postal code', 'Country'],
-    },
-  ];
-
   return (
     <FormProvider {...methods}>
       <ModalFormManager
@@ -78,11 +65,7 @@ const CompanyInfoForm = ({ closeModal }) => {
         <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
           Edit Company Details
         </Title>
-        <Notes
-          title="Please note!"
-          subtitle="Please note that any changes to these fields will require verification by ShipLink."
-          data={noteList}
-        />
+        <Notes subtitle="Please note that any changes to these fields will require verification by ShipLink." />
         <div className="flex flex-col gap-5 overflow-y-scroll px-2.5 py-2.5">
           <Title level="4" className="text-sm !text-black">
             Сompany information

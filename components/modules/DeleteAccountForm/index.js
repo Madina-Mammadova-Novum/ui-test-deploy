@@ -84,7 +84,7 @@ const DeleteAccountForm = ({ title, closeModal }) => {
               <p>Deleting you account will delete all of the account data from our platform.</p>
               <p>This deletion is not reversible. You will not be able to restore the account, once deleted.</p>
             </div>
-            <p className="text-xxs font-bold uppercase text-black">
+            <p className="text-xs-sm text-black">
               If you wish to stop using the platform temporarily, you can deactivate, instead of deleting it.
               <Button
                 buttonProps={{
