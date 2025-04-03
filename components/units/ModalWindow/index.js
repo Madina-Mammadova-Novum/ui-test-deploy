@@ -9,7 +9,7 @@ import { Button, Modal } from '@/elements';
 const ModalWindow = ({ children, buttonProps, containerClass }) => {
   const [opened, setOpened] = useState(false);
 
-  const { text, variant, size, icon, className, disabled } = buttonProps;
+  const { text, variant, size, icon, className, disabled, ...restButtonProps } = buttonProps;
 
   const handleOpenModal = (e) => {
     e?.stopPropagation();
@@ -30,6 +30,7 @@ const ModalWindow = ({ children, buttonProps, containerClass }) => {
         disabled={disabled}
         customStyles={className}
         onClick={handleOpenModal}
+        {...restButtonProps}
       />
       <Modal containerClass={containerClass} opened={opened} onClose={handleCloseModal}>
         {childrenWithProps}

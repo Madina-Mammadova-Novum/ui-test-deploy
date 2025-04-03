@@ -42,8 +42,8 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
   if (loading) {
     return (
-      <div className="h-72 w-72">
-        <Loader className="absolute top-3/4 h-8 w-8" />
+      <div className="relative flex h-72 w-72 items-center justify-center">
+        <Loader className="h-8 w-8" />
       </div>
     );
   }

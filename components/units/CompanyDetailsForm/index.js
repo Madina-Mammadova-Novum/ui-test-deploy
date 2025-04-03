@@ -10,7 +10,7 @@ import { CompanyDetailsPropTypes } from '@/lib/types';
 import { Input } from '@/elements';
 import { disableDefaultBehavior, disablePlusMinusSymbols } from '@/utils/helpers';
 
-const CompanyDetails = ({ notEditable }) => {
+const CompanyDetails = ({ notEditable = false }) => {
   const inputYearsRef = useRef(null);
   const {
     register,
@@ -44,24 +44,29 @@ const CompanyDetails = ({ notEditable }) => {
             <p className={classNames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
               {pending?.name}
             </p>
-          ) : null
+          ) : (
+            '*'
+          )
         }
         label="Company name"
         placeholder="Company"
         error={errors.companyName?.message}
         disabled={isSubmitting}
       />
-      <Input
-        ref={inputYearsRef}
-        type="number"
-        name="companyYearsOfOperation"
-        label="Years in operation"
-        placeholder="Years"
-        value={inputYearsRef.current?.value ?? ''}
-        onChange={handleNumberOfOperation}
-        disabled={isSubmitting || notEditable}
-        error={errors.companyYearsOfOperation?.message}
-      />
+      {!notEditable && (
+        <Input
+          ref={inputYearsRef}
+          type="number"
+          name="companyYearsOfOperation"
+          label="Years in operation"
+          labelBadge="*"
+          placeholder="Years"
+          value={inputYearsRef.current?.value ?? ''}
+          onChange={handleNumberOfOperation}
+          disabled={isSubmitting}
+          error={errors.companyYearsOfOperation?.message}
+        />
+      )}
     </div>
   );
 };

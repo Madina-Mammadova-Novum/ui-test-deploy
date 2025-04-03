@@ -10,7 +10,7 @@ import { NotificationCardBodyPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { REGEX } from '@/lib/constants';
 import { getCurrentDealStage, readNotification } from '@/store/entities/notifications/actions';
-import { resetDealData, resetParams, setIsOpened } from '@/store/entities/notifications/slice';
+import { resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
 
@@ -18,26 +18,12 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
   const dispatch = useDispatch();
 
   const role = getCookieFromBrowser('session-user-role');
-  const { deal, filterParams } = useSelector(getNotificationsDataSelector);
-  /* eslint-disable no-console */
-  console.log({ deal });
+  const { filterParams } = useSelector(getNotificationsDataSelector);
 
   const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
 
-  const getDealStage = useCallback(() => {
-    if (isDealPath) {
-      const id = getIdFromUrl(url);
-      dispatch(getCurrentDealStage({ id, role }));
-    }
-  }, [isDealPath, url, getIdFromUrl, dispatch, role]);
-
-  const resetDealStage = useCallback(() => {
-    dispatch(resetDealData());
-  }, [dispatch]);
-
   const handleRedirect = useCallback(() => {
-    handleClose();
     setDisabled(urlId);
 
     if (filterParams?.activeTab === 'unread') {
@@ -45,16 +31,29 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
     }
 
     if (isDealPath) {
-      if (deal?.route) {
-        window.open(deal.route, '_blank');
-      }
+      const id = getIdFromUrl(url);
+      dispatch(getCurrentDealStage({ id, role }))
+        .unwrap()
+        .then((dealData) => {
+          if (dealData?.route) {
+            window.open(dealData.route, '_blank');
+          }
+          handleClose();
+          dispatch(setIsOpened(false));
+          dispatch(resetParams());
+        })
+        .catch(() => {
+          handleClose();
+          dispatch(setIsOpened(false));
+          dispatch(resetParams());
+        });
     } else {
       window.open(url, '_blank');
+      handleClose();
+      dispatch(setIsOpened(false));
+      dispatch(resetParams());
     }
-
-    dispatch(setIsOpened(false));
-    dispatch(resetParams());
-  }, [urlId, setDisabled, filterParams, isDealPath, deal?.route, url, dispatch]);
+  }, [urlId, setDisabled, filterParams, isDealPath, url, dispatch, role, handleClose]);
 
   return (
     <div className="flex flex-col items-start">
@@ -62,11 +61,13 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
       {url && (
         <Button
           onClick={handleRedirect}
-          onMouseEnter={getDealStage}
-          onMouseLeave={resetDealStage}
           customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline "
-          buttonProps={{ size: 'small', variant: 'primary', text: 'See details' }}
           disabled={disabled === urlId}
+          buttonProps={{
+            size: 'small',
+            variant: 'primary',
+            text: disabled === urlId ? 'Loading...' : 'See details',
+          }}
         />
       )}
     </div>

@@ -40,7 +40,7 @@ export default async function PageFooter() {
         <NextLink href="/">
           <Logo className="fill-black" />
         </NextLink>
-        <div className="mt-[30px] flex flex-col gap-4 sm:flex-row 3md:gap-x-10">
+        <div className="mt-[30px] flex flex-col gap-4 pb-5 sm:flex-row 3md:gap-x-10">
           {Array.isArray(data) && data.length > 0 && data.map(printFooterLinks)}
           {legal?.length > 0 && <FooterNavBlock items={legal} title="Legal" />}
           <div className="w-[166px]">

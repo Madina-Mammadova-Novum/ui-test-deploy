@@ -1,3 +1,4 @@
+import { countriesAdapter } from '@/adapters/country';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
@@ -694,6 +695,7 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
         value: product.id,
       },
     })),
+    showAdditionalDischarge: false,
     isAlternative,
   };
 };
@@ -708,6 +710,9 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
     dischargeTerminal = {},
     cargoType: { id: cargoId, name: cargoName } = {},
     cargoes: products,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   const {
@@ -726,9 +731,17 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
   return {
     laycanStart,
     laycanEnd,
-    loadPort: { label: `${loadPortName}, ${loadPortLocode}`, value: loadPortId },
+    loadPort: {
+      label: `${loadPortName}, ${loadPortLocode}`,
+      value: loadPortId,
+      countryFlag: getLocode(loadPortLocode),
+    },
     loadTerminal: { label: loadTerminalName, value: loadTerminalId },
-    dischargePort: { label: `${dischargePortName}, ${dischargePortLocode}`, value: dischargePortId },
+    dischargePort: {
+      label: `${dischargePortName}, ${dischargePortLocode}`,
+      value: dischargePortId,
+      countryFlag: getLocode(dischargePortLocode),
+    },
     dischargeTerminal: { label: dischargeTerminalName, value: dischargeTerminalId },
     cargoType: { label: cargoName, value: cargoId },
     productsByIndex: Array.from({ length: products.length }, (_, index) => index),
@@ -741,6 +754,11 @@ export const prefilledSaveSearchDataAdapter = ({ data, isSavedSearch = false, sa
         value: product.productId,
       },
     })),
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
+    showAdditionalDischarge:
+      additionalDischargeOptions?.isAllSelected || additionalDischargeOptions?.selected?.length > 0,
     isSavedSearch,
     savedSearchId,
   };

@@ -25,6 +25,10 @@ const tabs = [
     label: 'Commercial offer terms',
   },
   {
+    value: 'voyage_details',
+    label: 'Voyage details',
+  },
+  {
     value: 'comments',
     label: 'Comments',
   },
@@ -34,12 +38,14 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const dispatch = useDispatch();
 
   const { valid, message } = useSelector(getOfferSelector);
-
   const scrollingContainerRef = useRef(null);
 
   const [disabled, setDisabled] = useState(false);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [confirmCounteroffer, setConfirmCounteroffer] = useState(false);
+
+  const [formMethods, setFormMethods] = useState(null);
+  const [additionalDischargeNextValue, setAdditionalDischargeNextValue] = useState(null);
 
   const [countdownState, setCountdownState] = useState({
     responseCountdownOptions: [],
@@ -50,13 +56,35 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   const { counterofferData, voyageDetails, comments, countdownData } = offerDetails;
   const { responseCountdownOptions, responseCountdown, loading } = countdownState;
 
+  const additionalDischargeValue = {
+    additionalDischargeOptions: additionalDischargeNextValue || voyageDetails?.additionalDischargeOptions || {},
+    excludeInternationallySanctioned: voyageDetails?.excludeInternationallySanctioned || false,
+    sanctionedCountries: voyageDetails?.sanctionedCountries || [],
+  };
+
+  const shouldShowShadow = scrollingContainerRef?.current?.scrollHeight > 320;
+
+  const calculateContainerHeight = () => {
+    if (!confirmCounteroffer && valid && message) {
+      return 'h-[calc(98vh-470.4px)]';
+    }
+    if (!confirmCounteroffer && valid) {
+      return 'h-[calc(98vh-424.2px)]';
+    }
+    if (!valid) {
+      return 'h-[calc(98vh-354.2px)]';
+    }
+    return 'h-[calc(98vh-292.2px)]';
+  };
+
+  const containerHeight = calculateContainerHeight();
+
   const errorBanner = useMemo(() => {
     return (
-      message &&
-      !valid && (
-        <div className="w-full rounded-base bg-red-light px-5 py-2.5 pb-3">
+      message && (
+        <div className={`${!valid ? 'bg-red-light' : 'bg-orange-300'} w-full rounded-base px-5 py-2.5 pb-3`}>
           <div className="mt-1.5 text-xsm">
-            <span className="font-bold">Declined: </span>
+            <span className="font-bold">{valid ? 'Warning: ' : 'Declined: '}</span>
             <span className="ml-1.5">{message}</span>
           </div>
         </div>
@@ -101,21 +129,36 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
     initActions();
   }, []);
 
+  const handleChangeTab = ({ target }) => {
+    if (formMethods?.getValues) {
+      const formValues = formMethods.getValues();
+      const nextAdditionalDischargeOptions = formValues?.additionalDischargeOptions;
+
+      setAdditionalDischargeNextValue(nextAdditionalDischargeOptions);
+    }
+    setCurrentTab(target.value);
+  };
+
   const tabContent = useMemo(() => {
     const scrollToBottom = () => {
       setTimeout(() => scrollingContainerRef?.current?.scroll({ top: scrollingContainerRef?.current?.scrollHeight }));
     };
 
     switch (currentTab) {
+      case 'voyage_details':
+        return (
+          <VoyageDetailsTabContent
+            data={{
+              ...voyageDetails,
+              additionalDischargeOptions: additionalDischargeNextValue || voyageDetails?.additionalDischargeOptions,
+            }}
+            isCounteroffer
+          />
+        );
       case 'comments':
         return <CommentsContent data={comments} />;
       default:
-        return (
-          <>
-            <VoyageDetailsTabContent data={voyageDetails} inlineVariant />
-            <SendCounterofferFormFields data={counterofferData} scrollToBottom={scrollToBottom} />
-          </>
-        );
+        return <SendCounterofferFormFields data={counterofferData} scrollToBottom={scrollToBottom} />;
     }
   }, [currentTab, voyageDetails, comments, counterofferData]);
 
@@ -151,7 +194,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             options={responseCountdownOptions}
             loading={loading}
             asyncCall
-            disabled={!responseCountdownOptions.length || confirmCounteroffer}
+            disabled={!responseCountdownOptions.length || confirmCounteroffer || !valid}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
             customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
           />
@@ -164,22 +207,19 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
         allowSubmit={confirmCounteroffer}
         handleConfirmCounteroffer={handleConfirmCounteroffer}
         handleValidationError={handleValidationError}
-        data={{ ...counterofferData, responseCountdown }}
+        data={{ ...counterofferData, ...additionalDischargeValue, responseCountdown }}
+        onFormChange={setFormMethods}
       >
         {!confirmCounteroffer ? (
           <>
-            <Tabs
-              customStyles="mx-auto mt-5 mb-3"
-              tabs={tabs}
-              activeTab={currentTab}
-              onClick={({ target }) => setCurrentTab(target.value)}
-            />
+            <Tabs customStyles="mx-auto mt-5 mb-3" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
 
             <div
               ref={scrollingContainerRef}
               className={classNames(
-                'h-[23.25rem] overflow-y-auto overflow-x-hidden p-5 2xl:h-[30rem]',
-                scrollingContainerRef?.current?.scrollHeight > 320 && 'shadow-vInset'
+                'overflow-y-auto overflow-x-hidden p-5',
+                shouldShowShadow && 'shadow-vInset',
+                containerHeight
               )}
             >
               {tabContent}

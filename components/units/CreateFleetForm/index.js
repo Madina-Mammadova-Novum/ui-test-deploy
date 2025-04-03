@@ -43,6 +43,7 @@ const CreateFleetForm = ({ closeModal }) => {
         <Input
           {...methods.register('fleetName')}
           label="Fleet name"
+          labelBadge="*"
           placeholder="Enter name of the fleet"
           error={methods.formState.errors?.fleetName?.message}
         />

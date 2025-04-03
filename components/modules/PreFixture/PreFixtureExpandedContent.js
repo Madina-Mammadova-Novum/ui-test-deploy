@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import CharterPartyContent from './CharterPartyContent';
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
@@ -24,9 +25,20 @@ const tabs = [
     label: 'Documents',
     value: 'documents',
   },
+  {
+    label: 'Charter Party',
+    value: 'charter-party',
+  },
 ];
 
-const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 'details' }) => {
+const PreFixtureExpandedContent = ({
+  detailsData,
+  documentsData,
+  charterPartyData,
+  proposedBaseCharterParty,
+  offerId,
+  tab = 'details',
+}) => {
   const dispatch = useDispatch();
 
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
@@ -50,6 +62,17 @@ const PreFixtureExpandedContent = ({ detailsData, documentsData, offerId, tab = 
   const printContent = useMemo(() => {
     if (currentTab === 'documents') {
       return <DocumentsContent rowsData={documentsData} offerId={offerId} />;
+    }
+
+    if (currentTab === 'charter-party') {
+      return (
+        <CharterPartyContent
+          charterPartyData={charterPartyData}
+          proposedBaseCharterParty={proposedBaseCharterParty}
+          offerId={offerId}
+          isCountdownActive={detailsData?.isCountdownActive}
+        />
+      );
     }
 
     return <DetailsContent detailsData={detailsData} />;

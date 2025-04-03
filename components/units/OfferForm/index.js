@@ -13,7 +13,13 @@ import { offerSchema } from '@/lib/schemas';
 import { getOfferSelector } from '@/store/selectors';
 import { useHookFormParams } from '@/utils/hooks';
 
-const OfferForm = ({ children, disabled, handleSubmit = () => {}, handleValidationError = () => {} }) => {
+const OfferForm = ({
+  children,
+  disabled,
+  handleSubmit = () => {},
+  handleValidationError = () => {},
+  onFormChange = () => {},
+}) => {
   const { formState, ranges } = useSelector(getOfferSelector);
 
   const [freightState, setFreightState] = useState({});
@@ -27,6 +33,11 @@ const OfferForm = ({ children, disabled, handleSubmit = () => {}, handleValidati
   useEffect(() => {
     setFreightState({ type: freightType?.value, value: freightValue });
   }, [freightType?.value, freightValue]);
+
+  // Pass form methods to parent
+  useEffect(() => {
+    onFormChange(methods);
+  }, [methods]);
 
   return (
     <FormProvider {...methods}>

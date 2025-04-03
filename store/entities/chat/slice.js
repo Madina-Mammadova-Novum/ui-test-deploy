@@ -268,6 +268,13 @@ const chatSlice = createSlice({
       state.data.archived = updatedArchivedState;
       state.data.collapsed = updatedCollapsedState;
     },
+    addNewChat: (state, { payload }) => {
+      const chatExists = state.data.active.some((chat) => chat.chatId === payload.chatId);
+
+      if (!chatExists) {
+        state.data.active.unshift(payload);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getListOfChats.pending, (state) => {
@@ -343,6 +350,7 @@ export const {
   onlineStatus,
   offlineStatus,
   setBotMessage,
+  addNewChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

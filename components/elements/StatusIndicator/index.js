@@ -9,15 +9,21 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
       case 'Delete requested by Vessel Owner':
       case 'Delete requested by Charterer':
       case 'New offer':
+      case 'Proposed':
+      case 'Proposed Charter Party - Pending Review':
         return 'bg-yellow';
       case 'Counteroffer':
-        return 'bg-blue';
       case 'PendingRequest':
-      case 'PendingConfirmation':
+      case 'Update Requested':
+      case 'Awaiting Broker Finalization':
         return 'bg-blue';
       case 'Confirmed':
       case 'Active':
+      case 'Accepted':
+      case 'Broker Finalized Charter Party':
         return 'bg-green';
+      case 'Failed':
+        return 'bg-red';
       case 'Inactive':
       default:
         return 'bg-gray';

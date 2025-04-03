@@ -42,7 +42,12 @@ const EditFleetForm = ({ closeModal, id }) => {
         submitButton={{ text: 'Save changes', variant: 'primary', size: 'large' }}
       >
         <Title level="2">Edit Fleet</Title>
-        <Input {...methods.register('fleetName')} label="Fleet name" placeholder="Enter name of the fleet" />
+        <Input
+          {...methods.register('fleetName')}
+          label="Fleet name"
+          placeholder="Enter name of the fleet"
+          labelBadge="*"
+        />
       </ModalFormManager>
     </FormProvider>
   );

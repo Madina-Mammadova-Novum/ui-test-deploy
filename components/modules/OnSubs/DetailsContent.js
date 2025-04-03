@@ -3,7 +3,7 @@
 import { DetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { Flag, PartyItem } from '@/units';
+import { AdditionalDischargeDetails, Flag } from '@/units';
 
 const DetailsContent = ({ detailsData = {} }) => {
   const {
@@ -12,13 +12,20 @@ const DetailsContent = ({ detailsData = {} }) => {
     cargoDetails,
     voyageDetails,
     commercialOfferTerms,
-    additionalCharterPartyTerms,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = detailsData || {};
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
   const { generalOfferTerms, bankInfo } = commercialOfferTerms || {};
+  const additionalDischargeData = {
+    additionalDischargeOptions,
+    sanctionedCountries,
+    excludeInternationallySanctioned,
+  };
 
   return (
     <div className="mb-5 flex flex-col gap-y-5">
@@ -120,6 +127,8 @@ const DetailsContent = ({ detailsData = {} }) => {
               </div>
             ))}
           </FieldsetContent>
+
+          <AdditionalDischargeDetails data={additionalDischargeData} classNames="mt-4" />
         </FieldsetWrapper>
       </div>
       <div className="flex flex-col gap-y-2.5 3md:flex-row 3md:gap-x-2.5 3md:gap-y-0">
@@ -144,16 +153,6 @@ const DetailsContent = ({ detailsData = {} }) => {
                 </TextRow>
               ))}
             </div>
-          </FieldsetContent>
-        </FieldsetWrapper>
-
-        <FieldsetWrapper>
-          <Title level={3}>Additional Charter Party Terms</Title>
-
-          <FieldsetContent className="mt-3.5 flex gap-2.5">
-            {additionalCharterPartyTerms?.map(({ title, body }) => (
-              <PartyItem key={title} buttonText={title} modalTitle="Tanker Voyage Charter Party" body={body} />
-            ))}
           </FieldsetContent>
         </FieldsetWrapper>
       </div>

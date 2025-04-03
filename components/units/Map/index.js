@@ -11,7 +11,7 @@ import { MapLoader } from '@/elements';
 import './style.css';
 import { CalculatedResult } from '@/units';
 import { getSeaMetrixURL } from '@/utils';
-import { getLineCoordinate, getMiddleElementFromArray } from '@/utils/helpers';
+import { fixLongitudeWrapping, getLineCoordinate, getMiddleElementFromArray } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 import 'leaflet/dist/leaflet.css';
@@ -20,6 +20,7 @@ const Map = ({ className = 'h-full' }) => {
   const { getValues, isSubmitting } = useHookForm();
   const [coord, setCoord] = useState([]);
   const [middleCoord, setMiddleCoord] = useState([48.3794, 31.1656]);
+  const [zoom, setZoom] = useState(4);
 
   const { fromPort, toPort, calculator, response } = getValues();
 
@@ -29,21 +30,26 @@ const Map = ({ className = 'h-full' }) => {
     if (!response?.route) return;
 
     const nextCoord = response?.route?.map(({ lon, lat }) => [lat, lon]) || [];
-    setCoord([...nextCoord]);
+    const wrappedCoordinates = fixLongitudeWrapping(nextCoord);
+    setCoord(wrappedCoordinates);
 
-    const nextMiddleElement = getMiddleElementFromArray(nextCoord);
+    // Set zoom level based on coordinates length
+    setZoom(wrappedCoordinates?.length > 45 ? 3 : 4);
+
+    const nextMiddleElement = getMiddleElementFromArray(wrappedCoordinates);
     setMiddleCoord([...nextMiddleElement]);
   }, [response]);
 
   useEffect(() => {
     setMiddleCoord([48.3794, 31.1656]);
     setCoord([]);
+    setZoom(4); // Reset zoom to default when calculator changes
   }, [calculator]);
 
   return (
-    <MapContainer center={middleCoord} zoom={4} className={`relative font-inter-sans ${className}`}>
+    <MapContainer center={middleCoord} zoom={zoom} className={`relative font-inter-sans ${className}`}>
       {isSubmitting && <MapLoader />}
-      <ChangeView center={middleCoord} />
+      <ChangeView center={middleCoord} zoom={zoom} />
       <TileLayer url={getSeaMetrixURL('mapsapi/simplemap')} crossOrigin />
       <TileLayer url={getSeaMetrixURL('mapsapi/ports')} crossOrigin />
       {!!coordinates.length && <Polyline positions={coord} />}

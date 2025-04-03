@@ -1,8 +1,9 @@
+import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const fixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
@@ -52,6 +53,7 @@ export const fixtureHeaderDataAdapter = ({ data }) => {
 
 export const fixtureDetailsAdapter = ({ data }) => {
   if (!data) return {};
+
   const {
     charterer: {
       name: chartererName,
@@ -75,7 +77,6 @@ export const fixtureDetailsAdapter = ({ data }) => {
     products,
     laycanStart,
     laycanEnd,
-    additionalCharterPartyTerms,
     freightFormat,
     freight,
     demurrageRate,
@@ -91,6 +92,9 @@ export const fixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;
@@ -263,9 +267,11 @@ export const fixtureDetailsAdapter = ({ data }) => {
         ],
       },
     },
-    additionalCharterPartyTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 
@@ -348,7 +354,7 @@ const fixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
       downloadData: !isDocumentDeleted &&
         url && {
           url,
-          fileName,
+          fileName: ensureFileExtension(fileName, extension),
         },
       actions: [
         {

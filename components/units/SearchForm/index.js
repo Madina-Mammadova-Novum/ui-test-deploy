@@ -27,6 +27,13 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const methods = useHookFormParams({ schema, state: searchParams });
 
   const handleResetFields = () => {
+    // Set initial values for additional discharge form fields
+    methods.setValue('additionalDischargeOptions', {});
+    methods.setValue('sanctionedCountries', []);
+    methods.setValue('excludedCountries', []);
+    methods.setValue('excludeInternationallySanctioned', false);
+    methods.setValue('showAdditionalDischarge', false);
+
     resetForm(methods);
     onReset();
     setProductState([0]);
@@ -68,7 +75,8 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     if (searchParams) {
       methods.reset(searchParams);
 
-      if (searchParams?.productsByIndex && searchParams?.isSavedSearch) setProductState(searchParams?.productsByIndex);
+      if (searchParams?.productsByIndex && (searchParams?.isSavedSearch || searchParams?.isAlternative))
+        setProductState(searchParams?.productsByIndex);
     }
   }, [searchParams]);
 

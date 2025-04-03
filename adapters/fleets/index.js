@@ -167,14 +167,12 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
 
   const {
     id,
-    canSendUpdateRequest,
     details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
-  const vesselInProgress = requestStatus !== 'Confirmed';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
@@ -220,7 +218,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: requestStatus === 'PendingConfirmation' ? 'Pending' : requestStatus,
+      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
     },
     {
@@ -229,16 +227,16 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       name,
       fleetName,
       disabled: additionRequested,
-      isValid: canSendUpdateRequest,
+      isValid: requestStatus !== 'Update Requested',
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
-          actionText: vesselInProgress ? requestStatus : 'Request to update info',
+          actionText: 'Request to update info',
           actionVariant: 'primary',
           actionSize: 'medium',
           disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-blue" />,
-          actionStyles: '!w-[165px]',
+          actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
         },
         {
           action: ACTIONS.DELETE_TANKER_FROM_FLEET,
@@ -264,7 +262,6 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
   const {
     id,
     imo,
-    canSendUpdateRequest,
     status: requestStatus,
     details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
@@ -322,14 +319,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: requestStatus === 'PendingConfirmation' ? 'Pending' : requestStatus,
+      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
     },
     {
       id,
       editable: true,
       name,
-      isValid: canSendUpdateRequest,
+      isValid: requestStatus !== 'Update Requested',
       actions: [
         {
           action: ACTIONS.REQUEST_UPDATE_TANKER_INFO,
@@ -338,7 +335,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
           actionSize: 'medium',
           disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-blue" />,
-          actionStyles: '!w-[165px]',
+          actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
         },
         {
           action: ACTIONS.DELETE_TANKER,

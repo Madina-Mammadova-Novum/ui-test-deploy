@@ -5,6 +5,7 @@ import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { addDays } from 'date-fns';
+import debounce from 'lodash/debounce';
 import * as yup from 'yup';
 
 import { ReactivateTankerFormPropTypes } from '@/lib/types';
@@ -55,9 +56,17 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     handleChangeState('loading', false);
   };
 
-  const loadOptions = async (inputValue, callback) => {
+  const debouncedLoadOptions = debounce(async (inputValue, callback) => {
     const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback(tankerState.listOfPorts);
+      return;
+    }
+    debouncedLoadOptions(inputValue, callback);
   };
 
   const handleMore = () => setPerList((prev) => prev + 50);
@@ -101,6 +110,12 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
     getPorts();
   }, [perList]);
 
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <ModalFormManager
@@ -125,6 +140,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
           <FormDropdown
             name="port"
             label="Port search"
+            labelBadge="*"
             errorMsg={errors?.port?.message}
             loading={loading}
             options={listOfPorts}
@@ -139,6 +155,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
             name="date"
             inputClass="w-full"
             label="Open date"
+            labelBadge="*"
             error={errors?.date?.message}
             onChange={(value) => handleChangeValue({ option: value, key: 'date' })}
             calendarClass="absolute top-5 left-0"

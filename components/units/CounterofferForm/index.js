@@ -27,6 +27,7 @@ const CounterofferForm = ({
   handleValidationError,
   disabled,
   setDisabled,
+  onFormChange = () => {},
 }) => {
   const dispatch = useDispatch();
   const role = getCookieFromBrowser('session-user-role');
@@ -40,6 +41,11 @@ const CounterofferForm = ({
 
   const freightType = methods.watch('freight');
   const freightValue = methods.watch('value');
+
+  // Pass form methods to parent
+  useEffect(() => {
+    onFormChange(methods);
+  }, [methods]);
 
   useEffect(() => {
     setFreightState({ type: freightType?.value, value: freightValue });
@@ -56,7 +62,15 @@ const CounterofferForm = ({
     const comment = formData?.comment || null;
 
     const { message: successMessage, error } = await sendCounteroffer({
-      data: { ...formData, comment, offerId: data?.offerId, responseCountdown: data?.responseCountdown },
+      data: {
+        additionalDischargeOptions: data?.additionalDischargeOptions,
+        excludeInternationallySanctioned: data?.excludeInternationallySanctioned,
+        sanctionedCountries: data?.sanctionedCountries,
+        ...formData,
+        comment,
+        offerId: data?.offerId,
+        responseCountdown: data?.responseCountdown,
+      },
       role,
     });
 

@@ -15,16 +15,25 @@ const ConfirmCounteroffer = ({ offerDetails }) => {
   const { voyageDetails, comments } = offerDetails;
   const { commercialOfferTerms, comment } = confirmCounterofferDetailsAdapter({ data: getValues() });
 
+  const formData = getValues();
+  const nextVoyageDetails = {
+    ...voyageDetails,
+    additionalDischargeOptions: {
+      ...voyageDetails?.additionalDischargeOptions,
+      ...formData?.additionalDischargeOptions,
+    },
+  };
+
   return (
     <div className="flex h-full w-[610px] flex-col">
       <div
         ref={(ref) => setShowScroll(ref?.scrollHeight > 320)}
-        className={`mt-2.5 flex h-[28.375rem] flex-col gap-y-5 overflow-y-auto overflow-x-hidden 3md:h-[33.75rem] lg:h-[40.5rem] ${
+        className={`mt-2.5 flex h-[28.375rem] min-h-full flex-col gap-y-5 overflow-y-auto overflow-x-hidden 3md:h-[33.75rem] xl:h-[40.5rem] ${
           showScroll && 'shadow-vInset'
         }`}
       >
         <COTTabContent data={commercialOfferTerms} />
-        <VoyageDetailsTabContent data={voyageDetails} />
+        <VoyageDetailsTabContent data={nextVoyageDetails} isCounteroffer isViewing />
         <CommentsContent data={[...comments, comment]} areaDisabled />
       </div>
     </div>

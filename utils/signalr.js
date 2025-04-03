@@ -6,7 +6,8 @@ import { getRtURL } from '.';
 import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
 import { useNotificationToast } from './hooks';
 
-import { messageDataAdapter } from '@/adapters';
+import { listOfChatsDataAdapter, messageDataAdapter } from '@/adapters';
+import { getOfferDetails } from '@/services/offer';
 import {
   messageAlert,
   offlineStatus,
@@ -17,7 +18,6 @@ import {
   updateUserConversation,
 } from '@/store/entities/chat/slice';
 import { fetchNotifications } from '@/store/entities/notifications/actions';
-
 import 'react-toastify/dist/ReactToastify.css';
 
 export class SignalRController {
@@ -93,17 +93,21 @@ export class NotificationController extends SignalRController {
 
         const newestNotification = unwatchedData?.[0]?.data?.[0] || false;
 
+        const soundEnabled = localStorage.getItem('notificationSound');
+        const isSoundEnabled = soundEnabled === null ? true : soundEnabled === 'true';
+
         const hornSound = new Howl({
           src: NotificationHorn,
           loop: false,
           preload: true,
           autoplay: true,
-          volume: 0.7,
+          volume: isSoundEnabled ? 0.7 : 0,
         });
 
-        //  TODO: pause case should be added to make horn loop true also mute button should be added
         if (newestNotification) {
-          hornSound.play();
+          if (isSoundEnabled) {
+            hornSound.play();
+          }
           useNotificationToast([newestNotification]);
         }
       });
@@ -150,16 +154,16 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setConversation(opened));
   }
 
-  async sendMessage({ message }) {
-    this.connection?.invoke('SendMessage', message);
-  }
-
   async readMessage({ id }) {
-    this.connection?.invoke('ReadMessage', id);
+    if (this.connection?.state === 'Connected') {
+      this.connection?.invoke('ReadMessage', id);
+    }
   }
 
   updateMessage({ message, clientId, role }) {
-    this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
+    if (this.connection?.state === 'Connected') {
+      this.store.dispatch(updateUserConversation(messageDataAdapter({ data: message, clientId, role })));
+    }
   }
 
   stop() {
@@ -194,6 +198,37 @@ export class ChatNotificationController extends SignalRController {
         this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: 0 }));
       } else {
         this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: chat.messageCount }));
+      }
+    });
+
+    this.connection.on('NewChat', async (chatData) => {
+      try {
+        // Get the user role from cookie
+        const role = getCookieFromBrowser('session-user-role');
+
+        // Fetch offer details using contentId from chatData
+        const { data: offerData } = await getOfferDetails(chatData?.contentId, role);
+
+        // Format the chat data for the state update
+        const formattedChat = listOfChatsDataAdapter({
+          data: [{ chat: chatData, deal: offerData }],
+        });
+
+        if (formattedChat && formattedChat.length > 0) {
+          // Dispatch action to add the new chat to the state
+          this.store.dispatch({
+            type: 'chat/addNewChat',
+            payload: formattedChat[0],
+          });
+        } else {
+          // If we couldn't format the chat data properly, fall back to refreshing the entire list
+          this.store.dispatch({ type: 'chat/getListOfChats' });
+        }
+      } catch (error) {
+        console.error('Error processing new chat:', error);
+
+        // If there's an error fetching the offer details, fall back to refreshing the entire chat list
+        this.store.dispatch({ type: 'chat/getListOfChats' });
       }
     });
 

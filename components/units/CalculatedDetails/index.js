@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import debounce from 'lodash/debounce';
+
 import { CalculatedDetailsPropTypes } from '@/lib/types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
@@ -28,10 +30,24 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
     setPortsLoader(false);
   };
 
-  const loadOptions = async (inputValue, callback) => {
+  const debouncedLoadOptions = debounce(async (inputValue, callback) => {
     const { data } = await getPortsForSearchForm({ query: inputValue, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(inputValue, callback);
   };
+
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
 
   const printOptionalProps = useMemo(() => {
     return isFreight ? (
@@ -39,6 +55,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         {...register('cargoQuantity')}
         error={errors?.cargoQuantity?.message}
         label="Cargo quantity"
+        labelBadge="*"
         placeholder="Enter the cargo quantity"
         type="number"
         helperText="Min value: 1000"
@@ -93,6 +110,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         onChange={(option) => onChange('calculator', option)}
         options={toolsCalculatorOptions}
         label="Choose a calculator"
+        labelBadge="*"
       />
       <FormDropdown
         asyncCall
@@ -104,6 +122,7 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         loadOptions={loadOptions}
         disabled={!ports.length}
         label="From which port"
+        labelBadge="*"
         placeholder="Select port"
       />
       <FormDropdown
@@ -116,9 +135,11 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         loadOptions={loadOptions}
         disabled={!ports.length}
         label="To which port"
+        labelBadge="*"
         placeholder="Select port"
       />
       {printAdditionalPorts.length > 0 && printAdditionalPorts}
+
       <Button
         buttonProps={{
           text: 'Add more ports',

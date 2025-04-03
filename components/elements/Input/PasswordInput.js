@@ -20,6 +20,7 @@ const PasswordInput = ({ name = '', label = '', placeholder = '', onChange, ...r
           <Input
             {...field}
             label={label}
+            labelBadge="*"
             onChange={onChange}
             placeholder={placeholder}
             ref={ref}

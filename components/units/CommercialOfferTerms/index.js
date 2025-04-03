@@ -56,7 +56,10 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat = freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
+  const helperFreightFormat =
+    selectedFreight?.label === 'WS'
+      ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
+      : freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
 
   const helperRangeFormat =
     ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start}$ - ${ranges?.demurrageRate?.max?.end}$`;
@@ -137,9 +140,11 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   }, [searchData]);
 
   useEffect(() => {
+    const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
+
     setFreightEstimation({
-      min: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.min?.start,
-      max: selectedFreight && ranges?.freightFormats[selectedFreight?.value - 1]?.ranges?.max?.end,
+      min: selectedFormat?.ranges?.min?.start,
+      max: selectedFormat?.ranges?.max?.end,
     });
   }, [selectedFreight, ranges]);
 
@@ -156,6 +161,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <div className="mt-3 flex w-1/2 items-baseline gap-x-5 pr-5">
         <FormDropdown
           label="Freight"
+          labelBadge="*"
           name="freight"
           customStyles={{ className: 'w-1/2' }}
           options={freightFormats}
@@ -167,6 +173,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
         <Input
           {...register('value')}
           label="Value"
+          labelBadge="*"
           name="value"
           type="number"
           placeholder={freightValuePlaceholder}
@@ -181,6 +188,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <Input
         {...register('demurrageRate')}
         label="Demurrage rate"
+        labelBadge="*"
         name="demurrageRate"
         type="number"
         placeholder="$ per day"
@@ -194,6 +202,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
         <Input
           {...register('layTime')}
           label="lay time"
+          labelBadge="*"
           name="layTime"
           type="number"
           placeholder="Hours"
@@ -216,6 +225,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
       <div className="pt-4">
         <FormDropdown
           label="undisputed demurrage payment terms"
+          labelBadge="*"
           name="undisputedDemurrage"
           options={demurragePaymentTerms}
           disabled={!valid || loading}
@@ -228,6 +238,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
 
         <FormDropdown
           label="payment terms"
+          labelBadge="*"
           name="paymentTerms"
           customStyles={{ className: 'mt-3' }}
           options={paymentTerms}

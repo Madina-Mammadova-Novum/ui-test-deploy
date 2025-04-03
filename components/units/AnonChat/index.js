@@ -13,7 +13,7 @@ import { sessionAdapter } from '@/adapters/user';
 import PlaneSVG from '@/assets/images/plane.svg';
 import { Button, Dropdown, Input, PhoneInput } from '@/elements';
 import { ROLES } from '@/lib';
-import { getChatToken, getCities, getCountries } from '@/services';
+import { getChatToken, getCities, getCountries, sendChatMessage } from '@/services';
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthSelector } from '@/store/selectors';
@@ -144,7 +144,10 @@ const AnonChat = ({ opened }) => {
   /* Submit handler used for switching steps and init conversation with support */
   const onSubmit = async (e) => {
     e?.preventDefault();
-    сhatSessionService.sendMessage({ message });
+
+    const chatId = session?.chatId;
+
+    sendChatMessage({ chatId, message });
     setMessage('');
   };
 
@@ -316,6 +319,8 @@ const AnonChat = ({ opened }) => {
     if (session?.accessToken) {
       setCookie('session-user-id', session?.userId);
       setCookie('session-user-role', session?.role);
+      setCookie('session-access-token', session?.accessToken);
+      setCookie('session-refresh-token', session?.refreshToken);
 
       initServices();
     }

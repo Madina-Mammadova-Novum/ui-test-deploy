@@ -1,15 +1,14 @@
-/* eslint-disable react/prop-types */
-
 'use client';
 
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { ModalFormManager } from '@/common';
-import { PasswordInput, Title } from '@/elements';
+import { Button, PasswordInput, Title } from '@/elements';
 import { ROUTES } from '@/lib';
 import { currentPasswordSchema } from '@/lib/schemas';
 import { deleteCompany } from '@/services';
@@ -47,10 +46,6 @@ const DeleteAccountForm = ({ title, closeModal }) => {
   const onSubmit = async (data) => {
     const { error, message } = await deleteCompany({ data });
 
-    // if (pendingRequest) {
-    //   errorToast('Bad request', 'You have pending personal request');
-    // }
-
     if (!error) {
       handleSignOut(message);
       router.replace(ROUTES.LOGIN);
@@ -58,8 +53,18 @@ const DeleteAccountForm = ({ title, closeModal }) => {
       dispatch(resetChat());
       router.refresh();
     } else {
-      errorToast('Bad request', error.title);
+      errorToast(error.title, error.message);
     }
+  };
+
+  const handleRedirectToDeactivate = () => {
+    closeModal();
+    setTimeout(() => {
+      const deactivateButton = document.querySelector('[data-deactivate-account-action="deactivate-account-button"]');
+      if (deactivateButton) {
+        deactivateButton.click();
+      }
+    }, 100);
   };
 
   return (
@@ -76,14 +81,20 @@ const DeleteAccountForm = ({ title, closeModal }) => {
           </Title>
           <Notes title="Please note!">
             <div className="grid gap-1.5 text-xs-sm text-black">
-              <p>We delete all of your personal accounts from our database and the account cannot be restored.</p>
-              <p>
-                You can register again with the same ships, user information, company information, etc. if you would
-                like to come back to us.
-              </p>
+              <p>Deleting you account will delete all of the account data from our platform.</p>
+              <p>This deletion is not reversible. You will not be able to restore the account, once deleted.</p>
             </div>
             <p className="text-xxs font-bold uppercase text-black">
-              When reviewing your application, your account will be deactivated
+              If you wish to stop using the platform temporarily, you can deactivate, instead of deleting it.
+              <Button
+                buttonProps={{
+                  text: 'Go to Deactivation',
+                  variant: 'secondary',
+                  size: 'small',
+                }}
+                customStyles="ml-2 !py-1 !px-2 text-xxs uppercase font-bold"
+                onClick={handleRedirectToDeactivate}
+              />
             </p>
           </Notes>
         </div>
@@ -98,13 +109,14 @@ const DeleteAccountForm = ({ title, closeModal }) => {
             error={errors.password?.message}
           />
         </div>
-        <p className="text-xsm font-semibold text-red">
-          If you send a request to delete your account, but then change your mind, it will be impossible to suspend the
-          process of considering your request.
-        </p>
       </ModalFormManager>
     </FormProvider>
   );
+};
+
+DeleteAccountForm.propTypes = {
+  title: PropTypes.string,
+  closeModal: PropTypes.func,
 };
 
 export default DeleteAccountForm;

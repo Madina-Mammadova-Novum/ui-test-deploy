@@ -35,14 +35,14 @@ export default function middleware(req) {
   const accessToken = cookies().get('session-access-token')?.value;
   const role = cookies().get('session-user-role')?.value;
 
-  const { isOwner, isCharterer } = getRoleIdentity({ role });
+  const { isOwner, isCharterer, isAnon } = getRoleIdentity({ role });
 
   const chartererRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_SEARCH);
   const ownerRoutes = checkAuthRoute(req, ROUTES.ACCOUNT_POSITIONS) || checkAuthRoute(req, ROUTES.ACCOUNT_FLEETS);
   const isUnauthorizedAccess = (chartererRoutes && !isCharterer) || (ownerRoutes && !isOwner);
 
   // Redirect to the login page if accessing account-related routes without a valid access token
-  if (pathname.startsWith('/account') && !accessToken) {
+  if (pathname.startsWith('/account') && (!accessToken || isAnon)) {
     return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
   }
 

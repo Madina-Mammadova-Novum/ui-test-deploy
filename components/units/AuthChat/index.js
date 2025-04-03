@@ -30,7 +30,7 @@ import { useMediaQuery } from '@/utils/hooks';
 
 const AuthChat = ({ opened, token }) => {
   const [dataByTab, setDataByTab] = useState([]);
-  const mdScreen = useMediaQuery(SCREENS.MDX);
+  const mdScreen = useMediaQuery(SCREENS.SMD);
 
   const dispatch = useDispatch();
 
@@ -105,12 +105,6 @@ const AuthChat = ({ opened, token }) => {
     }
   }, [tab, searched, search, active, archived]);
 
-  useEffect(() => {
-    if (mdScreen && isActive) {
-      сhatSessionService.onToggle(false);
-    }
-  }, [mdScreen, isActive]);
-
   const printChatRooms = useMemo(() => {
     return <ChatList loading={loading} tab={tab} data={dataByTab?.slice(0, limit)} />;
   }, [dataByTab, tab, loading, limit]);
@@ -148,6 +142,7 @@ const AuthChat = ({ opened, token }) => {
         isMediumScreen={mdScreen}
         onCloseSession={handleCloseConversation}
         onCollapseSession={handleCollapseConversation}
+        isChatModalOpened={opened}
       />
       <CollapsedChats />
     </>

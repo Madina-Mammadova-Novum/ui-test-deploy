@@ -1,8 +1,9 @@
+import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -203,6 +204,7 @@ export const prefixtureRowsDataAdapter = ({ data }) => {
 
 export const prefixtureOwnerDetailsAdapter = (data) => {
   if (!data) return {};
+
   const {
     searchedCargo: { cargoType } = {},
     products = [],
@@ -215,7 +217,10 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     isCountdownExtendedByOwner,
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
-    additionalCharterPartyTerms,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
+    isCountdownActive,
   } = data;
   const { country: registrationCountry } = registrationCity || {};
 
@@ -253,8 +258,11 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
       dischargeTerminal: dischargeTerminal?.name,
     },
-    additionalCharterPartyTerms,
-    allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByOwner,
+    allowExtension: isCountdownActive && !isCountdownExtendedByOwner,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
+    isCountdownActive,
   };
 };
 
@@ -273,8 +281,11 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     paymentTerm,
     isCountdownExtendedByCharterer,
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal },
-    additionalCharterPartyTerms,
     charterer,
+    isCountdownActive,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   return {
@@ -305,8 +316,11 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
       dischargeTerminal: dischargeTerminal?.name,
     },
-    additionalCharterPartyTerms,
-    allowExtension: additionalCharterPartyTerms?.length && !isCountdownExtendedByCharterer,
+    isCountdownActive,
+    allowExtension: isCountdownActive && !isCountdownExtendedByCharterer,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 
@@ -361,7 +375,7 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD_BLUE,
       downloadData: url && {
         url,
-        fileName,
+        fileName: ensureFileExtension(fileName, extension),
       },
     },
   ];

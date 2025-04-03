@@ -30,6 +30,7 @@ const DatePicker = ({
   dateVariant = 'MMM dd, yyyy',
   minDate,
   maxDate,
+  labelBadge = null,
   ...rest
 }) => {
   const [showPicker, setShowPicker] = useState(false);
@@ -62,6 +63,7 @@ const DatePicker = ({
                   customStyles={classNames(inputClass, 'pointer-events-none', showPicker && 'border-blue')}
                   inputStyles="pr-0"
                   label={label}
+                  labelBadge={labelBadge}
                   value={transformDate(value, dateVariant)}
                   icon={<CalendarSVG className={classNames('fill-black', showPicker && '!fill-blue')} />}
                   error={error}

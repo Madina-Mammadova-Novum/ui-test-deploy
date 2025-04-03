@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { ExpandableCardHeaderPropTypes } from '@/lib/types';
 
 import TableArrowSVG from '@/assets/images/arrow.svg';
-import { HoverTooltip, TextWithLabel } from '@/elements';
+import { Button, HoverTooltip, TextWithLabel } from '@/elements';
 import { ACTIONS, NO_DATA_MESSAGE, SETTINGS } from '@/lib/constants';
 import { DeleteFleetModal, DynamicCountdownTimer, EditFleetForm, ModalWindow } from '@/units';
 import { processTooltipData } from '@/utils/helpers';
@@ -60,6 +60,8 @@ const ExpandableCardHeader = ({
 
     const newId = `${data?.text}-${index}`;
 
+    if (data?.isHidden) return null;
+
     return (
       <div
         key={newId}
@@ -105,22 +107,40 @@ const ExpandableCardHeader = ({
         </div>
         {!!actions.length && (
           <div className="relative w-full lg:pr-10">
-            <div className="mt-3 flex justify-end gap-x-2.5 border-t border-purple-light pt-2 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:border-t-0 lg:pt-0">
-              {actions.map(({ action, text, variant, size, icon }) => (
-                <ModalWindow
-                  key={action}
-                  containerClass="overflow-y-[unset]"
-                  buttonProps={{
-                    icon,
-                    variant,
-                    size,
-                    text,
-                    className: 'whitespace-nowrap',
-                  }}
-                >
-                  {printModal(action)}
-                </ModalWindow>
-              ))}
+            <div className="mt-3 flex h-full justify-end gap-x-2.5 border-t border-purple-light pt-2 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:border-t-0 lg:pt-0">
+              {actions.map(({ action, text, variant, size, icon, onClick }) => {
+                if (action === ACTIONS.CHAT_FOR_CP) {
+                  return (
+                    <Button
+                      key={action}
+                      buttonProps={{
+                        icon,
+                        variant,
+                        size,
+                        text,
+                        className: 'whitespace-nowrap',
+                      }}
+                      onClick={onClick}
+                    />
+                  );
+                }
+
+                return (
+                  <ModalWindow
+                    key={action}
+                    containerClass="overflow-y-[unset]"
+                    buttonProps={{
+                      icon,
+                      variant,
+                      size,
+                      text,
+                      className: 'whitespace-nowrap',
+                    }}
+                  >
+                    {printModal(action)}
+                  </ModalWindow>
+                );
+              })}
             </div>
           </div>
         )}

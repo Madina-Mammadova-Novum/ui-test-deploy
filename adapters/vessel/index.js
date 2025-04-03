@@ -1,4 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
+import { countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import { getLocode, trimTonValue } from '@/utils/helpers';
 
@@ -17,6 +18,9 @@ export function requestSearchVesselAdapter({ data }) {
     sortBy,
     rangeBy,
     savedSearchId,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   return {
@@ -31,6 +35,9 @@ export function requestSearchVesselAdapter({ data }) {
     sortColumnDirection: sortBy,
     cargoes: postProductsAdapter({ data: products }),
     savedSearchId,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 }
 
@@ -66,6 +73,7 @@ export function responseSearchVesselAdapter({ data }) {
     technicalOperatorCountry,
     commercialOperatorCountry,
     searchResultFlag,
+    hasFailedOffer,
   } = data;
 
   return {
@@ -142,6 +150,7 @@ export function responseSearchVesselAdapter({ data }) {
       ],
     },
     searchResultFlag,
+    hasFailedOffer,
   };
 }
 
@@ -338,11 +347,7 @@ export function responseGetVesselCategoryTwoAdapter({ data }) {
 
   return data;
 }
-export function responseGetVesselFreightFormatsAdapter({ data }) {
-  if (!data) return null;
 
-  return data;
-}
 export function responseDeleteVesselFromFleetAdapter({ data }) {
   if (!data) return null;
 
@@ -495,7 +500,6 @@ export function vesselDetailsAdapter({ data }) {
   if (!data) return {};
 
   const {
-    canSendUpdateRequest,
     details: {
       name,
       q88UpdateDate,
@@ -527,7 +531,6 @@ export function vesselDetailsAdapter({ data }) {
   } = data;
 
   return {
-    canSendUpdateRequest,
     tankerName: name,
     imo,
     updateDate: q88UpdateDate,

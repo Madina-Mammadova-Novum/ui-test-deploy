@@ -39,7 +39,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
     {
       id: 1,
       label: null,
-      list: ['First Name', 'Last name', 'Email'],
+      list: ['Email'],
     },
   ];
 
@@ -49,18 +49,18 @@ const PersonalDetailsForm = ({ closeModal }) => {
         onClose={closeModal}
         submitAction={onSubmit}
         submitButton={{
-          text: 'Edit personal details',
+          text: 'Submit',
           variant: 'primary',
           size: 'large',
           disabled: !methods.formState.isDirty,
         }}
       >
         <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
-          Edit Personal Details
+          Edit User Details
         </Title>
         <Notes
           title="Please note!"
-          subtitle="This is a list of fields that you can edit, but for this you need to submit a data change request, which can be considered up to 24 hours, and upon confirmation, your data will be updated automatically."
+          subtitle="Please note that any changes to these fields will require verification by ShipLink."
           data={noteList}
         />
         <PersonalDetails onUpdatePage />

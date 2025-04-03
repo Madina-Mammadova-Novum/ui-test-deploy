@@ -43,8 +43,8 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
 
   if (isLoading) {
     return (
-      <div className="h-72 w-72">
-        <Loader className="absolute top-1/2 h-8 w-8" />
+      <div className="relative flex h-72 w-72 items-center justify-center">
+        <Loader className="h-8 w-8" />
       </div>
     );
   }
@@ -67,6 +67,7 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
           <FormDropdown
             name="fleet"
             label="Fleet name"
+            labelBadge="*"
             options={convertDataToOptions({ data }, 'id', 'name')}
             customStyles={{ dropdownExpanded: true }}
             onChange={(option) => handleChange('fleet', option)}

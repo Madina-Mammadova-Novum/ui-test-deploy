@@ -62,6 +62,7 @@ const AddTankerWithImoForm = ({
           <ModalHeader>Add a New Tanker</ModalHeader>
           <FormDropdown
             label="Fleet name"
+            labelBadge="*"
             options={fleetOptions}
             name="fleet"
             onChange={(fleet) => handleChange('fleet', fleet)}
@@ -73,6 +74,7 @@ const AddTankerWithImoForm = ({
           </p>
           <Input
             label="IMO"
+            labelBadge="*"
             value={imoValue}
             onChange={handleOnChange}
             placeholder="Enter IMO"

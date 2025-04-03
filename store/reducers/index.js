@@ -4,7 +4,9 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import {
   auth,
+  cargoVessel,
   chat,
+  failedOffers,
   fixture,
   fleets,
   general,
@@ -34,4 +36,6 @@ export const reducer = combineReducers({
   onSubs,
   postFixture,
   fixture,
+  cargoVessel,
+  failedOffers,
 });

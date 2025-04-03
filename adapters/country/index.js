@@ -17,3 +17,21 @@ export const countriesAdapter = ({ data }) => {
     return countryAdapter({ data: country });
   });
 };
+
+export const countryReverseAdapter = ({ data }) => {
+  if (data === null) return null;
+  const { countryId, countryName, countryCode } = data;
+  if (countryName === null) return null;
+  return {
+    id: countryId,
+    name: countryName,
+    codeISO2: countryCode ? countryCode.toUpperCase() : null,
+  };
+};
+
+export const countriesReverseAdapter = ({ data }) => {
+  if (data === null) return [];
+  return data.map((country) => {
+    return countryReverseAdapter({ data: country });
+  });
+};

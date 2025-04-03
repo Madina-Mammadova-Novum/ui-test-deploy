@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import Accordion from '@/units/Accordion';
 import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
+import AdditionalDischargeDetails from '@/units/AdditionalDischargeDetails';
+import AdditionalDischargeForm from '@/units/AdditionalDischargeForm';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
 import AddTankerWithImoForm from '@/units/AddTankerWithImoForm';
@@ -59,9 +61,11 @@ import UploadForm from '@/units/FileUpload';
 import Dropzone from '@/units/FileUpload/Dropzone';
 import File from '@/units/FileUpload/File';
 import FilterByForm from '@/units/FilterByForm';
+import FailedOffersFilter from '@/units/FilterByForm/failedOffersFilter';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import Flag from '@/units/Flag';
 import FooterNavBlock from '@/units/FooterNavBlock';
+import IconUpload from '@/units/IconUpload';
 import IconWrapper from '@/units/IconWrapper';
 import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
@@ -69,6 +73,7 @@ import ModalHeader from '@/units/ModalHeader';
 import ModalWindow from '@/units/ModalWindow';
 import NegotiatingChartererInformation from '@/units/NegotiatingChartererInformation';
 import NegotiatingTankerInformation from '@/units/NegotiatingTankerInformation';
+import NestedCheckboxList from '@/units/NestedCheckboxList';
 import Notes from '@/units/Notes';
 import NotificationCard from '@/units/NotificationCard';
 import NotificationContent from '@/units/NotificationContent';
@@ -98,7 +103,6 @@ import TabsAsLinks from '@/units/TabsAsLinks';
 import TabsVertical from '@/units/TabsVertical';
 import TankerInformationContent from '@/units/TankerInformationContent';
 import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
-import TankerSlotsDetailsStatic from '@/units/TankerSlotsDetailsStatic';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import UnassignedFleet from '@/units/UnassignedFleet';
@@ -114,6 +118,8 @@ export * from '@/units/Account';
 export {
   AnonChat,
   AuthChat,
+  AdditionalDischargeDetails,
+  AdditionalDischargeForm,
   AddressDetails,
   CalculatedForm,
   CalculatedResult,
@@ -126,7 +132,6 @@ export {
   PersonalDetails,
   CompanyDetails,
   TankerSlotsDetails,
-  TankerSlotsDetailsStatic,
   CompanyAddresses,
   TermsAndConditions,
   CargoesSlotsDetails,
@@ -218,5 +223,8 @@ export {
   FavoriteSearchForm,
   FavoriteSearchList,
   ConfirmModal,
+  NestedCheckboxList,
+  FailedOffersFilter,
+  IconUpload,
   CountdownTimer,
 };

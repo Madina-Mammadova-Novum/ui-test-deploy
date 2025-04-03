@@ -45,7 +45,12 @@ export const apiOptionsAdapter = ({ requestMethod, body = null, path, options = 
       method: requestMethod,
       url: path,
       data: body,
+      headers: {
+        Accept: responseType === 'pdf' ? 'application/pdf' : '*/*',
+        ...(options?.headers || {}),
+      },
       ...options,
+      ...(responseType === 'pdf' && { responseType: 'blob' }),
     };
   }
 

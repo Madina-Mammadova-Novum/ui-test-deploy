@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
+import debounce from 'lodash/debounce';
 import * as yup from 'yup';
 
 import { UpdateTankerFormPropTypes } from '@/lib/types';
@@ -93,9 +94,17 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     setPortsLoading(false);
   };
 
-  const loadOptions = async (query, callback) => {
+  const debouncedLoadOptions = debounce(async (query, callback) => {
     const { data } = await getPorts({ query, pageSize: perList });
     callback(dropDownOptionsAdapter({ data }));
+  }, 400);
+
+  const loadOptions = (query, callback) => {
+    if (!query) {
+      callback(ports);
+      return;
+    }
+    debouncedLoadOptions(query, callback);
   };
 
   const handleMore = () => setPerList((prev) => prev + 50);
@@ -206,10 +215,16 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     return () => dispatch(clearPrefilledState());
   }, []);
 
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
+
   if (initialLoading) {
     return (
-      <div className="h-72 w-72">
-        <Loader className="absolute top-1/2 h-8 w-8" />
+      <div className="relative flex h-72 w-72 items-center justify-center">
+        <Loader className="h-8 w-8" />
       </div>
     );
   }
@@ -262,12 +277,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`tankerName`)}
                 label="Tanker name"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.tankerName?.message}
               />
               <Input {...register(`imo`)} label="IMO" disabled customStyles="w-full" maxLength={7} />
               <DatePicker
                 label="Last Q88 update date"
+                labelBadge="*"
                 name="updateDate"
                 maxDate={new Date()}
                 onChange={(date) => handleChange('updateDate', date)}
@@ -285,6 +302,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <FormDropdown
                 label="Port of registry"
+                labelBadge="*"
                 options={ports}
                 loading={portsLoading}
                 loadOptions={loadOptions}
@@ -423,9 +441,11 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`registeredOwner`)}
                 label="Registered owner"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.registeredOwner?.message}
               />
+
               <FormDropdown
                 label="Country"
                 options={countries}
@@ -438,6 +458,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`technicalOperator`)}
                 label="Technical operator"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.technicalOperator?.message}
               />
@@ -453,9 +474,11 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`commercialOperator`)}
                 label="Commercial operator"
+                labelBadge="*"
                 customStyles="w-full"
                 error={errors.commercialOperator?.message}
               />
+
               <FormDropdown
                 label="Country"
                 options={countries}
@@ -483,7 +506,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
             </div>
             <div>
               <Title level="4" className="mb-2.5">
-                Upload your Q88 questionnaire file
+                Upload your Q88 questionnaire file *
               </Title>
               <DropzoneForm showTextFields={false} />
             </div>

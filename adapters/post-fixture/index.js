@@ -1,8 +1,9 @@
+import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import { ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
 
 export const postFixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
@@ -52,6 +53,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
 
 export const postFixtureDetailsAdapter = ({ data }) => {
   if (!data) return {};
+
   const {
     charterer: {
       name: chartererName,
@@ -75,7 +77,6 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     products,
     laycanStart,
     laycanEnd,
-    additionalCharterPartyTerms,
     freightFormat,
     freight,
     demurrageRate,
@@ -91,11 +92,24 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
+    additionalDischargeOptions = {},
+    sanctionedCountries = [],
+    excludeInternationallySanctioned = false,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
   const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
+
+  const registrationAddressText =
+    registrationAddress || registrationCityName || registrationCountry?.name
+      ? `${registrationAddress ?? '-'}, ${registrationCityName ?? '-'}, ${registrationCountry?.name ?? '-'}`
+      : null;
+
+  const correspondenceAddressText =
+    correspondenceAddress || correspondenceCityName || correspondenceCountry?.name
+      ? `${correspondenceAddress ?? '-'}, ${correspondenceCityName ?? '-'}, ${correspondenceCountry?.name ?? '-'}`
+      : null;
 
   return {
     chartererInformation: [
@@ -105,11 +119,11 @@ export const postFixtureDetailsAdapter = ({ data }) => {
       },
       {
         title: 'Registration Address',
-        text: `${registrationAddress}, ${registrationCityName}, ${registrationCountry?.name}`,
+        text: registrationAddressText,
       },
       {
         title: 'Correspondence Address',
-        text: `${correspondenceAddress}, ${correspondenceCityName}, ${correspondenceCountry?.name}`,
+        text: correspondenceAddressText,
       },
     ],
     tankerInformation: {
@@ -263,9 +277,11 @@ export const postFixtureDetailsAdapter = ({ data }) => {
         ],
       },
     },
-    additionalCharterPartyTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
+    additionalDischargeOptions,
+    sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
+    excludeInternationallySanctioned,
   };
 };
 
@@ -348,7 +364,7 @@ const postFixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
       downloadData: !isDocumentDeleted &&
         url && {
           url,
-          fileName,
+          fileName: ensureFileExtension(fileName, extension),
         },
       actions: [
         {
@@ -370,12 +386,13 @@ export const postFixtureDocumentsTabRowsDataAdapter = ({ data }) => {
 };
 
 export const filtersAdapter = (formData = {}) => {
-  const { cargoId, cargoType, tankerName, rangeDate } = formData || {};
+  const { cargoId, cargoType, tankerName, rangeDate, stages } = formData || {};
 
   return {
     CargoCode: cargoId?.value,
     CargoTypeId: cargoType?.value,
     TankerName: tankerName?.value,
+    Stages: stages?.value,
     FixtureDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
     FixtureDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
   };

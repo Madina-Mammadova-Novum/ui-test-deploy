@@ -83,13 +83,6 @@ export async function getVesselCategoryTwo(categoryOneId) {
   };
 }
 
-export async function getVesselFreightFormats(vesselId) {
-  const response = await getData(`vessels/freight-formats/${vesselId}`);
-  return {
-    ...response,
-  };
-}
-
 export async function updateVesselPortAndDate(data) {
   const body = updateVesselPortAndDataAdapter({ data });
 
@@ -153,8 +146,9 @@ export async function removeVessel(data) {
   };
 }
 
-export async function getPostFixtureTankerNames() {
-  const response = await getData(`account/post-fixture/get-tankernames`);
+export async function getVesselNames({ stages = null }) {
+  const response = await getData(`account/get-vesselnames${stages ? `?stages=${stages}` : ''}`);
+
   return {
     ...response,
   };
