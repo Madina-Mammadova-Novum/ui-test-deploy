@@ -16,7 +16,7 @@ export function generateMetadata() {
 
 export default function LoginPage() {
   return (
-    <AuthWrapper title="Log in" containerClass="flex flex-col w-full sm:w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40">
+    <AuthWrapper title="Log in" containerClass="flex flex-col w-full 2md:w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40">
       <LoginForm />
       <NextLink
         href={ROUTES.FORGOT_PASSWORD}
