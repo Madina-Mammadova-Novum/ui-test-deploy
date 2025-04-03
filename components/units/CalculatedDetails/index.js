@@ -7,14 +7,12 @@ import debounce from 'lodash/debounce';
 import { CalculatedDetailsPropTypes } from '@/lib/types';
 
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
-import PlusCircleSVG from '@/assets/images/plusCircle.svg';
-import TrashIcon from '@/assets/images/trashAlt.svg';
-import { Button, FormDropdown, Input } from '@/elements';
+import { FormDropdown, Input } from '@/elements';
 import { getPortsForSearchForm } from '@/services/port';
 import { useHookForm } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
-const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, onRemove }) => {
+const CalculatedDetails = ({ isFreight, onChange }) => {
   const { register, errors } = useHookForm();
   const handleMore = () => setPerList((prev) => prev + 100);
 
@@ -75,29 +73,30 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
     );
   }, [isFreight, errors, register]);
 
-  const printAdditionalPorts = useMemo(() => {
-    return additionalPorts?.map((portId) => (
-      <div key={portId} className="relative">
-        <FormDropdown
-          name={`additionalPorts[${portId}].port`}
-          onChange={(option) => onChange(`additionalPorts[${portId}].port`, option)}
-          options={ports}
-          label="Additional port"
-          placeholder="Select port"
-        />
-        <Button
-          buttonProps={{
-            text: 'Delete',
-            variant: 'tertiary',
-            size: 'small',
-            icon: { before: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
-          }}
-          customStyles="absolute right-0 -bottom-6 !p-0 !pt-1 [&>span]:!px-0.5"
-          onClick={() => onRemove(portId)}
-        />
-      </div>
-    ));
-  }, [ports, additionalPorts, onChange, onRemove]);
+  // TODO: Add back the additional ports
+  // const printAdditionalPorts = useMemo(() => {
+  //   return additionalPorts?.map((portId) => (
+  //     <div key={portId} className="relative">
+  //       <FormDropdown
+  //         name={`additionalPorts[${portId}].port`}
+  //         onChange={(option) => onChange(`additionalPorts[${portId}].port`, option)}
+  //         options={ports}
+  //         label="Additional port"
+  //         placeholder="Select port"
+  //       />
+  //       <Button
+  //         buttonProps={{
+  //           text: 'Delete',
+  //           variant: 'tertiary',
+  //           size: 'small',
+  //           icon: { before: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
+  //         }}
+  //         customStyles="absolute right-0 -bottom-6 !p-0 !pt-1 [&>span]:!px-0.5"
+  //         onClick={() => onRemove(portId)}
+  //       />
+  //     </div>
+  //   ));
+  // }, [ports, additionalPorts, onChange, onRemove]);
 
   useEffect(() => {
     getPorts();
@@ -138,8 +137,11 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         labelBadge="*"
         placeholder="Select port"
       />
-      {printAdditionalPorts.length > 0 && printAdditionalPorts}
 
+      {/* 
+      TODO: Add back the additional ports
+
+      {printAdditionalPorts.length > 0 && printAdditionalPorts}
       <Button
         buttonProps={{
           text: 'Add more ports',
@@ -153,7 +155,8 @@ const CalculatedDetails = ({ isFreight, additionalPorts = [], onAdd, onChange, o
         // disabled={additionalPorts.length >= 3}
         disabled
         onClick={onAdd}
-      />
+      /> */}
+
       <div className="sm:mb-16">{printOptionalProps}</div>
     </div>
   );
