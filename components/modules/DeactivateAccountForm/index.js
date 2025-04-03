@@ -67,7 +67,9 @@ const DeactivateAccountForm = ({ title, closeModal }) => {
             {title}
           </Title>
           <p className="text-xsm">
-            <span className="font-semibold">We will deactivate...&nbsp;</span>
+            <span className="font-semibold">
+              We will deactivate all your tankers and your account will become inactive.&nbsp;
+            </span>
             However, if you choose to reactivate your account at a future time, simply log in, and your account will be
             reactivated automatically.
           </p>

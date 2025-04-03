@@ -32,7 +32,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { calculator, additionalPorts, generalPorts } = state;
+  const { calculator, additionalPorts } = state;
 
   const isFreight = calculator?.value === toolsCalculatorOptions[0]?.value;
 
@@ -98,20 +98,21 @@ const CalculatedForm = ({ customHeight = '', children }) => {
     }
   };
 
-  const handleAddPort = () => {
-    const availablePortIds = [1, 2, 3];
-    const newPort = [...additionalPorts, availablePortIds.filter((el) => !additionalPorts.includes(el))[0]];
+  // TODO: Add back the additional ports
+  // const handleAddPort = () => {
+  //   const availablePortIds = [1, 2, 3];
+  //   const newPort = [...additionalPorts, availablePortIds.filter((el) => !additionalPorts.includes(el))[0]];
 
-    handleChangeState('additionalPorts', newPort);
-  };
+  //   handleChangeState('additionalPorts', newPort);
+  // };
 
-  const handleRemovePort = (id) => {
-    const removedPort = additionalPorts.filter((portId) => portId !== id);
-    handleChangeState('additionalPorts', removedPort);
+  // const handleRemovePort = (id) => {
+  //   const removedPort = additionalPorts.filter((portId) => portId !== id);
+  //   handleChangeState('additionalPorts', removedPort);
 
-    methods.unregister(`additionalPorts[${id}]`);
-    methods.clearErrors(`additionalPorts[${id}]`);
-  };
+  //   methods.unregister(`additionalPorts[${id}]`);
+  //   methods.clearErrors(`additionalPorts[${id}]`);
+  // };
 
   const setHeight = useMemo(() => {
     const heightProps = {
@@ -142,14 +143,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
           }}
         >
           <div className="flex w-full flex-col gap-5 sm:flex-row">
-            <CalculatedDetails
-              isFreight={isFreight}
-              ports={generalPorts}
-              additionalPorts={additionalPorts}
-              onAdd={handleAddPort}
-              onChange={handleChangeValue}
-              onRemove={handleRemovePort}
-            />
+            <CalculatedDetails isFreight={isFreight} onChange={handleChangeValue} />
             <div className={`${customHeight || setHeight} relative w-full transition-all duration-150 ease-out`}>
               {children}
             </div>

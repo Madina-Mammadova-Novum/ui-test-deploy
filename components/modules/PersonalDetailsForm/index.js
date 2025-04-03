@@ -35,14 +35,6 @@ const PersonalDetailsForm = ({ closeModal }) => {
     }
   };
 
-  const noteList = [
-    {
-      id: 1,
-      label: null,
-      list: ['Email'],
-    },
-  ];
-
   return (
     <FormProvider {...methods}>
       <ModalFormManager
@@ -58,11 +50,7 @@ const PersonalDetailsForm = ({ closeModal }) => {
         <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
           Edit User Details
         </Title>
-        <Notes
-          title="Please note!"
-          subtitle="Please note that any changes to these fields will require verification by ShipLink."
-          data={noteList}
-        />
+        <Notes subtitle="Please note that any changes to these fields will require verification by ShipLink." />
         <PersonalDetails onUpdatePage />
       </ModalFormManager>
     </FormProvider>

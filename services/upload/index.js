@@ -32,7 +32,7 @@ export async function uploadData({ data }) {
     data: null,
     status: res.status,
     errors: {
-      title: result?.title,
+      title: result?.title || 'Upload failed',
       message: formatErrors(result?.errors),
     },
   };

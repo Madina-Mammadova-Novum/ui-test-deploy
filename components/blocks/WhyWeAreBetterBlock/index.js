@@ -38,11 +38,11 @@ const WhyWeAreBetterBlock = ({ values }) => {
         width={1440}
         quality={100}
       />
-      <div className="container mx-auto grid max-w-[960px] gap-10 sm:grid-cols-3">
-        <div className="flex items-center justify-center sm:col-span-1">
-          {values && values.length > 0 && printItem(values[0])}
+      <div className="container mx-auto grid max-w-[960px] gap-10 md:grid-cols-3">
+        <div className="flex items-center justify-center md:col-span-1">
+          <NextImage src="/images/shiplink.png" alt="Shiplink" width={200} height={100} customStyles="object-contain" />
         </div>
-        <div className="sm:col-span-2">{values && values.length > 1 && printItem(values[1])}</div>
+        <div className="md:col-span-2">{values && values.length > 1 && printItem(values[1])}</div>
       </div>
     </section>
   );
