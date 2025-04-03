@@ -28,9 +28,11 @@ const Notes = ({ title, subtitle, data, children }) => {
 
   return (
     <article className="flex flex-col gap-1.5 rounded-lg border border-solid border-gray-darker bg-gray-light px-5 py-3">
-      <Title level="6" className="text-xsm font-semibold">
-        {title}
-      </Title>
+      {title && (
+        <Title level="6" className="text-xsm font-semibold">
+          {title}
+        </Title>
+      )}
       {subtitle && <p className="text-xs-sm text-black">{subtitle}</p>}
       {data && <div className="grid grid-cols-2 pt-1.5 text-xs-sm font-bold text-black">{printRuleList}</div>}
       {children}
