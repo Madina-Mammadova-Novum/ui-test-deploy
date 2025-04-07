@@ -555,15 +555,15 @@ export const sortTable = (array, index, sortDirection, sortType = 'numeric') => 
 
   if (sortDirection === 'asc') {
     const ascSorted = array.sort((a, b) => {
-      if (transformValue(a[index].value) > transformValue(b[index].value)) return 1;
-      if (transformValue(a[index].value) < transformValue(b[index].value)) return -1;
+      if (transformValue(a.data[index].value) > transformValue(b.data[index].value)) return 1;
+      if (transformValue(a.data[index].value) < transformValue(b.data[index].value)) return -1;
       return 0;
     });
     return ascSorted;
   }
   const descSorted = array.sort((a, b) => {
-    if (transformValue(a[index].value) > transformValue(b[index].value)) return -1;
-    if (transformValue(a[index].value) < transformValue(b[index].value)) return 1;
+    if (transformValue(a.data[index].value) > transformValue(b.data[index].value)) return -1;
+    if (transformValue(a.data[index].value) < transformValue(b.data[index].value)) return 1;
     return 0;
   });
   return descSorted;
