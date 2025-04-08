@@ -17,7 +17,7 @@ const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
       <ExpandableRow
         key={rowData?.id}
         className="px-5"
-        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 2fr 1fr 2fr 1fr 1fr 1fr" />}
+        header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
         expand={toggle}
         isOpened={isOpened}
       >

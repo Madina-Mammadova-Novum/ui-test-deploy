@@ -84,7 +84,7 @@ export const failedOffersDetailsAdapter = ({ data }) => {
         flagOfRegistry,
       } = {},
     } = {},
-    searchedCargo: { cargoType, loadTerminal, dischargeTerminal } = {},
+    searchedCargo: { cargoType, loadTerminal, dischargeTerminal, code } = {},
     heat,
     products,
     laycanStart,
@@ -296,6 +296,7 @@ export const failedOffersDetailsAdapter = ({ data }) => {
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
     failureReason,
+    cargoCode: code,
   };
 };
 

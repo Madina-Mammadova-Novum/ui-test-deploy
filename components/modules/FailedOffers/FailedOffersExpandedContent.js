@@ -25,6 +25,8 @@ const FailedOffersExpandedContent = ({ detailsData, documentsData, tab, offerId 
 
   const { failureReason } = detailsData;
 
+  const fileName = detailsData?.cargoCode ? `charter-party-${detailsData?.cargoCode}.pdf` : 'charter-party.pdf';
+
   const tabContent = useMemo(() => {
     switch (currentTab) {
       case 'documents':
@@ -69,7 +71,7 @@ const FailedOffersExpandedContent = ({ detailsData, documentsData, tab, offerId 
             xlMax:transform
             xlMax:-translate-x-1/2
           "
-          onClick={() => downloadFile({ url: detailsData?.charterPartyUrl, fileName: detailsData?.charterPartyUrl })}
+          onClick={() => downloadFile({ url: detailsData?.charterPartyUrl, fileName })}
           disabled={!detailsData?.charterPartyUrl}
         />
       </div>

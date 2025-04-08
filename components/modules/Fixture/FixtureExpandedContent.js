@@ -24,7 +24,9 @@ const FixtureExpandedContent = ({ detailsData, documentsData, offerId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
 
   const handleDownload = useCallback(() => {
-    downloadFile({ url: detailsData?.charterPartyUrl, fileName: detailsData?.charterPartyUrl });
+    const fileName = detailsData?.cargoCode ? `charter-party-${detailsData?.cargoCode}.pdf` : 'charter-party.pdf';
+
+    downloadFile({ url: detailsData?.charterPartyUrl, fileName });
   }, [detailsData?.charterPartyUrl]);
 
   const printTabContent = useMemo(() => {
