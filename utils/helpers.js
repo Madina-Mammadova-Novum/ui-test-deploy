@@ -679,12 +679,25 @@ export const transformBytes = ({ format = 'mb', value }) => {
   return 0;
 };
 
-export const trimTonValue = (number) =>
-  String(number).length > 3
-    ? `${String(number)
-        .slice(0, String(number).length - 3)
-        .replace('.', '')},***`
-    : `${String(number).replace('.', '')},***`;
+export const trimTonValue = (number) => {
+  const strNumber = String(number);
+  const numValue = parseFloat(number);
+
+  // For large numbers (≥ 1000), convert to tons format without rounding
+  if (numValue >= 1000) {
+    const tonValue = (numValue / 1000).toString();
+    // Remove any decimal part and add ,***
+    return `${tonValue.split('.')[0]},***`;
+  }
+
+  // For numbers with decimal point, remove decimal
+  if (strNumber.includes('.')) {
+    return `${strNumber.split('.')[0]},***`;
+  }
+
+  // For numbers without decimal
+  return `${strNumber},***`;
+};
 
 export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOffer }) => {
   const layTimeImprovement = initialOffer.layTime - counterOffer.layTime >= 6;
@@ -698,7 +711,7 @@ export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOf
 
 export const processTooltipData = ({ text, length }) => {
   return {
-    disableTooltip: !(text?.length > length),
+    disableTooltip: !(text?.length >= length),
     tooltipText: text,
     trimmedText: text?.length >= length ? `${text?.slice(0, length / 2)}...` : text,
   };
