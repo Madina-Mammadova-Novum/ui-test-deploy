@@ -354,8 +354,8 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
   }, [watchedLaycanStart, watchedLaycanEnd, watchedLoadPort, watchedLoadTerminal, isAccountSearch]);
 
   return (
-    <div className="flex flex-col sm:flex-row">
-      <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
+    <div className="flex flex-col md:flex-row">
+      <div className="flex w-full flex-col gap-y-4 md:mr-5 md:border-r md:pr-5">
         <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <DatePicker
             label="laycan start"
@@ -506,7 +506,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   labelBadge="*"
                   type="number"
                   placeholder="tons"
-                  customStyles="w-full sm:w-[45%] 3md:w-2/5"
+                  customStyles="w-full md:w-[45%] 3md:w-2/5"
                   error={errors.products ? errors.products[productId]?.quantity?.message : null}
                   disabled={isSubmitting}
                 />
@@ -516,7 +516,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   labelBadge="*"
                   type="number"
                   placeholder="%"
-                  customStyles="w-full sm:w-[45%] 3md:w-1/5"
+                  customStyles="w-full md:w-[45%] 3md:w-1/5"
                   error={errors.products ? errors.products[productId]?.tolerance?.message : null}
                   disabled={isSubmitting}
                 />
