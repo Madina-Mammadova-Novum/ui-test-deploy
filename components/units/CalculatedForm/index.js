@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -10,16 +10,18 @@ import * as yup from 'yup';
 import { successToolsDataAdapter } from '@/adapters';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { FormManager } from '@/common';
-import { toolsSchema } from '@/lib/schemas';
+import { captchaSchema, toolsSchema } from '@/lib/schemas';
 import { getEstimation } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
-import { CalculatedDetails } from '@/units';
+import { CalculatedDetails, Captcha } from '@/units';
 import { getValueWithPath } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
-const CalculatedForm = ({ customHeight = '', children }) => {
+const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => {
   const { ports } = useSelector(getGeneralDataSelector);
+  const [captcha, setCaptcha] = useState(null);
+  const captchaRef = useRef(null);
 
   const [state, setState] = useState({
     generalPorts: dropDownOptionsAdapter({ data: ports?.searchPorts }),
@@ -36,7 +38,10 @@ const CalculatedForm = ({ customHeight = '', children }) => {
 
   const isFreight = calculator?.value === toolsCalculatorOptions[0]?.value;
 
-  const schema = yup.object().shape({ ...toolsSchema({ isFreight }) });
+  const schema = yup.object().shape({
+    ...toolsSchema({ isFreight }),
+    ...(isLoggedIn ? {} : captchaSchema()),
+  });
 
   const methods = useHookFormParams({ schema, state });
 
@@ -47,6 +52,12 @@ const CalculatedForm = ({ customHeight = '', children }) => {
       setErrorMessage('');
     }
   }, [state.fromPort, state.toPort]);
+
+  useEffect(() => {
+    if (isLoggedIn) return;
+    methods.setValue('captcha', captcha);
+    methods.trigger('captcha');
+  }, [captcha, methods, isLoggedIn]);
 
   /* Change handler by key-value for userStore */
   const handleChangeState = (key, value) => {
@@ -66,12 +77,24 @@ const CalculatedForm = ({ customHeight = '', children }) => {
   };
 
   const handleReset = () => {
+    // Reset the form values
     methods.setValue('cargoQuantity', null);
     methods.setValue('speed', null);
     methods.setValue('fromPort', null);
     methods.setValue('toPort', null);
     methods.setValue('calculator', calculator);
     methods.setValue('response', null);
+
+    if (isLoggedIn) return;
+
+    methods.setValue('captcha', null);
+
+    // Reset the captcha using the ref
+    if (captchaRef.current) {
+      captchaRef.current.reset();
+    }
+
+    setCaptcha(null);
   };
 
   const handleChangeValue = (key, value) => {
@@ -126,7 +149,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
   }, [additionalPorts.length]);
 
   return (
-    <div className="relative mt-5 flex h-max w-full flex-row gap-5 divide-gray-darker rounded-base bg-white p-5 pb-16 shadow-2xl sm:pb-5">
+    <div className="relative mt-5 flex h-max w-full flex-row gap-5 divide-gray-darker rounded-base bg-white p-5 pb-20 shadow-2xl md:pb-5">
       <FormProvider {...methods}>
         <FormManager
           className="w-full gap-5"
@@ -142,8 +165,18 @@ const CalculatedForm = ({ customHeight = '', children }) => {
             disabled: !!errorMessage,
           }}
         >
-          <div className="flex w-full flex-col gap-5 sm:flex-row">
-            <CalculatedDetails isFreight={isFreight} onChange={handleChangeValue} />
+          <div className="flex w-full flex-col gap-5 md:flex-row">
+            <div className="flex w-full flex-col gap-4 md:max-w-[336px]">
+              <CalculatedDetails isFreight={isFreight} onChange={handleChangeValue} />
+              {!isLoggedIn && (
+                <Captcha
+                  onChange={setCaptcha}
+                  ref={captchaRef}
+                  errorClassName="text-xs-sm text-red md:mb-12"
+                  className="m-0"
+                />
+              )}
+            </div>
             <div className={`${customHeight || setHeight} relative w-full transition-all duration-150 ease-out`}>
               {children}
             </div>
@@ -156,6 +189,7 @@ const CalculatedForm = ({ customHeight = '', children }) => {
 
 CalculatedForm.propTypes = {
   customHeight: PropTypes.string,
+  isLoggedIn: PropTypes.bool,
 };
 
 export default CalculatedForm;
