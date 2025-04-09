@@ -181,9 +181,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
     const updatedProductsByIndex =
       id === 0
         ? (searchParams?.productsByIndex || []).slice(0, -1) // remove last if `id` is `0`
-        : searchParams?.productsByIndex.filter((_, index) => index !== id); // remove by `id` otherwise
+        : searchParams?.productsByIndex?.filter((_, index) => index !== id); // remove by `id` otherwise
 
-    const updatedSearchParamsProducts = searchParams?.products.filter((_, index) => index !== id);
+    const updatedSearchParamsProducts = searchParams?.products?.filter((_, index) => index !== id);
 
     const updatedSearchParams = {
       ...searchParams,
