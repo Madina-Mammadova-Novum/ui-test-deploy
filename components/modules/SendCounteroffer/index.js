@@ -103,6 +103,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
     if (confirmCounteroffer) {
       setConfirmCounteroffer(false);
+      return;
     }
 
     goBack('view_offer');
