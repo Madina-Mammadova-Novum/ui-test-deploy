@@ -19,11 +19,11 @@ import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
 import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
-import { AdditionalDischargeForm } from '@/units';
+import { AdditionalDischargeForm, Captcha } from '@/units';
 import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const SearchFormFields = ({ productState, setProductState }) => {
+const SearchFormFields = ({ productState, setProductState, captchaRef, isAccountSearch = false }) => {
   const dispatch = useDispatch();
   const { searchParams } = useSelector(getSearchSelector);
 
@@ -34,6 +34,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
     setValue,
     getValues,
     control,
+    trigger,
   } = useHookForm();
 
   const [initialLoading, setInitialLoading] = useState(false);
@@ -57,10 +58,27 @@ const SearchFormFields = ({ productState, setProductState }) => {
       data: [],
     },
   });
+  const [captcha, setCaptcha] = useState('');
+  const [showCaptcha, setShowCaptcha] = useState(false);
 
-  const laycanStart = useWatch({
+  const watchedLaycanStart = useWatch({
     control,
     name: 'laycanStart',
+  });
+
+  const watchedLaycanEnd = useWatch({
+    control,
+    name: 'laycanEnd',
+  });
+
+  const watchedLoadPort = useWatch({
+    control,
+    name: 'loadPort',
+  });
+
+  const watchedLoadTerminal = useWatch({
+    control,
+    name: 'loadTerminal',
   });
 
   const showAdditionalDischargeValue = useWatch({
@@ -68,8 +86,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
     name: 'showAdditionalDischarge',
   });
 
-  const minDateForLaycanEnd = laycanStart ? new Date(laycanStart) : new Date();
-  const maxDateForLaycanEnd = laycanStart ? addDays(new Date(laycanStart), 2) : null;
+  const minDateForLaycanEnd = watchedLaycanStart ? new Date(watchedLaycanStart) : new Date();
+  const maxDateForLaycanEnd = watchedLaycanStart ? addDays(new Date(watchedLaycanStart), 2) : null;
 
   const productsLimitExceeded = productState?.length >= 3;
   const isSavedSearch = getValues('isSavedSearch');
@@ -181,9 +199,9 @@ const SearchFormFields = ({ productState, setProductState }) => {
     const updatedProductsByIndex =
       id === 0
         ? (searchParams?.productsByIndex || []).slice(0, -1) // remove last if `id` is `0`
-        : searchParams?.productsByIndex.filter((_, index) => index !== id); // remove by `id` otherwise
+        : searchParams?.productsByIndex?.filter((_, index) => index !== id); // remove by `id` otherwise
 
-    const updatedSearchParamsProducts = searchParams?.products.filter((_, index) => index !== id);
+    const updatedSearchParamsProducts = searchParams?.products?.filter((_, index) => index !== id);
 
     const updatedSearchParams = {
       ...searchParams,
@@ -322,6 +340,19 @@ const SearchFormFields = ({ productState, setProductState }) => {
     };
   }, [isSavedSearch]);
 
+  useEffect(() => {
+    if (!isAccountSearch) {
+      setValue('captcha', captcha);
+      trigger('captcha');
+    }
+  }, [captcha, setValue, trigger, isAccountSearch]);
+
+  useEffect(() => {
+    if (!isAccountSearch) {
+      setShowCaptcha(!!watchedLaycanStart && !!watchedLaycanEnd && !!watchedLoadPort && !!watchedLoadTerminal);
+    }
+  }, [watchedLaycanStart, watchedLaycanEnd, watchedLoadPort, watchedLoadTerminal, isAccountSearch]);
+
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="flex w-full flex-col gap-y-4 sm:mr-5 sm:border-r sm:pr-5">
@@ -346,7 +377,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
             maxDate={maxDateForLaycanEnd}
             onChange={(date) => handleChange('laycanEnd', date)}
             error={errors.laycanEnd?.message}
-            disabled={!laycanStart}
+            disabled={!watchedLaycanStart}
           />
         </div>
         <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
@@ -505,7 +536,6 @@ const SearchFormFields = ({ productState, setProductState }) => {
             </div>
           );
         })}
-
         <Button
           disabled={productsLimitExceeded}
           buttonProps={{
@@ -517,6 +547,7 @@ const SearchFormFields = ({ productState, setProductState }) => {
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
         />
+        {!isAccountSearch && showCaptcha && <Captcha onChange={setCaptcha} ref={captchaRef} />}
       </div>
     </div>
   );
@@ -525,6 +556,8 @@ const SearchFormFields = ({ productState, setProductState }) => {
 SearchFormFields.propTypes = {
   productState: PropTypes.arrayOf(PropTypes.number).isRequired,
   setProductState: PropTypes.func.isRequired,
+  captchaRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  isAccountSearch: PropTypes.bool,
 };
 
 export default SearchFormFields;
