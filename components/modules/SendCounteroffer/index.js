@@ -110,7 +110,21 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
   };
 
   const handleConfirmCounteroffer = () => setConfirmCounteroffer(true);
-  const handleValidationError = () => setCurrentTab(tabs[0].value);
+  const handleValidationError = () => {
+    if (formMethods?.formState?.errors) {
+      const { errors } = formMethods.formState;
+      const errorKeys = Object.keys(errors);
+
+      // Only change to comments tab if it's the single error
+      if (errorKeys.length === 1 && errorKeys[0] === 'comment') {
+        setCurrentTab(tabs[2].value);
+        return;
+      }
+    }
+
+    // Default fallback for all other cases
+    setCurrentTab(tabs[0].value);
+  };
 
   const initActions = async () => {
     handleCountdownStateChange('loading', true);
