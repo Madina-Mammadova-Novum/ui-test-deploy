@@ -113,7 +113,7 @@ const TableCell = ({ cellProps }) => {
       case ACTIONS.DELETE_TANKER:
         return <DeleteTankerModal state={{ id, name, action }} />;
       case ACTIONS.ASSIGN_FLEET:
-        return <AssignToFleet tankerId={id} name={name} />;
+        return <AssignToFleet tankerId={id} name={name} currentFleetId={fleetId} />;
       case ACTIONS.REQUEST_DOCUMENT_DELETION:
         return <RequestDocumentDeletionModal documentId={id} />;
       case ACTIONS.REVOKE_DOCUMENT_DELETION:

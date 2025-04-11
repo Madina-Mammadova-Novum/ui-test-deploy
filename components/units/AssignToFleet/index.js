@@ -21,7 +21,7 @@ const schema = yup.object({
   ...assignToFleetSchema(),
 });
 
-const AssignToFleet = ({ tankerId, name, closeModal }) => {
+const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
   const [data, isLoading] = useFetch(useCallback(() => getUserFleets({ page: 1, perPage: 100, sortBy: 'asc' }), []));
   const methods = useHookFormParams({ schema });
   const { setValue, getValues } = methods;
@@ -49,6 +49,9 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
     );
   }
 
+  // Filter out the current fleet from options if currentFleetId is provided
+  const filteredData = currentFleetId ? { data: data?.filter((fleet) => fleet.id !== currentFleetId) } : { data };
+
   return (
     <div className="w-[292px]">
       <FormProvider {...methods}>
@@ -68,7 +71,7 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
             name="fleet"
             label="Fleet name"
             labelBadge="*"
-            options={convertDataToOptions({ data }, 'id', 'name')}
+            options={convertDataToOptions(filteredData, 'id', 'name')}
             customStyles={{ dropdownExpanded: true }}
             onChange={(option) => handleChange('fleet', option)}
           />

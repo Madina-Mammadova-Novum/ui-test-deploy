@@ -986,6 +986,11 @@ export const fleetsPageHeader = [
     width: 110,
   },
   {
+    text: 'Assigned fleet',
+    type: 'SIZE',
+    width: 112,
+  },
+  {
     text: 'Tanker status',
     type: 'SIZE',
     width: 112,

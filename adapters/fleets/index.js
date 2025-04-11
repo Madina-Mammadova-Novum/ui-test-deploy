@@ -212,6 +212,20 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
+      editable: true,
+      value: fleetName || 'Assigned',
+      type: fleetName ? null : TYPE.GREY,
+      name,
+      disabled: additionRequested,
+      actions: [
+        {
+          action: ACTIONS.ASSIGN_FLEET,
+          editIcon: <EditIcon />,
+        },
+      ],
+    },
+    {
+      id,
       value: status,
       icon: <StatusIndicator status={status} />,
       disabled: additionRequested,
