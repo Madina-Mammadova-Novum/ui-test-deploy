@@ -55,7 +55,7 @@ const NotificationContent = () => {
   }, [data, loading]);
 
   return (
-    <div onScroll={handleScroll} className="max-h-[calc(100vh-35vh)] overflow-y-auto">
+    <div onScroll={handleScroll} className="max-h-[calc(100vh-310px)] overflow-y-auto">
       {printNotifications}
     </div>
   );
