@@ -58,18 +58,31 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
   return (
     <div className="flex flex-col items-start">
       <p className="text-xsm font-normal text-black">{parse(formattedMessage)}</p>
-      {url && (
+      <div className="flex">
+        {url && (
+          <Button
+            onClick={handleRedirect}
+            customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline"
+            disabled={disabled === urlId}
+            buttonProps={{
+              size: 'small',
+              variant: 'primary',
+              text: disabled === urlId ? 'Loading...' : 'See details',
+            }}
+          />
+        )}
         <Button
-          onClick={handleRedirect}
-          customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline "
-          disabled={disabled === urlId}
+          onClick={() => dispatch(readNotification({ id: urlId }))}
+          customStyles="!p-0 !pt-2.5 opacity-0 group-hover:opacity-100 transition-opacity"
           buttonProps={{
             size: 'small',
-            variant: 'primary',
-            text: disabled === urlId ? 'Loading...' : 'See details',
+            variant: 'secondary',
+            text: 'Mark as read',
+            textClassName: '!p-0',
           }}
+          aria-label="Mark as read"
         />
-      )}
+      </div>
     </div>
   );
 };

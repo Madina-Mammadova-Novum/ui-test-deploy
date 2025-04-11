@@ -62,11 +62,25 @@ export const getCurrentDealStage = createAsyncThunk(
   }
 );
 
-export const readNotification = createAsyncThunk(NOTIFICATIONS.READ_NOTIFICATION, async ({ id }, { dispatch }) => {
-  await readNotificationById({ id }).then(() => {
-    dispatch(resetParams());
-  });
-});
+export const readNotification = createAsyncThunk(
+  NOTIFICATIONS.READ_NOTIFICATION,
+  async ({ id }, { dispatch, getState }) => {
+    await readNotificationById({ id }).then(() => {
+      const {
+        notifications: { filterParams },
+      } = getState();
+
+      // Fetch latest notifications to sync watched and unwatched data
+      dispatch(
+        fetchNotifications({
+          ...filterParams,
+          skip: 0,
+          take: filterParams.take || 50,
+        })
+      );
+    });
+  }
+);
 
 export const readAllNotifications = createAsyncThunk(NOTIFICATIONS.READ_ALL_NOTIFICATIONS, async (_, { dispatch }) => {
   await setReadAllNotifications().then(() => {
