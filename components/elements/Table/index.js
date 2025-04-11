@@ -18,7 +18,12 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const { isOwner, isCharterer } = getRoleIdentity({ role });
 
   useLayoutEffect(() => {
-    setSortedData((prevState) => ({ ...prevState, data: rows }));
+    // Add original position to each row for reference
+    const rowsWithPosition = rows.map((row, idx) => ({
+      originalPosition: idx,
+      data: row,
+    }));
+    setSortedData((prevState) => ({ ...prevState, data: rowsWithPosition }));
     return () => setSortedData({ data: [], sortDirection: null, sortBy: null });
   }, [rows]);
 
@@ -26,15 +31,31 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
     const { index, sortDirection: newSortDirection, sortBy: newSortBy, sortType } = options;
 
     if (newSortBy === sortBy && newSortDirection === sortDirection) {
-      setSortedData({ data: rows, sortDirection: null, sortBy: null });
+      // Reset sorting to original order
+      const rowsWithPosition = rows.map((row, idx) => ({
+        originalPosition: idx,
+        data: row,
+      }));
+      setSortedData({ data: rowsWithPosition, sortDirection: null, sortBy: null });
       return;
     }
 
-    const newSortedData = sortTable([...data], index, newSortDirection, sortType);
+    // Skip sorting for the first column (index=0) to maintain original order
+    if (index === 0) {
+      return;
+    }
+
+    // Clone the data for sorting
+    const dataToSort = [...data];
+
+    // Apply sorting only to the data part, not the position metadata
+    const newSortedData = sortTable(dataToSort, index, newSortDirection, sortType);
+
     setSortedData({ data: newSortedData, sortDirection: newSortDirection, sortBy: newSortBy });
   };
 
-  const printTableRow = (rowData, index) => {
+  const printTableRow = (rowInfo) => {
+    const rowData = rowInfo.data;
     const isFreezed = rowData?.some((cell) => cell?.freezed);
 
     let freezedText;
@@ -47,7 +68,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       freezedText = 'Deal is frozen';
     }
 
-    const newId = index;
+    const newId = rowInfo.originalPosition;
 
     return (
       <Fragment key={newId}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -10,7 +10,7 @@ import { SearchFormPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Button, Modal } from '@/elements';
-import { searchForTankerSchema } from '@/lib/schemas';
+import { captchaSchema, searchForTankerSchema } from '@/lib/schemas';
 import { getSearchSelector } from '@/store/selectors';
 import { FavoriteSearchForm, FavoriteSearchList, SearchFormFields } from '@/units';
 import { resetForm } from '@/utils/helpers';
@@ -22,8 +22,12 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const [productState, setProductState] = useState(searchParams?.productsByIndex || [0]);
   const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
   const [isViewFavoriteSearchesOpened, setIsViewFavoriteSearchesOpened] = useState(false);
+  const captchaRef = useRef(null);
 
-  const schema = yup.object({ ...searchForTankerSchema() });
+  const schema = yup.object({
+    ...searchForTankerSchema(),
+    ...(isAccountSearch ? {} : captchaSchema()),
+  });
   const methods = useHookFormParams({ schema, state: searchParams });
 
   const handleResetFields = () => {
@@ -33,6 +37,16 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     methods.setValue('excludedCountries', []);
     methods.setValue('excludeInternationallySanctioned', false);
     methods.setValue('showAdditionalDischarge', false);
+
+    // Reset captcha only if not account search
+    if (!isAccountSearch) {
+      methods.setValue('captcha', null);
+
+      // Reset the captcha using the ref
+      if (captchaRef.current) {
+        captchaRef.current.reset();
+      }
+    }
 
     resetForm(methods);
     onReset();
@@ -102,7 +116,12 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
           }}
           className={`${isAccountSearch ? 'gap-20 sm:gap-9 md:gap-5' : 'gap-5'} flex flex-col`}
         >
-          <SearchFormFields productState={productState} setProductState={setProductState} />
+          <SearchFormFields
+            productState={productState}
+            setProductState={setProductState}
+            captchaRef={captchaRef}
+            isAccountSearch={isAccountSearch}
+          />
           {isAccountSearch && (
             <div className="absolute bottom-[4.5rem] right-5 flex flex-col items-end gap-4 sm:flex-row md:bottom-6 md:left-5 md:right-0 md:w-96">
               <Button

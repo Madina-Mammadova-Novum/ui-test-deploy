@@ -72,7 +72,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
         flagOfRegistry,
       } = {},
     } = {},
-    searchedCargo: { cargoType, loadTerminal, dischargeTerminal } = {},
+    searchedCargo: { cargoType, loadTerminal, dischargeTerminal, code } = {},
     heat,
     products,
     laycanStart,
@@ -272,6 +272,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
+    cargoCode: code,
   };
 };
 

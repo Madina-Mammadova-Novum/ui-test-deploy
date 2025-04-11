@@ -103,7 +103,7 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
   }, [perList]);
 
   return (
-    <div className="flex h-full w-full max-w-[336px] flex-col gap-y-4">
+    <div className="flex w-full flex-col gap-y-4 md:max-w-[336px]">
       <FormDropdown
         name="calculator"
         onChange={(option) => onChange('calculator', option)}
@@ -157,7 +157,7 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
         onClick={onAdd}
       /> */}
 
-      <div className="sm:mb-16">{printOptionalProps}</div>
+      <div>{printOptionalProps}</div>
     </div>
   );
 };

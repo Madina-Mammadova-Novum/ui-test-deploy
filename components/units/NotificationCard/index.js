@@ -14,7 +14,7 @@ const NotificationCard = ({ data = [], useDivider = true, handleClose = () => {}
     const nextTime = extractTimeFromDate(time);
 
     return (
-      <div key={id} className="flex w-full flex-col gap-2.5 pb-4">
+      <div key={id} className="group flex w-full flex-col gap-2.5 pb-4">
         <NotificationCardHeader time={nextTime} topic={topic} />
         <NotificationCardBody
           message={title}

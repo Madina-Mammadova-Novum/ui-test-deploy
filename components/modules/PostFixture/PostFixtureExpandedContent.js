@@ -34,6 +34,8 @@ const PostFixtureExpandedContent = ({ detailsData, documentsData, tab }) => {
     }
   }, [currentTab, documentsData]);
 
+  const fileName = detailsData?.cargoCode ? `charter-party-${detailsData?.cargoCode}.pdf` : 'charter-party.pdf';
+
   return (
     <>
       <div className="py-8 xlMax:h-24">
@@ -61,7 +63,7 @@ const PostFixtureExpandedContent = ({ detailsData, documentsData, tab }) => {
             xlMax:transform
             xlMax:-translate-x-1/2
           "
-          onClick={() => downloadFile({ url: detailsData?.charterPartyUrl, fileName: detailsData?.charterPartyUrl })}
+          onClick={() => downloadFile({ url: detailsData?.charterPartyUrl, fileName })}
           disabled={!detailsData?.charterPartyUrl}
         />
       </div>

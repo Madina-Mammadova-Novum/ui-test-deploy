@@ -37,7 +37,7 @@ const PreFixture = () => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr' : '1fr 2fr 1fr 2fr 1fr 1fr 1fr'}
+            gridStyles={isOwner ? '1fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr' : '1fr 1fr 1fr 2fr 1fr 1fr 1fr'}
           />
         }
         footer={

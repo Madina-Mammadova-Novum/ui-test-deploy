@@ -14,7 +14,7 @@ export function generateMetadata() {
 export default function AccountTool() {
   return (
     <section className="mx-5">
-      <AccountTools title="Tools" customHeight="h-[580px]" />
+      <AccountTools title="Tools" customHeight="h-[580px]" isLoggedIn />
     </section>
   );
 }

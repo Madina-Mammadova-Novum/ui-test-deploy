@@ -76,7 +76,21 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
     }
     handleChangeState('currentTab', target.value);
   };
-  const handleValidationError = () => handleChangeState('currentTab', tabs[0].value);
+  const handleValidationError = () => {
+    if (formMethods?.formState?.errors) {
+      const { errors } = formMethods.formState;
+      const errorKeys = Object.keys(errors);
+
+      // Only change to comments tab if it's the single error
+      if (errorKeys.length === 1 && errorKeys[0] === 'comment') {
+        handleChangeState('currentTab', tabs[2].value);
+        return;
+      }
+    }
+
+    // Default fallback for all other cases
+    handleChangeState('currentTab', tabs[0].value);
+  };
 
   const { currentTab, responseCountdown, showScroll, responseCountdownOptions, loading } = modalStore;
 
