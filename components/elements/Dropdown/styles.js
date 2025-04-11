@@ -21,7 +21,7 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     cursor: 'pointer',
   }),
   container: (base, { selectProps: { menuIsOpen, options } }) => {
-    const containerMinHeight = options?.length > 11 ? 308 : options?.length * 28;
+    const containerMinHeight = options?.length > 11 ? 308 : options?.length * 32;
     return {
       ...base,
       minHeight: menuIsOpen && expand && options?.length > 1 && containerMinHeight,

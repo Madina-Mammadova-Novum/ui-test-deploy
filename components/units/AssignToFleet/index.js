@@ -13,7 +13,11 @@ import { FormDropdown, Loader, TextWithLabel, Title } from '@/elements';
 import { assignToFleetSchema } from '@/lib/schemas';
 import { getUserFleets } from '@/services';
 import { addVesselToFleet } from '@/services/vessel';
-import { addVesselToFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
+import {
+  addVesselToFleetsState,
+  deleteVesselFromFleetsState,
+  deleteVesselFromUnassignedFleetsState,
+} from '@/store/entities/fleets/slice';
 import { convertDataToOptions } from '@/utils/helpers';
 import { useFetch, useHookFormParams } from '@/utils/hooks';
 
@@ -35,8 +39,17 @@ const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
   const handleSubmit = async ({ fleet }) => {
     const { status } = await addVesselToFleet({ data: { tankerId }, fleetId: fleet.value });
     if (status === 200) {
+      // Add vessel to the new fleet
       dispatch(addVesselToFleetsState({ fleetId: fleet.value, tankerId }));
-      dispatch(deleteVesselFromUnassignedFleetsState(tankerId));
+
+      // If the vessel is already in a fleet, remove it from the old fleet
+      if (currentFleetId) {
+        dispatch(deleteVesselFromFleetsState({ tankerId, fleetId: currentFleetId }));
+      } else {
+        // If the vessel is coming from unassigned fleet, remove it from there
+        dispatch(deleteVesselFromUnassignedFleetsState(tankerId));
+      }
+
       closeModal();
     }
   };
@@ -65,7 +78,7 @@ const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
           onClose={closeModal}
           specialStyle
         >
-          <Title level={2}>Edit Assigned Fleet</Title>
+          <Title level={2}>{currentFleetId ? 'Change Assigned Fleet' : 'Edit Assigned Fleet'}</Title>
           <TextWithLabel label="Tanker name" text={name} customStyles="!flex-col !items-start [&>p]:!ml-0" />
           <FormDropdown
             name="fleet"

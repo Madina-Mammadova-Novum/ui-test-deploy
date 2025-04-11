@@ -50,10 +50,25 @@ const fleetsSlice = createSlice({
     },
     addVesselToFleetsState: (state, action) => {
       const { fleetId, tankerId } = action?.payload;
-      const vessel = state.unassignedFleetData.find(({ id }) => id === tankerId);
-      state.data.vessels = state.data.vessels.map((fleet) =>
-        fleet.id === fleetId ? { ...fleet, vessels: [{ ...vessel, fleetId }, ...fleet.vessels] } : fleet
-      );
+
+      // Try to find the vessel in unassigned fleet first
+      let vessel = state.unassignedFleetData.find(({ id }) => id === tankerId);
+
+      // If not found in unassigned fleet, try to find it in assigned fleets
+      if (!vessel) {
+        state.data.vessels.forEach((fleet) => {
+          const foundVessel = fleet.vessels?.find((v) => v.id === tankerId);
+          if (foundVessel) {
+            vessel = foundVessel;
+          }
+        });
+      }
+
+      if (vessel) {
+        state.data.vessels = state.data.vessels.map((fleet) =>
+          fleet.id === fleetId ? { ...fleet, vessels: [{ ...vessel, fleetId }, ...fleet.vessels] } : fleet
+        );
+      }
     },
     clearPrefilledState: (state) => {
       state.prefilledUpdateVesselState = initialState.prefilledUpdateVesselState;
