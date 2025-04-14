@@ -108,10 +108,8 @@ const TableCell = ({ cellProps }) => {
         return (
           <UpdateTankerForm fleetData={fleetId && { value: fleetId, label: fleetName }} itemId={id} isValid={isValid} />
         );
-      case ACTIONS.DELETE_TANKER_FROM_FLEET:
-        return <DeleteTankerModal state={{ id, fleetId, name, action, fleetName }} />;
       case ACTIONS.DELETE_TANKER:
-        return <DeleteTankerModal state={{ id, name, action }} />;
+        return <DeleteTankerModal state={{ id, name, action, fleetId }} />;
       case ACTIONS.ASSIGN_FLEET:
         return <AssignToFleet tankerId={id} name={name} currentFleetId={fleetId} />;
       case ACTIONS.REQUEST_DOCUMENT_DELETION:
@@ -147,7 +145,7 @@ const TableCell = ({ cellProps }) => {
     return (
       available && <Flag countryCode={countryCode || flagOfRegistry} className={classNames(freezed && 'opacity-50')} />
     );
-  }, [countryCode, available, freezed]);
+  }, [countryCode, available, freezed, flagOfRegistry]);
 
   const getContainerClass = (action) => {
     const modalActions = [
@@ -161,7 +159,6 @@ const TableCell = ({ cellProps }) => {
       ACTIONS.REQUEST_UPDATE_TANKER_INFO,
       ACTIONS.DELETE_TANKER,
       ACTIONS.VIEW_COMMENTS,
-      ACTIONS.DELETE_TANKER_FROM_FLEET,
       ACTIONS.REQUEST_DOCUMENT_DELETION,
       ACTIONS.REVOKE_DOCUMENT_DELETION,
       isMinimized && ACTIONS.VIEW_CHARTERER_COUNTEROFFER,
