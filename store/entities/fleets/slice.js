@@ -70,6 +70,28 @@ const fleetsSlice = createSlice({
         );
       }
     },
+    addVesselToUnassignedFleetState: (state, action) => {
+      const { tankerId } = action.payload;
+
+      // Check if the vessel is already in the unassigned fleet
+      const exists = state.unassignedFleetData.some((v) => v.id === tankerId);
+
+      if (!exists) {
+        // Try to find the vessel in assigned fleets
+        let vessel = null;
+        state.data.vessels.forEach((fleet) => {
+          const foundVessel = fleet.vessels?.find((v) => v.id === tankerId);
+          if (foundVessel) {
+            vessel = foundVessel;
+          }
+        });
+
+        // If found, add it to unassigned fleet
+        if (vessel) {
+          state.unassignedFleetData = [...state.unassignedFleetData, { ...vessel, fleetId: null }];
+        }
+      }
+    },
     clearPrefilledState: (state) => {
       state.prefilledUpdateVesselState = initialState.prefilledUpdateVesselState;
     },
@@ -110,6 +132,7 @@ export const {
   deleteVesselFromFleetsState,
   deleteVesselFromUnassignedFleetsState,
   addVesselToFleetsState,
+  addVesselToUnassignedFleetState,
   clearPrefilledState,
   updateUnassignedFleet,
   setToggle,

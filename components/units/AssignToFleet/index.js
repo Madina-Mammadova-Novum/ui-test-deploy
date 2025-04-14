@@ -12,14 +12,15 @@ import { ModalFormManager } from '@/common';
 import { FormDropdown, Loader, TextWithLabel, Title } from '@/elements';
 import { assignToFleetSchema } from '@/lib/schemas';
 import { getUserFleets } from '@/services';
-import { addVesselToFleet } from '@/services/vessel';
+import { addVesselToFleet, removeVesselFromFleet } from '@/services/vessel';
 import {
   addVesselToFleetsState,
+  addVesselToUnassignedFleetState,
   deleteVesselFromFleetsState,
   deleteVesselFromUnassignedFleetsState,
 } from '@/store/entities/fleets/slice';
 import { convertDataToOptions } from '@/utils/helpers';
-import { useFetch, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useFetch, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...assignToFleetSchema(),
@@ -37,8 +38,39 @@ const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
   };
 
   const handleSubmit = async ({ fleet }) => {
-    const { status } = await addVesselToFleet({ data: { tankerId }, fleetId: fleet.value });
-    if (status === 200) {
+    // Special case for Unassigned Fleet option
+    if (fleet.value === 'unassigned') {
+      if (currentFleetId) {
+        const fleetName = data.find((f) => f.id === currentFleetId)?.name || 'current';
+        const { error, message } = await removeVesselFromFleet({
+          id: tankerId,
+          fleetName,
+        });
+
+        if (error) {
+          errorToast(error?.title, error?.message);
+        } else {
+          // First add to the unassigned fleet
+          dispatch(addVesselToUnassignedFleetState({ tankerId }));
+          // Then remove from the assigned fleet
+          dispatch(deleteVesselFromFleetsState({ tankerId, fleetId: currentFleetId }));
+
+          successToast(message);
+        }
+
+        closeModal();
+        return;
+      }
+      // If already unassigned, just close the modal
+      closeModal();
+      return;
+    }
+
+    // Normal case for assigning to a fleet
+    const { status, error } = await addVesselToFleet({ data: { tankerId }, fleetId: fleet.value });
+    if (error) {
+      errorToast(error?.title, error?.message);
+    } else if (status === 200) {
       // Add vessel to the new fleet
       dispatch(addVesselToFleetsState({ fleetId: fleet.value, tankerId }));
 
@@ -50,6 +82,7 @@ const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
         dispatch(deleteVesselFromUnassignedFleetsState(tankerId));
       }
 
+      successToast('Vessel successfully assigned to fleet');
       closeModal();
     }
   };
@@ -64,6 +97,12 @@ const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
 
   // Filter out the current fleet from options if currentFleetId is provided
   const filteredData = currentFleetId ? { data: data?.filter((fleet) => fleet.id !== currentFleetId) } : { data };
+
+  // Create options array, adding Unassigned Fleet option if vessel is in a fleet
+  const fleetOptions = convertDataToOptions(filteredData, 'id', 'name');
+  if (currentFleetId) {
+    fleetOptions.unshift({ value: 'unassigned', label: 'Unassigned Fleet' });
+  }
 
   return (
     <div className="w-[292px]">
@@ -84,7 +123,7 @@ const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
             name="fleet"
             label="Fleet name"
             labelBadge="*"
-            options={convertDataToOptions(filteredData, 'id', 'name')}
+            options={fleetOptions}
             customStyles={{ dropdownExpanded: true }}
             onChange={(option) => handleChange('fleet', option)}
           />
