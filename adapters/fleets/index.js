@@ -212,6 +212,20 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
+      editable: true,
+      value: fleetName || 'Assigned',
+      type: fleetName ? null : TYPE.GREY,
+      name,
+      disabled: additionRequested,
+      actions: [
+        {
+          action: ACTIONS.ASSIGN_FLEET,
+          editIcon: <EditIcon />,
+        },
+      ],
+    },
+    {
+      id,
       value: status,
       icon: <StatusIndicator status={status} />,
       disabled: additionRequested,
@@ -239,7 +253,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
           actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
         },
         {
-          action: ACTIONS.DELETE_TANKER_FROM_FLEET,
+          action: ACTIONS.DELETE_TANKER,
           editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,
           actionVariant: 'delete',
           actionSize: 'medium',

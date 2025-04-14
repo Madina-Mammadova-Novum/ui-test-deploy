@@ -12,16 +12,21 @@ import { ModalFormManager } from '@/common';
 import { FormDropdown, Loader, TextWithLabel, Title } from '@/elements';
 import { assignToFleetSchema } from '@/lib/schemas';
 import { getUserFleets } from '@/services';
-import { addVesselToFleet } from '@/services/vessel';
-import { addVesselToFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
+import { addVesselToFleet, removeVesselFromFleet } from '@/services/vessel';
+import {
+  addVesselToFleetsState,
+  addVesselToUnassignedFleetState,
+  deleteVesselFromFleetsState,
+  deleteVesselFromUnassignedFleetsState,
+} from '@/store/entities/fleets/slice';
 import { convertDataToOptions } from '@/utils/helpers';
-import { useFetch, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useFetch, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   ...assignToFleetSchema(),
 });
 
-const AssignToFleet = ({ tankerId, name, closeModal }) => {
+const AssignToFleet = ({ tankerId, name, closeModal, currentFleetId }) => {
   const [data, isLoading] = useFetch(useCallback(() => getUserFleets({ page: 1, perPage: 100, sortBy: 'asc' }), []));
   const methods = useHookFormParams({ schema });
   const { setValue, getValues } = methods;
@@ -33,10 +38,51 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
   };
 
   const handleSubmit = async ({ fleet }) => {
-    const { status } = await addVesselToFleet({ data: { tankerId }, fleetId: fleet.value });
-    if (status === 200) {
+    // Special case for Unassigned Fleet option
+    if (fleet.value === 'unassigned') {
+      if (currentFleetId) {
+        const fleetName = data.find((f) => f.id === currentFleetId)?.name || 'current';
+        const { error, message } = await removeVesselFromFleet({
+          id: tankerId,
+          fleetName,
+        });
+
+        if (error) {
+          errorToast(error?.title, error?.message);
+        } else {
+          // First add to the unassigned fleet
+          dispatch(addVesselToUnassignedFleetState({ tankerId }));
+          // Then remove from the assigned fleet
+          dispatch(deleteVesselFromFleetsState({ tankerId, fleetId: currentFleetId }));
+
+          successToast(message);
+        }
+
+        closeModal();
+        return;
+      }
+      // If already unassigned, just close the modal
+      closeModal();
+      return;
+    }
+
+    // Normal case for assigning to a fleet
+    const { status, error } = await addVesselToFleet({ data: { tankerId }, fleetId: fleet.value });
+    if (error) {
+      errorToast(error?.title, error?.message);
+    } else if (status === 200) {
+      // Add vessel to the new fleet
       dispatch(addVesselToFleetsState({ fleetId: fleet.value, tankerId }));
-      dispatch(deleteVesselFromUnassignedFleetsState(tankerId));
+
+      // If the vessel is already in a fleet, remove it from the old fleet
+      if (currentFleetId) {
+        dispatch(deleteVesselFromFleetsState({ tankerId, fleetId: currentFleetId }));
+      } else {
+        // If the vessel is coming from unassigned fleet, remove it from there
+        dispatch(deleteVesselFromUnassignedFleetsState(tankerId));
+      }
+
+      successToast('Vessel successfully assigned to fleet');
       closeModal();
     }
   };
@@ -47,6 +93,15 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
         <Loader className="h-8 w-8" />
       </div>
     );
+  }
+
+  // Filter out the current fleet from options if currentFleetId is provided
+  const filteredData = currentFleetId ? { data: data?.filter((fleet) => fleet.id !== currentFleetId) } : { data };
+
+  // Create options array, adding Unassigned Fleet option if vessel is in a fleet
+  const fleetOptions = convertDataToOptions(filteredData, 'id', 'name');
+  if (currentFleetId) {
+    fleetOptions.unshift({ value: 'unassigned', label: 'Unassigned Fleet' });
   }
 
   return (
@@ -62,13 +117,13 @@ const AssignToFleet = ({ tankerId, name, closeModal }) => {
           onClose={closeModal}
           specialStyle
         >
-          <Title level={2}>Edit Assigned Fleet</Title>
+          <Title level={2}>{currentFleetId ? 'Change Assigned Fleet' : 'Edit Assigned Fleet'}</Title>
           <TextWithLabel label="Tanker name" text={name} customStyles="!flex-col !items-start [&>p]:!ml-0" />
           <FormDropdown
             name="fleet"
             label="Fleet name"
             labelBadge="*"
-            options={convertDataToOptions({ data }, 'id', 'name')}
+            options={fleetOptions}
             customStyles={{ dropdownExpanded: true }}
             onChange={(option) => handleChange('fleet', option)}
           />
