@@ -7,8 +7,12 @@ import { linkImagePropTypes } from '@/lib/types';
 import EnvelopeSvg from '@/assets/images/envelope.svg';
 import { Title } from '@/elements';
 import Map from '@/elements/Map';
+import { ContactUsForm } from '@/modules';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 const ContactUsBlock = ({ title, subTitle, shortDescription, address, emails, embedMap }) => {
+  const isAuthenticated = typeof window !== 'undefined' ? !!getCookieFromBrowser('session-access-token') : false;
+
   return (
     <section className="relative z-10 -mt-[188px] mb-[100px]">
       <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
@@ -16,19 +20,25 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, address, emails, em
         {subTitle && <div>{subTitle}</div>}
         {shortDescription && <div>{shortDescription}</div>}
         <div className="relative grid gap-4 divide-y divide-gray-darker rounded-base bg-white p-5 shadow-2xl md:grid-cols-2 md:divide-x md:divide-y-0">
-          <div className="flex flex-col items-center justify-center md:pr-5">
-            <div className="text-center">
-              <EnvelopeSvg className="mb-4 fill-black" />
-              <Title level={1} className="mb-2">
-                Contact Us
-              </Title>
-              {emails && emails.length > 0 && (
-                <a href={`mailto:${emails[0]}`} className="mt-2 inline-block text-blue-500 hover:underline">
-                  {emails[0]}
-                </a>
-              )}
+          {isAuthenticated ? (
+            <div className="flex flex-col items-center justify-center">
+              <div className="text-center">
+                <EnvelopeSvg className="mb-4 fill-black" />
+                <Title level={1} className="mb-2">
+                  Contact Us
+                </Title>
+                {emails && emails.length > 0 && (
+                  <a href={`mailto:${emails[0]}`} className="mt-2 inline-block text-blue-500 hover:underline">
+                    {emails[0]}
+                  </a>
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <ContactUsForm />
+            </div>
+          )}
           <div className="pt-5 md:pl-5 md:pt-0">
             <Map embedMap={embedMap} title={address} />
             <div className="mt-5 flex flex-wrap gap-[30px]">
