@@ -1,6 +1,6 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Howl } from 'howler';
-import { NotificationHorn } from 'public/sounds';
+import { NotificationBell, NotificationHorn } from 'public/sounds';
 
 import { getRtURL } from '.';
 import { getCookieFromBrowser, getSocketConnectionsParams } from './helpers';
@@ -143,10 +143,30 @@ export class ChatSessionController extends SignalRController {
     this.connection.on('ReceiveMessage', (message) => {
       this.updateMessage({ message, clientId, role, chatId });
 
+      if (message.senderId !== clientId) {
+        ChatSessionController.playMessageSound();
+      }
+
       if (this.isOpened) {
         this.readMessage({ id: message.id });
       }
     });
+  }
+
+  static playMessageSound() {
+    const soundEnabled = localStorage.getItem('notificationSound');
+    const isSoundEnabled = soundEnabled === null ? true : soundEnabled === 'true';
+
+    if (isSoundEnabled) {
+      const messageSound = new Howl({
+        src: NotificationBell,
+        loop: false,
+        preload: true,
+        volume: 0.5,
+      });
+
+      messageSound.play();
+    }
   }
 
   onToggle(opened) {
