@@ -14,7 +14,7 @@ import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { resetDealData } from '@/store/entities/notifications/slice';
 import { getAuthChatSelector, getNotificationsDataSelector } from '@/store/selectors';
 import { ChatAdditional, Flag } from '@/units';
-import { convertToKilotons, getCookieFromBrowser, getLocode } from '@/utils/helpers';
+import { getCookieFromBrowser, getLocode } from '@/utils/helpers';
 
 const ChatConversationCard = ({ data, contrasted = false }) => {
   const router = useRouter();
@@ -27,7 +27,8 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   const { chats } = useSelector(getAuthChatSelector);
   const { user } = chats;
 
-  const cargoProduct = `${data?.vessel?.type} (${convertToKilotons(data?.additional?.totalQuantity)})`;
+  const totalQuantity = `${data?.additional?.totalQuantity} mt`;
+  const cargoProduct = `${data?.vessel?.type} (${totalQuantity})`;
   const isHelpCenter = contrasted && user?.data?.key === 'support';
 
   const handleChangeState = (key, value) => {
