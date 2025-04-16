@@ -50,10 +50,47 @@ const fleetsSlice = createSlice({
     },
     addVesselToFleetsState: (state, action) => {
       const { fleetId, tankerId } = action?.payload;
-      const vessel = state.unassignedFleetData.find(({ id }) => id === tankerId);
-      state.data.vessels = state.data.vessels.map((fleet) =>
-        fleet.id === fleetId ? { ...fleet, vessels: [{ ...vessel, fleetId }, ...fleet.vessels] } : fleet
-      );
+
+      // Try to find the vessel in unassigned fleet first
+      let vessel = state.unassignedFleetData.find(({ id }) => id === tankerId);
+
+      // If not found in unassigned fleet, try to find it in assigned fleets
+      if (!vessel) {
+        state.data.vessels.forEach((fleet) => {
+          const foundVessel = fleet.vessels?.find((v) => v.id === tankerId);
+          if (foundVessel) {
+            vessel = foundVessel;
+          }
+        });
+      }
+
+      if (vessel) {
+        state.data.vessels = state.data.vessels.map((fleet) =>
+          fleet.id === fleetId ? { ...fleet, vessels: [{ ...vessel, fleetId }, ...fleet.vessels] } : fleet
+        );
+      }
+    },
+    addVesselToUnassignedFleetState: (state, action) => {
+      const { tankerId } = action.payload;
+
+      // Check if the vessel is already in the unassigned fleet
+      const exists = state.unassignedFleetData.some((v) => v.id === tankerId);
+
+      if (!exists) {
+        // Try to find the vessel in assigned fleets
+        let vessel = null;
+        state.data.vessels.forEach((fleet) => {
+          const foundVessel = fleet.vessels?.find((v) => v.id === tankerId);
+          if (foundVessel) {
+            vessel = foundVessel;
+          }
+        });
+
+        // If found, add it to unassigned fleet
+        if (vessel) {
+          state.unassignedFleetData = [...state.unassignedFleetData, { ...vessel, fleetId: null }];
+        }
+      }
     },
     clearPrefilledState: (state) => {
       state.prefilledUpdateVesselState = initialState.prefilledUpdateVesselState;
@@ -95,6 +132,7 @@ export const {
   deleteVesselFromFleetsState,
   deleteVesselFromUnassignedFleetsState,
   addVesselToFleetsState,
+  addVesselToUnassignedFleetState,
   clearPrefilledState,
   updateUnassignedFleet,
   setToggle,

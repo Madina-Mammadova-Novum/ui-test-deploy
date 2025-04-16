@@ -21,7 +21,7 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     cursor: 'pointer',
   }),
   container: (base, { selectProps: { menuIsOpen, options } }) => {
-    const containerMinHeight = options?.length > 11 ? 308 : options?.length * 28;
+    const containerMinHeight = options?.length > 11 ? 308 : options?.length * 34;
     return {
       ...base,
       minHeight: menuIsOpen && expand && options?.length > 1 && containerMinHeight,
@@ -48,9 +48,10 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     marginTop: '5px',
     padding: '0px',
     top: menuIsOpen && expand && options?.length > 1 && 40,
+    zIndex: 50,
   }),
   menuList: (base, { selectProps: { menuIsOpen, options } }) => {
-    const menuListMinHeight = options?.length > 11 ? 308 : options?.length * 28;
+    const menuListMinHeight = options?.length > 11 ? 308 : options?.length * 34;
     return {
       ...base,
       minHeight: menuIsOpen && expand && options?.length > 1 && menuListMinHeight,

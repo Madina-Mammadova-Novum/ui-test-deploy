@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { CaptchaPropTypes } from '@/lib/types';
@@ -7,19 +8,27 @@ import { CaptchaPropTypes } from '@/lib/types';
 import { InputErrorMessage } from '@/elements';
 import { useHookForm } from '@/utils/hooks';
 
-const Captcha = ({ onChange }) => {
+const Captcha = React.forwardRef(({ onChange, className = 'my-2.5', errorClassName = 'text-xs-sm text-red' }, ref) => {
   const {
     formState: { submitCount, errors },
   } = useHookForm();
 
   return (
     <div>
-      <ReCAPTCHA sitekey="6LeDBQMpAAAAAEFmHjH00wX_1kkrnUspo8ZG6ZZu" className="my-2.5" onChange={onChange} />
-      {submitCount > 0 && errors?.captcha && <InputErrorMessage message={errors.captcha.message} />}
+      <ReCAPTCHA
+        ref={ref}
+        sitekey="6LeDBQMpAAAAAEFmHjH00wX_1kkrnUspo8ZG6ZZu"
+        className={className}
+        onChange={onChange}
+      />
+      {submitCount > 0 && errors?.captcha && (
+        <InputErrorMessage className={errorClassName} message={errors.captcha.message} />
+      )}
     </div>
   );
-};
+});
 
+Captcha.displayName = 'Captcha';
 Captcha.propTypes = CaptchaPropTypes;
 
 export default Captcha;

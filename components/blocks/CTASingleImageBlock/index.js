@@ -25,13 +25,8 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
       <div className="mx-auto max-w-[1258px] gap-8 rounded-b-base px-6 3md:px-14">
         <div className="mb-10 w-full overflow-hidden rounded-b-base shadow-xl">
           <VideoPlayer
-            src="/videos/intro.mp4"
-            controls
-            autoPlay={false}
-            autoPlayOnScroll
-            loop={false}
-            muted
-            preload="auto"
+            src="/videos/intro.mp4#t=0.5"
+            preload="metadata"
             className="w-full"
             captionSrc="/captions/shiplink.vtt"
           />

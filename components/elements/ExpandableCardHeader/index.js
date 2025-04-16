@@ -22,6 +22,7 @@ const ExpandableCardHeader = ({
   gridStyles = '',
   itemId,
 }) => {
+  const xl = useMediaQuery('(min-width: 1440px)');
   const lg = useMediaQuery('(min-width: 1280px)');
   const sm3 = useMediaQuery('(max-width: 1023px)');
 
@@ -40,16 +41,16 @@ const ExpandableCardHeader = ({
   );
 
   const textLength = useMemo(() => {
-    if (lg) return 35;
-    if (sm3) return 20;
+    if (xl) return 25;
+    if (sm3 || lg) return 20;
 
     return SETTINGS.MAX_VISIBLE_TEXT_LENGTH;
-  }, [lg, sm3]);
+  }, [lg, sm3, xl]);
 
   const printHeaderRow = (data, index) => {
     const { disableTooltip, tooltipText, trimmedText } = processTooltipData({ text: data.text, length: textLength });
 
-    let textContent = lg && !data?.disableTooltip ? trimmedText : tooltipText;
+    let textContent = (lg || xl) && !data?.disableTooltip ? trimmedText : tooltipText;
     if (data.countdownData && data.isFailed) return null;
 
     if (data.label === 'Status' && !data.isFailed) return null;

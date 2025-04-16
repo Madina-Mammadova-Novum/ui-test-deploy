@@ -96,6 +96,20 @@ const nextConfig = {
             },
           },
         ],
+      },
+      {
+        test: /\.mp3$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/_next/static/',
+              outputPath: 'static/',
+              name: '[name].[hash].[ext]',
+              esModule: false,
+            },
+          },
+        ],
       }
     );
     return config;

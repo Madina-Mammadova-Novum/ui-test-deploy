@@ -29,7 +29,7 @@ const Negotiating = () => {
         header={
           <ExpandableCardHeader
             headerData={rowHeader}
-            gridStyles={isOwner ? '1.5fr 1fr 1fr 1fr 2fr' : '1fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr'}
+            gridStyles={isOwner ? '1.5fr 1fr 1fr 1fr 2fr' : '1fr 1fr 1fr 1.5fr 1fr 1fr 1fr'}
           />
         }
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}

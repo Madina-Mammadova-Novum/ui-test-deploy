@@ -8,7 +8,7 @@ import * as yup from 'yup';
 
 import TickInCircleSVG from '@/assets/images/checkCircle.svg';
 import { FormManager } from '@/common';
-import { Button, FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
+import { FormDropdown, Input, PhoneInput, TextArea, Title } from '@/elements';
 import { contactInfoSchema } from '@/lib/schemas';
 import { contactUs } from '@/services/contactUs';
 import { getValueWithPath } from '@/utils/helpers';
@@ -26,7 +26,6 @@ const ContactUsForm = () => {
   });
 
   const {
-    reset,
     register,
     setValue,
     clearErrors,
@@ -40,10 +39,11 @@ const ContactUsForm = () => {
     else errorToast(error?.title, error?.message);
   };
 
-  const onSubmitAgain = () => {
-    reset();
-    setIsSubmitted(false);
-  };
+  // REMOVED Fill the form again
+  // const onSubmitAgain = () => {
+  //   reset();
+  //   setIsSubmitted(false);
+  // };
 
   const testOption = [
     { label: 'testLabel', value: 'testValue' },
@@ -61,15 +61,17 @@ const ContactUsForm = () => {
   return isSubmitted ? (
     <div className="m-auto flex flex-col items-center text-center">
       <Title level={2} className="mb-2.5 flex items-center gap-2">
-        <TickInCircleSVG className="h-5 w-5 fill-black" viewBox="0 0 24 24" /> Thank you!
+        <TickInCircleSVG className="h-6 w-6 fill-black" viewBox="0 0 24 24" /> Thank you!
       </Title>
       <p className="mb-4 max-w-[240px] text-xsm">
-        Your message has been submitted. Someone from our team will contact you shortly.
+        Your message has been submitted. Someone from our team will contact you.
       </p>
+      {/* REMOVED Fill the form again
+      
       <Button
         buttonProps={{ text: 'Fill the form again', size: 'large', variant: 'secondary' }}
         onClick={onSubmitAgain}
-      />
+      /> */}
     </div>
   ) : (
     <FormProvider {...methods}>
@@ -81,6 +83,7 @@ const ContactUsForm = () => {
           className: '!w-fit self-baseline',
         }}
         submitAction={onSubmit}
+        className="flex w-full flex-col gap-5"
       >
         <Title level="2" className="mb-5">
           Write to us

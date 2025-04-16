@@ -6,7 +6,7 @@ import { IconWrapper } from '@/units';
 import { getButtonClassNames } from '@/utils/helpers';
 
 const Button = ({
-  buttonProps: { icon = {}, iconContainerStyles, helperText, text, variant, size },
+  buttonProps: { icon = {}, iconContainerStyles, helperText, text, variant, size, textClassName },
   customStyles = '',
   customStylesFromWrap = '',
   disabled = false,
@@ -33,7 +33,7 @@ const Button = ({
         {...rest}
       >
         {before && <IconWrapper iconData={{ className: iconContainerStyles, icon: before }} />}
-        {text && <span className="px-1.5 text-inherit">{text}</span>}
+        {text && <span className={classNames('px-1.5 text-inherit', textClassName)}>{text}</span>}
         {after && <IconWrapper iconData={{ className: iconContainerStyles, icon: after }} />}
       </button>
       {helperText && <span className="text-xs-sm font-normal text-gray">{helperText}</span>}
