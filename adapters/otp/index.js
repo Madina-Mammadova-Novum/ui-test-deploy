@@ -19,7 +19,7 @@ export const sendOtpAdapter = ({ data }) => {
 export const sendOtpResponseAdapter = ({ data }) => {
   return {
     otpId: data?.otpId,
-    date: data?.date,
+    expirationDate: data?.expirationDate,
   };
 };
 

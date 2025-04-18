@@ -1,20 +1,28 @@
+'use client';
+
+import { useState } from 'react';
+
 import classNames from 'classnames';
 
 import { PersonalDetailsFormPropTypes } from '@/lib/types';
 
-import { Input, PhoneInput } from '@/elements';
+import { Button, Input, PhoneInput } from '@/elements';
+import PhoneValidation from '@/units/PhoneValidation';
 import { useHookForm } from '@/utils/hooks';
 
 const PersonalDetails = ({ onUpdatePage = false }) => {
   const {
     register,
     getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useHookForm();
 
   const values = getValues();
+  const [showPhoneValidation, setShowPhoneValidation] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
-  const { pending, pendingRequest, firstName, lastName, email } = values;
+  const { pending, pendingRequest, firstName, lastName, email, userPhone } = values;
 
   // Helper function to render label badge based on conditions
   const renderLabelBadge = (pendingValue, currentValue, fieldName) => {
@@ -28,6 +36,19 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     }
 
     return '*';
+  };
+
+  const handlePhoneValidationClick = () => {
+    if (userPhone) {
+      setShowPhoneValidation(true);
+    }
+  };
+
+  const handlePhoneVerified = (verified) => {
+    setIsPhoneVerified(verified);
+    if (verified) {
+      setValue('phoneVerified', true);
+    }
   };
 
   return (
@@ -59,26 +80,36 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         />
       </div>
       <div className="flex flex-col gap-5">
-        <p className="w- b-l pt-5 text-sm font-semibold text-black">Contact Information</p>
-        <div className="grid gap-5 md:grid-cols-2">
-          <PhoneInput
-            {...register('primaryPhone')}
-            onBlur={() => {}}
-            label="Primary phone number"
-            disabled={isSubmitting}
-            error={errors.primaryPhone?.message}
-            dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
-            labelBadge="*"
-          />
-          <PhoneInput
-            onBlur={() => {}}
-            {...register('secondaryPhone')}
-            label="Secondary phone number (optional)"
-            disabled={isSubmitting}
-            error={errors.secondaryPhone?.message}
-            dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
-          />
+        <p className="pt-5 text-sm font-semibold text-black">Contact Information</p>
+        <div className="flex flex-col gap-5 md:flex-row">
+          <div className="flex-1">
+            <PhoneInput
+              {...register('userPhone')}
+              onBlur={() => {}}
+              label="Phone number"
+              disabled={isSubmitting || isPhoneVerified}
+              error={errors.userPhone?.message}
+              dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
+              labelBadge={isPhoneVerified ? '✓' : '*'}
+            />
+          </div>
+          <div className="flex items-end">
+            <Button
+              buttonProps={{
+                text: isPhoneVerified ? 'Verified' : 'Validate',
+                variant: isPhoneVerified ? 'success' : 'primary',
+                size: 'medium',
+              }}
+              className="mb-0.5"
+              disabled={!userPhone || isSubmitting || isPhoneVerified}
+              onClick={handlePhoneValidationClick}
+            />
+          </div>
         </div>
+        {showPhoneValidation && !isPhoneVerified && (
+          <PhoneValidation phone={userPhone} onVerified={handlePhoneVerified} />
+        )}
+        {errors.phoneVerified && <p className="text-xs mt-1 text-red">{errors.phoneVerified.message}</p>}
       </div>
     </>
   );
