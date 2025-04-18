@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import { Button, OTPInput } from '@/elements';
 import { sendOtp, validateOtp } from '@/services';
 import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
@@ -17,9 +18,16 @@ const PhoneValidation = ({ phone, onVerified }) => {
   const [expirationDate, setExpirationDate] = useState(null);
   const [codeSent, setCodeSent] = useState(false);
 
+  /* eslint-disable consistent-return */
   useEffect(() => {
     if (isVerified && onVerified) {
-      onVerified(true);
+      // Add timeout to allow user to see verification success message
+      const timeoutId = setTimeout(() => {
+        onVerified(true);
+      }, 1500);
+
+      // Clean up timeout if component unmounts
+      return () => clearTimeout(timeoutId);
     }
   }, [isVerified, onVerified]);
 
@@ -76,15 +84,9 @@ const PhoneValidation = ({ phone, onVerified }) => {
 
   if (isVerified) {
     return (
-      <div className="mt-4 rounded-md border border-green-200 bg-green-50 p-3">
+      <div className="rounded-md border border-green-200 bg-green-50 p-3">
         <p className="flex items-center text-green-700">
-          <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <CheckCircleSVG className="mr-2 fill-green-700" />
           Phone number verified successfully
         </p>
       </div>
