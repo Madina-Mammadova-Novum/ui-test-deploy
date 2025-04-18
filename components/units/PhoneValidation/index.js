@@ -138,7 +138,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500">
-                Code expires in: <DynamicCountdownTimer date={expirationDate} />
+                Code expires in: <DynamicCountdownTimer date={expirationDate} variant="secondary" />
               </span>
               <Button
                 buttonProps={{
