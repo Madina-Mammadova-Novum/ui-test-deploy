@@ -11,7 +11,7 @@ import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
 import { ensurePlusPrefix } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
-const PhoneValidation = ({ phone, onVerified }) => {
+const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [otpCode, setOtpCode] = useState('');
@@ -46,6 +46,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
         setOtpId(data.otpId);
         setExpirationDate(new Date(data.expirationDate) || null);
         setCodeSent(true);
+        onSendOtp(true);
         successToast('Success', 'Verification code sent to your phone');
       }
     } catch (error) {
@@ -111,10 +112,10 @@ const PhoneValidation = ({ phone, onVerified }) => {
 
   if (!codeSent) {
     return (
-      <div className="rounded-md border border-gray-200 p-4">
-        <div className="mb-3">
+      <div className="flex flex-col gap-4 rounded-md border border-gray-200 p-4">
+        <div>
           <h4 className="mb-1 text-sm font-semibold">Phone Verification</h4>
-          <p className="text-xs text-gray-600">To verify your phone number, we&apos;ll send you a 6-digit code.</p>
+          <p className="text-xsm text-gray-600">To verify your phone number, we&apos;ll send you a 6-digit code.</p>
         </div>
         <Button
           buttonProps={{
@@ -131,17 +132,17 @@ const PhoneValidation = ({ phone, onVerified }) => {
   }
 
   return (
-    <div className="rounded-md border border-gray-200 p-4">
-      <div className="mb-3">
+    <div className="flex flex-col gap-4 rounded-md border border-gray-200 p-4">
+      <div>
         <h4 className="mb-1 text-sm font-semibold">Phone Verification</h4>
-        <p className="text-xs text-gray-600">
+        <p className="text-xsm text-gray-600">
           {otpId ? 'Enter the verification code sent to your phone' : 'Sending verification code to your phone...'}
         </p>
       </div>
 
       {otpId && expirationDate && (
         <>
-          <div className="mb-3">
+          <div>
             <OTPInput
               label="Verification Code"
               labelBadge="*"
@@ -156,7 +157,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               {expirationDate && (
-                <span className="text-xs text-gray-500">
+                <span className="text-xsm text-gray-500">
                   Code expires in: <DynamicCountdownTimer date={expirationDate} variant="secondary" />
                 </span>
               )}
@@ -196,6 +197,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
 PhoneValidation.propTypes = {
   phone: PropTypes.string.isRequired,
   onVerified: PropTypes.func,
+  onSendOtp: PropTypes.func,
 };
 
 export default PhoneValidation;

@@ -301,25 +301,29 @@ function companyAddressesAdapter({ data }) {
 
 export function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
-  const { imos, companyYearsOfOperation, companyName } = data;
+  const { imos, companyYearsOfOperation, companyName, phone, secondaryPhone } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: imos.countOfTankers,
     imos: listOfImosAdapter({ data: imos.listOfTankers }),
+    phone: ensurePlusPrefix(phone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     ...companyAddressesAdapter({ data }),
   };
 }
 
 export function updateChartererCompanyAdapter({ data }) {
   if (!data) return null;
-  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName } = data;
+  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName, phone, secondaryPhone } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
+    phone: ensurePlusPrefix(phone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     ...companyAddressesAdapter({ data }),
     experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
   };
@@ -350,7 +354,7 @@ export function ownerSignUpAdapter({ data }) {
     companyName,
     password,
     secondaryPhone,
-    primaryPhone,
+    phone,
     email,
     lastName,
     firstName,
@@ -363,7 +367,7 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     password,
     email,
-    phone: ensurePlusPrefix(primaryPhone),
+    phone: ensurePlusPrefix(phone),
     secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     companyName,
     estimatedAverageTankerDWT: 1,
@@ -394,7 +398,7 @@ export function chartererSignUpAdapter({ data }) {
     companyName,
     password,
     secondaryPhone,
-    primaryPhone,
+    phone,
     email,
     lastName,
     firstName,
@@ -407,7 +411,7 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email,
     password,
-    phone: ensurePlusPrefix(primaryPhone),
+    phone: ensurePlusPrefix(phone),
     secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     companyName,
     yearsInOperation: companyYearsOfOperation,
