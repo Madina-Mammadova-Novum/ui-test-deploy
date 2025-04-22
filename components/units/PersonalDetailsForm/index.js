@@ -18,6 +18,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setValue,
     watch,
     formState: { errors, isSubmitting },
+    trigger,
   } = useHookForm();
 
   const values = getValues();
@@ -29,6 +30,11 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
 
   // Watch for changes to the userPhone field
   const userPhone = watch('userPhone');
+
+  // Initialize phoneVerified to false on component mount
+  useEffect(() => {
+    setValue('phoneVerified', false);
+  }, [setValue]);
 
   // Update phoneValue when userPhone changes
   useEffect(() => {
@@ -55,10 +61,13 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     }
   };
 
-  const handlePhoneVerified = (verified) => {
-    setIsPhoneVerified(verified);
-    if (verified) {
+  const handlePhoneVerified = ({ phoneVerified, otpId }) => {
+    setIsPhoneVerified(phoneVerified);
+    if (phoneVerified) {
       setValue('phoneVerified', true);
+      // Trigger validation to clear any errors
+      trigger('phoneVerified');
+      setValue('otpId', otpId);
     }
   };
 
@@ -93,46 +102,54 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       <div className="flex flex-col gap-5">
         <p className="pt-5 text-sm font-semibold text-black">Contact Information</p>
         <div className="flex flex-col gap-5 md:flex-row">
-          <div className="grid w-full gap-5 md:grid-cols-2">
-            <PhoneInput
-              {...register('userPhone')}
-              onBlur={() => {}}
-              label="Phone number"
-              disabled={isSubmitting || isPhoneVerified}
-              error={errors.userPhone?.message}
-              dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
-              labelBadge={isPhoneVerified ? '✓' : '*'}
-            />
-
-            {phoneValue && !isPhoneVerified && (
-              <Button
-                buttonProps={{
-                  text: 'Validate',
-                  variant: 'secondary',
-                  size: 'large',
-                }}
-                customStylesFromWrap="!items-start !justify-end"
-                disabled={isSubmitting}
-                onClick={handlePhoneValidationClick}
+          <div className="w-full">
+            <div className="grid w-full gap-5 md:grid-cols-2">
+              <PhoneInput
+                {...register('userPhone')}
+                onBlur={() => {}}
+                label="Phone number"
+                disabled={isSubmitting || isPhoneVerified}
+                error={errors.userPhone?.message}
+                dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
+                labelBadge={isPhoneVerified ? '✓' : '*'}
               />
-            )}
 
-            {isPhoneVerified && (
-              <TextWithLabel
-                label="Status"
-                text="Verified"
-                coverImage={<CheckCircleSVG className="fill-green" />}
-                textStyles="text-green font-semibold"
-                customStyles="!flex-col !items-start [&>div]:!ml-0 !gap-0"
-                textGroupStyle="h-full"
-              />
+              {phoneValue && !isPhoneVerified && (
+                <Button
+                  buttonProps={{
+                    text: 'Validate',
+                    variant: 'secondary',
+                    size: 'large',
+                  }}
+                  customStylesFromWrap="!items-start !justify-end"
+                  disabled={isSubmitting}
+                  onClick={handlePhoneValidationClick}
+                />
+              )}
+              {isPhoneVerified && (
+                <TextWithLabel
+                  label="Status"
+                  text="Verified"
+                  coverImage={<CheckCircleSVG className="fill-green" />}
+                  textStyles="text-green font-semibold"
+                  customStyles="!flex-col !items-start [&>div]:!ml-0 !gap-0"
+                  textGroupStyle="h-full"
+                />
+              )}
+            </div>
+            {errors.phoneVerified && (
+              <div className="md:col-span-3">
+                <p className="text-xs-sm text-red">{errors.phoneVerified.message}</p>
+              </div>
             )}
           </div>
         </div>
         {showPhoneValidation && !isPhoneVerified && (
           <PhoneValidation phone={phoneValue} onVerified={handlePhoneVerified} />
         )}
-        {errors.phoneVerified && <p className="text-xs mt-1 text-red">{errors.phoneVerified.message}</p>}
+
+        {/* Hidden input for phoneVerified validation */}
+        <input type="hidden" {...register('phoneVerified')} />
       </div>
     </>
   );

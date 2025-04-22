@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
+import { ensurePlusPrefix, formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -352,6 +352,8 @@ export function ownerSignUpAdapter({ data }) {
     email,
     lastName,
     firstName,
+    userPhone,
+    otpId,
   } = data;
 
   return {
@@ -359,13 +361,15 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     password,
     email,
-    phone: `+${primaryPhone}`,
-    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
+    phone: ensurePlusPrefix(primaryPhone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     imos: listOfImosAdapter({ data: imos }),
+    otpId,
+    userPhone: ensurePlusPrefix(userPhone),
     ...companyAddressesAdapter({ data }),
   };
 }
@@ -380,6 +384,7 @@ const cargoesAdapter = ({ data }) => {
 
 export function chartererSignUpAdapter({ data }) {
   if (data === null) return null;
+
   const {
     cargoes,
     numberOfCargoes,
@@ -391,6 +396,8 @@ export function chartererSignUpAdapter({ data }) {
     email,
     lastName,
     firstName,
+    userPhone,
+    otpId,
   } = data;
 
   return {
@@ -398,12 +405,14 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email,
     password,
-    phone: `+${primaryPhone}`,
-    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
+    phone: ensurePlusPrefix(primaryPhone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     experiences: cargoesAdapter({ data: cargoes }),
+    otpId,
+    userPhone: ensurePlusPrefix(userPhone),
     ...companyAddressesAdapter({ data }),
   };
 }

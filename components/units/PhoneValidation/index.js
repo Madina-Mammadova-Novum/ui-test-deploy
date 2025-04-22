@@ -8,6 +8,7 @@ import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import { Button, OTPInput } from '@/elements';
 import { sendOtp, validateOtp } from '@/services';
 import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
+import { ensurePlusPrefix } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const PhoneValidation = ({ phone, onVerified }) => {
@@ -23,7 +24,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
     if (isVerified && onVerified) {
       // Add timeout to allow user to see verification success message
       const timeoutId = setTimeout(() => {
-        onVerified(true);
+        onVerified({ phoneVerified: true, otpId });
       }, 1500);
 
       // Clean up timeout if component unmounts
@@ -37,13 +38,13 @@ const PhoneValidation = ({ phone, onVerified }) => {
     setIsLoading(true);
 
     try {
-      const { error, data } = await sendOtp({ receiver: phone });
+      const { error, data } = await sendOtp({ receiver: ensurePlusPrefix(phone) });
 
       if (error) {
         errorToast('Error', error?.message || 'Failed to send verification code');
       } else {
         setOtpId(data.otpId);
-        setExpirationDate(new Date(data.expirationDate));
+        setExpirationDate(new Date(data.expirationDate) || null);
         setCodeSent(true);
         successToast('Success', 'Verification code sent to your phone');
       }
@@ -60,13 +61,28 @@ const PhoneValidation = ({ phone, onVerified }) => {
     setIsLoading(true);
 
     try {
-      const { error } = await validateOtp({ id: otpId, code: otpCode });
+      const { error, data } = await validateOtp({ id: otpId, code: otpCode });
 
       if (error) {
         errorToast('Error', error?.message || 'Invalid verification code');
-      } else {
+      } else if (data?.isValidated) {
         setIsVerified(true);
         successToast('Success', 'Phone number successfully verified');
+      } else {
+        const attemptsMessage =
+          data?.leftAttempts > 0
+            ? `Incorrect code. ${data.leftAttempts} attempts remaining.`
+            : 'No attempts remaining. Please request a new code.';
+
+        errorToast('Error', attemptsMessage);
+
+        // If no attempts left, reset verification process
+        if (data?.leftAttempts === 0) {
+          setOtpCode('');
+          setOtpId(null);
+          setExpirationDate(null);
+          setCodeSent(false);
+        }
       }
     } catch (error) {
       errorToast('Error', 'Failed to verify code');
@@ -95,7 +111,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
 
   if (!codeSent) {
     return (
-      <div className="mt-4 rounded-md border border-gray-200 p-4">
+      <div className="rounded-md border border-gray-200 p-4">
         <div className="mb-3">
           <h4 className="mb-1 text-sm font-semibold">Phone Verification</h4>
           <p className="text-xs text-gray-600">To verify your phone number, we&apos;ll send you a 6-digit code.</p>
@@ -115,7 +131,7 @@ const PhoneValidation = ({ phone, onVerified }) => {
   }
 
   return (
-    <div className="mt-4 rounded-md border border-gray-200 p-4">
+    <div className="rounded-md border border-gray-200 p-4">
       <div className="mb-3">
         <h4 className="mb-1 text-sm font-semibold">Phone Verification</h4>
         <p className="text-xs text-gray-600">
@@ -139,13 +155,15 @@ const PhoneValidation = ({ phone, onVerified }) => {
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">
-                Code expires in: <DynamicCountdownTimer date={expirationDate} variant="secondary" />
-              </span>
+              {expirationDate && (
+                <span className="text-xs text-gray-500">
+                  Code expires in: <DynamicCountdownTimer date={expirationDate} variant="secondary" />
+                </span>
+              )}
               <Button
                 buttonProps={{
                   text: 'Resend Code',
-                  variant: 'link',
+                  variant: 'primary',
                   size: 'small',
                 }}
                 onClick={handleResendOtp}
