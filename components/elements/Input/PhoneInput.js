@@ -36,13 +36,13 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
                 id={name}
                 enableSearch
                 enableAreaCodes
-                disabled={isSubmitting}
+                disabled={isSubmitting || rest.disabled}
                 inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
                   error ? '!border-red' : '!border-gray-darker'
-                }`}
+                } ${isSubmitting || rest.disabled ? '!bg-purple-light !opacity-80' : ''}`}
                 buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
                   error ? '!border-red' : '!border-gray-darker'
-                }`}
+                } ${isSubmitting || rest.disabled ? '!cursor-not-allowed !opacity-80' : ''}`}
               />
               {error && <InputErrorMessage message={error?.message} />}
             </div>
@@ -68,8 +68,12 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
         enableSearch
         enableAreaCodes
         masks={{ ae: '.. .......' }}
-        inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${err ? '!border-red' : '!border-gray-darker'}`}
-        buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${err ? '!border-red' : '!border-gray-darker'}`}
+        inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
+          err ? '!border-red' : '!border-gray-darker'
+        } ${rest.disabled ? '!bg-purple-light !opacity-80' : ''}`}
+        buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
+          err ? '!border-red' : '!border-gray-darker'
+        } ${rest.disabled ? '!cursor-not-allowed !opacity-80' : ''}`}
       />
       {err && <InputErrorMessage message={err?.message} />}
     </div>

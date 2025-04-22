@@ -7,7 +7,7 @@ import { DynamicCountdownTimerPropTypes } from '@/lib/types';
 
 import ClockSVG from '@/assets/images/clock.svg';
 
-const DynamicCountdownTimer = ({ date, autoStart = true }) => {
+const DynamicCountdownTimer = ({ date, autoStart = true, variant = 'primary' }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -22,10 +22,9 @@ const DynamicCountdownTimer = ({ date, autoStart = true }) => {
         if (completed) return <span className="text-red">Expired</span>;
 
         return (
-          <span className={`flex gap-x-1 text-red ${!autoStart && 'opacity-50'}`}>
+          <span className={`flex items-center gap-x-1 text-red ${!autoStart ? 'opacity-50' : ''}`}>
             <ClockSVG className="h-4 w-4 fill-red" viewBox="0 0 14 14" /> {!!hours && `${hours}h`}{' '}
-            {!!minutes && `${minutes}m`}
-            {!hours && !minutes && `${seconds}s`}
+            {!!minutes && `${minutes}m`} {(variant !== 'primary' || (!hours && !minutes)) && `${seconds}s`}
           </span>
         );
       }}

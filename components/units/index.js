@@ -89,6 +89,7 @@ import PaginationComponent from '@/units/PaginationComponent';
 import PartyItem from '@/units/PartyItem';
 import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
+import PhoneValidation from '@/units/PhoneValidation';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
 import RequestDocumentDeletionModal from '@/units/RequestDocumentDeletionModal';
@@ -227,4 +228,5 @@ export {
   FailedOffersFilter,
   IconUpload,
   CountdownTimer,
+  PhoneValidation,
 };

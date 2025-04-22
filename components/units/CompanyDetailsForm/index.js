@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { CompanyDetailsPropTypes } from '@/lib/types';
 
-import { Input } from '@/elements';
+import { Input, PhoneInput } from '@/elements';
 import { disableDefaultBehavior, disablePlusMinusSymbols } from '@/utils/helpers';
 
 const CompanyDetails = ({ notEditable = false }) => {
@@ -20,7 +20,7 @@ const CompanyDetails = ({ notEditable = false }) => {
     formState: { errors, isSubmitting },
   } = useFormContext();
 
-  const { companyYearsOfOperation, pending, pendingRequest, companyName } = getValues();
+  const { companyYearsOfOperation, pending, pendingRequest, companyName, phone, secondaryPhone } = getValues();
 
   useEffect(() => {
     if (inputYearsRef.current) {
@@ -36,38 +36,80 @@ const CompanyDetails = ({ notEditable = false }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-      <Input
-        {...register('companyName')}
-        labelBadge={
-          pendingRequest ? (
-            <p className={classNames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
-              {pending?.name}
-            </p>
-          ) : (
-            '*'
-          )
-        }
-        label="Company name"
-        placeholder="Company"
-        error={errors.companyName?.message}
-        disabled={isSubmitting}
-      />
-      {!notEditable && (
+    <>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <Input
-          ref={inputYearsRef}
-          type="number"
-          name="companyYearsOfOperation"
-          label="Years in operation"
-          labelBadge="*"
-          placeholder="Years"
-          value={inputYearsRef.current?.value ?? ''}
-          onChange={handleNumberOfOperation}
+          {...register('companyName')}
+          labelBadge={
+            pendingRequest ? (
+              <p className={classNames('font-bold', pending?.name === companyName ? 'text-green' : 'text-blue')}>
+                {pending?.name}
+              </p>
+            ) : (
+              '*'
+            )
+          }
+          label="Company name"
+          placeholder="Company"
+          error={errors.companyName?.message}
           disabled={isSubmitting}
-          error={errors.companyYearsOfOperation?.message}
         />
-      )}
-    </div>
+        {!notEditable && (
+          <Input
+            ref={inputYearsRef}
+            type="number"
+            name="companyYearsOfOperation"
+            label="Years in operation"
+            labelBadge="*"
+            placeholder="Years"
+            value={inputYearsRef.current?.value ?? ''}
+            onChange={handleNumberOfOperation}
+            disabled={isSubmitting}
+            error={errors.companyYearsOfOperation?.message}
+          />
+        )}
+      </div>
+      <div className="mt-5 flex flex-col gap-5">
+        <p className="text-sm font-semibold text-black">Company Contact Information</p>
+        <div className="grid gap-5 md:grid-cols-2">
+          <PhoneInput
+            {...register('phone')}
+            onBlur={() => {}}
+            label="Primary phone number"
+            disabled={isSubmitting}
+            error={errors.phone?.message}
+            labelBadge={
+              pendingRequest ? (
+                <p className={classNames('font-bold', pending?.phone === phone ? 'text-green' : 'text-blue')}>
+                  {pending?.phone}
+                </p>
+              ) : (
+                '*'
+              )
+            }
+          />
+          <PhoneInput
+            {...register('secondaryPhone')}
+            onBlur={() => {}}
+            label="Secondary phone number (optional)"
+            disabled={isSubmitting}
+            error={errors.secondaryPhone?.message}
+            labelBadge={
+              pendingRequest && pending?.secondaryPhone ? (
+                <p
+                  className={classNames(
+                    'font-bold',
+                    pending?.secondaryPhone === secondaryPhone ? 'text-green' : 'text-blue'
+                  )}
+                >
+                  {pending?.secondaryPhone}
+                </p>
+              ) : null
+            }
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

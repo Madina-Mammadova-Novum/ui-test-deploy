@@ -38,7 +38,7 @@ const OwnerRegistrationForm = ({ countries }) => {
 
   const schema = yup.object().shape({
     ...companyDetailsSchema(),
-    ...personalDetailsSchema(),
+    ...personalDetailsSchema({ isRegister: true }),
     ...passwordValidationSchema(),
     ...tankerSlotsDetailsSchema(),
     ...termsAndConditionsSchema(),

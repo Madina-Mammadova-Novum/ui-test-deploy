@@ -23,6 +23,7 @@ import HoverTooltip from '@/elements/HoverTooltip';
 import IconComponent from '@/elements/IconComponent';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
+import OTPInput from '@/elements/Input/OTPInput';
 import PasswordInput from '@/elements/Input/PasswordInput';
 import PhoneInput from '@/elements/Input/PhoneInput';
 import RadioInput from '@/elements/Input/RadioInput';
@@ -73,6 +74,7 @@ export {
   TextRow,
   Input,
   PhoneInput,
+  OTPInput,
   Portal,
   Copyright,
   InputErrorMessage,

@@ -402,6 +402,11 @@ export const formattedPhoneNumber = (phone) => {
   return null;
 };
 
+export const ensurePlusPrefix = (phone) => {
+  if (!phone) return '';
+  return phone.startsWith('+') ? phone : `+${phone}`;
+};
+
 export const sortByType = (a, b, ascSort) => {
   const sortOrder = ascSort ? 1 : -1;
   const aType = a.type === SORT_OPTIONS.asc ? 1 : a.type === SORT_OPTIONS.dsc ? -1 : 0;
