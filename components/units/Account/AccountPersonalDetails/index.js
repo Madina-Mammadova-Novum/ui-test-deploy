@@ -17,11 +17,11 @@ const AccountPersonalDetails = ({ user = {} }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const { firstName, lastName, email, primaryPhone, secondaryPhone, pendingRequest } = user;
+  const { firstName, lastName, email, phone, pendingRequest } = user;
 
-  const printPhoneNumber = (phone) => {
-    if (!phone) return '—';
-    return `+${phone}`;
+  const printPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) return '—';
+    return `+${phoneNumber}`;
   };
 
   const handleCancelRequest = async () => {
@@ -81,8 +81,7 @@ const AccountPersonalDetails = ({ user = {} }) => {
           <TextRow title="Email Address">{email || '—'}</TextRow>
         </FieldsetContent>
         <FieldsetContent className="col-start-1 pt-5 3md:col-start-2 3md:pt-0">
-          <TextRow title="Primary phone number">{printPhoneNumber(primaryPhone)}</TextRow>
-          <TextRow title="Secondary phone number">{printPhoneNumber(secondaryPhone)}</TextRow>
+          <TextRow title="Phone number">{printPhoneNumber(phone)}</TextRow>
         </FieldsetContent>
       </FieldsetContentWrapper>
     </FieldsetWrapper>

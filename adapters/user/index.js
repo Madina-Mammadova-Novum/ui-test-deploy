@@ -38,7 +38,7 @@ export function userDetailsAdapter({ data, role }) {
 function userPersonalDetailsAdapter({ data }) {
   if (!data) return {};
 
-  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest, pending } = data;
+  const { name, surname, email, phone, hasPendingPersonalInfoUpdateRequest, pending } = data;
 
   return {
     personalDetails: {
@@ -46,8 +46,7 @@ function userPersonalDetailsAdapter({ data }) {
       lastName: surname,
       fullName: `${name} ${surname}`,
       email,
-      primaryPhone: formattedPhoneNumber(phone),
-      secondaryPhone: formattedPhoneNumber(secondaryPhone),
+      phone: formattedPhoneNumber(phone),
       pendingRequest: hasPendingPersonalInfoUpdateRequest,
       pending,
     },
@@ -75,6 +74,8 @@ function userCompanyDetailsAdapter({ data, role }) {
     hasPendingCompanyInfoUpdateRequest,
     pending,
     numberOfVessels,
+    phone,
+    secondaryPhone,
   } = data;
 
   const formattedCargoDetails = cargoesDetailsAdapter({ data: cargoesDetails });
@@ -119,6 +120,8 @@ function userCompanyDetailsAdapter({ data, role }) {
       correspondenceProvince,
       pending,
       pendingRequest: hasPendingCompanyInfoUpdateRequest,
+      phone: formattedPhoneNumber(phone),
+      secondaryPhone: formattedPhoneNumber(secondaryPhone),
       ...getRoleBasedData(),
     },
   };
@@ -256,13 +259,12 @@ export function updatePasswordAdapter({ data }) {
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email, primaryPhone, secondaryPhone } = data;
+  const { firstName, lastName, email, phone } = data;
   return {
     name: firstName,
     surname: lastName,
     email,
-    phone: `+${primaryPhone}`,
-    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
+    phone: ensurePlusPrefix(phone),
   };
 }
 
