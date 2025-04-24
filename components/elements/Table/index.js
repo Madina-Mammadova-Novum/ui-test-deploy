@@ -5,10 +5,12 @@ import { useSelector } from 'react-redux';
 
 import { TablePropTypes } from '@/lib/types';
 
+import HoverTooltip from '@/elements/HoverTooltip';
 import TableHeader from '@/elements/Table/TableHeader';
 import TableRow from '@/elements/Table/TableRow';
+import TextWithLabel from '@/elements/TextWithLabel';
 import { getUserDataSelector } from '@/store/selectors';
-import { getRoleIdentity, sortTable } from '@/utils/helpers';
+import { getRoleIdentity, processTooltipData, sortTable } from '@/utils/helpers';
 
 const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
   const [sortedData, setSortedData] = useState({ data: [], sortDirection: null, sortBy: null });
@@ -58,15 +60,22 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
     const rowData = rowInfo.data;
     const isFreezed = rowData?.some((cell) => cell?.freezed);
 
-    let freezedText;
+    let freezedText = '';
 
     if (isOwner) {
-      freezedText = 'You or the charterer have entered the prefixture stage with another party for this vessel.';
+      freezedText =
+        'The deal is in a frozen state — either you have shifted to the prefixture stage with another charterer, or the charterer has done so with another vessel. To avoid double commitments, new negotiations are paused until the prefixture is resolved.';
     } else if (isCharterer) {
-      freezedText = 'You or the vessel owner have entered the prefixture stage with another party for this cargo.';
+      freezedText =
+        'The deal is in a frozen state — either you have shifted to the prefixture stage with another vessel, or the vessel owner has done so with another charterer. To avoid double commitments, new negotiations are paused until the prefixture is resolved.';
     } else {
       freezedText = 'Deal is frozen';
     }
+
+    const { disableTooltip, tooltipText, trimmedText } = processTooltipData({
+      text: freezedText,
+      length: 40,
+    });
 
     const newId = rowInfo.originalPosition;
 
@@ -75,9 +84,18 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
         {isFreezed && (
           <tr>
             <td colSpan={headerData.length}>
-              <p className="absolute left-0 z-50 mt-2.5 whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm sm:left-1/4 lg:left-1/3">
-                {freezedText}
-              </p>
+              <div className="absolute left-0 z-50 mt-2.5 w-full sm:left-1/4 lg:left-1/3">
+                <HoverTooltip
+                  className="!-left-10 !top-0 h-auto w-auto !max-w-xs"
+                  data={{ description: tooltipText }}
+                  disabled={disableTooltip}
+                >
+                  <TextWithLabel
+                    text={trimmedText}
+                    customStyles="whitespace-nowrap rounded-lg border border-blue bg-white px-4 py-1 text-xs-sm"
+                  />
+                </HoverTooltip>
+              </div>
             </td>
           </tr>
         )}
