@@ -952,7 +952,7 @@ export const getOfferTotalMinQuantity = ({ data }) => {
 export const getFieldFromKey = (key) => {
   const errorByKey = {
     Email: 'email',
-    Phone: 'primaryPhone',
+    Phone: 'phone',
     SecondaryPhone: 'secondaryPhone',
   };
 

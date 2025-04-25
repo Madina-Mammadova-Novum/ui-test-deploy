@@ -38,7 +38,8 @@ const AccountCompanyDetails = ({ company = {} }) => {
 
   const printPhoneNumber = (phoneNumber) => {
     if (!phoneNumber) return '—';
-    return `+${phoneNumber}`;
+
+    return phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
   };
 
   const handleCancelRequest = async () => {
