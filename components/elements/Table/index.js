@@ -74,7 +74,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
 
     const { disableTooltip, tooltipText, trimmedText } = processTooltipData({
       text: freezedText,
-      length: 40,
+      length: 240,
     });
 
     const newId = rowInfo.originalPosition;
@@ -83,10 +83,11 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
       <Fragment key={newId}>
         {isFreezed && (
           <tr>
-            <td colSpan={headerData.length}>
-              <div className="absolute left-0 z-50 mt-2.5 w-full sm:left-1/4 lg:left-1/3">
+            <td className="!z-10" colSpan={headerData.length}>
+              <div className="absolute left-0 z-50 mt-2.5 flex !w-full justify-center">
                 <HoverTooltip
-                  className="!-left-10 !top-0 h-auto w-auto !max-w-xs"
+                  className="!-top-7 !left-6 !z-50 h-auto w-full max-w-[50.125rem]"
+                  groupClassName="mx-28 my-auto max-w-[53.125rem]"
                   data={{ description: tooltipText }}
                   disabled={disableTooltip}
                 >
