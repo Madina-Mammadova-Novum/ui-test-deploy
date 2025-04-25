@@ -23,7 +23,7 @@ const Chat = ({ token }) => {
           variant="default"
           onClick={handleOpen}
           counter={messageCount}
-          className="fixed bottom-3 right-3 z-100 block md:z-10"
+          className="fixed bottom-3 right-3 z-10 block"
         />
         <AuthChat opened={opened} token={token} />
       </>
