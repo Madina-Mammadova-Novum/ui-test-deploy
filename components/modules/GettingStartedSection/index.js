@@ -9,7 +9,7 @@ const GettingStartedSection = () => {
   return (
     <article className="prose pb-5">
       <h1>Registration Successful!</h1>
-      <p>Thank you for registering with ShipLink!</p>
+      <p>Thank you for registering with Ship.Link!</p>
       <h2>What&apos;s Next?</h2>
       <ol>
         <li>
@@ -54,7 +54,7 @@ const GettingStartedSection = () => {
         </li>
       </ol>
 
-      <p>We&apos;re excited to have you on board and look forward to helping you achieve your goals with ShipLink.</p>
+      <p>We&apos;re excited to have you on board and look forward to helping you achieve your goals with Ship.Link.</p>
 
       <h2>Stay Connected</h2>
 

@@ -66,7 +66,7 @@ export const metaData = (props) => {
   const { metaTitle, metaDescription, keywords, metaRobots, canonicalURL } = seo; // todo: metaViewport isset in seo but temporary not use
   const title = metaTitle !== null ? metaTitle : pageTitle;
   const description = metaDescription !== null ? metaDescription : '';
-  const siteName = 'ShipLink';
+  const siteName = 'Ship.Link';
   const url = getPublicUrl(slug);
 
   return {
@@ -78,8 +78,8 @@ export const metaData = (props) => {
     applicationName: siteName,
     referrer: 'origin-when-cross-origin',
     // authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],
-    url: 'https://shiplink.oyihost.com',
-    creator: 'ShipLink',
+    url: 'https://ship.link',
+    creator: 'Ship.Link',
     // publisher: 'Sebastian Markbåge',
     alternates: {
       canonical: canonicalURL !== null ? canonicalURL : url,

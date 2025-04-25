@@ -40,7 +40,13 @@ const WhyWeAreBetterBlock = ({ values }) => {
       />
       <div className="container mx-auto grid max-w-[960px] gap-10 md:grid-cols-3">
         <div className="flex items-center justify-center md:col-span-1">
-          <NextImage src="/images/shiplink.png" alt="Shiplink" width={200} height={100} customStyles="object-contain" />
+          <NextImage
+            src="/images/shiplink.png"
+            alt="Ship.Link image"
+            width={200}
+            height={100}
+            customStyles="object-contain"
+          />
         </div>
         <div className="md:col-span-2">{values && values.length > 1 && printItem(values[1])}</div>
       </div>
