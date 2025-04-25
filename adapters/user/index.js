@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { ensurePlusPrefix, formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
+import { ensurePlusPrefix, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -46,7 +46,7 @@ function userPersonalDetailsAdapter({ data }) {
       lastName: surname,
       fullName: `${name} ${surname}`,
       email,
-      phone: formattedPhoneNumber(phone),
+      phone,
       pendingRequest: hasPendingPersonalInfoUpdateRequest,
       pending,
     },
@@ -120,8 +120,8 @@ function userCompanyDetailsAdapter({ data, role }) {
       correspondenceProvince,
       pending,
       pendingRequest: hasPendingCompanyInfoUpdateRequest,
-      phone: formattedPhoneNumber(phone),
-      secondaryPhone: formattedPhoneNumber(secondaryPhone),
+      phone,
+      secondaryPhone,
       ...getRoleBasedData(),
     },
   };
