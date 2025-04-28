@@ -1,0 +1,54 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# API Architecture
+
+This document summarizes the API architecture guidelines for the ShipLink platform, based on [docs/architecture/api.md](mdc:docs/architecture/api.md).
+
+## Base Structure
+
+- **Root Directory**: `pages/api`
+- **API Version**: v1
+- **Key Endpoint Groups**:
+  - `/auth/*`
+  - `/calculator/freightestimation/*`
+  - `/v1/owner/*`
+  - `/v1/charterer/*`
+  - `/v1/cargotypes/*`
+  - `/v1/*/vessels/*`
+  - `/v1/*/deals/*`
+  - `/v1/*/account/*`
+  - `/v1/*/deals/negotiating`
+
+## Handlers
+
+- **Pattern**: Use `responseHandler`.
+- **Mandatory Checks**:
+  - Request method validation
+  - Authorization checks
+- **Requirements**:
+  - Must use a data adapter.
+- **Error Handling**:
+  - Provide clear status codes and error messages.
+  - Include detailed descriptions for errors.
+  - Log all errors.
+
+## Adapters
+
+- **Location**: `/adapters/${domain}` (e.g., `/adapters/vessel`)
+- **Naming Convention**: `${domain}${Direction}Adapter` (e.g., `vesselRequestAdapter`, `dealResponseAdapter`)
+- **Responsibilities**:
+  - Input validation
+  - Data transformation between API and service layers
+  - Specific error handling related to data adaptation
+
+## Service Layer Interaction
+
+- **Location**: `services/${domain}` (e.g., `services/vessel`)
+- **Purpose**: Contains the core business logic for each domain.
+- **Flow**: API Handlers (`pages/api`) utilize Adapters (`/adapters`) to validate and transform data before calling functions in the corresponding Service (`/services`). The Service layer then handles the primary logic and data interactions.
+
+
+

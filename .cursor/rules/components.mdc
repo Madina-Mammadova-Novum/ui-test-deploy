@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Component Architecture
+
+This rule outlines the component structure for the ShipLink frontend, derived from [docs/architecture/components.md](mdc:docs/architecture/components.md).
+
+## Component Types & Locations
+
+1.  **Module Components**
+    *   **Location**: `/components/modules/${domain}` (e.g., `/components/modules/vessel`)
+    *   **Purpose**: Handle complex domain-specific business logic.
+    *   **Responsibilities**: State management, API integration, role-based rendering.
+
+2.  **Unit Components**
+    *   **Location**: `/components/units`
+    *   **Purpose**: Reusable UI components with moderate logic.
+    *   **Rules**: Max medium logic complexity, require PropTypes and defaultProps, use camelCase for props.
+
+3.  **Element Components**
+    *   **Location**: `/components/elements`
+    *   **Purpose**: Basic, reusable UI building blocks.
+    *   **Rules**: No business logic, purely presentational.
+
+## Naming Conventions
+
+- **General Pattern**: PascalCase (`^[A-Z][a-zA-Z]+$`).
+- **Suffixes**: Use descriptive suffixes like `Content`, `Form`, `Modal`, `List`, `Details`, `Container`, `Wrapper`.
+- **Maritime Components**: Use domain prefixes:
+    - `Vessel${Purpose}` (e.g., `VesselDetails`)
+    - `Cargo${Purpose}` (e.g., `CargoForm`)
+    - `${Stage}Negotiation` (e.g., `OfferNegotiation`)
+

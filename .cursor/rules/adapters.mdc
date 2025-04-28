@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Adapter Layer (`adapters/`)
+
+This rule defines the purpose and conventions for the adapter layer within the ShipLink application, which bridges the gap between API handlers and the service layer.
+
+## Purpose
+
+- Adapters are responsible for validating incoming API request data and transforming data structures between the API layer (`pages/api`) and the Service layer (`services/`).
+- They ensure that data passed to the service layer meets the required format and business rules, and that data returned from the service layer is appropriately formatted for the API response.
+
+## Location
+
+- Adapters should reside in the `/adapters` directory, typically organized into subdirectories based on domain.
+- *Example*: Adapters related to vessel data would be in `adapters/vessel/`.
+
+## Naming Convention
+
+- Adapters should follow the naming pattern: `${domain}${Direction}Adapter`.
+- The `Direction` indicates whether the adapter handles request data (`Request`) or response data (`Response`).
+  - *Example*: `vesselRequestAdapter` (handles incoming vessel API data), `dealResponseAdapter` (formats deal data for API response).
+
+## Responsibilities
+
+- **Input Validation**: Validate data received from API requests against defined schemas or rules (e.g., using Yup).
+- **Data Transformation**: Convert data structures between the API format and the format expected by the service layer (and vice-versa for responses).
+- **Error Handling**: Handle specific errors related to data validation or transformation, potentially mapping them to appropriate API error responses.
+
+## Interaction Flow (Reference: [API Architecture Rules](mdc:.cursor/rules/api.mdc))
+
+1. API Handler receives request.
+2. **Request Adapter** validates and transforms request data.
+3. Request Adapter calls the appropriate Service function.
+4. Service executes logic and returns data.
+5. **Response Adapter** (if needed) transforms service data for the API response.
+6. API Handler sends the response.
+

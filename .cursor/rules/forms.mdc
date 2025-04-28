@@ -1,0 +1,55 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Form Handling with React Hook Form & Yup
+
+This rule outlines the conventions for implementing forms using `react-hook-form` and `yup` for validation, referencing custom hooks and centralized schemas.
+
+## Core Libraries
+
+- **Form Management**: `react-hook-form`
+- **Schema Validation**: `yup`
+
+## Validation Schemas
+
+- **Location**: All Yup validation schemas should be defined and exported from `lib/schemas.js`.
+- **Structure**: Define schemas as functions (e.g., `loginSchema()`, `offerSchema(props)`). This allows for reusability and parameterization.
+- **Organization**: Group related schema logic within `lib/schemas.js`.
+
+## Form Initialization
+
+- **Primary Hook**: Use the custom hook `useHookFormParams` (defined in `utils/hooks.js`) to initialize forms in your components.
+- **Integration**: Pass the corresponding Yup schema from `lib/schemas.js` to the `schema` parameter of `useHookFormParams`. This hook internally uses `yupResolver` to connect the schema to `react-hook-form`.
+- **Parameters**:
+  - `state`: Default values for the form fields.
+  - `schema`: The Yup validation schema function call (e.g., `loginSchema()`).
+  - `mode`: The validation mode (e.g., `'onSubmit'`, `'onChange'`).
+
+```jsx
+// Example usage in a component
+import { useHookFormParams } from '@/utils/hooks';
+import { loginSchema } from '@/lib/schemas';
+
+const MyFormComponent = () => {
+  const methods = useHookFormParams({
+    state: { email: '', password: '' },
+    schema: loginSchema(),
+    mode: 'onSubmit',
+  });
+
+  // Use methods like methods.register, methods.handleSubmit, methods.formState.errors
+  // ...
+}
+```
+
+## Accessing Form Context
+
+- **Context Hook**: When using `FormProvider` from `react-hook-form` to wrap parts of your form, use the custom hook `useHookForm` (defined in `utils/hooks.js`) within child components to access form methods and state (e.g., `register`, `formState`, `watch`).
+
+## Best Practices
+
+- Keep validation logic purely within the Yup schemas in `lib/schemas.js`.
+- Leverage the custom hooks `useHookFormParams` and `useHookForm` for consistent interaction with `react-hook-form`.
+

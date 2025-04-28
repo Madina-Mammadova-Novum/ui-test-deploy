@@ -1,0 +1,39 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Service Layer (`services/`)
+
+This rule defines the purpose and conventions for the service layer within the ShipLink application.
+
+## Purpose
+
+- The `services/` directory contains the core business logic for different domains of the application (e.g., vessel management, deal negotiation, user accounts).
+- Service functions encapsulate specific operations or workflows, interacting with data sources or other services as needed.
+- They are typically called by API Handlers (via Adapters) or other parts of the application that need to perform business operations.
+
+## Location and Organization
+
+- Services should be organized into subdirectories based on their domain.
+  - *Example*: Logic related to vessels resides in `services/vessel/`, logic for user accounts in `services/account/`.
+- Each file within a domain subdirectory might represent a specific entity or a set of related functionalities.
+
+## Interaction Flow
+
+- As outlined in the [API Architecture Rules](mdc:.cursor/rules/api.mdc), the typical flow involves:
+  1.  API Handler (`pages/api`) receives a request.
+  2.  An Adapter (`adapters/`) validates and transforms the request data.
+  3.  The Adapter calls the appropriate function within a Service (`services/${domain}`).
+  4.  The Service executes the business logic.
+  5.  The Service returns data (or indicates success/failure).
+  6.  An Adapter transforms the response data (if necessary).
+  7.  The API Handler sends the final response.
+
+## Responsibilities
+
+- Implementing specific business rules and logic.
+- Interacting with databases or external APIs (potentially through dedicated clients or repositories, although not explicitly defined yet).
+- Performing complex calculations or data manipulations relevant to the domain.
+- Ensuring data consistency and integrity for the operations they handle.
+

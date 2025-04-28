@@ -7,8 +7,11 @@ The ShipLink API is built to handle complex maritime B2B operations, connecting 
 - Root: `pages/api`
 - Version: v1
 - Endpoints:
+  - `/auth/*`
+  - `/calculator/freightestimation/*`
   - `/v1/owner/*`
   - `/v1/charterer/*`
+  - `/v1/cargotypes/*`
   - `/v1/*/vessels/*`
   - `/v1/*/deals/*`
   - `/v1/*/account/*`

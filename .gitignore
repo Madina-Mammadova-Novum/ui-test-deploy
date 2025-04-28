@@ -41,11 +41,3 @@ next-env.d.ts
 /public/robots.txt
 /public/sitemap.xml
 /public/sitemap*.xml
-
-# cursor rules
-.cursorrules
-
-# Changelog and logs
-/logs
-/logs/deniz-changelog
-/logs/deniz-changelog/**/*
