@@ -6,10 +6,8 @@ import PropTypes from 'prop-types';
 
 import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import { Button, OTPInput } from '@/elements';
-import { sendOtp, validateOtp } from '@/services';
 import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
-import { ensurePlusPrefix } from '@/utils/helpers';
-import { errorToast, successToast } from '@/utils/hooks';
+import { sendOtpCode, verifyOtpCode } from '@/utils/otp';
 
 const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,23 +35,16 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
 
     setIsLoading(true);
 
-    try {
-      const { error, data } = await sendOtp({ receiver: ensurePlusPrefix(phone) });
-
-      if (error) {
-        errorToast('Error', error?.message || 'Failed to send verification code');
-      } else {
+    await sendOtpCode({
+      phone,
+      onSuccess: (data) => {
         setOtpId(data.otpId);
         setExpirationDate(new Date(data.expirationDate) || null);
         setCodeSent(true);
         onSendOtp(true);
-        successToast('Success', 'Verification code sent to your phone');
-      }
-    } catch (error) {
-      errorToast('Error', 'Failed to send verification code');
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      onComplete: () => setIsLoading(false),
+    });
   };
 
   const handleVerifyOtp = async () => {
@@ -61,35 +52,23 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
 
     setIsLoading(true);
 
-    try {
-      const { error, data } = await validateOtp({ id: otpId, code: otpCode });
-
-      if (error) {
-        errorToast('Error', error?.message || 'Invalid verification code');
-      } else if (data?.isValidated) {
+    await verifyOtpCode({
+      otpId,
+      code: otpCode,
+      onSuccess: () => {
         setIsVerified(true);
-        successToast('Success', 'Phone number successfully verified');
-      } else {
-        const attemptsMessage =
-          data?.leftAttempts > 0
-            ? `Incorrect code. ${data.leftAttempts} attempts remaining.`
-            : 'No attempts remaining. Please request a new code.';
-
-        errorToast('Error', attemptsMessage);
-
+      },
+      onError: (error) => {
         // If no attempts left, reset verification process
-        if (data?.leftAttempts === 0) {
+        if (error.leftAttempts === 0) {
           setOtpCode('');
           setOtpId(null);
           setExpirationDate(null);
           setCodeSent(false);
         }
-      }
-    } catch (error) {
-      errorToast('Error', 'Failed to verify code');
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      onComplete: () => setIsLoading(false),
+    });
   };
 
   const handleResendOtp = () => {
