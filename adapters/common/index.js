@@ -45,3 +45,13 @@ export const dataObjectAdapter = (data) => {
   }
   return { data };
 };
+
+/**
+ * Returns null if data is null/undefined, otherwise returns data wrapped in {data}
+ * @param {*} data - The data to check
+ * @returns {Object|null} - Object with data property or null
+ */
+export const nullableDataObjectAdapter = (data) => {
+  if (!data) return null;
+  return { data };
+};

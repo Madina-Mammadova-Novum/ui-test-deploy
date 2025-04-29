@@ -2,6 +2,7 @@
  * Utility functions for OTP (One-Time Password) operations
  */
 
+import { nullableDataObjectAdapter } from '@/adapters/common';
 import { sendOtp, validateOtp } from '@/services';
 import { ensurePlusPrefix } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -39,7 +40,7 @@ export const sendOtpCode = async ({
       successToast('Success', 'Verification code sent to your phone');
     }
     onSuccess(data);
-    return { data };
+    return nullableDataObjectAdapter(data);
   } catch (error) {
     if (showToasts) {
       errorToast('Error', 'Failed to send verification code');
@@ -87,7 +88,7 @@ export const verifyOtpCode = async ({
         successToast('Success', 'Phone number successfully verified');
       }
       onSuccess(data);
-      return { data };
+      return nullableDataObjectAdapter(data);
     }
 
     // Handle unsuccessful validation but not an error

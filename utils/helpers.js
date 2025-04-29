@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
 
+import { nullableDataObjectAdapter } from '@/adapters/common';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { ERROR_MESSAGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
@@ -196,7 +197,7 @@ export function checkObjectValues({ data }) {
     return { message: `Error: One or more values not founded.` };
   }
 
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function formatDate(dateString) {
