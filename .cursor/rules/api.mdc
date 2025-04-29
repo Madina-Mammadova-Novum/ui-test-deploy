@@ -39,10 +39,21 @@ This document summarizes the API architecture guidelines for the ShipLink platfo
 
 - **Location**: `/adapters/${domain}` (e.g., `/adapters/vessel`)
 - **Naming Convention**: `${domain}${Direction}Adapter` (e.g., `vesselRequestAdapter`, `dealResponseAdapter`)
+- **Common Adapters**: For simple data handling patterns, use standardized common adapters:
+  - `arrayAdapter`: For null/undefined array handling
+  - `objectAdapter`: For null/undefined object handling
+  - `nullAdapter`: For returning null on null/undefined data
+  - `dataObjectAdapter`: For wrapping data in a data property
 - **Responsibilities**:
   - Input validation
   - Data transformation between API and service layers
   - Specific error handling related to data adaptation
+- **Import Pattern**: Import adapters using the absolute path:
+  ```javascript
+  import { adapterName } from '@/adapters/common';
+  // or from the main adapters export
+  import { adapterName } from '@/adapters';
+  ```
 
 ## Service Layer Interaction
 

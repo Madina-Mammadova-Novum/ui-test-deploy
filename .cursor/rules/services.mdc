@@ -28,7 +28,16 @@ This rule defines the purpose and conventions for the service layer within the S
   4.  The Service executes the business logic.
   5.  The Service returns data (or indicates success/failure).
   6.  An Adapter transforms the response data (if necessary).
+      - For common data handling patterns, use standardized adapters like `arrayAdapter`, `objectAdapter`, etc.
   7.  The API Handler sends the final response.
+
+## Data Handling
+
+- Services focus on business logic rather than API response formatting.
+- When returning data from services, follow these principles:
+  - Return raw data in the format needed by the domain logic
+  - Leave null/undefined handling to the adapter layer
+  - The adapter layer will apply appropriate common adapters (`arrayAdapter`, `objectAdapter`, etc.) as needed
 
 ## Responsibilities
 

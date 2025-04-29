@@ -1,4 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
+import { nullAdapter } from '@/adapters/common';
 import { countriesAdapter, countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import {
@@ -159,13 +160,11 @@ export function responseAcceptOfferAdapter({ data }) {
 }
 
 export function responseOfferDetailsAdapter({ data }) {
-  if (!data) return null;
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseSendCounterofferAdapter({ data }) {
-  if (!data) return null;
-  return data;
+  return nullAdapter(data);
 }
 
 export function offerDetailsAdapter({ data, role }) {

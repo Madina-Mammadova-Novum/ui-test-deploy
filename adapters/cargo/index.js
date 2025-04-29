@@ -1,13 +1,7 @@
-export const responseCargoSentOffersAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
-};
-export const responseCargoCounteroffersAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
-};
+import { arrayAdapter } from '@/adapters/common';
 
-export const responseCargoFailedOffersAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
-};
+export const responseCargoSentOffersAdapter = ({ data }) => arrayAdapter(data);
+
+export const responseCargoCounteroffersAdapter = ({ data }) => arrayAdapter(data);
+
+export const responseCargoFailedOffersAdapter = ({ data }) => arrayAdapter(data);

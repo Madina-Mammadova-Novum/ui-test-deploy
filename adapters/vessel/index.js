@@ -1,4 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
+import { nullAdapter } from '@/adapters/common';
 import { countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import { getLocode, trimTonValue } from '@/utils/helpers';
@@ -332,31 +333,21 @@ export function responseGetUnassignedVesselsAdapter({ data }) {
   return data.map((element) => unassignedVesselsAdapter({ data: element }));
 }
 export function responseGetVesselDetailsAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseGetVesselCategoryOneAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 export function responseGetVesselCategoryTwoAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseDeleteVesselFromFleetAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 export function responseDeleteVesselAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 export function responseGetVesselQ88Adapter({ data }) {
   if (!data) return null;
