@@ -1,3 +1,4 @@
+import { objectAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
@@ -508,6 +509,5 @@ export const failTheSubsAdapter = ({ data }) => {
 };
 
 export const responseFailTheSubsAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
+  return objectAdapter(data);
 };

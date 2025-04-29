@@ -1,3 +1,4 @@
+import { arrayAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, NO_DATA_MESSAGE, ROLES, TYPE } from '@/lib/constants';
@@ -625,34 +626,26 @@ export const failedTabDataByRole = ({ data, role }) => {
 };
 
 export const responseOwnerNegotiatingAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 export const responseChartererNegotiatingAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseIncomingOffersAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseFailedOffersAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseOffersAdapter = ({ data }) => {
-  if (!data) return [];
-
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseSentCounteroffersAdapter = ({ data }) => {
-  if (!data) return [];
-
-  return data;
+  return arrayAdapter(data);
 };
 
 export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {

@@ -1,5 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
-import { nullAdapter } from '@/adapters/common';
+import { nullAdapter, objectAdapter } from '@/adapters/common';
 import { countriesAdapter, countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import {
@@ -102,8 +102,7 @@ export function sendCounterofferAdapter({ data }) {
 }
 
 export function responseSendOfferAdapter({ data }) {
-  if (!data) return null;
-  return data;
+  return nullAdapter(data);
 }
 
 export function sendOfferValidationAdapter({ data }) {
@@ -140,8 +139,7 @@ export function declineOfferAdapter({ data }) {
 }
 
 export function responseDeclineOfferAdapter({ data }) {
-  if (!data) return null;
-  return data;
+  return nullAdapter(data);
 }
 
 export function acceptOfferAdapter({ data }) {
@@ -155,8 +153,7 @@ export function acceptOfferAdapter({ data }) {
 }
 
 export function responseAcceptOfferAdapter({ data }) {
-  if (!data) return null;
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseOfferDetailsAdapter({ data }) {
@@ -473,8 +470,7 @@ export const requestExtendCountdownAdapter = ({ data }) => {
 };
 
 export const responseExtendCountdownAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
+  return objectAdapter(data);
 };
 
 export const requestOnSubsCountdownExtensionAdapter = ({ data }) => {
@@ -487,8 +483,7 @@ export const requestOnSubsCountdownExtensionAdapter = ({ data }) => {
 };
 
 export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
+  return objectAdapter(data);
 };
 
 export const getPrefilledFormDataAdapter = ({ data }) => {

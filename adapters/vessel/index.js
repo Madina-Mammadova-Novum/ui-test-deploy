@@ -166,9 +166,7 @@ export function requestAddVesselToFleetAdapter({ data }) {
 }
 
 export function responseAddVesselByImoAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function requestAddVesselManuallyAdapter({ data }) {
@@ -317,15 +315,11 @@ export function unassignedVesselsAdapter({ data }) {
 }
 
 export function responseAddVesselManuallyAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseGetVesselTypesAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 export function responseGetUnassignedVesselsAdapter({ data }) {
   if (!data) return null;
@@ -339,6 +333,7 @@ export function responseGetVesselDetailsAdapter({ data }) {
 export function responseGetVesselCategoryOneAdapter({ data }) {
   return nullAdapter(data);
 }
+
 export function responseGetVesselCategoryTwoAdapter({ data }) {
   return nullAdapter(data);
 }
@@ -346,9 +341,11 @@ export function responseGetVesselCategoryTwoAdapter({ data }) {
 export function responseDeleteVesselFromFleetAdapter({ data }) {
   return nullAdapter(data);
 }
+
 export function responseDeleteVesselAdapter({ data }) {
   return nullAdapter(data);
 }
+
 export function responseGetVesselQ88Adapter({ data }) {
   if (!data) return null;
   const {
@@ -706,13 +703,9 @@ export const chartererInformationAdapter = (data) => {
 };
 
 export function responseAddSavedSearchAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseGetSavedSearchAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }

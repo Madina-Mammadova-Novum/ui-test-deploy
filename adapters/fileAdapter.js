@@ -1,3 +1,4 @@
+import { nullAdapter } from '@/adapters/common';
 import { FILE_CODE_ERRORS } from '@/lib/constants';
 import { uploadData } from '@/services/upload';
 import { makeId } from '@/utils/helpers';
@@ -49,19 +50,13 @@ export const uploadDataAdapter = ({ data }) => {
 };
 
 export const uploadResponseAdapter = ({ data }) => {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 };
 
 export const responseDocumentUploadAdapter = ({ data }) => {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 };
 
 export const responseDocumentDeletionAdapter = ({ data }) => {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 };

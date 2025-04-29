@@ -1,3 +1,4 @@
+import { arrayAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
@@ -399,18 +400,15 @@ export const prefixtureDetailsAdapter = ({ data, role }) => {
 };
 
 export const responseOwnerPrefixtureAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseChartererPrefixtureAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseOwnerAcceptPrefixtureAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const requestAcceptPrefixtureAdapter = ({ data }) => {
