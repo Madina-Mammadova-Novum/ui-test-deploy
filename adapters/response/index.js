@@ -1,15 +1,8 @@
+import { dataObjectAdapter } from '@/adapters/common';
 import { SYSTEM_ERROR } from '@/lib/constants';
 import { isEmpty } from '@/utils/helpers';
 
-export const responseAdapter = (data) => {
-  if (!data) return { data: null };
-
-  if (Object.prototype.hasOwnProperty.call(data, 'data')) {
-    return data;
-  }
-
-  return { data };
-};
+export const responseAdapter = dataObjectAdapter;
 
 const errorAdapter = (error) => {
   if (error === undefined || error === null || error === '') return [];

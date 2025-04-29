@@ -1,4 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
+import { nullAdapter } from '@/adapters/common';
 import { countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import { getLocode, trimTonValue } from '@/utils/helpers';
@@ -165,9 +166,7 @@ export function requestAddVesselToFleetAdapter({ data }) {
 }
 
 export function responseAddVesselByImoAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function requestAddVesselManuallyAdapter({ data }) {
@@ -316,15 +315,11 @@ export function unassignedVesselsAdapter({ data }) {
 }
 
 export function responseAddVesselManuallyAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseGetVesselTypesAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 export function responseGetUnassignedVesselsAdapter({ data }) {
   if (!data) return null;
@@ -332,32 +327,25 @@ export function responseGetUnassignedVesselsAdapter({ data }) {
   return data.map((element) => unassignedVesselsAdapter({ data: element }));
 }
 export function responseGetVesselDetailsAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseGetVesselCategoryOneAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
-export function responseGetVesselCategoryTwoAdapter({ data }) {
-  if (!data) return null;
 
-  return data;
+export function responseGetVesselCategoryTwoAdapter({ data }) {
+  return nullAdapter(data);
 }
 
 export function responseDeleteVesselFromFleetAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
+
 export function responseDeleteVesselAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
+
 export function responseGetVesselQ88Adapter({ data }) {
   if (!data) return null;
   const {
@@ -715,13 +703,9 @@ export const chartererInformationAdapter = (data) => {
 };
 
 export function responseAddSavedSearchAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function responseGetSavedSearchAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }

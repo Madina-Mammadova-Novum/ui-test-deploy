@@ -1,3 +1,4 @@
+import { arrayAdapter } from '@/adapters/common';
 import { countryAdapter } from '@/adapters/country';
 import { terminalsAdapter } from '@/adapters/terminal';
 
@@ -58,6 +59,5 @@ export const portOptionsAdapter = ({ data }) => {
 };
 
 export const dischargeOptionsAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };

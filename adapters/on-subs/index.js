@@ -1,3 +1,4 @@
+import { objectAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
@@ -64,7 +65,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Status',
       textStyles: isFailed ? 'text-red' : 'text-yellow',
       freezed: frozenAt,
-      text: isFailed ? 'Failed' : 'Countdown freezed',
+      text: isFailed ? 'Failed' : 'Countdown frozen',
       isFailed: isFailed || frozenAt,
     },
   ];
@@ -135,7 +136,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Status',
       textStyles: isFailed ? 'text-red' : 'text-yellow',
       freezed: frozenAt,
-      text: isFailed ? 'Failed' : 'Countdown freezed',
+      text: isFailed ? 'Failed' : 'Countdown frozen',
       isFailed: isFailed || frozenAt,
     },
   ];
@@ -508,6 +509,5 @@ export const failTheSubsAdapter = ({ data }) => {
 };
 
 export const responseFailTheSubsAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
+  return objectAdapter(data);
 };

@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Utilities (`utils/`)
+
+This rule defines the purpose and conventions for the `utils/` directory.
+
+## Purpose
+
+- The `utils/` directory is intended for pure, reusable helper functions that are framework-agnostic and can be used across different parts of the application.
+- These functions should be small, focused, and perform a single task (e.g., data formatting, validation helpers, string manipulation).
+
+## Conventions
+
+- **Organization**: Group related utility functions into logical files (e.g., `dateUtils.js`, `stringUtils.js`, `validationUtils.js`).
+- **Naming**: Use clear, descriptive names for files and functions (camelCase for functions).
+- **Purity**: Functions in `utils/` should ideally be pure, meaning they produce the same output for the same input and have no side effects.
+- **Dependencies**: Avoid dependencies on specific components, services, or store logic within `utils/` functions. If a function requires complex application state or logic, it might belong elsewhere.
+

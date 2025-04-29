@@ -1,0 +1,50 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Code Style Conventions
+
+This rule outlines key code style conventions enforced by ESLint ([.eslintrc](mdc:.eslintrc)) and Prettier, complementing the [Technical Stack Rules](mdc:.cursor/rules/stack.mdc).
+
+## Import Order
+
+Imports must follow a specific order enforced by the `import/order` ESLint rule. Adhering to this order improves readability and consistency. The general order is:
+
+1.  **Built-in Modules** (e.g., `react`, `path`, `fs`)
+2.  **External Packages** (e.g., `lodash`, `axios`, `@reduxjs/toolkit`)
+    *   Includes aliased paths like `@/*`.
+3.  **Internal Modules** (Using path groups defined in `.eslintrc`)
+    *   `hooks/**`
+    *   `hocs/**`
+    *   `helpers/**`
+    *   `resources/**`
+    *   `services/**`
+    *   `store/**`
+4.  **Parent/Sibling/Index Imports**
+    *   `components/**` falls into this group.
+    *   Relative paths like `../`, `./`
+5.  **Object Imports** (`import { type } from ...`)
+6.  **Type Imports** (`import type ...`)
+7.  **Unknown** (Less common)
+
+**Note:** Newlines are required between different groups.
+
+While Prettier and ESLint format on save (via Husky hooks), understanding this order helps when manually adding imports.
+
+## PropTypes
+
+- As specified in the [Component Architecture Rules](mdc:.cursor/rules/components.mdc) and enforced by `.eslintrc` (`react/prop-types`), PropTypes are **required** for all component props **except** for `children`.
+
+## Other Conventions
+
+- **Formatting**: Code formatting (spacing, line breaks, semicolons, etc.) is handled automatically by Prettier on save (via Husky hooks). Key configurations from [.prettierrc](mdc:.prettierrc) include:
+    - `printWidth: 120`
+    - `singleQuote: true`
+    - `trailingComma: "es5"`
+    - `tabWidth: 2`
+    - `semi: true`
+    - Tailwind CSS class sorting via `prettier-plugin-tailwindcss`.
+- **Linting**: Refer to the full [.eslintrc](mdc:.eslintrc) for specific linting rules (e.g., `no-console`, max classes, naming conventions enforced by Airbnb config).
+
+

@@ -7,6 +7,10 @@ import { Alert, NotificationAlert } from '@/elements';
 import { COLLECTIONS_TYPES, NAVIGATIONS } from '@/lib';
 import { toCamelCase } from '@/utils/helpers';
 
+// Re-export utilities from new modules
+export * from './apiResponse';
+export * from './otp';
+
 export function getStrapiMedia(url, query = '') {
   if (url == null) {
     return null;

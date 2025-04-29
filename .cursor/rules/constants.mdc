@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Constants
+
+This rule defines the conventions for defining and using constants within the ShipLink application.
+
+## Location
+
+- Application-wide constants should primarily reside in the `lib/constants/` directory.
+- Group related constants into logical files within this directory (e.g., `apiEndpoints.js`, `maritimeUnits.js`, `uiMessages.js`).
+- Constants specific to a single component or module may be defined within that module if they are not reused elsewhere, but prefer the central location for broader constants.
+
+## Naming Convention
+
+- Constants must use `SCREAMING_SNAKE_CASE`.
+- *Example*: `MAX_RETRIES`, `DEFAULT_TIMEOUT_MS`, `NEGOTIATING_TABS`.
+
+## Purpose
+
+- Use constants to represent fixed values like configuration settings, API endpoints, UI text strings, magic numbers, or enumerated types.
+- Centralizing constants improves maintainability and reduces errors caused by typos or inconsistent values.
+
+## Example Usage (from `lib.mdc`)
+
+- The `NEGOTIATING_TABS` constant, likely defined in `lib/constants/`, is used in `components/modules/Negotiating/index.js`.
+

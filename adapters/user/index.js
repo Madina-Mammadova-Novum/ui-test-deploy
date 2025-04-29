@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+import { nullableDataObjectAdapter, nullAdapter } from '@/adapters/common';
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
 import { ensurePlusPrefix, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
@@ -435,7 +436,7 @@ export function loginResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function refreshTokenAdapter({ data }) {
@@ -483,15 +484,11 @@ export function positionsAdapter({ data }) {
 }
 
 export function positionByIdAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function updateVesselPortAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function signupResponseAdapter({ data }) {
@@ -507,7 +504,7 @@ export function confirmEmailResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function signInAdapter({ data }) {
@@ -566,25 +563,17 @@ export function sessionAdapter({ token = null }) {
 }
 
 export function accountPersonalDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function accountCompanyUpdateDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function accountDeleteDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function accountCargoesDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }

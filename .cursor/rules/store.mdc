@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# State Management with Redux Toolkit
+
+This rule outlines the guidelines for using Redux Toolkit for state management in the ShipLink platform, complementing the information in [docs/technical/stack.md](mdc:docs/technical/stack.md).
+
+## Store Structure (`store/`)
+
+- **Configuration**: The main store configuration is typically found in `store/store.js`, including middleware (like Thunk for async actions) and integration with tools like Redux Persist.
+- **Reducers/Slices**: Business logic for state updates resides in slices, likely located within `store/reducers/` or `store/entities/`. Slices should follow standard Redux Toolkit patterns (`createSlice`).
+- **Selectors**: Memoized selectors, created using `createSelector` (from Reselect, included with Redux Toolkit), are defined in `store/selectors/`. Selectors encapsulate the logic for deriving data from the state.
+  - **Naming**: Selectors should generally follow a `get<StateSlice><Data>` pattern (e.g., `getNegotiatingDataSelector`).
+
+## Component Interaction
+
+- **Accessing State**: Use the `useSelector` hook from `react-redux` combined with predefined selectors from `store/selectors/` to access state data.
+  - *Example*: See `components/modules/Negotiating/index.js` usage of `useSelector(getNegotiatingDataSelector)`.
+- **Dispatching Actions**: Use the `useDispatch` hook from `react-redux` to dispatch actions imported from the relevant slices.
+
+## Best Practices
+
+- Keep state normalized, especially within `entities`.
+- Use selectors to decouple components from the exact state structure.
+- Leverage Redux Toolkit's features (like `createSlice`, `createAsyncThunk`) to simplify reducer logic and handle async operations.
+

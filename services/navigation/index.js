@@ -2,6 +2,7 @@ import delve from 'dlv';
 
 import { getSingleType } from '../singleType';
 
+import { nullableDataObjectAdapter } from '@/adapters/common';
 import { linkAdapter } from '@/adapters/global';
 import { getData } from '@/utils/dataFetching';
 
@@ -19,7 +20,7 @@ export const getFooterLinks = async () => {
 
   const { data } = await getNavigation(navigationSlug, 'en');
 
-  return { data };
+  return nullableDataObjectAdapter(data);
 };
 
 export const getContactInfo = async () => {
