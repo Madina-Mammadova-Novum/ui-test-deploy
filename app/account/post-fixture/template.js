@@ -29,8 +29,8 @@ export default function PostFixtureLayout({ children }) {
   useEffect(() => {
     // Fetch cargo and vessel data
     dispatch(fetchCargoTypes());
-    dispatch(fetchCargoCodes({ stage: 'post-fixture' }));
-    dispatch(fetchVesselNames({ stage: 'post-fixture' }));
+    dispatch(fetchCargoCodes({ stage: 'Post_Fixture' }));
+    dispatch(fetchVesselNames({ stage: 'Post_Fixture' }));
 
     dispatch(
       fetchPostFixtureOffers({
