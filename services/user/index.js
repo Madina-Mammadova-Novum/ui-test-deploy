@@ -1,5 +1,6 @@
-import { getFleetByIdAdapter } from '@/adapters';
+import { getFleetByIdAdapter, responseFailedOffersAdapter, responseOwnerPrefixtureAdapter } from '@/adapters';
 import { basePageNavAdapter, negotiationPageNavAdapter, positionsPageNavAdapter } from '@/adapters/navigation';
+import { responsePostFixtureAdapter } from '@/adapters/post-fixture';
 import {
   chartererSignUpAdapter,
   deleteCompanyAdapter,
@@ -181,21 +182,13 @@ export const getVesselsById = async (data) => {
   return Promise.all(data.map(fetchUserVesselById));
 };
 
-export async function getUserFixtures() {
-  const response = await getData(`account/fixture`, { headers: { ...ContentTypeJson() } });
-  return {
-    ...response,
-  };
-}
-
 export async function getRoleBasedPrefixture({ page, perPage }) {
-  const body = basePageNavAdapter({ data: { page, perPage } });
-
-  const response = await postData(`account/pre-fixture?page=${page}&perPage=${perPage}`, body);
-
-  return {
-    ...response,
-  };
+  return searchDeals({
+    page,
+    perPage,
+    filters: { Stages: ['Pre_Fixture'] },
+    dataAdapter: responseOwnerPrefixtureAdapter,
+  });
 }
 
 export async function getRoleBasedNegotiating({ role, page = 1, perPage = 5, stage = 'Negotiating' }) {
@@ -243,27 +236,56 @@ export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
 }
 
 export async function getRoleBasedOnSubs({ page, perPage }) {
-  const body = basePageNavAdapter({ data: { page, perPage } });
-
-  const response = await postData(`account/on-subs?page=${page}&perPage=${perPage}`, body);
-
-  return {
-    ...response,
-  };
+  return searchDeals({
+    page,
+    perPage,
+    filters: { Stages: ['On_Subs'] },
+    dataAdapter: responseOwnerPrefixtureAdapter,
+  });
 }
 
 export async function getPostFixtureOffers({ page, perPage, filters, sorting }) {
-  return getFailedOffers({ page, perPage, filters, sorting });
+  return searchDeals({
+    page,
+    perPage,
+    filters: { ...filters, Stages: ['Post_Fixture'] },
+    sorting,
+    dataAdapter: responsePostFixtureAdapter,
+  });
 }
 
 export async function getFailedOffers({ page, perPage, filters, sorting, isFailed = false }) {
+  return searchDeals({
+    page,
+    perPage,
+    filters,
+    sorting,
+    dataAdapter: responseFailedOffersAdapter,
+    IsFailed: isFailed,
+  });
+}
+
+/**
+ * General purpose function to search deals across all stages
+ * @param {Object} params - Search parameters
+ * @param {number} params.page - Page number (1-based)
+ * @param {number} params.perPage - Items per page
+ * @param {Object} params.filters - Filter criteria including Stages
+ * @param {Object} params.sorting - Sorting parameters
+ * @param {Function} params.dataAdapter - Optional adapter for response data
+ * @returns {Promise<Object>} API response
+ */
+export async function searchDeals({ page = 1, perPage = 10, filters = {}, sorting = {}, dataAdapter, ...otherParams }) {
   const body = basePageNavAdapter({ data: { page, perPage } });
 
-  const response = await postData(`account/failed-offers?page=${page}&perPage=${perPage}`, {
+  const response = await postData(`account/deals`, {
     ...body,
     filters,
     sorting,
-    IsFailed: isFailed,
+    skip: (page - 1) * perPage,
+    pageSize: perPage,
+    ...(dataAdapter && { dataAdapter }),
+    ...otherParams,
   });
 
   return {
@@ -272,11 +294,9 @@ export async function getFailedOffers({ page, perPage, filters, sorting, isFaile
 }
 
 export async function getFixtureOffers({ page, perPage }) {
-  const body = basePageNavAdapter({ data: { page, perPage } });
-
-  const response = await postData(`account/fixture?page=${page}&perPage=${perPage}`, body);
-
-  return {
-    ...response,
-  };
+  return searchDeals({
+    page,
+    perPage,
+    filters: { Stages: ['Fixture'] },
+  });
 }
