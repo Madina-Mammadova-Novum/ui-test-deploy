@@ -39,6 +39,14 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
     position: 'relative',
     left: '4px',
   }),
+  clearIndicator: (base) => ({
+    ...base,
+    padding: '0px',
+    svg: {
+      width: '18px',
+      height: '18px',
+    },
+  }),
   menu: (base, { selectProps: { menuIsOpen, options } }) => ({
     ...base,
     background: '#ffffff',

@@ -94,6 +94,7 @@ const FailedOffersFilter = ({
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
+          isClearable
         />
         <FormDropdown
           name="tankerName"
@@ -105,6 +106,7 @@ const FailedOffersFilter = ({
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
+          isClearable
         />
         <FormDropdown
           name="cargoType"
@@ -116,6 +118,7 @@ const FailedOffersFilter = ({
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
+          isClearable
         />
       </div>
 

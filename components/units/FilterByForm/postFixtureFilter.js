@@ -32,6 +32,7 @@ const PostFixtureFilter = ({
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
+          isClearable
         />
         <FormDropdown
           name="tankerName"
@@ -43,6 +44,7 @@ const PostFixtureFilter = ({
           classNames={{
             placeholder: () => 'overflow-hidden text-ellipsis whitespace-nowrap',
           }}
+          isClearable
         />
         <FormDropdown
           name="cargoType"
@@ -57,6 +59,7 @@ const PostFixtureFilter = ({
           customStyles={{
             className: '2md:col-span-2 lg:col-span-1',
           }}
+          isClearable
         />
       </div>
 
