@@ -1,4 +1,5 @@
+import { arrayAdapter } from '@/adapters/common';
+
 export const responsePaymentTermsAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };

@@ -189,6 +189,7 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
 
 CalculatedForm.propTypes = {
   customHeight: PropTypes.string,
+  children: PropTypes.node,
   isLoggedIn: PropTypes.bool,
 };
 

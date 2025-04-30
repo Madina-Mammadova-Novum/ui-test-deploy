@@ -1,8 +1,6 @@
-export const requestCharterPartyAdapter = ({ data }) => {
-  if (!data) return [];
+import { arrayAdapter } from '@/adapters/common';
 
-  return data;
-};
+export const requestCharterPartyAdapter = ({ data }) => arrayAdapter(data);
 
 /**
  * @util charterPartyPreviewAdapter

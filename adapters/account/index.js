@@ -1,9 +1,5 @@
-export const requestDeactivateAccountAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
-};
+import { objectAdapter } from '@/adapters/common';
 
-export const responseDeactivateAccountAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
-};
+export const requestDeactivateAccountAdapter = ({ data }) => objectAdapter(data);
+
+export const responseDeactivateAccountAdapter = ({ data }) => objectAdapter(data);
