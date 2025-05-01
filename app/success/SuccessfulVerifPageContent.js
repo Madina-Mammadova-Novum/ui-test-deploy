@@ -47,7 +47,7 @@ const SuccessfulVerifPageContent = () => {
         <p>
           Your account will be fully activated in 10-15 minutes, and you will be able to start exploring all the
           features and services we offer. We&apos;re thrilled to have you on board and look forward to helping you
-          achieve your goals with <b>ShipLink</b>.
+          achieve your goals with <b>Ship.Link</b>.
         </p>
         <p>
           If you have any questions or need assistance, our support team is here to help. Contact us at{' '}

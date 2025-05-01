@@ -1,0 +1,46 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Maritime Standards & Calculations
+
+This rule summarizes key maritime standards, units, calculations, and states used in the ShipLink platform, based on [docs/maritime/standards.md](mdc:docs/maritime/standards.md).
+
+## Units
+
+- **Weight**: DWT (Deadweight Tonnage), MT (Metric Tons)
+- **Volume**: m³ (Cubic Meters)
+- **Density**: mt/m³ (Metric Tons per Cubic Meter)
+
+## Standard Ranges
+
+- **Laytime**: 12-120 hours
+- **Tolerance** (e.g., for cargo quantity): ±5-10%
+- **Cargo Density**: 0.6-2.0 mt/m³
+
+## Core Calculations
+
+Ensure correct implementation for:
+- Laytime
+- Demurrage
+- Freight
+- Bunker (Fuel)
+- Cargo Capacity
+
+## Deal / Operation States
+
+Follow this state progression:
+1.  Negotiating
+2.  On Subs (Subject to Conditions)
+3.  Failed
+4.  Completed
+5.  Lifted (Subjects Lifted / Confirmed)
+6.  Cancelled
+
+## API Response Requirements
+
+- Responses involving maritime data must adhere to defined business rules.
+- Calculations and data must follow established maritime standards.
+- Include necessary unit conversions where applicable.
+

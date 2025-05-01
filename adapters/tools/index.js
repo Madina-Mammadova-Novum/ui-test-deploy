@@ -1,3 +1,5 @@
+import { dataObjectAdapter } from '@/adapters/common';
+
 const rangeDataAdapter = ({ data }) => {
   if (!data) return null;
 
@@ -47,11 +49,7 @@ export const estimationBodyAdapter = ({ data }) => {
   return body[calculator?.value];
 };
 
-export const estimationResponseDataAdapter = ({ data }) => {
-  if (!data) return null;
-
-  return { data };
-};
+export const estimationResponseDataAdapter = ({ data }) => dataObjectAdapter(data);
 
 export const successEstimationAdapter = ({ data }) => {
   if (!data) return null;

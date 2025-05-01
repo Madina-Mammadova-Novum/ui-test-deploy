@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Library (`lib/`)
+
+This rule defines the purpose and conventions for the `lib/` directory.
+
+## Purpose
+
+- The `lib/` directory typically houses core application logic, configurations, constants, or integrations that are not specific UI components or API handlers.
+- It can serve as a place for shared modules, third-party library configurations, or foundational code used throughout the application.
+
+## Common Subdirectories/Files
+
+- **`lib/constants/`**: For defining application-wide constants (e.g., `NEGOTIATING_TABS` seen in `components/modules/Negotiating/index.js`). Constants should generally use `SCREAMING_SNAKE_CASE`.
+- **`lib/config/`**: For application configuration files or setup.
+- **`lib/hooks/`**: If custom React hooks are used, they might reside here, following the `useSomething` naming convention.
+- **`lib/clients/`**: For configuring third-party API clients or SDKs.
+
+## Distinction from `utils/`
+
+- While `utils/` contains small, generic helper functions, `lib/` often contains more substantial or application-specific modules, configurations, and core functionalities.
+

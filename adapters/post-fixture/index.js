@@ -1,3 +1,4 @@
+import { arrayAdapter } from '@/adapters';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
@@ -397,4 +398,8 @@ export const filtersAdapter = (formData = {}) => {
     FixtureDateFrom: transformDate(rangeDate?.startDate, 'yyyy-MM-dd'),
     FixtureDateTo: transformDate(rangeDate?.endDate, 'yyyy-MM-dd'),
   };
+};
+
+export const responsePostFixtureAdapter = ({ data }) => {
+  return arrayAdapter(data);
 };

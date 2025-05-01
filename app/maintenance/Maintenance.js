@@ -6,8 +6,8 @@ import { LinkAsButton, NextImage, Title } from '@/elements';
 import { CountdownTimer } from '@/units';
 
 export default function Maintenance({ title, description, variant = 'maintenance' }) {
-  // May 1st, 2025
-  const targetDate = new Date(2025, 4, 1);
+  // June 1st, 2025
+  const targetDate = new Date(2025, 5, 1);
 
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-black/95 to-blue-dark/90">
@@ -59,7 +59,7 @@ export default function Maintenance({ title, description, variant = 'maintenance
           </div>
 
           <div className="mt-6 rounded-full border border-blue-darker/30 bg-black/60 px-8 py-3 backdrop-blur-md">
-            <p className="text-sm text-blue-light">We&apos;re launching on May 1st</p>
+            <p className="text-sm text-blue-light">We&apos;re launching on June 1st</p>
           </div>
         </div>
       )}

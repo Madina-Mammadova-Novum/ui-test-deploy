@@ -1,3 +1,4 @@
+import { arrayAdapter } from '@/adapters/common';
 import ClockSVG from '@/assets/images/clock.svg';
 import EditIcon from '@/assets/images/editAlt.svg';
 import ToggleActiveIcon from '@/assets/images/toggleActive.svg';
@@ -378,14 +379,11 @@ export const requestFleetNameAdapter = ({ data }) => {
 };
 
 export const responseCreateFleetAdapter = ({ data }) => {
-  if (!data) return [];
-
-  return data;
+  return arrayAdapter(data);
 };
 
 export const responseGetFleetsAdapter = ({ data }) => {
-  if (!data) return [];
-  return data;
+  return arrayAdapter(data);
 };
 
 export const getFleetByIdAdapter = ({ id }) => {

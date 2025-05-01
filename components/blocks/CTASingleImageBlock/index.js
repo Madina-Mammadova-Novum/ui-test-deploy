@@ -6,7 +6,13 @@ import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 import { LinkAsButton, NextImage, Title, VideoPlayer } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
-const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) => {
+const CTASingleImageBlock = ({
+  title,
+  shortDescription,
+  coverImage,
+  button,
+  videoSrc = 'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/introvideo/Introduction%20video.mp4',
+}) => {
   return (
     <section className="relative pb-20">
       {coverImage && (
@@ -24,12 +30,7 @@ const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) =>
       )}
       <div className="mx-auto max-w-[1258px] gap-8 rounded-b-base px-6 3md:px-14">
         <div className="mb-10 w-full overflow-hidden rounded-b-base shadow-xl">
-          <VideoPlayer
-            src="/videos/intro.mp4#t=0.5"
-            preload="metadata"
-            className="w-full"
-            captionSrc="/captions/shiplink.vtt"
-          />
+          <VideoPlayer src={videoSrc} preload="metadata" className="w-full" captionSrc="/captions/shiplink.vtt" />
         </div>
 
         <div className="mx-auto max-w-[500px] rounded-base bg-white py-8">
@@ -65,6 +66,7 @@ CTASingleImageBlock.propTypes = {
   shortDescription: PropTypes.string,
   button: linkPropTypes,
   coverImage: mediaPropTypes,
+  videoSrc: PropTypes.string,
 };
 
 export default CTASingleImageBlock;

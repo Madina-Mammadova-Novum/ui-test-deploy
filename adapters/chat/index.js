@@ -1,11 +1,10 @@
+import { nullableDataObjectAdapter } from '@/adapters/common';
 import { tokenAdapter } from '@/adapters/user';
 import { convertDate, transformDate } from '@/utils/date';
 import { addLocalDateFlag, clientIdentification, getListOfDataByDays, sortFromPastToToday } from '@/utils/helpers';
 
 export function chatSessionResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 function chatSessionDataAdapter({ data }) {
@@ -153,9 +152,7 @@ export function chatHistoryResponseAdapter({ data, clientId, role }) {
 }
 
 export function chatSupportResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function chatTokenAdapter({ data }) {

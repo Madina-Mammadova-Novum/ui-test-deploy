@@ -69,7 +69,6 @@ ShipLink is built with modern web technologies, optimized for maritime B2B opera
 
 ### UI Components
 
-- **@headlessui/react**: Accessible UI components
 - **react-select**: Advanced vessel/port selection
   - Async search for ports and vessels
   - Debounced API calls (400ms)
@@ -105,7 +104,6 @@ ShipLink is built with modern web technologies, optimized for maritime B2B opera
 ### Version Control
 
 - **Git**
-- **GitLab CI/CD**
 - **Conventional Commits**
   - Scopes: owner, charterer, vessel, cargo, ui, api, fix, negotiation
   - Consistent commit messages

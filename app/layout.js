@@ -4,8 +4,8 @@ import Providers from '@/providers';
 
 export const metadata = {
   title: {
-    default: 'Shiplink',
-    template: '%s | Shiplink',
+    default: 'Ship.Link',
+    template: '%s | Ship.Link',
   },
 };
 

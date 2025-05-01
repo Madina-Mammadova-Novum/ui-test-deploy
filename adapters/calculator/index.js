@@ -1,3 +1,5 @@
+import { objectAdapter } from '@/adapters/common';
+
 export const requestFreightEstimationAdapter = ({ data }) => {
   if (!data) return {};
   const { loadPortId, dischargePortId, totalCargoQuantity } = data;
@@ -9,6 +11,5 @@ export const requestFreightEstimationAdapter = ({ data }) => {
 };
 
 export const responseFreightEstimationAdapter = ({ data }) => {
-  if (!data) return {};
-  return data;
+  return objectAdapter(data);
 };

@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 
+import { nullableDataObjectAdapter, nullAdapter } from '@/adapters/common';
 import { ROUTES } from '@/lib';
 import { ROLES } from '@/lib/constants';
-import { formattedPhoneNumber, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
+import { ensurePlusPrefix, getRoleIdentity, imoFormatter, isEmpty } from '@/utils/helpers';
 
 export function userRoleAdapter({ data }) {
   if (!data) return null;
@@ -38,7 +39,7 @@ export function userDetailsAdapter({ data, role }) {
 function userPersonalDetailsAdapter({ data }) {
   if (!data) return {};
 
-  const { name, surname, email, phone, secondaryPhone, hasPendingPersonalInfoUpdateRequest, pending } = data;
+  const { name, surname, email, phone, hasPendingPersonalInfoUpdateRequest, pending } = data;
 
   return {
     personalDetails: {
@@ -46,8 +47,7 @@ function userPersonalDetailsAdapter({ data }) {
       lastName: surname,
       fullName: `${name} ${surname}`,
       email,
-      primaryPhone: formattedPhoneNumber(phone),
-      secondaryPhone: formattedPhoneNumber(secondaryPhone),
+      phone,
       pendingRequest: hasPendingPersonalInfoUpdateRequest,
       pending,
     },
@@ -75,6 +75,8 @@ function userCompanyDetailsAdapter({ data, role }) {
     hasPendingCompanyInfoUpdateRequest,
     pending,
     numberOfVessels,
+    phone,
+    secondaryPhone,
   } = data;
 
   const formattedCargoDetails = cargoesDetailsAdapter({ data: cargoesDetails });
@@ -119,6 +121,8 @@ function userCompanyDetailsAdapter({ data, role }) {
       correspondenceProvince,
       pending,
       pendingRequest: hasPendingCompanyInfoUpdateRequest,
+      phone,
+      secondaryPhone,
       ...getRoleBasedData(),
     },
   };
@@ -256,13 +260,12 @@ export function updatePasswordAdapter({ data }) {
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email, primaryPhone, secondaryPhone } = data;
+  const { firstName, lastName, email, phone } = data;
   return {
     name: firstName,
     surname: lastName,
     email,
-    phone: `+${primaryPhone}`,
-    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
+    phone: ensurePlusPrefix(phone),
   };
 }
 
@@ -299,25 +302,29 @@ function companyAddressesAdapter({ data }) {
 
 export function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
-  const { imos, companyYearsOfOperation, companyName } = data;
+  const { imos, companyYearsOfOperation, companyName, phone, secondaryPhone } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: imos.countOfTankers,
     imos: listOfImosAdapter({ data: imos.listOfTankers }),
+    phone: ensurePlusPrefix(phone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     ...companyAddressesAdapter({ data }),
   };
 }
 
 export function updateChartererCompanyAdapter({ data }) {
   if (!data) return null;
-  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName } = data;
+  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName, phone, secondaryPhone } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
+    phone: ensurePlusPrefix(phone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     ...companyAddressesAdapter({ data }),
     experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
   };
@@ -348,10 +355,12 @@ export function ownerSignUpAdapter({ data }) {
     companyName,
     password,
     secondaryPhone,
-    primaryPhone,
+    phone,
     email,
     lastName,
     firstName,
+    userPhone,
+    otpId,
   } = data;
 
   return {
@@ -359,13 +368,15 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     password,
     email,
-    phone: `+${primaryPhone}`,
-    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
+    phone: ensurePlusPrefix(phone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
     numberOfVessels: numberOfTankers,
     imos: listOfImosAdapter({ data: imos }),
+    otpId,
+    userPhone: ensurePlusPrefix(userPhone),
     ...companyAddressesAdapter({ data }),
   };
 }
@@ -380,6 +391,7 @@ const cargoesAdapter = ({ data }) => {
 
 export function chartererSignUpAdapter({ data }) {
   if (data === null) return null;
+
   const {
     cargoes,
     numberOfCargoes,
@@ -387,10 +399,12 @@ export function chartererSignUpAdapter({ data }) {
     companyName,
     password,
     secondaryPhone,
-    primaryPhone,
+    phone,
     email,
     lastName,
     firstName,
+    userPhone,
+    otpId,
   } = data;
 
   return {
@@ -398,12 +412,14 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email,
     password,
-    phone: `+${primaryPhone}`,
-    secondaryPhone: secondaryPhone ? `+${secondaryPhone}` : '',
+    phone: ensurePlusPrefix(phone),
+    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     experiences: cargoesAdapter({ data: cargoes }),
+    otpId,
+    userPhone: ensurePlusPrefix(userPhone),
     ...companyAddressesAdapter({ data }),
   };
 }
@@ -420,7 +436,7 @@ export function loginResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function refreshTokenAdapter({ data }) {
@@ -468,15 +484,11 @@ export function positionsAdapter({ data }) {
 }
 
 export function positionByIdAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function updateVesselPortAdapter({ data }) {
-  if (!data) return null;
-
-  return data;
+  return nullAdapter(data);
 }
 
 export function signupResponseAdapter({ data }) {
@@ -492,7 +504,7 @@ export function confirmEmailResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
 
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function signInAdapter({ data }) {
@@ -551,25 +563,17 @@ export function sessionAdapter({ token = null }) {
 }
 
 export function accountPersonalDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function accountCompanyUpdateDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function accountDeleteDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }
 
 export function accountCargoesDataResponseAdapter({ data }) {
-  if (!data) return null;
-
-  return { data };
+  return nullableDataObjectAdapter(data);
 }

@@ -37,7 +37,7 @@ const ChartererRegistrationForm = ({ countries }) => {
   const [captcha, setCaptcha] = useState('');
 
   const schema = yup.object().shape({
-    ...personalDetailsSchema(),
+    ...personalDetailsSchema({ isRegister: true }),
     ...passwordValidationSchema(),
     ...companyDetailsSchema(),
     ...cargoesSlotsDetailsSchema(),

@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Styling with Tailwind CSS
+
+This rule outlines the guidelines for using Tailwind CSS for styling in the ShipLink platform, referencing [tailwind.config.js](mdc:tailwind.config.js).
+
+## Core Approach
+
+- **Utility-First**: Leverage Tailwind's utility classes as the primary method for styling components.
+- **Responsive Design**: Utilize Tailwind's responsive modifiers (e.g., `md:`, `lg:`, `3md:`) to create adaptive layouts. Adhere to the project's defined breakpoints.
+- **Custom Theme**: Use theme values (colors, spacing, fonts) defined in [tailwind.config.js](mdc:tailwind.config.js) for consistency.
+- **Custom Breakpoint**: Note the custom breakpoint `3md: 1024px` defined in the theme.
+
+## Dynamic Class Names
+
+- **Mandatory Library**: Use the `classnames` library (or a similar utility like `clsx`) for conditionally applying or combining Tailwind classes.
+- **Rationale**: This approach improves readability and maintainability compared to complex template literals.
+- **❌ Bad Practice (Avoid):**
+  ```jsx
+  <div className={`p-4 ${isActive ? 'bg-blue-500' : 'bg-gray-200'} ${isLarge ? 'text-lg' : 'text-base'}`}>...</div>
+  ```
+- **✅ Good Practice (Use):**
+  ```jsx
+  import classnames from 'classnames';
+  // ...
+  <div className={classnames('p-4', {
+    'bg-blue-500': isActive,
+    'bg-gray-200': !isActive,
+    'text-lg': isLarge,
+    'text-base': !isLarge,
+  })}>...</div>
+  ```
+
+## Custom CSS
+
+- **Minimize Usage**: Avoid writing custom CSS files whenever possible. Prefer utility classes or theme extensions.
+- **Location**: If custom global styles are absolutely necessary, they should reside in a designated global CSS file (e.g., `styles/globals.css`) and be imported appropriately.
+
