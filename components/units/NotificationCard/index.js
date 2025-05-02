@@ -10,7 +10,7 @@ import { extractTimeFromDate } from '@/utils/helpers';
 const NotificationCard = ({ data = [], useDivider = true, handleClose = () => {} }) => {
   const [disabled, setDisabled] = useState(false);
 
-  const printNotificationCard = ({ title, time, topic, url, id }) => {
+  const printNotificationCard = ({ title, time, topic, url, id, watched, isSignal = false }) => {
     const nextTime = extractTimeFromDate(time);
 
     return (
@@ -23,6 +23,8 @@ const NotificationCard = ({ data = [], useDivider = true, handleClose = () => {}
           disabled={disabled}
           setDisabled={setDisabled}
           handleClose={handleClose}
+          watched={watched}
+          isSignal={isSignal}
         />
         {useDivider && <Divider />}
       </div>
