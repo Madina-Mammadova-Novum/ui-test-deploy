@@ -14,7 +14,16 @@ import { resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
 import { getCookieFromBrowser, getIdFromUrl } from '@/utils/helpers';
 
-const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, handleClose }) => {
+const NotificationCardBody = ({
+  message,
+  url,
+  urlId,
+  disabled,
+  setDisabled,
+  handleClose,
+  watched,
+  isSignal = false,
+}) => {
   const dispatch = useDispatch();
 
   const role = getCookieFromBrowser('session-user-role');
@@ -71,17 +80,19 @@ const NotificationCardBody = ({ message, url, urlId, disabled, setDisabled, hand
             }}
           />
         )}
-        <Button
-          onClick={() => dispatch(readNotification({ id: urlId }))}
-          customStyles="!p-0 !pt-2.5 opacity-0 group-hover:opacity-100 transition-opacity"
-          buttonProps={{
-            size: 'small',
-            variant: 'secondary',
-            text: 'Mark as read',
-            textClassName: '!p-0',
-          }}
-          aria-label="Mark as read"
-        />
+        {!watched && !isSignal && (
+          <Button
+            onClick={() => dispatch(readNotification({ id: urlId }))}
+            customStyles="!p-0 !pt-2.5 opacity-0 group-hover:opacity-100 transition-opacity"
+            buttonProps={{
+              size: 'small',
+              variant: 'secondary',
+              text: 'Mark as read',
+              textClassName: '!p-0',
+            }}
+            aria-label="Mark as read"
+          />
+        )}
       </div>
     </div>
   );
