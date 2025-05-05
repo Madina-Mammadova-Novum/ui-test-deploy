@@ -4,21 +4,20 @@ import { useEffect, useState } from 'react';
 
 import { Button, NextLink } from '@/elements';
 import { COOKIE_CONSENT_KEY, ROUTES } from '@/lib/constants';
-import { getCookieFromBrowser, setCookie } from '@/utils/helpers';
 
 const CookieConsent = () => {
   const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
     // Check if user has already consented
-    const hasConsented = getCookieFromBrowser(COOKIE_CONSENT_KEY);
+    const hasConsented = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (!hasConsented) {
       setShowConsent(true);
     }
   }, []);
 
   const handleAccept = () => {
-    setCookie(COOKIE_CONSENT_KEY, 'true');
+    localStorage.setItem(COOKIE_CONSENT_KEY, 'true');
     setShowConsent(false);
   };
 
