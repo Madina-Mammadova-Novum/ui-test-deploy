@@ -4,8 +4,8 @@ import { NextLink, Title } from '@/elements';
 
 const FooterNavBlock = ({ title, items }) => {
   return (
-    <div className="w-32 3md:w-40">
-      <Title level={5} className="title-main mb-4 text-gray">
+    <div className="w-[10.25rem] 3md:w-[11.625rem]">
+      <Title level={5} className="title-main mb-6 text-gray">
         {title}
       </Title>
       <ul className="space-y-2 text-black">
@@ -14,7 +14,7 @@ const FooterNavBlock = ({ title, items }) => {
           items.map((item) => {
             return (
               <li key={item.path}>
-                <NextLink href={item.path} className="text-xsm">
+                <NextLink href={item.path} className="text-xsm font-medium">
                   {item.title}
                 </NextLink>
               </li>
