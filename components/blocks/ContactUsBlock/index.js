@@ -37,7 +37,7 @@ const ContactUsBlock = ({ title, subTitle, shortDescription, address, emails, em
         </div>
       </div>
 
-      <div className="bg-gray-medium flex flex-col items-center gap-8 px-4 pb-[5.75rem] pt-16 md:px-8 md:pb-[8.25rem] md:pt-20 3md:px-14 3md:py-24">
+      <div className="bg-gray-medium flex flex-col items-center gap-8 px-4 pb-[5.75rem] pt-16 md:px-8 md:pb-[8.25rem] md:pt-20 3md:gap-12 3md:px-14 3md:py-24">
         <Title className="text-[1.875rem] leading-[1.4]" level="2">
           Write to Us
         </Title>
