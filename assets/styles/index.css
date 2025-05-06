@@ -148,7 +148,7 @@
   }
 
   .heading-wrapper h1 {
-    @apply mb-2.5 text-white;
+    @apply text-2.5xl text-white;
   }
   .heading-wrapper p {
     @apply mx-auto max-w-[800px] text-xsm text-white;
