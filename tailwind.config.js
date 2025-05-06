@@ -19,6 +19,7 @@ module.exports = {
       lg: ['20px', '130%'],
       xl: ['24px', '130%'],
       '2xl': ['26px', '130%'],
+      '2.5xl': ['30px', '140%'],
       '3xl': ['34px', '130%'],
       '4xl': ['42px', '130%'],
       '5xl': ['55px', '130%'],
@@ -77,6 +78,7 @@ module.exports = {
           DEFAULT: '#828C9C',
           darker: '#DADFEA',
           light: '#F8FAFB',
+          medium: '#F4FAFF',
         },
         white: '#FFFFFF',
         purple: {

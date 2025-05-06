@@ -1,6 +1,8 @@
+import classNames from 'classnames';
+
 import { MapPropTypes } from '@/lib/types';
 
-const Map = ({ title, embedMap }) => {
+const Map = ({ title, embedMap, className }) => {
   const src = embedMap.match(/src="([^"]+)"/)[1];
   return (
     <iframe
@@ -11,7 +13,7 @@ const Map = ({ title, embedMap }) => {
       allowFullScreen=""
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-      className="h-[400px] w-full rounded-base"
+      className={classNames('h-[400px] w-full rounded-base', className)}
     />
   );
 };

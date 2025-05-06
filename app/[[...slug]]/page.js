@@ -39,13 +39,24 @@ export default async function Home({ params }) {
 
   if (pageData === null) notFound();
 
+  const isAboutUs = pathname === '/about-us';
+  const isContactUs = pathname === '/contact-us';
+
   return (
     <main className={classNames(legal && 'legal-styles')}>
       {/* todo: example to use legal variable */}
       <section
-        className={`relative bg-gray-light pt-[115px] ${pathname === '/about-us' ? 'pb-[100px]' : 'pb-[195px]'}`}
+        className={`relative bg-gray-light ${isAboutUs || isContactUs ? 'pb-[158px] pt-[109px] md:pb-[172px] 3md:pb-[200px] 3md:pt-[101px]' : 'pb-[195px] pt-[115px]'}`}
       >
-        <div className="container mx-auto max-w-[1258px] px-6 3md:px-14">
+        <div className="container mx-auto max-w-[1258px] px-4 md:px-8 3md:px-14">
+          {(isAboutUs || isContactUs) && (
+            <div className="relative z-10 mb-8 md:mb-3 3md:mb-4">
+              <p className="text-xs-sm text-white">
+                Home <span className="text-[#FFFFFF99]">/</span>{' '}
+                <span className="text-gray">{isAboutUs ? 'About Us' : 'Contact Us'}</span>
+              </p>
+            </div>
+          )}
           <NextImage
             alt="waves"
             height={352}
@@ -54,7 +65,11 @@ export default async function Home({ params }) {
             src="/images/waves.jpg"
             customStyles="absolute inset-0 z-0 h-full w-full object-cover object-center"
           />
-          {content && <div className="heading-wrapper relative z-10 text-white">{parse(content)}</div>}
+          {content && (
+            <div className={`heading-wrapper relative z-10 ${isAboutUs || isContactUs ? 'text-center' : ''}`}>
+              {parse(content)}
+            </div>
+          )}
         </div>
       </section>
       <div className="space-y-[100px]">{blocks && <BlockManager blocks={blocks} />}</div>
