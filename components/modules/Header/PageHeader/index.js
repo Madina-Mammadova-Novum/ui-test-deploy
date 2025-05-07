@@ -3,7 +3,6 @@
 import delve from 'dlv';
 import { cookies } from 'next/headers';
 
-import SmallLogo from '@/assets/images/logo-sm.svg';
 import Logo from '@/assets/images/logo.svg';
 import { NavButton, NextLink } from '@/elements';
 import { getNavigation } from '@/services/navigation';
@@ -57,8 +56,7 @@ export default async function PageHeader() {
       <div className="container mx-auto max-w-[1258px] px-4 md:px-8 3md:px-14">
         <div className="flex items-center justify-between border-b border-white/10 py-6 3md:py-5">
           <NextLink href="/">
-            <Logo className="hidden fill-white md:block" />
-            <SmallLogo className="fill-white md:hidden" />
+            <Logo className="fill-white" />
           </NextLink>
           <nav className="flex flex-col items-center gap-x-10 md:flex-row">
             {Array.isArray(navigation) && navigation.length > 0 && (
