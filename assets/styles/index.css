@@ -166,7 +166,7 @@
   .swiper.swiperTestimonial .swiper-wrapper,
   .swiper.swiperTeam .swiper-wrapper,
   .swiper.swiperImprovements .swiper-wrapper {
-    @apply mt-10 !pb-11 lg:mt-14 2xl:mt-16;
+    @apply mb-8 mt-8 3md:mt-12;
   }
   .swiper.swiperIngredients .swiper-wrapper {
     @apply !pb-8 md:!pb-0;
