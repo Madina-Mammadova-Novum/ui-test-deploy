@@ -27,13 +27,14 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   const printSocialLink = (link) => (
     <NextLink key={link} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
-        className="rounded-md border border-gray-darker"
+        className="rounded-md border border-gray-darker p-4"
         icon={
           <NextImage
             alt={delve(link, 'title')}
             src={getStrapiMedia(delve(link, 'coverImage.format.original.url'), '')}
-            height={20}
-            width={20}
+            height={16}
+            width={16}
+            customStyles="h-4 w-4"
           />
         }
       />
@@ -41,36 +42,41 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   );
 
   const printMember = ({ fullName, content, position, coverImage, socialLinks }) => (
-    <SwiperSlide key={makeId()} className="flex h-auto px-2.5">
-      <div className="mt-[60px] flex max-w-full grow flex-col items-center rounded-base bg-white px-[30px] pb-[30px] text-black shadow-2xmd">
-        {coverImage && (
-          <NextImage
-            alt={delve(coverImage, 'alternativeText') || 'User Avatar'}
-            src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
-            height={120}
-            width={120}
-            className="-mt-[60px] mb-2.5 h-[120px] w-[120px] rounded-full object-cover object-center"
-          />
-        )}
-        {fullName.trim() && (
-          <Title level="2" className="mb-1 max-w-full break-words">
-            {fullName}
-          </Title>
-        )}
-        {position && (
-          <Title level="4" className="mb-1 font-semibold">
-            {delve(position, 'title')}
-          </Title>
-        )}
-        {socialLinks && <div className="mb-2.5 flex gap-x-2.5">{socialLinks.map(printSocialLink)}</div>}
+    <SwiperSlide key={makeId()} className="flex h-auto px-2">
+      <div className="flex max-w-full flex-col gap-y-6 rounded-base bg-white p-8 text-black shadow-2xmd">
+        <div className="flex items-center gap-4">
+          {coverImage && (
+            <NextImage
+              alt={delve(coverImage, 'alternativeText') || 'User Avatar'}
+              src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
+              height={60}
+              width={60}
+              className="h-[60px] w-[60px] rounded-full object-cover object-center"
+            />
+          )}
+
+          <div className="flex flex-col">
+            {fullName.trim() && (
+              <Title level="2" className="max-w-full break-words text-lg">
+                {fullName}
+              </Title>
+            )}
+            {position && (
+              <Title level="4" className="text-xsm font-normal text-black">
+                {delve(position, 'title')}
+              </Title>
+            )}
+          </div>
+        </div>
         {content && <div className="text-xsm">{parse(content)}</div>}
+        {socialLinks && <div className="flex gap-x-2">{socialLinks.map(printSocialLink)}</div>}
       </div>
     </SwiperSlide>
   );
 
   return (
     <section>
-      <div className="container mx-auto w-screen max-w-[1268px] px-6 3md:px-14">
+      <div className="w-screen max-w-[1168px] px-2 pb-16 md:px-6 md:pb-20 3md:pb-24 lg:mx-auto lg:px-0">
         {title && (
           <Title level="1" className="mb-5 text-center text-black">
             {title}
