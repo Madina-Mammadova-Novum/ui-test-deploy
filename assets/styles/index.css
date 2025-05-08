@@ -166,7 +166,7 @@
   .swiper.swiperTestimonial .swiper-wrapper,
   .swiper.swiperTeam .swiper-wrapper,
   .swiper.swiperImprovements .swiper-wrapper {
-    @apply mt-10 !pb-11 lg:mt-14 2xl:mt-16;
+    @apply mb-8 mt-8 3md:mt-12;
   }
   .swiper.swiperIngredients .swiper-wrapper {
     @apply !pb-8 md:!pb-0;
@@ -444,7 +444,7 @@ table > tbody > tr td[name='GREY'] > div {
 }
 
 .legal-styles .container {
-  @apply max-w-[1258px] px-6 3md:px-14;
+  @apply max-w-[1152px] px-6;
 }
 
 .table-scroll {

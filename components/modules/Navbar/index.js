@@ -33,7 +33,7 @@ const Navbar = ({ placeholder, cta, path }) => {
   }, [cta, path]);
 
   return (
-    <nav className="z-50 flex h-14 flex-grow justify-between bg-white sm:flex-row 3md:bg-transparent">
+    <nav className="z-50 flex h-14 flex-grow items-center justify-between bg-white sm:flex-row 3md:bg-transparent">
       <NextLink href="/" className="py-1">
         <Logo className="hidden fill-black md:block 3md:fill-white" />
         <SmallLogo className="fill-black md:hidden" />

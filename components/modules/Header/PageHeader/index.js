@@ -1,15 +1,18 @@
 'use server';
 
 import delve from 'dlv';
+import dynamic from 'next/dynamic';
 import { cookies } from 'next/headers';
 
-import SmallLogo from '@/assets/images/logo-sm.svg';
 import Logo from '@/assets/images/logo.svg';
 import { NavButton, NextLink } from '@/elements';
 import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { AuthNavButtons } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
+
+// Dynamic import to load a client component from a server component
+const MobileMenu = dynamic(() => import('@/modules/Header/MobileMenu'), { ssr: false });
 
 const getUserRole = async () => {
   const role = cookies()?.get('session-user-role')?.value;
@@ -54,17 +57,17 @@ export default async function PageHeader() {
 
   return (
     <header className="absolute z-10 w-full">
-      <div className="container mx-auto max-w-[1258px] px-4 md:px-8 3md:px-14">
+      <div className="container mx-auto max-w-[1152px] px-4 md:px-8 xl:px-0">
         <div className="flex items-center justify-between border-b border-white/10 py-6 3md:py-5">
           <NextLink href="/">
-            <Logo className="hidden fill-white md:block" />
-            <SmallLogo className="fill-white md:hidden" />
+            <Logo className="fill-white" />
           </NextLink>
-          <nav className="flex flex-col items-center gap-x-10 md:flex-row">
+          <nav className="flex items-center md:gap-x-5 3md:gap-x-14">
             {Array.isArray(navigation) && navigation.length > 0 && (
-              <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>
+              <ul className="hidden items-center gap-x-6 3md:flex">{navigation.map(printNavigation)}</ul>
             )}
             {buttons?.length > 0 && <AuthNavButtons authorized={!isAnon} data={buttons} />}
+            <MobileMenu navigation={navigation} buttons={buttons} authorized={!isAnon} />
           </nav>
         </div>
       </div>
