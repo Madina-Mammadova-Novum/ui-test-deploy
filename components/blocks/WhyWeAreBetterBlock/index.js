@@ -52,7 +52,7 @@ const WhyWeAreBetterBlock = () => {
 
   return (
     <section id="why-we-are-better" className="py-16 md:py-20 3md:py-24">
-      <div className="flex flex-col gap-8 px-4 md:px-8 3md:gap-12 xl:mx-auto xl:max-w-[1152px] xl:px-0">
+      <div className="mx-auto flex max-w-[1152px] flex-col gap-8 px-4 md:px-8 3md:gap-12 xl:px-0">
         <div className="flex items-center justify-center md:col-span-1">
           <NextImage
             src="/images/icon-shiplink.png"
