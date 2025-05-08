@@ -1,6 +1,7 @@
 'use server';
 
 import delve from 'dlv';
+import dynamic from 'next/dynamic';
 import { cookies } from 'next/headers';
 
 import Logo from '@/assets/images/logo.svg';
@@ -9,6 +10,9 @@ import { getNavigation } from '@/services/navigation';
 import { getSingleType } from '@/services/singleType';
 import { AuthNavButtons } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
+
+// Dynamic import to load a client component from a server component
+const MobileMenu = dynamic(() => import('@/modules/Header/MobileMenu'), { ssr: false });
 
 const getUserRole = async () => {
   const role = cookies()?.get('session-user-role')?.value;
@@ -58,11 +62,12 @@ export default async function PageHeader() {
           <NextLink href="/">
             <Logo className="fill-white" />
           </NextLink>
-          <nav className="flex flex-col items-center gap-x-10 md:flex-row">
+          <nav className="flex items-center md:gap-x-5 3md:gap-x-14">
             {Array.isArray(navigation) && navigation.length > 0 && (
-              <ul className="flex items-center gap-x-5">{navigation.map(printNavigation)}</ul>
+              <ul className="hidden items-center gap-x-6 3md:flex">{navigation.map(printNavigation)}</ul>
             )}
             {buttons?.length > 0 && <AuthNavButtons authorized={!isAnon} data={buttons} />}
+            <MobileMenu navigation={navigation} buttons={buttons} authorized={!isAnon} />
           </nav>
         </div>
       </div>

@@ -30,7 +30,7 @@ const AuthNavButtons = ({ authorized, data = [] }) => {
   };
 
   return (
-    <ul className="flex gap-x-2.5">
+    <ul className="hidden gap-x-2 md:flex">
       {!authorized ? (
         data.map(printUnAuthButtons)
       ) : (
