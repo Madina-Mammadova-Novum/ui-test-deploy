@@ -46,7 +46,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   return (
     <section id="how-it-works" className="py-16 md:py-20 3md:py-24">
       <div className="flex flex-col-reverse gap-8 px-4 md:px-8 3md:mx-auto 3md:max-w-[1152px] 3md:flex-row 3md:gap-10 xl:px-0">
-        <div className="flex flex-col gap-6 3md:w-1/2">
+        <div className="flex flex-col gap-6 3md:w-1/2 lg:max-w-[540px]">
           {title && (
             <Title level="2" className="text-2.5xl text-black">
               {title}
@@ -63,7 +63,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         </div>
 
         {coverImage && (
-          <div className="h-full w-full rounded-base 3md:w-1/2">
+          <div className="h-full w-full rounded-base 3md:w-1/2 lg:max-w-[572px]">
             <NextImage
               src={currentTab === 'For Vessel Owner' ? ownerImage : chartererImage}
               alt="Cover Image for User"

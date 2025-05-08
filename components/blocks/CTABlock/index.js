@@ -1,67 +1,46 @@
 import delve from 'dlv';
 import PropTypes from 'prop-types';
 
-import { NextLink } from '@/elements';
+import { LinkAsButton, Title, VideoPlayer } from '@/elements';
 
 const CTABlock = ({ title, shortDescription, buttons }) => {
   return (
-    <div className="relative px-6 lg:px-8">
-      <div className="mx-auto pb-32 pt-20 sm:pb-40 sm:pt-48">
-        <div>
-          <div>
-            {title && <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">{title}</h1>}
-            {shortDescription && (
-              <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">{shortDescription}</p>
-            )}
-            {buttons && (
-              <div className="mt-8 flex gap-x-4 sm:justify-center">
-                {buttons.map((button) => (
-                  <NextLink
-                    key={button.path}
-                    href={delve(button, 'path')}
-                    target={delve(button, 'linkOptions.target')}
-                    rel={delve(button, 'linkOptions.rel')}
-                    className="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
-                  >
-                    {delve(button, 'label')}
-                    <span className="text-indigo-200" aria-hidden="true">
-                      &rarr;
-                    </span>
-                  </NextLink>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-            <svg
-              className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
-              viewBox="0 0 1155 678"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
-                fillOpacity=".3"
-                d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
-              />
-              <defs>
-                <linearGradient
-                  id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
-                  x1="1155.49"
-                  x2="-78.208"
-                  y1=".177"
-                  y2="474.645"
-                  gradientUnits="userSpaceOnUse"
+    <section className="bg-gray-medium py-16 md:py-20 3md:py-24">
+      <div className="flex flex-col gap-8 px-4 md:px-8 3md:mx-auto 3md:max-w-[1152px] 3md:flex-row 3md:items-center 3md:gap-[105px] xl:px-0">
+        <div className="h-full w-full rounded-base 3md:w-1/2 lg:max-w-[572px]">
+          <VideoPlayer
+            src="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/introvideo/Introduction%20video.mp4"
+            preload="metadata"
+            className="w-full rounded-base"
+            captionSrc="/captions/shiplink.vtt"
+            poster="/images/poster-shiplink.png"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 3md:w-1/2 lg:max-w-[474px]">
+          {title && (
+            <Title level="2" className="text-2.5xl text-black">
+              {title}
+            </Title>
+          )}
+          {shortDescription && <p className="text-xsm text-black">{shortDescription}</p>}
+          {buttons && (
+            <div className="mt-4 flex gap-x-4 3md:mt-5">
+              {buttons.map((button) => (
+                <LinkAsButton
+                  key={button.path}
+                  href={delve(button, 'path')}
+                  buttonProps={{ variant: 'primary', size: 'large' }}
+                  customStyles="w-full md:w-fit"
                 >
-                  <stop stopColor="#9089FC" />
-                  <stop offset={1} stopColor="#FF80B5" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
+                  {delve(button, 'label')}
+                </LinkAsButton>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

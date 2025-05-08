@@ -42,6 +42,7 @@ export default async function Home({ params }) {
 
   const isAboutUs = pathname === '/about-us';
   const isContactUs = pathname === '/contact-us';
+  const isHome = pathname === '/';
 
   const aboutUsContent = (
     <div className="flex w-full flex-col items-center justify-center gap-y-4 md:max-w-[584px] md:gap-y-6 3md:max-w-[572px]">
@@ -67,10 +68,11 @@ export default async function Home({ params }) {
         className={classNames('relative bg-gray-light', {
           'pb-[158px] pt-[109px] md:pb-[172px] 3md:pb-[200px] 3md:pt-[101px]': isContactUs,
           'pb-16 pt-[109px] md:pb-[4.25rem] 3md:pb-24 3md:pt-[101px]': isAboutUs,
-          'pb-[195px] pt-[115px]': !isContactUs && !isAboutUs,
+          'custom-hero pb-[158px] pt-[121px] 3md:pb-[289px] 3md:pt-[129px]': isHome,
+          'pb-[195px] pt-[115px]': !isContactUs && !isAboutUs && !isHome,
         })}
       >
-        <div className="container mx-auto max-w-[1258px] px-4 md:px-8 3md:px-14">
+        <div className="container mx-auto max-w-[1152px] px-4 md:px-8 xl:px-0">
           {(isAboutUs || isContactUs) && (
             <div className="relative z-10 mb-8 md:mb-3 3md:mb-4">
               <p className="text-xs-sm text-white">
@@ -84,14 +86,15 @@ export default async function Home({ params }) {
             height={352}
             quality={100}
             width={1440}
-            src="/images/waves.jpg"
-            customStyles="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            src="/images/waves.png"
+            customStyles="absolute inset-0 z-0 h-full w-full object-fill object-center"
           />
           {content && (
             <div
-              className={classNames('heading-wrapper relative z-10', {
+              className={classNames('heading-wrapper relative', {
                 'text-center': isAboutUs || isContactUs,
                 'flex items-center justify-center': isAboutUs,
+                'max-w-md': isHome,
               })}
             >
               {isAboutUs ? aboutUsContent : parse(content)}

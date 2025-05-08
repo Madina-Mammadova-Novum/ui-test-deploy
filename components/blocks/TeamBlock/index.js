@@ -76,7 +76,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
 
   return (
     <section>
-      <div className="w-screen max-w-[1168px] px-2 pb-16 md:px-6 md:pb-20 3md:pb-24 lg:mx-auto lg:px-0">
+      <div className="w-screen max-w-[1168px] px-2 pb-16 md:px-6 md:pb-20 3md:mx-auto 3md:pb-24 lg:px-0">
         {title && (
           <Title level="1" className="mb-5 text-center text-black">
             {title}
