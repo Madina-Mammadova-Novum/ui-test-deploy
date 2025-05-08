@@ -19,7 +19,7 @@ const AccountPositionsDetails = ({ searchedParams }) => {
   const assignedResult = vessels?.find((vessel) => vessel?.fleetId === searchedParams?.id);
 
   const assignedData = fleetNotificationAdapter({ data: assignedResult, id: searchedParams?.tankerId });
-  const unassignedData = fleetNotificationAdapter({ data: unassignedVessel, id: urlParser(searchedParams.id) });
+  const unassignedData = fleetNotificationAdapter({ data: unassignedVessel, id: urlParser(searchedParams.tankerId) });
 
   useEffect(() => {
     dispatch(setToggle(true));
