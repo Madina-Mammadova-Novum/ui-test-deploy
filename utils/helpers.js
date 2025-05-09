@@ -747,6 +747,24 @@ export const formattedNumber = (value) => {
   return value?.toFixed(2);
 };
 
+/**
+ * Formats a number as currency with thousand separators and 2 decimal places
+ * @param {number} value - The number to format
+ * @returns {string} Formatted currency string (e.g. 500,000.24)
+ */
+export const formatCurrency = (value) => {
+  if (value === null || value === undefined) return '';
+
+  // Convert to number if it's a string
+  const numValue = typeof value === 'string' ? parseFloat(value) : value;
+
+  // Check if it's a valid number
+  if (Number.isNaN(numValue)) return '';
+
+  // Format with 2 decimal places and add thousand separators
+  return numValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
 export const formattedDay = (number) => {
   if (number === null || number === undefined) return '';
   const hoursInADay = 24;
@@ -792,8 +810,8 @@ export const sortChatMessagesByDay = (array) =>
 
 export const freightFormatter = ({ value, format }) => {
   const response = {
-    Lumpsum: `${format} $${value}`,
-    '$/mt': `${value} ${format}`,
+    Lumpsum: `${format} $${formatCurrency(value)}`,
+    '$/mt': `${formatCurrency(value)} ${format}`,
     WS: `${format} ${value}`,
   };
 

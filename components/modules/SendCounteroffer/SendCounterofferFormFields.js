@@ -9,7 +9,7 @@ import { FormDropdown, Input, Title } from '@/elements';
 import { FREIGHT_PLACEHOLDERS } from '@/lib/constants';
 import { fetchOfferOptions } from '@/store/entities/offer/actions';
 import { getOfferSelector } from '@/store/selectors';
-import { getValueWithPath } from '@/utils/helpers';
+import { formatCurrency, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
@@ -46,10 +46,11 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const helperFreightFormat =
     selectedFreight?.label === 'WS'
       ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
-      : freightEstimation?.min && `${minValue}$ - ${maxValue}$`;
+      : freightEstimation?.min && `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
 
   const helperRangeFormat =
-    ranges?.demurrageRate?.min && `${ranges?.demurrageRate?.min?.start}$ - ${ranges?.demurrageRate?.max?.end}$`;
+    ranges?.demurrageRate?.min &&
+    `$${formatCurrency(ranges?.demurrageRate?.min?.start)} - $${formatCurrency(ranges?.demurrageRate?.max?.end)}`;
 
   const helperLaytimeFormat = `Laytime available in range from ${ranges?.layTime?.min?.start || 12} to ${
     ranges?.layTime?.min?.end || 94
@@ -135,7 +136,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         />
       </div>
       {products?.filter((product) => product).map(printProduct)}
-      <div className="mt-3 flex w-1/2 items-baseline gap-x-5 pr-5">
+      <div className="mt-3 flex items-baseline gap-x-5">
         <FormDropdown
           label="Freight"
           labelBadge="*"

@@ -515,7 +515,7 @@ export const COTData = {
     },
     {
       key: 'Demurrage rate',
-      label: '$17,000 per day',
+      label: '$17,000.00 per day',
     },
     {
       key: 'Laytime + NOR',

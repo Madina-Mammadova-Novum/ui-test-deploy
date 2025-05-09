@@ -4,7 +4,14 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import {
+  calculateCountdown,
+  ensureFileExtension,
+  formatCurrency,
+  freightFormatter,
+  getLocode,
+  transformBytes,
+} from '@/utils/helpers';
 
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -317,7 +324,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Demurrage rate',
-          text: demurrageRate && `$${demurrageRate} per day`,
+          text: demurrageRate && `$${formatCurrency(demurrageRate)} per day`,
         },
         {
           title: 'Laytime + NOR',

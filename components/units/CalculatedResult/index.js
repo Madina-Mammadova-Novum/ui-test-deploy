@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { CalculatedResultPropTypes } from '@/lib/types';
 
 import { TextWithLabel, Title } from '@/elements';
-import { formattedDay, formattedNumber } from '@/utils/helpers';
+import { formatCurrency, formattedDay, formattedNumber } from '@/utils/helpers';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
 const ResultItem = ({ label, text }) => (
@@ -30,8 +30,8 @@ const CalculatedResult = ({ result, value }) => {
   // Format display values based on calculation type
   const distanceValue = firstValue ? `${firstValue} nm` : '';
   const durationValue = secondValue ? `${formattedDay(secondValue)} days` : '';
-  const freightValue = secondValue ? `$${secondValue}` : '';
-  const costPerTonValue = firstValue ? `$${firstValue}` : '';
+  const freightValue = secondValue ? `$${formatCurrency(secondValue)}` : '';
+  const costPerTonValue = firstValue ? `$${formatCurrency(firstValue)}` : '';
 
   return (
     <div className="absolute bottom-2 left-2 z-[500] w-[250px] rounded-md bg-[rgba(255,255,255,0.8)] p-5 font-inter-sans">
