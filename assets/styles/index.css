@@ -303,8 +303,7 @@
 }
 
 .leaflet-container {
-  height: 100%;
-  z-index: 10;
+  @apply z-0 h-full 3md:z-10;
 }
 
 /* Phone Field Rewrites */
