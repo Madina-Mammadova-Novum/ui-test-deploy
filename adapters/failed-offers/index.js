@@ -5,11 +5,11 @@ import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 import {
   ensureFileExtension,
+  formatCurrency,
   formatStageText,
   freightFormatter,
   getLocode,
   transformBytes,
-  formatCurrency,
 } from '@/utils/helpers';
 
 export const failedOffersHeaderDataAdapter = ({ data }) => {
