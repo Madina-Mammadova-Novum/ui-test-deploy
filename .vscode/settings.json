@@ -1,5 +1,15 @@
 {
   "vscode-bard.cookie": "__Secure-1PSID=bAgY4NFMXPIvjHcprp1WIo5TT5jATI-Nzb5llK5-3aL9QMOIw_WWF2EgoqwI-egTdsLiiw",
   "CodeGPT.apiKey": "CodeGPT Plus Beta",
-  "cSpell.words": ["apos", "Hoverable", "laycan", "shiplink"]
+  "cSpell.words": [
+    "apos",
+    "Hoverable",
+    "iconscout",
+    "laycan",
+    "linkify",
+    "recaptcha",
+    "shiplink",
+    "signalr",
+    "unicons"
+  ]
 }
