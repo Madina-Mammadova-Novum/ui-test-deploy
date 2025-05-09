@@ -4,7 +4,14 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
 import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { calculateCountdown, ensureFileExtension, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import {
+  calculateCountdown,
+  ensureFileExtension,
+  formatCurrency,
+  freightFormatter,
+  getLocode,
+  transformBytes,
+} from '@/utils/helpers';
 
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
@@ -241,8 +248,8 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       products,
     },
     commercialOfferTerms: {
-      freight: `${freight} ${freightFormat?.value} `,
-      demurrageRate: `$${demurrageRate} per day`,
+      freight: `$${formatCurrency(freight)} ${freightFormat?.value} `,
+      demurrageRate: `$${formatCurrency(demurrageRate)} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymentTerms: demurragePaymentTerm?.name,
       paymentTerms: paymentTerm?.name,

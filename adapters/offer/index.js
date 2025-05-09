@@ -5,6 +5,7 @@ import { transformDate } from '@/utils/date';
 import {
   addLocalDateFlag,
   calculateCountdown,
+  formatCurrency,
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
@@ -280,7 +281,7 @@ export function offerDetailsAdapter({ data, role }) {
         },
         {
           key: 'Demurrage rate',
-          label: `$${demurrageRate} per day`,
+          label: `$${formatCurrency(demurrageRate)} per day`,
         },
         {
           key: 'Laytime + NOR',
@@ -438,7 +439,7 @@ export function confirmCounterofferDetailsAdapter({ data }) {
         },
         {
           key: 'Demurrage rate',
-          label: `$${demurrageRate} per day`,
+          label: `$${formatCurrency(demurrageRate)} per day`,
         },
         {
           key: 'Laytime + NOR',
