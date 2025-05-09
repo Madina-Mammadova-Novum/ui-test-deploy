@@ -26,8 +26,11 @@ const ChatSupport = ({ title, description, loading }) => {
   const handleOpenConversation = (e) => {
     e.stopPropagation();
 
-    if (chats?.support === null) return;
-    if (isActive && (chats?.support?.length === 0 || chats?.support[0]?.chatId === chats?.user.data?.chatId)) return;
+    if (
+      chats?.support == null ||
+      (isActive && (chats.support.length === 0 || chats.support[0]?.chatId === chats?.user?.data?.chatId))
+    )
+      return;
 
     onRemove({ id: chats?.support[0]?.chatId });
     onActivate(chats?.support[0]);
