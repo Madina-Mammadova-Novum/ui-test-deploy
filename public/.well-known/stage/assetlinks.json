@@ -1,9 +1,12 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.ship.link.staging",
-    "sha256_cert_fingerprints":
-    ["94:DC:37:98:80:94:06:15:DC:67:8E:5C:3E:83:45:2B:5E:D3:8B:79:8D:F1:D1:25:71:5E:3B:18:47:3A:2C:1B"]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ship.link.staging",
+      "sha256_cert_fingerprints": [
+        "94:DC:37:98:80:94:06:15:DC:67:8E:5C:3E:83:45:2B:5E:D3:8B:79:8D:F1:D1:25:71:5E:3B:18:47:3A:2C:1B"
+      ]
+    }
   }
-}]
+]
