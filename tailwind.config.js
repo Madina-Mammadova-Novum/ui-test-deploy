@@ -13,17 +13,18 @@ module.exports = {
   ],
   theme: {
     fontSize: {
-      xsm: ['14px', '130%'],
-      sm: ['16px', '130%'],
-      base: ['18px', '130%'],
-      lg: ['20px', '130%'],
-      xl: ['24px', '130%'],
-      '2xl': ['26px', '130%'],
-      '3xl': ['34px', '130%'],
-      '4xl': ['42px', '130%'],
-      '5xl': ['55px', '130%'],
-      '6xl': ['65px', '130%'],
-      '7xl': ['80px', '130%'],
+      xsm: ['14px', '140%'],
+      sm: ['16px', '140%'],
+      base: ['18px', '140%'],
+      lg: ['20px', '140%'],
+      xl: ['24px', '140%'],
+      '2xl': ['26px', '140%'],
+      '2.5xl': ['30px', '140%'],
+      '3xl': ['34px', '140%'],
+      '4xl': ['42px', '140%'],
+      '5xl': ['55px', '140%'],
+      '6xl': ['65px', '140%'],
+      '7xl': ['80px', '140%'],
     },
     container: {
       padding: {
@@ -77,6 +78,7 @@ module.exports = {
           DEFAULT: '#828C9C',
           darker: '#DADFEA',
           light: '#F8FAFB',
+          medium: '#F4FAFF',
         },
         white: '#FFFFFF',
         purple: {

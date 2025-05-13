@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ship.link.development",
+      "sha256_cert_fingerprints": [
+        "D6:69:27:AA:B9:24:05:48:5E:16:5F:76:40:A0:41:86:C0:C3:07:FA:D6:AE:59:B9:8E:B9:68:D3:A0:35:A2:EC"
+      ]
+    }
+  }
+]

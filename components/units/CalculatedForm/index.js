@@ -158,7 +158,7 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
           resetAction={handleReset}
           submitButton={{
             text: 'Calculate',
-            variant: 'secondary',
+            variant: 'primary',
             size: 'large',
             className: '!w-auto !text-white',
             buttonContainerClassName: 'absolute bottom-3 sm:bottom-5 right-5 sm:right-0 sm:left-5',

@@ -27,7 +27,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   const printCtaBlockItem = (item) => {
     return (
-      <div key={`id-${item.id}`} className="mt-1 rounded-base bg-white p-4 text-black shadow-xmd">
+      <div key={`id-${item.id}`} className="mt-2 rounded-base bg-white p-8 text-black shadow-xmd">
         <Item text={item.text} buttons={item.buttons} />
       </div>
     );
@@ -44,14 +44,11 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   };
 
   return (
-    <section>
-      <div
-        className="container mx-auto flex max-w-[1258px] scroll-mt-16 flex-col-reverse items-center justify-between gap-8 px-6 md:flex-row 3md:px-14"
-        id="how-it-works"
-      >
-        <div className="md:w-1/2">
+    <section id="how-it-works" className="py-16 md:py-20 3md:py-24">
+      <div className="flex flex-col-reverse gap-8 px-4 md:px-8 3md:mx-auto 3md:max-w-[1152px] 3md:flex-row 3md:gap-10 xl:px-0">
+        <div className="flex flex-col gap-6 3md:w-1/2 lg:max-w-[540px]">
           {title && (
-            <Title level="1" className="mb-5 text-black">
+            <Title level="2" className="text-2.5xl text-black">
               {title}
             </Title>
           )}
@@ -66,11 +63,11 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
         </div>
 
         {coverImage && (
-          <div className="h-full w-full rounded-base md:w-1/2">
+          <div className="h-full w-full rounded-base 3md:w-1/2 lg:max-w-[572px]">
             <NextImage
               src={currentTab === 'For Vessel Owner' ? ownerImage : chartererImage}
               alt="Cover Image for User"
-              className="w-full rounded-base object-cover object-center"
+              className="h-60 w-full rounded-base object-cover object-center md:h-[22.875rem] 3md:h-[24.5rem]"
               quality={100}
               height={320}
               width={400}

@@ -5,6 +5,7 @@ import { transformDate } from '@/utils/date';
 import {
   addLocalDateFlag,
   calculateCountdown,
+  formatCurrency,
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
@@ -280,7 +281,7 @@ export function offerDetailsAdapter({ data, role }) {
         },
         {
           key: 'Demurrage rate',
-          label: `$${demurrageRate} per day`,
+          label: `$${formatCurrency(demurrageRate)} per day`,
         },
         {
           key: 'Laytime + NOR',
@@ -438,7 +439,7 @@ export function confirmCounterofferDetailsAdapter({ data }) {
         },
         {
           key: 'Demurrage rate',
-          label: `$${demurrageRate} per day`,
+          label: `$${formatCurrency(demurrageRate)} per day`,
         },
         {
           key: 'Laytime + NOR',
@@ -486,7 +487,7 @@ export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {
   return objectAdapter(data);
 };
 
-export const getPrefilledFormDataAdapter = ({ data }) => {
+export const getPrefilledFormDataAdapter = ({ data, isCounteroffer = false }) => {
   if (!data) return [];
 
   return data
@@ -496,7 +497,13 @@ export const getPrefilledFormDataAdapter = ({ data }) => {
       res[`products[${index}].density`] = curr.density;
       res[`products[${index}].tolerance`] = curr.tolerance;
       res[`products[${index}].quantity`] = curr.quantity;
-      res[`products[${index}].minQuantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
+
+      // For counteroffers, just round the quantity; for regular offers calculate based on tolerance
+      if (isCounteroffer) {
+        res[`products[${index}].minQuantity`] = Math.round(curr.quantity);
+      } else {
+        res[`products[${index}].minQuantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
+      }
 
       return res;
     }, {});

@@ -3,18 +3,13 @@ import PropTypes from 'prop-types';
 
 import { linkPropTypes, mediaPropTypes } from '@/lib/types';
 
-import { LinkAsButton, NextImage, Title, VideoPlayer } from '@/elements';
+import EnvelopeAltSVG from '@/assets/images/envelopeAlt.svg';
+import { LinkAsButton, NextImage, Title } from '@/elements';
 import { getStrapiMedia } from '@/utils';
 
-const CTASingleImageBlock = ({
-  title,
-  shortDescription,
-  coverImage,
-  button,
-  videoSrc = 'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/introvideo/Introduction%20video.mp4',
-}) => {
+const CTASingleImageBlock = ({ title, shortDescription, coverImage, button }) => {
   return (
-    <section className="relative pb-20">
+    <section className="relative pb-[5.75rem] pt-16 md:pb-[8.25rem] md:pt-20 3md:py-24">
       {coverImage && (
         <div className="absolute inset-0 -z-10 h-full w-full">
           <NextImage
@@ -28,19 +23,18 @@ const CTASingleImageBlock = ({
           />
         </div>
       )}
-      <div className="mx-auto max-w-[1258px] gap-8 rounded-b-base px-6 3md:px-14">
-        <div className="mb-10 w-full overflow-hidden rounded-b-base shadow-xl">
-          <VideoPlayer src={videoSrc} preload="metadata" className="w-full" captionSrc="/captions/shiplink.vtt" />
-        </div>
-
-        <div className="mx-auto max-w-[500px] rounded-base bg-white py-8">
+      <div className="mx-auto gap-8 rounded-b-base px-4 md:mx-auto md:max-w-[485px] md:px-0">
+        <div className="flex flex-col items-center justify-center rounded-base bg-white p-10">
+          <div className="mb-4 flex size-11 items-center rounded-md border border-blue/20 p-2">
+            <EnvelopeAltSVG className="fill-blue" />
+          </div>
           {title && (
-            <Title level="1" className="mb-2.5 text-center text-black">
+            <Title level="1" className="mb-0.5 text-center text-black">
               {title}
             </Title>
           )}
-          <div className="mx-auto max-w-[300px]">
-            {shortDescription && <p className="mb-5 text-center text-xsm text-black">{shortDescription}</p>}
+          <div className="mx-auto max-w-[405px]">
+            {shortDescription && <p className="mb-7 text-center text-xsm text-black">{shortDescription}</p>}
             {button && (
               <LinkAsButton
                 href={button.path}
@@ -48,7 +42,7 @@ const CTASingleImageBlock = ({
                   variant: 'primary',
                   size: 'large',
                 }}
-                customStyles="max-w-[115px] mx-auto"
+                customStyles="md:max-w-[115px] mx-auto"
                 target={button.target}
               >
                 {button.label}

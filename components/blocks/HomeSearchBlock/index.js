@@ -4,8 +4,6 @@ import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import ArrowSVG from '@/assets/images/arrow.svg';
-import { Button } from '@/elements';
 import { AccountTools, TankerSearch } from '@/modules';
 import { Tabs } from '@/units';
 
@@ -29,28 +27,13 @@ export default function HomeSearchBlock({ title, subTitle, shortDescription }) {
 
   const handleActiveTab = ({ target }) => setActiveTab(target.value);
 
-  const handleClickScroll = () => {
-    const elementToScroll = document.getElementById('how-it-works');
-    elementToScroll?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section className="relative">
       {title && <div>{title}</div>}
       {subTitle && <div>{subTitle}</div>}
       {shortDescription && <div>{shortDescription}</div>}
-      <div className="h- container mx-auto -mt-[205px] max-w-[1258px] px-6 3md:px-14">
-        <Button
-          buttonProps={{
-            text: 'How it works',
-            variant: 'primary',
-            size: 'large',
-            icon: { after: <ArrowSVG viewBox="0 0 24 24" className="h-5 w-5 -rotate-90 fill-white" /> },
-          }}
-          customStyles="!bg-transparent !p-0 font-medium self-baseline mb-2"
-          onClick={handleClickScroll}
-        />
-        <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="mb-1" />
+      <div className="-mt-[134px] mb-16 px-4 md:mb-8 md:px-8 3md:mx-auto 3md:-mt-[265px] 3md:mb-24 3md:max-w-[1152px] xl:px-0">
+        <Tabs tabs={tabs} activeTab={activeTab} onClick={handleActiveTab} customStyles="-mb-3" />
         {dataByTab[activeTab]}
       </div>
     </section>

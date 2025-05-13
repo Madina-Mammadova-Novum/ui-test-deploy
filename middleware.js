@@ -12,13 +12,14 @@ export default function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // If maintenance mode is active, rewrite all requests to the maintenance page,
-  // but skip static files, contact-us, and privacy-policy pages
+  // but skip static files, contact-us, well-known, and privacy-policy pages
   if (
     maintenanceMode &&
     !pathname.startsWith('/_next') &&
     !pathname.startsWith('/images') &&
     !pathname.startsWith('/favicon.ico') &&
     !pathname.startsWith('/api') &&
+    !pathname.startsWith('/.well-known') &&
     !pathname.startsWith(ROUTES.MAINTENANCE) &&
     pathname !== ROUTES.CONTACT_US &&
     pathname !== ROUTES.PRIVACY_POLICY &&

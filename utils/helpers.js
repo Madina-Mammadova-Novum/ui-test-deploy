@@ -747,6 +747,47 @@ export const formattedNumber = (value) => {
   return value?.toFixed(2);
 };
 
+/**
+ * Formats a number as currency with thousand separators
+ * @param {number} value - The number to format
+ * @param {boolean} showDecimals - Whether to show decimal places (default: false)
+ * @returns {string} Formatted currency string with or without decimal places
+ */
+export const formatCurrency = (value, showDecimals = false) => {
+  if (value === null || value === undefined) return '';
+
+  // Convert to number if it's a string
+  const numValue = typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value;
+
+  // Check if it's a valid number
+  if (Number.isNaN(numValue)) return '';
+
+  // Format with or without decimal places based on parameter
+  if (showDecimals) {
+    // Format with 2 decimal places and add thousand separators
+    return numValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // Round to whole number and add thousand separators
+  return Math.round(numValue)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+/**
+ * Parses a formatted number string with thousand separators back to a number
+ * @param {string} formattedValue - Formatted string with commas (e.g. "500,000")
+ * @returns {number} Parsed number value
+ */
+export const parseFormattedNumber = (formattedValue) => {
+  if (!formattedValue) return null;
+
+  // Remove thousand separators and convert to number
+  const numericValue = parseFloat(formattedValue.toString().replace(/,/g, ''));
+
+  return Number.isNaN(numericValue) ? null : numericValue;
+};
+
 export const formattedDay = (number) => {
   if (number === null || number === undefined) return '';
   const hoursInADay = 24;
@@ -792,8 +833,8 @@ export const sortChatMessagesByDay = (array) =>
 
 export const freightFormatter = ({ value, format }) => {
   const response = {
-    Lumpsum: `${format} $${value}`,
-    '$/mt': `${value} ${format}`,
+    Lumpsum: `${format} $${formatCurrency(value)}`,
+    '$/mt': `${formatCurrency(value, true)} ${format}`,
     WS: `${format} ${value}`,
   };
 
