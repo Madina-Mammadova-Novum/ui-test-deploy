@@ -202,6 +202,11 @@ export function requestAddVesselManuallyAdapter({ data }) {
     disponentOwner,
     disponentOwnerCountry,
     file,
+    netTonnage,
+    grossTonnage,
+    suezCanalNetTonnage,
+    suezCanalGrossTonnage,
+    panamaCanalNetTonnage,
   } = data;
 
   return {
@@ -233,6 +238,11 @@ export function requestAddVesselManuallyAdapter({ data }) {
     disponentOwnerCountryId: disponentOwnerCountry.value,
     fleetId,
     q88QuestionnaireFile: file,
+    netTonnage,
+    grossTonnage,
+    suezCanalNetTonnage,
+    suezCanalGrossTonnage,
+    panamaCanalNetTonnage,
   };
 }
 export function requestUpdateVesselAdapter({ data }) {
@@ -348,6 +358,7 @@ export function responseDeleteVesselAdapter({ data }) {
 
 export function responseGetVesselQ88Adapter({ data }) {
   if (!data) return null;
+
   const {
     ballastDraft,
     ballastDwt,
@@ -369,7 +380,6 @@ export function responseGetVesselQ88Adapter({ data }) {
     vesselCategoryOne,
     vesselCategoryTwo,
     vesselTypeLevelOne,
-
     country,
     registeredOwner,
     registeredOwnerCountry,
@@ -379,6 +389,11 @@ export function responseGetVesselQ88Adapter({ data }) {
     commercialOperatorCountry,
     disponentOwner,
     disponentOwnerCountry,
+    netTonnage,
+    grossTonnage,
+    suezCanalNetTonnage,
+    suezCanalGrossTonnage,
+    panamaCanalNetTonnage,
   } = data;
 
   return {
@@ -409,6 +424,11 @@ export function responseGetVesselQ88Adapter({ data }) {
     commercialOperatorCountry,
     disponentOwner,
     disponentOwnerCountry,
+    netTonnage,
+    grossTonnage,
+    suezCanalNetTonnage,
+    suezCanalGrossTonnage,
+    panamaCanalNetTonnage,
   };
 }
 
