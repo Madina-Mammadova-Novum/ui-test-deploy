@@ -59,13 +59,11 @@ const ContactUsForm = () => {
   };
 
   return isSubmitted ? (
-    <div className="m-auto flex flex-col items-center text-center">
+    <div className="m-auto flex flex-col items-center rounded-base bg-white px-4 py-8 text-center md:px-5 3md:max-w-[35.75rem]">
       <Title level={2} className="mb-2.5 flex items-center gap-2">
         <TickInCircleSVG className="h-6 w-6 fill-black" viewBox="0 0 24 24" /> Thank you!
       </Title>
-      <p className="mb-4 max-w-[240px] text-xsm">
-        Your message has been submitted. Someone from our team will contact you.
-      </p>
+      <p className="text-xsm">Your message has been submitted. Someone from our team will contact you.</p>
       {/* REMOVED Fill the form again
       
       <Button
@@ -78,18 +76,15 @@ const ContactUsForm = () => {
       <FormManager
         submitButton={{
           text: 'Send Message',
-          variant: 'secondary',
+          variant: 'primary',
           size: 'large',
-          className: '!w-fit self-baseline',
+          className: 'self-baseline !mt-0 w-full !font-medium md:w-fit',
         }}
         submitAction={onSubmit}
-        className="flex w-full flex-col gap-5"
+        className="flex w-full flex-col gap-8 rounded-base bg-white px-4 py-8 md:px-5 3md:max-w-[35.75rem]"
       >
-        <Title level="2" className="mb-5">
-          Write to us
-        </Title>
         <div className="grid gap-y-4">
-          <div className="grid gap-x-5 gap-y-4 lg:grid-cols-2">
+          <div className="grid gap-x-5 gap-y-4 md:grid-cols-2">
             <Input
               {...register('firstName')}
               label="First name"
@@ -123,11 +118,10 @@ const ContactUsForm = () => {
           <TextArea
             {...register('message')}
             label="Message"
-            placeholder="Type your message here"
-            inputStyles="h-20"
+            placeholder="Type your message"
+            inputStyles="h-20 min-w-max"
             error={errors.message?.message}
           />
-          <div />
         </div>
       </FormManager>
     </FormProvider>

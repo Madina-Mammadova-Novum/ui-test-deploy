@@ -3,7 +3,14 @@ import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
-import { ensureFileExtension, formatStageText, freightFormatter, getLocode, transformBytes } from '@/utils/helpers';
+import {
+  ensureFileExtension,
+  formatCurrency,
+  formatStageText,
+  freightFormatter,
+  getLocode,
+  transformBytes,
+} from '@/utils/helpers';
 
 export const failedOffersHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
@@ -249,7 +256,7 @@ export const failedOffersDetailsAdapter = ({ data }) => {
         },
         {
           title: 'Demurrage rate',
-          text: `$${demurrageRate} per day`,
+          text: `$${formatCurrency(demurrageRate)} per day`,
         },
         {
           title: 'Laytime + NOR',

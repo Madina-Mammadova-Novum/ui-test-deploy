@@ -95,7 +95,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   }, [searchParams]);
 
   return (
-    <div className="relative mt-5 w-full rounded-base bg-white p-5 shadow-2xmd">
+    <div className="relative mt-5 w-full rounded-base bg-white px-4 py-8 shadow-2xmd md:px-5 3md:px-7 3md:py-9">
       <Modal opened={isAddFavoriteOpened} onClose={handleCloseModal}>
         <FavoriteSearchForm title="Add to Favorites" state={searchFormData} closeModal={handleCloseModal} />
       </Modal>
@@ -109,7 +109,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
           submitAction={(formData) => onSubmit(formData)}
           submitButton={{
             text: 'Show results',
-            variant: 'secondary',
+            variant: 'primary',
             size: 'large',
             className: '!w-max ml-auto !text-white',
             disabled: isLoading,
@@ -134,7 +134,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
               />
             </div>
           )}
-          <div className="absolute bottom-5 right-40">
+          <div className="absolute bottom-8 right-40 3md:bottom-9">
             <Button
               buttonProps={{ text: 'Reset all', variant: 'primary', size: 'small' }}
               onClick={handleResetFields}

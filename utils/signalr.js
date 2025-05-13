@@ -91,7 +91,11 @@ export class NotificationController extends SignalRController {
           notifications: { unwatchedData },
         } = this.store.getState();
 
-        const newestNotification = unwatchedData?.[0]?.data?.[0] || false;
+        let newestNotification = unwatchedData?.[0]?.data?.[0] || false;
+
+        if (newestNotification) {
+          newestNotification = { ...newestNotification, isSignal: true };
+        }
 
         const soundEnabled = localStorage.getItem('notificationSound');
         const isSoundEnabled = soundEnabled === null ? true : soundEnabled === 'true';

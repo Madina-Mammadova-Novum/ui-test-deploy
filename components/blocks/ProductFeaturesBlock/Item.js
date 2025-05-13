@@ -12,8 +12,8 @@ const Item = ({ text, buttons }) => {
       <LinkAsButton
         key={path}
         href={path}
-        buttonProps={{ variant: 'secondary', size: 'large' }}
-        customStyles="w-fit mt-5"
+        buttonProps={{ variant: 'primary', size: 'large' }}
+        customStyles="w-full mt-5 md:w-fit"
       >
         {label}
       </LinkAsButton>

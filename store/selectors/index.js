@@ -15,7 +15,7 @@ export const notificationsSelector = ({ notifications }) => notifications;
 export const offerSelector = ({ offer, search }) => ({
   ...offer,
   cargoType: search?.searchParams?.cargoType,
-  products: getPrefilledFormDataAdapter({ data: search?.searchParams?.products }),
+  products: getPrefilledFormDataAdapter({ data: search?.searchParams?.products, isCounteroffer: false }),
 });
 export const preFixtureSelector = ({ preFixture, notifications, auth }) => ({
   ...preFixture,
