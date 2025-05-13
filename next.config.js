@@ -22,6 +22,20 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    const appEnv = process.env.APP_ENV || 'dev'; // Default to 'dev' if not set or for local
+
+    return [
+      {
+        source: '/.well-known/assetlinks.json',
+        destination: `/.well-known/${appEnv}/assetlinks.json`,
+      },
+      {
+        source: '/.well-known/apple-app-site-association',
+        destination: `/.well-known/${appEnv}/apple-app-site-association`,
+      },
+    ];
+  },
   crossOrigin: 'anonymous',
   reactStrictMode: false,
   swcMinify: true,
