@@ -45,7 +45,9 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity }) 
       );
 
     return (
-      <div className={`flex gap-x-5 ${underRecap ? 'justify-between' : 'justify-end'} pt-2.5`}>
+      <div
+        className={`flex gap-x-5 ${underRecap && !isOwnerConfirmed && !isChartererConfirmed ? 'justify-between' : 'justify-end'} pt-2.5`}
+      >
         {!isOwnerConfirmed && !isChartererConfirmed && (
           <div className="w-full grow">
             <Button
