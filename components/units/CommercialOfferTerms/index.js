@@ -56,10 +56,21 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat =
-    selectedFreight?.label === 'WS'
-      ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
-      : freightEstimation?.min && `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+  const getHelperFreightFormat = () => {
+    if (!minValue || !maxValue) return '';
+
+    if (selectedFreight?.label === 'WS') {
+      return `WS ${minValue} - WS ${maxValue}`;
+    }
+
+    if (selectedFreight?.label === '$/mt') {
+      return `$${formatCurrency(minValue, true)} - $${formatCurrency(maxValue, true)}`;
+    }
+
+    return `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+  };
+
+  const helperFreightFormat = getHelperFreightFormat();
 
   const helperRangeFormat =
     ranges?.demurrageRate?.min &&
@@ -159,12 +170,12 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
         )}
       </div>
       {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
-      <div className="mt-3 flex items-baseline gap-x-5">
+      <div className="mt-3 flex items-baseline">
         <FormDropdown
           label="Freight"
           labelBadge="*"
           name="freight"
-          customStyles={{ className: 'w-1/2' }}
+          customStyles={{ className: 'w-1/2 pr-5' }}
           options={freightFormats}
           disabled={!valid || loading}
           loading={valid && loading}

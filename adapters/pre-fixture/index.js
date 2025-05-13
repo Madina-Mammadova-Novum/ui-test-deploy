@@ -309,7 +309,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     },
     commercialOfferTerms: {
       freight: freightFormatter({ value: freight, format: freightFormat.value }),
-      demurrageRate: `$${demurrageRate} per day`,
+      demurrageRate: `$${formatCurrency(demurrageRate)} per day`,
       laytime: `${layTime} hrs + (6 + 6 hrs)`,
       demurragePaymentTerms: demurragePaymentTerm?.name,
       paymentTerms: paymentTerm?.name,
