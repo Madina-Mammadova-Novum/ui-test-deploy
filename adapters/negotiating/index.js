@@ -378,7 +378,12 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
   const { vessel, createdAt, expiresAt, frozenAt, id } = data;
-  const { details: { summerDwt } = {}, openPort: { name: portName, locode: portLocode } = {}, openDate } = vessel || {};
+
+  const { details: { summerDwt } = {} } = vessel || {};
+  const openPort = vessel?.openPort || {};
+  const portName = openPort?.name || null;
+  const portLocode = openPort?.locode || null;
+  const openDate = vessel?.openDate;
 
   return [
     {

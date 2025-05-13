@@ -43,10 +43,21 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const minValue = freightEstimation?.min;
   const maxValue = freightEstimation?.max;
 
-  const helperFreightFormat =
-    selectedFreight?.label === 'WS'
-      ? freightEstimation?.min && `WS ${minValue} - WS ${maxValue}`
-      : freightEstimation?.min && `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+  const getHelperFreightFormat = () => {
+    if (!minValue || !maxValue) return '';
+
+    if (selectedFreight?.label === 'WS') {
+      return `WS ${minValue} - WS ${maxValue}`;
+    }
+
+    if (selectedFreight?.label === '$/mt') {
+      return `$${formatCurrency(minValue, true)} - $${formatCurrency(maxValue, true)}`;
+    }
+
+    return `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+  };
+
+  const helperFreightFormat = getHelperFreightFormat();
 
   const helperRangeFormat =
     ranges?.demurrageRate?.min &&
@@ -92,7 +103,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
 
   const printProduct = (_, index) => {
     return (
-      <div key={index} className="mt-3 flex items-baseline gap-x-5">
+      <div key={index} className="mt-3 flex items-baseline gap-x-6">
         <FormDropdown
           label={`product #${index + 1}`}
           labelBadge="*"
@@ -136,12 +147,12 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
         />
       </div>
       {products?.filter((product) => product).map(printProduct)}
-      <div className="mt-3 flex items-baseline gap-x-5">
+      <div className="mt-3 flex items-baseline">
         <FormDropdown
           label="Freight"
           labelBadge="*"
           name="freight"
-          customStyles={{ className: 'w-1/2' }}
+          customStyles={{ className: 'w-1/2 pr-5' }}
           options={freightFormats}
           disabled={loading || !valid}
           loading={loading}
