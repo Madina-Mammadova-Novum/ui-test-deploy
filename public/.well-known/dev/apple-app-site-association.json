@@ -3,9 +3,7 @@
     "apps": [],
     "details": [
       {
-        "appIDs": [
-          "9MDQDGM33H.com.ship.link.development"
-        ],
+        "appIDs": ["9MDQDGM33H.com.ship.link.development"],
         "components": [
           {
             "/": "/*"
@@ -15,8 +13,6 @@
     ]
   },
   "webcredentials": {
-    "apps": [
-      "9MDQDGM33H.com.ship.link.development"
-    ]
+    "apps": ["9MDQDGM33H.com.ship.link.development"]
   }
 }
