@@ -32,7 +32,7 @@ const nextConfig = {
       },
       {
         source: '/.well-known/apple-app-site-association',
-        destination: `/.well-known/${appEnv}/apple-app-site-association`,
+        destination: `/.well-known/${appEnv}/apple-app-site-association.json`,
       },
     ];
   },
