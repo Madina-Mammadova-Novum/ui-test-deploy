@@ -29,13 +29,14 @@ import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import GettingStartedSection from '@/modules/GettingStartedSection';
 import GlobalError from '@/modules/GlobalError';
-import { AccountHeader, AuthHeader, MaintenanceHeader, PageHeader } from '@/modules/Header';
+import { AccountHeader, AuthHeader, MaintenanceHeader, NewAuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
 import Negotiating from '@/modules/Negotiating';
 import NegotiatingDetails from '@/modules/Negotiating/NegotiatingDetails';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
+import NewNavbar from '@/modules/NewNavbar';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
 import OnSubs from '@/modules/OnSubs';
@@ -62,6 +63,7 @@ import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
+import NewAuthWrapper from '@/modules/NewAuthWrapper';
 
 export {
   AccountContainer,
@@ -87,7 +89,9 @@ export {
   AccountTools,
   AccountFooter,
   AuthHeader,
+  NewAuthHeader,
   AuthWrapper,
+  NewAuthWrapper,
   ModalWrapper,
   LoginForm,
   PersonalDetailsForm,
@@ -132,4 +136,5 @@ export {
   FailedOffersExpandedContent,
   FailedOffersDetailsContent,
   FailedOffersDocumentsContent,
+  NewNavbar,
 };

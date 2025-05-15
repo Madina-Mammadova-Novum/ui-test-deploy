@@ -1,7 +1,7 @@
 import { metaData } from '@/adapters/metaData';
 import { NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
-import { AuthWrapper, LoginForm } from '@/modules';
+import { LoginForm, NewAuthWrapper } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -16,7 +16,7 @@ export function generateMetadata() {
 
 export default function LoginPage() {
   return (
-    <AuthWrapper title="Log in" containerClass="flex flex-col w-full 2md:w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40">
+    <NewAuthWrapper containerClass="flex flex-col w-full">
       <LoginForm />
       <NextLink
         href={ROUTES.FORGOT_PASSWORD}
@@ -24,6 +24,6 @@ export default function LoginPage() {
       >
         Forgot your password
       </NextLink>
-    </AuthWrapper>
+    </NewAuthWrapper>
   );
 }

@@ -1,4 +1,4 @@
-import AuthLayout from '@/layouts/AuthLayout';
+import NewAuthLayout from '@/layouts/NewAuthLayout';
 import { ROUTES } from '@/lib';
 
 export default function LoginLayout({ children }) {
@@ -10,8 +10,8 @@ export default function LoginLayout({ children }) {
   };
 
   return (
-    <AuthLayout navigation={navigation} containerClass="flex flex-col items-center 3md:items-end w-full">
+    <NewAuthLayout navigation={navigation} containerClass="flex flex-col items-center 3md:items-end w-full">
       {children}
-    </AuthLayout>
+    </NewAuthLayout>
   );
 }

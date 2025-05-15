@@ -71,28 +71,38 @@ const LoginForm = () => {
           text: 'Log in',
           variant: 'primary',
           size: 'large',
-          className: 'mt-0 w-full',
+          className: '!mt-0 w-full',
         }}
-        className="flex flex-col gap-y-5 pt-5"
+        className="mx-auto flex max-w-[546px] flex-col gap-y-8 bg-gray-medium p-10"
         submitAction={onSubmit}
       >
-        <Input
-          {...register('email')}
-          label="Email"
-          labelBadge="*"
-          placeholder="Enter your email"
-          type="email"
-          disabled={isSubmitting}
-          error={errors?.email?.message}
-        />
-        <PasswordInput
-          name="password"
-          label="Password"
-          placeholder="Enter your password"
-          disabled={isSubmitting}
-          onChange={handlePassword}
-          error={errors?.password?.message}
-        />
+        <div className="flex flex-col gap-y-3">
+          <div className="flex flex-col gap-y-4">
+            <Input
+              {...register('email')}
+              label="Email"
+              placeholder="Enter your email"
+              type="email"
+              disabled={isSubmitting}
+              error={errors?.email?.message}
+              inputStyles="bg-white"
+            />
+            <PasswordInput
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+              disabled={isSubmitting}
+              onChange={handlePassword}
+              error={errors?.password?.message}
+              inputStyles="bg-white"
+            />
+          </div>
+
+          <div className="flex justify-between">
+            <p>test1</p>
+            <p>test2</p>
+          </div>
+        </div>
       </FormManager>
     </FormProvider>
   );
