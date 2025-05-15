@@ -36,6 +36,7 @@ import Navbar from '@/modules/Navbar';
 import Negotiating from '@/modules/Negotiating';
 import NegotiatingDetails from '@/modules/Negotiating/NegotiatingDetails';
 import NegotiatingAcceptOffer from '@/modules/NegotiatingAcceptOffer';
+import NewAuthWrapper from '@/modules/NewAuthWrapper';
 import NewNavbar from '@/modules/NewNavbar';
 import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
@@ -63,7 +64,6 @@ import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
 import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
-import NewAuthWrapper from '@/modules/NewAuthWrapper';
 
 export {
   AccountContainer,
