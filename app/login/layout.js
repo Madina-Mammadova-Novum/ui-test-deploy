@@ -10,7 +10,10 @@ export default function LoginLayout({ children }) {
   };
 
   return (
-    <NewAuthLayout navigation={navigation} containerClass="flex flex-col items-center 3md:items-end w-full">
+    <NewAuthLayout
+      navigation={navigation}
+      containerClass="flex flex-col items-center 3md:items-end w-full py-16 md:py-20 3md:py-24"
+    >
       {children}
     </NewAuthLayout>
   );

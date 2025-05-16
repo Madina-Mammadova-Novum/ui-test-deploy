@@ -4,7 +4,7 @@ import { NewAuthHeader, PageFooter } from '@/modules';
 
 const NewAuthLayout = ({ navigation, children, containerClass = '' }) => {
   return (
-    <div className="max-w-screen container mx-auto flex min-h-screen flex-col px-5 md:px-10">
+    <div className="max-w-screen flex min-h-screen flex-col justify-between">
       <NewAuthHeader navigation={navigation} />
       <section className={containerClass}>{children}</section>
       <PageFooter />
