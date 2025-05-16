@@ -69,10 +69,10 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
   };
 
   return (
-    <div className={classNames(customStyles, 'pt-4')}>
+    <div className={customStyles}>
       {title !== '' ?? <Title level="3">{title}</Title>}
-      <div className="flex flex-col items-start gap-5 md:min-w-[450px] md:flex-row">
-        <div className="flex w-full flex-col justify-between gap-y-5">
+      <div className="flex flex-col items-start gap-3">
+        <div className="flex w-full flex-col justify-between gap-y-4">
           <PasswordInput
             name="password"
             label={password?.label}
@@ -81,6 +81,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
             onChange={passwordValidation}
             autoComplete="off"
             aria-autocomplete="none"
+            inputStyles="bg-white"
           />
           <PasswordInput
             name="confirmPassword"
@@ -90,24 +91,18 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
             onChange={passwordValidation}
             autoComplete="off"
             aria-autocomplete="none"
+            inputStyles="bg-white"
           />
         </div>
-        <div className="pl-0 md:pl-5">
-          <Title level="4" className="whitespace-nowrap">
-            Password requirements
-          </Title>
-          <ul className="mt-2 text-[12px] text-black">
-            {validation.map(({ text, isValidated }, index) => (
-              <li key={text} className={classNames('flex items-center', index && 'mt-1.5')}>
-                <TickInCircleSVG
-                  className={`${isValidated ? 'fill-green' : 'fill-black'} h-5 w-5`}
-                  viewBox="0 0 24 24"
-                />
-                <span className="ml-1.5">{text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+
+        <ul className="text-[12px] leading-[130%] text-black">
+          {validation.map(({ text, isValidated }, index) => (
+            <li key={text} className={classNames('flex items-center', index && 'mt-1')}>
+              <TickInCircleSVG className={`${isValidated ? 'fill-green' : 'fill-blue'} h-5 w-5`} viewBox="0 0 24 24" />
+              <span className="ml-1">{text}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
