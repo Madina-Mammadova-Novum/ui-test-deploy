@@ -126,6 +126,15 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
 
     setValue(key, value);
 
+    // Auto-set laycanEnd to laycanStart + 2 days when laycanStart changes
+    if (key === 'laycanStart' && value) {
+      // Format is already in yyyy-MM-dd from the DatePicker component
+      const newLaycanEnd = addDays(new Date(value), 2);
+      // We maintain the same string format as the input
+      setValue('laycanEnd', newLaycanEnd.toISOString().split('T')[0]);
+      clearErrors('laycanEnd');
+    }
+
     if (portKeys.includes(key)) {
       setValue(terminalKeys[key], null);
 

@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import PlaySVG from '@/assets/images/play.svg';
+import { Button } from '@/elements';
+
 /**
  * @component VideoPlayer
- * @description Displays a video with scroll-triggered autoplay
+ * @description Displays a video with custom play button and behavior
  */
 const VideoPlayer = ({
   src,
@@ -25,6 +28,27 @@ const VideoPlayer = ({
   ...rest
 }) => {
   const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+            setHasInteracted(true);
+          })
+          .catch((error) => {
+            console.error('Error playing video:', error);
+          });
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
 
   useEffect(() => {
     if (!autoPlayOnScroll || typeof window === 'undefined') {
@@ -37,11 +61,18 @@ const VideoPlayer = ({
       // Play/pause based on visibility
       if (videoRef.current) {
         if (entry.isIntersecting) {
-          videoRef.current.play().catch(() => {
-            // Autoplay might be blocked by browser, ignore error
-          });
+          videoRef.current
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+              setHasInteracted(true);
+            })
+            .catch(() => {
+              // Autoplay might be blocked by browser, ignore error
+            });
         } else {
           videoRef.current.pause();
+          setIsPlaying(false);
         }
       }
     };
@@ -62,28 +93,82 @@ const VideoPlayer = ({
     };
   }, [autoPlayOnScroll]);
 
+  // Handle video end event
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    const handleEnded = () => {
+      if (!loop) {
+        setIsPlaying(false);
+      }
+    };
+
+    const handlePause = () => {
+      setIsPlaying(false);
+    };
+
+    const handlePlay = () => {
+      setIsPlaying(true);
+      setHasInteracted(true);
+    };
+
+    if (videoElement) {
+      videoElement.addEventListener('ended', handleEnded);
+      videoElement.addEventListener('pause', handlePause);
+      videoElement.addEventListener('play', handlePlay);
+    }
+
+    return () => {
+      if (videoElement) {
+        videoElement.removeEventListener('ended', handleEnded);
+        videoElement.removeEventListener('pause', handlePause);
+        videoElement.removeEventListener('play', handlePlay);
+      }
+    };
+  }, [loop]);
+
   return (
-    <video
-      ref={videoRef}
-      controls={controls}
-      autoPlay={autoPlay}
-      loop={loop}
-      muted={muted}
-      preload={preload}
-      className={`w-full ${className}`}
-      poster={poster}
-      controlsList="nodownload"
-      {...rest}
-    >
-      <source src={src} type={type} />
-      <track
-        kind="captions"
-        src={captionSrc || '/captions/default.vtt'}
-        srcLang={captionLanguage}
-        label={captionLabel}
-      />
-      Your browser does not support the video tag.
-    </video>
+    <div className={`relative w-full overflow-hidden ${className}`} style={{ aspectRatio: '16/9' }}>
+      <video
+        ref={videoRef}
+        controls={hasInteracted && controls}
+        autoPlay={autoPlay}
+        loop={loop}
+        muted={muted}
+        preload={preload}
+        className="absolute inset-0 h-full w-full object-cover"
+        poster={poster}
+        controlsList="nodownload"
+        {...rest}
+      >
+        <source src={src} type={type} />
+        <track
+          kind="captions"
+          src={captionSrc || '/captions/default.vtt'}
+          srcLang={captionLanguage}
+          label={captionLabel}
+        />
+        Your browser does not support the video tag.
+      </video>
+
+      {(!isPlaying || !hasInteracted) && (
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Button
+            type="button"
+            onClick={handlePlayPause}
+            customStyles="flex h-12 w-12 items-center justify-center !rounded-full transition-all"
+            buttonProps={{
+              variant: 'primary',
+              size: 'large',
+              icon: {
+                before: <PlaySVG className="h-7 w-7 fill-white" />,
+              },
+            }}
+            aria-label="Play video"
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

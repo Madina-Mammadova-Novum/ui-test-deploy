@@ -3,6 +3,8 @@
   "CodeGPT.apiKey": "CodeGPT Plus Beta",
   "cSpell.words": [
     "apos",
+    "applinks",
+    "assetlinks",
     "Datepickers",
     "disponent",
     "Hoverable",
@@ -13,6 +15,7 @@
     "linkify",
     "Locode",
     "Lumpsum",
+    "MDQDGM",
     "nodownload",
     "nowrap",
     "ONSUBS",
@@ -27,6 +30,7 @@
     "signalr",
     "unicons",
     "vesselnames",
+    "webcredentials",
     "webp"
   ]
 }

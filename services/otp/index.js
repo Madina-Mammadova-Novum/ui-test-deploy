@@ -12,7 +12,8 @@ import { postData } from '@/utils/dataFetching';
 export async function sendOtp({ receiver }) {
   const response = await postData('otp/send', { receiver }, { headers: { ...ContentTypeJson() } });
 
-  if (response.error) response.error.message = 'Sending limit exceeded. Please try again later.';
+  if (response.error && response.status === 429)
+    response.error.message = 'Sending limit exceeded. Please try again later.';
 
   return {
     ...response,
