@@ -1,9 +1,9 @@
 import { ResetPasswordPagePropTypes } from '@/lib/types';
 
 import { metaData } from '@/adapters/metaData';
-import { NextLink } from '@/elements';
+import { AuthHeader, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
-import { AuthWrapper, ResetPasswordForm } from '@/modules';
+import { NewAuthWrapper, ResetPasswordForm } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -18,19 +18,23 @@ export function generateMetadata() {
 
 const ResetPasswordPage = ({ params }) => {
   return (
-    <AuthWrapper
-      title="Reset your password"
-      subtitle="Pick and set a new password for your account and you’re good to go!"
-      containerClass="flex flex-col w-full sm:w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40"
-    >
-      <ResetPasswordForm params={params} />
-      <NextLink
-        href={ROUTES.LOGIN}
-        className="inline-flex w-full items-center justify-center pt-2.5 text-xsm text-blue"
-      >
-        Return to Log in
-      </NextLink>
-    </AuthWrapper>
+    <NewAuthWrapper containerClass="flex flex-col w-full px-4 md:px-8 3md:mx-auto 3md:max-w-[546px] xl:px-0 gap-8 3md:gap-12">
+      <AuthHeader
+        logoSrc="/images/dark-logo.png"
+        titleText="Reset your password"
+        accountText="Pick and set a new password for your account and you're good to go!"
+      />
+
+      <div className="flex flex-col items-center justify-center gap-y-4">
+        <ResetPasswordForm params={params} />
+        <p className="text-xsm text-black">
+          Remember your password?{' '}
+          <NextLink href={ROUTES.LOGIN} className="text-blue underline">
+            Log In
+          </NextLink>
+        </p>
+      </div>
+    </NewAuthWrapper>
   );
 };
 

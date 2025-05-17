@@ -50,25 +50,27 @@ const ForgotPasswordForm = () => {
   return (
     <FormProvider {...methods}>
       <FormManager
-        className="pt-4"
+        className="mx-auto flex w-full max-w-[546px] flex-col gap-y-8 rounded-[10px] bg-gray-medium p-10"
         submitButton={{
           text: 'Get a new password',
           variant: 'primary',
           size: 'large',
+          className: '!mt-0 w-full',
         }}
         submitAction={onSubmit}
       >
-        <Input
-          {...register('email')}
-          label="Email"
-          labelBadge="*"
-          placeholder="Enter your email"
-          customStyles="mt-4"
-          type="email"
-          disabled={isSubmitting}
-          error={errors.email?.message}
-        />
-        <Captcha onChange={setCaptcha} />
+        <div className="flex flex-col gap-y-3">
+          <Input
+            {...register('email')}
+            label="Email"
+            placeholder="Enter your email"
+            type="email"
+            disabled={isSubmitting}
+            error={errors.email?.message}
+            inputStyles="bg-white"
+          />
+          <Captcha onChange={setCaptcha} className="my-0" />
+        </div>
       </FormManager>
     </FormProvider>
   );
