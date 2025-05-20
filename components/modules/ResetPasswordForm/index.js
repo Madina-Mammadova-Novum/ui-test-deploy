@@ -48,13 +48,15 @@ const ResetPasswordForm = ({ params }) => {
           text: 'Reset password',
           variant: 'primary',
           size: 'large',
+          className: '!mt-0 w-full',
         }}
         submitAction={onSubmit}
+        className="mx-auto flex w-full max-w-[546px] flex-col gap-y-8 rounded-[10px] bg-gray-medium p-10"
       >
         <PasswordValidation
           helperData={{
-            password: { label: 'chose password', placeholder: 'Enter your password' },
-            confirm: { label: 'confirm password', placeholder: 'Enter your password' },
+            password: { label: 'chose new password', placeholder: 'Enter your password' },
+            confirm: { label: 'confirm new password', placeholder: 'Enter your password' },
           }}
         />
       </FormManager>

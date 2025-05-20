@@ -9,7 +9,7 @@ import PasswordHiddenSVG from '@/assets/images/passwordHidden.svg';
 import ShowPasswordSVG from '@/assets/images/showPassword.svg';
 import { Input } from '@/elements';
 
-const PasswordInput = ({ name = '', label = '', placeholder = '', onChange, ...rest }) => {
+const PasswordInput = ({ name = '', label = '', labelBadge = '', placeholder = '', onChange, ...rest }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ const PasswordInput = ({ name = '', label = '', placeholder = '', onChange, ...r
           <Input
             {...field}
             label={label}
-            labelBadge="*"
+            labelBadge={labelBadge}
             onChange={onChange}
             placeholder={placeholder}
             ref={ref}

@@ -1,6 +1,7 @@
 import AccordionBody from '@/elements/AccordionBody';
 import Alert from '@/elements/Alert';
 import ArchiveButton from '@/elements/ArchiveButton';
+import AuthHeader from '@/elements/AuthHeader';
 import Badge from '@/elements/Badge';
 import Button from '@/elements/Button';
 import ChatButton from '@/elements/ChatButton';
@@ -63,6 +64,7 @@ import VideoPlayer from '@/elements/VideoPlayer';
 
 export {
   AccordionBody,
+  AuthHeader,
   ReActivateButton,
   ChatListLoader,
   Table,

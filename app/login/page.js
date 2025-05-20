@@ -1,7 +1,7 @@
 import { metaData } from '@/adapters/metaData';
-import { NextLink } from '@/elements';
+import { AuthHeader } from '@/elements';
 import { ROUTES } from '@/lib';
-import { AuthWrapper, LoginForm } from '@/modules';
+import { LoginForm, NewAuthWrapper } from '@/modules';
 
 export function generateMetadata() {
   return metaData({
@@ -16,14 +16,15 @@ export function generateMetadata() {
 
 export default function LoginPage() {
   return (
-    <AuthWrapper title="Log in" containerClass="flex flex-col w-full 2md:w-1/2 3md:w-1/3 3md:mx-32 lg:mx-40">
+    <NewAuthWrapper containerClass="flex flex-col w-full px-4 md:px-8 3md:mx-auto 3md:max-w-[546px] xl:px-0 gap-8 3md:gap-12">
+      <AuthHeader
+        logoSrc="/images/dark-logo.png"
+        titleText="Log In"
+        accountText="Don't have an account yet?"
+        linkText="Registration"
+        linkHref={ROUTES.SIGNUP}
+      />
       <LoginForm />
-      <NextLink
-        href={ROUTES.FORGOT_PASSWORD}
-        className="inline-flex items-center justify-center pt-2.5 text-xsm text-blue"
-      >
-        Forgot your password
-      </NextLink>
-    </AuthWrapper>
+    </NewAuthWrapper>
   );
 }

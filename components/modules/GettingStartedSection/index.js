@@ -1,10 +1,12 @@
 'use client';
 
+import { NextLink } from '@/elements';
 import { getCookieFromBrowser } from '@/utils/helpers';
 
 const GettingStartedSection = () => {
   const email = getCookieFromBrowser('session-user-email');
   const emailText = email || "[user's email address]";
+  const supportEmail = 'registration.support@ship.link';
 
   return (
     <article className="prose pb-5">
@@ -49,7 +51,11 @@ const GettingStartedSection = () => {
         <li>
           <p>
             <strong>Support:</strong> If you have any questions or need assistance, feel free to reach out to our
-            support team at [support email/phone number].
+            support team at{' '}
+            <NextLink href={`mailto:${supportEmail}`} className="text-blue underline">
+              {supportEmail}
+            </NextLink>
+            .
           </p>
         </li>
       </ol>
@@ -62,16 +68,9 @@ const GettingStartedSection = () => {
 
       <ul>
         <li>
-          <a href="https://www.facebook.com/shiplink">Facebook</a>
-        </li>
-        <li>
-          <a href="https://www.twitter.com/shiplink">Twitter</a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/shiplink">LinkedIn</a>
-        </li>
-        <li>
-          <a href="https://www.instagram.com/shiplink">Instagram</a>
+          <NextLink href="https://www.linkedin.com/company/shiplink" target="_blank" className="text-blue underline">
+            LinkedIn
+          </NextLink>
         </li>
       </ul>
 
