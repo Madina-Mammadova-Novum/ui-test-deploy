@@ -24,14 +24,24 @@ const LoginForm = () => {
   const schema = yup.object().shape({ ...loginSchema() });
   const { error, session, loading } = useSelector(getAuthSelector);
 
-  const methods = useHookFormParams({ schema });
+  const methods = useHookFormParams({
+    schema,
+    state: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+  });
 
   const {
     register,
     setValue,
     clearErrors,
+    watch,
     formState: { errors, isSubmitting },
   } = methods;
+
+  const rememberMe = watch('rememberMe', false);
 
   useEffect(() => {
     if (error) {
@@ -53,6 +63,9 @@ const LoginForm = () => {
   };
 
   const onSubmit = (data) => {
+    // Store remember me preference in localStorage
+    localStorage.setItem('remember-me', data.rememberMe);
+
     dispatch(signIn({ data }));
     handleResetFields();
     router.refresh();
@@ -62,6 +75,12 @@ const LoginForm = () => {
     clearErrors('password');
     const { value } = event.target;
     setValue('password', value);
+  };
+
+  const handleRememberMe = (event) => {
+    clearErrors('rememberMe');
+    const { checked } = event.target;
+    setValue('rememberMe', checked);
   };
 
   return (
@@ -102,8 +121,8 @@ const LoginForm = () => {
           <div className="flex flex-col justify-between gap-2 md:flex-row md:gap-0">
             <CheckBoxInput
               name="rememberMe"
-              // onChange={handleSameAddress}
-              // checked={sameAddresses}
+              onChange={handleRememberMe}
+              checked={rememberMe}
               labelStyles="text-black text-xsm"
               boxStyles="!gap-x-2 !h-5"
             >
