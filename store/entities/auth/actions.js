@@ -16,7 +16,7 @@ export const signIn = createAsyncThunk(AUTH.SIGNIN, async ({ data }, { rejectWit
 
   const { sub, role, ...rest } = decodedTokenAdapter(response.data.access_token);
 
-  sessionCookieData(response.data);
+  sessionCookieData(response.data, data.rememberMe);
 
   if (role) {
     dispatch(resetUser());
