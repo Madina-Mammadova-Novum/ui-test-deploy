@@ -11,7 +11,16 @@ const CookieConsent = () => {
   useEffect(() => {
     // Check if user has already consented
     const hasConsented = localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (!hasConsented) {
+
+    // Check for inApp=true in query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const inApp = urlParams.get('inApp') === 'true';
+
+    if (inApp && !hasConsented) {
+      // Auto-consent if inApp=true is present in URL
+      localStorage.setItem(COOKIE_CONSENT_KEY, 'true');
+    } else if (!hasConsented) {
+      // Only show consent banner if not already consented
       setShowConsent(true);
     }
   }, []);
