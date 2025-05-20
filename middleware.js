@@ -4,7 +4,57 @@ import { NextResponse } from 'next/server';
 import { ROUTES } from '@/lib';
 import { checkAuthRoute, getRoleIdentity } from '@/utils/helpers';
 
+// Define allowed origins for CORS
+const allowedOrigins = ['https://ship.link', 'https://prod-int.ship.link'];
+
+// Handle CORS for API routes
+function handleCors(req, response) {
+  // Only apply to /api routes
+  if (!req.nextUrl.pathname.startsWith('/api')) {
+    return response;
+  }
+
+  // Get the origin from request headers
+  const origin = req.headers.get('origin');
+
+  // Only set CORS headers if there's an origin
+  if (origin) {
+    // Check if the origin is in our allowed list
+    if (allowedOrigins.includes(origin)) {
+      response.headers.set('Access-Control-Allow-Origin', origin);
+    }
+  }
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    response.headers.set('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT');
+    response.headers.set(
+      'Access-Control-Allow-Headers',
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
+
+    // Max age for preflight results (in seconds)
+    response.headers.set('Access-Control-Max-Age', '86400');
+  }
+
+  return response;
+}
+
 export default function middleware(req) {
+  // Initialize the response
+  let response = NextResponse.next();
+
+  // Apply CORS headers for API routes
+  if (req.nextUrl.pathname.startsWith('/api')) {
+    response = handleCors(req, response);
+
+    // If it's a preflight request, return early
+    if (req.method === 'OPTIONS') {
+      return response;
+    }
+  }
+
   // Check if maintenance mode is enabled and the environment is production
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
 
@@ -27,7 +77,7 @@ export default function middleware(req) {
     pathname !== ROUTES.GETTING_STARTED
   ) {
     req.nextUrl.pathname = ROUTES.MAINTENANCE;
-    const response = NextResponse.rewrite(req.nextUrl);
+    response = NextResponse.rewrite(req.nextUrl);
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     return response;
   }
@@ -53,7 +103,7 @@ export default function middleware(req) {
   }
 
   // Allow the request to proceed if all checks pass
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

@@ -9,7 +9,7 @@ import Logo from '@/assets/images/logo.svg';
 import { LoginButton, NextLink } from '@/elements';
 import { ROUTES } from '@/lib';
 
-const Navbar = ({ placeholder, cta, path }) => {
+const NewNavbar = ({ placeholder, cta, path }) => {
   const printLink = useMemo(() => {
     switch (path) {
       case ROUTES.LOGIN:
@@ -33,12 +33,12 @@ const Navbar = ({ placeholder, cta, path }) => {
   }, [cta, path]);
 
   return (
-    <nav className="z-50 flex h-14 flex-grow items-center justify-between bg-white sm:flex-row 3md:bg-transparent">
-      <NextLink href="/" className="py-1">
-        <Logo className="hidden fill-black md:block 3md:fill-white" />
+    <nav className="z-50 flex w-full items-center justify-between border-b border-black/10 bg-white py-6 sm:flex-row 3md:py-5">
+      <NextLink href="/">
+        <Logo className="hidden h-10 fill-black md:block" />
         <SmallLogo className="fill-black md:hidden" />
       </NextLink>
-      <ul className="xl:w-[calc(100% - 668px)] z-50 flex w-full items-center justify-end gap-5 bg-white py-1 3md:w-7/12">
+      <ul className="xl:w-[calc(100% - 668px)] z-50 flex w-full items-center justify-end gap-3 bg-white 3md:w-7/12">
         <li className="hidden whitespace-nowrap text-xsm font-normal text-black md:block">
           <p>{placeholder}</p>
         </li>
@@ -48,6 +48,6 @@ const Navbar = ({ placeholder, cta, path }) => {
   );
 };
 
-Navbar.propTypes = navBarPropTypes;
+NewNavbar.propTypes = navBarPropTypes;
 
-export default Navbar;
+export default NewNavbar;

@@ -1,4 +1,4 @@
-import AuthLayout from '@/layouts/AuthLayout';
+import NewAuthLayout from '@/layouts/NewAuthLayout';
 import { ROUTES } from '@/lib';
 
 export default async function RootLayout(props) {
@@ -10,8 +10,11 @@ export default async function RootLayout(props) {
     path: ROUTES.SIGNUP,
   };
   return (
-    <AuthLayout navigation={navigation} containerClass="flex flex-col items-center 3md:items-end w-full">
+    <NewAuthLayout
+      navigation={navigation}
+      containerClass="flex flex-col items-center 3md:items-end w-full py-16 md:py-20 3md:py-24"
+    >
       {children}
-    </AuthLayout>
+    </NewAuthLayout>
   );
 }

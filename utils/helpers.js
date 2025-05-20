@@ -869,12 +869,12 @@ export const errorMessage = ({ errors }) => {
   return { message: formatErrors(errors?.errors) };
 };
 
-export const setCookie = (key, value) => {
+export const setCookie = (key, value, cookieOptions = {}) => {
   cookie.set(key, value, {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Lax',
-    expires: 1,
+    expires: cookieOptions.expires || 1,
   });
 };
 
@@ -908,17 +908,23 @@ export const sessionCookieCleaner = () => {
   removeCookie('session-user-role');
   removeCookie('session-user-id');
   removeCookie('session-user-email');
+
+  // Clear remember-me preference
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('remember-me');
+  }
 };
 
-export const sessionCookieData = (data) => {
+export const sessionCookieData = (data, rememberMe = false) => {
   if (!data) throw new Error('Unauthorized');
 
   const { sub, role } = decodedTokenAdapter(data.access_token);
+  const cookieOptions = rememberMe ? { expires: 30 } : {};
 
-  setCookie('session-access-token', data.access_token);
-  setCookie('session-refresh-token', data.refresh_token);
-  setCookie('session-user-role', userRoleAdapter({ data: role }));
-  setCookie('session-user-id', sub);
+  setCookie('session-access-token', data.access_token, cookieOptions);
+  setCookie('session-refresh-token', data.refresh_token, cookieOptions);
+  setCookie('session-user-role', userRoleAdapter({ data: role }), cookieOptions);
+  setCookie('session-user-id', sub, cookieOptions);
 };
 
 export const urlParser = (data) => {

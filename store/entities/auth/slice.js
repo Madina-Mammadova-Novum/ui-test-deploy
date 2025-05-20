@@ -22,6 +22,11 @@ const authSlice = createSlice({
       removeCookie('session-access-token');
       removeCookie('session-refresh-token');
 
+      // Clear remember-me preference
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('remember-me');
+      }
+
       state.authorized = initialState.authorized;
       state.error = initialState.error;
       state.session = initialState.session;
