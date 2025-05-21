@@ -27,7 +27,7 @@ const NotificationCardBody = ({
   const dispatch = useDispatch();
 
   const role = getCookieFromBrowser('session-user-role');
-  const { filterParams } = useSelector(getNotificationsDataSelector);
+  const { filterParams, loading } = useSelector(getNotificationsDataSelector);
 
   const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
@@ -83,14 +83,15 @@ const NotificationCardBody = ({
         {!watched && !isSignal && (
           <Button
             onClick={() => dispatch(readNotification({ id: urlId }))}
-            customStyles="!p-0 !pt-2.5 opacity-0 group-hover:opacity-100 transition-opacity"
+            customStyles="!p-0 !pt-2.5 !opacity-0 group-hover:!opacity-100 transition-opacity"
             buttonProps={{
               size: 'small',
               variant: 'secondary',
-              text: 'Mark as read',
+              text: loading ? 'Loading...' : 'Mark as read',
               textClassName: '!p-0',
             }}
             aria-label="Mark as read"
+            disabled={loading}
           />
         )}
       </div>
