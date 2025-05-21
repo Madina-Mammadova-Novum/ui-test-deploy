@@ -15,6 +15,7 @@ import { revokeDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
+import { updateDocumentStatus as updatePreFixtureDocumentStatus } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast } from '@/utils/hooks';
 
@@ -33,8 +34,17 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
         return { updateDocumentStatus: updateOnSubsDocumentStatus };
       case ROUTES.ACCOUNT_POSTFIXTURE:
         return { updateDocumentStatus: updatePostFixtureDocumentStatus };
+      case ROUTES.ACCOUNT_PREFIXTURE:
+        return { updateDocumentStatus: updatePreFixtureDocumentStatus };
       default:
-        return { updateDocumentStatus: pathname.includes(ROUTES.ACCOUNT_ONSUBS) ? updateOnSubsDocumentStatus : null };
+        return {
+          // eslint-disable-next-line no-nested-ternary
+          updateDocumentStatus: pathname.includes(ROUTES.ACCOUNT_ONSUBS)
+            ? updateOnSubsDocumentStatus
+            : pathname.includes(ROUTES.ACCOUNT_PREFIXTURE)
+              ? updatePreFixtureDocumentStatus
+              : null,
+        };
     }
   }, [ROUTES, pathname, updateFixtureDocumentStatus, updateOnSubsDocumentStatus, updatePostFixtureDocumentStatus]);
 
