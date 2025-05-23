@@ -23,9 +23,8 @@ const ResetPasswordForm = ({ params }) => {
 
   const handleResetFields = () => {
     methods.reset((formValues) => {
-      resetObjectFields({ initialObject: formValues, resetType: '' });
-
-      return formValues;
+      const resetValues = resetObjectFields({ initialObject: formValues, resetType: '' });
+      return resetValues;
     });
   };
 
