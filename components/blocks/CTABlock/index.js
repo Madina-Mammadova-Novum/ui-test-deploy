@@ -13,7 +13,7 @@ const CTABlock = ({ title, shortDescription, buttons }) => {
             preload="metadata"
             className="w-full rounded-base"
             captionSrc="/captions/shiplink.vtt"
-            poster="/images/poster-shiplink.png"
+            poster="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/poster_shiplink.webp"
           />
         </div>
 
