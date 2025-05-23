@@ -79,6 +79,9 @@ const nextConfig = {
       {
         hostname: domain,
       },
+      {
+        hostname: 'cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net',
+      },
     ],
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],

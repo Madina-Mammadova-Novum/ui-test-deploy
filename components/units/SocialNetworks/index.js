@@ -17,14 +17,14 @@ const SocialNetworks = ({ data = [] }) => {
         title={delve(socialLink, 'title')}
       >
         <HoverableIcon
-          className="rounded-md border border-gray-darker p-4"
+          className="rounded-md border border-gray-darker p-2"
           icon={
             <NextImage
               alt={delve(socialLink, 'title')}
               src={getStrapiMedia(delve(socialLink, 'coverImage.format.original.url'), '')}
-              height={16}
-              width={16}
-              customStyles="h-4 w-4"
+              height={32}
+              width={32}
+              customStyles="h-8 w-8"
             />
           }
         />
