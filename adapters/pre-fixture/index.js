@@ -335,21 +335,37 @@ export const prefixtureChartererDetailsAdapter = (data) => {
 const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
   if (!data) return {};
 
-  const { id, title, comments, name: fileName, extension, size, createdAt, url } = data;
+  const {
+    id,
+    title,
+    comments,
+    name: fileName,
+    extension,
+    size,
+    createdAt,
+    url,
+    status,
+    deleted: isDocumentDeleted,
+  } = data;
+
+  const revokeDeletionForbidden = status === 'Active';
 
   return [
     {
       value: index,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       type: TYPE.SEMIBOLD,
       value: id,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       type: TYPE.SEMIBOLD,
       value: title,
+      disabled: isDocumentDeleted,
     },
     {
       id,
@@ -361,30 +377,47 @@ const prefixtureDocumentsTabRowDataAdapter = ({ data, index }) => {
           editIcon: comments && <CommentIcon />,
         },
       ],
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: fileName,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: extension,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: `${+transformBytes({ value: size }).toFixed(2) || 0.01} MB`,
+      disabled: isDocumentDeleted,
     },
     {
       id,
       value: transformDate(createdAt, 'MMM dd, yyyy'),
+      disabled: isDocumentDeleted,
     },
     {
       id,
-      type: TYPE.SEMIBOLD_BLUE,
-      downloadData: url && {
-        url,
-        fileName: ensureFileExtension(fileName, extension),
-      },
+      editable: !isDocumentDeleted,
+      disabled: isDocumentDeleted,
+      value: true,
+      downloadData: !isDocumentDeleted &&
+        url && {
+          url,
+          fileName: ensureFileExtension(fileName, extension),
+        },
+      actions: [
+        {
+          action: revokeDeletionForbidden ? ACTIONS.REQUEST_DOCUMENT_DELETION : ACTIONS.REVOKE_DOCUMENT_DELETION,
+          actionText: revokeDeletionForbidden ? 'Delete' : 'Revoke',
+          actionVariant: revokeDeletionForbidden ? 'delete' : 'primary',
+          actionSize: 'medium',
+          actionStyles: 'ml-2.5 w-[68px]',
+        },
+      ],
     },
   ];
 };

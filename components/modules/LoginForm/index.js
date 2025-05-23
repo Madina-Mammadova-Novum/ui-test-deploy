@@ -14,7 +14,7 @@ import { loginSchema } from '@/lib/schemas';
 import { signIn } from '@/store/entities/auth/actions';
 import { clearError } from '@/store/entities/auth/slice';
 import { getAuthSelector } from '@/store/selectors';
-import { generateRedirectPath, resetObjectFields } from '@/utils/helpers';
+import { generateRedirectPath } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const LoginForm = () => {
@@ -55,19 +55,11 @@ const LoginForm = () => {
     }
   }, [error, session?.accessToken, session?.role]);
 
-  const handleResetFields = () => {
-    methods.reset((formValues) => {
-      resetObjectFields({ initialObject: formValues, resetType: '' });
-      return formValues;
-    });
-  };
-
   const onSubmit = (data) => {
     // Store remember me preference in localStorage
     localStorage.setItem('remember-me', data.rememberMe);
 
     dispatch(signIn({ data }));
-    handleResetFields();
     router.refresh();
   };
 
