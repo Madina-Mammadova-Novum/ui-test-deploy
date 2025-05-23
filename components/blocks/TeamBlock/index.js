@@ -27,14 +27,14 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   const printSocialLink = (link) => (
     <NextLink key={link} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
-        className="rounded-md border border-gray-darker p-4"
+        className="rounded-md border border-gray-darker p-2"
         icon={
           <NextImage
             alt={delve(link, 'title')}
             src={getStrapiMedia(delve(link, 'coverImage.format.original.url'), '')}
-            height={16}
-            width={16}
-            customStyles="h-4 w-4"
+            height={32}
+            width={32}
+            customStyles="h-8 w-8"
           />
         }
       />

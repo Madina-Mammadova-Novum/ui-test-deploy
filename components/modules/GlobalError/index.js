@@ -13,7 +13,7 @@ export default function GlobalError({
   return (
     <section className="relative min-h-screen">
       <NextImage
-        src="/images/crash.jpg"
+        src="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/404.jpg"
         alt="error"
         customStyles="absolute inset-0 -z-10 h-full w-full object-cover"
         height={750}

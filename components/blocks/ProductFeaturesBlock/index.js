@@ -14,8 +14,10 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
-  const ownerImage = '/images/owner.png';
-  const chartererImage = '/images/charterer.png';
+  const ownerImage =
+    'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/vessel_owner_1x.png';
+  const chartererImage =
+    'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/charterer.png';
 
   const tabs = ctaList.map((ctaBlock) => {
     return {
@@ -45,7 +47,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
 
   return (
     <section id="how-it-works" className="py-16 md:py-20 3md:py-24">
-      <div className="flex flex-col-reverse gap-8 px-4 md:px-8 3md:mx-auto 3md:max-w-[1152px] 3md:flex-row 3md:gap-10 xl:px-0">
+      <div className="flex flex-col-reverse gap-8 px-4 md:px-8 3md:mx-auto 3md:max-w-[1152px] 3md:flex-row 3md:items-center 3md:gap-10 xl:px-0">
         <div className="flex flex-col gap-6 3md:w-1/2 lg:max-w-[540px]">
           {title && (
             <Title level="2" className="text-2.5xl text-black">
