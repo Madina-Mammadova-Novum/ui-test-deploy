@@ -6,7 +6,7 @@
         "appIDs": ["9MDQDGM33H.com.ship.link"],
         "components": [
           {
-            "/": "/*"
+            "/": "/reset-password*"
           }
         ]
       }
