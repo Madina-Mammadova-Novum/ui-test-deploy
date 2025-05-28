@@ -9,6 +9,8 @@
     "createdocumentdeleterequest",
     "Datepickers",
     "disponent",
+    "distanceandduration",
+    "freightestimation",
     "Hoverable",
     "iban",
     "iconscout",
@@ -34,8 +36,10 @@
     "shiplink",
     "signalr",
     "unicons",
+    "Verif",
     "vesselnames",
     "webcredentials",
-    "webp"
+    "webp",
+    "Сompany"
   ]
 }

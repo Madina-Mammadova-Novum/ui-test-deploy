@@ -17,7 +17,7 @@ import {
 const AccountDetails = () => {
   const dispatch = useDispatch();
 
-  const { loading, data } = useSelector(getUserDataSelector);
+  const { data, loading } = useSelector(getUserDataSelector);
 
   useEffect(() => {
     dispatch(fetchUserProfileData());
@@ -30,7 +30,7 @@ const AccountDetails = () => {
       <Title level="1" className="py-5">
         Account information
       </Title>
-      {loading && <DynamicLoader animationDataType="account" className="size-40" />}
+      {loading && <DynamicLoader animationDataType="account" className="size-32" />}
       {data && !loading && (
         <>
           <AccountPersonalDetails user={data?.personalDetails} />

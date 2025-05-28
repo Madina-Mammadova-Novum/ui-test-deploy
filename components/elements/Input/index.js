@@ -34,7 +34,7 @@ const Input = React.forwardRef(
           <Label
             name={name}
             className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
-              'flex items-center gap-1': labelBadge,
+              'flex flex-wrap items-center gap-1': labelBadge,
             })}
           >
             {label} {labelBadge}
