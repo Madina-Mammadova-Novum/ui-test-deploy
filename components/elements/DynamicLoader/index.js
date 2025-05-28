@@ -10,11 +10,11 @@ const animationDataMap = {
   account: AccountLoaderData,
 };
 
-const DynamicLoader = ({ className = 'w-56 h-64', animationDataType = 'tanker' }) => {
+const DynamicLoader = ({ className = 'w-48 h-48', animationDataType = 'tanker' }) => {
   const animationData = animationDataMap[animationDataType] || TankerLoaderData;
 
   return (
-    <div className="flex h-56 w-full items-center justify-center">
+    <div className="flex h-32 w-full items-center justify-center">
       <Lottie className={className} animationData={animationData} speed="3" />
     </div>
   );

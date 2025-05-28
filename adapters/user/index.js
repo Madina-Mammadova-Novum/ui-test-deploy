@@ -260,12 +260,15 @@ export function updatePasswordAdapter({ data }) {
 
 export function updateInfoAdapter({ data }) {
   if (data === null) return null;
-  const { firstName, lastName, email, phone } = data;
+
+  const { firstName, lastName, email, phone, otpId } = data;
+
   return {
     name: firstName,
     surname: lastName,
     email,
     phone: ensurePlusPrefix(phone),
+    otpId,
   };
 }
 

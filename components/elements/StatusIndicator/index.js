@@ -21,6 +21,7 @@ const StatusIndicator = ({ status = '', customStyles = '' }) => {
       case 'Active':
       case 'Accepted':
       case 'Broker Finalized Charter Party':
+      case 'Ongoing':
         return 'bg-green';
       case 'Failed':
         return 'bg-red';
