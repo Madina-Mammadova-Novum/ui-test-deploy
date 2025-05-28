@@ -235,6 +235,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
       id,
       value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
+      disabled: additionRequested,
     },
     {
       id,
@@ -258,7 +259,6 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
           editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,
           actionVariant: 'delete',
           actionSize: 'medium',
-          disabled: additionRequested,
         },
       ],
     },
@@ -290,6 +290,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: index,
+      disabled: additionRequested,
     },
     {
       id,
@@ -297,22 +298,27 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       type: TYPE.SEMIBOLD,
       flagOfRegistry: getLocode(flagOfRegistry?.codeISO2) || getLocode(flagOfRegistry?.codeISO3),
       available: status,
+      disabled: additionRequested,
     },
     {
       id,
       value: imo,
+      disabled: additionRequested,
     },
     {
       id,
       value: `${summerDwt} tons`,
+      disabled: additionRequested,
     },
     {
       id,
       value: tankerLink?.name,
+      disabled: additionRequested,
     },
     {
       id,
       link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
+      disabled: additionRequested,
     },
     {
       id,
@@ -320,6 +326,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       value: 'Unassigned',
       type: TYPE.GREY,
       name,
+      disabled: additionRequested,
       actions: [
         {
           action: ACTIONS.ASSIGN_FLEET,
@@ -331,16 +338,19 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
       id,
       value: status,
       icon: <StatusIndicator status={status} />,
+      disabled: additionRequested,
     },
     {
       id,
       value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
+      disabled: additionRequested,
     },
     {
       id,
       editable: true,
       name,
+      disabled: additionRequested,
       isValid: requestStatus !== 'Update Requested',
       actions: [
         {

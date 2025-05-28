@@ -55,7 +55,6 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
   return (
     <div className="w-full">
       <Label
-        name={name}
         className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
           'flex flex-wrap items-center gap-1': labelBadge,
         })}
