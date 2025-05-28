@@ -32,6 +32,7 @@ const PasswordInfoForm = ({ closeModal }) => {
       setValue('password', '');
       setValue('confirmPassword', '');
       setValue('currentPassword', '');
+      closeModal();
     }
 
     if (error) errorToast(error?.title, error?.message);
