@@ -19,12 +19,12 @@ const ComplexPagination = ({
   onSelectedPageChange,
   label = 'offers',
 }) => {
-  const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5' };
+  const dropdownStyles = { dropdownWidth: 34, className: 'flex items-center gap-x-5 flex-wrap' };
   const pages = getFilledArray(numberOfPages)?.map(navigationPagesAdapter);
 
   return (
     pages.length > 0 && (
-      <div className="relative mb-6 flex items-start justify-between 3md:items-center">
+      <div className="relative mb-6 flex items-center justify-between 3md:items-center">
         <Dropdown
           value={{ label: perPage, value: perPage }}
           label={`${label} per page:`}
@@ -35,7 +35,7 @@ const ComplexPagination = ({
           menuPlacement="auto"
         />
 
-        <div className="3sm:translate-x-[unset] 3sm:position-unset absolute bottom-1 left-[50%] flex translate-x-[-50%] items-center">
+        <div className="flex items-center">
           {numberOfPages > 0 && (
             <PaginationComponent currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange} />
           )}
@@ -46,7 +46,8 @@ const ComplexPagination = ({
           value={{ label: currentPage, value: currentPage }}
           options={pages}
           onChange={onSelectedPageChange}
-          customStyles={dropdownStyles}
+          // eslint-disable-next-line
+          customStyles={{ ...dropdownStyles, className: dropdownStyles.className + ' justify-end' }}
           menuPlacement="auto"
         />
       </div>
