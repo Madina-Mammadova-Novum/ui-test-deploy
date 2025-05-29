@@ -47,7 +47,7 @@ const Input = React.forwardRef(
                 type !== 'checkbox',
             },
             {
-              'mt-1.5': type === 'checkbox',
+              'h-5 w-5': type === 'checkbox',
             },
             {
               'border-none !p-0': type === 'radio',
