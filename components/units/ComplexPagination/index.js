@@ -24,7 +24,7 @@ const ComplexPagination = ({
 
   return (
     pages.length > 0 && (
-      <div className="relative mb-6 flex h-20 items-start justify-between 3md:h-auto 3md:items-center">
+      <div className="relative mb-6 flex items-start justify-between 3md:items-center">
         <Dropdown
           value={{ label: perPage, value: perPage }}
           label={`${label} per page:`}
@@ -35,7 +35,7 @@ const ComplexPagination = ({
           menuPlacement="auto"
         />
 
-        <div className="3sm:translate-x-[unset] 3sm:position-unset absolute bottom-0 left-[50%] flex translate-x-[-50%] items-center">
+        <div className="3sm:translate-x-[unset] 3sm:position-unset absolute bottom-1 left-[50%] flex translate-x-[-50%] items-center">
           {numberOfPages > 0 && (
             <PaginationComponent currentPage={currentPage} pageCount={numberOfPages} onPageChange={onPageChange} />
           )}
