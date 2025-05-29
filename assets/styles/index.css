@@ -443,7 +443,7 @@ table > tbody > tr td[name='GREY'] > div {
 }
 
 .legal-styles .container {
-  @apply max-w-[1152px] px-6;
+  @apply max-w-[1152px];
 }
 
 .table-scroll {

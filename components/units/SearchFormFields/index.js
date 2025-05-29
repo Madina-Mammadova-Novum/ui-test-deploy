@@ -363,7 +363,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
   }, [watchedLaycanStart, watchedLaycanEnd, watchedLoadPort, watchedLoadTerminal, isAccountSearch]);
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col gap-y-4 md:flex-row">
       <div className="flex w-full flex-col gap-y-4 md:mr-5 md:border-r md:pr-5">
         <div className="flex flex-col gap-x-5 gap-y-2.5 3md:flex-row">
           <DatePicker
