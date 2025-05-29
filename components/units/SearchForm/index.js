@@ -114,7 +114,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
             className: '!w-max ml-auto !text-white',
             disabled: isLoading,
           }}
-          className={`${isAccountSearch ? 'gap-20 sm:gap-9 md:gap-5' : 'gap-5'} flex flex-col`}
+          className={`${isAccountSearch ? 'gap-20 md:gap-5' : 'gap-5'} flex flex-col`}
         >
           <SearchFormFields
             productState={productState}
@@ -122,8 +122,9 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
             captchaRef={captchaRef}
             isAccountSearch={isAccountSearch}
           />
+          {/* relative mt-5 w-full rounded-base bg-white px-4 py-8 shadow-2xmd md:px-5 3md:px-7 3md:py-9 */}
           {isAccountSearch && (
-            <div className="absolute bottom-[4.5rem] right-5 flex flex-col items-end gap-4 sm:flex-row md:bottom-6 md:left-5 md:right-0 md:w-96">
+            <div className="absolute bottom-[5.5rem] right-5 flex flex-col items-end gap-4 md:bottom-[2.375rem] md:left-5 md:right-0 md:w-96 md:flex-row 3md:bottom-[2.625rem] 3md:left-7">
               <Button
                 buttonProps={{ text: 'Mark as Favorite', variant: 'primary', size: 'medium' }}
                 onClick={handleMarkAsFavorite}
