@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useParams } from 'next/navigation';
+
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
@@ -12,6 +14,7 @@ import { useFilters } from '@/utils/hooks';
 
 export default function NegotiatingLayout({ children }) {
   const dispatch = useDispatch();
+  const searchedParams = useParams();
 
   const { offers, totalPages } = useSelector(getNegotiatingDataSelector);
   const { page, pageSize } = PAGE_STATE;
@@ -29,7 +32,7 @@ export default function NegotiatingLayout({ children }) {
   const layoutConfig = {
     withActions: false,
     useExpand: true,
-    usePagination: true,
+    usePagination: !searchedParams.id,
     data: { label: 'Offer stage #1', title: 'Negotiating' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),

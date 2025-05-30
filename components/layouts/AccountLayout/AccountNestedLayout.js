@@ -72,7 +72,7 @@ const AccountNestedLayout = ({ children, config }) => {
           {printActions}
         </div>
         <AccountWrapper>{children}</AccountWrapper>
-        {(usePagination || searchedParams?.id) && (
+        {usePagination && (
           <ComplexPagination
             label="offers"
             perPage={pagination?.perPage}

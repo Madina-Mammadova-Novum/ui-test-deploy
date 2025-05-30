@@ -48,6 +48,8 @@ export default function PostFixtureLayout({ children }) {
 
   const layoutConfig = {
     withActions: false,
+    useExpand: true,
+    usePagination: !searchedParams.id,
     data: { label: 'Offer stage #5', title: 'Post-fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
