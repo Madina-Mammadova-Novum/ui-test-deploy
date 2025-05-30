@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useParams } from 'next/navigation';
+
 import { AccountNestedLayout } from '@/layouts';
 import { PAGE_STATE } from '@/lib/constants';
 import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
@@ -12,6 +14,7 @@ import { useFilters } from '@/utils/hooks';
 
 export default function OnSubsLayout({ children }) {
   const dispatch = useDispatch();
+  const searchedParams = useParams();
   const { offers, totalPages } = useSelector(getOnSubsDataSelector);
 
   const { page, pageSize } = PAGE_STATE;
@@ -28,7 +31,7 @@ export default function OnSubsLayout({ children }) {
 
   const layoutConfig = {
     useExpand: true,
-    usePagination: true,
+    usePagination: !searchedParams.id,
     withActions: false,
     data: { label: 'Offer stage #3', title: 'On subs' },
     pagination: { ...paginationParams, totalPages },
