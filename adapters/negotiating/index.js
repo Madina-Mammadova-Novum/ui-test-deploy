@@ -218,6 +218,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      notified,
       value: openDate ? transformDate(openDate, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
       freezed: frozenAt,
     },
