@@ -42,8 +42,8 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   );
 
   const printMember = ({ fullName, content, position, coverImage, socialLinks }) => (
-    <SwiperSlide key={makeId()} className="flex h-auto px-2">
-      <div className="flex max-w-full flex-col gap-y-6 rounded-base bg-white p-8 text-black shadow-2xmd">
+    <SwiperSlide key={makeId()} className="flex px-2">
+      <div className="flex w-full max-w-full flex-col gap-y-6 rounded-base bg-white p-8 text-black shadow-2xmd">
         <div className="flex items-center gap-4">
           {coverImage && (
             <NextImage

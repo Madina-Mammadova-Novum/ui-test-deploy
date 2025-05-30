@@ -119,7 +119,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
         </div>
         <Input
           {...register(`${type}Address`)}
-          label="Address line #1"
+          label="Address line #1 *"
           labelBadge={renderBadge('Address')}
           placeholder="Apartment, suite, unit, building, floor, etc."
           error={errors[`${type}Address`]?.message}

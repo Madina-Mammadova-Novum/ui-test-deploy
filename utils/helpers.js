@@ -289,8 +289,29 @@ export const removeByIndex = (data, index) => {
   });
 };
 
+export const turkishToLowerCase = (str) => {
+  if (!str) return '';
+
+  // Turkish character mappings for proper case conversion
+  const turkishCharMap = {
+    İ: 'i',
+    I: 'ı',
+    Ğ: 'ğ',
+    Ü: 'ü',
+    Ş: 'ş',
+    Ö: 'ö',
+    Ç: 'ç',
+  };
+
+  return str
+    .split('')
+    .map((char) => turkishCharMap[char] || char.toLowerCase())
+    .join('');
+};
+
 export const filterDataByLowerCase = (inputValue, data = []) => {
-  return data?.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()));
+  const normalizedInput = turkishToLowerCase(inputValue);
+  return data?.filter((i) => turkishToLowerCase(i.label).includes(normalizedInput));
 };
 
 export const resetObjectFields = ({ initialObject, resetType = null }) => {
