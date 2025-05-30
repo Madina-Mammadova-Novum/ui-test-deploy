@@ -12,13 +12,25 @@ import { SimpleDropdownPropTypes } from '@/lib/types';
 import OptionRow from '@/elements/Dropdown/OptionRow';
 import OptionsList from '@/elements/Dropdown/OptionsList';
 import { dropdownTheme } from '@/elements/Dropdown/styles';
-import { filterDataByLowerCase } from '@/utils/helpers';
+import { filterDataByLowerCase, turkishToLowerCase } from '@/utils/helpers';
 
 const LoadingIndicator = () => (
   <div className="spinner-border text-primary" role="status">
     <Loader className="h-4 w-4" />
   </div>
 );
+
+// Custom filter function for Turkish character support
+const createTurkishFilter = () => {
+  return (option, inputValue) => {
+    if (!inputValue) return true;
+
+    const normalizedInput = turkishToLowerCase(inputValue);
+    const normalizedLabel = turkishToLowerCase(option.label || '');
+
+    return normalizedLabel.includes(normalizedInput);
+  };
+};
 
 export const SimpleDropdown = React.forwardRef(
   (
@@ -96,6 +108,7 @@ export const SimpleDropdown = React.forwardRef(
         className={isDisabled ? 'opacity-50' : ''}
         components={mergedComponents}
         isOptionDisabled={(option) => option.isDisabled}
+        filterOption={createTurkishFilter()}
       />
     );
   }
