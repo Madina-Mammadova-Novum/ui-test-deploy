@@ -94,6 +94,7 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
                           'border border-white text-white': linkOptions?.style === 'tertiary' || !linkOptions?.style,
                         })}
                         onClick={toggleMenu}
+                        prefetch
                       >
                         {label}
                       </NextLink>
@@ -105,6 +106,7 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
                       href={ROUTES.ACCOUNT_NEGOTIATING}
                       className="text-primary block w-full rounded-full bg-white py-3 text-center md:text-lg"
                       onClick={toggleMenu}
+                      prefetch
                     >
                       Go to deals
                     </NextLink>
