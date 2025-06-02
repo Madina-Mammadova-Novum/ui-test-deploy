@@ -23,6 +23,7 @@ const GettingStartedSection = () => {
             <li>Non-Disclosure Agreement (NDA)</li>
             <li>User Authorization Letter</li>
             <li>Acknowledgment Letter</li>
+            <li>Commission Agreement</li>
           </ul>
           <p>Please fill out these documents on your company letterhead and submit them as instructed in the email.</p>
         </li>
