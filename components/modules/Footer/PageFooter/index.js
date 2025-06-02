@@ -44,7 +44,7 @@ export default async function PageFooter() {
         <div className="container mx-auto mt-4 max-w-6xl px-4 md:mt-6 md:px-8 3md:mt-8 xl:px-0">
           <div className="flex flex-col-reverse gap-12 pb-8 md:flex-row md:justify-between 3md:items-center">
             <div className="flex flex-col gap-y-6 md:gap-y-8">
-              <NextLink href="/">
+              <NextLink href="/" prefetch>
                 <Logo className="fill-black" />
               </NextLink>
 

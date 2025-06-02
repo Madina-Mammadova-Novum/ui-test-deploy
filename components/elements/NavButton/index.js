@@ -7,7 +7,7 @@ import { NavButtonPropTypes } from '@/lib/types';
 
 import { NextLink } from '@/elements';
 
-const NavButton = ({ children, path, customStyles, disabled = false, target = null, ...rest }) => {
+const NavButton = ({ children, path, customStyles, disabled = false, target = null, prefetch = true, ...rest }) => {
   const pathname = usePathname();
   const isActive = pathname === path;
 
@@ -21,6 +21,7 @@ const NavButton = ({ children, path, customStyles, disabled = false, target = nu
         customStyles
       )}
       target={target}
+      prefetch={prefetch}
       {...rest}
     >
       {children}

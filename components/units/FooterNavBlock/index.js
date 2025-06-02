@@ -14,7 +14,7 @@ const FooterNavBlock = ({ title, items }) => {
           items.map((item) => {
             return (
               <li key={item.path}>
-                <NextLink href={item.path} className="text-xsm font-medium">
+                <NextLink href={item.path} className="text-xsm font-medium" prefetch>
                   {item.title}
                 </NextLink>
               </li>
