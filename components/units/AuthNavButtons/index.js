@@ -22,6 +22,7 @@ const AuthNavButtons = ({ authorized, data = [] }) => {
             size: 'large',
           }}
           customStyles="max-w-[115px] mx-auto"
+          prefetch
         >
           {label}
         </LinkAsButton>
@@ -38,6 +39,7 @@ const AuthNavButtons = ({ authorized, data = [] }) => {
           href={ROUTES.ACCOUNT_NEGOTIATING}
           buttonProps={{ variant: 'secondary', size: 'large' }}
           customStyles="capitalize"
+          prefetch
         >
           Go to deals
         </LinkAsButton>

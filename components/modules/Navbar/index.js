@@ -25,6 +25,7 @@ const Navbar = ({ placeholder, cta, path }) => {
           <NextLink
             href={path}
             className="z-20 inline-block h-10 whitespace-nowrap rounded-md bg-blue px-5 py-2.5 text-xsm font-medium text-white hover:bg-blue-darker"
+            prefetch
           >
             {cta}
           </NextLink>
@@ -34,7 +35,7 @@ const Navbar = ({ placeholder, cta, path }) => {
 
   return (
     <nav className="z-50 flex h-14 flex-grow items-center justify-between bg-white sm:flex-row 3md:bg-transparent">
-      <NextLink href="/" className="py-1">
+      <NextLink href="/" className="py-1" prefetch>
         <Logo className="hidden fill-black md:block 3md:fill-white" />
         <SmallLogo className="fill-black md:hidden" />
       </NextLink>
