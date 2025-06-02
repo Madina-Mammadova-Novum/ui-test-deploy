@@ -86,7 +86,7 @@ export default async function Home({ params }) {
             height={352}
             quality={100}
             width={1440}
-            src="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/dark_waves_1x.png"
+            src="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/dark_waves_1x.webp"
             customStyles="absolute inset-0 z-0 h-full w-full object-fill object-center"
           />
           {content && (

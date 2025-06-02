@@ -12,7 +12,7 @@ export default function NotFound({
   return (
     <section className="relative min-h-screen">
       <NextImage
-        src="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/404.jpg"
+        src="https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/404.webp"
         alt="error"
         customStyles="absolute inset-0 -z-10 h-full w-full object-cover"
         height={750}
