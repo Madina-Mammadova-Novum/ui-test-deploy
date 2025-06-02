@@ -13,8 +13,12 @@ import { ROUTES } from '@/lib';
 
 const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasBeenToggled, setHasBeenToggled] = useState(false);
 
   const toggleMenu = () => {
+    if (!hasBeenToggled) {
+      setHasBeenToggled(true);
+    }
     setIsOpen(!isOpen);
     // Prevent scrolling when menu is open
     if (!isOpen) {
@@ -37,13 +41,11 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
 
       {/* Full screen modal */}
       <div
-        className={classnames(
-          'fixed inset-0 z-50 flex flex-col bg-black text-white transition-transform duration-300',
-          {
-            'translate-x-0': isOpen,
-            'translate-x-full': !isOpen,
-          }
-        )}
+        className={classnames('fixed inset-0 z-50 flex flex-col bg-black text-white', {
+          'transition-transform duration-300': hasBeenToggled,
+          'translate-x-0': isOpen,
+          'translate-x-full': !isOpen,
+        })}
       >
         <div className="container mx-auto flex h-full max-w-[1152px] flex-col px-4 md:px-8">
           {/* Header with logo and close button */}
