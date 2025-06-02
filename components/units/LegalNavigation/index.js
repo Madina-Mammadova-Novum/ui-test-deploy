@@ -4,7 +4,7 @@ import { NextLink } from '@/elements';
 
 const LegalNavigation = ({ data = [] }) => {
   const printLink = ({ path, title }) => (
-    <NextLink key={path} href={path} target="_blank" className="underline">
+    <NextLink key={path} href={path} target="_blank" className="underline" prefetch>
       {title}
     </NextLink>
   );

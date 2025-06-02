@@ -50,7 +50,7 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
         <div className="container mx-auto flex h-full max-w-[1152px] flex-col px-4 md:px-8">
           {/* Header with logo and close button */}
           <div className="flex items-center justify-between border-b border-white/10 py-6">
-            <NextLink href="/" onClick={toggleMenu}>
+            <NextLink href="/" onClick={toggleMenu} prefetch>
               <Logo className="fill-white" />
             </NextLink>
             <button
@@ -94,6 +94,7 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
                           'border border-white text-white': linkOptions?.style === 'tertiary' || !linkOptions?.style,
                         })}
                         onClick={toggleMenu}
+                        prefetch
                       >
                         {label}
                       </NextLink>
@@ -105,6 +106,7 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
                       href={ROUTES.ACCOUNT_NEGOTIATING}
                       className="text-primary block w-full rounded-full bg-white py-3 text-center md:text-lg"
                       onClick={toggleMenu}
+                      prefetch
                     >
                       Go to deals
                     </NextLink>
