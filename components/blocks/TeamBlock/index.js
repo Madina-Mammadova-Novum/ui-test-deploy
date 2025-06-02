@@ -42,33 +42,35 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   );
 
   const printMember = ({ fullName, content, position, coverImage, socialLinks }) => (
-    <SwiperSlide key={makeId()} className="flex px-2">
-      <div className="flex w-full max-w-full flex-col gap-y-6 rounded-base bg-white p-8 text-black shadow-2xmd">
-        <div className="flex items-center gap-4">
-          {coverImage && (
-            <NextImage
-              alt={delve(coverImage, 'alternativeText') || 'User Avatar'}
-              src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
-              height={60}
-              width={60}
-              className="h-[60px] w-[60px] rounded-full object-cover object-center"
-            />
-          )}
+    <SwiperSlide key={makeId()} className="flex !h-auto px-2">
+      <div className="flex w-full max-w-full flex-col justify-between gap-y-6 rounded-base bg-white p-8 text-black shadow-2xmd">
+        <div className="flex flex-col gap-y-6">
+          <div className="flex items-center gap-4">
+            {coverImage && (
+              <NextImage
+                alt={delve(coverImage, 'alternativeText') || 'User Avatar'}
+                src={getStrapiMedia(delve(coverImage, 'format.original.url'), '')}
+                height={60}
+                width={60}
+                className="h-[60px] w-[60px] rounded-full object-cover object-center"
+              />
+            )}
 
-          <div className="flex flex-col">
-            {fullName.trim() && (
-              <Title level="2" className="max-w-full break-words text-lg">
-                {fullName}
-              </Title>
-            )}
-            {position && (
-              <Title level="4" className="text-xsm font-normal text-black">
-                {delve(position, 'title')}
-              </Title>
-            )}
+            <div className="flex flex-col">
+              {fullName.trim() && (
+                <Title level="2" className="max-w-full break-words text-lg">
+                  {fullName}
+                </Title>
+              )}
+              {position && (
+                <Title level="4" className="text-xsm font-normal text-black">
+                  {delve(position, 'title')}
+                </Title>
+              )}
+            </div>
           </div>
+          {content && <div className="text-xsm">{parse(content)}</div>}
         </div>
-        {content && <div className="text-xsm">{parse(content)}</div>}
         {socialLinks && <div className="flex gap-x-2">{socialLinks.map(printSocialLink)}</div>}
       </div>
     </SwiperSlide>
