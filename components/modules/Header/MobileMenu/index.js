@@ -50,7 +50,7 @@ const MobileMenu = ({ navigation = [], buttons = [], authorized = false }) => {
         <div className="container mx-auto flex h-full max-w-[1152px] flex-col px-4 md:px-8">
           {/* Header with logo and close button */}
           <div className="flex items-center justify-between border-b border-white/10 py-6">
-            <NextLink href="/" onClick={toggleMenu} prefetch>
+            <NextLink href="/" onClick={toggleMenu}>
               <Logo className="fill-white" />
             </NextLink>
             <button
