@@ -15,9 +15,9 @@ import 'swiper/css/pagination';
 
 const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   const ownerImage =
-    'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/vessel_owner_1x.png';
+    'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/vessel_owner_1x.webp';
   const chartererImage =
-    'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/charterer.png';
+    'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/charterer.webp';
 
   const tabs = ctaList.map((ctaBlock) => {
     return {
