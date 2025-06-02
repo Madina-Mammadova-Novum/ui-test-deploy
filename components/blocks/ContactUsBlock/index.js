@@ -1,5 +1,7 @@
 'use client';
 
+import { useSelector } from 'react-redux';
+
 import PropTypes from 'prop-types';
 
 import { linkImagePropTypes } from '@/lib/types';
@@ -9,8 +11,11 @@ import Phone from '@/assets/images/phone.svg';
 import { Title } from '@/elements';
 import Map from '@/elements/Map';
 import { ContactUsForm } from '@/modules';
+import { getAuthSelector } from '@/store/selectors';
 
 const ContactUsBlock = ({ address, emails, embedMap, phones }) => {
+  const { authorized } = useSelector(getAuthSelector);
+
   return (
     <section className="relative -mt-[126px] md:-mt-[140px] 3md:-mt-[152px]">
       <div className="flex flex-col items-center gap-8 px-4 pb-16 md:px-8 md:pb-20 3md:mx-auto 3md:max-w-[36.5rem] 3md:gap-12 3md:pb-24">
@@ -51,13 +56,15 @@ const ContactUsBlock = ({ address, emails, embedMap, phones }) => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-8 bg-gray-medium px-4 pb-[5.75rem] pt-16 md:px-8 md:pb-[8.25rem] md:pt-20 3md:gap-12 3md:py-24">
-        <Title className="text-[1.875rem] leading-[1.4]" level="2">
-          Write to Us
-        </Title>
+      {!authorized && (
+        <div className="flex flex-col items-center gap-8 bg-gray-medium px-4 pb-[5.75rem] pt-16 md:px-8 md:pb-[8.25rem] md:pt-20 3md:gap-12 3md:py-24">
+          <Title className="text-[1.875rem] leading-[1.4]" level="2">
+            Write to Us
+          </Title>
 
-        <ContactUsForm />
-      </div>
+          <ContactUsForm />
+        </div>
+      )}
     </section>
   );
 };
