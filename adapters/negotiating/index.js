@@ -39,10 +39,9 @@ export const ownerNegotiatingHeaderDataAdapter = ({ data }) => {
 export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { code, cargoType, minQuantity, maxQuantity, loadPort, laycanStart, laycanEnd, createdAt } = data;
+  const { code, cargoType, loadPort, laycanStart, laycanEnd, createdAt, totalQuantity } = data;
 
-  const minValue = parseFloat(minQuantity?.toFixed(1)).toString();
-  const maxValue = parseFloat(maxQuantity?.toFixed(1)).toString();
+  const quantity = parseFloat(totalQuantity?.toFixed(1)).toString();
 
   return [
     {
@@ -55,7 +54,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: `${minValue} - ${maxValue} tons`,
+      text: `${quantity} tons`,
     },
     {
       label: 'Load port',
@@ -656,6 +655,7 @@ export const responseSentCounteroffersAdapter = ({ data }) => {
 
 export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
   if (!data) return [];
+
   const {
     laycanStart,
     laycanEnd,
@@ -687,7 +687,7 @@ export const prefilledSearchDataAdapter = ({ data, isAlternative = false }) => {
     productsByIndex: Array.from({ length: products.length }, (_, index) => index),
     products: products.map((product) => ({
       density: product.density,
-      quantity: product.minQuantity,
+      quantity: product.quantity,
       tolerance: product.tolerance,
       product: {
         label: product.productName,
