@@ -372,6 +372,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
             inputClass="w-full"
             containerClass="w-full"
             name="laycanStart"
+            placeholder="Select Laycan Start"
             minDate={new Date()}
             onChange={(date) => handleChange('laycanStart', date)}
             error={errors.laycanStart?.message}
@@ -382,6 +383,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
             inputClass="w-full"
             containerClass="w-full"
             name="laycanEnd"
+            placeholder="Select Laycan End"
             minDate={minDateForLaycanEnd}
             maxDate={maxDateForLaycanEnd}
             onChange={(date) => handleChange('laycanEnd', date)}
