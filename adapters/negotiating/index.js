@@ -41,7 +41,7 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
 
   const { code, cargoType, loadPort, laycanStart, laycanEnd, createdAt, totalQuantity } = data;
 
-  const quantity = parseFloat(totalQuantity?.toFixed(1)).toString();
+  const quantity = parseFloat((totalQuantity ?? 0).toFixed(1)).toString();
 
   return [
     {
