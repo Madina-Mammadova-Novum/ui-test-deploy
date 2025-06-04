@@ -19,6 +19,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setValue,
     watch,
     formState: { errors, isSubmitting },
+    setError,
     trigger,
   } = useHookForm();
 
@@ -28,7 +29,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   const [phoneValue, setPhoneValue] = useState('');
   const [validationInProgress, setValidationInProgress] = useState(false);
 
-  const phoneVerifiedErrorRef = useRef(null);
+  const phoneInputRef = useRef(null);
 
   // Determine which field name to use based on onUpdatePage prop
   const phoneFieldName = onUpdatePage ? 'phone' : 'userPhone';
@@ -48,17 +49,56 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setPhoneValue(userPhone || '');
   }, [userPhone]);
 
-  // Scroll to phoneVerified error when it's the only error
-  useEffect(() => {
-    if (errors && Object.keys(errors).length === 1 && errors.phoneVerified) {
-      if (phoneVerifiedErrorRef.current) {
-        phoneVerifiedErrorRef.current.scrollIntoView({
+  // Helper function to reset phone validation states and scroll to input
+  const resetPhoneValidation = () => {
+    setShowPhoneValidation(false);
+    setValidationInProgress(false);
+    setIsPhoneVerified(false);
+    setValue('phoneVerified', false);
+    setValue('otpId', null);
+
+    // Scroll to phone input when there's an error (with small delay to ensure error is rendered)
+    setTimeout(() => {
+      if (phoneInputRef.current) {
+        phoneInputRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
         });
       }
+    }, 100);
+  };
+
+  // Reset validation when there's an error on the phone field
+  useEffect(() => {
+    // Only proceed if there are any errors at all
+    if (Object.keys(errors).length > 0) {
+      // Check for errors on either phone field name
+      const phoneError = errors[phoneFieldName] || errors.phone || errors.userPhone;
+
+      if (phoneError?.message) {
+        resetPhoneValidation();
+      }
     }
-  }, [errors]);
+  }, [errors, phoneFieldName, setValue]);
+
+  // Additional check specifically for phone field errors with more specific dependency
+  useEffect(() => {
+    const phoneError = errors[phoneFieldName];
+
+    if (phoneError?.message && isPhoneVerified) {
+      resetPhoneValidation();
+    }
+  }, [errors[phoneFieldName], phoneFieldName, isPhoneVerified, setValue]);
+
+  // Set phone verification error when phoneVerified validation fails
+  useEffect(() => {
+    if (errors.phoneVerified && !isPhoneVerified) {
+      setError(phoneFieldName, {
+        type: 'manual',
+        message: 'Phone verification is required',
+      });
+    }
+  }, [errors.phoneVerified, isPhoneVerified, setError, phoneFieldName]);
 
   // Helper function to render label badge based on conditions
   const renderLabelBadge = (pendingValue, currentValue, fieldName) => {
@@ -85,8 +125,9 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setValidationInProgress(false);
     if (phoneVerified) {
       setValue('phoneVerified', true);
-      // Trigger validation to clear any errors
-      trigger('phoneVerified');
+      // Clear any phone field errors when verification succeeds
+      setError(phoneFieldName, null);
+      trigger(phoneFieldName);
       setValue('otpId', otpId);
     }
   };
@@ -98,8 +139,11 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setIsPhoneVerified(false);
     setValue('phoneVerified', false);
     setValue('otpId', null);
-    // Trigger validation to show errors if needed
-    trigger('phoneVerified');
+    // Set phone verification error
+    setError(phoneFieldName, {
+      type: 'manual',
+      message: 'Phone verification is required',
+    });
   };
 
   const handleSendOtp = (sendOtp) => {
@@ -141,17 +185,24 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         <div className="flex flex-col gap-5 md:flex-row">
           <div className="w-full">
             <div className="grid w-full gap-5 md:grid-cols-2">
-              <PhoneInput
-                {...register(phoneFieldName)}
-                onBlur={() => {}}
-                label="Phone number"
-                disabled={isSubmitting || isPhoneVerified || (validationInProgress && !isPhoneVerified)}
-                error={errors[phoneFieldName]?.message}
-                dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
-                labelBadge={isPhoneVerified ? '✓' : '*'}
-              />
+              <div ref={phoneInputRef}>
+                <PhoneInput
+                  {...register(phoneFieldName)}
+                  onBlur={() => {}}
+                  label="Phone number"
+                  disabled={isSubmitting || isPhoneVerified || (validationInProgress && !isPhoneVerified)}
+                  error={errors[phoneFieldName]?.message}
+                  dropdownClass={onUpdatePage ? '-top-[220px] h-[200px] overflow-x-hidden' : ''}
+                  labelBadge={isPhoneVerified ? '✓' : '*'}
+                />
+              </div>
 
-              <div className="flex items-end justify-start gap-2">
+              <div
+                className={classNames('flex justify-start gap-2', {
+                  'items-center': errors[phoneFieldName]?.message,
+                  'items-end': !errors[phoneFieldName]?.message,
+                })}
+              >
                 {phoneValue && !isPhoneVerified && (
                   <Button
                     buttonProps={{
@@ -159,7 +210,6 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                       variant: 'secondary',
                       size: 'large',
                     }}
-                    // customStylesFromWrap="!items-start !justify-end"
                     disabled={isSubmitting}
                     onClick={handlePhoneValidationClick}
                   />
@@ -172,7 +222,6 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                       size: 'large',
                       icon: { before: <RefreshSVG className="fill-black" /> },
                     }}
-                    // customStylesFromWrap="!items-start !justify-end"
                     disabled={isSubmitting}
                     onClick={handleRefreshValidation}
                   />
@@ -189,11 +238,6 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                 )}
               </div>
             </div>
-            {errors.phoneVerified && (
-              <div className="md:col-span-3" ref={phoneVerifiedErrorRef}>
-                <p className="text-xs-sm text-red">{errors.phoneVerified.message}</p>
-              </div>
-            )}
           </div>
         </div>
         {showPhoneValidation && !isPhoneVerified && (
