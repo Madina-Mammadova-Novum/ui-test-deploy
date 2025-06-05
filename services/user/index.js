@@ -15,6 +15,7 @@ import {
 import { userTankersDetailsAdapter } from '@/adapters/vessel';
 import { ContentTypeJson } from '@/lib/constants';
 import { deleteData, getData, postData, putData } from '@/utils/dataFetching';
+import { ensurePlusPrefix } from '@/utils/helpers';
 
 export async function forgotPassword({ data }) {
   const body = forgotPasswordAdapter({ data });
@@ -298,5 +299,18 @@ export async function getFixtureOffers({ page, perPage }) {
     page,
     perPage,
     filters: { Stages: ['Fixture'] },
+    dataAdapter: responseOwnerPrefixtureAdapter,
   });
+}
+
+export async function checkPhoneAvailability({ phone }) {
+  const response = await postData(
+    `auth/phone-availability`,
+    { phone: ensurePlusPrefix(phone) },
+    { headers: { ...ContentTypeJson() } }
+  );
+
+  return {
+    ...response,
+  };
 }
