@@ -580,3 +580,14 @@ export function accountDeleteDataResponseAdapter({ data }) {
 export function accountCargoesDataResponseAdapter({ data }) {
   return nullableDataObjectAdapter(data);
 }
+
+export function phoneAvailabilityResponseAdapter({ data }) {
+  if (!data) return null;
+
+  return {
+    data: {
+      available: data.available,
+      message: data.message,
+    },
+  };
+}
