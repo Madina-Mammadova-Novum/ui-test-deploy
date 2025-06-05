@@ -9,6 +9,7 @@ import { PersonalDetailsFormPropTypes } from '@/lib/types';
 import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import RefreshSVG from '@/assets/images/refresh.svg';
 import { Button, Input, PhoneInput, TextWithLabel } from '@/elements';
+import { checkPhoneAvailability } from '@/services/user';
 import PhoneValidation from '@/units/PhoneValidation';
 import { useHookForm } from '@/utils/hooks';
 
@@ -28,6 +29,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [phoneValue, setPhoneValue] = useState('');
   const [validationInProgress, setValidationInProgress] = useState(false);
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
 
   const phoneInputRef = useRef(null);
 
@@ -114,9 +116,45 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     return '*';
   };
 
-  const handlePhoneValidationClick = () => {
-    if (phoneValue) {
-      setShowPhoneValidation(true);
+  const handlePhoneValidationClick = async () => {
+    if (!phoneValue) return;
+
+    setIsCheckingAvailability(true);
+
+    try {
+      const response = await checkPhoneAvailability({ phone: phoneValue });
+
+      if (response.error) {
+        // Handle API error
+        setError(phoneFieldName, {
+          type: 'manual',
+          message: response.message || 'Failed to check phone availability',
+        });
+        return;
+      }
+
+      const { available, message } = response.data;
+
+      if (available) {
+        // Phone is available, clear any existing errors and proceed with OTP verification
+        setError(phoneFieldName, null);
+        trigger(phoneFieldName);
+        setShowPhoneValidation(true);
+      } else {
+        // Phone is not available, show error message
+        setError(phoneFieldName, {
+          type: 'manual',
+          message: message || 'This phone number is already registered',
+        });
+      }
+    } catch (error) {
+      // Handle network or other errors
+      setError(phoneFieldName, {
+        type: 'manual',
+        message: 'Failed to check phone availability. Please try again.',
+      });
+    } finally {
+      setIsCheckingAvailability(false);
     }
   };
 
@@ -210,7 +248,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                       variant: 'secondary',
                       size: 'large',
                     }}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isCheckingAvailability}
+                    isLoading={isCheckingAvailability}
                     onClick={handlePhoneValidationClick}
                   />
                 )}
