@@ -126,6 +126,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
 
       if (response.error) {
         // Handle API error
+        setShowPhoneValidation(false);
+        setValidationInProgress(false);
         setError(phoneFieldName, {
           type: 'manual',
           message: response.message || 'Failed to check phone availability',
@@ -141,7 +143,9 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         trigger(phoneFieldName);
         setShowPhoneValidation(true);
       } else {
-        // Phone is not available, show error message
+        // Phone is not available, reset validation states and show error message
+        setShowPhoneValidation(false);
+        setValidationInProgress(false);
         setError(phoneFieldName, {
           type: 'manual',
           message: message || 'This phone number is already registered',
@@ -149,6 +153,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       }
     } catch (error) {
       // Handle network or other errors
+      setShowPhoneValidation(false);
+      setValidationInProgress(false);
       setError(phoneFieldName, {
         type: 'manual',
         message: 'Failed to check phone availability. Please try again.',
