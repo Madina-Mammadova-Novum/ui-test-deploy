@@ -172,7 +172,7 @@ export function getRtURL(path) {
 }
 
 export function getSeaMetrixURL(path) {
-  return `${process.env.NEXT_PUBLIC_SEAMETRIX_API_URL}/${path}/${process.env.NEXT_PUBLIC_SEAMETRIX_MAP_KEY}/{z}/{x}/{y}.png`;
+  return `/api/map-tiles/${path}/{z}/{x}/{y}.png`;
 }
 
 export function getIdentityApiURL(path, apiVersion = null) {

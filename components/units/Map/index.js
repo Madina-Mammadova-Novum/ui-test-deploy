@@ -57,8 +57,8 @@ const Map = ({ className = 'h-full' }) => {
     <MapContainer center={middleCoord} zoom={zoom} className={`relative font-inter-sans ${className}`}>
       {isSubmitting && <MapLoader />}
       <ChangeView center={middleCoord} zoom={zoom} />
-      <TileLayer url={getSeaMetrixURL('mapsapi/simplemap')} crossOrigin />
-      <TileLayer url={getSeaMetrixURL('mapsapi/ports')} crossOrigin />
+      <TileLayer url={getSeaMetrixURL('bk')} crossOrigin="anonymous" />
+      <TileLayer url={getSeaMetrixURL('lpo')} crossOrigin="anonymous" />
       {!!coordinates.length && <Polyline positions={coord} />}
       <CalculatedResult value={calculator?.value} result={isSubmitting || !response ? null : response} />
     </MapContainer>

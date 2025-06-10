@@ -15,6 +15,7 @@ import { updateInfo } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Notes, PersonalDetails } from '@/units';
+import { getFieldFromKey } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsForm = ({ closeModal }) => {
@@ -46,6 +47,16 @@ const PersonalDetailsForm = ({ closeModal }) => {
     if (formData === data?.personalDetails) return;
 
     if (error) {
+      const errorKeys = Object.keys(error?.errors || {});
+
+      errorKeys?.forEach((key) => {
+        if (error?.errors[key]?.length > 0) {
+          methods.setError(getFieldFromKey(key), {
+            message: error?.errors[key][0],
+          });
+        }
+      });
+
       errorToast(error?.title, error?.message);
     } else {
       dispatch(fetchUserProfileData());

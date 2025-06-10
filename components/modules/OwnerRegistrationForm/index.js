@@ -84,7 +84,7 @@ const OwnerRegistrationForm = ({ countries }) => {
         }
       });
 
-      errorToast('Bad request', error?.title);
+      errorToast(error?.title, error?.message);
     }
   };
 
