@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     // Construct the external URL
-    const externalUrl = `${process.env.NEXT_PUBLIC_SEAMETRIX_API_URL}/${path.join('/')}`;
+    const externalUrl = `${process.env.SEAMETRIX_API_URL}/${process.env.SEAMETRIX_MAP_KEY}/${path.join('/')}`;
 
     // Fetch the tile from the external service
     const response = await fetch(externalUrl);
