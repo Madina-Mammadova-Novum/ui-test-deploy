@@ -25,7 +25,7 @@ const ClientSidePackages = () => {
   return (
     <>
       <div id="portal" />
-      <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={3500} hideProgressBar />
+      <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={8000} hideProgressBar />
       {isChatAvailable && <Chat token={token} />}
       <CookieConsent />
       <NewRelicBrowser />
