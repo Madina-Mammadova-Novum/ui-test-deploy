@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { Slide, toast } from 'react-toastify';
 
 // import delve from 'dlv';
 import pluralize from 'pluralize';
@@ -137,12 +137,19 @@ export async function getCollectionTypesData(key) {
  * @param {string} type - You can use predefined values: default, info, warning, error, success
  * @param {string} title - The required field with the title in toast pop-up
  * @param {string} description - The detailed message in toast pop-up
+ * @param {number} autoClose - Auto close time in milliseconds (default: 8000ms)
  * @returns {function(): number | string}
  */
-export function toastFunc(type, title, description = '') {
-  toast(({ closeToast }) => {
-    return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
-  });
+export function toastFunc(type, title, description = '', autoClose = 8000) {
+  toast(
+    ({ closeToast }) => {
+      return <Alert variant={type} title={title} description={description} handleClose={closeToast} />;
+    },
+    {
+      autoClose,
+      transition: Slide,
+    }
+  );
 }
 
 /**
@@ -154,7 +161,8 @@ export function notificationToastFunc(notificationData) {
       return <NotificationAlert handleClose={closeToast} notificationData={notificationData} />;
     },
     {
-      autoClose: false,
+      autoClose: 8000,
+      transition: Slide,
     }
   );
 }
