@@ -12,6 +12,15 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],
       },
+      {
+        // Add CORS headers for map tiles proxy
+        source: '/api/map-tiles/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET' },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
     ];
   },
   async rewrites() {
@@ -47,14 +56,14 @@ const nextConfig = {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
-    NEXT_PUBLIC_SEAMETRIX_MAP_KEY: process.env.NEXT_PUBLIC_SEAMETRIX_MAP_KEY || '',
+    SEAMETRIX_MAP_KEY: process.env.SEAMETRIX_MAP_KEY || '',
     RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || '',
     NEXT_PUBLIC_STRAPI_API_URL: process.env.NEXT_PUBLIC_STRAPI_API_URL || '',
     NEXT_PUBLIC_RT_URL: process.env.NEXT_PUBLIC_RT_URL || '',
     BACKEND_API_URL: process.env.BACKEND_API_URL || '',
     IDENTITY_API_URL: process.env.IDENTITY_API_URL || '',
     NEXT_PUBLIC_FILE_API_URL: process.env.NEXT_PUBLIC_FILE_API_URL || '',
-    NEXT_PUBLIC_SEAMETRIX_API_URL: process.env.NEXT_PUBLIC_SEAMETRIX_API_URL || '',
+    SEAMETRIX_API_URL: process.env.SEAMETRIX_API_URL || '',
     NEXT_PUBLIC_SEAMETRIX_KEY: process.env.NEXT_PUBLIC_SEAMETRIX_KEY || '',
     NEXT_PUBLIC_MAINTENANCE_MODE: process.env.NEXT_PUBLIC_MAINTENANCE_MODE || '',
     IDENTITY_API_CLIENT_ID: process.env.IDENTITY_API_CLIENT_ID || '',
