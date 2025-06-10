@@ -22,7 +22,14 @@ import { IconUpload } from '@/units';
 import { getCookieFromBrowser } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
-const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapseSession, isChatModalOpened }) => {
+const ChatConversation = ({
+  isOpened,
+  isMediumScreen,
+  isSmallScreen,
+  onCloseSession,
+  onCollapseSession,
+  isChatModalOpened,
+}) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -158,8 +165,10 @@ const ChatConversation = ({ isOpened, isMediumScreen, onCloseSession, onCollapse
   const handleMessage = ({ target: { value } }) => setMessage(value);
 
   const setConversationPosition = useMemo(() => {
+    if (isSmallScreen) return 'right-1';
     if (isMediumScreen && isOpened) return 'right-24';
     if (!isChatModalOpened && isOpened) return 'right-24';
+
     return 'right-[480px]';
   }, [isMediumScreen, isOpened, isChatModalOpened]);
 

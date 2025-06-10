@@ -30,6 +30,7 @@ import { useMediaQuery } from '@/utils/hooks';
 
 const AuthChat = ({ opened, token }) => {
   const [dataByTab, setDataByTab] = useState([]);
+  const smScreen = useMediaQuery(SCREENS.SM);
   const mdScreen = useMediaQuery(SCREENS.SMD);
 
   const dispatch = useDispatch();
@@ -140,6 +141,7 @@ const AuthChat = ({ opened, token }) => {
       <ChatConversation
         isOpened={isActive}
         isMediumScreen={mdScreen}
+        isSmallScreen={smScreen}
         onCloseSession={handleCloseConversation}
         onCollapseSession={handleCollapseConversation}
         isChatModalOpened={opened}

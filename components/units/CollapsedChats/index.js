@@ -54,7 +54,9 @@ const CollapsedChats = () => {
 
   return (
     chats.collapsed.length > 0 && (
-      <div className="fixed bottom-24 right-4 flex flex-col gap-4">{chats.collapsed.map(printCollapsedChat)}</div>
+      <div className="msm:bottom-[8.5rem] fixed bottom-40 right-5 flex flex-col gap-4 md:bottom-24">
+        {chats.collapsed.map(printCollapsedChat)}
+      </div>
     )
   );
 };
