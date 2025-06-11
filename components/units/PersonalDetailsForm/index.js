@@ -135,13 +135,22 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         return;
       }
 
-      const { available, message } = response.data;
+      const { available, message, canSendSms } = response.data;
 
       if (available) {
-        // Phone is available, clear any existing errors and proceed with OTP verification
-        setError(phoneFieldName, null);
-        trigger(phoneFieldName);
-        setShowPhoneValidation(true);
+        if (!canSendSms) {
+          // Phone is available but SMS cannot be sent, mark as verified and finish validation
+          setIsPhoneVerified(true);
+          setValidationInProgress(false);
+          setValue('phoneVerified', true);
+          setError(phoneFieldName, null);
+          trigger(phoneFieldName);
+        } else {
+          // Phone is available and SMS can be sent, proceed with OTP verification
+          setError(phoneFieldName, null);
+          trigger(phoneFieldName);
+          setShowPhoneValidation(true);
+        }
       } else {
         // Phone is not available, reset validation states and show error message
         setShowPhoneValidation(false);
@@ -259,7 +268,17 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                     onClick={handlePhoneValidationClick}
                   />
                 )}
-                {validationInProgress && !isPhoneVerified && (
+                {isPhoneVerified && (
+                  <TextWithLabel
+                    label="Status"
+                    text="Verified"
+                    coverImage={<CheckCircleSVG className="fill-green" />}
+                    textStyles="text-green font-semibold"
+                    customStyles="!flex-col !items-start [&>div]:!ml-0 !gap-0"
+                    textGroupStyle="h-full"
+                  />
+                )}
+                {(validationInProgress || isPhoneVerified) && (
                   <Button
                     buttonProps={{
                       text: 'Reset',
@@ -269,16 +288,6 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                     }}
                     disabled={isSubmitting}
                     onClick={handleRefreshValidation}
-                  />
-                )}
-                {isPhoneVerified && (
-                  <TextWithLabel
-                    label="Status"
-                    text="Verified"
-                    coverImage={<CheckCircleSVG className="fill-green" />}
-                    textStyles="text-green font-semibold"
-                    customStyles="!flex-col !items-start [&>div]:!ml-0 !gap-0"
-                    textGroupStyle="h-full"
                   />
                 )}
               </div>
