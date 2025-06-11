@@ -74,7 +74,7 @@ const ExpandableCardHeader = ({
         style={{ gridRowStart: !lg && !sm3 && index > 3 && index - 3 }}
       >
         <HoverTooltip
-          className="!-left-10 !top-0"
+          className="!top-0 left-0"
           data={{ description: tooltipText }}
           disabled={!lg || disableTooltip || data?.disableTooltip}
         >
