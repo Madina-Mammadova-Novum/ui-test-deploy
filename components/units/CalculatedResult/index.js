@@ -31,7 +31,7 @@ const CalculatedResult = ({ result, value }) => {
   const distanceValue = firstValue ? `${firstValue} nm` : '';
   const durationValue = secondValue ? `${formattedDay(secondValue)} days` : '';
   const freightValue = secondValue ? `$${formatCurrency(secondValue)}` : '';
-  const costPerTonValue = firstValue ? `$${formatCurrency(firstValue)}` : '';
+  const costPerTonValue = firstValue ? `$${formatCurrency(firstValue, true)}` : '';
 
   return (
     <div className="absolute bottom-2 left-2 z-[500] w-[250px] rounded-md bg-[rgba(255,255,255,0.8)] p-5 font-inter-sans">
