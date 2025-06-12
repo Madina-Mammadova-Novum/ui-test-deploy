@@ -588,7 +588,7 @@ export function phoneAvailabilityResponseAdapter({ data }) {
     data: {
       available: data.available,
       message: data.message,
-      canSendSms: data.canSendSms || true,
+      canSendSms: data.canSendSms || false,
     },
   };
 }

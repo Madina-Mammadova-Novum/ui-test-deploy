@@ -4,7 +4,7 @@ import { TabsPropTypes } from '@/lib/types';
 
 import { Badge } from '@/elements';
 
-const Tabs = ({ tabs, customStyles = '', hasUnreadComment = false, activeTab, onClick, ...rest }) => {
+const Tabs = ({ tabs, customStyles = '', hasUnreadComment = false, activeTab, onClick, disabled = false, ...rest }) => {
   return (
     <div className={classNames('flex w-min rounded-md bg-purple-light p-1 text-xsm font-medium', customStyles)}>
       {tabs?.map(({ value, label }) => (
@@ -15,11 +15,13 @@ const Tabs = ({ tabs, customStyles = '', hasUnreadComment = false, activeTab, on
             {...rest}
             type="button"
             value={value}
-            onClick={onClick}
+            onClick={disabled ? undefined : onClick}
+            disabled={disabled}
             className={classNames(
               'h-7 min-w-16 whitespace-nowrap rounded-md px-5',
               value === activeTab && 'bg-white text-blue shadow-2xmd',
-              hasUnreadComment && 'px-7'
+              hasUnreadComment && 'px-7',
+              disabled && 'cursor-not-allowed opacity-50'
             )}
           >
             {label}
