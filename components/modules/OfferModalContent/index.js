@@ -224,7 +224,13 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
           />
         </div>
       </div>
-      <Tabs customStyles="mx-auto my-5" tabs={tabs} activeTab={currentTab} onClick={handleChangeTab} />
+      <Tabs
+        customStyles="mx-auto my-5"
+        tabs={tabs}
+        activeTab={currentTab}
+        onClick={handleChangeTab}
+        disabled={!offer.valid}
+      />
       <div
         ref={scrollingContainerRef}
         className={`h-full overflow-y-auto overflow-x-hidden ${showScroll && 'shadow-vInset'}`}

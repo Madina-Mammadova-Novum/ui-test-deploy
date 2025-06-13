@@ -37,7 +37,7 @@ const TextWithLabel = ({
       )}
       <div
         className={classNames(
-          'mx-2 ml-1.5 flex h-5 items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap text-xsm lg:ml-0',
+          'mx-2 ml-1.5 flex h-5 items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap text-xsm lg:ml-0 lg:mr-1',
           textGroupStyle
         )}
       >

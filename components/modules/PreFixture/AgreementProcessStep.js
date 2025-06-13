@@ -146,8 +146,6 @@ const AgreementProcessStep = ({ proposedBaseCharterParty }) => {
         proposedBaseCharterParty: response?.data,
       })
     );
-
-    successToast('Success', 'Counter proposal submitted successfully');
   };
 
   // UI Helper Functions

@@ -4,7 +4,7 @@ import { ModalWindow } from '@/units';
 const AccountDeleteDetails = () => {
   return (
     <ModalWindow
-      containerClass="w-auto"
+      containerClass="w-auto overflow-y-auto"
       buttonProps={{
         text: 'Do you want to delete your account?',
         variant: 'delete',

@@ -59,7 +59,7 @@ const AccountPersonalDetails = ({ user = {} }) => {
             />
           ) : null}
           <ModalWindow
-            containerClass="w-[672px]"
+            containerClass="w-[672px] overflow-y-auto"
             buttonProps={{
               text: 'Edit',
               variant: 'primary',

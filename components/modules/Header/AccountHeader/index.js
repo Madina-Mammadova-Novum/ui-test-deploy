@@ -10,7 +10,7 @@ const InAppChecker = dynamic(() => import('@/common/InAppChecker'), { ssr: false
 export default function AccountHeader() {
   return (
     <InAppChecker>
-      <header className="flex w-full items-center px-5 py-2 shadow-xmd">
+      <header className="flex w-full items-center bg-white px-5 py-2 shadow-xmd">
         <div className="flex w-full items-center justify-end">
           <NotificationSound />
           <Notification />

@@ -90,7 +90,7 @@ const CounterofferForm = ({
       <FormManager
         submitAction={handleSubmit}
         onErrorAction={handleValidationError}
-        className="flex h-full flex-col justify-between !gap-0"
+        className="flex h-full flex-col justify-between !gap-0 overflow-y-auto"
         submitButton={{
           text: allowSubmit ? 'Confirm Changes and Send' : 'Proceed',
           variant: 'primary',
