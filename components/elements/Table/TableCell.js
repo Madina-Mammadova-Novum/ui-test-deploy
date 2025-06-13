@@ -165,7 +165,7 @@ const TableCell = ({ cellProps }) => {
       isMinimized && ACTIONS.VIEW_OFFER,
     ];
 
-    return modalActions.includes(action) ? 'overflow-y-hidden' : 'h-full overflow-y-hidden';
+    return modalActions.includes(action) ? 'overflow-y-auto' : 'h-full overflow-y-auto';
   };
 
   const printModalView = useMemo(() => {

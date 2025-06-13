@@ -72,7 +72,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Status',
       textStyles: isFailed ? 'text-red' : 'text-yellow',
       freezed: frozenAt,
-      text: isFailed ? 'Failed' : 'Countdown frozen',
+      text: isFailed ? 'Failed' : 'Frozen',
       isFailed: isFailed || frozenAt,
     },
   ];
@@ -143,7 +143,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Status',
       textStyles: isFailed ? 'text-red' : 'text-yellow',
       freezed: frozenAt,
-      text: isFailed ? 'Failed' : 'Countdown frozen',
+      text: isFailed ? 'Failed' : 'Frozen',
       isFailed: isFailed || frozenAt,
     },
   ];

@@ -20,11 +20,11 @@ const Chat = ({ token }) => {
 
   const handleOpen = () => dispatch(setOpenedChat(!opened));
 
-  const isAccountRoute = pathname.startsWith(ROUTES.ACCOUNT);
+  const shouldShowChat = pathname.startsWith(ROUTES.ACCOUNT) || pathname.startsWith(ROUTES.CONTACT_US);
 
   const memoizedChatButton = useMemo(() => {
-    // Only render chat button on account routes
-    if (!isAccountRoute) {
+    // Only render chat button on account and contact us routes
+    if (!shouldShowChat) {
       return null;
     }
 
@@ -39,7 +39,7 @@ const Chat = ({ token }) => {
         <AuthChat opened={opened} token={token} />
       </>
     );
-  }, [token, opened, messageCount, handleOpen, isAccountRoute]);
+  }, [token, opened, messageCount, handleOpen, shouldShowChat]);
 
   return memoizedChatButton;
 };

@@ -45,8 +45,8 @@ const OnSubsDetails = ({ searchedParams }) => {
             headerData={rowHeader}
             gridStyles={
               isOwner
-                ? `1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
-                : `1.5fr 2fr 1fr 1fr 2.5fr 1fr 1fr 1fr 1fr ${isStatusSectionActive ? '2fr' : ''}`
+                ? `1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr ${isStatusSectionActive ? '1fr' : ''}`
+                : `1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr ${isStatusSectionActive ? '1fr' : ''}`
             }
           />
         }
