@@ -136,23 +136,26 @@ export class ChatSessionController extends SignalRController {
   constructor({ host, state }) {
     super({ host, state });
     this.isOpened = false;
+    this.currentChatId = null;
   }
 
   async init({ chatId, token }) {
     const clientId = getCookieFromBrowser('session-user-id');
     const role = getCookieFromBrowser('session-user-role');
 
+    // Store the current chat ID for message filtering
+    this.currentChatId = chatId;
+
     await this.setupConnection({ path: `${this.host}/chat?chatId=${chatId}`, token });
 
     this.connection.on('ReceiveMessage', (message) => {
-      this.updateMessage({ message, clientId, role, chatId });
+      // Only update message if it belongs to the currently opened chat
+      if (message.chatId === this.currentChatId) {
+        this.updateMessage({ message, clientId, role, chatId });
 
-      if (message.senderId !== clientId) {
-        ChatSessionController.playMessageSound();
-      }
-
-      if (this.isOpened) {
-        this.readMessage({ id: message.id });
+        if (this.isOpened) {
+          this.readMessage({ id: message.id });
+        }
       }
     });
   }
@@ -194,6 +197,9 @@ export class ChatSessionController extends SignalRController {
     this.store.dispatch(setConversation(false));
     this.store.dispatch(setLoadConversation(false));
 
+    // Clear the current chat ID when stopping the session
+    this.currentChatId = null;
+
     if (this.connection) {
       this.connection.stop();
     }
@@ -218,11 +224,11 @@ export class ChatNotificationController extends SignalRController {
     });
 
     this.connection.on('ReceiveMessage', async (chat) => {
-      if (this.isOpened) {
-        this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: 0 }));
-      } else {
-        this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: chat.messageCount }));
+      if (chat?.messageCount > 0) {
+        ChatSessionController.playMessageSound();
       }
+
+      this.store.dispatch(messageAlert({ chatId: chat.id, messageCount: chat.messageCount }));
     });
 
     this.connection.on('NewChat', async (chatData) => {
