@@ -27,6 +27,7 @@ const FleetsActions = () => {
             before: <PlusCircleSVG className="fill-white" />,
           },
         }}
+        containerClass="overflow-y-auto"
       >
         <AddNewTanker />
       </ModalWindow>

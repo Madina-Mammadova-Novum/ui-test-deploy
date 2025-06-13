@@ -55,6 +55,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_ADMIN_URL: process.env.NEXT_PUBLIC_ADMIN_URL || '',
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
     SEAMETRIX_MAP_KEY: process.env.SEAMETRIX_MAP_KEY || '',
     RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || '',
