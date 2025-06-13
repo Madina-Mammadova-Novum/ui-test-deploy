@@ -21,7 +21,7 @@ const Comment = ({ title = '', date = '', time = '', sentBy = '' }) => {
       <Title level="2" className={`text-sm font-semibold ${textColor}`}>
         {userType}:
       </Title>
-      <Title level="6" className="mt-2.5 text-xsm font-semibold">
+      <Title level="6" className="mt-2.5 break-all text-xsm font-semibold">
         {title}
       </Title>
       <DateTimeRow date={date} time={time} />
