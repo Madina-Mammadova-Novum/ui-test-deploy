@@ -10,10 +10,12 @@ const SuccessfulVerifPageContent = () => {
 
   // TODO: const transactionId = searchParams.get('transaction_id');
   const isSuccess = searchParams.get('success') === 'true';
+  const failedSupportEmail = 'registration.support@ship.link';
+  const successSupportEmail = 'support@ship.link';
 
   if (!isSuccess) {
     return (
-      <AuthWrapper title="Identity Verification Failed" containerClass="md:px-24 min-w-[450px] 3md:w-7/12 3md:ml-auto">
+      <AuthWrapper title="Identity Verification Failed" containerClass="md:px-24 w-full 3md:w-7/12 3md:ml-auto">
         <div className="my-5 grid gap-4 text-xsm">
           <p>
             Unfortunately, your identity verification has failed. Please try again or contact our support team for
@@ -21,8 +23,8 @@ const SuccessfulVerifPageContent = () => {
           </p>
           <p>
             For further assistance, please reach out to us at{' '}
-            <NextLink href="mailto:support@ship.link" className="inline text-blue">
-              support@ship.link
+            <NextLink href={`mailto:${failedSupportEmail}`} className="inline text-blue">
+              {failedSupportEmail}
             </NextLink>
             .
           </p>
@@ -35,10 +37,7 @@ const SuccessfulVerifPageContent = () => {
   }
 
   return (
-    <AuthWrapper
-      title="Identity Verification Successful!"
-      containerClass="md:px-24 min-w-[450px] 3md:w-7/12 3md:ml-auto"
-    >
+    <AuthWrapper title="Identity Verification Successful!" containerClass="md:px-24 w-full 3md:w-7/12 3md:ml-auto">
       <div className="my-5 grid gap-4 text-xsm">
         <p>
           Congratulations! You have successfully passed our identity verification procedure. We take the security of our
@@ -51,8 +50,8 @@ const SuccessfulVerifPageContent = () => {
         </p>
         <p>
           If you have any questions or need assistance, our support team is here to help. Contact us at{' '}
-          <NextLink href="mailto:support@ship.link" className="inline text-blue">
-            support@ship.link
+          <NextLink href={`mailto:${successSupportEmail}`} className="inline text-blue">
+            {successSupportEmail}
           </NextLink>{' '}
           or simply start the chat to get live assistance.
         </p>
