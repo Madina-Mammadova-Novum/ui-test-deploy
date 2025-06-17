@@ -19,7 +19,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
   const chartererImage =
     'https://cdne-shiplinkfront-prod-001-a0hmdrbncmhhgfbw.a03.azurefd.net/pageimages/charterer.webp';
 
-  const tabs = ctaList.map((ctaBlock) => {
+  const tabs = ctaList?.map((ctaBlock) => {
     return {
       label: ctaBlock.title,
       value: ctaBlock.title,
@@ -39,7 +39,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
     return (
       currentTab === ctaBlock.title && (
         <div key={ctaBlock.title} className="mt-1 divide-y divide-gray-darker">
-          {ctaBlock.cta.map(printCtaBlockItem)}
+          {ctaBlock?.cta?.map(printCtaBlockItem)}
         </div>
       )
     );
@@ -59,7 +59,7 @@ const ProductFeaturesBlock = ({ title, coverImage, ctaList }) => {
               {ctaList && (
                 <Tabs activeTab={currentTab} onClick={({ target }) => setCurrentTab(target.value)} tabs={tabs} />
               )}
-              {ctaList && ctaList.map(printCtaBlock)}
+              {ctaList?.length > 0 && ctaList?.map(printCtaBlock)}
             </div>
           </div>
         </div>

@@ -23,7 +23,6 @@ const preFixtureSlice = createSlice({
       state.toggle = payload;
     },
     updateDocumentStatus: (state, action) => {
-      console.log({ action, state });
       const { documentId, status } = action?.payload;
       state.data.offers = state.data.offers.map((offer) => ({
         ...offer,
