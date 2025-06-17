@@ -36,7 +36,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   // Determine which field name to use based on onUpdatePage prop
   const phoneFieldName = onUpdatePage ? 'phone' : 'userPhone';
 
-  const { pending, pendingRequest, firstName, lastName, email } = values;
+  const { pending, pendingRequest, firstName, lastName, email, confirmEmail } = values;
 
   // Watch for changes to the phone field
   const userPhone = watch(phoneFieldName);
@@ -44,6 +44,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   // Initialize phoneVerified to false on component mount
   useEffect(() => {
     setValue('phoneVerified', false);
+    setValue('confirmEmail', email);
   }, [setValue]);
 
   // Update phoneValue when userPhone changes
@@ -230,6 +231,14 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           labelBadge={renderLabelBadge(pending?.email, email, 'email')}
           placeholder="Enter your email"
           error={errors.email?.message}
+          disabled={isSubmitting}
+        />
+        <Input
+          {...register('confirmEmail')}
+          label="Confirm email"
+          labelBadge={renderLabelBadge(pending?.email, confirmEmail, 'confirmEmail')}
+          placeholder="Enter your email"
+          error={errors.confirmEmail?.message}
           disabled={isSubmitting}
         />
       </div>

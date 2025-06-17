@@ -1022,7 +1022,6 @@ export const getFieldFromKey = (key) => {
   const errorByKey = {
     Email: 'email',
     Phone: 'phone',
-    SecondaryPhone: 'secondaryPhone',
     UserPhone: 'userPhone',
   };
 
@@ -1118,4 +1117,12 @@ export const convertToKilotons = (tons) => {
   const formattedValue = numericValue.toFixed(1);
 
   return `${formattedValue} kt`;
+};
+
+/**
+ * Check if captcha should be shown based on environment
+ * @returns {boolean} Returns false for dev environment, true for all others
+ */
+export const shouldShowCaptcha = () => {
+  return process.env.NEXT_PUBLIC_APP_ENV !== 'dev';
 };

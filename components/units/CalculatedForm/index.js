@@ -14,7 +14,7 @@ import { captchaSchema, toolsSchema } from '@/lib/schemas';
 import { getEstimation } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { CalculatedDetails, Captcha } from '@/units';
-import { getValueWithPath } from '@/utils/helpers';
+import { getValueWithPath, shouldShowCaptcha } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
@@ -40,7 +40,7 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
 
   const schema = yup.object().shape({
     ...toolsSchema({ isFreight }),
-    ...(isLoggedIn ? {} : captchaSchema()),
+    ...(isLoggedIn || !shouldShowCaptcha() ? {} : captchaSchema()),
   });
 
   const methods = useHookFormParams({ schema, state });
@@ -54,7 +54,7 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
   }, [state.fromPort, state.toPort]);
 
   useEffect(() => {
-    if (isLoggedIn) return;
+    if (isLoggedIn || !shouldShowCaptcha()) return;
     methods.setValue('captcha', captcha);
     methods.trigger('captcha');
   }, [captcha, methods, isLoggedIn]);
@@ -85,7 +85,7 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
     methods.setValue('calculator', calculator);
     methods.setValue('response', null);
 
-    if (isLoggedIn) return;
+    if (isLoggedIn || !shouldShowCaptcha()) return;
 
     methods.setValue('captcha', null);
 
@@ -168,7 +168,7 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
           <div className="flex w-full flex-col gap-5 md:flex-row">
             <div className="flex w-full flex-col gap-4 md:max-w-[336px]">
               <CalculatedDetails isFreight={isFreight} onChange={handleChangeValue} />
-              {!isLoggedIn && (
+              {!isLoggedIn && shouldShowCaptcha() && (
                 <Captcha
                   onChange={setCaptcha}
                   ref={captchaRef}

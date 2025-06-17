@@ -62,7 +62,30 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
   const handleApplySlot = () => {
     const nextTankersCount =
       tankersCount > SETTINGS.MAX_NUMBER_OF_TANKERS ? SETTINGS.MAX_NUMBER_OF_TANKERS : tankersCount;
+
+    // Clear apply slots errors
     clearErrors('applySlots');
+    clearErrors('imos');
+
+    // If we're reducing the number of tankers, clear errors for the ones being removed
+    if (nextTankersCount < tankers.length) {
+      tankers.forEach((tankerId, index) => {
+        if (index >= nextTankersCount) {
+          // Clear errors for tankers that will be removed
+          clearErrors(`imos[${tankerId}].imo`);
+          clearErrors(`imos[${tankerId}]`);
+          // Unregister the field to clean up form state
+          unregister(`imos[${tankerId}].imo`);
+        }
+      });
+    }
+
+    // Clear all existing tanker errors to start fresh
+    tankers.forEach((tankerId) => {
+      clearErrors(`imos[${tankerId}].imo`);
+      clearErrors(`imos[${tankerId}]`);
+    });
+
     handleChangeState('tankers', getFilledArray(nextTankersCount));
   };
 
@@ -127,7 +150,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           const error = errors.imos ? errors.imos[item]?.imo : null;
 
           return (
-            <div key={`${item[index]}`} className="relative">
+            <div key={item} className="relative">
               <Input
                 {...register(`${fieldName}.imo`, {
                   onChange: (e) => {

@@ -29,32 +29,38 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { getBrowser, getFieldFromKey, resetForm, setCookie } from '@/utils/helpers';
+import { getBrowser, getFieldFromKey, resetForm, setCookie, shouldShowCaptcha } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
   const [captcha, setCaptcha] = useState('');
   const [sameAddress, setSameAddress] = useState(false);
+  const [samePhone, setSamePhone] = useState(false);
 
   const schema = yup.object().shape({
-    ...companyDetailsSchema(),
+    ...companyDetailsSchema(samePhone),
     ...personalDetailsSchema({ isRegister: true }),
     ...passwordValidationSchema(),
     ...tankerSlotsDetailsSchema(),
     ...termsAndConditionsSchema(),
     ...companyAddressesSchema(sameAddress),
-    ...captchaSchema(),
+    ...(shouldShowCaptcha() ? captchaSchema() : {}),
   });
 
   const methods = useHookFormParams({ schema });
   const addressValue = methods.watch('sameAddresses', sameAddress);
+  const phoneValue = methods.watch('samePhone', samePhone);
 
   useEffect(() => {
-    methods.setValue('captcha', captcha);
+    if (shouldShowCaptcha()) {
+      methods.setValue('captcha', captcha);
+    }
     methods.setValue('sameAddresses', addressValue);
+    methods.setValue('samePhone', phoneValue);
 
     setSameAddress(addressValue);
-  }, [addressValue, methods, captcha]);
+    setSamePhone(phoneValue);
+  }, [addressValue, phoneValue, methods, captcha]);
 
   const onSubmit = async (formData) => {
     const { error, data } = await ownerSignUp({ data: formData });
@@ -123,7 +129,7 @@ const OwnerRegistrationForm = ({ countries }) => {
           <CompanyAddresses countries={countries} />
         </Step>
         <TermsAndConditions />
-        <Captcha onChange={setCaptcha} />
+        {shouldShowCaptcha() && <Captcha onChange={setCaptcha} />}
       </FormManager>
     </FormProvider>
   );
