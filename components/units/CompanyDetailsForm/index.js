@@ -20,7 +20,7 @@ const CompanyDetails = ({ notEditable = false }) => {
     formState: { errors, isSubmitting },
   } = useFormContext();
 
-  const { companyYearsOfOperation, pending, pendingRequest, companyName, phone, secondaryPhone } = getValues();
+  const { companyYearsOfOperation, pending, pendingRequest, companyName, phone } = getValues();
 
   useEffect(() => {
     if (inputYearsRef.current) {
@@ -86,25 +86,6 @@ const CompanyDetails = ({ notEditable = false }) => {
               ) : (
                 '*'
               )
-            }
-          />
-          <PhoneInput
-            {...register('secondaryPhone')}
-            onBlur={() => {}}
-            label="Secondary phone number (optional)"
-            disabled={isSubmitting}
-            error={errors.secondaryPhone?.message}
-            labelBadge={
-              pendingRequest && pending?.secondaryPhone ? (
-                <p
-                  className={classNames(
-                    'font-bold',
-                    pending?.secondaryPhone === secondaryPhone ? 'text-green' : 'text-blue'
-                  )}
-                >
-                  {pending?.secondaryPhone}
-                </p>
-              ) : null
             }
           />
         </div>

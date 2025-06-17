@@ -1022,7 +1022,6 @@ export const getFieldFromKey = (key) => {
   const errorByKey = {
     Email: 'email',
     Phone: 'phone',
-    SecondaryPhone: 'secondaryPhone',
     UserPhone: 'userPhone',
   };
 
