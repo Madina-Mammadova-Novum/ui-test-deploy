@@ -1119,3 +1119,11 @@ export const convertToKilotons = (tons) => {
 
   return `${formattedValue} kt`;
 };
+
+/**
+ * Check if captcha should be shown based on environment
+ * @returns {boolean} Returns false for dev environment, true for all others
+ */
+export const shouldShowCaptcha = () => {
+  return process.env.NEXT_PUBLIC_APP_ENV !== 'dev';
+};

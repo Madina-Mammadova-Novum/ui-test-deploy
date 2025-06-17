@@ -29,7 +29,7 @@ import {
   TankerSlotsDetails,
   TermsAndConditions,
 } from '@/units';
-import { getBrowser, getFieldFromKey, resetForm, setCookie } from '@/utils/helpers';
+import { getBrowser, getFieldFromKey, resetForm, setCookie, shouldShowCaptcha } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const OwnerRegistrationForm = ({ countries }) => {
@@ -43,14 +43,16 @@ const OwnerRegistrationForm = ({ countries }) => {
     ...tankerSlotsDetailsSchema(),
     ...termsAndConditionsSchema(),
     ...companyAddressesSchema(sameAddress),
-    ...captchaSchema(),
+    ...(shouldShowCaptcha() ? captchaSchema() : {}),
   });
 
   const methods = useHookFormParams({ schema });
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
   useEffect(() => {
-    methods.setValue('captcha', captcha);
+    if (shouldShowCaptcha()) {
+      methods.setValue('captcha', captcha);
+    }
     methods.setValue('sameAddresses', addressValue);
 
     setSameAddress(addressValue);
@@ -123,7 +125,7 @@ const OwnerRegistrationForm = ({ countries }) => {
           <CompanyAddresses countries={countries} />
         </Step>
         <TermsAndConditions />
-        <Captcha onChange={setCaptcha} />
+        {shouldShowCaptcha() && <Captcha onChange={setCaptcha} />}
       </FormManager>
     </FormProvider>
   );

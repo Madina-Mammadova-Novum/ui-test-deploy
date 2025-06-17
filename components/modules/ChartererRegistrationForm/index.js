@@ -29,7 +29,7 @@ import {
   Step,
   TermsAndConditions,
 } from '@/units';
-import { getFieldFromKey, resetForm, setCookie } from '@/utils/helpers';
+import { getFieldFromKey, resetForm, setCookie, shouldShowCaptcha } from '@/utils/helpers';
 import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks';
 
 const ChartererRegistrationForm = ({ countries }) => {
@@ -43,7 +43,7 @@ const ChartererRegistrationForm = ({ countries }) => {
     ...cargoesSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
     ...termsAndConditionsSchema(),
-    ...captchaSchema(),
+    ...(shouldShowCaptcha() ? captchaSchema() : {}),
   });
 
   const methods = useHookFormParams({ schema });
@@ -51,7 +51,9 @@ const ChartererRegistrationForm = ({ countries }) => {
   const addressValue = methods.watch('sameAddresses', sameAddress);
 
   useEffect(() => {
-    methods.setValue('captcha', captcha);
+    if (shouldShowCaptcha()) {
+      methods.setValue('captcha', captcha);
+    }
     methods.setValue('sameAddresses', addressValue);
 
     setSameAddress(addressValue);
@@ -115,7 +117,7 @@ const ChartererRegistrationForm = ({ countries }) => {
           <CargoesSlotsDetails applyHelper />
         </Step>
         <TermsAndConditions />
-        <Captcha onChange={setCaptcha} />
+        {shouldShowCaptcha() && <Captcha onChange={setCaptcha} />}
       </FormManager>
     </FormProvider>
   );
