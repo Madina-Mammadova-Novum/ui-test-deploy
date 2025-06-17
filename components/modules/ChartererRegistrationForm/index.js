@@ -34,12 +34,13 @@ import { errorToast, redirectAfterToast, useHookFormParams } from '@/utils/hooks
 
 const ChartererRegistrationForm = ({ countries }) => {
   const [sameAddress, setSameAddress] = useState(false);
+  const [samePhone, setSamePhone] = useState(false);
   const [captcha, setCaptcha] = useState('');
 
   const schema = yup.object().shape({
     ...personalDetailsSchema({ isRegister: true }),
     ...passwordValidationSchema(),
-    ...companyDetailsSchema(),
+    ...companyDetailsSchema(samePhone),
     ...cargoesSlotsDetailsSchema(),
     ...companyAddressesSchema(sameAddress),
     ...termsAndConditionsSchema(),
@@ -49,15 +50,18 @@ const ChartererRegistrationForm = ({ countries }) => {
   const methods = useHookFormParams({ schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
+  const phoneValue = methods.watch('samePhone', samePhone);
 
   useEffect(() => {
     if (shouldShowCaptcha()) {
       methods.setValue('captcha', captcha);
     }
     methods.setValue('sameAddresses', addressValue);
+    methods.setValue('samePhone', phoneValue);
 
     setSameAddress(addressValue);
-  }, [addressValue, methods, captcha]);
+    setSamePhone(phoneValue);
+  }, [addressValue, phoneValue, methods, captcha]);
 
   const onSubmit = async (formData) => {
     const { error, data } = await chartererSignUp({ data: formData });

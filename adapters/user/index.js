@@ -359,6 +359,7 @@ export function ownerSignUpAdapter({ data }) {
     firstName,
     userPhone,
     otpId,
+    samePhone,
   } = data;
 
   return {
@@ -366,7 +367,7 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     password,
     email,
-    phone: ensurePlusPrefix(phone),
+    phone: ensurePlusPrefix(samePhone ? userPhone : phone),
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
@@ -401,6 +402,7 @@ export function chartererSignUpAdapter({ data }) {
     firstName,
     userPhone,
     otpId,
+    samePhone,
   } = data;
 
   return {
@@ -408,7 +410,7 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email,
     password,
-    phone: ensurePlusPrefix(phone),
+    phone: ensurePlusPrefix(samePhone ? userPhone : phone),
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,

@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { CompanyDetailsPropTypes } from '@/lib/types';
 
-import { Input, PhoneInput } from '@/elements';
+import { CheckBoxInput, Input, PhoneInput } from '@/elements';
 import { disableDefaultBehavior, disablePlusMinusSymbols } from '@/utils/helpers';
 
 const CompanyDetails = ({ notEditable = false }) => {
@@ -20,7 +20,7 @@ const CompanyDetails = ({ notEditable = false }) => {
     formState: { errors, isSubmitting },
   } = useFormContext();
 
-  const { companyYearsOfOperation, pending, pendingRequest, companyName, phone } = getValues();
+  const { companyYearsOfOperation, pending, pendingRequest, companyName, phone, samePhone } = getValues();
 
   useEffect(() => {
     if (inputYearsRef.current) {
@@ -33,6 +33,11 @@ const CompanyDetails = ({ notEditable = false }) => {
   const handleNumberOfOperation = () => {
     clearErrors('companyYearsOfOperation');
     setValue('companyYearsOfOperation', inputYearsRef.current.value);
+  };
+
+  const handleSamePhone = (event) => {
+    const { checked } = event.target;
+    setValue('samePhone', checked);
   };
 
   return (
@@ -71,24 +76,36 @@ const CompanyDetails = ({ notEditable = false }) => {
       </div>
       <div className="mt-5 flex flex-col gap-5">
         <p className="text-sm font-semibold text-black">Company Contact Information</p>
-        <div className="grid gap-5 md:grid-cols-2">
-          <PhoneInput
-            {...register('phone')}
-            onBlur={() => {}}
-            label="Primary phone number"
-            disabled={isSubmitting}
-            error={errors.phone?.message}
-            labelBadge={
-              pendingRequest ? (
-                <p className={classNames('font-bold', pending?.phone === phone ? 'text-green' : 'text-blue')}>
-                  {pending?.phone}
-                </p>
-              ) : (
-                '*'
-              )
-            }
-          />
+        <div className="col-span-2 row-auto">
+          <CheckBoxInput
+            name="samePhone"
+            onChange={handleSamePhone}
+            checked={samePhone}
+            labelStyles="text-black text-xsm"
+          >
+            The company phone number is the same as my personal phone number.
+          </CheckBoxInput>
         </div>
+        {!samePhone && (
+          <div className="grid gap-5 md:grid-cols-2">
+            <PhoneInput
+              {...register('phone')}
+              onBlur={() => {}}
+              label="Phone number"
+              disabled={isSubmitting}
+              error={errors.phone?.message}
+              labelBadge={
+                pendingRequest ? (
+                  <p className={classNames('font-bold', pending?.phone === phone ? 'text-green' : 'text-blue')}>
+                    {pending?.phone}
+                  </p>
+                ) : (
+                  '*'
+                )
+              }
+            />
+          </div>
+        )}
       </div>
     </>
   );
