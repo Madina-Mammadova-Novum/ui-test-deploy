@@ -10,6 +10,7 @@ import { Input } from '@/elements';
 import { captchaSchema, forgotPasswordSchema } from '@/lib/schemas';
 import { forgotPassword } from '@/services/user';
 import { Captcha } from '@/units';
+import { shouldShowCaptcha } from '@/utils/helpers';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const ForgotPasswordForm = () => {
@@ -17,7 +18,7 @@ const ForgotPasswordForm = () => {
 
   const schema = yup.object().shape({
     ...forgotPasswordSchema(),
-    ...captchaSchema(),
+    ...(shouldShowCaptcha() ? captchaSchema() : {}),
   });
 
   const methods = useHookFormParams({ schema, mode: 'onSubmit' });
@@ -31,8 +32,10 @@ const ForgotPasswordForm = () => {
   } = methods;
 
   useEffect(() => {
-    setValue('captcha', captcha);
-    trigger('captcha');
+    if (shouldShowCaptcha()) {
+      setValue('captcha', captcha);
+      trigger('captcha');
+    }
   }, [captcha, setValue, trigger]);
 
   const onSubmit = async (formData) => {
@@ -69,7 +72,7 @@ const ForgotPasswordForm = () => {
             error={errors.email?.message}
             inputStyles="bg-white"
           />
-          <Captcha onChange={setCaptcha} className="my-0" />
+          {shouldShowCaptcha() && <Captcha onChange={setCaptcha} className="my-0" />}
         </div>
       </FormManager>
     </FormProvider>

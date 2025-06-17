@@ -76,7 +76,6 @@ function userCompanyDetailsAdapter({ data, role }) {
     pending,
     numberOfVessels,
     phone,
-    secondaryPhone,
   } = data;
 
   const formattedCargoDetails = cargoesDetailsAdapter({ data: cargoesDetails });
@@ -122,7 +121,6 @@ function userCompanyDetailsAdapter({ data, role }) {
       pending,
       pendingRequest: hasPendingCompanyInfoUpdateRequest,
       phone,
-      secondaryPhone,
       ...getRoleBasedData(),
     },
   };
@@ -305,7 +303,7 @@ function companyAddressesAdapter({ data }) {
 
 export function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
-  const { imos, companyYearsOfOperation, companyName, phone, secondaryPhone } = data;
+  const { imos, companyYearsOfOperation, companyName, phone } = data;
 
   return {
     companyName,
@@ -313,21 +311,19 @@ export function updateOwnerCompanyAdapter({ data }) {
     numberOfVessels: imos.countOfTankers,
     imos: listOfImosAdapter({ data: imos.listOfTankers }),
     phone: ensurePlusPrefix(phone),
-    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     ...companyAddressesAdapter({ data }),
   };
 }
 
 export function updateChartererCompanyAdapter({ data }) {
   if (!data) return null;
-  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName, phone, secondaryPhone } = data;
+  const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName, phone } = data;
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,
     phone: ensurePlusPrefix(phone),
-    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
     ...companyAddressesAdapter({ data }),
     experiences: cargoesAdapter({ data: cargoes?.listOfCargoes }),
   };
@@ -357,13 +353,13 @@ export function ownerSignUpAdapter({ data }) {
     companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhone,
     phone,
     email,
     lastName,
     firstName,
     userPhone,
     otpId,
+    samePhone,
   } = data;
 
   return {
@@ -371,8 +367,7 @@ export function ownerSignUpAdapter({ data }) {
     ownerSurname: lastName,
     password,
     email,
-    phone: ensurePlusPrefix(phone),
-    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
+    phone: ensurePlusPrefix(samePhone ? userPhone : phone),
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
@@ -401,13 +396,13 @@ export function chartererSignUpAdapter({ data }) {
     companyYearsOfOperation,
     companyName,
     password,
-    secondaryPhone,
     phone,
     email,
     lastName,
     firstName,
     userPhone,
     otpId,
+    samePhone,
   } = data;
 
   return {
@@ -415,8 +410,7 @@ export function chartererSignUpAdapter({ data }) {
     ownerSurname: lastName,
     email,
     password,
-    phone: ensurePlusPrefix(phone),
-    secondaryPhone: secondaryPhone ? ensurePlusPrefix(secondaryPhone) : '',
+    phone: ensurePlusPrefix(samePhone ? userPhone : phone),
     companyName,
     yearsInOperation: companyYearsOfOperation,
     estimatedNumberOfChartersPerYear: numberOfCargoes,

@@ -13,7 +13,7 @@ import { Button, Modal } from '@/elements';
 import { captchaSchema, searchForTankerSchema } from '@/lib/schemas';
 import { getSearchSelector } from '@/store/selectors';
 import { FavoriteSearchForm, FavoriteSearchList, SearchFormFields } from '@/units';
-import { resetForm } from '@/utils/helpers';
+import { resetForm, shouldShowCaptcha } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = false }) => {
@@ -26,7 +26,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
 
   const schema = yup.object({
     ...searchForTankerSchema(),
-    ...(isAccountSearch ? {} : captchaSchema()),
+    ...(isAccountSearch || !shouldShowCaptcha() ? {} : captchaSchema()),
   });
   const methods = useHookFormParams({ schema, state: searchParams });
 
@@ -38,8 +38,8 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     methods.setValue('excludeInternationallySanctioned', false);
     methods.setValue('showAdditionalDischarge', false);
 
-    // Reset captcha only if not account search
-    if (!isAccountSearch) {
+    // Reset captcha only if not account search and captcha should be shown
+    if (!isAccountSearch && shouldShowCaptcha()) {
       methods.setValue('captcha', null);
 
       // Reset the captcha using the ref

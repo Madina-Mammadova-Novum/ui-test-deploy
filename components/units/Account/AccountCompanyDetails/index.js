@@ -96,9 +96,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
         <FieldsetContent label="Company information" className="pt-5">
           {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
           {company?.phone && <TextRow title="Primary phone number">{printPhoneNumber(company?.phone)}</TextRow>}
-          {company?.secondaryPhone && (
-            <TextRow title="Secondary phone number">{printPhoneNumber(company?.secondaryPhone)}</TextRow>
-          )}
+
           {company?.totalTankers ? (
             <AccountAmountOfTankers data={company?.cargoes?.listOfCargoes} total={company?.totalTankers} />
           ) : null}

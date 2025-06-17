@@ -39,7 +39,7 @@ const Navbar = ({ placeholder, cta, path }) => {
         <Logo className="hidden fill-black md:block 3md:fill-white" />
         <SmallLogo className="fill-black md:hidden" />
       </NextLink>
-      <ul className="xl:w-[calc(100% - 668px)] z-50 flex w-full items-center justify-end gap-5 bg-white py-1 3md:w-7/12">
+      <ul className="xl:w-[calc(100% - 668px)] z-50 flex w-full items-center justify-end gap-5 bg-white py-1 3md:h-full 3md:w-7/12">
         <li className="hidden whitespace-nowrap text-xsm font-normal text-black md:block">
           <p>{placeholder}</p>
         </li>
