@@ -19,6 +19,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   const {
     register,
     setValue,
+    getValues,
     clearErrors,
     watch,
     formState: { errors, isSubmitting },
@@ -83,16 +84,35 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   const handleApplySlot = () => {
     const nextCargoesCount =
       cargoesCount > SETTINGS.MAX_NUMBER_OF_CARGOES ? SETTINGS.MAX_NUMBER_OF_CARGOES : cargoesCount;
+    const newCargoes = getFilledArray(nextCargoesCount).map((item) => ({
+      ...item,
+      id: `cargo-${Date.now()}-${Math.random()}`,
+    }));
     clearErrors('applySlots');
-    handleChangeState('cargoes', getFilledArray(nextCargoesCount));
+
+    // Update form values for each cargo slot
+    newCargoes.forEach((_, index) => {
+      setValue(`cargoes[${index}].imo`, '');
+      setValue(`cargoes[${index}].port`, null);
+      setValue(`cargoes[${index}].date`, null);
+    });
+
+    setValue('cargoes', newCargoes);
+    handleChangeState('cargoes', newCargoes);
   };
 
   const handleAddSlot = () => {
-    handleChangeState('cargoes', [...cargoes, ...getFilledArray(1)]);
+    const newSlot = getFilledArray(1).map(() => ({
+      id: `cargo-${Date.now()}-${Math.random()}`,
+    }));
+    handleChangeState('cargoes', [...cargoes, ...newSlot]);
   };
 
   const handleRemoveSlot = (index) => {
-    setValue('cargoes', removeByIndex(cargoes, index));
+    const cargoesValues = getValues('cargoes');
+    const updatedCargoes = removeByIndex(cargoesValues, index);
+
+    setValue('cargoes', updatedCargoes);
     handleChangeState('cargoes', removeByIndex(cargoes, index));
   };
 
@@ -163,7 +183,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="relative flex flex-col justify-center gap-2 md:flex-row" key={item}>
+          <div className="relative flex flex-col justify-center gap-2 md:flex-row" key={item.id || `cargo-${index}`}>
             <Input
               {...register(`${fieldName}.imo`, {
                 onChange: (e) => {
