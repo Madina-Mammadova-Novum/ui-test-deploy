@@ -2,7 +2,7 @@ import { authorPositionAdapter } from '@/adapters/authorPosition';
 import { linkImageAdapter } from '@/adapters/global';
 import { imageAdapter, imagesAdapter } from '@/adapters/image';
 
-export const authorAdapter = ({ data }) => {
+export const authorAdapter = ({ data = null } = {}) => {
   if (data === null) return null;
   const { id, attributes } = data;
   const {
@@ -41,8 +41,8 @@ export const authorAdapter = ({ data }) => {
   };
 };
 
-export const authorsAdapter = ({ data }) => {
-  if (data === null) return [];
+export const authorsAdapter = ({ data } = {}) => {
+  if (!data) return [];
   return data.map((author) => {
     return authorAdapter({ data: author });
   });
