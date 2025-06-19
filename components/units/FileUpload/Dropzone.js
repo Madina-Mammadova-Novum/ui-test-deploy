@@ -19,7 +19,7 @@ const Dropzone = ({ areaParams, inputParams, children, dropzoneRef }) => {
         <div className="flex flex-col items-center justify-center gap-1.5">
           <FileUploadSVG className="fill-gray" />
           <p className="text-center text-xsm font-normal text-gray">Drop your File&apos;s here, or Select</p>
-          <span className="text-xs pb-0 text-center font-medium text-blue md:pb-5">Click to browse</span>
+          <span className="pb-0 text-center text-xs font-medium text-blue md:pb-5">Click to browse</span>
         </div>
         {children}
       </div>

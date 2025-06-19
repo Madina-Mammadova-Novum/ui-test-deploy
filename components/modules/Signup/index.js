@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
+import { Title } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { ChartererRegistrationForm, OwnerRegistrationForm } from '@/modules';
 import { getSignUpData } from '@/services';
-import { Step, Tabs } from '@/units';
+import { Tabs } from '@/units';
 import { signUpTab } from '@/utils/mock';
 
 const Signup = () => {
@@ -41,12 +42,21 @@ const Signup = () => {
   const handleActiveTab = ({ target }) => setRole(target.value);
 
   return (
-    <>
-      <Step title="Step #1: Choose who you are" containerClass="flex flex-col pt-5 gap-5">
-        <Tabs tabs={signUpTab?.tabs} activeTab={role} onClick={handleActiveTab} />
-      </Step>
+    <div className="flex flex-col gap-6">
+      <Title level="1" className="text-center text-2.5xl font-bold text-black md:text-start">
+        Registration
+      </Title>
+      <Tabs
+        tabs={signUpTab?.tabs}
+        activeTab={role}
+        onClick={handleActiveTab}
+        buttonClassName="w-full md:w-auto"
+        customStyles="!w-full md:!w-min"
+        groupClassName="w-full md:w-auto"
+      />
+
       {roleBasedForm[role]}
-    </>
+    </div>
   );
 };
 

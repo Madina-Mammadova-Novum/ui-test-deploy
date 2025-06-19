@@ -108,13 +108,19 @@ const OwnerRegistrationForm = ({ countries }) => {
         <Divider className="mt-5" />
         <Step title="Step #2: User Details" titleClass="pt-5" containerClass="flex flex-col gap-5">
           <PersonalDetails />
-          <p className="pt-5 text-sm font-semibold text-black">Enter a password for account access</p>
-          <PasswordValidation
-            helperData={{
-              password: { label: 'chose password', placeholder: 'Enter your password' },
-              confirm: { label: 'confirm password', placeholder: 'Enter your password' },
-            }}
-          />
+
+          <div className="flex flex-col gap-6">
+            <p className="pt-5 text-sm font-semibold text-black">
+              Enter a strong password according to our requirements
+            </p>
+            <PasswordValidation
+              helperData={{
+                password: { label: 'chose password', placeholder: 'Enter your password' },
+                confirm: { label: 'confirm password', placeholder: 'Enter your password' },
+              }}
+              inputGroupClassName="md:flex-row md:justify-normal gap-x-4"
+            />
+          </div>
         </Step>
         <Divider className="mt-5" />
         <Step title="Step #3: Company Details" titleClass="pt-5" containerClass="flex flex-col gap-5">

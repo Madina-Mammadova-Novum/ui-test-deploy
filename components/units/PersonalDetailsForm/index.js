@@ -207,8 +207,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   };
 
   return (
-    <>
-      <div className="grid grid-cols-2 gap-5">
+    <div className="flex flex-col gap-8">
+      <div className="grid grid-cols-2 gap-4">
         <Input
           {...register('firstName')}
           label="First name"
@@ -242,11 +242,11 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           disabled={isSubmitting}
         />
       </div>
-      <div className="flex flex-col gap-5">
-        <p className="pt-5 text-sm font-semibold text-black">Contact Information</p>
+      <div className="flex flex-col gap-6">
+        <p className="text-sm font-semibold text-black">Contact Information</p>
         <div className="flex flex-col gap-5 md:flex-row">
           <div className="w-full">
-            <div className="grid w-full gap-5 md:grid-cols-2">
+            <div className="grid w-full gap-2 md:grid-cols-2 md:gap-1">
               <div ref={phoneInputRef}>
                 <PhoneInput
                   {...register(phoneFieldName)}
@@ -269,7 +269,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                   <Button
                     buttonProps={{
                       text: 'Validate',
-                      variant: 'secondary',
+                      variant: 'primary',
                       size: 'large',
                     }}
                     disabled={isSubmitting || isCheckingAvailability}
@@ -310,7 +310,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         {/* Hidden input for phoneVerified validation */}
         <input type="hidden" {...register('phoneVerified')} />
       </div>
-    </>
+    </div>
   );
 };
 

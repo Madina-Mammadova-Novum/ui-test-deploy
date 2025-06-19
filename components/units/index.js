@@ -36,7 +36,9 @@ import CollapsedChats from '@/units/CollapsedChats';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
+import CompanyAddressStepForm from '@/units/CompanyAddressStepForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
+import CompanyDetailsStepForm from '@/units/CompanyDetailsStepForm';
 import ComplexPagination from '@/units/ComplexPagination';
 import ConfirmModal from '@/units/ConfirmModal';
 import COTTabContent from '@/units/COTTabContent';
@@ -64,6 +66,7 @@ import FilterByForm from '@/units/FilterByForm';
 import FailedOffersFilter from '@/units/FilterByForm/failedOffersFilter';
 import PostFixtureFilter from '@/units/FilterByForm/postFixtureFilter';
 import Flag from '@/units/Flag';
+import FleetInformationStepForm from '@/units/FleetInformationStepForm';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconUpload from '@/units/IconUpload';
 import IconWrapper from '@/units/IconWrapper';
@@ -89,6 +92,7 @@ import PaginationComponent from '@/units/PaginationComponent';
 import PartyItem from '@/units/PartyItem';
 import PasswordValidation from '@/units/PasswordValidationForm';
 import PersonalDetails from '@/units/PersonalDetailsForm';
+import PersonalDetailsStepForm from '@/units/PersonalDetailsStepForm';
 import PhoneValidation from '@/units/PhoneValidation';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
@@ -99,6 +103,7 @@ import SearchFormFields from '@/units/SearchFormFields';
 import SearchNotFound from '@/units/SearchNotFound';
 import SocialNetworks from '@/units/SocialNetworks';
 import Step from '@/units/Step';
+import Stepper from '@/units/Stepper';
 import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
 import TabsVertical from '@/units/TabsVertical';
@@ -128,12 +133,17 @@ export {
   PasswordValidation,
   Tabs,
   Step,
+  Stepper,
   Notes,
   AuthNavButtons,
   PersonalDetails,
+  PersonalDetailsStepForm,
   CompanyDetails,
+  CompanyDetailsStepForm,
   TankerSlotsDetails,
   CompanyAddresses,
+  CompanyAddressStepForm,
+  FleetInformationStepForm,
   TermsAndConditions,
   CargoesSlotsDetails,
   CargoesSlotsDetailsStatic,

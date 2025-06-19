@@ -1,39 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import classNames from 'classnames';
 
-import { CompanyDetailsPropTypes } from '@/lib/types';
-
 import { CheckBoxInput, Input, PhoneInput } from '@/elements';
-import { disableDefaultBehavior, disablePlusMinusSymbols } from '@/utils/helpers';
 
-const CompanyDetails = ({ notEditable = false }) => {
-  const inputYearsRef = useRef(null);
+const CompanyDetails = () => {
   const {
     register,
     setValue,
-    clearErrors,
     getValues,
     formState: { errors, isSubmitting },
   } = useFormContext();
 
-  const { companyYearsOfOperation, pending, pendingRequest, companyName, phone, samePhone } = getValues();
-
-  useEffect(() => {
-    if (inputYearsRef.current) {
-      inputYearsRef.current.addEventListener('wheel', disableDefaultBehavior);
-      inputYearsRef.current.addEventListener('keydown', disablePlusMinusSymbols);
-      inputYearsRef.current.value = companyYearsOfOperation;
-    }
-  }, [companyYearsOfOperation, inputYearsRef]);
-
-  const handleNumberOfOperation = () => {
-    clearErrors('companyYearsOfOperation');
-    setValue('companyYearsOfOperation', inputYearsRef.current.value);
-  };
+  const { pending, pendingRequest, companyName, phone, samePhone } = getValues();
 
   const handleSamePhone = (event) => {
     const { checked } = event.target;
@@ -59,20 +40,6 @@ const CompanyDetails = ({ notEditable = false }) => {
           error={errors.companyName?.message}
           disabled={isSubmitting}
         />
-        {!notEditable && (
-          <Input
-            ref={inputYearsRef}
-            type="number"
-            name="companyYearsOfOperation"
-            label="Years in operation"
-            labelBadge="*"
-            placeholder="Years"
-            value={inputYearsRef.current?.value ?? ''}
-            onChange={handleNumberOfOperation}
-            disabled={isSubmitting}
-            error={errors.companyYearsOfOperation?.message}
-          />
-        )}
       </div>
       <div className="mt-5 flex flex-col gap-5">
         <p className="text-sm font-semibold text-black">Company Contact Information</p>
@@ -110,7 +77,5 @@ const CompanyDetails = ({ notEditable = false }) => {
     </>
   );
 };
-
-CompanyDetails.propTypes = CompanyDetailsPropTypes;
 
 export default CompanyDetails;

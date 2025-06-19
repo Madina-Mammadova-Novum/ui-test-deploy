@@ -38,7 +38,7 @@ const initialState = [
   },
 ];
 
-const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
+const PasswordValidation = ({ title = '', customStyles = '', inputGroupClassName = '', helperData }) => {
   const [validation, setValidation] = useState(initialState);
 
   const {
@@ -72,7 +72,7 @@ const PasswordValidation = ({ title = '', customStyles = '', helperData }) => {
     <div className={customStyles}>
       {title !== '' ?? <Title level="3">{title}</Title>}
       <div className="flex flex-col items-start gap-3">
-        <div className="flex w-full flex-col justify-between gap-y-4">
+        <div className={classNames('flex w-full flex-col justify-between gap-y-4', inputGroupClassName)}>
           <PasswordInput
             name="password"
             label={password?.label}
