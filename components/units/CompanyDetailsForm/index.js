@@ -41,8 +41,7 @@ const CompanyDetails = () => {
           disabled={isSubmitting}
         />
       </div>
-      <div className="mt-5 flex flex-col gap-5">
-        <p className="text-sm font-semibold text-black">Company Contact Information</p>
+      <div className="flex flex-col gap-5">
         <div className="col-span-2 row-auto">
           <CheckBoxInput
             name="samePhone"

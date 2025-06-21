@@ -8,17 +8,17 @@ import * as yup from 'yup';
 
 import { FormManager } from '@/common';
 import { Input } from '@/elements';
-import { captchaSchema, tankerSlotsDetailsSchema, termsAndConditionsSchema } from '@/lib/schemas';
-import { Captcha, TankerSlotsDetailsForm, TermsAndConditions } from '@/units';
+import { captchaSchema, cargoesSlotsDetailsSchema, termsAndConditionsSchema } from '@/lib/schemas';
+import { Captcha, CargoesSlotsDetailsForm, TermsAndConditions } from '@/units';
 import { disableDefaultBehavior, disablePlusMinusSymbols, shouldShowCaptcha } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
+const CharteringExperienceStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
   const inputYearsRef = useRef(null);
   const [captcha, setCaptcha] = React.useState('');
 
   const schema = yup.object().shape({
-    ...tankerSlotsDetailsSchema(),
+    ...cargoesSlotsDetailsSchema(),
     ...termsAndConditionsSchema(),
     ...(shouldShowCaptcha() ? captchaSchema() : {}),
   });
@@ -81,9 +81,9 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
         hideSubmitButton
       >
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-black">Fleet Information</h3>
+          <h3 className="mb-4 text-lg font-semibold text-black">Recent Chartering Experience</h3>
           <p className="mb-6 text-sm text-gray-600">
-            Please provide information about your fleet and years of operation in the maritime industry.
+            Please provide information about your recent chartering experience and cargo requirements.
           </p>
           <div className="mb-6">
             <Input
@@ -99,7 +99,7 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
               error={errors.companyYearsOfOperation?.message}
             />
           </div>
-          <TankerSlotsDetailsForm applyHelper />
+          <CargoesSlotsDetailsForm applyHelper />
         </div>
         <div>
           <TermsAndConditions />
@@ -110,10 +110,10 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
   );
 };
 
-FleetInformationStepForm.propTypes = {
+CharteringExperienceStepForm.propTypes = {
   onFormValid: PropTypes.func.isRequired,
   onMethodsReady: PropTypes.func,
   initialData: PropTypes.shape(),
 };
 
-export default FleetInformationStepForm;
+export default CharteringExperienceStepForm;

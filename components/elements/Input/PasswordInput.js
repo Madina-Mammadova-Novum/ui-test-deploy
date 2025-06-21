@@ -16,7 +16,7 @@ const PasswordInput = ({ name = '', label = '', labelBadge = '', placeholder = '
     <Controller
       name={name}
       render={({ field: { ref, ...field }, formState: { errors } }) => (
-        <div className="relative">
+        <div className="relative w-full">
           <Input
             {...field}
             label={label}

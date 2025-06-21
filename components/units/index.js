@@ -17,9 +17,10 @@ import CalculatedForm from '@/units/CalculatedForm';
 import CalculatedResult from '@/units/CalculatedResult';
 import Captcha from '@/units/Captcha';
 import CargoesInfoModal from '@/units/CargoesInfoModal';
-import CargoesSlotsDetails from '@/units/CargoesSlotsDetailsForm';
+import CargoesSlotsDetailsForm from '@/units/CargoesSlotsDetailsForm';
 import CargoesSlotsDetailsStatic from '@/units/CargoesSlotsDetailsStatic';
 import ChartererInformationContent from '@/units/ChartererInformationContent';
+import CharteringExperienceStepForm from '@/units/CharteringExperienceStepForm';
 import ChatAdditional from '@/units/ChatAdditional';
 import ChatControl from '@/units/ChatControl';
 import ChatConversation from '@/units/ChatConversation';
@@ -36,7 +37,6 @@ import CollapsedChats from '@/units/CollapsedChats';
 import Comment from '@/units/Comment';
 import CommercialOfferTerms from '@/units/CommercialOfferTerms';
 import CompanyAddresses from '@/units/CompanyAddressesForm';
-import CompanyAddressStepForm from '@/units/CompanyAddressStepForm';
 import CompanyDetails from '@/units/CompanyDetailsForm';
 import CompanyDetailsStepForm from '@/units/CompanyDetailsStepForm';
 import ComplexPagination from '@/units/ComplexPagination';
@@ -70,6 +70,7 @@ import FleetInformationStepForm from '@/units/FleetInformationStepForm';
 import FooterNavBlock from '@/units/FooterNavBlock';
 import IconUpload from '@/units/IconUpload';
 import IconWrapper from '@/units/IconWrapper';
+import IdentityVerificationStepForm from '@/units/IdentityVerificationStepForm';
 import ImoNotFound from '@/units/ImoNotFound';
 import LegalNavigation from '@/units/LegalNavigation';
 import ModalHeader from '@/units/ModalHeader';
@@ -96,6 +97,7 @@ import PersonalDetailsStepForm from '@/units/PersonalDetailsStepForm';
 import PhoneValidation from '@/units/PhoneValidation';
 import PortDetailsForm from '@/units/PortDetailsForm';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
+import RegistrationDocumentsStepForm from '@/units/RegistrationDocumentsStepForm';
 import RequestDocumentDeletionModal from '@/units/RequestDocumentDeletionModal';
 import RevokeDocumentDeletionModal from '@/units/RevokeDocumentDeletionModal';
 import SearchForm from '@/units/SearchForm';
@@ -108,7 +110,7 @@ import Tabs from '@/units/Tabs';
 import TabsAsLinks from '@/units/TabsAsLinks';
 import TabsVertical from '@/units/TabsVertical';
 import TankerInformationContent from '@/units/TankerInformationContent';
-import TankerSlotsDetails from '@/units/TankerSlotsDetailsForm';
+import TankerSlotsDetailsForm from '@/units/TankerSlotsDetailsForm';
 import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import UnassignedFleet from '@/units/UnassignedFleet';
@@ -140,12 +142,14 @@ export {
   PersonalDetailsStepForm,
   CompanyDetails,
   CompanyDetailsStepForm,
-  TankerSlotsDetails,
+  TankerSlotsDetailsForm,
   CompanyAddresses,
-  CompanyAddressStepForm,
+  CharteringExperienceStepForm,
   FleetInformationStepForm,
+  RegistrationDocumentsStepForm,
+  IdentityVerificationStepForm,
   TermsAndConditions,
-  CargoesSlotsDetails,
+  CargoesSlotsDetailsForm,
   CargoesSlotsDetailsStatic,
   SearchForm,
   SearchFormFields,

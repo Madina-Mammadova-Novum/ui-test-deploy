@@ -243,10 +243,9 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         />
       </div>
       <div className="flex flex-col gap-6">
-        <p className="text-sm font-semibold text-black">Contact Information</p>
         <div className="flex flex-col gap-5 md:flex-row">
           <div className="w-full">
-            <div className="grid w-full gap-2 md:grid-cols-2 md:gap-1">
+            <div className="grid w-full gap-2 md:grid-cols-2 md:gap-4">
               <div ref={phoneInputRef}>
                 <PhoneInput
                   {...register(phoneFieldName)}

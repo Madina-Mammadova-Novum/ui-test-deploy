@@ -27,7 +27,9 @@ const StepIndicator = ({ step, currentStep, isCompleted }) => {
         </div>
       </div>
 
-      <h2 className={classNames('text-xs font-semibold uppercase', isActive ? 'text-blue' : 'text-gray-400')}>
+      <h2
+        className={classNames('text-xs font-semibold uppercase', isActive || isDone ? 'text-blue' : 'text-gray-darker')}
+      >
         {step.title}
       </h2>
     </div>
@@ -39,12 +41,11 @@ const Stepper = ({
   currentStep,
   onNext,
   onPrevious,
-  onSubmit,
   children,
   isLastStep,
   contentClassName = '',
-  canProceed = true,
   isSubmitting = false,
+  hideActionButtons = false,
 }) => {
   return (
     <div className="flex h-full flex-col">
@@ -60,7 +61,7 @@ const Stepper = ({
         </div>
 
         {/* Desktop: Show all steps */}
-        <div className="hidden md:grid md:grid-cols-4 md:gap-4">
+        <div className="hidden md:grid md:grid-cols-5 md:gap-4">
           {steps.map((step) => (
             <StepIndicator key={step.id} step={step} currentStep={currentStep} isCompleted={step.isCompleted} />
           ))}
@@ -71,46 +72,43 @@ const Stepper = ({
       <div className={classNames('mb-8 flex-1 md:mb-12', contentClassName)}>{children}</div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-        <div>
+      {!hideActionButtons && (
+        <div className="grid w-full max-w-[824px] grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
           {currentStep > 1 && (
             <Button
               buttonProps={{
-                text: 'Previous',
-                variant: 'secondary',
+                text: 'Previous Step',
+                variant: 'tertiary',
                 size: 'large',
               }}
+              customStyles="w-full !border-blue !text-blue hover:!border-blue-darker hover:!text-blue-darker"
+              customStylesFromWrap="w-full order-2 md:order-1"
               onClick={onPrevious}
               disabled={isSubmitting}
             />
           )}
-        </div>
 
-        <div>
-          {isLastStep ? (
-            <Button
-              buttonProps={{
-                text: isSubmitting ? 'Creating Account...' : 'Create Account',
-                variant: 'primary',
-                size: 'large',
-              }}
-              onClick={onSubmit}
-              disabled={!canProceed || isSubmitting}
-              type="submit"
-            />
-          ) : (
-            <Button
-              buttonProps={{
-                text: 'Next Step',
-                variant: 'primary',
-                size: 'large',
-              }}
-              onClick={onNext}
-              // disabled={!canProceed || isSubmitting}
-            />
-          )}
+          <Button
+            buttonProps={{
+              text:
+                currentStep === 3
+                  ? isSubmitting
+                    ? 'Creating Account...'
+                    : 'Create Account'
+                  : isLastStep
+                    ? 'Complete'
+                    : 'Next Step',
+              variant: 'primary',
+              size: 'large',
+            }}
+            onClick={onNext}
+            customStyles="w-full"
+            customStylesFromWrap="w-full order-1 md:order-2"
+            disabled={isSubmitting}
+            type={isLastStep ? 'submit' : 'button'}
+          />
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -137,11 +135,10 @@ Stepper.propTypes = {
   contentClassName: PropTypes.string,
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   isLastStep: PropTypes.bool.isRequired,
-  canProceed: PropTypes.bool,
   isSubmitting: PropTypes.bool,
+  hideActionButtons: PropTypes.bool,
 };
 
 export default Stepper;

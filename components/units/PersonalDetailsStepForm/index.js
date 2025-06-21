@@ -11,7 +11,7 @@ import { passwordValidationSchema, personalDetailsSchema } from '@/lib/schemas';
 import { PasswordValidation, PersonalDetails } from '@/units';
 import { useHookFormParams } from '@/utils/hooks';
 
-const PersonalDetailsStepForm = ({ onFormValid, initialData = {} }) => {
+const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
   const schema = yup.object().shape({
     ...personalDetailsSchema({ isRegister: true }),
     ...passwordValidationSchema(),
@@ -35,6 +35,13 @@ const PersonalDetailsStepForm = ({ onFormValid, initialData = {} }) => {
   React.useEffect(() => {
     onFormValid(isValid, formValues);
   }, [isValid, formValues, onFormValid]);
+
+  // Expose form methods to parent component
+  React.useEffect(() => {
+    if (onMethodsReady) {
+      onMethodsReady(methods);
+    }
+  }, [methods, onMethodsReady]);
 
   return (
     <FormProvider {...methods}>
@@ -62,6 +69,7 @@ const PersonalDetailsStepForm = ({ onFormValid, initialData = {} }) => {
 
 PersonalDetailsStepForm.propTypes = {
   onFormValid: PropTypes.func.isRequired,
+  onMethodsReady: PropTypes.func,
   initialData: PropTypes.shape(),
 };
 
