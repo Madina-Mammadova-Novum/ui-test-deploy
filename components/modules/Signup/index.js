@@ -11,6 +11,7 @@ import { signUpTab } from '@/utils/mock';
 
 const Signup = () => {
   const [role, setRole] = useState(ROLES.OWNER);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const [countries, setCountries] = useState([]);
 
@@ -26,12 +27,17 @@ const Signup = () => {
 
   const roleBasedForm = {
     // eslint-disable-next-line jsx-a11y/aria-role
-    charterer: <RegistrationForm countries={countries} userRole="charterer" />,
+    charterer: <RegistrationForm countries={countries} userRole="charterer" onStepChange={setCurrentStep} />,
     // eslint-disable-next-line jsx-a11y/aria-role
-    owner: <RegistrationForm countries={countries} userRole="owner" />,
+    owner: <RegistrationForm countries={countries} userRole="owner" onStepChange={setCurrentStep} />,
   };
 
-  const handleActiveTab = ({ target }) => setRole(target.value);
+  const handleActiveTab = ({ target }) => {
+    // Only allow role change when on step 1
+    if (currentStep === 1) {
+      setRole(target.value);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -45,6 +51,7 @@ const Signup = () => {
         buttonClassName="w-full md:w-auto"
         customStyles="!w-full md:!w-min"
         groupClassName="w-full md:w-auto"
+        disabled={currentStep !== 1}
       />
 
       {roleBasedForm[role]}
