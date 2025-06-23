@@ -1175,3 +1175,45 @@ export const scrollToFirstError = (errors, delay = 100) => {
     }
   }, delay);
 };
+
+/**
+ * Focuses on the first form element in the current form/step
+ * @param {number} delay - Delay in milliseconds before focusing (default: 150)
+ */
+export const focusFirstFormElement = (delay = 150) => {
+  setTimeout(() => {
+    // Common selectors for focusable form elements, ordered by priority
+    const selectors = [
+      'input[type="text"]:not([disabled]):not([readonly])',
+      'input[type="email"]:not([disabled]):not([readonly])',
+      'input[type="number"]:not([disabled]):not([readonly])',
+      'input[type="tel"]:not([disabled]):not([readonly])',
+      'input[type="password"]:not([disabled]):not([readonly])',
+      'select:not([disabled])',
+      'textarea:not([disabled]):not([readonly])',
+      'input:not([type="hidden"]):not([disabled]):not([readonly])',
+      'button:not([disabled])',
+    ];
+
+    // Try each selector until we find a focusable element
+    for (const selector of selectors) {
+      const elements = document.querySelectorAll(selector);
+
+      if (elements.length > 0) {
+        const firstElement = elements[0];
+
+        // Ensure the element is visible and not hidden
+        if (firstElement.offsetParent !== null) {
+          firstElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+
+          // Focus the element
+          firstElement.focus();
+          return; // Exit after successful focus
+        }
+      }
+    }
+  }, delay);
+};
