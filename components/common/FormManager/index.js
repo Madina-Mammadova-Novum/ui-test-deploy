@@ -15,6 +15,7 @@ const FormManager = ({
   showReset = false,
   resetAction,
   className = 'flex flex-col gap-5',
+  hideSubmitButton = false,
 }) => {
   const {
     handleSubmit,
@@ -29,9 +30,13 @@ const FormManager = ({
     icon,
     className: buttonClassName = 'w-full',
     buttonContainerClassName,
-  } = submitButton;
+  } = submitButton || {};
 
   const printCta = useMemo(() => {
+    if (hideSubmitButton) {
+      return null;
+    }
+
     return showReset ? (
       <div className={`flex gap-x-2.5 ${buttonContainerClassName}`}>
         <SubmitButton
@@ -62,7 +67,19 @@ const FormManager = ({
         icon={icon}
       />
     );
-  }, [showReset, text, variant, size, isSubmitting, disabled, buttonClassName, icon, resetAction, isDirty]);
+  }, [
+    hideSubmitButton,
+    showReset,
+    text,
+    variant,
+    size,
+    isSubmitting,
+    disabled,
+    buttonClassName,
+    icon,
+    resetAction,
+    isDirty,
+  ]);
 
   return (
     <form className={className} onSubmit={handleSubmit(submitAction, onErrorAction)}>

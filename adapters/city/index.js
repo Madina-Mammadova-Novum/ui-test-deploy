@@ -1,10 +1,11 @@
 export const cityAdapter = ({ data }) => {
   if (data === null) return null;
-  const { id, name } = data;
+  const { id, name, state } = data;
+  const { name: stateName } = state;
 
   return {
     cityId: id,
-    cityName: name,
+    cityName: `${name}, ${stateName}`,
   };
 };
 

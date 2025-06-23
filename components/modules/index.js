@@ -6,7 +6,6 @@ import AccountTools from '@/modules/AccountTools';
 import AccountWrapper from '@/modules/AccountWrapper';
 import AddNewTanker from '@/modules/AddNewTanker';
 import AuthWrapper from '@/modules/AuthWrapper';
-import ChartererRegistrationForm from '@/modules/ChartererRegistrationForm';
 import Chat from '@/modules/Chat';
 import CommentsContent from '@/modules/CommentsContent';
 import CompanyInfoForm from '@/modules/CompanyInfoForm';
@@ -42,7 +41,6 @@ import NotFound from '@/modules/NotFound';
 import Notification from '@/modules/Notification';
 import OnSubs from '@/modules/OnSubs';
 import OnSubsDetails from '@/modules/OnSubs/OnSubsDetails';
-import OwnerRegistrationForm from '@/modules/OwnerRegistrationForm';
 import PasswordInfoForm from '@/modules/PasswordInfoForm';
 import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PostFixture from '@/modules/PostFixture';
@@ -53,6 +51,7 @@ import PostFixtureResultContent from '@/modules/PostFixture/PostFixtureResultCon
 import PreFixture from '@/modules/PreFixture';
 import PreFixtureDetails from '@/modules/PreFixture/PreFixtureDetails';
 import ProfileMenu from '@/modules/ProfileMenu';
+import RegistrationForm from '@/modules/RegistrationForm';
 import ResetPasswordForm from '@/modules/ResetPasswordForm';
 import SendCounteroffer from '@/modules/SendCounteroffer';
 import Sidebar from '@/modules/Sidebar';
@@ -98,8 +97,7 @@ export {
   PasswordInfoForm,
   ForgotPasswordForm,
   ResetPasswordForm,
-  OwnerRegistrationForm,
-  ChartererRegistrationForm,
+  RegistrationForm,
   TankerSearch,
   ExpandableRow,
   VoyageDetailsContent,
