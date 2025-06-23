@@ -38,10 +38,10 @@ const Signup = () => {
   useEffect(() => {
     const urlRole = searchParams.get('role');
     const allowedRoles = [ROLES.OWNER, ROLES.CHARTERER];
-    const newRole = allowedRoles.includes(urlRole) ? urlRole : ROLES.OWNER;
+    const newRole = allowedRoles.includes(urlRole) ? urlRole : null;
 
     // Only update role if it's different and we're on step 1
-    if (newRole !== role && currentStep === 1) {
+    if (newRole && newRole !== role && currentStep === 1) {
       setRole(newRole);
     }
   }, [searchParams, role, currentStep]);
