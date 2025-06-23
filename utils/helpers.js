@@ -1126,3 +1126,52 @@ export const convertToKilotons = (tons) => {
 export const shouldShowCaptcha = () => {
   return process.env.NEXT_PUBLIC_APP_ENV !== 'dev';
 };
+
+/**
+ * Scrolls to the first form error element and focuses on it
+ * @param {Object} errors - React Hook Form errors object
+ * @param {number} delay - Delay in milliseconds before scrolling (default: 100)
+ */
+export const scrollToFirstError = (errors, delay = 100) => {
+  if (!errors || Object.keys(errors).length === 0) return;
+
+  const firstErrorField = Object.keys(errors)[0];
+
+  // Skip phoneVerified as it's handled directly in the component
+  if (firstErrorField === 'phoneVerified') return;
+
+  setTimeout(() => {
+    // Try to find the error element by various selectors
+    const errorElement =
+      document.querySelector(`[name="${firstErrorField}"]`) ||
+      document.querySelector(`#${firstErrorField}`) ||
+      document.querySelector(`[data-testid="${firstErrorField}"]`) ||
+      document.querySelector(`[data-field="${firstErrorField}"]`) ||
+      document.querySelector(`input[name="${firstErrorField}"]`);
+
+    if (errorElement) {
+      errorElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+
+      // Try to focus the element if it's focusable
+      if (errorElement.focus && typeof errorElement.focus === 'function') {
+        errorElement.focus();
+      }
+    } else {
+      // If we can't find the specific input, try to find the error message and scroll to it
+      const errorMessageElement =
+        document.querySelector(`[data-field-error="${firstErrorField}"]`) ||
+        document.querySelector('.text-red') ||
+        document.querySelector('[class*="error"]');
+
+      if (errorMessageElement) {
+        errorMessageElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }
+  }, delay);
+};

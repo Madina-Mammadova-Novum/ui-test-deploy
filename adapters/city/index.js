@@ -1,5 +1,4 @@
 export const cityAdapter = ({ data }) => {
-  // console.log('data2: ', data);
   if (data === null) return null;
   const { id, name, state } = data;
   const { name: stateName } = state;
@@ -11,7 +10,6 @@ export const cityAdapter = ({ data }) => {
 };
 
 export const citiesAdapter = ({ data }) => {
-  console.log('data: ', data);
   if (data === null) return [];
   return data.map((city) => {
     return cityAdapter({ data: city });

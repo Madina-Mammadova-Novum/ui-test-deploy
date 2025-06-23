@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
@@ -10,7 +10,12 @@ import { FormManager } from '@/common';
 import { Input } from '@/elements';
 import { captchaSchema, cargoesSlotsDetailsSchema, termsAndConditionsSchema } from '@/lib/schemas';
 import { Captcha, CargoesSlotsDetailsForm, TermsAndConditions } from '@/units';
-import { disableDefaultBehavior, disablePlusMinusSymbols, shouldShowCaptcha } from '@/utils/helpers';
+import {
+  disableDefaultBehavior,
+  disablePlusMinusSymbols,
+  scrollToFirstError,
+  shouldShowCaptcha,
+} from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const CharteringExperienceStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
@@ -42,6 +47,9 @@ const CharteringExperienceStepForm = ({ onFormValid, onMethodsReady, initialData
   // Watch all form values to detect changes
   const formValues = watch();
 
+  // Stabilize formValues for comparison using JSON string
+  const stableFormValues = useMemo(() => JSON.stringify(formValues), [formValues]);
+
   useEffect(() => {
     if (inputYearsRef.current) {
       inputYearsRef.current.addEventListener('wheel', disableDefaultBehavior);
@@ -64,7 +72,7 @@ const CharteringExperienceStepForm = ({ onFormValid, onMethodsReady, initialData
   // Notify parent component about form validity
   React.useEffect(() => {
     onFormValid(isValid, formValues);
-  }, [isValid, formValues, onFormValid]);
+  }, [isValid, stableFormValues, onFormValid]);
 
   // Expose form methods to parent component
   React.useEffect(() => {
@@ -72,6 +80,13 @@ const CharteringExperienceStepForm = ({ onFormValid, onMethodsReady, initialData
       onMethodsReady(methods);
     }
   }, [methods, onMethodsReady]);
+
+  // Scroll to first error when validation fails
+  React.useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      scrollToFirstError(errors);
+    }
+  }, [errors]);
 
   return (
     <FormProvider {...methods}>

@@ -1,20 +1,18 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import { FormManager } from '@/common';
-import { Input } from '@/elements';
 import { captchaSchema, tankerSlotsDetailsSchema, termsAndConditionsSchema } from '@/lib/schemas';
 import { Captcha, TankerSlotsDetailsForm, TermsAndConditions } from '@/units';
-import { disableDefaultBehavior, disablePlusMinusSymbols, shouldShowCaptcha } from '@/utils/helpers';
+import { scrollToFirstError, shouldShowCaptcha } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
-  const inputYearsRef = useRef(null);
   const [captcha, setCaptcha] = React.useState('');
 
   const schema = yup.object().shape({
@@ -33,38 +31,24 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
     formState: { isValid, errors },
     watch,
     setValue,
-    clearErrors,
-    getValues,
   } = methods;
-
-  const { companyYearsOfOperation } = getValues();
 
   // Watch all form values to detect changes
   const formValues = watch();
 
-  useEffect(() => {
-    if (inputYearsRef.current) {
-      inputYearsRef.current.addEventListener('wheel', disableDefaultBehavior);
-      inputYearsRef.current.addEventListener('keydown', disablePlusMinusSymbols);
-      inputYearsRef.current.value = companyYearsOfOperation;
-    }
-  }, [companyYearsOfOperation, inputYearsRef]);
+  // Stabilize formValues for comparison using JSON string
+  const stableFormValues = useMemo(() => JSON.stringify(formValues), [formValues]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (shouldShowCaptcha()) {
       setValue('captcha', captcha);
     }
   }, [captcha, setValue]);
 
-  const handleNumberOfOperation = () => {
-    clearErrors('companyYearsOfOperation');
-    setValue('companyYearsOfOperation', inputYearsRef.current.value);
-  };
-
   // Notify parent component about form validity
   React.useEffect(() => {
     onFormValid(isValid, formValues);
-  }, [isValid, formValues, onFormValid]);
+  }, [isValid, stableFormValues, onFormValid]); // Use stable reference
 
   // Expose form methods to parent component
   React.useEffect(() => {
@@ -72,6 +56,13 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
       onMethodsReady(methods);
     }
   }, [methods, onMethodsReady]);
+
+  // Scroll to first error when validation fails
+  React.useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      scrollToFirstError(errors);
+    }
+  }, [errors]);
 
   return (
     <FormProvider {...methods}>
@@ -81,24 +72,9 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
         hideSubmitButton
       >
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-black">Fleet Information</h3>
-          <p className="mb-6 text-sm text-gray-600">
-            Please provide information about your fleet and years of operation in the maritime industry.
-          </p>
-          <div className="mb-6">
-            <Input
-              ref={inputYearsRef}
-              type="number"
-              name="companyYearsOfOperation"
-              label="Years in operation"
-              labelBadge="*"
-              placeholder="Years"
-              value={inputYearsRef.current?.value ?? ''}
-              onChange={handleNumberOfOperation}
-              disabled={methods.formState.isSubmitting}
-              error={errors.companyYearsOfOperation?.message}
-            />
-          </div>
+          <h3 className="mb-4 text-lg font-semibold text-black">Fleet & Operations</h3>
+          <p className="mb-6 text-sm text-gray-600">Please provide information about your fleet.</p>
+
           <TankerSlotsDetailsForm applyHelper />
         </div>
         <div>

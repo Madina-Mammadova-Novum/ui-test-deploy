@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import PropTypes from 'prop-types';
 import { UilCheckCircle, UilEnvelopeAlt } from '@iconscout/react-unicons';
+import PropTypes from 'prop-types';
 
 import { NextLink } from '@/elements';
 import { getCookieFromBrowser } from '@/utils/helpers';
@@ -58,15 +58,15 @@ const RegistrationDocumentsStepForm = ({ onFormValid, onMethodsReady, userRole }
                 <ul className="mb-3 space-y-1 text-xsm text-gray-700">
                   <li className="flex items-center gap-2">
                     <div className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                    Acknowledgment Letter 1
+                    Acknowledgment Letter
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                    Non-Disclosure Agreement (NDA) 2
+                    Non-Disclosure Agreement (NDA)
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                    User Authorization Letter 3
+                    User Authorization Letter
                   </li>
                   {isCharterer && (
                     <li className="flex items-center gap-2">

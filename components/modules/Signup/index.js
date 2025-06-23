@@ -26,9 +26,9 @@ const Signup = () => {
 
   const roleBasedForm = {
     // eslint-disable-next-line jsx-a11y/aria-role
-    charterer: <RegistrationForm countries={countries} role="charterer" />,
+    charterer: <RegistrationForm countries={countries} userRole="charterer" />,
     // eslint-disable-next-line jsx-a11y/aria-role
-    owner: <RegistrationForm countries={countries} role="owner" />,
+    owner: <RegistrationForm countries={countries} userRole="owner" />,
   };
 
   const handleActiveTab = ({ target }) => setRole(target.value);

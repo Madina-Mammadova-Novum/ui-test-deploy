@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -15,7 +15,7 @@ import {
   RegistrationDocumentsStepForm,
   Stepper,
 } from '@/units';
-import { getFieldFromKey, setCookie } from '@/utils/helpers';
+import { getFieldFromKey, scrollToFirstError, setCookie } from '@/utils/helpers';
 import { errorToast, redirectAfterToast } from '@/utils/hooks';
 
 const STEPS = [
@@ -28,7 +28,7 @@ const STEPS = [
 
 const ROLE_CONFIG = {
   owner: {
-    step3Title: 'Fleet Information',
+    step3Title: 'Fleet & Operations',
     signUpService: ownerSignUp,
     storageKey: 'owner_registration_data',
   },
@@ -41,15 +41,21 @@ const ROLE_CONFIG = {
 
 const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
   const config = ROLE_CONFIG[userRole];
-  const steps = STEPS.map((step) => (step.id === 3 ? { ...step, title: config.step3Title } : step));
+
+  // Use useMemo to recalculate steps when userRole changes
+  const steps = useMemo(
+    () => STEPS.map((step) => (step.id === 3 ? { ...step, title: config.step3Title } : step)),
+    [config.step3Title]
+  );
 
   const [currentStep, setCurrentStep] = useState(1);
   const [stepsState, setStepsState] = useState(steps);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingFromStorage, setIsLoadingFromStorage] = useState(true);
   const [formData, setFormData] = useState({
     step1: {},
     step2: {},
-    step3: {},
+    step3: {}, // This will not be saved to localStorage
     step4: {},
     step5: {},
   });
@@ -63,30 +69,75 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     step5: null,
   });
 
-  // Load saved data from localStorage on mount
+  // Load saved data from localStorage on mount (excluding step 3)
   useEffect(() => {
     try {
       const savedData = localStorage.getItem(config.storageKey);
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-        setFormData(parsedData);
+        // Only load steps 1, 2, 4, 5 from localStorage
+        setFormData((prev) => ({
+          ...prev,
+          step1: parsedData.step1 || {},
+          step2: parsedData.step2 || {},
+          // step3 intentionally excluded
+          step4: parsedData.step4 || {},
+          step5: parsedData.step5 || {},
+        }));
       }
     } catch (error) {
-      console.warn('Failed to load saved registration data:', error);
+      // Mark loading as complete regardless of success/failure
+    } finally {
+      // Mark loading as complete regardless of success/failure
+      setIsLoadingFromStorage(false);
     }
   }, [config.storageKey]);
 
-  // Save data to localStorage whenever formData changes
+  // Save data to localStorage whenever formData changes (excluding step 3)
   useEffect(() => {
-    try {
-      localStorage.setItem(config.storageKey, JSON.stringify(formData));
-    } catch (error) {
-      console.warn('Failed to save registration data:', error);
+    // Only save to localStorage after initial loading is complete
+    if (isLoadingFromStorage) {
+      return;
     }
-  }, [formData, config.storageKey]);
+
+    try {
+      const dataToSave = {
+        step1: formData.step1,
+        step2: formData.step2,
+        // step3 intentionally excluded from localStorage
+        step4: formData.step4,
+        step5: formData.step5,
+      };
+      localStorage.setItem(config.storageKey, JSON.stringify(dataToSave));
+    } catch (error) {
+      // Handle localStorage errors silently
+    }
+  }, [formData.step1, formData.step2, formData.step4, formData.step5, config.storageKey, isLoadingFromStorage]);
 
   useEffect(() => {
-    console.log({ userRole });
+    // Effect for userRole changes
+  }, [userRole]);
+
+  // Update stepsState when steps change (i.e., when userRole changes)
+  useEffect(() => {
+    setStepsState(steps);
+  }, [steps]);
+
+  // Add effect to track stepsState changes
+  useEffect(() => {
+    // Effect for stepsState changes
+  }, [stepsState]);
+
+  // Reset only step 3 data and form methods when userRole changes
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      step3: {}, // Reset step 3 data but don't save to localStorage
+    }));
+    setStepFormMethods((prev) => ({
+      ...prev,
+      step3: null,
+    }));
   }, [userRole]);
 
   const handleFormMethodsReady = useCallback((stepNumber, methods) => {
@@ -97,24 +148,39 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
   }, []);
 
   const handleFormValid = useCallback((stepNumber, isValid, data) => {
-    setFormData((prev) => {
-      const currentData = prev[`step${stepNumber}`];
-      // Simple shallow comparison for data changes
-      if (currentData === data || (currentData && Object.keys(currentData).length === Object.keys(data || {}).length)) {
-        let isEqual = true;
-        for (const key in data || {}) {
-          if (currentData[key] !== data[key]) {
-            isEqual = false;
-            break;
-          }
-        }
-        if (isEqual) return prev;
-      }
-      return {
+    // For step 3, only update the in-memory formData, don't trigger localStorage save
+    if (stepNumber === 3) {
+      setFormData((prev) => ({
         ...prev,
-        [`step${stepNumber}`]: data,
-      };
-    });
+        step3: data,
+      }));
+    } else {
+      // For other steps, update formData which will trigger localStorage save
+      setFormData((prev) => {
+        const currentData = prev[`step${stepNumber}`];
+        // Simple shallow comparison for data changes
+        if (
+          currentData === data ||
+          (currentData && Object.keys(currentData).length === Object.keys(data || {}).length)
+        ) {
+          let isEqual = true;
+          for (const key in data || {}) {
+            if (currentData[key] !== data[key]) {
+              isEqual = false;
+              break;
+            }
+          }
+          if (isEqual) return prev;
+        }
+
+        const newFormData = {
+          ...prev,
+          [`step${stepNumber}`]: data,
+        };
+
+        return newFormData;
+      });
+    }
 
     // Update step completion status
     setStepsState((prev) => {
@@ -122,66 +188,32 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
       if (stepToUpdate && stepToUpdate.isCompleted === isValid) return prev;
       return prev.map((step) => (step.id === stepNumber ? { ...step, isCompleted: isValid } : step));
     });
-  }, []);
+  }, []); // Remove isLoadingFromStorage to prevent callback recreation
 
-  const handleNext = useCallback(async () => {
-    // Get the current step's form methods
-    const currentFormMethods = stepFormMethods[`step${currentStep}`];
-
-    if (!currentFormMethods) {
-      console.warn('Form methods not ready for current step');
-      return;
-    }
-
-    // Trigger form validation and submission
-    const isValid = await currentFormMethods.trigger();
-
-    if (isValid) {
-      // If we're on step 3, create the account before proceeding
-      if (currentStep === 3) {
-        await handleAccountCreation();
-      }
-
-      // Form is valid, proceed to next step or complete registration
-      if (currentStep < STEPS.length) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        // Final step completion - redirect to getting started
-        Promise.resolve(redirectAfterToast('Welcome to Ship.Link!', ROUTES.GETTING_STARTED));
-      }
-    } else {
-      // Form has validation errors - they will be displayed automatically
-      console.log('Form validation failed for step', currentStep);
-    }
-  }, [currentStep, stepFormMethods]);
-
-  const handlePrevious = useCallback(() => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  }, [currentStep]);
-
-  const handleAccountCreation = async () => {
+  const handleAccountCreation = useCallback(async () => {
     setIsSubmitting(true);
 
     try {
-      // Combine all form data
+      // Get step 3 data directly from form methods instead of localStorage
+      const step3FormMethods = stepFormMethods.step3;
+      const step3Data = step3FormMethods ? step3FormMethods.getValues() : {};
+
+      // Combine all form data with fresh step 3 data from form
       const combinedData = {
         ...formData.step1,
         ...formData.step2,
-        ...formData.step3,
+        ...step3Data, // Use fresh form values for step 3
       };
 
-      const { error, data } = await config.signUpService({ data: combinedData });
+      const { error } = await config.signUpService({ data: combinedData });
 
       if (!error) {
         setCookie('session-user-email', combinedData.email);
 
-        // Clear saved data on successful registration
+        // Clear saved data on successful registration (step 3 wasn't saved anyway)
         localStorage.removeItem(config.storageKey);
 
         // Don't redirect yet, let user proceed to steps 4 and 5
-        console.log('Account created successfully:', data.message);
       } else {
         const errorKeys = Object.keys(error?.errors || {});
 
@@ -206,7 +238,67 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [stepFormMethods.step3, formData.step1, formData.step2, config.signUpService, config.storageKey]);
+
+  const handleNext = useCallback(async () => {
+    // Get the current step's form methods
+    const currentFormMethods = stepFormMethods[`step${currentStep}`];
+
+    if (!currentFormMethods) {
+      return;
+    }
+
+    // Trigger form validation and submission
+    const isValid = await currentFormMethods.trigger();
+
+    if (isValid) {
+      // If we're on step 3, create the account before proceeding
+      if (currentStep === 3) {
+        await handleAccountCreation();
+      }
+
+      // Form is valid, proceed to next step or complete registration
+      if (currentStep < STEPS.length) {
+        setCurrentStep((prev) => {
+          const nextStep = prev + 1;
+          return nextStep;
+        });
+      } else {
+        // Final step completion - redirect to getting started
+        Promise.resolve(redirectAfterToast('Welcome to Ship.Link!', ROUTES.GETTING_STARTED));
+      }
+    } else if (currentFormMethods?.formState?.errors) {
+      // Form has validation errors - scroll to first error
+      scrollToFirstError(currentFormMethods.formState.errors);
+    }
+  }, [currentStep, stepFormMethods, handleAccountCreation]);
+
+  const handlePrevious = useCallback(() => {
+    setCurrentStep((prev) => {
+      if (prev > 1) {
+        const prevStep = prev - 1;
+
+        // Reset completion status for steps > the target step
+        // Keep completion status for steps <= the target step
+        setStepsState((stepsStatePrev) => {
+          const newStepsState = stepsStatePrev.map((step) => ({
+            ...step,
+            isCompleted: step.id <= prevStep ? step.isCompleted : false,
+          }));
+
+          return newStepsState;
+        });
+
+        return prevStep;
+      }
+      return prev;
+    });
+  }, []); // Remove currentStep from dependencies to avoid stale closures
+
+  // Add effect to track currentStep changes
+  useEffect(() => {
+    // Effect for currentStep changes
+  }, [currentStep]);
 
   // Memoize callback functions for each step to prevent re-creation
   const step1Callback = useCallback((isValid, data) => handleFormValid(1, isValid, data), [handleFormValid]);
@@ -225,6 +317,15 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
   const step5MethodsCallback = useCallback((methods) => handleFormMethodsReady(5, methods), [handleFormMethodsReady]);
 
   const renderStepContent = () => {
+    // Don't render forms until localStorage loading is complete
+    if (isLoadingFromStorage) {
+      return (
+        <div className="flex items-center justify-center py-8">
+          <div className="text-gray-600">Loading saved data...</div>
+        </div>
+      );
+    }
+
     switch (currentStep) {
       case 1:
         return (
@@ -248,13 +349,13 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
           <FleetInformationStepForm
             onFormValid={step3Callback}
             onMethodsReady={step3MethodsCallback}
-            initialData={formData.step3}
+            initialData={{}} // Always use empty initial data for step 3
           />
         ) : (
           <CharteringExperienceStepForm
             onFormValid={step3Callback}
             onMethodsReady={step3MethodsCallback}
-            initialData={formData.step3}
+            initialData={{}} // Always use empty initial data for step 3
           />
         );
       case 4:
