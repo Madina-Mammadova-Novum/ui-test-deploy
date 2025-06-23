@@ -66,13 +66,19 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   useEffect(() => {
     // First set default values
     setValue('phoneVerified', false);
-    setValue('confirmEmail', email);
 
     // Then try to load saved phone validation state
     if (userPhone) {
       loadSavedPhoneValidation();
     }
-  }, [setValue, email, userPhone]);
+  }, [setValue, userPhone]);
+
+  // Set initial confirmEmail value only once on component mount
+  useEffect(() => {
+    if (email && !getValues('confirmEmail')) {
+      setValue('confirmEmail', email);
+    }
+  }, []);
 
   // Update phoneValue when userPhone changes
   useEffect(() => {
