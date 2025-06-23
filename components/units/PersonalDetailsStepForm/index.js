@@ -12,7 +12,7 @@ import { PasswordValidation, PersonalDetails } from '@/units';
 import { scrollToFirstError } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
+const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {}, serverErrors = {} }) => {
   const schema = yup.object().shape({
     ...personalDetailsSchema({ isRegister: true }),
     ...passwordValidationSchema(),
@@ -46,6 +46,19 @@ const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {}
       onMethodsReady(methods);
     }
   }, [methods, onMethodsReady]);
+
+  // Handle server errors from parent component
+  React.useEffect(() => {
+    if (serverErrors && Object.keys(serverErrors).length > 0) {
+      // Set server errors on the form
+      Object.entries(serverErrors).forEach(([fieldName, errorMessage]) => {
+        methods.setError(fieldName, {
+          type: 'server',
+          message: errorMessage,
+        });
+      });
+    }
+  }, [serverErrors, methods]);
 
   // Scroll to first error when validation fails
   React.useEffect(() => {
@@ -99,6 +112,7 @@ PersonalDetailsStepForm.propTypes = {
   onFormValid: PropTypes.func.isRequired,
   onMethodsReady: PropTypes.func,
   initialData: PropTypes.shape(),
+  serverErrors: PropTypes.shape(),
 };
 
 export default PersonalDetailsStepForm;

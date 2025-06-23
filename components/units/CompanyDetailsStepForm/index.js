@@ -12,7 +12,13 @@ import { CompanyAddresses, CompanyDetails } from '@/units';
 import { scrollToFirstError } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const CompanyDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {}, countries = [] }) => {
+const CompanyDetailsStepForm = ({
+  onFormValid,
+  onMethodsReady,
+  initialData = {},
+  countries = [],
+  serverErrors = {},
+}) => {
   const [sameAddress, setSameAddress] = React.useState(initialData.sameAddresses || false);
   const [samePhone, setSamePhone] = React.useState(initialData.samePhone || false);
 
@@ -77,6 +83,19 @@ const CompanyDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {},
     }
   }, [methods, onMethodsReady]);
 
+  // Handle server errors from parent component
+  React.useEffect(() => {
+    if (serverErrors && Object.keys(serverErrors).length > 0) {
+      // Set server errors on the form
+      Object.entries(serverErrors).forEach(([fieldName, errorMessage]) => {
+        methods.setError(fieldName, {
+          type: 'server',
+          message: errorMessage,
+        });
+      });
+    }
+  }, [serverErrors, methods]);
+
   // Scroll to first error when validation fails
   React.useEffect(() => {
     if (errors && Object.keys(errors).length > 0) {
@@ -103,6 +122,7 @@ CompanyDetailsStepForm.propTypes = {
   onMethodsReady: PropTypes.func,
   initialData: PropTypes.shape(),
   countries: PropTypes.arrayOf(PropTypes.shape()),
+  serverErrors: PropTypes.shape(),
 };
 
 export default CompanyDetailsStepForm;

@@ -12,7 +12,7 @@ import { Captcha, TankerSlotsDetailsForm, TermsAndConditions } from '@/units';
 import { scrollToFirstError, shouldShowCaptcha } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
+const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {}, serverErrors = {} }) => {
   const [captcha, setCaptcha] = React.useState('');
 
   const schema = yup.object().shape({
@@ -57,6 +57,19 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
     }
   }, [methods, onMethodsReady]);
 
+  // Handle server errors from parent component
+  React.useEffect(() => {
+    if (serverErrors && Object.keys(serverErrors).length > 0) {
+      // Set server errors on the form
+      Object.entries(serverErrors).forEach(([fieldName, errorMessage]) => {
+        methods.setError(fieldName, {
+          type: 'server',
+          message: errorMessage,
+        });
+      });
+    }
+  }, [serverErrors, methods]);
+
   // Scroll to first error when validation fails
   React.useEffect(() => {
     if (errors && Object.keys(errors).length > 0) {
@@ -90,6 +103,7 @@ FleetInformationStepForm.propTypes = {
   onFormValid: PropTypes.func.isRequired,
   onMethodsReady: PropTypes.func,
   initialData: PropTypes.shape(),
+  serverErrors: PropTypes.shape(),
 };
 
 export default FleetInformationStepForm;

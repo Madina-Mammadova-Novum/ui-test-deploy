@@ -40,7 +40,7 @@ const ROLE_CONFIG = {
   },
 };
 
-const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
+const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) => {
   const config = ROLE_CONFIG[userRole];
   const searchParams = useSearchParams();
 
@@ -86,13 +86,6 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
       cargoes: 3,
       termsAndConditions: 3,
       captcha: 3,
-
-      // Common variations that might appear in API responses
-      Email: 1, // Capital E version
-      Phone: 2, // Capital P version
-      CompanyName: 2, // Capital C version
-      FirstName: 1, // Capital F version
-      LastName: 1, // Capital L version
     }),
     []
   );
@@ -125,6 +118,9 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     step4: null,
     step5: null,
   });
+
+  // State to hold server errors that need to be displayed
+  const [serverErrors, setServerErrors] = useState({});
 
   // Load saved data from localStorage on mount (excluding step 3 and when starting at step 5)
   useEffect(() => {
@@ -318,9 +314,33 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
       const errorKeys = Object.keys(error?.errors || {});
 
       if (errorKeys.length > 0) {
-        // Navigate to the first error field's step and focus on it
-        const firstErrorField = errorKeys[0];
+        // Convert first error field to lowercase first letter
+        const originalFirstErrorField = errorKeys[0];
+        const firstErrorField = originalFirstErrorField.charAt(0).toLowerCase() + originalFirstErrorField.slice(1);
+
+        // Navigate to the first error field's step
         handleErrorNavigation(firstErrorField);
+
+        // Store server errors in state to pass to step components
+        const processedServerErrors = {};
+        errorKeys.forEach((originalKey) => {
+          const processedKey = originalKey.charAt(0).toLowerCase() + originalKey.slice(1);
+          const fieldErrors = error.errors[originalKey];
+          const errorMessage = Array.isArray(fieldErrors) ? fieldErrors[0] : fieldErrors;
+
+          // Store both original and processed keys
+          processedServerErrors[processedKey] = errorMessage;
+          if (processedKey !== originalKey) {
+            processedServerErrors[originalKey] = errorMessage;
+          }
+        });
+
+        setServerErrors(processedServerErrors);
+
+        // Clear server errors after a delay to allow for user interaction
+        setTimeout(() => {
+          setServerErrors({});
+        }, 10000); // Clear after 10 seconds
 
         // Show error message in toast
         const errorMessages = errorKeys
@@ -344,12 +364,13 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
       setIsSubmitting(false);
     }
   }, [
-    stepFormMethods.step3,
+    stepFormMethods,
     formData.step1,
     formData.step2,
     config.signUpService,
     config.storageKey,
     handleErrorNavigation,
+    fieldToStepMapping,
   ]);
 
   const handleNext = useCallback(async () => {
@@ -416,10 +437,12 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     });
   }, []); // Remove currentStep from dependencies to avoid stale closures
 
-  // Add effect to track currentStep changes
+  // Add effect to track currentStep changes and notify parent
   useEffect(() => {
-    // Effect for currentStep changes
-  }, [currentStep]);
+    if (onStepChange) {
+      onStepChange(currentStep);
+    }
+  }, [currentStep, onStepChange]);
 
   // Memoize callback functions for each step to prevent re-creation
   const step1Callback = useCallback((isValid, data) => handleFormValid(1, isValid, data), [handleFormValid]);
@@ -454,6 +477,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
             onFormValid={step1Callback}
             onMethodsReady={step1MethodsCallback}
             initialData={formData.step1}
+            serverErrors={serverErrors}
           />
         );
       case 2:
@@ -463,6 +487,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
             onMethodsReady={step2MethodsCallback}
             initialData={formData.step2}
             countries={countries}
+            serverErrors={serverErrors}
           />
         );
       case 3:
@@ -471,12 +496,14 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
             onFormValid={step3Callback}
             onMethodsReady={step3MethodsCallback}
             initialData={{}} // Always use empty initial data for step 3
+            serverErrors={serverErrors}
           />
         ) : (
           <CharteringExperienceStepForm
             onFormValid={step3Callback}
             onMethodsReady={step3MethodsCallback}
             initialData={{}} // Always use empty initial data for step 3
+            serverErrors={serverErrors}
           />
         );
       case 4:
@@ -517,6 +544,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
 RegistrationForm.propTypes = {
   countries: PropTypes.arrayOf(PropTypes.shape()),
   userRole: PropTypes.oneOf(['owner', 'charterer']).isRequired,
+  onStepChange: PropTypes.func,
 };
 
 export default RegistrationForm;
