@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useSearchParams } from 'next/navigation';
 import PropTypes from 'prop-types';
 
 import { ROUTES } from '@/lib';
@@ -41,6 +42,7 @@ const ROLE_CONFIG = {
 
 const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
   const config = ROLE_CONFIG[userRole];
+  const searchParams = useSearchParams();
 
   // Use useMemo to recalculate steps when userRole changes
   const steps = useMemo(
@@ -95,10 +97,18 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     []
   );
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [stepsState, setStepsState] = useState(steps);
+  // Check URL parameters to determine initial step
+  const redirectUrl = searchParams.get('redirectUrl');
+  const status = searchParams.get('status');
+  const shouldStartAtStep5 = redirectUrl || status;
+
+  const [currentStep, setCurrentStep] = useState(shouldStartAtStep5 ? 5 : 1);
+  // Initialize steps state with completed steps if starting at step 5
+  const initialStepsState = shouldStartAtStep5 ? steps.map((step) => ({ ...step, isCompleted: step.id < 5 })) : steps;
+
+  const [stepsState, setStepsState] = useState(initialStepsState);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoadingFromStorage, setIsLoadingFromStorage] = useState(true);
+  const [isLoadingFromStorage, setIsLoadingFromStorage] = useState(!shouldStartAtStep5);
   const [formData, setFormData] = useState({
     step1: {},
     step2: {},
@@ -116,8 +126,14 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     step5: null,
   });
 
-  // Load saved data from localStorage on mount (excluding step 3)
+  // Load saved data from localStorage on mount (excluding step 3 and when starting at step 5)
   useEffect(() => {
+    // Skip localStorage loading if starting directly at step 5
+    if (shouldStartAtStep5) {
+      setIsLoadingFromStorage(false);
+      return;
+    }
+
     try {
       const savedData = localStorage.getItem(config.storageKey);
       if (savedData) {
@@ -138,7 +154,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
       // Mark loading as complete regardless of success/failure
       setIsLoadingFromStorage(false);
     }
-  }, [config.storageKey]);
+  }, [config.storageKey, shouldStartAtStep5]);
 
   // Save data to localStorage whenever formData changes (excluding step 3)
   useEffect(() => {
@@ -489,7 +505,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
         onPrevious={handlePrevious}
         isLastStep={isLastStep}
         isSubmitting={isSubmitting}
-        hideActionButtons={currentStep === 4}
+        hideActionButtons={currentStep === 4 || currentStep === 5}
         contentClassName="max-w-[51.5rem] w-full"
       >
         {renderStepContent()}
