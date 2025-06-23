@@ -152,7 +152,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="relative md:w-full">
+      <div className="relative w-full md:w-1/2">
         <Input
           label="Number of cargoes chartered in the last 6 months"
           labelBadge="*"

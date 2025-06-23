@@ -129,7 +129,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           value={tankersCount}
           label="Number of tankers"
           labelBadge="*"
-          customStyles="z-10 w-full"
+          customStyles="z-10 w-1/2"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
           helperText={helperText}

@@ -48,6 +48,53 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     [config.step3Title]
   );
 
+  // Mapping of error field names to their corresponding steps
+  const fieldToStepMapping = useMemo(
+    () => ({
+      // Step 1 fields (Personal Details)
+      firstName: 1,
+      lastName: 1,
+      email: 1,
+      userPhone: 1,
+      password: 1,
+      confirmPassword: 1,
+      phoneVerified: 1,
+
+      // Step 2 fields (Company Details)
+      companyName: 2,
+      phone: 2,
+      samePhone: 2,
+      registeredAddress: 2,
+      registeredCity: 2,
+      registeredState: 2,
+      registeredCountry: 2,
+      registeredPostalCode: 2,
+      operatingAddress: 2,
+      operatingCity: 2,
+      operatingState: 2,
+      operatingCountry: 2,
+      operatingPostalCode: 2,
+      sameAddresses: 2,
+
+      // Step 3 fields (Fleet/Chartering Experience)
+      companyYearsOfOperation: 3,
+      numberOfTankers: 3,
+      numberOfCargoes: 3,
+      imos: 3,
+      cargoes: 3,
+      termsAndConditions: 3,
+      captcha: 3,
+
+      // Common variations that might appear in API responses
+      Email: 1, // Capital E version
+      Phone: 2, // Capital P version
+      CompanyName: 2, // Capital C version
+      FirstName: 1, // Capital F version
+      LastName: 1, // Capital L version
+    }),
+    []
+  );
+
   const [currentStep, setCurrentStep] = useState(1);
   const [stepsState, setStepsState] = useState(steps);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -190,6 +237,41 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     });
   }, []); // Remove isLoadingFromStorage to prevent callback recreation
 
+  // Helper function to navigate to the step containing the error field and focus on it
+  const handleErrorNavigation = useCallback(
+    (errorFieldName) => {
+      const targetStep = fieldToStepMapping[errorFieldName];
+      if (targetStep && targetStep !== currentStep) {
+        setCurrentStep(targetStep);
+
+        // Reset completion status for steps > the target step
+        setStepsState((prev) =>
+          prev.map((step) => ({
+            ...step,
+            isCompleted: step.id <= targetStep ? step.isCompleted : false,
+          }))
+        );
+
+        // Wait for the step to render, then focus on the error field
+        setTimeout(() => {
+          const errorField =
+            document.querySelector(`[name="${errorFieldName}"]`) ||
+            document.querySelector(`[name*="${errorFieldName}"]`) ||
+            document.querySelector(`#${errorFieldName}`) ||
+            document.querySelector(`label[for="${errorFieldName}"]`);
+
+          if (errorField) {
+            errorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (errorField.focus) {
+              errorField.focus();
+            }
+          }
+        }, 100);
+      }
+    },
+    [fieldToStepMapping, currentStep]
+  );
+
   const handleAccountCreation = useCallback(async () => {
     setIsSubmitting(true);
 
@@ -214,31 +296,45 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
         localStorage.removeItem(config.storageKey);
 
         // Don't redirect yet, let user proceed to steps 4 and 5
-      } else {
-        const errorKeys = Object.keys(error?.errors || {});
-
-        if (errorKeys.length > 0) {
-          // Handle specific field errors by showing them in a toast
-          const errorMessages = errorKeys
-            .map((key) => {
-              const fieldErrors = error.errors[key];
-              return `${getFieldFromKey(key)}: ${fieldErrors.join(', ')}`;
-            })
-            .join('\n');
-
-          errorToast('Validation Errors', errorMessages);
-        }
-
-        errorToast(error?.title, error?.message);
-        throw new Error('Account creation failed');
+        return true; // Success
       }
+
+      const errorKeys = Object.keys(error?.errors || {});
+
+      if (errorKeys.length > 0) {
+        // Navigate to the first error field's step and focus on it
+        const firstErrorField = errorKeys[0];
+        handleErrorNavigation(firstErrorField);
+
+        // Show error message in toast
+        const errorMessages = errorKeys
+          .map((key) => {
+            const fieldErrors = error.errors[key];
+            return `${getFieldFromKey(key)}: ${fieldErrors.join(', ')}`;
+          })
+          .join('\n');
+
+        errorToast('Validation Error', errorMessages);
+      } else {
+        // Generic error without specific field errors
+        errorToast(error?.title, error?.message);
+      }
+
+      return false; // Validation error - don't proceed
     } catch (err) {
       errorToast('Registration Failed', 'An unexpected error occurred. Please try again.');
-      throw err;
+      return false; // Unexpected error - don't proceed
     } finally {
       setIsSubmitting(false);
     }
-  }, [stepFormMethods.step3, formData.step1, formData.step2, config.signUpService, config.storageKey]);
+  }, [
+    stepFormMethods.step3,
+    formData.step1,
+    formData.step2,
+    config.signUpService,
+    config.storageKey,
+    handleErrorNavigation,
+  ]);
 
   const handleNext = useCallback(async () => {
     // Get the current step's form methods
@@ -254,7 +350,12 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
     if (isValid) {
       // If we're on step 3, create the account before proceeding
       if (currentStep === 3) {
-        await handleAccountCreation();
+        const accountCreated = await handleAccountCreation();
+        if (!accountCreated) {
+          // Account creation failed or had validation errors
+          // handleAccountCreation already handled error navigation and toasts
+          return;
+        }
       }
 
       // Form is valid, proceed to next step or complete registration
