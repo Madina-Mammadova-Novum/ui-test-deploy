@@ -52,46 +52,23 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setPhoneValue(userPhone || '');
   }, [userPhone]);
 
-  // Helper function to reset phone validation states and scroll to input
-  const resetPhoneValidation = () => {
-    setShowPhoneValidation(false);
-    setValidationInProgress(false);
-    setIsPhoneVerified(false);
-    setValue('phoneVerified', false);
-    setValue('otpId', null);
-
-    // Scroll to phone input when there's an error (with small delay to ensure error is rendered)
+  // Helper function to scroll to phone input
+  const scrollToPhoneInput = () => {
     setTimeout(() => {
-      if (phoneInputRef.current) {
-        phoneInputRef.current.scrollIntoView({
+      const phoneInput =
+        phoneInputRef.current ||
+        document.querySelector('.react-tel-input input') ||
+        document.querySelector(`input[name="${phoneFieldName}"]`);
+
+      if (phoneInput) {
+        phoneInput.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
         });
+        phoneInput.focus();
       }
     }, 100);
   };
-
-  // Reset validation when there's an error on the phone field
-  useEffect(() => {
-    // Only proceed if there are any errors at all
-    if (Object.keys(errors).length > 0) {
-      // Check for errors on either phone field name
-      const phoneError = errors[phoneFieldName] || errors.phone || errors.userPhone;
-
-      if (phoneError?.message) {
-        resetPhoneValidation();
-      }
-    }
-  }, [errors, phoneFieldName, setValue]);
-
-  // Additional check specifically for phone field errors with more specific dependency
-  useEffect(() => {
-    const phoneError = errors[phoneFieldName];
-
-    if (phoneError?.message && isPhoneVerified) {
-      resetPhoneValidation();
-    }
-  }, [errors[phoneFieldName], phoneFieldName, isPhoneVerified, setValue]);
 
   // Set phone verification error when phoneVerified validation fails
   useEffect(() => {
@@ -133,6 +110,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           type: 'manual',
           message: response.message || 'Failed to check phone availability',
         });
+        scrollToPhoneInput();
         return;
       }
 
@@ -160,6 +138,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           type: 'manual',
           message: message || 'This phone number is already registered',
         });
+        scrollToPhoneInput();
       }
     } catch (error) {
       // Handle network or other errors
@@ -169,6 +148,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         type: 'manual',
         message: 'Failed to check phone availability. Please try again.',
       });
+      scrollToPhoneInput();
     } finally {
       setIsCheckingAvailability(false);
     }
@@ -198,6 +178,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       type: 'manual',
       message: 'Phone verification is required',
     });
+    scrollToPhoneInput();
   };
 
   const handleSendOtp = (sendOtp) => {
@@ -246,9 +227,10 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         <div className="flex flex-col gap-5 md:flex-row">
           <div className="w-full">
             <div className="grid w-full gap-2 md:grid-cols-2 md:gap-4">
-              <div ref={phoneInputRef}>
+              <div>
                 <PhoneInput
                   {...register(phoneFieldName)}
+                  ref={phoneInputRef}
                   onBlur={() => {}}
                   label="Phone number"
                   disabled={isSubmitting || isPhoneVerified || (validationInProgress && !isPhoneVerified)}

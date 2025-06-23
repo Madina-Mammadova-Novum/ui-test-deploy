@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import PropTypes from 'prop-types';
@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import { FormManager } from '@/common';
 import { passwordValidationSchema, personalDetailsSchema } from '@/lib/schemas';
 import { PasswordValidation, PersonalDetails } from '@/units';
+import { scrollToFirstError } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
 const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {} }) => {
@@ -24,17 +25,20 @@ const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {}
   });
 
   const {
-    formState: { isValid },
+    formState: { isValid, errors },
     watch,
   } = methods;
 
   // Watch all form values to detect changes
   const formValues = watch();
 
+  // Stabilize formValues for comparison using JSON string
+  const stableFormValues = useMemo(() => JSON.stringify(formValues), [formValues]);
+
   // Notify parent component about form validity
   React.useEffect(() => {
     onFormValid(isValid, formValues);
-  }, [isValid, formValues, onFormValid]);
+  }, [isValid, stableFormValues, onFormValid]); // Use stable reference
 
   // Expose form methods to parent component
   React.useEffect(() => {
@@ -42,6 +46,30 @@ const PersonalDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {}
       onMethodsReady(methods);
     }
   }, [methods, onMethodsReady]);
+
+  // Scroll to first error when validation fails
+  React.useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      const firstErrorField = Object.keys(errors)[0];
+
+      // For phoneVerified errors, scroll to the phone input directly
+      if (firstErrorField === 'phoneVerified') {
+        setTimeout(() => {
+          const phoneInput =
+            document.querySelector('.react-tel-input input') ||
+            document.querySelector('input[name="userPhone"]') ||
+            document.querySelector('input[name="phone"]');
+          if (phoneInput) {
+            phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            phoneInput.focus();
+          }
+        }, 150);
+      } else {
+        // For other errors, use the general scroll function
+        scrollToFirstError(errors, 150);
+      }
+    }
+  }, [errors]);
 
   return (
     <FormProvider {...methods}>
