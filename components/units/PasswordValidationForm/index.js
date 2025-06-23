@@ -70,7 +70,7 @@ const PasswordValidation = ({ title = '', customStyles = '', inputGroupClassName
 
   return (
     <div className={customStyles}>
-      {title !== '' ?? <Title level="3">{title}</Title>}
+      {title !== '' && <Title level="3">{title}</Title>}
       <div className="flex flex-col items-start gap-3">
         <div className={classNames('flex w-full flex-col justify-between gap-y-4', inputGroupClassName)}>
           <PasswordInput

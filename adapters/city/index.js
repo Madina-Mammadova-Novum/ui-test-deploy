@@ -1,6 +1,7 @@
 export const cityAdapter = ({ data }) => {
   if (data === null) return null;
   const { id, name, state } = data;
+  if (!state) return null;
   const { name: stateName } = state;
 
   return {
