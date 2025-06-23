@@ -1217,3 +1217,91 @@ export const focusFirstFormElement = (delay = 150) => {
     }
   }, delay);
 };
+
+export const getPhoneValidationStorageKey = (context = 'registration', userRole = null) => {
+  if (context === 'update') {
+    return 'phone_validation_update';
+  }
+
+  // For registration context
+  if (userRole) {
+    return `phone_validation_${userRole}_registration`;
+  }
+
+  // Auto-detect role based on existing registration data
+  try {
+    const ownerData = localStorage.getItem('owner_registration_data');
+    const chartererData = localStorage.getItem('charterer_registration_data');
+    if (ownerData) {
+      return 'phone_validation_owner_registration';
+    }
+    if (chartererData) {
+      return 'phone_validation_charterer_registration';
+    }
+  } catch (error) {
+    // Handle localStorage errors silently
+  }
+
+  return 'phone_validation_registration'; // fallback
+};
+
+export const savePhoneValidationState = (
+  phoneValue,
+  isVerified,
+  otpId = null,
+  context = 'registration',
+  userRole = null
+) => {
+  try {
+    const storageKey = getPhoneValidationStorageKey(context, userRole);
+    const stateToSave = {
+      phoneValue,
+      isPhoneVerified: isVerified,
+      otpId,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(storageKey, JSON.stringify(stateToSave));
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const loadPhoneValidationState = (phoneValue, context = 'registration', userRole = null) => {
+  try {
+    const storageKey = getPhoneValidationStorageKey(context, userRole);
+    const savedState = localStorage.getItem(storageKey);
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      // Only return state if the phone number matches
+      if (parsedState.phoneValue === phoneValue && parsedState.isPhoneVerified) {
+        return parsedState;
+      }
+    }
+  } catch (error) {
+    // Handle localStorage errors silently
+  }
+  return null;
+};
+
+export const clearPhoneValidationState = (context = 'registration', userRole = null) => {
+  try {
+    const storageKey = getPhoneValidationStorageKey(context, userRole);
+    localStorage.removeItem(storageKey);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const clearAllPhoneValidationStates = () => {
+  try {
+    localStorage.removeItem('phone_validation_update');
+    localStorage.removeItem('phone_validation_owner_registration');
+    localStorage.removeItem('phone_validation_charterer_registration');
+    localStorage.removeItem('phone_validation_registration');
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

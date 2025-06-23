@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { useSearchParams } from 'next/navigation';
+
 import { Title } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { RegistrationForm } from '@/modules';
@@ -10,7 +12,14 @@ import { Tabs } from '@/units';
 import { signUpTab } from '@/utils/mock';
 
 const Signup = () => {
-  const [role, setRole] = useState(ROLES.OWNER);
+  const searchParams = useSearchParams();
+
+  // Get role from searchParams and validate it, default to OWNER if invalid or not provided
+  const roleFromParams = searchParams.get('role');
+  const validRoles = [ROLES.OWNER, ROLES.CHARTERER];
+  const initialRole = validRoles.includes(roleFromParams) ? roleFromParams : ROLES.OWNER;
+
+  const [role, setRole] = useState(initialRole);
   const [currentStep, setCurrentStep] = useState(1);
 
   const [countries, setCountries] = useState([]);
@@ -24,6 +33,18 @@ const Signup = () => {
   useEffect(() => {
     fetchSignUpData();
   }, []);
+
+  // Update role when searchParams change
+  useEffect(() => {
+    const urlRole = searchParams.get('role');
+    const allowedRoles = [ROLES.OWNER, ROLES.CHARTERER];
+    const newRole = allowedRoles.includes(urlRole) ? urlRole : ROLES.OWNER;
+
+    // Only update role if it's different and we're on step 1
+    if (newRole !== role && currentStep === 1) {
+      setRole(newRole);
+    }
+  }, [searchParams, role, currentStep]);
 
   const roleBasedForm = {
     // eslint-disable-next-line jsx-a11y/aria-role

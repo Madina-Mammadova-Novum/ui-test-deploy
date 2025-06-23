@@ -16,7 +16,13 @@ import {
   RegistrationDocumentsStepForm,
   Stepper,
 } from '@/units';
-import { focusFirstFormElement, getFieldFromKey, scrollToFirstError, setCookie } from '@/utils/helpers';
+import {
+  clearPhoneValidationState,
+  focusFirstFormElement,
+  getFieldFromKey,
+  scrollToFirstError,
+  setCookie,
+} from '@/utils/helpers';
 import { errorToast, redirectAfterToast } from '@/utils/hooks';
 
 const STEPS = [
@@ -197,6 +203,10 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
       ...prev,
       step3: null,
     }));
+
+    // Clear phone validation state when switching roles
+    // to prevent validation data from one role being used for another
+    clearPhoneValidationState('registration', userRole);
   }, [userRole]);
 
   const handleFormMethodsReady = useCallback((stepNumber, methods) => {
@@ -306,6 +316,9 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
 
         // Clear saved data on successful registration (step 3 wasn't saved anyway)
         localStorage.removeItem(config.storageKey);
+
+        // Clear phone validation state
+        clearPhoneValidationState('registration', userRole);
 
         // Don't redirect yet, let user proceed to steps 4 and 5
         return true; // Success
