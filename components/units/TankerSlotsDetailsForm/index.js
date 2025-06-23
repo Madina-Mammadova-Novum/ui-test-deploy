@@ -122,7 +122,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="!relative w-full">
+      <div className="!relative flex w-full flex-wrap gap-x-4 gap-y-2">
         <Input
           {...register('numberOfTankers')}
           type="number"
@@ -138,7 +138,8 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[17px] right-1 my-1 !py-4"
+          customStylesFromWrap="!justify-end"
+          customStyles="h-[2.375rem]"
           buttonProps={{ text: 'Apply', variant: !errors.numberOfTankers ? 'primary' : 'delete', size: 'medium' }}
           onClick={handleApplySlot}
           disabled={tankersCount <= 0 || isSubmitting}
