@@ -11,6 +11,7 @@ import RefreshSVG from '@/assets/images/refresh.svg';
 import { Button, Input, PhoneInput, TextWithLabel } from '@/elements';
 import { checkPhoneAvailability } from '@/services/user';
 import PhoneValidation from '@/units/PhoneValidation';
+import { clearPhoneValidationState, loadPhoneValidationState, savePhoneValidationState } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const PersonalDetails = ({ onUpdatePage = false }) => {
@@ -41,15 +42,55 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   // Watch for changes to the phone field
   const userPhone = watch(phoneFieldName);
 
-  // Initialize phoneVerified to false on component mount
+  // Determine context for phone validation storage
+  const getValidationContext = () => (onUpdatePage ? 'update' : 'registration');
+
+  // Load phone validation state from localStorage
+  const loadSavedPhoneValidation = () => {
+    const savedState = loadPhoneValidationState(userPhone, getValidationContext());
+    if (savedState) {
+      setIsPhoneVerified(true);
+      setValue('phoneVerified', true);
+      if (savedState.otpId) {
+        setValue('otpId', savedState.otpId);
+      }
+      // Clear any existing phone field errors
+      setError(phoneFieldName, null);
+      trigger(phoneFieldName);
+      return true;
+    }
+    return false;
+  };
+
+  // Initialize phoneVerified to false on component mount and check localStorage
   useEffect(() => {
+    // First set default values
     setValue('phoneVerified', false);
     setValue('confirmEmail', email);
-  }, [setValue]);
+
+    // Then try to load saved phone validation state
+    if (userPhone) {
+      loadSavedPhoneValidation();
+    }
+  }, [setValue, email, userPhone]);
 
   // Update phoneValue when userPhone changes
   useEffect(() => {
-    setPhoneValue(userPhone || '');
+    const newPhoneValue = userPhone || '';
+    setPhoneValue(newPhoneValue);
+
+    // If phone number changed, reset verification state and clear localStorage
+    if (newPhoneValue && newPhoneValue !== phoneValue) {
+      // Check if we have a saved state for this phone number
+      const hasValidState = loadSavedPhoneValidation();
+      if (!hasValidState) {
+        // Reset verification state if no valid saved state
+        setIsPhoneVerified(false);
+        setValue('phoneVerified', false);
+        setValue('otpId', null);
+        clearPhoneValidationState(getValidationContext());
+      }
+    }
   }, [userPhone]);
 
   // Helper function to scroll to phone input
@@ -124,6 +165,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           setValue('phoneVerified', true);
           setError(phoneFieldName, null);
           trigger(phoneFieldName);
+          // Save to localStorage
+          savePhoneValidationState(phoneValue, true, null, getValidationContext());
         } else {
           // Phone is available and SMS can be sent, proceed with OTP verification
           setError(phoneFieldName, null);
@@ -163,6 +206,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       setError(phoneFieldName, null);
       trigger(phoneFieldName);
       setValue('otpId', otpId);
+      // Save to localStorage
+      savePhoneValidationState(phoneValue, true, otpId, getValidationContext());
     }
   };
 
@@ -173,6 +218,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setIsPhoneVerified(false);
     setValue('phoneVerified', false);
     setValue('otpId', null);
+    // Clear from localStorage
+    clearPhoneValidationState(getValidationContext());
     // Set phone verification error
     setError(phoneFieldName, {
       type: 'manual',

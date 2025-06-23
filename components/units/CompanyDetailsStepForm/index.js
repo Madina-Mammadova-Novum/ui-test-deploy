@@ -12,7 +12,13 @@ import { CompanyAddresses, CompanyDetails } from '@/units';
 import { scrollToFirstError } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const CompanyDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {}, countries = [] }) => {
+const CompanyDetailsStepForm = ({
+  onFormValid,
+  onMethodsReady,
+  initialData = {},
+  countries = [],
+  serverErrors = {},
+}) => {
   const [sameAddress, setSameAddress] = React.useState(initialData.sameAddresses || false);
   const [samePhone, setSamePhone] = React.useState(initialData.samePhone || false);
 
@@ -37,6 +43,7 @@ const CompanyDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {},
     watch,
     setValue,
     trigger,
+    clearErrors,
   } = methods;
 
   // Watch all form values to detect changes
@@ -47,23 +54,55 @@ const CompanyDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {},
   // Stabilize formValues for comparison using JSON string
   const stableFormValues = useMemo(() => JSON.stringify(formValues), [formValues]);
 
+  // Handle address checkbox changes
   React.useEffect(() => {
     if (addressValue !== sameAddress) {
       setValue('sameAddresses', addressValue);
       setSameAddress(addressValue);
-      // Re-trigger validation after schema change
-      trigger();
-    }
-  }, [addressValue, setValue, sameAddress, trigger]);
 
+      // If switching to "same addresses", clear correspondence address errors
+      // since those fields are no longer required
+      if (addressValue) {
+        clearErrors(['correspondenceAddress', 'correspondenceCity', 'correspondenceCountry']);
+      } else {
+        // If unchecking "same addresses", only trigger validation for correspondence fields
+        // that are now required, but do it with a slight delay to avoid immediate errors
+        setTimeout(() => {
+          const correspondenceFields = ['correspondenceAddress', 'correspondenceCity', 'correspondenceCountry'];
+          // Only trigger validation if the fields have values to avoid showing errors on empty required fields
+          correspondenceFields.forEach((field) => {
+            const fieldValue = methods.getValues(field);
+            if (fieldValue) {
+              trigger(field);
+            }
+          });
+        }, 100);
+      }
+    }
+  }, [addressValue, setValue, sameAddress, clearErrors, trigger, methods]);
+
+  // Handle phone checkbox changes
   React.useEffect(() => {
     if (phoneValue !== samePhone) {
       setValue('samePhone', phoneValue);
       setSamePhone(phoneValue);
-      // Re-trigger validation after schema change
-      trigger();
+
+      // If switching to "same phone", clear company phone errors
+      // since that field is no longer required
+      if (phoneValue) {
+        clearErrors(['phone']);
+      } else {
+        // If unchecking "same phone", only trigger validation for phone field
+        // if it has a value to avoid showing errors on empty required field
+        setTimeout(() => {
+          const phoneFieldValue = methods.getValues('phone');
+          if (phoneFieldValue) {
+            trigger('phone');
+          }
+        }, 100);
+      }
     }
-  }, [phoneValue, setValue, samePhone, trigger]);
+  }, [phoneValue, setValue, samePhone, clearErrors, trigger, methods]);
 
   // Notify parent component about form validity
   React.useEffect(() => {
@@ -76,6 +115,19 @@ const CompanyDetailsStepForm = ({ onFormValid, onMethodsReady, initialData = {},
       onMethodsReady(methods);
     }
   }, [methods, onMethodsReady]);
+
+  // Handle server errors from parent component
+  React.useEffect(() => {
+    if (serverErrors && Object.keys(serverErrors).length > 0) {
+      // Set server errors on the form
+      Object.entries(serverErrors).forEach(([fieldName, errorMessage]) => {
+        methods.setError(fieldName, {
+          type: 'server',
+          message: errorMessage,
+        });
+      });
+    }
+  }, [serverErrors, methods]);
 
   // Scroll to first error when validation fails
   React.useEffect(() => {
@@ -103,6 +155,7 @@ CompanyDetailsStepForm.propTypes = {
   onMethodsReady: PropTypes.func,
   initialData: PropTypes.shape(),
   countries: PropTypes.arrayOf(PropTypes.shape()),
+  serverErrors: PropTypes.shape(),
 };
 
 export default CompanyDetailsStepForm;
