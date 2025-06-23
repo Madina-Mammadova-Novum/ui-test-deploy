@@ -15,7 +15,7 @@ import {
   RegistrationDocumentsStepForm,
   Stepper,
 } from '@/units';
-import { getFieldFromKey, scrollToFirstError, setCookie } from '@/utils/helpers';
+import { focusFirstFormElement, getFieldFromKey, scrollToFirstError, setCookie } from '@/utils/helpers';
 import { errorToast, redirectAfterToast } from '@/utils/hooks';
 
 const STEPS = [
@@ -362,6 +362,8 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
       if (currentStep < STEPS.length) {
         setCurrentStep((prev) => {
           const nextStep = prev + 1;
+          // Focus first form element after step change
+          focusFirstFormElement(200);
           return nextStep;
         });
       } else {
@@ -390,6 +392,8 @@ const RegistrationForm = ({ countries, userRole = 'charterer' }) => {
           return newStepsState;
         });
 
+        // Focus first form element after step change
+        focusFirstFormElement(200);
         return prevStep;
       }
       return prev;
