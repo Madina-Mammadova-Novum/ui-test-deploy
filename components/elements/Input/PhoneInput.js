@@ -19,7 +19,7 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
         render={({ field: { ref: rfRef, ...field }, formState: { errors, isSubmitting } }) => {
           const error = errors[name];
           return (
-            <div className="w-full">
+            <div className="w-full" data-field={name}>
               <Label
                 name={name}
                 className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
@@ -28,22 +28,28 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
               >
                 {label} {labelBadge}
               </Label>
-              <Phone
-                {...rest}
-                {...field}
-                masks={{ ae: '.. .......' }}
-                inputProps={{ ref: rfRef }}
-                id={name}
-                enableSearch
-                enableAreaCodes
-                disabled={isSubmitting || rest.disabled}
-                inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
-                  error ? '!border-red' : '!border-gray-darker'
-                } ${isSubmitting || rest.disabled ? '!bg-purple-light !opacity-80' : ''}`}
-                buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
-                  error ? '!border-red' : '!border-gray-darker'
-                } ${isSubmitting || rest.disabled ? '!cursor-not-allowed !opacity-80' : ''}`}
-              />
+              <div className="react-tel-input">
+                <Phone
+                  {...rest}
+                  {...field}
+                  masks={{ ae: '.. .......' }}
+                  inputProps={{
+                    ref: rfRef,
+                    name,
+                    id: name,
+                    'data-field': name,
+                  }}
+                  enableSearch
+                  enableAreaCodes
+                  disabled={isSubmitting || rest.disabled}
+                  inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
+                    error ? '!border-red' : '!border-gray-darker'
+                  } ${isSubmitting || rest.disabled ? '!bg-purple-light !opacity-80' : ''}`}
+                  buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
+                    error ? '!border-red' : '!border-gray-darker'
+                  } ${isSubmitting || rest.disabled ? '!cursor-not-allowed !opacity-80' : ''}`}
+                />
+              </div>
               {error && <InputErrorMessage message={error?.message} />}
             </div>
           );
@@ -53,7 +59,7 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full" data-field={name}>
       <Label
         className={classNames('mb-0.5 block whitespace-nowrap text-left text-xs-sm', {
           'flex flex-wrap items-center gap-1': labelBadge,
@@ -61,19 +67,34 @@ const PhoneInput = React.forwardRef(({ name, label, err, labelBadge = null, ...r
       >
         {label} {labelBadge}
       </Label>
-      <Phone
-        {...rest}
-        inputProps={ref ? { ref } : undefined}
-        enableSearch
-        enableAreaCodes
-        masks={{ ae: '.. .......' }}
-        inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
-          err ? '!border-red' : '!border-gray-darker'
-        } ${rest.disabled ? '!bg-purple-light !opacity-80' : ''}`}
-        buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
-          err ? '!border-red' : '!border-gray-darker'
-        } ${rest.disabled ? '!cursor-not-allowed !opacity-80' : ''}`}
-      />
+      <div className="react-tel-input">
+        <Phone
+          {...rest}
+          inputProps={
+            ref
+              ? {
+                  ref,
+                  name,
+                  id: name,
+                  'data-field': name,
+                }
+              : {
+                  name,
+                  id: name,
+                  'data-field': name,
+                }
+          }
+          enableSearch
+          enableAreaCodes
+          masks={{ ae: '.. .......' }}
+          inputClass={`!border-l-0 !pl-[72px] !w-full !h-10 !rounded-md ${
+            err ? '!border-red' : '!border-gray-darker'
+          } ${rest.disabled ? '!bg-purple-light !opacity-80' : ''}`}
+          buttonClass={`!border-r-0 !bg-purple-light !rounded-md ${
+            err ? '!border-red' : '!border-gray-darker'
+          } ${rest.disabled ? '!cursor-not-allowed !opacity-80' : ''}`}
+        />
+      </div>
       {err && <InputErrorMessage message={err?.message} />}
     </div>
   );

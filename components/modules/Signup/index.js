@@ -2,51 +2,81 @@
 
 import { useEffect, useState } from 'react';
 
+import { useSearchParams } from 'next/navigation';
+
+import { Title } from '@/elements';
 import { ROLES } from '@/lib/constants';
-import { ChartererRegistrationForm, OwnerRegistrationForm } from '@/modules';
+import { RegistrationForm } from '@/modules';
 import { getSignUpData } from '@/services';
-import { Step, Tabs } from '@/units';
+import { Tabs } from '@/units';
 import { signUpTab } from '@/utils/mock';
 
 const Signup = () => {
-  const [role, setRole] = useState(ROLES.OWNER);
+  const searchParams = useSearchParams();
 
-  const [state, setState] = useState({
-    ports: [],
-    countries: [],
-  });
+  // Get role from searchParams and validate it, default to OWNER if invalid or not provided
+  const roleFromParams = searchParams.get('role');
+  const validRoles = [ROLES.OWNER, ROLES.CHARTERER];
+  const initialRole = validRoles.includes(roleFromParams) ? roleFromParams : ROLES.OWNER;
 
-  const handleChangeState = (key, value) => {
-    setState((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
-  };
+  const [role, setRole] = useState(initialRole);
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const [countries, setCountries] = useState([]);
 
   const fetchSignUpData = async () => {
     const data = await getSignUpData();
 
-    handleChangeState('countries', data.countries);
+    setCountries(data.countries);
   };
 
   useEffect(() => {
     fetchSignUpData();
   }, []);
 
+  // Update role when searchParams change
+  useEffect(() => {
+    const urlRole = searchParams.get('role');
+    const allowedRoles = [ROLES.OWNER, ROLES.CHARTERER];
+    const newRole = allowedRoles.includes(urlRole) ? urlRole : null;
+
+    // Only update role if it's different and we're on step 1
+    if (newRole && newRole !== role && currentStep === 1) {
+      setRole(newRole);
+    }
+  }, [searchParams, role, currentStep]);
+
   const roleBasedForm = {
-    charterer: <ChartererRegistrationForm countries={state?.countries} ports={state?.ports} />,
-    owner: <OwnerRegistrationForm countries={state?.countries} />,
+    // eslint-disable-next-line jsx-a11y/aria-role
+    charterer: <RegistrationForm countries={countries} userRole="charterer" onStepChange={setCurrentStep} />,
+    // eslint-disable-next-line jsx-a11y/aria-role
+    owner: <RegistrationForm countries={countries} userRole="owner" onStepChange={setCurrentStep} />,
   };
 
-  const handleActiveTab = ({ target }) => setRole(target.value);
+  const handleActiveTab = ({ target }) => {
+    // Only allow role change when on step 1
+    if (currentStep === 1) {
+      setRole(target.value);
+    }
+  };
 
   return (
-    <>
-      <Step title="Step #1: Choose who you are" containerClass="flex flex-col pt-5 gap-5">
-        <Tabs tabs={signUpTab?.tabs} activeTab={role} onClick={handleActiveTab} />
-      </Step>
+    <div className="flex flex-col gap-6">
+      <Title level="1" className="text-center text-2.5xl font-bold text-black md:text-start">
+        Registration
+      </Title>
+      <Tabs
+        tabs={signUpTab?.tabs}
+        activeTab={role}
+        onClick={handleActiveTab}
+        buttonClassName="w-full md:w-auto"
+        customStyles="!w-full md:!w-min"
+        groupClassName="w-full md:w-auto"
+        disabled={currentStep !== 1}
+      />
+
       {roleBasedForm[role]}
-    </>
+    </div>
   );
 };
 

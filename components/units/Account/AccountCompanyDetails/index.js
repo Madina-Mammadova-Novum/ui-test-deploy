@@ -22,7 +22,6 @@ const AccountCompanyDetails = ({ company = {} }) => {
     addressLine1: company?.registrationAddress,
     addressLine2: company?.registrationAddress2,
     city: company?.registrationCity?.label,
-    state: company?.registrationProvince,
     country: company?.registrationCountry?.label,
     postal: company?.registrationPostalCode,
   };
@@ -31,7 +30,6 @@ const AccountCompanyDetails = ({ company = {} }) => {
     addressLine1: company?.correspondenceAddress,
     addressLine2: company?.correspondenceAddress2,
     city: company?.correspondenceCity?.label,
-    state: company?.correspondenceProvince,
     country: company?.correspondenceCountry?.label,
     postal: company?.correspondencePostalCode,
   };
@@ -96,9 +94,7 @@ const AccountCompanyDetails = ({ company = {} }) => {
         <FieldsetContent label="Company information" className="pt-5">
           {company?.companyName && <TextRow title="Company name">{company?.companyName}</TextRow>}
           {company?.phone && <TextRow title="Primary phone number">{printPhoneNumber(company?.phone)}</TextRow>}
-          {company?.secondaryPhone && (
-            <TextRow title="Secondary phone number">{printPhoneNumber(company?.secondaryPhone)}</TextRow>
-          )}
+
           {company?.totalTankers ? (
             <AccountAmountOfTankers data={company?.cargoes?.listOfCargoes} total={company?.totalTankers} />
           ) : null}

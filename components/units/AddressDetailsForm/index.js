@@ -90,7 +90,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
             onChange={handleCountryChange}
           />
           <FormDropdown
-            label="City"
+            label="State/City"
             labelBadge="*"
             name={`${type}City`}
             options={cities}
@@ -98,14 +98,6 @@ const AddressDetails = ({ title, type, countries = [] }) => {
             loading={disabled}
             disabled={disabled || countries?.length === 0}
             asyncCall
-          />
-          <Input
-            {...register(`${type}Province`)}
-            label="State / Province / Region (optional)"
-            labelBadge={renderBadge('Province')}
-            placeholder="NY"
-            error={errors[`${type}Province`]?.message}
-            disabled={disabled || isSubmitting}
           />
           <Input
             {...register(`${type}PostalCode`)}
@@ -121,7 +113,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
           {...register(`${type}Address`)}
           label="Address line #1 *"
           labelBadge={renderBadge('Address')}
-          placeholder="Apartment, suite, unit, building, floor, etc."
+          placeholder="Street address, number, etc."
           error={errors[`${type}Address`]?.message}
           disabled={disabled || isSubmitting}
         />
@@ -129,7 +121,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
           {...register(`${type}Address2`)}
           label="Address line #2 (optional)"
           labelBadge={renderBadge('Address2')}
-          placeholder="Apartment, suite, unit, building, floor, etc."
+          placeholder="Building, floor, suite, unit, etc."
           error={errors[`${type}Address2`]?.message}
           disabled={disabled || isSubmitting}
         />

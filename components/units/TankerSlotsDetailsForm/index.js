@@ -62,7 +62,30 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
   const handleApplySlot = () => {
     const nextTankersCount =
       tankersCount > SETTINGS.MAX_NUMBER_OF_TANKERS ? SETTINGS.MAX_NUMBER_OF_TANKERS : tankersCount;
+
+    // Clear apply slots errors
     clearErrors('applySlots');
+    clearErrors('imos');
+
+    // If we're reducing the number of tankers, clear errors for the ones being removed
+    if (nextTankersCount < tankers.length) {
+      tankers.forEach((tankerId, index) => {
+        if (index >= nextTankersCount) {
+          // Clear errors for tankers that will be removed
+          clearErrors(`imos[${tankerId}].imo`);
+          clearErrors(`imos[${tankerId}]`);
+          // Unregister the field to clean up form state
+          unregister(`imos[${tankerId}].imo`);
+        }
+      });
+    }
+
+    // Clear all existing tanker errors to start fresh
+    tankers.forEach((tankerId) => {
+      clearErrors(`imos[${tankerId}].imo`);
+      clearErrors(`imos[${tankerId}]`);
+    });
+
     handleChangeState('tankers', getFilledArray(nextTankersCount));
   };
 
@@ -99,14 +122,14 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="!relative w-full">
+      <div className="!relative flex w-full flex-wrap gap-x-4 gap-y-2">
         <Input
           {...register('numberOfTankers')}
           type="number"
           value={tankersCount}
           label="Number of tankers"
           labelBadge="*"
-          customStyles="z-10 w-full"
+          customStyles="z-10 w-1/2"
           onChange={handleSlotsCount}
           error={errors.numberOfTankers?.message || errors.applySlots?.message}
           helperText={helperText}
@@ -115,7 +138,8 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
         <Input {...register('applySlots')} disabled={isSubmitting} type="hidden" />
         <Button
           type="button"
-          customStyles="absolute top-[17px] right-1 my-1 !py-4"
+          customStylesFromWrap="!justify-end"
+          customStyles="h-[2.375rem]"
           buttonProps={{ text: 'Apply', variant: !errors.numberOfTankers ? 'primary' : 'delete', size: 'medium' }}
           onClick={handleApplySlot}
           disabled={tankersCount <= 0 || isSubmitting}
@@ -127,7 +151,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           const error = errors.imos ? errors.imos[item]?.imo : null;
 
           return (
-            <div key={`${item[index]}`} className="relative">
+            <div key={item} className="relative">
               <Input
                 {...register(`${fieldName}.imo`, {
                   onChange: (e) => {

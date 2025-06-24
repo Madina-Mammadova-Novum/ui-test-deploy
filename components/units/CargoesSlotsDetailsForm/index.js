@@ -19,6 +19,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   const {
     register,
     setValue,
+    getValues,
     clearErrors,
     watch,
     formState: { errors, isSubmitting },
@@ -83,16 +84,35 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
   const handleApplySlot = () => {
     const nextCargoesCount =
       cargoesCount > SETTINGS.MAX_NUMBER_OF_CARGOES ? SETTINGS.MAX_NUMBER_OF_CARGOES : cargoesCount;
+    const newCargoes = getFilledArray(nextCargoesCount).map((item) => ({
+      ...item,
+      id: `cargo-${Date.now()}-${Math.random()}`,
+    }));
     clearErrors('applySlots');
-    handleChangeState('cargoes', getFilledArray(nextCargoesCount));
+
+    // Update form values for each cargo slot
+    newCargoes.forEach((_, index) => {
+      setValue(`cargoes[${index}].imo`, '');
+      setValue(`cargoes[${index}].port`, null);
+      setValue(`cargoes[${index}].date`, null);
+    });
+
+    setValue('cargoes', newCargoes);
+    handleChangeState('cargoes', newCargoes);
   };
 
   const handleAddSlot = () => {
-    handleChangeState('cargoes', [...cargoes, ...getFilledArray(1)]);
+    const newSlot = getFilledArray(1).map(() => ({
+      id: `cargo-${Date.now()}-${Math.random()}`,
+    }));
+    handleChangeState('cargoes', [...cargoes, ...newSlot]);
   };
 
   const handleRemoveSlot = (index) => {
-    setValue('cargoes', removeByIndex(cargoes, index));
+    const cargoesValues = getValues('cargoes');
+    const updatedCargoes = removeByIndex(cargoesValues, index);
+
+    setValue('cargoes', updatedCargoes);
     handleChangeState('cargoes', removeByIndex(cargoes, index));
   };
 
@@ -132,7 +152,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
 
   return (
     <div className="grid gap-5">
-      <div className="relative md:w-full">
+      <div className="relative w-full md:w-1/2">
         <Input
           label="Number of cargoes chartered in the last 6 months"
           labelBadge="*"
@@ -163,7 +183,7 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
         const error = errors.cargoes ? errors.cargoes[index] : null;
 
         return (
-          <div className="relative flex flex-col justify-center gap-2 md:flex-row" key={item}>
+          <div className="relative flex flex-col justify-center gap-2 md:flex-row" key={item.id || `cargo-${index}`}>
             <Input
               {...register(`${fieldName}.imo`, {
                 onChange: (e) => {
@@ -206,9 +226,10 @@ const CargoesSlotsDetailsForm = ({ data = {}, applyHelper = false }) => {
             />
             <Button
               type="button"
-              customStyles="absolute -bottom-4 md:bottom-auto md:top-1/2 md:-right-8 !p-0"
+              customStyles="!p-0"
+              customStylesFromWrap="!mb-2 !justify-end"
               buttonProps={{
-                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
+                icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-6 w-6 fill-black" /> },
                 variant: 'tertiary',
                 size: 'small',
               }}

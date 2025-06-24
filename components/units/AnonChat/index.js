@@ -210,7 +210,7 @@ const AnonChat = ({ opened }) => {
                 asyncCall
               />
               <Dropdown
-                label="City"
+                label="State/City"
                 onChange={handleCityChange}
                 options={cities}
                 disabled={!cities.length}

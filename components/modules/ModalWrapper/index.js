@@ -21,7 +21,7 @@ const ModalWrapper = ({ opened, onClose, containerClass, children }) => {
       <>
         <div className="fixed bottom-0 left-0 right-0 top-0 z-50 bg-[#000000] opacity-40" />
         <div
-          className={`${containerClass} fixed left-1/2 top-1/2 z-50 max-h-[98vh] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-8`}
+          className={`${containerClass} fixed left-1/2 top-1/2 z-50 max-h-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-8`}
           aria-hidden
           onClick={(e) => e.stopPropagation()}
         >

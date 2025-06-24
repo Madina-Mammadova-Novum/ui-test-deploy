@@ -1557,6 +1557,13 @@
   dependencies:
     react ">=15.0.0 <17.0.0"
 
+"@iconscout/react-unicons@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.npmjs.org/@iconscout/react-unicons/-/react-unicons-2.2.4.tgz"
+  integrity sha512-lAgPSustUauaGF1u/dsrCePdfVt8pV8Wr13c5pqw5GBALZ9AZL4acwDwzNvDutgj5QPu0UBoTe/hLKhL/Sz3gQ==
+  dependencies:
+    react ">=15.0.0 <17.0.0"
+
 "@jridgewell/gen-mapping@^0.3.0", "@jridgewell/gen-mapping@^0.3.2", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.5"
   resolved "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.5.tgz"

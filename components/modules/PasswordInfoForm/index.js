@@ -66,13 +66,15 @@ const PasswordInfoForm = ({ closeModal }) => {
           />
         </div>
         <Divider />
-        <p className="text-sm font-semibold text-black">Enter a strong password according to our requirements</p>
-        <PasswordValidation
-          helperData={{
-            password: { label: 'new password', placeholder: 'Enter a new password' },
-            confirm: { label: 'confirm password', placeholder: 'Enter a new password' },
-          }}
-        />
+        <div className="flex flex-col gap-6">
+          <p className="text-sm font-semibold text-black">Enter a strong password according to our requirements</p>
+          <PasswordValidation
+            helperData={{
+              password: { label: 'new password', placeholder: 'Enter a new password' },
+              confirm: { label: 'confirm password', placeholder: 'Enter a new password' },
+            }}
+          />
+        </div>
       </ModalFormManager>
     </FormProvider>
   );

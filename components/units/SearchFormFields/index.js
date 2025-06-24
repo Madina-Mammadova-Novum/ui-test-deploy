@@ -20,7 +20,7 @@ import { getTerminals } from '@/services/terminal';
 import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
 import { AdditionalDischargeForm, Captcha } from '@/units';
-import { convertDataToOptions, getValueWithPath } from '@/utils/helpers';
+import { convertDataToOptions, getValueWithPath, shouldShowCaptcha } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = ({ productState, setProductState, captchaRef, isAccountSearch = false }) => {
@@ -350,7 +350,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
   }, [isSavedSearch]);
 
   useEffect(() => {
-    if (!isAccountSearch) {
+    if (!isAccountSearch && shouldShowCaptcha()) {
       setValue('captcha', captcha);
       trigger('captcha');
     }
@@ -558,7 +558,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
           customStyles="self-start text-xsm !px-0 !py-0"
           onClick={handleAddProduct}
         />
-        {!isAccountSearch && showCaptcha && <Captcha onChange={setCaptcha} ref={captchaRef} />}
+        {!isAccountSearch && showCaptcha && shouldShowCaptcha() && <Captcha onChange={setCaptcha} ref={captchaRef} />}
       </div>
     </div>
   );

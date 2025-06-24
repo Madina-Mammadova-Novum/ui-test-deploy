@@ -13,6 +13,7 @@ module.exports = {
   ],
   theme: {
     fontSize: {
+      xs: ['12px', '130%'],
       xsm: ['14px', '140%'],
       sm: ['16px', '140%'],
       base: ['18px', '140%'],

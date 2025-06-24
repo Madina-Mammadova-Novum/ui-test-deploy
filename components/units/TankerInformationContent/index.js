@@ -6,7 +6,7 @@ import { tankerInformationTooltipData } from '@/utils/mock';
 const TankerInformationContent = () => {
   return (
     !!tankerInformationTooltipData.length && (
-      <div className="text-xs flex gap-x-5">
+      <div className="flex gap-x-5 text-xs">
         <div className="w-full">
           {tankerInformationTooltipData.slice(0, 9).map(({ title, description, countryCode }) => (
             <TextRow title={title} className="!text-[12px]">
