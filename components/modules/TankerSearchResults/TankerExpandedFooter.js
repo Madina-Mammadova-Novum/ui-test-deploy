@@ -13,6 +13,7 @@ import { ExpandableRowFooter, ModalWindow } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 
 const TankerExpandedFooter = ({ tankerId, tankerData }) => {
+const TankerExpandedFooter = ({ tankerId, tankerData, products }) => {
   const { role } = useSelector(getUserDataSelector);
   const { isCharterer, isOwner } = getRoleIdentity({ role });
 
@@ -30,6 +31,7 @@ const TankerExpandedFooter = ({ tankerId, tankerData }) => {
           containerClass="h-full"
         >
           <OfferModalContent tankerId={tankerId} tankerData={tankerData} />
+          <OfferModalContent tankerId={tankerId} tankerData={tankerData} products={products} />
         </ModalWindow>
       );
     }

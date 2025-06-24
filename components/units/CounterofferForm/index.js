@@ -34,7 +34,7 @@ const CounterofferForm = ({
   const { ranges } = useSelector(getOfferSelector);
 
   const [freightState, setFreightState] = useState({});
-  const formState = { ...data, ...getPrefilledFormDataAdapter({ data: data?.products || [], isCounteroffer: true }) };
+  const formState = { ...data, ...getPrefilledFormDataAdapter({ data: data?.products || [] }) };
 
   const schema = yup.object({ ...offerSchema({ ...ranges, currentFreight: freightState }) });
   const methods = useHookFormParams({ schema, state: formState });

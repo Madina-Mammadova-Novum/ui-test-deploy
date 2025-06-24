@@ -49,6 +49,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
 
   const offer = useSelector(getOfferSelector);
   const { searchParams } = useSelector(getSearchSelector);
+
   const { loadTerminal, dischargeTerminal, products } = searchParams;
   const { voyageDetails } = voyageDetailsAdapter({
     data: {
