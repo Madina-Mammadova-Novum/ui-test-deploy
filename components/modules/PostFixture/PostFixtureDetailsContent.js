@@ -96,11 +96,11 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
           </FieldsetContent>
 
           <FieldsetContent label="Products" className="mt-4">
-            {products?.map(({ productName, density, minQuantity }, index) => (
+            {products?.map(({ productName, density, quantity }, index) => (
               <div key={productName} className={index && 'mt-4'}>
                 <TextRow title={`Product #${index + 1}`}>{productName}</TextRow>
                 <TextRow title="Density">{density} mt/m³</TextRow>
-                <TextRow title="Min quantity">{minQuantity} tons</TextRow>
+                <TextRow title="Min quantity">{quantity} tons</TextRow>
               </div>
             ))}
           </FieldsetContent>

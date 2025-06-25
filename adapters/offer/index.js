@@ -260,7 +260,7 @@ export function offerDetailsAdapter({ data, role }) {
           label: cargoName,
         },
       ],
-      products: products?.map(({ productName, density, minQuantity }, index) => [
+      products: products?.map(({ productName, density, quantity }, index) => [
         {
           key: `Product #${index + 1}`,
           label: productName,
@@ -271,7 +271,7 @@ export function offerDetailsAdapter({ data, role }) {
         },
         {
           key: 'Min quantity',
-          label: `${minQuantity} tons`,
+          label: `${quantity} tons`,
         },
       ]),
       details: [
@@ -317,11 +317,11 @@ export function offerDetailsAdapter({ data, role }) {
         label: cargoName,
         value: cargoId,
       },
-      products: products?.map(({ productName, density, minQuantity, tolerance, id }) => ({
+      products: products?.map(({ productName, density, quantity, tolerance, id }) => ({
         product: { label: productName, value: id },
         density,
         tolerance,
-        quantity: minQuantity,
+        quantity,
       })),
       value: freight,
       demurrageRate,

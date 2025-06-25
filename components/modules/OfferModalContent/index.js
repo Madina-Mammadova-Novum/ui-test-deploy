@@ -33,7 +33,7 @@ const tabs = [
   },
 ];
 
-const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
+const OfferModalContent = ({ closeModal, tankerId, tankerData, products }) => {
   const dispatch = useDispatch();
   const scrollingContainerRef = useRef(null);
   const [formMethods, setFormMethods] = useState(null);
@@ -50,7 +50,10 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   const offer = useSelector(getOfferSelector);
   const { searchParams } = useSelector(getSearchSelector);
 
-  const { loadTerminal, dischargeTerminal, products } = searchParams;
+  const { loadTerminal, dischargeTerminal, products: searchProducts } = searchParams;
+
+  // Use products from search results if available, otherwise fallback to search params
+  const finalProducts = products || searchProducts;
   const { voyageDetails } = voyageDetailsAdapter({
     data: {
       ...searchParams,
@@ -118,7 +121,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
         laycanEnd: offer?.data?.laycanEnd,
         loadTerminal,
         dischargeTerminal,
-        products,
+        products: finalProducts,
         additionalDischargeOptions,
         sanctionedCountries,
         excludeInternationallySanctioned,
@@ -155,7 +158,8 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
   };
 
   useEffect(() => {
-    const filteredSearchParams = filterValidProducts(searchParams);
+    const nextSearchParams = { ...searchParams, products: finalProducts };
+    const filteredSearchParams = filterValidProducts(nextSearchParams);
 
     dispatch(fetchOfferValidation({ ...filteredSearchParams, tankerId }));
 
@@ -186,9 +190,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData }) => {
       case 'comments':
         return <CommentsContent />;
       default:
-        return <CommercialOfferTerms tankerId={tankerId} searchData={searchParams} scrollToBottom={scrollToBottom} />;
+        return <CommercialOfferTerms tankerId={tankerId} products={finalProducts} scrollToBottom={scrollToBottom} />;
     }
-  }, [currentTab, tankerId, searchParams, voyageDetails, scrollToBottom]);
+  }, [currentTab, tankerId, searchParams, finalProducts, voyageDetails, scrollToBottom]);
 
   const errorBanner = useMemo(() => {
     return (
