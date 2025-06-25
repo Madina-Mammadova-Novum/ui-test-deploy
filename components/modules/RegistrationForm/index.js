@@ -33,9 +33,38 @@ const STEPS = [
   { id: 5, title: 'Identity Verification', isCompleted: false },
 ];
 
+// Helper functions for sessionStorage
+const setSessionStorage = (key, data) => {
+  try {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      window.sessionStorage.setItem(key, JSON.stringify(data));
+      return true;
+    }
+    return false;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getSessionStorage = (key) => {
+  try {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const item = window.sessionStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    }
+    return null;
+  } catch (error) {
+    // If there's an error parsing, remove the corrupted item
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      window.sessionStorage.removeItem(key);
+    }
+    return null;
+  }
+};
+
 const ROLE_CONFIG = {
   owner: {
-    step3Title: 'Fleet & Operations',
+    step3Title: 'Fleet Information',
     signUpService: ownerSignUp,
     storageKey: 'owner_registration_data',
   },
@@ -101,6 +130,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
   const shouldStartAtStep5 = redirectUrl;
 
   const [currentStep, setCurrentStep] = useState(shouldStartAtStep5 ? 5 : 1);
+
   // Initialize steps state with completed steps if starting at step 5
   const initialStepsState = shouldStartAtStep5 ? steps.map((step) => ({ ...step, isCompleted: step.id < 5 })) : steps;
 
@@ -110,7 +140,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
   const [formData, setFormData] = useState({
     step1: {},
     step2: {},
-    step3: {}, // This will not be saved to localStorage
+    step3: {}, // This will not be saved to sessionStorage
     step4: {},
     step5: {},
   });
@@ -127,26 +157,25 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
   // State to hold server errors that need to be displayed
   const [serverErrors, setServerErrors] = useState({});
 
-  // Load saved data from localStorage on mount (excluding step 3 and when starting at step 5)
+  // Load saved data from sessionStorage on mount (excluding step 3 and when starting at step 5)
   useEffect(() => {
-    // Skip localStorage loading if starting directly at step 5
+    // Skip sessionStorage loading if starting directly at step 5
     if (shouldStartAtStep5) {
       setIsLoadingFromStorage(false);
       return;
     }
 
     try {
-      const savedData = localStorage.getItem(config.storageKey);
+      const savedData = getSessionStorage(config.storageKey);
       if (savedData) {
-        const parsedData = JSON.parse(savedData);
-        // Only load steps 1, 2, 4, 5 from localStorage
+        // Only load steps 1, 2, 4, 5 from sessionStorage
         setFormData((prev) => ({
           ...prev,
-          step1: parsedData.step1 || {},
-          step2: parsedData.step2 || {},
+          step1: savedData.step1 || {},
+          step2: savedData.step2 || {},
           // step3 intentionally excluded
-          step4: parsedData.step4 || {},
-          step5: parsedData.step5 || {},
+          step4: savedData.step4 || {},
+          step5: savedData.step5 || {},
         }));
       }
     } catch (error) {
@@ -157,25 +186,22 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
     }
   }, [config.storageKey, shouldStartAtStep5]);
 
-  // Save data to localStorage whenever formData changes (excluding step 3)
+  // Save data to sessionStorage whenever formData changes (excluding step 3)
   useEffect(() => {
-    // Only save to localStorage after initial loading is complete
+    // Only save to sessionStorage after initial loading is complete
     if (isLoadingFromStorage) {
       return;
     }
 
-    try {
-      const dataToSave = {
-        step1: formData.step1,
-        step2: formData.step2,
-        // step3 intentionally excluded from localStorage
-        step4: formData.step4,
-        step5: formData.step5,
-      };
-      localStorage.setItem(config.storageKey, JSON.stringify(dataToSave));
-    } catch (error) {
-      // Handle localStorage errors silently
-    }
+    const dataToSave = {
+      step1: formData.step1,
+      step2: formData.step2,
+      // step3 intentionally excluded from sessionStorage
+      step4: formData.step4,
+      step5: formData.step5,
+    };
+
+    setSessionStorage(config.storageKey, dataToSave);
   }, [formData.step1, formData.step2, formData.step4, formData.step5, config.storageKey, isLoadingFromStorage]);
 
   useEffect(() => {
@@ -196,7 +222,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      step3: {}, // Reset step 3 data but don't save to localStorage
+      step3: {}, // Reset step 3 data but don't save to sessionStorage
     }));
     setStepFormMethods((prev) => ({
       ...prev,
@@ -216,14 +242,14 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
   }, []);
 
   const handleFormValid = useCallback((stepNumber, isValid, data) => {
-    // For step 3, only update the in-memory formData, don't trigger localStorage save
+    // For step 3, only update the in-memory formData, don't trigger sessionStorage save
     if (stepNumber === 3) {
       setFormData((prev) => ({
         ...prev,
         step3: data,
       }));
     } else {
-      // For other steps, update formData which will trigger localStorage save
+      // For other steps, update formData which will trigger sessionStorage save
       setFormData((prev) => {
         const currentData = prev[`step${stepNumber}`];
         // Simple shallow comparison for data changes
@@ -297,7 +323,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
     setIsSubmitting(true);
 
     try {
-      // Get step 3 data directly from form methods instead of localStorage
+      // Get step 3 data directly from form methods instead of sessionStorage
       const step3FormMethods = stepFormMethods.step3;
       const step3Data = step3FormMethods ? step3FormMethods.getValues() : {};
 
@@ -314,7 +340,9 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
         setCookie('session-user-email', combinedData.email);
 
         // Clear saved data on successful registration (step 3 wasn't saved anyway)
-        localStorage.removeItem(config.storageKey);
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          window.sessionStorage.removeItem(config.storageKey);
+        }
 
         // Clear phone validation state
         clearPhoneValidationState('registration', userRole);
@@ -473,11 +501,11 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
   const step5MethodsCallback = useCallback((methods) => handleFormMethodsReady(5, methods), [handleFormMethodsReady]);
 
   const renderStepContent = () => {
-    // Don't render forms until localStorage loading is complete
+    // Don't render forms until sessionStorage loading is complete
     if (isLoadingFromStorage) {
       return (
         <div className="flex items-center justify-center py-8">
-          <div className="text-gray-600">Loading saved data...</div>
+          <div className="text-gray-600">Loading session data...</div>
         </div>
       );
     }
