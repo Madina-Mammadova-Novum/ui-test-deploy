@@ -14,7 +14,7 @@ import { transformDate } from '@/utils/date';
 import { convertDataToOptions, formatCurrency, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
+const CommercialOfferTerms = ({ products, scrollToBottom }) => {
   const dispatch = useDispatch();
 
   const [freightEstimation, setFreightEstimation] = useState({});
@@ -144,12 +144,16 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   };
 
   useEffect(() => {
-    if (searchData?.products) {
-      searchData.products.forEach((product, index) => {
+    if (products) {
+      products.forEach((product, index) => {
+        setValue(`products[${index}].product`, product.product);
+        setValue(`products[${index}].density`, product.density);
+        setValue(`products[${index}].minQuantity`, product.quantity);
+        setValue(`products[${index}].quantity`, product.quantity);
         setValue(`products[${index}].tolerance`, product.tolerance);
       });
     }
-  }, [searchData]);
+  }, [products, setValue]);
 
   useEffect(() => {
     const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
@@ -169,7 +173,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           <Input label="laycan period" customStyles="w-1/2" value={laycanPeriod} disabled />
         )}
       </div>
-      {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
+      {products?.length > 0 && products.map(printProduct)}
       <div className="mt-3 flex items-baseline">
         <FormDropdown
           label="Freight"

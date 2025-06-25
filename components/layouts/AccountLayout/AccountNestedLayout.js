@@ -12,7 +12,7 @@ import { AccountWrapper } from '@/modules';
 import FleetsActions from '@/modules/FleetsActions';
 import { ComplexPagination, ToggleRows } from '@/units';
 
-const AccountNestedLayout = ({ children, config }) => {
+const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
   const searchedParams = useParams();
 
   const { data, pagination, sorting, onToggle, withActions = false, useExpand = true, usePagination = true } = config;
@@ -74,7 +74,7 @@ const AccountNestedLayout = ({ children, config }) => {
         <AccountWrapper>{children}</AccountWrapper>
         {usePagination && (
           <ComplexPagination
-            label="offers"
+            label={label}
             perPage={pagination?.perPage}
             currentPage={pagination?.currentPage}
             numberOfPages={pagination?.totalPages}

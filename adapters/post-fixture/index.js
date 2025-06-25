@@ -9,7 +9,7 @@ import { ensureFileExtension, formatCurrency, freightFormatter, getLocode, trans
 export const postFixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate, totalQuantity } = data;
 
   return [
     {
@@ -28,7 +28,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: searchedCargo?.totalQuantity && `${searchedCargo.totalQuantity} tons`,
+      text: totalQuantity && `${totalQuantity} tons`,
     },
     {
       label: 'Load port',

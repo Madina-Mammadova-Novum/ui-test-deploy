@@ -24,7 +24,7 @@ const ComplexPagination = ({
 
   return (
     pages.length > 0 && (
-      <div className="relative mb-6 flex items-center justify-between 3md:items-center">
+      <div className="relative flex items-center justify-between 3md:items-center">
         <Dropdown
           value={{ label: perPage, value: perPage }}
           label={`${label} per page:`}

@@ -44,6 +44,7 @@ export function requestSearchVesselAdapter({ data }) {
 
 export function responseSearchVesselsAdapter({ data }) {
   if (!data) return null;
+
   const processedData = data.map((result) => responseSearchVesselAdapter({ data: result }));
 
   return {
@@ -54,6 +55,7 @@ export function responseSearchVesselsAdapter({ data }) {
 
 export function responseSearchVesselAdapter({ data }) {
   if (!data) return null;
+
   const {
     // name,
     // imo,
@@ -75,7 +77,10 @@ export function responseSearchVesselAdapter({ data }) {
     commercialOperatorCountry,
     searchResultFlag,
     hasFailedOffer,
+    cargoes,
   } = data;
+
+  const processedCargoes = cargoes.map((result) => responseSearchVesselCargoesAdapter({ data: result }));
 
   return {
     id,
@@ -152,6 +157,7 @@ export function responseSearchVesselAdapter({ data }) {
     },
     searchResultFlag,
     hasFailedOffer,
+    products: processedCargoes,
   };
 }
 
@@ -162,6 +168,24 @@ export function requestAddVesselToFleetAdapter({ data }) {
 
   return {
     vesselId: tankerId,
+  };
+}
+
+export function responseSearchVesselCargoesAdapter({ data }) {
+  if (!data) return null;
+
+  const { product: responseProduct, quantity, tolerance, referenceDensity: density } = data;
+
+  const product = {
+    label: responseProduct?.name,
+    value: responseProduct?.id,
+  };
+
+  return {
+    product,
+    density,
+    quantity,
+    tolerance,
   };
 }
 

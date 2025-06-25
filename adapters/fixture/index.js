@@ -9,8 +9,8 @@ import { ensureFileExtension, formatCurrency, freightFormatter, getLocode, trans
 export const fixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
-  const { code: cargoId, cargoType, totalQuantity, loadTerminal } = searchedCargo;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate, totalQuantity } = data;
+  const { code: cargoId, cargoType, loadTerminal } = searchedCargo;
 
   return [
     {

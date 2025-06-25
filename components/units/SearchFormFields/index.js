@@ -280,11 +280,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
         }, {});
 
         currentProducts.forEach((currentProduct) => {
-          const productId = currentProduct.product.value;
+          const productId = currentProduct?.product?.value;
           const relatedProduct = relatedProductsMap[productId];
 
           if (relatedProduct) {
-            currentProduct.product.density = relatedProduct.density;
+            currentProduct.product.density = relatedProduct?.density;
           }
         });
 
