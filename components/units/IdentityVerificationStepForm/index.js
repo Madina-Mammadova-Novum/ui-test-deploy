@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import { UilUser } from '@iconscout/react-unicons';
 import { useSearchParams } from 'next/navigation';
 import PropTypes from 'prop-types';
 
@@ -28,22 +27,7 @@ const IdentityVerificationStepForm = ({ onFormValid, onMethodsReady }) => {
   if (redirectUrl) {
     return (
       <div className="flex flex-col gap-5">
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-5">
-          <div className="mb-2 flex items-center gap-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100">
-              <UilUser className="h-5 w-5 text-blue-600" />
-            </div>
-            <h3 className="text-sm font-semibold text-blue-900">Identity Verification Required</h3>
-          </div>
-          <p className="text-xsm leading-relaxed text-blue-800">
-            To complete your registration and activate your account, you need to complete the identity verification
-            process.
-          </p>
-        </div>
-
         <div className="max-w-none">
-          <h2 className="mb-4 text-sm font-semibold text-gray-900">Identity Verification Process</h2>
-
           <div className="space-y-4">
             <div className="rounded-lg border border-gray-200 bg-white p-5">
               <div className="flex items-start gap-3">
