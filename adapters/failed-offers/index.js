@@ -15,7 +15,7 @@ import {
 export const failedOffersHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  const { searchedCargo, vessel, laycanStart, laycanEnd, stage, failedBy } = data;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, stage, failedBy, totalQuantity } = data;
 
   return [
     {
@@ -38,7 +38,7 @@ export const failedOffersHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: searchedCargo?.totalQuantity && `${searchedCargo.totalQuantity} tons`,
+      text: totalQuantity && `${totalQuantity} tons`,
     },
     {
       label: 'Load port',
