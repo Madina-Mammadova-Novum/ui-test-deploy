@@ -98,8 +98,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
 
   // Check URL parameters to determine initial step
   const redirectUrl = searchParams.get('redirectUrl');
-  const status = searchParams.get('status');
-  const shouldStartAtStep5 = redirectUrl || status;
+  const shouldStartAtStep5 = redirectUrl;
 
   const [currentStep, setCurrentStep] = useState(shouldStartAtStep5 ? 5 : 1);
   // Initialize steps state with completed steps if starting at step 5
