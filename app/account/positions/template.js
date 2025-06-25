@@ -61,5 +61,9 @@ export default function PositionsLayout({ children }) {
     },
   };
 
-  return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;
+  return (
+    <AccountNestedLayout config={layoutConfig} label="fleets">
+      {children}
+    </AccountNestedLayout>
+  );
 }
