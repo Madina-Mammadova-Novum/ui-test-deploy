@@ -272,6 +272,22 @@ export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
     });
 };
 
+export const convertTerminalDataToOptions = ({ data }) => {
+  if (!data?.length) return [];
+
+  return data
+    .filter(({ id, name }) => id && name)
+    .map(({ id, name, max }) => {
+      const maxDraft = max?.draft;
+      const formattedLabel = maxDraft ? `${name} (${maxDraft} m)` : name;
+
+      return {
+        value: id,
+        label: formattedLabel,
+      };
+    });
+};
+
 export const convertPayloadToOptions = (data, keyValue, keyLabel) => {
   if (!data?.length) return [];
 

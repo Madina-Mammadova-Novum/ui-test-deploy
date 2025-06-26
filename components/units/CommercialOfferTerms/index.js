@@ -196,7 +196,7 @@ const CommercialOfferTerms = ({ products, scrollToBottom }) => {
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
-          step="any"
+          step="0.001"
         />
       </div>
 
