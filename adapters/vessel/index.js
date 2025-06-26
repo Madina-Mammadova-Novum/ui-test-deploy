@@ -80,7 +80,7 @@ export function responseSearchVesselAdapter({ data }) {
     cargoes,
   } = data;
 
-  const processedCargoes = cargoes.map((result) => responseSearchVesselCargoesAdapter({ data: result }));
+  const processedCargoes = cargoes?.map((result) => responseSearchVesselCargoesAdapter({ data: result }));
 
   return {
     id,
