@@ -11,14 +11,14 @@ import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow, PostFixtureExpandedContent } from '@/modules';
 
 const PostFixtureResultContent = ({ data, toggle, isOpened, tab }) => {
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = postFixtureHeaderDataAdapter({ data: rowData });
     return (
       <ExpandableRow
         key={rowData?.id}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
-        expand={toggle}
+        expand={index === 0 || toggle}
         isOpened={isOpened}
       >
         <PostFixtureExpandedContent

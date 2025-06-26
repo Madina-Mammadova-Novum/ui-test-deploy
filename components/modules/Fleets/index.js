@@ -17,7 +17,7 @@ import { UnassignedFleet } from '@/units';
 const Fleets = ({ searchedParams }) => {
   const { data, unassignedData, toggle, loading } = useSelector(getFleetsSelector);
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
 
     return (
@@ -45,7 +45,7 @@ const Fleets = ({ searchedParams }) => {
             ]}
           />
         }
-        expand={toggle}
+        expand={index === 0 || toggle}
         isOpened={Boolean(searchedParams?.id)}
       >
         <FleetsExpandedContent
@@ -69,7 +69,7 @@ const Fleets = ({ searchedParams }) => {
 
   return (
     <div className="flex grow flex-col gap-y-2.5">
-      {!loading && <UnassignedFleet data={unassignedData} toggle={toggle} />}
+      {!loading && <UnassignedFleet data={unassignedData} toggle={toggle} index={0} />}
       {printContent}
     </div>
   );
