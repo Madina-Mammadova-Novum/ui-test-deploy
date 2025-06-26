@@ -46,14 +46,14 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
     if (!minValue) return '';
 
     if (selectedFreight?.label === 'WS') {
-      return `Minimum WS ${minValue}`;
+      return `Min WS ${minValue}`;
     }
 
     if (selectedFreight?.label === '$/mt') {
-      return `Minimum $${formatCurrency(minValue, true)}`;
+      return `Min $${formatCurrency(minValue, true)}`;
     }
 
-    return `Minimum $${formatCurrency(minValue)}`;
+    return `Min $${formatCurrency(minValue)}`;
   };
 
   const helperFreightFormat = getHelperFreightFormat();
@@ -177,7 +177,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="value"
           type="number"
           placeholder={freightValuePlaceholder}
-          customStyles="w-1/2 whitespace-nowrap"
+          customStyles="w-1/2"
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={isSubmitting || !valid}
