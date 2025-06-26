@@ -41,20 +41,19 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   const freightValuePlaceholder = useMemo(() => FREIGHT_PLACEHOLDERS[selectedFreight?.label], [selectedFreight]);
 
   const minValue = freightEstimation?.min;
-  const maxValue = freightEstimation?.max;
 
   const getHelperFreightFormat = () => {
-    if (!minValue || !maxValue) return '';
+    if (!minValue) return '';
 
     if (selectedFreight?.label === 'WS') {
-      return `WS ${minValue} - WS ${maxValue}`;
+      return `Min WS ${minValue}`;
     }
 
     if (selectedFreight?.label === '$/mt') {
-      return `$${formatCurrency(minValue, true)} - $${formatCurrency(maxValue, true)}`;
+      return `Min $${formatCurrency(minValue, true)}`;
     }
 
-    return `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+    return `Min $${formatCurrency(minValue)}`;
   };
 
   const helperFreightFormat = getHelperFreightFormat();
@@ -178,7 +177,7 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
           name="value"
           type="number"
           placeholder={freightValuePlaceholder}
-          customStyles="w-1/2 whitespace-nowrap"
+          customStyles="w-1/2"
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={isSubmitting || !valid}

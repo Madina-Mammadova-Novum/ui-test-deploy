@@ -24,7 +24,7 @@ const PreFixture = () => {
 
   const { isOwner } = getRoleIdentity({ role });
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
@@ -32,7 +32,7 @@ const PreFixture = () => {
     return (
       <ExpandableRow
         key={rowData.id}
-        expand={toggle}
+        expand={index === 0 || toggle}
         className="px-5"
         header={
           <ExpandableCardHeader

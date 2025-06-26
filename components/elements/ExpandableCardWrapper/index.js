@@ -6,15 +6,33 @@ import { ExpandableCardWrapperPropTypes } from '@/lib/types';
 
 import { Divider } from '@/elements';
 
-const ExpandableCardWrapper = ({ headerComponent, footerComponent, children, className = '', expandAll = false }) => {
-  const [toggle, setToggle] = useState(expandAll);
+const ExpandableCardWrapper = ({
+  headerComponent,
+  footerComponent,
+  children,
+  className = '',
+  expandAll = false,
+  index = null,
+}) => {
+  // If index is provided and it's the first element (index === 0), expand by default
+  // Otherwise, use the expandAll prop
+  const shouldExpandByDefault = index === 0 || expandAll;
+
+  const [toggle, setToggle] = useState(shouldExpandByDefault);
 
   const contentRef = useRef(null);
   const headerComponentWithProps = cloneElement(headerComponent, { toggle });
 
   useEffect(() => {
-    setToggle(expandAll);
-  }, [expandAll]);
+    // Update toggle state when expandAll changes, but preserve first element expansion
+    if (index === 0) {
+      // First element should always be expanded unless explicitly collapsed
+      setToggle(true);
+    } else {
+      // Other elements follow expandAll prop
+      setToggle(expandAll);
+    }
+  }, [expandAll, index]);
 
   const handleClick = () => {
     setToggle((prevValue) => !prevValue);

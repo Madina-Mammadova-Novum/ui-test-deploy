@@ -29,7 +29,7 @@ const OnSubsDetails = ({ searchedParams }) => {
     dispatch(setToggle(true));
   }, [dispatch]);
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
@@ -50,7 +50,7 @@ const OnSubsDetails = ({ searchedParams }) => {
             }
           />
         }
-        expand={toggle}
+        expand={index === 0 || toggle}
         className="px-5"
         footer={
           <OnSubsExpandedFooter

@@ -8,7 +8,7 @@ import { fleetsPageHeaderDataAdapter, unassignedFleetRowsDataAdapter } from '@/a
 import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow } from '@/modules';
 
-const UnassignedFleet = ({ toggle, data }) => {
+const UnassignedFleet = ({ toggle, data, index = 0 }) => {
   const fleetData = { vessels: data, name: 'Unassigned Fleet' };
 
   const formattedHeaderData = fleetsPageHeaderDataAdapter({ data: fleetData });
@@ -17,7 +17,7 @@ const UnassignedFleet = ({ toggle, data }) => {
   return (
     <ExpandableRow
       className="px-5 pb-5 pt-2.5"
-      expand={toggle}
+      expand={index === 0 || toggle}
       header={<ExpandableCardHeader headerData={formattedHeaderData} itemsContainerStyles="lg:grid-cols-2" />}
     >
       <UnassignedFleetExpandedContent rowsData={formattedRowData} />

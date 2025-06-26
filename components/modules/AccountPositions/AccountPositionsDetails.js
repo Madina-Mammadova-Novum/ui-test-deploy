@@ -25,8 +25,10 @@ const AccountPositionsDetails = ({ searchedParams }) => {
     dispatch(setToggle(true));
   }, []);
 
-  const printExpandableCard = (fleet) => {
-    return <ExpandableCard key={fleet.id} data={fleet} expandAll={toggle} className="my-5 bg-white px-5" />;
+  const printExpandableCard = (fleet, index) => {
+    return (
+      <ExpandableCard key={fleet.id} data={fleet} expandAll={toggle} className="my-5 bg-white px-5" index={index} />
+    );
   };
 
   const printContent = useMemo(() => {
