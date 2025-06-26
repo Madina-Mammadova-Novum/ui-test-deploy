@@ -301,7 +301,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 error={errors.built?.message}
               />
               <FormDropdown
-                label="Port of registry"
+                label="Flag/Port of registry"
                 labelBadge="*"
                 options={ports}
                 loading={portsLoading}
@@ -423,7 +423,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <FormDropdown
                 label="IMO class"
-                disabled={watch('imoClass')}
+                labelBadge="*"
                 options={imoClassOptions}
                 name="imoClass"
                 onChange={(option) => handleChange('imoClass', option)}
