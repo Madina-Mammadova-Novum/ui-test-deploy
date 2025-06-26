@@ -36,7 +36,7 @@ const AccountDetails = () => {
           <AccountPersonalDetails user={data?.personalDetails} />
           <AccountCompanyDetails company={data?.companyDetails} />
           <AccountPasswordDetails />
-          <div className="pb-5 pt-2.5">
+          <div className="flex w-full flex-wrap justify-between gap-5 pb-5 pt-2.5">
             <AccountDeactivateDetails pendingRequest={pendingRequest} />
             <AccountDeleteDetails pendingRequest={pendingRequest} />
           </div>

@@ -60,6 +60,7 @@ const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
                 key={rowHeader?.id}
                 tankerId={rowHeader.id}
                 tankerData={{ ballastLeg: rowHeader.ballastLeg, estimatedArrivalTime: rowHeader.estimatedArrivalTime }}
+                products={rowHeader.products}
               />
             }
             expand={expandExactResults}
@@ -89,6 +90,7 @@ const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
                 key={rowHeader?.id}
                 tankerId={rowHeader.id}
                 tankerData={{ ballastLeg: rowHeader.ballastLeg, estimatedArrivalTime: rowHeader.estimatedArrivalTime }}
+                products={rowHeader.products}
               />
             }
             expand={expandPartialResults}

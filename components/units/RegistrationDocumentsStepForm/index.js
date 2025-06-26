@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { UilCheckCircle, UilEnvelopeAlt } from '@iconscout/react-unicons';
+import { UilEnvelopeAlt } from '@iconscout/react-unicons';
 import PropTypes from 'prop-types';
 
 import { NextLink } from '@/elements';
@@ -27,22 +27,7 @@ const RegistrationDocumentsStepForm = ({ onFormValid, onMethodsReady, userRole }
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="rounded-lg border border-blue-200 bg-blue-50 p-5">
-        <div className="mb-2 flex items-center gap-3">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100">
-            <UilCheckCircle className="h-5 w-5 text-blue-600" />
-          </div>
-          <h3 className="text-sm font-semibold text-blue-900">Account Created Successfully!</h3>
-        </div>
-        <p className="text-xsm leading-relaxed text-blue-800">
-          Your account has been created but is currently <strong>inactive</strong>. To activate your account and start
-          using Ship.Link, you need to complete the document submission and verification process below.
-        </p>
-      </div>
-
       <div className="max-w-none">
-        <h2 className="mb-4 text-sm font-semibold text-gray-900">Next Steps for Account Activation</h2>
-
         <div className="space-y-4">
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <div className="flex items-start gap-3">

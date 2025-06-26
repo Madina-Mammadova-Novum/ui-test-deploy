@@ -82,6 +82,18 @@ const SendCounterofferFormFields = ({ data, scrollToBottom }) => {
   };
 
   useEffect(() => {
+    if (products) {
+      products.forEach((product, index) => {
+        setValue(`products[${index}].product`, product.product);
+        setValue(`products[${index}].density`, product.density);
+        setValue(`products[${index}].minQuantity`, product.quantity);
+        setValue(`products[${index}].quantity`, product.quantity);
+        setValue(`products[${index}].tolerance`, product.tolerance);
+      });
+    }
+  }, [products, setValue]);
+
+  useEffect(() => {
     const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
 
     setFreightEstimation({

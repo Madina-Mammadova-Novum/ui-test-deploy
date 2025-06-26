@@ -16,13 +16,14 @@ import {
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const {
-    searchedCargo: { code, cargoType, totalQuantity, loadTerminal } = {},
+    searchedCargo: { code, cargoType, loadTerminal } = {},
     vessel: { details: { name: tankerName = '', flagOfRegistry } = {} } = {},
     laycanStart,
     laycanEnd,
     expiresAt,
     frozenAt,
     isFailed,
+    totalQuantity,
   } = data;
 
   const { port: { name: portName, locode } = {} } = loadTerminal || {};
@@ -87,12 +88,13 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
   const {
-    searchedCargo: { code, cargoType, totalQuantity, loadTerminal } = {},
+    searchedCargo: { code, cargoType, loadTerminal } = {},
     laycanStart,
     laycanEnd,
     expiresAt,
     frozenAt,
     isFailed,
+    totalQuantity,
   } = data;
   const { port: { name, locode } = {} } = loadTerminal || {};
 

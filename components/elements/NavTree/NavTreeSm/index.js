@@ -89,7 +89,9 @@ const NavTreeSm = ({ data, active }) => {
             )}
           />
 
-          <span className="text-center text-xxs font-bold text-white">{data.title}</span>
+          <span className="text-center text-xxs font-bold text-white">
+            {data.title === 'Fleet Management' ? 'Fleet' : data.title}
+          </span>
         </div>
       )}
       {showLinks && (

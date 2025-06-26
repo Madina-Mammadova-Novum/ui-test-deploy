@@ -109,10 +109,6 @@ const CharteringExperienceStepForm = ({ onFormValid, onMethodsReady, initialData
         hideSubmitButton
       >
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-black">Recent Chartering Experience</h3>
-          <p className="mb-6 text-sm text-gray-600">
-            Please provide information about your recent chartering experience and cargo requirements.
-          </p>
           <div className="mb-6 w-full md:w-1/2">
             <Input
               ref={inputYearsRef}

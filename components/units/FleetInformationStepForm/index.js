@@ -84,12 +84,8 @@ const FleetInformationStepForm = ({ onFormValid, onMethodsReady, initialData = {
         submitAction={() => {}} // No submit action as it's handled by parent
         hideSubmitButton
       >
-        <div>
-          <h3 className="mb-4 text-lg font-semibold text-black">Fleet & Operations</h3>
-          <p className="mb-6 text-sm text-gray-600">Please provide information about your fleet.</p>
+        <TankerSlotsDetailsForm applyHelper />
 
-          <TankerSlotsDetailsForm applyHelper />
-        </div>
         <div>
           <TermsAndConditions />
           {shouldShowCaptcha() && <Captcha onChange={setCaptcha} />}

@@ -34,10 +34,14 @@ export default function FleetsLayout({ children }) {
     withActions: true,
     useExpand: true,
     usePagination: true,
-    data: { label: null, title: 'Тanker List' },
+    data: { label: null, title: 'Fleet Management' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
   };
 
-  return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;
+  return (
+    <AccountNestedLayout config={layoutConfig} label="fleets">
+      {children}
+    </AccountNestedLayout>
+  );
 }

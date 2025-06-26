@@ -182,7 +182,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
       setValue('tankerType', convertDataToOptions({ data: [validTankerTypeOption] }, 'id', 'name')[0]);
       if (q88State.tankerCategoryOne) {
         const { data: categoryOne } = await getVesselCategoryOne(validPrefilledOptions.tankerType.value);
-        const validTankerCategoryOneOption = categoryOne.find(({ name }) => name === q88State.tankerCategoryOne.label);
+        const validTankerCategoryOneOption = categoryOne?.find(({ name }) => name === q88State.tankerCategoryOne.label);
         validPrefilledOptions.tankerCategoryOne = convertDataToOptions(
           { data: [validTankerCategoryOneOption] },
           'id',
@@ -278,7 +278,7 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 asyncCall
                 options={ports}
                 name="portOfRegistry"
-                label="Port of registry"
+                label="Flag/Port of registry"
                 labelBadge="*"
                 loadOptions={loadOptions}
                 onMenuScrollToBottom={handleMore}
@@ -409,7 +409,6 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
                 labelBadge="*"
                 options={imoClassOptions}
                 name="imoClass"
-                disabled={q88State.imoClass}
                 onChange={(option) => handleChange('imoClass', option)}
               />
               <Input

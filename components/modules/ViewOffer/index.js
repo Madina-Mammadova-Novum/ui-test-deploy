@@ -107,7 +107,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
         />
         <Button
           onClick={() => setStep('offer_accept')}
-          buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large' }}
+          buttonProps={{ text: 'Accept Offer', variant: 'primary', size: 'large' }}
           disabled={!isCountdownActive}
         />
       </div>

@@ -91,13 +91,7 @@ const Stepper = ({
           <Button
             buttonProps={{
               text:
-                currentStep === 3
-                  ? isSubmitting
-                    ? 'Creating Account...'
-                    : 'Create Account'
-                  : isLastStep
-                    ? 'Complete'
-                    : 'Next Step',
+                currentStep === 3 ? (isSubmitting ? 'Loading...' : 'Next Step') : isLastStep ? 'Complete' : 'Next Step',
               variant: 'primary',
               size: 'large',
             }}
