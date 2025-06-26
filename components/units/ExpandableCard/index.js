@@ -4,7 +4,7 @@ import { fleetsHeaderDataAdapter, fleetsRowsDataAdapter } from '@/adapters';
 import { ExpandableCardHeader, ExpandableCardWrapper, Table } from '@/elements';
 import { fleetsHeader } from '@/utils/mock';
 
-const ExpandableCard = ({ data, expandAll, className }) => {
+const ExpandableCard = ({ data, expandAll, className, index }) => {
   const headerData = fleetsHeaderDataAdapter({ data });
   const rowsData = fleetsRowsDataAdapter({ data: data?.tankers });
 
@@ -12,6 +12,7 @@ const ExpandableCard = ({ data, expandAll, className }) => {
     <ExpandableCardWrapper
       expandAll={expandAll}
       className={className}
+      index={index}
       headerComponent={<ExpandableCardHeader headerData={headerData} gridLayout={false} />}
     >
       <Table

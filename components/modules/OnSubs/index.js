@@ -21,7 +21,7 @@ const OnSubs = () => {
   const { offers, toggle, loading, role } = useSelector(getOnSubsDataSelector);
   const { isOwner, isCharterer } = getRoleIdentity({ role });
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
       ? ownerOnSubsHeaderDataAdapter({ data: rowData })
       : chartererOnSubsHeaderDataAdapter({ data: rowData });
@@ -42,7 +42,7 @@ const OnSubs = () => {
             }
           />
         }
-        expand={toggle}
+        expand={index === 0 || toggle}
         footer={
           <OnSubsExpandedFooter
             underRecap={!rowData?.isCountdownActive}

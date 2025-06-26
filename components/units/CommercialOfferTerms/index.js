@@ -54,20 +54,19 @@ const CommercialOfferTerms = ({ products, scrollToBottom }) => {
   const selectedFreight = getFreightValue();
 
   const minValue = freightEstimation?.min;
-  const maxValue = freightEstimation?.max;
 
   const getHelperFreightFormat = () => {
-    if (!minValue || !maxValue) return '';
+    if (!minValue) return '';
 
     if (selectedFreight?.label === 'WS') {
-      return `WS ${minValue} - WS ${maxValue}`;
+      return `Min WS ${minValue}`;
     }
 
     if (selectedFreight?.label === '$/mt') {
-      return `$${formatCurrency(minValue, true)} - $${formatCurrency(maxValue, true)}`;
+      return `Min $${formatCurrency(minValue, true)}`;
     }
 
-    return `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+    return `Min $${formatCurrency(minValue)}`;
   };
 
   const helperFreightFormat = getHelperFreightFormat();
@@ -197,7 +196,7 @@ const CommercialOfferTerms = ({ products, scrollToBottom }) => {
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
-          step="any"
+          step="0.001"
         />
       </div>
 

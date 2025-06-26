@@ -10,8 +10,8 @@ import { ExpandableCard } from '@/units';
 const AccountPositions = () => {
   const { vessels = [], unassignedVessel, toggle, loading } = useSelector(getUserVesselsSelector);
 
-  const printExpandableCard = (fleet) => {
-    return <ExpandableCard className="bg-white" key={fleet.fleetId} data={fleet} expandAll={toggle} />;
+  const printExpandableCard = (fleet, index) => {
+    return <ExpandableCard className="bg-white" key={fleet.fleetId} data={fleet} expandAll={toggle} index={index} />;
   };
 
   const printContent = useMemo(() => {
@@ -21,12 +21,12 @@ const AccountPositions = () => {
     if (unassignedVessel?.tankers?.length === 0) return <Title level="3">No opened positions</Title>;
 
     return null;
-  }, [loading, vessels, toggle]);
+  }, [loading, vessels, toggle, unassignedVessel?.tankers?.length]);
 
   return (
     <div className="grow">
       {unassignedVessel?.tankers?.length > 0 && !loading && (
-        <ExpandableCard data={unassignedVessel} className="bg-white" expandAll={toggle} />
+        <ExpandableCard data={unassignedVessel} className="bg-white" expandAll={toggle} index={0} />
       )}
       {printContent}
     </div>
