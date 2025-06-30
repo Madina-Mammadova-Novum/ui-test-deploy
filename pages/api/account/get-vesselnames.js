@@ -1,4 +1,4 @@
-import { responseOwnerPrefixtureAdapter } from '@/adapters';
+import { responseVesselNamesAdapter } from '@/adapters/vessel';
 import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     req,
     res,
     path: getApiURL(`v1/${role}/deals/vesselnames${stagesQuery}`),
-    dataAdapter: responseOwnerPrefixtureAdapter,
+    dataAdapter: responseVesselNamesAdapter,
     requestMethod: 'GET',
     options: { headers: Authorization(token) },
   });

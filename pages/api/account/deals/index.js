@@ -1,4 +1,7 @@
 import { nullAdapter } from '@/adapters/common';
+import { responseFailedOffersAdapter } from '@/adapters/failed-offers';
+import { responsePostFixtureAdapter } from '@/adapters/post-fixture';
+import { responseOwnerPrefixtureAdapter } from '@/adapters/pre-fixture';
 import { Authorization } from '@/lib/constants';
 import { getApiURL } from '@/utils';
 import { responseHandler } from '@/utils/api';
@@ -8,8 +11,24 @@ export default async function handler(req, res) {
   const role = getCookieFromServer('session-user-role', req);
   const token = getCookieFromServer('session-access-token', req);
 
-  const { filters = {}, sorting = {}, skip = 0, pageSize = 10, dataAdapter = nullAdapter } = req.body;
+  const { filters = {}, sorting = {}, skip = 0, pageSize = 10, dataAdapterType } = req.body;
   const queryData = { ...filters, ...sorting };
+
+  // Determine which data adapter to use based on the request
+  let dataAdapter = nullAdapter;
+  switch (dataAdapterType) {
+    case 'responseOwnerPrefixtureAdapter':
+      dataAdapter = responseOwnerPrefixtureAdapter;
+      break;
+    case 'responsePostFixtureAdapter':
+      dataAdapter = responsePostFixtureAdapter;
+      break;
+    case 'responseFailedOffersAdapter':
+      dataAdapter = responseFailedOffersAdapter;
+      break;
+    default:
+      dataAdapter = nullAdapter;
+  }
 
   // Handle specific query parameters like IsFailed
   const specificQueries = [];

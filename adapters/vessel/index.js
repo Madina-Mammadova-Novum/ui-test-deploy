@@ -766,3 +766,7 @@ export function responseAddSavedSearchAdapter({ data }) {
 export function responseGetSavedSearchAdapter({ data }) {
   return nullAdapter(data);
 }
+
+export function responseVesselNamesAdapter({ data }) {
+  return nullAdapter(data);
+}
