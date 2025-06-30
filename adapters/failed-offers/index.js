@@ -63,11 +63,20 @@ export const failedOffersHeaderDataAdapter = ({ data }) => {
 };
 
 export const responseFailedOffersAdapter = ({ data }) => {
-  if (!data) return { data: [] };
+  if (!data) return [];
 
-  return {
-    data,
-  };
+  return data.map((rowData) => ({
+    ...rowData,
+    charterer: {
+      ...rowData?.charterer,
+      registrationCity: {
+        ...rowData?.charterer?.registrationCity?.state,
+      },
+      correspondenceCity: {
+        ...rowData?.charterer?.correspondenceCity?.state,
+      },
+    },
+  }));
 };
 
 export const failedOffersDetailsAdapter = ({ data }) => {
