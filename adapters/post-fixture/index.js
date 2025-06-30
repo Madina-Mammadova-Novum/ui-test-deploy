@@ -1,4 +1,3 @@
-import { arrayAdapter } from '@/adapters';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
@@ -391,5 +390,18 @@ export const filtersAdapter = (formData = {}) => {
 };
 
 export const responsePostFixtureAdapter = ({ data }) => {
-  return arrayAdapter(data);
+  if (!data) return [];
+
+  return data.map((rowData) => ({
+    ...rowData,
+    charterer: {
+      ...rowData?.charterer,
+      registrationCity: {
+        ...rowData?.charterer?.registrationCity?.state,
+      },
+      correspondenceCity: {
+        ...rowData?.charterer?.correspondenceCity?.state,
+      },
+    },
+  }));
 };

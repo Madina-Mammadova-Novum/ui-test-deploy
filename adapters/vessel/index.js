@@ -1,5 +1,5 @@
 import { postProductsAdapter } from '@/adapters';
-import { nullAdapter } from '@/adapters/common';
+import { nullAdapter, objectAdapter } from '@/adapters/common';
 import { countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
 import { getLocode, trimTonValue } from '@/utils/helpers';
@@ -348,14 +348,7 @@ export function requestUpdateVesselAdapter({ data }) {
 }
 
 export function unassignedVesselsAdapter({ data }) {
-  if (!data) return {};
-
-  const { apearsInSearch, ...rest } = data;
-
-  return {
-    ...rest,
-    appearsInSearch: apearsInSearch,
-  };
+  return objectAdapter(data);
 }
 
 export function responseAddVesselManuallyAdapter({ data }) {
@@ -771,5 +764,9 @@ export function responseAddSavedSearchAdapter({ data }) {
 }
 
 export function responseGetSavedSearchAdapter({ data }) {
+  return nullAdapter(data);
+}
+
+export function responseVesselNamesAdapter({ data }) {
   return nullAdapter(data);
 }
