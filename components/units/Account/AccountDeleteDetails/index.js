@@ -8,8 +8,8 @@ const AccountDeleteDetails = () => {
       buttonProps={{
         text: 'Do you want to delete your account?',
         variant: 'delete',
-        size: 'small',
-        className: '!py-0 !mr-7',
+        size: 'medium',
+        className: '!py-0',
       }}
     >
       <DeleteAccountForm title="Delete your account" />

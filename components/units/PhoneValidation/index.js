@@ -81,7 +81,7 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
   if (isVerified) {
     return (
       <div className="rounded-md border border-green-200 bg-green-50 p-3">
-        <p className="flex items-center text-green-700">
+        <p className="flex items-center text-xsm text-green-700">
           <CheckCircleSVG className="mr-2 fill-green-700" />
           Phone number verified successfully
         </p>
@@ -91,10 +91,10 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
 
   if (!codeSent) {
     return (
-      <div className="flex flex-col gap-4 rounded-md border border-gray-200 p-4">
-        <div>
-          <h4 className="mb-1 text-sm font-semibold">Phone Verification</h4>
-          <p className="text-xsm text-gray-600">To verify your phone number, we&apos;ll send you a 6-digit code.</p>
+      <div className="flex flex-col gap-4 rounded-md border border-gray-200 px-[14px] py-8 md:px-8">
+        <div className="text-center text-black">
+          <h4 className="mb-1 text-xsm font-semibold">Phone Verification</h4>
+          <p className="text-xs">To verify your phone number, we&apos;ll send you a 6-digit code.</p>
         </div>
         <Button
           buttonProps={{
@@ -111,10 +111,10 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 rounded-md border border-gray-200 p-4">
-      <div>
-        <h4 className="mb-1 text-sm font-semibold">Phone Verification</h4>
-        <p className="text-xsm text-gray-600">
+    <div className="flex flex-col gap-4 rounded-md border border-gray-200 px-[14px] py-8 md:px-8">
+      <div className="text-center text-black">
+        <h4 className="mb-1 text-xsm font-semibold">Phone Verification</h4>
+        <p className="text-xs">
           {otpId ? 'Enter the verification code sent to your phone' : 'Sending verification code to your phone...'}
         </p>
       </div>
@@ -122,15 +122,7 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
       {otpId && expirationDate && (
         <>
           <div>
-            <OTPInput
-              label="Verification Code"
-              labelBadge="*"
-              length={6}
-              value={otpCode}
-              onChange={setOtpCode}
-              separator
-              shouldFocus
-            />
+            <OTPInput length={6} value={otpCode} onChange={setOtpCode} separator shouldFocus />
           </div>
 
           <div className="flex flex-col gap-2">

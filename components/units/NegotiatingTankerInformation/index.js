@@ -64,7 +64,7 @@ const NegotiatingTankerInformation = ({ offerId }) => {
 
       {!!tankerInfo.length && (
         <FieldsetContent label="About the Tanker">
-          <div className="text-xs flex gap-x-5">
+          <div className="flex gap-x-5 text-xs">
             <div className="w-full">
               {tankerInfo.slice(0, 9).map(({ title, description, countryCode }) => (
                 <TextRow key={title} title={title}>

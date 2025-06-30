@@ -66,7 +66,7 @@
     "react/jsx-props-no-spreading": 0,
     "prefer-promise-reject-errors": 0,
     "no-lonely-if": "error",
-    "no-nested-ternary": "warn",
+    "no-nested-ternary": "off",
     "jest/consistent-test-it": [
       "error",
       {

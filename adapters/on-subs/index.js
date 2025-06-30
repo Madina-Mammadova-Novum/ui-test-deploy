@@ -16,7 +16,7 @@ import {
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed, laycanEnd, laycanStart } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed, laycanEnd, laycanStart, totalQuantity } = data;
 
   return [
     {
@@ -38,7 +38,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: `${searchedCargo?.totalQuantity || 0} tons`,
+      text: `${totalQuantity || 0} tons`,
       freezed: frozenAt,
     },
     {
@@ -81,7 +81,8 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed, laycanEnd, laycanStart } = data;
+  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed, laycanEnd, laycanStart, totalQuantity } =
+    data;
 
   return [
     {
@@ -103,7 +104,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: `${searchedCargo?.totalQuantity || 0} tons`,
+      text: `${totalQuantity || 0} tons`,
       freezed: frozenAt,
     },
     {

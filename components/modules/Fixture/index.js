@@ -17,12 +17,12 @@ import { getFixtureSelector } from '@/store/selectors';
 const Fixture = () => {
   const { offers, toggle, loading } = useSelector(getFixtureSelector);
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
 
     return (
       <ExpandableRow
-        expand={toggle}
+        expand={index === 0 || toggle}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
       >

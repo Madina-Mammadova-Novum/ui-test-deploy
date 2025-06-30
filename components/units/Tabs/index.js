@@ -4,11 +4,21 @@ import { TabsPropTypes } from '@/lib/types';
 
 import { Badge } from '@/elements';
 
-const Tabs = ({ tabs, customStyles = '', hasUnreadComment = false, activeTab, onClick, disabled = false, ...rest }) => {
+const Tabs = ({
+  tabs,
+  customStyles = '',
+  hasUnreadComment = false,
+  activeTab,
+  onClick,
+  disabled = false,
+  buttonClassName = '',
+  groupClassName = '',
+  ...rest
+}) => {
   return (
     <div className={classNames('flex w-min rounded-md bg-purple-light p-1 text-xsm font-medium', customStyles)}>
       {tabs?.map(({ value, label }) => (
-        <div key={value} className="relative flex items-center">
+        <div key={value} className={classNames('relative flex items-center', groupClassName)}>
           {hasUnreadComment && value === 'comments' && <Badge counter="1" className="left-1" />}
 
           <button
@@ -21,7 +31,8 @@ const Tabs = ({ tabs, customStyles = '', hasUnreadComment = false, activeTab, on
               'h-7 min-w-16 whitespace-nowrap rounded-md px-5',
               value === activeTab && 'bg-white text-blue shadow-2xmd',
               hasUnreadComment && 'px-7',
-              disabled && 'cursor-not-allowed opacity-50'
+              disabled && 'cursor-not-allowed opacity-50',
+              buttonClassName
             )}
           >
             {label}

@@ -79,10 +79,7 @@ const TableCell = ({ cellProps }) => {
         );
       case ACTIONS.TANKER_REACTIVATE:
         return (
-          <ReactivateTankerForm
-            title="Reactivate your Tanker"
-            state={{ ...state, action: ACTIONS.TANKER_REACTIVATE }}
-          />
+          <ReactivateTankerForm title="Activate your Tanker" state={{ ...state, action: ACTIONS.TANKER_REACTIVATE }} />
         );
       case ACTIONS.PORT:
         return <EditPortForm title="edit open port" state={{ ...state, action: ACTIONS.PORT }} />;

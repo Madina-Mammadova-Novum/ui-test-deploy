@@ -1,0 +1,161 @@
+'use client';
+
+import React, { useMemo } from 'react';
+import { FormProvider } from 'react-hook-form';
+
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
+import { FormManager } from '@/common';
+import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
+import { CompanyAddresses, CompanyDetails } from '@/units';
+import { scrollToFirstError } from '@/utils/helpers';
+import { useHookFormParams } from '@/utils/hooks';
+
+const CompanyDetailsStepForm = ({
+  onFormValid,
+  onMethodsReady,
+  initialData = {},
+  countries = [],
+  serverErrors = {},
+}) => {
+  const [sameAddress, setSameAddress] = React.useState(initialData.sameAddresses || false);
+  const [samePhone, setSamePhone] = React.useState(initialData.samePhone || false);
+
+  // Create dynamic schema based on samePhone state
+  const schema = React.useMemo(() => {
+    return yup.object().shape({
+      ...companyDetailsSchema(samePhone),
+      ...companyAddressesSchema(sameAddress),
+      samePhone: yup.boolean().nullable(),
+      sameAddresses: yup.boolean().nullable(),
+    });
+  }, [samePhone, sameAddress]);
+
+  const methods = useHookFormParams({
+    schema,
+    state: initialData,
+    mode: 'onChange', // Back to onChange for immediate error clearing
+  });
+
+  const {
+    formState: { isValid, errors },
+    watch,
+    setValue,
+    trigger,
+    clearErrors,
+  } = methods;
+
+  // Watch all form values to detect changes
+  const formValues = watch();
+  const addressValue = watch('sameAddresses', sameAddress);
+  const phoneValue = watch('samePhone', samePhone);
+
+  // Stabilize formValues for comparison using JSON string
+  const stableFormValues = useMemo(() => JSON.stringify(formValues), [formValues]);
+
+  // Handle address checkbox changes
+  React.useEffect(() => {
+    if (addressValue !== sameAddress) {
+      setValue('sameAddresses', addressValue);
+      setSameAddress(addressValue);
+
+      // If switching to "same addresses", clear correspondence address errors
+      // since those fields are no longer required
+      if (addressValue) {
+        clearErrors(['correspondenceAddress', 'correspondenceCity', 'correspondenceCountry']);
+      } else {
+        // If unchecking "same addresses", only trigger validation for correspondence fields
+        // that are now required, but do it with a slight delay to avoid immediate errors
+        setTimeout(() => {
+          const correspondenceFields = ['correspondenceAddress', 'correspondenceCity', 'correspondenceCountry'];
+          // Only trigger validation if the fields have values to avoid showing errors on empty required fields
+          correspondenceFields.forEach((field) => {
+            const fieldValue = methods.getValues(field);
+            if (fieldValue) {
+              trigger(field);
+            }
+          });
+        }, 100);
+      }
+    }
+  }, [addressValue, setValue, sameAddress, clearErrors, trigger, methods]);
+
+  // Handle phone checkbox changes
+  React.useEffect(() => {
+    if (phoneValue !== samePhone) {
+      setValue('samePhone', phoneValue);
+      setSamePhone(phoneValue);
+
+      // If switching to "same phone", clear company phone errors
+      // since that field is no longer required
+      if (phoneValue) {
+        clearErrors(['phone']);
+      } else {
+        // If unchecking "same phone", only trigger validation for phone field
+        // if it has a value to avoid showing errors on empty required field
+        setTimeout(() => {
+          const phoneFieldValue = methods.getValues('phone');
+          if (phoneFieldValue) {
+            trigger('phone');
+          }
+        }, 100);
+      }
+    }
+  }, [phoneValue, setValue, samePhone, clearErrors, trigger, methods]);
+
+  // Notify parent component about form validity
+  React.useEffect(() => {
+    onFormValid(isValid, formValues);
+  }, [isValid, stableFormValues, onFormValid]); // Use stable reference
+
+  // Expose form methods to parent component
+  React.useEffect(() => {
+    if (onMethodsReady) {
+      onMethodsReady(methods);
+    }
+  }, [methods, onMethodsReady]);
+
+  // Handle server errors from parent component
+  React.useEffect(() => {
+    if (serverErrors && Object.keys(serverErrors).length > 0) {
+      // Set server errors on the form
+      Object.entries(serverErrors).forEach(([fieldName, errorMessage]) => {
+        methods.setError(fieldName, {
+          type: 'server',
+          message: errorMessage,
+        });
+      });
+    }
+  }, [serverErrors, methods]);
+
+  // Scroll to first error when validation fails
+  React.useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      scrollToFirstError(errors);
+    }
+  }, [errors]);
+
+  return (
+    <FormProvider {...methods}>
+      <FormManager
+        className="flex flex-col gap-6"
+        submitAction={() => {}} // No submit action as it's handled by parent
+        hideSubmitButton
+      >
+        <CompanyDetails />
+        <CompanyAddresses countries={countries} />
+      </FormManager>
+    </FormProvider>
+  );
+};
+
+CompanyDetailsStepForm.propTypes = {
+  onFormValid: PropTypes.func.isRequired,
+  onMethodsReady: PropTypes.func,
+  initialData: PropTypes.shape(),
+  countries: PropTypes.arrayOf(PropTypes.shape()),
+  serverErrors: PropTypes.shape(),
+};
+
+export default CompanyDetailsStepForm;

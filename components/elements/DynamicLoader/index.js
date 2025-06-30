@@ -14,7 +14,7 @@ const DynamicLoader = ({ className = 'w-48 h-48', animationDataType = 'tanker' }
   const animationData = animationDataMap[animationDataType] || TankerLoaderData;
 
   return (
-    <div className="mt-4 flex h-32 w-full items-center justify-center">
+    <div className="mt-4 flex h-48 w-full items-center justify-center">
       <Lottie className={className} animationData={animationData} speed="3" />
     </div>
   );

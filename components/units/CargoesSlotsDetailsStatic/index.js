@@ -13,7 +13,7 @@ const CargoesSlotsDetailsStatic = ({ data = {} }) => {
         label="How many cargoes have you chartered during the last 6 months?"
         value={countOfCargoes}
         type="number"
-        customStyles="z-10 w-full"
+        customStyles="z-10 w-1/2"
         disabled
       />
     </div>

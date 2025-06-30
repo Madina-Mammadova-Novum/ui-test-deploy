@@ -35,7 +35,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
     };
   }, []);
 
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
@@ -45,7 +45,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
     return (
       <ExpandableRow
         key={rowData.id}
-        expand={toggle}
+        expand={index === 0 || toggle}
         header={
           <ExpandableCardHeader
             headerData={rowHeader}

@@ -168,6 +168,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
 
   const {
     id,
+    appearsInSearch,
     details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
@@ -176,6 +177,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const additionRequested = requestStatus === 'Addition requested';
 
   const status = additionRequested ? 'Inactive' : 'Active';
+  const tankersStatus = appearsInSearch ? 'Active' : 'Inactive';
   const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
 
   return [
@@ -227,8 +229,8 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: status,
-      icon: <StatusIndicator status={status} />,
+      value: tankersStatus,
+      icon: <StatusIndicator status={tankersStatus} />,
       disabled: additionRequested,
     },
     {
@@ -278,12 +280,14 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     id,
     imo,
     status: requestStatus,
+    appearsInSearch,
     details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested';
 
   const status = additionRequested ? 'Inactive' : 'Active';
+  const tankersStatus = appearsInSearch ? 'Active' : 'Inactive';
   const tankerName = portOfRegistry?.locode ? `${name}, ${portOfRegistry?.locode}` : name;
 
   return [
@@ -336,8 +340,8 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: status,
-      icon: <StatusIndicator status={status} />,
+      value: tankersStatus,
+      icon: <StatusIndicator status={tankersStatus} />,
       disabled: additionRequested,
     },
     {

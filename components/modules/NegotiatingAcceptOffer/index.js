@@ -79,7 +79,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
   return (
     <div className="flex h-full w-[610px] flex-col">
       <ModalHeader goBack={handleBack} disabled={disabled}>
-        Accept the offer
+        Accept Offer
       </ModalHeader>
       <Countdown time={countdownData} customStyles="mt-5" />
       <Tabs
@@ -98,7 +98,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
             submitAction={handleSubmit}
             className="!gap-0"
             submitButton={{
-              text: 'Accept the offer',
+              text: 'Confirm Offer',
               variant: 'primary',
               size: 'large',
               className: 'absolute bottom-8 right-8 text-xsm !w-max z-[1] !w-40',
@@ -112,7 +112,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
       <div className="mt-4 flex h-10 justify-end gap-x-2.5 text-xsm">
         <Button
-          buttonProps={{ text: 'Accept the offer', variant: 'primary', size: 'large', disabled }}
+          buttonProps={{ text: 'Accept Offer', variant: 'primary', size: 'large', disabled }}
           customStyles="opacity-0"
         />
       </div>

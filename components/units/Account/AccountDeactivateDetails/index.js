@@ -8,8 +8,8 @@ const AccountDeactivateDetails = () => {
     <ModalWindow
       buttonProps={{
         text: 'Do you want to deactivate your account?',
-        variant: 'delete',
-        size: 'small',
+        variant: 'primary',
+        size: 'medium',
         className: '!py-0',
         'data-deactivate-account-action': 'deactivate-account-button',
       }}

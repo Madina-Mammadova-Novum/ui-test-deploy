@@ -272,6 +272,22 @@ export const convertDataToOptions = ({ data }, keyValue, keyLabel) => {
     });
 };
 
+export const convertTerminalDataToOptions = ({ data }) => {
+  if (!data?.length) return [];
+
+  return data
+    .filter(({ id, name }) => id && name)
+    .map(({ id, name, max }) => {
+      const maxDraft = max?.draft;
+      const formattedLabel = maxDraft ? `${name} (${maxDraft} m)` : name;
+
+      return {
+        value: id,
+        label: formattedLabel,
+      };
+    });
+};
+
 export const convertPayloadToOptions = (data, keyValue, keyLabel) => {
   if (!data?.length) return [];
 
@@ -1012,12 +1028,6 @@ export const notificationPathGenerator = ({ data, role }) => {
   return routeByStage[data.stage];
 };
 
-export const getOfferTotalMinQuantity = ({ data }) => {
-  if (!data) return null;
-
-  return data.map(({ quantity }) => +quantity).reduce((a, b) => a + b);
-};
-
 export const getFieldFromKey = (key) => {
   const errorByKey = {
     Email: 'email',
@@ -1125,4 +1135,183 @@ export const convertToKilotons = (tons) => {
  */
 export const shouldShowCaptcha = () => {
   return process.env.NEXT_PUBLIC_APP_ENV !== 'dev';
+};
+
+/**
+ * Scrolls to the first form error element and focuses on it
+ * @param {Object} errors - React Hook Form errors object
+ * @param {number} delay - Delay in milliseconds before scrolling (default: 100)
+ */
+export const scrollToFirstError = (errors, delay = 100) => {
+  if (!errors || Object.keys(errors).length === 0) return;
+
+  const firstErrorField = Object.keys(errors)[0];
+
+  // Skip phoneVerified as it's handled directly in the component
+  if (firstErrorField === 'phoneVerified') return;
+
+  setTimeout(() => {
+    // Try to find the error element by various selectors
+    const errorElement =
+      document.querySelector(`[name="${firstErrorField}"]`) ||
+      document.querySelector(`#${firstErrorField}`) ||
+      document.querySelector(`[data-testid="${firstErrorField}"]`) ||
+      document.querySelector(`[data-field="${firstErrorField}"]`) ||
+      document.querySelector(`input[name="${firstErrorField}"]`);
+
+    if (errorElement) {
+      errorElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+
+      // Try to focus the element if it's focusable
+      if (errorElement.focus && typeof errorElement.focus === 'function') {
+        errorElement.focus();
+      }
+    } else {
+      // If we can't find the specific input, try to find the error message and scroll to it
+      const errorMessageElement =
+        document.querySelector(`[data-field-error="${firstErrorField}"]`) ||
+        document.querySelector('.text-red') ||
+        document.querySelector('[class*="error"]');
+
+      if (errorMessageElement) {
+        errorMessageElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }
+  }, delay);
+};
+
+/**
+ * Focuses on the first form element in the current form/step
+ * @param {number} delay - Delay in milliseconds before focusing (default: 150)
+ */
+export const focusFirstFormElement = (delay = 150) => {
+  setTimeout(() => {
+    // Common selectors for focusable form elements, ordered by priority
+    const selectors = [
+      'input[type="text"]:not([disabled]):not([readonly])',
+      'input[type="email"]:not([disabled]):not([readonly])',
+      'input[type="number"]:not([disabled]):not([readonly])',
+      'input[type="tel"]:not([disabled]):not([readonly])',
+      'input[type="password"]:not([disabled]):not([readonly])',
+      'select:not([disabled])',
+      'textarea:not([disabled]):not([readonly])',
+      'input:not([type="hidden"]):not([disabled]):not([readonly])',
+      'button:not([disabled])',
+    ];
+
+    // Try each selector until we find a focusable element
+    for (const selector of selectors) {
+      const elements = document.querySelectorAll(selector);
+
+      if (elements.length > 0) {
+        const firstElement = elements[0];
+
+        // Ensure the element is visible and not hidden
+        if (firstElement.offsetParent !== null) {
+          firstElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+
+          // Focus the element
+          firstElement.focus();
+          return; // Exit after successful focus
+        }
+      }
+    }
+  }, delay);
+};
+
+export const getPhoneValidationStorageKey = (context = 'registration', userRole = null) => {
+  if (context === 'update') {
+    return 'phone_validation_update';
+  }
+
+  // For registration context
+  if (userRole) {
+    return `phone_validation_${userRole}_registration`;
+  }
+
+  // Auto-detect role based on existing registration data
+  try {
+    const ownerData = localStorage.getItem('owner_registration_data');
+    const chartererData = localStorage.getItem('charterer_registration_data');
+    if (ownerData) {
+      return 'phone_validation_owner_registration';
+    }
+    if (chartererData) {
+      return 'phone_validation_charterer_registration';
+    }
+  } catch (error) {
+    // Handle localStorage errors silently
+  }
+
+  return 'phone_validation_registration'; // fallback
+};
+
+export const savePhoneValidationState = (
+  phoneValue,
+  isVerified,
+  otpId = null,
+  context = 'registration',
+  userRole = null
+) => {
+  try {
+    const storageKey = getPhoneValidationStorageKey(context, userRole);
+    const stateToSave = {
+      phoneValue,
+      isPhoneVerified: isVerified,
+      otpId,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(storageKey, JSON.stringify(stateToSave));
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const loadPhoneValidationState = (phoneValue, context = 'registration', userRole = null) => {
+  try {
+    const storageKey = getPhoneValidationStorageKey(context, userRole);
+    const savedState = localStorage.getItem(storageKey);
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      // Only return state if the phone number matches
+      if (parsedState.phoneValue === phoneValue && parsedState.isPhoneVerified) {
+        return parsedState;
+      }
+    }
+  } catch (error) {
+    // Handle localStorage errors silently
+  }
+  return null;
+};
+
+export const clearPhoneValidationState = (context = 'registration', userRole = null) => {
+  try {
+    const storageKey = getPhoneValidationStorageKey(context, userRole);
+    localStorage.removeItem(storageKey);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const clearAllPhoneValidationStates = () => {
+  try {
+    localStorage.removeItem('phone_validation_update');
+    localStorage.removeItem('phone_validation_owner_registration');
+    localStorage.removeItem('phone_validation_charterer_registration');
+    localStorage.removeItem('phone_validation_registration');
+    return true;
+  } catch (error) {
+    return false;
+  }
 };

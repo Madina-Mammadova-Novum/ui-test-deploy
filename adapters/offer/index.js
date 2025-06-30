@@ -260,7 +260,7 @@ export function offerDetailsAdapter({ data, role }) {
           label: cargoName,
         },
       ],
-      products: products?.map(({ productName, density, minQuantity }, index) => [
+      products: products?.map(({ productName, density, quantity }, index) => [
         {
           key: `Product #${index + 1}`,
           label: productName,
@@ -271,7 +271,7 @@ export function offerDetailsAdapter({ data, role }) {
         },
         {
           key: 'Min quantity',
-          label: `${minQuantity} tons`,
+          label: `${quantity} tons`,
         },
       ]),
       details: [
@@ -317,11 +317,11 @@ export function offerDetailsAdapter({ data, role }) {
         label: cargoName,
         value: cargoId,
       },
-      products: products?.map(({ productName, density, minQuantity, tolerance, id }) => ({
+      products: products?.map(({ productName, density, quantity, tolerance, id }) => ({
         product: { label: productName, value: id },
         density,
         tolerance,
-        quantity: minQuantity,
+        quantity,
       })),
       value: freight,
       demurrageRate,
@@ -487,7 +487,7 @@ export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {
   return objectAdapter(data);
 };
 
-export const getPrefilledFormDataAdapter = ({ data, isCounteroffer = false }) => {
+export const getPrefilledFormDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data
@@ -497,13 +497,7 @@ export const getPrefilledFormDataAdapter = ({ data, isCounteroffer = false }) =>
       res[`products[${index}].density`] = curr.density;
       res[`products[${index}].tolerance`] = curr.tolerance;
       res[`products[${index}].quantity`] = curr.quantity;
-
-      // For counteroffers, just round the quantity; for regular offers calculate based on tolerance
-      if (isCounteroffer) {
-        res[`products[${index}].minQuantity`] = Math.round(curr.quantity);
-      } else {
-        res[`products[${index}].minQuantity`] = Math.round(curr.quantity * (1 - curr.tolerance / 100));
-      }
+      res[`products[${index}].minQuantity`] = curr.quantity;
 
       return res;
     }, {});

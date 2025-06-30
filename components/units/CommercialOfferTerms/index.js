@@ -14,7 +14,7 @@ import { transformDate } from '@/utils/date';
 import { convertDataToOptions, formatCurrency, getValueWithPath } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
+const CommercialOfferTerms = ({ products, scrollToBottom }) => {
   const dispatch = useDispatch();
 
   const [freightEstimation, setFreightEstimation] = useState({});
@@ -54,20 +54,19 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   const selectedFreight = getFreightValue();
 
   const minValue = freightEstimation?.min;
-  const maxValue = freightEstimation?.max;
 
   const getHelperFreightFormat = () => {
-    if (!minValue || !maxValue) return '';
+    if (!minValue) return '';
 
     if (selectedFreight?.label === 'WS') {
-      return `WS ${minValue} - WS ${maxValue}`;
+      return `Min WS ${minValue}`;
     }
 
     if (selectedFreight?.label === '$/mt') {
-      return `$${formatCurrency(minValue, true)} - $${formatCurrency(maxValue, true)}`;
+      return `Min $${formatCurrency(minValue, true)}`;
     }
 
-    return `$${formatCurrency(minValue)} - $${formatCurrency(maxValue)}`;
+    return `Min $${formatCurrency(minValue)}`;
   };
 
   const helperFreightFormat = getHelperFreightFormat();
@@ -144,12 +143,16 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
   };
 
   useEffect(() => {
-    if (searchData?.products) {
-      searchData.products.forEach((product, index) => {
+    if (products) {
+      products.forEach((product, index) => {
+        setValue(`products[${index}].product`, product.product);
+        setValue(`products[${index}].density`, product.density);
+        setValue(`products[${index}].minQuantity`, product.quantity);
+        setValue(`products[${index}].quantity`, product.quantity);
         setValue(`products[${index}].tolerance`, product.tolerance);
       });
     }
-  }, [searchData]);
+  }, [products, setValue]);
 
   useEffect(() => {
     const selectedFormat = ranges?.freightFormats?.find((format) => format.id === selectedFreight?.value);
@@ -169,7 +172,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           <Input label="laycan period" customStyles="w-1/2" value={laycanPeriod} disabled />
         )}
       </div>
-      {searchData?.products?.length > 0 && searchData.products.map(printProduct)}
+      {products?.length > 0 && products.map(printProduct)}
       <div className="mt-3 flex items-baseline">
         <FormDropdown
           label="Freight"
@@ -193,7 +196,7 @@ const CommercialOfferTerms = ({ searchData, scrollToBottom }) => {
           helperText={helperFreightFormat}
           error={errors.value?.message}
           disabled={!valid || isSubmitting}
-          step="any"
+          step="0.001"
         />
       </div>
 

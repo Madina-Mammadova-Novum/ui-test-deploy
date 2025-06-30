@@ -8,7 +8,7 @@ export async function generateMetadata() {
   return metaData({
     data: {
       seo: {
-        metaTitle: 'Tanker list',
+        metaTitle: 'Fleet Management',
       },
     },
   });

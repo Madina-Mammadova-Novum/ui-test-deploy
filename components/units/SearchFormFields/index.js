@@ -20,7 +20,12 @@ import { getTerminals } from '@/services/terminal';
 import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
 import { AdditionalDischargeForm, Captcha } from '@/units';
-import { convertDataToOptions, getValueWithPath, shouldShowCaptcha } from '@/utils/helpers';
+import {
+  convertDataToOptions,
+  convertTerminalDataToOptions,
+  getValueWithPath,
+  shouldShowCaptcha,
+} from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const SearchFormFields = ({ productState, setProductState, captchaRef, isAccountSearch = false }) => {
@@ -152,7 +157,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
         ...prevState,
         [`${key}Terminals`]: {
           loading: false,
-          data: convertDataToOptions(relatedTerminals, 'id', 'name'),
+          data: convertTerminalDataToOptions(relatedTerminals),
         },
       }));
     }
@@ -280,11 +285,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
         }, {});
 
         currentProducts.forEach((currentProduct) => {
-          const productId = currentProduct.product.value;
+          const productId = currentProduct?.product?.value;
           const relatedProduct = relatedProductsMap[productId];
 
           if (relatedProduct) {
-            currentProduct.product.density = relatedProduct.density;
+            currentProduct.product.density = relatedProduct?.density;
           }
         });
 
@@ -315,7 +320,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                 ...prev,
                 loadPortTerminals: {
                   loading: false,
-                  data: convertDataToOptions(loadPortTerminals, 'id', 'name'),
+                  data: convertTerminalDataToOptions(loadPortTerminals),
                 },
               }));
             })(),
@@ -333,7 +338,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                 ...prev,
                 dischargePortTerminals: {
                   loading: false,
-                  data: convertDataToOptions(dischargePortTerminals, 'id', 'name'),
+                  data: convertTerminalDataToOptions(dischargePortTerminals),
                 },
               }));
             })(),

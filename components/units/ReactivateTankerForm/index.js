@@ -123,7 +123,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
         className="max-w-[356px]"
         submitAction={onSubmit}
         submitButton={{
-          text: 'Reactivate tanker',
+          text: 'Activate tanker',
           variant: 'primary',
           size: 'large',
           disabled: port === null,
@@ -139,7 +139,7 @@ const ReactivateTankerForm = ({ title, state, closeModal }) => {
         <div className="grid min-w-[296px] gap-5">
           <FormDropdown
             name="port"
-            label="Port search"
+            label="Open Port"
             labelBadge="*"
             errorMsg={errors?.port?.message}
             loading={loading}

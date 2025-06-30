@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import AuthLayout from '@/layouts/AuthLayout';
+import NewAuthLayout from '@/layouts/NewAuthLayout';
 import { ROUTES } from '@/lib';
 
 export function generateMetadata() {
@@ -22,11 +22,11 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <AuthLayout
+    <NewAuthLayout
       navigation={navigation}
-      containerClass="grid place-items-center 3md:place-items-start 3md:mr-20 xl:mr-40 grid-cols-1 3md:grid-cols-2"
+      containerClass="flex flex-col items-center w-full py-16 md:pb-20 md:pt-12 3md:pb-24 3md:pt-14"
     >
       {children}
-    </AuthLayout>
+    </NewAuthLayout>
   );
 }

@@ -15,7 +15,7 @@ import {
 export const failedOffersHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  const { searchedCargo, vessel, laycanStart, laycanEnd, stage, failedBy } = data;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, stage, failedBy, totalQuantity } = data;
 
   return [
     {
@@ -38,7 +38,7 @@ export const failedOffersHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: searchedCargo?.totalQuantity && `${searchedCargo.totalQuantity} tons`,
+      text: totalQuantity && `${totalQuantity} tons`,
     },
     {
       label: 'Load port',
@@ -63,11 +63,20 @@ export const failedOffersHeaderDataAdapter = ({ data }) => {
 };
 
 export const responseFailedOffersAdapter = ({ data }) => {
-  if (!data) return { data: [] };
+  if (!data) return [];
 
-  return {
-    data,
-  };
+  return data.map((rowData) => ({
+    ...rowData,
+    charterer: {
+      ...rowData?.charterer,
+      registrationCity: {
+        ...rowData?.charterer?.registrationCity?.state,
+      },
+      correspondenceCity: {
+        ...rowData?.charterer?.correspondenceCity?.state,
+      },
+    },
+  }));
 };
 
 export const failedOffersDetailsAdapter = ({ data }) => {

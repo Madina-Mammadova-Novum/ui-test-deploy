@@ -1,4 +1,3 @@
-import { arrayAdapter } from '@/adapters';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
@@ -9,7 +8,7 @@ import { ensureFileExtension, formatCurrency, freightFormatter, getLocode, trans
 export const postFixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return [];
 
-  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate } = data;
+  const { searchedCargo, vessel, laycanStart, laycanEnd, fixtureDate, totalQuantity } = data;
 
   return [
     {
@@ -28,7 +27,7 @@ export const postFixtureHeaderDataAdapter = ({ data }) => {
     },
     {
       label: 'Quantity',
-      text: searchedCargo?.totalQuantity && `${searchedCargo.totalQuantity} tons`,
+      text: totalQuantity && `${totalQuantity} tons`,
     },
     {
       label: 'Load port',
@@ -391,5 +390,18 @@ export const filtersAdapter = (formData = {}) => {
 };
 
 export const responsePostFixtureAdapter = ({ data }) => {
-  return arrayAdapter(data);
+  if (!data) return [];
+
+  return data.map((rowData) => ({
+    ...rowData,
+    charterer: {
+      ...rowData?.charterer,
+      registrationCity: {
+        ...rowData?.charterer?.registrationCity?.state,
+      },
+      correspondenceCity: {
+        ...rowData?.charterer?.correspondenceCity?.state,
+      },
+    },
+  }));
 };

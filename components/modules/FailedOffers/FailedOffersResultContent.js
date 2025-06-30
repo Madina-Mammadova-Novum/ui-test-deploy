@@ -11,7 +11,7 @@ import { ExpandableCardHeader } from '@/elements';
 import { ExpandableRow, FailedOffersExpandedContent } from '@/modules';
 
 const FailedOffersResultContent = ({ data, toggle, isOpened, tab }) => {
-  const printExpandableRow = (rowData) => {
+  const printExpandableRow = (rowData, index) => {
     const rowHeader = failedOffersHeaderDataAdapter({ data: rowData });
     const gridStyles = '1fr 1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr';
 
@@ -20,7 +20,7 @@ const FailedOffersResultContent = ({ data, toggle, isOpened, tab }) => {
         key={rowData?.id}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={gridStyles} />}
-        expand={toggle}
+        expand={index === 0 || toggle}
         isOpened={isOpened}
       >
         <FailedOffersExpandedContent
