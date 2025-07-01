@@ -6,9 +6,9 @@ import { useDispatch } from 'react-redux';
 import { DeleteTankerModalPropTypes } from '@/lib/types';
 
 import { Button, TextWithLabel, Title } from '@/elements';
-import { ConfirmModal } from '@/units';
 import { removeVessel } from '@/services/vessel';
 import { deleteVesselFromFleetsState, deleteVesselFromUnassignedFleetsState } from '@/store/entities/fleets/slice';
+import { ConfirmModal } from '@/units';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const DeleteTankerModal = ({ closeModal, state }) => {
