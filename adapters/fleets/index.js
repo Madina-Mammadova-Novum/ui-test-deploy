@@ -258,6 +258,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
         },
         {
           action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete tanker',
           editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,
           actionVariant: 'delete',
           actionSize: 'medium',
@@ -364,10 +365,11 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
           actionSize: 'medium',
           disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-blue" />,
-          actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
+          actionStyles: '!w-[190px]',
         },
         {
           action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete tanker',
           actionVariant: 'delete',
           actionSize: 'medium',
           editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,

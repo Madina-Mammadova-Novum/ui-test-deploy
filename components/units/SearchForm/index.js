@@ -100,7 +100,11 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
         <FavoriteSearchForm title="Add to Favorites" state={searchFormData} closeModal={handleCloseModal} />
       </Modal>
 
-      <Modal opened={isViewFavoriteSearchesOpened} onClose={handleCloseModal}>
+      <Modal
+        opened={isViewFavoriteSearchesOpened}
+        onClose={handleCloseModal}
+        containerClass="h-full 3md:h-auto 3md:overflow-y-auto"
+      >
         <FavoriteSearchList onClose={handleCloseModal} />
       </Modal>
 
