@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { UisAngleDoubleRight, UisFavorite, UisObjectGroup, UisSchedule } from '@iconscout/react-unicons-solid';
+import { UisFavorite, UisObjectGroup, UisSchedule } from '@iconscout/react-unicons-solid';
 import classNames from 'classnames';
 
 import PaginationComponent from '../PaginationComponent';
@@ -11,6 +11,7 @@ import PaginationComponent from '../PaginationComponent';
 import { FavoriteSearchListPropTypes } from '@/lib/types';
 
 import { prefilledSaveSearchDataAdapter } from '@/adapters/negotiating';
+import ArrowSVG from '@/assets/images/arrow.svg';
 import BellSVG from '@/assets/images/bell.svg';
 import { Button, Loader, TextWithLabel, Title } from '@/elements';
 import { deleteSavedSearch, getSavedSearchDetail, getSavedSearches, updateSavedSearch } from '@/services/savedSearch';
@@ -30,7 +31,7 @@ const FavoriteSearchList = ({ onClose }) => {
   const [modalConfig, setModalConfig] = useState({});
 
   const { currentPage, handlePageChange, handleSelectedPageChange, perPage } = useFilters({
-    itemsPerPage: 2,
+    itemsPerPage: 4, // Increased to show 4 items (2x2 grid on XL)
     initialPage: 1,
     data: savedSearches,
     sortValue: 'asc',
@@ -133,143 +134,268 @@ const FavoriteSearchList = ({ onClose }) => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchSearches(currentPage, perPage);
-  }, [currentPage, perPage]);
+  const renderSearchCard = (search, index) => {
+    const { name, id, laycanStart, laycanEnd, status, isNotification, loadTerminal, dischargeTerminal, cargoType } =
+      search;
+    const isDisabled = status !== 'Active';
 
-  return (
-    <div className="relative flex flex-col gap-2 pb-12 lg:gap-4 lg:pb-16">
-      <Title level="2" className="mb-2 flex items-center gap-2 text-sm font-bold capitalize text-black lg:text-lg">
-        <UisFavorite size="24" color="#072d46" />
-        Favorite Searches
-      </Title>
-
-      {isLoading && (
-        <div
-          className="spinner-border text-primary flex h-[33rem] w-[22.3rem] items-center justify-center"
-          role="status"
-        >
-          <Loader className="size-16" />
+    return (
+      <div
+        key={id}
+        className={classNames(
+          'rounded-md border bg-white p-3 shadow-sm transition-all duration-200',
+          isDisabled && 'bg-gray-50 opacity-75'
+        )}
+      >
+        {/* Header - more compact */}
+        <div className="mb-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {name && (
+              <Title level="4" className="truncate text-sm font-semibold text-black">
+                {name}
+              </Title>
+            )}
+            {isDisabled && (
+              <span className="whitespace-nowrap rounded-full bg-gray-200 px-1.5 py-0.5 text-xs text-gray-600">
+                Inactive
+              </span>
+            )}
+          </div>
+          <Button
+            customStyles="p-1 flex-shrink-0"
+            buttonProps={{
+              icon: {
+                before: <BellSVG size="16" className={isNotification ? 'fill-blue' : 'fill-gray'} />,
+              },
+              variant: 'tertiary',
+              size: 'small',
+            }}
+            onClick={() =>
+              openModal({
+                message: isNotification
+                  ? 'Are you sure you want to stop receiving notifications for this search?'
+                  : 'Are you sure you want to start receiving notifications for this search?',
+                onConfirm: () => updateSearchHandler(id, index),
+                variant: 'primary',
+                confirmText: isNotification ? 'Stop Notifications' : 'Start Notifications',
+              })
+            }
+            disabled={isLoading || isDisabled}
+          />
         </div>
-      )}
 
-      {!isLoading &&
-        (savedSearches.length > 0 ? (
-          savedSearches?.map(
-            (
-              { name, id, laycanStart, laycanEnd, status, isNotification, loadTerminal, dischargeTerminal, cargoType },
-              index
-            ) => (
-              <div
-                key={id}
-                className={classNames(
-                  'flex w-full flex-col items-center justify-center rounded-lg border p-4 shadow-xmd',
-                  status !== 'Active' && 'bg-gray-darker'
-                )}
-              >
-                {name && (
-                  <Title level="2" className="text-sm font-bold capitalize text-black">
-                    {name}
-                  </Title>
-                )}
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex items-center gap-2">
+        {/* Route Display - responsive design */}
+        <div className="mb-3">
+          {/* XL screens: Horizontal layout */}
+          <div className="hidden xl:block">
+            <div className="flex items-center">
+              {/* Load Port */}
+              <div className="flex-1 rounded-md border-l-4 border-blue-500 bg-blue-50 px-2 py-1.5">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs font-medium uppercase tracking-wide text-blue-700">LOAD</span>
+                  <div className="h-1 w-1 rounded-full bg-blue-400" />
+                </div>
+                <div className="mt-0.5">
+                  <div className="truncate text-xs font-semibold text-gray-900">{loadTerminal.port.name}</div>
+                  <div className="flex items-center gap-1 text-xs text-gray-600">
                     <TextWithLabel
-                      customStyles="!max-w-[6.625rem] !w-full"
-                      textGroupStyle="!text-base"
+                      customStyles=""
+                      textGroupStyle="text-xs font-medium"
                       text={loadTerminal.port.locode}
                       countryCode={loadTerminal.port.country?.codeISO2 || loadTerminal.port.locode.slice(0, 2)}
                     />
-                    <UisAngleDoubleRight size="60" color="#072d46" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Connection Arrow */}
+              <div className="flex items-center justify-center px-2">
+                <div className="flex items-center">
+                  <div className="h-0.5 w-4 bg-gradient-to-r from-blue-400 to-green-400" />
+                  <div className="mx-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-green-500">
+                    <ArrowSVG size="10" className="-rotate-90 fill-white" />
+                  </div>
+                  <div className="h-0.5 w-4 bg-gradient-to-r from-green-400 to-green-500" />
+                </div>
+              </div>
+
+              {/* Discharge Port */}
+              <div className="flex-1 rounded-md border-l-4 border-green-500 bg-green-50 px-2 py-1.5">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs font-medium uppercase tracking-wide text-green-700">DISCHARGE</span>
+                  <div className="h-1 w-1 rounded-full bg-green-400" />
+                </div>
+                <div className="mt-0.5">
+                  <div className="truncate text-xs font-semibold text-gray-900">{dischargeTerminal.port.name}</div>
+                  <div className="flex items-center gap-1 text-xs text-gray-600">
                     <TextWithLabel
-                      customStyles="!max-w-[6.625rem] !w-full"
-                      textGroupStyle="!text-base"
+                      customStyles=""
+                      textGroupStyle="text-xs font-medium"
                       text={dischargeTerminal.port.locode}
                       countryCode={
                         dischargeTerminal.port.country?.codeISO2 || dischargeTerminal.port.locode.slice(0, 2)
                       }
                     />
                   </div>
-
-                  <div className="flex items-center gap-4 text-xsm font-bold text-black lg:text-sm">
-                    <span>{transformDate(laycanStart, 'MMM dd, yyyy')}</span>
-                    <UisSchedule size="24" color="#072d46" />
-
-                    <span>{transformDate(laycanEnd, 'MMM dd, yyyy')}</span>
-                  </div>
-
-                  <div className="mt-2 flex gap-1">
-                    <span className="flex items-center justify-center gap-2 rounded-full border border-solid border-black p-3 text-xsm font-bold text-black">
-                      <UisObjectGroup size="24" color="#072d46" />
-                      {cargoType.name}
-                    </span>
-                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div className="mt-4 flex gap-2">
-                  <Button
-                    customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
-                    buttonProps={{ text: 'Use Search', size: 'medium', variant: 'primary' }}
-                    onClick={() => searchUseHandler(id)}
-                    disabled={isLoading || status === 'Disabled'}
-                  />
-                  <Button
-                    customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
-                    buttonProps={{ text: 'Delete Search', size: 'medium', variant: 'delete' }}
-                    onClick={() =>
-                      openModal({
-                        message: 'Are you sure you want to delete this search?',
-                        onConfirm: () => deleteSearchHandler(id),
-                      })
-                    }
-                    disabled={isLoading}
-                  />
-                  <Button
-                    customStyles="px-1 py-6 lg:px-3.5 lg:py-2.5"
-                    buttonProps={{
-                      icon: { before: <BellSVG size="30" className={isNotification ? 'fill-blue' : 'fill-black'} /> },
-                      size: 'medium',
-                      variant: isNotification ? 'primary' : 'tertiary',
-                    }}
-                    onClick={() =>
-                      openModal({
-                        message: isNotification
-                          ? 'Are you sure you want to stop receiving notifications for this search?'
-                          : 'Are you sure you want to start receiving notifications for this search?',
-                        onConfirm: () => updateSearchHandler(id, index),
-                      })
-                    }
-                    disabled={isLoading || status === 'Disabled'}
-                  />
-
-                  <ConfirmModal
-                    isOpen={isModalOpen}
-                    onConfirm={modalConfig.onConfirm}
-                    onClose={closeModal}
-                    message={modalConfig.message}
-                    okButtonProps={modalConfig.okButtonProps}
-                    cancelButtonProps={modalConfig.cancelButtonProps}
+          {/* Tablet/Mobile: Vertical layout */}
+          <div className="xl:hidden">
+            <div className="space-y-2">
+              {/* Load Port */}
+              <div className="rounded-md border-l-4 border-blue-500 bg-blue-50 px-3 py-2">
+                <div className="mb-1 flex items-center gap-1">
+                  <span className="text-xs font-medium uppercase tracking-wide text-blue-700">LOAD</span>
+                  <div className="h-1 w-1 rounded-full bg-blue-400" />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">{loadTerminal.port.name}</div>
+                <div className="mt-1 flex items-center gap-1 text-xs text-gray-600">
+                  <TextWithLabel
+                    customStyles=""
+                    textGroupStyle="text-xs font-medium"
+                    text={loadTerminal.port.locode}
+                    countryCode={loadTerminal.port.country?.codeISO2 || loadTerminal.port.locode.slice(0, 2)}
                   />
                 </div>
               </div>
-            )
-          )
-        ) : (
-          <div
-            className="spinner-border text-primary flex h-[33rem] w-[22.3rem] items-center justify-center"
-            role="status"
-          >
-            <Notes
-              title="No Favorite Searches Found"
-              subtitle="You currently have no favorite searches. Once you mark searches as favorites, they will appear here."
-            />
+
+              {/* Connection Indicator - pointing down */}
+              <div className="flex justify-center">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-b from-blue-500 to-green-500">
+                  <ArrowSVG size="10" className="fill-white" />
+                </div>
+              </div>
+
+              {/* Discharge Port */}
+              <div className="rounded-md border-l-4 border-green-500 bg-green-50 px-3 py-2">
+                <div className="mb-1 flex items-center gap-1">
+                  <span className="text-xs font-medium uppercase tracking-wide text-green-700">DISCHARGE</span>
+                  <div className="h-1 w-1 rounded-full bg-green-400" />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">{dischargeTerminal.port.name}</div>
+                <div className="mt-1 flex items-center gap-1 text-xs text-gray-600">
+                  <TextWithLabel
+                    customStyles=""
+                    textGroupStyle="text-xs font-medium"
+                    text={dischargeTerminal.port.locode}
+                    countryCode={dischargeTerminal.port.country?.codeISO2 || dischargeTerminal.port.locode.slice(0, 2)}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        ))}
-      {savedSearches.length > 0 && (
-        <div className="3sm:translate-x-[unset] 3sm:position-unset absolute bottom-0 left-[50%] flex translate-x-[-50%] items-center">
+        </div>
+
+        {/* Voyage Details */}
+        <div className="mb-3 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2 rounded-md bg-gray-50 px-2 py-1">
+            <UisSchedule size="12" color="#6B7280" />
+            <span className="font-medium text-gray-700">
+              {transformDate(laycanStart, 'MMM dd')} - {transformDate(laycanEnd, 'MMM dd')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 rounded-md bg-orange-50 px-2 py-1">
+            <UisObjectGroup size="12" color="#EA580C" />
+            <span className="truncate font-medium text-orange-700">{cargoType.name}</span>
+          </div>
+        </div>
+
+        {/* Actions - more compact */}
+        <div className="flex gap-2">
+          <Button
+            buttonProps={{
+              text: 'Use Search',
+              variant: 'primary',
+              size: 'medium',
+            }}
+            customStyles="flex-1 !py-1.5 !text-xs"
+            onClick={() => searchUseHandler(id)}
+            disabled={isLoading || isDisabled}
+          />
+          <Button
+            buttonProps={{
+              text: 'Delete',
+              variant: 'delete',
+              size: 'medium',
+            }}
+            customStyles="flex-1 !py-1.5 !text-xs"
+            onClick={() =>
+              openModal({
+                message: 'Are you sure you want to delete this search?',
+                onConfirm: () => deleteSearchHandler(id),
+                variant: 'delete',
+                confirmText: 'Delete Search',
+              })
+            }
+            disabled={isLoading}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderEmptyState = () => (
+    <div className="flex flex-col items-center justify-center py-8 text-center">
+      <UisFavorite size="32" color="#828C9C" className="mb-3 opacity-50" />
+      <Notes
+        title="No Favorite Searches Found"
+        subtitle="You currently have no favorite searches. Once you mark searches as favorites, they will appear here."
+      />
+    </div>
+  );
+
+  const renderLoadingState = () => (
+    <div className="flex items-center justify-center" style={{ minHeight: '300px' }}>
+      <Loader className="size-6" />
+    </div>
+  );
+
+  useEffect(() => {
+    fetchSearches(currentPage, perPage);
+  }, [currentPage, perPage]);
+
+  return (
+    <div className="w-[600px] pr-4 xl:w-[800px]">
+      {/* Header - more compact */}
+      <div className="mb-4 flex items-center gap-2">
+        <UisFavorite size="20" color="#072d46" />
+        <Title level="2" className="text-base font-bold text-black">
+          Favorite Searches
+        </Title>
+      </div>
+
+      {/* Content - responsive grid with proper loading height */}
+      <div className="max-h-[500px] min-h-[300px] overflow-y-auto pr-2">
+        {isLoading ? (
+          renderLoadingState()
+        ) : savedSearches.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">{savedSearches.map(renderSearchCard)}</div>
+        ) : (
+          renderEmptyState()
+        )}
+      </div>
+
+      {/* Pagination - more compact */}
+      {!isLoading && savedSearches.length > 0 && recordsTotals > 1 && (
+        <div className="mt-4 flex justify-center">
           <PaginationComponent currentPage={currentPage} pageCount={recordsTotals} onPageChange={handlePageChange} />
         </div>
       )}
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onConfirm={modalConfig.onConfirm}
+        onClose={closeModal}
+        message={modalConfig.message}
+        variant={modalConfig.variant}
+        confirmText={modalConfig.confirmText}
+        okButtonProps={modalConfig.okButtonProps}
+        cancelButtonProps={modalConfig.cancelButtonProps}
+      />
     </div>
   );
 };
