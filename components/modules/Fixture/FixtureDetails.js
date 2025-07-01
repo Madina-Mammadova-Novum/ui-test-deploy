@@ -30,6 +30,7 @@ const FixtureDetails = ({ searchedParams }) => {
 
     return (
       <ExpandableRow
+        key={rowData?.id}
         expand={index === 0 || toggle}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
@@ -45,7 +46,7 @@ const FixtureDetails = ({ searchedParams }) => {
 
   const printContent = useMemo(() => {
     if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
-    return [deal].map(printExpandableRow) || <Title>Outdated notification</Title>;
+    return [deal].map((rowData, index) => printExpandableRow(rowData, index)) || <Title>Outdated notification</Title>;
   }, [loading, toggle, searchedParams.id]);
 
   return printContent;

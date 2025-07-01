@@ -60,9 +60,9 @@ const Fleets = ({ searchedParams }) => {
     const searchedResult = data?.find((vessel) => vessel?.id === searchedParams?.id);
 
     if (loading) return <DynamicLoader />;
-    if (searchedResult) return [searchedResult].map(printExpandableRow);
+    if (searchedResult) return [searchedResult].map((rowData, index) => printExpandableRow(rowData, index));
 
-    if (data.length > 0 && !searchedResult) return data.map(printExpandableRow);
+    if (data.length > 0 && !searchedResult) return data.map((rowData, index) => printExpandableRow(rowData, index));
 
     return null;
   }, [loading, data, toggle, searchedParams?.id]);

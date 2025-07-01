@@ -31,6 +31,7 @@ const OnSubs = () => {
 
     return (
       <ExpandableRow
+        key={rowData?.id}
         className="px-5"
         header={
           <ExpandableCardHeader
@@ -63,7 +64,7 @@ const OnSubs = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <DynamicLoader />;
-    if (offers?.length) return offers?.map(printExpandableRow);
+    if (offers?.length) return offers?.map((rowData, index) => printExpandableRow(rowData, index));
 
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers, printExpandableRow]);
