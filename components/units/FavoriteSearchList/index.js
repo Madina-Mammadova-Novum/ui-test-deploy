@@ -342,7 +342,7 @@ const FavoriteSearchList = ({ onClose }) => {
   }, [currentPage, perPage]);
 
   return (
-    <div className="flex h-full w-full flex-col 3md:h-[572px] 3md:w-[800px]">
+    <div className="flex h-full w-80 flex-col 3md:h-[572px] 3md:w-[800px]">
       {/* Header - more compact */}
       <div className="mb-4 flex flex-shrink-0 items-center gap-2">
         <UisFavorite size="20" color="#072d46" />
