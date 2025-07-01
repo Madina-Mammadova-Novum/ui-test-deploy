@@ -58,7 +58,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
     const searchedResult = offers.find((offer) => offer.id === searchedParams.id);
 
     if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
-    if (searchedResult) return [searchedResult].map(printExpandableRow);
+    if (searchedResult) return [searchedResult].map((rowData, index) => printExpandableRow(rowData, index));
 
     return <Title level="3">Notification is outdated.</Title>;
   }, [loading, toggle, offers, searchedParams.id, printExpandableRow]);
