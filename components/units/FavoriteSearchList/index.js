@@ -342,7 +342,7 @@ const FavoriteSearchList = ({ onClose }) => {
   }, [currentPage, perPage]);
 
   return (
-    <div className="flex h-full w-full flex-col 3md:h-auto 3md:w-[800px]">
+    <div className="flex h-full w-full flex-col 3md:h-[572px] 3md:w-[800px]">
       {/* Header - more compact */}
       <div className="mb-4 flex flex-shrink-0 items-center gap-2">
         <UisFavorite size="20" color="#072d46" />
@@ -351,16 +351,16 @@ const FavoriteSearchList = ({ onClose }) => {
         </Title>
       </div>
 
-      {/* Content - responsive grid with calculated height */}
-      <div className="flex-1 overflow-y-auto pr-2 3md:max-h-[500px] 3md:min-h-[300px] 3md:flex-initial">
+      {/* Content - takes remaining space, accounting for pagination */}
+      <div className="flex-1 overflow-y-auto pr-2">
         {isLoading ? (
-          <div className="flex h-full w-[300px] items-center justify-center 3md:h-[300px] 3md:w-full">
+          <div className="flex h-full w-[300px] items-center justify-center 3md:w-full">
             <Loader className="size-6" />
           </div>
         ) : savedSearches.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 3md:grid-cols-2 3md:gap-3">{savedSearches.map(renderSearchCard)}</div>
         ) : (
-          <div className="flex h-full items-center justify-center 3md:h-[300px]">
+          <div className="flex h-full items-center justify-center">
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <UisFavorite size="32" color="#828C9C" className="mb-3 opacity-50" />
               <Notes
@@ -372,8 +372,8 @@ const FavoriteSearchList = ({ onClose }) => {
         )}
       </div>
 
-      {/* Pagination - more compact and always at bottom */}
-      {!isLoading && savedSearches.length > 0 && recordsTotals > 1 && (
+      {/* Pagination - always at bottom */}
+      {savedSearches?.length > 0 && recordsTotals > 1 && (
         <div className="mt-4 flex flex-shrink-0 justify-center border-t border-gray-100 pt-4">
           <PaginationComponent currentPage={currentPage} pageCount={recordsTotals} onPageChange={handlePageChange} />
         </div>
