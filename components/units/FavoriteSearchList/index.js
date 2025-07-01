@@ -31,7 +31,7 @@ const FavoriteSearchList = ({ onClose }) => {
   const [modalConfig, setModalConfig] = useState({});
 
   const { currentPage, handlePageChange, handleSelectedPageChange, perPage } = useFilters({
-    itemsPerPage: 4, // Increased to show 4 items (2x2 grid on XL)
+    itemsPerPage: 4, // Increased to show 4 items (2x2 grid on 3MD)
     initialPage: 1,
     data: savedSearches,
     sortValue: 'asc',
@@ -186,8 +186,8 @@ const FavoriteSearchList = ({ onClose }) => {
 
         {/* Route Display - responsive design */}
         <div className="mb-3">
-          {/* XL screens: Horizontal layout */}
-          <div className="hidden xl:block">
+          {/* 3MD screens: Horizontal layout */}
+          <div className="hidden 3md:block">
             <div className="flex items-center">
               {/* Load Port */}
               <div className="flex-1 rounded-md border-l-4 border-blue-500 bg-blue-50 px-2 py-1.5">
@@ -243,7 +243,7 @@ const FavoriteSearchList = ({ onClose }) => {
           </div>
 
           {/* Tablet/Mobile: Vertical layout */}
-          <div className="xl:hidden">
+          <div className="3md:hidden">
             <div className="space-y-2">
               {/* Load Port */}
               <div className="rounded-md border-l-4 border-blue-500 bg-blue-50 px-3 py-2">
@@ -290,7 +290,7 @@ const FavoriteSearchList = ({ onClose }) => {
         </div>
 
         {/* Voyage Details */}
-        <div className="mb-3 flex items-center justify-between text-xs">
+        <div className="mb-3 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 rounded-md bg-gray-50 px-2 py-1">
             <UisSchedule size="12" color="#6B7280" />
             <span className="font-medium text-gray-700">
@@ -304,7 +304,7 @@ const FavoriteSearchList = ({ onClose }) => {
         </div>
 
         {/* Actions - more compact */}
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <Button
             buttonProps={{
               text: 'Use Search',
@@ -337,50 +337,44 @@ const FavoriteSearchList = ({ onClose }) => {
     );
   };
 
-  const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-8 text-center">
-      <UisFavorite size="32" color="#828C9C" className="mb-3 opacity-50" />
-      <Notes
-        title="No Favorite Searches Found"
-        subtitle="You currently have no favorite searches. Once you mark searches as favorites, they will appear here."
-      />
-    </div>
-  );
-
-  const renderLoadingState = () => (
-    <div className="flex items-center justify-center" style={{ minHeight: '300px' }}>
-      <Loader className="size-6" />
-    </div>
-  );
-
   useEffect(() => {
     fetchSearches(currentPage, perPage);
   }, [currentPage, perPage]);
 
   return (
-    <div className="w-[600px] pr-4 xl:w-[800px]">
+    <div className="flex h-full w-full flex-col 3md:h-auto 3md:w-[800px]">
       {/* Header - more compact */}
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-4 flex flex-shrink-0 items-center gap-2">
         <UisFavorite size="20" color="#072d46" />
         <Title level="2" className="text-base font-bold text-black">
           Favorite Searches
         </Title>
       </div>
 
-      {/* Content - responsive grid with proper loading height */}
-      <div className="max-h-[500px] min-h-[300px] overflow-y-auto pr-2">
+      {/* Content - responsive grid with calculated height */}
+      <div className="flex-1 overflow-y-auto pr-2 3md:max-h-[500px] 3md:min-h-[300px] 3md:flex-initial">
         {isLoading ? (
-          renderLoadingState()
+          <div className="flex h-full w-[300px] items-center justify-center 3md:h-[300px] 3md:w-full">
+            <Loader className="size-6" />
+          </div>
         ) : savedSearches.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">{savedSearches.map(renderSearchCard)}</div>
+          <div className="grid grid-cols-1 gap-4 3md:grid-cols-2 3md:gap-3">{savedSearches.map(renderSearchCard)}</div>
         ) : (
-          renderEmptyState()
+          <div className="flex h-full items-center justify-center 3md:h-[300px]">
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <UisFavorite size="32" color="#828C9C" className="mb-3 opacity-50" />
+              <Notes
+                title="No Favorite Searches Found"
+                subtitle="You currently have no favorite searches. Once you mark searches as favorites, they will appear here."
+              />
+            </div>
+          </div>
         )}
       </div>
 
-      {/* Pagination - more compact */}
+      {/* Pagination - more compact and always at bottom */}
       {!isLoading && savedSearches.length > 0 && recordsTotals > 1 && (
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex flex-shrink-0 justify-center border-t border-gray-100 pt-4">
           <PaginationComponent currentPage={currentPage} pageCount={recordsTotals} onPageChange={handlePageChange} />
         </div>
       )}
