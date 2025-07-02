@@ -11,7 +11,6 @@ import TrashAltSVG from '@/assets/images/trashAlt.svg';
 import UploadSVG from '@/assets/images/upload.svg';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { getFilledArray } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const TankerSlotsDetails = ({ applyHelper = false }) => {
@@ -22,6 +21,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     clearErrors,
     watch,
     setError,
+    getValues,
     formState: { errors, isSubmitting },
   } = useHookForm();
 
@@ -72,80 +72,97 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     clearErrors('applySlots');
     clearErrors('vessels');
 
-    // If we're reducing the number of tankers, clear errors for the ones being removed
-    if (nextTankersCount < tankers.length) {
-      tankers.forEach((tankerId, index) => {
-        if (index >= nextTankersCount) {
-          // Clear errors for tankers that will be removed
-          clearErrors(`vessels[${tankerId}].imo`);
-          clearErrors(`vessels[${tankerId}].q88FileUrl`);
-          clearErrors(`vessels[${tankerId}]`);
-          // Unregister the fields to clean up form state
-          unregister(`vessels[${tankerId}].imo`);
-          unregister(`vessels[${tankerId}].q88FileUrl`);
-        }
-      });
-    }
+    // Completely unregister the entire vessels array to avoid sparse arrays
+    unregister('vessels');
 
-    // Clear all existing tanker errors to start fresh
-    tankers.forEach((tankerId) => {
-      clearErrors(`vessels[${tankerId}].imo`);
-      clearErrors(`vessels[${tankerId}].q88FileUrl`);
-      clearErrors(`vessels[${tankerId}]`);
+    // Clear uploading states for all tankers since we're starting fresh
+    setUploadingStates({});
+
+    // Use sequential indices (0, 1, 2, 3...) instead of tanker IDs (1, 2, 3, 4...)
+    const newTankers = Array.from({ length: nextTankersCount }, (_, index) => index);
+
+    // Initialize form fields for new tankers using sequential indices
+    newTankers.forEach((index) => {
+      setValue(`vessels[${index}].imo`, '');
+      setValue(`vessels[${index}].q88FileUrl`, '');
     });
 
-    handleChangeState('tankers', getFilledArray(nextTankersCount));
+    handleChangeState('tankers', newTankers);
   };
 
   const handleAddSlot = () => {
     clearErrors('applySlots');
-    if (tankers.length) {
-      const maxNumber = Math.max(...tankers);
-      handleChangeState('tankers', [...tankers, maxNumber + 1]);
-    } else {
-      handleChangeState('tankers', getFilledArray(1));
-    }
+
+    // Add one more tanker using sequential index
+    const newIndex = tankers.length;
+    const newTankers = [...tankers, newIndex];
+
+    // Initialize form fields for the new tanker
+    setValue(`vessels[${newIndex}].imo`, '');
+    setValue(`vessels[${newIndex}].q88FileUrl`, '');
+
+    handleChangeState('tankers', newTankers);
   };
 
-  const handleRemoveSlot = (tankerId) => {
-    handleChangeState(
-      'tankers',
-      tankers.filter((tanker) => tanker !== tankerId)
-    );
+  const handleRemoveSlot = (indexToRemove) => {
+    // Get current form values before removing
+    const currentVessels = getValues('vessels') || [];
 
-    unregister(`vessels[${tankerId}].imo`);
-    unregister(`vessels[${tankerId}].q88FileUrl`);
+    // Remove the tanker at the specified index
+    const newTankers = tankers.filter((_, index) => index !== indexToRemove);
+
+    // Create new vessels array by filtering out the removed index and reindexing
+    const newVessels = currentVessels
+      .filter((_, index) => index !== indexToRemove)
+      .map((vessel) => vessel || { imo: '', q88FileUrl: '' });
+
+    // Completely rebuild the vessels array to avoid gaps
+    unregister('vessels');
+
+    // Set the new vessels array with preserved values
+    setValue('vessels', newVessels);
+
     clearErrors(`vessels`);
 
-    // Clear uploading state for this tanker
-    setUploadingStates((prev) => {
-      const newState = { ...prev };
-      delete newState[tankerId];
-      return newState;
+    // Update uploading states to match new indices
+    const newUploadingStates = {};
+    Object.keys(uploadingStates).forEach((oldIndex) => {
+      const oldIndexNum = parseInt(oldIndex, 10);
+      if (oldIndexNum < indexToRemove) {
+        // Indices before the removed one stay the same
+        newUploadingStates[oldIndexNum] = uploadingStates[oldIndex];
+      } else if (oldIndexNum > indexToRemove) {
+        // Indices after the removed one shift down by 1
+        newUploadingStates[oldIndexNum - 1] = uploadingStates[oldIndex];
+      }
+      // The removed index is excluded
     });
+    setUploadingStates(newUploadingStates);
+
+    handleChangeState('tankers', newTankers);
   };
 
   const handleFileUpload = useCallback(
-    (tankerId, file) => {
+    (index, file) => {
       if (!file) return;
 
-      setUploadingStates((prev) => ({ ...prev, [tankerId]: true }));
+      setUploadingStates((prev) => ({ ...prev, [index]: true }));
 
       const customSetValue = (key, value) => {
         if (key === 'file' && value) {
-          setValue(`vessels[${tankerId}].q88FileUrl`, value);
-          clearErrors(`vessels[${tankerId}].q88FileUrl`);
+          setValue(`vessels[${index}].q88FileUrl`, value);
+          clearErrors(`vessels[${index}].q88FileUrl`);
         }
       };
 
       const customSetError = (key, error) => {
         if (key === 'file' && error) {
-          setError(`vessels[${tankerId}].q88FileUrl`, error);
+          setError(`vessels[${index}].q88FileUrl`, error);
         }
       };
 
       const customSetLoading = (loading) => {
-        setUploadingStates((prev) => ({ ...prev, [tankerId]: loading }));
+        setUploadingStates((prev) => ({ ...prev, [index]: loading }));
       };
 
       fileReaderAdapter(file, customSetValue, customSetError, customSetLoading);
@@ -154,15 +171,15 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
   );
 
   const handleFileRemove = useCallback(
-    (tankerId) => {
-      setValue(`vessels[${tankerId}].q88FileUrl`, '');
-      clearErrors(`vessels[${tankerId}].q88FileUrl`);
+    (index) => {
+      setValue(`vessels[${index}].q88FileUrl`, '');
+      clearErrors(`vessels[${index}].q88FileUrl`);
     },
     [setValue, clearErrors]
   );
 
-  const getFileName = (tankerId) => {
-    const fileUrl = watch(`vessels[${tankerId}].q88FileUrl`);
+  const getFileName = (index) => {
+    const fileUrl = watch(`vessels[${index}].q88FileUrl`);
     if (!fileUrl) return null;
 
     // Extract filename from URL (assuming it's the last part after the last slash)
@@ -207,15 +224,16 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
         />
       </div>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        {tankers.map((item, index) => {
-          const fieldName = `vessels[${item}]`;
-          const imoError = errors.vessels ? errors.vessels[item]?.imo : null;
-          const fileError = errors.vessels ? errors.vessels[item]?.q88FileUrl : null;
-          const isUploading = uploadingStates[item];
-          const fileName = getFileName(item);
+        {tankers.map((_, index) => {
+          const fieldName = `vessels[${index}]`;
+          const imoError = errors.vessels ? errors.vessels[index]?.imo : null;
+          const fileError = errors.vessels ? errors.vessels[index]?.q88FileUrl : null;
+          const isUploading = uploadingStates[index];
+          const fileName = getFileName(index);
 
           return (
-            <div key={item} className="relative rounded-lg border border-gray-200 p-4">
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={`vessel-form-${index}`} className="relative rounded-lg border border-gray-200 p-4">
               <div className="mb-3 flex items-center justify-between">
                 <h4 className="text-sm font-medium text-gray-900">Vessel #{index + 1}</h4>
                 <Button
@@ -226,7 +244,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                     variant: 'tertiary',
                     size: 'small',
                   }}
-                  onClick={() => handleRemoveSlot(item)}
+                  onClick={() => handleRemoveSlot(index)}
                   disabled={isSubmitting}
                 />
               </div>
@@ -257,13 +275,13 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                       <input
                         type="file"
                         accept=".pdf,.doc,.docx,.xls,.xlsx"
-                        onChange={(e) => handleFileUpload(item, e.target.files[0])}
+                        onChange={(e) => handleFileUpload(index, e.target.files[0])}
                         className="hidden"
-                        id={`file-upload-${item}`}
+                        id={`file-upload-${index}`}
                         disabled={isSubmitting || isUploading}
                       />
                       <label
-                        htmlFor={`file-upload-${item}`}
+                        htmlFor={`file-upload-${index}`}
                         className={`flex w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed px-4 py-2 transition-colors ${
                           fileError
                             ? 'border-red-300 bg-red-50 hover:border-red-400'
@@ -294,7 +312,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                           variant: 'tertiary',
                           size: 'small',
                         }}
-                        onClick={() => handleFileRemove(item)}
+                        onClick={() => handleFileRemove(index)}
                         disabled={isSubmitting}
                       />
                     </div>
