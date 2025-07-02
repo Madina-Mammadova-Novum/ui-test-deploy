@@ -45,7 +45,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   // Determine context for phone validation storage
   const getValidationContext = () => (onUpdatePage ? 'update' : 'registration');
 
-  // Load phone validation state from localStorage
+  // Load phone validation state from sessionStorage
   const loadSavedPhoneValidation = () => {
     const savedState = loadPhoneValidationState(userPhone, getValidationContext());
     if (savedState) {
@@ -62,7 +62,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     return false;
   };
 
-  // Initialize phoneVerified to false on component mount and check localStorage
+  // Initialize phoneVerified to false on component mount and check sessionStorage
   useEffect(() => {
     // First set default values
     setValue('phoneVerified', false);
@@ -85,7 +85,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     const newPhoneValue = userPhone || '';
     setPhoneValue(newPhoneValue);
 
-    // If phone number changed, reset verification state and clear localStorage
+    // If phone number changed, reset verification state and clear sessionStorage
     if (newPhoneValue && newPhoneValue !== phoneValue) {
       // Check if we have a saved state for this phone number
       const hasValidState = loadSavedPhoneValidation();
@@ -171,7 +171,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           setValue('phoneVerified', true);
           setError(phoneFieldName, null);
           trigger(phoneFieldName);
-          // Save to localStorage
+          // Save to sessionStorage
           savePhoneValidationState(phoneValue, true, null, getValidationContext());
         } else {
           // Phone is available and SMS can be sent, proceed with OTP verification
@@ -212,7 +212,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       setError(phoneFieldName, null);
       trigger(phoneFieldName);
       setValue('otpId', otpId);
-      // Save to localStorage
+      // Save to sessionStorage
       savePhoneValidationState(phoneValue, true, otpId, getValidationContext());
     }
   };
@@ -224,7 +224,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setIsPhoneVerified(false);
     setValue('phoneVerified', false);
     setValue('otpId', null);
-    // Clear from localStorage
+    // Clear from sessionStorage
     clearPhoneValidationState(getValidationContext());
     // Set phone verification error
     setError(phoneFieldName, {

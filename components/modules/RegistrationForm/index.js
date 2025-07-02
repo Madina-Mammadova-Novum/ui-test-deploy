@@ -229,7 +229,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
       step3: null,
     }));
 
-    // Clear phone validation state when switching roles
+    // Clear phone validation state from sessionStorage when switching roles
     // to prevent validation data from one role being used for another
     clearPhoneValidationState('registration', userRole);
   }, [userRole]);
@@ -344,7 +344,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
           window.sessionStorage.removeItem(config.storageKey);
         }
 
-        // Clear phone validation state
+        // Clear phone validation state from sessionStorage
         clearPhoneValidationState('registration', userRole);
 
         // Don't redirect yet, let user proceed to steps 4 and 5
