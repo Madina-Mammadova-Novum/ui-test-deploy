@@ -1,6 +1,7 @@
 import {
   removeVesselAdapter,
   removeVesselFromFleetAdapter,
+  requestAddVesselAdapter,
   requestAddVesselManuallyAdapter,
   requestAddVesselToFleetAdapter,
   requestSearchVesselAdapter,
@@ -148,6 +149,21 @@ export async function removeVessel(data) {
 
 export async function getVesselNames({ stages = null }) {
   const response = await getData(`account/get-vesselnames${stages ? `?stages=${stages}` : ''}`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function addVessel({ imo, fleetId, q88QuestionnaireFile }) {
+  const body = requestAddVesselAdapter({ data: { imo, fleetId, q88QuestionnaireFile } });
+
+  const response = await postData(`vessels/add`, body);
+
+  if (!response.error) {
+    response.message = 'Your tanker has been successfully added.';
+    response.messageDescription = 'The tanker is now available in your fleet.';
+  }
 
   return {
     ...response,
