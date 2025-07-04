@@ -318,7 +318,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
                     </div>
                   )}
 
-                  {fileError && <p className="mt-1 text-sm text-red-600">{fileError.message}</p>}
+                  {fileError && <p className="mt-1 text-xs-sm text-red-600">{fileError.message}</p>}
                 </div>
               </div>
             </div>
