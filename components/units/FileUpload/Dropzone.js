@@ -12,7 +12,6 @@ const Dropzone = ({ areaParams, inputParams, children, dropzoneRef, isMultiple =
 
   const fieldName = isMultiple ? 'files' : 'file';
   const fieldError = errors?.[fieldName];
-  console.log({ fieldError, errors });
 
   return (
     <div className="relative w-full cursor-pointer" {...areaParams()} ref={dropzoneRef}>
