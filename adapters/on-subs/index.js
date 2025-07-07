@@ -475,17 +475,41 @@ export const onSubsDocumentsTabRowsDataAdapter = ({ data }) => {
 
 export const onSubsAddDocumentAdapter = ({ data }) => {
   if (!data) return {};
-  const { offerId, title, comment, fileDetails, file } = data;
-  const { name, size } = fileDetails || {};
-  const extension = name?.split('.')?.pop();
+
+  const { offerId, title, comment, files = [], file, fileDetails } = data;
+
+  // Handle backward compatibility for single file
+  if (file && fileDetails && !files.length) {
+    const { name, size } = fileDetails;
+    const extension = name?.split('.')?.pop();
+    return {
+      dealId: offerId,
+      title,
+      comments: comment,
+      files: [
+        {
+          name,
+          size,
+          extension,
+          url: file,
+        },
+      ],
+    };
+  }
+
+  // Handle multiple files
+  const filesArray = files.map((fileItem) => ({
+    name: fileItem.name,
+    size: fileItem.size,
+    extension: fileItem.extension,
+    url: fileItem.url,
+  }));
+
   return {
     dealId: offerId,
     title,
-    name,
     comments: comment,
-    size,
-    extension,
-    url: file,
+    files: filesArray,
   };
 };
 
