@@ -33,7 +33,13 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
 
   return (
     <div className="mb-5 flex flex-col gap-y-5">
-      <UploadForm onSubmit={onSubmit} />
+      <UploadForm
+        onSubmit={onSubmit}
+        dropzoneProps={{
+          multiple: true,
+          maxFiles: 10,
+        }}
+      />
       <Table headerData={onSubsHeader} rows={rowsData} noDataMessage="You did not upload any documents yet" />
     </div>
   );
