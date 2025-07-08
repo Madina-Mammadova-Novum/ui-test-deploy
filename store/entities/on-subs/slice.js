@@ -30,12 +30,13 @@ const onSubsSlice = createSlice({
       }));
     },
     updateDocumentList: (state, action) => {
-      const { offerId, newDocument } = action?.payload;
+      const { offerId, newDocuments } = action?.payload;
+
       state.data.offers = state.data.offers.map((offer) =>
         offer.id === offerId
           ? {
               ...offer,
-              documents: [...offer.documents, newDocument],
+              documents: [...offer.documents, ...newDocuments],
             }
           : offer
       );
