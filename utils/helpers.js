@@ -355,6 +355,10 @@ export const resetObjectFields = ({ initialObject, resetType = null }) => {
     else if (['excludeInternationallySanctioned', 'showAdditionalDischarge'].includes(key)) {
       result[key] = false;
     }
+    // Special handling for file upload fields - reset to empty arrays instead of null
+    else if (['files', 'fileDetails'].includes(key) && Array.isArray(result[key])) {
+      result[key] = [];
+    }
     // For all other fields that are objects or arrays, just set to null
     else if (typeof result[key] === 'object') {
       result[key] = null;

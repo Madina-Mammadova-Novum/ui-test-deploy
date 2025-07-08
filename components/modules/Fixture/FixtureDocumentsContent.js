@@ -26,7 +26,7 @@ const FixtureDocumentsContent = ({ rowsData = [], offerId }) => {
     if (error) {
       errorToast(error?.title, error?.message);
     } else {
-      dispatch(updateDocumentList({ offerId, newDocument: data }));
+      dispatch(updateDocumentList({ offerId, newDocuments: data }));
       successToast(successMessage);
     }
   };

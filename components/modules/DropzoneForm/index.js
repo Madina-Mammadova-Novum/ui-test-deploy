@@ -51,19 +51,29 @@ const DropzoneForm = ({ showTextFields = true, dropzoneProps = {} }) => {
     }
   }, [errors, isMultiple]);
 
+  // Watch for specific form field values and reset local state when form is reset
+  const watchedFiles = watch('files');
+  const watchedFile = watch('file');
+
   useEffect(() => {
-    const watchField = isMultiple ? 'files' : 'file';
-    if (!watch(watchField)) setFiles([]);
-  }, [watch, isMultiple]);
+    const fieldValue = isMultiple ? watchedFiles : watchedFile;
+
+    // Reset local files state when form field is empty/null/undefined
+    if (!fieldValue || (Array.isArray(fieldValue) && fieldValue.length === 0)) {
+      setFiles([]);
+    }
+  }, [watchedFiles, watchedFile, isMultiple]);
 
   const resetDropzone = useCallback(() => {
     setFiles([]);
     if (isMultiple) {
       setValue('files', []);
+      clearErrors('files');
     } else {
       setValue('file', null);
+      clearErrors('file');
     }
-  }, [setValue, isMultiple]);
+  }, [setValue, clearErrors, isMultiple]);
 
   const onDrop = async (acceptedFiles, rejections) => {
     if (rejections.length > 0) {

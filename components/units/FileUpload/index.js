@@ -32,7 +32,6 @@ const UploadForm = ({ onSubmit = async () => {}, dropzoneProps = {} }) => {
   const handleResetFields = () => {
     methods.reset((formValues) => {
       const resetValues = resetObjectFields({ initialObject: formValues, resetType: '' });
-
       return resetValues;
     });
   };
