@@ -18,3 +18,21 @@ export const createDocumentRequest = async ({ dealId, title, requestedFiles }) =
     ...response,
   };
 };
+
+export const completeUploadDocumentRequest = async ({ requestId }) => {
+  const response = await postData('document-requests/complete-upload', {
+    requestId,
+  });
+  return {
+    ...response,
+  };
+};
+
+export const approveDocumentRequest = async ({ requestId }) => {
+  const response = await postData('document-requests/approve', {
+    requestId,
+  });
+  return {
+    ...response,
+  };
+};

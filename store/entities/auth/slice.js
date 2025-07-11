@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: 'chat',
+  name: 'auth',
   initialState,
   reducers: {
     clearSession: (state) => {

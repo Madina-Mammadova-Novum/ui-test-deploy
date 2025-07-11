@@ -19,6 +19,7 @@ import { useHookFormParams } from '@/utils/hooks';
 // Status descriptions and configurations
 const getStatusConfig = (status, role) => {
   const isCharterer = role === ROLES.CHARTERER;
+  const isOwner = role === ROLES.OWNER;
 
   const statusConfigs = {
     initial: {
@@ -30,38 +31,42 @@ const getStatusConfig = (status, role) => {
       icon: <UilInfoCircle size="24" className="fill-blue-600" />,
     },
     Pending: {
-      statusText: 'Your last request is pending review',
+      statusText: isOwner ? 'Document request received from charterer' : 'Your last request is pending review',
       message: isCharterer
         ? 'You can update your request or wait for the response'
-        : 'Please review and respond to the request',
+        : 'Please review the requirements and prepare the requested documents',
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-50',
       borderColor: 'border-yellow-200',
       icon: <UilClock size="24" className="fill-yellow-600" />,
     },
-    UploadInProgress: {
-      statusText: 'Your last request has documents being uploaded',
-      message: isCharterer ? 'You can monitor the upload progress' : 'Documents are being uploaded by the charterer',
+    'In Progress': {
+      statusText: isOwner ? 'You are currently uploading documents' : 'Your last request has documents being uploaded',
+      message: isCharterer ? 'You can monitor the upload progress' : 'Submit the required documents to the charterer',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
       borderColor: 'border-blue-200',
       icon: <UilSyncExclamation size="24" className="fill-blue-600" />,
     },
-    DocumentsUploaded: {
-      statusText: 'Your last request has been fulfilled with document uploads',
+    'Documents Uploaded': {
+      statusText: isOwner
+        ? 'Documents have been uploaded successfully'
+        : 'Your last request has been fulfilled with document uploads',
       message: isCharterer
         ? 'You can review the uploaded documents or ask for revisions'
-        : 'Documents have been uploaded for your review',
+        : 'Waiting for charterer review of the uploaded documents',
       color: 'text-indigo-600',
       bgColor: 'bg-indigo-50',
       borderColor: 'border-indigo-200',
       icon: <UilCheckCircle size="24" className="fill-indigo-600" />,
     },
-    RevisionRequested: {
-      statusText: 'Your last request has revision requirements',
+    'Revision Requested': {
+      statusText: isOwner
+        ? 'Charterer has requested document revisions'
+        : 'Your last request has revision requirements',
       message: isCharterer
         ? 'You can update your request based on the feedback'
-        : 'Please provide the requested revisions',
+        : 'Please review the feedback and provide the requested document revisions',
       color: 'text-orange-600',
       bgColor: 'bg-orange-50',
       borderColor: 'border-orange-200',
@@ -160,6 +165,11 @@ const DocumentRequestForm = ({
 
   // Handle individual checkbox change
   const handleCheckboxChange = (optionValue, checked) => {
+    // Don't allow changes if form is disabled or owner is in read-only mode
+    if (disabled || isOwnerReadOnly) {
+      return;
+    }
+
     const currentValues = methods.watch('selectedDocuments') || [];
     let newValues;
 
@@ -182,21 +192,21 @@ const DocumentRequestForm = ({
     const buttons = [];
 
     if (isCharterer) {
-      if (status === 'initial' || status === 'Expired' || status === 'Rejected') {
+      if (status === 'initial' || status === 'Expired' || status === 'Rejected' || status === 'Approved') {
         buttons.push({
           text: 'Request from Vessel Owner',
           variant: 'primary',
           type: 'submit',
           disabled: false,
         });
-      } else if (status === 'Pending' || status === 'UploadInProgress') {
+      } else if (status === 'Pending' || status === 'In Progress') {
         buttons.push({
           text: 'Update Document Request',
           variant: 'secondary',
           type: 'submit',
           disabled: true,
         });
-      } else if (status === 'DocumentsUploaded') {
+      } else if (status === 'Documents Uploaded') {
         buttons.push({
           text: 'Ask for Revision',
           variant: 'outline',
@@ -213,7 +223,7 @@ const DocumentRequestForm = ({
     }
 
     if (isOwner) {
-      if (['Pending', 'UploadInProgress', 'RevisionRequested'].includes(status)) {
+      if (['Pending', 'In Progress', 'Revision Requested'].includes(status)) {
         buttons.push({
           text: 'Submit to Charterer',
           variant: 'primary',
@@ -229,9 +239,16 @@ const DocumentRequestForm = ({
   const buttonConfig = getButtonConfig();
   const statusConfig = getStatusConfig(status, role);
 
+  // Determine if form fields should be read-only for owners
+  const isOwnerReadOnly = useMemo(() => {
+    const isOwner = role === ROLES.OWNER;
+    const readOnlyStatuses = ['Pending', 'In Progress', 'Documents Uploaded', 'Revision Requested'];
+    return isOwner && readOnlyStatuses.includes(status);
+  }, [role, status]);
+
   // Determine if comments section should be shown
   const shouldShowComments = () => {
-    const hideCommentsStatuses = ['initial', 'Expired', 'Rejected', 'RevisionRequested'];
+    const hideCommentsStatuses = ['initial', 'Expired', 'Rejected', 'Revision Requested'];
     return !hideCommentsStatuses.includes(status);
   };
 
@@ -282,8 +299,8 @@ const DocumentRequestForm = ({
                       name={`selectedDocuments.${index}`}
                       checked={methods.watch('selectedDocuments')?.includes(option.value)}
                       onChange={(e) => handleCheckboxChange(option.value, e.target.checked)}
-                      disabled={disabled}
-                      labelStyles="cursor-pointer text-sm leading-relaxed text-gray-700"
+                      disabled={disabled || isOwnerReadOnly}
+                      labelStyles={`text-sm leading-relaxed text-gray-700 ${disabled || isOwnerReadOnly ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                       {option.label}
                     </CheckBoxInput>
@@ -298,9 +315,11 @@ const DocumentRequestForm = ({
                 <h6 className="mb-3 text-sm font-medium text-gray-700">Comments</h6>
                 <TextArea
                   name="comments"
-                  placeholder="Add any additional comments or requirements..."
+                  placeholder={
+                    isOwnerReadOnly ? 'No comments shared yet' : 'Add any additional comments or requirements...'
+                  }
                   rows={6}
-                  disabled={disabled}
+                  disabled={disabled || isOwnerReadOnly}
                   maxLength={500}
                 />
               </div>

@@ -5,11 +5,16 @@ import { documentsContentPropTypes } from '@/lib/types';
 
 import { Table } from '@/elements';
 import { ROLES } from '@/lib/constants';
-import { createDocumentRequest, getDocumentRequests } from '@/services/documentRequests';
+import {
+  approveDocumentRequest,
+  completeUploadDocumentRequest,
+  createDocumentRequest,
+  getDocumentRequests,
+} from '@/services/documentRequests';
 import { uploadDocument } from '@/services/on-subs';
 import { updateDocumentList } from '@/store/entities/on-subs/slice';
 import { getUserDataSelector } from '@/store/selectors';
-import { DocumentRequestForm, UploadForm } from '@/units';
+import { ConfirmModal, DocumentRequestForm, UploadForm } from '@/units';
 import { errorToast, successToast } from '@/utils/hooks';
 import { onSubsHeader } from '@/utils/mock';
 
@@ -19,6 +24,9 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
   const [documentRequests, setDocumentRequests] = useState([]);
   const [requestStatus, setRequestStatus] = useState('initial');
   const [loading, setLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [useForDocumentRequest, setUseForDocumentRequest] = useState(false);
+  const [pendingUploadData, setPendingUploadData] = useState(null);
 
   // Fetch document requests on component mount
   useEffect(() => {
@@ -57,12 +65,36 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
   }, [offerId]);
 
   const onSubmit = async (formData) => {
+    // Check if there's an ongoing document request
+    const ongoingStatuses = ['Pending', 'In Progress', 'Documents Uploaded', 'Revision Requested'];
+    const hasOngoingRequest = ongoingStatuses.includes(requestStatus);
+
+    if (hasOngoingRequest) {
+      // Show confirmation modal for ongoing requests
+      setPendingUploadData(formData);
+      setShowConfirmModal(true);
+      return;
+    }
+
+    // If no ongoing request, proceed with normal upload
+    await handleUpload(formData, false);
+  };
+
+  const handleUpload = async (formData, useDocumentRequest) => {
+    const dealDocumentRequestId = useDocumentRequest && documentRequests.length > 0 ? documentRequests[0].id : null;
+
+    const uploadData = {
+      ...formData,
+      offerId,
+      ...(dealDocumentRequestId && { dealDocumentRequestId }),
+    };
+
     const {
       data,
       error,
       message: successMessage,
     } = await uploadDocument({
-      data: { ...formData, offerId },
+      data: uploadData,
       role,
     });
     if (error) {
@@ -71,6 +103,19 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       dispatch(updateDocumentList({ offerId, newDocuments: data }));
       successToast(successMessage);
     }
+  };
+
+  const handleConfirmUpload = async () => {
+    setShowConfirmModal(false);
+    await handleUpload(pendingUploadData, useForDocumentRequest);
+    setPendingUploadData(null);
+    setUseForDocumentRequest(false);
+  };
+
+  const handleCancelUpload = () => {
+    setShowConfirmModal(false);
+    setPendingUploadData(null);
+    setUseForDocumentRequest(false);
   };
 
   const onDocumentRequest = async (formData, action) => {
@@ -107,16 +152,54 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
 
           successToast('Revision requested successfully');
           break;
-        case 'confirm':
-          // TODO: Implement confirm completeness
+        case 'confirm': {
+          // Get the first document request ID for the approval
+          const requestId = documentRequests.length > 0 ? documentRequests[0].id : null;
 
-          successToast('Documents confirmed as complete');
-          break;
-        case 'submit':
-          // TODO: Implement submit to charterer
+          if (!requestId) {
+            errorToast('Error', 'No document request found');
+            break;
+          }
 
-          successToast('Submitted to charterer successfully');
+          const response = await approveDocumentRequest({ requestId });
+
+          if (response.error) {
+            errorToast('Error', 'Failed to approve documents');
+          } else {
+            successToast('Documents confirmed as complete');
+            // Refresh document requests to get updated status
+            const updatedRequests = await getDocumentRequests({ dealId: offerId });
+            if (updatedRequests.data && updatedRequests.data.length > 0) {
+              setDocumentRequests(updatedRequests.data);
+              setRequestStatus(updatedRequests.data[0].status || 'Pending');
+            }
+          }
           break;
+        }
+        case 'submit': {
+          // Get the first document request ID for the complete upload
+          const requestId = documentRequests.length > 0 ? documentRequests[0].id : null;
+
+          if (!requestId) {
+            errorToast('Error', 'No document request found');
+            break;
+          }
+
+          const response = await completeUploadDocumentRequest({ requestId });
+
+          if (response.error) {
+            errorToast('Error', 'Failed to submit to charterer');
+          } else {
+            successToast('Submitted to charterer successfully');
+            // Refresh document requests to get updated status
+            const updatedRequests = await getDocumentRequests({ dealId: offerId });
+            if (updatedRequests.data && updatedRequests.data.length > 0) {
+              setDocumentRequests(updatedRequests.data);
+              setRequestStatus(updatedRequests.data[0].status || 'Pending');
+            }
+          }
+          break;
+        }
         default:
           successToast('Action completed successfully');
           break;
@@ -133,7 +216,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
     const isOwner = role === ROLES.OWNER;
 
     // Define ongoing statuses where interaction is possible
-    const ongoingStatuses = ['initial', 'Pending', 'UploadInProgress', 'DocumentsUploaded', 'RevisionRequested'];
+    const ongoingStatuses = ['initial', 'Pending', 'In Progress', 'Documents Uploaded', 'Revision Requested'];
     const isOngoing = ongoingStatuses.includes(requestStatus);
 
     // For charterer: always show the form regardless of status
@@ -193,6 +276,35 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
         }}
       />
       <Table headerData={onSubsHeader} rows={rowsData} noDataMessage="You did not upload any documents yet" />
+
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onConfirm={handleConfirmUpload}
+        onClose={handleCancelUpload}
+        title="Document Request Association"
+        confirmText="Upload"
+        cancelText="Cancel"
+        variant="primary"
+      >
+        <div className="space-y-4">
+          <p className="text-sm leading-relaxed text-black">
+            You have requested documents from this deal. Would you like to associate this file upload with the document
+            request?
+          </p>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="useForDocumentRequest"
+              checked={useForDocumentRequest}
+              onChange={(e) => setUseForDocumentRequest(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300 text-blue-600"
+            />
+            <label htmlFor="useForDocumentRequest" className="text-sm text-gray-700">
+              Use this file upload for the document request
+            </label>
+          </div>
+        </div>
+      </ConfirmModal>
     </div>
   );
 };
