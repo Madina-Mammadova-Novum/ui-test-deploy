@@ -113,6 +113,7 @@ const DocumentRequestForm = ({
   const [toggle, setToggle] = useState(true);
   const [clearanceFiles, setClearanceFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const contentRef = useRef(null);
 
   const schema = yup.object().shape({
@@ -135,8 +136,13 @@ const DocumentRequestForm = ({
   }, [toggle]);
 
   const handleSubmit = async (formData, action) => {
-    const transformedData = documentRequestsRequestAdapter(formData);
-    await onSubmit(transformedData, action);
+    setActionLoading(true);
+    try {
+      const transformedData = documentRequestsRequestAdapter(formData);
+      await onSubmit(transformedData, action);
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   // Fetch clearance files on mount
@@ -194,30 +200,30 @@ const DocumentRequestForm = ({
     if (isCharterer) {
       if (status === 'initial' || status === 'Expired' || status === 'Rejected' || status === 'Approved') {
         buttons.push({
-          text: 'Request from Vessel Owner',
+          text: actionLoading ? 'Requesting...' : 'Request from Vessel Owner',
           variant: 'primary',
           type: 'submit',
-          disabled: false,
+          disabled: actionLoading,
         });
       } else if (status === 'Pending' || status === 'In Progress') {
         buttons.push({
-          text: 'Update Document Request',
+          text: actionLoading ? 'Updating...' : 'Update Document Request',
           variant: 'secondary',
           type: 'submit',
           disabled: true,
         });
       } else if (status === 'Documents Uploaded') {
         buttons.push({
-          text: 'Ask for Revision',
+          text: actionLoading ? 'Requesting...' : 'Ask for Revision',
           variant: 'outline',
           type: 'submit',
-          disabled: false,
+          disabled: actionLoading,
         });
         buttons.push({
-          text: 'Confirm Completeness',
+          text: actionLoading ? 'Confirming...' : 'Confirm Completeness',
           variant: 'primary',
           type: 'submit',
-          disabled: false,
+          disabled: actionLoading,
         });
       }
     }
@@ -225,10 +231,10 @@ const DocumentRequestForm = ({
     if (isOwner) {
       if (['Pending', 'In Progress', 'Revision Requested'].includes(status)) {
         buttons.push({
-          text: 'Submit to Charterer',
+          text: actionLoading ? 'Submitting...' : 'Submit to Charterer',
           variant: 'primary',
           type: 'submit',
-          disabled: false,
+          disabled: actionLoading,
         });
       }
     }
