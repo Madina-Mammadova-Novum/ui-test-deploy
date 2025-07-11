@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// eslint-disable-next-line import/no-cycle
 import { signIn } from './actions';
 
 import { removeCookie } from '@/utils/helpers';
