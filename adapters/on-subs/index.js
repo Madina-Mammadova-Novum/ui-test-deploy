@@ -476,7 +476,7 @@ export const onSubsDocumentsTabRowsDataAdapter = ({ data }) => {
 export const onSubsAddDocumentAdapter = ({ data }) => {
   if (!data) return {};
 
-  const { offerId, title, comment, files = [], file, fileDetails } = data;
+  const { offerId, title, comment, files = [], file, fileDetails, dealDocumentRequestId } = data;
 
   // Handle backward compatibility for single file
   if (file && fileDetails && !files.length) {
@@ -494,6 +494,7 @@ export const onSubsAddDocumentAdapter = ({ data }) => {
           url: file,
         },
       ],
+      ...(dealDocumentRequestId && { dealDocumentRequestId }),
     };
   }
 
@@ -510,6 +511,7 @@ export const onSubsAddDocumentAdapter = ({ data }) => {
     title,
     comments: comment,
     files: filesArray,
+    ...(dealDocumentRequestId && { dealDocumentRequestId }),
   };
 };
 

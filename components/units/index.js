@@ -51,6 +51,7 @@ import DateDetailsForm from '@/units/DateDetailsForm';
 import DeactivateTankerForm from '@/units/DeactivateTankerForm';
 import DeleteFleetModal from '@/units/DeleteFleetModal';
 import DeleteTankerModal from '@/units/DeleteTankerModal';
+import DocumentRequestForm from '@/units/DocumentRequestForm';
 import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
 import EditDateForm from '@/units/EditDateForm';
 import EditFleetForm from '@/units/EditFleetForm';
@@ -237,6 +238,7 @@ export {
   SearchNotFound,
   RequestDocumentDeletionModal,
   RevokeDocumentDeletionModal,
+  DocumentRequestForm,
   DynamicCountdownTimer,
   Map,
   FavoriteSearchForm,

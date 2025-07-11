@@ -10,3 +10,5 @@ export * from '@/services/session';
 export * from '@/services/savedSearch';
 export * from '@/services/charterParty';
 export * from '@/services/otp';
+export * from '@/services/clearanceFiles';
+export * from '@/services/documentRequests';

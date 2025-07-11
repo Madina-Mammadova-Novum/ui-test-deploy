@@ -68,7 +68,6 @@ export const multipleFileReaderAdapter = async (files, setValue, setError, setLo
 
 export const fileErrorAdapter = ({ data }) => {
   if (!data) return [];
-  console.log({ data });
 
   const errors = data?.map((error) => ({ message: FILE_CODE_ERRORS[error.code] }));
 
@@ -96,5 +95,9 @@ export const responseDocumentUploadAdapter = ({ data }) => {
 };
 
 export const responseDocumentDeletionAdapter = ({ data }) => {
+  return nullAdapter(data);
+};
+
+export const responseClearanceFilesAdapter = ({ data }) => {
   return nullAdapter(data);
 };
