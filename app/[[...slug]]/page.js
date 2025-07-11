@@ -19,6 +19,7 @@ export async function generateMetadata({ params }) {
 
 export default async function Home({ params }) {
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
+  const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.APP_ENV === 'prod';
 
   // Get the current pathname from params.slug
   const pathname = params?.slug ? `/${params.slug.join('/')}` : '/';
@@ -68,7 +69,8 @@ export default async function Home({ params }) {
         className={classNames('relative bg-gray-light', {
           'pb-[158px] pt-[109px] md:pb-[172px] 3md:pb-[200px] 3md:pt-[101px]': isContactUs,
           'pb-16 pt-[109px] md:pb-[4.25rem] 3md:pb-24 3md:pt-[101px]': isAboutUs,
-          'custom-hero pb-[158px] pt-[121px] 3md:pb-[289px] 3md:pt-[129px]': isHome,
+          'custom-hero pb-[158px] pt-[121px] 3md:pb-[289px] 3md:pt-[129px]': isHome && !betaMode,
+          'custom-hero pb-[80px] pt-[121px] 3md:pb-[96px] 3md:pt-[129px]': isHome && betaMode,
           'pb-[195px] pt-[115px]': !isContactUs && !isAboutUs && !isHome,
         })}
       >
