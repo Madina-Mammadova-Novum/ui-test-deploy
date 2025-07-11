@@ -58,6 +58,9 @@ export default function middleware(req) {
   // Check if maintenance mode is enabled and the environment is production
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
 
+  // Check if beta mode is enabled and the environment is production
+  const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.APP_ENV === 'prod';
+
   // Get the current pathname
   const { pathname } = req.nextUrl;
 
@@ -78,6 +81,28 @@ export default function middleware(req) {
   ) {
     req.nextUrl.pathname = ROUTES.MAINTENANCE;
     response = NextResponse.rewrite(req.nextUrl);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    return response;
+  }
+
+  // If beta mode is active, redirect all requests to the home page,
+  // but skip static files and allowed pages
+  if (
+    betaMode &&
+    !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/images') &&
+    !pathname.startsWith('/favicon.ico') &&
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/.well-known') &&
+    pathname !== ROUTES.CONTACT_US &&
+    pathname !== ROUTES.PRIVACY_POLICY &&
+    pathname !== ROUTES.ABOUT_US &&
+    pathname !== ROUTES.COOKIE_STATEMENT &&
+    pathname !== ROUTES.TERMS_OF_USE &&
+    pathname !== ROUTES.ROOT
+  ) {
+    req.nextUrl.pathname = ROUTES.ROOT;
+    response = NextResponse.redirect(req.nextUrl);
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     return response;
   }

@@ -35,9 +35,17 @@ const BLOCK_COMPONENTS = {
 const BlockManager = ({ blocks = null }) => {
   if (!blocks) return null;
 
+  // Check if beta mode is enabled and the environment is production
+  const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.APP_ENV === 'prod';
+
   return blocks.map((block, idx) => {
     const Block = BLOCK_COMPONENTS[block.__component];
     if (!Block) return null;
+
+    // Skip HomeSearchBlock if in beta mode
+    if (betaMode && block.__component === 'blocks.search-block') {
+      return null;
+    }
 
     // eslint-disable-next-line react/no-array-index-key
     return <Block key={idx} {...block} />;
