@@ -17,12 +17,8 @@ import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
   {
-    label: 'Voyage details',
-    value: 'voyage_details',
-  },
-  {
-    label: 'Commercial offer terms',
-    value: 'commercial_offer_terms',
+    label: 'Fixture Terms',
+    value: 'fixture_terms',
   },
 ];
 
@@ -77,12 +73,13 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   }, []);
 
   const tabContent = () => {
-    switch (currentTab) {
-      case 'commercial_offer_terms':
-        return <COTTabContent data={commercialOfferTerms} />;
-      default:
-        return <VoyageDetailsTabContent data={voyageDetails} isViewing isCounteroffer />;
-    }
+    return (
+      <div className="space-y-6">
+        <VoyageDetailsTabContent data={voyageDetails} isViewing isCounteroffer />
+        <hr className="my-4" />
+        <COTTabContent data={commercialOfferTerms} />
+      </div>
+    );
   };
 
   if (initialLoading) {
@@ -95,7 +92,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
   return (
     <div className="flex h-full w-[610px] flex-col">
-      <Title level={2}>Accept the Pre-fixture Offer</Title>
+      <Title level={2}>Confirm Fixture with technical subjects</Title>
 
       <div className="mt-5 flex items-center text-[12px]">
         <Countdown time={countdownData} />
@@ -132,7 +129,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
         />
         <Button
           buttonProps={{
-            text: pending ? 'Please wait...' : 'Accept the pre-fixture offer',
+            text: pending ? 'Please wait...' : 'Confirm Fixture with technical subjects',
             variant: 'primary',
             size: 'large',
           }}

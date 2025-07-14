@@ -17,7 +17,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const {
     searchedCargo: { code, cargoType, loadTerminal } = {},
-    vessel: { details: { name: tankerName = '', flagOfRegistry } = {} } = {},
+    vessel = {},
     laycanStart,
     laycanEnd,
     expiresAt,
@@ -25,6 +25,8 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     isFailed,
     totalQuantity,
   } = data;
+
+  const { details: { name: tankerName = '', flagOfRegistry } = {} } = vessel || {};
 
   const { port: { name: portName, locode } = {} } = loadTerminal || {};
 
