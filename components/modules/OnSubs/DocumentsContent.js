@@ -10,6 +10,7 @@ import {
   completeUploadDocumentRequest,
   createDocumentRequest,
   getDocumentRequests,
+  revisionDocumentRequest,
 } from '@/services/documentRequests';
 import { uploadDocument } from '@/services/on-subs';
 import { updateDocumentList } from '@/store/entities/on-subs/slice';
@@ -130,7 +131,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
           });
 
           if (response.error) {
-            errorToast('Error', 'Failed to create document request');
+            errorToast(response.error?.title, response.error?.message);
           } else {
             successToast('Document request created successfully');
             // Refresh document requests
@@ -147,11 +148,33 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
 
           successToast('Document request updated successfully');
           break;
-        case 'revision':
-          // TODO: Implement ask for revision
+        case 'revision': {
+          // Get the first document request ID for the revision
+          const requestId = documentRequests.length > 0 ? documentRequests[0].id : null;
 
-          successToast('Revision requested successfully');
+          if (!requestId) {
+            errorToast('Error', 'No document request found');
+            break;
+          }
+
+          const response = await revisionDocumentRequest({
+            requestId,
+            comment: formData.comments || '',
+          });
+
+          if (response.error) {
+            errorToast(response.error?.title, response.error?.message);
+          } else {
+            successToast('Revision requested successfully');
+            // Refresh document requests to get updated status
+            const updatedRequests = await getDocumentRequests({ dealId: offerId });
+            if (updatedRequests.data && updatedRequests.data.length > 0) {
+              setDocumentRequests(updatedRequests.data);
+              setRequestStatus(updatedRequests.data[0].status || 'Pending');
+            }
+          }
           break;
+        }
         case 'confirm': {
           // Get the first document request ID for the approval
           const requestId = documentRequests.length > 0 ? documentRequests[0].id : null;
@@ -164,7 +187,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
           const response = await approveDocumentRequest({ requestId });
 
           if (response.error) {
-            errorToast('Error', 'Failed to approve documents');
+            errorToast(response.error?.title, response.error?.message);
           } else {
             successToast('Documents confirmed as complete');
             // Refresh document requests to get updated status
@@ -188,7 +211,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
           const response = await completeUploadDocumentRequest({ requestId });
 
           if (response.error) {
-            errorToast('Error', 'Failed to submit to charterer');
+            errorToast(response.error?.title, response.error?.message);
           } else {
             successToast('Submitted to charterer successfully');
             // Refresh document requests to get updated status
@@ -206,7 +229,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       }
     } catch (error) {
       console.error('Error handling document request action:', error);
-      errorToast('Error', 'Failed to process document request');
+      errorToast(error?.title || 'Error', error?.message || 'Failed to process document request');
     }
   };
 

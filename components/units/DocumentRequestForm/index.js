@@ -33,7 +33,7 @@ const getStatusConfig = (status, role) => {
     Pending: {
       statusText: isOwner ? 'Document request received from charterer' : 'Your last request is pending review',
       message: isCharterer
-        ? 'You can update your request or wait for the response'
+        ? 'Pending owner document submission - awaiting required files and documentation'
         : 'Please review the requirements and prepare the requested documents',
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-50',
@@ -116,9 +116,16 @@ const DocumentRequestForm = ({
   const [actionLoading, setActionLoading] = useState(false);
   const contentRef = useRef(null);
 
+  // Dynamic schema based on whether comments are required (revision mode)
+  const isRevisionMode = role === ROLES.CHARTERER && status === 'Documents Uploaded';
   const schema = yup.object().shape({
     selectedDocuments: yup.array().of(yup.string()),
-    comments: yup.string().max(500, 'Comments cannot exceed 500 characters'),
+    comments: isRevisionMode
+      ? yup
+          .string()
+          .required('Comments are required for revision requests')
+          .max(500, 'Comments cannot exceed 500 characters')
+      : yup.string().max(500, 'Comments cannot exceed 500 characters'),
   });
 
   const methods = useHookFormParams({
@@ -127,6 +134,7 @@ const DocumentRequestForm = ({
       selectedDocuments: initialDocuments,
       comments,
     },
+    mode: 'onChange', // Enable real-time validation
   });
 
   const handleToggle = () => setToggle((prev) => !prev);
@@ -171,8 +179,8 @@ const DocumentRequestForm = ({
 
   // Handle individual checkbox change
   const handleCheckboxChange = (optionValue, checked) => {
-    // Don't allow changes if form is disabled or owner is in read-only mode
-    if (disabled || isOwnerReadOnly) {
+    // Don't allow changes if checkboxes should be disabled
+    if (shouldDisableCheckboxes()) {
       return;
     }
 
@@ -205,17 +213,10 @@ const DocumentRequestForm = ({
           type: 'submit',
           disabled: actionLoading,
         });
-      } else if (status === 'Pending' || status === 'In Progress') {
-        buttons.push({
-          text: actionLoading ? 'Updating...' : 'Update Document Request',
-          variant: 'secondary',
-          type: 'submit',
-          disabled: true,
-        });
       } else if (status === 'Documents Uploaded') {
         buttons.push({
           text: actionLoading ? 'Requesting...' : 'Ask for Revision',
-          variant: 'outline',
+          variant: 'secondary',
           type: 'submit',
           disabled: actionLoading,
         });
@@ -252,10 +253,29 @@ const DocumentRequestForm = ({
     return isOwner && readOnlyStatuses.includes(status);
   }, [role, status]);
 
-  // Determine if comments section should be shown
+  // Determine if comments section should be shown - only when Ask for Revision button appears or for owners with revision requests
   const shouldShowComments = () => {
-    const hideCommentsStatuses = ['initial', 'Expired', 'Rejected', 'Revision Requested'];
-    return !hideCommentsStatuses.includes(status);
+    const isCharterer = role === ROLES.CHARTERER;
+    const isOwner = role === ROLES.OWNER;
+
+    // Show comments for charterers when Ask for Revision button is available
+    if (isCharterer) {
+      return status === 'Documents Uploaded';
+    }
+
+    // Show comments for owners when revision is requested (read-only)
+    if (isOwner) {
+      return status === 'Revision Requested';
+    }
+
+    // Don't show comments for other cases
+    return false;
+  };
+
+  // Determine if checkboxes should be disabled - disable for owners read-only mode, revision cases, pending and in-progress statuses
+  const shouldDisableCheckboxes = () => {
+    const disabledStatuses = ['Pending', 'In Progress'];
+    return disabled || isOwnerReadOnly || shouldShowComments() || disabledStatuses.includes(status);
   };
 
   return (
@@ -305,8 +325,8 @@ const DocumentRequestForm = ({
                       name={`selectedDocuments.${index}`}
                       checked={methods.watch('selectedDocuments')?.includes(option.value)}
                       onChange={(e) => handleCheckboxChange(option.value, e.target.checked)}
-                      disabled={disabled || isOwnerReadOnly}
-                      labelStyles={`text-sm leading-relaxed text-gray-700 ${disabled || isOwnerReadOnly ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      disabled={shouldDisableCheckboxes()}
+                      labelStyles={`text-sm leading-relaxed text-gray-700 ${shouldDisableCheckboxes() ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                       {option.label}
                     </CheckBoxInput>
@@ -327,6 +347,8 @@ const DocumentRequestForm = ({
                   rows={6}
                   disabled={disabled || isOwnerReadOnly}
                   maxLength={500}
+                  {...methods.register('comments')}
+                  error={methods.formState.errors.comments?.message}
                 />
               </div>
             )}
@@ -340,8 +362,6 @@ const DocumentRequestForm = ({
                   switch (buttonText) {
                     case 'Request from Vessel Owner':
                       return 'create';
-                    case 'Update Document Request':
-                      return 'update';
                     case 'Ask for Revision':
                       return 'revision';
                     case 'Confirm Completeness':

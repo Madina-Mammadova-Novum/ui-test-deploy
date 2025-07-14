@@ -36,3 +36,13 @@ export const approveDocumentRequest = async ({ requestId }) => {
     ...response,
   };
 };
+
+export const revisionDocumentRequest = async ({ requestId, comment }) => {
+  const response = await postData('document-requests/revision', {
+    requestId,
+    comment,
+  });
+  return {
+    ...response,
+  };
+};

@@ -3,18 +3,29 @@ import { arrayAdapter, objectAdapter } from '@/adapters/common';
 export const documentRequestsResponseAdapter = (data) => {
   if (!data) return arrayAdapter(data);
 
-  // If data is an array, return it directly with array adapter
+  let processedData;
+
+  // If data is an array, use it directly
   if (Array.isArray(data)) {
-    return arrayAdapter(data);
+    processedData = data;
   }
-
   // If data is an object with a data property containing an array
-  if (data.data && Array.isArray(data.data)) {
-    return arrayAdapter(data.data);
+  else if (data.data && Array.isArray(data.data)) {
+    processedData = data.data;
+  }
+  // If data is a single object, wrap it in an array
+  else {
+    processedData = [objectAdapter(data)];
   }
 
-  // If data is a single object, wrap it in an array
-  return arrayAdapter([objectAdapter(data)]);
+  // Sort by deadline from newest to oldest (most recent deadline first)
+  const sortedData = processedData.sort((a, b) => {
+    const dateA = new Date(a.deadline || 0);
+    const dateB = new Date(b.deadline || 0);
+    return dateB - dateA; // Descending order (newest first)
+  });
+
+  return arrayAdapter(sortedData);
 };
 
 export const createDocumentRequestAdapter = (data) => {
