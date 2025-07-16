@@ -10,7 +10,11 @@ import CircleArrowsSVG from '@/assets/images/process.svg';
 import { Button, Divider, QrCode } from '@/elements';
 import { ExpandableRowFooter, ModalWindow } from '@/units';
 
-const APP_DOWNLOAD_URL = 'https://apps.apple.com/app/id1146507477';
+const baseUrl =
+  typeof window !== 'undefined'
+    ? process.env.NEXT_PUBLIC_API_URL
+    : process?.env?.NEXT_PUBLIC_API_URL || 'https://ship.link';
+const APP_QR_URL = `${baseUrl}/qr-redirect?variant=download`;
 const APP_LOGO_PATH = '/images/dark-logo.svg';
 
 const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity }) => {
@@ -99,7 +103,7 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity }) 
                 </div>
                 <div className="flex justify-center">
                   <QrCode
-                    value={APP_DOWNLOAD_URL}
+                    value={APP_QR_URL}
                     logo={APP_LOGO_PATH}
                     size={180}
                     logoWidth={150}
