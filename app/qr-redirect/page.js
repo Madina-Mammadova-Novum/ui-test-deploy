@@ -38,11 +38,11 @@ export default function QrRedirectPage() {
   }, [variant]);
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center">
+    <section className="flex min-h-screen flex-col items-center justify-center">
       <DynamicLoader />
       {/* Optionally, show fallback links if not redirected */}
       {variant === 'download' && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center text-xs text-gray-500">
+        <div className="mt-4 text-center text-xs text-gray-500">
           <div>If you are not redirected, choose your platform:</div>
           <div className="mt-2 flex justify-center gap-4">
             <a href={IOS_URL} className="text-blue underline" target="_blank" rel="noopener noreferrer">
