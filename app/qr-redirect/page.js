@@ -38,7 +38,7 @@ export default function QrRedirectPage() {
   }, [variant]);
 
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center">
+    <section className="flex min-h-dvh flex-col items-center justify-center">
       <DynamicLoader />
       {/* Optionally, show fallback links if not redirected */}
       {variant === 'download' && (
