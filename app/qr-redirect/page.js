@@ -6,8 +6,8 @@ import { useSearchParams } from 'next/navigation';
 
 import { DynamicLoader } from '@/elements';
 
-const IOS_URL = 'https://apps.apple.com/app/id1146507477';
-const ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.mobillium.papara';
+const IOS_URL = 'https://apps.apple.com/app/id6702015014';
+const ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.ship.link';
 
 function getMobilePlatform() {
   if (typeof window === 'undefined') return null;
