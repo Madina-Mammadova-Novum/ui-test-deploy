@@ -62,16 +62,6 @@ export const postFixtureDetailsAdapter = ({ data }) => {
       correspondenceAddress,
       correspondenceCity,
     } = {},
-    vessel: {
-      details: {
-        registeredOwner,
-        technicalOperator,
-        commercialOperator,
-        disponentOwner,
-        name: tankerName,
-        flagOfRegistry,
-      } = {},
-    } = {},
     searchedCargo: { cargoType, loadTerminal, dischargeTerminal, code } = {},
     heat,
     products,
@@ -96,6 +86,18 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
   } = data;
+
+  // Handle vessel data safely
+  const vessel = data.vessel || {};
+  const vesselDetails = vessel.details || {};
+  const {
+    registeredOwner,
+    technicalOperator,
+    commercialOperator,
+    disponentOwner,
+    name: tankerName,
+    flagOfRegistry,
+  } = vesselDetails;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
