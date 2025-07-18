@@ -74,18 +74,20 @@ const OnSubsExpandedFooter = ({ underRecap = true, offerId, status, identity }) 
 
         <div className="flex items-center justify-end gap-x-2.5 gap-y-2.5">
           <div className="flex w-full gap-x-2.5">
-            <ModalWindow
-              buttonProps={{
-                variant: 'delete',
-                size: 'large',
-                text: 'Fail the Subs',
-                className: 'w-max',
-                disabled: underRecap,
-              }}
-              containerClass="w-[356px]"
-            >
-              <FailTheSubsModalContent offerId={offerId} />
-            </ModalWindow>
+            {identity?.isOwner && (
+              <ModalWindow
+                buttonProps={{
+                  variant: 'delete',
+                  size: 'large',
+                  text: 'Fail the Subs',
+                  className: 'w-max',
+                  disabled: underRecap,
+                }}
+                containerClass="w-[356px]"
+              >
+                <FailTheSubsModalContent offerId={offerId} />
+              </ModalWindow>
+            )}
             {identity?.isCharterer && (
               <ModalWindow
                 buttonProps={{
