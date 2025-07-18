@@ -282,7 +282,7 @@ export const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
 
   const {
-    vessel: { company: { details: { yearsInOperation, numberOfVessels } = {}, estimatedAverageTankerDWT } = {} } = {},
+    vessel,
     searchedCargo: { cargoType } = {},
     products = [],
     freight,
@@ -299,6 +299,11 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
   } = data;
+
+  // Safely extract vessel company details with proper null checks
+  const yearsInOperation = vessel?.company?.details?.yearsInOperation;
+  const numberOfVessels = vessel?.company?.details?.numberOfVessels;
+  const estimatedAverageTankerDWT = vessel?.company?.estimatedAverageTankerDWT;
 
   return {
     partyInformation: {
