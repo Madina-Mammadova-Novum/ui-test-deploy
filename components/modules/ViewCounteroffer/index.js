@@ -6,8 +6,7 @@ import { useSelector } from 'react-redux';
 import { ViewCounterofferPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
-import { Dropdown, Loader } from '@/elements';
-import { COUNTDOWN_OPTIONS } from '@/lib/constants';
+import { Loader } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { getUserDataSelector } from '@/store/selectors';
@@ -28,7 +27,6 @@ const tabs = [
 const ViewCounteroffer = ({ itemId }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [showScroll, setShowScroll] = useState(false);
-  const [responseCountdown, setResponseCountdown] = useState(COUNTDOWN_OPTIONS[1]);
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
 
@@ -71,24 +69,7 @@ const ViewCounteroffer = ({ itemId }) => {
     <div className="flex h-full w-[610px] flex-col">
       <ModalHeader>{isOwner ? 'View Counteroffer' : 'View Sent Offer'}</ModalHeader>
 
-      {isOwner ? (
-        <Countdown time={countdownData} customStyles="mt-5" />
-      ) : (
-        <div className="mt-5 flex items-center text-[12px]">
-          <div className="flex h-min items-center border-l-2 border-blue pl-4">
-            <p className="max-w-[240px] font-bold">
-              Set a response countdown timer for the counterparty to reply to this offer
-            </p>
-            <Dropdown
-              disabled
-              defaultValue={responseCountdown}
-              options={COUNTDOWN_OPTIONS}
-              onChange={setResponseCountdown}
-              customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
-            />
-          </div>
-        </div>
-      )}
+      {isOwner && <Countdown time={countdownData} customStyles="mt-5" />}
 
       <Tabs
         tabs={tabs}

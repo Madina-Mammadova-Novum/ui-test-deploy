@@ -16,4 +16,5 @@ export * from '@/adapters/charterParty';
 export * from '@/adapters/offer';
 export * from '@/adapters/otp';
 export * from '@/adapters/documentRequests';
+export * from '@/adapters/countdownTimer';
 export * from '@/adapters/common';

@@ -5,6 +5,10 @@ export const responseCountdownTimerAdapter = ({ data }) => {
   return arrayAdapter(data);
 };
 
+export const responseCountdownConfigsAdapter = ({ data }) => {
+  return arrayAdapter(data);
+};
+
 export const extendCountdownDataAdapter = (prevOfferDetailsState) => ({
   ...prevOfferDetailsState,
   allowExtension: false,
