@@ -205,7 +205,7 @@ export function offerDetailsAdapter({ data, role }) {
     hasUnreadComment,
     isCountdownActive,
     countdownData: {
-      date: calculateCountdown(expiresAt, frozenAt),
+      date: calculateCountdown(expiresAt),
       autoStart: !frozenAt,
     },
     voyageDetails: {

@@ -580,15 +580,10 @@ export const getListOfDataByDays = (data) => {
   });
 };
 
-export const calculateCountdown = (expiresAt, frozenAt) => {
+export const calculateCountdown = (expiresAt) => {
   const currentUTCtime = Date.now();
 
-  let millisecondsUntilExpiration = 0;
-  if (frozenAt) {
-    millisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(frozenAt).getTime();
-  } else {
-    millisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
-  }
+  const millisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
 
   return millisecondsUntilExpiration < 0 ? Date.now() : Date.now() + millisecondsUntilExpiration;
 };

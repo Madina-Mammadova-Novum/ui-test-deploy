@@ -63,7 +63,7 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
+        date: calculateCountdown(expiresAt),
         autoStart: !frozenAt,
       },
       isFailed,
@@ -135,7 +135,7 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       freezed: frozenAt,
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
+        date: calculateCountdown(expiresAt),
         autoStart: !frozenAt,
       },
       isFailed,

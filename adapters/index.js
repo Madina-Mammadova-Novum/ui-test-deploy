@@ -10,6 +10,7 @@ export * from '@/adapters/on-subs';
 export * from '@/adapters/tools';
 export * from '@/adapters/errors';
 export * from '@/adapters/api';
+export * from '@/adapters/assignedTasks';
 export * from '@/adapters/savedSearch';
 export * from '@/adapters/failed-offers';
 export * from '@/adapters/charterParty';

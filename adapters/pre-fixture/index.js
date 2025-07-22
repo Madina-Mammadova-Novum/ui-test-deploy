@@ -72,7 +72,7 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
+        date: calculateCountdown(expiresAt),
         autoStart: !frozenAt,
       },
     },
@@ -136,7 +136,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
+        date: calculateCountdown(expiresAt),
         autoStart: !frozenAt,
       },
     },
