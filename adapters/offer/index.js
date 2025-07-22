@@ -9,7 +9,6 @@ import {
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
-  getRoleIdentity,
 } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
@@ -185,28 +184,29 @@ export function offerDetailsAdapter({ data, role }) {
     failureReason,
     failedBy,
     expiresAt,
-    frozenAt,
     freightFormat,
-    isCountdownExtendedByOwner,
-    isCountdownExtendedByCharterer,
-    isCountdownActive,
+    countdownStatus,
+    allowExtension,
+    extensionTimeOptions,
     hasUnreadComment,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    taskId,
   } = data;
 
-  const { isOwner } = getRoleIdentity({ role });
-
-  const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
+  // Use countdown status from assigned tasks if available, otherwise fallback to isCountdownActive
+  const isCountdownActive = countdownStatus === 'Running';
 
   return {
-    allowExtension: allowExtensionByRole,
+    allowExtension,
     hasUnreadComment,
     isCountdownActive,
+    extensionTimeOptions,
+    taskId,
     countdownData: {
       date: calculateCountdown(expiresAt),
-      autoStart: !frozenAt,
+      autoStart: isCountdownActive,
     },
     voyageDetails: {
       dates: [

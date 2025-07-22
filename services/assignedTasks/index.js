@@ -1,4 +1,4 @@
-import { getData } from '@/utils/dataFetching';
+import { getData, postData } from '@/utils/dataFetching';
 
 export const getAssignedTasks = async ({ targetId, purpose, status }) => {
   // Build query parameters
@@ -20,5 +20,19 @@ export const getAssignedTasks = async ({ targetId, purpose, status }) => {
   const endpoint = `assigned-tasks${queryString ? `?${queryString}` : ''}`;
 
   const response = await getData(endpoint);
+  return response;
+};
+
+export const getTaskExtensionTimeOptions = async ({ taskId }) => {
+  const endpoint = `assigned-tasks/${taskId}/extension-time-options`;
+
+  const response = await getData(endpoint);
+  return response;
+};
+
+export const submitTaskExtensionRequest = async ({ taskId, data }) => {
+  const endpoint = `assigned-tasks/${taskId}/extension-requests`;
+
+  const response = await postData(endpoint, data);
   return response;
 };
