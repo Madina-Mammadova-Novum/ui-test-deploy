@@ -54,7 +54,7 @@ export function sendOfferAdapter({ data }) {
     laytime: layTime,
     demurragePaymentTermId: undisputedDemurrage.value,
     paymentTermId: paymentTerms.value,
-    countDownTimerSettingId: responseCountdown.value,
+    responseTimeMinutes: responseCountdown.value,
     cargoes: postProductsAdapter({ data: products }),
     additionalDischargeOptions,
     sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),
@@ -89,7 +89,7 @@ export function sendCounterofferAdapter({ data }) {
     demurrageRate,
     comment,
     freightFormatId: freight?.value,
-    countDownTimerSettingId: responseCountdown?.value,
+    responseTimeMinutes: responseCountdown?.value,
     cargoes: products.map(({ density, product: { value: productId }, quantity }, index) => ({
       productId,
       referenceDensity: +density,
