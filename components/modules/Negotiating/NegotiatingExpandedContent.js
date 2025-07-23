@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
@@ -12,11 +12,11 @@ import {
   offerTabDataByRole,
 } from '@/adapters/negotiating';
 import { Table } from '@/elements';
-import { getAssignedTasks } from '@/services/assignedTasks';
 import { setTab } from '@/store/entities/negotiating/slice';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
+import { useAssignedTasks } from '@/utils/hooks';
 import {
   chartererNegotiatingCounterofferTableHeader,
   chartererNegotiatingFailedTableHeader,
@@ -28,11 +28,10 @@ import {
 
 const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   const dispatch = useDispatch();
+  const { fetchAndUpdateAssignedTasks } = useAssignedTasks();
 
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
   const [currentTab, setCurrentTab] = useState(tabs?.[0]?.value);
-  const [enhancedIncomingData, setEnhancedIncomingData] = useState([]);
-  const [enhancedSentData, setEnhancedSentData] = useState([]);
 
   const { incoming = [], sent = [], failed = [] } = offerById[data.id];
   const { isOwner } = getRoleIdentity({ role });
@@ -52,84 +51,6 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
     () => (tab ? notifiedNegotiatingDataAdapter({ tab, data: incoming, fleetId: data.fleetId }) : incoming),
     [tab, incoming, data.fleetId]
   );
-
-  const fetchAssignedTasksForIncoming = useCallback(async (incomingItems) => {
-    if (!incomingItems || incomingItems.length === 0) {
-      setEnhancedIncomingData([]);
-      return;
-    }
-
-    try {
-      const enhancedData = await Promise.all(
-        incomingItems.map(async (item) => {
-          try {
-            const assignedTasksResponse = await getAssignedTasks({
-              targetId: item.id,
-              purpose: 'NegotiatingOffer',
-            });
-
-            // Find the task with status "Created" and extract its countdown timer data
-            const createdTask = assignedTasksResponse?.data?.find((task) => task.status === 'Created');
-            const expiresAt = createdTask?.countdownTimer?.expiresAt;
-            const countdownStatus = createdTask?.countdownTimer?.status;
-
-            return {
-              ...item,
-              expiresAt,
-              countdownStatus,
-            };
-          } catch (error) {
-            console.error(`Error fetching assigned tasks for item ${item.id}:`, error);
-            return item; // Return original item if fetch fails
-          }
-        })
-      );
-
-      setEnhancedIncomingData(enhancedData);
-    } catch (error) {
-      console.error('Error fetching assigned tasks for incoming data:', error);
-      setEnhancedIncomingData(incomingItems); // Fallback to original data
-    }
-  }, []);
-
-  const fetchAssignedTasksForSent = useCallback(async (sentItems) => {
-    if (!sentItems || sentItems.length === 0) {
-      setEnhancedSentData([]);
-      return;
-    }
-
-    try {
-      const enhancedData = await Promise.all(
-        sentItems.map(async (item) => {
-          try {
-            const assignedTasksResponse = await getAssignedTasks({
-              targetId: item.id,
-              purpose: 'NegotiatingOffer',
-            });
-
-            // Find the task with status "Created" and extract its countdown timer data
-            const createdTask = assignedTasksResponse?.data?.find((task) => task.status === 'Created');
-            const expiresAt = createdTask?.countdownTimer?.expiresAt;
-            const countdownStatus = createdTask?.countdownTimer?.status;
-
-            return {
-              ...item,
-              expiresAt,
-              countdownStatus,
-            };
-          } catch (error) {
-            console.error(`Error fetching assigned tasks for item ${item.id}:`, error);
-            return item; // Return original item if fetch fails
-          }
-        })
-      );
-
-      setEnhancedSentData(enhancedData);
-    } catch (error) {
-      console.error('Error fetching assigned tasks for sent data:', error);
-      setEnhancedSentData(sentItems); // Fallback to original data
-    }
-  }, []);
 
   const determineInitialTab = () => {
     const urlParams = new URLSearchParams(window.location.href);
@@ -168,9 +89,7 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   // Fetch assigned tasks once when component mounts and has incoming data
   useEffect(() => {
     if (incomingData && incomingData.length > 0) {
-      fetchAssignedTasksForIncoming(incomingData);
-    } else {
-      setEnhancedIncomingData([]);
+      fetchAndUpdateAssignedTasks(incomingData, data.id, 'incoming');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run once on mount
@@ -178,9 +97,7 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   // Fetch assigned tasks once when component mounts and has sent data
   useEffect(() => {
     if (sentData && sentData.length > 0) {
-      fetchAssignedTasksForSent(sentData);
-    } else {
-      setEnhancedSentData([]);
+      fetchAndUpdateAssignedTasks(sentData, data.id, 'sent');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run once on mount
@@ -190,7 +107,7 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
       <Table
         headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
         rows={counteroffersTabDataByRole({
-          data: enhancedSentData.length > 0 ? enhancedSentData : sentData,
+          data: sentData,
           role,
           parentId: data.id,
         })}
@@ -207,7 +124,7 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
     incoming: (
       <Table
         headerData={isOwner ? negotiatingIncomingTableHeader : negotiatingSentOffersTableHeader}
-        rows={offerTabDataByRole({ data: enhancedIncomingData, role, parentId: data.id })}
+        rows={offerTabDataByRole({ data: incomingData, role, parentId: data.id })}
         noDataMessage="No data provided"
       />
     ),

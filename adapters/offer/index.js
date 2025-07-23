@@ -198,11 +198,18 @@ export function offerDetailsAdapter({ data, role }) {
   // Use countdown status from assigned tasks if available, otherwise fallback to isCountdownActive
   const isCountdownActive = countdownStatus === 'Running';
 
+  // Convert extension time options to dropdown format
+  const convertedExtensionTimeOptions =
+    extensionTimeOptions?.map((option) => ({
+      value: option.value,
+      label: option.text || option.label,
+    })) || [];
+
   return {
     allowExtension,
     hasUnreadComment,
     isCountdownActive,
-    extensionTimeOptions,
+    extensionTimeOptions: convertedExtensionTimeOptions,
     taskId,
     countdownData: {
       date: calculateCountdown(expiresAt),

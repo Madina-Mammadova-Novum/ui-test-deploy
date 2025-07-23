@@ -55,7 +55,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
       errorToast(error?.title, error?.message);
     } else {
       successToast(successMessage);
-      setOfferDetails(extendCountdownDataAdapter);
+      setOfferDetails((prevOfferDetails) => extendCountdownDataAdapter(prevOfferDetails, 15));
       dispatch(updateCountdown({ offerId }));
     }
   };

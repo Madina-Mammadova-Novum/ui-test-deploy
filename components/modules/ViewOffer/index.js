@@ -93,7 +93,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
             extendMinute: extensionOption.value,
           })
         );
-        handleCountdownExtensionSuccess();
+        handleCountdownExtensionSuccess(extensionOption.value);
         successToast(successMessage || 'Extension request submitted successfully');
       }
     } catch (err) {
@@ -130,7 +130,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
               />
               <Button
                 customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
-                buttonProps={{ text: 'Extend', variant: 'primary', size: 'medium' }}
+                buttonProps={{ text: 'Extend the response time', variant: 'primary', size: 'medium' }}
                 disabled={!allowCountdownExtension || !isCountdownActive}
                 onClick={handleExtendCountdown}
               />
@@ -139,7 +139,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
             <Button
               customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
               buttonProps={{
-                text: `Extend the response time by ${extensionTimeOptions?.[0]?.text || '15 Minutes'}`,
+                text: `Extend the response time by ${extensionTimeOptions?.[0]?.label || '15 Minutes'}`,
                 variant: 'primary',
                 size: 'medium',
               }}

@@ -24,7 +24,9 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
 
   const { parentId } = cellData || {};
 
-  const handleCountdownExtensionSuccess = () => setOfferDetails(extendCountdownDataAdapter);
+  const handleCountdownExtensionSuccess = (extendMinutes) => {
+    setOfferDetails((prevOfferDetails) => extendCountdownDataAdapter(prevOfferDetails, extendMinutes));
+  };
 
   const initActions = async () => {
     const { status, data, error } = await getOfferDetails(itemId, role);
