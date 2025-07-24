@@ -8,7 +8,7 @@ import { OfferModalContentPropTypes } from '@/lib/types';
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { extensionTimeOptionsAdapter } from '@/adapters/pre-fixture';
 import { Button, Dropdown, Loader, Title } from '@/elements';
-import { getAssignedTasks, getTaskExtensionTimeOptions , submitTaskExtensionRequest } from '@/services/assignedTasks';
+import { getAssignedTasks, getTaskExtensionTimeOptions, submitTaskExtensionRequest } from '@/services/assignedTasks';
 import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
 import { updateConfirmationStatus, updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
