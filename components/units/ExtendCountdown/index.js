@@ -71,7 +71,8 @@ const ExtendCountdown = ({
       <div className="border-darker rounded-[10px] border bg-gray-light px-5 py-3 text-[12px]">{description}</div>
       <div className="border-l-2 border-blue pl-4">
         <p className="mb-2.5 text-[12px] font-bold">
-          Choose time which you want to add to countdown. Maximum {options.length > 0 ? options[options.length - 1]?.label : 'N/A'}.
+          Choose time which you want to add to countdown. Maximum{' '}
+          {options.length > 0 ? options[options.length - 1]?.label : 'N/A'}.
         </p>
         <Dropdown
           options={options}

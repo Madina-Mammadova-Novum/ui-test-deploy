@@ -5,6 +5,7 @@ ShipLink is built with modern web technologies, optimized for maritime B2B opera
 ## Core Framework Architecture
 
 ### Next.js 14 Application Structure
+
 ```
 shiplink-frontend-ui/
 ├── app/                    # Next.js App Router (App directory)
@@ -29,6 +30,7 @@ shiplink-frontend-ui/
 ```
 
 ### Framework Features Utilized
+
 - **Hybrid Rendering**: SSR for SEO-critical pages, CSR for interactive maritime tools
 - **API Routes**: Proxy layer to backend with authentication and data transformation
 - **Dynamic Imports**: Code splitting for maritime modules (vessel management, calculations)
@@ -38,6 +40,7 @@ shiplink-frontend-ui/
 ## State Management Architecture
 
 ### Redux Toolkit Implementation
+
 ```javascript
 // Store structure for maritime operations
 store/
@@ -55,6 +58,7 @@ store/
 ```
 
 ### Key Redux Patterns
+
 ```javascript
 // Maritime-specific slice example
 const vesselSlice = createSlice({
@@ -75,7 +79,7 @@ const vesselSlice = createSlice({
     },
     updateVesselPosition: (state, action) => {
       const { vesselId, position } = action.payload;
-      const vessel = state.fleet.find(v => v.id === vesselId);
+      const vessel = state.fleet.find((v) => v.id === vesselId);
       if (vessel) {
         vessel.position = position;
         vessel.lastUpdated = new Date().toISOString();
@@ -101,6 +105,7 @@ const vesselSlice = createSlice({
 ```
 
 ### Redux Persist Configuration
+
 ```javascript
 const persistConfig = {
   key: 'shiplink',
@@ -129,6 +134,7 @@ const persistConfig = {
 ## Styling and Design System
 
 ### Tailwind CSS Configuration
+
 ```javascript
 // tailwind.config.js - Maritime-optimized configuration
 module.exports = {
@@ -141,17 +147,17 @@ module.exports = {
     extend: {
       // Maritime-specific breakpoints
       screens: {
-        'xs': '375px',      // Mobile
-        'msm': '425px',     // Large mobile
-        'sm': '480px',      // Small tablet
-        'md': '768px',      // Tablet
-        '2md': '980px',     // Large tablet
-        '3md': '1024px',    // Small desktop
-        'lg': '1280px',     // Desktop
-        'xl': '1440px',     // Large desktop
-        '2xl': '1920px',    // Ultra-wide
+        xs: '375px', // Mobile
+        msm: '425px', // Large mobile
+        sm: '480px', // Small tablet
+        md: '768px', // Tablet
+        '2md': '980px', // Large tablet
+        '3md': '1024px', // Small desktop
+        lg: '1280px', // Desktop
+        xl: '1440px', // Large desktop
+        '2xl': '1920px', // Ultra-wide
       },
-      
+
       // Maritime color palette
       colors: {
         maritime: {
@@ -174,50 +180,48 @@ module.exports = {
             900: '#0c4a6e',
           },
         },
-        
+
         // Status colors for maritime operations
         status: {
-          negotiating: '#f59e0b',    // Amber
-          prefixture: '#3b82f6',     // Blue
-          onsubs: '#8b5cf6',         // Purple
-          fixture: '#10b981',        // Green
-          failed: '#ef4444',         // Red
+          negotiating: '#f59e0b', // Amber
+          prefixture: '#3b82f6', // Blue
+          onsubs: '#8b5cf6', // Purple
+          fixture: '#10b981', // Green
+          failed: '#ef4444', // Red
         },
       },
-      
+
       // Typography optimized for maritime data
       fontSize: {
-        'xs': ['12px', '130%'],
-        'sm': ['16px', '140%'],
-        'base': ['18px', '140%'],
-        'lg': ['20px', '140%'],
-        'xl': ['24px', '140%'],
+        xs: ['12px', '130%'],
+        sm: ['16px', '140%'],
+        base: ['18px', '140%'],
+        lg: ['20px', '140%'],
+        xl: ['24px', '140%'],
         '2xl': ['26px', '140%'],
         '3xl': ['34px', '140%'],
         '4xl': ['42px', '140%'],
       },
-      
+
       // Spacing for maritime forms and data tables
       spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '128': '32rem',
+        18: '4.5rem',
+        88: '22rem',
+        128: '32rem',
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
 };
 ```
 
 ### Component Design Patterns
+
 ```javascript
 // Standard maritime component styling patterns
 const MaritimeButton = ({ variant, size, children, ...props }) => {
   const baseClasses = 'font-medium rounded-lg transition-colors focus:outline-none focus:ring-2';
-  
+
   const variants = {
     primary: 'bg-maritime-blue-500 text-white hover:bg-maritime-blue-700 focus:ring-maritime-blue-300',
     secondary: 'bg-maritime-navy-100 text-maritime-navy-700 hover:bg-maritime-navy-200 focus:ring-maritime-navy-300',
@@ -225,15 +229,15 @@ const MaritimeButton = ({ variant, size, children, ...props }) => {
     warning: 'bg-status-negotiating text-white hover:bg-amber-600 focus:ring-amber-300',
     danger: 'bg-status-failed text-white hover:bg-red-700 focus:ring-red-300',
   };
-  
+
   const sizes = {
     sm: 'px-3 py-2 text-sm',
     md: 'px-4 py-2 text-base',
     lg: 'px-6 py-3 text-lg',
   };
-  
+
   const classes = `${baseClasses} ${variants[variant]} ${sizes[size]}`;
-  
+
   return (
     <button className={classes} {...props}>
       {children}
@@ -245,6 +249,7 @@ const MaritimeButton = ({ variant, size, children, ...props }) => {
 ## Form Management and Validation
 
 ### React Hook Form Integration
+
 ```javascript
 // Maritime form with complex validation
 const VesselOfferForm = () => {
@@ -268,18 +273,18 @@ const VesselOfferForm = () => {
       dischargePort: null,
     },
   });
-  
+
   // Watch for cargo type changes to validate quantity
   const cargoType = watch('cargoType');
   const selectedVessel = watch('vessel');
-  
+
   useEffect(() => {
     if (cargoType && selectedVessel) {
       // Trigger vessel capacity validation
       trigger('cargoQuantity');
     }
   }, [cargoType, selectedVessel, trigger]);
-  
+
   const onSubmit = async (data) => {
     try {
       const offerData = vesselOfferAdapter(data);
@@ -289,7 +294,7 @@ const VesselOfferForm = () => {
       toast.error(`Failed to submit offer: ${error.message}`);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Form fields with maritime-specific validation */}
@@ -299,64 +304,62 @@ const VesselOfferForm = () => {
 ```
 
 ### Yup Validation Schemas
+
 ```javascript
 // Maritime-specific validation schemas
 const vesselOfferSchema = yup.object({
   vessel: yup.object().required('Vessel selection is required'),
-  
+
   cargoQuantity: yup
     .number()
     .required('Cargo quantity is required')
     .positive('Cargo quantity must be positive')
-    .test('capacity-check', 'Exceeds vessel capacity', function(value) {
+    .test('capacity-check', 'Exceeds vessel capacity', function (value) {
       const vessel = this.parent.vessel;
       if (!vessel || !value) return true;
-      
+
       return value <= vessel.dwt * 0.95; // 95% of vessel capacity
     }),
-    
-  cargoType: yup
-    .string()
-    .required('Cargo type is required')
-    .oneOf(VALID_CARGO_TYPES, 'Invalid cargo type'),
-    
+
+  cargoType: yup.string().required('Cargo type is required').oneOf(VALID_CARGO_TYPES, 'Invalid cargo type'),
+
   laycanStart: yup
     .date()
     .required('Laycan start date is required')
     .min(addDays(new Date(), 2), 'Minimum 48 hours advance notice'),
-    
+
   laycanEnd: yup
     .date()
     .required('Laycan end date is required')
     .min(yup.ref('laycanStart'), 'End date must be after start date')
-    .test('laycan-spread', 'Laycan spread must be 3-30 days', function(value) {
+    .test('laycan-spread', 'Laycan spread must be 3-30 days', function (value) {
       const startDate = this.parent.laycanStart;
       if (!startDate || !value) return true;
-      
+
       const daysDiff = differenceInDays(value, startDate);
       return daysDiff >= 3 && daysDiff <= 30;
     }),
-    
+
   freight: yup
     .number()
     .required('Freight rate is required')
     .positive('Freight rate must be positive')
     .max(1000, 'Freight rate seems unreasonably high'),
-    
+
   loadPort: yup
     .object()
     .required('Loading port is required')
-    .test('port-accessibility', 'Port not accessible for cargo type', function(value) {
+    .test('port-accessibility', 'Port not accessible for cargo type', function (value) {
       const cargoType = this.parent.cargoType;
       if (!value || !cargoType) return true;
-      
+
       return value.accessibleCargoTypes?.includes(cargoType);
     }),
-    
+
   dischargePort: yup
     .object()
     .required('Discharge port is required')
-    .test('different-ports', 'Load and discharge ports must be different', function(value) {
+    .test('different-ports', 'Load and discharge ports must be different', function (value) {
       const loadPort = this.parent.loadPort;
       return !loadPort || !value || loadPort.id !== value.id;
     }),
@@ -366,13 +369,14 @@ const vesselOfferSchema = yup.object({
 ## Real-time Features
 
 ### SignalR Integration
+
 ```javascript
 // Real-time maritime operations with SignalR
 const useMaritimeHub = () => {
   const [connection, setConnection] = useState(null);
   const [connectionState, setConnectionState] = useState('disconnected');
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
       .withUrl('/api/maritime-hub', {
@@ -381,44 +385,43 @@ const useMaritimeHub = () => {
       .withAutomaticReconnect([0, 2000, 10000, 30000])
       .configureLogging(LogLevel.Information)
       .build();
-    
+
     const startConnection = async () => {
       try {
         await newConnection.start();
         setConnectionState('connected');
         setConnection(newConnection);
-        
+
         // Subscribe to maritime events
         newConnection.on('VesselPositionUpdate', (vesselId, position) => {
           dispatch(updateVesselPosition({ vesselId, position }));
         });
-        
+
         newConnection.on('OfferStatusChange', (offerId, status) => {
           dispatch(updateOfferStatus({ offerId, status }));
         });
-        
+
         newConnection.on('NewChatMessage', (message) => {
           dispatch(addChatMessage(message));
         });
-        
+
         newConnection.on('NotificationReceived', (notification) => {
           dispatch(addNotification(notification));
           toast.info(notification.message);
         });
-        
       } catch (error) {
         console.error('SignalR connection failed:', error);
         setConnectionState('failed');
       }
     };
-    
+
     startConnection();
-    
+
     return () => {
       newConnection?.stop();
     };
   }, [dispatch]);
-  
+
   return { connection, connectionState };
 };
 ```
@@ -426,6 +429,7 @@ const useMaritimeHub = () => {
 ## Performance Optimization Libraries
 
 ### Data Fetching and Caching
+
 ```javascript
 // React Query for maritime data management
 const queryClient = new QueryClient({
@@ -466,6 +470,7 @@ const useOfferDetails = (offerId) => {
 ```
 
 ### Bundle Optimization
+
 ```javascript
 // webpack.config.js - Maritime-specific optimizations
 module.exports = {
@@ -480,7 +485,7 @@ module.exports = {
           chunks: 'all',
           priority: 10,
         },
-        
+
         // Maps and visualization
         maps: {
           test: /[\\/](leaflet|react-leaflet)[\\/]/,
@@ -488,7 +493,7 @@ module.exports = {
           chunks: 'all',
           priority: 8,
         },
-        
+
         // UI components
         ui: {
           test: /[\\/]components[\\/]/,
@@ -496,7 +501,7 @@ module.exports = {
           chunks: 'all',
           priority: 6,
         },
-        
+
         // Vendor libraries
         vendor: {
           test: /[\\/]node_modules[\\/]/,
@@ -507,7 +512,7 @@ module.exports = {
       },
     },
   },
-  
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './'),
@@ -525,36 +530,42 @@ module.exports = {
 ## Development and Build Tools
 
 ### Code Quality and Linting
+
 ```javascript
 // .eslintrc.js - Maritime-specific rules
 module.exports = {
-  extends: [
-    'next/core-web-vitals',
-    'airbnb',
-    'prettier',
-  ],
+  extends: ['next/core-web-vitals', 'airbnb', 'prettier'],
   rules: {
     // Maritime-specific naming conventions
-    'camelcase': ['error', { 
-      allow: ['^UNSAFE_', '^imo_', '^dwt_', '^mt_'] 
-    }],
-    
+    camelcase: [
+      'error',
+      {
+        allow: ['^UNSAFE_', '^imo_', '^dwt_', '^mt_'],
+      },
+    ],
+
     // Require PropTypes for maritime components
-    'react/prop-types': ['error', { 
-      ignore: ['children', 'className'] 
-    }],
-    
+    'react/prop-types': [
+      'error',
+      {
+        ignore: ['children', 'className'],
+      },
+    ],
+
     // Maritime data validation rules
-    'no-magic-numbers': ['warn', { 
-      ignore: [0, 1, -1, 24, 48, 72], // Common maritime time periods
-      ignoreArrayIndexes: true,
-    }],
-    
+    'no-magic-numbers': [
+      'warn',
+      {
+        ignore: [0, 1, -1, 24, 48, 72], // Common maritime time periods
+        ignoreArrayIndexes: true,
+      },
+    ],
+
     // Async operations for maritime APIs
     'require-await': 'error',
     'no-return-await': 'error',
   },
-  
+
   overrides: [
     {
       files: ['**/*.test.js', '**/*.spec.js'],
@@ -570,12 +581,13 @@ module.exports = {
 ```
 
 ### Testing Configuration
+
 ```javascript
 // jest.config.js - Maritime testing setup
 module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  
+
   moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/$1',
     '^@/components/(.*)$': '<rootDir>/components/$1',
@@ -585,13 +597,13 @@ module.exports = {
     '^@/store/(.*)$': '<rootDir>/store/$1',
     '^@/lib/(.*)$': '<rootDir>/lib/$1',
   },
-  
+
   // Mock maritime external dependencies
   moduleNameMapping: {
     '^leaflet$': '<rootDir>/__mocks__/leaflet.js',
     '^@microsoft/signalr$': '<rootDir>/__mocks__/signalr.js',
   },
-  
+
   collectCoverageFrom: [
     'components/**/*.{js,jsx}',
     'services/**/*.{js,jsx}',
@@ -601,7 +613,7 @@ module.exports = {
     '!**/*.stories.{js,jsx}',
     '!**/node_modules/**',
   ],
-  
+
   coverageThreshold: {
     global: {
       branches: 70,
@@ -629,6 +641,7 @@ module.exports = {
 ## Security and Authentication
 
 ### JWT Token Management
+
 ```javascript
 // Enhanced security for maritime operations
 const useAuthTokens = () => {
@@ -636,25 +649,25 @@ const useAuthTokens = () => {
     accessToken: null,
     refreshToken: null,
   });
-  
+
   const refreshAccessToken = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/refresh', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          refreshToken: tokens.refreshToken 
+        body: JSON.stringify({
+          refreshToken: tokens.refreshToken,
         }),
       });
-      
+
       if (!response.ok) throw new Error('Token refresh failed');
-      
+
       const newTokens = await response.json();
       setTokens(newTokens);
-      
+
       // Update axios defaults for maritime API calls
       axios.defaults.headers.common['Authorization'] = `Bearer ${newTokens.accessToken}`;
-      
+
       return newTokens.accessToken;
     } catch (error) {
       // Redirect to login on refresh failure
@@ -662,22 +675,22 @@ const useAuthTokens = () => {
       throw error;
     }
   }, [tokens.refreshToken]);
-  
+
   // Automatic token refresh before expiration
   useEffect(() => {
     if (!tokens.accessToken) return;
-    
+
     const tokenData = jwt.decode(tokens.accessToken);
     const expirationTime = tokenData.exp * 1000;
     const refreshTime = expirationTime - 5 * 60 * 1000; // 5 minutes before expiry
     const timeUntilRefresh = refreshTime - Date.now();
-    
+
     if (timeUntilRefresh > 0) {
       const refreshTimer = setTimeout(refreshAccessToken, timeUntilRefresh);
       return () => clearTimeout(refreshTimer);
     }
   }, [tokens.accessToken, refreshAccessToken]);
-  
+
   return { tokens, refreshAccessToken };
 };
 ```
@@ -685,6 +698,7 @@ const useAuthTokens = () => {
 ## Monitoring and Analytics
 
 ### Performance Monitoring
+
 ```javascript
 // Maritime-specific performance tracking
 import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
@@ -696,7 +710,7 @@ const trackMaritimePerformance = () => {
   getFCP(console.log);
   getLCP(console.log);
   getTTFB(console.log);
-  
+
   // Maritime-specific metrics
   const trackVesselSearchPerformance = () => {
     performance.mark('vessel-search-start');
@@ -704,7 +718,7 @@ const trackMaritimePerformance = () => {
     performance.mark('vessel-search-end');
     performance.measure('vessel-search-duration', 'vessel-search-start', 'vessel-search-end');
   };
-  
+
   const trackOfferSubmissionPerformance = () => {
     performance.mark('offer-submit-start');
     // Offer submission logic
@@ -715,6 +729,7 @@ const trackMaritimePerformance = () => {
 ```
 
 This comprehensive technical stack documentation provides a complete overview of ShipLink's technology choices, implementation patterns, and architectural decisions, enabling developers to understand and contribute effectively to the maritime platform.
+
 - **PostCSS**: CSS processing
 - **SWC**: Fast compilation
 
