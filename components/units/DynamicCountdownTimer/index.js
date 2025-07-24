@@ -24,7 +24,11 @@ const DynamicCountdownTimer = ({ date, autoStart = true, variant = 'primary', st
           return <span className="text-yellow">Not Started</span>;
         }
 
-        if (completed) return <span className="text-red">Expired</span>;
+        if (status === 'Paused') {
+          return <span className="text-yellow">Paused</span>;
+        }
+
+        if (completed || status === 'Expired') return <span className="text-red">Expired</span>;
 
         return (
           <span className={`flex items-center gap-x-1 text-red ${!autoStart ? 'opacity-50' : ''}`}>

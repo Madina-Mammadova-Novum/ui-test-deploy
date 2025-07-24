@@ -38,8 +38,10 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
           purpose: 'NegotiatingOffer',
         });
 
-        // Find the task with status "Created" and extract its countdown timer data
-        const createdTask = assignedTasksResponse?.data?.find((task) => task.status === 'Created');
+        // First try to find the task with status "Created", otherwise take the first one
+        const tasks = assignedTasksResponse?.data || [];
+        const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
         const countdownStatus = createdTask?.countdownTimer?.status;
         const taskId = createdTask?.id;

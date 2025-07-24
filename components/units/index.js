@@ -59,6 +59,7 @@ import EditPortForm from '@/units/EditPortForm';
 import ExpandableCard from '@/units/ExpandableCard';
 import ExpandableRowFooter from '@/units/ExpandableRowFooter';
 import ExpandableRowHeader from '@/units/ExpandableRowHeader';
+import ExtendCountdown from '@/units/ExtendCountdown';
 import FavoriteSearchForm from '@/units/FavoriteSearchForm';
 import FavoriteSearchList from '@/units/FavoriteSearchList';
 import UploadForm from '@/units/FileUpload';
@@ -249,4 +250,5 @@ export {
   IconUpload,
   CountdownTimer,
   PhoneValidation,
+  ExtendCountdown,
 };

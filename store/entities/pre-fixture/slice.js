@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchPrefixtureOffers } from './actions';
+import { fetchDealCountdownData, fetchPrefixtureOffers } from './actions';
 
 import { transformDate } from '@/utils/date';
 
@@ -90,6 +90,16 @@ const preFixtureSlice = createSlice({
     builder.addCase(fetchPrefixtureOffers.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload?.error;
+    });
+    builder.addCase(fetchDealCountdownData.pending, () => {
+      // Optional: could add a separate loading state for deal countdown
+    });
+    builder.addCase(fetchDealCountdownData.fulfilled, () => {
+      // The countdown data will be handled by updating the notifications dealData
+      // This is handled in the component via dispatch to notifications slice
+    });
+    builder.addCase(fetchDealCountdownData.rejected, (state, action) => {
+      console.error('Failed to fetch deal countdown data:', action.payload);
     });
   },
 });

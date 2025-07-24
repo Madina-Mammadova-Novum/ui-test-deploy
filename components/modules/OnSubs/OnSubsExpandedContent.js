@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
-import ExtendOnSubsCountdown from './ExtendOnSubsCountdown';
 
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
@@ -13,7 +12,7 @@ import PrintSVG from '@/assets/images/print.svg';
 import { Button } from '@/elements';
 import { getPdfToPrint } from '@/services/offer';
 import { getUserDataSelector } from '@/store/selectors';
-import { ModalWindow, Tabs } from '@/units';
+import { ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
@@ -117,7 +116,19 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
                   'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
               }}
             >
-              <ExtendOnSubsCountdown offerId={offerId} onExtensionSuccess={() => setAllowCountdownExtension(false)} />
+              <ExtendCountdown
+                offerId={offerId}
+                taskId={detailsData?.taskId}
+                onExtensionSuccess={() => setAllowCountdownExtension(false)}
+                options={[
+                  { label: '30 min', value: 30 },
+                  { label: '1 hour', value: 60 },
+                  { label: '2 hours', value: 120 },
+                  { label: '3 hours', value: 180 },
+                  { label: '6 hours', value: 360 },
+                  { label: '12 hours', value: 720 },
+                ]}
+              />
             </ModalWindow>
           )}
           <Button
