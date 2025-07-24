@@ -118,6 +118,7 @@ module.exports = {
         'fade-in-image': 'fadeInImage 3s ease-in-out',
         'appear-left-side-0.8': 'appearLeft 0.8s ease-in-out',
         'appear-left-side-0.65': 'appearLeft 0.65s ease-in-out',
+        'clock-spin': 'clockRotate 3s linear infinite',
       },
 
       keyframes: {
@@ -137,6 +138,10 @@ module.exports = {
         fadeInImage: {
           '0%': { opacity: 0.4 },
           '100%': { opacity: 1 },
+        },
+        clockRotate: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
       },
       boxShadow: {
