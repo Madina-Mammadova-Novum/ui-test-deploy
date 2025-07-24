@@ -239,7 +239,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
     const isOwner = role === ROLES.OWNER;
 
     // Define ongoing statuses where interaction is possible
-    const ongoingStatuses = ['initial', 'Pending', 'In Progress', 'Documents Uploaded', 'Revision Requested'];
+    const ongoingStatuses = ['Pending', 'In Progress', 'Documents Uploaded', 'Revision Requested'];
     const isOngoing = ongoingStatuses.includes(requestStatus);
 
     // For charterer: always show the form regardless of status

@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchOnSubsOffers } from './actions';
 
-import { FIFTEEN_MINUTES_IN_MS } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 const initialState = {
@@ -42,13 +41,15 @@ const onSubsSlice = createSlice({
       );
     },
     updateCountdown: (state, action) => {
-      const { offerId } = action?.payload;
+      const { offerId, extendMinute = 15 } = action?.payload;
+      const extendMinutesInMs = extendMinute * 60 * 1000; // Convert minutes to milliseconds
+
       state.data.offers = state.data.offers.map((offer) =>
         offer.id === offerId
           ? {
               ...offer,
               expiresAt: transformDate(
-                new Date(offer.expiresAt).getTime() + FIFTEEN_MINUTES_IN_MS,
+                new Date(offer.expiresAt).getTime() + extendMinutesInMs,
                 "yyyy-MM-dd'T'HH:mm:ss.SSS"
               ),
             }

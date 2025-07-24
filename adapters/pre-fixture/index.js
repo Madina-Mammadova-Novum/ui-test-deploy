@@ -13,6 +13,17 @@ import {
   transformBytes,
 } from '@/utils/helpers';
 
+// Convert extension time options to dropdown format
+export const extensionTimeOptionsAdapter = ({ options }) => {
+  if (!Array.isArray(options)) return [];
+
+  return options.map((option) => ({
+    label: option.label || `${option.value} Minutes`,
+    value: option.value,
+    ...option, // preserve any other properties
+  }));
+};
+
 export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
   const {
@@ -24,11 +35,15 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
     frozenAt,
     isFailed,
     totalQuantity,
+    countdownStatus,
   } = data;
 
   const { details: { name: tankerName = '', flagOfRegistry } = {} } = vessel || {};
 
   const { port: { name: portName, locode } = {} } = loadTerminal || {};
+
+  const countdownDate = expiresAt;
+  const isCountdownActive = countdownStatus === 'Running';
 
   return [
     {
@@ -72,8 +87,9 @@ export const ownerPrefixtureHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(countdownDate),
+        autoStart: isCountdownActive,
+        status: countdownStatus,
       },
     },
     {
@@ -97,8 +113,12 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
     frozenAt,
     isFailed,
     totalQuantity,
+    countdownStatus,
   } = data;
   const { port: { name, locode } = {} } = loadTerminal || {};
+
+  const countdownDate = expiresAt;
+  const isCountdownActive = countdownStatus === 'Running';
 
   return [
     {
@@ -136,8 +156,9 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(countdownDate),
+        autoStart: isCountdownActive,
+        status: countdownStatus,
       },
     },
     {
@@ -226,13 +247,15 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
-    isCountdownExtendedByOwner,
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
-    isCountdownActive,
+    allowExtension,
+    extensionTimeOptions,
+    taskId,
+    countdownStatus,
   } = data;
   const { country: registrationCountry } = registrationCity || {};
 
@@ -270,11 +293,13 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
       dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
       dischargeTerminal: dischargeTerminal?.name,
     },
-    allowExtension: isCountdownActive && !isCountdownExtendedByOwner,
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
-    isCountdownActive,
+    allowExtension,
+    extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
+    taskId,
+    isCountdownActive: countdownStatus === 'Running',
   };
 };
 
@@ -291,13 +316,15 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
-    isCountdownExtendedByCharterer,
     searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal },
     charterer,
-    isCountdownActive,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    allowExtension,
+    extensionTimeOptions,
+    taskId,
+    countdownStatus,
   } = data;
 
   // Safely extract vessel company details with proper null checks
@@ -333,8 +360,10 @@ export const prefixtureChartererDetailsAdapter = (data) => {
       dischargePortCountryCode: getLocode(dischargeTerminal?.port?.locode),
       dischargeTerminal: dischargeTerminal?.name,
     },
-    isCountdownActive,
-    allowExtension: isCountdownActive && !isCountdownExtendedByCharterer,
+    allowExtension,
+    extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
+    taskId,
+    isCountdownActive: countdownStatus === 'Running',
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,

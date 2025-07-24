@@ -9,7 +9,7 @@ import { voyageDetailsAdapter } from '@/adapters/offer';
 import { Button, Dropdown, Title } from '@/elements';
 import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
-import { getCountdownTimer } from '@/services/countdownTimer';
+import { getCountdownConfigs } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
 import { fetchOfferOptions, fetchOfferValidation } from '@/store/entities/offer/actions';
 import { resetOfferData } from '@/store/entities/offer/slice';
@@ -140,9 +140,9 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData, products }) => {
 
   const fetchCountdownData = async () => {
     handleChangeState('loading', true);
-    const response = await getCountdownTimer();
-    const convertedOptions = convertDataToOptions({ data: response.data }, 'id', 'text');
-    const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+    const response = await getCountdownConfigs({ purpose: 'NegotiatingOffer' });
+    const convertedOptions = convertDataToOptions({ data: response.data }, 'value', 'text');
+    const defaultCountdown = convertedOptions.find(({ value }) => value === DEFAULT_COUNTDOWN_OPTION);
 
     handleChangeState('responseCountdownOptions', convertedOptions);
     handleChangeOption(defaultCountdown);
@@ -224,7 +224,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData, products }) => {
             loading={loading}
             disabled={!responseCountdownOptions?.length || !offer.valid}
             onChange={handleChangeOption}
-            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 130 }}
             asyncCall
           />
         </div>
