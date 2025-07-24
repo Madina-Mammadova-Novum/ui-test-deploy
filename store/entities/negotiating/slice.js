@@ -47,7 +47,7 @@ const negotiatingSlice = createSlice({
     updateAssignedTasksForOffers: (state, action) => {
       const { parentId, offers, type } = action?.payload; // type: 'incoming' or 'sent'
 
-      if (state.data.offerById[parentId] && state.data.offerById[parentId][type]) {
+      if (state.data.offerById?.[parentId]?.[type]) {
         state.data.offerById[parentId][type] = offers;
       }
     },
