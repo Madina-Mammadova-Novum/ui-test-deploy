@@ -95,8 +95,12 @@ const preFixtureSlice = createSlice({
       // Optional: could add a separate loading state for deal countdown
     });
     builder.addCase(fetchDealCountdownData.fulfilled, () => {
-      // The countdown data will be handled by updating the notifications dealData
-      // This is handled in the component via dispatch to notifications slice
+      // The countdown data represents the remaining time for a specific deal.
+      // When this data is fetched successfully, it is dispatched to the notifications slice
+      // using a separate action. The notifications slice is responsible for updating the
+      // state related to deal notifications, including countdown timers.
+      // This dispatch is typically triggered in the relevant React component that handles
+      // deal notifications, ensuring the UI reflects the updated countdown data.
     });
     builder.addCase(fetchDealCountdownData.rejected, (state, action) => {
       console.error('Failed to fetch deal countdown data:', action.payload);
