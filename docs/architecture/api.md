@@ -5,6 +5,7 @@ The ShipLink API is built to handle complex maritime B2B operations, connecting 
 ## Base Structure
 
 ### API Organization
+
 - **Root**: `pages/api` (Next.js API routes acting as proxy layer)
 - **Backend Integration**: Strapi-based backend with custom maritime extensions
 - **Version**: v1 (with backwards compatibility support)
@@ -13,12 +14,14 @@ The ShipLink API is built to handle complex maritime B2B operations, connecting 
 ### Core Endpoint Categories
 
 #### Authentication & Authorization
+
 - `/auth/login` - User authentication with role-based access
 - `/auth/refresh` - JWT token refresh mechanism
 - `/auth/logout` - Secure session termination
 - `/auth/verify` - Account verification for new users
 
 #### Maritime Business Operations
+
 - `/calculator/freightestimation/*` - Freight calculation tools
 - `/v1/owner/*` - Vessel owner specific operations
 - `/v1/charterer/*` - Charterer specific operations
@@ -28,6 +31,7 @@ The ShipLink API is built to handle complex maritime B2B operations, connecting 
 - `/v1/*/account/*` - User account management
 
 #### Real-time Features
+
 - `/chat/*` - Chat system integration
 - `/notifications/*` - Push notification handling
 - `/websocket/*` - SignalR connection endpoints
@@ -35,6 +39,7 @@ The ShipLink API is built to handle complex maritime B2B operations, connecting 
 ## API Handler Pattern
 
 ### Response Handler Structure
+
 ```javascript
 // Standard pattern for all API routes
 export default async function handler(req, res) {
@@ -50,6 +55,7 @@ export default async function handler(req, res) {
 ```
 
 ### Required Components
+
 - **Data Adapter**: Transform request/response data
 - **Request Method Validation**: Ensure proper HTTP method usage
 - **Authorization Checks**: Role-based access control
@@ -57,6 +63,7 @@ export default async function handler(req, res) {
 - **Logging**: Audit trail for maritime operations
 
 ### Security Middleware
+
 - JWT token validation
 - Role-based endpoint access
 - Rate limiting for API calls
@@ -66,6 +73,7 @@ export default async function handler(req, res) {
 ## Data Adapters
 
 ### Adapter Architecture
+
 - **Location**: `/adapters/${domain}/index.js`
 - **Naming Convention**: `${domain}${Direction}Adapter`
 - **Purpose**: Data transformation layer between UI and API
@@ -73,6 +81,7 @@ export default async function handler(req, res) {
 ### Adapter Types
 
 #### Request Adapters
+
 ```javascript
 // Transform UI data for API consumption
 export function requestOfferAdapter({ data }) {
@@ -96,12 +105,13 @@ export function requestOfferAdapter({ data }) {
 ```
 
 #### Response Adapters
+
 ```javascript
 // Transform API response for UI consumption
 export function responseOffersAdapter({ data }) {
   if (!Array.isArray(data)) return [];
-  
-  return data.map(offer => ({
+
+  return data.map((offer) => ({
     id: offer.id,
     status: offer.attributes.status,
     vessel: {
@@ -122,6 +132,7 @@ export function responseOffersAdapter({ data }) {
 ```
 
 ### Adapter Requirements
+
 - **Input Validation**: Validate all incoming data
 - **Data Transformation**: Convert between UI and API formats
 - **Error Handling**: Graceful error management
@@ -131,19 +142,23 @@ export function responseOffersAdapter({ data }) {
 ## Business Rules Implementation
 
 ### Offer Workflow Rules
+
 1. **Negotiating Stage**:
+
    - Only charterers can initiate offers
    - Owners can accept, decline, or counter-offer
    - Maximum 5 counter-offers per deal
    - 24-hour expiration for initial offers
 
 2. **Pre-fixture Stage**:
+
    - Detailed vessel and cargo information required
    - Document upload becomes mandatory
    - Final commercial terms must be agreed
    - 48-hour countdown for documentation
 
 3. **On Subs Stage**:
+
    - Subject removal requires both parties' confirmation
    - Legal documentation review period
    - Bank guarantees and certificates validation
@@ -156,6 +171,7 @@ export function responseOffersAdapter({ data }) {
    - Deal completion triggers payment processes
 
 ### Role-Based Access Rules
+
 ```javascript
 // Owner permissions
 const OWNER_PERMISSIONS = {
@@ -177,6 +193,7 @@ const CHARTERER_PERMISSIONS = {
 ```
 
 ### Maritime Validation Rules
+
 - **IMO Numbers**: Must be valid 7-digit vessel identification
 - **Port Codes**: Must follow UN/LOCODE standard (5 characters)
 - **Cargo Quantities**: Minimum 1 MT, maximum vessel DWT capacity
@@ -186,6 +203,7 @@ const CHARTERER_PERMISSIONS = {
 ## Error Handling Strategy
 
 ### Error Categories
+
 1. **Validation Errors** (400): Invalid input data
 2. **Authentication Errors** (401): Invalid or expired tokens
 3. **Authorization Errors** (403): Insufficient permissions
@@ -194,6 +212,7 @@ const CHARTERER_PERMISSIONS = {
 6. **Server Errors** (500): Internal system failures
 
 ### Error Response Format
+
 ```javascript
 {
   error: {
@@ -207,6 +226,7 @@ const CHARTERER_PERMISSIONS = {
 ```
 
 ### Logging Requirements
+
 - All API requests and responses
 - Authentication attempts and failures
 - Business rule violations
@@ -216,18 +236,21 @@ const CHARTERER_PERMISSIONS = {
 ## Performance Optimization
 
 ### Caching Strategy
+
 - **Static Data**: Port lists, cargo types, vessel categories
 - **User Sessions**: Authentication tokens and permissions
 - **Frequently Accessed**: Active deals and vessel positions
 - **Cache Duration**: Varies by data type (5 minutes to 24 hours)
 
 ### Rate Limiting
+
 - **General API**: 100 requests per minute per user
 - **Search Operations**: 20 requests per minute
 - **File Uploads**: 5 requests per minute
 - **Real-time Updates**: 200 requests per minute
 
 ### Database Optimization
+
 - Indexed queries for vessel searches
 - Optimized joins for complex maritime data
 - Connection pooling for high traffic
@@ -236,6 +259,7 @@ const CHARTERER_PERMISSIONS = {
 ## Security Implementation
 
 ### Authentication Flow
+
 1. User credentials validation
 2. Role-based JWT token generation
 3. Token includes user permissions and role
@@ -243,6 +267,7 @@ const CHARTERER_PERMISSIONS = {
 5. Secure logout with token invalidation
 
 ### Data Protection
+
 - Sensitive maritime data encryption at rest
 - TLS 1.3 for data in transit
 - Regular security audits and penetration testing
@@ -250,6 +275,7 @@ const CHARTERER_PERMISSIONS = {
 - Maritime industry compliance (IMO regulations)
 
 ### API Security Headers
+
 ```javascript
 const securityHeaders = {
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
@@ -263,6 +289,7 @@ const securityHeaders = {
 ## Integration Patterns
 
 ### External Services
+
 - **Vessel Tracking**: AIS data integration
 - **Weather Services**: Route optimization data
 - **Port Information**: Real-time port congestion
@@ -270,6 +297,7 @@ const securityHeaders = {
 - **Document Verification**: Maritime certificate validation
 
 ### Webhook Implementation
+
 - Deal status changes notification
 - Vessel position updates
 - Document upload confirmations
@@ -279,6 +307,7 @@ const securityHeaders = {
 ## API Documentation Standards
 
 ### Endpoint Documentation Requirements
+
 - Clear description of maritime business purpose
 - Request/response examples with real maritime data
 - Error scenarios and handling
@@ -287,6 +316,7 @@ const securityHeaders = {
 - Business rule explanations
 
 ### Testing Requirements
+
 - Unit tests for all adapters
 - Integration tests for critical workflows
 - Load testing for high-traffic endpoints

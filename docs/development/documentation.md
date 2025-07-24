@@ -5,24 +5,28 @@ Clear, comprehensive documentation is essential for maintaining a complex mariti
 ## Documentation Hierarchy
 
 ### Level 1: Architecture Documentation
+
 - **Purpose**: High-level system design and maritime business context
 - **Audience**: Technical leads, product managers, new team members
 - **Location**: `/docs/architecture/`
 - **Update Frequency**: Quarterly or with major architectural changes
 
 ### Level 2: API Documentation
+
 - **Purpose**: Detailed API specifications and maritime data contracts
 - **Audience**: Frontend and backend developers, integration partners
 - **Location**: `/docs/api/` and inline code documentation
 - **Update Frequency**: With each API change
 
 ### Level 3: Component Documentation
+
 - **Purpose**: Individual component usage and maritime-specific props
 - **Audience**: Frontend developers
 - **Location**: Component files and Storybook
 - **Update Frequency**: With each component change
 
 ### Level 4: Business Rules Documentation
+
 - **Purpose**: Maritime industry rules and compliance requirements
 - **Audience**: Product team, QA, developers
 - **Location**: `/docs/maritime/` and inline business logic
@@ -31,15 +35,16 @@ Clear, comprehensive documentation is essential for maintaining a complex mariti
 ## Component Documentation Standards
 
 ### JSDoc Component Template
+
 ```javascript
 /**
  * @component VesselSearchCard
  * @description Interactive vessel search result card with maritime-specific details
- * 
+ *
  * Displays comprehensive vessel information including technical specifications,
  * current position, cargo capabilities, and availability status. Integrates with
  * maritime databases for real-time vessel tracking and charter availability.
- * 
+ *
  * @param {Object} props - Component properties
  * @param {Vessel} props.vessel - Complete vessel object with technical specs
  * @param {string} props.vessel.id - Unique vessel identifier
@@ -51,19 +56,19 @@ Clear, comprehensive documentation is essential for maintaining a complex mariti
  * @param {Function} props.onSelect - Callback when vessel is selected for charter
  * @param {boolean} props.showTechnicalDetails - Whether to display technical specifications
  * @param {string} props.userRole - Current user role (owner/charterer)
- * 
+ *
  * @maritime
  * - Displays DWT (Deadweight Tonnage) in metric tons
  * - Shows vessel type according to IMO classification
  * - Includes current position with port proximity
  * - Indicates charter availability status
  * - Complies with maritime data privacy regulations
- * 
+ *
  * @business
  * - Only shows available vessels to charterers
  * - Owners see all their fleet vessels regardless of status
  * - Pricing information hidden until formal negotiation starts
- * 
+ *
  * @example
  * <VesselSearchCard
  *   vessel={{
@@ -82,6 +87,7 @@ Clear, comprehensive documentation is essential for maintaining a complex mariti
 ```
 
 ### PropTypes Documentation
+
 ```javascript
 VesselSearchCard.propTypes = {
   // Core vessel data - required for maritime compliance
@@ -101,16 +107,16 @@ VesselSearchCard.propTypes = {
     enginePower: PropTypes.number, // in kW
     fuelConsumption: PropTypes.number, // MT per day
   }).isRequired,
-  
+
   // Interaction handlers
   onSelect: PropTypes.func,
   onFavorite: PropTypes.func,
-  
+
   // Display options
   showTechnicalDetails: PropTypes.bool,
   showPosition: PropTypes.bool,
   compact: PropTypes.bool,
-  
+
   // User context
   userRole: PropTypes.oneOf(['owner', 'charterer', 'broker']).isRequired,
 };
@@ -127,11 +133,12 @@ VesselSearchCard.defaultProps = {
 ## Utility Function Documentation
 
 ### Maritime Utility Template
+
 ```javascript
 /**
  * @util calculateFreightEstimate
  * @description Calculates freight estimation for maritime cargo transportation
- * 
+ *
  * Implements industry-standard freight calculation methodology accounting for:
  * - Base freight rate per metric ton
  * - Distance-based adjustments using great circle navigation
@@ -139,7 +146,7 @@ VesselSearchCard.defaultProps = {
  * - Port congestion surcharges based on current port status
  * - Fuel price fluctuations with Bunker Adjustment Factor (BAF)
  * - Currency exchange rate considerations
- * 
+ *
  * @param {Object} params - Freight calculation parameters
  * @param {number} params.cargoQuantity - Cargo quantity in metric tons (MT)
  * @param {string} params.cargoType - Cargo type identifier (crude-oil, lng, chemicals)
@@ -154,31 +161,31 @@ VesselSearchCard.defaultProps = {
  * @param {number} params.vessel.dwt - Vessel deadweight tonnage
  * @param {number} params.vessel.speed - Service speed in knots
  * @param {number} params.vessel.consumption - Daily fuel consumption in MT
- * 
+ *
  * @returns {Object} Comprehensive freight calculation result
  * @returns {number} returns.totalFreight - Total freight cost in USD
  * @returns {number} returns.ratePerTon - Effective rate per metric ton
  * @returns {number} returns.voyageDuration - Estimated voyage duration in days
  * @returns {Array<Object>} returns.adjustments - Applied rate adjustments
  * @returns {Object} returns.breakdown - Detailed cost breakdown
- * 
+ *
  * @throws {ValidationError} When cargo quantity exceeds vessel DWT capacity
  * @throws {ValidationError} When port codes are not valid UN/LOCODE format
  * @throws {BusinessRuleError} When ports are not accessible for specified cargo type
  * @throws {BusinessRuleError} When laycan dates are in the past or invalid
- * 
+ *
  * @maritime
  * - Follows IMO guidelines for cargo capacity calculations
  * - Respects port restrictions for specific cargo types
  * - Accounts for seasonal weather patterns affecting voyage times
  * - Includes mandatory port state control delays
- * 
+ *
  * @business
  * - Freight rates are indicative only until formal offer
  * - Final rates subject to market conditions at fixture time
  * - Additional costs (port charges, agencies) are separate
  * - Currency hedging options available for long-term contracts
- * 
+ *
  * @example
  * const estimate = calculateFreightEstimate({
  *   cargoQuantity: 50000,
@@ -197,7 +204,7 @@ VesselSearchCard.defaultProps = {
  *     consumption: 35
  *   }
  * });
- * 
+ *
  * console.log(estimate.totalFreight); // 2,275,000 USD
  * console.log(estimate.ratePerTon); // 45.50 USD/MT
  * console.log(estimate.voyageDuration); // 24 days
@@ -208,28 +215,29 @@ export function calculateFreightEstimate(params) {
 ```
 
 ### Data Validation Documentation
+
 ```javascript
 /**
  * @util validateIMONumber
  * @description Validates International Maritime Organization (IMO) vessel numbers
- * 
+ *
  * Performs comprehensive IMO number validation including:
  * - Format validation (exactly 7 digits)
  * - Check digit algorithm verification
  * - Blacklist verification against known invalid numbers
  * - Integration with IMO database for existence verification
- * 
+ *
  * @param {string} imo - IMO number to validate
  * @returns {Object} Validation result
  * @returns {boolean} returns.valid - Whether IMO number is valid
  * @returns {string} returns.error - Error message if invalid
  * @returns {Object} returns.vessel - Basic vessel info if valid (optional)
- * 
+ *
  * @maritime
  * IMO numbers are assigned by Lloyd's Register on behalf of the IMO.
  * The check digit is calculated using the sum of the first 6 digits
  * multiplied by their position (7,6,5,4,3,2) modulo 10.
- * 
+ *
  * @example
  * validateIMONumber('9074729'); // { valid: true }
  * validateIMONumber('1234567'); // { valid: false, error: 'Invalid check digit' }
@@ -239,35 +247,36 @@ export function calculateFreightEstimate(params) {
 ## Service Documentation Standards
 
 ### API Service Template
+
 ```javascript
 /**
  * @service VesselSearchService
  * @description Comprehensive vessel search functionality for maritime charter operations
- * 
+ *
  * Provides advanced search capabilities across global vessel fleet including:
  * - Real-time availability status from maritime databases
  * - Technical specification filtering
  * - Geographical constraint-based search
  * - Charter history and reputation scoring
  * - Integration with AIS (Automatic Identification System) for positions
- * 
+ *
  * @endpoint /api/v1/vessels/search
  * @method POST
  * @authentication Required - JWT token with vessel search permissions
  * @rateLimit 20 requests per minute per user
- * 
+ *
  * @business
  * - Charterers see only available vessels matching their cargo requirements
  * - Owners can search across all vessels for market intelligence
  * - Brokers have access to extended fleet information
  * - Historical charter data influences search ranking
- * 
+ *
  * @maritime
  * - Complies with ISPS (International Ship and Port Facility Security) code
  * - Respects flag state regulations for vessel information disclosure
  * - Integrates with port state control databases
  * - Follows IMO data classification standards
- * 
+ *
  * @param {Object} searchCriteria - Vessel search parameters
  * @param {string} searchCriteria.cargoType - Required cargo type capability
  * @param {Object} searchCriteria.capacity - Cargo capacity requirements
@@ -277,19 +286,19 @@ export function calculateFreightEstimate(params) {
  * @param {Array<string>} searchCriteria.acceptableFlags - Acceptable flag states
  * @param {Date} searchCriteria.availableFrom - Required availability date
  * @param {Object} searchCriteria.route - Optional route information for optimization
- * 
+ *
  * @returns {Promise<Object>} Search results with vessel list and metadata
  * @returns {Array<Vessel>} returns.vessels - Matching vessels with complete information
  * @returns {number} returns.totalCount - Total vessels matching criteria
  * @returns {Object} returns.aggregations - Search result aggregations
  * @returns {Array<string>} returns.suggestedRefinements - Suggested search refinements
- * 
+ *
  * @throws {ValidationError} 400 - Invalid search criteria format
  * @throws {AuthenticationError} 401 - Invalid or expired authentication token
  * @throws {AuthorizationError} 403 - Insufficient permissions for vessel search
  * @throws {RateLimitError} 429 - Too many search requests
  * @throws {ServiceError} 500 - Internal vessel database service failure
- * 
+ *
  * @example
  * const searchResults = await vesselSearchService({
  *   cargoType: 'crude-oil',
@@ -307,46 +316,47 @@ export function calculateFreightEstimate(params) {
 ## Business Rules Documentation
 
 ### Maritime Compliance Documentation
+
 ```javascript
 /**
  * @businessRule VesselCharter Approval Process
  * @regulation IMO MARPOL Annex I & VI, Flag State Requirements
  * @description Automated vessel charter approval workflow
- * 
+ *
  * MANDATORY CHECKS:
  * 1. Vessel Certificate Validation
  *    - Class Certificate (valid and not expired)
  *    - Safety Management Certificate (ISM Code compliance)
  *    - ISPS Certificate (security compliance)
  *    - P&I Insurance Certificate (minimum $1B coverage)
- * 
+ *
  * 2. Flag State Compliance
  *    - Vessel must be flagged in acceptable jurisdictions
  *    - White list: Marshall Islands, Liberia, Panama, Singapore, UK
  *    - Gray list: Requires additional documentation
  *    - Black list: Automatic rejection
- * 
+ *
  * 3. Port State Control History
  *    - No detention in last 12 months
  *    - Maximum 2 deficiencies in last 6 months
  *    - Clean PSC record required for high-value cargoes
- * 
+ *
  * 4. Cargo Compatibility
  *    - Vessel type must match cargo requirements
  *    - Previous cargo compatibility (no contamination risk)
  *    - Tank coating compatibility for chemical cargoes
- * 
+ *
  * @implementation
  * - Automated certificate verification via maritime APIs
  * - Real-time PSC database integration
  * - Machine learning risk assessment
  * - Manual override capability for senior chartering managers
- * 
+ *
  * @exceptions
  * - Emergency charter situations (requires C-level approval)
  * - Government requisition orders
  * - Force majeure circumstances
- * 
+ *
  * @auditRequirements
  * - All approval decisions logged with reasoning
  * - Quarterly compliance review with maritime legal team
@@ -357,6 +367,7 @@ export function calculateFreightEstimate(params) {
 ## TODO and Technical Debt Documentation
 
 ### Standard TODO Format
+
 ```javascript
 /**
  * TODO Categories:
@@ -364,7 +375,7 @@ export function calculateFreightEstimate(params) {
  * - P1: High - Significant impact on user experience or performance
  * - P2: Medium - Nice to have improvement or minor bug
  * - P3: Low - Future enhancement or optimization
- * 
+ *
  * Format: TODO(assignee): Description [Priority] [Ticket] [Deadline]
  */
 
@@ -374,10 +385,10 @@ export function calculateFreightEstimate(params) {
 
 /**
  * FIXME: Temporary workaround for API rate limiting
- * 
+ *
  * Current implementation uses setTimeout to throttle requests,
  * but this should be replaced with proper rate limiting middleware.
- * 
+ *
  * @see https://github.com/company/maritime-api/issues/123
  * @deadline 2024-04-01
  * @assignee api-team
@@ -385,28 +396,29 @@ export function calculateFreightEstimate(params) {
 ```
 
 ### Technical Debt Documentation
+
 ```javascript
 /**
  * @technicalDebt Vessel Position Caching
  * @priority P2
  * @effort 2 weeks
  * @impact Performance improvement for 80% of vessel searches
- * 
+ *
  * @problem
  * Current implementation fetches vessel positions in real-time for every search,
  * causing 2-3 second delays and high API costs. AIS data updates every 3 minutes
  * but we're fetching every request.
- * 
+ *
  * @solution
  * Implement Redis-based caching with 3-minute TTL for vessel positions.
  * Background job updates positions from AIS stream. Fallback to real-time
  * for critical operations.
- * 
+ *
  * @risks
  * - Slightly stale position data (max 3 minutes)
  * - Additional Redis infrastructure complexity
  * - Cache invalidation complexity for specific vessels
- * 
+ *
  * @metrics
  * - Current: 2.3s average search response time
  * - Target: 0.8s average search response time
@@ -417,36 +429,43 @@ export function calculateFreightEstimate(params) {
 ## API Documentation Standards
 
 ### Endpoint Documentation Template
-```markdown
+
+````markdown
 ## POST /api/v1/deals/offers
 
 ### Description
+
 Create a new charter party offer between vessel owner and charterer.
 
 ### Maritime Context
+
 This endpoint initiates the formal offer process in maritime charter negotiations.
 Offers are legally binding preliminary agreements subject to detailed terms
 negotiation and subject removal.
 
 ### Business Rules
+
 - Only charterers can initiate offers
 - Vessel must be available during specified laycan period
 - Cargo quantity must not exceed 95% of vessel DWT
 - Offer automatically expires after 48 hours unless extended
 
 ### Authentication
+
 Bearer token required with `offers:create` permission.
 
 ### Rate Limiting
+
 - 10 offers per hour per user
 - 50 offers per day per company
 
 ### Request Body
+
 ```json
 {
   "vesselId": "string", // Required - UUID of target vessel
   "cargoDetails": {
-    "type": "string", // Required - Cargo type identifier  
+    "type": "string", // Required - Cargo type identifier
     "quantity": "number", // Required - Quantity in metric tons
     "loadTerminal": "string", // Required - Loading terminal ID
     "dischargeTerminal": "string" // Required - Discharge terminal ID
@@ -460,8 +479,10 @@ Bearer token required with `offers:create` permission.
   "additionalTerms": "string" // Optional - Additional conditions
 }
 ```
+````
 
 ### Response Body
+
 ```json
 {
   "success": true,
@@ -476,6 +497,7 @@ Bearer token required with `offers:create` permission.
 ```
 
 ### Error Responses
+
 - `400` - Invalid request data or business rule violation
 - `401` - Authentication required
 - `403` - Insufficient permissions (not a charterer)
@@ -483,12 +505,13 @@ Bearer token required with `offers:create` permission.
 - `429` - Rate limit exceeded
 
 ### Example Usage
+
 ```javascript
 const response = await fetch('/api/v1/deals/offers', {
   method: 'POST',
   headers: {
-    'Authorization': 'Bearer ' + token,
-    'Content-Type': 'application/json'
+    Authorization: 'Bearer ' + token,
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     vesselId: 'vessel-123',
@@ -496,17 +519,18 @@ const response = await fetch('/api/v1/deals/offers', {
       type: 'crude-oil',
       quantity: 75000,
       loadTerminal: 'terminal-456',
-      dischargeTerminal: 'terminal-789'
+      dischargeTerminal: 'terminal-789',
     },
     commercialTerms: {
-      freight: 45.50,
+      freight: 45.5,
       laycanStart: '2024-04-15T00:00:00Z',
       laycanEnd: '2024-04-18T00:00:00Z',
-      paymentTerms: 'net-15'
-    }
-  })
+      paymentTerms: 'net-15',
+    },
+  }),
 });
 ```
+
 ```
 
 ## Documentation Maintenance
@@ -530,3 +554,4 @@ const response = await fetch('/api/v1/deals/offers', {
 - Documentation must be reviewed before code merge
 
 This comprehensive documentation standard ensures that ShipLink's complex maritime operations are well-documented, maintainable, and accessible to all team members while preserving critical maritime industry knowledge.
+```

@@ -27,6 +27,7 @@ components/
   - Authentication and authorization
 
 ### Key Module Examples
+
 - `Chat` - Real-time messaging system
 - `Negotiating` - Offer negotiation workflows
 - `PreFixture` - Pre-fixture stage management
@@ -38,7 +39,7 @@ components/
 
 ## Unit Components
 
-- "Location**: `/components/units`
+- "Location\*\*: `/components/units`
 - **Purpose**: Reusable UI components with moderate complexity
 - **Rules**:
   - Medium logic complexity maximum
@@ -48,6 +49,7 @@ components/
   - Reusable across different modules
 
 ### Key Unit Examples
+
 - `SearchForm` - Advanced maritime search interface
 - `OfferForm` - Structured offer creation
 - `VesselInformationContent` - Vessel detail display
@@ -67,6 +69,7 @@ components/
   - Tailwind CSS only for styling
 
 ### Key Element Examples
+
 - `Button` - All button variants and states
 - `Table` - Data table with maritime-specific features
 - `Portal` - Modal and overlay rendering
@@ -107,6 +110,7 @@ components/
 - **Export Pattern**: Named exports preferred for reusability
 
 ### Component Suffixes
+
 - **Content components**: `*Content` (e.g., `ChartererInformationContent`)
 - **Forms**: `*Form` (e.g., `OfferForm`, `SearchForm`)
 - **Modals**: `*Modal` (e.g., `CargoesInfoModal`, `ChatModal`)
@@ -118,21 +122,25 @@ components/
 ## Maritime-Specific Components
 
 ### Vessel Components
+
 - Pattern: `Vessel${Purpose}` or `Tanker${Purpose}`
 - Examples: `TankerInformationContent`, `VesselSearchResults`
 - Purpose: Display vessel specifications, Q88 data, fleet management
 
 ### Cargo Components
+
 - Pattern: `Cargo${Purpose}`
 - Examples: `CargoesInfoModal`, `CargoesSlotsDetailsForm`
 - Purpose: Cargo type selection, quantity management, terminal details
 
 ### Negotiation Stage Components
+
 - Pattern: `${Stage}${Component}`
 - Examples: `NegotiatingDetails`, `PreFixtureDetails`, `OnSubsDetails`
 - Purpose: Stage-specific workflows and data presentation
 
 ### Chat Components
+
 - Pattern: `Chat${Purpose}`
 - Examples: `ChatConversation`, `ChatMessage`, `ChatModal`
 - Purpose: Real-time communication during negotiations
@@ -140,13 +148,14 @@ components/
 ## Component Development Guidelines
 
 ### PropTypes Requirements
+
 ```javascript
 // Required for units and modules
 ComponentName.propTypes = {
   // Required props
   vesselId: PropTypes.string.isRequired,
   role: PropTypes.oneOf(['owner', 'charterer']).isRequired,
-  
+
   // Optional props with defaults
   onUpdate: PropTypes.func,
   showDetails: PropTypes.bool,
@@ -159,6 +168,7 @@ ComponentName.defaultProps = {
 ```
 
 ### State Management Integration
+
 ```javascript
 // Modules should connect to Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -167,19 +177,20 @@ import { selectUserRole } from '@/store/selectors';
 const ModuleComponent = () => {
   const role = useSelector(selectUserRole);
   const dispatch = useDispatch();
-  
+
   // Component logic
 };
 ```
 
 ### Role-Based Rendering
+
 ```javascript
 // Implement role-based access
 import { getRoleIdentity } from '@/utils/helpers';
 
 const Component = ({ role }) => {
   const { isOwner, isCharterer } = getRoleIdentity({ role });
-  
+
   return (
     <>
       {isOwner && <OwnerSpecificContent />}
@@ -192,22 +203,22 @@ const Component = ({ role }) => {
 ## Performance Considerations
 
 ### Dynamic Imports
+
 ```javascript
 // For large modules
 const HeavyModule = dynamic(() => import('@/modules/HeavyModule'), {
   ssr: false,
-  loading: () => <LoadingSpinner />
+  loading: () => <LoadingSpinner />,
 });
 ```
 
 ### Memoization
+
 ```javascript
 // For expensive calculations
 const MemoizedComponent = React.memo(({ data }) => {
-  const processedData = useMemo(() => 
-    expensiveCalculation(data), [data]
-  );
-  
+  const processedData = useMemo(() => expensiveCalculation(data), [data]);
+
   return <div>{processedData}</div>;
 });
 ```
@@ -215,16 +226,19 @@ const MemoizedComponent = React.memo(({ data }) => {
 ## Testing Patterns
 
 ### Unit Testing
+
 - Test components in isolation
 - Mock maritime data scenarios
 - Validate PropTypes and error boundaries
 
 ### Integration Testing
+
 - Test component interactions
 - Validate maritime workflows
 - Test role-based rendering
 
 ### E2E Testing
+
 - Complete charter party workflows
 - Multi-user negotiation scenarios
 - Document upload and management flows

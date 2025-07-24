@@ -5,6 +5,7 @@ In the fast-paced world of maritime commerce, performance is crucial. These guid
 ## Core Performance Requirements
 
 ### Response Time Targets
+
 - **Vessel Search**: < 2 seconds for basic queries
 - **Offer Submission**: < 1 second for form processing
 - **Real-time Updates**: < 500ms for chat and notifications
@@ -12,6 +13,7 @@ In the fast-paced world of maritime commerce, performance is crucial. These guid
 - **Maritime Calculations**: < 1 second for freight estimations
 
 ### Data Volume Handling
+
 - **Vessel Lists**: Support 10,000+ vessels with pagination
 - **Search Results**: Handle 1,000+ concurrent searches
 - **Chat History**: Maintain 6 months of chat data
@@ -21,33 +23,30 @@ In the fast-paced world of maritime commerce, performance is crucial. These guid
 ## Pagination Strategies
 
 ### Server-Side Pagination
+
 ```javascript
 // Required for all lists > 10 items
 const VesselList = ({ filters }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(20);
-  
+
   const { vessels, totalCount, loading } = useVesselPagination({
     filters,
     page: currentPage,
     limit: pageSize,
   });
-  
+
   return (
     <div>
       <VesselGrid vessels={vessels} loading={loading} />
-      <Pagination
-        current={currentPage}
-        total={totalCount}
-        pageSize={pageSize}
-        onChange={setCurrentPage}
-      />
+      <Pagination current={currentPage} total={totalCount} pageSize={pageSize} onChange={setCurrentPage} />
     </div>
   );
 };
 ```
 
 ### Virtual Scrolling for Large Datasets
+
 ```javascript
 import { FixedSizeList as List } from 'react-window';
 
@@ -57,14 +56,9 @@ const VirtualizedVesselList = ({ vessels }) => {
       <VesselCard vessel={vessels[index]} />
     </div>
   );
-  
+
   return (
-    <List
-      height={600}
-      itemCount={vessels.length}
-      itemSize={120}
-      width="100%"
-    >
+    <List height={600} itemCount={vessels.length} itemSize={120} width="100%">
       {Row}
     </List>
   );
@@ -72,15 +66,16 @@ const VirtualizedVesselList = ({ vessels }) => {
 ```
 
 ### Infinite Scrolling for Mobile
+
 ```javascript
 const useInfiniteVessels = (filters) => {
   const [vessels, setVessels] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  
+
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
-    
+
     setLoading(true);
     try {
       const newVessels = await searchVessels({
@@ -88,14 +83,14 @@ const useInfiniteVessels = (filters) => {
         offset: vessels.length,
         limit: 20,
       });
-      
-      setVessels(prev => [...prev, ...newVessels.data]);
+
+      setVessels((prev) => [...prev, ...newVessels.data]);
       setHasMore(newVessels.hasMore);
     } finally {
       setLoading(false);
     }
   }, [filters, vessels.length, loading, hasMore]);
-  
+
   return { vessels, loadMore, hasMore, loading };
 };
 ```
@@ -103,6 +98,7 @@ const useInfiniteVessels = (filters) => {
 ## Lazy Loading Implementation
 
 ### Component-Level Lazy Loading
+
 ```javascript
 // Heavy maritime modules
 const VesselManagement = lazy(() => import('@/modules/VesselManagement'));
@@ -123,23 +119,20 @@ const MaritimeApp = () => (
 ```
 
 ### Image Lazy Loading
+
 ```javascript
 const VesselImage = ({ vessel, priority = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  
+
   return (
     <div className="relative">
-      {!imageLoaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
-      )}
+      {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
       <img
         src={vessel.imageUrl}
         alt={`${vessel.name} vessel`}
         loading={priority ? 'eager' : 'lazy'}
         onLoad={() => setImageLoaded(true)}
-        className={`transition-opacity duration-300 ${
-          imageLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>
   );
@@ -147,23 +140,24 @@ const VesselImage = ({ vessel, priority = false }) => {
 ```
 
 ### Data Lazy Loading
+
 ```javascript
 const VesselDetails = ({ vesselId }) => {
   const [activeTab, setActiveTab] = useState('general');
-  
+
   // Only load data for active tab
   const { data: generalData } = useVesselGeneral(vesselId, {
     enabled: activeTab === 'general',
   });
-  
+
   const { data: technicalData } = useVesselTechnical(vesselId, {
     enabled: activeTab === 'technical',
   });
-  
+
   const { data: documentsData } = useVesselDocuments(vesselId, {
     enabled: activeTab === 'documents',
   });
-  
+
   return (
     <TabContainer activeTab={activeTab} onTabChange={setActiveTab}>
       <Tab name="general">{generalData && <GeneralInfo data={generalData} />}</Tab>
@@ -177,6 +171,7 @@ const VesselDetails = ({ vesselId }) => {
 ## Memoization Strategies
 
 ### Maritime Calculations
+
 ```javascript
 const FreightCalculator = ({ cargo, vessel, route }) => {
   // Expensive freight calculation
@@ -190,7 +185,7 @@ const FreightCalculator = ({ cargo, vessel, route }) => {
       portCosts: route.portCharges,
     });
   }, [cargo.quantity, cargo.type, vessel.dwt, route.nauticalMiles, route.currentFuelPrice]);
-  
+
   // Memoize voyage calculations
   const voyageDetails = useMemo(() => {
     return calculateVoyageDetails({
@@ -200,7 +195,7 @@ const FreightCalculator = ({ cargo, vessel, route }) => {
       weatherConditions: route.weather,
     });
   }, [route.loadPort, route.dischargePort, vessel.speed, route.weather]);
-  
+
   return (
     <div className="space-y-4">
       <FreightDisplay estimate={freightEstimate} />
@@ -211,11 +206,12 @@ const FreightCalculator = ({ cargo, vessel, route }) => {
 ```
 
 ### Search and Filter Operations
+
 ```javascript
 const VesselSearchResults = ({ vessels, filters }) => {
   // Memoize filtered results
   const filteredVessels = useMemo(() => {
-    return vessels.filter(vessel => {
+    return vessels.filter((vessel) => {
       if (filters.cargoType && vessel.cargoTypes?.includes(filters.cargoType)) {
         return false;
       }
@@ -231,7 +227,7 @@ const VesselSearchResults = ({ vessels, filters }) => {
       return true;
     });
   }, [vessels, filters]);
-  
+
   // Memoize sorted results
   const sortedVessels = useMemo(() => {
     const sorted = [...filteredVessels];
@@ -246,51 +242,53 @@ const VesselSearchResults = ({ vessels, filters }) => {
         return sorted;
     }
   }, [filteredVessels, filters.sortBy]);
-  
+
   return <VesselGrid vessels={sortedVessels} />;
 };
 ```
 
 ### Component Memoization
+
 ```javascript
-const VesselCard = React.memo(({ vessel, onSelect, showDetails }) => {
-  return (
-    <div 
-      className="vessel-card p-4 border rounded-lg hover:shadow-lg"
-      onClick={() => onSelect(vessel.id)}
-    >
-      <VesselImage vessel={vessel} />
-      <VesselInfo vessel={vessel} showDetails={showDetails} />
-    </div>
-  );
-}, (prevProps, nextProps) => {
-  // Custom comparison for vessel data
-  return (
-    prevProps.vessel.id === nextProps.vessel.id &&
-    prevProps.vessel.status === nextProps.vessel.status &&
-    prevProps.showDetails === nextProps.showDetails
-  );
-});
+const VesselCard = React.memo(
+  ({ vessel, onSelect, showDetails }) => {
+    return (
+      <div className="vessel-card rounded-lg border p-4 hover:shadow-lg" onClick={() => onSelect(vessel.id)}>
+        <VesselImage vessel={vessel} />
+        <VesselInfo vessel={vessel} showDetails={showDetails} />
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison for vessel data
+    return (
+      prevProps.vessel.id === nextProps.vessel.id &&
+      prevProps.vessel.status === nextProps.vessel.status &&
+      prevProps.showDetails === nextProps.showDetails
+    );
+  }
+);
 ```
 
 ## Caching Implementation
 
 ### Data Caching Strategy
+
 ```javascript
 const cacheConfig = {
   // Static maritime data - long cache
   cargoTypes: { ttl: 24 * 60 * 60 * 1000 }, // 24 hours
   countries: { ttl: 24 * 60 * 60 * 1000 },
   ports: { ttl: 12 * 60 * 60 * 1000 }, // 12 hours
-  
+
   // Semi-static data - medium cache
   vesselTypes: { ttl: 6 * 60 * 60 * 1000 }, // 6 hours
   exchangeRates: { ttl: 60 * 60 * 1000 }, // 1 hour
-  
+
   // Dynamic data - short cache
   vesselPositions: { ttl: 5 * 60 * 1000 }, // 5 minutes
   offerStatus: { ttl: 30 * 1000 }, // 30 seconds
-  
+
   // Real-time data - no cache
   chatMessages: { ttl: 0 },
   notifications: { ttl: 0 },
@@ -298,6 +296,7 @@ const cacheConfig = {
 ```
 
 ### React Query Implementation
+
 ```javascript
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -323,10 +322,11 @@ const useOfferDetails = (offerId) => {
 ```
 
 ### Cache Invalidation
+
 ```javascript
 const useOfferMutations = () => {
   const queryClient = useQueryClient();
-  
+
   const submitOffer = useMutation({
     mutationFn: submitOfferData,
     onSuccess: (data) => {
@@ -334,12 +334,12 @@ const useOfferMutations = () => {
       queryClient.invalidateQueries(['offers']);
       queryClient.invalidateQueries(['vessels', 'positions']);
       queryClient.invalidateQueries(['user', 'deals']);
-      
+
       // Update specific offer cache
       queryClient.setQueryData(['offers', data.id], data);
     },
   });
-  
+
   const acceptOffer = useMutation({
     mutationFn: acceptOfferData,
     onSuccess: () => {
@@ -348,7 +348,7 @@ const useOfferMutations = () => {
       queryClient.invalidateQueries(['deals', 'active']);
     },
   });
-  
+
   return { submitOffer, acceptOffer };
 };
 ```
@@ -356,57 +356,60 @@ const useOfferMutations = () => {
 ## Real-Time Performance
 
 ### WebSocket Connection Management
+
 ```javascript
 const useMaritimeWebSocket = () => {
   const [connection, setConnection] = useState(null);
   const [connectionState, setConnectionState] = useState('disconnected');
-  
+
   useEffect(() => {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('/api/maritime-hub')
       .withAutomaticReconnect([0, 2000, 10000, 30000])
       .build();
-    
-    hubConnection.start()
+
+    hubConnection
+      .start()
       .then(() => {
         setConnectionState('connected');
         setConnection(hubConnection);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('SignalR connection failed:', err);
         setConnectionState('failed');
       });
-    
+
     return () => {
       hubConnection?.stop();
     };
   }, []);
-  
+
   return { connection, connectionState };
 };
 ```
 
 ### Throttled Real-time Updates
+
 ```javascript
 const useThrottledVesselUpdates = (vesselId) => {
   const [position, setPosition] = useState(null);
   const { connection } = useMaritimeWebSocket();
-  
+
   useEffect(() => {
     if (!connection || !vesselId) return;
-    
+
     // Throttle position updates to every 30 seconds
     const throttledUpdate = throttle((newPosition) => {
       setPosition(newPosition);
     }, 30000);
-    
+
     connection.on('VesselPositionUpdate', throttledUpdate);
-    
+
     return () => {
       connection.off('VesselPositionUpdate', throttledUpdate);
     };
   }, [connection, vesselId]);
-  
+
   return position;
 };
 ```
@@ -414,6 +417,7 @@ const useThrottledVesselUpdates = (vesselId) => {
 ## Bundle Optimization
 
 ### Code Splitting
+
 ```javascript
 // Route-based splitting
 const routes = [
@@ -440,6 +444,7 @@ const features = {
 ```
 
 ### Tree Shaking Optimization
+
 ```javascript
 // Import only what you need
 import { format } from 'date-fns';
@@ -455,6 +460,7 @@ import { calculateDistance } from '@/utils/maritime';
 ## Performance Monitoring
 
 ### Core Web Vitals Tracking
+
 ```javascript
 import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
 
@@ -473,7 +479,7 @@ const trackMaritimeMetrics = () => {
   // ... search logic
   performance.mark('vessel-search-end');
   performance.measure('vessel-search', 'vessel-search-start', 'vessel-search-end');
-  
+
   // Track offer submission time
   performance.mark('offer-submit-start');
   // ... submission logic
@@ -483,6 +489,7 @@ const trackMaritimeMetrics = () => {
 ```
 
 ### Performance Budget
+
 ```javascript
 // webpack.config.js performance budgets
 module.exports = {
@@ -514,45 +521,45 @@ module.exports = {
 ## Security Performance Balance
 
 ### JWT Token Management
+
 ```javascript
 const useAuthTokens = () => {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
-  
+
   // Automatic token refresh before expiration
   useEffect(() => {
     if (!accessToken) return;
-    
+
     const tokenData = jwt.decode(accessToken);
     const expirationTime = tokenData.exp * 1000;
     const refreshTime = expirationTime - 5 * 60 * 1000; // 5 minutes before expiry
-    
+
     const timeUntilRefresh = refreshTime - Date.now();
-    
+
     if (timeUntilRefresh > 0) {
       const refreshTimer = setTimeout(() => {
         refreshAccessToken();
       }, timeUntilRefresh);
-      
+
       return () => clearTimeout(refreshTimer);
     }
   }, [accessToken]);
-  
+
   return { accessToken, refreshToken, refreshAccessToken };
 };
 ```
 
 ### Optimized Role Validation
+
 ```javascript
 const useRolePermissions = (requiredPermissions) => {
   const userPermissions = useSelector(selectUserPermissions);
-  
+
   return useMemo(() => {
     if (!userPermissions || !requiredPermissions) return false;
-    
-    return requiredPermissions.every(permission => 
-      userPermissions.includes(permission)
-    );
+
+    return requiredPermissions.every((permission) => userPermissions.includes(permission));
   }, [userPermissions, requiredPermissions]);
 };
 ```
@@ -560,6 +567,7 @@ const useRolePermissions = (requiredPermissions) => {
 ## Performance Testing Guidelines
 
 ### Load Testing Scenarios
+
 - **Concurrent Users**: Test with 1000+ simultaneous users
 - **Data Volume**: Test with 50,000+ vessels in search results
 - **Real-time Load**: Test with 500+ concurrent chat sessions
@@ -567,6 +575,7 @@ const useRolePermissions = (requiredPermissions) => {
 - **API Stress**: Test API endpoints with 100 requests/second
 
 ### Performance Benchmarks
+
 - Initial page load: < 3 seconds
 - Vessel search results: < 2 seconds
 - Offer submission: < 1 second
