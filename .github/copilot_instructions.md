@@ -284,8 +284,14 @@ const assignedTasksResponse = await getAssignedTasks({
   purpose: 'NegotiatingOffer', // or 'PreFixture'
 });
 
+// Common task selection pattern - prioritize "Created" status
 const tasks = assignedTasksResponse?.data || [];
 const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+
+// Extract countdown data from the selected task
+const expiresAt = createdTask?.countdownTimer?.expiresAt;
+const countdownStatus = createdTask?.countdownTimer?.status;
+const taskId = createdTask?.id;
 ```
 
 #### Countdown Status Management
@@ -346,6 +352,19 @@ const handleExtendCountdown = async () => {
 };
 ```
 
+#### Extension Time Options Pattern
+
+```javascript
+// Fetch extension options and check availability
+const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId });
+const allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
+const extensionTimeOptions = extensionTimeOptionsResponse?.data?.options || [];
+
+// Adapt options for dropdown component
+import { extensionTimeOptionsAdapter } from '@/adapters/pre-fixture';
+const adaptedOptions = extensionTimeOptionsAdapter({ options: extensionTimeOptions });
+```
+
 #### Adapter Patterns for Countdown
 
 ```javascript
@@ -368,6 +387,17 @@ export const offerDetailsAdapter = ({ data, role }) => {
     },
     // ... other properties
   };
+};
+
+// Extension time options adapter for dropdown formatting
+export const extensionTimeOptionsAdapter = ({ options }) => {
+  if (!Array.isArray(options)) return [];
+
+  return options.map((option) => ({
+    label: option.label || `${option.value} Minutes`,
+    value: option.value,
+    ...option, // preserve any other properties
+  }));
 };
 ```
 
@@ -431,6 +461,13 @@ dispatch(
     parentId,
     offers: enhancedOffers,
     type: 'incoming',
+  })
+);
+
+// Fetch countdown data for individual deals
+dispatch(
+  fetchDealCountdownData({
+    dealId: offerId,
   })
 );
 ```
@@ -578,12 +615,15 @@ const { isOwner, isCharterer } = getRoleIdentity({ role });
 
 ```javascript
 // Extension time options formatting
-export const extensionTimeOptionsAdapter = ({ options }) =>
-  options.map((option) => ({
+export const extensionTimeOptionsAdapter = ({ options }) => {
+  if (!Array.isArray(options)) return [];
+
+  return options.map((option) => ({
     label: option.label || `${option.value} Minutes`,
     value: option.value,
-    ...option,
+    ...option, // preserve any other properties
   }));
+};
 
 // Convert data to dropdown options (updated for new API format)
 const convertedOptions = convertDataToOptions(
@@ -591,6 +631,10 @@ const convertedOptions = convertDataToOptions(
   'value', // Changed from 'id' to 'value'
   'text'
 );
+
+// Extension availability check pattern
+const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId });
+const allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
 ```
 
 ### Validation Schemas
