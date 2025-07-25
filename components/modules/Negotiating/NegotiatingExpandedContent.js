@@ -16,7 +16,6 @@ import { setTab } from '@/store/entities/negotiating/slice';
 import { getNegotiatingDataSelector } from '@/store/selectors';
 import { Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
-import { useAssignedTasks } from '@/utils/hooks';
 import {
   chartererNegotiatingCounterofferTableHeader,
   chartererNegotiatingFailedTableHeader,
@@ -28,7 +27,6 @@ import {
 
 const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   const dispatch = useDispatch();
-  const { fetchAndUpdateAssignedTasks } = useAssignedTasks();
 
   const { offerById, role } = useSelector(getNegotiatingDataSelector);
   const [currentTab, setCurrentTab] = useState(tabs?.[0]?.value);
@@ -85,22 +83,6 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   useEffect(() => {
     updateTabBasedOnData();
   }, [data, sentData, incomingData, dispatch, tab]);
-
-  // Fetch assigned tasks once when component mounts and has incoming data
-  useEffect(() => {
-    if (incomingData && incomingData.length > 0) {
-      fetchAndUpdateAssignedTasks(incomingData, data.id, 'incoming');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount
-
-  // Fetch assigned tasks once when component mounts and has sent data
-  useEffect(() => {
-    if (sentData && sentData.length > 0) {
-      fetchAndUpdateAssignedTasks(sentData, data.id, 'sent');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount
 
   const tabContent = {
     counteroffers: (

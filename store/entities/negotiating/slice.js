@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchUserNegotiating } from './actions';
+import { fetchDealCountdownData, fetchUserNegotiating } from './actions';
 
 import { transformDate } from '@/utils/date';
 
@@ -14,6 +14,7 @@ const initialState = {
     offerById: {},
   },
   tab: 'incoming',
+  countdownData: {}, // For storing individual deal countdown data
 };
 
 const negotiatingSlice = createSlice({
@@ -63,6 +64,17 @@ const negotiatingSlice = createSlice({
     builder.addCase(fetchUserNegotiating.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload?.error;
+    });
+    builder.addCase(fetchDealCountdownData.pending, () => {
+      // Could add loading state for countdown data if needed
+    });
+    builder.addCase(fetchDealCountdownData.fulfilled, (state, action) => {
+      const { dealId, ...countdownData } = action.payload;
+      state.countdownData[dealId] = countdownData;
+    });
+    builder.addCase(fetchDealCountdownData.rejected, (state, action) => {
+      // Could handle countdown data fetch errors if needed
+      console.error('Failed to fetch countdown data:', action.payload);
     });
   },
 });
