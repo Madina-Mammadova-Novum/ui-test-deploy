@@ -585,8 +585,9 @@ export const calculateCountdown = (expiresAt) => {
 
   const millisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
 
-  // If the countdown has expired, return 0 to explicitly indicate the expiration state.
-  return millisecondsUntilExpiration < 0 ? 0 : Date.now() + millisecondsUntilExpiration;
+  if (!millisecondsUntilExpiration) return 1;
+
+  return millisecondsUntilExpiration < 0 ? 1 : Date.now() + millisecondsUntilExpiration;
 };
 
 export const formattedTabValue = (value) => value?.split(' ')[0]?.toLowerCase();

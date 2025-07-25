@@ -18,7 +18,7 @@ const DynamicCountdownTimer = ({ date, autoStart = true, variant = 'primary', st
     <Countdown
       date={date}
       autoStart={autoStart}
-      renderer={({ hours, minutes, seconds, completed }) => {
+      renderer={({ days, hours, minutes, seconds, completed }) => {
         // Handle NotStarted status first
         if (status === 'NotStarted') {
           return <span className="text-yellow">Not Started</span>;
@@ -33,8 +33,9 @@ const DynamicCountdownTimer = ({ date, autoStart = true, variant = 'primary', st
         return (
           <span className={`flex items-center gap-x-1 text-red ${!autoStart ? 'opacity-50' : ''}`}>
             <ClockSVG className={`h-4 w-4 fill-red ${autoStart ? 'animate-clock-spin' : ''}`} viewBox="0 0 14 14" />{' '}
+            {!!days && `${days}d`}
             {!!hours && `${hours}h`}
-            {!!minutes && `${minutes}m`} {(variant !== 'primary' || (!hours && !minutes)) && `${seconds}s`}
+            {!!minutes && `${minutes}m`} {(variant !== 'primary' || (!days && !hours && !minutes)) && `${seconds}s`}
           </span>
         );
       }}

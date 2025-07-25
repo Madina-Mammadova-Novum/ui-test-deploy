@@ -196,6 +196,10 @@ export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSel
   };
 });
 
+// Selector to get countdown data for a specific deal
+export const getCountdownDataSelector = (dealId) =>
+  createDraftSafeSelector(negotiatingSelector, (state) => state.countdownData?.[dealId] || null);
+
 export const getOnSubsDataSelector = createDraftSafeSelector(onSubsSelector, (state) => {
   return {
     error: state.error,

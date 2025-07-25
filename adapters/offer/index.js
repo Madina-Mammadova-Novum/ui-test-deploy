@@ -214,6 +214,7 @@ export function offerDetailsAdapter({ data, role }) {
     countdownData: {
       date: calculateCountdown(expiresAt),
       autoStart: isCountdownActive,
+      status: countdownStatus,
     },
     voyageDetails: {
       dates: [

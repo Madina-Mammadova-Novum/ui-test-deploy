@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ViewCounterofferPropTypes } from '@/lib/types';
 
@@ -9,7 +9,8 @@ import { offerDetailsAdapter } from '@/adapters/offer';
 import { Loader } from '@/elements';
 import { CommentsContent } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
-import { getUserDataSelector } from '@/store/selectors';
+import { fetchDealCountdownData } from '@/store/entities/negotiating/actions';
+import { getCountdownDataSelector, getUserDataSelector } from '@/store/selectors';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 
@@ -30,23 +31,40 @@ const ViewCounteroffer = ({ itemId }) => {
   const [loading, setLoading] = useState(true);
   const [offerDetails, setOfferDetails] = useState({});
 
+  const dispatch = useDispatch();
   const { role } = useSelector(getUserDataSelector);
+  const countdownData = useSelector(getCountdownDataSelector(itemId));
 
   const { isOwner } = getRoleIdentity({ role });
 
-  const { comments, voyageDetails, commercialOfferTerms, countdownData } = offerDetails;
+  const { comments, voyageDetails, commercialOfferTerms } = offerDetails;
 
   useEffect(() => {
     (async () => {
       const { status, data, error } = await getOfferDetails(itemId, role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data }));
+        // Don't include countdownData from adapter since we're getting it from Redux
+        const adaptedData = offerDetailsAdapter({ data });
+        const { countdownData: _, ...dataWithoutCountdown } = adaptedData || {};
+        setOfferDetails(dataWithoutCountdown);
+
+        // Fetch countdown data from Redux
+        dispatch(fetchDealCountdownData({ dealId: itemId }));
       } else {
         console.error(error);
       }
       setLoading(false);
     })();
-  }, []);
+  }, [itemId, role, dispatch]);
+
+  // Transform Redux countdown data to the format expected by Countdown component
+  const transformedCountdownData = countdownData
+    ? {
+        date: countdownData.expiresAt,
+        autoStart: countdownData.isCountdownActive,
+        status: countdownData.countdownStatus,
+      }
+    : null;
 
   if (loading) {
     return (
@@ -69,7 +87,7 @@ const ViewCounteroffer = ({ itemId }) => {
     <div className="flex h-full w-[610px] flex-col">
       <ModalHeader>{isOwner ? 'View Counteroffer' : 'View Sent Offer'}</ModalHeader>
 
-      {isOwner && <Countdown time={countdownData} customStyles="mt-5" />}
+      {isOwner && transformedCountdownData && <Countdown time={transformedCountdownData} customStyles="mt-5" />}
 
       <Tabs
         tabs={tabs}
