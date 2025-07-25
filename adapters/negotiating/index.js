@@ -162,6 +162,7 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
       countdownData: {
         date: calculateCountdown(expiresAt),
         autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {
@@ -259,6 +260,7 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       countdownData: {
         date: calculateCountdown(expiresAt),
         autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {
@@ -361,6 +363,7 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       countdownData: {
         date: calculateCountdown(expiresAt),
         autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {
@@ -442,6 +445,7 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
       countdownData: {
         date: calculateCountdown(expiresAt),
         autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {

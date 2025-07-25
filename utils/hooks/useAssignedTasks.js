@@ -26,7 +26,7 @@ export const useAssignedTasks = () => {
               // Find the task with status "Created" and extract its countdown timer data
               const createdTask = assignedTasksResponse?.data?.find((task) => task.status === 'Created');
               const expiresAt = createdTask?.countdownTimer?.expiresAt;
-              const countdownStatus = createdTask?.countdownTimer?.status;
+              const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
 
               return {
                 ...offer,

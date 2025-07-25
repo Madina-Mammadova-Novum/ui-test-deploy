@@ -27,7 +27,7 @@ export const fetchPrefixtureOffers = createAsyncThunk(PRE_FIXTURE.GET_PRE_FIXTUR
         const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
-        const countdownStatus = createdTask?.countdownTimer?.status;
+        const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
         const taskId = createdTask?.id;
 
         // Fetch extension time options if we have a task ID
@@ -82,7 +82,7 @@ export const fetchDealCountdownData = createAsyncThunk(
       const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
 
       const expiresAt = createdTask?.countdownTimer?.expiresAt;
-      const countdownStatus = createdTask?.countdownTimer?.status;
+      const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
       const taskId = createdTask?.id;
 
       // Fetch extension time options if we have a task ID

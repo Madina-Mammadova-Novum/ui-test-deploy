@@ -43,7 +43,7 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
         const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
-        const countdownStatus = createdTask?.countdownTimer?.status;
+        const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
         const taskId = createdTask?.id;
 
         // Fetch extension time options if we have a task ID
