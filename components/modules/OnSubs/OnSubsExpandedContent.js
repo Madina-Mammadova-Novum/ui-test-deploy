@@ -3,15 +3,16 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { UilFileInfoAlt } from '@iconscout/react-unicons';
+
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
-import PrintSVG from '@/assets/images/print.svg';
 import { Button } from '@/elements';
 import { getPdfToPrint } from '@/services/offer';
-import { getUserDataSelector } from '@/store/selectors';
+import { getAuthSelector, getUserDataSelector } from '@/store/selectors';
 import { ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
@@ -33,7 +34,29 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   const [isLoading, setIsLoading] = useState(false);
 
   const { role } = useSelector(getUserDataSelector);
+  const { session } = useSelector(getAuthSelector);
   const { isCharterer } = getRoleIdentity({ role });
+
+  // Check if current user has permission to extend countdown
+  const hasExtensionPermission = () => {
+    if (!detailsData?.assignTo || !session) return false;
+
+    const { assignTo } = detailsData;
+    const currentUserId = session.userId;
+    const currentCompanyId = session.user?.companyId; // Assuming companyId is in user object
+
+    // Check if current user matches assignTo userId
+    if (assignTo.userId && assignTo.userId === currentUserId) {
+      return true;
+    }
+
+    // Check if current user's company matches assignTo companyId
+    if (assignTo.companyId && assignTo.companyId === currentCompanyId) {
+      return true;
+    }
+
+    return false;
+  };
 
   const handlePrint = async () => {
     setIsLoading(true);
@@ -105,7 +128,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
         <div className="absolute right-1/2 top-14 flex translate-x-1/2 flex-col items-end gap-2 2md:right-1 2md:top-3 2md:-translate-x-5 3md:flex-row 3md:items-center">
-          {isCharterer && (
+          {isCharterer && detailsData?.taskId && detailsData?.allowExtension && hasExtensionPermission() && (
             <ModalWindow
               buttonProps={{
                 text: 'Request response time extension',
@@ -120,23 +143,16 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
                 offerId={offerId}
                 taskId={detailsData?.taskId}
                 onExtensionSuccess={() => setAllowCountdownExtension(false)}
-                options={[
-                  { label: '30 min', value: 30 },
-                  { label: '1 hour', value: 60 },
-                  { label: '2 hours', value: 120 },
-                  { label: '3 hours', value: 180 },
-                  { label: '6 hours', value: 360 },
-                  { label: '12 hours', value: 720 },
-                ]}
+                options={detailsData?.extensionTimeOptions || []}
               />
             </ModalWindow>
           )}
           <Button
             buttonProps={{
-              text: isLoading ? 'Loading...' : 'Print',
+              text: isLoading ? 'Loading...' : 'Recap',
               variant: 'tertiary',
               size: 'large',
-              icon: { before: <PrintSVG /> },
+              icon: { before: <UilFileInfoAlt size="20" className="fill-black" /> },
             }}
             customStyles="!text-black"
             onClick={handlePrint}

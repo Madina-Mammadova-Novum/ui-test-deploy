@@ -16,7 +16,17 @@ import {
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed, laycanEnd, laycanStart, totalQuantity } = data;
+  const {
+    searchedCargo,
+    vessel,
+    expiresAt,
+    frozenAt,
+    isFailed,
+    laycanEnd,
+    laycanStart,
+    totalQuantity,
+    countdownStatus,
+  } = data;
 
   return [
     {
@@ -64,7 +74,8 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
         date: calculateCountdown(expiresAt),
-        autoStart: !frozenAt,
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
       isFailed,
     },
@@ -81,8 +92,18 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed, laycanEnd, laycanStart, totalQuantity } =
-    data;
+  const {
+    searchedCargo,
+    vessel,
+    expiresAt,
+    frozenAt,
+    createdAt,
+    isFailed,
+    laycanEnd,
+    laycanStart,
+    totalQuantity,
+    countdownStatus,
+  } = data;
 
   return [
     {
@@ -136,7 +157,8 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       freezed: frozenAt,
       countdownData: {
         date: calculateCountdown(expiresAt),
-        autoStart: !frozenAt,
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
       isFailed,
     },

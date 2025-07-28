@@ -17,82 +17,43 @@ export const fetchOnSubsOffers = createAsyncThunk(ON_SUBS.GET_ON_SUBS_OFFERS, as
   const enhancedOffers = await Promise.all(
     data.map(async (offer) => {
       try {
-        const [liftSubsTasksResponse, clearanceFileRequestTasksResponse] = await Promise.all([
-          getAssignedTasks({
-            targetId: offer.id,
-            purpose: 'LiftSubs',
-          }),
-          getAssignedTasks({
-            targetId: offer.id,
-            purpose: 'ClearanceFileRequest',
-          }),
-        ]);
+        const assignedTasksResponse = await getAssignedTasks({
+          targetId: offer.id,
+          purpose: 'LiftSubs',
+        });
 
-        // Logic for LiftSubs
-        const liftSubsTasks = liftSubsTasksResponse?.data || [];
-        const liftSubsCreatedTask = liftSubsTasks.find((task) => task.status === 'Created') || liftSubsTasks[0];
+        // First try to find the task with status "Created", otherwise take the first one
+        const tasks = assignedTasksResponse?.data || [];
+        const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
 
-        const liftSubsExpiresAt = liftSubsCreatedTask?.countdownTimer?.expiresAt;
-        const liftSubsCountdownStatus = liftSubsCreatedTask?.countdownTimer?.status || 'Expired';
-        const liftSubsTaskId = liftSubsCreatedTask?.id;
-        const { assignTo, initiator } = liftSubsCreatedTask || {};
+        const expiresAt = createdTask?.countdownTimer?.expiresAt;
+        const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
+        const taskId = createdTask?.id;
+        const { assignTo, initiator } = createdTask || {};
 
-        let liftSubsAllowExtension = false;
-        let liftSubsExtensionTimeOptions = [];
+        // Fetch extension time options if we have a task ID
+        let allowExtension = false;
+        let extensionTimeOptions = [];
 
-        if (liftSubsTaskId) {
+        if (taskId) {
           try {
-            const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId: liftSubsTaskId });
-            liftSubsAllowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
-            liftSubsExtensionTimeOptions = extensionTimeOptionsResponse?.data?.options || [];
+            const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId });
+            allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
+            extensionTimeOptions = extensionTimeOptionsResponse?.data?.options || [];
           } catch (extensionError) {
-            console.error(`Error fetching LiftSubs extension time options for offer ${offer.id}:`, extensionError);
+            console.error(`Error fetching extension time options for offer ${offer.id}:`, extensionError);
           }
         }
-
-        // Logic for ClearanceFileRequest
-        const clearanceFileTasks = clearanceFileRequestTasksResponse?.data || [];
-        const clearanceFileCreatedTask =
-          clearanceFileTasks.find((task) => task.status === 'Created') || clearanceFileTasks[0];
-
-        const docExpiresAt = clearanceFileCreatedTask?.countdownTimer?.expiresAt;
-        const docCountdownStatus = clearanceFileCreatedTask?.countdownTimer?.status || 'Expired';
-        const docTaskId = clearanceFileCreatedTask?.id;
-
-        let docAllowExtension = false;
-        let docExtensionTimeOptions = [];
-
-        if (docTaskId) {
-          try {
-            const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId: docTaskId });
-            docAllowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
-            docExtensionTimeOptions = extensionTimeOptionsResponse?.data?.options || [];
-          } catch (extensionError) {
-            console.error(
-              `Error fetching ClearanceFileRequest extension time options for offer ${offer.id}:`,
-              extensionError
-            );
-          }
-        }
-
-        const documentCountdown = {
-          expiresAt: docExpiresAt,
-          countdownStatus: docCountdownStatus,
-          allowExtension: docAllowExtension,
-          extensionTimeOptions: extensionTimeOptionsAdapter({ options: docExtensionTimeOptions }),
-          taskId: docTaskId,
-        };
 
         return {
           ...offer,
-          expiresAt: liftSubsExpiresAt,
-          countdownStatus: liftSubsCountdownStatus,
-          allowExtension: liftSubsAllowExtension,
-          extensionTimeOptions: extensionTimeOptionsAdapter({ options: liftSubsExtensionTimeOptions }),
-          taskId: liftSubsTaskId,
+          expiresAt,
+          countdownStatus,
+          allowExtension,
+          extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
+          taskId,
           assignTo,
           initiator,
-          documentCountdown,
         };
       } catch (error) {
         console.error(`Error fetching assigned tasks for offer ${offer.id}:`, error);
