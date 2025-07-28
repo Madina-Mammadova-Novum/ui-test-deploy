@@ -36,3 +36,17 @@ export const submitTaskExtensionRequest = async ({ taskId, data }) => {
   const response = await postData(endpoint, data);
   return response;
 };
+
+export const approveExtensionRequest = async ({ requestId, data = {} }) => {
+  const endpoint = `assigned-tasks/extensionrequests/${requestId}/approve`;
+
+  const response = await postData(endpoint, data);
+  return response;
+};
+
+export const rejectExtensionRequest = async ({ requestId, data = {} }) => {
+  const endpoint = `assigned-tasks/extensionrequests/${requestId}/reject`;
+
+  const response = await postData(endpoint, data);
+  return response;
+};
