@@ -289,8 +289,11 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
             status={requestStatus}
             initialDocuments={initialDocuments}
             comments={comments}
+            documentRequestId={documentRequests.length > 0 ? documentRequests[0].id : null}
+            offerId={offerId}
           />
         ))}
+
       <UploadForm
         onSubmit={onSubmit}
         dropzoneProps={{

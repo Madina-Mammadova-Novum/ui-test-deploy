@@ -17,7 +17,7 @@ const ExtendCountdown = ({
   taskId,
   onExtensionSuccess,
   title = 'Request to change countdown',
-  description = "In order to increase countdown time, please, send the request. The countdown will be changed only after Broker's approval.",
+  description = 'In order to increase countdown time, please, send the request.',
   options = [],
 }) => {
   const [selectedOption, setSelectedOption] = useState(null);

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import { UilCheckCircle, UilClock, UilInfoCircle, UilSyncExclamation, UilTimes } from '@iconscout/react-unicons';
 import * as yup from 'yup';
@@ -9,12 +10,21 @@ import * as yup from 'yup';
 import { DocumentRequestFormPropTypes } from '@/lib/types';
 
 import { documentRequestsRequestAdapter } from '@/adapters';
+import { extensionTimeOptionsAdapter } from '@/adapters/pre-fixture';
 import AngleDownSVG from '@/assets/images/angleDown.svg';
 import { FormManager } from '@/common';
 import { Button, CheckBoxInput, TextArea } from '@/elements';
 import { ROLES } from '@/lib/constants';
+import {
+  approveExtensionRequest,
+  getAssignedTasks,
+  getTaskExtensionTimeOptions,
+  rejectExtensionRequest,
+} from '@/services/assignedTasks';
 import { getClearanceFiles } from '@/services/clearanceFiles';
-import { useHookFormParams } from '@/utils/hooks';
+import { getAuthSelector } from '@/store/selectors';
+import { ConfirmModal, DynamicCountdownTimer, ExtendCountdown, ModalWindow } from '@/units';
+import { successToast, useHookFormParams } from '@/utils/hooks';
 
 // Status descriptions and configurations
 const getStatusConfig = (status, role) => {
@@ -109,12 +119,206 @@ const DocumentRequestForm = ({
   comments = '',
   status = '',
   disabled = false,
+  documentRequestId = null, // Add prop for document request ID
+  offerId = null, // Add prop for offer ID
 }) => {
   const [toggle, setToggle] = useState(true);
   const [clearanceFiles, setClearanceFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const contentRef = useRef(null);
+
+  // Countdown related state
+  const { session } = useSelector(getAuthSelector);
+
+  const [countdownData, setCountdownData] = useState({
+    expiresAt: null,
+    countdownStatus: 'Expired',
+    allowExtension: false,
+    extensionTimeOptions: [],
+    taskId: null,
+    assignTo: null,
+    initiator: null,
+  });
+  const [allowCountdownExtension, setAllowCountdownExtension] = useState(false);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+
+  // Check if current user has permission to extend countdown
+  const hasExtensionPermission = () => {
+    if (!countdownData.assignTo || !session) return false;
+
+    const { assignTo } = countdownData;
+    const currentUserId = session.userId;
+    const currentCompanyId = session.user?.companyId; // Assuming companyId is in user object
+
+    // Check if current user matches assignTo userId
+    if (assignTo.userId && assignTo.userId === currentUserId) {
+      return true;
+    }
+
+    // Check if current user's company matches assignTo companyId
+    if (assignTo.companyId && assignTo.companyId === currentCompanyId) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // Check if current user is the initiator and can approve/reject extension requests
+  const hasApprovalPermission = () => {
+    if (!countdownData.initiator || !session) return false;
+
+    const { initiator } = countdownData;
+    const currentUserId = session.userId;
+    const currentCompanyId = session.user?.companyId; // Assuming companyId is in user object
+
+    // Check if current user matches initiator userId
+    if (initiator.userId && initiator.userId === currentUserId) {
+      return true;
+    }
+
+    // Check if current user's company matches initiator companyId
+    if (initiator.companyId && initiator.companyId === currentCompanyId) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // Fetch countdown data when we have document requests
+  const fetchCountdownData = async (requestId) => {
+    try {
+      const assignedTasksResponse = await getAssignedTasks({
+        targetId: requestId,
+        purpose: 'ClearanceFileRequest',
+      });
+
+      // First try to find the task with status "Created", otherwise take the first one
+      const tasks = assignedTasksResponse?.data || [];
+      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+
+      if (!createdTask) {
+        setCountdownData({
+          expiresAt: null,
+          countdownStatus: 'Expired',
+          allowExtension: false,
+          extensionTimeOptions: [],
+          taskId: null,
+          assignTo: null,
+          initiator: null,
+        });
+        setAllowCountdownExtension(false);
+        return;
+      }
+
+      const expiresAt = createdTask?.countdownTimer?.expiresAt;
+      const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
+      const taskId = createdTask?.id;
+      const { assignTo, initiator } = createdTask || {};
+
+      // Fetch extension time options if we have a task ID
+      let allowExtension = false;
+      let extensionTimeOptions = [];
+
+      if (taskId) {
+        try {
+          const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId });
+          allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
+          extensionTimeOptions = extensionTimeOptionsAdapter({
+            options: extensionTimeOptionsResponse?.data?.options || [],
+          });
+        } catch (extensionError) {
+          console.error(`Error fetching extension time options for document request ${requestId}:`, extensionError);
+        }
+      }
+
+      const newCountdownData = {
+        expiresAt,
+        countdownStatus,
+        allowExtension,
+        extensionTimeOptions,
+        taskId,
+        assignTo,
+        initiator,
+      };
+
+      setCountdownData(newCountdownData);
+      setAllowCountdownExtension(allowExtension && hasExtensionPermission());
+    } catch (error) {
+      console.error(`Error fetching countdown data for document request ${requestId}:`, error);
+      setCountdownData({
+        expiresAt: null,
+        countdownStatus: 'Expired',
+        allowExtension: false,
+        extensionTimeOptions: [],
+        taskId: null,
+        assignTo: null,
+      });
+      setAllowCountdownExtension(false);
+    }
+  };
+
+  // Update permission when countdown data or session changes
+  useEffect(() => {
+    setAllowCountdownExtension(countdownData.allowExtension && hasExtensionPermission());
+  }, [countdownData, session]);
+
+  // Handle approve extension request
+  const handleApproveExtension = async (requestId) => {
+    setActionLoading(true);
+    try {
+      await approveExtensionRequest({ requestId });
+      successToast('Extension request approved successfully');
+      // Refresh countdown data after approval
+      if (documentRequestId) {
+        fetchCountdownData(documentRequestId);
+      }
+    } catch (error) {
+      console.error('Error approving extension request:', error);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handle reject extension request
+  const handleRejectExtension = async (requestId) => {
+    setActionLoading(true);
+    try {
+      await rejectExtensionRequest({ requestId });
+      successToast('Extension request rejected successfully');
+      // Refresh countdown data after rejection
+      if (documentRequestId) {
+        fetchCountdownData(documentRequestId);
+      }
+    } catch (error) {
+      console.error('Error rejecting extension request:', error);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Show approve confirmation modal
+  const showApproveModal = () => {
+    setIsApproveModalOpen(true);
+  };
+
+  // Show reject confirmation modal
+  const showRejectModal = () => {
+    setIsRejectModalOpen(true);
+  };
+
+  // Handle confirm approve
+  const handleConfirmApprove = () => {
+    handleApproveExtension(countdownData.taskId);
+    setIsApproveModalOpen(false);
+  };
+
+  // Handle confirm reject
+  const handleConfirmReject = () => {
+    handleRejectExtension(countdownData.taskId);
+    setIsRejectModalOpen(false);
+  };
 
   // Dynamic schema based on whether comments are required (revision mode)
   const isRevisionMode = role === ROLES.CHARTERER && status === 'Documents Uploaded';
@@ -176,6 +380,13 @@ const DocumentRequestForm = ({
 
     fetchClearanceFiles();
   }, []);
+
+  // Fetch countdown data when documentRequestId changes
+  useEffect(() => {
+    if (documentRequestId) {
+      fetchCountdownData(documentRequestId);
+    }
+  }, [documentRequestId]);
 
   // Handle individual checkbox change
   const handleCheckboxChange = (optionValue, checked) => {
@@ -296,6 +507,79 @@ const DocumentRequestForm = ({
         </button>
       </div>
 
+      {/* Countdown Timer Section - Show when countdown data exists */}
+      {countdownData.taskId && (
+        <div className="mt-4 flex flex-col items-start justify-center gap-y-2">
+          {/* Countdown Timer */}
+          <div className="border-l-2 border-l-blue px-4 py-1">
+            <span className="text-sm font-semibold uppercase">Document Request Countdown</span>
+            <div className="flex text-xsm">
+              <DynamicCountdownTimer
+                date={countdownData.expiresAt}
+                status={countdownData.countdownStatus}
+                autoStart={countdownData.countdownStatus === 'Running'}
+              />
+            </div>
+          </div>
+
+          {/* Extend Countdown Button - Show only if user has permission */}
+          {countdownData.allowExtension && hasExtensionPermission() && (
+            <ModalWindow
+              buttonProps={{
+                text: 'Request document time extension',
+                variant: 'primary',
+                size: 'small',
+                disabled: !allowCountdownExtension,
+                className:
+                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+              }}
+            >
+              <ExtendCountdown
+                offerId={offerId}
+                taskId={countdownData.taskId}
+                onExtensionSuccess={() => {
+                  setAllowCountdownExtension(false);
+                  successToast('Extension request submitted successfully');
+                  // Refresh countdown data after extension
+                  if (documentRequestId) {
+                    fetchCountdownData(documentRequestId);
+                  }
+                }}
+                options={countdownData.extensionTimeOptions}
+              />
+            </ModalWindow>
+          )}
+
+          {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
+          {hasApprovalPermission() && countdownData.taskId && (
+            <div className="flex gap-2">
+              <Button
+                buttonProps={{
+                  text: 'Approve Extension',
+                  variant: 'primary',
+                  size: 'medium',
+                  className:
+                    'border border-green-500 hover:border-green-600 bg-green-500 hover:bg-green-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+                }}
+                disabled={actionLoading}
+                onClick={showApproveModal}
+              />
+              <Button
+                buttonProps={{
+                  text: 'Reject Extension',
+                  variant: 'delete',
+                  size: 'medium',
+                  className:
+                    'border border-red-500 hover:border-red-600 bg-red-500 hover:bg-red-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+                }}
+                disabled={actionLoading}
+                onClick={showRejectModal}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Status Description Section */}
       <div className={`mt-5 rounded-lg border p-3 ${statusConfig.bgColor} ${statusConfig.borderColor}`}>
         <div className="flex items-center gap-2">
@@ -313,7 +597,7 @@ const DocumentRequestForm = ({
         >
           <div className={`grid grid-cols-1 gap-6 ${shouldShowComments() ? 'lg:grid-cols-2' : ''}`}>
             {/* Left side - Checkbox list */}
-            <div className="rounded-lg border border-gray-200 p-4">
+            <div className="max-h-[400px] overflow-y-auto rounded-lg border border-gray-200 p-4">
               <h6 className="mb-3 text-sm font-medium text-gray-700">Document Requirements</h6>
               {loading ? (
                 <div className="text-sm text-gray-500">Loading documents...</div>
@@ -397,6 +681,42 @@ const DocumentRequestForm = ({
           )}
         </FormManager>
       </FormProvider>
+
+      {/* Approve Extension Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isApproveModalOpen}
+        onConfirm={handleConfirmApprove}
+        onClose={() => setIsApproveModalOpen(false)}
+        title="Approve Extension Request"
+        message="Are you sure you want to approve this extension request? This will extend the document submission deadline."
+        confirmText={actionLoading ? 'Approving...' : 'Yes, Approve'}
+        cancelText="Cancel"
+        variant="primary"
+        okButtonProps={{
+          disabled: actionLoading,
+        }}
+        cancelButtonProps={{
+          disabled: actionLoading,
+        }}
+      />
+
+      {/* Reject Extension Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isRejectModalOpen}
+        onConfirm={handleConfirmReject}
+        onClose={() => setIsRejectModalOpen(false)}
+        title="Reject Extension Request"
+        message="Are you sure you want to reject this extension request? The original deadline will remain in effect."
+        confirmText={actionLoading ? 'Rejecting...' : 'Yes, Reject'}
+        cancelText="Cancel"
+        variant="delete"
+        okButtonProps={{
+          disabled: actionLoading,
+        }}
+        cancelButtonProps={{
+          disabled: actionLoading,
+        }}
+      />
     </div>
   );
 };
