@@ -61,7 +61,7 @@ const PreFixtureExpandedFooter = ({ underNegotiation, offerId, offerAccepted }) 
               <div className="w-full">
                 <Button
                   onClick={() => handleOpenModal('accept_offer')}
-                  buttonProps={{ text: 'Confirm Added Terms & Go On Subs', variant: 'primary', size: 'large' }}
+                  buttonProps={{ text: 'Confirm Fixture with technical subjects', variant: 'primary', size: 'large' }}
                   customStyles="w-full whitespace-nowrap"
                   disabled={underNegotiation}
                 />
