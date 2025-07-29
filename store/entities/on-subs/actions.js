@@ -27,7 +27,7 @@ export const fetchOnSubsOffers = createAsyncThunk(ON_SUBS.GET_ON_SUBS_OFFERS, as
         const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
-        const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
+        const countdownStatus = createdTask?.countdownTimer?.status || 'NotStarted';
         const taskId = createdTask?.id;
         const { assignTo, initiator } = createdTask || {};
 

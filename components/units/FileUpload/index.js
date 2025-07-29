@@ -52,7 +52,7 @@ const UploadForm = ({ onSubmit = async () => {}, dropzoneProps = {} }) => {
 
   return (
     <div
-      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 pb-3 pt-5 transition-all duration-500"
+      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 transition-all duration-500"
       ref={contentRef}
       style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '64px' }}
     >

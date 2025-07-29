@@ -128,7 +128,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
         <div className="absolute right-1/2 top-14 flex translate-x-1/2 flex-col items-end gap-2 2md:right-1 2md:top-3 2md:-translate-x-5 3md:flex-row 3md:items-center">
-          {isCharterer && detailsData?.taskId && detailsData?.allowExtension && hasExtensionPermission() && (
+          {detailsData?.taskId && detailsData?.allowExtension && hasExtensionPermission() && (
             <ModalWindow
               buttonProps={{
                 text: 'Request response time extension',

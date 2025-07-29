@@ -21,6 +21,7 @@ import { onSubsHeader } from '@/utils/mock';
 
 const DocumentsContent = ({ rowsData = [], offerId }) => {
   const { role } = useSelector(getUserDataSelector);
+
   const dispatch = useDispatch();
   const [documentRequests, setDocumentRequests] = useState([]);
   const [requestStatus, setRequestStatus] = useState('initial');
@@ -276,23 +277,22 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
 
   return (
     <div className="mb-5 flex flex-col gap-y-5">
-      {shouldRenderDocumentRequestForm() &&
-        (loading ? (
-          <div className="flex items-center justify-center p-8">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-          </div>
-        ) : (
-          <DocumentRequestForm
-            role={role}
-            onSubmit={onDocumentRequest}
-            title={title || 'Please choose the documents required for clearance of the vessel.'}
-            status={requestStatus}
-            initialDocuments={initialDocuments}
-            comments={comments}
-            documentRequestId={documentRequests.length > 0 ? documentRequests[0].id : null}
-            offerId={offerId}
-          />
-        ))}
+      {loading ? (
+        <div className="flex items-center justify-center p-8">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
+        </div>
+      ) : shouldRenderDocumentRequestForm ? (
+        <DocumentRequestForm
+          role={role}
+          onSubmit={onDocumentRequest}
+          title={title || 'Please choose the documents required for clearance of the vessel.'}
+          status={requestStatus}
+          initialDocuments={initialDocuments}
+          comments={comments}
+          documentRequestId={documentRequests.length > 0 ? documentRequests[0].id : null}
+          offerId={offerId}
+        />
+      ) : null}
 
       <UploadForm
         onSubmit={onSubmit}
