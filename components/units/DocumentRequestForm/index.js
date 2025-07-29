@@ -24,7 +24,7 @@ import {
 import { getClearanceFiles } from '@/services/clearanceFiles';
 import { getAuthSelector } from '@/store/selectors';
 import { ConfirmModal, DynamicCountdownTimer, ExtendCountdown, ModalWindow } from '@/units';
-import { successToast, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 // Status descriptions and configurations
 const getStatusConfig = (status, role) => {
@@ -126,6 +126,7 @@ const DocumentRequestForm = ({
   const [clearanceFiles, setClearanceFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [calculatedHeight, setCalculatedHeight] = useState('auto');
   const contentRef = useRef(null);
 
   // Countdown related state
@@ -139,6 +140,8 @@ const DocumentRequestForm = ({
     taskId: null,
     assignTo: null,
     initiator: null,
+    extensionRequests: [],
+    pendingExtensionRequest: null, // Object to store targetId and requestedMinutes
   });
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
@@ -167,7 +170,7 @@ const DocumentRequestForm = ({
 
   // Check if current user is the initiator and can approve/reject extension requests
   const hasApprovalPermission = () => {
-    if (!countdownData.initiator || !session) return false;
+    if (!countdownData.initiator || !session || !countdownData.pendingExtensionRequest) return false;
 
     const { initiator } = countdownData;
     const currentUserId = session.userId;
@@ -207,6 +210,8 @@ const DocumentRequestForm = ({
           taskId: null,
           assignTo: null,
           initiator: null,
+          extensionRequests: [],
+          pendingExtensionRequest: null,
         });
         setAllowCountdownExtension(false);
         return;
@@ -215,7 +220,7 @@ const DocumentRequestForm = ({
       const expiresAt = createdTask?.countdownTimer?.expiresAt;
       const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
       const taskId = createdTask?.id;
-      const { assignTo, initiator } = createdTask || {};
+      const { assignTo, initiator, extensionRequests } = createdTask || {};
 
       // Fetch extension time options if we have a task ID
       let allowExtension = false;
@@ -241,7 +246,18 @@ const DocumentRequestForm = ({
         taskId,
         assignTo,
         initiator,
+        extensionRequests,
+        pendingExtensionRequest: null,
       };
+
+      // Find and set pending extension request
+      const pendingRequest = extensionRequests.find((request) => request.status === 'Pending');
+      if (pendingRequest) {
+        newCountdownData.pendingExtensionRequest = {
+          targetId: pendingRequest.id,
+          requestedMinutes: pendingRequest.requestedMinutes,
+        };
+      }
 
       setCountdownData(newCountdownData);
       setAllowCountdownExtension(allowExtension && hasExtensionPermission());
@@ -254,6 +270,9 @@ const DocumentRequestForm = ({
         extensionTimeOptions: [],
         taskId: null,
         assignTo: null,
+        initiator: null,
+        extensionRequests: [],
+        pendingExtensionRequest: null,
       });
       setAllowCountdownExtension(false);
     }
@@ -268,7 +287,15 @@ const DocumentRequestForm = ({
   const handleApproveExtension = async (requestId) => {
     setActionLoading(true);
     try {
-      await approveExtensionRequest({ requestId });
+      const response = await approveExtensionRequest({ requestId });
+
+      // Check if there's an error in the response
+      if (response?.error || response?.message) {
+        console.error('Error approving extension request:', response?.message || response?.error);
+        errorToast('Failed to approve extension request');
+        return; // Don't proceed with success actions
+      }
+
       successToast('Extension request approved successfully');
       // Refresh countdown data after approval
       if (documentRequestId) {
@@ -276,6 +303,7 @@ const DocumentRequestForm = ({
       }
     } catch (error) {
       console.error('Error approving extension request:', error);
+      errorToast('Failed to approve extension request');
     } finally {
       setActionLoading(false);
     }
@@ -285,7 +313,15 @@ const DocumentRequestForm = ({
   const handleRejectExtension = async (requestId) => {
     setActionLoading(true);
     try {
-      await rejectExtensionRequest({ requestId });
+      const response = await rejectExtensionRequest({ requestId });
+
+      // Check if there's an error in the response
+      if (response?.error || response?.message) {
+        console.error('Error rejecting extension request:', response?.message || response?.error);
+        errorToast('Failed to reject extension request');
+        return; // Don't proceed with success actions
+      }
+
       successToast('Extension request rejected successfully');
       // Refresh countdown data after rejection
       if (documentRequestId) {
@@ -293,6 +329,7 @@ const DocumentRequestForm = ({
       }
     } catch (error) {
       console.error('Error rejecting extension request:', error);
+      errorToast('Failed to reject extension request');
     } finally {
       setActionLoading(false);
     }
@@ -310,26 +347,19 @@ const DocumentRequestForm = ({
 
   // Handle confirm approve
   const handleConfirmApprove = () => {
-    handleApproveExtension(countdownData.taskId);
+    handleApproveExtension(countdownData.pendingExtensionRequest?.targetId);
     setIsApproveModalOpen(false);
   };
 
   // Handle confirm reject
   const handleConfirmReject = () => {
-    handleRejectExtension(countdownData.taskId);
+    handleRejectExtension(countdownData.pendingExtensionRequest?.targetId);
     setIsRejectModalOpen(false);
   };
 
-  // Dynamic schema based on whether comments are required (revision mode)
-  const isRevisionMode = role === ROLES.CHARTERER && status === 'Documents Uploaded';
   const schema = yup.object().shape({
     selectedDocuments: yup.array().of(yup.string()),
-    comments: isRevisionMode
-      ? yup
-          .string()
-          .required('Comments are required for revision requests')
-          .max(500, 'Comments cannot exceed 500 characters')
-      : yup.string().max(500, 'Comments cannot exceed 500 characters'),
+    comments: yup.string().max(500, 'Comments cannot exceed 500 characters'),
   });
 
   const methods = useHookFormParams({
@@ -489,11 +519,41 @@ const DocumentRequestForm = ({
     return disabled || isOwnerReadOnly || shouldShowComments() || disabledStatuses.includes(status);
   };
 
+  // Recalculate height when content changes
+  const recalculateHeight = () => {
+    if (contentRef.current) {
+      if (toggle) {
+        // Use setTimeout to ensure DOM updates are complete
+        setTimeout(() => {
+          if (contentRef.current) {
+            setCalculatedHeight(`${contentRef.current.scrollHeight}px`);
+          }
+        }, 200);
+      } else {
+        setCalculatedHeight('50px');
+      }
+    }
+  };
+
+  // Effect to recalculate height when dynamic content changes
+  useEffect(() => {
+    recalculateHeight();
+  }, [
+    toggle,
+    clearanceFiles,
+    loading,
+    actionLoading,
+    countdownData,
+    status,
+    allowCountdownExtension,
+    methods.formState.errors,
+  ]);
+
   return (
     <div
-      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 pb-3 pt-5 transition-all duration-500"
+      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 transition-all duration-500"
       ref={contentRef}
-      style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '64px' }}
+      style={{ height: calculatedHeight }}
     >
       <div className="flex justify-between">
         <h5 className="text-sm font-semibold text-black">{title}</h5>
@@ -508,85 +568,97 @@ const DocumentRequestForm = ({
       </div>
 
       {/* Countdown Timer Section - Show when countdown data exists */}
-      {countdownData.taskId && (
-        <div className="mt-4 flex flex-col items-start justify-center gap-y-2">
-          {/* Countdown Timer */}
-          <div className="border-l-2 border-l-blue px-4 py-1">
-            <span className="text-sm font-semibold uppercase">Document Request Countdown</span>
-            <div className="flex text-xsm">
-              <DynamicCountdownTimer
-                date={countdownData.expiresAt}
-                status={countdownData.countdownStatus}
-                autoStart={countdownData.countdownStatus === 'Running'}
-              />
+      {countdownData.taskId &&
+        (status === 'Pending' ||
+          status === 'In Progress' ||
+          status === 'Revision Requested' ||
+          status === 'Documents Uploaded') && (
+          <div className="mt-4 flex flex-col items-start justify-center gap-y-3">
+            {/* Countdown Timer */}
+            <div className="border-l-2 border-l-blue px-4 py-1">
+              <span className="text-sm font-semibold uppercase">Document Request Countdown</span>
+              <div className="flex text-xsm">
+                <DynamicCountdownTimer
+                  date={countdownData.expiresAt}
+                  status={countdownData.countdownStatus}
+                  autoStart={countdownData.countdownStatus === 'Running'}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Extend Countdown Button - Show only if user has permission */}
-          {countdownData.allowExtension && hasExtensionPermission() && (
-            <ModalWindow
-              buttonProps={{
-                text: 'Request document time extension',
-                variant: 'primary',
-                size: 'small',
-                disabled: !allowCountdownExtension,
-                className:
-                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-              }}
-            >
-              <ExtendCountdown
-                offerId={offerId}
-                taskId={countdownData.taskId}
-                onExtensionSuccess={() => {
-                  setAllowCountdownExtension(false);
-                  successToast('Extension request submitted successfully');
-                  // Refresh countdown data after extension
-                  if (documentRequestId) {
-                    fetchCountdownData(documentRequestId);
-                  }
-                }}
-                options={countdownData.extensionTimeOptions}
-              />
-            </ModalWindow>
-          )}
-
-          {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
-          {hasApprovalPermission() && countdownData.taskId && (
-            <div className="flex gap-2">
-              <Button
+            {/* Extend Countdown Button - Show only if user has permission */}
+            {countdownData.allowExtension && hasExtensionPermission() && (
+              <ModalWindow
                 buttonProps={{
-                  text: 'Approve Extension',
+                  text: 'Request document time extension',
                   variant: 'primary',
-                  size: 'medium',
+                  size: 'small',
+                  disabled: !allowCountdownExtension,
                   className:
-                    'border border-green-500 hover:border-green-600 bg-green-500 hover:bg-green-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+                    'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
                 }}
-                disabled={actionLoading}
-                onClick={showApproveModal}
-              />
-              <Button
-                buttonProps={{
-                  text: 'Reject Extension',
-                  variant: 'delete',
-                  size: 'medium',
-                  className:
-                    'border border-red-500 hover:border-red-600 bg-red-500 hover:bg-red-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-                }}
-                disabled={actionLoading}
-                onClick={showRejectModal}
-              />
-            </div>
-          )}
-        </div>
-      )}
+              >
+                <ExtendCountdown
+                  offerId={offerId}
+                  taskId={countdownData.taskId}
+                  onExtensionSuccess={() => {
+                    setAllowCountdownExtension(false);
+                    // Refresh countdown data after extension
+                    if (documentRequestId) {
+                      fetchCountdownData(documentRequestId);
+                    }
+                  }}
+                  options={countdownData.extensionTimeOptions}
+                />
+              </ModalWindow>
+            )}
+
+            {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
+            {countdownData.extensionRequests.length > 0 && countdownData.taskId && hasApprovalPermission() && (
+              <div className="flex w-full flex-col gap-2 rounded-md border border-gray-200 p-3">
+                <p className="text-xsm">
+                  You have a pending extension request for{' '}
+                  <span className="font-semibold">
+                    {countdownData.pendingExtensionRequest?.requestedMinutes} minutes
+                  </span>
+                </p>
+
+                <div className="flex gap-2">
+                  <Button
+                    buttonProps={{
+                      text: 'Approve Extension',
+                      variant: 'primary',
+                      size: 'medium',
+                      className:
+                        'border border-green-500 hover:border-green-600 bg-green-500 hover:bg-green-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+                    }}
+                    disabled={actionLoading}
+                    onClick={showApproveModal}
+                  />
+                  <Button
+                    buttonProps={{
+                      text: 'Reject Extension',
+                      variant: 'delete',
+                      size: 'medium',
+                      className:
+                        'border border-red-500 hover:border-red-600 bg-red-500 hover:bg-red-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+                    }}
+                    disabled={actionLoading}
+                    onClick={showRejectModal}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
       {/* Status Description Section */}
       <div className={`mt-5 rounded-lg border p-3 ${statusConfig.bgColor} ${statusConfig.borderColor}`}>
         <div className="flex items-center gap-2">
           {statusConfig.icon}
-          <span className={`text-sm font-medium ${statusConfig.color}`}>{statusConfig.statusText}</span>
+          <span className={`text-xsm font-medium ${statusConfig.color}`}>{statusConfig.statusText}</span>
         </div>
-        <p className={`mt-2 text-sm ${statusConfig.color}`}>{statusConfig.message}</p>
+        <p className={`mt-2 text-xsm ${statusConfig.color}`}>{statusConfig.message}</p>
       </div>
 
       <FormProvider {...methods}>
@@ -598,11 +670,11 @@ const DocumentRequestForm = ({
           <div className={`grid grid-cols-1 gap-6 ${shouldShowComments() ? 'lg:grid-cols-2' : ''}`}>
             {/* Left side - Checkbox list */}
             <div className="max-h-[400px] overflow-y-auto rounded-lg border border-gray-200 p-4">
-              <h6 className="mb-3 text-sm font-medium text-gray-700">Document Requirements</h6>
+              <h6 className="mb-3 text-xsm font-medium text-gray-700">Document Requirements</h6>
               {loading ? (
                 <div className="text-sm text-gray-500">Loading documents...</div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {clearanceFiles.map((option, index) => (
                     <CheckBoxInput
                       key={option.value}
@@ -610,7 +682,7 @@ const DocumentRequestForm = ({
                       checked={methods.watch('selectedDocuments')?.includes(option.value)}
                       onChange={(e) => handleCheckboxChange(option.value, e.target.checked)}
                       disabled={shouldDisableCheckboxes()}
-                      labelStyles={`text-sm leading-relaxed text-gray-700 ${shouldDisableCheckboxes() ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      labelStyles={`text-xsm leading-relaxed text-gray-700 ${shouldDisableCheckboxes() ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                       {option.label}
                     </CheckBoxInput>
@@ -622,7 +694,7 @@ const DocumentRequestForm = ({
             {/* Right side - Comments (conditionally rendered) */}
             {shouldShowComments() && (
               <div className="rounded-lg border border-gray-200 p-4">
-                <h6 className="mb-3 text-sm font-medium text-gray-700">Comments</h6>
+                <h6 className="mb-3 text-xsm font-medium text-gray-700">Comments</h6>
                 <TextArea
                   name="comments"
                   placeholder={
