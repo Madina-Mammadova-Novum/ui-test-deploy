@@ -41,6 +41,7 @@ module.exports = {
       '2md': '980px',
       '3md': '1024px',
       lg: '1280px',
+      lgMax: { max: '1280px' },
       xl: '1440px',
       xlMax: { max: '1440px' },
       '2xl': '1920px',

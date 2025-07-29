@@ -1,5 +1,6 @@
 import { objectAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
+import { extensionTimeOptionsAdapter } from '@/adapters/pre-fixture';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
@@ -211,11 +212,16 @@ export const onSubsDetailsAdapter = ({ data }) => {
     lastSire,
     approvals,
     bankDetails,
-    canRequestForCountdownExtension,
-    isCountdownActive,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    allowExtension,
+    extensionTimeOptions,
+    taskId,
+    countdownStatus,
+    assignTo,
+    initiator,
+    extensionRequests = [],
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -388,7 +394,13 @@ export const onSubsDetailsAdapter = ({ data }) => {
         ],
       },
     },
-    allowExtension: canRequestForCountdownExtension && isCountdownActive,
+    allowExtension,
+    extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
+    taskId,
+    isCountdownActive: countdownStatus === 'Running',
+    assignTo,
+    initiator,
+    extensionRequests,
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,

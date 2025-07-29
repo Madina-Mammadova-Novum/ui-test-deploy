@@ -29,7 +29,7 @@ export const fetchOnSubsOffers = createAsyncThunk(ON_SUBS.GET_ON_SUBS_OFFERS, as
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
         const countdownStatus = createdTask?.countdownTimer?.status || 'NotStarted';
         const taskId = createdTask?.id;
-        const { assignTo, initiator } = createdTask || {};
+        const { assignTo, initiator, extensionRequests } = createdTask || {};
 
         // Fetch extension time options if we have a task ID
         let allowExtension = false;
@@ -54,6 +54,7 @@ export const fetchOnSubsOffers = createAsyncThunk(ON_SUBS.GET_ON_SUBS_OFFERS, as
           taskId,
           assignTo,
           initiator,
+          extensionRequests,
         };
       } catch (error) {
         console.error(`Error fetching assigned tasks for offer ${offer.id}:`, error);
