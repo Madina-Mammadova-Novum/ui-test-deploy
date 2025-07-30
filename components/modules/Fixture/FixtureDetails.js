@@ -36,7 +36,7 @@ const FixtureDetails = ({ searchedParams }) => {
         expand={index === 0 || toggle}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
-        footer={<FixtureExpandedFooter underRecap={!rowData?.isCountdownActive} identity={{ isOwner }} />}
+        footer={<FixtureExpandedFooter identity={{ isOwner }} />}
       >
         <FixtureExpandedContent
           offerId={rowData?.id}

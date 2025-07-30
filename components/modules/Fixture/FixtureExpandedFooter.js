@@ -10,7 +10,7 @@ const baseUrl =
 const APP_QR_URL = `${baseUrl}/qr-redirect?variant=download`;
 const APP_LOGO_PATH = '/images/dark-logo.svg';
 
-const FixtureExpandedFooter = ({ underRecap = true, identity }) => {
+const FixtureExpandedFooter = ({ underRecap = false, identity }) => {
   return (
     <ExpandableRowFooter>
       <Divider />

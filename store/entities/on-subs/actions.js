@@ -67,3 +67,58 @@ export const fetchOnSubsOffers = createAsyncThunk(ON_SUBS.GET_ON_SUBS_OFFERS, as
     data: { offers: enhancedOffers, totalPages: calculateAmountOfPages(recordsTotal, perPage) },
   };
 });
+
+export const fetchOnSubsDealCountdownData = createAsyncThunk(
+  ON_SUBS.GET_DEAL_COUNTDOWN_DATA,
+  async ({ dealId }, { rejectWithValue }) => {
+    try {
+      if (!dealId) {
+        return rejectWithValue('Deal ID is required');
+      }
+
+      const assignedTasksResponse = await getAssignedTasks({
+        targetId: dealId,
+        purpose: 'LiftSubs',
+      });
+
+      // First try to find the task with status "Created", otherwise take the first one
+      const tasks = assignedTasksResponse?.data || [];
+      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+
+      const expiresAt = createdTask?.countdownTimer?.expiresAt;
+      const countdownStatus = createdTask?.countdownTimer?.status || 'NotStarted';
+      const taskId = createdTask?.id;
+      const { assignTo, initiator, extensionRequests } = createdTask || {};
+
+      // Fetch extension time options if we have a task ID
+      let allowExtension = false;
+      let extensionTimeOptions = [];
+
+      if (taskId) {
+        try {
+          const extensionTimeOptionsResponse = await getTaskExtensionTimeOptions({ taskId });
+          allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
+          extensionTimeOptions = extensionTimeOptionsResponse?.data?.options || [];
+        } catch (extensionError) {
+          console.error(`Error fetching extension time options for deal ${dealId}:`, extensionError);
+        }
+      }
+
+      return {
+        dealId,
+        expiresAt,
+        countdownStatus,
+        allowExtension,
+        extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
+        taskId,
+        assignTo,
+        initiator,
+        extensionRequests,
+        isCountdownActive: !!expiresAt && countdownStatus === 'Running',
+      };
+    } catch (error) {
+      console.error(`Error fetching assigned tasks for deal ${dealId}:`, error);
+      return rejectWithValue(error.message || 'Failed to fetch countdown data');
+    }
+  }
+);

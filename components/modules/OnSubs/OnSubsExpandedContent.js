@@ -13,9 +13,11 @@ import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { approveExtensionRequest, rejectExtensionRequest } from '@/services/assignedTasks';
 import { getPdfToPrint } from '@/services/offer';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateCountdown, updateDeals } from '@/store/entities/on-subs/slice';
 import { getAuthSelector } from '@/store/selectors';
 import { ConfirmModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
+import { transformDate } from '@/utils/date';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -44,6 +46,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   const pendingExtensionRequest = useMemo(() => {
     const extensionRequests = detailsData?.extensionRequests || [];
     const pendingRequest = extensionRequests.find((request) => request.status === 'Pending');
+
     return pendingRequest
       ? {
           targetId: pendingRequest.id,
@@ -124,6 +127,27 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
         })
       );
 
+      // Update the deal data in notifications state with extended countdown
+      const extendMinutesInMs = extendedMinutes * 60 * 1000; // Convert minutes to milliseconds
+      const currentExpiresAt = detailsData?.expiresAt;
+      let newExpiresAt = null;
+
+      if (currentExpiresAt) {
+        newExpiresAt = transformDate(
+          new Date(currentExpiresAt).getTime() + extendMinutesInMs,
+          "yyyy-MM-dd'T'HH:mm:ss.SSS"
+        );
+      }
+
+      dispatch(
+        updateDealData({
+          dealId: offerId,
+          allowExtension: false,
+          extensionRequests: [],
+          ...(newExpiresAt && { expiresAt: newExpiresAt }),
+        })
+      );
+
       setAllowCountdownExtension(false);
     } catch (error) {
       console.error('Error approving extension request:', error);
@@ -156,6 +180,15 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
             allowExtension: false,
             extensionRequests: [],
           },
+        })
+      );
+
+      // Update the deal data in notifications state
+      dispatch(
+        updateDealData({
+          dealId: offerId,
+          allowExtension: false,
+          extensionRequests: [],
         })
       );
 
