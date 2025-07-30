@@ -682,7 +682,7 @@ const DocumentRequestForm = ({
                       checked={methods.watch('selectedDocuments')?.includes(option.value)}
                       onChange={(e) => handleCheckboxChange(option.value, e.target.checked)}
                       disabled={shouldDisableCheckboxes()}
-                      labelStyles={`text-xsm leading-relaxed text-gray-700 ${shouldDisableCheckboxes() ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      labelStyles={`text-xsm text-gray-700 ${shouldDisableCheckboxes() ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                       {option.label}
                     </CheckBoxInput>

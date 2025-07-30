@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { UilFileInfoAlt } from '@iconscout/react-unicons';
 
@@ -13,6 +13,7 @@ import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 import { Button } from '@/elements';
 import { approveExtensionRequest, rejectExtensionRequest } from '@/services/assignedTasks';
 import { getPdfToPrint } from '@/services/offer';
+import { updateCountdown, updateDeals } from '@/store/entities/on-subs/slice';
 import { getAuthSelector } from '@/store/selectors';
 import { ConfirmModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { errorToast, successToast } from '@/utils/hooks';
@@ -29,6 +30,7 @@ const tabs = [
 ];
 
 const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, tab = 'details' }) => {
+  const dispatch = useDispatch();
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,8 +108,22 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
       }
 
       successToast('Extension request approved successfully');
-      // Note: In a real implementation, you might want to refresh the data here
-      // For now, we'll just disable the buttons to indicate the action was taken
+
+      // Update the local state
+      const extendedMinutes = pendingExtensionRequest?.requestedMinutes || 0;
+      dispatch(updateCountdown({ offerId, extendMinute: extendedMinutes }));
+
+      // Update the deal data - clear extension requests
+      dispatch(
+        updateDeals({
+          offerId,
+          updates: {
+            allowExtension: false,
+            extensionRequests: [],
+          },
+        })
+      );
+
       setAllowCountdownExtension(false);
     } catch (error) {
       console.error('Error approving extension request:', error);
@@ -131,8 +147,18 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
       }
 
       successToast('Extension request rejected successfully');
-      // Note: In a real implementation, you might want to refresh the data here
-      // For now, we'll just disable the buttons to indicate the action was taken
+
+      // Update the deal data - clear extension requests
+      dispatch(
+        updateDeals({
+          offerId,
+          updates: {
+            allowExtension: false,
+            extensionRequests: [],
+          },
+        })
+      );
+
       setAllowCountdownExtension(false);
     } catch (error) {
       console.error('Error rejecting extension request:', error);
@@ -226,17 +252,53 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
 
   return (
     <>
-      <div className={`py-16 2md:py-10 3md:py-8 ${hasApprovalPermission() && 'lg:h-28 lgMax:h-36'}`}>
+      <div
+        className={`py-16 2md:py-10 3md:py-8 ${hasApprovalPermission() && detailsData?.extensionRequests?.length > 0 ? '2md:h-36 2mdMax:h-48 lg:h-32' : ''}`}
+      >
         <Tabs
           activeTab={currentTab}
           tabs={tabs}
           onClick={({ target }) => setCurrentTab(target.value)}
           customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
-        {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
-        {detailsData?.extensionRequests?.length > 0 && detailsData?.taskId && hasApprovalPermission() && (
-          <div className="absolute left-5 top-14 lg:top-3">
-            <div className="flex flex-col gap-2 rounded-md border border-gray-200 p-3">
+
+        <div className="absolute right-1/2 top-14 flex translate-x-1/2 flex-col items-center gap-2 2md:right-1 2md:top-3 2md:-translate-x-5 2md:items-end">
+          {/* Extend Countdown Button */}
+          {detailsData?.taskId && detailsData?.allowExtension && hasExtensionPermission() && (
+            <ModalWindow
+              buttonProps={{
+                text: 'Request response time extension',
+                variant: 'primary',
+                size: 'small',
+                disabled: !allowCountdownExtension,
+                className:
+                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+              }}
+            >
+              <ExtendCountdown
+                offerId={offerId}
+                taskId={detailsData?.taskId}
+                onExtensionSuccess={() => setAllowCountdownExtension(false)}
+                options={detailsData?.extensionTimeOptions || []}
+              />
+            </ModalWindow>
+          )}
+
+          <Button
+            buttonProps={{
+              text: isLoading ? 'Loading...' : 'Recap',
+              variant: 'primary',
+              size: 'small',
+              icon: { before: <UilFileInfoAlt size="14" className="fill-blue" /> },
+            }}
+            customStyles="border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold"
+            onClick={handlePrint}
+            disabled={isLoading}
+          />
+
+          {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
+          {detailsData?.extensionRequests?.length > 0 && detailsData?.taskId && hasApprovalPermission() && (
+            <div className="flex flex-col gap-2 rounded-md border border-gray-200 p-3 2md:mt-3 lg:mt-0">
               <p className="text-xsm">
                 You have a pending extension request for{' '}
                 <span className="font-semibold">{pendingExtensionRequest?.requestedMinutes} minutes</span>
@@ -267,43 +329,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
                 />
               </div>
             </div>
-          </div>
-        )}
-        <div
-          className={`absolute top-14 flex flex-col items-end gap-2 2md:right-1 2md:top-3 2md:-translate-x-5 3md:flex-row 3md:items-center ${hasApprovalPermission() ? 'right-1 -translate-x-5' : 'right-1/2 translate-x-1/2'}`}
-        >
-          {/* Extend Countdown Button */}
-          {detailsData?.taskId && detailsData?.allowExtension && hasExtensionPermission() && (
-            <ModalWindow
-              buttonProps={{
-                text: 'Request response time extension',
-                variant: 'primary',
-                size: 'small',
-                disabled: !allowCountdownExtension,
-                className:
-                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-              }}
-            >
-              <ExtendCountdown
-                offerId={offerId}
-                taskId={detailsData?.taskId}
-                onExtensionSuccess={() => setAllowCountdownExtension(false)}
-                options={detailsData?.extensionTimeOptions || []}
-              />
-            </ModalWindow>
           )}
-
-          <Button
-            buttonProps={{
-              text: isLoading ? 'Loading...' : 'Recap',
-              variant: 'tertiary',
-              size: 'large',
-              icon: { before: <UilFileInfoAlt size="20" className="fill-black" /> },
-            }}
-            customStyles="!text-black"
-            onClick={handlePrint}
-            disabled={isLoading}
-          />
         </div>
       </div>
       {printContent}

@@ -119,7 +119,7 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
       <div className="mt-5 flex items-center text-[12px]">
         <Countdown time={countdownData} />
         <div className="flex h-min flex-col items-start border-l pl-4">
-          <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
+          <p className="font-bold">You can use an extension for an incoming offer</p>
           {extensionTimeOptions && extensionTimeOptions.length > 1 ? (
             <div className="flex items-center gap-2">
               <Dropdown

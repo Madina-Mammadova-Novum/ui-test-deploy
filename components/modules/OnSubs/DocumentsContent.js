@@ -313,7 +313,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
         variant="primary"
       >
         <div className="space-y-4">
-          <p className="text-sm leading-relaxed text-black">
+          <p className="text-sm text-black">
             You have requested documents from this deal. Would you like to associate this file upload with the document
             request?
           </p>

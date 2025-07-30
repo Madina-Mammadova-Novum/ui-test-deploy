@@ -56,6 +56,18 @@ const onSubsSlice = createSlice({
           : offer
       );
     },
+    updateDeals: (state, action) => {
+      const { offerId, updates } = action?.payload;
+
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              ...updates,
+            }
+          : offer
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchOnSubsOffers.pending, (state) => {
@@ -72,6 +84,7 @@ const onSubsSlice = createSlice({
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList, updateCountdown, setToggle } = onSubsSlice.actions;
+export const { updateDocumentStatus, updateDocumentList, updateCountdown, updateDeals, setToggle } =
+  onSubsSlice.actions;
 
 export default onSubsSlice.reducer;
