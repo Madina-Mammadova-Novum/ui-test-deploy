@@ -100,7 +100,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
 
   const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;
   const { name: correspondenceCityName = '', country: correspondenceCountry = '' } = correspondenceCity;
-  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails;
+  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
   return {
     chartererInformation: [
