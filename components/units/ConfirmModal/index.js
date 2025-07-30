@@ -25,7 +25,7 @@ const ConfirmModal = ({
     <Modal opened={isOpen} onClose={onClose}>
       <div className="w-96">
         {title && <h2 className="mb-4 text-xl font-bold text-black">{title}</h2>}
-        <div className="mb-6">{children || <p className="text-sm leading-relaxed text-black">{message}</p>}</div>
+        <div className="mb-6">{children || <p className="text-sm text-black">{message}</p>}</div>
         <div className="flex gap-x-2.5">
           <Button
             buttonProps={{

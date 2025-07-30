@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchOnSubsOffers } from './actions';
+import { fetchOnSubsDealCountdownData, fetchOnSubsOffers } from './actions';
 
 import { transformDate } from '@/utils/date';
 
@@ -56,6 +56,18 @@ const onSubsSlice = createSlice({
           : offer
       );
     },
+    updateDeals: (state, action) => {
+      const { offerId, updates } = action?.payload;
+
+      state.data.offers = state.data.offers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              ...updates,
+            }
+          : offer
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchOnSubsOffers.pending, (state) => {
@@ -69,9 +81,24 @@ const onSubsSlice = createSlice({
       state.loading = false;
       state.error = action.payload?.error;
     });
+    builder.addCase(fetchOnSubsDealCountdownData.pending, () => {
+      // Optional: could add a separate loading state for deal countdown
+    });
+    builder.addCase(fetchOnSubsDealCountdownData.fulfilled, () => {
+      // The countdown data represents the remaining time for a specific deal.
+      // When this data is fetched successfully, it is dispatched to the notifications slice
+      // using a separate action. The notifications slice is responsible for updating the
+      // state related to deal notifications, including countdown timers.
+      // This dispatch is typically triggered in the relevant React component that handles
+      // deal notifications, ensuring the UI reflects the updated countdown data.
+    });
+    builder.addCase(fetchOnSubsDealCountdownData.rejected, (state, action) => {
+      console.error('Failed to fetch deal countdown data:', action.payload);
+    });
   },
 });
 
-export const { updateDocumentStatus, updateDocumentList, updateCountdown, setToggle } = onSubsSlice.actions;
+export const { updateDocumentStatus, updateDocumentList, updateCountdown, updateDeals, setToggle } =
+  onSubsSlice.actions;
 
 export default onSubsSlice.reducer;

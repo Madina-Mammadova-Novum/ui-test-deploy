@@ -52,7 +52,7 @@ export default function Maintenance({ title, description, variant = 'maintenance
             />
           </div>
 
-          {description && <p className="mb-16 max-w-xl text-xl leading-relaxed text-white">{description}</p>}
+          {description && <p className="mb-16 max-w-xl text-xl text-white">{description}</p>}
 
           <div className="mb-16">
             <CountdownTimer targetDate={targetDate} />
