@@ -374,21 +374,12 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           </div>
         )}
         {/* Verification screen */}
-        {showPhoneValidation && !isPhoneVerified && selectedChannel && (
+        {showPhoneValidation && !isPhoneVerified && activeChannel && (
           <PhoneValidation
             phone={phoneValue}
             onVerified={handlePhoneVerified}
             onSendOtp={handleSendOtp}
-            channel={selectedChannel}
-          />
-        )}
-        {/* For legacy flow: if only one method or none */}
-        {showPhoneValidation && !isPhoneVerified && !selectedChannel && verificationOptions.length === 1 && (
-          <PhoneValidation
-            phone={phoneValue}
-            onVerified={handlePhoneVerified}
-            onSendOtp={handleSendOtp}
-            channel={verificationOptions[0]}
+            channel={activeChannel}
           />
         )}
         {/* Hidden input for phoneVerified validation */}
