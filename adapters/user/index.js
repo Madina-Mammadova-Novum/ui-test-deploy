@@ -597,6 +597,7 @@ export function phoneAvailabilityResponseAdapter({ data }) {
       available: data.available,
       message: data.message,
       canSendSms: data.canSendSms || false,
+      canSendWhatsApp: data.canSendWhatsApp || false,
     },
   };
 }

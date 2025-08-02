@@ -8,7 +8,7 @@ import { PersonalDetailsFormPropTypes } from '@/lib/types';
 
 import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import RefreshSVG from '@/assets/images/refresh.svg';
-import { Button, Input, PhoneInput, TextWithLabel } from '@/elements';
+import { Button, Input, Label, PhoneInput, TextWithLabel } from '@/elements';
 import { checkPhoneAvailability } from '@/services/user';
 import PhoneValidation from '@/units/PhoneValidation';
 import { clearPhoneValidationState, loadPhoneValidationState, savePhoneValidationState } from '@/utils/helpers';
@@ -32,8 +32,12 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   const [validationInProgress, setValidationInProgress] = useState(false);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
 
-  const phoneInputRef = useRef(null);
+  // New: State for verification channel selection
+  const [verificationOptions, setVerificationOptions] = useState([]);
+  const [selectedChannel, setSelectedChannel] = useState(null);
 
+  const phoneInputRef = useRef(null);
+  const VerificationChannel = { SMS: 'Sms', WHATSAPP: 'WhatsApp' };
   // Determine which field name to use based on onUpdatePage prop
   const phoneFieldName = onUpdatePage ? 'phone' : 'userPhone';
 
@@ -161,23 +165,32 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         return;
       }
 
-      const { available, message, canSendSms } = response.data;
+      const { available, message, canSendSms, canSendWhatsApp } = response.data;
 
       if (available) {
-        if (!canSendSms) {
-          // Phone is available but SMS cannot be sent, mark as verified and finish validation
+        // Present verification options to the user
+        const options = [];
+        if (canSendSms) options.push(VerificationChannel.SMS);
+        if (canSendWhatsApp) options.push(VerificationChannel.WHATSAPP);
+        setVerificationOptions(options);
+
+        if (options.length === 0) {
+          // No method available, mark as verified directly
           setIsPhoneVerified(true);
           setValidationInProgress(false);
           setValue('phoneVerified', true);
           setError(phoneFieldName, null);
           trigger(phoneFieldName);
-          // Save to sessionStorage
           savePhoneValidationState(phoneValue, true, null, getValidationContext());
-        } else {
-          // Phone is available and SMS can be sent, proceed with OTP verification
+        } else if (options.length === 1) {
+          // Only one channel, select automatically
+          setSelectedChannel(options[0]);
           setError(phoneFieldName, null);
           trigger(phoneFieldName);
           setShowPhoneValidation(true);
+        } else {
+          // Both channels available, let user choose
+          setSelectedChannel(null);
         }
       } else {
         // Phone is not available, reset validation states and show error message
@@ -337,10 +350,47 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
             </div>
           </div>
         </div>
-        {showPhoneValidation && !isPhoneVerified && (
-          <PhoneValidation phone={phoneValue} onVerified={handlePhoneVerified} onSendOtp={handleSendOtp} />
+        {/* Verification method selection UI */}
+        {verificationOptions.length > 0 && !isPhoneVerified && (
+          <div className="flex items-center gap-4">
+            <Label className="mr-2 text-xs-sm">Select verification channel:</Label>
+            {verificationOptions.map((channel) => (
+              <Button
+                key={channel}
+                buttonProps={{
+                  text: channel,
+                  variant: selectedChannel === channel || verificationOptions.length === 1 ? 'primary' : 'secondary',
+                  size: 'medium',
+                }}
+                onClick={() => {
+                  setSelectedChannel(channel);
+                  setShowPhoneValidation(true);
+                  setError(phoneFieldName, null);
+                  trigger(phoneFieldName);
+                }}
+                disabled={verificationOptions.length === 1}
+              />
+            ))}
+          </div>
         )}
-
+        {/* Verification screen */}
+        {showPhoneValidation && !isPhoneVerified && selectedChannel && (
+          <PhoneValidation
+            phone={phoneValue}
+            onVerified={handlePhoneVerified}
+            onSendOtp={handleSendOtp}
+            channel={selectedChannel}
+          />
+        )}
+        {/* For legacy flow: if only one method or none */}
+        {showPhoneValidation && !isPhoneVerified && !selectedChannel && verificationOptions.length === 1 && (
+          <PhoneValidation
+            phone={phoneValue}
+            onVerified={handlePhoneVerified}
+            onSendOtp={handleSendOtp}
+            channel={verificationOptions[0]}
+          />
+        )}
         {/* Hidden input for phoneVerified validation */}
         <input type="hidden" {...register('phoneVerified')} />
       </div>

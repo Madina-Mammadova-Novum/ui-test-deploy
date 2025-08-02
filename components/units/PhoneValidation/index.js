@@ -9,7 +9,7 @@ import { Button, OTPInput } from '@/elements';
 import DynamicCountdownTimer from '@/units/DynamicCountdownTimer';
 import { sendOtpCode, verifyOtpCode } from '@/utils/otp';
 
-const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
+const PhoneValidation = ({ phone, onVerified, onSendOtp, channel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [otpCode, setOtpCode] = useState('');
@@ -34,9 +34,9 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp }) => {
     if (!phone) return;
 
     setIsLoading(true);
-
     await sendOtpCode({
       phone,
+      channel,
       onSuccess: (data) => {
         setOtpId(data.otpId);
         setExpirationDate(new Date(data.expirationDate) || null);
@@ -169,6 +169,7 @@ PhoneValidation.propTypes = {
   phone: PropTypes.string.isRequired,
   onVerified: PropTypes.func,
   onSendOtp: PropTypes.func,
+  channel: PropTypes.string,
 };
 
 export default PhoneValidation;

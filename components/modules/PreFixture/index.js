@@ -43,7 +43,7 @@ const PreFixture = () => {
         footer={
           <PreFixtureExpandedFooter
             offerId={rowData.id}
-            underNegotiation={!rowData?.isCountdownActive}
+            underNegotiation={!rowData?.countdownStatus === 'Running'}
             offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
           />
         }
