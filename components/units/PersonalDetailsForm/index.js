@@ -374,12 +374,12 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           </div>
         )}
         {/* Verification screen */}
-        {showPhoneValidation && !isPhoneVerified && activeChannel && (
+        {showPhoneValidation && !isPhoneVerified && selectedChannel && (
           <PhoneValidation
             phone={phoneValue}
             onVerified={handlePhoneVerified}
             onSendOtp={handleSendOtp}
-            channel={activeChannel}
+            channel={selectedChannel}
           />
         )}
         {/* Hidden input for phoneVerified validation */}
