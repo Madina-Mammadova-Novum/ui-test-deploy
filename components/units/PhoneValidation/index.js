@@ -89,12 +89,24 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp, channel }) => {
     );
   }
 
+  // Helper function to get channel-specific text
+  const getChannelText = (channelType) => {
+    switch (channelType) {
+      case 'WhatsApp':
+        return "To verify your phone number, we'll send you a 6-digit code via WhatsApp.";
+      case 'Sms':
+        return "To verify your phone number, we'll send you a 6-digit code via SMS.";
+      default:
+        return "To verify your phone number, we'll send you a 6-digit code.";
+    }
+  };
+
   if (!codeSent) {
     return (
       <div className="flex flex-col gap-4 rounded-md border border-gray-200 px-[14px] py-8 md:px-8">
         <div className="text-center text-black">
           <h4 className="mb-1 text-xsm font-semibold">Phone Verification</h4>
-          <p className="text-xs">To verify your phone number, we&apos;ll send you a 6-digit code.</p>
+          <p className="text-xs">{getChannelText(channel)}</p>
         </div>
         <Button
           buttonProps={{
@@ -115,7 +127,9 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp, channel }) => {
       <div className="text-center text-black">
         <h4 className="mb-1 text-xsm font-semibold">Phone Verification</h4>
         <p className="text-xs">
-          {otpId ? 'Enter the verification code sent to your phone' : 'Sending verification code to your phone...'}
+          {otpId
+            ? `Enter the verification code sent to your phone via ${channel === 'WhatsApp' ? 'WhatsApp' : 'SMS'}`
+            : `Sending verification code to your phone via ${channel === 'WhatsApp' ? 'WhatsApp' : 'SMS'}...`}
         </p>
       </div>
 
@@ -158,7 +172,9 @@ const PhoneValidation = ({ phone, onVerified, onSendOtp, channel }) => {
 
       {!otpId && (
         <div className="flex justify-center">
-          <div className="animate-pulse text-blue">Sending verification code...</div>
+          <div className="animate-pulse text-blue">
+            Sending verification code via {channel === 'WhatsApp' ? 'WhatsApp' : 'SMS'}...
+          </div>
         </div>
       )}
     </div>

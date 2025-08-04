@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { UilCommentAlt, UilWhatsapp } from '@iconscout/react-unicons';
 import classNames from 'classnames';
 
 import { PersonalDetailsFormPropTypes } from '@/lib/types';
@@ -40,6 +41,20 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   const VerificationChannel = { SMS: 'Sms', WHATSAPP: 'WhatsApp' };
   // Determine which field name to use based on onUpdatePage prop
   const phoneFieldName = onUpdatePage ? 'phone' : 'userPhone';
+
+  // Helper function to get the appropriate icon for verification channel
+  const getVerificationIcon = (channel, isSelected = false) => {
+    const iconClass = `h-5 w-5 ${isSelected ? 'fill-blue' : 'fill-black'}`;
+
+    switch (channel) {
+      case VerificationChannel.WHATSAPP:
+        return <UilWhatsapp className={iconClass} />;
+      case VerificationChannel.SMS:
+        return <UilCommentAlt className={iconClass} />;
+      default:
+        return null;
+    }
+  };
 
   const { pending, pendingRequest, firstName, lastName, email, confirmEmail } = values;
 
@@ -189,7 +204,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
           trigger(phoneFieldName);
           setShowPhoneValidation(true);
         } else {
-          // Both channels available, let user choose
+          // Both channels available, let user choose with the first one as default
           setSelectedChannel(null);
         }
       } else {
@@ -237,6 +252,8 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setIsPhoneVerified(false);
     setValue('phoneVerified', false);
     setValue('otpId', null);
+    setSelectedChannel(null);
+    setVerificationOptions([]);
     // Clear from sessionStorage
     clearPhoneValidationState(getValidationContext());
     // Set phone verification error
@@ -353,24 +370,28 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         {/* Verification method selection UI */}
         {verificationOptions.length > 0 && !isPhoneVerified && (
           <div className="flex items-center gap-4">
-            <Label className="mr-2 text-xs-sm">Select verification channel:</Label>
-            {verificationOptions.map((channel) => (
-              <Button
-                key={channel}
-                buttonProps={{
-                  text: channel,
-                  variant: selectedChannel === channel || verificationOptions.length === 1 ? 'primary' : 'secondary',
-                  size: 'medium',
-                }}
-                onClick={() => {
-                  setSelectedChannel(channel);
-                  setShowPhoneValidation(true);
-                  setError(phoneFieldName, null);
-                  trigger(phoneFieldName);
-                }}
-                disabled={verificationOptions.length === 1}
-              />
-            ))}
+            <Label className="text-xs-sm">Select verification channel:</Label>
+            {verificationOptions.map((channel) => {
+              const isSelected = selectedChannel === channel || verificationOptions.length === 1;
+
+              return (
+                <Button
+                  key={channel}
+                  buttonProps={{
+                    text: channel,
+                    variant: isSelected ? 'primary' : 'secondary',
+                    size: 'medium',
+                    icon: { before: getVerificationIcon(channel, isSelected) },
+                  }}
+                  onClick={() => {
+                    setSelectedChannel(channel);
+                    setShowPhoneValidation(true);
+                    setError(phoneFieldName, null);
+                    trigger(phoneFieldName);
+                  }}
+                />
+              );
+            })}
           </div>
         )}
         {/* Verification screen */}
