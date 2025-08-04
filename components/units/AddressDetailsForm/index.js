@@ -9,6 +9,7 @@ import debounce from 'lodash/debounce';
 import { AddressDetailsFormPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input } from '@/elements';
+import { ADDRESS_FORM } from '@/lib/constants';
 import { getCities } from '@/services';
 import { convertDataToOptions } from '@/utils/helpers';
 
@@ -27,10 +28,13 @@ const AddressDetails = ({ title, type, countries = [] }) => {
 
   const [cities, setCities] = useState([]);
   const [citiesLoader, setCitiesLoader] = useState(false);
-  const [perList, setPerList] = useState(50);
+  const [perList, setPerList] = useState(ADDRESS_FORM.PER_LIST_INITIAL);
   const [disabled, setDisabled] = useState(false);
 
-  const fetchCities = async (countryId, { query = '', skip = 0, pageSize = 50 } = {}) => {
+  const fetchCities = async (
+    countryId,
+    { query = '', skip = 0, pageSize = ADDRESS_FORM.DEBOUNCED_LOAD_PAGE_SIZE } = {}
+  ) => {
     const response = await getCities(countryId, { query, skip, pageSize });
     const options = convertDataToOptions(response, 'cityId', 'cityName');
 
@@ -45,7 +49,10 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   };
 
   const debouncedLoadOptions = debounce(async (countryId, inputValue, callback) => {
-    const { options } = await fetchCities(countryId, { query: inputValue, pageSize: perList });
+    const { options } = await fetchCities(countryId, {
+      query: inputValue,
+      pageSize: ADDRESS_FORM.DEBOUNCED_LOAD_PAGE_SIZE,
+    });
     callback(options);
   }, 400);
 
@@ -63,7 +70,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
     debouncedLoadOptions(selectedCountry.value, inputValue, callback);
   };
 
-  const handleMore = () => setPerList((prev) => prev + 50);
+  const handleMore = () => setPerList((prev) => prev + ADDRESS_FORM.LOAD_MORE_INCREMENT);
 
   const handleCountryChange = async (data) => {
     clearErrors([`${type}Country`, `${type}City`]);
@@ -73,7 +80,7 @@ const AddressDetails = ({ title, type, countries = [] }) => {
 
     setDisabled(true);
     setCities([]);
-    setPerList(50);
+    setPerList(ADDRESS_FORM.PER_LIST_INITIAL);
 
     const { value: countryId } = data;
     await loadCities(countryId);
