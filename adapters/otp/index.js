@@ -7,6 +7,7 @@
 export const sendOtpAdapter = ({ data }) => {
   return {
     receiver: data?.receiver,
+    channel: data?.channel,
   };
 };
 
