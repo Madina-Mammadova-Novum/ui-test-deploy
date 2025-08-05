@@ -20,13 +20,14 @@ import { errorToast, successToast } from '@/utils/hooks';
  */
 export const sendOtpCode = async ({
   phone,
+  channel,
   onSuccess = () => {},
   onError = () => {},
   onComplete = () => {},
   showToasts = true,
 }) => {
   try {
-    const { error, data } = await sendOtp({ receiver: ensurePlusPrefix(phone) });
+    const { error, data } = await sendOtp({ receiver: ensurePlusPrefix(phone), channel });
 
     if (error) {
       if (showToasts) {

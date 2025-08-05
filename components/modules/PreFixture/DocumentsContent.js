@@ -26,14 +26,20 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
     if (error) {
       errorToast(error?.title, error?.message);
     } else {
-      dispatch(updateDocumentList({ offerId, newDocument: data }));
+      dispatch(updateDocumentList({ offerId, newDocuments: data }));
       successToast(successMessage);
     }
   };
 
   return (
     <div className="mb-5 flex flex-col gap-y-5">
-      <UploadForm onSubmit={onSubmit} />
+      <UploadForm
+        onSubmit={onSubmit}
+        dropzoneProps={{
+          multiple: true,
+          maxFiles: 10,
+        }}
+      />
       <div className="table-scroll">
         <Table headerData={prefixtureHeader} rows={rowsData} noDataMessage="No Documents Provided" />
       </div>

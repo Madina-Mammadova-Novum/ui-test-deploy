@@ -355,6 +355,10 @@ export const resetObjectFields = ({ initialObject, resetType = null }) => {
     else if (['excludeInternationallySanctioned', 'showAdditionalDischarge'].includes(key)) {
       result[key] = false;
     }
+    // Special handling for file upload fields - reset to empty arrays instead of null
+    else if (['files', 'fileDetails'].includes(key) && Array.isArray(result[key])) {
+      result[key] = [];
+    }
     // For all other fields that are objects or arrays, just set to null
     else if (typeof result[key] === 'object') {
       result[key] = null;
@@ -576,17 +580,14 @@ export const getListOfDataByDays = (data) => {
   });
 };
 
-export const calculateCountdown = (expiresAt, frozenAt) => {
+export const calculateCountdown = (expiresAt) => {
   const currentUTCtime = Date.now();
 
-  let millisecondsUntilExpiration = 0;
-  if (frozenAt) {
-    millisecondsUntilExpiration = new Date(expiresAt).getTime() - new Date(frozenAt).getTime();
-  } else {
-    millisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
-  }
+  const millisecondsUntilExpiration = new Date(expiresAt).getTime() - currentUTCtime;
 
-  return millisecondsUntilExpiration < 0 ? Date.now() : Date.now() + millisecondsUntilExpiration;
+  if (!millisecondsUntilExpiration) return 1;
+
+  return millisecondsUntilExpiration < 0 ? 1 : Date.now() + millisecondsUntilExpiration;
 };
 
 export const formattedTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
@@ -1238,10 +1239,16 @@ export const getPhoneValidationStorageKey = (context = 'registration', userRole 
     return `phone_validation_${userRole}_registration`;
   }
 
-  // Auto-detect role based on existing registration data
+  // Auto-detect role based on existing registration data in sessionStorage
   try {
-    const ownerData = localStorage.getItem('owner_registration_data');
-    const chartererData = localStorage.getItem('charterer_registration_data');
+    const ownerData =
+      typeof window !== 'undefined' && window.sessionStorage
+        ? window.sessionStorage.getItem('owner_registration_data')
+        : null;
+    const chartererData =
+      typeof window !== 'undefined' && window.sessionStorage
+        ? window.sessionStorage.getItem('charterer_registration_data')
+        : null;
     if (ownerData) {
       return 'phone_validation_owner_registration';
     }
@@ -1249,7 +1256,7 @@ export const getPhoneValidationStorageKey = (context = 'registration', userRole 
       return 'phone_validation_charterer_registration';
     }
   } catch (error) {
-    // Handle localStorage errors silently
+    // Handle sessionStorage errors silently
   }
 
   return 'phone_validation_registration'; // fallback
@@ -1263,15 +1270,18 @@ export const savePhoneValidationState = (
   userRole = null
 ) => {
   try {
-    const storageKey = getPhoneValidationStorageKey(context, userRole);
-    const stateToSave = {
-      phoneValue,
-      isPhoneVerified: isVerified,
-      otpId,
-      timestamp: Date.now(),
-    };
-    localStorage.setItem(storageKey, JSON.stringify(stateToSave));
-    return true;
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const storageKey = getPhoneValidationStorageKey(context, userRole);
+      const stateToSave = {
+        phoneValue,
+        isPhoneVerified: isVerified,
+        otpId,
+        timestamp: Date.now(),
+      };
+      window.sessionStorage.setItem(storageKey, JSON.stringify(stateToSave));
+      return true;
+    }
+    return false;
   } catch (error) {
     return false;
   }
@@ -1279,26 +1289,31 @@ export const savePhoneValidationState = (
 
 export const loadPhoneValidationState = (phoneValue, context = 'registration', userRole = null) => {
   try {
-    const storageKey = getPhoneValidationStorageKey(context, userRole);
-    const savedState = localStorage.getItem(storageKey);
-    if (savedState) {
-      const parsedState = JSON.parse(savedState);
-      // Only return state if the phone number matches
-      if (parsedState.phoneValue === phoneValue && parsedState.isPhoneVerified) {
-        return parsedState;
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const storageKey = getPhoneValidationStorageKey(context, userRole);
+      const savedState = window.sessionStorage.getItem(storageKey);
+      if (savedState) {
+        const parsedState = JSON.parse(savedState);
+        // Only return state if the phone number matches
+        if (parsedState.phoneValue === phoneValue && parsedState.isPhoneVerified) {
+          return parsedState;
+        }
       }
     }
   } catch (error) {
-    // Handle localStorage errors silently
+    // Handle sessionStorage errors silently
   }
   return null;
 };
 
 export const clearPhoneValidationState = (context = 'registration', userRole = null) => {
   try {
-    const storageKey = getPhoneValidationStorageKey(context, userRole);
-    localStorage.removeItem(storageKey);
-    return true;
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const storageKey = getPhoneValidationStorageKey(context, userRole);
+      window.sessionStorage.removeItem(storageKey);
+      return true;
+    }
+    return false;
   } catch (error) {
     return false;
   }
@@ -1306,11 +1321,14 @@ export const clearPhoneValidationState = (context = 'registration', userRole = n
 
 export const clearAllPhoneValidationStates = () => {
   try {
-    localStorage.removeItem('phone_validation_update');
-    localStorage.removeItem('phone_validation_owner_registration');
-    localStorage.removeItem('phone_validation_charterer_registration');
-    localStorage.removeItem('phone_validation_registration');
-    return true;
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      window.sessionStorage.removeItem('phone_validation_update');
+      window.sessionStorage.removeItem('phone_validation_owner_registration');
+      window.sessionStorage.removeItem('phone_validation_charterer_registration');
+      window.sessionStorage.removeItem('phone_validation_registration');
+      return true;
+    }
+    return false;
   } catch (error) {
     return false;
   }

@@ -770,3 +770,19 @@ export function responseGetSavedSearchAdapter({ data }) {
 export function responseVesselNamesAdapter({ data }) {
   return nullAdapter(data);
 }
+
+export function requestAddVesselAdapter({ data }) {
+  if (!data) return null;
+
+  const { imo, fleetId, q88QuestionnaireFile } = data;
+
+  return {
+    imo,
+    fleetId,
+    q88QuestionnaireFile,
+  };
+}
+
+export function responseAddVesselAdapter({ data }) {
+  return nullAdapter(data);
+}

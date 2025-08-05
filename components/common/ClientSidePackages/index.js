@@ -21,13 +21,14 @@ const ClientSidePackages = () => {
   const unavailableChatRoute = pathname === ROUTES.LOGIN || pathname === ROUTES.SIGNUP;
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
   const isChatAvailable = !maintenanceMode && !unavailableChatRoute && !isAnon;
+  const showCookieConsent = pathname !== ROUTES.QR_REDIRECT;
 
   return (
     <>
       <div id="portal" />
       <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={8000} hideProgressBar />
       {isChatAvailable && <Chat token={token} />}
-      <CookieConsent />
+      {showCookieConsent && <CookieConsent />}
       <NewRelicBrowser />
       <MatomoAnalytics />
     </>

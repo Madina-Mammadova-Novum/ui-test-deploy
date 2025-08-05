@@ -62,7 +62,7 @@ const CompanyInfoForm = ({ closeModal }) => {
         submitButton={{ text: 'Submit', variant: 'primary', size: 'large' }}
         className="h-full"
       >
-        <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
+        <Title level="3" className="text-lg font-bold capitalize text-black">
           Edit Company Details
         </Title>
         <Notes subtitle="Please note that any changes to these fields will require verification by Ship.Link." />

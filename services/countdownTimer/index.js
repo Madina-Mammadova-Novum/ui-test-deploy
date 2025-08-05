@@ -6,3 +6,11 @@ export const getCountdownTimer = async () => {
     ...response,
   };
 };
+
+export const getCountdownConfigs = async ({ purpose = null } = {}) => {
+  const queryParams = purpose ? `?purpose=${purpose}` : '';
+  const response = await getData(`countdown-configs${queryParams}`);
+  return {
+    ...response,
+  };
+};

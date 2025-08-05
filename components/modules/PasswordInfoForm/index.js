@@ -52,7 +52,7 @@ const PasswordInfoForm = ({ closeModal }) => {
         onClose={closeModal}
         submitButton={{ text: 'Update password', variant: 'primary', size: 'large' }}
       >
-        <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
+        <Title level="3" className="text-lg font-bold capitalize text-black">
           Change Your Password
         </Title>
         <div className="w-2/3">

@@ -16,6 +16,8 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { updateDealData } from '@/store/entities/notifications/slice';
+import { fetchDealCountdownData } from '@/store/entities/pre-fixture/actions';
 import { setToggle } from '@/store/entities/pre-fixture/slice';
 import { getPreFixtureDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -34,6 +36,21 @@ const PreFixtureDetails = ({ searchedParams }) => {
       dispatch(setToggle(false));
     };
   }, []);
+
+  // Fetch countdown data when deal changes
+  useEffect(() => {
+    if (deal?.id) {
+      dispatch(fetchDealCountdownData({ dealId: deal.id }))
+        .unwrap()
+        .then((countdownData) => {
+          // Update the deal object in notifications state with countdown data
+          dispatch(updateDealData(countdownData));
+        })
+        .catch((error) => {
+          console.error('Failed to fetch countdown data for deal:', error);
+        });
+    }
+  }, [deal?.id, dispatch]);
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner

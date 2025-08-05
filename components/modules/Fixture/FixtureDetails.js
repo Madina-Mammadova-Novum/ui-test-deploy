@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FixtureExpandedContent from './FixtureExpandedContent';
+import FixtureExpandedFooter from './FixtureExpandedFooter';
 
 import { UrlPropTypes } from '@/lib/types';
 
@@ -16,11 +17,12 @@ import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
 import { setToggle } from '@/store/entities/fixture/slice';
 import { getFixtureSelector } from '@/store/selectors';
+import { getRoleIdentity } from '@/utils/helpers';
 
 const FixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
-  const { deal, toggle, loading } = useSelector(getFixtureSelector);
-
+  const { deal, toggle, loading, role } = useSelector(getFixtureSelector);
+  const { isOwner } = getRoleIdentity({ role });
   useEffect(() => {
     dispatch(setToggle(true));
   }, []);
@@ -34,6 +36,7 @@ const FixtureDetails = ({ searchedParams }) => {
         expand={index === 0 || toggle}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
+        footer={<FixtureExpandedFooter identity={{ isOwner }} />}
       >
         <FixtureExpandedContent
           offerId={rowData?.id}

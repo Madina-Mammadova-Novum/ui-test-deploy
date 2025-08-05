@@ -9,7 +9,6 @@ import {
   freightFormatter,
   getAppropriateFailedBy,
   getLocode,
-  getRoleIdentity,
 } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
@@ -54,7 +53,7 @@ export function sendOfferAdapter({ data }) {
     laytime: layTime,
     demurragePaymentTermId: undisputedDemurrage.value,
     paymentTermId: paymentTerms.value,
-    countDownTimerSettingId: responseCountdown.value,
+    responseTimeMinutes: responseCountdown.value,
     cargoes: postProductsAdapter({ data: products }),
     additionalDischargeOptions,
     sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),
@@ -89,7 +88,7 @@ export function sendCounterofferAdapter({ data }) {
     demurrageRate,
     comment,
     freightFormatId: freight?.value,
-    countDownTimerSettingId: responseCountdown?.value,
+    responseTimeMinutes: responseCountdown?.value,
     cargoes: products.map(({ density, product: { value: productId }, quantity }, index) => ({
       productId,
       referenceDensity: +density,
@@ -185,28 +184,37 @@ export function offerDetailsAdapter({ data, role }) {
     failureReason,
     failedBy,
     expiresAt,
-    frozenAt,
     freightFormat,
-    isCountdownExtendedByOwner,
-    isCountdownExtendedByCharterer,
-    isCountdownActive,
+    countdownStatus,
+    allowExtension = false,
+    extensionTimeOptions = [],
     hasUnreadComment,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    taskId,
   } = data;
 
-  const { isOwner } = getRoleIdentity({ role });
+  // Use countdown status from assigned tasks if available, otherwise fallback to isCountdownActive
+  const isCountdownActive = countdownStatus === 'Running';
 
-  const allowExtensionByRole = isOwner ? !isCountdownExtendedByOwner : !isCountdownExtendedByCharterer;
+  // Convert extension time options to dropdown format
+  const convertedExtensionTimeOptions =
+    extensionTimeOptions?.map((option) => ({
+      value: option.value,
+      label: option.text || option.label,
+    })) || [];
 
   return {
-    allowExtension: allowExtensionByRole,
+    allowExtension,
     hasUnreadComment,
     isCountdownActive,
+    extensionTimeOptions: convertedExtensionTimeOptions,
+    taskId,
     countdownData: {
-      date: calculateCountdown(expiresAt, frozenAt),
-      autoStart: !frozenAt,
+      date: calculateCountdown(expiresAt),
+      autoStart: isCountdownActive,
+      status: countdownStatus,
     },
     voyageDetails: {
       dates: [

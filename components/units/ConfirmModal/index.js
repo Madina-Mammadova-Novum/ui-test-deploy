@@ -8,6 +8,7 @@ const ConfirmModal = ({
   onClose,
   title = 'Confirm Your Action',
   message = 'Are you sure you want to proceed?',
+  children,
   okButtonProps = {},
   cancelButtonProps = {},
   confirmText = 'Confirm',
@@ -24,7 +25,7 @@ const ConfirmModal = ({
     <Modal opened={isOpen} onClose={onClose}>
       <div className="w-96">
         {title && <h2 className="mb-4 text-xl font-bold text-black">{title}</h2>}
-        <p className="mb-6 text-sm leading-relaxed text-black">{message}</p>
+        <div className="mb-6">{children || <p className="text-sm text-black">{message}</p>}</div>
         <div className="flex gap-x-2.5">
           <Button
             buttonProps={{
@@ -58,6 +59,7 @@ ConfirmModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,
+  children: PropTypes.node,
   confirmText: PropTypes.string,
   cancelText: PropTypes.string,
   variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'delete']),

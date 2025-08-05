@@ -16,6 +16,8 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { updateDealData } from '@/store/entities/notifications/slice';
+import { fetchOnSubsDealCountdownData } from '@/store/entities/on-subs/actions';
 import { setToggle } from '@/store/entities/on-subs/slice';
 import { getOnSubsDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -23,11 +25,30 @@ import { getRoleIdentity } from '@/utils/helpers';
 const OnSubsDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
   const { loading, role, toggle, deal } = useSelector(getOnSubsDataSelector);
-  const { isOwner } = getRoleIdentity({ role });
+  const { isOwner, isCharterer } = getRoleIdentity({ role });
 
   useEffect(() => {
     dispatch(setToggle(true));
-  }, [dispatch]);
+
+    return () => {
+      dispatch(setToggle(false));
+    };
+  }, []);
+
+  // Fetch countdown data when deal changes
+  useEffect(() => {
+    if (deal?.id) {
+      dispatch(fetchOnSubsDealCountdownData({ dealId: deal.id }))
+        .unwrap()
+        .then((countdownData) => {
+          // Update the deal object in notifications state with countdown data
+          dispatch(updateDealData(countdownData));
+        })
+        .catch((error) => {
+          console.error('Failed to fetch countdown data for deal:', error);
+        });
+    }
+  }, [deal?.id, dispatch]);
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
@@ -55,9 +76,8 @@ const OnSubsDetails = ({ searchedParams }) => {
         footer={
           <OnSubsExpandedFooter
             offerId={rowData?.id}
-            identity={{ isOwner }}
-            underRecap={!rowData?.isCountdownActive || !rowData?.failedAt || rowData?.isFailed}
-            status={{ charterer: rowData.chartererConfirmed, owner: rowData.ownerConfirmed }}
+            identity={{ isOwner, isCharterer }}
+            underRecap={!rowData?.isCountdownActive}
           />
         }
       >

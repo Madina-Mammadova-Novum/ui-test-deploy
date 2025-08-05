@@ -2,18 +2,19 @@
 
 import { useMemo, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
+import { useRouter } from 'next/navigation';
 import * as yup from 'yup';
 
 import { NegotiatingAcceptOfferPropTypes } from '@/lib/types';
 
 import { FormManager } from '@/common';
 import { Button } from '@/elements';
+import { ROUTES } from '@/lib/constants';
 import { acceptOfferSchema } from '@/lib/schemas';
 import { CommentsContent } from '@/modules';
 import { acceptOffer } from '@/services/offer';
-import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
 import { getUserDataSelector } from '@/store/selectors';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
@@ -29,8 +30,8 @@ const tabs = [
   },
 ];
 
-const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) => {
-  const dispatch = useDispatch();
+const NegotiatingAcceptOffer = ({ goBack, itemId, offerDetails }) => {
+  const router = useRouter();
 
   const [disabled, setDisabled] = useState(false);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
@@ -58,9 +59,7 @@ const NegotiatingAcceptOffer = ({ closeModal, goBack, itemId, offerDetails }) =>
 
     if (!error) {
       successToast(successMessage);
-      dispatch(fetchUserNegotiating());
-      setDisabled(false);
-      closeModal();
+      router.push(ROUTES.ACCOUNT_PREFIXTURE);
     } else {
       setDisabled(false);
       errorToast(error?.title, error?.message);

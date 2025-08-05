@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { OfferModalContentPropTypes } from '@/lib/types';
 
-import { extendCountdownDataAdapter } from '@/adapters/countdownTimer';
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Button, Loader, Title } from '@/elements';
-import { acceptPrefixtureOffer, extendCountdown, getOfferDetails } from '@/services/offer';
-import { updateConfirmationStatus, updateCountdown } from '@/store/entities/pre-fixture/slice';
+import { getAssignedTasks } from '@/services/assignedTasks';
+import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
+import { updateConfirmationStatus } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
@@ -17,12 +17,8 @@ import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
   {
-    label: 'Voyage details',
-    value: 'voyage_details',
-  },
-  {
-    label: 'Commercial offer terms',
-    value: 'commercial_offer_terms',
+    label: 'Fixture Terms',
+    value: 'fixture_terms',
   },
 ];
 
@@ -38,7 +34,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
   const { role } = useSelector(getUserDataSelector);
   const { isOwner } = getRoleIdentity({ role });
 
-  const { commercialOfferTerms, voyageDetails, countdownData, allowExtension } = offerDetails;
+  const { commercialOfferTerms, voyageDetails } = offerDetails;
 
   const handleSubmit = async () => {
     setPending(true);
@@ -53,36 +49,57 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
     setPending(false);
   };
 
-  const handleExtendCountdown = async () => {
-    const { error, message: successMessage } = await extendCountdown({ offerId, role });
-    if (error) {
-      errorToast(error?.title, error?.message);
-    } else {
-      successToast(successMessage);
-      setOfferDetails(extendCountdownDataAdapter);
-      dispatch(updateCountdown({ offerId }));
-    }
-  };
-
   useEffect(() => {
-    (async () => {
+    const initActions = async () => {
       const { status, data, error } = await getOfferDetails(offerId, role);
       if (status === 200) {
-        setOfferDetails(offerDetailsAdapter({ data, role }));
+        try {
+          // Fetch assigned tasks for countdown data
+          const assignedTasksResponse = await getAssignedTasks({
+            targetId: offerId,
+            purpose: 'PreFixture',
+          });
+
+          // First try to find the task with status "Created", otherwise take the first one
+          const tasks = assignedTasksResponse?.data || [];
+          const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+
+          const expiresAt = createdTask?.countdownTimer?.expiresAt;
+          const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
+          const fetchedTaskId = createdTask?.id;
+
+          // Enhance the offer data with countdown information from assigned tasks
+          const enhancedData = {
+            ...data,
+            expiresAt,
+            countdownStatus,
+            taskId: fetchedTaskId,
+            isCountdownActive: !!expiresAt && countdownStatus === 'Running',
+          };
+
+          setOfferDetails(offerDetailsAdapter({ data: enhancedData, role }));
+        } catch (assignedTasksError) {
+          console.error('Error fetching assigned tasks:', assignedTasksError);
+          // Fallback to original data if assigned tasks fetch fails
+          setOfferDetails(offerDetailsAdapter({ data, role }));
+        }
       } else {
         console.error(error);
       }
       setInitialLoading(false);
-    })();
-  }, []);
+    };
+
+    initActions();
+  }, [offerId, role]);
 
   const tabContent = () => {
-    switch (currentTab) {
-      case 'commercial_offer_terms':
-        return <COTTabContent data={commercialOfferTerms} />;
-      default:
-        return <VoyageDetailsTabContent data={voyageDetails} isViewing isCounteroffer />;
-    }
+    return (
+      <div className="space-y-6">
+        <VoyageDetailsTabContent data={voyageDetails} isViewing isCounteroffer />
+        <hr className="my-4" />
+        <COTTabContent data={commercialOfferTerms} />
+      </div>
+    );
   };
 
   if (initialLoading) {
@@ -95,19 +112,10 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
 
   return (
     <div className="flex h-full w-[610px] flex-col">
-      <Title level={2}>Accept the Pre-fixture Offer</Title>
+      <Title level={2}>Confirm Fixture with technical subjects</Title>
 
       <div className="mt-5 flex items-center text-[12px]">
-        <Countdown time={countdownData} />
-        <div className="flex h-min flex-col items-start border-l pl-4">
-          <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
-          <Button
-            customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
-            buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
-            disabled={!allowExtension}
-            onClick={handleExtendCountdown}
-          />
-        </div>
+        <Countdown time={offerDetails.countdownData} />
       </div>
 
       <Tabs
@@ -132,7 +140,7 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
         />
         <Button
           buttonProps={{
-            text: pending ? 'Please wait...' : 'Accept the pre-fixture offer',
+            text: pending ? 'Please wait...' : 'Confirm Fixture with technical subjects',
             variant: 'primary',
             size: 'large',
           }}

@@ -18,6 +18,8 @@ import { resetChat } from '@/store/entities/chat/slice';
 import { resetNotificationData } from '@/store/entities/notifications/slice';
 import { notificationToastFunc, toastFunc } from '@/utils/index';
 
+export { useAssignedTasks } from './hooks/useAssignedTasks';
+
 export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
 };

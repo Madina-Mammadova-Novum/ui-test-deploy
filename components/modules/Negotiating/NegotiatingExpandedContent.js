@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { negotiatingExpandedContentPropTypes } from '@/lib/types';
@@ -34,9 +34,21 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   const { incoming = [], sent = [], failed = [] } = offerById[data.id];
   const { isOwner } = getRoleIdentity({ role });
 
-  const sentData = tab ? notifiedNegotiatingDataAdapter({ tab, data: sent, fleetId: data.fleetId }) : sent;
-  const failedData = tab ? notifiedNegotiatingDataAdapter({ tab, data: failed, fleetId: data.fleetId }) : failed;
-  const incomingData = tab ? notifiedNegotiatingDataAdapter({ tab, data: incoming, fleetId: data.fleetId }) : incoming;
+  // Memoize processed data to prevent unnecessary recalculations
+  const sentData = useMemo(
+    () => (tab ? notifiedNegotiatingDataAdapter({ tab, data: sent, fleetId: data.fleetId }) : sent),
+    [tab, sent, data.fleetId]
+  );
+
+  const failedData = useMemo(
+    () => (tab ? notifiedNegotiatingDataAdapter({ tab, data: failed, fleetId: data.fleetId }) : failed),
+    [tab, failed, data.fleetId]
+  );
+
+  const incomingData = useMemo(
+    () => (tab ? notifiedNegotiatingDataAdapter({ tab, data: incoming, fleetId: data.fleetId }) : incoming),
+    [tab, incoming, data.fleetId]
+  );
 
   const determineInitialTab = () => {
     const urlParams = new URLSearchParams(window.location.href);
@@ -76,7 +88,11 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
     counteroffers: (
       <Table
         headerData={isOwner ? ownerNegotiatingCounterofferTableHeader : chartererNegotiatingCounterofferTableHeader}
-        rows={counteroffersTabDataByRole({ data: sentData, role, parentId: data.id })}
+        rows={counteroffersTabDataByRole({
+          data: sentData,
+          role,
+          parentId: data.id,
+        })}
         noDataMessage="No data provided"
       />
     ),

@@ -4,13 +4,14 @@ import { ContentTypeJson } from '@/lib/constants';
 import { postData } from '@/utils/dataFetching';
 
 /**
- * Sends a one-time password to the given phone number
+ * Sends a one-time password to the given phone number via specified channel
  * @param {Object} params - Parameters for the OTP sending
  * @param {string} params.receiver - User's phone number to receive OTP
+ * @param {string} params.channel - Channel to send OTP ('sms' or 'whatsapp')
  * @returns {Promise} A promise that resolves with the response including otpId and expiration date
  */
-export async function sendOtp({ receiver }) {
-  const response = await postData('otp/send', { receiver }, { headers: { ...ContentTypeJson() } });
+export async function sendOtp({ receiver, channel }) {
+  const response = await postData('otp/send', { receiver, channel }, { headers: { ...ContentTypeJson() } });
 
   if (response.error && response.status === 429)
     response.error.message = 'Sending limit exceeded. Please try again later.';

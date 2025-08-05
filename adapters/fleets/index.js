@@ -174,7 +174,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     status: requestStatus,
   } = data;
 
-  const additionRequested = requestStatus === 'Addition requested';
+  const additionRequested = requestStatus === 'Addition requested' || requestStatus === 'Q88Processing';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankersStatus = appearsInSearch ? 'Active' : 'Inactive';
@@ -235,7 +235,12 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
+      value:
+        requestStatus === 'Update Requested'
+          ? 'Pending'
+          : requestStatus === 'Q88Processing'
+            ? 'Q88 Processing'
+            : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
       disabled: additionRequested,
     },
@@ -285,7 +290,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
-  const additionRequested = requestStatus === 'Addition requested';
+  const additionRequested = requestStatus === 'Addition requested' || requestStatus === 'Q88Processing';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankersStatus = appearsInSearch ? 'Active' : 'Inactive';
@@ -347,7 +352,12 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
+      value:
+        requestStatus === 'Update Requested'
+          ? 'Pending'
+          : requestStatus === 'Q88Processing'
+            ? 'Q88 Processing'
+            : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
       disabled: additionRequested,
     },

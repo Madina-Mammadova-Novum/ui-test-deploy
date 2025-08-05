@@ -85,7 +85,18 @@ export const incomingTabRowsDataAdapter = ({ data, parentId }) => {
 export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
-  const { cargo, status, laycanStart, laycanEnd, createdAt: dateReceived, expiresAt, frozenAt, notified, id } = data;
+  const {
+    cargo,
+    status,
+    laycanStart,
+    laycanEnd,
+    createdAt: dateReceived,
+    expiresAt,
+    frozenAt,
+    notified,
+    id,
+    countdownStatus,
+  } = data;
 
   return [
     {
@@ -149,8 +160,9 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
       freezed: frozenAt,
       notified,
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(expiresAt),
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {
@@ -180,7 +192,7 @@ export const sentOffersTabRowsDataAdapter = ({ data }) => {
 export const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { id, vessel, status, createdAt, expiresAt, frozenAt, notified } = data;
+  const { id, vessel, status, createdAt, expiresAt, frozenAt, notified, countdownStatus } = data;
   const { details: { summerDwt } = {}, openPort, openDate } = vessel || {};
 
   const portName = openPort?.name || null;
@@ -246,8 +258,9 @@ export const sentOffersTabRowDataAdapter = ({ data, index }) => {
       freezed: frozenAt,
       notified,
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(expiresAt),
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {
@@ -297,10 +310,10 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     laycanStart,
     laycanEnd,
     expiresAt,
-    frozenAt,
     notified,
     id,
     createdAt,
+    countdownStatus,
   } = data;
 
   return [
@@ -348,8 +361,9 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       id,
       notified,
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(expiresAt),
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {
@@ -377,7 +391,7 @@ export const counteroffersTabRowsDataAdapter = ({ data, parentId }) => {
 export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
-  const { vessel, createdAt, expiresAt, frozenAt, id } = data;
+  const { vessel, createdAt, expiresAt, frozenAt, id, countdownStatus } = data;
 
   const { details: { summerDwt } = {} } = vessel || {};
   const openPort = vessel?.openPort || {};
@@ -429,8 +443,9 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
     {
       id,
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(expiresAt),
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
     },
     {

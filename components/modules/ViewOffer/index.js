@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import classNames from 'classnames';
 
 import { ViewOfferPropTypes } from '@/lib/types';
 
-import { Button } from '@/elements';
+import { Button, Dropdown } from '@/elements';
 import { CommentsContent } from '@/modules';
-import { extendCountdown } from '@/services/offer';
+import { submitTaskExtensionRequest } from '@/services/assignedTasks';
 import { updateCountdown } from '@/store/entities/negotiating/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { Countdown, ModalHeader, OfferDetails, Tabs } from '@/units';
@@ -33,23 +33,73 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
   const [showScroll, setShowScroll] = useState(false);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(data?.allowExtension);
+  const [selectedExtensionOption, setSelectedExtensionOption] = useState(null);
 
   const { role } = useSelector(getUserDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
-  const { isCountdownActive, voyageDetails, commercialOfferTerms, comments, countdownData, hasUnreadComment } = data;
+  const {
+    isCountdownActive,
+    voyageDetails,
+    commercialOfferTerms,
+    comments,
+    countdownData,
+    hasUnreadComment,
+    allowExtension,
+    extensionTimeOptions,
+    taskId,
+  } = data;
+
+  // Set default extension option when component mounts
+  useEffect(() => {
+    if (extensionTimeOptions && extensionTimeOptions.length > 0) {
+      setSelectedExtensionOption(extensionTimeOptions[0]);
+    }
+  }, [extensionTimeOptions]);
 
   const handleExtendCountdown = async () => {
     setAllowCountdownExtension(false);
-    const { error, message: successMessage } = await extendCountdown({ offerId, role });
-    if (error) {
-      errorToast('Bad request', error?.title);
-      setAllowCountdownExtension(data?.allowExtension);
-    } else {
-      setAllowCountdownExtension(false);
-      dispatch(updateCountdown({ parentId, offerId, isOwner }));
-      handleCountdownExtensionSuccess();
-      successToast(successMessage);
+
+    try {
+      // Get the selected extension option
+      const extensionOption = selectedExtensionOption || extensionTimeOptions?.[0];
+
+      if (!extensionOption) {
+        errorToast('Error', 'No extension option available');
+        setAllowCountdownExtension(allowExtension);
+        return;
+      }
+
+      // Submit extension request using the new API
+
+      const { error, message: successMessage } = await submitTaskExtensionRequest({
+        taskId,
+        data: {
+          requestedMinutes: extensionOption.value,
+          description: `Requesting extension for offer ${offerId}`,
+        },
+      });
+
+      if (error) {
+        errorToast('Extension Request Failed', error?.title || error?.message);
+        setAllowCountdownExtension(allowExtension);
+      } else {
+        setAllowCountdownExtension(false);
+        dispatch(
+          updateCountdown({
+            parentId,
+            offerId,
+            isOwner,
+            extendMinute: extensionOption.value,
+          })
+        );
+        handleCountdownExtensionSuccess(extensionOption.value);
+        successToast(successMessage || 'Extension request submitted successfully');
+      }
+    } catch (err) {
+      console.error('Extension request error:', err);
+      errorToast('Extension Request Failed', 'An unexpected error occurred');
+      setAllowCountdownExtension(allowExtension);
     }
   };
 
@@ -69,13 +119,34 @@ const ViewOffer = ({ setStep, data, offerId, parentId, handleCountdownExtensionS
       <div className="mt-5 flex items-center text-[12px]">
         <Countdown time={countdownData} />
         <div className="flex h-min flex-col items-start border-l pl-4">
-          <p className="font-bold">You can use an extension for a response only once for each incoming offer</p>
-          <Button
-            customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
-            buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'medium' }}
-            disabled={!allowCountdownExtension || !isCountdownActive}
-            onClick={handleExtendCountdown}
-          />
+          <p className="font-bold">You can use an extension for an incoming offer</p>
+          {extensionTimeOptions && extensionTimeOptions.length > 1 ? (
+            <div className="flex items-center gap-2">
+              <Dropdown
+                defaultValue={selectedExtensionOption}
+                options={extensionTimeOptions}
+                onChange={setSelectedExtensionOption}
+                customStyles={{ dropdownWidth: 130 }}
+              />
+              <Button
+                customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
+                buttonProps={{ text: 'Extend the response time', variant: 'primary', size: 'medium' }}
+                disabled={!allowCountdownExtension || !isCountdownActive}
+                onClick={handleExtendCountdown}
+              />
+            </div>
+          ) : (
+            <Button
+              customStyles="!text-[10px] font-bold !px-2 !h-5 uppercase leading-none"
+              buttonProps={{
+                text: `Extend the response time by ${extensionTimeOptions?.[0]?.label || '15 Minutes'}`,
+                variant: 'primary',
+                size: 'medium',
+              }}
+              disabled={!allowCountdownExtension || !isCountdownActive}
+              onClick={handleExtendCountdown}
+            />
+          )}
         </div>
       </div>
 
