@@ -12,9 +12,9 @@ import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
-import { updateCompany } from '@/services';
+import { getCountries, updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
-import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
+import { getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
@@ -23,9 +23,9 @@ const CompanyInfoForm = ({ closeModal }) => {
   const dispatch = useDispatch();
 
   const [sameAddress, setSameAddress] = useState(false);
+  const [countries, setCountries] = useState([]);
 
   const { data, role } = useSelector(getUserDataSelector);
-  const { countries } = useSelector(getGeneralDataSelector);
 
   const schema = yup.object({
     ...companyDetailsSchema(),
@@ -37,6 +37,15 @@ const CompanyInfoForm = ({ closeModal }) => {
   const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
+
+  const fetchCountries = async () => {
+    const response = await getCountries();
+    setCountries(response?.data || []);
+  };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
 
   useEffect(() => {
     methods.setValue('sameAddresses', addressValue);
