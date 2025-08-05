@@ -19,7 +19,7 @@ import {
 import {
   clearPhoneValidationState,
   focusFirstFormElement,
-  getFieldFromKey,
+  getFieldFromKeyForRegistration,
   scrollToFirstError,
   setCookie,
 } from '@/utils/helpers';
@@ -386,9 +386,9 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
         const errorMessages = errorKeys
           .map((key) => {
             const fieldErrors = error.errors[key];
-            return `${getFieldFromKey(key)}: ${fieldErrors.join(', ')}`;
+            return `${getFieldFromKeyForRegistration(key)}: ${fieldErrors.join(', ')}`;
           })
-          .join('\n');
+          .join('\n \n');
 
         errorToast('Validation Error', errorMessages);
       } else {
