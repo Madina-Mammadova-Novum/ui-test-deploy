@@ -114,13 +114,24 @@ const AddressDetails = ({ title, type, countries = [] }) => {
 
   const renderBadge = (fieldType) => {
     if (pendingRequest) {
-      getValues(`${type}Country`);
       const field = `${type}${fieldType}`;
       const fieldValue = getValues(field);
-      const isPending = pending[field] === fieldValue;
+      let isPending = false;
+      let pendingText = '';
+      if (fieldType === 'Country') {
+        isPending = pending[`${type}City`].state.country.id === fieldValue?.value;
+        pendingText = pending[`${type}City`]?.state?.country?.name;
+      } else if (fieldType === 'City') {
+        isPending = pending[`${type}City`].id === fieldValue?.value;
+        pendingText = pending[`${type}City`].name;
+      } else {
+        isPending = pending[field] === fieldValue;
+        pendingText = pending[field];
+      }
+
       const colorClass = isPending ? 'text-green' : 'text-blue';
 
-      return <p className={classNames('font-bold', colorClass)}>{pending[field]}</p>;
+      return <p className={classNames('font-bold', colorClass)}>{pendingText}</p>;
     }
     return null;
   };
@@ -132,15 +143,15 @@ const AddressDetails = ({ title, type, countries = [] }) => {
         <div className="grid gap-5 md:grid-cols-2">
           <FormDropdown
             name={`${type}Country`}
-            label="Country"
-            labelBadge="*"
+            label="Country *"
+            labelBadge={renderBadge('Country')}
             disabled={countries?.length === 0}
             options={countries}
             onChange={handleCountryChange}
           />
           <FormDropdown
-            label="State/City"
-            labelBadge="*"
+            label="State/City *"
+            labelBadge={renderBadge('City')}
             name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
