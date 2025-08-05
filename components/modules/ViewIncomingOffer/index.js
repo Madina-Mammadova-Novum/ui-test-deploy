@@ -35,7 +35,7 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
         // Fetch assigned tasks for countdown data
         const assignedTasksResponse = await getAssignedTasks({
           targetId: itemId,
-          purpose: 'NegotiatingOffer',
+          purpose: 'Negotiating',
         });
 
         // First try to find the task with status "Created", otherwise take the first one

@@ -281,7 +281,7 @@ import { getAssignedTasks, getTaskExtensionTimeOptions, submitTaskExtensionReque
 // Typical usage pattern
 const assignedTasksResponse = await getAssignedTasks({
   targetId: offerId,
-  purpose: 'NegotiatingOffer', // or 'PreFixture'
+  purpose: 'Negotiating', // or 'PreFixture'
 });
 
 // Common task selection pattern - prioritize "Created" status
@@ -305,7 +305,7 @@ const taskId = createdTask?.id;
 
 ```javascript
 // Get countdown configurations by purpose
-const response = await getCountdownConfigs({ purpose: 'NegotiatingOffer' });
+const response = await getCountdownConfigs({ purpose: 'Negotiating' });
 const convertedOptions = convertDataToOptions({ data: response.data }, 'value', 'text');
 
 // Default countdown is now in minutes (not a string)

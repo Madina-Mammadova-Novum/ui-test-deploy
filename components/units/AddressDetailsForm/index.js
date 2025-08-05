@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import classNames from 'classnames';
+import debounce from 'lodash/debounce';
 
 import { AddressDetailsFormPropTypes } from '@/lib/types';
 
 import { FormDropdown, Input } from '@/elements';
+import { ADDRESS_FORM } from '@/lib/constants';
 import { getCities } from '@/services';
 import { convertDataToOptions } from '@/utils/helpers';
 
@@ -25,14 +27,50 @@ const AddressDetails = ({ title, type, countries = [] }) => {
   const { pending, pendingRequest } = values;
 
   const [cities, setCities] = useState([]);
+  const [citiesLoader, setCitiesLoader] = useState(false);
+  const [perList, setPerList] = useState(ADDRESS_FORM.PER_LIST_INITIAL);
   const [disabled, setDisabled] = useState(false);
 
-  const fetchCities = async (id) => {
-    const data = await getCities(id);
-    const options = convertDataToOptions(data, 'cityId', 'cityName');
+  const fetchCities = async (
+    countryId,
+    { query = '', skip = 0, pageSize = ADDRESS_FORM.DEBOUNCED_LOAD_PAGE_SIZE } = {}
+  ) => {
+    const response = await getCities(countryId, { query, skip, pageSize });
+    const options = convertDataToOptions(response, 'cityId', 'cityName');
 
     return { options };
   };
+
+  const loadCities = async (countryId) => {
+    setCitiesLoader(true);
+    const { options } = await fetchCities(countryId, { pageSize: perList });
+    setCities(options);
+    setCitiesLoader(false);
+  };
+
+  const debouncedLoadOptions = debounce(async (countryId, inputValue, callback) => {
+    const { options } = await fetchCities(countryId, {
+      query: inputValue,
+      pageSize: ADDRESS_FORM.DEBOUNCED_LOAD_PAGE_SIZE,
+    });
+    callback(options);
+  }, 400);
+
+  const loadOptions = (inputValue, callback) => {
+    const selectedCountry = getValues(`${type}Country`);
+    if (!selectedCountry?.value) {
+      callback([]);
+      return;
+    }
+
+    if (!inputValue) {
+      callback(cities);
+      return;
+    }
+    debouncedLoadOptions(selectedCountry.value, inputValue, callback);
+  };
+
+  const handleMore = () => setPerList((prev) => prev + ADDRESS_FORM.LOAD_MORE_INCREMENT);
 
   const handleCountryChange = async (data) => {
     clearErrors([`${type}Country`, `${type}City`]);
@@ -42,14 +80,12 @@ const AddressDetails = ({ title, type, countries = [] }) => {
 
     setDisabled(true);
     setCities([]);
+    setPerList(ADDRESS_FORM.PER_LIST_INITIAL);
 
     const { value: countryId } = data;
-    const { options } = await fetchCities(countryId);
+    await loadCities(countryId);
 
-    if (options.length > 0) {
-      setCities(options);
-      setDisabled(false);
-    }
+    setDisabled(false);
   };
 
   const handleCityChange = (option) => {
@@ -62,6 +98,19 @@ const AddressDetails = ({ title, type, countries = [] }) => {
       setDisabled(false);
     }
   }, [getValues, type]);
+
+  useEffect(() => {
+    const selectedCountry = getValues(`${type}Country`);
+    if (selectedCountry?.value) {
+      loadCities(selectedCountry.value);
+    }
+  }, [perList]);
+
+  useEffect(() => {
+    return () => {
+      debouncedLoadOptions.cancel();
+    };
+  }, []);
 
   const renderBadge = (fieldType) => {
     if (pendingRequest) {
@@ -95,9 +144,11 @@ const AddressDetails = ({ title, type, countries = [] }) => {
             name={`${type}City`}
             options={cities}
             onChange={handleCityChange}
-            loading={disabled}
+            loading={citiesLoader}
             disabled={disabled || countries?.length === 0}
             asyncCall
+            onMenuScrollToBottom={handleMore}
+            loadOptions={loadOptions}
           />
           <Input
             {...register(`${type}PostalCode`)}

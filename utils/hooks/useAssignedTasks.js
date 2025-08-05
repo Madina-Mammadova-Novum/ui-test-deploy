@@ -20,7 +20,7 @@ export const useAssignedTasks = () => {
             try {
               const assignedTasksResponse = await getAssignedTasks({
                 targetId: offer.id,
-                purpose: 'NegotiatingOffer',
+                purpose: 'Negotiating',
               });
 
               // Find the task with status "Created" and extract its countdown timer data

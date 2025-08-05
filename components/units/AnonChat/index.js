@@ -50,8 +50,8 @@ const AnonChat = ({ opened }) => {
   };
 
   const fetchCities = async (id) => {
-    const res = await getCities(id);
-    const params = convertDataToOptions(res, 'cityId', 'cityName');
+    const res = await getCities(id, {});
+    const params = convertDataToOptions(res.data, 'cityId', 'cityName');
     return { options: params };
   };
 
