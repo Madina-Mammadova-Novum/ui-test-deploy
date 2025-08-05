@@ -47,9 +47,6 @@ export default async function PageHeader() {
 
   const { isAnon = true } = getRoleIdentity({ role });
 
-  // Check if beta mode is enabled and the environment is production
-  const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.APP_ENV === 'prod';
-
   const printNavigation = ({ path, title }) => {
     return (
       <li key={path}>
@@ -72,8 +69,8 @@ export default async function PageHeader() {
               {Array.isArray(navigation) && navigation.length > 0 && (
                 <ul className="hidden items-center gap-x-6 3md:flex">{navigation.map(printNavigation)}</ul>
               )}
-              {!betaMode && buttons?.length > 0 && <AuthNavButtons authorized={!isAnon} data={buttons} />}
-              <MobileMenu navigation={navigation} buttons={betaMode ? [] : buttons} authorized={!isAnon} />
+              {buttons?.length > 0 && <AuthNavButtons authorized={!isAnon} data={buttons} />}
+              <MobileMenu navigation={navigation} buttons={buttons} authorized={!isAnon} />
             </nav>
           </div>
         </div>
