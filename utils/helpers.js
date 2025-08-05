@@ -1039,6 +1039,35 @@ export const getFieldFromKey = (key) => {
   return errorByKey[key];
 };
 
+export const getFieldFromKeyForRegistration = (key) => {
+  // Handle vessel-related keys
+  if (key && key.includes('Vessels')) {
+    // Match pattern like Vessels[0].Imo, Vessels[1].File, etc.
+    const vesselMatch = key.match(/Vessels\[(\d+)\]\.(.+)/);
+    if (vesselMatch) {
+      const [, index, field] = vesselMatch;
+      const vesselNumber = parseInt(index, 10) + 1; // Convert 0-based index to 1-based
+
+      // Map field names to user-friendly labels
+      const fieldLabels = {
+        Imo: 'IMO',
+        Q88FileUrl: 'Q88 File',
+      };
+
+      const fieldLabel = fieldLabels[field] || field;
+      return `${vesselNumber}. Vessel's ${fieldLabel}`;
+    }
+  }
+
+  const errorByKey = {
+    Email: 'Email',
+    Phone: 'Phone',
+    UserPhone: 'User Phone',
+  };
+
+  return errorByKey[key];
+};
+
 export const getBrowser = (environment) => {
   if (environment.indexOf('Firefox') !== -1) {
     return 'firefox';
