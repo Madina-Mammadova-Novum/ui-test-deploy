@@ -140,7 +140,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData, products }) => {
 
   const fetchCountdownData = async () => {
     handleChangeState('loading', true);
-    const response = await getCountdownConfigs({ purpose: 'NegotiatingOffer' });
+    const response = await getCountdownConfigs({ purpose: 'Negotiating' });
     const convertedOptions = convertDataToOptions({ data: response.data }, 'value', 'text');
     const defaultCountdown = convertedOptions.find(({ value }) => value === DEFAULT_COUNTDOWN_OPTION);
 
