@@ -128,7 +128,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
   const initActions = async () => {
     handleCountdownStateChange('loading', true);
-    const { data = [] } = await getCountdownConfigs({ purpose: 'NegotiatingOffer' });
+    const { data = [] } = await getCountdownConfigs({ purpose: 'Negotiating' });
     const convertedOptions = convertDataToOptions({ data }, 'value', 'text');
     const defaultCountdown = convertedOptions.find(({ value }) => value === DEFAULT_COUNTDOWN_OPTION);
     handleCountdownStateChange('responseCountdownOptions', convertedOptions);
