@@ -18,7 +18,7 @@ const enhanceOffersWithAssignedTasks = async (offers) => {
       try {
         const assignedTasksResponse = await getAssignedTasks({
           targetId: offer.id,
-          purpose: 'NegotiatingOffer',
+          purpose: 'Negotiating',
         });
 
         // First try to find the task with status "Created", otherwise take the first one
@@ -117,7 +117,7 @@ export const fetchDealCountdownData = createAsyncThunk(
 
       const assignedTasksResponse = await getAssignedTasks({
         targetId: dealId,
-        purpose: 'NegotiatingOffer',
+        purpose: 'Negotiating',
       });
 
       // First try to find the task with status "Created", otherwise take the first one

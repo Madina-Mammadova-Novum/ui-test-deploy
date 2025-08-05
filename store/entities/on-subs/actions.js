@@ -19,7 +19,7 @@ export const fetchOnSubsOffers = createAsyncThunk(ON_SUBS.GET_ON_SUBS_OFFERS, as
       try {
         const assignedTasksResponse = await getAssignedTasks({
           targetId: offer.id,
-          purpose: 'LiftSubs',
+          purpose: 'Subject',
         });
 
         // First try to find the task with status "Created", otherwise take the first one
@@ -78,7 +78,7 @@ export const fetchOnSubsDealCountdownData = createAsyncThunk(
 
       const assignedTasksResponse = await getAssignedTasks({
         targetId: dealId,
-        purpose: 'LiftSubs',
+        purpose: 'Subject',
       });
 
       // First try to find the task with status "Created", otherwise take the first one
