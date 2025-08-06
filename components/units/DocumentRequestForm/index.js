@@ -194,7 +194,7 @@ const DocumentRequestForm = ({
     try {
       const assignedTasksResponse = await getAssignedTasks({
         targetId: requestId,
-        purpose: 'ClearanceFileRequests',
+        purpose: 'ClearanceFilesRequest',
       });
 
       // First try to find the task with status "Created", otherwise take the first one
