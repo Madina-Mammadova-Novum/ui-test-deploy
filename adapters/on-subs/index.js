@@ -211,7 +211,6 @@ export const onSubsDetailsAdapter = ({ data }) => {
     thirdCargo,
     lastSire,
     approvals,
-    bankDetails,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
@@ -226,7 +225,6 @@ export const onSubsDetailsAdapter = ({ data }) => {
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
-  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
   return {
     chartererInformation: [
@@ -368,31 +366,6 @@ export const onSubsDetailsAdapter = ({ data }) => {
           text: paymentTerm?.name,
         },
       ],
-      bankInfo: {
-        bankName: accountName,
-        bankDetails: [
-          {
-            title: 'Account Number',
-            text: accountNumber,
-          },
-          {
-            title: 'Bank Code',
-            text: bankCode,
-          },
-          {
-            title: 'BIC (SWIFT-CODE)',
-            text: swift,
-          },
-          {
-            title: 'IBAN',
-            text: iban,
-          },
-          {
-            title: 'Bank Address',
-            text: bankAddress,
-          },
-        ],
-      },
     },
     allowExtension,
     extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
