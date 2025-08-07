@@ -45,9 +45,10 @@ const ContactUsForm = () => {
   //   setIsSubmitted(false);
   // };
 
-  const testOption = [
-    { label: 'testLabel', value: 'testValue' },
-    { label: 'testLabel2', value: 'testValue2' },
+  const subjectOptions = [
+    { label: 'General Inquiry', value: 'General Inquiry' },
+    { label: 'Registration Help', value: 'Registration Help' },
+    { label: 'Technical Issue / Bug', value: 'Technical Issue / Bug' },
   ];
 
   const handleChange = (key, value) => {
@@ -109,9 +110,8 @@ const ContactUsForm = () => {
           </div>
           <FormDropdown
             label="Subject"
-            defaultValue="Some category"
             name="subject"
-            options={testOption}
+            options={subjectOptions}
             onChange={(option) => handleChange('subject', option)}
             error={errors.subject?.message}
           />
