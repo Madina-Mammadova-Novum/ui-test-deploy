@@ -10,7 +10,6 @@ import SendCounterofferFormFields from './SendCounterofferFormFields';
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
 import { Dropdown } from '@/elements';
-import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
 import { getCountdownConfigs } from '@/services/countdownTimer';
 import { fetchСounterOfferValidation } from '@/store/entities/offer/actions';
@@ -130,7 +129,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
     handleCountdownStateChange('loading', true);
     const { data = [] } = await getCountdownConfigs({ purpose: 'Negotiating' });
     const convertedOptions = convertDataToOptions({ data }, 'value', 'text');
-    const defaultCountdown = convertedOptions.find(({ value }) => value === DEFAULT_COUNTDOWN_OPTION);
+    const defaultCountdown = convertedOptions[0]; // Use first option as default
     handleCountdownStateChange('responseCountdownOptions', convertedOptions);
     handleCountdownStateChange('responseCountdown', defaultCountdown);
     handleCountdownStateChange('loading', false);

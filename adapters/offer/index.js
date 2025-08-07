@@ -53,7 +53,7 @@ export function sendOfferAdapter({ data }) {
     laytime: layTime,
     demurragePaymentTermId: undisputedDemurrage.value,
     paymentTermId: paymentTerms.value,
-    responseTimeMinutes: responseCountdown.value,
+    responseTimeMinutes: responseCountdown?.value,
     cargoes: postProductsAdapter({ data: products }),
     additionalDischargeOptions,
     sanctionedCountries: countriesReverseAdapter({ data: sanctionedCountries }),

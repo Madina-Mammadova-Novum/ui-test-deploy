@@ -308,8 +308,8 @@ const taskId = createdTask?.id;
 const response = await getCountdownConfigs({ purpose: 'Negotiating' });
 const convertedOptions = convertDataToOptions({ data: response.data }, 'value', 'text');
 
-// Default countdown is now in minutes (not a string)
-const defaultCountdown = convertedOptions.find(({ value }) => value === DEFAULT_COUNTDOWN_OPTION); // 45 minutes
+// Default countdown is now in minutes (not a string) and first value of the option
+const defaultCountdown = convertedOptions[0]; // Use first option as default
 ```
 
 ### Key Patterns
@@ -701,7 +701,7 @@ const allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
 
    - New endpoints: `/v1/assignedtasks/*` and `/v1/countdownconfigs/*`
    - Changed from `countDownTimerSettingId` to `responseTimeMinutes` in requests
-   - Updated `DEFAULT_COUNTDOWN_OPTION` from string `'20 Mins'` to number `45` (minutes)
+   - Updated defaultValue to first option value
 
 3. **Improved Component Architecture**:
 
