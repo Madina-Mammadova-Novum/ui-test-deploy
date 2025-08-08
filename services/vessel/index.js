@@ -161,8 +161,8 @@ export async function addVessel({ imo, fleetId, q88QuestionnaireFile }) {
   const response = await postData(`vessels/add`, body);
 
   if (!response.error) {
-    response.message = 'Your tanker has been successfully added.';
-    response.messageDescription = 'The tanker is now available in your fleet.';
+    response.message = 'Vessel addition request is under review';
+    response.messageDescription = `We have received your vessel addition request for IMO: ${imo}. We will conduct a verification of your commercial authority over the vessel, and you will be notified as soon as the process is finalized.`;
   }
 
   return {

@@ -892,12 +892,6 @@ export function lowerCaseFormat(obj) {
 }
 
 export const errorMessage = ({ errors }) => {
-  if (errors?.message === 'Internal server error') {
-    return {
-      message: 'External server error',
-    };
-  }
-
   if (errors?.message === 'Bad Request') {
     return {
       message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
@@ -1008,7 +1002,7 @@ const urlStatusFormatterForPreFixture = ({ data }) => {
   return '';
 };
 
-export const notificationPathGenerator = ({ data, role }) => {
+export const notificationPathGenerator = ({ data, role, isDocumentTab = false }) => {
   if (!data?.stage) return null;
 
   const { isOwner } = getRoleIdentity({ role });
@@ -1016,17 +1010,30 @@ export const notificationPathGenerator = ({ data, role }) => {
   const statusTab = urlStatusFormatter({ isFailed: data.isFailed });
   const preFixtureTab = urlStatusFormatterForPreFixture({ data });
 
-  const routeByStage = {
-    Negotiating: `${initialPath}/${isOwner ? data?.vessel?.id : data?.searchedCargo?.id}?fleetId=${
-      data.id
-    }&status=${statusTab}`,
-    Pre_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}${preFixtureTab}`,
+  // Build base routes per stage
+  const baseRoutes = {
+    Negotiating: `${initialPath}/${isOwner ? data?.vessel?.id : data?.searchedCargo?.id}?fleetId=${data.id}`,
+    Pre_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
     On_Subs: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
     Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
     Post_Fixture: `${initialPath}/${data?.searchedCargo?.id}?code=${data?.searchedCargo?.code}`,
   };
 
-  return routeByStage[data.stage];
+  let route = baseRoutes[data.stage];
+
+  if (data.stage === 'Negotiating') {
+    // Negotiating remains unchanged; always use computed status
+    route = `${route}&status=${statusTab}`;
+  } else if (data.stage === 'Pre_Fixture') {
+    // If preFixtureTab exists (e.g., charter-party), do not append documents
+    // Only append documents when there is no preFixtureTab
+    route = `${route}${preFixtureTab || (isDocumentTab ? '&status=documents' : '')}`;
+  } else {
+    // Other stages: append documents status when requested
+    route = `${route}${isDocumentTab ? '&status=documents' : ''}`;
+  }
+
+  return route;
 };
 
 export const getFieldFromKey = (key) => {

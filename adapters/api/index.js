@@ -11,7 +11,7 @@ export const successResponseAdapter = (response) => ({
 export const errorResponseAdapter = (error) => {
   return {
     status: error?.response?.status || error?.status || 500,
-    statusText: error?.response?.statusText || error?.statusText || 'External Server Error',
+    statusText: error?.response?.statusText || error?.statusText || 'Internal Server Error',
     errorResponse: lowerCaseFormat(error.response?.data),
   };
 };

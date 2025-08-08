@@ -45,7 +45,8 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (error) {
-      errorToast(error.title, 'Incorrect email or password');
+      const errorMessage = error.title === 'Bad Request' ? 'Incorrect email or password' : error.message;
+      errorToast(error.title, errorMessage);
       dispatch(clearError());
     }
 
