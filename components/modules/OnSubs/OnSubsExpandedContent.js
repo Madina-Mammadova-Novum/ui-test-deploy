@@ -144,7 +144,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           dealId: offerId,
           allowExtension: false,
           extensionRequests: [],
-          ...(newExpiresAt && { expiresAt: newExpiresAt }),
+          ...(newExpiresAt && { expiresAt: newExpiresAt, countdownStatus: 'Running', isCountdownActive: true }),
         })
       );
 
