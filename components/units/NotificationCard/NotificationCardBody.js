@@ -30,6 +30,7 @@ const NotificationCardBody = ({
   const { filterParams, loading } = useSelector(getNotificationsDataSelector);
 
   const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
+  const isDocumentTab = useMemo(() => /document/i.test(message || ''), [message]);
   const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
 
   const handleRedirect = useCallback(() => {
@@ -39,9 +40,11 @@ const NotificationCardBody = ({
       dispatch(readNotification({ id: urlId }));
     }
 
+    // message is used to detect if status should be set to documents
+
     if (isDealPath) {
       const id = getIdFromUrl(url);
-      dispatch(getCurrentDealStage({ id, role }))
+      dispatch(getCurrentDealStage({ id, role, isDocumentTab }))
         .unwrap()
         .then((dealData) => {
           if (dealData?.route) {
@@ -62,7 +65,7 @@ const NotificationCardBody = ({
       dispatch(setIsOpened(false));
       dispatch(resetParams());
     }
-  }, [urlId, setDisabled, filterParams, isDealPath, url, dispatch, role, handleClose]);
+  }, [urlId, setDisabled, filterParams, isDealPath, url, dispatch, role, handleClose, isDocumentTab]);
 
   return (
     <div className="flex flex-col items-start">

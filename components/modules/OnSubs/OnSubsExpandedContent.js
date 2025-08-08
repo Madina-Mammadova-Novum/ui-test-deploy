@@ -27,7 +27,7 @@ const tabs = [
   },
   {
     label: 'Documents',
-    value: 'document',
+    value: 'documents',
   },
 ];
 

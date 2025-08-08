@@ -49,9 +49,22 @@ const Q88FileUpload = ({ setValue, clearErrors, setError, watch, error, disabled
     const fileUrl = watch(name);
     if (!fileUrl) return null;
 
-    // Extract filename from URL (assuming it's the last part after the last slash)
-    const parts = fileUrl.split('/');
-    return parts[parts.length - 1] || 'Uploaded file';
+    // Extract the last segment in case it's a full URL/path
+    const lastSegment = fileUrl.split('/').pop();
+    if (!lastSegment) return 'Uploaded file';
+
+    // Remove trailing "_<id>" just before the extension, preserving the extension
+    const lastDotIndex = lastSegment.lastIndexOf('.');
+    if (lastDotIndex === -1) return lastSegment;
+
+    const lastUnderscoreBeforeExt = lastSegment.lastIndexOf('_', lastDotIndex);
+    if (lastUnderscoreBeforeExt === -1) return lastSegment;
+
+    const baseNameWithoutId = lastSegment.slice(0, lastUnderscoreBeforeExt);
+    const extension = lastSegment.slice(lastDotIndex);
+    const cleanedName = `${baseNameWithoutId}${extension}`;
+
+    return cleanedName || 'Uploaded file';
   };
 
   const fileName = getFileName();

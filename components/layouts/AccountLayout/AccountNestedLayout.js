@@ -64,7 +64,7 @@ const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
                   className="text-xsm text-blue transition-all duration-500 group-hover:text-blue-darker"
                   href={parentRoute}
                 >
-                  Back to all deals
+                  {parentRoute === '/account/positions' ? 'Back to all positions' : 'Back to all offers'}
                 </NextLink>
               </div>
             )}
