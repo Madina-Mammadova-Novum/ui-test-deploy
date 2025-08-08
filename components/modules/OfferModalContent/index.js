@@ -7,7 +7,6 @@ import { OfferModalContentPropTypes } from '@/lib/types';
 
 import { voyageDetailsAdapter } from '@/adapters/offer';
 import { Button, Dropdown, Title } from '@/elements';
-import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent } from '@/modules';
 import { getCountdownConfigs } from '@/services/countdownTimer';
 import { sendOffer } from '@/services/offer';
@@ -142,7 +141,7 @@ const OfferModalContent = ({ closeModal, tankerId, tankerData, products }) => {
     handleChangeState('loading', true);
     const response = await getCountdownConfigs({ purpose: 'Negotiating' });
     const convertedOptions = convertDataToOptions({ data: response.data }, 'value', 'text');
-    const defaultCountdown = convertedOptions.find(({ value }) => value === DEFAULT_COUNTDOWN_OPTION);
+    const defaultCountdown = convertedOptions[0]; // Use first option as default
 
     handleChangeState('responseCountdownOptions', convertedOptions);
     handleChangeOption(defaultCountdown);

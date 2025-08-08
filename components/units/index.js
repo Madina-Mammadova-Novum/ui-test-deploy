@@ -99,6 +99,7 @@ import PersonalDetails from '@/units/PersonalDetailsForm';
 import PersonalDetailsStepForm from '@/units/PersonalDetailsStepForm';
 import PhoneValidation from '@/units/PhoneValidation';
 import PortDetailsForm from '@/units/PortDetailsForm';
+import PreFixtureDocumentRequestForm from '@/units/PreFixtureDocumentRequestForm';
 import Q88FileUpload from '@/units/Q88FileUpload';
 import ReactivateTankerForm from '@/units/ReactivateTankerForm';
 import RegistrationDocumentsStepForm from '@/units/RegistrationDocumentsStepForm';
@@ -241,6 +242,7 @@ export {
   RevokeDocumentDeletionModal,
   DocumentRequestForm,
   DynamicCountdownTimer,
+  PreFixtureDocumentRequestForm,
   Map,
   FavoriteSearchForm,
   FavoriteSearchList,

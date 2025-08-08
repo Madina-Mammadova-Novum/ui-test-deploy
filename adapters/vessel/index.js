@@ -730,9 +730,7 @@ export const chartererInformationAdapter = (data) => {
       yearsInOperation,
       estimatedNumberOfChartersPerYear,
       averageTonnagePerCharter,
-      registrationCity: {
-        country: { name: registrationCountryName, codeISO2: registrationCountryCode },
-      },
+      registrationCity: { country: { name: registrationCountryName, codeISO2: registrationCountryCode } = {} } = {},
     } = {},
   } = data;
 
