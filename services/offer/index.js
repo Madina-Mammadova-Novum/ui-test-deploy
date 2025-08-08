@@ -218,7 +218,7 @@ export async function requestCountdownExtension({ data }) {
   };
 }
 
-export async function getPdfToPrint(offerId) {
+export async function getPdfToView(offerId) {
   const path = `account/on-subs/recap/${offerId}`;
 
   const response = await getData(path, null, 'pdf');

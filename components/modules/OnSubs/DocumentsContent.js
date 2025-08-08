@@ -289,6 +289,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
           status={requestStatus}
           initialDocuments={initialDocuments}
           comments={comments}
+          requestedFiles={documentRequests.length > 0 ? documentRequests[0].requestedFiles : []}
           documentRequestId={documentRequests.length > 0 ? documentRequests[0].id : null}
           offerId={offerId}
         />

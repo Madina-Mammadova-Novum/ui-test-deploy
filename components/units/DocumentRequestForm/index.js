@@ -121,6 +121,7 @@ const DocumentRequestForm = ({
   disabled = false,
   documentRequestId = null, // Add prop for document request ID
   offerId = null, // Add prop for offer ID
+  requestedFiles = [],
 }) => {
   const [toggle, setToggle] = useState(true);
   const [clearanceFiles, setClearanceFiles] = useState([]);
@@ -387,14 +388,31 @@ const DocumentRequestForm = ({
     }
   };
 
-  // Fetch clearance files on mount
+  // Initialize clearance files
   useEffect(() => {
+    // If user is owner, use requestedFiles directly and skip fetching
+    if (role === ROLES.OWNER) {
+      setLoading(true);
+      try {
+        const options = (requestedFiles || []).map((file) => ({
+          label: file.name,
+          value: file.name,
+        }));
+        setClearanceFiles(options);
+      } catch (error) {
+        console.error('Failed to set requested files for owner:', error);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // Otherwise fetch the available clearance files
     const fetchClearanceFiles = async () => {
       setLoading(true);
       try {
         const response = await getClearanceFiles();
         if (response.data) {
-          // Transform the response data using name for both label and value
           const options = response.data.map((file) => ({
             label: file.name,
             value: file.name,
@@ -409,7 +427,7 @@ const DocumentRequestForm = ({
     };
 
     fetchClearanceFiles();
-  }, []);
+  }, [role, requestedFiles]);
 
   // Fetch countdown data when documentRequestId changes
   useEffect(() => {

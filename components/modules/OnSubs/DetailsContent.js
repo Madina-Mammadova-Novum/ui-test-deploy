@@ -20,7 +20,7 @@ const DetailsContent = ({ detailsData = {} }) => {
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
-  const { generalOfferTerms, bankInfo } = commercialOfferTerms || {};
+  const { generalOfferTerms } = commercialOfferTerms || {};
   const additionalDischargeData = {
     additionalDischargeOptions,
     sanctionedCountries,
@@ -141,18 +141,6 @@ const DetailsContent = ({ detailsData = {} }) => {
                 {text}
               </TextRow>
             ))}
-          </FieldsetContent>
-
-          <FieldsetContent label="Bank details" className="mt-2.5">
-            <Title level={4}>{bankInfo?.bankName}</Title>
-
-            <div className="mt-1.5">
-              {bankInfo?.bankDetails?.map(({ title, text }) => (
-                <TextRow key={title} title={title} inlineVariant>
-                  {text}
-                </TextRow>
-              ))}
-            </div>
           </FieldsetContent>
         </FieldsetWrapper>
       </div>

@@ -182,9 +182,20 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     const fileUrl = watch(`vessels[${index}].q88FileUrl`);
     if (!fileUrl) return null;
 
-    // Extract filename from URL (assuming it's the last part after the last slash)
-    const parts = fileUrl.split('/');
-    return parts[parts.length - 1] || 'Uploaded file';
+    // Extract last segment and strip trailing _<id> before extension
+    const lastSegment = fileUrl.split('/').pop();
+    if (!lastSegment) return 'Uploaded file';
+
+    const lastDotIndex = lastSegment.lastIndexOf('.');
+    if (lastDotIndex === -1) return lastSegment;
+
+    const lastUnderscoreBeforeExt = lastSegment.lastIndexOf('_', lastDotIndex);
+    if (lastUnderscoreBeforeExt === -1) return lastSegment;
+
+    const baseNameWithoutId = lastSegment.slice(0, lastUnderscoreBeforeExt);
+    const extension = lastSegment.slice(lastDotIndex);
+    const cleanedName = `${baseNameWithoutId}${extension}`;
+    return cleanedName || 'Uploaded file';
   };
 
   useEffect(() => {

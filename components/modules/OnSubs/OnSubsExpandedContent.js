@@ -12,7 +12,7 @@ import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
 import { approveExtensionRequest, rejectExtensionRequest } from '@/services/assignedTasks';
-import { getPdfToPrint } from '@/services/offer';
+import { getPdfToView } from '@/services/offer';
 import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateCountdown, updateDeals } from '@/store/entities/on-subs/slice';
 import { getAuthSelector } from '@/store/selectors';
@@ -27,7 +27,7 @@ const tabs = [
   },
   {
     label: 'Documents',
-    value: 'document',
+    value: 'documents',
   },
 ];
 
@@ -144,7 +144,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           dealId: offerId,
           allowExtension: false,
           extensionRequests: [],
-          ...(newExpiresAt && { expiresAt: newExpiresAt }),
+          ...(newExpiresAt && { expiresAt: newExpiresAt, countdownStatus: 'Running', isCountdownActive: true }),
         })
       );
 
@@ -223,54 +223,34 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
     setIsRejectModalOpen(false);
   };
 
-  const handlePrint = async () => {
+  const handleViewRecap = async () => {
     setIsLoading(true);
-    let pdfUrl;
-    let iframe;
-
     try {
-      const response = await getPdfToPrint(offerId);
-
+      const response = await getPdfToView(offerId);
+      if (response?.error) {
+        throw new Error(response?.error?.message || 'Failed to get recap');
+      }
       if (!response?.data) {
-        errorToast('Print Error', 'No PDF data found in response');
+        errorToast('View Error', 'No PDF data found in response');
         return;
       }
 
-      // Create blob URL
+      // Open received PDF blob in a new tab directly
       const blob = new Blob([response.data], { type: 'application/pdf' });
-      pdfUrl = URL.createObjectURL(blob);
+      const objectUrl = URL.createObjectURL(blob);
 
-      // Create temporary iframe
-      iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-      iframe.src = pdfUrl;
+      if (!objectUrl) {
+        errorToast('View Error', 'No PDF data found in response');
+        return;
+      }
 
-      let printTimeout;
+      window.open(objectUrl, '_blank', 'noopener');
 
-      // Wait for iframe to load then print
-      await new Promise((resolve, reject) => {
-        iframe.onload = () => {
-          try {
-            iframe.contentWindow.print();
-            printTimeout = setTimeout(() => {
-              errorToast('Print Error', 'Print dialog failed to open - timeout');
-            }, 10000);
-            resolve();
-          } catch (error) {
-            errorToast('Print Error', 'Failed to open print dialog');
-            reject(new Error('Failed to open print dialog'));
-          } finally {
-            clearTimeout(printTimeout);
-            iframe.onload = null;
-          }
-        };
-      });
+      // Revoke after opening
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 5000);
     } catch (error) {
-      errorToast('Print Error', error.message);
+      errorToast('View Error', error?.message || 'Failed to open recap');
     } finally {
-      // Cleanup
-      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
       setIsLoading(false);
     }
   };
@@ -325,7 +305,7 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
               icon: { before: <UilFileInfoAlt size="14" className="fill-blue" /> },
             }}
             customStyles="border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold"
-            onClick={handlePrint}
+            onClick={handleViewRecap}
             disabled={isLoading}
           />
 
