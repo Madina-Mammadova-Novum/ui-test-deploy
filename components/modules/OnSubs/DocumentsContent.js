@@ -244,7 +244,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
     const isOngoing = ongoingStatuses.includes(requestStatus);
 
     // For charterer: always show the form regardless of status
-    if (isCharterer) {
+    if (isCharterer && requestStatus !== 'Approved') {
       return true;
     }
 
