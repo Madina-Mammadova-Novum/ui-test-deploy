@@ -7,8 +7,9 @@ import { Table } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { completeUploadDocumentRequest, getDocumentRequests } from '@/services/documentRequests';
 import { uploadDocument } from '@/services/on-subs';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateDocumentList } from '@/store/entities/pre-fixture/slice';
-import { getUserDataSelector } from '@/store/selectors';
+import { getNotificationsDataSelector, getUserDataSelector } from '@/store/selectors';
 import { ConfirmModal, PreFixtureDocumentRequestForm, UploadForm } from '@/units';
 import { errorToast, successToast } from '@/utils/hooks';
 import { prefixtureHeader } from '@/utils/mock';
@@ -18,6 +19,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
 
   const dispatch = useDispatch();
   const [documentRequests, setDocumentRequests] = useState([]);
+  const { deal } = useSelector(getNotificationsDataSelector);
   const [requestStatus, setRequestStatus] = useState('initial');
   const [loading, setLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -98,6 +100,16 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentList({ offerId, newDocuments: data }));
+
+      // Also keep notifications.dealData in sync with latest documents
+      const newDocuments = Array.isArray(data) ? data : [data];
+      const currentDocuments = Array.isArray(deal?.documents) ? deal.documents : [];
+
+      dispatch(
+        updateDealData({
+          documents: [...currentDocuments, ...newDocuments],
+        })
+      );
       successToast(successMessage);
     }
   };
