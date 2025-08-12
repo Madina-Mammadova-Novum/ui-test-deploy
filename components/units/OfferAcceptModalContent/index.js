@@ -12,7 +12,7 @@ import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
 import { updateConfirmationStatus } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getCookieFromBrowser, getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -60,9 +60,15 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
             purpose: 'PreFixture',
           });
 
-          // First try to find the task with status "Created", otherwise take the first one
+          // Prefer the task with status "Created" assigned to current user; otherwise fallback
           const tasks = assignedTasksResponse?.data || [];
-          const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+          const currentUserId = getCookieFromBrowser('session-user-id');
+          const createdTask =
+            tasks.find(
+              (task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)
+            ) ||
+            tasks.find((task) => task.status === 'Created') ||
+            tasks[0];
 
           const expiresAt = createdTask?.countdownTimer?.expiresAt;
           const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';

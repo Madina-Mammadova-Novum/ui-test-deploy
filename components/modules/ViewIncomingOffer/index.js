@@ -13,6 +13,7 @@ import { getAssignedTasks, getTaskExtensionTimeOptions } from '@/services/assign
 import { getOfferDetails } from '@/services/offer';
 import { getUserDataSelector } from '@/store/selectors';
 import { OfferDeclineForm } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 
 const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
@@ -38,9 +39,13 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
           purpose: 'Negotiating',
         });
 
-        // First try to find the task with status "Created", otherwise take the first one
+        // Prefer the task with status "Created" assigned to current user; otherwise fallback
         const tasks = assignedTasksResponse?.data || [];
-        const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+        const currentUserId = getCookieFromBrowser('session-user-id');
+        const createdTask =
+          tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+          tasks.find((task) => task.status === 'Created') ||
+          tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
         const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
