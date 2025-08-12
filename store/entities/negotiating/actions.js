@@ -23,7 +23,11 @@ const enhanceOffersWithAssignedTasks = async (offers) => {
 
         // First try to find the task with status "Created", otherwise take the first one
         const tasks = assignedTasksResponse?.data || [];
-        const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+        const currentUserId = getCookieFromBrowser('session-user-id');
+        const createdTask =
+          tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+          tasks.find((task) => task.status === 'Created') ||
+          tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
         const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
@@ -122,7 +126,11 @@ export const fetchDealCountdownData = createAsyncThunk(
 
       // First try to find the task with status "Created", otherwise take the first one
       const tasks = assignedTasksResponse?.data || [];
-      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+      const currentUserId = getCookieFromBrowser('session-user-id');
+      const createdTask =
+        tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+        tasks.find((task) => task.status === 'Created') ||
+        tasks[0];
 
       const expiresAt = createdTask?.countdownTimer?.expiresAt;
       const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';

@@ -198,9 +198,13 @@ const DocumentRequestForm = ({
         purpose: 'ClearanceFilesRequest',
       });
 
-      // First try to find the task with status "Created", otherwise take the first one
+      // Prefer the task with status "Created" assigned to current user; otherwise fallback
       const tasks = assignedTasksResponse?.data || [];
-      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+      const currentUserId = session?.userId;
+      const createdTask =
+        tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+        tasks.find((task) => task.status === 'Created') ||
+        tasks[0];
 
       if (!createdTask) {
         setCountdownData({
