@@ -16,6 +16,7 @@ import {
 } from '@/adapters';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { getOfferDetails } from '@/services/offer';
 import { updateDealData } from '@/store/entities/notifications/slice';
 import { fetchOnSubsDealCountdownData } from '@/store/entities/on-subs/actions';
 import { setToggle } from '@/store/entities/on-subs/slice';
@@ -34,6 +35,25 @@ const OnSubsDetails = ({ searchedParams }) => {
       dispatch(setToggle(false));
     };
   }, []);
+
+  // Always refresh deal details by ID on mount or when params/role change
+  useEffect(() => {
+    const refreshDealDetails = async () => {
+      try {
+        const targetDealId = searchedParams?.dealId || deal?.id;
+        if (!targetDealId || !role) return;
+        const { data } = await getOfferDetails(targetDealId, role);
+        if (data) {
+          dispatch(updateDealData(data));
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to refresh on-subs deal details:', error);
+      }
+    };
+
+    refreshDealDetails();
+  }, [searchedParams?.dealId, deal?.id, role, dispatch]);
 
   // Fetch countdown data when deal changes
   useEffect(() => {
