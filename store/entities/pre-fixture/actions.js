@@ -28,7 +28,7 @@ export const fetchPrefixtureOffers = createAsyncThunk(PRE_FIXTURE.GET_PRE_FIXTUR
         const createdTask =
           tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
           tasks.find((task) => task.status === 'Created') ||
-        const createdTask = selectCreatedTask(tasks, currentUserId);
+          tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
         const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
