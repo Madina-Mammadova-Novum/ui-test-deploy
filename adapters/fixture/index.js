@@ -95,6 +95,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    additionalTerms = [],
   } = data;
 
   const { name: registrationCityName = '', country: registrationCountry = '' } = registrationCity;
@@ -241,6 +242,7 @@ export const fixtureDetailsAdapter = ({ data }) => {
         },
       ],
     },
+    additionalTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
     additionalDischargeOptions,

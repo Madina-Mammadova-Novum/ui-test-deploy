@@ -15,7 +15,9 @@ import {
 } from '@/adapters/fixture';
 import { ExpandableCardHeader, Loader, Title } from '@/elements';
 import { ExpandableRow } from '@/modules';
+import { getOfferDetails } from '@/services/offer';
 import { setToggle } from '@/store/entities/fixture/slice';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { getFixtureSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
@@ -26,6 +28,25 @@ const FixtureDetails = ({ searchedParams }) => {
   useEffect(() => {
     dispatch(setToggle(true));
   }, []);
+
+  // Always refresh deal details by ID on mount or when params/role change
+  useEffect(() => {
+    const refreshDealDetails = async () => {
+      try {
+        const targetDealId = searchedParams?.dealId || deal?.id;
+        if (!targetDealId || !role) return;
+        const { data } = await getOfferDetails(targetDealId, role);
+        if (data) {
+          dispatch(updateDealData(data));
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to refresh fixture deal details:', error);
+      }
+    };
+
+    refreshDealDetails();
+  }, [searchedParams?.dealId, deal?.id, role, dispatch]);
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
@@ -50,7 +71,7 @@ const FixtureDetails = ({ searchedParams }) => {
   const printContent = useMemo(() => {
     if (loading) return <Loader className="absolute top-1/2 z-0 h-8 w-8" />;
     return [deal].map((rowData, index) => printExpandableRow(rowData, index)) || <Title>Outdated notification</Title>;
-  }, [loading, toggle, searchedParams.id]);
+  }, [loading, toggle, searchedParams.id, deal]);
 
   return printContent;
 };

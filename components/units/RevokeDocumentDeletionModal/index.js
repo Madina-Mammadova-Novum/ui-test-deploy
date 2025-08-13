@@ -13,10 +13,11 @@ import { Button } from '@/elements';
 import { ROUTES } from '@/lib';
 import { revokeDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
 import { updateDocumentStatus as updatePreFixtureDocumentStatus } from '@/store/entities/pre-fixture/slice';
-import { getUserDataSelector } from '@/store/selectors';
+import { getNotificationsDataSelector, getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
@@ -24,6 +25,7 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
   const [loading, setLoading] = useState(false);
 
   const { role } = useSelector(getUserDataSelector);
+  const { deal } = useSelector(getNotificationsDataSelector);
   const pathname = usePathname();
 
   const modalSettings = useMemo(() => {
@@ -61,6 +63,13 @@ const RevokeDocumentDeletionModal = ({ closeModal, documentId }) => {
       errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentStatus({ documentId, status: 'Active' }));
+      // Also reflect status in notifications.dealData documents
+      if (Array.isArray(deal?.documents)) {
+        const updatedDocuments = deal.documents.map((doc) =>
+          doc.id === documentId ? { ...doc, status: 'Active' } : doc
+        );
+        dispatch(updateDealData({ documents: updatedDocuments }));
+      }
       successToast(successMessage);
       closeModal();
     }

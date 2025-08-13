@@ -13,15 +13,17 @@ import { Button } from '@/elements';
 import { ROUTES } from '@/lib';
 import { requestDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateDocumentStatus as updateOnSubsDocumentStatus } from '@/store/entities/on-subs/slice';
 import { updateDocumentStatus as updatePostFixtureDocumentStatus } from '@/store/entities/post-fixture/slice';
 import { updateDocumentStatus as updatePreFixtureDocumentStatus } from '@/store/entities/pre-fixture/slice';
-import { getUserDataSelector } from '@/store/selectors';
+import { getNotificationsDataSelector, getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
   const [loading, setLoading] = useState(false);
   const { role } = useSelector(getUserDataSelector);
+  const { deal } = useSelector(getNotificationsDataSelector);
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -60,6 +62,13 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
       errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentStatus({ documentId, status: 'Deletion Requested' }));
+      // Also reflect status in notifications.dealData documents
+      if (Array.isArray(deal?.documents)) {
+        const updatedDocuments = deal.documents.map((doc) =>
+          doc.id === documentId ? { ...doc, status: 'Deletion Requested' } : doc
+        );
+        dispatch(updateDealData({ documents: updatedDocuments }));
+      }
       successToast(successMessage);
       closeModal();
     }

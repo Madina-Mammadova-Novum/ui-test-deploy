@@ -84,6 +84,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    additionalTerms = [],
   } = data;
 
   // Handle vessel data safely
@@ -252,6 +253,7 @@ export const postFixtureDetailsAdapter = ({ data }) => {
         },
       ],
     },
+    additionalTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
     additionalDischargeOptions,

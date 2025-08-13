@@ -1021,6 +1021,9 @@ export const notificationPathGenerator = ({ data, role, isDocumentTab = false })
 
   let route = baseRoutes[data.stage];
 
+  // Always include dealId in query string for direct fetching on destination pages
+  route = `${route}&dealId=${data.id}`;
+
   if (data.stage === 'Negotiating') {
     // Negotiating remains unchanged; always use computed status
     route = `${route}&status=${statusTab}`;

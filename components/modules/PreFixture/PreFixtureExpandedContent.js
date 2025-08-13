@@ -12,6 +12,7 @@ import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { ExtendCountdown, ModalWindow, Tabs } from '@/units';
+import { transformDate } from '@/utils/date';
 
 const tabs = [
   {
@@ -46,8 +47,25 @@ const PreFixtureExpandedContent = ({
     // Update the local state
     dispatch(updateCountdown({ offerId, extendMinute: extendedMinutes }));
 
-    // Update the deal data in notifications state
-    dispatch(updateDealData({ allowExtension: false }));
+    // Update the deal data in notifications state similar to OnSubsExpandedContent
+    const extendMinutesInMs = extendedMinutes * 60 * 1000;
+    const currentExpiresAt = detailsData?.expiresAt;
+    let newExpiresAt = null;
+
+    if (currentExpiresAt) {
+      newExpiresAt = transformDate(
+        new Date(currentExpiresAt).getTime() + extendMinutesInMs,
+        "yyyy-MM-dd'T'HH:mm:ss.SSS"
+      );
+    }
+
+    dispatch(
+      updateDealData({
+        dealId: offerId,
+        allowExtension: false,
+        ...(newExpiresAt && { expiresAt: newExpiresAt, countdownStatus: 'Running', isCountdownActive: true }),
+      })
+    );
 
     // Call the parent callback if provided
     if (handleCountdownExtensionSuccess) {

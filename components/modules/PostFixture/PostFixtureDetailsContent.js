@@ -1,7 +1,7 @@
 import { PostFixtureDetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { AdditionalDischargeDetails, Flag } from '@/units';
+import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
 
 const PostFixtureDetailsContent = ({ detailsData }) => {
   const {
@@ -13,6 +13,7 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    additionalTerms = [],
   } = detailsData;
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
@@ -141,6 +142,18 @@ const PostFixtureDetailsContent = ({ detailsData }) => {
             ))}
           </FieldsetContent>
         </FieldsetWrapper>
+        {!!additionalTerms.length && (
+          <FieldsetWrapper>
+            <Title level="3">Additional Charter Party Terms</Title>
+
+            <FieldsetContent className="mt-3.5 flex gap-2.5">
+              {additionalTerms.map(({ body, id }, index) => {
+                const title = `Additional Terms #${index + 1}`;
+                return <PartyItem key={id} buttonText={title} modalTitle="All Additional Information" body={body} />;
+              })}
+            </FieldsetContent>
+          </FieldsetWrapper>
+        )}
       </div>
     </div>
   );
