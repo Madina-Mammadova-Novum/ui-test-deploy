@@ -256,6 +256,8 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     extensionTimeOptions,
     taskId,
     countdownStatus,
+    additionalTerms = [],
+    expiresAt,
   } = data;
   const { country: registrationCountry } = registrationCity || {};
 
@@ -300,6 +302,8 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
     extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
     taskId,
     isCountdownActive: countdownStatus === 'Running',
+    additionalTerms,
+    expiresAt,
   };
 };
 
@@ -325,6 +329,8 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     extensionTimeOptions,
     taskId,
     countdownStatus,
+    additionalTerms = [],
+    expiresAt,
   } = data;
 
   // Safely extract vessel company details with proper null checks
@@ -367,6 +373,8 @@ export const prefixtureChartererDetailsAdapter = (data) => {
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
+    additionalTerms,
+    expiresAt,
   };
 };
 
