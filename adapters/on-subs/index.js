@@ -222,6 +222,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     initiator,
     extensionRequests = [],
     expiresAt,
+    additionalTerms = [],
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -377,6 +378,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
     assignTo,
     initiator,
     extensionRequests,
+    additionalTerms,
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
