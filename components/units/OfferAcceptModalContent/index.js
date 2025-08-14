@@ -3,16 +3,20 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useRouter } from 'next/navigation';
+
 import { OfferModalContentPropTypes } from '@/lib/types';
 
 import { offerDetailsAdapter } from '@/adapters/offer';
 import { Button, Loader, Title } from '@/elements';
+import { ROUTES } from '@/lib/constants';
 import { getAssignedTasks } from '@/services/assignedTasks';
 import { acceptPrefixtureOffer, getOfferDetails } from '@/services/offer';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateConfirmationStatus } from '@/store/entities/pre-fixture/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { COTTabContent, Countdown, Tabs, VoyageDetailsTabContent } from '@/units';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getCookieFromBrowser, getRoleIdentity } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
 const tabs = [
@@ -23,6 +27,7 @@ const tabs = [
 ];
 
 const OfferAcceptModalContent = ({ closeModal, offerId }) => {
+  const router = useRouter();
   const [initialLoading, setInitialLoading] = useState(true);
   const [pending, setPending] = useState(false);
   const [currentTab, setCurrentTab] = useState(tabs[0].value);
@@ -41,6 +46,28 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
     const { error, message: successMessage } = await acceptPrefixtureOffer(offerId);
     if (!error) {
       dispatch(updateConfirmationStatus({ offerId, isOwner }));
+      // Update notifications deal data to reflect confirmation status as well
+      dispatch(
+        updateDealData({
+          dealId: offerId,
+          [isOwner ? 'ownerConfirmed' : 'chartererConfirmed']: 'Confirmed',
+        })
+      );
+
+      // If counterparty already confirmed, redirect to On-Subs
+      try {
+        const { data: latest } = await getOfferDetails(offerId, role);
+        const counterpartyConfirmed = isOwner
+          ? latest?.chartererConfirmed === 'Confirmed'
+          : latest?.ownerConfirmed === 'Confirmed';
+
+        if (counterpartyConfirmed) {
+          router.push(ROUTES.ACCOUNT_ONSUBS);
+        }
+      } catch (e) {
+        // swallow; redirect only when check succeeds
+      }
+
       successToast(successMessage);
       closeModal();
     } else {
@@ -60,9 +87,15 @@ const OfferAcceptModalContent = ({ closeModal, offerId }) => {
             purpose: 'PreFixture',
           });
 
-          // First try to find the task with status "Created", otherwise take the first one
+          // Prefer the task with status "Created" assigned to current user; otherwise fallback
           const tasks = assignedTasksResponse?.data || [];
-          const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+          const currentUserId = getCookieFromBrowser('session-user-id');
+          const createdTask =
+            tasks.find(
+              (task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)
+            ) ||
+            tasks.find((task) => task.status === 'Created') ||
+            tasks[0];
 
           const expiresAt = createdTask?.countdownTimer?.expiresAt;
           const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';

@@ -181,7 +181,7 @@ const AdditionalDischargeDetails = ({
           {renderExcludedCountries()}
         </>
       ) : (
-        <div className="rounded-lg border border-gray-200 p-4 text-center text-gray-500">
+        <div className="rounded-lg border border-gray-200 p-4 text-center text-xsm text-gray-500">
           {data.additionalDischargeOptions?.isAllSelected
             ? 'All discharge options are selected'
             : 'No discharge options selected'}

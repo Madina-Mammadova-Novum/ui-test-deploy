@@ -123,6 +123,7 @@ export const failedOffersDetailsAdapter = ({ data }) => {
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
     failureReason,
+    additionalTerms = [],
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -279,6 +280,7 @@ export const failedOffersDetailsAdapter = ({ data }) => {
         },
       ],
     },
+    additionalTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
     additionalDischargeOptions,

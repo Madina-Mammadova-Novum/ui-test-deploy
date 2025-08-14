@@ -221,8 +221,8 @@ export const onSubsDetailsAdapter = ({ data }) => {
     assignTo,
     initiator,
     extensionRequests = [],
-    // Needed for countdown extension updates in header
     expiresAt,
+    additionalTerms = [],
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -372,13 +372,13 @@ export const onSubsDetailsAdapter = ({ data }) => {
     allowExtension,
     extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
     taskId,
-    // Expose raw countdown data to allow local state updates (e.g., after approve extension)
     expiresAt,
     countdownStatus,
     isCountdownActive: countdownStatus === 'Running',
     assignTo,
     initiator,
     extensionRequests,
+    additionalTerms,
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,

@@ -198,9 +198,13 @@ const DocumentRequestForm = ({
         purpose: 'ClearanceFilesRequest',
       });
 
-      // First try to find the task with status "Created", otherwise take the first one
+      // Prefer the task with status "Created" assigned to current user; otherwise fallback
       const tasks = assignedTasksResponse?.data || [];
-      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+      const currentUserId = session?.userId;
+      const createdTask =
+        tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+        tasks.find((task) => task.status === 'Created') ||
+        tasks[0];
 
       if (!createdTask) {
         setCountdownData({
@@ -635,10 +639,9 @@ const DocumentRequestForm = ({
             {countdownData.extensionRequests.length > 0 && countdownData.taskId && hasApprovalPermission() && (
               <div className="flex w-full flex-col gap-2 rounded-md border border-gray-200 p-3">
                 <p className="text-xsm">
-                  You have a pending extension request for{' '}
-                  <span className="font-semibold">
-                    {countdownData.pendingExtensionRequest?.requestedMinutes} minutes
-                  </span>
+                  {session?.role === ROLES.OWNER ? 'Charterer' : 'Owner'} requested an extension of{' '}
+                  <span className="font-semibold">{countdownData.pendingExtensionRequest?.requestedMinutes}</span>{' '}
+                  {countdownData.pendingExtensionRequest?.requestedMinutes === 1 ? 'minute' : 'minutes'}
                 </p>
 
                 <div className="flex gap-2">

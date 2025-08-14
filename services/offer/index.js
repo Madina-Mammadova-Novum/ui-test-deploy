@@ -186,6 +186,7 @@ export async function getOfferDetails(offerId, role) {
     ...response,
   };
 }
+
 export async function acceptPrefixtureOffer(offerId) {
   const body = requestAcceptPrefixtureAdapter({ data: offerId });
 

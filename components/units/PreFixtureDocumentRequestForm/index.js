@@ -11,6 +11,7 @@ import { Button } from '@/elements';
 import { ROLES } from '@/lib/constants';
 import { getAssignedTasks } from '@/services/assignedTasks';
 import { DynamicCountdownTimer } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 // Status descriptions and configurations for pre-fixture (owner-only)
 const getStatusConfig = (status) => {
@@ -114,9 +115,13 @@ const PreFixtureDocumentRequestForm = ({
         purpose: 'Q88FileRequest',
       });
 
-      // First try to find the task with status "Created", otherwise take the first one
+      // Prefer the task with status "Created" assigned to current user; otherwise fallback
       const tasks = assignedTasksResponse?.data || [];
-      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+      const currentUserId = getCookieFromBrowser('session-user-id');
+      const createdTask =
+        tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+        tasks.find((task) => task.status === 'Created') ||
+        tasks[0];
 
       if (!createdTask) {
         setCountdownData({

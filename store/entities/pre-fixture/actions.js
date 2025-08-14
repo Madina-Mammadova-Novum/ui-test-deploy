@@ -8,7 +8,7 @@ import { extensionTimeOptionsAdapter } from '@/adapters/pre-fixture';
 /* Services */
 import { getRoleBasedPrefixture } from '@/services';
 import { getAssignedTasks, getTaskExtensionTimeOptions } from '@/services/assignedTasks';
-import { calculateAmountOfPages } from '@/utils/helpers';
+import { calculateAmountOfPages, getCookieFromBrowser } from '@/utils/helpers';
 
 export const fetchPrefixtureOffers = createAsyncThunk(PRE_FIXTURE.GET_PRE_FIXTURE_OFFERS, async ({ page, perPage }) => {
   const { data, recordsTotal } = await getRoleBasedPrefixture({ page, perPage });
@@ -24,7 +24,11 @@ export const fetchPrefixtureOffers = createAsyncThunk(PRE_FIXTURE.GET_PRE_FIXTUR
 
         // First try to find the task with status "Created", otherwise take the first one
         const tasks = assignedTasksResponse?.data || [];
-        const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+        const currentUserId = getCookieFromBrowser && getCookieFromBrowser('session-user-id');
+        const createdTask =
+          tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+          tasks.find((task) => task.status === 'Created') ||
+          tasks[0];
 
         const expiresAt = createdTask?.countdownTimer?.expiresAt;
         const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
@@ -79,7 +83,11 @@ export const fetchDealCountdownData = createAsyncThunk(
 
       // First try to find the task with status "Created", otherwise take the first one
       const tasks = assignedTasksResponse?.data || [];
-      const createdTask = tasks.find((task) => task.status === 'Created') || tasks[0];
+      const currentUserId = getCookieFromBrowser && getCookieFromBrowser('session-user-id');
+      const createdTask =
+        tasks.find((task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)) ||
+        tasks.find((task) => task.status === 'Created') ||
+        tasks[0];
 
       const expiresAt = createdTask?.countdownTimer?.expiresAt;
       const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';

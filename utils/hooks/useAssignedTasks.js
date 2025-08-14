@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { getAssignedTasks } from '@/services/assignedTasks';
 import { updateAssignedTasksForOffers } from '@/store/entities/negotiating/slice';
+import { getCookieFromBrowser } from '@/utils/helpers';
 
 export const useAssignedTasks = () => {
   const dispatch = useDispatch();
@@ -23,8 +24,13 @@ export const useAssignedTasks = () => {
                 purpose: 'Negotiating',
               });
 
-              // Find the task with status "Created" and extract its countdown timer data
-              const createdTask = assignedTasksResponse?.data?.find((task) => task.status === 'Created');
+              // Find the task with status "Created" assigned to current user; fallback to any Created
+              const currentUserId = getCookieFromBrowser('session-user-id');
+              const tasks = assignedTasksResponse?.data || [];
+              const createdTask =
+                tasks.find(
+                  (task) => task.status === 'Created' && String(task.assignTo?.userId) === String(currentUserId)
+                ) || tasks.find((task) => task.status === 'Created');
               const expiresAt = createdTask?.countdownTimer?.expiresAt;
               const countdownStatus = createdTask?.countdownTimer?.status || 'Expired';
 

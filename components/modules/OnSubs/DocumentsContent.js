@@ -13,14 +13,17 @@ import {
   revisionDocumentRequest,
 } from '@/services/documentRequests';
 import { uploadDocument } from '@/services/on-subs';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateDocumentList } from '@/store/entities/on-subs/slice';
-import { getUserDataSelector } from '@/store/selectors';
+import { getNotificationsDataSelector, getUserDataSelector } from '@/store/selectors';
 import { ConfirmModal, DocumentRequestForm, UploadForm } from '@/units';
 import { errorToast, successToast } from '@/utils/hooks';
 import { onSubsHeader } from '@/utils/mock';
 
 const DocumentsContent = ({ rowsData = [], offerId }) => {
   const { role } = useSelector(getUserDataSelector);
+
+  const { deal } = useSelector(getNotificationsDataSelector);
 
   const dispatch = useDispatch();
   const [documentRequests, setDocumentRequests] = useState([]);
@@ -103,6 +106,16 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       errorToast(error?.title, error?.message);
     } else {
       dispatch(updateDocumentList({ offerId, newDocuments: data }));
+
+      // Also keep notifications.dealData in sync with latest documents
+      const newDocuments = Array.isArray(data) ? data : [data];
+      const currentDocuments = Array.isArray(deal?.documents) ? deal.documents : [];
+
+      dispatch(
+        updateDealData({
+          documents: [...currentDocuments, ...newDocuments],
+        })
+      );
       successToast(successMessage);
     }
   };
@@ -244,7 +257,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
     const isOngoing = ongoingStatuses.includes(requestStatus);
 
     // For charterer: always show the form regardless of status
-    if (isCharterer) {
+    if (isCharterer && requestStatus !== 'Approved') {
       return true;
     }
 
@@ -281,7 +294,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
         <div className="flex items-center justify-center p-8">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
         </div>
-      ) : shouldRenderDocumentRequestForm ? (
+      ) : shouldRenderDocumentRequestForm() ? (
         <DocumentRequestForm
           role={role}
           onSubmit={onDocumentRequest}
