@@ -10,7 +10,7 @@ import ModalHeader from '../ModalHeader';
 import { RequestDocumentDeletionModalPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
-import { ROUTES } from '@/lib';
+import { ROUTES } from '@/lib/constants';
 import { requestDocumentDeletion } from '@/services/on-subs';
 import { updateDocumentStatus as updateFixtureDocumentStatus } from '@/store/entities/fixture/slice';
 import { updateDealData } from '@/store/entities/notifications/slice';
@@ -28,26 +28,28 @@ const RequestDocumentDeletionModal = ({ closeModal, documentId }) => {
   const pathname = usePathname();
 
   const modalSettings = useMemo(() => {
-    switch (pathname) {
-      case ROUTES.ACCOUNT_FIXTURE:
-        return { updateDocumentStatus: updateFixtureDocumentStatus };
-      case ROUTES.ACCOUNT_ONSUBS:
-        return { updateDocumentStatus: updateOnSubsDocumentStatus };
-      case ROUTES.ACCOUNT_POSTFIXTURE:
-        return { updateDocumentStatus: updatePostFixtureDocumentStatus };
-      case ROUTES.ACCOUNT_PREFIXTURE:
-        return { updateDocumentStatus: updatePreFixtureDocumentStatus };
-      default:
-        return {
-          // eslint-disable-next-line no-nested-ternary
-          updateDocumentStatus: pathname.includes(ROUTES.ACCOUNT_ONSUBS)
-            ? updateOnSubsDocumentStatus
-            : pathname.includes(ROUTES.ACCOUNT_PREFIXTURE)
-              ? updatePreFixtureDocumentStatus
-              : null,
-        };
+    if (pathname.startsWith(ROUTES.ACCOUNT_FIXTURE)) {
+      return { updateDocumentStatus: updateFixtureDocumentStatus };
     }
-  }, [ROUTES, pathname, updateFixtureDocumentStatus, updateOnSubsDocumentStatus, updatePostFixtureDocumentStatus]);
+    if (pathname.startsWith(ROUTES.ACCOUNT_ONSUBS)) {
+      return { updateDocumentStatus: updateOnSubsDocumentStatus };
+    }
+    if (pathname.startsWith(ROUTES.ACCOUNT_POSTFIXTURE)) {
+      return { updateDocumentStatus: updatePostFixtureDocumentStatus };
+    }
+    if (pathname.startsWith(ROUTES.ACCOUNT_PREFIXTURE)) {
+      return { updateDocumentStatus: updatePreFixtureDocumentStatus };
+    }
+    return {
+      updateDocumentStatus: null,
+    };
+  }, [
+    pathname,
+    updateFixtureDocumentStatus,
+    updateOnSubsDocumentStatus,
+    updatePostFixtureDocumentStatus,
+    updatePreFixtureDocumentStatus,
+  ]);
 
   const { updateDocumentStatus } = modalSettings;
 
