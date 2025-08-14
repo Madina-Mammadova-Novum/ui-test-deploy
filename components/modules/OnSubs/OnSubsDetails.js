@@ -3,6 +3,8 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { usePathname, useRouter } from 'next/navigation';
+
 import OnSubsExpandedContent from './OnSubsExpandedContent';
 import OnSubsExpandedFooter from './OnSubsExpandedFooter';
 
@@ -21,10 +23,13 @@ import { updateDealData } from '@/store/entities/notifications/slice';
 import { fetchOnSubsDealCountdownData } from '@/store/entities/on-subs/actions';
 import { setToggle } from '@/store/entities/on-subs/slice';
 import { getOnSubsDataSelector } from '@/store/selectors';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getRoleIdentity, notificationPathGenerator } from '@/utils/helpers';
 
 const OnSubsDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { loading, role, toggle, deal } = useSelector(getOnSubsDataSelector);
   const { isOwner, isCharterer } = getRoleIdentity({ role });
 
@@ -69,6 +74,28 @@ const OnSubsDetails = ({ searchedParams }) => {
         });
     }
   }, [deal?.id, dispatch]);
+
+  // Stage validation and redirection logic
+  useEffect(() => {
+    if (!deal?.stage || !role || loading) return;
+
+    // Check if current page matches the deal stage
+    const isOnSubsPage = pathname.includes('/on-subs');
+    const shouldBeOnSubs = deal.stage === 'On_Subs';
+
+    if (!shouldBeOnSubs && isOnSubsPage) {
+      // Deal stage doesn't match current page, redirect to correct stage
+      const correctRoute = notificationPathGenerator({
+        data: deal,
+        role,
+        isDocumentTab: searchedParams?.status === 'documents',
+      });
+
+      if (correctRoute) {
+        router.push(correctRoute);
+      }
+    }
+  }, [deal?.stage, role, loading, pathname, router, searchedParams?.status]);
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner
