@@ -3,6 +3,8 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { usePathname, useRouter } from 'next/navigation';
+
 import PreFixtureExpandedContent from './PreFixtureExpandedContent';
 import PreFixtureExpandedFooter from './PreFixtureExpandedFooter';
 
@@ -21,10 +23,12 @@ import { updateDealData } from '@/store/entities/notifications/slice';
 import { fetchDealCountdownData } from '@/store/entities/pre-fixture/actions';
 import { setToggle } from '@/store/entities/pre-fixture/slice';
 import { getPreFixtureDataSelector } from '@/store/selectors';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getRoleIdentity, notificationPathGenerator } from '@/utils/helpers';
 
 const PreFixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { loading, role, toggle, deal } = useSelector(getPreFixtureDataSelector);
 
@@ -71,6 +75,28 @@ const PreFixtureDetails = ({ searchedParams }) => {
         });
     }
   }, [deal?.id, dispatch]);
+
+  // Stage validation and redirection logic
+  useEffect(() => {
+    if (!deal?.stage || !role || loading) return;
+
+    // Check if current page matches the deal stage
+    const isPreFixturePage = pathname.startsWith('/pre-fixture');
+    const shouldBeOnPreFixture = deal.stage === 'Pre_Fixture';
+
+    if (!shouldBeOnPreFixture && isPreFixturePage) {
+      // Deal stage doesn't match current page, redirect to correct stage
+      const correctRoute = notificationPathGenerator({
+        data: deal,
+        role,
+        isDocumentTab: searchedParams?.status === 'documents',
+      });
+
+      if (correctRoute) {
+        router.push(correctRoute);
+      }
+    }
+  }, [deal?.stage, role, loading, pathname, router, searchedParams?.status]);
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = isOwner

@@ -3,6 +3,8 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { usePathname, useRouter } from 'next/navigation';
+
 import FixtureExpandedContent from './FixtureExpandedContent';
 import FixtureExpandedFooter from './FixtureExpandedFooter';
 
@@ -19,10 +21,13 @@ import { getOfferDetails } from '@/services/offer';
 import { setToggle } from '@/store/entities/fixture/slice';
 import { updateDealData } from '@/store/entities/notifications/slice';
 import { getFixtureSelector } from '@/store/selectors';
-import { getRoleIdentity } from '@/utils/helpers';
+import { getRoleIdentity, notificationPathGenerator } from '@/utils/helpers';
 
 const FixtureDetails = ({ searchedParams }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { deal, toggle, loading, role } = useSelector(getFixtureSelector);
   const { isOwner } = getRoleIdentity({ role });
   useEffect(() => {
@@ -47,6 +52,28 @@ const FixtureDetails = ({ searchedParams }) => {
 
     refreshDealDetails();
   }, [searchedParams?.dealId, deal?.id, role, dispatch]);
+
+  // Stage validation and redirection logic
+  useEffect(() => {
+    if (!deal?.stage || !role || loading) return;
+
+    // Check if current page matches the deal stage
+    const isFixturePage = pathname.startsWith('/fixture');
+    const shouldBeOnFixture = deal.stage === 'Fixture';
+
+    if (!shouldBeOnFixture && isFixturePage) {
+      // Deal stage doesn't match current page, redirect to correct stage
+      const correctRoute = notificationPathGenerator({
+        data: deal,
+        role,
+        isDocumentTab: searchedParams?.status === 'documents',
+      });
+
+      if (correctRoute) {
+        router.push(correctRoute);
+      }
+    }
+  }, [deal?.stage, role, loading, pathname, router, searchedParams?.status]);
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
