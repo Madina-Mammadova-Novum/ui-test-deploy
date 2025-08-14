@@ -38,7 +38,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
     if (!searchedResult?.stage || !role || loading) return;
 
     // Check if current page matches the deal stage
-    const isNegotiatingPage = pathname.includes('/negotiating');
+    const isNegotiatingPage = pathname.startsWith('/negotiating');
     const shouldBeOnNegotiating = searchedResult.stage === 'Negotiating';
 
     if (!shouldBeOnNegotiating && isNegotiatingPage) {
