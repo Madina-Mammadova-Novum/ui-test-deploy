@@ -19,8 +19,8 @@ const StepIndicator = ({ step, currentStep, isCompleted }) => {
         <div className="h-1 overflow-hidden rounded-full bg-gray-darker">
           <div
             className={classNames('h-full rounded-full transition-all duration-300 ease-in-out', {
-              'bg-blue': isDone,
-              'bg-yellow': isActive && !isDone,
+              'bg-blue': isDone && !isActive,
+              'bg-yellow': isActive,
               'bg-gray-darker': !isDone && !isActive,
             })}
             style={{ width: isDone ? '100%' : isActive ? '100%' : '0%' }}
@@ -30,8 +30,8 @@ const StepIndicator = ({ step, currentStep, isCompleted }) => {
 
       <h2
         className={classNames('text-xs font-semibold uppercase', {
-          'text-blue': isDone,
-          'text-yellow': isActive && !isDone,
+          'text-blue': isDone && !isActive,
+          'text-yellow': isActive,
           'text-gray-darker': !isDone && !isActive,
         })}
       >
