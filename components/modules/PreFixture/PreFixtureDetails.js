@@ -81,7 +81,7 @@ const PreFixtureDetails = ({ searchedParams }) => {
     if (!deal?.stage || !role || loading) return;
 
     // Check if current page matches the deal stage
-    const isPreFixturePage = pathname.includes('/pre-fixture');
+    const isPreFixturePage = pathname.startsWith('/pre-fixture');
     const shouldBeOnPreFixture = deal.stage === 'Pre_Fixture';
 
     if (!shouldBeOnPreFixture && isPreFixturePage) {
