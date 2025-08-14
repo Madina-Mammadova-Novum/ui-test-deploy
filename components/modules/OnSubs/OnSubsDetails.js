@@ -80,7 +80,7 @@ const OnSubsDetails = ({ searchedParams }) => {
     if (!deal?.stage || !role || loading) return;
 
     // Check if current page matches the deal stage
-    const isOnSubsPage = pathname.includes('/on-subs');
+    const isOnSubsPage = pathname.startsWith('/on-subs');
     const shouldBeOnSubs = deal.stage === 'On_Subs';
 
     if (!shouldBeOnSubs && isOnSubsPage) {
