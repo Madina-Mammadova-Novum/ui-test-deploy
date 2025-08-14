@@ -58,7 +58,7 @@ const FixtureDetails = ({ searchedParams }) => {
     if (!deal?.stage || !role || loading) return;
 
     // Check if current page matches the deal stage
-    const isFixturePage = pathname.includes('/fixture');
+    const isFixturePage = pathname.startsWith('/fixture');
     const shouldBeOnFixture = deal.stage === 'Fixture';
 
     if (!shouldBeOnFixture && isFixturePage) {
