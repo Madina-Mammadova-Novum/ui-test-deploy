@@ -15,7 +15,7 @@ import { refetchFleets } from '@/store/entities/fleets/slice';
 import { ModalHeader, Q88FileUpload } from '@/units';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
-const AddTankerForm = ({ closeModal, fleetOptions, selectedFleet, setSelectedFleet }) => {
+const AddTankerForm = ({ closeModal, fleetOptions, selectedFleet, setSelectedFleet, onMoveToManualForm }) => {
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,16 +47,30 @@ const AddTankerForm = ({ closeModal, fleetOptions, selectedFleet, setSelectedFle
   const onSubmit = async (formData) => {
     setIsSubmitting(true);
     try {
-      const { status, message, messageDescription, error } = await addVessel({
+      const { status, message, messageDescription, error, data } = await addVessel({
         imo: formData.imo,
         fleetId: formData.fleet.value,
         q88QuestionnaireFile: formData.file, // The file URL comes from the form's file field
       });
 
       if (status >= 200 && status < 400) {
-        dispatch(refetchFleets());
-        successToast(message, messageDescription);
-        closeModal();
+        const { body } = data || {};
+        const { automaticParsingEnabled, id } = body || {};
+
+        if (automaticParsingEnabled) {
+          // Automatic parsing successful - complete the flow
+          dispatch(refetchFleets());
+          successToast(message, messageDescription);
+          closeModal();
+        } else if (onMoveToManualForm) {
+          // Automatic parsing failed - move to manual form
+          onMoveToManualForm({
+            imo: formData.imo,
+            fleet: formData.fleet,
+            file: formData.file,
+            vesselId: id,
+          });
+        }
       } else if (error) {
         errorToast(error?.title, error?.message);
       }
@@ -144,6 +158,7 @@ AddTankerForm.propTypes = {
     label: PropTypes.string.isRequired,
   }).isRequired,
   setSelectedFleet: PropTypes.func.isRequired,
+  onMoveToManualForm: PropTypes.func,
 };
 
 export default AddTankerForm;

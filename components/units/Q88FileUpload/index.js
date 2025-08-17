@@ -105,7 +105,7 @@ const Q88FileUpload = ({ setValue, clearErrors, setError, watch, error, disabled
         <div className="flex items-center justify-between rounded-md border border-green-200 bg-green-50 p-3">
           <div className="flex items-center space-x-2">
             <div className="h-2 w-2 rounded-full bg-green-500" />
-            <span className="max-w-[200px] truncate text-sm font-medium text-green-700" title={fileName}>
+            <span className="max-w-[300px] truncate text-sm font-medium text-green-700" title={fileName}>
               {fileName}
             </span>
           </div>
