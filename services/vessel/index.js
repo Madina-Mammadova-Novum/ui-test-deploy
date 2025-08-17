@@ -35,9 +35,9 @@ export async function getQ88DataByImo({ imo }) {
   };
 }
 
-export async function addVesselManually({ data }) {
+export async function addVesselManually({ data, vesselId }) {
   const body = requestAddVesselManuallyAdapter({ data });
-  const response = await postData(`vessels/add-manually`, body);
+  const response = await postData(`vessels/initiate/${vesselId}`, body);
 
   if (!response.error) {
     response.message = 'Your tanker addition request has been successfully sent.';

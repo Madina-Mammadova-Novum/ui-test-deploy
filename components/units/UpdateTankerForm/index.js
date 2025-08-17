@@ -58,7 +58,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
 
   const schema = yup.object({
     ...tankerDataSchema(tankerCategoryTwoOptions.length > 0),
-    ...fileSchema(true),
+    ...fileSchema(),
   });
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
