@@ -112,6 +112,13 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     setValue(key, value);
 
     if (key === 'tankerType') {
+      // Reset dependent fields when tanker type changes
+      setValue('tankerCategoryOne', null);
+      setValue('tankerCategoryTwo', null);
+      clearErrors('tankerCategoryOne');
+      clearErrors('tankerCategoryTwo');
+      handleTankerOptionsChange('tankerCategoryTwo', { options: [] });
+
       handleTankerOptionsChange('tankerCategoryOne', { loading: true });
       const {
         status,
@@ -128,6 +135,10 @@ const AddTankerManuallyForm = ({ closeModal, goBack, fleetData, q88 }) => {
     }
 
     if (key === 'tankerCategoryOne') {
+      // Reset dependent field when tanker category one changes
+      setValue('tankerCategoryTwo', null);
+      clearErrors('tankerCategoryTwo');
+
       handleTankerOptionsChange('tankerCategoryTwo', { loading: true });
       const {
         status,
