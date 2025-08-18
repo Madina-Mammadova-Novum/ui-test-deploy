@@ -116,7 +116,7 @@ const DocumentRequestForm = ({
   onSubmit,
   title = 'Please choose the documents required for clearance of the vessel.',
   initialDocuments = [],
-  comments = '',
+  revisionComments = [],
   status = '',
   disabled = false,
   documentRequestId = null, // Add prop for document request ID
@@ -371,7 +371,7 @@ const DocumentRequestForm = ({
     schema,
     state: {
       selectedDocuments: initialDocuments,
-      comments,
+      comments: '', // Always start with empty comments for new input
     },
     mode: 'onChange', // Enable real-time validation
   });
@@ -528,7 +528,7 @@ const DocumentRequestForm = ({
 
     // Show comments for owners when revision is requested (read-only)
     if (isOwner) {
-      return status === 'Revision Requested';
+      return false;
     }
 
     // Don't show comments for other cases
@@ -713,20 +713,49 @@ const DocumentRequestForm = ({
             </div>
 
             {/* Right side - Comments (conditionally rendered) */}
-            {shouldShowComments() && (
+            {(shouldShowComments() || revisionComments.length > 0) && (
               <div className="rounded-lg border border-gray-200 p-4">
                 <h6 className="mb-3 text-xsm font-medium text-gray-700">Comments</h6>
-                <TextArea
-                  name="comments"
-                  placeholder={
-                    isOwnerReadOnly ? 'No comments shared yet' : 'Add any additional comments or requirements...'
-                  }
-                  rows={6}
-                  disabled={disabled || isOwnerReadOnly}
-                  maxLength={500}
-                  {...methods.register('comments')}
-                  error={methods.formState.errors.comments?.message}
-                />
+
+                {/* Revision Comments Section */}
+                {revisionComments && revisionComments.length > 0 && (
+                  <div className="mb-4">
+                    <div className="mb-3 flex items-center gap-2">
+                      <div className="h-1 w-1 rounded-full bg-orange-500" />
+                      <span className="text-xsm font-medium uppercase tracking-wide text-orange-600">
+                        Previous Revision Comments
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {revisionComments.map((comment, index) => (
+                        <div key={`revision-comment-${comment}`} className="group relative">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-xs font-semibold text-orange-600">
+                              {index + 1}
+                            </div>
+                            <div className="flex-1 rounded-lg border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-3 shadow-sm transition-all duration-200 group-hover:shadow-md">
+                              <p className="text-xsm leading-relaxed text-gray-800">{comment}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {shouldShowComments() && (
+                  <TextArea
+                    name="comments"
+                    placeholder={
+                      isOwnerReadOnly ? 'No comments shared yet' : 'Add any additional comments or requirements...'
+                    }
+                    rows={6}
+                    disabled={disabled}
+                    maxLength={500}
+                    {...methods.register('comments')}
+                    error={methods.formState.errors.comments?.message}
+                  />
+                )}
               </div>
             )}
           </div>
