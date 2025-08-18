@@ -75,9 +75,9 @@ const RegistrationDocumentsStepForm = ({ onFormValid, onMethodsReady, userRole }
               <div className="flex-1">
                 <h3 className="mb-2 text-sm font-semibold text-gray-900">Document Review</h3>
                 <p className="text-xsm text-gray-700">
-                  Once we receive your documents, our team will review them. This process may take a few business days.
-                  We will notify you via email once your documents have been reviewed and you can proceed to the next
-                  step.
+                  Upon receipt, your documents will undergo verification and compliance checks by our team. Reviews are
+                  generally completed within 24 hours. You will be informed by email once the process is complete and
+                  advised on how to proceed to the next stage.
                 </p>
               </div>
             </div>
