@@ -369,29 +369,72 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         </div>
         {/* Verification method selection UI */}
         {verificationOptions.length > 0 && !isPhoneVerified && (
-          <div className="flex items-center gap-4">
-            <Label className="text-xs-sm">Select verification channel:</Label>
-            {verificationOptions.map((channel) => {
-              const isSelected = selectedChannel === channel || verificationOptions.length === 1;
+          <div className="flex flex-col gap-1">
+            <Label className="text-xs-sm font-semibold">Select verification method:</Label>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {verificationOptions.map((channel) => {
+                const isSelected = selectedChannel === channel || verificationOptions.length === 1;
 
-              return (
-                <Button
-                  key={channel}
-                  buttonProps={{
-                    text: channel,
-                    variant: isSelected ? 'primary' : 'secondary',
-                    size: 'medium',
-                    icon: { before: getVerificationIcon(channel, isSelected) },
-                  }}
-                  onClick={() => {
-                    setSelectedChannel(channel);
-                    setShowPhoneValidation(true);
-                    setError(phoneFieldName, null);
-                    trigger(phoneFieldName);
-                  }}
-                />
-              );
-            })}
+                return (
+                  <button
+                    key={channel}
+                    type="button"
+                    className={classNames(
+                      'flex cursor-pointer items-center justify-between rounded-lg border-2 p-4 text-left transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500',
+                      {
+                        'border-blue-500 bg-blue-50 shadow-sm': isSelected,
+                        'border-gray-200 bg-white hover:border-gray-300': !isSelected,
+                      }
+                    )}
+                    onClick={() => {
+                      setSelectedChannel(channel);
+                      setShowPhoneValidation(true);
+                      setError(phoneFieldName, null);
+                      trigger(phoneFieldName);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={classNames('flex h-10 w-10 items-center justify-center rounded-full', {
+                          'bg-blue-100': isSelected,
+                          'bg-gray-100': !isSelected,
+                        })}
+                      >
+                        {getVerificationIcon(channel, isSelected)}
+                      </div>
+                      <div className="flex flex-col">
+                        <span
+                          className={classNames('text-xsm font-medium', {
+                            'text-blue-700': isSelected,
+                            'text-gray-900': !isSelected,
+                          })}
+                        >
+                          {channel === 'WhatsApp' ? 'WhatsApp' : 'SMS'}
+                        </span>
+                        <span
+                          className={classNames('text-xs', {
+                            'text-blue-600': isSelected,
+                            'text-gray-500': !isSelected,
+                          })}
+                        >
+                          {channel === 'WhatsApp' ? 'Verify via WhatsApp message' : 'Verify via SMS message'}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className={classNames('h-4 w-4 rounded-full border-2 transition-colors', {
+                        'border-blue-500 bg-blue-500': isSelected,
+                        'border-gray-300 bg-white': !isSelected,
+                      })}
+                    >
+                      {isSelected && (
+                        <div className="h-full w-full rounded-full bg-white" style={{ transform: 'scale(0.4)' }} />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
         {/* Verification screen */}
