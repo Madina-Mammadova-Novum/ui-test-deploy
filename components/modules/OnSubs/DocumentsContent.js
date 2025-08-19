@@ -275,18 +275,18 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
       const latestRequest = documentRequests[0];
       return {
         initialDocuments: latestRequest.requestedFiles?.map((file) => file.id || file.name) || [],
-        comments: latestRequest.revisionComment || '',
+        revisionComments: latestRequest.revisionComments || [],
         title: latestRequest.title || '',
       };
     }
     return {
       initialDocuments: [],
-      comments: '',
+      revisionComments: [],
       title: '',
     };
   };
 
-  const { initialDocuments, comments, title } = getInitialFormData();
+  const { initialDocuments, revisionComments, title } = getInitialFormData();
 
   return (
     <div className="mb-5 flex flex-col gap-y-5">
@@ -301,7 +301,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
           title={title || 'Please choose the documents required for clearance of the vessel.'}
           status={requestStatus}
           initialDocuments={initialDocuments}
-          comments={comments}
+          revisionComments={revisionComments}
           requestedFiles={documentRequests.length > 0 ? documentRequests[0].requestedFiles : []}
           documentRequestId={documentRequests.length > 0 ? documentRequests[0].id : null}
           offerId={offerId}
