@@ -728,6 +728,7 @@ const DocumentRequestForm = ({
                     </div>
                     <div className="space-y-3">
                       {revisionComments.map((comment, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
                         <div key={`revision-comment-${index}`} className="group relative">
                           <div className="flex items-center gap-3">
                             <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-xs font-semibold text-orange-600">
