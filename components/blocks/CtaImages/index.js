@@ -14,33 +14,34 @@ const CtaImages = ({ items }) => {
   if (!items) return null;
 
   return (
-    <section className="mb-28 sm:mb-44 2xl:mb-64">
-      <div className="flex flex-col items-center gap-y-3 lg:flex-row lg:gap-x-5">
+    <section id="cta-images" className="bg-gray-medium py-16 md:py-20 3md:py-24">
+      <div className="mx-auto flex max-w-[1152px] flex-col gap-8 px-4 md:px-8 3md:gap-12 xl:px-0">
         {items.map(({ title, coverImage, button }) => {
           return (
-            <div
-              key={makeId()}
-              className="relative overflow-hidden rounded-[10px] sm:h-[690px] sm:w-[692px] sm:rounded-[20px] lg:h-full lg:max-h-[832px] lg:w-full lg:max-w-[848px]"
-            >
-              <div>
+            <div key={makeId()} className="flex flex-col items-center gap-8 3md:flex-row 3md:gap-12 xl:gap-16">
+              <div className="w-4/5 md:w-1/2 3md:w-2/5">
                 <Image
-                  width={848}
-                  height={832}
-                  alt={delve(coverImage, 'alternativeText')}
-                  src={getStrapiMedia(delve(coverImage, 'format.original.url'), '?format=webp')}
-                  className="h-full w-full object-cover object-center"
-                  quality={75}
+                  width={600}
+                  height={450}
+                  alt={delve(coverImage, 'alternativeText') || 'Feature image'}
+                  src={getStrapiMedia(delve(coverImage, 'data.attributes.url'), '')}
+                  className="h-full w-full object-cover transition-transform duration-300 3md:hover:scale-105"
+                  quality={85}
                 />
               </div>
-              <h4 className="absolute left-5 top-5 text-base font-bold text-white sm:left-7 sm:top-7 sm:text-4xl 2xl:left-10 2xl:top-10 2xl:text-5xl">
-                {title}
-              </h4>
-              <NextLink
-                label={button.label}
-                href={button.path}
-                type={button.linkOptions.style}
-                customStyles="!absolute bottom-5 left-5 sm:top-[102px] sm:left-7 2xl:left-10 2xl:top-[130px]"
-              />
+              <div className="flex flex-col 3md:w-3/5 xl:w-1/2">
+                <h2 className="text-center text-xl font-bold text-black md:text-2xl 3md:text-2.5xl">{title}</h2>
+                {button && (
+                  <div className="flex">
+                    <NextLink
+                      label={button.label}
+                      href={button.path}
+                      type={button.linkOptions.style}
+                      customStyles="inline-flex items-center justify-center"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
