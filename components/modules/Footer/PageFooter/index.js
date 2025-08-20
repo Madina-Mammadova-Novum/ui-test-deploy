@@ -80,8 +80,9 @@ export default async function PageFooter() {
             </div>
           </div>
 
-          <div className="border-grey-darker flex justify-between border-t pt-8 text-xsm">
+          <div className="border-grey-darker flex flex-wrap justify-between gap-2 border-t pt-8 text-xsm">
             <Copyright />
+            <p className="text-gray">Ship.Link Ltd. is a member of Emirates Shipping Association</p>
           </div>
         </div>
       </footer>
