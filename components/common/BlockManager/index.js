@@ -4,6 +4,7 @@ import {
   BlockHeroImage,
   ContactUsBlock,
   CTABlock,
+  CtaImages,
   CTASingleImageBlock,
   FAQBlock,
   HomeSearchBlock,
@@ -30,6 +31,7 @@ const BLOCK_COMPONENTS = {
   'blocks.lets-talk-block': CTASingleImageBlock,
   'blocks.faq-block': FAQBlock,
   'blocks.faq-by-category-block': FAQBlock,
+  'blocks.cta-images': CtaImages,
 };
 
 const BlockManager = ({ blocks = null }) => {

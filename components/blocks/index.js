@@ -1,6 +1,7 @@
 import BlockHeroImage from '@/blocks/BlockHeroImage';
 import ContactUsBlock from '@/blocks/ContactUsBlock';
 import CTABlock from '@/blocks/CTABlock';
+import CtaImages from '@/blocks/CtaImages';
 import CTASingleImageBlock from '@/blocks/CTASingleImageBlock';
 import FAQBlock from '@/blocks/FAQBlock';
 import HomeSearchBlock from '@/blocks/HomeSearchBlock';
@@ -24,4 +25,5 @@ export {
   WhyWeAreBetterBlock,
   ProductFeaturesBlock,
   FAQBlock,
+  CtaImages,
 };
