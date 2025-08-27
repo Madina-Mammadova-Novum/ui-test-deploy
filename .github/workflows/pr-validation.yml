@@ -265,25 +265,30 @@ jobs:
         run: |
           echo "🔍 Running security audit..."
 
-          # Run audit and capture results
-          if yarn audit --level high; then
-            echo "✅ No critical or high security vulnerabilities found"
+          # Check for critical vulnerabilities only
+          if yarn audit --level critical; then
+            echo "✅ No critical vulnerabilities found"
+            
+            # Check for high vulnerabilities
+            if yarn audit --level high; then
+              echo "✅ No high vulnerabilities found"
+              echo "✅ Security audit passed - PR can proceed"
+            else
+              echo "⚠️ High vulnerabilities detected but not blocking PR"
+              echo "📋 Full audit report:"
+              yarn audit --level moderate || true
+              echo ""
+              echo "💡 Consider updating dependencies to resolve high vulnerabilities"
+              echo "✅ Only critical vulnerabilities block PRs - PR can proceed"
+            fi
           else
-            echo "⚠️ Critical or high security vulnerabilities detected"
+            echo "❌ Critical vulnerabilities found - blocking PR"
             echo ""
             echo "📋 Full audit report:"
             yarn audit --level moderate || true
             echo ""
-            echo "💡 Consider updating dependencies to resolve security issues"
-            echo "💡 Run 'yarn audit --level high' locally to see critical/high issues only"
-            
-            # Only fail on critical vulnerabilities to prevent blocking PRs on minor issues
-            if yarn audit --level critical; then
-              echo "✅ No critical vulnerabilities found - PR can proceed"
-            else
-              echo "❌ Critical vulnerabilities found - blocking PR"
-              exit 1
-            fi
+            echo "💡 Fix critical vulnerabilities before merging"
+            exit 1
           fi
 
       - name: Check for outdated packages
