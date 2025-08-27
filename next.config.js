@@ -50,7 +50,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    instrumentationHook: true,
+    instrumentationHook: process.env.NODE_ENV === 'production',
   },
   env: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
