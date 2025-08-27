@@ -36,30 +36,71 @@ jobs:
       - name: Create environment file for CI
         run: |
           cat > .env.local << 'EOF'
-          # CI Environment Variables
+          # Core Application URLs
           NEXT_PUBLIC_URL=http://localhost:3000
           NEXT_PUBLIC_API_URL=http://localhost:8080/api
           NEXT_PUBLIC_ADMIN_URL=http://localhost:8080/admin
+
+          # Environment Configuration
           APP_ENV=ci
+          NEXT_PUBLIC_APP_ENV=ci
           NODE_ENV=production
-          NEXTAUTH_SECRET=dummy-secret-for-ci-builds-only
+
+          # Authentication & Security
+          NEXTAUTH_SECRET=dummy-nextauth-secret-for-ci-builds-only
           NEXTAUTH_URL=http://localhost:3000
-          PREVIEW_SECRET=dummy-preview-secret
-          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=dummy-recaptcha-site-key
-          RECAPTCHA_SECRET_KEY=dummy-recaptcha-secret-key
-          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
-          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+          PREVIEW_SECRET=dummy-preview-secret-for-ci
+
+          # reCAPTCHA Configuration
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+          RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+          # Backend Services
           BACKEND_API_URL=http://localhost:8080/api
           IDENTITY_API_URL=http://localhost:8080/identity
           NEXT_PUBLIC_FILE_API_URL=http://localhost:8080/files
+
+          # Strapi CMS
+          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+
+          # Real-time Communication
+          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+
+          # Seametrix Maritime Data
+          NEXT_PUBLIC_SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key-12345
+          NEXT_PUBLIC_SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
           SEAMETRIX_API_URL=http://localhost:8080/seametrix
-          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key
-          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key
+          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
+
+          # Identity API Configuration
           IDENTITY_API_CLIENT_ID=dummy-client-id
-          IDENTITY_API_CLIENT_SECRET=dummy-client-secret
-          IDENTITY_API_GRANT_TYPE=client_credentials
-          IDENTITY_TOKEN_GRANT_TYPE=authorization_code
+          IDENTITY_API_CLIENT_SECRET=dummy-client-secret-guid-12345678
+          IDENTITY_API_GRANT_TYPE=password
+          IDENTITY_TOKEN_GRANT_TYPE=refresh_token
+
+          # Container Registry (not needed for CI builds)
+          CONTAINER_REGISTRY_SERVICE_CONNECTION=dummy-registry-connection
+          DOCKER_IMAGE_REPO=dummy-registry.azurecr.io
+          IMAGE_REPOSITORY=dummy-frontend
+
+          # New Relic Monitoring
+          IDENTITY_NEW_RELIC_APP_NAME=shiplink-frontend-ci
+          IDENTITY_NEW_RELIC_LICENSE_KEY=dummy-license-key-12345
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=dummy-browser-license-key
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY=1234567
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID=1234567
+
+          # OpenTelemetry Configuration
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
+          OTEL_METRIC_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/metrics
+
+          # Feature Flags
           NEXT_PUBLIC_MAINTENANCE_MODE=false
+          NEXT_PUBLIC_BETA_MODE=false
+          NEXT_PUBLIC_ENABLE_MATOMO=false
           EOF
 
       - name: Check Node.js and Yarn versions
@@ -234,6 +275,8 @@ jobs:
           cat > .env.local << 'EOF'
           # CI Environment Variables for Security Scan
           NODE_ENV=production
+          APP_ENV=ci
+          NEXT_PUBLIC_APP_ENV=ci
           EOF
 
       - name: Run yarn audit
@@ -273,30 +316,71 @@ jobs:
       - name: Create environment file for performance check
         run: |
           cat > .env.local << 'EOF'
-          # CI Environment Variables for Performance Check
+          # Core Application URLs
           NEXT_PUBLIC_URL=http://localhost:3000
           NEXT_PUBLIC_API_URL=http://localhost:8080/api
           NEXT_PUBLIC_ADMIN_URL=http://localhost:8080/admin
+
+          # Environment Configuration
           APP_ENV=ci
+          NEXT_PUBLIC_APP_ENV=ci
           NODE_ENV=production
-          NEXTAUTH_SECRET=dummy-secret-for-ci-builds-only
+
+          # Authentication & Security
+          NEXTAUTH_SECRET=dummy-nextauth-secret-for-ci-builds-only
           NEXTAUTH_URL=http://localhost:3000
-          PREVIEW_SECRET=dummy-preview-secret
-          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=dummy-recaptcha-site-key
-          RECAPTCHA_SECRET_KEY=dummy-recaptcha-secret-key
-          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
-          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+          PREVIEW_SECRET=dummy-preview-secret-for-ci
+
+          # reCAPTCHA Configuration
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+          RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+          # Backend Services
           BACKEND_API_URL=http://localhost:8080/api
           IDENTITY_API_URL=http://localhost:8080/identity
           NEXT_PUBLIC_FILE_API_URL=http://localhost:8080/files
+
+          # Strapi CMS
+          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+
+          # Real-time Communication
+          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+
+          # Seametrix Maritime Data
+          NEXT_PUBLIC_SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key-12345
+          NEXT_PUBLIC_SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
           SEAMETRIX_API_URL=http://localhost:8080/seametrix
-          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key
-          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key
+          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
+
+          # Identity API Configuration
           IDENTITY_API_CLIENT_ID=dummy-client-id
-          IDENTITY_API_CLIENT_SECRET=dummy-client-secret
-          IDENTITY_API_GRANT_TYPE=client_credentials
-          IDENTITY_TOKEN_GRANT_TYPE=authorization_code
+          IDENTITY_API_CLIENT_SECRET=dummy-client-secret-guid-12345678
+          IDENTITY_API_GRANT_TYPE=password
+          IDENTITY_TOKEN_GRANT_TYPE=refresh_token
+
+          # Container Registry (not needed for CI builds)
+          CONTAINER_REGISTRY_SERVICE_CONNECTION=dummy-registry-connection
+          DOCKER_IMAGE_REPO=dummy-registry.azurecr.io
+          IMAGE_REPOSITORY=dummy-frontend
+
+          # New Relic Monitoring
+          IDENTITY_NEW_RELIC_APP_NAME=shiplink-frontend-ci
+          IDENTITY_NEW_RELIC_LICENSE_KEY=dummy-license-key-12345
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=dummy-browser-license-key
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY=1234567
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID=1234567
+
+          # OpenTelemetry Configuration
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
+          OTEL_METRIC_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/metrics
+
+          # Feature Flags
           NEXT_PUBLIC_MAINTENANCE_MODE=false
+          NEXT_PUBLIC_BETA_MODE=false
+          NEXT_PUBLIC_ENABLE_MATOMO=false
           EOF
 
       - name: Build and analyze bundle size
