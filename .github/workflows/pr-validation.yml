@@ -87,7 +87,7 @@ jobs:
       - name: Run type check
         id: typecheck
         run: |
-          if npx tsc --noEmit; then
+          if yarn tsc --noEmit; then
             echo "Type check passed"
             echo "typecheck_passed=true" >> $GITHUB_OUTPUT
           else
@@ -200,13 +200,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run npm audit
+      - name: Run yarn audit
         run: |
-          if npm audit --audit-level=moderate; then
+          if yarn audit --level moderate; then
             echo "✅ No high or moderate security vulnerabilities found"
           else
             echo "⚠️ Security vulnerabilities detected"
-            npm audit --audit-level=moderate
+            yarn audit --level moderate
             exit 1
           fi
 

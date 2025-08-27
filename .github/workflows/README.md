@@ -55,7 +55,7 @@ Go to your repository settings:
 
 Add these optional secrets in repository settings if you want to use the corresponding features:
 
-- `NPM_TOKEN` (optional): For publishing packages
+- `YARN_TOKEN` (optional): For publishing packages
 - `SONAR_TOKEN` (optional): For SonarQube integration
 
 ## Workflow Features
