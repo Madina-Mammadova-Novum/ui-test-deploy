@@ -33,6 +33,35 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create environment file for CI
+        run: |
+          cat > .env.local << 'EOF'
+          # CI Environment Variables
+          NEXT_PUBLIC_URL=http://localhost:3000
+          NEXT_PUBLIC_API_URL=http://localhost:8080/api
+          NEXT_PUBLIC_ADMIN_URL=http://localhost:8080/admin
+          APP_ENV=ci
+          NODE_ENV=production
+          NEXTAUTH_SECRET=dummy-secret-for-ci-builds-only
+          NEXTAUTH_URL=http://localhost:3000
+          PREVIEW_SECRET=dummy-preview-secret
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=dummy-recaptcha-site-key
+          RECAPTCHA_SECRET_KEY=dummy-recaptcha-secret-key
+          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+          BACKEND_API_URL=http://localhost:8080/api
+          IDENTITY_API_URL=http://localhost:8080/identity
+          NEXT_PUBLIC_FILE_API_URL=http://localhost:8080/files
+          SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key
+          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key
+          IDENTITY_API_CLIENT_ID=dummy-client-id
+          IDENTITY_API_CLIENT_SECRET=dummy-client-secret
+          IDENTITY_API_GRANT_TYPE=client_credentials
+          IDENTITY_TOKEN_GRANT_TYPE=authorization_code
+          NEXT_PUBLIC_MAINTENANCE_MODE=false
+          EOF
+
       - name: Check Node.js and Yarn versions
         run: |
           echo "Node.js version: $(node --version)"
@@ -200,6 +229,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create environment file for security scan
+        run: |
+          cat > .env.local << 'EOF'
+          # CI Environment Variables for Security Scan
+          NODE_ENV=production
+          EOF
+
       - name: Run yarn audit
         run: |
           if yarn audit --level moderate; then
@@ -233,6 +269,35 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Create environment file for performance check
+        run: |
+          cat > .env.local << 'EOF'
+          # CI Environment Variables for Performance Check
+          NEXT_PUBLIC_URL=http://localhost:3000
+          NEXT_PUBLIC_API_URL=http://localhost:8080/api
+          NEXT_PUBLIC_ADMIN_URL=http://localhost:8080/admin
+          APP_ENV=ci
+          NODE_ENV=production
+          NEXTAUTH_SECRET=dummy-secret-for-ci-builds-only
+          NEXTAUTH_URL=http://localhost:3000
+          PREVIEW_SECRET=dummy-preview-secret
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=dummy-recaptcha-site-key
+          RECAPTCHA_SECRET_KEY=dummy-recaptcha-secret-key
+          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+          BACKEND_API_URL=http://localhost:8080/api
+          IDENTITY_API_URL=http://localhost:8080/identity
+          NEXT_PUBLIC_FILE_API_URL=http://localhost:8080/files
+          SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key
+          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key
+          IDENTITY_API_CLIENT_ID=dummy-client-id
+          IDENTITY_API_CLIENT_SECRET=dummy-client-secret
+          IDENTITY_API_GRANT_TYPE=client_credentials
+          IDENTITY_TOKEN_GRANT_TYPE=authorization_code
+          NEXT_PUBLIC_MAINTENANCE_MODE=false
+          EOF
 
       - name: Build and analyze bundle size
         run: |

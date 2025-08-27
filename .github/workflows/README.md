@@ -13,7 +13,7 @@ This directory contains GitHub Actions workflows for automated code quality chec
 
 - ✅ ESLint code quality
 - ✅ Prettier formatting
-- ✅ Project build
+- ✅ Project build (with CI environment variables)
 - ✅ TypeScript type checking
 - 🔒 Security vulnerability scanning
 - 📊 Performance monitoring
@@ -75,6 +75,16 @@ Add these optional secrets in repository settings if you want to use the corresp
 - Clear error messages with fix suggestions
 - Automated PR comments on failures
 - Continues on non-critical failures
+
+### Environment Variables
+
+The workflows automatically create a `.env.local` file with dummy values required for CI builds:
+
+- **Build Jobs**: Include all necessary environment variables for Next.js compilation
+- **Security Jobs**: Minimal environment variables for audit processes
+- **Performance Jobs**: Full environment variables for bundle analysis
+
+The dummy values ensure the application can build successfully without exposing sensitive production credentials.
 
 ### Performance Optimizations
 
