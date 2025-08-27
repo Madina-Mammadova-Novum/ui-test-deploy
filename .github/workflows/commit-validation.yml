@@ -28,11 +28,6 @@ jobs:
 
       - name: Validate commit messages
         run: |
-          # Install commitlint if not already installed
-          if ! command -v commitlint &> /dev/null; then
-            yarn add --dev @commitlint/cli @commitlint/config-conventional
-          fi
-
           # Get the commits in this PR
           if [ -n "$GITHUB_HEAD_REF" ]; then
             # For pull requests

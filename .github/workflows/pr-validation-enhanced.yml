@@ -38,12 +38,10 @@ jobs:
           echo "Node.js version: $(node --version)"
           echo "Yarn version: $(yarn --version)"
 
-      - name: Cache node modules
+      - name: Cache Next.js build
         uses: actions/cache@v3
         with:
-          path: |
-            .next/cache
-            node_modules
+          path: .next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
@@ -135,8 +133,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { execSync } = require('child_process');
-
             let comment = '## 🔍 PR Validation Results\n\n';
 
             // Check ESLint
