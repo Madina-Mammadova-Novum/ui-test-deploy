@@ -1,0 +1,72 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: ['*']
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Code Quality & Build Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run ESLint
+        id: eslint
+        run: |
+          if yarn lint; then
+            echo "✅ ESLint passed"
+          else
+            echo "❌ ESLint failed - run 'yarn lint' to fix"
+            exit 1
+          fi
+
+      - name: Check Prettier formatting
+        id: prettier
+        run: |
+          if yarn format --check; then
+            echo "✅ Prettier check passed"
+          else
+            echo "❌ Prettier check failed - run 'yarn format' to fix"
+            exit 1
+          fi
+
+      - name: Build project
+        id: build
+        run: |
+          if yarn build; then
+            echo "✅ Build successful"
+          else
+            echo "❌ Build failed"
+            exit 1
+          fi
+
+      - name: Run type check (if using TypeScript)
+        id: typecheck
+        run: |
+          if npx tsc --noEmit; then
+            echo "✅ Type check passed"
+          else
+            echo "❌ Type check failed"
+            exit 1
+          fi
+        continue-on-error: true
