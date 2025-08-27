@@ -6,7 +6,7 @@ This directory contains GitHub Actions workflows for automated code quality chec
 
 ### 1. PR Validation (`pr-validation.yml`)
 
-**Basic workflow** - Recommended for getting started quickly.
+**Comprehensive workflow** - Complete code quality, security, and performance validation.
 
 **Triggers**: All PRs to any branch
 **Checks**:
@@ -14,16 +14,7 @@ This directory contains GitHub Actions workflows for automated code quality chec
 - ✅ ESLint code quality
 - ✅ Prettier formatting
 - ✅ Project build
-- ✅ TypeScript type checking (if applicable)
-
-### 2. PR Validation Enhanced (`pr-validation-enhanced.yml`)
-
-**Comprehensive workflow** - Includes additional security and performance checks.
-
-**Triggers**: All PRs to any branch
-**Checks**:
-
-- ✅ All basic validation checks
+- ✅ TypeScript type checking
 - 🔒 Security vulnerability scanning
 - 📊 Performance monitoring
 - 🧪 Test execution (if available)
@@ -42,12 +33,9 @@ This directory contains GitHub Actions workflows for automated code quality chec
 
 ## Setup Instructions
 
-### 1. Choose Your Workflow
+### 1. Workflow Setup
 
-**For basic setup**: Use `pr-validation.yml`
-**For comprehensive setup**: Use `pr-validation-enhanced.yml`
-
-Rename the chosen file to `pr-validation.yml` or keep both if you want different trigger conditions.
+The `pr-validation.yml` workflow is ready to use as-is. It provides comprehensive validation for all pull requests.
 
 ### 2. Configure Branch Protection Rules
 
@@ -56,15 +44,16 @@ Go to your repository settings:
 1. **Settings** → **Branches** → **Add rule**
 2. **Branch name pattern**: `main` (or your default branch)
 3. **Require status checks to pass**:
-   - `validate` (for basic workflow)
-   - `validate`, `security-scan`, `performance-check` (for enhanced workflow)
+   - `validate`
+   - `security-scan`
+   - `performance-check`
 4. **Require branches to be up to date**
 5. **Required approvals**: Set as needed (recommended: 1)
 6. **Restrict pushes that create matching branches**
 
-### 3. Required Secrets (for enhanced workflow)
+### 3. Required Secrets
 
-If using the enhanced workflow, add these secrets in repository settings:
+Add these optional secrets in repository settings if you want to use the corresponding features:
 
 - `NPM_TOKEN` (optional): For publishing packages
 - `SONAR_TOKEN` (optional): For SonarQube integration
@@ -84,7 +73,7 @@ If using the enhanced workflow, add these secrets in repository settings:
 ### Error Handling
 
 - Clear error messages with fix suggestions
-- Automated PR comments (enhanced workflow)
+- Automated PR comments on failures
 - Continues on non-critical failures
 
 ### Performance Optimizations
