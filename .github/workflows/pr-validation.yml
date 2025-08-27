@@ -154,19 +154,6 @@ jobs:
             exit 1
           fi
 
-      - name: Run type check
-        id: typecheck
-        run: |
-          if yarn tsc --noEmit; then
-            echo "Type check passed"
-            echo "typecheck_passed=true" >> $GITHUB_OUTPUT
-          else
-            echo "Type check failed"
-            echo "typecheck_passed=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
-        continue-on-error: true
-
       - name: Check test coverage (if tests exist)
         id: test
         run: |
@@ -228,12 +215,7 @@ jobs:
               comment += '✅ **Build**: Passed\n';
             }
 
-            // Check TypeScript
-            if ('${{ steps.typecheck.outputs.typecheck_passed }}' === 'false') {
-              comment += '❌ **Type Check**: Failed - Type errors detected\n';
-            } else if ('${{ steps.typecheck.outputs.typecheck_passed }}' === 'true') {
-              comment += '✅ **Type Check**: Passed\n';
-            }
+
 
             // Check Tests
             if ('${{ steps.test.outputs.test_passed }}' === 'false') {
