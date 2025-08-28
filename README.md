@@ -72,27 +72,13 @@ To add a new icon:
 
 1. Add svg icon to the `assets/images` (in the wrapper 24x24px - as in the design)
 2. Name the file as it is named in design, with camelCase (minus-circle-alt => minusCircleAlt)
-3. Change fill to `“current”` in this file to make it possible reusability of this icon with different colours.
+3. Change fill to `"current"` in this file to make it possible reusability of this icon with different colours.
 
 To use icon:
 
-1. Import it as “FileNameSVG” (MinusCircleAltSVG)
-2. Determine color by adding classname (`“fill-white”`)
-3. Default size is 24x24px. If you need another size (16x16px)- add classnames (`“w-4 h-4”`) and add `viewBox=“0 0 24 24”`
-
-# Branching Strategy
-
-Git-Flow used here with additional branches for each environment develop for dev , stage for stage and main for prod.
-
-Branch name examples
-bugfix/issue-number/abc-def
-hotfix/issue-number/abc-def
-feature/issue-number/abc-def
-
-The commits can be linked with work items using #issuenumber style.
-
-To links branch with issue numbers please check below link
-https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/add-link?view=azure-devops#link-several-work-items-to-new-git-branches
+1. Import it as `FileNameSVG` (MinusCircleAltSVG)
+2. Determine color by adding classname (`fill-white`)
+3. Default size is 24x24px. If you need another size (16x16px)- add classnames (`w-4 h-4`) and add `viewBox="0 0 24 24"`
 
 ## CI/CD Workflows
 
