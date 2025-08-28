@@ -136,7 +136,8 @@
   },
   "engines": {
     "node": "20.x",
-    "yarn": ">=1.22.0"
+    "yarn": ">=1.22.0",
+    "npm": "please-use-yarn"
   },
   "license": "MIT"
 }
