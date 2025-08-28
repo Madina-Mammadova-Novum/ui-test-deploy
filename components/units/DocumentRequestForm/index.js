@@ -382,6 +382,11 @@ const DocumentRequestForm = ({
     return toggle ? 'Hide' : 'Show';
   }, [toggle]);
 
+  // Memoize reversed revision comments to avoid recomputing on every render
+  const reversedRevisionComments = useMemo(() => {
+    return revisionComments ? [...revisionComments].reverse() : [];
+  }, [revisionComments]);
+
   const handleSubmit = async (formData, action) => {
     setActionLoading(true);
     try {
@@ -713,12 +718,12 @@ const DocumentRequestForm = ({
             </div>
 
             {/* Right side - Comments (conditionally rendered) */}
-            {(shouldShowComments() || revisionComments.length > 0) && (
+            {(shouldShowComments() || reversedRevisionComments.length > 0) && (
               <div className="rounded-lg border border-gray-200 p-4">
                 <h6 className="mb-3 text-xsm font-medium text-gray-700">Comments</h6>
 
                 {/* Revision Comments Section */}
-                {revisionComments && revisionComments.length > 0 && (
+                {reversedRevisionComments && reversedRevisionComments.length > 0 && (
                   <div className="mb-4">
                     <div className="mb-3 flex items-center gap-2">
                       <div className="h-1 w-1 rounded-full bg-orange-500" />
@@ -727,16 +732,11 @@ const DocumentRequestForm = ({
                       </span>
                     </div>
                     <div className="space-y-3">
-                      {revisionComments.map((comment, index) => (
+                      {reversedRevisionComments.map((comment, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <div key={`revision-comment-${index}`} className="group relative">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-xs font-semibold text-orange-600">
-                              {index + 1}
-                            </div>
-                            <div className="flex-1 rounded-lg border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-3 shadow-sm transition-all duration-200 group-hover:shadow-md">
-                              <p className="text-xsm leading-relaxed text-gray-800">{comment}</p>
-                            </div>
+                          <div className="flex-1 rounded-lg border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-3 shadow-sm transition-all duration-200 group-hover:shadow-md">
+                            <p className="text-xsm leading-relaxed text-gray-800">{comment}</p>
                           </div>
                         </div>
                       ))}

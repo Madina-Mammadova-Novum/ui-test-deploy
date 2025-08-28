@@ -1,0 +1,40 @@
+name: Commit Message Validation
+
+on:
+  pull_request:
+    branches: ['develop']
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-commits:
+    name: Validate Commit Messages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Validate commit messages
+        run: |
+          # Get the commits in this PR
+          if [ -n "$GITHUB_HEAD_REF" ]; then
+            # For pull requests
+            git log --oneline origin/${{ github.base_ref }}..HEAD --no-merges
+            yarn commitlint --from origin/${{ github.base_ref }} --to HEAD --verbose
+          else
+            # For pushes
+            git log --oneline HEAD~1..HEAD
+            yarn commitlint --from HEAD~1 --to HEAD --verbose
+          fi
