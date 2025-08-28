@@ -14,18 +14,17 @@ This directory contains GitHub Actions workflows for automated code quality chec
 - ✅ ESLint code quality
 - ✅ Prettier formatting
 - ✅ Project build (with CI environment variables)
-- ✅ TypeScript type checking
 - 🔒 Security vulnerability scanning
 - 📊 Performance monitoring
 - 🧪 Test execution (if available)
 - 📦 Bundle size analysis
 - 💬 Automated PR comments with results
 
-### 3. Commit Message Validation (`commit-validation.yml`)
+### 2. Commit Message Validation (`commit-validation.yml`)
 
 **Commit linting** - Ensures conventional commit messages.
 
-**Triggers**: All PRs to any branch
+**Triggers**: All PRs to `develop` branch
 **Checks**:
 
 - ✅ Commit message format validation using commitlint
@@ -35,7 +34,7 @@ This directory contains GitHub Actions workflows for automated code quality chec
 
 ### 1. Workflow Setup
 
-The `pr-validation.yml` workflow is ready to use as-is. It provides comprehensive validation for all pull requests.
+The `pr-validation.yml` and `commit-validation.yml` workflows are ready to use as-is. They provide comprehensive validation for all pull requests.
 
 ### 2. Configure Branch Protection Rules
 
@@ -44,9 +43,10 @@ Go to your repository settings:
 1. **Settings** → **Branches** → **Add rule**
 2. **Branch name pattern**: `main` (or your default branch)
 3. **Require status checks to pass**:
-   - `validate`
-   - `security-scan`
-   - `performance-check`
+   - `validate` (Code Quality & Build Check)
+   - `security-scan` (Security Scan)
+   - `performance-check` (Performance Check)
+   - `validate-commits` (Commit Message Validation)
 4. **Require branches to be up to date**
 5. **Required approvals**: Set as needed (recommended: 1)
 6. **Restrict pushes that create matching branches**
@@ -112,8 +112,8 @@ Change when workflows run by editing the `on` section:
 ```yaml
 on:
   pull_request:
-    branches: ['main', 'develop'] # Only specific branches
-    types: [opened, synchronize] # Only specific PR events
+    branches: ['develop'] # Only develop branch for commit validation
+    types: [opened, synchronize, reopened] # PR events
 ```
 
 ### Environment Variables
