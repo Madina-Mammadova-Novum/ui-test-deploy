@@ -12,9 +12,9 @@ import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { ModalFormManager } from '@/common';
 import { Title } from '@/elements';
 import { companyAddressesSchema, companyDetailsSchema } from '@/lib/schemas';
-import { updateCompany } from '@/services';
+import { getCountries, updateCompany } from '@/services';
 import { fetchUserProfileData } from '@/store/entities/user/actions';
-import { getGeneralDataSelector, getUserDataSelector } from '@/store/selectors';
+import { getUserDataSelector } from '@/store/selectors';
 import { CargoesSlotsDetailsStatic, CompanyAddresses, CompanyDetails, Notes } from '@/units';
 import { getRoleIdentity } from '@/utils/helpers';
 import { errorToast, useHookFormParams } from '@/utils/hooks';
@@ -23,9 +23,9 @@ const CompanyInfoForm = ({ closeModal }) => {
   const dispatch = useDispatch();
 
   const [sameAddress, setSameAddress] = useState(false);
+  const [countries, setCountries] = useState([]);
 
   const { data, role } = useSelector(getUserDataSelector);
-  const { countries } = useSelector(getGeneralDataSelector);
 
   const schema = yup.object({
     ...companyDetailsSchema(),
@@ -37,6 +37,15 @@ const CompanyInfoForm = ({ closeModal }) => {
   const methods = useHookFormParams({ state: data?.companyDetails, schema });
 
   const addressValue = methods.watch('sameAddresses', sameAddress);
+
+  const fetchCountries = async () => {
+    const response = await getCountries();
+    setCountries(response?.data || []);
+  };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
 
   useEffect(() => {
     methods.setValue('sameAddresses', addressValue);
@@ -62,7 +71,7 @@ const CompanyInfoForm = ({ closeModal }) => {
         submitButton={{ text: 'Submit', variant: 'primary', size: 'large' }}
         className="h-full"
       >
-        <Title level="3" className="pb-5 text-lg font-bold capitalize text-black">
+        <Title level="3" className="text-lg font-bold capitalize text-black">
           Edit Company Details
         </Title>
         <Notes subtitle="Please note that any changes to these fields will require verification by Ship.Link." />

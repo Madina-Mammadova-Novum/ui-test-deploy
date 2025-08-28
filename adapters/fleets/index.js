@@ -174,7 +174,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     status: requestStatus,
   } = data;
 
-  const additionRequested = requestStatus === 'Addition requested';
+  const additionRequested = requestStatus === 'Addition requested' || requestStatus === 'Q88Processing';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankersStatus = appearsInSearch ? 'Active' : 'Inactive';
@@ -235,7 +235,12 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
+      value:
+        requestStatus === 'Update Requested'
+          ? 'Pending'
+          : requestStatus === 'Q88Processing'
+            ? 'Q88 Processing'
+            : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
       disabled: additionRequested,
     },
@@ -258,6 +263,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
         },
         {
           action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete tanker',
           editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,
           actionVariant: 'delete',
           actionSize: 'medium',
@@ -284,7 +290,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
-  const additionRequested = requestStatus === 'Addition requested';
+  const additionRequested = requestStatus === 'Addition requested' || requestStatus === 'Q88Processing';
 
   const status = additionRequested ? 'Inactive' : 'Active';
   const tankersStatus = appearsInSearch ? 'Active' : 'Inactive';
@@ -346,7 +352,12 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: requestStatus === 'Update Requested' ? 'Pending' : requestStatus,
+      value:
+        requestStatus === 'Update Requested'
+          ? 'Pending'
+          : requestStatus === 'Q88Processing'
+            ? 'Q88 Processing'
+            : requestStatus,
       icon: <StatusIndicator status={requestStatus} />,
       disabled: additionRequested,
     },
@@ -364,10 +375,11 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
           actionSize: 'medium',
           disabled: additionRequested,
           editIcon: additionRequested && <ClockSVG viewBox="0 0 14 14" className="ml-1 h-4 w-4 fill-blue" />,
-          actionStyles: additionRequested ? '!w-[190px]' : '!w-[165px]',
+          actionStyles: '!w-[190px]',
         },
         {
           action: ACTIONS.DELETE_TANKER,
+          actionText: 'Delete tanker',
           actionVariant: 'delete',
           actionSize: 'medium',
           editIcon: <TrashIcon viewBox="0 0 24 24" className="h-5 w-5 fill-red" />,

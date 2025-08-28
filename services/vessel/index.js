@@ -1,6 +1,7 @@
 import {
   removeVesselAdapter,
   removeVesselFromFleetAdapter,
+  requestAddVesselAdapter,
   requestAddVesselManuallyAdapter,
   requestAddVesselToFleetAdapter,
   requestSearchVesselAdapter,
@@ -34,9 +35,9 @@ export async function getQ88DataByImo({ imo }) {
   };
 }
 
-export async function addVesselManually({ data }) {
+export async function addVesselManually({ data, vesselId }) {
   const body = requestAddVesselManuallyAdapter({ data });
-  const response = await postData(`vessels/add-manually`, body);
+  const response = await postData(`vessels/initiate/${vesselId}`, body);
 
   if (!response.error) {
     response.message = 'Your tanker addition request has been successfully sent.';
@@ -148,6 +149,21 @@ export async function removeVessel(data) {
 
 export async function getVesselNames({ stages = null }) {
   const response = await getData(`account/get-vesselnames${stages ? `?stages=${stages}` : ''}`);
+
+  return {
+    ...response,
+  };
+}
+
+export async function addVessel({ imo, fleetId, q88QuestionnaireFile }) {
+  const body = requestAddVesselAdapter({ data: { imo, fleetId, q88QuestionnaireFile } });
+
+  const response = await postData(`vessels/add`, body);
+
+  if (!response.error) {
+    response.message = 'Vessel addition request is under review';
+    response.messageDescription = `We have received your vessel addition request for IMO: ${imo}. We will conduct a verification of your commercial authority over the vessel, and you will be notified as soon as the process is finalized.`;
+  }
 
   return {
     ...response,

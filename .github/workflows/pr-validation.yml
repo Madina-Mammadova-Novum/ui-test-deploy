@@ -1,0 +1,401 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: ['*']
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  validate:
+    name: Code Quality & Build Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create environment file for CI
+        run: |
+          cat > .env.local << 'EOF'
+          # Core Application URLs
+          NEXT_PUBLIC_URL=http://localhost:3000
+          NEXT_PUBLIC_API_URL=http://localhost:8080/api
+          NEXT_PUBLIC_ADMIN_URL=http://localhost:8080/admin
+
+          # Environment Configuration
+          APP_ENV=ci
+          NEXT_PUBLIC_APP_ENV=ci
+          NODE_ENV=production
+
+          # Authentication & Security
+          NEXTAUTH_SECRET=dummy-nextauth-secret-for-ci-builds-only
+          NEXTAUTH_URL=http://localhost:3000
+          PREVIEW_SECRET=dummy-preview-secret-for-ci
+
+          # reCAPTCHA Configuration
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+          RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+          # Backend Services
+          BACKEND_API_URL=http://localhost:8080/api
+          IDENTITY_API_URL=http://localhost:8080/identity
+          NEXT_PUBLIC_FILE_API_URL=http://localhost:8080/files
+
+          # Strapi CMS
+          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+
+          # Real-time Communication
+          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+
+          # Seametrix Maritime Data
+          NEXT_PUBLIC_SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key-12345
+          NEXT_PUBLIC_SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
+          SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
+
+          # Identity API Configuration
+          IDENTITY_API_CLIENT_ID=dummy-client-id
+          IDENTITY_API_CLIENT_SECRET=dummy-client-secret-guid-12345678
+          IDENTITY_API_GRANT_TYPE=password
+          IDENTITY_TOKEN_GRANT_TYPE=refresh_token
+
+          # Container Registry (not needed for CI builds)
+          CONTAINER_REGISTRY_SERVICE_CONNECTION=dummy-registry-connection
+          DOCKER_IMAGE_REPO=dummy-registry.azurecr.io
+          IMAGE_REPOSITORY=dummy-frontend
+
+          # New Relic Monitoring
+          IDENTITY_NEW_RELIC_APP_NAME=shiplink-frontend-ci
+          IDENTITY_NEW_RELIC_LICENSE_KEY=dummy-license-key-12345
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=dummy-browser-license-key
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY=1234567
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID=1234567
+
+          # OpenTelemetry Configuration
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
+          OTEL_METRIC_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/metrics
+
+          # Feature Flags
+          NEXT_PUBLIC_MAINTENANCE_MODE=false
+          NEXT_PUBLIC_BETA_MODE=false
+          NEXT_PUBLIC_ENABLE_MATOMO=false
+          EOF
+
+      - name: Check Node.js and Yarn versions
+        run: |
+          echo "Node.js version: $(node --version)"
+          echo "Yarn version: $(yarn --version)"
+
+      - name: Cache Next.js build
+        uses: actions/cache@v3
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Run ESLint
+        id: eslint
+        run: |
+          if yarn lint; then
+            echo "ESLint passed"
+            echo "eslint_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "ESLint failed"
+            echo "eslint_passed=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Check Prettier formatting
+        id: prettier
+        run: |
+          if yarn format --check; then
+            echo "Prettier check passed"
+            echo "prettier_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Prettier check failed"
+            echo "prettier_passed=false" >> $GITHUB_OUTPUT
+            echo ""
+            echo "💡 To fix formatting issues, run: yarn format"
+            exit 1
+          fi
+
+      - name: Build project
+        id: build
+        run: |
+          if yarn build; then
+            echo "Build successful"
+            echo "build_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Build failed"
+            echo "build_passed=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Check test coverage (if tests exist)
+        id: test
+        run: |
+          if [ -f "package.json" ] && grep -q '"test"' package.json; then
+            if yarn test --coverage --watchAll=false; then
+              echo "Tests passed"
+              echo "test_passed=true" >> $GITHUB_OUTPUT
+            else
+              echo "Tests failed"
+              echo "test_passed=false" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+          else
+            echo "No test script found, skipping tests"
+            echo "test_passed=skipped" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Check bundle size
+        id: bundle
+        run: |
+          if [ -f "package.json" ] && grep -q '"build:analyze"' package.json; then
+            yarn build:analyze
+            echo "Bundle analysis completed"
+            echo "bundle_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No bundle analysis script found"
+            echo "bundle_passed=skipped" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Generate PR comment
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let comment = '## 🔍 PR Validation Results\n\n';
+
+            // Check ESLint
+            if ('${{ steps.eslint.outputs.eslint_passed }}' === 'false') {
+              comment += '❌ **ESLint**: Failed - Code style issues detected\n';
+              comment += '```bash\nyarn lint\n```\n';
+            } else {
+              comment += '✅ **ESLint**: Passed\n';
+            }
+
+            // Check Prettier
+            if ('${{ steps.prettier.outputs.prettier_passed }}' === 'false') {
+              comment += '❌ **Prettier**: Failed - Formatting issues detected\n';
+              comment += '```bash\nyarn format\n```\n';
+            } else {
+              comment += '✅ **Prettier**: Passed\n';
+            }
+
+            // Check Build
+            if ('${{ steps.build.outputs.build_passed }}' === 'false') {
+              comment += '❌ **Build**: Failed - Compilation errors\n';
+            } else {
+              comment += '✅ **Build**: Passed\n';
+            }
+
+
+
+            // Check Tests
+            if ('${{ steps.test.outputs.test_passed }}' === 'false') {
+              comment += '❌ **Tests**: Failed\n';
+            } else if ('${{ steps.test.outputs.test_passed }}' === 'true') {
+              comment += '✅ **Tests**: Passed\n';
+            }
+
+            comment += '\n---\n';
+            comment += '*This comment was automatically generated by the PR validation workflow.*';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create environment file for security scan
+        run: |
+          cat > .env.local << 'EOF'
+          # CI Environment Variables for Security Scan
+          NODE_ENV=production
+          APP_ENV=ci
+          NEXT_PUBLIC_APP_ENV=ci
+          EOF
+
+      - name: Run yarn audit
+        run: |
+          echo "🔍 Running security audit..."
+
+          # Get audit output and check for critical vulnerabilities
+          AUDIT_OUTPUT=$(yarn audit --level critical --json 2>/dev/null || true)
+          CRITICAL_COUNT=$(echo "$AUDIT_OUTPUT" | grep -c '"severity":"critical"' || true)
+
+          if [ "$CRITICAL_COUNT" -gt 0 ]; then
+            echo "❌ Critical vulnerabilities found: $CRITICAL_COUNT"
+            echo "📋 Full audit report:"
+            yarn audit --level moderate || true
+            echo ""
+            echo "💡 Fix critical vulnerabilities before merging"
+            exit 1
+          else
+            echo "✅ No critical vulnerabilities found"
+            
+            # Check for high vulnerabilities
+            HIGH_COUNT=$(echo "$AUDIT_OUTPUT" | grep -c '"severity":"high"' || true)
+            if [ "$HIGH_COUNT" -gt 0 ]; then
+              echo "⚠️ High vulnerabilities detected: $HIGH_COUNT (not blocking PR)"
+              echo "📋 Full audit report:"
+              yarn audit --level moderate || true
+              echo ""
+              echo "💡 Consider updating dependencies to resolve high vulnerabilities"
+              echo "✅ Only critical vulnerabilities block PRs - PR can proceed"
+            else
+              echo "✅ No high vulnerabilities found"
+              echo "✅ Security audit passed - PR can proceed"
+            fi
+          fi
+
+      - name: Check for outdated packages
+        run: |
+          echo "📦 Checking for outdated packages..."
+          yarn outdated || true
+        continue-on-error: true
+
+  performance-check:
+    name: Performance Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create environment file for performance check
+        run: |
+          cat > .env.local << 'EOF'
+          # Core Application URLs
+          NEXT_PUBLIC_URL=http://localhost:3000
+          NEXT_PUBLIC_API_URL=http://localhost:8080/api
+          NEXT_PUBLIC_ADMIN_URL=http://localhost:8080/admin
+
+          # Environment Configuration
+          APP_ENV=ci
+          NEXT_PUBLIC_APP_ENV=ci
+          NODE_ENV=production
+
+          # Authentication & Security
+          NEXTAUTH_SECRET=dummy-nextauth-secret-for-ci-builds-only
+          NEXTAUTH_URL=http://localhost:3000
+          PREVIEW_SECRET=dummy-preview-secret-for-ci
+
+          # reCAPTCHA Configuration
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+          RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+          # Backend Services
+          BACKEND_API_URL=http://localhost:8080/api
+          IDENTITY_API_URL=http://localhost:8080/identity
+          NEXT_PUBLIC_FILE_API_URL=http://localhost:8080/files
+
+          # Strapi CMS
+          NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+
+          # Real-time Communication
+          NEXT_PUBLIC_RT_URL=http://localhost:8080/hubs
+
+          # Seametrix Maritime Data
+          NEXT_PUBLIC_SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          NEXT_PUBLIC_SEAMETRIX_KEY=dummy-seametrix-key-12345
+          NEXT_PUBLIC_SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
+          SEAMETRIX_API_URL=http://localhost:8080/seametrix
+          SEAMETRIX_MAP_KEY=dummy-seametrix-map-key-67890
+
+          # Identity API Configuration
+          IDENTITY_API_CLIENT_ID=dummy-client-id
+          IDENTITY_API_CLIENT_SECRET=dummy-client-secret-guid-12345678
+          IDENTITY_API_GRANT_TYPE=password
+          IDENTITY_TOKEN_GRANT_TYPE=refresh_token
+
+          # Container Registry (not needed for CI builds)
+          CONTAINER_REGISTRY_SERVICE_CONNECTION=dummy-registry-connection
+          DOCKER_IMAGE_REPO=dummy-registry.azurecr.io
+          IMAGE_REPOSITORY=dummy-frontend
+
+          # New Relic Monitoring
+          IDENTITY_NEW_RELIC_APP_NAME=shiplink-frontend-ci
+          IDENTITY_NEW_RELIC_LICENSE_KEY=dummy-license-key-12345
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=dummy-browser-license-key
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=123456789
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY=1234567
+          NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID=1234567
+
+          # OpenTelemetry Configuration
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
+          OTEL_METRIC_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/metrics
+
+          # Feature Flags
+          NEXT_PUBLIC_MAINTENANCE_MODE=false
+          NEXT_PUBLIC_BETA_MODE=false
+          NEXT_PUBLIC_ENABLE_MATOMO=false
+          EOF
+
+      - name: Build and analyze bundle size
+        run: |
+          echo "📊 Analyzing bundle size..."
+          yarn build
+
+          # Check if bundle analyzer is available
+          if [ -f ".next/static/chunks/webpack.js" ]; then
+            echo "✅ Build completed successfully"
+            echo "💡 Consider using @next/bundle-analyzer for detailed bundle analysis"
+          fi
+        continue-on-error: true

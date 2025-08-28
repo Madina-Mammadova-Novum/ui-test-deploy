@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { UilCommentAlt, UilWhatsapp } from '@iconscout/react-unicons';
 import classNames from 'classnames';
 
 import { PersonalDetailsFormPropTypes } from '@/lib/types';
 
 import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import RefreshSVG from '@/assets/images/refresh.svg';
-import { Button, Input, PhoneInput, TextWithLabel } from '@/elements';
+import { Button, Input, Label, PhoneInput, TextWithLabel } from '@/elements';
 import { checkPhoneAvailability } from '@/services/user';
 import PhoneValidation from '@/units/PhoneValidation';
 import { clearPhoneValidationState, loadPhoneValidationState, savePhoneValidationState } from '@/utils/helpers';
@@ -32,10 +33,28 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   const [validationInProgress, setValidationInProgress] = useState(false);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
 
-  const phoneInputRef = useRef(null);
+  // New: State for verification channel selection
+  const [verificationOptions, setVerificationOptions] = useState([]);
+  const [selectedChannel, setSelectedChannel] = useState(null);
 
+  const phoneInputRef = useRef(null);
+  const VerificationChannel = { SMS: 'Sms', WHATSAPP: 'WhatsApp' };
   // Determine which field name to use based on onUpdatePage prop
   const phoneFieldName = onUpdatePage ? 'phone' : 'userPhone';
+
+  // Helper function to get the appropriate icon for verification channel
+  const getVerificationIcon = (channel, isSelected = false) => {
+    const iconClass = `h-5 w-5 ${isSelected ? 'fill-blue' : 'fill-black'}`;
+
+    switch (channel) {
+      case VerificationChannel.WHATSAPP:
+        return <UilWhatsapp className={iconClass} />;
+      case VerificationChannel.SMS:
+        return <UilCommentAlt className={iconClass} />;
+      default:
+        return null;
+    }
+  };
 
   const { pending, pendingRequest, firstName, lastName, email, confirmEmail } = values;
 
@@ -45,7 +64,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
   // Determine context for phone validation storage
   const getValidationContext = () => (onUpdatePage ? 'update' : 'registration');
 
-  // Load phone validation state from localStorage
+  // Load phone validation state from sessionStorage
   const loadSavedPhoneValidation = () => {
     const savedState = loadPhoneValidationState(userPhone, getValidationContext());
     if (savedState) {
@@ -62,7 +81,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     return false;
   };
 
-  // Initialize phoneVerified to false on component mount and check localStorage
+  // Initialize phoneVerified to false on component mount and check sessionStorage
   useEffect(() => {
     // First set default values
     setValue('phoneVerified', false);
@@ -85,7 +104,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     const newPhoneValue = userPhone || '';
     setPhoneValue(newPhoneValue);
 
-    // If phone number changed, reset verification state and clear localStorage
+    // If phone number changed, reset verification state and clear sessionStorage
     if (newPhoneValue && newPhoneValue !== phoneValue) {
       // Check if we have a saved state for this phone number
       const hasValidState = loadSavedPhoneValidation();
@@ -161,23 +180,32 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
         return;
       }
 
-      const { available, message, canSendSms } = response.data;
+      const { available, message, canSendSms, canSendWhatsApp } = response.data;
 
       if (available) {
-        if (!canSendSms) {
-          // Phone is available but SMS cannot be sent, mark as verified and finish validation
+        // Present verification options to the user
+        const options = [];
+        if (canSendSms) options.push(VerificationChannel.SMS);
+        if (canSendWhatsApp) options.push(VerificationChannel.WHATSAPP);
+        setVerificationOptions(options);
+
+        if (options.length === 0) {
+          // No method available, mark as verified directly
           setIsPhoneVerified(true);
           setValidationInProgress(false);
           setValue('phoneVerified', true);
           setError(phoneFieldName, null);
           trigger(phoneFieldName);
-          // Save to localStorage
           savePhoneValidationState(phoneValue, true, null, getValidationContext());
-        } else {
-          // Phone is available and SMS can be sent, proceed with OTP verification
+        } else if (options.length === 1) {
+          // Only one channel, select automatically
+          setSelectedChannel(options[0]);
           setError(phoneFieldName, null);
           trigger(phoneFieldName);
           setShowPhoneValidation(true);
+        } else {
+          // Both channels available, let user choose with the first one as default
+          setSelectedChannel(null);
         }
       } else {
         // Phone is not available, reset validation states and show error message
@@ -212,7 +240,7 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
       setError(phoneFieldName, null);
       trigger(phoneFieldName);
       setValue('otpId', otpId);
-      // Save to localStorage
+      // Save to sessionStorage
       savePhoneValidationState(phoneValue, true, otpId, getValidationContext());
     }
   };
@@ -224,7 +252,9 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
     setIsPhoneVerified(false);
     setValue('phoneVerified', false);
     setValue('otpId', null);
-    // Clear from localStorage
+    setSelectedChannel(null);
+    setVerificationOptions([]);
+    // Clear from sessionStorage
     clearPhoneValidationState(getValidationContext());
     // Set phone verification error
     setError(phoneFieldName, {
@@ -337,10 +367,85 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
             </div>
           </div>
         </div>
-        {showPhoneValidation && !isPhoneVerified && (
-          <PhoneValidation phone={phoneValue} onVerified={handlePhoneVerified} onSendOtp={handleSendOtp} />
-        )}
+        {/* Verification method selection UI */}
+        {verificationOptions.length > 0 && !isPhoneVerified && (
+          <div className="flex flex-col gap-1">
+            <Label className="text-xs-sm font-semibold">Select verification method:</Label>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {verificationOptions.map((channel) => {
+                const isSelected = selectedChannel === channel || verificationOptions.length === 1;
 
+                return (
+                  <button
+                    key={channel}
+                    type="button"
+                    className={classNames(
+                      'flex cursor-pointer items-center justify-between rounded-lg border-2 p-4 text-left transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500',
+                      {
+                        'border-blue-500 bg-blue-50 shadow-sm': isSelected,
+                        'border-gray-200 bg-white hover:border-gray-300': !isSelected,
+                      }
+                    )}
+                    onClick={() => {
+                      setSelectedChannel(channel);
+                      setShowPhoneValidation(true);
+                      setError(phoneFieldName, null);
+                      trigger(phoneFieldName);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={classNames('flex h-10 w-10 items-center justify-center rounded-full', {
+                          'bg-blue-100': isSelected,
+                          'bg-gray-100': !isSelected,
+                        })}
+                      >
+                        {getVerificationIcon(channel, isSelected)}
+                      </div>
+                      <div className="flex flex-col">
+                        <span
+                          className={classNames('text-xsm font-medium', {
+                            'text-blue-700': isSelected,
+                            'text-gray-900': !isSelected,
+                          })}
+                        >
+                          {channel === 'WhatsApp' ? 'WhatsApp' : 'SMS'}
+                        </span>
+                        <span
+                          className={classNames('text-xs', {
+                            'text-blue-600': isSelected,
+                            'text-gray-500': !isSelected,
+                          })}
+                        >
+                          {channel === 'WhatsApp' ? 'Verify via WhatsApp message' : 'Verify via SMS message'}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className={classNames('h-4 w-4 rounded-full border-2 transition-colors', {
+                        'border-blue-500 bg-blue-500': isSelected,
+                        'border-gray-300 bg-white': !isSelected,
+                      })}
+                    >
+                      {isSelected && (
+                        <div className="h-full w-full rounded-full bg-white" style={{ transform: 'scale(0.4)' }} />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {/* Verification screen */}
+        {showPhoneValidation && !isPhoneVerified && selectedChannel && (
+          <PhoneValidation
+            phone={phoneValue}
+            onVerified={handlePhoneVerified}
+            onSendOtp={handleSendOtp}
+            channel={selectedChannel}
+          />
+        )}
         {/* Hidden input for phoneVerified validation */}
         <input type="hidden" {...register('phoneVerified')} />
       </div>

@@ -18,17 +18,22 @@ const StepIndicator = ({ step, currentStep, isCompleted }) => {
       <div className="w-full">
         <div className="h-1 overflow-hidden rounded-full bg-gray-darker">
           <div
-            className={classNames(
-              'h-full rounded-full transition-all duration-300 ease-in-out',
-              isDone || isActive ? 'bg-blue' : 'bg-gray-darker'
-            )}
+            className={classNames('h-full rounded-full transition-all duration-300 ease-in-out', {
+              'bg-blue': isDone && !isActive,
+              'bg-yellow': isActive,
+              'bg-gray-darker': !isDone && !isActive,
+            })}
             style={{ width: isDone ? '100%' : isActive ? '100%' : '0%' }}
           />
         </div>
       </div>
 
       <h2
-        className={classNames('text-xs font-semibold uppercase', isActive || isDone ? 'text-blue' : 'text-gray-darker')}
+        className={classNames('text-xs font-semibold uppercase', {
+          'text-blue': isDone && !isActive,
+          'text-yellow': isActive,
+          'text-gray-darker': !isDone && !isActive,
+        })}
       >
         {step.title}
       </h2>

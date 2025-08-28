@@ -32,6 +32,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
   const [portsLoading, setPortsLoading] = useState(false);
   const [ports, setPorts] = useState(false);
   const [perList, setPerList] = useState(50);
+  const [initialFieldValues, setInitialFieldValues] = useState({});
 
   const {
     prefilledUpdateVesselState: { loading, data: prefilledData, countries, tankerTypes },
@@ -57,7 +58,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
 
   const schema = yup.object({
     ...tankerDataSchema(tankerCategoryTwoOptions.length > 0),
-    ...fileSchema(true),
+    ...fileSchema(),
   });
 
   const { tankerType, tankerCategoryOne, tankerCategoryTwo } = tankerOptions;
@@ -76,6 +77,16 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     clearErrors,
     formState: { errors },
   } = methods;
+
+  // Helper function to check if a field should be disabled
+  const isFieldDisabled = (fieldName) => {
+    return (
+      initialFieldValues[fieldName] !== undefined &&
+      initialFieldValues[fieldName] !== null &&
+      initialFieldValues[fieldName] !== '' &&
+      initialFieldValues[fieldName] !== 0
+    );
+  };
 
   const handleTankerOptionsChange = (key, state) => {
     setTankerOptions((prevState) => ({
@@ -135,6 +146,9 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
     setInitialLoading(false);
     reset({ ...prefilledData, ...validPrefilledOptions });
     handleTankerOptionsChange('tankerType', { options: tankerTypes });
+
+    // Store initial field values to determine which fields should be disabled
+    setInitialFieldValues(prefilledData || {});
   };
 
   const onSubmit = async (formData) => {
@@ -295,7 +309,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 type="number"
                 label="Built"
                 placeholder="YYYY"
-                disabled={watch('built')}
+                disabled={isFieldDisabled('built')}
                 inputStyles="bg-[#E7ECF8]"
                 customStyles="w-full"
                 error={errors.built?.message}
@@ -357,14 +371,14 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 customStyles="w-full"
                 type="number"
                 step="any"
-                disabled={watch('loa')}
+                disabled={isFieldDisabled('loa')}
                 placeholder="meters"
                 error={errors.loa?.message}
               />
               <Input
                 {...register(`beam`)}
                 label="Beam"
-                disabled={watch('beam')}
+                disabled={isFieldDisabled('beam')}
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -373,7 +387,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`summerDWT`)}
-                disabled={watch('summerDWT')}
+                disabled={isFieldDisabled('summerDWT')}
                 label="Summer DWT"
                 customStyles="w-full"
                 type="number"
@@ -383,7 +397,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`summerDraft`)}
-                disabled={watch('summerDraft')}
+                disabled={isFieldDisabled('summerDraft')}
                 label="Summer draft"
                 customStyles="w-full"
                 type="number"
@@ -393,7 +407,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`normalBallastDWT`)}
-                disabled={watch('normalBallastDWT')}
+                disabled={isFieldDisabled('normalBallastDWT')}
                 label="Normal ballast DWT"
                 customStyles="w-full"
                 type="number"
@@ -404,7 +418,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               <Input
                 {...register(`normalBallastDraft`)}
                 label="Normal ballast draft"
-                disabled={watch('normalBallastDraft')}
+                disabled={isFieldDisabled('normalBallastDraft')}
                 customStyles="w-full"
                 type="number"
                 step="any"
@@ -413,7 +427,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`cubicCapacity`)}
-                disabled={watch('cubicCapacity')}
+                disabled={isFieldDisabled('cubicCapacity')}
                 label="cubic capacity 98%"
                 customStyles="w-full"
                 type="number"
@@ -430,7 +444,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
               />
               <Input
                 {...register(`grades`)}
-                disabled={watch('grades')}
+                disabled={isFieldDisabled('grades')}
                 label="How many grades / products can tanker load / discharge with double valve segregation?"
                 type="number"
                 customStyles="col-span-4"

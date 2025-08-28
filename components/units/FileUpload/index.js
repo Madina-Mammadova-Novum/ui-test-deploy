@@ -15,9 +15,11 @@ import { DropzoneForm } from '@/modules';
 import { resetObjectFields } from '@/utils/helpers';
 import { useHookFormParams } from '@/utils/hooks';
 
-const UploadForm = ({ onSubmit = async () => {} }) => {
+const UploadForm = ({ onSubmit = async () => {}, dropzoneProps = {} }) => {
+  const isMultiple = dropzoneProps.multiple || false;
+
   const schema = yup.object().shape({
-    ...uploadFileSchema(),
+    ...uploadFileSchema({ isMultiple }),
   });
 
   const methods = useHookFormParams({ schema });
@@ -30,7 +32,6 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
   const handleResetFields = () => {
     methods.reset((formValues) => {
       const resetValues = resetObjectFields({ initialObject: formValues, resetType: '' });
-
       return resetValues;
     });
   };
@@ -51,7 +52,7 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
 
   return (
     <div
-      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 pb-3 pt-5 transition-all duration-500"
+      className="border-grey-darker relative box-border overflow-hidden rounded-lg border border-solid px-5 py-3 transition-all duration-500"
       ref={contentRef}
       style={{ height: toggle ? `${contentRef?.current?.scrollHeight}px` : '64px' }}
     >
@@ -78,7 +79,7 @@ const UploadForm = ({ onSubmit = async () => {} }) => {
             icon: { before: <UploadSVG className="fill-white" /> },
           }}
         >
-          <DropzoneForm />
+          <DropzoneForm dropzoneProps={dropzoneProps} />
         </FormManager>
       </FormProvider>
     </div>

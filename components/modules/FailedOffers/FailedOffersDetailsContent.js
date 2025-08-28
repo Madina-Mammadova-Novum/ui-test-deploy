@@ -1,7 +1,7 @@
 import { FailedOffersDetailsContentPropTypes } from '@/lib/types';
 
 import { Divider, FieldsetContent, FieldsetWrapper, TextRow, Title } from '@/elements';
-import { AdditionalDischargeDetails, Flag } from '@/units';
+import { AdditionalDischargeDetails, Flag, PartyItem } from '@/units';
 
 const FailedOffersDetailsContent = ({ detailsData }) => {
   const {
@@ -13,16 +13,14 @@ const FailedOffersDetailsContent = ({ detailsData }) => {
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    additionalTerms = [],
   } = detailsData;
 
   const { generalInformation, lastCargoes, additionalInformation } = tankerInformation || {};
   const { cargoInformation, products } = cargoDetails || {};
   const { voyageDates, voyagePorts } = voyageDetails || {};
 
-  const {
-    generalOfferTerms,
-    bankInfo: { bankName, bankDetails },
-  } = commercialOfferTerms || {};
+  const { generalOfferTerms } = commercialOfferTerms || {};
 
   const additionalDischargeData = {
     additionalDischargeOptions,
@@ -143,19 +141,19 @@ const FailedOffersDetailsContent = ({ detailsData }) => {
               </TextRow>
             ))}
           </FieldsetContent>
-
-          <FieldsetContent label="Bank details" className="mt-2.5">
-            <Title level={4}>{bankName}</Title>
-
-            <div className="mt-1.5">
-              {bankDetails?.map(({ title, text }) => (
-                <TextRow key={title} title={title} inlineVariant>
-                  {text}
-                </TextRow>
-              ))}
-            </div>
-          </FieldsetContent>
         </FieldsetWrapper>
+        {!!additionalTerms.length && (
+          <FieldsetWrapper>
+            <Title level="3">Additional Charter Party Terms</Title>
+
+            <FieldsetContent className="mt-3.5 flex gap-2.5">
+              {additionalTerms.map(({ body, id }, index) => {
+                const title = `Additional Terms #${index + 1}`;
+                return <PartyItem key={id} buttonText={title} modalTitle="All Additional Information" body={body} />;
+              })}
+            </FieldsetContent>
+          </FieldsetWrapper>
+        )}
       </div>
     </div>
   );

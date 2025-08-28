@@ -7,42 +7,53 @@ import { AddNewTankerPropTypes } from '@/lib/types';
 
 import { unassignedFleetOption } from '@/lib/constants';
 import { getFleetsSelector } from '@/store/selectors';
-import { AddTankerManuallyForm, AddTankerWithImoForm } from '@/units';
+import { AddTankerForm, AddTankerManuallyForm } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 
 const AddNewTanker = ({ closeModal }) => {
-  const [step, setStep] = useState('imo');
+  const [step, setStep] = useState('initial');
   const [selectedFleet, setSelectedFleet] = useState(unassignedFleetOption);
-  const [q88, setQ88] = useState({});
+  const [q88Data, setQ88Data] = useState({});
 
   const { data } = useSelector(getFleetsSelector);
 
-  const handleNextStep = () => setStep('tanker_form');
+  const fleetOptions = [unassignedFleetOption, ...convertDataToOptions({ data }, 'id', 'name')];
+
+  const handleMoveToManualForm = (formData) => {
+    setSelectedFleet(formData.fleet);
+
+    setQ88Data({
+      imo: formData.imo,
+      file: formData.file,
+      vesselId: formData.vesselId,
+    });
+
+    setStep('manual');
+  };
 
   const printModal = useMemo(() => {
     switch (step) {
-      case 'tanker_form':
+      case 'manual':
         return (
           <AddTankerManuallyForm
             closeModal={closeModal}
-            goBack={() => setStep('imo')}
+            goBack={() => setStep('initial')}
             fleetData={selectedFleet}
-            q88={q88}
+            q88={q88Data}
           />
         );
       default:
         return (
-          <AddTankerWithImoForm
+          <AddTankerForm
             closeModal={closeModal}
-            handleNextStep={handleNextStep}
-            fleetOptions={[unassignedFleetOption, ...convertDataToOptions({ data }, 'id', 'name')]}
-            setSelectedFleet={setSelectedFleet}
+            fleetOptions={fleetOptions}
             selectedFleet={selectedFleet}
-            setQ88={setQ88}
+            setSelectedFleet={setSelectedFleet}
+            onMoveToManualForm={handleMoveToManualForm}
           />
         );
     }
-  }, [step]);
+  }, [step, selectedFleet, q88Data, fleetOptions, closeModal]);
 
   return printModal;
 };

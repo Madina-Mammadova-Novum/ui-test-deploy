@@ -62,16 +62,6 @@ export const postFixtureDetailsAdapter = ({ data }) => {
       correspondenceAddress,
       correspondenceCity,
     } = {},
-    vessel: {
-      details: {
-        registeredOwner,
-        technicalOperator,
-        commercialOperator,
-        disponentOwner,
-        name: tankerName,
-        flagOfRegistry,
-      } = {},
-    } = {},
     searchedCargo: { cargoType, loadTerminal, dischargeTerminal, code } = {},
     heat,
     products,
@@ -89,17 +79,28 @@ export const postFixtureDetailsAdapter = ({ data }) => {
     thirdCargo,
     lastSire,
     approvals,
-    bankDetails,
     isCountdownExtendedByCharterer,
     charterPartyUrl,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    additionalTerms = [],
   } = data;
+
+  // Handle vessel data safely
+  const vessel = data.vessel || {};
+  const vesselDetails = vessel.details || {};
+  const {
+    registeredOwner,
+    technicalOperator,
+    commercialOperator,
+    disponentOwner,
+    name: tankerName,
+    flagOfRegistry,
+  } = vesselDetails;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
-  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
   const registrationAddressText =
     registrationAddress || registrationCityName || registrationCountry?.name
@@ -251,32 +252,8 @@ export const postFixtureDetailsAdapter = ({ data }) => {
           text: paymentTerm?.name,
         },
       ],
-      bankInfo: {
-        bankName: accountName,
-        bankDetails: [
-          {
-            title: 'Account Number',
-            text: accountNumber,
-          },
-          {
-            title: 'Bank Code',
-            text: bankCode,
-          },
-          {
-            title: 'BIC (SWIFT-CODE)',
-            text: swift,
-          },
-          {
-            title: 'IBAN',
-            text: iban,
-          },
-          {
-            title: 'Bank Address',
-            text: bankAddress,
-          },
-        ],
-      },
     },
+    additionalTerms,
     allowExtension: !isCountdownExtendedByCharterer,
     charterPartyUrl,
     additionalDischargeOptions,

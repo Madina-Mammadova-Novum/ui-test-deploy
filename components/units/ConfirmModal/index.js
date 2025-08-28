@@ -8,35 +8,44 @@ const ConfirmModal = ({
   onClose,
   title = 'Confirm Your Action',
   message = 'Are you sure you want to proceed?',
+  children,
   okButtonProps = {},
   cancelButtonProps = {},
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  variant = 'primary',
+  size = 'large',
 }) => {
+  const handleConfirm = () => {
+    onConfirm?.();
+    onClose();
+  };
+
   return (
     <Modal opened={isOpen} onClose={onClose}>
-      <div className="p-4 text-center">
+      <div className="w-96">
         {title && <h2 className="mb-4 text-xl font-bold text-black">{title}</h2>}
-        <p className="mb-4 text-black">{message}</p>
-        <div className="flex justify-center space-x-4">
+        <div className="mb-6">{children || <p className="text-sm text-black">{message}</p>}</div>
+        <div className="flex gap-x-2.5">
           <Button
             buttonProps={{
-              text: 'Confirm',
-              variant: 'primary',
-              size: 'large',
-              ...okButtonProps,
+              text: cancelText,
+              variant: 'tertiary',
+              size,
+              ...cancelButtonProps,
             }}
-            onClick={() => {
-              onConfirm();
-              onClose();
-            }}
+            customStyles="w-full whitespace-nowrap"
+            onClick={onClose}
           />
           <Button
             buttonProps={{
-              text: 'Cancel',
-              variant: 'secondary',
-              size: 'large',
-              ...cancelButtonProps,
+              text: confirmText,
+              variant,
+              size,
+              ...okButtonProps,
             }}
-            onClick={onClose}
+            customStyles="w-full whitespace-nowrap"
+            onClick={handleConfirm}
           />
         </div>
       </div>
@@ -50,6 +59,11 @@ ConfirmModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,
+  children: PropTypes.node,
+  confirmText: PropTypes.string,
+  cancelText: PropTypes.string,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'delete']),
+  size: PropTypes.oneOf(['large', 'medium', 'small']),
   okButtonProps: PropTypes.shape({
     text: PropTypes.string,
     variant: PropTypes.string,
@@ -58,6 +72,7 @@ ConfirmModal.propTypes = {
       before: PropTypes.element,
       after: PropTypes.element,
     }),
+    disabled: PropTypes.bool,
   }),
   cancelButtonProps: PropTypes.shape({
     text: PropTypes.string,
@@ -67,6 +82,7 @@ ConfirmModal.propTypes = {
       before: PropTypes.element,
       after: PropTypes.element,
     }),
+    disabled: PropTypes.bool,
   }),
 };
 

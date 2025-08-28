@@ -186,6 +186,7 @@ export async function getOfferDetails(offerId, role) {
     ...response,
   };
 }
+
 export async function acceptPrefixtureOffer(offerId) {
   const body = requestAcceptPrefixtureAdapter({ data: offerId });
 
@@ -218,7 +219,7 @@ export async function requestCountdownExtension({ data }) {
   };
 }
 
-export async function getPdfToPrint(offerId) {
+export async function getPdfToView(offerId) {
   const path = `account/on-subs/recap/${offerId}`;
 
   const response = await getData(path, null, 'pdf');

@@ -10,9 +10,8 @@ import SendCounterofferFormFields from './SendCounterofferFormFields';
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
 import { Dropdown } from '@/elements';
-import { DEFAULT_COUNTDOWN_OPTION } from '@/lib/constants';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
-import { getCountdownTimer } from '@/services/countdownTimer';
+import { getCountdownConfigs } from '@/services/countdownTimer';
 import { fetchСounterOfferValidation } from '@/store/entities/offer/actions';
 import { getOfferSelector } from '@/store/selectors';
 import { Countdown, CounterofferForm, ModalHeader, Tabs, VoyageDetailsTabContent } from '@/units';
@@ -128,9 +127,9 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
 
   const initActions = async () => {
     handleCountdownStateChange('loading', true);
-    const { data = [] } = await getCountdownTimer();
-    const convertedOptions = convertDataToOptions({ data }, 'id', 'text');
-    const defaultCountdown = convertedOptions.find(({ label }) => label === DEFAULT_COUNTDOWN_OPTION);
+    const { data = [] } = await getCountdownConfigs({ purpose: 'Negotiating' });
+    const convertedOptions = convertDataToOptions({ data }, 'value', 'text');
+    const defaultCountdown = convertedOptions[0]; // Use first option as default
     handleCountdownStateChange('responseCountdownOptions', convertedOptions);
     handleCountdownStateChange('responseCountdown', defaultCountdown);
     handleCountdownStateChange('loading', false);
@@ -211,7 +210,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             asyncCall
             disabled={!responseCountdownOptions.length || confirmCounteroffer || !valid}
             onChange={(option) => handleCountdownStateChange('responseCountdown', option)}
-            customStyles={{ className: 'ml-2.5', dropdownWidth: 60 }}
+            customStyles={{ className: 'ml-2.5', dropdownWidth: 130 }}
           />
         </div>
       </div>

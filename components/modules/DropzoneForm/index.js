@@ -3,16 +3,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import { DropZonePropTypes } from '@/lib/types';
+import { DropzoneFormPropTypes } from '@/lib/types';
 
-import { fileErrorAdapter, fileReaderAdapter, fileUpdateAdapter } from '@/adapters/fileAdapter';
+import {
+  fileErrorAdapter,
+  fileReaderAdapter,
+  fileUpdateAdapter,
+  multipleFileReaderAdapter,
+} from '@/adapters/fileAdapter';
 import { Input, Loader, TextArea } from '@/elements';
 import { AVAILABLE_FORMATS, SETTINGS } from '@/lib/constants';
 import { Dropzone, File } from '@/units';
 import { updateFormats } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const DropzoneForm = ({ showTextFields = true }) => {
+const DropzoneForm = ({ showTextFields = true, dropzoneProps = {} }) => {
   const {
     register,
     setValue,
@@ -22,6 +27,17 @@ const DropzoneForm = ({ showTextFields = true }) => {
     formState: { errors },
   } = useHookForm();
 
+  // Merge default dropzone props with passed props
+  const defaultDropzoneProps = {
+    multiple: false,
+    maxFiles: 1,
+    maxSize: 10 * 1024 * 1024,
+    accept: { files: AVAILABLE_FORMATS.DOCS },
+  };
+
+  const finalDropzoneProps = { ...defaultDropzoneProps, ...dropzoneProps };
+  const isMultiple = finalDropzoneProps.multiple;
+
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const formats = updateFormats(AVAILABLE_FORMATS.DOCS);
@@ -29,25 +45,50 @@ const DropzoneForm = ({ showTextFields = true }) => {
   const fileErrorRef = useRef(null);
 
   useEffect(() => {
-    if (Object.keys(errors).length === 1 && errors?.file) {
+    const errorField = isMultiple ? 'files' : 'file';
+    if (Object.keys(errors).length === 1 && errors?.[errorField]) {
       fileErrorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [errors]);
+  }, [errors, isMultiple]);
+
+  // Watch for specific form field values and reset local state when form is reset
+  const watchedFiles = watch('files');
+  const watchedFile = watch('file');
 
   useEffect(() => {
-    if (!watch('file')) setFiles([]);
-  }, [watch('file')]);
+    const fieldValue = isMultiple ? watchedFiles : watchedFile;
+
+    // Reset local files state when form field is empty/null/undefined
+    if (!fieldValue || (Array.isArray(fieldValue) && fieldValue.length === 0)) {
+      setFiles([]);
+    }
+  }, [watchedFiles, watchedFile, isMultiple]);
 
   const resetDropzone = useCallback(() => {
     setFiles([]);
-    setValue('file', null);
-  }, [setValue, setError]);
-
-  const onDrop = (acceptedFiles, rejections) => {
-    if (rejections.length > 0) {
-      setError('file', fileErrorAdapter({ data: rejections[0]?.errors }));
-      resetDropzone();
+    if (isMultiple) {
+      setValue('files', []);
+      clearErrors('files');
     } else {
+      setValue('file', null);
+      clearErrors('file');
+    }
+  }, [setValue, clearErrors, isMultiple]);
+
+  const onDrop = async (acceptedFiles, rejections) => {
+    if (rejections.length > 0) {
+      const errorField = isMultiple ? 'files' : 'file';
+      setError(errorField, fileErrorAdapter({ data: rejections[0]?.errors }));
+      resetDropzone();
+    } else if (isMultiple) {
+      // Handle multiple files
+      const currentFiles = watch('files') || [];
+      const updatedFiles = acceptedFiles.map(fileUpdateAdapter);
+      setFiles([...files, ...updatedFiles]);
+
+      await multipleFileReaderAdapter(acceptedFiles, setValue, setError, setLoading, currentFiles);
+    } else {
+      // Handle single file (original behavior)
       setFiles(acceptedFiles.map(fileUpdateAdapter));
       fileReaderAdapter(acceptedFiles[0], setValue, setError, setLoading);
     }
@@ -60,37 +101,49 @@ const DropzoneForm = ({ showTextFields = true }) => {
 
       if (newFiles.length > 0) {
         setFiles(newFiles);
-        setValue('file', newFiles);
+
+        if (isMultiple) {
+          const currentUploadedFiles = watch('files') || [];
+          const updatedUploadedFiles = currentUploadedFiles.filter(
+            (uploadedFile) => uploadedFile.originalFile?.name !== file.name
+          );
+          setValue('files', updatedUploadedFiles);
+        } else {
+          setValue('file', newFiles);
+        }
       } else {
         resetDropzone();
-        clearErrors('file');
+        const errorField = isMultiple ? 'files' : 'file';
+        clearErrors(errorField);
       }
     },
-    [files, resetDropzone, setValue, clearErrors]
+    [files, resetDropzone, setValue, clearErrors, isMultiple, watch]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    multiple: false,
-    maxFiles: 1,
-    maxSize: 10 * 1024 * 1024,
-    accept: { files: AVAILABLE_FORMATS.DOCS },
+    ...finalDropzoneProps,
   });
 
   const printFile = (file) => <File key={file.id} title={file?.path} onClick={(e) => onRemove(e, file)} />;
 
   const printHelpers = useMemo(() => {
+    const maxFilesText = isMultiple ? ` | Max files: ${finalDropzoneProps.maxFiles}` : '';
+
     return (
       <div className="flex h-auto w-full justify-between gap-3 self-end py-2 text-xs-sm">
         <p>
           <span className="text-gray">Supports:</span> <span>{formats}</span>
         </p>
         <p className="flex gap-2 self-end whitespace-nowrap text-gray">
-          Max size: <span>{SETTINGS.FILE_SIZE_RESTRICTION}MB</span>
+          Max size:{' '}
+          <span>
+            {SETTINGS.FILE_SIZE_RESTRICTION}MB{maxFilesText}
+          </span>
         </p>
       </div>
     );
-  }, [formats]);
+  }, [formats, isMultiple, finalDropzoneProps.maxFiles]);
 
   return (
     <div className="flex !min-h-[160px] flex-auto gap-5">
@@ -114,11 +167,16 @@ const DropzoneForm = ({ showTextFields = true }) => {
         </div>
       )}
       {!files.length ? (
-        <Dropzone areaParams={getRootProps} inputParams={getInputProps} dropzoneRef={fileErrorRef}>
+        <Dropzone
+          areaParams={getRootProps}
+          inputParams={getInputProps}
+          dropzoneRef={fileErrorRef}
+          isMultiple={isMultiple}
+        >
           {printHelpers}
         </Dropzone>
       ) : (
-        <div className="relative flex h-auto w-full flex-wrap gap-x-3 gap-y-0 rounded-md border border-dashed border-gray-darker px-3 pt-5 hover:border-blue">
+        <div className="relative flex h-auto w-full flex-wrap gap-x-3 gap-y-1 rounded-md border border-dashed border-gray-darker px-3 pt-5 hover:border-blue xl:gap-y-0">
           {loading && (
             <div className="absolute bottom-0 left-0 right-0 top-0 bg-gray-light opacity-50">
               <Loader className="absolute left-[48%] top-[40%] h-8 w-8" />
@@ -132,6 +190,6 @@ const DropzoneForm = ({ showTextFields = true }) => {
   );
 };
 
-DropzoneForm.propTypes = DropZonePropTypes;
+DropzoneForm.propTypes = DropzoneFormPropTypes;
 
 export default DropzoneForm;

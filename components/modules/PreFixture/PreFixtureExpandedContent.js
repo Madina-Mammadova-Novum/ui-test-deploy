@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import CharterPartyContent from './CharterPartyContent';
 import DetailsContent from './DetailsContent';
@@ -9,12 +9,10 @@ import DocumentsContent from './DocumentsContent';
 
 import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 
-import { Button } from '@/elements';
-import { extendCountdown } from '@/services/offer';
+import { updateDealData } from '@/store/entities/notifications/slice';
 import { updateCountdown } from '@/store/entities/pre-fixture/slice';
-import { getUserDataSelector } from '@/store/selectors';
-import { Tabs } from '@/units';
-import { errorToast, successToast } from '@/utils/hooks';
+import { ExtendCountdown, ModalWindow, Tabs } from '@/units';
+import { transformDate } from '@/utils/date';
 
 const tabs = [
   {
@@ -38,22 +36,40 @@ const PreFixtureExpandedContent = ({
   proposedBaseCharterParty,
   offerId,
   tab = 'details',
+  handleCountdownExtensionSuccess,
 }) => {
   const dispatch = useDispatch();
-
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
-  const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
 
-  const { role } = useSelector(getUserDataSelector);
+  const { allowExtension, extensionTimeOptions, taskId, isCountdownActive } = detailsData || {};
 
-  const handleExtendCountdown = async () => {
-    const { error, message: successMessage } = await extendCountdown({ offerId, role });
-    if (error) {
-      errorToast(error?.title, error?.message);
-    } else {
-      successToast(successMessage);
-      setAllowCountdownExtension(false);
-      dispatch(updateCountdown({ offerId }));
+  const handleExtensionSuccess = (extendedMinutes) => {
+    // Update the local state
+    dispatch(updateCountdown({ offerId, extendMinute: extendedMinutes }));
+
+    // Update the deal data in notifications state similar to OnSubsExpandedContent
+    const extendMinutesInMs = extendedMinutes * 60 * 1000;
+    const currentExpiresAt = detailsData?.expiresAt;
+    let newExpiresAt = null;
+
+    if (currentExpiresAt) {
+      newExpiresAt = transformDate(
+        new Date(currentExpiresAt).getTime() + extendMinutesInMs,
+        "yyyy-MM-dd'T'HH:mm:ss.SSS"
+      );
+    }
+
+    dispatch(
+      updateDealData({
+        dealId: offerId,
+        allowExtension: false,
+        ...(newExpiresAt && { expiresAt: newExpiresAt, countdownStatus: 'Running', isCountdownActive: true }),
+      })
+    );
+
+    // Call the parent callback if provided
+    if (handleCountdownExtensionSuccess) {
+      handleCountdownExtensionSuccess(extendedMinutes);
     }
   };
 
@@ -87,12 +103,25 @@ const PreFixtureExpandedContent = ({
           onClick={handleChange}
           customStyles="custom-container my-3 -mr-1/2 mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
-        <Button
-          onClick={handleExtendCountdown}
-          customStyles="tab-btn"
-          disabled={!allowCountdownExtension}
-          buttonProps={{ text: 'Extend the response time by 15min', variant: 'primary', size: 'small' }}
-        />
+        {extensionTimeOptions && extensionTimeOptions.length > 0 && (
+          <ModalWindow
+            buttonProps={{
+              text: 'Request response time extension',
+              variant: 'primary',
+              size: 'small',
+              className: 'tab-btn !text-[10px] font-bold !px-2 !h-5 uppercase leading-none',
+              disabled: !allowExtension || !isCountdownActive,
+            }}
+          >
+            <ExtendCountdown
+              offerId={offerId}
+              taskId={taskId}
+              onExtensionSuccess={handleExtensionSuccess}
+              description="In order to increase countdown time, please, send the request."
+              options={extensionTimeOptions}
+            />
+          </ModalWindow>
+        )}
       </div>
       {printContent}
     </div>

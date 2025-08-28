@@ -52,7 +52,7 @@ const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
 
   return (
     <div className="px-5">
-      <section className="flex min-h-[87vh] flex-col gap-y-5 3md:min-h-[89vh]">
+      <section className="flex min-h-[calc(100vh-200px)] flex-col gap-y-5 md:min-h-[calc(100vh-160px)]">
         <div className="flex items-center justify-between pt-5">
           <div className="flex flex-col">
             <Label className="text-xs-sm">{data.label}</Label>
@@ -64,7 +64,7 @@ const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
                   className="text-xsm text-blue transition-all duration-500 group-hover:text-blue-darker"
                   href={parentRoute}
                 >
-                  Back to all deals
+                  {parentRoute === '/account/positions' ? 'Back to all positions' : 'Back to all offers'}
                 </NextLink>
               </div>
             )}

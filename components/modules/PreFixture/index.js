@@ -43,7 +43,7 @@ const PreFixture = () => {
         footer={
           <PreFixtureExpandedFooter
             offerId={rowData.id}
-            underNegotiation={!rowData?.isCountdownActive}
+            underNegotiation={rowData?.countdownStatus !== 'Running'}
             offerAccepted={(isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed'}
           />
         }
@@ -61,7 +61,7 @@ const PreFixture = () => {
 
   const printContent = useMemo(() => {
     if (loading) return <DynamicLoader />;
-    if (offers?.length) return offers.map(printExpandableRow);
+    if (offers?.length) return offers.map((rowData, index) => printExpandableRow(rowData, index));
 
     return <Title level="3">No offers at current stage</Title>;
   }, [loading, offers]);

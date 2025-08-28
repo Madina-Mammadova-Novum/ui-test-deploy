@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { TankerSlotsPropTypes } from '@/lib/types';
 
+import { fileReaderAdapter } from '@/adapters/fileAdapter';
+import CloseSVG from '@/assets/images/close.svg';
 import PlusSVG from '@/assets/images/plusCircle.svg';
 import TrashAltSVG from '@/assets/images/trashAlt.svg';
+import UploadSVG from '@/assets/images/upload.svg';
 import { Button, Input } from '@/elements';
 import { SETTINGS } from '@/lib/constants';
-import { getFilledArray } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
 const TankerSlotsDetails = ({ applyHelper = false }) => {
@@ -18,6 +20,8 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
     setValue,
     clearErrors,
     watch,
+    setError,
+    getValues,
     formState: { errors, isSubmitting },
   } = useHookForm();
 
@@ -27,6 +31,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
   });
 
   const [helperText, setHelperText] = useState('');
+  const [uploadingStates, setUploadingStates] = useState({});
   const isApplied = watch('applySlots');
 
   const { tankersCount, tankers } = slotsState;
@@ -44,7 +49,7 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
     if (numberOfTankers <= 0) {
       numberOfTankers = '';
-      unregister('imos');
+      unregister('vessels');
       setValue('applySlots', false);
       handleChangeState('tankers', []);
     }
@@ -65,48 +70,132 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
 
     // Clear apply slots errors
     clearErrors('applySlots');
-    clearErrors('imos');
+    clearErrors('vessels');
 
-    // If we're reducing the number of tankers, clear errors for the ones being removed
-    if (nextTankersCount < tankers.length) {
-      tankers.forEach((tankerId, index) => {
-        if (index >= nextTankersCount) {
-          // Clear errors for tankers that will be removed
-          clearErrors(`imos[${tankerId}].imo`);
-          clearErrors(`imos[${tankerId}]`);
-          // Unregister the field to clean up form state
-          unregister(`imos[${tankerId}].imo`);
-        }
-      });
-    }
+    // Completely unregister the entire vessels array to avoid sparse arrays
+    unregister('vessels');
 
-    // Clear all existing tanker errors to start fresh
-    tankers.forEach((tankerId) => {
-      clearErrors(`imos[${tankerId}].imo`);
-      clearErrors(`imos[${tankerId}]`);
+    // Clear uploading states for all tankers since we're starting fresh
+    setUploadingStates({});
+
+    // Use sequential indices (0, 1, 2, 3...) instead of tanker IDs (1, 2, 3, 4...)
+    const newTankers = Array.from({ length: nextTankersCount }, (_, index) => index);
+
+    // Initialize form fields for new tankers using sequential indices
+    newTankers.forEach((index) => {
+      setValue(`vessels[${index}].imo`, '');
+      setValue(`vessels[${index}].q88FileUrl`, '');
     });
 
-    handleChangeState('tankers', getFilledArray(nextTankersCount));
+    handleChangeState('tankers', newTankers);
   };
 
   const handleAddSlot = () => {
     clearErrors('applySlots');
-    if (tankers.length) {
-      const maxNumber = Math.max(...tankers);
-      handleChangeState('tankers', [...tankers, maxNumber + 1]);
-    } else {
-      handleChangeState('tankers', getFilledArray(1));
-    }
+
+    // Add one more tanker using sequential index
+    const newIndex = tankers.length;
+    const newTankers = [...tankers, newIndex];
+
+    // Initialize form fields for the new tanker
+    setValue(`vessels[${newIndex}].imo`, '');
+    setValue(`vessels[${newIndex}].q88FileUrl`, '');
+
+    handleChangeState('tankers', newTankers);
   };
 
-  const handleRemoveSlot = (tankerId) => {
-    handleChangeState(
-      'tankers',
-      tankers.filter((tanker) => tanker !== tankerId)
-    );
+  const handleRemoveSlot = (indexToRemove) => {
+    // Get current form values before removing
+    const currentVessels = getValues('vessels') || [];
 
-    unregister(`imos[${tankerId}].imo`);
-    clearErrors(`imos`);
+    // Remove the tanker at the specified index
+    const newTankers = tankers.filter((_, index) => index !== indexToRemove);
+
+    // Create new vessels array by filtering out the removed index and reindexing
+    const newVessels = currentVessels
+      .filter((_, index) => index !== indexToRemove)
+      .map((vessel) => vessel || { imo: '', q88FileUrl: '' });
+
+    // Completely rebuild the vessels array to avoid gaps
+    unregister('vessels');
+
+    // Set the new vessels array with preserved values
+    setValue('vessels', newVessels);
+
+    clearErrors(`vessels`);
+
+    // Update uploading states to match new indices
+    const newUploadingStates = {};
+    Object.keys(uploadingStates).forEach((oldIndex) => {
+      const oldIndexNum = parseInt(oldIndex, 10);
+      if (oldIndexNum < indexToRemove) {
+        // Indices before the removed one stay the same
+        newUploadingStates[oldIndexNum] = uploadingStates[oldIndex];
+      } else if (oldIndexNum > indexToRemove) {
+        // Indices after the removed one shift down by 1
+        newUploadingStates[oldIndexNum - 1] = uploadingStates[oldIndex];
+      }
+      // The removed index is excluded
+    });
+    setUploadingStates(newUploadingStates);
+
+    handleChangeState('tankers', newTankers);
+  };
+
+  const handleFileUpload = useCallback(
+    (index, file) => {
+      if (!file) return;
+
+      setUploadingStates((prev) => ({ ...prev, [index]: true }));
+
+      const customSetValue = (key, value) => {
+        if (key === 'file' && value) {
+          setValue(`vessels[${index}].q88FileUrl`, value);
+          clearErrors(`vessels[${index}].q88FileUrl`);
+        }
+      };
+
+      const customSetError = (key, error) => {
+        if (key === 'file' && error) {
+          setError(`vessels[${index}].q88FileUrl`, error);
+        }
+      };
+
+      const customSetLoading = (loading) => {
+        setUploadingStates((prev) => ({ ...prev, [index]: loading }));
+      };
+
+      fileReaderAdapter(file, customSetValue, customSetError, customSetLoading);
+    },
+    [setValue, clearErrors, setError]
+  );
+
+  const handleFileRemove = useCallback(
+    (index) => {
+      setValue(`vessels[${index}].q88FileUrl`, '');
+      clearErrors(`vessels[${index}].q88FileUrl`);
+    },
+    [setValue, clearErrors]
+  );
+
+  const getFileName = (index) => {
+    const fileUrl = watch(`vessels[${index}].q88FileUrl`);
+    if (!fileUrl) return null;
+
+    // Extract last segment and strip trailing _<id> before extension
+    const lastSegment = fileUrl.split('/').pop();
+    if (!lastSegment) return 'Uploaded file';
+
+    const lastDotIndex = lastSegment.lastIndexOf('.');
+    if (lastDotIndex === -1) return lastSegment;
+
+    const lastUnderscoreBeforeExt = lastSegment.lastIndexOf('_', lastDotIndex);
+    if (lastUnderscoreBeforeExt === -1) return lastSegment;
+
+    const baseNameWithoutId = lastSegment.slice(0, lastUnderscoreBeforeExt);
+    const extension = lastSegment.slice(lastDotIndex);
+    const cleanedName = `${baseNameWithoutId}${extension}`;
+    return cleanedName || 'Uploaded file';
   };
 
   useEffect(() => {
@@ -145,38 +234,104 @@ const TankerSlotsDetails = ({ applyHelper = false }) => {
           disabled={tankersCount <= 0 || isSubmitting}
         />
       </div>
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {tankers.map((item, index) => {
-          const fieldName = `imos[${item}]`;
-          const error = errors.imos ? errors.imos[item]?.imo : null;
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {tankers.map((_, index) => {
+          const fieldName = `vessels[${index}]`;
+          const imoError = errors.vessels ? errors.vessels[index]?.imo : null;
+          const fileError = errors.vessels ? errors.vessels[index]?.q88FileUrl : null;
+          const isUploading = uploadingStates[index];
+          const fileName = getFileName(index);
 
           return (
-            <div key={item} className="relative">
-              <Input
-                {...register(`${fieldName}.imo`, {
-                  onChange: (e) => {
-                    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 7);
-                  },
-                })}
-                label={`Imo #${index + 1}`}
-                labelBadge="*"
-                placeholder="Enter IMO"
-                error={error?.message}
-                disabled={isSubmitting}
-                maxLength={7}
-                type="text"
-              />
-              <Button
-                type="button"
-                customStyles="absolute top-7 right-1.5 z-10 !p-0"
-                buttonProps={{
-                  icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
-                  variant: 'tertiary',
-                  size: 'small',
-                }}
-                onClick={() => handleRemoveSlot(item)}
-                disabled={isSubmitting}
-              />
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={`vessel-form-${index}`} className="relative rounded-lg border border-gray-200 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <h4 className="text-sm font-medium text-gray-900">Vessel #{index + 1}</h4>
+                <Button
+                  type="button"
+                  customStyles="!p-1"
+                  buttonProps={{
+                    icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-4 w-4 fill-red-500" /> },
+                    variant: 'tertiary',
+                    size: 'small',
+                  }}
+                  onClick={() => handleRemoveSlot(index)}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Input
+                  {...register(`${fieldName}.imo`, {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 7);
+                    },
+                  })}
+                  label="IMO Number"
+                  labelBadge="*"
+                  placeholder="Enter IMO"
+                  error={imoError?.message}
+                  disabled={isSubmitting}
+                  maxLength={7}
+                  type="text"
+                />
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Q88 File <span className="text-red-500">*</span>
+                  </label>
+
+                  {!fileName ? (
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx"
+                        onChange={(e) => handleFileUpload(index, e.target.files[0])}
+                        className="hidden"
+                        id={`file-upload-${index}`}
+                        disabled={isSubmitting || isUploading}
+                      />
+                      <label
+                        htmlFor={`file-upload-${index}`}
+                        className={`flex w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed px-4 py-2 transition-colors ${
+                          fileError
+                            ? 'border-red-300 bg-red-50 hover:border-red-400'
+                            : 'border-gray-300 bg-gray-50 hover:border-blue-400 hover:bg-blue-50'
+                        } ${isSubmitting || isUploading ? 'cursor-not-allowed opacity-50' : ''}`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <UploadSVG className={`h-5 w-5 ${fileError ? 'fill-red-400' : 'fill-gray-400'}`} />
+                          <span className={`text-sm ${fileError ? 'text-red-600' : 'text-gray-600'}`}>
+                            {isUploading ? 'Uploading...' : 'Upload Q88 File'}
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between rounded-md border border-green-200 bg-green-50 p-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500" />
+                        <span className="max-w-[200px] truncate text-sm font-medium text-green-700" title={fileName}>
+                          {fileName}
+                        </span>
+                      </div>
+                      <Button
+                        type="button"
+                        customStyles="!p-1"
+                        buttonProps={{
+                          icon: { before: <CloseSVG className="h-6 w-6 fill-red-500" /> },
+                          variant: 'tertiary',
+                          size: 'small',
+                        }}
+                        onClick={() => handleFileRemove(index)}
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  )}
+
+                  {fileError && <p className="mt-1 text-xs-sm text-red-600">{fileError.message}</p>}
+                </div>
+              </div>
             </div>
           );
         })}

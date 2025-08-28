@@ -19,7 +19,7 @@ import {
 import {
   clearPhoneValidationState,
   focusFirstFormElement,
-  getFieldFromKey,
+  getFieldFromKeyForRegistration,
   scrollToFirstError,
   setCookie,
 } from '@/utils/helpers';
@@ -229,7 +229,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
       step3: null,
     }));
 
-    // Clear phone validation state when switching roles
+    // Clear phone validation state from sessionStorage when switching roles
     // to prevent validation data from one role being used for another
     clearPhoneValidationState('registration', userRole);
   }, [userRole]);
@@ -344,7 +344,7 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
           window.sessionStorage.removeItem(config.storageKey);
         }
 
-        // Clear phone validation state
+        // Clear phone validation state from sessionStorage
         clearPhoneValidationState('registration', userRole);
 
         // Don't redirect yet, let user proceed to steps 4 and 5
@@ -386,9 +386,9 @@ const RegistrationForm = ({ countries, userRole = 'charterer', onStepChange }) =
         const errorMessages = errorKeys
           .map((key) => {
             const fieldErrors = error.errors[key];
-            return `${getFieldFromKey(key)}: ${fieldErrors.join(', ')}`;
+            return `${getFieldFromKeyForRegistration(key)}: ${fieldErrors.join(', ')}`;
           })
-          .join('\n');
+          .join('\n \n');
 
         errorToast('Validation Error', errorMessages);
       } else {

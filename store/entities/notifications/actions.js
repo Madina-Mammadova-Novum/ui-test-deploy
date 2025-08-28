@@ -46,7 +46,7 @@ export const fetchNotifications = createAsyncThunk(
 
 export const getCurrentDealStage = createAsyncThunk(
   NOTIFICATIONS.GET_CURRENT_DEAL,
-  async ({ id, role }, { rejectWithValue }) => {
+  async ({ id, role, isDocumentTab = false }, { rejectWithValue }) => {
     try {
       const { data, error } = await getOfferDetails(id, role);
 
@@ -54,7 +54,7 @@ export const getCurrentDealStage = createAsyncThunk(
         return rejectWithValue(error);
       }
 
-      const route = notificationPathGenerator({ data, role });
+      const route = notificationPathGenerator({ data, role, isDocumentTab });
       return { ...data, route };
     } catch (error) {
       return rejectWithValue(error.message);

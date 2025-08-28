@@ -39,8 +39,10 @@ module.exports = {
       sm: '480px',
       md: '768px',
       '2md': '980px',
+      '2mdMax': { max: '980px' },
       '3md': '1024px',
       lg: '1280px',
+      lgMax: { max: '1280px' },
       xl: '1440px',
       xlMax: { max: '1440px' },
       '2xl': '1920px',
@@ -118,6 +120,7 @@ module.exports = {
         'fade-in-image': 'fadeInImage 3s ease-in-out',
         'appear-left-side-0.8': 'appearLeft 0.8s ease-in-out',
         'appear-left-side-0.65': 'appearLeft 0.65s ease-in-out',
+        'clock-spin': 'clockRotate 3s linear infinite',
       },
 
       keyframes: {
@@ -137,6 +140,10 @@ module.exports = {
         fadeInImage: {
           '0%': { opacity: 0.4 },
           '100%': { opacity: 1 },
+        },
+        clockRotate: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
       },
       boxShadow: {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { SimpleDropdown } from './SimpleDropdown';
 
@@ -18,9 +18,10 @@ const Dropdown = ({
   loading = false,
   disabled = false,
   asyncCall = false,
+  defaultValue = null,
   ...rest
 }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(defaultValue);
 
   const { dropdownWidth, className } = customStyles;
 
@@ -31,6 +32,12 @@ const Dropdown = ({
     },
     [onChange]
   );
+
+  useEffect(() => {
+    if (defaultValue !== selectedOption) {
+      setSelectedOption(defaultValue);
+    }
+  }, [defaultValue, selectedOption]);
 
   return (
     <div className={`relative top-px ${disabled && 'opacity-70'} ${className}`}>
@@ -46,6 +53,7 @@ const Dropdown = ({
         styles={dropdownStyles(selectedOption, null, dropdownWidth)}
         isDisabled={disabled}
         asyncCall={asyncCall}
+        value={selectedOption}
       />
     </div>
   );

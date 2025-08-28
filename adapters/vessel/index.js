@@ -730,9 +730,7 @@ export const chartererInformationAdapter = (data) => {
       yearsInOperation,
       estimatedNumberOfChartersPerYear,
       averageTonnagePerCharter,
-      registrationCity: {
-        country: { name: registrationCountryName, codeISO2: registrationCountryCode },
-      },
+      registrationCity: { country: { name: registrationCountryName, codeISO2: registrationCountryCode } = {} } = {},
     } = {},
   } = data;
 
@@ -768,5 +766,21 @@ export function responseGetSavedSearchAdapter({ data }) {
 }
 
 export function responseVesselNamesAdapter({ data }) {
+  return nullAdapter(data);
+}
+
+export function requestAddVesselAdapter({ data }) {
+  if (!data) return null;
+
+  const { imo, fleetId, q88QuestionnaireFile } = data;
+
+  return {
+    imo,
+    fleetId,
+    q88QuestionnaireFile,
+  };
+}
+
+export function responseAddVesselAdapter({ data }) {
   return nullAdapter(data);
 }

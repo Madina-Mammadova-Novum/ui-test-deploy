@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchUserNegotiating } from './actions';
+import { fetchDealCountdownData, fetchUserNegotiating } from './actions';
 
-import { FIFTEEN_MINUTES_IN_MS } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 
 const initialState = {
@@ -15,6 +14,7 @@ const initialState = {
     offerById: {},
   },
   tab: 'incoming',
+  countdownData: {}, // For storing individual deal countdown data
 };
 
 const negotiatingSlice = createSlice({
@@ -28,7 +28,9 @@ const negotiatingSlice = createSlice({
       state.tab = payload;
     },
     updateCountdown: (state, action) => {
-      const { parentId, offerId, isOwner } = action?.payload;
+      const { parentId, offerId, isOwner, extendMinute = 15 } = action?.payload;
+      const extendMinutesInMs = extendMinute * 60 * 1000; // Convert minutes to milliseconds
+
       state.data.offerById[parentId][isOwner ? 'incoming' : 'sent'] = state.data.offerById[parentId][
         isOwner ? 'incoming' : 'sent'
       ].map((offer) =>
@@ -36,12 +38,19 @@ const negotiatingSlice = createSlice({
           ? {
               ...offer,
               expiresAt: transformDate(
-                new Date(offer.expiresAt).getTime() + FIFTEEN_MINUTES_IN_MS,
+                new Date(offer.expiresAt).getTime() + extendMinutesInMs,
                 "yyyy-MM-dd'T'HH:mm:ss.SSS"
               ),
             }
           : offer
       );
+    },
+    updateAssignedTasksForOffers: (state, action) => {
+      const { parentId, offers, type } = action?.payload; // type: 'incoming' or 'sent'
+
+      if (state.data.offerById?.[parentId]?.[type]) {
+        state.data.offerById[parentId][type] = offers;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -56,9 +65,20 @@ const negotiatingSlice = createSlice({
       state.loading = false;
       state.error = action.payload?.error;
     });
+    builder.addCase(fetchDealCountdownData.pending, () => {
+      // Could add loading state for countdown data if needed
+    });
+    builder.addCase(fetchDealCountdownData.fulfilled, (state, action) => {
+      const { dealId, ...countdownData } = action.payload;
+      state.countdownData[dealId] = countdownData;
+    });
+    builder.addCase(fetchDealCountdownData.rejected, (state, action) => {
+      // Could handle countdown data fetch errors if needed
+      console.error('Failed to fetch countdown data:', action.payload);
+    });
   },
 });
 
-export const { updateCountdown, setToggle, setTab } = negotiatingSlice.actions;
+export const { updateCountdown, setToggle, setTab, updateAssignedTasksForOffers } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

@@ -1,5 +1,6 @@
 import { objectAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
+import { extensionTimeOptionsAdapter } from '@/adapters/pre-fixture';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
 import { ACTIONS, TYPE } from '@/lib/constants';
@@ -16,7 +17,17 @@ import {
 export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, isFailed, laycanEnd, laycanStart, totalQuantity } = data;
+  const {
+    searchedCargo,
+    vessel,
+    expiresAt,
+    frozenAt,
+    isFailed,
+    laycanEnd,
+    laycanStart,
+    totalQuantity,
+    countdownStatus,
+  } = data;
 
   return [
     {
@@ -63,8 +74,9 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
       label: 'Countdown',
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(expiresAt),
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
       isFailed,
     },
@@ -81,8 +93,18 @@ export const ownerOnSubsHeaderDataAdapter = ({ data }) => {
 export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { searchedCargo, vessel, expiresAt, frozenAt, createdAt, isFailed, laycanEnd, laycanStart, totalQuantity } =
-    data;
+  const {
+    searchedCargo,
+    vessel,
+    expiresAt,
+    frozenAt,
+    createdAt,
+    isFailed,
+    laycanEnd,
+    laycanStart,
+    totalQuantity,
+    countdownStatus,
+  } = data;
 
   return [
     {
@@ -135,8 +157,9 @@ export const chartererOnSubsHeaderDataAdapter = ({ data }) => {
       textStyles: 'absolute top-1 lg:relative lg:top-0',
       freezed: frozenAt,
       countdownData: {
-        date: calculateCountdown(expiresAt, frozenAt),
-        autoStart: !frozenAt,
+        date: calculateCountdown(expiresAt),
+        autoStart: countdownStatus === 'Running',
+        status: countdownStatus,
       },
       isFailed,
     },
@@ -188,17 +211,22 @@ export const onSubsDetailsAdapter = ({ data }) => {
     thirdCargo,
     lastSire,
     approvals,
-    bankDetails,
-    canRequestForCountdownExtension,
-    isCountdownActive,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
     excludeInternationallySanctioned = false,
+    allowExtension,
+    extensionTimeOptions,
+    taskId,
+    countdownStatus,
+    assignTo,
+    initiator,
+    extensionRequests = [],
+    expiresAt,
+    additionalTerms = [],
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
   const { name: correspondenceCityName, country: correspondenceCountry } = correspondenceCity || {};
-  const { accountName, accountNumber, bankAddress, bankCode, iban, swift } = bankDetails || {};
 
   return {
     chartererInformation: [
@@ -340,33 +368,17 @@ export const onSubsDetailsAdapter = ({ data }) => {
           text: paymentTerm?.name,
         },
       ],
-      bankInfo: {
-        bankName: accountName,
-        bankDetails: [
-          {
-            title: 'Account Number',
-            text: accountNumber,
-          },
-          {
-            title: 'Bank Code',
-            text: bankCode,
-          },
-          {
-            title: 'BIC (SWIFT-CODE)',
-            text: swift,
-          },
-          {
-            title: 'IBAN',
-            text: iban,
-          },
-          {
-            title: 'Bank Address',
-            text: bankAddress,
-          },
-        ],
-      },
     },
-    allowExtension: canRequestForCountdownExtension && isCountdownActive,
+    allowExtension,
+    extensionTimeOptions: extensionTimeOptionsAdapter({ options: extensionTimeOptions }),
+    taskId,
+    expiresAt,
+    countdownStatus,
+    isCountdownActive: countdownStatus === 'Running',
+    assignTo,
+    initiator,
+    extensionRequests,
+    additionalTerms,
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
@@ -475,17 +487,43 @@ export const onSubsDocumentsTabRowsDataAdapter = ({ data }) => {
 
 export const onSubsAddDocumentAdapter = ({ data }) => {
   if (!data) return {};
-  const { offerId, title, comment, fileDetails, file } = data;
-  const { name, size } = fileDetails || {};
-  const extension = name?.split('.')?.pop();
+
+  const { offerId, title, comment, files = [], file, fileDetails, dealDocumentRequestId } = data;
+
+  // Handle backward compatibility for single file
+  if (file && fileDetails && !files.length) {
+    const { name, size } = fileDetails;
+    const extension = name?.split('.')?.pop();
+    return {
+      dealId: offerId,
+      title,
+      comments: comment,
+      files: [
+        {
+          name,
+          size,
+          extension,
+          url: file,
+        },
+      ],
+      ...(dealDocumentRequestId && { dealDocumentRequestId }),
+    };
+  }
+
+  // Handle multiple files
+  const filesArray = files.map((fileItem) => ({
+    name: fileItem.name,
+    size: fileItem.size,
+    extension: fileItem.extension,
+    url: fileItem.url,
+  }));
+
   return {
     dealId: offerId,
     title,
-    name,
     comments: comment,
-    size,
-    extension,
-    url: file,
+    files: filesArray,
+    ...(dealDocumentRequestId && { dealDocumentRequestId }),
   };
 };
 

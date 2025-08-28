@@ -64,7 +64,7 @@ const Signup = () => {
           </div>
           <h3 className="text-sm font-semibold text-green-900">Registration Successful!</h3>
         </div>
-        <p className="text-xsm leading-relaxed text-green-800">
+        <p className="text-xsm text-green-800">
           Congratulations! You have successfully completed your registration and passed our identity verification
           procedure. We take the security of our users seriously, and this is an important step in ensuring a safe and
           secure platform for everyone.
@@ -133,7 +133,7 @@ const Signup = () => {
           </div>
           <h3 className="text-sm font-semibold text-red-900">Registration Failed</h3>
         </div>
-        <p className="text-xsm leading-relaxed text-red-800">
+        <p className="text-xsm text-red-800">
           Unfortunately, your identity verification has failed. Please try again or contact our support team for
           assistance.
         </p>

@@ -27,6 +27,17 @@ export function listOfImosAdapter({ data }) {
   return data.filter(({ imo }) => imo).map(({ imo }) => imo);
 }
 
+export function listOfVesselsAdapter({ data }) {
+  if (!data) return [];
+
+  return data
+    .filter(({ imo, q88FileUrl }) => imo && q88FileUrl)
+    .map(({ imo, q88FileUrl }) => ({
+      imo,
+      q88FileUrl,
+    }));
+}
+
 export function userDetailsAdapter({ data, role }) {
   if (!data) return {};
 
@@ -107,12 +118,12 @@ function userCompanyDetailsAdapter({ data, role }) {
       registrationAddress,
       registrationAddress2,
       registrationCity: cityAdapter({ data: registrationCity }),
-      registrationCountry: countryAdapter({ data: registrationCity?.country }),
+      registrationCountry: countryAdapter({ data: registrationCity?.state?.country }),
       registrationPostalCode,
       correspondenceAddress,
       correspondenceAddress2,
       correspondenceCity: cityAdapter({ data: correspondenceCity }),
-      correspondenceCountry: countryAdapter({ data: correspondenceCity?.country }),
+      correspondenceCountry: countryAdapter({ data: correspondenceCity?.state?.country }),
       correspondencePostalCode,
       pending,
       pendingRequest: hasPendingCompanyInfoUpdateRequest,
@@ -295,13 +306,19 @@ function companyAddressesAdapter({ data }) {
 
 export function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
-  const { imos, companyYearsOfOperation, companyName, phone } = data;
+  const { vessels, imos, companyYearsOfOperation, companyName, phone } = data;
+
+  // Support both new vessels structure and legacy imos structure
+  const vesselCount = vessels ? vessels.length : imos?.countOfTankers;
+  const vesselList = vessels
+    ? listOfVesselsAdapter({ data: vessels })
+    : listOfImosAdapter({ data: imos.listOfTankers });
 
   return {
     companyName,
     yearsInOperation: companyYearsOfOperation,
-    numberOfVessels: imos.countOfTankers,
-    imos: listOfImosAdapter({ data: imos.listOfTankers }),
+    numberOfVessels: vesselCount,
+    vessels: vesselList,
     phone: ensurePlusPrefix(phone),
     ...companyAddressesAdapter({ data }),
   };
@@ -340,6 +357,7 @@ export function ownerSignUpAdapter({ data }) {
   if (data === null) return null;
 
   const {
+    vessels,
     imos,
     numberOfTankers,
     companyYearsOfOperation,
@@ -354,6 +372,10 @@ export function ownerSignUpAdapter({ data }) {
     samePhone,
   } = data;
 
+  // Support both new vessels structure and legacy imos structure
+  const vesselCount = vessels ? vessels.length : numberOfTankers;
+  const vesselList = vessels ? listOfVesselsAdapter({ data: vessels }) : listOfImosAdapter({ data: imos });
+
   return {
     ownerName: firstName,
     ownerSurname: lastName,
@@ -363,8 +385,8 @@ export function ownerSignUpAdapter({ data }) {
     companyName,
     estimatedAverageTankerDWT: 1,
     yearsInOperation: companyYearsOfOperation,
-    numberOfVessels: numberOfTankers,
-    imos: listOfImosAdapter({ data: imos }),
+    numberOfVessels: vesselCount,
+    vessels: vesselList,
     otpId,
     userPhone: ensurePlusPrefix(userPhone),
     ...companyAddressesAdapter({ data }),
@@ -575,6 +597,7 @@ export function phoneAvailabilityResponseAdapter({ data }) {
       available: data.available,
       message: data.message,
       canSendSms: data.canSendSms || false,
+      canSendWhatsApp: data.canSendWhatsApp || false,
     },
   };
 }
