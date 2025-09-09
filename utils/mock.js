@@ -981,11 +981,6 @@ export const fleetsPageHeader = [
     sortType: 'alphabetical',
   },
   {
-    text: 'Q88 Questionnaire',
-    type: 'EXTENSION',
-    width: 110,
-  },
-  {
     text: 'Assigned fleet',
     type: 'SIZE',
     width: 112,
@@ -1036,11 +1031,6 @@ export const unassignedFleetHeader = [
     width: 166,
     isSortable: true,
     sortType: 'alphabetical',
-  },
-  {
-    text: 'Q88 Questionnaire',
-    type: 'EXTENSION',
-    width: 110,
   },
   {
     text: 'Assigned fleet',

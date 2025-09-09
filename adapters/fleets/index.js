@@ -169,7 +169,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const {
     id,
     appearsInSearch,
-    details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
+    details: { name, summerDwt, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
   } = data;
@@ -206,11 +206,6 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     {
       id,
       value: tankerLink?.name,
-      disabled: additionRequested,
-    },
-    {
-      id,
-      link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
       disabled: additionRequested,
     },
     {
@@ -287,7 +282,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     status: requestStatus,
     appearsInSearch,
-    details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
+    details: { summerDwt, name, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested' || requestStatus === 'Q88Processing';
@@ -323,11 +318,6 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     {
       id,
       value: tankerLink?.name,
-      disabled: additionRequested,
-    },
-    {
-      id,
-      link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
       disabled: additionRequested,
     },
     {
