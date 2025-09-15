@@ -507,6 +507,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 label="Disponent owner"
                 customStyles="w-full"
                 error={errors.disponentOwner?.message}
+                placeholder="N/A"
               />
               <FormDropdown
                 label="Country"
@@ -516,6 +517,7 @@ const UpdateTankerForm = ({ closeModal, fleetData = unassignedFleetOption, itemI
                 disabled={!countries.length || !watch('disponentOwner')}
                 name="disponentOwnerCountry"
                 onChange={(option) => handleChange('disponentOwnerCountry', option)}
+                placeholder="N/A"
               />
             </div>
             <div>

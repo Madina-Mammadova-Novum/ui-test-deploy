@@ -39,10 +39,6 @@ const FormDropdown = ({
         const error = getValueWithPath(errors, name)?.value ?? getValueWithPath(errors, name);
         const hasValue = { ...field }.value;
 
-        if (open) {
-          field.value = null;
-        }
-
         return (
           <div className={`relative ${className}`}>
             <Label
