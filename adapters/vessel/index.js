@@ -784,3 +784,19 @@ export function requestAddVesselAdapter({ data }) {
 export function responseAddVesselAdapter({ data }) {
   return nullAdapter(data);
 }
+
+export function vesselTankerLinkRequestAdapter(data) {
+  if (!data) return null;
+
+  const { vesselTypeId, vesselCategoryOneId, vesselCategoryTwoId } = data;
+
+  return {
+    vesselTypeId,
+    vesselCategoryOneId,
+    vesselCategoryTwoId,
+  };
+}
+
+export function vesselTankerLinkResponseAdapter({ data }) {
+  return nullAdapter(data);
+}

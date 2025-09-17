@@ -169,3 +169,15 @@ export async function addVessel({ imo, fleetId, q88QuestionnaireFile }) {
     ...response,
   };
 }
+
+export async function updateVesselTankerLink({ vesselId, data }) {
+  const response = await putData(`vessels/tankerlink/${vesselId}`, data);
+
+  if (!response.error) {
+    response.message = 'Vessel category updated successfully';
+  }
+
+  return {
+    ...response,
+  };
+}

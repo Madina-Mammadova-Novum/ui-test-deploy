@@ -95,6 +95,50 @@ const fleetsSlice = createSlice({
     clearPrefilledState: (state) => {
       state.prefilledUpdateVesselState = initialState.prefilledUpdateVesselState;
     },
+    updateVesselCategoryTwo: (state, action) => {
+      const { vesselId, vesselCategoryTwoName } = action.payload;
+
+      // Update in assigned fleets
+      state.data.vessels = state.data.vessels.map((fleet) => ({
+        ...fleet,
+        vessels: fleet.vessels.map((vessel) =>
+          vessel.id === vesselId
+            ? {
+                ...vessel,
+                details: {
+                  ...vessel.details,
+                  tankerLink: {
+                    ...vessel.details.tankerLink,
+                    vesselCategoryTwos: {
+                      ...vessel.details.tankerLink?.vesselCategoryTwos,
+                      name: vesselCategoryTwoName,
+                    },
+                  },
+                },
+              }
+            : vessel
+        ),
+      }));
+
+      // Update in unassigned fleet
+      state.unassignedFleetData = state.unassignedFleetData.map((vessel) =>
+        vessel.id === vesselId
+          ? {
+              ...vessel,
+              details: {
+                ...vessel.details,
+                tankerLink: {
+                  ...vessel.details.tankerLink,
+                  vesselCategoryTwos: {
+                    ...vessel.details.tankerLink?.vesselCategoryTwos,
+                    name: vesselCategoryTwoName,
+                  },
+                },
+              },
+            }
+          : vessel
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchFleetsWithVessels.pending, (state) => {
@@ -136,6 +180,7 @@ export const {
   clearPrefilledState,
   updateUnassignedFleet,
   setToggle,
+  updateVesselCategoryTwo,
 } = fleetsSlice.actions;
 
 export default fleetsSlice.reducer;
