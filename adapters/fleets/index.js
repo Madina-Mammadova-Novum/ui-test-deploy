@@ -205,8 +205,27 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: tankerLink?.name,
+      value:
+        tankerLink?.vesselType?.name && tankerLink?.vesselCategoryOne?.name
+          ? `${tankerLink.vesselType.name} - ${tankerLink.vesselCategoryOne.name}`
+          : null,
       disabled: additionRequested,
+    },
+    {
+      id,
+      editable: Boolean(tankerLink?.vesselCategoryTwos?.name),
+      value: tankerLink?.vesselCategoryTwos?.name,
+      disabled: additionRequested,
+      name,
+      vesselId: id,
+      vesselCategoryOneId: tankerLink?.vesselCategoryOne?.id,
+      vesselTypeId: tankerLink?.vesselType?.id,
+      actions: [
+        {
+          action: ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,
+          editIcon: <EditIcon />,
+        },
+      ],
     },
     {
       id,
@@ -317,8 +336,27 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: tankerLink?.name,
+      value:
+        tankerLink?.vesselType?.name && tankerLink?.vesselCategoryOne?.name
+          ? `${tankerLink.vesselType.name} - ${tankerLink.vesselCategoryOne.name}`
+          : null,
       disabled: additionRequested,
+    },
+    {
+      id,
+      editable: Boolean(tankerLink?.vesselCategoryTwos?.name),
+      value: tankerLink?.vesselCategoryTwos?.name,
+      disabled: additionRequested,
+      name,
+      vesselId: id,
+      vesselCategoryOneId: tankerLink?.vesselCategoryOne?.id,
+      vesselTypeId: tankerLink?.vesselType?.id,
+      actions: [
+        {
+          action: ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,
+          editIcon: <EditIcon />,
+        },
+      ],
     },
     {
       id,
