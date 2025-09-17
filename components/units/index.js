@@ -120,6 +120,7 @@ import TermsAndConditions from '@/units/TermsAndConditionsForm';
 import ToggleRows from '@/units/ToggleRows';
 import UnassignedFleet from '@/units/UnassignedFleet';
 import UpdateTankerForm from '@/units/UpdateTankerForm';
+import UpdateVesselCategoryTwo from '@/units/UpdateVesselCategoryTwo';
 import VerificationUserAccount from '@/units/VerificationUserAccount';
 import ViewCommentContent from '@/units/ViewCommentContent';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
@@ -201,6 +202,7 @@ export {
   EditFleetForm,
   DeleteFleetModal,
   UpdateTankerForm,
+  UpdateVesselCategoryTwo,
   DeleteTankerModal,
   AddTankerForm,
   AddTankerWithImoForm,

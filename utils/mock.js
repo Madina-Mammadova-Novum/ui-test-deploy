@@ -981,6 +981,11 @@ export const fleetsPageHeader = [
     sortType: 'alphabetical',
   },
   {
+    text: 'Dirty/Clean',
+    type: 'SIZE',
+    width: 112,
+  },
+  {
     text: 'Assigned fleet',
     type: 'SIZE',
     width: 112,
@@ -1031,6 +1036,11 @@ export const unassignedFleetHeader = [
     width: 166,
     isSortable: true,
     sortType: 'alphabetical',
+  },
+  {
+    text: 'Dirty/Clean',
+    type: 'SIZE',
+    width: 112,
   },
   {
     text: 'Assigned fleet',

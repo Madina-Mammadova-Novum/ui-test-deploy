@@ -25,6 +25,7 @@ import {
   RequestDocumentDeletionModal,
   RevokeDocumentDeletionModal,
   UpdateTankerForm,
+  UpdateVesselCategoryTwo,
   ViewCommentContent,
 } from '@/units';
 import { downloadFile, handleFileView } from '@/utils/helpers';
@@ -60,9 +61,12 @@ const TableCell = ({ cellProps }) => {
     rolled,
     isValid = true,
     flagOfRegistry,
+    vesselId,
+    vesselCategoryOneId,
+    vesselTypeId,
   } = cellProps;
 
-  const emptyCell = !value && !editable && !link && !downloadData && !countdownData;
+  const emptyCell = !value && !link && !downloadData && !countdownData;
 
   const port = { value: portId, label: value, countryFlag: countryCode };
 
@@ -109,6 +113,16 @@ const TableCell = ({ cellProps }) => {
         return <DeleteTankerModal state={{ id, name, action, fleetId }} />;
       case ACTIONS.ASSIGN_FLEET:
         return <AssignToFleet tankerId={id} name={name} currentFleetId={fleetId} />;
+      case ACTIONS.UPDATE_VESSEL_CATEGORY_TWO:
+        return (
+          <UpdateVesselCategoryTwo
+            vesselId={vesselId}
+            tankerName={name}
+            vesselCategoryOneId={vesselCategoryOneId}
+            vesselTypeId={vesselTypeId}
+            currentValue={value ? { id: value.id, name: value } : null}
+          />
+        );
       case ACTIONS.REQUEST_DOCUMENT_DELETION:
         return <RequestDocumentDeletionModal documentId={id} />;
       case ACTIONS.REVOKE_DOCUMENT_DELETION:
@@ -149,6 +163,7 @@ const TableCell = ({ cellProps }) => {
       ACTIONS.TANKER_INFORMATION,
       ACTIONS.CHARTERER_INFORMATION,
       ACTIONS.ASSIGN_FLEET,
+      ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,
       ACTIONS.PORT,
       ACTIONS.DATE,
       ACTIONS.TANKER_REACTIVATE,
