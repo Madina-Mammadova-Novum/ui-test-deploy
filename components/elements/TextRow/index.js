@@ -10,7 +10,7 @@ const TextRow = ({ title = '', children, className = '', inlineVariant = false }
         inlineVariant && '[&>span:nth-child(2)]:!inline [&>span:nth-child(2)]:!whitespace-pre-wrap'
       } ${className}`}
     >
-      <span className="mr-1 font-normal">{title}:</span>
+      <span className="mr-1 flex items-center gap-1 font-normal">{title}:</span>
       {isEmptyChildren(children) ? (
         <span className="inline-flex items-center break-words font-bold">{children}</span>
       ) : (
