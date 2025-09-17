@@ -66,7 +66,7 @@ const TableCell = ({ cellProps }) => {
     vesselTypeId,
   } = cellProps;
 
-  const emptyCell = !value && !link && !downloadData && !countdownData;
+  const emptyCell = !value && !link && !downloadData && !countdownData && !editable;
 
   const port = { value: portId, label: value, countryFlag: countryCode };
 
