@@ -4,23 +4,13 @@ import { HttpTransportType } from '@microsoft/signalr';
 import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
 import cookie from 'js-cookie';
-import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
 
 import { nullableDataObjectAdapter } from '@/adapters/common';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
-import { ERROR_MESSAGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
-
-/**
- * createMarkup
- * @param content
- * @returns {{__html}}
- */
-export function createMarkup(content) {
-  return { __html: content };
-}
+import { ERROR_MESSAGE, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
 
 /**
  * toCamelCase
@@ -43,34 +33,6 @@ export function toCamelCase(str) {
 }
 
 /**
- * createPathOptions
- * @param data
- * @param type
- * @returns {*}
- */
-export function createPathOptions(data, type) {
-  if (data === null) return [];
-  const { data: items } = data;
-  return items.map((item) => {
-    const { slug, locale } = item;
-    return {
-      path: `${type}/${slug}`,
-      locale,
-    };
-  });
-}
-
-/**
- * checkIfKeyExist
- * @param objectName
- * @param keyName
- * @returns {boolean}
- */
-export function checkIfKeyExist(objectName, keyName) {
-  return Object.keys(objectName).some((key) => key === keyName);
-}
-
-/**
  * createsUniqueId
  * @returns {string}
  */
@@ -83,47 +45,6 @@ export function makeId() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
-
-export function getHighlightedInput(text, userInput) {
-  if (text.match(userInput.charAt(0).toUpperCase() + userInput.slice(1))) {
-    return text.replaceAll(
-      userInput.charAt(0).toUpperCase() + userInput.slice(1),
-      `<b>${userInput.charAt(0).toUpperCase() + userInput.slice(1)}</b>`
-    );
-  }
-  return text
-    .replaceAll(userInput.toLowerCase(), `<b>${userInput.toLowerCase()}</b>`)
-    .replaceAll(userInput.toUpperCase(), `<b>${userInput.toUpperCase()}</b>`);
-}
-
-export function propIsComponent(prop) {
-  return typeof prop === 'function' && String(prop).includes('.createElement');
-}
-
-export function isMainPage(pageContext) {
-  const { slug, localizations } = pageContext;
-  return [slug, localizations?.data[0]?.attributes?.slug].includes('main');
-}
-
-export function getProportion(constParam, itemParam) {
-  return constParam / itemParam;
-}
-
-export function uniqueArray(arrayOfObject) {
-  return arrayOfObject.filter((value, index) => {
-    const itemValue = JSON.stringify(value);
-    return (
-      index ===
-      arrayOfObject.findIndex((obj) => {
-        return JSON.stringify(obj) === itemValue;
-      })
-    );
-  });
-}
-
-export function getNumbersFromString(str) {
-  return str.replace(/\D/g, '');
 }
 
 /**
@@ -146,33 +67,12 @@ export function getMiddleElementFromArray(array) {
   return array[expectedIndex];
 }
 
-export function cutStringToLimitation(str, limit) {
-  if (str.length < limit) return str;
-  return `${str.slice(0, limit)} ...`;
-}
-
-export function getCurrentYear() {
-  const date = new Date();
-  const year = date.getFullYear();
-  return year;
-}
-
-export function noSSR(Component) {
-  return dynamic(() => Promise.resolve(Component), { ssr: false });
-}
-
 export const updateFormats = (data = []) => {
   return data
     .map((format) => format)
     .join(', ')
     .replaceAll('.', '');
 };
-
-export function hasNestedArrays(data) {
-  const isNested = data.every((val) => Array.isArray(val));
-
-  return isNested;
-}
 
 export function getFilledArray(length = 1) {
   return Array.from({ length: length || 1 }).map((_, index) => index + 1);
@@ -382,28 +282,10 @@ export const resetForm = (methods, type) => {
   methods.reset(resetValues);
 };
 
-export const sleep = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};
-
 export const isEmpty = (value) => {
   if (value === undefined || value === null) return true;
   if (Array.isArray(value) && value.length === 0) return true;
   return typeof value === 'object' && Object.keys(value).length === 0;
-};
-
-export const transformInvalidLoginMessage = (msg) => {
-  return msg
-    ?.split('_')
-    .map((word, index) => {
-      if (index === 0) {
-        return word;
-      }
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(' ');
 };
 
 export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
@@ -415,15 +297,6 @@ export const checkEmailPrefix = (email) => {
   const regExpCase = /\S+@\S+\.\S+/;
 
   return regExpCase.test(email);
-};
-
-export const checkPhoneValue = (value) => {
-  if (!value) {
-    return true;
-  }
-
-  const regex = REGEX.PHONE;
-  return regex.test(value);
 };
 
 export const checkAuthRoute = (req, pathName) => {
@@ -439,11 +312,6 @@ export const formatErrors = (errors) => {
   })[0];
 };
 
-export const formattedPhoneNumber = (phone) => {
-  if (typeof phone !== 'undefined' || phone !== '') return phone?.replace('+', '');
-  return null;
-};
-
 export const ensurePlusPrefix = (phone) => {
   if (!phone) return '';
   return phone.startsWith('+') ? phone : `+${phone}`;
@@ -457,20 +325,6 @@ export const sortByType = (a, b, ascSort) => {
 };
 
 export const imoFormatter = (str) => str?.replace(/IMO/g, '');
-
-export const isIdExist = ({ data }) => {
-  if (!data) return false;
-
-  return data.map(({ value }) => !!value);
-};
-
-export const findValueById = ({ data, id }) => {
-  if (!data) return [];
-
-  const result = data.find((obj) => obj.value === id);
-
-  return [result];
-};
 
 export const getUserType = (isCharterer, isOwner) => {
   if (isCharterer) return 'Charterer';
@@ -500,29 +354,13 @@ export const generateRedirectPath = ({ role }) => {
   return { path: ROUTES.ACCOUNT_SEARCH };
 };
 
-export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).toFixed(0);
-
-export const calculateTotal = (array, key) =>
-  +array
-    ?.filter((item) => item)
-    ?.map(({ [key]: itemValue }) => itemValue)
-    ?.reduce((a, b) => +a + +b);
-
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);
 
 export const addLocalDateFlag = (dateString = '') => (dateString.endsWith('Z') ? dateString : `${dateString}Z`);
 
-export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
-
 export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
   return Math.ceil(recordsTotal / recordsFiltered);
-};
-
-export const extractTime = (string) => {
-  const timePattern = /\d{2}:\d{2}/; // Matches the pattern HH:MM
-  const match = string.match(timePattern);
-  return match ? match[0] : null; // Return the matched time or null if no match found
 };
 
 export const setSkippedValue = (pageValue, perPageValue) => {
