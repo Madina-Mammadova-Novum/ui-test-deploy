@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
+
 # Testing Conventions
 
 This rule outlines the conventions for writing unit and integration tests using Jest and React Testing Library, as specified in the [Technical Stack Rules](mdc:.cursor/rules/stack.mdc).
@@ -11,12 +12,12 @@ This rule outlines the conventions for writing unit and integration tests using 
 
 - Test files should be co-located with the source files they are testing.
 - Place test files in a `__tests__` subdirectory within the component or module directory.
-  - *Example*: A test for `components/units/Button/index.js` should be located at `components/units/Button/__tests__/index.test.js`.
+  - _Example_: A test for `components/units/Button/index.js` should be located at `components/units/Button/__tests__/index.test.js`.
 
 ## Naming Conventions
 
 - Test files should use the `.test.js` (or `.test.ts` if using TypeScript) suffix.
-- *Example*: `myComponent.test.js`
+- _Example_: `myComponent.test.js`
 
 ## Test Structure
 
@@ -30,8 +31,6 @@ This rule outlines the conventions for writing unit and integration tests using 
 - Mock API responses to ensure tests are predictable and don't rely on external services.
 - Keep mocks focused and relevant to the specific test case.
 
-## Querying Elements (React Testing Library)
+## Querying Elements
 
 - Prefer accessible queries (e.g., `getByRole`, `getByLabelText`, `getByText`) over implementation details (e.g., `getByTestId`, CSS selectors) whenever possible.
-- Use `screen` imported from `@testing-library/react` for querying.
-

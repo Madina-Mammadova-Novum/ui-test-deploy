@@ -5,7 +5,6 @@
     "plugin:react-hooks/recommended",
     "airbnb",
     "plugin:prettier/recommended",
-    "plugin:testing-library/react",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
@@ -88,10 +87,6 @@
     "jest/no-export": 0,
     "jest/no-standalone-expect": 0,
     "jest/no-try-expect": 0,
-
-    "testing-library/prefer-wait-for": "error",
-    "testing-library/no-wait-for-empty-callback": "error",
-    "testing-library/no-dom-import": "error",
 
     "react/no-unused-prop-types": "off",
     "react/jsx-indent": 0,

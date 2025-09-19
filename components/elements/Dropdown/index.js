@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { SimpleDropdown } from './SimpleDropdown';
+import SimpleDropdown from './SimpleDropdown';
 
 import { DropdownPropTypes } from '@/lib/types';
 

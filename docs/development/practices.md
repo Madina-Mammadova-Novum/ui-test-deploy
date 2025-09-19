@@ -357,42 +357,6 @@ const MaritimeApp = () => (
 
 ## Testing Standards
 
-### Unit Testing
-
-```javascript
-import { render, screen, fireEvent } from '@testing-library/react';
-import { VesselSearchForm } from '../VesselSearchForm';
-
-describe('VesselSearchForm', () => {
-  it('validates IMO number format', async () => {
-    render(<VesselSearchForm onSearch={jest.fn()} />);
-
-    const imoInput = screen.getByLabelText('IMO Number');
-    fireEvent.change(imoInput, { target: { value: '123456' } });
-    fireEvent.blur(imoInput);
-
-    expect(screen.getByText('IMO must be 7 digits')).toBeInTheDocument();
-  });
-
-  it('submits valid maritime search data', async () => {
-    const mockSearch = jest.fn();
-    render(<VesselSearchForm onSearch={mockSearch} />);
-
-    // Fill form with valid maritime data
-    fireEvent.change(screen.getByLabelText('Cargo Type'), {
-      target: { value: 'crude-oil' },
-    });
-
-    fireEvent.click(screen.getByText('Search Vessels'));
-
-    expect(mockSearch).toHaveBeenCalledWith({
-      cargoType: 'crude-oil',
-      // ... other expected data
-    });
-  });
-});
-```
-
 ### Integration Testing
 
 ```javascript

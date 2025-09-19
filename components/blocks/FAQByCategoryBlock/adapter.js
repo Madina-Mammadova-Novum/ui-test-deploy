@@ -1,6 +1,6 @@
 import { categoryAdapter } from '@/adapters/category';
 import { updateCTABlock } from '@/blocks/CTABlock/adapter';
-import { getFAQs } from '@/services';
+import { getFAQs } from '@/services/faq';
 
 export const updateFAQByCategoryBlock = async (block) => {
   const { data: items } = await getFAQs();
