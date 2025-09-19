@@ -1,6 +1,9 @@
+import { UilInfoCircle } from '@iconscout/react-unicons';
+
 import { postProductsAdapter } from '@/adapters';
 import { nullAdapter, objectAdapter } from '@/adapters/common';
 import { countriesReverseAdapter } from '@/adapters/country';
+import { HoverTooltip } from '@/elements';
 import { transformDate } from '@/utils/date';
 import { getLocode, trimTonValue } from '@/utils/helpers';
 
@@ -78,6 +81,7 @@ export function responseSearchVesselAdapter({ data }) {
     searchResultFlag,
     hasFailedOffer,
     cargoes,
+    ballastLegTooltipText,
   } = data;
 
   const processedCargoes = cargoes?.map((result) => responseSearchVesselCargoesAdapter({ data: result }));
@@ -90,6 +94,7 @@ export function responseSearchVesselAdapter({ data }) {
     dwt: summerDeadWeight,
     estimatedArrival: estimatedArrivalTime && transformDate(estimatedArrivalTime, 'MMM dd, yyyy'),
     ballastLeg,
+    ballastLegTooltipText,
     estimatedArrivalTime,
     expandedData: {
       vesselOwnerData: [
@@ -630,6 +635,7 @@ export const tankerInformationAdapter = (data) => {
       } = {},
     } = {},
     ballastLeg,
+    ballastLegTooltipText,
     estimatedArrivalTime,
   } = data;
 
@@ -671,7 +677,19 @@ export const tankerInformationAdapter = (data) => {
         description: transformDate(estimatedArrivalTime, 'MMM dd, yyyy'),
       },
       {
-        title: 'Ballast Leg',
+        title: (
+          <>
+            Ballast Leg
+            {ballastLegTooltipText && (
+              <HoverTooltip
+                className="!-top-11 !max-w-[320px] !-translate-x-[50%] !whitespace-pre-wrap"
+                data={{ description: ballastLegTooltipText }}
+              >
+                <UilInfoCircle className="h-4 w-4 cursor-help fill-black hover:fill-blue-darker" />
+              </HoverTooltip>
+            )}
+          </>
+        ),
         description: ballastLeg,
       },
       {
@@ -782,5 +800,21 @@ export function requestAddVesselAdapter({ data }) {
 }
 
 export function responseAddVesselAdapter({ data }) {
+  return nullAdapter(data);
+}
+
+export function vesselTankerLinkRequestAdapter(data) {
+  if (!data) return null;
+
+  const { vesselTypeId, vesselCategoryOneId, vesselCategoryTwoId } = data;
+
+  return {
+    vesselTypeId,
+    vesselCategoryOneId,
+    vesselCategoryTwoId,
+  };
+}
+
+export function vesselTankerLinkResponseAdapter({ data }) {
   return nullAdapter(data);
 }

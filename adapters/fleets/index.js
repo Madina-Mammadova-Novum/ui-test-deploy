@@ -169,7 +169,7 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   const {
     id,
     appearsInSearch,
-    details: { name, summerDwt, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
+    details: { name, summerDwt, tankerLink, flagOfRegistry, portOfRegistry },
     imo,
     status: requestStatus,
   } = data;
@@ -205,13 +205,27 @@ export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      value: tankerLink?.name,
+      value:
+        tankerLink?.vesselType?.name && tankerLink?.vesselCategoryOne?.name
+          ? `${tankerLink.vesselType.name} - ${tankerLink.vesselCategoryOne.name}`
+          : null,
       disabled: additionRequested,
     },
     {
       id,
-      link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
+      editable: Boolean(tankerLink?.vesselCategoryTwos?.name),
+      value: tankerLink?.vesselCategoryTwos?.name,
       disabled: additionRequested,
+      name,
+      vesselId: id,
+      vesselCategoryOneId: tankerLink?.vesselCategoryOne?.id,
+      vesselTypeId: tankerLink?.vesselType?.id,
+      actions: [
+        {
+          action: ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,
+          editIcon: <EditIcon />,
+        },
+      ],
     },
     {
       id,
@@ -287,7 +301,7 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     imo,
     status: requestStatus,
     appearsInSearch,
-    details: { summerDwt, name, q88QuestionnaireFile, tankerLink, flagOfRegistry, portOfRegistry },
+    details: { summerDwt, name, tankerLink, flagOfRegistry, portOfRegistry },
   } = data;
 
   const additionRequested = requestStatus === 'Addition requested' || requestStatus === 'Q88Processing';
@@ -322,13 +336,27 @@ export const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      value: tankerLink?.name,
+      value:
+        tankerLink?.vesselType?.name && tankerLink?.vesselCategoryOne?.name
+          ? `${tankerLink.vesselType.name} - ${tankerLink.vesselCategoryOne.name}`
+          : null,
       disabled: additionRequested,
     },
     {
       id,
-      link: q88QuestionnaireFile && `${process.env.NEXT_PUBLIC_FILE_API_URL}/v1/file/get/${q88QuestionnaireFile}`,
+      editable: Boolean(tankerLink?.vesselCategoryTwos?.name),
+      value: tankerLink?.vesselCategoryTwos?.name,
       disabled: additionRequested,
+      name,
+      vesselId: id,
+      vesselCategoryOneId: tankerLink?.vesselCategoryOne?.id,
+      vesselTypeId: tankerLink?.vesselType?.id,
+      actions: [
+        {
+          action: ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,
+          editIcon: <EditIcon />,
+        },
+      ],
     },
     {
       id,

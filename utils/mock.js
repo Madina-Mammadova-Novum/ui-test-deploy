@@ -981,9 +981,9 @@ export const fleetsPageHeader = [
     sortType: 'alphabetical',
   },
   {
-    text: 'Q88 Questionnaire',
-    type: 'EXTENSION',
-    width: 110,
+    text: 'Dirty/Clean',
+    type: 'SIZE',
+    width: 112,
   },
   {
     text: 'Assigned fleet',
@@ -1038,9 +1038,9 @@ export const unassignedFleetHeader = [
     sortType: 'alphabetical',
   },
   {
-    text: 'Q88 Questionnaire',
-    type: 'EXTENSION',
-    width: 110,
+    text: 'Dirty/Clean',
+    type: 'SIZE',
+    width: 112,
   },
   {
     text: 'Assigned fleet',
