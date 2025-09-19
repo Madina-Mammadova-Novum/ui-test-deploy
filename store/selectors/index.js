@@ -3,43 +3,43 @@ import { createDraftSafeSelector } from '@reduxjs/toolkit';
 import { getPrefilledFormDataAdapter } from '@/adapters/offer';
 import { userDetailsAdapter } from '@/adapters/user';
 
-export const authSelector = ({ auth }) => auth;
-export const sidebarSelector = ({ general, auth }) => ({ ...general, role: auth?.session?.role });
-export const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role });
-export const vesselsSelector = ({ positions }) => positions;
+const authSelector = ({ auth }) => auth;
+const sidebarSelector = ({ general, auth }) => ({ ...general, role: auth?.session?.role });
+const userSelector = ({ user, auth }) => ({ ...user, role: auth?.session?.role });
+const vesselsSelector = ({ positions }) => positions;
 export const fleetsSelector = ({ fleets }) => fleets;
-export const searchSelector = ({ search }) => search;
-export const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session?.role });
-export const generalSelector = ({ general }) => general;
-export const notificationsSelector = ({ notifications }) => notifications;
-export const offerSelector = ({ offer, search }) => ({
+const searchSelector = ({ search }) => search;
+const negotiatingSelector = ({ negotiating, auth }) => ({ ...negotiating, role: auth?.session?.role });
+const generalSelector = ({ general }) => general;
+const notificationsSelector = ({ notifications }) => notifications;
+const offerSelector = ({ offer, search }) => ({
   ...offer,
   cargoType: search?.searchParams?.cargoType,
   products: getPrefilledFormDataAdapter({ data: search?.searchParams?.products, isCounteroffer: false }),
 });
-export const preFixtureSelector = ({ preFixture, notifications, auth }) => ({
+const preFixtureSelector = ({ preFixture, notifications, auth }) => ({
   ...preFixture,
   role: auth?.session?.role,
   deal: notifications?.dealData,
 });
-export const onSubsSelector = ({ onSubs, notifications, auth }) => ({
+const onSubsSelector = ({ onSubs, notifications, auth }) => ({
   ...onSubs,
   role: auth?.session?.role,
   deal: notifications.dealData,
 });
-export const fixtureSelector = ({ fixture, notifications, auth }) => ({
+const fixtureSelector = ({ fixture, notifications, auth }) => ({
   ...fixture,
   role: auth?.session?.role,
   deal: notifications?.dealData,
 });
-export const postFixtureSelector = ({ postFixture, notifications, auth }) => ({
+const postFixtureSelector = ({ postFixture, notifications, auth }) => ({
   ...postFixture,
   role: auth?.session?.role,
   deal: notifications?.dealData,
 });
-export const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
+const chatSelector = ({ chat, auth }) => ({ ...chat, role: auth?.session?.role });
 
-export const failedOffersSelector = ({ failedOffers, notifications, auth }) => ({
+const failedOffersSelector = ({ failedOffers, notifications, auth }) => ({
   ...failedOffers,
   role: auth?.session?.role,
   deal: notifications?.dealData,
@@ -254,7 +254,7 @@ export const getSearchSelector = createDraftSafeSelector(searchSelector, (state)
 });
 
 /* Cargo Vessel Selectors */
-export const getCargoVesselSelector = (state) => state.cargoVessel;
+const getCargoVesselSelector = (state) => state.cargoVessel;
 
 export const getCargoVesselDataSelector = createDraftSafeSelector(getCargoVesselSelector, (state) => {
   return {
@@ -265,14 +265,6 @@ export const getCargoVesselDataSelector = createDraftSafeSelector(getCargoVessel
     vesselNames: state.vesselNames,
   };
 });
-
-// Specific data selectors that use the main selector
-export const getCargoTypesSelector = (state) => getCargoVesselDataSelector(state).cargoTypes;
-export const getCargoCodesSelector = (state) => getCargoVesselDataSelector(state).cargoCodes;
-export const getVesselNamesSelector = (state) => getCargoVesselDataSelector(state).vesselNames;
-
-export const getCargoVesselLoadingSelector = (state) => getCargoVesselSelector(state).loading;
-export const getCargoVesselErrorSelector = (state) => getCargoVesselSelector(state).error;
 
 export const getFailedOffersDataSelector = createDraftSafeSelector(failedOffersSelector, (state) => {
   return {

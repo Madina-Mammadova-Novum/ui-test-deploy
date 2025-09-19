@@ -1,13 +1,15 @@
-export const imageFormatAdapter = ({ url, mime, width, height }) => {
+const imageFormatAdapter = ({ url, mime, width, height }) => {
   return { url, mime, width, height };
 };
-export const imageFormatsAdapter = (formats) => {
+
+const imageFormatsAdapter = (formats) => {
   if (formats === null) return null;
   Object.keys(formats).forEach((key) => {
     formats[key] = imageFormatAdapter(formats[key]);
   });
   return formats;
 };
+
 export const imageAdapter = ({ data }) => {
   if (data === null) return null;
   const { id, attributes } = data;

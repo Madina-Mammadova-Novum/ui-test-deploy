@@ -45,9 +45,7 @@
         "adapters/**/*.{js,jsx,ts,tsx}",
         "services/**/*.{js,jsx,ts,tsx}",
         "lib/**/*.{js,jsx,ts,tsx}",
-        "utils/**/*.{js,jsx,ts,tsx}",
-        "middleware.js",
-        "next.config.js"
+        "utils/**/*.{js,jsx,ts,tsx}"
       ]
     }
   }

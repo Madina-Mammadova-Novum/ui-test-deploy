@@ -455,37 +455,12 @@ dispatch(
   })
 );
 
-// New action for assigned tasks synchronization
-dispatch(
-  updateAssignedTasksForOffers({
-    parentId,
-    offers: enhancedOffers,
-    type: 'incoming',
-  })
-);
-
 // Fetch countdown data for individual deals
 dispatch(
   fetchDealCountdownData({
     dealId: offerId,
   })
 );
-```
-
-#### Custom Hook for Assigned Tasks
-
-```javascript
-// Centralized hook for task management
-import { useAssignedTasks } from '@/utils/hooks';
-
-const { fetchAndUpdateAssignedTasks } = useAssignedTasks();
-
-// Usage in components
-useEffect(() => {
-  if (incomingData?.length > 0) {
-    fetchAndUpdateAssignedTasks(incomingData, data.id, 'incoming');
-  }
-}, []);
 ```
 
 ### Error Prevention Patterns
@@ -607,7 +582,6 @@ const { isOwner, isCharterer } = getRoleIdentity({ role });
 
 ### Custom Hooks
 
-- `useAssignedTasks()` - Task management and countdown synchronization
 - `useHookFormParams()` - Form parameter management
 - `errorToast()`, `successToast()` - Consistent notification patterns
 
@@ -711,7 +685,6 @@ const allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
 
 4. **Redux State Management**:
 
-   - Added `updateAssignedTasksForOffers` action for task synchronization
    - Enhanced countdown actions to accept dynamic `extendMinute` values
    - Added `fetchDealCountdownData` action with proper error handling
 

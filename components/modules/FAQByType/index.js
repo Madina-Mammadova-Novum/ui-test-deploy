@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { faqsByTypeAdapter } from '@/adapters/faqs';
 import { Title } from '@/elements';
 import { ROLES } from '@/lib';
-import { getFAQs } from '@/services/faq';
+import { getFAQs } from '@/services';
 import { getUserDataSelector } from '@/store/selectors';
 import { Accordion, TabsVertical } from '@/units';
 

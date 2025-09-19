@@ -1,3 +1,4 @@
+import { responseAdapter } from '@/adapters';
 import {
   apiErrorAdapter,
   apiOptionsAdapter,
@@ -5,7 +6,6 @@ import {
   errorResponseAdapter,
   successResponseAdapter,
 } from '@/adapters/api';
-import { responseAdapter } from '@/adapters/response';
 import { api } from '@/lib/axios';
 
 export const apiHandler = async (options) => {

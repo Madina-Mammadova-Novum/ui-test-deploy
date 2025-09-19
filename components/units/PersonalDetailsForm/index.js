@@ -11,7 +11,7 @@ import CheckCircleSVG from '@/assets/images/checkCircle.svg';
 import RefreshSVG from '@/assets/images/refresh.svg';
 import { Button, Input, Label, PhoneInput, TextWithLabel } from '@/elements';
 import { checkPhoneAvailability } from '@/services/user';
-import PhoneValidation from '@/units/PhoneValidation';
+import { PhoneValidation } from '@/units';
 import { clearPhoneValidationState, loadPhoneValidationState, savePhoneValidationState } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 

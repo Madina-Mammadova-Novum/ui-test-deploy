@@ -15,10 +15,3 @@ export const categoryAdapter = ({ data }) => {
     coverImage: coverImage ? imageAdapter(coverImage) : null,
   };
 };
-
-export const categoriesAdapter = ({ data }) => {
-  if (data === null) return [];
-  return data.map((category) => {
-    return categoryAdapter({ data: category });
-  });
-};

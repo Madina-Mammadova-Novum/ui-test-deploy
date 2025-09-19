@@ -1,4 +1,4 @@
-import { getFAQs } from '@/services/faq';
+import { getFAQs } from '@/services';
 
 export const updateFAQBlock = async (block) => {
   const { data } = await getFAQs();

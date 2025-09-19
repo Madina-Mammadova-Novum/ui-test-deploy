@@ -1,4 +1,4 @@
-import NewAuthLayout from '@/layouts/NewAuthLayout';
+import { NewAuthLayout } from '@/layouts';
 import { ROUTES } from '@/lib';
 
 export default async function RootLayout(props) {

@@ -4,7 +4,6 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatMessage } from '..';
-import ChatModal from '../ChatModal';
 
 import { AnonChatPropTypes } from '@/lib/types';
 
@@ -17,6 +16,7 @@ import { getChatToken, getCities, getCountries, sendChatMessage } from '@/servic
 import { chatNotificationService, сhatSessionService } from '@/services/signalR';
 import { messageAlert, resetChat, resetUser, setBotMessage, setOpenedChat, setUser } from '@/store/entities/chat/slice';
 import { getAnonChatSelector, getAuthSelector } from '@/store/selectors';
+import { ChatModal } from '@/units';
 import { addLocalDateFlag, checkEmailPrefix, convertDataToOptions, countriesOptions, setCookie } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
 import { steps } from '@/utils/mock';

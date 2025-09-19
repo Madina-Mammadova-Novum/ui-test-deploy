@@ -13,26 +13,6 @@ import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
 import { ERROR_MESSAGE, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
 
 /**
- * toCamelCase
- * @param str
- * @returns {string}
- */
-export function toCamelCase(str) {
-  let newStr = '';
-  if (str) {
-    const wordArr = str.split(/[-_]/g);
-    wordArr.forEach((word, index) => {
-      if (index === 0) {
-        newStr += word.toLowerCase();
-      } else {
-        newStr += word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      }
-    });
-  }
-  return newStr;
-}
-
-/**
  * createsUniqueId
  * @returns {string}
  */
@@ -98,13 +78,6 @@ export function checkObjectValues({ data }) {
   }
 
   return nullableDataObjectAdapter(data);
-}
-
-export function formatDate(dateString) {
-  const date = new Date(dateString);
-  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formatter = new Intl.DateTimeFormat('en-US', optionsDate);
-  return formatter.format(date);
 }
 
 export const disableDefaultBehavior = (e) => e.preventDefault();
@@ -377,10 +350,6 @@ export const transformToCapitalize = (str = '') => {
 
 export const generateMessageByActionType = ({ action }) => RESPONSE_MESSAGES[action];
 
-export const getCountryById = ({ id, data = [] }) => {
-  return data?.find((country) => country.countryId === id);
-};
-
 export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
 export const sortFromPastToToday = (a, b) => new Date(a?.createdAt) - new Date(b?.createdAt);
 
@@ -390,7 +359,7 @@ export const formattedBySpaces = ({ string }) => {
   return string.replace(/([a-z])([A-Z])/g, '$1 $2');
 };
 
-export const getFormattedDays = () => {
+const getFormattedDays = () => {
   const today = new Date().toISOString().split('T')[0];
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -428,7 +397,6 @@ export const calculateCountdown = (expiresAt) => {
   return millisecondsUntilExpiration < 0 ? 1 : Date.now() + millisecondsUntilExpiration;
 };
 
-export const formattedTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
 export const isReadValue = (value) => value === 'read';
 
 export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
@@ -471,7 +439,7 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   return failedByText;
 };
 
-export const getFileUrl = ({ url }) => {
+const getFileUrl = ({ url }) => {
   const token = getCookieFromBrowser('session-access-token');
 
   return {
@@ -581,16 +549,6 @@ export const trimTonValue = (number) => {
   return `${strNumber},***`;
 };
 
-export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOffer }) => {
-  const layTimeImprovement = initialOffer.layTime - counterOffer.layTime >= 6;
-  const demurrageRateImprovement = initialOffer.demurrageRate * 1.05 <= counterOffer.demurrageRate;
-  const freightImprovement = initialOffer.value * 1.05 <= counterOffer.value;
-  const isMinimalImprovementMet = [layTimeImprovement, demurrageRateImprovement, freightImprovement].some(
-    (value) => value
-  );
-  return isMinimalImprovementMet;
-};
-
 export const processTooltipData = ({ text, length }) => {
   return {
     disableTooltip: !(text?.length >= length),
@@ -598,15 +556,6 @@ export const processTooltipData = ({ text, length }) => {
     trimmedText: text?.length >= length ? `${text?.slice(0, length / 2)}...` : text,
   };
 };
-
-export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
-
-export function checkTankerStatus(date) {
-  const openDate = new Date(date);
-  const today = new Date();
-
-  return today > openDate;
-}
 
 export const getLineCoordinate = ({ data }) => {
   if (!data) return [];
@@ -650,20 +599,6 @@ export const formatCurrency = (value, showDecimals = false) => {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-/**
- * Parses a formatted number string with thousand separators back to a number
- * @param {string} formattedValue - Formatted string with commas (e.g. "500,000")
- * @returns {number} Parsed number value
- */
-export const parseFormattedNumber = (formattedValue) => {
-  if (!formattedValue) return null;
-
-  // Remove thousand separators and convert to number
-  const numericValue = parseFloat(formattedValue.toString().replace(/,/g, ''));
-
-  return Number.isNaN(numericValue) ? null : numericValue;
-};
-
 export const formattedDay = (number) => {
   if (number === null || number === undefined) return '';
   const hoursInADay = 24;
@@ -671,7 +606,7 @@ export const formattedDay = (number) => {
   return days.toFixed(2);
 };
 
-export const parseErrorMessage = (responseError = {}) => {
+const parseErrorMessage = (responseError = {}) => {
   try {
     const {
       message: { Errors },
@@ -728,16 +663,6 @@ export function lowerCaseFormat(obj) {
     return newObj;
   }, {});
 }
-
-export const errorMessage = ({ errors }) => {
-  if (errors?.message === 'Bad Request') {
-    return {
-      message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
-    };
-  }
-
-  return { message: formatErrors(errors?.errors) };
-};
 
 export const setCookie = (key, value, cookieOptions = {}) => {
   cookie.set(key, value, {
@@ -815,7 +740,7 @@ export const getIdFromUrl = (url) => {
   return match ? match[0] : null;
 };
 
-export const stageFormatter = (stage) => {
+const stageFormatter = (stage) => {
   const stageToPage = {
     Fleets: ROUTES.ACCOUNT_POSITIONS,
     Negotiating: ROUTES.ACCOUNT_NEGOTIATING,
@@ -916,22 +841,6 @@ export const getFieldFromKeyForRegistration = (key) => {
   return errorByKey[key];
 };
 
-export const getBrowser = (environment) => {
-  if (environment.indexOf('Firefox') !== -1) {
-    return 'firefox';
-  }
-  if (environment.indexOf('Chrome') !== -1) {
-    return 'chrome';
-  }
-  if (environment.indexOf('Safari') !== -1) {
-    return 'safari';
-  }
-  if (environment.indexOf('MSIE') !== -1 || environment.indexOf('Trident/') !== -1) {
-    return 'internet explorer';
-  }
-  return 'unknown';
-};
-
 /**
  * Ensures a filename has the correct extension
  * @param {string} fileName - The name of the file
@@ -983,28 +892,6 @@ export const fixLongitudeWrapping = (coordinates) => {
 export const formatStageText = (stage) => {
   if (!stage) return '';
   return stage.replace(/_/g, ' ');
-};
-
-/**
- * @util convertToKilotons
- * @description Formats tonnage values to kilotons (kt) with one decimal place
- * @param {number|string} tons - Weight value
- * @returns {string} Weight formatted with kt unit
- * @example convertToKilotons(45) // returns "45.0 kt"
- */
-export const convertToKilotons = (tons) => {
-  if (!tons) return '0.0 kt';
-
-  // Convert to number if it's a string
-  const numericValue = typeof tons === 'string' ? parseFloat(tons.replace(/,/g, '')) : tons;
-
-  // Check if it's a valid number
-  if (Number.isNaN(numericValue)) return '0.0 kt';
-
-  // Format to 1 decimal place
-  const formattedValue = numericValue.toFixed(1);
-
-  return `${formattedValue} kt`;
 };
 
 /**
@@ -1106,7 +993,7 @@ export const focusFirstFormElement = (delay = 150) => {
   }, delay);
 };
 
-export const getPhoneValidationStorageKey = (context = 'registration', userRole = null) => {
+const getPhoneValidationStorageKey = (context = 'registration', userRole = null) => {
   if (context === 'update') {
     return 'phone_validation_update';
   }
@@ -1188,21 +1075,6 @@ export const clearPhoneValidationState = (context = 'registration', userRole = n
     if (typeof window !== 'undefined' && window.sessionStorage) {
       const storageKey = getPhoneValidationStorageKey(context, userRole);
       window.sessionStorage.removeItem(storageKey);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    return false;
-  }
-};
-
-export const clearAllPhoneValidationStates = () => {
-  try {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      window.sessionStorage.removeItem('phone_validation_update');
-      window.sessionStorage.removeItem('phone_validation_owner_registration');
-      window.sessionStorage.removeItem('phone_validation_charterer_registration');
-      window.sessionStorage.removeItem('phone_validation_registration');
       return true;
     }
     return false;

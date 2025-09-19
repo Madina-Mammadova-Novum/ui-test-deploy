@@ -102,7 +102,7 @@ export function messageDataAdapter({ data, clientId, role }) {
   };
 }
 
-export function messagesDataAdapter({ data, role, clientId }) {
+function messagesDataAdapter({ data, role, clientId }) {
   const sortedArray = data?.map((el) => el).sort(sortFromPastToToday);
 
   const messagesByDate = sortedArray.reduce((acc, currentValue) => {

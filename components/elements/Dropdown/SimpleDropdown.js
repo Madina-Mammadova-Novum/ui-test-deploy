@@ -32,7 +32,7 @@ const createTurkishFilter = () => {
   };
 };
 
-export const SimpleDropdown = React.forwardRef(
+const SimpleDropdown = React.forwardRef(
   (
     {
       asyncCall = false,

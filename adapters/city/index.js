@@ -1,4 +1,4 @@
-export const cityAdapter = ({ data }) => {
+const cityAdapter = ({ data }) => {
   if (data === null) return null;
   const { id, name, state } = data;
   if (!state) return null;

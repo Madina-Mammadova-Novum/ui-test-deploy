@@ -21,13 +21,13 @@ export function userRoleAdapter({ data }) {
   return ROLES.ANON;
 }
 
-export function listOfImosAdapter({ data }) {
+function listOfImosAdapter({ data }) {
   if (!data) return [];
 
   return data.filter(({ imo }) => imo).map(({ imo }) => imo);
 }
 
-export function listOfVesselsAdapter({ data }) {
+function listOfVesselsAdapter({ data }) {
   if (!data) return [];
 
   return data
@@ -133,7 +133,7 @@ function userCompanyDetailsAdapter({ data, role }) {
   };
 }
 
-export function cityAdapter({ data }) {
+function cityAdapter({ data }) {
   if (!data) return {};
 
   const { id, name } = data;
@@ -144,7 +144,7 @@ export function cityAdapter({ data }) {
   };
 }
 
-export function countryAdapter({ data }) {
+function countryAdapter({ data }) {
   if (!data) return {};
 
   const { id, name, codeISO3, codeISO2 } = data;
@@ -159,7 +159,7 @@ export function countryAdapter({ data }) {
   };
 }
 
-export function companyImosAdapter({ data, numberOfVessels }) {
+function companyImosAdapter({ data, numberOfVessels }) {
   if (!data) return {};
 
   return {
@@ -168,7 +168,7 @@ export function companyImosAdapter({ data, numberOfVessels }) {
   };
 }
 
-export function companyCargoesAdapter({ data }) {
+function companyCargoesAdapter({ data }) {
   if (!data) return [];
 
   return {
@@ -177,7 +177,7 @@ export function companyCargoesAdapter({ data }) {
   };
 }
 
-export function cargoesDetailsAdapter({ data }) {
+function cargoesDetailsAdapter({ data }) {
   if (Array.isArray(data)) {
     return data?.map((cargo) => cargoAdapter({ data: cargo }));
   }
@@ -185,7 +185,7 @@ export function cargoesDetailsAdapter({ data }) {
   return { data };
 }
 
-export function cargoAdapter({ data }) {
+function cargoAdapter({ data }) {
   const { billOfLadingDate, loadPort, vesselImo } = data;
 
   return {
@@ -195,13 +195,13 @@ export function cargoAdapter({ data }) {
   };
 }
 
-export function imoAdapter({ data }) {
+function imoAdapter({ data }) {
   if (!data) return null;
 
   return imoFormatter(data);
 }
 
-export function portAdapter({ data }) {
+function portAdapter({ data }) {
   if (!data) return {};
 
   const { name, id, enabled, countryId, terminals } = data;
@@ -304,7 +304,7 @@ function companyAddressesAdapter({ data }) {
   };
 }
 
-export function updateOwnerCompanyAdapter({ data }) {
+function updateOwnerCompanyAdapter({ data }) {
   if (!data) return null;
   const { vessels, imos, companyYearsOfOperation, companyName, phone } = data;
 
@@ -324,7 +324,7 @@ export function updateOwnerCompanyAdapter({ data }) {
   };
 }
 
-export function updateChartererCompanyAdapter({ data }) {
+function updateChartererCompanyAdapter({ data }) {
   if (!data) return null;
   const { cargoes, numberOfCargoes, companyYearsOfOperation, companyName, phone } = data;
 
@@ -450,12 +450,6 @@ export function loginResponseAdapter({ data }) {
   return nullableDataObjectAdapter(data);
 }
 
-export function refreshTokenAdapter({ data }) {
-  if (!data) return null;
-
-  return { token: data };
-}
-
 export function refreshTokenResponseAdapter({ data }) {
   if (data === null) return null;
   if (isEmpty(data)) return null;
@@ -463,21 +457,7 @@ export function refreshTokenResponseAdapter({ data }) {
   return { data };
 }
 
-export function tankerInfoAdapter({ data }) {
-  if (data === null) return null;
-  const { id, title, imo, port, date, status, marked } = data;
-  return {
-    id,
-    title,
-    imo,
-    port,
-    date,
-    status,
-    marked,
-  };
-}
-
-export function positionAdapter({ data }) {
+function positionAdapter({ data }) {
   if (!data) return null;
 
   const { id, name } = data;
@@ -528,13 +508,6 @@ export function signInAdapter({ data }) {
     password,
     redirect: false,
     callbackUrl: ROUTES.ACCOUNT_INFO,
-  };
-}
-
-export function signOutAdapter() {
-  return {
-    redirect: true,
-    callbackUrl: ROUTES.ROOT,
   };
 }
 

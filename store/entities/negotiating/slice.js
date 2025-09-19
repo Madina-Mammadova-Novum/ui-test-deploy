@@ -45,13 +45,6 @@ const negotiatingSlice = createSlice({
           : offer
       );
     },
-    updateAssignedTasksForOffers: (state, action) => {
-      const { parentId, offers, type } = action?.payload; // type: 'incoming' or 'sent'
-
-      if (state.data.offerById?.[parentId]?.[type]) {
-        state.data.offerById[parentId][type] = offers;
-      }
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserNegotiating.pending, (state) => {
@@ -79,6 +72,6 @@ const negotiatingSlice = createSlice({
   },
 });
 
-export const { updateCountdown, setToggle, setTab, updateAssignedTasksForOffers } = negotiatingSlice.actions;
+export const { updateCountdown, setToggle, setTab } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

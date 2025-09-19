@@ -7,7 +7,6 @@ import FormManager from '@/common/FormManager';
 import MatomoAnalytics from '@/common/Matomo';
 import NewRelicBrowser from '@/common/NewRelicBrowser';
 import StoreManager from '@/common/StoreManager';
-import TailwindIndicator from '@/common/TailwindIndicator';
 
 export {
   ClientSidePackages,
@@ -17,6 +16,5 @@ export {
   BlockManager,
   MatomoAnalytics,
   StoreManager,
-  TailwindIndicator,
   NewRelicBrowser,
 };

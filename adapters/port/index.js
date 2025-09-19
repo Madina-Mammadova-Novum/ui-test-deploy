@@ -2,7 +2,7 @@ import { arrayAdapter } from '@/adapters/common';
 import { countryAdapter } from '@/adapters/country';
 import { terminalsAdapter } from '@/adapters/terminal';
 
-export const portAdapter = ({ data }) => {
+const portAdapter = ({ data }) => {
   if (!data) return [];
 
   const {

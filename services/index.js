@@ -14,3 +14,4 @@ export * from '@/services/assignedTasks';
 export * from '@/services/clearanceFiles';
 export * from '@/services/documentRequests';
 export * from '@/services/countdownTimer';
+export * from '@/services/faq';
