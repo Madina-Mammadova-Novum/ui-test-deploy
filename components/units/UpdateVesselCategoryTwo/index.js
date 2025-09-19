@@ -1,6 +1,5 @@
 'use client';
 
-import { useCallback } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -9,11 +8,11 @@ import * as yup from 'yup';
 import { UpdateVesselCategoryTwoPropTypes } from '@/lib/types';
 
 import { ModalFormManager } from '@/common';
-import { FormDropdown, Loader, TextWithLabel, Title } from '@/elements';
-import { getVesselCategoryTwo, updateVesselTankerLink } from '@/services/vessel';
+import { FormDropdown, TextWithLabel, Title } from '@/elements';
+import { updateVesselTankerLink } from '@/services/vessel';
 import { updateVesselCategoryTwo } from '@/store/entities/fleets/slice';
 import { convertDataToOptions } from '@/utils/helpers';
-import { errorToast, successToast, useFetch, useHookFormParams } from '@/utils/hooks';
+import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
   vesselCategoryTwo: yup.object().required('Vessel category two is required'),
@@ -26,10 +25,8 @@ const UpdateVesselCategoryTwo = ({
   vesselTypeId,
   closeModal,
   currentValue,
+  vesselCategoryTwoOptions,
 }) => {
-  const [data, isLoading] = useFetch(
-    useCallback(() => getVesselCategoryTwo(vesselCategoryOneId), [vesselCategoryOneId])
-  );
   const methods = useHookFormParams({
     schema,
     state: {
@@ -73,15 +70,7 @@ const UpdateVesselCategoryTwo = ({
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="relative flex h-72 w-72 items-center justify-center">
-        <Loader className="h-8 w-8" />
-      </div>
-    );
-  }
-
-  const categoryTwoOptions = convertDataToOptions({ data }, 'id', 'name');
+  const categoryTwoOptions = convertDataToOptions({ data: vesselCategoryTwoOptions }, 'id', 'name');
 
   return (
     <div className="w-[292px]">
