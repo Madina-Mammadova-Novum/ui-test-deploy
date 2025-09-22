@@ -131,7 +131,7 @@
     "url": "https://ship.link/"
   },
   "engines": {
-    "node": "20.x",
+    "node": "22.x",
     "yarn": ">=1.22.0",
     "npm": "please-use-yarn"
   },
