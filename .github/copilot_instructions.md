@@ -667,24 +667,20 @@ const allowExtension = extensionTimeOptionsResponse?.data?.isAvailable || false;
 ### Key Updates to Follow
 
 1. **Replaced Static Countdown System**:
-
    - Old: `FIFTEEN_MINUTES_IN_MS` constant with `frozenAt` logic
    - New: Dynamic `extendMinute` parameters with `countdownStatus` field
 
 2. **Enhanced API Integration**:
-
    - New endpoints: `/v1/assignedtasks/*` and `/v1/countdownconfigs/*`
    - Changed from `countDownTimerSettingId` to `responseTimeMinutes` in requests
    - Updated defaultValue to first option value
 
 3. **Improved Component Architecture**:
-
    - New `ExtendCountdown` unit component replaces old modal patterns
    - Enhanced `Dropdown` component with `defaultValue` synchronization
    - Status-aware `DynamicCountdownTimer` with visual states
 
 4. **Redux State Management**:
-
    - Enhanced countdown actions to accept dynamic `extendMinute` values
    - Added `fetchDealCountdownData` action with proper error handling
 
