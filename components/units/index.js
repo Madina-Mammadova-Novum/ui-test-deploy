@@ -1,5 +1,3 @@
-import dynamic from 'next/dynamic';
-
 import Accordion from '@/units/Accordion';
 import AccordionCTA from '@/units/AccordionCTA';
 import AccordionHeader from '@/units/AccordionHeader';
@@ -117,8 +115,6 @@ import VerificationUserAccount from '@/units/VerificationUserAccount';
 import ViewCommentContent from '@/units/ViewCommentContent';
 import VoyageDetailsTabContent from '@/units/VoyageDetailsTabContent';
 
-const Map = dynamic(() => import('@/units/Map'), { ssr: false });
-
 export * from '@/units/Account';
 
 export {
@@ -229,7 +225,6 @@ export {
   DocumentRequestForm,
   DynamicCountdownTimer,
   PreFixtureDocumentRequestForm,
-  Map,
   FavoriteSearchForm,
   FavoriteSearchList,
   ConfirmModal,

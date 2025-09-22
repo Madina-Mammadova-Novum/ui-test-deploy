@@ -8,7 +8,7 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "prettier"
+    "prettier",
   ],
   "plugins": ["react-hooks", "jest", "jest-formatting", "import", "prettier"],
   "globals": {
@@ -30,10 +30,10 @@
     "jasmine": true,
     "window": true,
     "document": true,
-    "fetch": true
+    "fetch": true,
   },
   "parserOptions": {
-    "ecmaVersion": 2020
+    "ecmaVersion": 2020,
   },
   "rules": {
     "jsx-a11y/control-has-associated-label": "off",
@@ -49,12 +49,12 @@
     "no-param-reassign": [
       2,
       {
-        "props": false
-      }
+        "props": false,
+      },
     ],
     "no-underscore-dangle": [
       "error",
-      { "allow": ["__SERVER__", "__PRELOADED__STATE__", "__component", "__contentType"] }
+      { "allow": ["__SERVER__", "__PRELOADED__STATE__", "__component", "__contentType"] },
     ],
     "no-unsafe-optional-chaining": 0,
     "object-curly-spacing": [2, "always"],
@@ -69,8 +69,8 @@
     "jest/consistent-test-it": [
       "error",
       {
-        "fn": "it"
-      }
+        "fn": "it",
+      },
     ],
     "jest/no-test-return-statement": "error",
     "jest/no-done-callback": "error",
@@ -96,8 +96,8 @@
       "warn",
       {
         "ignoreCase": true,
-        "ignoreDeclarationSort": true
-      }
+        "ignoreDeclarationSort": true,
+      },
     ],
     "import/order": [
       1,
@@ -114,15 +114,15 @@
           { "pattern": "services/**", "group": "internal" },
           { "pattern": "store/**", "group": "internal" },
           { "pattern": "components/**", "group": "parent" },
-          { "pattern": "{types/**,**/types,types}", "group": "type" }
+          { "pattern": "{types/**,**/types,types}", "group": "type" },
         ],
         "pathGroupsExcludedImportTypes": ["react"],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",
-          "caseInsensitive": true
-        }
-      }
+          "caseInsensitive": true,
+        },
+      },
     ],
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "no-use-before-define": "off",
@@ -134,18 +134,20 @@
         "js": "never",
         "jsx": "never",
         "ts": "never",
-        "tsx": "never"
-      }
+        "tsx": "never",
+      },
     ],
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "react/destructuring-assignment": "off",
+    "react/forbid-prop-types": "off",
   },
   "parser": "@typescript-eslint/parser",
   "overrides": [
     {
       "files": ["src/**/*.tsx"],
       "rules": {
-        "react/prop-types": 0
-      }
-    }
-  ]
+        "react/prop-types": 0,
+      },
+    },
+  ],
 }

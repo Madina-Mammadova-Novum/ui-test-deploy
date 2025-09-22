@@ -1,12 +1,16 @@
+'use client';
+
+import React from 'react';
+
+import dynamic from 'next/dynamic';
+
 import { BlocksTypes } from '@/lib/types';
 
 import {
   BlockHeroImage,
-  ContactUsBlock,
   CTABlock,
   CtaImages,
   CTASingleImageBlock,
-  FAQBlock,
   HomeSearchBlock,
   ImageSliderBlock,
   ProductFeaturesBlock,
@@ -15,6 +19,15 @@ import {
   WhatWeOfferBlock,
   WhyWeAreBetterBlock,
 } from '@/blocks';
+
+// Dynamic imports with no SSR for components that have client-side dependencies
+const ContactUsBlock = dynamic(() => import('@/blocks/ContactUsBlock'), {
+  ssr: false,
+});
+
+const FAQBlock = dynamic(() => import('@/blocks/FAQBlock'), {
+  ssr: false,
+});
 
 const BLOCK_COMPONENTS = {
   'blocks.contact-us': ContactUsBlock,

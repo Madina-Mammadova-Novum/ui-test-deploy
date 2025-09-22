@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 
 const getServerCookie = async () => {
-  const role = cookies().get('session-user-role')?.value;
+  const role = (await cookies()).get('session-user-role')?.value;
 
   return { role };
 };

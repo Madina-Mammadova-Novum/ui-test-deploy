@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import delve from 'dlv';
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
@@ -25,7 +27,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
   };
 
   const printSocialLink = (link) => (
-    <NextLink key={link} href={delve(link, 'path')} title={delve(link, 'title')}>
+    <NextLink key={makeId()} href={delve(link, 'path')} title={delve(link, 'title')}>
       <HoverableIcon
         className="rounded-md border border-gray-darker p-2"
         icon={
@@ -62,7 +64,7 @@ const TeamBlock = ({ title, subTitle, shortDescription, members }) => {
               )}
 
               <div className="flex flex-col">
-                {fullName.trim() && (
+                {fullName?.trim() && (
                   <Title level="2" className="max-w-full break-words text-lg">
                     {fullName}
                   </Title>
