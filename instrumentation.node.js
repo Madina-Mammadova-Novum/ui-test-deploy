@@ -1,8 +1,11 @@
 // Completely disable instrumentation in development to avoid OpenTelemetry warnings
 const isDevelopment = process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development';
 
-if (isDevelopment) {
-  // In development, just export nothing to prevent module compilation
+// Also check if we have the required environment variables for OpenTelemetry
+const hasOtelConfig = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY && process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+
+if (isDevelopment || !hasOtelConfig) {
+  // In development or without proper config, just export nothing to prevent module compilation
   module.exports = {};
 } else {
   // In production, load OpenTelemetry normally
