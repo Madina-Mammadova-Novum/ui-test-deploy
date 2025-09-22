@@ -213,13 +213,15 @@ const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
     },
     {
       id,
-      editable: Boolean(tankerLink?.vesselCategoryTwos?.name),
+      rowType: 'category-two',
+      editable: tankerLink?.vesselCategoryOne?.vesselCategoryTwoOptions?.length > 0,
       value: tankerLink?.vesselCategoryTwos?.name,
       disabled: additionRequested,
       name,
       vesselId: id,
       vesselCategoryOneId: tankerLink?.vesselCategoryOne?.id,
       vesselTypeId: tankerLink?.vesselType?.id,
+      vesselCategoryTwoOptions: tankerLink?.vesselCategoryOne?.vesselCategoryTwoOptions,
       actions: [
         {
           action: ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,
@@ -344,13 +346,15 @@ const unassignedFleetRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
-      editable: Boolean(tankerLink?.vesselCategoryTwos?.name),
+      rowType: 'category-two',
+      editable: tankerLink?.vesselCategoryOne?.vesselCategoryTwoOptions?.length > 0,
       value: tankerLink?.vesselCategoryTwos?.name,
       disabled: additionRequested,
       name,
       vesselId: id,
       vesselCategoryOneId: tankerLink?.vesselCategoryOne?.id,
       vesselTypeId: tankerLink?.vesselType?.id,
+      vesselCategoryTwoOptions: tankerLink?.vesselCategoryOne?.vesselCategoryTwoOptions,
       actions: [
         {
           action: ACTIONS.UPDATE_VESSEL_CATEGORY_TWO,

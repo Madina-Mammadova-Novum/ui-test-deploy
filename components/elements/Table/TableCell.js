@@ -64,9 +64,11 @@ const TableCell = ({ cellProps }) => {
     vesselId,
     vesselCategoryOneId,
     vesselTypeId,
+    vesselCategoryTwoOptions,
+    rowType,
   } = cellProps;
 
-  const emptyCell = !value && !link && !downloadData && !countdownData && !editable;
+  const emptyCell = !value && !link && !downloadData && !countdownData && (!editable || rowType === 'category-two');
 
   const port = { value: portId, label: value, countryFlag: countryCode };
 
@@ -120,6 +122,7 @@ const TableCell = ({ cellProps }) => {
             tankerName={name}
             vesselCategoryOneId={vesselCategoryOneId}
             vesselTypeId={vesselTypeId}
+            vesselCategoryTwoOptions={vesselCategoryTwoOptions}
             currentValue={value ? { id: value.id, name: value } : null}
           />
         );
