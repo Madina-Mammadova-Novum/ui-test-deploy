@@ -40,10 +40,9 @@ const NotificationCardBody = ({
     if (!isMessageLong || isExpanded) {
       return message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
     }
-    return (
-      `${message?.substring(0, MESSAGE_CHAR_LIMIT).replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>') 
-      }<span class="pr-1">...</span>`
-    );
+    return `${message
+      ?.substring(0, MESSAGE_CHAR_LIMIT)
+      .replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>')}<span class="pr-1">...</span>`;
   }, [message, isMessageLong, isExpanded]);
 
   const handleToggleExpand = useCallback(() => {
