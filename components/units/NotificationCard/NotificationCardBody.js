@@ -91,7 +91,7 @@ const NotificationCardBody = ({
           {isMessageLong && !isExpanded && (
             <Button
               onClick={handleToggleExpand}
-              customStyles="!p-0 underline decoration-underline"
+              customStyles="!p-0 underline"
               buttonProps={{
                 size: 'small',
                 variant: 'primary',
@@ -107,7 +107,7 @@ const NotificationCardBody = ({
         {url && (
           <Button
             onClick={handleRedirect}
-            customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline"
+            customStyles="!p-0 !pt-2.5 relative -left-1.5 underline"
             disabled={disabled === urlId}
             buttonProps={{
               size: 'small',
