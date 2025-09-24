@@ -314,6 +314,8 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     id,
     createdAt,
     countdownStatus,
+    status,
+    frozenAt,
   } = data;
 
   return [
@@ -354,6 +356,15 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     },
     {
       id,
+      value: status,
+      notified,
+      type: TYPE.SEMIBOLD,
+      freezed: frozenAt,
+      icon: <StatusIndicator status={status} />,
+    },
+    {
+      id,
+      freezed: frozenAt,
       notified,
       value: createdAt ? transformDate(createdAt, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
     },
@@ -391,7 +402,7 @@ export const counteroffersTabRowsDataAdapter = ({ data, parentId }) => {
 export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
-  const { vessel, createdAt, expiresAt, frozenAt, id, countdownStatus } = data;
+  const { vessel, createdAt, expiresAt, frozenAt, id, countdownStatus, status } = data;
 
   const { details: { summerDwt } = {} } = vessel || {};
   const openPort = vessel?.openPort || {};
@@ -434,6 +445,13 @@ export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
       id,
       freezed: frozenAt,
       value: summerDwt && `${trimTonValue(summerDwt)} tons`,
+    },
+    {
+      id,
+      freezed: frozenAt,
+      value: status,
+      type: TYPE.SEMIBOLD,
+      icon: <StatusIndicator status={status} />,
     },
     {
       id,
