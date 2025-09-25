@@ -81,7 +81,6 @@ export function responseSearchVesselAdapter({ data }) {
     searchResultFlag,
     hasFailedOffer,
     cargoes,
-    ballastLegTooltipText,
   } = data;
 
   const processedCargoes = cargoes?.map((result) => responseSearchVesselCargoesAdapter({ data: result }));
@@ -94,7 +93,6 @@ export function responseSearchVesselAdapter({ data }) {
     dwt: summerDeadWeight,
     estimatedArrival: estimatedArrivalTime && transformDate(estimatedArrivalTime, 'MMM dd, yyyy'),
     ballastLeg,
-    ballastLegTooltipText,
     estimatedArrivalTime,
     expandedData: {
       vesselOwnerData: [
@@ -635,7 +633,6 @@ export const tankerInformationAdapter = (data) => {
       } = {},
     } = {},
     ballastLeg,
-    ballastLegTooltipText,
     estimatedArrivalTime,
   } = data;
 
@@ -680,17 +677,17 @@ export const tankerInformationAdapter = (data) => {
         title: (
           <>
             Ballast Leg
-            {ballastLegTooltipText && (
+            {ballastLeg?.description && (
               <HoverTooltip
                 className="!-top-11 !max-w-[320px] !-translate-x-[50%] !whitespace-pre-wrap"
-                data={{ description: ballastLegTooltipText }}
+                data={{ description: ballastLeg?.description }}
               >
                 <UilInfoCircle className="h-4 w-4 cursor-help fill-black hover:fill-blue-darker" />
               </HoverTooltip>
             )}
           </>
         ),
-        description: ballastLeg,
+        description: ballastLeg?.type,
       },
       {
         title: 'Ship Age',

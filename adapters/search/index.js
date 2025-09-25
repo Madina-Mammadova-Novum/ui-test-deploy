@@ -7,8 +7,7 @@ import { trimTonValue } from '@/utils/helpers';
 export const searchHeaderDataAdapter = ({ data }) => {
   if (!data) return null;
 
-  const { tankerName, imo, flagOfRegistry, dwt, estimatedArrival, ballastLeg, ballastLegTooltipText, hasFailedOffer } =
-    data;
+  const { tankerName, imo, flagOfRegistry, dwt, estimatedArrival, ballastLeg, hasFailedOffer } = data;
 
   return [
     {
@@ -47,17 +46,17 @@ export const searchHeaderDataAdapter = ({ data }) => {
       label: (
         <span className="flex items-center gap-1 text-xs-sm font-semibold uppercase text-gray">
           Ballast Leg
-          {ballastLegTooltipText && (
+          {ballastLeg?.description && (
             <HoverTooltip
               className="!-top-11 left-12 !max-w-[320px] !-translate-x-[50%] !whitespace-pre-wrap 3md:left-0"
-              data={{ description: ballastLegTooltipText }}
+              data={{ description: ballastLeg?.description }}
             >
               <UilInfoCircle className="h-4 w-4 cursor-help fill-black hover:fill-blue-darker" />
             </HoverTooltip>
           )}
         </span>
       ),
-      text: ballastLeg ?? '',
+      text: ballastLeg?.type ?? '',
       customStyles: '[&>label]:min-w-[8rem]',
     },
   ];

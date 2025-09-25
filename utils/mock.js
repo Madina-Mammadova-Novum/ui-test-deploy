@@ -683,6 +683,9 @@ export const ownerNegotiatingCounterofferTableHeader = [
     text: 'load port',
   },
   {
+    text: 'status',
+  },
+  {
     text: 'date sent',
   },
   {
@@ -708,6 +711,9 @@ export const chartererNegotiatingCounterofferTableHeader = [
   },
   {
     text: 'DWT',
+  },
+  {
+    text: 'status',
   },
   {
     text: 'Date received',
