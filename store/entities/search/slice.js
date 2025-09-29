@@ -34,6 +34,8 @@ const searchSlice = createSlice({
     },
     setSearchParams: (state, { payload }) => {
       state.searchParams = payload;
+      // Clear existing search data when new search params are set
+      state.searchData = null;
     },
     setSearchData: (state, { payload }) => {
       state.searchData = payload;
