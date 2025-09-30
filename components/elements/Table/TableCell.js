@@ -274,7 +274,7 @@ const TableCell = ({ cellProps }) => {
           />
         )}
         {countdownData && <DynamicCountdownTimer {...countdownData} />}
-        {editable && <div className="flex gap-x-2.5">{printModalView}</div>}
+        {editable && <div className="flex w-full justify-end gap-x-2.5">{printModalView}</div>}
       </div>
     </td>
   );

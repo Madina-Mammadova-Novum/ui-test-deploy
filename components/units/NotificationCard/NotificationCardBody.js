@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import parse from 'html-react-parser';
@@ -8,7 +8,7 @@ import parse from 'html-react-parser';
 import { NotificationCardBodyPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
-import { REGEX } from '@/lib/constants';
+import { MESSAGE_CHAR_LIMIT, REGEX } from '@/lib/constants';
 import { getCurrentDealStage, readNotification } from '@/store/entities/notifications/actions';
 import { resetParams, setIsOpened } from '@/store/entities/notifications/slice';
 import { getNotificationsDataSelector } from '@/store/selectors';
@@ -29,9 +29,25 @@ const NotificationCardBody = ({
   const role = getCookieFromBrowser('session-user-role');
   const { filterParams, loading } = useSelector(getNotificationsDataSelector);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const isDealPath = useMemo(() => url?.startsWith('/deals'), [url]);
   const isDocumentTab = useMemo(() => /document/i.test(message || ''), [message]);
-  const formattedMessage = message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
+
+  const isMessageLong = useMemo(() => (message?.length || 0) > MESSAGE_CHAR_LIMIT, [message]);
+
+  const displayMessage = useMemo(() => {
+    if (!isMessageLong || isExpanded) {
+      return message?.replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>');
+    }
+    return `${message
+      ?.substring(0, MESSAGE_CHAR_LIMIT)
+      .replace(REGEX.DETECT_ID, '<span class="font-semibold">$&</span>')}<span class="pr-1">...</span>`;
+  }, [message, isMessageLong, isExpanded]);
+
+  const handleToggleExpand = useCallback(() => {
+    setIsExpanded((prev) => !prev);
+  }, []);
 
   const handleRedirect = useCallback(() => {
     setDisabled(urlId);
@@ -69,12 +85,29 @@ const NotificationCardBody = ({
 
   return (
     <div className="flex flex-col items-start">
-      <p className="text-xsm font-normal text-black">{parse(formattedMessage)}</p>
+      <div className="flex flex-col">
+        <p className="text-xsm font-normal text-black">
+          {parse(displayMessage)}
+          {isMessageLong && !isExpanded && (
+            <Button
+              onClick={handleToggleExpand}
+              customStyles="!p-0 underline"
+              buttonProps={{
+                size: 'small',
+                variant: 'primary',
+                text: 'Show more',
+                textClassName: '!pl-0',
+              }}
+              customStylesFromWrap="!inline-block"
+            />
+          )}
+        </p>
+      </div>
       <div className="flex">
         {url && (
           <Button
             onClick={handleRedirect}
-            customStyles="!p-0 !pt-2.5 relative -left-1.5 underline decoration-underline"
+            customStyles="!p-0 !pt-2.5 relative -left-1.5 underline"
             disabled={disabled === urlId}
             buttonProps={{
               size: 'small',
