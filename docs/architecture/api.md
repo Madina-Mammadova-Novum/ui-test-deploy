@@ -144,18 +144,21 @@ export function responseOffersAdapter({ data }) {
 ### Offer Workflow Rules
 
 1. **Negotiating Stage**:
+
    - Only charterers can initiate offers
    - Owners can accept, decline, or counter-offer
    - Maximum 5 counter-offers per deal
    - 24-hour expiration for initial offers
 
 2. **Pre-fixture Stage**:
+
    - Detailed vessel and cargo information required
    - Document upload becomes mandatory
    - Final commercial terms must be agreed
    - 48-hour countdown for documentation
 
 3. **On Subs Stage**:
+
    - Subject removal requires both parties' confirmation
    - Legal documentation review period
    - Bank guarantees and certificates validation

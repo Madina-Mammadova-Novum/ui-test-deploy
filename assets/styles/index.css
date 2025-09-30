@@ -257,8 +257,7 @@
 /* Swiper Concern Gallery  */
 
 .bg-swiper-navigation {
-  background-image:
-    url('/angle.webp'),
+  background-image: url('/angle.webp'),
     linear-gradient(179.62deg, #f4f4f4 0.32%, rgba(255, 255, 255, 0) 229.29%, rgba(244, 244, 244, 0) 229.29%);
 }
 
