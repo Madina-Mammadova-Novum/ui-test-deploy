@@ -2,12 +2,14 @@
 
 ## Project Overview
 
-ShipLink is a maritime B2B platform built with Next.js 14 that facilitates vessel chartering, cargo negotiations, and maritime documentation workflows. The platform handles complex shipping operations including vessel position tracking, charter party negotiations, and real-time updates for maritime business processes.
+ShipLink is a maritime B2B platform built with Next.js 15.5.3 and React 19.1.1 that facilitates vessel chartering, cargo negotiations, and maritime documentation workflows. The platform runs on Node.js 22.x and handles complex shipping operations including vessel position tracking, charter party negotiations, and real-time updates for maritime business processes.
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 15.5.3 with App Router
 - **Language**: JavaScript (ES6+)
+- **Runtime**: Node.js 22.x (>=22.0.0)
+- **React**: 19.1.1
 - **Styling**: Tailwind CSS with custom design system
 - **State Management**: Redux Toolkit with Redux Persist
 - **Form Handling**: React Hook Form with Yup validation
@@ -160,10 +162,7 @@ export function responseDataAdapter({ data }) {
 import { adapter } from '@/adapters/${domain}';
 
 export async function serviceFunction({ data }) {
-  const response = await postData({
-    url: '/api/endpoint',
-    data: requestAdapter(data),
-  });
+  const response = await postData({ url: '/api/endpoint', data: requestAdapter(data) });
   return responseAdapter(response);
 }
 ```
@@ -203,14 +202,9 @@ export const getCountdownConfigs = async ({ purpose = null } = {}) => {
 
 ```javascript
 // PropTypes validation required for units/modules
-ComponentName.propTypes = {
-  prop1: PropTypes.string.isRequired,
-  prop2: PropTypes.func,
-};
+ComponentName.propTypes = { prop1: PropTypes.string.isRequired, prop2: PropTypes.func };
 
-ComponentName.defaultProps = {
-  prop2: () => {},
-};
+ComponentName.defaultProps = { prop2: () => {} };
 ```
 
 ## Maritime-Specific Guidelines
@@ -334,19 +328,11 @@ export const calculateCountdown = (expiresAt) => {
 const handleExtendCountdown = async () => {
   const { error, message } = await submitTaskExtensionRequest({
     taskId,
-    data: {
-      requestedMinutes: selectedOption.value,
-      description: `Requesting extension for offer ${offerId}`,
-    },
+    data: { requestedMinutes: selectedOption.value, description: `Requesting extension for offer ${offerId}` },
   });
 
   if (!error) {
-    dispatch(
-      updateCountdown({
-        offerId,
-        extendMinute: selectedOption.value,
-      })
-    );
+    dispatch(updateCountdown({ offerId, extendMinute: selectedOption.value }));
     onExtensionSuccess(selectedOption.value);
   }
 };
@@ -376,15 +362,9 @@ export const offerDetailsAdapter = ({ data, role }) => {
     allowExtension,
     isCountdownActive: countdownStatus === 'Running',
     extensionTimeOptions:
-      extensionTimeOptions?.map((option) => ({
-        value: option.value,
-        label: option.text || option.label,
-      })) || [],
+      extensionTimeOptions?.map((option) => ({ value: option.value, label: option.text || option.label })) || [],
     taskId,
-    countdownData: {
-      date: calculateCountdown(expiresAt),
-      autoStart: countdownStatus === 'Running',
-    },
+    countdownData: { date: calculateCountdown(expiresAt), autoStart: countdownStatus === 'Running' },
     // ... other properties
   };
 };
@@ -456,11 +436,7 @@ dispatch(
 );
 
 // Fetch countdown data for individual deals
-dispatch(
-  fetchDealCountdownData({
-    dealId: offerId,
-  })
-);
+dispatch(fetchDealCountdownData({ dealId: offerId }));
 ```
 
 ### Error Prevention Patterns

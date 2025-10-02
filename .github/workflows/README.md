@@ -2,6 +2,12 @@
 
 This directory contains GitHub Actions workflows for automated code quality checks and validation on pull requests.
 
+## Current Versions
+
+- **Node.js**: 22.x
+- **Next.js**: 15.5.3
+- **React**: 19.1.1
+
 ## Available Workflows
 
 ### 1. PR Validation (`pr-validation.yml`)

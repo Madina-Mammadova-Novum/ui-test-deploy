@@ -1,15 +1,18 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 # Technical Stack Overview
 
 This rule provides an overview of the technical stack and associated guidelines for the ShipLink project, based on [docs/technical/stack.md](mdc:docs/technical/stack.md).
 
 ## Core Technologies
 
-- **Framework**: Next.js 14 (using `pages/api`, SSR, App Router partially)
+- **Runtime**: Node.js 22.x (>=22.0.0)
+- **Framework**: Next.js 15.5.3 (using `pages/api`, SSR, App Router partially)
+- **React**: 19.1.1
 - **State Management**: Redux Toolkit (with Redux Persist, custom slices, Thunk)
 - **Styling**: Tailwind CSS (with custom theme, responsive design, utility-first, custom breakpoint `3md: 1024px`)
 - **Forms**: React Hook Form (with Yup for schema validation, custom maritime rules)
@@ -25,14 +28,14 @@ This rule provides an overview of the technical stack and associated guidelines 
 - **Data Handling**: `date-fns` (timezones, laycan), `lodash`, `axios` (custom headers), `yup`
 - **UI Components**: `react-select` (async search, debounce 400ms, caching), `react-datepicker`
 - **Maps**: `react-leaflet` (vessel tracking, port visualization, custom markers)
-    - *See TODOs in [docs/technical/stack.md](mdc:docs/technical/stack.md) for planned map features.*
+  - _See TODOs in [docs/technical/stack.md](mdc:docs/technical/stack.md) for planned map features._
 
 ## Development Environment
 
 - **Build**: Webpack, Babel, PostCSS, SWC
 - **Version Control**: Git
 - **Commit Messages**: Follow Conventional Commits standard.
-    - **Scopes**: `owner`, `charterer`, `vessel`, `cargo`, `ui`, `api`, `fix`, `negotiation`
+  - **Scopes**: `owner`, `charterer`, `vessel`, `cargo`, `ui`, `api`, `fix`, `negotiation`
 
 ## Performance
 
@@ -43,4 +46,3 @@ This rule provides an overview of the technical stack and associated guidelines 
 
 - **Authentication**: JWT with refresh tokens, role-based access control (RBAC), session management.
 - **Data Protection**: HTTPS, API request validation, data encryption, maritime compliance checks.
-

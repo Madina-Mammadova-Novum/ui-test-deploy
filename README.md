@@ -4,6 +4,13 @@ A Next.js-based maritime B2B platform for vessel chartering, cargo management, a
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Tech Stack Versions
+
+- **Node.js**: 22.x (>=22.0.0)
+- **Next.js**: 15.5.3
+- **React**: 19.1.1
+- **Package Manager**: Yarn (exclusively)
+
 ## Getting Started
 
 First, init your Node version to version for the project:
