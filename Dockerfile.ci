@@ -1,4 +1,4 @@
-FROM node:20.9.0 as builder
+FROM node:22.19.0 as builder
 WORKDIR /app
 COPY . .
 
@@ -29,7 +29,7 @@ ENV PREVIEW_SECRET $PREVIEW_SECRET
 RUN yarn install
 RUN NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL yarn build
 
-FROM node:20.9.0 as runner
+FROM node:22.19.0 as runner
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs

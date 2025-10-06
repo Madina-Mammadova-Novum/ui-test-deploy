@@ -76,13 +76,13 @@ export const chartererNegotiatingHeaderDataAdapter = ({ data }) => {
   ];
 };
 
-export const incomingTabRowsDataAdapter = ({ data, parentId }) => {
+const incomingTabRowsDataAdapter = ({ data, parentId }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => incomingTabRowDataAdapter({ data: rowData, index: index + 1, parentId }));
 };
 
-export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
+const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
   const {
@@ -183,13 +183,13 @@ export const incomingTabRowDataAdapter = ({ data, index, parentId }) => {
   ];
 };
 
-export const sentOffersTabRowsDataAdapter = ({ data }) => {
+const sentOffersTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => sentOffersTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const sentOffersTabRowDataAdapter = ({ data, index }) => {
+const sentOffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { id, vessel, status, createdAt, expiresAt, frozenAt, notified, countdownStatus } = data;
@@ -291,13 +291,13 @@ export const offerTabDataByRole = ({ data, role, parentId }) => {
   }
 };
 
-export const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
+const sentCounteroffersTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => sentCounteroffersTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
+const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const {
@@ -393,13 +393,13 @@ export const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const counteroffersTabRowsDataAdapter = ({ data, parentId }) => {
+const counteroffersTabRowsDataAdapter = ({ data, parentId }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => counteroffersTabRowDataAdapter({ data: rowData, index: index + 1, parentId }));
 };
 
-export const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
+const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
   if (!data) return null;
 
   const { vessel, createdAt, expiresAt, frozenAt, id, countdownStatus, status } = data;
@@ -493,13 +493,13 @@ export const counteroffersTabDataByRole = ({ data, role, parentId }) => {
   }
 };
 
-export const ownerFailedTabRowsDataAdapter = ({ data }) => {
+const ownerFailedTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => ownerFailedTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
+const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { cargo, laycanStart, laycanEnd, failedAt, notified, reason, id } = data;
@@ -574,13 +574,13 @@ export const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   ];
 };
 
-export const chartererFailedTabRowsDataAdapter = ({ data }) => {
+const chartererFailedTabRowsDataAdapter = ({ data }) => {
   if (!data) return [];
 
   return data.map((rowData, index) => chartererFailedTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
 
-export const chartererFailedTabRowDataAdapter = ({ data, index }) => {
+const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const { vessel, failedAt, reason, id, notified } = data;

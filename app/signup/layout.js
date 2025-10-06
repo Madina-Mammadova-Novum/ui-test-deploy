@@ -1,5 +1,5 @@
 import { metaData } from '@/adapters/metaData';
-import NewAuthLayout from '@/layouts/NewAuthLayout';
+import { NewAuthLayout } from '@/layouts';
 import { ROUTES } from '@/lib';
 
 export function generateMetadata() {

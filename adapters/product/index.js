@@ -1,4 +1,4 @@
-export const postProductAdapter = ({ data }) => {
+const postProductAdapter = ({ data }) => {
   const { product, density, quantity, tolerance } = data;
   return {
     productId: product?.value,
@@ -17,7 +17,7 @@ export const postProductsAdapter = ({ data }) => {
     .filter((item) => item);
 };
 
-export const getProductAdapter = ({ data }) => {
+const getProductAdapter = ({ data }) => {
   const { id, name, density } = data;
   return {
     id,

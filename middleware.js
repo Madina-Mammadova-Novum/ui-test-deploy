@@ -41,7 +41,7 @@ function handleCors(req, response) {
   return response;
 }
 
-export default function middleware(req) {
+export default async function middleware(req) {
   // Initialize the response
   let response = NextResponse.next();
 
@@ -83,8 +83,9 @@ export default function middleware(req) {
   }
 
   // Continue with the original authentication and authorization checks if not in maintenance mode
-  const accessToken = cookies().get('session-access-token')?.value;
-  const role = cookies().get('session-user-role')?.value;
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('session-access-token')?.value;
+  const role = cookieStore.get('session-user-role')?.value;
 
   const { isOwner, isCharterer, isAnon } = getRoleIdentity({ role });
 

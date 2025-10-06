@@ -1,6 +1,6 @@
 import { getLocode } from '@/utils/helpers';
 
-export const dropDownOptionAdapter = (data) => {
+const dropDownOptionAdapter = (data) => {
   if (!data) return {};
 
   const { id, countryId, label, code, countryFlag, countryName, countryCode } = data;

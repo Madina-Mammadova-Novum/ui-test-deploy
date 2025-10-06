@@ -469,24 +469,8 @@ export function confirmCounterofferDetailsAdapter({ data }) {
   };
 }
 
-export const requestExtendCountdownAdapter = ({ data }) => {
-  if (!data) return [];
-  return {
-    dealId: data,
-  };
-};
-
 export const responseExtendCountdownAdapter = ({ data }) => {
   return objectAdapter(data);
-};
-
-export const requestOnSubsCountdownExtensionAdapter = ({ data }) => {
-  if (!data) return [];
-  const { option, offerId } = data;
-  return {
-    dealId: offerId,
-    minutes: option?.value,
-  };
 };
 
 export const responseOnSubsCountdownExtensionAdapter = ({ data }) => {

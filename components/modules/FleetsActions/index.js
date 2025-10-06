@@ -1,6 +1,5 @@
-import AddNewTanker from '../AddNewTanker';
-
 import PlusCircleSVG from '@/assets/images/plusCircle.svg';
+import { AddNewTanker } from '@/modules';
 import { CreateFleetForm, ModalWindow } from '@/units';
 
 const FleetsActions = () => {

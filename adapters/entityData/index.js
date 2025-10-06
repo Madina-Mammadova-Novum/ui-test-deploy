@@ -1,7 +1,7 @@
 import { blocksDataAdapter } from '@/adapters/block';
 import { ROOT_COLLECTION_TYPE } from '@/lib/constants';
 
-export const entityDataError = (error) => {
+const entityDataError = (error) => {
   return {
     error: {
       ...error,
@@ -10,7 +10,7 @@ export const entityDataError = (error) => {
   };
 };
 
-export const entityDataAdapter = async ({ data }) => {
+const entityDataAdapter = async ({ data }) => {
   if (!data) return null;
   const { id, attributes } = data;
   const { title, slug, content, blocks, seo } = attributes;
@@ -24,16 +24,6 @@ export const entityDataAdapter = async ({ data }) => {
     blocks: blocks !== undefined ? await blocksDataAdapter(blocks) : [],
     seo: seo !== undefined ? seo : null,
   };
-};
-
-export const entitiesDataAdapter = async ({ data }) => {
-  if (data === null) return [];
-  const entitiesData = await Promise.all(
-    data.map((entity) => {
-      return entityDataAdapter({ data: entity });
-    })
-  );
-  return entitiesData;
 };
 
 export const entityDataResponseAdapter = async (response, locale, collectionType) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,8 @@ import TankerSearch from '@/modules/TankerSearch';
 import { getSavedSearchDetail } from '@/services/savedSearch';
 import { setSearchParams } from '@/store/entities/search/slice';
 
-export default function Page({ params }) {
+export default function Page(props) {
+  const params = use(props.params);
   const [isLoading, setIsLoading] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
 

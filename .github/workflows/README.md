@@ -2,6 +2,12 @@
 
 This directory contains GitHub Actions workflows for automated code quality checks and validation on pull requests.
 
+## Current Versions
+
+- **Node.js**: 22.x
+- **Next.js**: 15.5.3
+- **React**: 19.1.1
+
 ## Available Workflows
 
 ### 1. PR Validation (`pr-validation.yml`)
@@ -131,12 +137,10 @@ env:
 ### Common Issues
 
 1. **"No package.json found"**
-
    - Ensure you're running from the correct directory
    - Check that all files are committed
 
 2. **"ESLint not found"**
-
    - Verify ESLint is in your `devDependencies`
    - Check that `yarn install` completed successfully
 

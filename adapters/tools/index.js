@@ -51,7 +51,7 @@ export const estimationBodyAdapter = ({ data }) => {
 
 export const estimationResponseDataAdapter = ({ data }) => dataObjectAdapter(data);
 
-export const successEstimationAdapter = ({ data }) => {
+const successEstimationAdapter = ({ data }) => {
   if (!data) return null;
 
   const { perTonnage, total, route } = data;
@@ -63,7 +63,7 @@ export const successEstimationAdapter = ({ data }) => {
   };
 };
 
-export const successDistanceAdapter = ({ data }) => {
+const successDistanceAdapter = ({ data }) => {
   if (!data) return null;
 
   const { distance, duration, route } = data;

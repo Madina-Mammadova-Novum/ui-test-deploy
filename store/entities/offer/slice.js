@@ -24,9 +24,6 @@ const offerSlice = createSlice({
   name: 'offer',
   initialState,
   reducers: {
-    setRanges: (state, { payload }) => {
-      state.data.ranges = payload;
-    },
     setPaymentTerms: (state, { payload }) => {
       state.data.paymentTerms = payload;
     },
@@ -97,6 +94,6 @@ const offerSlice = createSlice({
   },
 });
 
-export const { setPaymentTerms, setDemurragePaymentTerms, setRanges, resetOfferData } = offerSlice.actions;
+export const { setPaymentTerms, setDemurragePaymentTerms, resetOfferData } = offerSlice.actions;
 
 export default offerSlice.reducer;

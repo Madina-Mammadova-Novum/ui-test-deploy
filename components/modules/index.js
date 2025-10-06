@@ -28,7 +28,7 @@ import { AccountFooter, PageFooter } from '@/modules/Footer';
 import ForgotPasswordForm from '@/modules/ForgotPasswordForm';
 import GettingStartedSection from '@/modules/GettingStartedSection';
 import GlobalError from '@/modules/GlobalError';
-import { AccountHeader, AuthHeader, MaintenanceHeader, NewAuthHeader, PageHeader } from '@/modules/Header';
+import { AccountHeader, AuthHeader, NewAuthHeader, PageHeader } from '@/modules/Header';
 import LoginForm from '@/modules/LoginForm';
 import ModalWrapper from '@/modules/ModalWrapper';
 import Navbar from '@/modules/Navbar';
@@ -46,7 +46,6 @@ import PersonalDetailsForm from '@/modules/PersonalDetailsForm';
 import PostFixture from '@/modules/PostFixture';
 import PostFixtureDetails from '@/modules/PostFixture/PostFixtureDetails';
 import PostFixtureExpandedContent from '@/modules/PostFixture/PostFixtureExpandedContent';
-import PostFixtureExpandedFooter from '@/modules/PostFixture/PostFixtureExpandedFooter';
 import PostFixtureResultContent from '@/modules/PostFixture/PostFixtureResultContent';
 import PreFixture from '@/modules/PreFixture';
 import PreFixtureDetails from '@/modules/PreFixture/PreFixtureDetails';
@@ -62,7 +61,6 @@ import ViewCounteroffer from '@/modules/ViewCounteroffer';
 import ViewFailedOffer from '@/modules/ViewFailedOffer';
 import ViewIncomingOffer from '@/modules/ViewIncomingOffer';
 import ViewOffer from '@/modules/ViewOffer';
-import VoyageDetailsContent from '@/modules/VoyageDetailsContent';
 
 export {
   AccountContainer,
@@ -82,7 +80,6 @@ export {
   Notification,
   ProfileMenu,
   PageHeader,
-  MaintenanceHeader,
   AccountHeader,
   PageFooter,
   AccountTools,
@@ -100,14 +97,12 @@ export {
   RegistrationForm,
   TankerSearch,
   ExpandableRow,
-  VoyageDetailsContent,
   CommentsContent,
   TankerSearchResults,
   PreFixture,
   PostFixture,
   PostFixtureExpandedContent,
   PostFixtureResultContent,
-  PostFixtureExpandedFooter,
   Fixture,
   Negotiating,
   ViewIncomingOffer,

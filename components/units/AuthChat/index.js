@@ -3,13 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import ChatControl from '../ChatControl';
-import ChatConversation from '../ChatConversation';
-import ChatList from '../ChatList';
-import ChatModal from '../ChatModal';
-import ChatLoadMoreCta from '../ChatModal/ChatLoadMoreCta';
-import CollapsedChats from '../CollapsedChats';
-
 import { AuthChatPropTypes } from '@/lib/types';
 
 import { Divider, Loader } from '@/elements';
@@ -26,6 +19,7 @@ import {
   setOpenedChat,
 } from '@/store/entities/chat/slice';
 import { getAuthChatSelector } from '@/store/selectors';
+import { ChatControl, ChatConversation, ChatList, ChatLoadMoreCta, ChatModal, CollapsedChats } from '@/units';
 import { useMediaQuery } from '@/utils/hooks';
 
 const AuthChat = ({ opened, token }) => {

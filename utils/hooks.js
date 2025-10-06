@@ -10,15 +10,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { getFilledArray, sortByType } from './helpers';
 
 import { navigationPagesAdapter } from '@/adapters/navigation';
-import { chartererSidebarAdapter, ownerSidebarAdapter } from '@/adapters/sidebar';
 import { ROUTES } from '@/lib';
-import { ROLES, SORT_OPTIONS } from '@/lib/constants';
+import { SORT_OPTIONS } from '@/lib/constants';
 import { clearSession } from '@/store/entities/auth/slice';
 import { resetChat } from '@/store/entities/chat/slice';
 import { resetNotificationData } from '@/store/entities/notifications/slice';
 import { notificationToastFunc, toastFunc } from '@/utils/index';
-
-export { useAssignedTasks } from './hooks/useAssignedTasks';
 
 export const successToast = (title, description = '') => {
   return toastFunc('success', title, description);
@@ -28,35 +25,9 @@ export const errorToast = (title, description = '') => {
   return toastFunc('error', title, description);
 };
 
-export const useWarningToast = (title, description = '') => {
-  return toastFunc('warning', title, description);
-};
-
-export const useInfoToast = (title, description = '') => {
-  return toastFunc('info', title, description);
-};
-
 export const useNotificationToast = (notificationData) => {
   return notificationToastFunc(notificationData);
 };
-
-export const useToast = (title, description = '') => {
-  return toastFunc('default', title, description);
-};
-
-export function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 export const redirectAfterToast = (message, url) => {
   return new Promise((resolve) => {
@@ -221,17 +192,6 @@ export const useSidebarActiveColor = (path) => {
   if (path === pathname) return { isActive: true };
 
   return { isActive: false };
-};
-
-export const getRoleBasedNavigation = async ({ role }) => {
-  switch (role) {
-    case ROLES.OWNER:
-      return { data: ownerSidebarAdapter({ role }) };
-    case ROLES.CHARTERER:
-      return { data: chartererSidebarAdapter({ role }) };
-    default:
-      return { data: [] };
-  }
 };
 
 export const useDisableNumberInputScroll = () => {

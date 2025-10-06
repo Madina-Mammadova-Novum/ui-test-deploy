@@ -59,9 +59,6 @@ const notificationsSlice = createSlice({
     setIsOpened: (state, action) => {
       state.isOpened = action.payload;
     },
-    setDealPath: (state, { payload }) => {
-      state.dealPath = payload;
-    },
     resetDealData: (state) => {
       state.dealData = initialState.dealData;
     },
@@ -108,17 +105,13 @@ const notificationsSlice = createSlice({
 });
 
 export const {
-  setConnectionStatus,
   setFilterParams,
   setIsOpened,
   setWatchedData,
   setUnwatchedData,
-  setDealPath,
   resetNotifications,
   updateWatchedData,
   updateUnwatchedData,
-  getUnwatchedData,
-  getWatchedData,
   resetParams,
   resetNotificationData,
   resetDealData,

@@ -1,6 +1,6 @@
 import { categoryAdapter } from '@/adapters/category';
 
-export const faqAdapter = ({ data }) => {
+const faqAdapter = ({ data }) => {
   if (data === null) return null;
   const { id, attributes } = data;
   const { question, category, answer, questionType } = attributes;

@@ -14,7 +14,9 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page({ params, searchParams }) {
+export default async function Page(props) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const searchedParams = searchParamsAdapter({ data: { id: params.id, ...searchParams } });
 
   return <OnSubsDetails searchedParams={searchedParams} />;

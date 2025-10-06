@@ -111,7 +111,7 @@ components/
 
 ### Component Suffixes
 
-- **Content components**: `*Content` (e.g., `ChartererInformationContent`)
+- **Content components**: `*Content`
 - **Forms**: `*Form` (e.g., `OfferForm`, `SearchForm`)
 - **Modals**: `*Modal` (e.g., `CargoesInfoModal`, `ChatModal`)
 - **Lists**: `*List` (e.g., `NotificationList`, `ChatList`)
@@ -124,7 +124,7 @@ components/
 ### Vessel Components
 
 - Pattern: `Vessel${Purpose}` or `Tanker${Purpose}`
-- Examples: `TankerInformationContent`, `VesselSearchResults`
+- Examples: `VesselSearchResults`
 - Purpose: Display vessel specifications, Q88 data, fleet management
 
 ### Cargo Components

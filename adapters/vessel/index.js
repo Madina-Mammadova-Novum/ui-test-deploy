@@ -56,7 +56,7 @@ export function responseSearchVesselsAdapter({ data }) {
   };
 }
 
-export function responseSearchVesselAdapter({ data }) {
+function responseSearchVesselAdapter({ data }) {
   if (!data) return null;
 
   const {
@@ -174,7 +174,7 @@ export function requestAddVesselToFleetAdapter({ data }) {
   };
 }
 
-export function responseSearchVesselCargoesAdapter({ data }) {
+function responseSearchVesselCargoesAdapter({ data }) {
   if (!data) return null;
 
   const { product: responseProduct, quantity, tolerance, referenceDensity: density } = data;
@@ -350,7 +350,7 @@ export function requestUpdateVesselAdapter({ data }) {
   };
 }
 
-export function unassignedVesselsAdapter({ data }) {
+function unassignedVesselsAdapter({ data }) {
   return objectAdapter(data);
 }
 
@@ -462,7 +462,7 @@ export function responseGetVesselQ88Adapter({ data }) {
   };
 }
 
-export function userTankerAdapter({ data }) {
+function userTankerAdapter({ data }) {
   if (!data) return {};
 
   const {
@@ -798,18 +798,6 @@ export function requestAddVesselAdapter({ data }) {
 
 export function responseAddVesselAdapter({ data }) {
   return nullAdapter(data);
-}
-
-export function vesselTankerLinkRequestAdapter(data) {
-  if (!data) return null;
-
-  const { vesselTypeId, vesselCategoryOneId, vesselCategoryTwoId } = data;
-
-  return {
-    vesselTypeId,
-    vesselCategoryOneId,
-    vesselCategoryTwoId,
-  };
 }
 
 export function vesselTankerLinkResponseAdapter({ data }) {

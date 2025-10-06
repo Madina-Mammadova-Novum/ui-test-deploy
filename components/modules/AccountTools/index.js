@@ -1,9 +1,13 @@
 'use client';
 
+import dynamic from 'next/dynamic';
+
 import { AccountToolsPropTypes } from '@/lib/types';
 
 import { Title } from '@/elements';
-import { CalculatedForm, Map } from '@/units';
+import { CalculatedForm } from '@/units';
+
+const Map = dynamic(() => import('@/units/Map'), { ssr: false });
 
 const AccountTools = ({ title, customHeight = '', isLoggedIn = false }) => {
   return (

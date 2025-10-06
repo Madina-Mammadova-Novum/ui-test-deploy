@@ -18,7 +18,7 @@ export const countriesAdapter = ({ data }) => {
   });
 };
 
-export const countryReverseAdapter = ({ data }) => {
+const countryReverseAdapter = ({ data }) => {
   if (data === null) return null;
   const { countryId, countryName, countryCode } = data;
   if (countryName === null) return null;

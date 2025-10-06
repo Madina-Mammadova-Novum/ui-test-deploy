@@ -2,7 +2,7 @@ import { arrayAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import { ROLES } from '@/lib';
-import { ACTIONS, NO_DATA_MESSAGE, TYPE } from '@/lib/constants';
+import { ACTIONS, TYPE } from '@/lib/constants';
 import { transformDate } from '@/utils/date';
 import {
   calculateCountdown,
@@ -171,71 +171,7 @@ export const chartererPrefixtureHeaderDataAdapter = ({ data }) => {
   ];
 };
 
-export const prefixtureRowDataAdapter = ({ data, index }) => {
-  if (!data) return null;
-  const { id, docId, title, comment, docName, extension, size, dateAdded } = data;
-
-  return [
-    {
-      value: index,
-    },
-    {
-      id,
-      value: docId,
-      type: TYPE.SEMIBOLD,
-    },
-    {
-      id,
-      value: title,
-      type: TYPE.SEMIBOLD,
-    },
-    {
-      id,
-      editable: true,
-      actions: [
-        {
-          editIcon: comment ? <CommentIcon /> : '---',
-        },
-      ],
-    },
-    {
-      id,
-      value: docName,
-    },
-    {
-      id,
-      value: extension,
-    },
-    {
-      id,
-      value: size,
-    },
-    {
-      id,
-      value: dateAdded ? transformDate(dateAdded, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
-    },
-    {
-      id,
-      actions: [
-        {
-          action: ACTIONS.DOWNLOAD,
-          actionText: 'Download',
-          actionVariant: 'primary',
-          actionSize: 'medium',
-        },
-      ],
-      editable: true,
-    },
-  ];
-};
-
-export const prefixtureRowsDataAdapter = ({ data }) => {
-  if (!data) return [];
-
-  return data.map((rowData, index) => prefixtureRowDataAdapter({ data: rowData, index: index + 1 }));
-};
-
-export const prefixtureOwnerDetailsAdapter = (data) => {
+const prefixtureOwnerDetailsAdapter = (data) => {
   if (!data) return {};
 
   const {
@@ -307,7 +243,7 @@ export const prefixtureOwnerDetailsAdapter = (data) => {
   };
 };
 
-export const prefixtureChartererDetailsAdapter = (data) => {
+const prefixtureChartererDetailsAdapter = (data) => {
   if (!data) return {};
 
   const {
@@ -500,10 +436,6 @@ export const responseOwnerPrefixtureAdapter = ({ data }) => {
       },
     },
   }));
-};
-
-export const responseChartererPrefixtureAdapter = ({ data }) => {
-  return arrayAdapter(data);
 };
 
 export const responseOwnerAcceptPrefixtureAdapter = ({ data }) => {

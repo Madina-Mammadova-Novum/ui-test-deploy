@@ -20,7 +20,7 @@ import {
 import { fetchNotifications } from '@/store/entities/notifications/actions';
 import 'react-toastify/dist/ReactToastify.css';
 
-export class SignalRController {
+class SignalRController {
   constructor({ host, state }) {
     this.host = host;
     this.store = state;

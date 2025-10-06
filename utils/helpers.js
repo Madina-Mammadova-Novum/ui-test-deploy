@@ -4,71 +4,13 @@ import { HttpTransportType } from '@microsoft/signalr';
 import { addDays } from 'date-fns';
 import parse from 'html-react-parser';
 import cookie from 'js-cookie';
-import dynamic from 'next/dynamic';
 
 import { transformDate } from './date';
 
 import { nullableDataObjectAdapter } from '@/adapters/common';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { decodedTokenAdapter, userRoleAdapter } from '@/adapters/user';
-import { ERROR_MESSAGE, REGEX, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
-
-/**
- * createMarkup
- * @param content
- * @returns {{__html}}
- */
-export function createMarkup(content) {
-  return { __html: content };
-}
-
-/**
- * toCamelCase
- * @param str
- * @returns {string}
- */
-export function toCamelCase(str) {
-  let newStr = '';
-  if (str) {
-    const wordArr = str.split(/[-_]/g);
-    wordArr.forEach((word, index) => {
-      if (index === 0) {
-        newStr += word.toLowerCase();
-      } else {
-        newStr += word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      }
-    });
-  }
-  return newStr;
-}
-
-/**
- * createPathOptions
- * @param data
- * @param type
- * @returns {*}
- */
-export function createPathOptions(data, type) {
-  if (data === null) return [];
-  const { data: items } = data;
-  return items.map((item) => {
-    const { slug, locale } = item;
-    return {
-      path: `${type}/${slug}`,
-      locale,
-    };
-  });
-}
-
-/**
- * checkIfKeyExist
- * @param objectName
- * @param keyName
- * @returns {boolean}
- */
-export function checkIfKeyExist(objectName, keyName) {
-  return Object.keys(objectName).some((key) => key === keyName);
-}
+import { ERROR_MESSAGE, RESPONSE_MESSAGES, ROLES, ROUTES, SORT_OPTIONS } from '@/lib/constants';
 
 /**
  * createsUniqueId
@@ -83,47 +25,6 @@ export function makeId() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
-
-export function getHighlightedInput(text, userInput) {
-  if (text.match(userInput.charAt(0).toUpperCase() + userInput.slice(1))) {
-    return text.replaceAll(
-      userInput.charAt(0).toUpperCase() + userInput.slice(1),
-      `<b>${userInput.charAt(0).toUpperCase() + userInput.slice(1)}</b>`
-    );
-  }
-  return text
-    .replaceAll(userInput.toLowerCase(), `<b>${userInput.toLowerCase()}</b>`)
-    .replaceAll(userInput.toUpperCase(), `<b>${userInput.toUpperCase()}</b>`);
-}
-
-export function propIsComponent(prop) {
-  return typeof prop === 'function' && String(prop).includes('.createElement');
-}
-
-export function isMainPage(pageContext) {
-  const { slug, localizations } = pageContext;
-  return [slug, localizations?.data[0]?.attributes?.slug].includes('main');
-}
-
-export function getProportion(constParam, itemParam) {
-  return constParam / itemParam;
-}
-
-export function uniqueArray(arrayOfObject) {
-  return arrayOfObject.filter((value, index) => {
-    const itemValue = JSON.stringify(value);
-    return (
-      index ===
-      arrayOfObject.findIndex((obj) => {
-        return JSON.stringify(obj) === itemValue;
-      })
-    );
-  });
-}
-
-export function getNumbersFromString(str) {
-  return str.replace(/\D/g, '');
 }
 
 /**
@@ -146,33 +47,12 @@ export function getMiddleElementFromArray(array) {
   return array[expectedIndex];
 }
 
-export function cutStringToLimitation(str, limit) {
-  if (str.length < limit) return str;
-  return `${str.slice(0, limit)} ...`;
-}
-
-export function getCurrentYear() {
-  const date = new Date();
-  const year = date.getFullYear();
-  return year;
-}
-
-export function noSSR(Component) {
-  return dynamic(() => Promise.resolve(Component), { ssr: false });
-}
-
 export const updateFormats = (data = []) => {
   return data
     .map((format) => format)
     .join(', ')
     .replaceAll('.', '');
 };
-
-export function hasNestedArrays(data) {
-  const isNested = data.every((val) => Array.isArray(val));
-
-  return isNested;
-}
 
 export function getFilledArray(length = 1) {
   return Array.from({ length: length || 1 }).map((_, index) => index + 1);
@@ -198,13 +78,6 @@ export function checkObjectValues({ data }) {
   }
 
   return nullableDataObjectAdapter(data);
-}
-
-export function formatDate(dateString) {
-  const date = new Date(dateString);
-  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formatter = new Intl.DateTimeFormat('en-US', optionsDate);
-  return formatter.format(date);
 }
 
 export const disableDefaultBehavior = (e) => e.preventDefault();
@@ -382,28 +255,10 @@ export const resetForm = (methods, type) => {
   methods.reset(resetValues);
 };
 
-export const sleep = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};
-
 export const isEmpty = (value) => {
   if (value === undefined || value === null) return true;
   if (Array.isArray(value) && value.length === 0) return true;
   return typeof value === 'object' && Object.keys(value).length === 0;
-};
-
-export const transformInvalidLoginMessage = (msg) => {
-  return msg
-    ?.split('_')
-    .map((word, index) => {
-      if (index === 0) {
-        return word;
-      }
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(' ');
 };
 
 export const isEmptyChildren = (children) => (Array.isArray(children) ? children.every((child) => child) : !!children);
@@ -415,15 +270,6 @@ export const checkEmailPrefix = (email) => {
   const regExpCase = /\S+@\S+\.\S+/;
 
   return regExpCase.test(email);
-};
-
-export const checkPhoneValue = (value) => {
-  if (!value) {
-    return true;
-  }
-
-  const regex = REGEX.PHONE;
-  return regex.test(value);
 };
 
 export const checkAuthRoute = (req, pathName) => {
@@ -439,11 +285,6 @@ export const formatErrors = (errors) => {
   })[0];
 };
 
-export const formattedPhoneNumber = (phone) => {
-  if (typeof phone !== 'undefined' || phone !== '') return phone?.replace('+', '');
-  return null;
-};
-
 export const ensurePlusPrefix = (phone) => {
   if (!phone) return '';
   return phone.startsWith('+') ? phone : `+${phone}`;
@@ -457,20 +298,6 @@ export const sortByType = (a, b, ascSort) => {
 };
 
 export const imoFormatter = (str) => str?.replace(/IMO/g, '');
-
-export const isIdExist = ({ data }) => {
-  if (!data) return false;
-
-  return data.map(({ value }) => !!value);
-};
-
-export const findValueById = ({ data, id }) => {
-  if (!data) return [];
-
-  const result = data.find((obj) => obj.value === id);
-
-  return [result];
-};
 
 export const getUserType = (isCharterer, isOwner) => {
   if (isCharterer) return 'Charterer';
@@ -500,29 +327,13 @@ export const generateRedirectPath = ({ role }) => {
   return { path: ROUTES.ACCOUNT_SEARCH };
 };
 
-export const calculateIntDigit = (digit, coefficient) => +(digit * coefficient).toFixed(0);
-
-export const calculateTotal = (array, key) =>
-  +array
-    ?.filter((item) => item)
-    ?.map(({ [key]: itemValue }) => itemValue)
-    ?.reduce((a, b) => +a + +b);
-
 export const extractTimeFromDate = (dateString, settings = { hour: 'numeric', minute: 'numeric', hour12: true }) =>
   new Date(dateString).toLocaleString('en-US', settings);
 
 export const addLocalDateFlag = (dateString = '') => (dateString.endsWith('Z') ? dateString : `${dateString}Z`);
 
-export const parseErrors = (errors) => parse(Object.values(errors).join('<br />'));
-
 export const calculateAmountOfPages = (recordsTotal, recordsFiltered) => {
   return Math.ceil(recordsTotal / recordsFiltered);
-};
-
-export const extractTime = (string) => {
-  const timePattern = /\d{2}:\d{2}/; // Matches the pattern HH:MM
-  const match = string.match(timePattern);
-  return match ? match[0] : null; // Return the matched time or null if no match found
 };
 
 export const setSkippedValue = (pageValue, perPageValue) => {
@@ -539,10 +350,6 @@ export const transformToCapitalize = (str = '') => {
 
 export const generateMessageByActionType = ({ action }) => RESPONSE_MESSAGES[action];
 
-export const getCountryById = ({ id, data = [] }) => {
-  return data?.find((country) => country.countryId === id);
-};
-
 export const sortFromCurrentToPast = (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt);
 export const sortFromPastToToday = (a, b) => new Date(a?.createdAt) - new Date(b?.createdAt);
 
@@ -552,7 +359,7 @@ export const formattedBySpaces = ({ string }) => {
   return string.replace(/([a-z])([A-Z])/g, '$1 $2');
 };
 
-export const getFormattedDays = () => {
+const getFormattedDays = () => {
   const today = new Date().toISOString().split('T')[0];
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -590,7 +397,6 @@ export const calculateCountdown = (expiresAt) => {
   return millisecondsUntilExpiration < 0 ? 1 : Date.now() + millisecondsUntilExpiration;
 };
 
-export const formattedTabValue = (value) => value?.split(' ')[0]?.toLowerCase();
 export const isReadValue = (value) => value === 'read';
 
 export const sortTable = (array, index, sortDirection, sortType = 'numeric') => {
@@ -633,7 +439,7 @@ export const getAppropriateFailedBy = ({ failedBy, role }) => {
   return failedByText;
 };
 
-export const getFileUrl = ({ url }) => {
+const getFileUrl = ({ url }) => {
   const token = getCookieFromBrowser('session-access-token');
 
   return {
@@ -743,16 +549,6 @@ export const trimTonValue = (number) => {
   return `${strNumber},***`;
 };
 
-export const counterofferMinimumImprovementAchieved = ({ initialOffer, counterOffer }) => {
-  const layTimeImprovement = initialOffer.layTime - counterOffer.layTime >= 6;
-  const demurrageRateImprovement = initialOffer.demurrageRate * 1.05 <= counterOffer.demurrageRate;
-  const freightImprovement = initialOffer.value * 1.05 <= counterOffer.value;
-  const isMinimalImprovementMet = [layTimeImprovement, demurrageRateImprovement, freightImprovement].some(
-    (value) => value
-  );
-  return isMinimalImprovementMet;
-};
-
 export const processTooltipData = ({ text, length }) => {
   return {
     disableTooltip: !(text?.length >= length),
@@ -760,15 +556,6 @@ export const processTooltipData = ({ text, length }) => {
     trimmedText: text?.length >= length ? `${text?.slice(0, length / 2)}...` : text,
   };
 };
-
-export const containsOnlyNumbers = (str) => /^\d+$/.test(str);
-
-export function checkTankerStatus(date) {
-  const openDate = new Date(date);
-  const today = new Date();
-
-  return today > openDate;
-}
 
 export const getLineCoordinate = ({ data }) => {
   if (!data) return [];
@@ -812,20 +599,6 @@ export const formatCurrency = (value, showDecimals = false) => {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-/**
- * Parses a formatted number string with thousand separators back to a number
- * @param {string} formattedValue - Formatted string with commas (e.g. "500,000")
- * @returns {number} Parsed number value
- */
-export const parseFormattedNumber = (formattedValue) => {
-  if (!formattedValue) return null;
-
-  // Remove thousand separators and convert to number
-  const numericValue = parseFloat(formattedValue.toString().replace(/,/g, ''));
-
-  return Number.isNaN(numericValue) ? null : numericValue;
-};
-
 export const formattedDay = (number) => {
   if (number === null || number === undefined) return '';
   const hoursInADay = 24;
@@ -833,7 +606,7 @@ export const formattedDay = (number) => {
   return days.toFixed(2);
 };
 
-export const parseErrorMessage = (responseError = {}) => {
+const parseErrorMessage = (responseError = {}) => {
   try {
     const {
       message: { Errors },
@@ -890,16 +663,6 @@ export function lowerCaseFormat(obj) {
     return newObj;
   }, {});
 }
-
-export const errorMessage = ({ errors }) => {
-  if (errors?.message === 'Bad Request') {
-    return {
-      message: 'Something went wrong. Please, contact Ship.Link support for detailed information.',
-    };
-  }
-
-  return { message: formatErrors(errors?.errors) };
-};
 
 export const setCookie = (key, value, cookieOptions = {}) => {
   cookie.set(key, value, {
@@ -977,7 +740,7 @@ export const getIdFromUrl = (url) => {
   return match ? match[0] : null;
 };
 
-export const stageFormatter = (stage) => {
+const stageFormatter = (stage) => {
   const stageToPage = {
     Fleets: ROUTES.ACCOUNT_POSITIONS,
     Negotiating: ROUTES.ACCOUNT_NEGOTIATING,
@@ -1078,22 +841,6 @@ export const getFieldFromKeyForRegistration = (key) => {
   return errorByKey[key];
 };
 
-export const getBrowser = (environment) => {
-  if (environment.indexOf('Firefox') !== -1) {
-    return 'firefox';
-  }
-  if (environment.indexOf('Chrome') !== -1) {
-    return 'chrome';
-  }
-  if (environment.indexOf('Safari') !== -1) {
-    return 'safari';
-  }
-  if (environment.indexOf('MSIE') !== -1 || environment.indexOf('Trident/') !== -1) {
-    return 'internet explorer';
-  }
-  return 'unknown';
-};
-
 /**
  * Ensures a filename has the correct extension
  * @param {string} fileName - The name of the file
@@ -1145,28 +892,6 @@ export const fixLongitudeWrapping = (coordinates) => {
 export const formatStageText = (stage) => {
   if (!stage) return '';
   return stage.replace(/_/g, ' ');
-};
-
-/**
- * @util convertToKilotons
- * @description Formats tonnage values to kilotons (kt) with one decimal place
- * @param {number|string} tons - Weight value
- * @returns {string} Weight formatted with kt unit
- * @example convertToKilotons(45) // returns "45.0 kt"
- */
-export const convertToKilotons = (tons) => {
-  if (!tons) return '0.0 kt';
-
-  // Convert to number if it's a string
-  const numericValue = typeof tons === 'string' ? parseFloat(tons.replace(/,/g, '')) : tons;
-
-  // Check if it's a valid number
-  if (Number.isNaN(numericValue)) return '0.0 kt';
-
-  // Format to 1 decimal place
-  const formattedValue = numericValue.toFixed(1);
-
-  return `${formattedValue} kt`;
 };
 
 /**
@@ -1268,7 +993,7 @@ export const focusFirstFormElement = (delay = 150) => {
   }, delay);
 };
 
-export const getPhoneValidationStorageKey = (context = 'registration', userRole = null) => {
+const getPhoneValidationStorageKey = (context = 'registration', userRole = null) => {
   if (context === 'update') {
     return 'phone_validation_update';
   }
@@ -1350,21 +1075,6 @@ export const clearPhoneValidationState = (context = 'registration', userRole = n
     if (typeof window !== 'undefined' && window.sessionStorage) {
       const storageKey = getPhoneValidationStorageKey(context, userRole);
       window.sessionStorage.removeItem(storageKey);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    return false;
-  }
-};
-
-export const clearAllPhoneValidationStates = () => {
-  try {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      window.sessionStorage.removeItem('phone_validation_update');
-      window.sessionStorage.removeItem('phone_validation_owner_registration');
-      window.sessionStorage.removeItem('phone_validation_charterer_registration');
-      window.sessionStorage.removeItem('phone_validation_registration');
       return true;
     }
     return false;
