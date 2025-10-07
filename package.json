@@ -42,9 +42,6 @@
     "@opentelemetry/sdk-trace-node": "^2.1.0",
     "@opentelemetry/semantic-conventions": "^1.27.0",
     "@opentelemetry/winston-transport": "^0.16.0",
-    "@types/node": "^24.5.2",
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
     "autoprefixer": "^10.4.13",
     "commitlint-plugin-function-rules": "^4.0.2",
     "eslint-config-airbnb": "^19.0.4",
@@ -64,8 +61,7 @@
     "prettier-plugin-tailwindcss": "^0.6.6",
     "pretty-quick": "^4.0.0",
     "react-linkify": "^1.0.0-alpha",
-    "standard-version": "^9.5.0",
-    "typescript": "^5.9.2"
+    "standard-version": "^9.5.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.22.5",
