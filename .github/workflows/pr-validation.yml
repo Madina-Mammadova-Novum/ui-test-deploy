@@ -17,6 +17,9 @@ jobs:
     name: Code Quality & Build Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read # Read repository code for linting and building
+      pull-requests: write # Post comments on PR with validation results
 
     steps:
       - name: Checkout code
@@ -238,6 +241,8 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read # Read package.json and yarn.lock for security audit
 
     steps:
       - name: Checkout code
@@ -304,6 +309,8 @@ jobs:
     name: Performance Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read # Read repository code for building and analysis
 
     steps:
       - name: Checkout code

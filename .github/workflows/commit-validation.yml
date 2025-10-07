@@ -10,6 +10,9 @@ jobs:
     name: Validate Commit Messages
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read # Read repository code and commits
+      pull-requests: read # Read PR details for commit validation
 
     steps:
       - name: Checkout code
