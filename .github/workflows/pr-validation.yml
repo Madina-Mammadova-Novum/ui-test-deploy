@@ -163,15 +163,15 @@ jobs:
       - name: Cache ESLint
         uses: actions/cache@v4
         with:
-          path: .eslintcache
-          key: ${{ runner.os }}-eslint-${{ hashFiles('**/*.js', '**/*.jsx', '.eslintrc', '.eslintignore') }}
+          path: .next/cache/eslint
+          key: ${{ runner.os }}-nextjs-eslint-${{ hashFiles('**/*.js', '**/*.jsx', '.eslintrc', '.eslintignore') }}
           restore-keys: |
-            ${{ runner.os }}-eslint-
+            ${{ runner.os }}-nextjs-eslint-
 
       - name: Run ESLint
         id: eslint
         run: |
-          if yarn lint --cache; then
+          if yarn lint; then
             echo "ESLint passed"
             echo "eslint_passed=true" >> $GITHUB_OUTPUT
           else
