@@ -144,7 +144,17 @@
       "jsx": true,
     },
     "babelOptions": {
-      "presets": ["@babel/preset-react"],
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "22",
+            },
+          },
+        ],
+        "@babel/preset-react",
+      ],
     },
   },
 }
