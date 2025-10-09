@@ -51,3 +51,4 @@ jobs:
       environment: stage
       image-tag-suffix: stage-latest
       deployment-reason: ${{ github.event.inputs.reason || 'Automated deployment from stage branch' }}
+    secrets: inherit # Pass all secrets from the calling workflow to the reusable workflow
