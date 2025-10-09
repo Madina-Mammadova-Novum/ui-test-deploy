@@ -4,8 +4,10 @@ pool:
   # demands:
   #   - agent.name -equals ubuntu-sha
 
-trigger:
-  - develop
+# Trigger disabled to avoid conflict with GitHub Actions
+# Azure Pipelines kept as backup - can be triggered manually if needed
+# TODO: Remove this file once GitHub Actions deployment is fully tested and stable
+trigger: none
 
 parameters:
   - name: environment_name
