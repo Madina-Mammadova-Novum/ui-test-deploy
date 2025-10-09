@@ -1,6 +1,22 @@
 # CI/CD Workflows for ShipLink Frontend
 
-This directory contains optimized GitHub Actions workflows for automated code quality checks, security scanning, and performance validation on pull requests.
+This directory contains optimized GitHub Actions workflows for automated code quality checks, security scanning, performance validation, and continuous deployment.
+
+## 🚀 Quick Links
+
+- 📖 [Quick Start Guide](./QUICK_START.md) - Get started with deployments in 5 minutes
+- 🔧 [Setup Guide](./DEPLOYMENT_SETUP.md) - Complete deployment setup instructions
+- 🐛 [Troubleshooting](./TROUBLESHOOTING.md) - Common issues and solutions
+
+## ✅ Deployment Status
+
+| Environment           | Status               | Last Updated |
+| --------------------- | -------------------- | ------------ |
+| **Development (DEV)** | 🟡 Ready for Testing | 2025-10-09   |
+| **Staging (STAGE)**   | 🟡 Ready for Testing | 2025-10-09   |
+| **Production (PROD)** | ⚪ Not Configured    | -            |
+
+**Legend**: ✅ Active · 🟡 Ready for Testing · 🟠 Configuration In Progress · ⚪ Not Configured
 
 ## 🎯 Current Versions
 
@@ -32,7 +48,6 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 - Project build (with CI environment variables)
 - Test execution (if available)
 - Bundle size analysis
-- Build artifact upload (on failure & success)
 - Automated PR comments with results
 - GitHub Actions summary page
 
@@ -63,6 +78,68 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 
 - ✅ Commit message format validation using commitlint
 - 📝 Conventional commit standards
+
+---
+
+### 3. Deploy to Development (`deploy-dev.yml`)
+
+**Continuous Deployment** - Automated deployment to DEV environment.
+
+**Triggers**:
+
+- PR merged to `develop` branch
+- Manual trigger via GitHub UI (workflow_dispatch)
+- Only on relevant file changes (code, config, Dockerfile)
+
+**Jobs**:
+
+#### 🏗️ **Build & Push Docker Image**
+
+- Checkout code
+- Generate deployment metadata (SHA-based tags)
+- Login to Azure Container Registry
+- Build Docker image with Next.js app
+- Push image to registry with unique tag
+- Cache Docker layers for faster builds
+
+#### 🚀 **Deploy to Dev Server**
+
+- Setup SSH connection to dev VM
+- Pull new Docker image from registry
+- Tag old image for rollback capability
+- Stop and remove old container
+- Start new container with environment secrets
+- Wait 30 seconds for application startup
+- Verify container is running
+- Automatic rollback on failure
+- Cleanup old images to save disk space
+- Generate deployment summary
+
+**Features**:
+
+- ✅ Zero-downtime capable
+- ✅ Automatic rollback on failure
+- ✅ Environment-specific secrets via GitHub Environments
+- ✅ Deployment audit trail
+- ✅ Manual deployment option
+- ✅ Comprehensive logging
+- ⏱️ ~7-11 minutes total deployment time
+
+---
+
+### 4. Deploy to Staging (`deploy-stage.yml`)
+
+**Continuous Deployment** - Automated deployment to STAGE environment.
+
+**Triggers**:
+
+- PR merged to `stage` branch
+- Manual trigger via GitHub UI (workflow_dispatch)
+- Only on relevant file changes (code, config, Dockerfile)
+
+**Jobs & Features**:
+
+Same as Deploy to Development, but targeting staging environment with stage-specific secrets and configuration.
 
 ---
 
@@ -113,27 +190,20 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 - ✅ CI runs only when marked "Ready for Review"
 - 🎯 Developers can iterate freely without wasting CI minutes
 
-### 🐛 **5. Build Artifacts** (Phase 6)
+### 📦 **5. No Build Artifacts in CI** (Intentional)
 
-**Better debugging with artifact uploads**:
+**Why PR builds don't save artifacts:**
 
-**On Build Failure** (7-day retention):
+- ❌ **PR builds are throwaway** - Never deployed to any environment
+- ❌ **Wasteful storage** - Every PR creates artifacts that are never used
+- ❌ **Logs are sufficient** - Error messages in logs provide enough debug info
+- ✅ **Artifacts in CD only** - Deployment builds save artifacts for rollback/audit
 
-- Full `.next/` directory (except cache)
-- Partial build output for investigation
-- Download from workflow run's Artifacts section
+**Where artifacts ARE saved:**
 
-**On Build Success** (3-day retention):
-
-- `.next/static/` - Static assets & chunks
-- `.next/server/` - Server-side bundles
-- `.next/BUILD_ID` - Build identifier
-
-**How to download**:
-
-1. Go to failed/succeeded workflow run
-2. Scroll to "Artifacts" section
-3. Download `build-failure-XXXXX` or `build-success-XXXXX`
+- ✅ CD workflows (`deploy-dev.yml`, `deploy-stage.yml`)
+- ✅ Used for deployment verification and rollback
+- ✅ Stored in Azure Container Registry as Docker images
 
 ### 📊 **6. Professional Summaries** (Phase 7)
 
@@ -171,11 +241,44 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 
 ## 🛠️ Setup Instructions
 
-### 1. Workflow Setup
+### 1. CI Workflows Setup (PR Validation & Commit Validation)
 
-The workflows are ready to use as-is. No additional configuration required.
+The CI workflows are ready to use as-is. No additional configuration required.
 
-### 2. Configure Branch Protection Rules
+### 2. CD Workflows Setup (Deployment)
+
+**Required setup for deployment workflows:**
+
+1. **Create GitHub Environments**:
+   - Go to Settings → Environments
+   - Create `dev` and `stage` environments
+   - Configure protection rules (optional for dev, recommended for stage)
+
+2. **Add Secrets to Each Environment**:
+   - Registry secrets (ACR credentials) - 3 secrets
+   - SSH secrets (server access) - 4 secrets
+   - Application secrets (environment variables) - 33 secrets
+   - See detailed list: [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md)
+
+3. **Verify Infrastructure**:
+   - Azure Container Registry is accessible
+   - VMs are accessible via SSH (or password authentication)
+   - Docker is installed on target servers
+
+**📚 Deployment Documentation:**
+
+- 🚀 **Quick Start**: [QUICK_START.md](./QUICK_START.md) - Fast setup guide with checklists
+- 📖 **Full Setup Guide**: [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md) - Comprehensive deployment setup
+- 🔧 **Troubleshooting**: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Common issues and solutions
+
+**Note on SSH Authentication:**
+
+- Workflows support both SSH key-based and password authentication
+- SSH keys are recommended for better security
+- Password authentication is simpler for initial setup
+- Consult your DevOps team for existing credentials
+
+### 3. Configure Branch Protection Rules
 
 **Recommended settings**:
 
@@ -190,9 +293,19 @@ The workflows are ready to use as-is. No additional configuration required.
 5. **Required approvals**: 1-2 reviewers
 6. **Restrict pushes**: ✅ Enable
 
-### 3. No Secrets Required
+### 4. Secrets Configuration
 
-All workflows work without additional secrets. The following are **optional**:
+**CI Workflows** (PR & Commit Validation):
+
+- ✅ No secrets required - works out of the box
+
+**CD Workflows** (Deployments):
+
+- ⚠️ Requires environment-specific secrets
+- See [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md) for complete list
+- Secrets are configured per GitHub Environment (dev, stage)
+
+**Optional Secrets**:
 
 - `YARN_TOKEN` - For publishing packages
 - `SONAR_TOKEN` - For SonarQube integration
@@ -231,9 +344,9 @@ PR approved directly → Merge immediately ✅
 
 ```
 Build fails in CI → Check workflow run
-Download build-failure artifact → Unzip locally
-Investigate .next/ folder → Find issue
-Fix and push → Build succeeds ✅
+Read build logs → Find error message
+Fix the issue → Push changes
+Build succeeds ✅
 ```
 
 ---
@@ -291,12 +404,7 @@ key: ${{ runner.os }}-custom-${{ hashFiles('**/package.json') }}
 **Cause**: `.eslintcache` might be committed to git  
 **Solution**: Verify `.eslintcache` is in `.gitignore` (already added)
 
-#### 4. "Build artifacts not available"
-
-**Cause**: Artifacts expire after retention period  
-**Solution**: Download within 7 days for failures, 3 days for successes
-
-#### 5. "Draft PR still running CI"
+#### 4. "Draft PR still running CI"
 
 **Cause**: PR was converted from ready to draft after CI started  
 **Solution**: Cancel running workflow and re-convert to draft
@@ -351,8 +459,8 @@ GitHub provides insights on:
 1. ✅ **Mark PRs as draft** while working → Save CI minutes
 2. ✅ **Run linters locally** before pushing → `yarn lint --fix`
 3. ✅ **Format code before commit** → `yarn format`
-4. ✅ **Download artifacts** when builds fail → Better debugging
-5. ✅ **Review summary page** → Quick status check
+4. ✅ **Review summary page** → Quick status check
+5. ✅ **Check logs for errors** → Better debugging
 
 ### For Reviewers
 
@@ -391,8 +499,7 @@ GitHub provides insights on:
 1. **Check workflow logs** → Detailed error messages
 2. **Review this README** → Common issues covered
 3. **Check summary page** → Quick diagnostics
-4. **Download artifacts** → For build failures
-5. **Contact DevOps team** → For workflow issues
+4. **Contact DevOps team** → For workflow issues
 
 ### Useful Links
 
@@ -410,7 +517,6 @@ GitHub provides insights on:
 ✅ **Performance**: Cache v4 + ESLint caching (60% faster)  
 ✅ **Cost**: Path filtering + draft skip (60% fewer runs)  
 ✅ **Quality**: Professional summaries + enhanced comments  
-✅ **Debugging**: Build artifacts on failure + success  
 ✅ **Experience**: Better error messages + fix suggestions
 
 **Total estimated savings**: **~3,000 CI minutes per month (~50 hours)**
@@ -419,18 +525,72 @@ GitHub provides insights on:
 
 ## 📝 Changelog
 
-### 2025-10-07 - v2.0.0
+### 2025-10-09 - v2.1.1 - CD Setup Complete
+
+**Setup Status**: ✅ **Ready for Initial Deployment Testing**
+
+**Configuration Completed**:
+
+- ✅ GitHub Environments created (`dev`, `stage`)
+- ✅ Azure Container Registry secrets configured
+- ✅ Application environment variables configured (33 secrets per environment)
+- ✅ SSH/authentication credentials set up
+- ✅ Documentation secured (sensitive values removed)
+- ✅ Deployment workflows ready to test
+
+**Documentation Updates**:
+
+- ✅ Secured `DEPLOYMENT_SETUP.md` - Removed sensitive values
+- ✅ Secured `QUICK_START.md` - Removed sensitive values
+- ✅ Added Quick Links section to main README
+- ✅ Updated setup instructions with authentication options
+- ✅ Removed completed TODO checklist
+
+**Next Steps**:
+
+- 🔜 First deployment test to DEV environment
+- 🔜 Verify deployment success and rollback mechanism
+- 🔜 First deployment test to STAGE environment
+- 🔜 Production deployment preparation
+
+### 2025-10-07 - v2.1.0 - CD Implementation
+
+**New Continuous Deployment Workflows**:
+
+- ✅ Added `deploy-dev.yml` - Automated deployment to development
+- ✅ Added `deploy-stage.yml` - Automated deployment to staging
+- ✅ Implemented automatic rollback on deployment failure
+- ✅ Added GitHub Environments integration for secrets
+- ✅ Created comprehensive deployment documentation
+- ✅ Added deployment troubleshooting guide
+- ✅ Environment-specific secret management
+- ✅ SSH-based deployment with Docker containers
+- ✅ Deployment audit trail and summaries
+
+**Security Improvements**:
+
+- ✅ Secrets no longer baked into Docker images
+- ✅ Runtime-only secret injection
+- ✅ Environment-based secret isolation
+
+**Documentation**:
+
+- ✅ Added `DEPLOYMENT_SETUP.md` - Complete setup guide
+- ✅ Added `QUICK_START.md` - Quick reference guide
+- ✅ Added `TROUBLESHOOTING.md` - Deployment debugging guide
+- ✅ Updated main README with CD workflows
+
+### 2025-10-07 - v2.0.0 - CI Optimization
 
 - Added security permissions to all jobs
 - Upgraded to actions/cache@v4
 - Implemented intelligent path filtering
 - Added draft PR skip logic
 - Enabled ESLint caching
-- Added build artifact uploads
 - Enhanced PR comments and summaries
 - Optimized workflow performance
 
-### Previous Version - v1.0.0
+### Previous Version - v1.0.0 - Initial CI
 
 - Initial PR validation workflow
 - Basic commit message validation

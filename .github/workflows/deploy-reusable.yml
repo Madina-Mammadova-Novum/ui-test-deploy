@@ -1,0 +1,440 @@
+name: Reusable Deployment Workflow
+
+# This is a reusable workflow that can be called by environment-specific workflows
+# It contains all the deployment logic, parameterized by environment
+#
+# Setup Status: ✅ Configured and ready for use
+# - GitHub Environments created (dev, stage)
+# - All secrets configured (ACR, SSH, Application)
+# - Ready for deployment testing
+#
+# Called by:
+# - deploy-dev.yml (deploys to DEV environment)
+# - deploy-stage.yml (deploys to STAGE environment)
+#
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Target environment (dev, stage, prod)'
+        required: true
+        type: string
+      image-tag-suffix:
+        description: 'Suffix for the latest tag (e.g., dev-latest, stage-latest)'
+        required: true
+        type: string
+      deployment-reason:
+        description: 'Reason for deployment (for manual triggers)'
+        required: false
+        type: string
+        default: 'Automated deployment'
+    outputs:
+      image-tag:
+        description: 'The Docker image tag that was deployed'
+        value: ${{ jobs.build.outputs.image-tag }}
+      deployment-time:
+        description: 'Timestamp of the deployment'
+        value: ${{ jobs.build.outputs.deployment-time }}
+
+env:
+  NODE_VERSION: '22.x'
+  DOCKER_IMAGE_NAME: shiplink-frontend
+
+jobs:
+  # ============================================================================
+  # JOB 1: BUILD & PUSH DOCKER IMAGE
+  # ============================================================================
+  build:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Use GitHub Environment for environment-specific secrets
+    environment: ${{ inputs.environment }}
+
+    permissions:
+      contents: read # Read repository code for building
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.image-tag }}
+      deployment-time: ${{ steps.meta.outputs.deployment-time }}
+
+    steps:
+      # ----------------------------------------------------------------------
+      # STEP 1: Checkout code
+      # ----------------------------------------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for better context
+
+      # ----------------------------------------------------------------------
+      # STEP 2: Generate deployment metadata
+      # ----------------------------------------------------------------------
+      - name: Generate deployment metadata
+        id: meta
+        run: |
+          # Create unique image tag using git commit SHA (first 8 chars)
+          IMAGE_TAG="${GITHUB_SHA:0:8}"
+          echo "image-tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+
+          # Record deployment timestamp
+          DEPLOYMENT_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          echo "deployment-time=${DEPLOYMENT_TIME}" >> $GITHUB_OUTPUT
+
+          # Log deployment info
+          echo "🚀 Deployment Information:"
+          echo "  - Environment: ${{ inputs.environment }}"
+          echo "  - Image Tag: ${IMAGE_TAG}"
+          echo "  - Commit SHA: ${{ github.sha }}"
+          echo "  - Branch: ${{ github.ref_name }}"
+          echo "  - Triggered by: ${{ github.actor }}"
+          echo "  - Deployment Time: ${DEPLOYMENT_TIME}"
+          echo "  - Reason: ${{ inputs.deployment-reason }}"
+
+      # ----------------------------------------------------------------------
+      # STEP 3: Login to Azure Container Registry
+      # Secrets are configured in GitHub Environments (Settings → Environments)
+      # ----------------------------------------------------------------------
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_REGISTRY_URL }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      # ----------------------------------------------------------------------
+      # STEP 4: Set up Docker Buildx (for better caching and multi-platform)
+      # ----------------------------------------------------------------------
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ----------------------------------------------------------------------
+      # STEP 5: Build Docker image with environment variables
+      # NOTE: Build args match Azure Pipelines setup (Dockerfile.ci requirements)
+      # Secrets are passed here for build process but NOT in final image (multi-stage build)
+      # All vars are ALSO passed at runtime for the running container
+      # ----------------------------------------------------------------------
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.ci
+          push: true
+          tags: |
+            ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.image-tag }}
+            ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.image-tag-suffix }}
+          build-args: |
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
+            NEXT_PUBLIC_SEAMETRIX_KEY=${{ secrets.NEXT_PUBLIC_SEAMETRIX_KEY }}
+            RECAPTCHA_SECRET_KEY=${{ secrets.RECAPTCHA_SECRET_KEY }}
+            NEXT_PUBLIC_STRAPI_API_URL=${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }}
+            NEXT_PUBLIC_RT_URL=${{ secrets.NEXT_PUBLIC_RT_URL }}
+            BACKEND_API_URL=${{ secrets.BACKEND_API_URL }}
+            IDENTITY_API_URL=${{ secrets.IDENTITY_API_URL }}
+            NEXT_PUBLIC_FILE_API_URL=${{ secrets.NEXT_PUBLIC_FILE_API_URL }}
+            SEAMETRIX_API_URL=${{ secrets.SEAMETRIX_API_URL }}
+            SEAMETRIX_MAP_KEY=${{ secrets.SEAMETRIX_MAP_KEY }}
+            IDENTITY_API_CLIENT_ID=${{ secrets.IDENTITY_API_CLIENT_ID }}
+            IDENTITY_API_CLIENT_SECRET=${{ secrets.IDENTITY_API_CLIENT_SECRET }}
+            IDENTITY_API_GRANT_TYPE=${{ secrets.IDENTITY_API_GRANT_TYPE }}
+            IDENTITY_TOKEN_GRANT_TYPE=${{ secrets.IDENTITY_TOKEN_GRANT_TYPE }}
+            PREVIEW_SECRET=${{ secrets.PREVIEW_SECRET }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ----------------------------------------------------------------------
+      # STEP 6: Verify image was pushed successfully
+      # ----------------------------------------------------------------------
+      - name: Verify Docker image
+        run: |
+          echo "✅ Docker image built and pushed successfully"
+          echo "📦 Image: ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.image-tag }}"
+
+  # ============================================================================
+  # JOB 2: DEPLOY TO SERVER
+  # ============================================================================
+  deploy:
+    name: Deploy to ${{ inputs.environment }} Server
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+    environment: ${{ inputs.environment }}
+
+    permissions:
+      contents: read
+
+    steps:
+      # ----------------------------------------------------------------------
+      # STEP 1: Setup SSH connection
+      # SSH credentials are configured in GitHub Environments per environment
+      # Supports both SSH key-based and password authentication
+      # ----------------------------------------------------------------------
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Add SSH host to known_hosts to avoid prompt
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          echo "✅ SSH key configured"
+
+      # ----------------------------------------------------------------------
+      # STEP 2: Deploy to server via SSH
+      # This is where the magic happens! 🎩
+      # ----------------------------------------------------------------------
+      - name: Deploy container to server
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          REGISTRY_URL: ${{ secrets.ACR_REGISTRY_URL }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+              -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              -p ${{ secrets.SSH_PORT || 22 }} \
+              ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+
+          set -e  # Exit on any error
+
+          # Configuration
+          CONTAINER_NAME="${{ env.DOCKER_IMAGE_NAME }}"
+          NEW_IMAGE="${{ env.REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ needs.build.outputs.image-tag }}"
+
+          echo "=================================================="
+          echo "🚀 Starting deployment to $(echo '${{ env.ENVIRONMENT }}' | tr '[:lower:]' '[:upper:]') environment"
+          echo "=================================================="
+          echo "Container: ${CONTAINER_NAME}"
+          echo "New Image: ${NEW_IMAGE}"
+          echo ""
+
+          # ------------------------------------------------------
+          # Login to Azure Container Registry from server
+          # ------------------------------------------------------
+          echo "📦 Logging in to container registry..."
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login \
+            ${{ secrets.ACR_REGISTRY_URL }} \
+            --username ${{ secrets.ACR_USERNAME }} \
+            --password-stdin
+
+          # ------------------------------------------------------
+          # Pull new image
+          # ------------------------------------------------------
+          echo "⬇️  Pulling new image..."
+          docker pull "${NEW_IMAGE}"
+
+          # ------------------------------------------------------
+          # Check if old container exists and tag its image for rollback
+          # ------------------------------------------------------
+          if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+            echo "📦 Found existing container, preparing for rollback capability..."
+            OLD_IMAGE=$(docker inspect --format='{{.Image}}' "${CONTAINER_NAME}" 2>/dev/null || echo "none")
+            
+            if [ "${OLD_IMAGE}" != "none" ]; then
+              docker tag "${OLD_IMAGE}" "${CONTAINER_NAME}-previous" 2>/dev/null || true
+              echo "✅ Tagged old image as '${CONTAINER_NAME}-previous' for rollback"
+            fi
+            
+            echo "🛑 Stopping old container..."
+            docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+            
+            echo "🗑️  Removing old container..."
+            docker rm "${CONTAINER_NAME}" 2>/dev/null || true
+          else
+            echo "ℹ️  No existing container found (first deployment or clean slate)"
+          fi
+
+          # ------------------------------------------------------
+          # Start new container with all runtime environment variables
+          # IMPORTANT: Secrets are passed here, NOT in Docker build!
+          # ------------------------------------------------------
+          echo "🚀 Starting new container..."
+          docker run -d \
+            --name "${CONTAINER_NAME}" \
+            --restart always \
+            -p 3000:3000 \
+            -e NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}" \
+            -e NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+            -e NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
+            -e NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            -e NEXT_PUBLIC_RECAPTCHA_SITE_KEY="${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}" \
+            -e RECAPTCHA_SECRET_KEY="${{ secrets.RECAPTCHA_SECRET_KEY }}" \
+            -e NEXT_PUBLIC_SEAMETRIX_KEY="${{ secrets.NEXT_PUBLIC_SEAMETRIX_KEY }}" \
+            -e NEXT_PUBLIC_SEAMETRIX_MAP_KEY="${{ secrets.NEXT_PUBLIC_SEAMETRIX_MAP_KEY }}" \
+            -e SEAMETRIX_MAP_KEY="${{ secrets.SEAMETRIX_MAP_KEY }}" \
+            -e NEXT_PUBLIC_SEAMETRIX_API_URL="${{ secrets.NEXT_PUBLIC_SEAMETRIX_API_URL }}" \
+            -e SEAMETRIX_API_URL="${{ secrets.SEAMETRIX_API_URL }}" \
+            -e NEXT_PUBLIC_STRAPI_API_URL="${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }}" \
+            -e NEXT_PUBLIC_RT_URL="${{ secrets.NEXT_PUBLIC_RT_URL }}" \
+            -e NEXT_PUBLIC_FILE_API_URL="${{ secrets.NEXT_PUBLIC_FILE_API_URL }}" \
+            -e BACKEND_API_URL="${{ secrets.BACKEND_API_URL }}" \
+            -e IDENTITY_API_URL="${{ secrets.IDENTITY_API_URL }}" \
+            -e IDENTITY_API_CLIENT_ID="${{ secrets.IDENTITY_API_CLIENT_ID }}" \
+            -e IDENTITY_API_CLIENT_SECRET="${{ secrets.IDENTITY_API_CLIENT_SECRET }}" \
+            -e IDENTITY_API_GRANT_TYPE="${{ secrets.IDENTITY_API_GRANT_TYPE }}" \
+            -e IDENTITY_TOKEN_GRANT_TYPE="${{ secrets.IDENTITY_TOKEN_GRANT_TYPE }}" \
+            -e PREVIEW_SECRET="${{ secrets.PREVIEW_SECRET }}" \
+            -e APP_ENV="${{ secrets.APP_ENV }}" \
+            -e IDENTITY_NEW_RELIC_APP_NAME="${{ secrets.IDENTITY_NEW_RELIC_APP_NAME }}" \
+            -e IDENTITY_NEW_RELIC_LICENSE_KEY="${{ secrets.IDENTITY_NEW_RELIC_LICENSE_KEY }}" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}" \
+            -e OTEL_METRIC_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT }}" \
+            -e NEXT_PUBLIC_MAINTENANCE_MODE="${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}" \
+            -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
+            -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
+            -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
+            -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \
+            -e NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}" \
+            -e NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}" \
+            -e NEXT_PUBLIC_ADMIN_URL="${{ secrets.NEXT_PUBLIC_ADMIN_URL }}" \
+            "${NEW_IMAGE}"
+
+          # ------------------------------------------------------
+          # Wait for container to start and verify it's running
+          # ------------------------------------------------------
+          echo ""
+          echo "⏳ Waiting 30 seconds for application to start..."
+          sleep 30
+
+          # Check if container is still running
+          if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+            echo ""
+            echo "=================================================="
+            echo "✅ DEPLOYMENT SUCCESSFUL!"
+            echo "=================================================="
+            echo "Container Status:"
+            docker ps --filter "name=${CONTAINER_NAME}" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            echo ""
+            echo "Recent Logs:"
+            docker logs --tail 20 "${CONTAINER_NAME}" 2>&1 || true
+            
+          else
+            echo ""
+            echo "=================================================="
+            echo "❌ DEPLOYMENT FAILED - Container not running!"
+            echo "=================================================="
+            echo ""
+            echo "Container logs:"
+            docker logs "${CONTAINER_NAME}" 2>&1 || true
+            echo ""
+            
+            # Attempt automatic rollback
+            if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${CONTAINER_NAME}-previous"; then
+              echo "🔄 Attempting automatic rollback..."
+              docker rm -f "${CONTAINER_NAME}" 2>/dev/null || true
+              
+              # Start previous version
+              docker run -d \
+                --name "${CONTAINER_NAME}" \
+                --restart always \
+                -p 3000:3000 \
+                -e NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}" \
+                -e NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+                -e NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
+                -e NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+                -e NEXT_PUBLIC_RECAPTCHA_SITE_KEY="${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}" \
+                -e RECAPTCHA_SECRET_KEY="${{ secrets.RECAPTCHA_SECRET_KEY }}" \
+                -e NEXT_PUBLIC_SEAMETRIX_KEY="${{ secrets.NEXT_PUBLIC_SEAMETRIX_KEY }}" \
+                -e NEXT_PUBLIC_SEAMETRIX_MAP_KEY="${{ secrets.NEXT_PUBLIC_SEAMETRIX_MAP_KEY }}" \
+                -e SEAMETRIX_MAP_KEY="${{ secrets.SEAMETRIX_MAP_KEY }}" \
+                -e NEXT_PUBLIC_SEAMETRIX_API_URL="${{ secrets.NEXT_PUBLIC_SEAMETRIX_API_URL }}" \
+                -e SEAMETRIX_API_URL="${{ secrets.SEAMETRIX_API_URL }}" \
+                -e NEXT_PUBLIC_STRAPI_API_URL="${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }}" \
+                -e NEXT_PUBLIC_RT_URL="${{ secrets.NEXT_PUBLIC_RT_URL }}" \
+                -e NEXT_PUBLIC_FILE_API_URL="${{ secrets.NEXT_PUBLIC_FILE_API_URL }}" \
+                -e BACKEND_API_URL="${{ secrets.BACKEND_API_URL }}" \
+                -e IDENTITY_API_URL="${{ secrets.IDENTITY_API_URL }}" \
+                -e IDENTITY_API_CLIENT_ID="${{ secrets.IDENTITY_API_CLIENT_ID }}" \
+                -e IDENTITY_API_CLIENT_SECRET="${{ secrets.IDENTITY_API_CLIENT_SECRET }}" \
+                -e IDENTITY_API_GRANT_TYPE="${{ secrets.IDENTITY_API_GRANT_TYPE }}" \
+                -e IDENTITY_TOKEN_GRANT_TYPE="${{ secrets.IDENTITY_TOKEN_GRANT_TYPE }}" \
+                -e PREVIEW_SECRET="${{ secrets.PREVIEW_SECRET }}" \
+                -e APP_ENV="${{ secrets.APP_ENV }}" \
+                -e IDENTITY_NEW_RELIC_APP_NAME="${{ secrets.IDENTITY_NEW_RELIC_APP_NAME }}" \
+                -e IDENTITY_NEW_RELIC_LICENSE_KEY="${{ secrets.IDENTITY_NEW_RELIC_LICENSE_KEY }}" \
+                -e OTEL_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}" \
+                -e OTEL_METRIC_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT }}" \
+                -e NEXT_PUBLIC_MAINTENANCE_MODE="${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}" \
+                -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
+                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
+                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
+                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \
+                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}" \
+                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}" \
+                -e NEXT_PUBLIC_ADMIN_URL="${{ secrets.NEXT_PUBLIC_ADMIN_URL }}" \
+                "${CONTAINER_NAME}-previous"
+              
+              sleep 10
+              if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+                echo "✅ Rollback successful - previous version restored"
+              else
+                echo "❌ Rollback failed - manual intervention required"
+              fi
+            fi
+            
+            exit 1
+          fi
+
+          # ------------------------------------------------------
+          # Cleanup old images to save disk space
+          # ------------------------------------------------------
+          echo ""
+          echo "🧹 Cleaning up old images..."
+          docker image prune -a -f --filter "until=72h" 2>/dev/null || true
+          docker builder prune -a -f 2>/dev/null || true
+
+          echo ""
+          echo "=================================================="
+          echo "🎉 Deployment completed successfully!"
+          echo "Environment: $(echo '${{ env.ENVIRONMENT }}' | tr '[:lower:]' '[:upper:]')"
+          echo "Image: ${NEW_IMAGE}"
+          echo "Deployed at: ${{ needs.build.outputs.deployment-time }}"
+          echo "Deployed by: ${{ github.actor }}"
+          echo "=================================================="
+
+          ENDSSH
+
+      # ----------------------------------------------------------------------
+      # STEP 3: Deployment summary
+      # ----------------------------------------------------------------------
+      - name: Generate deployment summary
+        if: always()
+        run: |
+          ENV_UPPER=$(echo "${{ inputs.environment }}" | tr '[:lower:]' '[:upper:]')
+          echo "# 🚀 Deployment Summary - ${ENV_UPPER} Environment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | ${{ inputs.environment }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Image Tag** | \`${{ needs.build.outputs.image-tag }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit SHA** | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Deployed By** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Deployment Time** | ${{ needs.build.outputs.deployment-time }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Reason** | ${{ inputs.deployment-reason }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "## ✅ Status: Successful" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "The application has been successfully deployed to the ${ENV_UPPER} environment." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🌐 Access URL: ${{ secrets.NEXT_PUBLIC_URL }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Status: Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Deployment failed. Check the logs above for details." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "If automatic rollback occurred, the previous version should be running." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "📖 [View full workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

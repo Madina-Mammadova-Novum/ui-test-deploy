@@ -206,29 +206,6 @@ jobs:
             exit 1
           fi
 
-      - name: Upload build artifacts on failure
-        if: failure() && steps.build.outcome == 'failure'
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-failure-${{ github.run_number }}
-          path: |
-            .next/
-            !.next/cache
-          retention-days: 7
-          if-no-files-found: warn
-
-      - name: Upload build artifacts on success
-        if: success() && steps.build.outcome == 'success'
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-success-${{ github.run_number }}
-          path: |
-            .next/static/
-            .next/server/
-            .next/BUILD_ID
-          retention-days: 3
-          if-no-files-found: warn
-
       - name: Check test coverage (if tests exist)
         id: test
         run: |
@@ -340,7 +317,7 @@ jobs:
             // Check Build
             if ('${{ steps.build.outputs.build_passed }}' === 'false') {
               comment += '❌ **Build**: Compilation failed\n\n';
-              comment += '💡 **Tip**: Download build artifacts from the workflow run for debugging\n\n';
+              comment += '💡 **Tip**: Check the workflow logs for detailed error messages\n\n';
             } else {
               comment += '✅ **Build**: Passed\n\n';
             }
