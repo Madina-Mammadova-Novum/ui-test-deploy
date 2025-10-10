@@ -177,7 +177,7 @@ jobs:
         run: |
           # Determine authentication method once (avoid redundant checks)
           USE_SSH_KEY="${{ secrets.SSH_PRIVATE_KEY != '' }}"
-          
+
           mkdir -p ~/.ssh
 
           # Add SSH host to known_hosts to avoid prompt
@@ -209,7 +209,7 @@ jobs:
         run: |
           # Determine authentication method once (consistent with setup step)
           USE_SSH_KEY="${{ secrets.SSH_PRIVATE_KEY != '' }}"
-          
+
           # Build SSH command based on authentication method
           if [ "$USE_SSH_KEY" = "true" ]; then
             # SSH key authentication
