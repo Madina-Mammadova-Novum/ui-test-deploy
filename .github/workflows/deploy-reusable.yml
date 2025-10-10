@@ -173,16 +173,28 @@ jobs:
       # SSH credentials are configured in GitHub Environments per environment
       # Supports both SSH key-based and password authentication
       # ----------------------------------------------------------------------
-      - name: Setup SSH key
+      - name: Setup SSH connection
         run: |
+          # Install sshpass for password authentication if needed
+          if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            sudo apt-get update
+            sudo apt-get install -y sshpass
+            echo "✅ sshpass installed for password authentication"
+          fi
+
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
 
           # Add SSH host to known_hosts to avoid prompt
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
-          echo "✅ SSH key configured"
+          # Check if we have SSH private key or password
+          if [ -n "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+            chmod 600 ~/.ssh/deploy_key
+            echo "✅ SSH key configured"
+          else
+            echo "✅ SSH password authentication will be used"
+          fi
 
       # ----------------------------------------------------------------------
       # STEP 2: Deploy to server via SSH
@@ -194,11 +206,22 @@ jobs:
           REGISTRY_URL: ${{ secrets.ACR_REGISTRY_URL }}
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
-          ssh -i ~/.ssh/deploy_key \
-              -o StrictHostKeyChecking=no \
-              -o UserKnownHostsFile=/dev/null \
-              -p ${{ secrets.SSH_PORT || 22 }} \
-              ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+          # Use sshpass for password authentication if SSH_PRIVATE_KEY is not available
+          if [ -n "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            # SSH key authentication
+            ssh -i ~/.ssh/deploy_key \
+                -o StrictHostKeyChecking=no \
+                -o UserKnownHostsFile=/dev/null \
+                -p ${{ secrets.SSH_PORT || 22 }} \
+                ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+          else
+            # Password authentication using sshpass
+            echo "${{ secrets.SSH_PASSWORD }}" | sshpass -p "${{ secrets.SSH_PASSWORD }}" \
+                ssh -o StrictHostKeyChecking=no \
+                -o UserKnownHostsFile=/dev/null \
+                -p ${{ secrets.SSH_PORT || 22 }} \
+                ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+          fi
 
           set -e  # Exit on any error
 
