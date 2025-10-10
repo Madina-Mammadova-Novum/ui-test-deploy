@@ -173,16 +173,27 @@ jobs:
       # SSH credentials are configured in GitHub Environments per environment
       # Supports both SSH key-based and password authentication
       # ----------------------------------------------------------------------
-      - name: Setup SSH key
+      - name: Setup SSH connection
         run: |
+          # Determine authentication method once (avoid redundant checks)
+          USE_SSH_KEY="${{ secrets.SSH_PRIVATE_KEY != '' }}"
+
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
 
           # Add SSH host to known_hosts to avoid prompt
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
-          echo "✅ SSH key configured"
+          # Configure authentication based on method
+          if [ "$USE_SSH_KEY" = "true" ]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+            chmod 600 ~/.ssh/deploy_key
+            echo "✅ SSH key configured"
+          else
+            # Install sshpass for password authentication
+            sudo apt-get update -qq
+            sudo apt-get install -y sshpass
+            echo "✅ SSH password authentication configured"
+          fi
 
       # ----------------------------------------------------------------------
       # STEP 2: Deploy to server via SSH
@@ -193,13 +204,23 @@ jobs:
           IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
           REGISTRY_URL: ${{ secrets.ACR_REGISTRY_URL }}
           ENVIRONMENT: ${{ inputs.environment }}
+          # Use SSHPASS environment variable for security (not exposed in process list)
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
         run: |
-          ssh -i ~/.ssh/deploy_key \
-              -o StrictHostKeyChecking=no \
-              -o UserKnownHostsFile=/dev/null \
-              -p ${{ secrets.SSH_PORT || 22 }} \
-              ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+          # Determine authentication method once (consistent with setup step)
+          USE_SSH_KEY="${{ secrets.SSH_PRIVATE_KEY != '' }}"
 
+          # Build SSH command based on authentication method
+          if [ "$USE_SSH_KEY" = "true" ]; then
+            # SSH key authentication
+            SSH_CMD="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
+          else
+            # Password authentication using sshpass with environment variable (more secure)
+            SSH_CMD="sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
+          fi
+
+          # Execute deployment script on remote server
+          $SSH_CMD << 'ENDSSH'
           set -e  # Exit on any error
 
           # Configuration
