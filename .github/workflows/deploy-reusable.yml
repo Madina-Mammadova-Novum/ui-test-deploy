@@ -206,23 +206,17 @@ jobs:
           REGISTRY_URL: ${{ secrets.ACR_REGISTRY_URL }}
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
-          # Use sshpass for password authentication if SSH_PRIVATE_KEY is not available
+          # Determine SSH command based on authentication method
           if [ -n "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
             # SSH key authentication
-            ssh -i ~/.ssh/deploy_key \
-                -o StrictHostKeyChecking=no \
-                -o UserKnownHostsFile=/dev/null \
-                -p ${{ secrets.SSH_PORT || 22 }} \
-                ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+            SSH_CMD="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
           else
             # Password authentication using sshpass
-            echo "${{ secrets.SSH_PASSWORD }}" | sshpass -p "${{ secrets.SSH_PASSWORD }}" \
-                ssh -o StrictHostKeyChecking=no \
-                -o UserKnownHostsFile=/dev/null \
-                -p ${{ secrets.SSH_PORT || 22 }} \
-                ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+            SSH_CMD="sshpass -p '${{ secrets.SSH_PASSWORD }}' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
           fi
 
+          # Execute deployment script on remote server
+          $SSH_CMD << 'ENDSSH'
           set -e  # Exit on any error
 
           # Configuration
