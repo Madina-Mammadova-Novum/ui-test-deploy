@@ -6,6 +6,7 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 
 - 📖 [Quick Start Guide](./QUICK_START.md) - Get started with deployments in 5 minutes
 - 🔧 [Setup Guide](./DEPLOYMENT_SETUP.md) - Complete deployment setup instructions
+- 📋 [Release Process](./RELEASE_PROCESS.md) - Production release workflow with milestones
 - 🐛 [Troubleshooting](./TROUBLESHOOTING.md) - Common issues and solutions
 
 ## ✅ Deployment Status
@@ -14,9 +15,20 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 | --------------------- | -------------------- | ------------ |
 | **Development (DEV)** | 🟡 Ready for Testing | 2025-10-09   |
 | **Staging (STAGE)**   | 🟡 Ready for Testing | 2025-10-09   |
-| **Production (PROD)** | ⚪ Not Configured    | -            |
+| **Production (PROD)** | 🟡 Ready for Testing | 2025-10-10   |
 
 **Legend**: ✅ Active · 🟡 Ready for Testing · 🟠 Configuration In Progress · ⚪ Not Configured
+
+### 🌳 Branch Flow
+
+```
+Dev ─────► feature ─────► Stage ─────► release/yyyymmdd-count ─────► Main (PROD)
+                                                                        ▲
+                                                                        │
+                                                                     hotfix
+```
+
+**Production deployments** use date-based release branches (`release/yyyymmdd-count`) and require manual approval before deploying to production.
 
 ## 🎯 Current Versions
 
@@ -140,6 +152,75 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 **Jobs & Features**:
 
 Same as Deploy to Development, but targeting staging environment with stage-specific secrets and configuration.
+
+---
+
+### 5. Deploy to Production (`deploy-prod.yml`)
+
+**Controlled Production Deployment** - Secure production deployment with approval gates and health checks.
+
+**Triggers**:
+
+- PR merged from `release/yyyymmdd-count` or `hotfix/*` to `main` branch
+- Manual trigger via GitHub UI (workflow_dispatch)
+- Only on relevant file changes (code, config, Dockerfile)
+- **Branch validation** - Deployment rejected if source isn't `release/*` or `hotfix/*`
+
+**Jobs**:
+
+#### 🔍 **Validate Deployment Source**
+
+- Validates merge came from authorized branch (`release/*` or `hotfix/*`)
+- Extracts release version from branch name
+- Generates deployment validation summary
+- Blocks deployment from unauthorized branches
+
+#### 🏗️ **Build & Push Docker Image**
+
+Same as dev/stage, with additional:
+
+- **Release version tagging** - Images tagged with `release-yyyymmdd-count`
+- Example: `release-20251010-1` for first release on Oct 10, 2025
+
+#### 🚀 **Deploy to Production Server**
+
+- **Manual approval required** before deployment starts (via GitHub Environment)
+- SSH deployment with environment-specific secrets
+- Zero-downtime deployment capability
+- Automatic rollback on container failure
+
+#### 🏥 **Production Health Checks** (NEW - Production Only)
+
+- Waits 60 seconds for application stabilization
+- Automated smoke tests:
+  - Home page accessibility (200 OK)
+  - API health endpoint (200 OK)
+  - Authentication service (200 or 401 expected)
+  - Critical API endpoints (401 without auth = healthy)
+- **Automatic rollback** if any health check fails
+- Detailed health check report in workflow summary
+
+**Features**:
+
+- ✅ Manual approval required (minimum 1 reviewer)
+- ✅ Branch validation (only `release/*` and `hotfix/*`)
+- ✅ Release version tagging
+- ✅ Automated health checks with retries
+- ✅ Automatic rollback on health check failure
+- ✅ Emergency skip health checks option (workflow_dispatch only)
+- ✅ Comprehensive deployment audit trail
+- ✅ Integration with GitHub Milestones
+- ⏱️ ~10-15 minutes total deployment time (including approval and health checks)
+
+**Safety Features**:
+
+- 🔒 Only release and hotfix branches can deploy
+- 🔒 Manual approval prevents accidental deployments
+- 🔒 Health checks verify deployment success
+- 🔒 Automatic rollback protects production
+- 🔒 Deployment audit trail for compliance
+
+**See Also**: [Release Process Guide](./RELEASE_PROCESS.md) for complete production deployment workflow
 
 ---
 
@@ -524,6 +605,49 @@ GitHub provides insights on:
 ---
 
 ## 📝 Changelog
+
+### 2025-10-10 - v2.2.0 - Production Deployment Pipeline
+
+**Setup Status**: ✅ **Production Workflow Ready for Testing**
+
+**New Production Deployment Features**:
+
+- ✅ Added `deploy-prod.yml` - Production deployment with approval gates
+- ✅ Branch validation - Only `release/*` and `hotfix/*` can deploy to production
+- ✅ Release version tagging - Images tagged with `release-yyyymmdd-count`
+- ✅ Automated health checks - Post-deployment smoke tests (production only)
+- ✅ Automatic rollback - Triggers on health check failure
+- ✅ Manual approval required - Prevents accidental production deployments
+- ✅ Created `RELEASE_PROCESS.md` - Complete guide on milestones and releases
+- ✅ Updated all documentation with production workflow
+- ✅ Date-based release branch naming convention (`release/yyyymmdd-count`)
+
+**Health Check Features**:
+
+- ✅ 60-second stabilization wait
+- ✅ Automated endpoint testing with retries
+- ✅ Tests: Home page, API health, auth service, protected endpoints
+- ✅ Detailed health report in workflow summary
+- ✅ Automatic rollback on any failure
+
+**Documentation Updates**:
+
+- ✅ Added production deployment guide to README
+- ✅ Created comprehensive RELEASE_PROCESS.md
+- ✅ Updated DEPLOYMENT_SETUP.md with production setup
+- ✅ Updated QUICK_START.md with production quick reference
+- ✅ Added branch flow diagram to README
+- ✅ Documented milestone integration workflow
+
+**Next Steps**:
+
+- 🔜 Create `prod` GitHub Environment
+- 🔜 Configure production secrets (40 secrets)
+- 🔜 Set up branch protection rules on `main` branch
+- 🔜 First production deployment test
+- 🔜 Create first milestone and test release process
+
+---
 
 ### 2025-10-09 - v2.1.1 - CD Setup Complete
 

@@ -251,10 +251,165 @@ deploy-reusable.yml → Contains all the actual deployment logic
 **Why this matters:**
 
 - ✅ When you need to modify deployment logic, you only update `deploy-reusable.yml`
-- ✅ Both dev and stage use exactly the same deployment process
-- ✅ Adding production deployment later is just copying `deploy-dev.yml` and changing the environment
+- ✅ Dev, stage, and production use exactly the same deployment core logic
+- ✅ Production adds extra safety features: approval gates, health checks, branch validation
 
-**You don't need to touch `deploy-reusable.yml`** - it's already fully configured. You only interact with `deploy-dev.yml` and `deploy-stage.yml` for environment-specific triggers.
+**You don't need to touch `deploy-reusable.yml`** - it's already fully configured. You only interact with environment-specific workflows for triggers.
+
+---
+
+## 🏭 Production Deployment Quick Reference
+
+### Branch Flow
+
+```
+Dev ─────► feature ─────► Stage ─────► release/yyyymmdd-count ─────► Main (PROD)
+                                                                        ▲
+                                                                        │
+                                                                     hotfix
+```
+
+### Production Setup (One-Time)
+
+1. **Create `prod` environment** in GitHub (Settings → Environments)
+2. **Add production secrets** (same 40 secrets as dev/stage, but PROD values)
+3. **Configure approvers** (1-2 team members who can approve deployments)
+4. **Set branch protection** on `main` (only `release/*` and `hotfix/*` allowed)
+
+### Production Deployment Process
+
+**Step 1: Create Release Branch**
+
+```bash
+# Today's date: October 10, 2025
+# First release of the day: -1
+
+git checkout stage
+git pull origin stage
+git checkout -b release/20251010-1
+git push origin release/20251010-1
+```
+
+**Step 2: Create PR to main**
+
+- From: `release/20251010-1`
+- To: `main`
+- Use PR template from [RELEASE_PROCESS.md](./RELEASE_PROCESS.md)
+
+**Step 3: Get PR Approved & Merge**
+
+- Requires code review approval
+- Merge the PR (triggers deployment workflow)
+
+**Step 4: Approve Deployment**
+
+1. Go to **Actions** tab
+2. Find running workflow
+3. Click **Review deployments**
+4. Select `prod` environment
+5. Click **Approve and deploy**
+
+**Step 5: Monitor Deployment**
+
+Watch for:
+
+```
+✅ Branch validation passed
+✅ Docker image built
+✅ Waiting for approval... → YOU APPROVED
+✅ Container deployed
+⏳ Running health checks...
+✅ Health check: Home Page - PASS
+✅ Health check: API Health - PASS
+✅ Health check: Auth Service - PASS
+✅ Health check: Vessels API - PASS
+🎉 Production deployment successful!
+```
+
+### Production Deployment Timeline
+
+```
+0:00  - PR merged to main
+0:01  - Workflow triggered
+0:02  - Source branch validated
+0:05  - Docker build starts
+5:00  - Image pushed to registry
+5:30  - ⏸️  WAITING FOR APPROVAL (you must approve)
+6:00  - Approved, deployment starts
+9:00  - Container deployed
+9:30  - Wait 60 seconds for stabilization
+10:30 - Running health checks
+12:00 - ✅ Deployment complete!
+```
+
+**Total time: ~12-15 minutes** (including manual approval)
+
+### Health Checks
+
+Production deployments include automated health checks:
+
+- **Home Page** (/) - 200 OK
+- **API Health** (/api/health) - 200 OK
+- **Auth Service** - 200 or 401 expected
+- **Protected API** (/v1/charterer/vessels) - 401 (means healthy)
+
+If ANY check fails → **Automatic rollback** to previous version
+
+### Release Branch Naming
+
+- Format: `release/yyyymmdd-count`
+- `yyyymmdd`: Today's date (YYYYMMDD)
+- `count`: Number of releases today (start with 1)
+
+**Examples:**
+
+```bash
+release/20251010-1  # First release on Oct 10, 2025
+release/20251010-2  # Second release same day
+release/20251125-1  # First release on Nov 25, 2025
+```
+
+### Hotfix (Emergency Only)
+
+For critical production fixes:
+
+```bash
+# Create hotfix from main
+git checkout main
+git checkout -b hotfix/critical-security-fix
+
+# Make minimal fix, test thoroughly
+
+# Create PR: hotfix/* → main
+# Get approved and merge
+# Approve deployment in GitHub Actions
+
+# Backport to other branches
+git checkout dev
+git cherry-pick <hotfix-commit>
+
+git checkout stage
+git cherry-pick <hotfix-commit>
+```
+
+### Production Best Practices
+
+✅ **DO:**
+
+- Deploy during off-peak hours
+- Monitor health checks closely
+- Have rollback plan ready
+- Test thoroughly on stage first
+- Use milestones to track releases
+
+❌ **DON'T:**
+
+- Deploy on Fridays (unless critical)
+- Skip approval step
+- Deploy without testing
+- Ignore health check failures
+
+**For Complete Guide**: See [RELEASE_PROCESS.md](./RELEASE_PROCESS.md)
 
 ---
 
@@ -278,7 +433,9 @@ deploy-reusable.yml → Contains all the actual deployment logic
 
 ## 🎉 You're Ready!
 
-Once you've completed Steps 1-5:
+Once you've completed the setup:
+
+**For DEV & STAGE:**
 
 - ✅ Your CD pipeline is ready
 - ✅ Merging to `develop` → auto-deploys to DEV
@@ -286,9 +443,23 @@ Once you've completed Steps 1-5:
 - ✅ Manual deployments work via GitHub UI
 - ✅ Automatic rollback protects you
 
-**Questions?** Check [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) or ask your DevOps team!
+**For PRODUCTION:**
+
+- ✅ Production workflow configured
+- ✅ Manual approval required before deployment
+- ✅ Automated health checks verify deployments
+- ✅ Automatic rollback on health check failure
+- ✅ Release branch workflow with milestones
+- ✅ Hotfix process for emergencies
+
+**Questions?**
+
+- Quick issues: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+- Production releases: [RELEASE_PROCESS.md](./RELEASE_PROCESS.md)
+- Full setup: [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md)
+- DevOps team for infrastructure questions
 
 ---
 
-_Last updated: 2025-10-07_  
+_Last updated: 2025-10-10_  
 _Quick reference for ShipLink Frontend deployments_
