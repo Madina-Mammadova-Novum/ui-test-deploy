@@ -1,6 +1,6 @@
 import { transformDate } from '@/utils/date';
 
-export const cargoTypeAdapter = ({ data }) => {
+const cargoTypeAdapter = ({ data }) => {
   if (data === null || data === undefined) return [];
   const { id, name } = data;
   return {
@@ -16,7 +16,7 @@ export const cargoTypesAdapter = ({ data }) => {
   });
 };
 
-export const cargoesTableRowAdapter = ({ data, index }) => {
+const cargoesTableRowAdapter = ({ data, index }) => {
   if (!data) return {};
 
   const { date, imo, port } = data;

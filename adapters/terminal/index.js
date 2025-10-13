@@ -1,4 +1,4 @@
-export const terminalAdapter = ({ data }) => {
+const terminalAdapter = ({ data }) => {
   if (data === null) return [];
   const {
     id,

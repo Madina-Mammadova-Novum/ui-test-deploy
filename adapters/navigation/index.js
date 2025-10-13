@@ -1,7 +1,7 @@
 import { ROOT_SLUG } from '@/lib/constants';
 import { setSkippedValue } from '@/utils/helpers';
 
-export const navigationItemAdapter = ({ data }) => {
+const navigationItemAdapter = ({ data }) => {
   if (data === null) return null;
 
   const { order, id, title, type, path, externalPath, collapsed, related, items } = data;

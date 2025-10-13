@@ -13,10 +13,3 @@ export const valueAdapter = ({ data }) => {
     valueType: valueType ? categoryAdapter(valueType) : null,
   };
 };
-
-export const valuesAdapter = ({ data }) => {
-  if (data === null) return [];
-  return data.map((value) => {
-    return valueAdapter({ data: value });
-  });
-};

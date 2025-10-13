@@ -275,14 +275,7 @@ export async function getFailedOffers({ page, perPage, filters, sorting, isFaile
  * @param {string} params.dataAdapterType - Optional adapter type name for response data
  * @returns {Promise<Object>} API response
  */
-export async function searchDeals({
-  page = 1,
-  perPage = 10,
-  filters = {},
-  sorting = {},
-  dataAdapterType,
-  ...otherParams
-}) {
+async function searchDeals({ page = 1, perPage = 10, filters = {}, sorting = {}, dataAdapterType, ...otherParams }) {
   const body = basePageNavAdapter({ data: { page, perPage } });
 
   const response = await postData(`account/deals`, {

@@ -1,11 +1,7 @@
-import { getCargoCounteroffers, getCargoFailedOffers, getCargoSentOffers } from '../cargo';
-
 import { requestAcceptPrefixtureAdapter } from '@/adapters';
 import {
   acceptOfferAdapter,
   declineOfferAdapter,
-  requestExtendCountdownAdapter,
-  requestOnSubsCountdownExtensionAdapter,
   sendCounterofferAdapter,
   sendCounterOfferValidationAdapter,
   sendOfferAdapter,
@@ -77,7 +73,7 @@ export async function sendCounteroffer({ data, role }) {
   };
 }
 
-export async function getAllOffers({ id, role }) {
+async function getAllOffers({ id, role }) {
   const response = await getData(`vessels/${role}-offers/${id}`);
 
   return {
@@ -85,28 +81,7 @@ export async function getAllOffers({ id, role }) {
   };
 }
 
-export async function getIncomingOffers(tankerId) {
-  const response = await getData(`vessels/incoming-offers/${tankerId}`);
-  return {
-    ...response,
-  };
-}
-
-export async function getFailedOffers(tankerId) {
-  const response = await getData(`vessels/failed-offers/${tankerId}`);
-  return {
-    ...response,
-  };
-}
-
-export async function getSentCounteroffers(tankerId) {
-  const response = await getData(`vessels/sent-counteroffers/${tankerId}`);
-  return {
-    ...response,
-  };
-}
-
-export async function getOffers({ id, role }) {
+async function getOffers({ id, role }) {
   const allOffersData = await getAllOffers({ id, role });
 
   const roleBasedMapping = {
@@ -143,34 +118,6 @@ export async function getOffers({ id, role }) {
   };
 }
 
-export async function getOwnerDetailsOffers({ id }) {
-  const incomingOffersData = await getIncomingOffers(id);
-  const sentCounterOffersData = await getSentCounteroffers(id);
-  const failedOffersData = await getFailedOffers(id);
-
-  return {
-    [id]: {
-      incoming: incomingOffersData?.data,
-      sent: sentCounterOffersData?.data,
-      failed: failedOffersData?.data,
-    },
-  };
-}
-
-export async function getChartererDetailsOffers({ id }) {
-  const sentOffersData = await getCargoSentOffers(id);
-  const counteroffersData = await getCargoCounteroffers(id);
-  const failedOffersData = await getCargoFailedOffers(id);
-
-  return {
-    [id]: {
-      incoming: sentOffersData?.data,
-      sent: counteroffersData?.data,
-      failed: failedOffersData?.data,
-    },
-  };
-}
-
 export function* getOffersById({ data, role }) {
   return yield Promise.all(data.map(({ id }) => getOffers({ id, role })));
 }
@@ -194,26 +141,6 @@ export async function acceptPrefixtureOffer(offerId) {
 
   if (!response.error) response.message = 'You have confirmed to go on subs';
 
-  return {
-    ...response,
-  };
-}
-
-export async function extendCountdown({ offerId, role }) {
-  const body = requestExtendCountdownAdapter({ data: offerId });
-  const { isOwner } = getRoleIdentity({ role });
-  const path = isOwner ? `offer/extend-countdown` : `offer/charterer/extend-countdown`;
-  const response = await postData(path, body);
-  if (!response.error) response.message = 'Countdown has been successfully extended';
-  return {
-    ...response,
-  };
-}
-
-export async function requestCountdownExtension({ data }) {
-  const body = requestOnSubsCountdownExtensionAdapter({ data });
-  const response = await postData('account/on-subs/request-extension', body);
-  if (!response.error) response.message = 'You have successfully requested countdown extension';
   return {
     ...response,
   };

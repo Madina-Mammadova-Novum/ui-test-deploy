@@ -42,12 +42,6 @@ const fleetsSlice = createSlice({
     deleteVesselFromUnassignedFleetsState: (state, action) => {
       state.unassignedFleetData = state.unassignedFleetData.filter(({ id }) => id !== action.payload);
     },
-    updateUnassignedFleet: (state, action) => {
-      const { id, tankers } = action.payload;
-      const updatedTanker = state.unassignedFleetData.find((fleet) => fleet.id === id);
-
-      if (updatedTanker) state.unassignedFleetData = tankers;
-    },
     addVesselToFleetsState: (state, action) => {
       const { fleetId, tankerId } = action?.payload;
 
@@ -178,7 +172,6 @@ export const {
   addVesselToFleetsState,
   addVesselToUnassignedFleetState,
   clearPrefilledState,
-  updateUnassignedFleet,
   setToggle,
   updateVesselCategoryTwo,
 } = fleetsSlice.actions;

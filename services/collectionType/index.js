@@ -4,7 +4,7 @@ import { COLLECTIONS_TYPES } from '@/lib';
 import { ROOT_COLLECTION_TYPE, ROOT_SLUG } from '@/lib/constants';
 import { getData } from '@/utils/dataFetching';
 
-export function getCollectionType(slug) {
+function getCollectionType(slug) {
   if (slug !== undefined) {
     const locale = 'en'; // defaultLocale without using next-i18next.config.js
     if (slug.length > 0) {

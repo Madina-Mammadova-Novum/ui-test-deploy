@@ -12,12 +12,14 @@ import { ROUTES } from '@/lib';
 import { getHomePageData } from '@/services';
 import { getEntityData } from '@/services/collectionType';
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const data = await getEntityData(params);
   return metaData(data);
 }
 
-export default async function Home({ params }) {
+export default async function Home(props) {
+  const params = await props.params;
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
   const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.APP_ENV === 'prod';
 

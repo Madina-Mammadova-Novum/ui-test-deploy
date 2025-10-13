@@ -14,7 +14,8 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page({ searchParams }) {
+export default async function Page(props) {
+  const searchParams = await props.searchParams;
   const searchedParams = searchParamsAdapter({ data: searchParams });
 
   return <Fleets searchedParams={searchedParams} />;

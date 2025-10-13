@@ -28,10 +28,6 @@ export const documentRequestsResponseAdapter = (data) => {
   return arrayAdapter(sortedData);
 };
 
-export const createDocumentRequestAdapter = (data) => {
-  return objectAdapter(data);
-};
-
 export const documentRequestsRequestAdapter = (formData) => {
   if (!formData) return objectAdapter(formData);
 

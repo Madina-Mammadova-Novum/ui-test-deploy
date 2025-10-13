@@ -1,16 +1,12 @@
-import { arrayAdapter, nullAdapter } from '@/adapters/common';
+import { nullAdapter } from '@/adapters/common';
 import { convertDate, transformDate } from '@/utils/date';
 import { addLocalDateFlag, getListOfDataByDays, sortFromCurrentToPast } from '@/utils/helpers';
-
-export const notificationsResponseAdapter = (data) => {
-  return arrayAdapter(data);
-};
 
 export const readNotificationResponseAdapter = (data) => {
   return nullAdapter(data);
 };
 
-export const notificationAdapter = (data) => {
+const notificationAdapter = (data) => {
   if (!data) return {};
 
   return {

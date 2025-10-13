@@ -40,10 +40,3 @@ export const authorAdapter = ({ data = null } = {}) => {
     publishedAt,
   };
 };
-
-export const authorsAdapter = ({ data } = {}) => {
-  if (!data) return [];
-  return data.map((author) => {
-    return authorAdapter({ data: author });
-  });
-};

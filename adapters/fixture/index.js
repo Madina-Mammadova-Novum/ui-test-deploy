@@ -1,4 +1,3 @@
-import { arrayAdapter } from '@/adapters/common';
 import { countriesAdapter } from '@/adapters/country';
 import CommentIcon from '@/assets/images/commentMessage.svg';
 import StatusIndicator from '@/elements/StatusIndicator';
@@ -351,5 +350,3 @@ export const fixtureDocumentsTabRowsDataAdapter = ({ data }) => {
 
   return data.map((rowData, index) => fixtureDocumentsTabRowDataAdapter({ data: rowData, index: index + 1 }));
 };
-
-export const responseFixtureAdapter = ({ data }) => arrayAdapter(data);

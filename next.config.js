@@ -39,7 +39,6 @@ const nextConfig = {
   },
   crossOrigin: 'anonymous',
   reactStrictMode: false,
-  swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
@@ -48,9 +47,6 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
-  experimental: {
-    instrumentationHook: process.env.NODE_ENV === 'production',
   },
   env: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
@@ -97,7 +93,7 @@ const nextConfig = {
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920],
   },
-  webpack(config) {
+  webpack(config, { isServer, dev }) {
     config.module.rules.push(
       {
         test: /\.svg$/,
@@ -132,6 +128,37 @@ const nextConfig = {
         ],
       }
     );
+
+    // Proper solution for OpenTelemetry dynamic import warnings
+    if (isServer) {
+      // Only apply to server-side builds where OpenTelemetry runs
+      config.externals = config.externals || [];
+
+      // In development, completely externalize OpenTelemetry to prevent webpack processing
+      if (dev) {
+        config.externals.push({
+          '@opentelemetry/instrumentation': 'commonjs @opentelemetry/instrumentation',
+          '@opentelemetry/auto-instrumentations-node': 'commonjs @opentelemetry/auto-instrumentations-node',
+          '@opentelemetry/sdk-node': 'commonjs @opentelemetry/sdk-node',
+        });
+      } else {
+        // In production, handle dynamic imports properly
+        config.module.rules.push({
+          test: /node_modules\/@opentelemetry\/.*\.js$/,
+          resolve: {
+            fullySpecified: false,
+          },
+        });
+      }
+
+      // Configure webpack to handle dynamic requires in OpenTelemetry modules
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        // Ensure OpenTelemetry modules resolve correctly
+        '@opentelemetry/instrumentation': require.resolve('@opentelemetry/instrumentation'),
+      };
+    }
+
     return config;
   },
 };

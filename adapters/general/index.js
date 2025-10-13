@@ -1,12 +1,5 @@
 import { isDocument } from '@/utils/helpers';
 
-export function getGeneralDataAdapter({ data }) {
-  return {
-    countries: data.general.data.countries,
-    ports: data.general.data.ports,
-  };
-}
-
 export const searchParamsAdapter = ({ data }) => {
   if (!data) return null;
 

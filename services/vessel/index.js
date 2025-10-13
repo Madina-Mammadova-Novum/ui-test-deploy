@@ -28,13 +28,6 @@ export async function addVesselToFleet({ data, fleetId }) {
   };
 }
 
-export async function getQ88DataByImo({ imo }) {
-  const response = await getData(`vessels/get-q88/${imo}`);
-  return {
-    ...response,
-  };
-}
-
 export async function addVesselManually({ data, vesselId }) {
   const body = requestAddVesselManuallyAdapter({ data });
   const response = await postData(`vessels/initiate/${vesselId}`, body);
@@ -104,7 +97,7 @@ export async function getUnassignedVessels() {
   };
 }
 
-export async function getAssignedVessels({ id, ...rest }) {
+async function getAssignedVessels({ id, ...rest }) {
   const response = await getData(`vessels/get-assigned/${id}`);
 
   return {

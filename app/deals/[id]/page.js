@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
@@ -10,7 +10,8 @@ import { NotFound } from '@/modules';
 import { getOfferDetails } from '@/services/offer';
 import { getCookieFromBrowser, notificationPathGenerator } from '@/utils/helpers';
 
-const DealRedirectPage = ({ params }) => {
+const DealRedirectPage = (props) => {
+  const params = use(props.params);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 

@@ -16,7 +16,8 @@ export function generateMetadata() {
   });
 }
 
-const ResetPasswordPage = ({ params }) => {
+const ResetPasswordPage = async (props) => {
+  const params = await props.params;
   return (
     <NewAuthWrapper containerClass="flex flex-col w-full px-4 md:px-8 3md:mx-auto 3md:max-w-[546px] xl:px-0 gap-8 3md:gap-12">
       <AuthHeader

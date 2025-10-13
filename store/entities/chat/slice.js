@@ -335,7 +335,6 @@ export const {
   setUpdate,
   setConversation,
   setCollapsedChat,
-  setDeactivateConversation,
   setUserMessages,
   updateUserMessages,
   messageAlert,
@@ -350,7 +349,6 @@ export const {
   onlineStatus,
   offlineStatus,
   setBotMessage,
-  addNewChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

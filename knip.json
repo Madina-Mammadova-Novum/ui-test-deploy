@@ -1,0 +1,52 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "workspaces": {
+    ".": {
+      "paths": {
+        "@/*": ["./*"],
+        "@/adapters": ["adapters/index"],
+        "@/adapters/*": ["adapters/*"],
+        "@/app/*": ["app/*"],
+        "@/assets": ["assets/index"],
+        "@/assets/*": ["assets/*"],
+        "@/blocks": ["components/blocks/index"],
+        "@/blocks/*": ["components/blocks/*"],
+        "@/collections": ["components/collections/index"],
+        "@/collections/*": ["components/collections/*"],
+        "@/common": ["components/common/index"],
+        "@/common/*": ["components/common/*"],
+        "@/elements": ["components/elements/index"],
+        "@/elements/*": ["components/elements/*"],
+        "@/layouts": ["components/layouts/index"],
+        "@/layouts/*": ["components/layouts/*"],
+        "@/lib": ["lib/index"],
+        "@/lib/*": ["lib/*"],
+        "@/modules": ["components/modules/index"],
+        "@/modules/*": ["components/modules/*"],
+        "@/models": ["models/index"],
+        "@/models/*": ["models/*"],
+        "@/providers": ["components/providers/index"],
+        "@/providers/*": ["providers/*"],
+        "@/services": ["services/index"],
+        "@/services/*": ["services/*"],
+        "@/store": ["store/store"],
+        "@/store/*": ["store/*"],
+        "@/styles/*": ["assets/styles/*"],
+        "@/units": ["components/units/index"],
+        "@/units/*": ["components/units/*"],
+        "@/utils": ["utils/index"],
+        "@/utils/*": ["utils/*"]
+      },
+      "project": [
+        "app/**/*.{js,jsx,ts,tsx}",
+        "pages/**/*.{js,jsx,ts,tsx}",
+        "components/**/*.{js,jsx,ts,tsx}",
+        "store/**/*.{js,jsx,ts,tsx}",
+        "adapters/**/*.{js,jsx,ts,tsx}",
+        "services/**/*.{js,jsx,ts,tsx}",
+        "lib/**/*.{js,jsx,ts,tsx}",
+        "utils/**/*.{js,jsx,ts,tsx}"
+      ]
+    }
+  }
+}

@@ -2,9 +2,16 @@
 
 ShipLink is built with modern web technologies, optimized for maritime B2B operations. Our stack is carefully chosen to handle complex shipping operations while maintaining excellent performance and developer experience. This document provides a comprehensive overview of our technology choices, architectural decisions, and implementation patterns.
 
+## Current Versions
+
+- **Node.js**: 22.x (>=22.0.0)
+- **Next.js**: 15.5.3
+- **React**: 19.1.1
+- **Package Manager**: Yarn (exclusively)
+
 ## Core Framework Architecture
 
-### Next.js 14 Application Structure
+### Next.js 15.5.3 Application Structure
 
 ```
 shiplink-frontend-ui/
@@ -63,13 +70,7 @@ store/
 // Maritime-specific slice example
 const vesselSlice = createSlice({
   name: 'vessels',
-  initialState: {
-    fleet: [],
-    selectedVessel: null,
-    searchResults: [],
-    loading: false,
-    error: null,
-  },
+  initialState: { fleet: [], selectedVessel: null, searchResults: [], loading: false, error: null },
   reducers: {
     setFleet: (state, action) => {
       state.fleet = action.payload;
@@ -121,10 +122,7 @@ const persistConfig = {
         return publicState;
       },
       // Deserialize: restore with defaults
-      (outboundState) => ({
-        ...outboundState,
-        lastHydrated: Date.now(),
-      }),
+      (outboundState) => ({ ...outboundState, lastHydrated: Date.now() }),
       { whitelist: ['user'] }
     ),
   ],
@@ -161,24 +159,9 @@ module.exports = {
       // Maritime color palette
       colors: {
         maritime: {
-          blue: {
-            50: '#eff6ff',
-            500: '#3b82f6',
-            700: '#1d4ed8',
-            900: '#1e3a8a',
-          },
-          navy: {
-            50: '#f8fafc',
-            500: '#475569',
-            700: '#334155',
-            900: '#0f172a',
-          },
-          ocean: {
-            50: '#f0f9ff',
-            500: '#0ea5e9',
-            700: '#0369a1',
-            900: '#0c4a6e',
-          },
+          blue: { 50: '#eff6ff', 500: '#3b82f6', 700: '#1d4ed8', 900: '#1e3a8a' },
+          navy: { 50: '#f8fafc', 500: '#475569', 700: '#334155', 900: '#0f172a' },
+          ocean: { 50: '#f0f9ff', 500: '#0ea5e9', 700: '#0369a1', 900: '#0c4a6e' },
         },
 
         // Status colors for maritime operations
@@ -204,11 +187,7 @@ module.exports = {
       },
 
       // Spacing for maritime forms and data tables
-      spacing: {
-        18: '4.5rem',
-        88: '22rem',
-        128: '32rem',
-      },
+      spacing: { 18: '4.5rem', 88: '22rem', 128: '32rem' },
     },
   },
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
@@ -230,11 +209,7 @@ const MaritimeButton = ({ variant, size, children, ...props }) => {
     danger: 'bg-status-failed text-white hover:bg-red-700 focus:ring-red-300',
   };
 
-  const sizes = {
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
-  };
+  const sizes = { sm: 'px-3 py-2 text-sm', md: 'px-4 py-2 text-base', lg: 'px-6 py-3 text-lg' };
 
   const classes = `${baseClasses} ${variants[variant]} ${sizes[size]}`;
 
@@ -379,9 +354,7 @@ const useMaritimeHub = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl('/api/maritime-hub', {
-        accessTokenFactory: () => getAccessToken(),
-      })
+      .withUrl('/api/maritime-hub', { accessTokenFactory: () => getAccessToken() })
       .withAutomaticReconnect([0, 2000, 10000, 30000])
       .configureLogging(LogLevel.Information)
       .build();
@@ -443,9 +416,7 @@ const queryClient = new QueryClient({
         return failureCount < 3;
       },
     },
-    mutations: {
-      retry: 1,
-    },
+    mutations: { retry: 1 },
   },
 });
 
@@ -479,36 +450,16 @@ module.exports = {
       chunks: 'all',
       cacheGroups: {
         // Maritime business logic
-        maritime: {
-          test: /[\\/](adapters|services|utils)[\\/]/,
-          name: 'maritime-core',
-          chunks: 'all',
-          priority: 10,
-        },
+        maritime: { test: /[\\/](adapters|services|utils)[\\/]/, name: 'maritime-core', chunks: 'all', priority: 10 },
 
         // Maps and visualization
-        maps: {
-          test: /[\\/](leaflet|react-leaflet)[\\/]/,
-          name: 'maps',
-          chunks: 'all',
-          priority: 8,
-        },
+        maps: { test: /[\\/](leaflet|react-leaflet)[\\/]/, name: 'maps', chunks: 'all', priority: 8 },
 
         // UI components
-        ui: {
-          test: /[\\/]components[\\/]/,
-          name: 'ui-components',
-          chunks: 'all',
-          priority: 6,
-        },
+        ui: { test: /[\\/]components[\\/]/, name: 'ui-components', chunks: 'all', priority: 6 },
 
         // Vendor libraries
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          priority: 4,
-        },
+        vendor: { test: /[\\/]node_modules[\\/]/, name: 'vendors', chunks: 'all', priority: 4 },
       },
     },
   },
@@ -537,20 +488,10 @@ module.exports = {
   extends: ['next/core-web-vitals', 'airbnb', 'prettier'],
   rules: {
     // Maritime-specific naming conventions
-    camelcase: [
-      'error',
-      {
-        allow: ['^UNSAFE_', '^imo_', '^dwt_', '^mt_'],
-      },
-    ],
+    camelcase: ['error', { allow: ['^UNSAFE_', '^imo_', '^dwt_', '^mt_'] }],
 
     // Require PropTypes for maritime components
-    'react/prop-types': [
-      'error',
-      {
-        ignore: ['children', 'className'],
-      },
-    ],
+    'react/prop-types': ['error', { ignore: ['children', 'className'] }],
 
     // Maritime data validation rules
     'no-magic-numbers': [
@@ -566,17 +507,7 @@ module.exports = {
     'no-return-await': 'error',
   },
 
-  overrides: [
-    {
-      files: ['**/*.test.js', '**/*.spec.js'],
-      env: {
-        jest: true,
-      },
-      rules: {
-        'no-magic-numbers': 'off',
-      },
-    },
-  ],
+  overrides: [{ files: ['**/*.test.js', '**/*.spec.js'], env: { jest: true }, rules: { 'no-magic-numbers': 'off' } }],
 };
 ```
 
@@ -615,25 +546,10 @@ module.exports = {
   ],
 
   coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
+    global: { branches: 70, functions: 70, lines: 70, statements: 70 },
     // Higher standards for critical maritime logic
-    './services/': {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-    './adapters/': {
-      branches: 85,
-      functions: 85,
-      lines: 85,
-      statements: 85,
-    },
+    './services/': { branches: 80, functions: 80, lines: 80, statements: 80 },
+    './adapters/': { branches: 85, functions: 85, lines: 85, statements: 85 },
   },
 };
 ```
@@ -645,19 +561,14 @@ module.exports = {
 ```javascript
 // Enhanced security for maritime operations
 const useAuthTokens = () => {
-  const [tokens, setTokens] = useState({
-    accessToken: null,
-    refreshToken: null,
-  });
+  const [tokens, setTokens] = useState({ accessToken: null, refreshToken: null });
 
   const refreshAccessToken = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/refresh', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          refreshToken: tokens.refreshToken,
-        }),
+        body: JSON.stringify({ refreshToken: tokens.refreshToken }),
       });
 
       if (!response.ok) throw new Error('Token refresh failed');

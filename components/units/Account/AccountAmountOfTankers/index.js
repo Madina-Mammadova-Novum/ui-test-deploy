@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { TextRow } from '@/elements';
 import { getUserDataSelector } from '@/store/selectors';
-import CargoesInfoModal from '@/units/CargoesInfoModal';
+import { CargoesInfoModal } from '@/units';
 import ModalWindow from '@/units/ModalWindow';
 import { getRoleIdentity } from '@/utils/helpers';
 

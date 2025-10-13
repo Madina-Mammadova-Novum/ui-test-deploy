@@ -7,10 +7,3 @@ export const authorPositionAdapter = ({ data }) => {
     title,
   };
 };
-
-export const authorPositionsAdapter = ({ data }) => {
-  if (data === null) return [];
-  return data.map((authorPosition) => {
-    return authorPositionAdapter({ data: authorPosition });
-  });
-};

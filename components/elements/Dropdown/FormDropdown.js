@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 
 import classNames from 'classnames';
 
-import { SimpleDropdown } from './SimpleDropdown';
+import SimpleDropdown from './SimpleDropdown';
 
 import { DropdownPropTypes } from '@/lib/types';
 

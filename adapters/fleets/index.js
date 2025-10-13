@@ -37,7 +37,7 @@ export const fleetsHeaderDataAdapter = ({ data }) => {
   ];
 };
 
-export const fleetsRowDataAdapter = ({ data, index }) => {
+const fleetsRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const {
@@ -163,7 +163,7 @@ export const fleetsPageHeaderDataAdapter = ({ data }) => {
   ];
 };
 
-export const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
+const fleetsPageRowDataAdapter = ({ data, index, fleetName }) => {
   if (!data) return null;
 
   const {
@@ -295,7 +295,7 @@ export const fleetsPageRowsDataAdapter = ({ data, fleetName }) => {
   return data.map((rowData, index) => fleetsPageRowDataAdapter({ data: rowData, index: index + 1, fleetName }));
 };
 
-export const unassignedFleetRowDataAdapter = ({ data, index }) => {
+const unassignedFleetRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
   const {
@@ -448,17 +448,6 @@ export const getFleetByIdAdapter = ({ id }) => {
   if (!id) return null;
 
   return { fleetId: id };
-};
-
-export const complexFleetDataAdapter = ({ fleet, fleetDetails }) => {
-  if (!fleet) return [];
-
-  return {
-    data: {
-      ...fleet,
-      tankers: fleetDetails?.data,
-    },
-  };
 };
 
 export const fleetNotificationAdapter = ({ data, id }) => {
