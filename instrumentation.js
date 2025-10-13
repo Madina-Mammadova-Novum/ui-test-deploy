@@ -1,6 +1,6 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development';
+    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_APP_ENV === 'dev';
     const hasOtelConfig = process.env.IDENTITY_NEW_RELIC_LICENSE_KEY && process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 
     if (isDevelopment || !hasOtelConfig) {

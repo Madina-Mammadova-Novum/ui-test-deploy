@@ -21,7 +21,7 @@ export async function generateMetadata(props) {
 export default async function Home(props) {
   const params = await props.params;
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
-  const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.APP_ENV === 'prod';
+  const betaMode = process.env.NEXT_PUBLIC_BETA_MODE === 'true' && process.env.NEXT_PUBLIC_APP_ENV === 'prod';
 
   // Get the current pathname from params.slug
   const pathname = params?.slug ? `/${params.slug.join('/')}` : '/';
