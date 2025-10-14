@@ -642,7 +642,7 @@ GitHub provides insights on:
 **Next Steps**:
 
 - 🔜 Create `prod` GitHub Environment
-- 🔜 Configure production secrets (40 secrets)
+- 🔜 Configure production secrets (45 secrets)
 - 🔜 Set up branch protection rules on `main` branch
 - 🔜 First production deployment test
 - 🔜 Create first milestone and test release process

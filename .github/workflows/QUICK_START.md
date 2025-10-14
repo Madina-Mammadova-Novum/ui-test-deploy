@@ -57,7 +57,7 @@ SSH_PORT             = 22
 SSH_PRIVATE_KEY      = (full key including -----BEGIN----- and -----END-----)
 ```
 
-#### Application Secrets (33 secrets)
+#### Application Secrets (38 secrets)
 
 **⚠️ SECURITY NOTE**: Actual secret values should be obtained from your team lead, DevOps team, or secure password manager.
 
@@ -66,14 +66,14 @@ SSH_PRIVATE_KEY      = (full key including -----BEGIN----- and -----END-----)
 1. Contact your DevOps team or team lead
 2. Check your team's secure password manager (e.g., 1Password, LastPass, Azure Key Vault)
 3. Refer to environment-specific documentation
-4. See [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md) for the complete list of 33 required secrets with descriptions
+4. See [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md) for the complete list of 38 required secrets with descriptions
 
 **Required secrets include:**
 
-- API URLs and endpoints (8 secrets)
+- API URLs and endpoints (10 secrets)
 - Authentication & authorization (7 secrets)
-- Third-party integrations (Seametrix, reCAPTCHA, New Relic) (15 secrets)
-- Feature flags and configuration (3 secrets)
+- Third-party integrations (Seametrix, reCAPTCHA, New Relic) (17 secrets)
+- Feature flags and configuration (4 secrets)
 
 ---
 
@@ -272,7 +272,7 @@ Dev ─────► feature ─────► Stage ─────► relea
 ### Production Setup (One-Time)
 
 1. **Create `prod` environment** in GitHub (Settings → Environments)
-2. **Add production secrets** (same 40 secrets as dev/stage, but PROD values)
+2. **Add production secrets** (same 45 secrets as dev/stage, but PROD values)
 3. **Configure approvers** (1-2 team members who can approve deployments)
 4. **Set branch protection** on `main` (only `release/*` and `hotfix/*` allowed)
 

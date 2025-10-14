@@ -187,7 +187,7 @@ Go to your `dev` environment and add these secrets:
 
 **⚠️ SECURITY NOTE**: Actual secret values should be obtained from your team lead, DevOps team, or secure password manager. Never commit secrets to version control.
 
-**Required Secrets** (33 total):
+**Required Secrets** (38 total):
 
 | Secret Name                                 | Description                        | Where to Get                             |
 | ------------------------------------------- | ---------------------------------- | ---------------------------------------- |
@@ -222,8 +222,10 @@ Go to your `dev` environment and add these secrets:
 | `NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY`   | New Relic browser trust key        | New Relic console / DevOps               |
 | `NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID`  | New Relic browser account ID       | New Relic console / DevOps               |
 | `APP_ENV`                                   | Environment name (dev/stage/prod)  | Set to `dev` for DEV environment         |
-| `SEAMETRIX_API_URL`                         | Seametrix tiles API URL            | Seametrix provider / DevOps              |
-| `SEAMETRIX_MAP_KEY`                         | Seametrix map key                  | Seametrix provider / DevOps              |
+| `NEXT_PUBLIC_APP_ENV`                       | Public environment name            | Set to `dev` for DEV environment         |
+| `NEXT_PUBLIC_BETA_MODE`                     | Beta mode flag (true/false)        | Set to `false` for stable features       |
+| `SEAMETRIX_API_URL`                         | Seametrix tiles API URL (server)   | Seametrix provider / DevOps              |
+| `SEAMETRIX_MAP_KEY`                         | Seametrix map key (server)         | Seametrix provider / DevOps              |
 | `NEXT_PUBLIC_ADMIN_URL`                     | Admin panel URL                    | DevOps team / Environment config         |
 
 ---
@@ -491,7 +493,7 @@ After successful DEV and STAGE deployments, set up production deployment:
 
 ### Step 2: Add Production Secrets
 
-Go to `prod` environment and add all 40 secrets (same as dev/stage but with PRODUCTION values):
+Go to `prod` environment and add all 45 secrets (same as dev/stage but with PRODUCTION values):
 
 **⚠️ CRITICAL**: Production secrets must be:
 
@@ -520,7 +522,7 @@ Go to `prod` environment and add all 40 secrets (same as dev/stage but with PROD
 - `SSH_PORT` (usually `22`)
 - `SSH_PRIVATE_KEY` (production server SSH key)
 
-**Application Secrets** (33):
+**Application Secrets** (38):
 
 - Same list as dev/stage but with **PRODUCTION VALUES**
 - Change `APP_ENV` to `prod`
