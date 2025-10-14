@@ -39,6 +39,16 @@ on:
         required: false
         type: boolean
         default: false
+      environment-display-name:
+        description: 'Display name for the environment (e.g., DEV, STAGE, PRODUCTION)'
+        required: false
+        type: string
+        default: ''
+      app-url:
+        description: 'Public application URL for display in summary (non-sensitive)'
+        required: false
+        type: string
+        default: ''
     outputs:
       image-tag:
         description: 'The Docker image tag that was deployed'
@@ -481,14 +491,27 @@ jobs:
       - name: Generate deployment summary
         if: always()
         run: |
-          ENV_UPPER=$(echo "${{ inputs.environment }}" | tr '[:lower:]' '[:upper:]')
-          echo "# 🚀 Deployment Summary - ${ENV_UPPER} Environment" >> $GITHUB_STEP_SUMMARY
+          # Use provided display name or default to uppercase environment name
+          if [ -n "${{ inputs.environment-display-name }}" ]; then
+            ENV_DISPLAY="${{ inputs.environment-display-name }}"
+          else
+            ENV_DISPLAY=$(echo "${{ inputs.environment }}" | tr '[:lower:]' '[:upper:]')
+          fi
+
+          # Use provided app URL or indicate it's configured
+          if [ -n "${{ inputs.app-url }}" ]; then
+            APP_URL="${{ inputs.app-url }}"
+          else
+            APP_URL="Configured in environment"
+          fi
+
+          echo "# 🚀 Deployment Summary - ${ENV_DISPLAY} Environment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Deployment Details" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **Environment** | ${{ inputs.environment }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | ${ENV_DISPLAY} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Image Tag** | \`${{ needs.build.outputs.image-tag }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Commit SHA** | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
@@ -500,9 +523,9 @@ jobs:
           if [ "${{ job.status }}" = "success" ]; then
             echo "## ✅ Status: Successful" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "The application has been successfully deployed to the ${ENV_UPPER} environment." >> $GITHUB_STEP_SUMMARY
+            echo "The application has been successfully deployed to the ${ENV_DISPLAY} environment." >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "🌐 Access URL: ${{ secrets.NEXT_PUBLIC_URL }}" >> $GITHUB_STEP_SUMMARY
+            echo "🌐 **Access URL:** ${APP_URL}" >> $GITHUB_STEP_SUMMARY
           else
             echo "## ❌ Status: Failed" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY

@@ -10,9 +10,10 @@ This guide will walk you through setting up Continuous Deployment (CD) for the S
 2. [Prerequisites](#prerequisites)
 3. [GitHub Environments Setup](#github-environments-setup)
 4. [Adding Secrets to GitHub](#adding-secrets-to-github)
-5. [Testing the Deployment](#testing-the-deployment)
-6. [Troubleshooting](#troubleshooting)
-7. [Rollback Procedure](#rollback-procedure)
+5. [Adding Environment Variables](#adding-environment-variables)
+6. [Testing the Deployment](#testing-the-deployment)
+7. [Troubleshooting](#troubleshooting)
+8. [Rollback Procedure](#rollback-procedure)
 
 ---
 
@@ -238,6 +239,93 @@ Repeat the same process for the `stage` environment, but use STAGE-specific valu
 - Different SSH credentials (different server)
 - Different application URLs (stage-specific)
 - **Change `APP_ENV` to `stage`**
+
+---
+
+## 🌐 Adding Environment Variables
+
+**IMPORTANT**: To prevent deployment summaries from showing `***` instead of environment names and URLs, you need to add **Environment Variables** (non-secret).
+
+### Why This is Needed
+
+GitHub Actions automatically masks **secrets** in logs and summaries to protect sensitive data. However, this also masks public information like URLs and environment names, showing `***` instead.
+
+**Example of the problem:**
+
+```
+| Environment     | ***                      |
+| Access URL      | ***                      |
+```
+
+**After adding variables:**
+
+```
+| Environment     | DEV                      |
+| Access URL      | https://dev.shiplink.com |
+```
+
+### Quick Setup Steps
+
+For **each environment** (`dev`, `stage`, `prod`):
+
+1. Go to **Settings → Environments → [environment-name]**
+2. Scroll to **Environment variables** section (NOT Secrets)
+3. Click **Add variable**
+4. Add the following:
+
+| Environment | Variable Name   | Example Value                 |
+| ----------- | --------------- | ----------------------------- |
+| dev         | `DEV_APP_URL`   | `https://dev-int.ship.link`   |
+| stage       | `STAGE_APP_URL` | `https://stage-int.ship.link` |
+| prod        | `PROD_APP_URL`  | `https://ship.link`           |
+
+### ⚠️ Important Notes
+
+- ✅ Add as **Environment variables** (NOT Secrets)
+- ✅ Use exact variable names: `DEV_APP_URL`, `STAGE_APP_URL`, `PROD_APP_URL`
+- ✅ Replace example values with your actual application URLs
+- ✅ Each environment gets its own variable
+- ❌ Don't add as secrets
+- ❌ Don't change the variable names
+
+### Where to Find Your URLs
+
+If you're unsure about your environment URLs:
+
+1. Check the `NEXT_PUBLIC_URL` secret value in each environment (but add as variable, not secret)
+2. Ask your DevOps team
+3. Check the "Important URLs" section at the bottom of this document
+
+### Variables vs Secrets - What's the Difference?
+
+**Environment Variables (Non-Secret):**
+
+- ✅ Public, non-sensitive information
+- ✅ Visible in logs and summaries
+- ✅ Use for: URLs, environment names, feature flags
+
+**Secrets:**
+
+- 🔒 Sensitive information
+- 🔒 Always masked as `***` in logs
+- 🔒 Use for: API keys, passwords, tokens, credentials
+
+### Verification
+
+After adding the variables, they should appear in the environment like this:
+
+**dev Environment:**
+
+```
+Environment variables:
+└── DEV_APP_URL = https://dev-int.ship.link
+
+Environment secrets:
+├── ACR_REGISTRY_URL
+├── ACR_USERNAME
+├── ACR_PASSWORD
+└── ... (all other secrets)
+```
 
 ---
 
