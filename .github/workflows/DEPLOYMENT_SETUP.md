@@ -187,7 +187,7 @@ Go to your `dev` environment and add these secrets:
 
 **⚠️ SECURITY NOTE**: Actual secret values should be obtained from your team lead, DevOps team, or secure password manager. Never commit secrets to version control.
 
-**Required Secrets** (33 total):
+**Required Secrets** (38 total):
 
 | Secret Name                                 | Description                        | Where to Get                             |
 | ------------------------------------------- | ---------------------------------- | ---------------------------------------- |
@@ -222,8 +222,10 @@ Go to your `dev` environment and add these secrets:
 | `NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY`   | New Relic browser trust key        | New Relic console / DevOps               |
 | `NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID`  | New Relic browser account ID       | New Relic console / DevOps               |
 | `APP_ENV`                                   | Environment name (dev/stage/prod)  | Set to `dev` for DEV environment         |
-| `SEAMETRIX_API_URL`                         | Seametrix tiles API URL            | Seametrix provider / DevOps              |
-| `SEAMETRIX_MAP_KEY`                         | Seametrix map key                  | Seametrix provider / DevOps              |
+| `NEXT_PUBLIC_APP_ENV`                       | Public environment name            | Set to `dev` for DEV environment         |
+| `NEXT_PUBLIC_BETA_MODE`                     | Beta mode flag (true/false)        | Set to `false` for stable features       |
+| `SEAMETRIX_API_URL`                         | Seametrix tiles API URL (server)   | Seametrix provider / DevOps              |
+| `SEAMETRIX_MAP_KEY`                         | Seametrix map key (server)         | Seametrix provider / DevOps              |
 | `NEXT_PUBLIC_ADMIN_URL`                     | Admin panel URL                    | DevOps team / Environment config         |
 
 ---
@@ -475,29 +477,280 @@ If you need to manually rollback to a specific version:
 
 ---
 
-## 🚀 Next Steps
+## 🚀 Production Setup
 
-After successful DEV and STAGE deployments:
+After successful DEV and STAGE deployments, set up production deployment:
 
-1. **Production Setup** (Later)
-   - Create `prod` environment
-   - Add production secrets
-   - Configure required approvals
-   - Create `deploy-prod.yml` workflow
-   - Test with manual deployment first
+### Step 1: Create Production Environment
 
-2. **Enhancements to Consider**
-   - Slack/Discord notifications
-   - Deployment metrics
-   - Blue-green deployment strategy
+1. Go to **Settings** → **Environments**
+2. Click **New environment**
+3. Name: `prod`
+4. **Environment Protection Rules**:
+   - ✅ **Required reviewers**: Add 1-2 team members
+   - ✅ **Deployment branches**: Select "Selected branches" → Add `main` only
+   - ⚠️ **Optional**: Wait timer (5-10 minutes for final review)
+
+### Step 2: Add Production Secrets
+
+Go to `prod` environment and add all 45 secrets (same as dev/stage but with PRODUCTION values):
+
+**⚠️ CRITICAL**: Production secrets must be:
+
+- Different from dev/stage
+- Stored securely
+- Rotated every 90 days
+- Never committed to code
+
+**Get production secrets from:**
+
+- DevOps team / Team lead
+- Secure password manager (1Password, LastPass, etc.)
+- Azure Key Vault
+- Production environment documentation
+
+**Registry Secrets** (3):
+
+- `ACR_REGISTRY_URL` (same as dev/stage)
+- `ACR_USERNAME` (same as dev/stage)
+- `ACR_PASSWORD` (same as dev/stage)
+
+**SSH Secrets** (4):
+
+- `SSH_HOST` (production server hostname/IP)
+- `SSH_USERNAME` (production server username)
+- `SSH_PORT` (usually `22`)
+- `SSH_PRIVATE_KEY` (production server SSH key)
+
+**Application Secrets** (38):
+
+- Same list as dev/stage but with **PRODUCTION VALUES**
+- Change `APP_ENV` to `prod`
+- Use production URLs, keys, and credentials
+
+### Step 3: Configure Branch Protection
+
+**For `main` branch** (Settings → Branches → Add rule):
+
+1. **Branch name pattern**: `main`
+2. **Protect matching branches**:
+   - ✅ Require pull request before merging
+   - ✅ Require approvals: 1
+   - ✅ Require status checks to pass:
+     - Code Quality & Build Check
+     - Security Scan
+     - Performance Check
+   - ✅ Require conversation resolution
+   - ✅ Restrict who can push to matching branches
+   - ✅ Block force pushes
+
+3. **Deployment branch restrictions**:
+   - Go to Settings → Environments → `prod`
+   - Deployment branches: "Selected branches"
+   - Add pattern: `main` (only main branch can deploy to prod)
+
+**For `stage` branch**:
+
+- Require PR from feature branches
+- Require 1 approval
+- Require status checks to pass
+
+### Step 4: Understand Production Workflow
+
+**Branch Flow:**
+
+```
+Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
+                                                   ↓
+                                                hotfix → Main
+```
+
+**Release Branch Naming:**
+
+- Format: `release/yyyymmdd-count`
+- Example: `release/20251010-1` (first release on Oct 10, 2025)
+- Example: `release/20251010-2` (second release same day)
+
+**Deployment Process:**
+
+1. Create release branch from `stage`: `release/20251010-1`
+2. Final testing on release branch
+3. Create PR: `release/20251010-1` → `main`
+4. Get PR approved
+5. Merge PR (triggers deployment workflow)
+6. Workflow validates source branch
+7. **Manual approval required** → You must approve in GitHub Actions
+8. Deployment to server
+9. **Automated health checks** run
+10. Automatic rollback if health checks fail
+
+### Step 5: Test Production Deployment
+
+**First Deployment Test** (recommended):
+
+1. Create test release branch:
+
+   ```bash
+   git checkout stage
+   git checkout -b release/test-$(date +%Y%m%d)-1
+   git push origin release/test-$(date +%Y%m%d)-1
+   ```
+
+2. Create PR to `main`
+
+3. Review PR description (use template from RELEASE_PROCESS.md)
+
+4. Get approval and merge
+
+5. Go to **Actions** tab → Find running workflow
+
+6. **Approve deployment** when prompted
+
+7. **Monitor**:
+   - Container deployment
+   - Health checks (Home, API, Auth, Vessels API)
+   - Health check summary
+
+8. **Verify**:
+   - Access production URL
+   - Test critical features
+   - Check monitoring dashboards
+
+### Step 6: Health Checks Information
+
+Production deployments include automated health checks:
+
+**What's Tested:**
+
+- Home Page (`/`) - 200 OK
+- API Health (`/api/health`) - 200 OK
+- Identity Service (`/api/health` or `/api/account/info`) - 200 or 401
+- Protected API (`/v1/charterer/vessels`) - 401 (means it's protected = healthy)
+
+**Features:**
+
+- 60-second stabilization wait
+- 2 retries per endpoint (5-second delay)
+- 30-second timeout per check
+- Automatic rollback on any failure
+
+**Health Check Summary:**
+
+```
+✅ Health check: Home Page - PASS
+✅ Health check: API Health - PASS
+✅ Health check: Auth Service - PASS
+✅ Health check: Vessels API - PASS
+📊 Total: 4/4 checks passed
+🎉 Production deployment verified!
+```
+
+If health checks fail:
+
+```
+❌ Health check: API Health - FAIL
+🔄 Initiating automatic rollback...
+📦 Starting previous version...
+✅ Rollback successful
+```
+
+### Step 7: Hotfix Process
+
+For emergency production fixes:
+
+1. **Create hotfix branch from main:**
+
+   ```bash
+   git checkout main
+   git checkout -b hotfix/critical-security-fix
+   ```
+
+2. **Make minimal fix** and test thoroughly
+
+3. **Create PR**: `hotfix/*` → `main`
+
+4. **Fast-track approval** and merge
+
+5. **Approve deployment** in GitHub Actions
+
+6. **Backport to other branches:**
+
+   ```bash
+   git checkout dev
+   git cherry-pick <hotfix-commit>
+   git push origin dev
+
+   git checkout stage
+   git cherry-pick <hotfix-commit>
+   git push origin stage
+   ```
+
+**See Also**: [RELEASE_PROCESS.md](./RELEASE_PROCESS.md) for complete production workflow
+
+---
+
+## 💡 Best Practices
+
+### Production Deployment
+
+✅ **DO:**
+
+- Deploy during off-peak hours
+- Have rollback plan ready
+- Monitor health checks closely
+- Test release branch thoroughly before merging
+- Use milestones to track releases
+- Document all production changes
+- Communicate deployments to team
+
+❌ **DON'T:**
+
+- Deploy on Fridays (unless critical)
+- Skip health checks (except emergencies)
+- Deploy without approval
+- Deploy untested code
+- Deploy without rollback plan
+- Ignore health check failures
+
+### Secret Management
+
+✅ **DO:**
+
+- Rotate secrets every 90 days
+- Use different secrets per environment
+- Store in secure password manager
+- Document where to find secrets
+- Use principle of least privilege
+
+❌ **DON'T:**
+
+- Reuse secrets across environments
+- Share secrets via chat/email
+- Commit secrets to code
+- Use weak secrets
+- Skip secret rotation
+
+---
+
+## 🔜 Next Enhancements
+
+After production deployment is stable:
+
+1. **Monitoring & Notifications**
+   - Slack/Discord deployment notifications
+   - Deployment metrics dashboard
+   - Alert on deployment failures
+
+2. **Advanced Deployment Strategies**
+   - Blue-green deployments
    - Canary deployments
    - Database migration automation
 
-3. **Security Improvements**
-   - Implement secret scanning
-   - Add dependency vulnerability checks
+3. **Security Enhancements**
+   - Secret scanning
+   - Dependency vulnerability checks
    - Enable Dependabot
-   - Configure branch protection rules
+   - Security audit logs
 
 ---
 
@@ -506,7 +759,8 @@ After successful DEV and STAGE deployments:
 - **GitHub Repository**: `https://github.com/YOUR_ORG/shiplink-frontend-ui`
 - **GitHub Actions**: `https://github.com/YOUR_ORG/shiplink-frontend-ui/actions`
 - **Dev Environment**: `https://dev-int.ship.link`
-- **Stage Environment**: `https://stage-int.ship.link` (update when available)
+- **Stage Environment**: `https://stage-int.ship.link`
+- **Production Environment**: (Configure after production setup)
 
 ---
 
@@ -516,9 +770,10 @@ After successful DEV and STAGE deployments:
 - [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 - [Next.js Deployment](https://nextjs.org/docs/deployment)
+- [Release Process Guide](./RELEASE_PROCESS.md) - Complete production release workflow
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: October 2025  
-**Maintained By**: DevOps Team
+**Document Version**: 2.0  
+**Last Updated**: October 10, 2025  
+**Maintained By**: DevOps & Frontend Team

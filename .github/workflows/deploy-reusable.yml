@@ -11,6 +11,7 @@ name: Reusable Deployment Workflow
 # Called by:
 # - deploy-dev.yml (deploys to DEV environment)
 # - deploy-stage.yml (deploys to STAGE environment)
+# - deploy-prod.yml (deploys to PRODUCTION environment)
 #
 on:
   workflow_call:
@@ -20,7 +21,7 @@ on:
         required: true
         type: string
       image-tag-suffix:
-        description: 'Suffix for the latest tag (e.g., dev-latest, stage-latest)'
+        description: 'Suffix for the latest tag (e.g., dev-latest, stage-latest, prod-latest)'
         required: true
         type: string
       deployment-reason:
@@ -28,6 +29,16 @@ on:
         required: false
         type: string
         default: 'Automated deployment'
+      release-version:
+        description: 'Release version for production (extracted from branch name)'
+        required: false
+        type: string
+        default: ''
+      skip-health-checks:
+        description: 'Skip health checks (emergency production deployments only)'
+        required: false
+        type: boolean
+        default: false
     outputs:
       image-tag:
         description: 'The Docker image tag that was deployed'
@@ -35,6 +46,9 @@ on:
       deployment-time:
         description: 'Timestamp of the deployment'
         value: ${{ jobs.build.outputs.deployment-time }}
+      release-version:
+        description: 'The release version (production only)'
+        value: ${{ jobs.build.outputs.release-version }}
 
 env:
   NODE_VERSION: '22.x'
@@ -57,6 +71,7 @@ jobs:
     outputs:
       image-tag: ${{ steps.meta.outputs.image-tag }}
       deployment-time: ${{ steps.meta.outputs.deployment-time }}
+      release-version: ${{ steps.meta.outputs.release-version }}
 
     steps:
       # ----------------------------------------------------------------------
@@ -81,10 +96,20 @@ jobs:
           DEPLOYMENT_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           echo "deployment-time=${DEPLOYMENT_TIME}" >> $GITHUB_OUTPUT
 
+          # Handle release version for production deployments
+          RELEASE_VERSION="${{ inputs.release-version }}"
+          if [ -n "$RELEASE_VERSION" ]; then
+            echo "release-version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+            echo "📦 Release Version: ${RELEASE_VERSION}"
+          else
+            echo "release-version=none" >> $GITHUB_OUTPUT
+          fi
+
           # Log deployment info
           echo "🚀 Deployment Information:"
           echo "  - Environment: ${{ inputs.environment }}"
           echo "  - Image Tag: ${IMAGE_TAG}"
+          echo "  - Release Version: ${RELEASE_VERSION:-N/A}"
           echo "  - Commit SHA: ${{ github.sha }}"
           echo "  - Branch: ${{ github.ref_name }}"
           echo "  - Triggered by: ${{ github.actor }}"
@@ -114,15 +139,29 @@ jobs:
       # Secrets are passed here for build process but NOT in final image (multi-stage build)
       # All vars are ALSO passed at runtime for the running container
       # ----------------------------------------------------------------------
+      - name: Build and tag Docker image
+        id: docker-build
+        run: |
+          # Base tags (always applied)
+          TAGS="${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.image-tag }},${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.image-tag-suffix }}"
+
+          # Add release version tag for production deployments
+          if [ "${{ inputs.environment }}" = "prod" ] && [ "${{ steps.meta.outputs.release-version }}" != "none" ]; then
+            RELEASE_TAG="${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:release-${{ steps.meta.outputs.release-version }}"
+            TAGS="${TAGS},${RELEASE_TAG}"
+            echo "📦 Adding production release tag: ${RELEASE_TAG}"
+          fi
+
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "🏷️  Image tags: ${TAGS}"
+
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile.ci
           push: true
-          tags: |
-            ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.image-tag }}
-            ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.image-tag-suffix }}
+          tags: ${{ steps.docker-build.outputs.tags }}
           build-args: |
             NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
             NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
@@ -130,12 +169,24 @@ jobs:
             NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
             NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
             NEXT_PUBLIC_SEAMETRIX_KEY=${{ secrets.NEXT_PUBLIC_SEAMETRIX_KEY }}
+            NEXT_PUBLIC_SEAMETRIX_API_URL=${{ secrets.NEXT_PUBLIC_SEAMETRIX_API_URL }}
+            NEXT_PUBLIC_SEAMETRIX_MAP_KEY=${{ secrets.NEXT_PUBLIC_SEAMETRIX_MAP_KEY }}
             RECAPTCHA_SECRET_KEY=${{ secrets.RECAPTCHA_SECRET_KEY }}
             NEXT_PUBLIC_STRAPI_API_URL=${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }}
             NEXT_PUBLIC_RT_URL=${{ secrets.NEXT_PUBLIC_RT_URL }}
             BACKEND_API_URL=${{ secrets.BACKEND_API_URL }}
             IDENTITY_API_URL=${{ secrets.IDENTITY_API_URL }}
             NEXT_PUBLIC_FILE_API_URL=${{ secrets.NEXT_PUBLIC_FILE_API_URL }}
+            NEXT_PUBLIC_ADMIN_URL=${{ secrets.NEXT_PUBLIC_ADMIN_URL }}
+            NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV }}
+            NEXT_PUBLIC_MAINTENANCE_MODE=${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}
+            NEXT_PUBLIC_BETA_MODE=${{ secrets.NEXT_PUBLIC_BETA_MODE }}
+            NEXT_PUBLIC_ENABLE_MATOMO=${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}
             SEAMETRIX_API_URL=${{ secrets.SEAMETRIX_API_URL }}
             SEAMETRIX_MAP_KEY=${{ secrets.SEAMETRIX_MAP_KEY }}
             IDENTITY_API_CLIENT_ID=${{ secrets.IDENTITY_API_CLIENT_ID }}
@@ -306,6 +357,8 @@ jobs:
             -e OTEL_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}" \
             -e OTEL_METRIC_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT }}" \
             -e NEXT_PUBLIC_MAINTENANCE_MODE="${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}" \
+            -e NEXT_PUBLIC_BETA_MODE="${{ secrets.NEXT_PUBLIC_BETA_MODE }}" \
+            -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
             -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
             -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
             -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
@@ -381,6 +434,8 @@ jobs:
                 -e OTEL_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}" \
                 -e OTEL_METRIC_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT }}" \
                 -e NEXT_PUBLIC_MAINTENANCE_MODE="${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}" \
+                -e NEXT_PUBLIC_BETA_MODE="${{ secrets.NEXT_PUBLIC_BETA_MODE }}" \
+                -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
                 -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
                 -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
                 -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
@@ -459,3 +514,272 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "📖 [View full workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================================================
+  # JOB 3: PRODUCTION HEALTH CHECKS (Production Only)
+  # ============================================================================
+  health-check:
+    name: Production Health Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: deploy
+    # Only run for production environment and when health checks are not skipped
+    if: inputs.environment == 'prod' && inputs.skip-health-checks == false
+    environment: ${{ inputs.environment }}
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Wait for application stabilization
+        run: |
+          echo "⏳ Waiting 60 seconds for application to fully stabilize..."
+          echo "This ensures all services are properly initialized before health checks"
+          sleep 60
+
+      - name: Run health checks
+        id: health
+        env:
+          APP_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+          API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          IDENTITY_URL: ${{ secrets.IDENTITY_API_URL }}
+        run: |
+          echo "🏥 Starting production health checks..."
+          echo ""
+
+          FAILED_CHECKS=0
+          TOTAL_CHECKS=0
+
+          # Function to perform health check with retries
+          check_endpoint() {
+            local name="$1"
+            local url="$2"
+            local expected_status="$3"
+            local max_retries=2
+            local retry_delay=5
+            
+            TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+            
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "📍 Testing: $name"
+            echo "🔗 URL: $url"
+            echo "✓ Expected: HTTP $expected_status"
+            echo ""
+            
+            for attempt in $(seq 1 $((max_retries + 1))); do
+              if [ $attempt -gt 1 ]; then
+                echo "🔄 Retry attempt $((attempt - 1))/$max_retries after ${retry_delay}s..."
+                sleep $retry_delay
+              fi
+              
+              # Perform curl request with timeout
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 --connect-timeout 10 "$url" 2>/dev/null || echo "000")
+              
+              if [ "$HTTP_CODE" = "$expected_status" ]; then
+                echo "✅ PASS - Received HTTP $HTTP_CODE"
+                echo ""
+                return 0
+              else
+                echo "⚠️  Received HTTP $HTTP_CODE (expected $expected_status)"
+              fi
+            done
+            
+            echo "❌ FAIL - Health check failed after $max_retries retries"
+            echo ""
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            return 1
+          }
+
+          # ============================================================
+          # HEALTH CHECK 1: Home Page
+          # ============================================================
+          check_endpoint "Home Page" "${APP_URL}/" "200"
+
+          # ============================================================
+          # HEALTH CHECK 2: API Health Endpoint
+          # ============================================================
+          # Note: Adjust this endpoint based on your actual health check route
+          check_endpoint "API Health" "${API_URL}/health" "200" || \
+          check_endpoint "API Root" "${API_URL}/" "200"
+
+          # ============================================================
+          # HEALTH CHECK 3: Authentication Service
+          # ============================================================
+          # 401 is expected for unauthenticated requests (means service is working)
+          check_endpoint "Identity Service" "${IDENTITY_URL}/api/health" "200" || \
+          check_endpoint "Identity Service (Auth)" "${IDENTITY_URL}/api/account/info" "401"
+
+          # ============================================================
+          # HEALTH CHECK 4: Critical API Endpoint
+          # ============================================================
+          # 401 without auth means the endpoint exists and is protected (healthy)
+          check_endpoint "Vessels API (Protected)" "${API_URL}/v1/charterer/vessels" "401"
+
+          # ============================================================
+          # Summary
+          # ============================================================
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "📊 Health Check Summary:"
+          echo "  - Total Checks: ${TOTAL_CHECKS}"
+          echo "  - Passed: $((TOTAL_CHECKS - FAILED_CHECKS))"
+          echo "  - Failed: ${FAILED_CHECKS}"
+          echo ""
+
+          # Save results for next steps
+          echo "failed-checks=${FAILED_CHECKS}" >> $GITHUB_OUTPUT
+          echo "total-checks=${TOTAL_CHECKS}" >> $GITHUB_OUTPUT
+
+          if [ $FAILED_CHECKS -gt 0 ]; then
+            echo "❌ Health checks FAILED"
+            exit 1
+          else
+            echo "✅ All health checks PASSED"
+            exit 0
+          fi
+
+      - name: Rollback on health check failure
+        if: failure()
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          echo "🚨 HEALTH CHECKS FAILED - Initiating automatic rollback"
+          echo ""
+
+          # Determine authentication method
+          USE_SSH_KEY="${{ secrets.SSH_PRIVATE_KEY != '' }}"
+
+          # Setup SSH
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          if [ "$USE_SSH_KEY" = "true" ]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+            chmod 600 ~/.ssh/deploy_key
+            SSH_CMD="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
+          else
+            sudo apt-get update -qq && sudo apt-get install -y sshpass
+            SSH_CMD="sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
+          fi
+
+          # Execute rollback on server
+          $SSH_CMD << 'ENDSSH'
+          set -e
+
+          CONTAINER_NAME="${{ env.DOCKER_IMAGE_NAME }}"
+
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔄 AUTOMATIC ROLLBACK INITIATED"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
+          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${CONTAINER_NAME}-previous"; then
+            echo "📦 Previous image found, rolling back..."
+            
+            # Stop and remove failed container
+            docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+            docker rm "${CONTAINER_NAME}" 2>/dev/null || true
+            
+            # Start previous version with all environment variables
+            docker run -d \
+              --name "${CONTAINER_NAME}" \
+              --restart always \
+              -p 3000:3000 \
+              -e NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}" \
+              -e NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+              -e NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
+              -e NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+              -e NEXT_PUBLIC_RECAPTCHA_SITE_KEY="${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}" \
+              -e RECAPTCHA_SECRET_KEY="${{ secrets.RECAPTCHA_SECRET_KEY }}" \
+              -e NEXT_PUBLIC_SEAMETRIX_KEY="${{ secrets.NEXT_PUBLIC_SEAMETRIX_KEY }}" \
+              -e NEXT_PUBLIC_SEAMETRIX_MAP_KEY="${{ secrets.NEXT_PUBLIC_SEAMETRIX_MAP_KEY }}" \
+              -e SEAMETRIX_MAP_KEY="${{ secrets.SEAMETRIX_MAP_KEY }}" \
+              -e NEXT_PUBLIC_SEAMETRIX_API_URL="${{ secrets.NEXT_PUBLIC_SEAMETRIX_API_URL }}" \
+              -e SEAMETRIX_API_URL="${{ secrets.SEAMETRIX_API_URL }}" \
+              -e NEXT_PUBLIC_STRAPI_API_URL="${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }}" \
+              -e NEXT_PUBLIC_RT_URL="${{ secrets.NEXT_PUBLIC_RT_URL }}" \
+              -e NEXT_PUBLIC_FILE_API_URL="${{ secrets.NEXT_PUBLIC_FILE_API_URL }}" \
+              -e BACKEND_API_URL="${{ secrets.BACKEND_API_URL }}" \
+              -e IDENTITY_API_URL="${{ secrets.IDENTITY_API_URL }}" \
+              -e IDENTITY_API_CLIENT_ID="${{ secrets.IDENTITY_API_CLIENT_ID }}" \
+              -e IDENTITY_API_CLIENT_SECRET="${{ secrets.IDENTITY_API_CLIENT_SECRET }}" \
+              -e IDENTITY_API_GRANT_TYPE="${{ secrets.IDENTITY_API_GRANT_TYPE }}" \
+              -e IDENTITY_TOKEN_GRANT_TYPE="${{ secrets.IDENTITY_TOKEN_GRANT_TYPE }}" \
+              -e PREVIEW_SECRET="${{ secrets.PREVIEW_SECRET }}" \
+              -e APP_ENV="${{ secrets.APP_ENV }}" \
+              -e IDENTITY_NEW_RELIC_APP_NAME="${{ secrets.IDENTITY_NEW_RELIC_APP_NAME }}" \
+              -e IDENTITY_NEW_RELIC_LICENSE_KEY="${{ secrets.IDENTITY_NEW_RELIC_LICENSE_KEY }}" \
+              -e OTEL_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}" \
+              -e OTEL_METRIC_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT }}" \
+              -e NEXT_PUBLIC_MAINTENANCE_MODE="${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}" \
+              -e NEXT_PUBLIC_BETA_MODE="${{ secrets.NEXT_PUBLIC_BETA_MODE }}" \
+              -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
+              -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}" \
+              -e NEXT_PUBLIC_ADMIN_URL="${{ secrets.NEXT_PUBLIC_ADMIN_URL }}" \
+              "${CONTAINER_NAME}-previous"
+            
+            echo ""
+            echo "⏳ Waiting 15 seconds for rollback container to start..."
+            sleep 15
+            
+            if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+              echo ""
+              echo "✅ ROLLBACK SUCCESSFUL"
+              echo "Previous version has been restored"
+              echo ""
+              docker ps --filter "name=${CONTAINER_NAME}" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            else
+              echo ""
+              echo "❌ ROLLBACK FAILED"
+              echo "Manual intervention required immediately!"
+              exit 1
+            fi
+          else
+            echo "❌ No previous image available for rollback"
+            echo "Manual intervention required immediately!"
+            exit 1
+          fi
+          ENDSSH
+
+      - name: Generate health check summary
+        if: always()
+        run: |
+          echo "# 🏥 Production Health Check Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.health.outcome }}" = "success" ]; then
+            echo "## ✅ All Health Checks Passed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Total Checks:** ${{ steps.health.outputs.total-checks || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+            echo "**Failed Checks:** 0" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🎉 Production deployment verified and healthy!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Health Checks Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Total Checks:** ${{ steps.health.outputs.total-checks || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+            echo "**Failed Checks:** ${{ steps.health.outputs.failed-checks || 'Unknown' }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🚨 **Automatic rollback has been initiated**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Action Required:" >> $GITHUB_STEP_SUMMARY
+            echo "1. Review the health check logs above" >> $GITHUB_STEP_SUMMARY
+            echo "2. Verify rollback was successful" >> $GITHUB_STEP_SUMMARY
+            echo "3. Investigate the root cause" >> $GITHUB_STEP_SUMMARY
+            echo "4. Fix issues before attempting redeployment" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Endpoints Tested:" >> $GITHUB_STEP_SUMMARY
+          echo "- Home Page (\`/\`)" >> $GITHUB_STEP_SUMMARY
+          echo "- API Health Endpoint" >> $GITHUB_STEP_SUMMARY
+          echo "- Identity/Auth Service" >> $GITHUB_STEP_SUMMARY
+          echo "- Protected API Endpoints" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View deployment details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
