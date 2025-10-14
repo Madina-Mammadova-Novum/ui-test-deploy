@@ -51,4 +51,6 @@ jobs:
       environment: dev
       image-tag-suffix: dev-latest
       deployment-reason: ${{ github.event.inputs.reason || 'Automated deployment from develop branch' }}
+      environment-display-name: 'DEV'
+      app-url: ${{ vars.DEV_APP_URL }}
     secrets: inherit # Pass all secrets from the calling workflow to the reusable workflow
