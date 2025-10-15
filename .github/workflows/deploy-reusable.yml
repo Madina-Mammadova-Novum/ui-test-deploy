@@ -490,6 +490,8 @@ jobs:
       # ----------------------------------------------------------------------
       - name: Generate deployment summary
         if: always()
+        env:
+          APP_URL_FROM_SECRET: ${{ secrets.NEXT_PUBLIC_URL }}
         run: |
           # Use provided display name or default to uppercase environment name
           if [ -n "${{ inputs.environment-display-name }}" ]; then
@@ -498,9 +500,11 @@ jobs:
             ENV_DISPLAY=$(echo "${{ inputs.environment }}" | tr '[:lower:]' '[:upper:]')
           fi
 
-          # Use provided app URL or indicate it's configured
+          # Use provided app URL, fallback to secret, or indicate it's configured
           if [ -n "${{ inputs.app-url }}" ]; then
             APP_URL="${{ inputs.app-url }}"
+          elif [ -n "${APP_URL_FROM_SECRET}" ]; then
+            APP_URL="${APP_URL_FROM_SECRET}"
           else
             APP_URL="Configured in environment"
           fi
@@ -536,7 +540,7 @@ jobs:
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "📖 [View full workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "📖 [View full workflow run for ${ENV_DISPLAY}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
 
   # ============================================================================
   # JOB 3: PRODUCTION HEALTH CHECKS (Production Only)
@@ -805,4 +809,4 @@ jobs:
           echo "- Protected API Endpoints" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [View deployment details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View deployment details for PRODUCTION](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
