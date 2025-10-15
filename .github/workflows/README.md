@@ -202,7 +202,7 @@ Same as dev/stage, with additional:
 
 **Features**:
 
-- ✅ Manual approval required (minimum 1 reviewer)
+- ✅ Label-based approval system (works without GitHub Enterprise)
 - ✅ Branch validation (only `release/*` and `hotfix/*`)
 - ✅ Release version tagging
 - ✅ Automated health checks with retries
@@ -210,7 +210,16 @@ Same as dev/stage, with additional:
 - ✅ Emergency skip health checks option (workflow_dispatch only)
 - ✅ Comprehensive deployment audit trail
 - ✅ Integration with GitHub Milestones
-- ⏱️ ~10-15 minutes total deployment time (including approval and health checks)
+- ⏱️ ~6-8 minutes deployment time + manual approval review time
+
+**Approval System**:
+
+- 🏷️ Issues-based approval (no Enterprise plan required)
+- 🏷️ Approvers add `deploy-approved` label to proceed
+- 🏷️ Auto-assigns designated reviewers
+- 🏷️ Configurable via `WAIT_FOR_APPROVAL` environment variable
+- 🏷️ Build completes before approval (no wasted runner minutes)
+- 🏷️ Deployment continues automatically after label added
 
 **Safety Features**:
 

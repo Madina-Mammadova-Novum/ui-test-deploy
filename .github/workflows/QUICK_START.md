@@ -303,20 +303,25 @@ git push origin release/20251010-1
 
 **Step 4: Approve Deployment**
 
-1. Go to **Actions** tab
-2. Find running workflow
-3. Click **Review deployments**
-4. Select `prod` environment
-5. Click **Approve and deploy**
+1. Go to **Issues** tab
+2. Find the approval issue (labeled `deploy-approval`)
+3. Review deployment details (release version, image tag, etc.)
+4. Add the label `deploy-approved` to the issue
+5. Approval workflow will automatically trigger
 
 **Step 5: Monitor Deployment**
 
 Watch for:
 
 ```
+# Initial Workflow (deploy-prod.yml)
 ✅ Branch validation passed
 ✅ Docker image built
-✅ Waiting for approval... → YOU APPROVED
+✅ Approval issue created
+⏸️  Waiting for approval label...
+
+# After Adding deploy-approved Label (approve-deploy-prod.yml)
+✅ Approval detected
 ✅ Container deployed
 ⏳ Running health checks...
 ✅ Health check: Home Page - PASS
@@ -334,15 +339,18 @@ Watch for:
 0:02  - Source branch validated
 0:05  - Docker build starts
 5:00  - Image pushed to registry
-5:30  - ⏸️  WAITING FOR APPROVAL (you must approve)
-6:00  - Approved, deployment starts
-9:00  - Container deployed
-9:30  - Wait 60 seconds for stabilization
-10:30 - Running health checks
-12:00 - ✅ Deployment complete!
+6:00  - Approval issue created
+⏸️    - WAITING FOR deploy-approved LABEL
+      (approver reviews and adds label)
+      - Approval workflow triggers automatically
++0:00 - Container deployment starts
++3:00 - Container deployed
++3:30 - Wait 60 seconds for stabilization
++4:30 - Running health checks
++6:00 - ✅ Deployment complete!
 ```
 
-**Total time: ~12-15 minutes** (including manual approval)
+**Total time: ~6-8 minutes** (from build) + **approval time** (manual review)
 
 ### Health Checks
 

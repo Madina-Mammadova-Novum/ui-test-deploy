@@ -1,0 +1,53 @@
+name: Parse Approval Issue
+description: Extracts deployment metadata from approval issue body
+
+inputs:
+  issue_body:
+    description: 'The issue body to parse'
+    required: true
+
+outputs:
+  env_name:
+    description: 'Parsed environment name'
+    value: ${{ steps.parse.outputs.env_name }}
+  run_id:
+    description: 'Parsed workflow run ID'
+    value: ${{ steps.parse.outputs.run_id }}
+  image_tag:
+    description: 'Parsed Docker image tag'
+    value: ${{ steps.parse.outputs.image_tag }}
+  release_version:
+    description: 'Parsed release version'
+    value: ${{ steps.parse.outputs.release_version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Parse issue body
+      id: parse
+      shell: bash
+      run: |
+        ISSUE_BODY=$(cat <<'EOF'
+        ${{ inputs.issue_body }}
+        EOF
+        )
+
+        # Extract environment name
+        ENV_NAME=$(echo "$ISSUE_BODY" | grep -oP '(?<=\*\*Environment:\*\* )\S+' || echo "")
+        echo "env_name=${ENV_NAME}" >> $GITHUB_OUTPUT
+        echo "Parsed env_name: ${ENV_NAME}"
+
+        # Extract run ID
+        RUN_ID=$(echo "$ISSUE_BODY" | grep -oP '(?<=\*\*Run ID:\*\* )\d+' || echo "")
+        echo "run_id=${RUN_ID}" >> $GITHUB_OUTPUT
+        echo "Parsed run_id: ${RUN_ID}"
+
+        # Extract image tag
+        IMAGE_TAG=$(echo "$ISSUE_BODY" | grep -oP '(?<=\*\*Image Tag:\*\* `)[^`]+' || echo "")
+        echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+        echo "Parsed image_tag: ${IMAGE_TAG}"
+
+        # Extract release version
+        RELEASE_VERSION=$(echo "$ISSUE_BODY" | grep -oP '(?<=\*\*Release Version:\*\* `)[^`]+' || echo "")
+        echo "release_version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+        echo "Parsed release_version: ${RELEASE_VERSION}"

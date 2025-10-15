@@ -643,7 +643,50 @@ Go to `prod` environment and add all 45 secrets (same as dev/stage but with PROD
 - Require 1 approval
 - Require status checks to pass
 
-### Step 4: Understand Production Workflow
+### Step 4: Configure Approval System
+
+**⚠️ IMPORTANT**: This project uses a label-based approval system that works without GitHub Enterprise.
+
+1. Go to **Settings** → **Environments** → **prod**
+2. Add environment **variables** (NOT secrets):
+   - Name: `WAIT_FOR_APPROVAL`
+   - Value: `true`
+
+**Optional Configuration:**
+
+3. **Approval Assignees** (auto-assign approval issues):
+   - Name: `APPROVAL_ASSIGNEES`
+   - Value: `username1,username2` (comma-separated GitHub usernames)
+
+4. **Custom Labels** (additional labels for approval issues):
+   - Name: `APPROVAL_LABELS`
+   - Value: `production,critical` (comma-separated, default includes `deploy-approval`)
+
+**How It Works:**
+
+When a PR is merged to `main`:
+
+1. Workflow validates the source branch (`release/*` or `hotfix/*`)
+2. Builds Docker image and pushes to registry
+3. Creates a GitHub issue labeled `deploy-approval`
+4. **Deployment PAUSES** - waiting for approval
+5. Approver adds `deploy-approved` label to the issue
+6. Deployment automatically continues
+7. Health checks verify deployment success
+
+**To Approve a Deployment:**
+
+1. Find the approval issue in the Issues tab
+2. Review deployment details (release version, image tag, etc.)
+3. Add the label `deploy-approved` to the issue
+4. Deployment will automatically start
+
+**To Disable Approval (Not Recommended for Production):**
+
+- Set `WAIT_FOR_APPROVAL` to `false` or remove the variable
+- Deployments will proceed automatically without approval
+
+### Step 5: Understand Production Workflow
 
 **Branch Flow:**
 
@@ -672,7 +715,7 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
 9. **Automated health checks** run
 10. Automatic rollback if health checks fail
 
-### Step 5: Test Production Deployment
+### Step 6: Test Production Deployment
 
 **First Deployment Test** (recommended):
 
@@ -690,11 +733,11 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
 
 4. Get approval and merge
 
-5. Go to **Actions** tab → Find running workflow
+5. Find approval issue in **Issues** tab
 
-6. **Approve deployment** when prompted
+6. **Approve deployment** by adding `deploy-approved` label to the issue
 
-7. **Monitor**:
+7. **Monitor** (approval workflow will trigger automatically):
    - Container deployment
    - Health checks (Home, API, Auth, Vessels API)
    - Health check summary
@@ -704,7 +747,7 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
    - Test critical features
    - Check monitoring dashboards
 
-### Step 6: Health Checks Information
+### Step 7: Health Checks Information
 
 Production deployments include automated health checks:
 
@@ -742,7 +785,7 @@ If health checks fail:
 ✅ Rollback successful
 ```
 
-### Step 7: Hotfix Process
+### Step 8: Hotfix Process
 
 For emergency production fixes:
 
