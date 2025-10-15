@@ -52,5 +52,5 @@ jobs:
       image-tag-suffix: dev-latest
       deployment-reason: ${{ github.event.inputs.reason || 'Automated deployment from develop branch' }}
       environment-display-name: 'DEV'
-      app-url: ${{ vars.DEV_APP_URL }}
+      # app-url will use NEXT_PUBLIC_URL secret as fallback if not provided
     secrets: inherit # Pass all secrets from the calling workflow to the reusable workflow
