@@ -286,11 +286,11 @@ For environment-specific display URLs in deployment summaries, you can set up Gi
 #### Health Checks (Production Only)
 
 - Runs after successful deployment to production
-- Tests critical endpoints:
-  - Home page
-  - API health endpoint
-  - Identity/authentication service
-  - Protected API endpoints
+- Tests 3 critical endpoints:
+  - Home page (/)
+  - API health endpoint (/api/health)
+  - Protected authentication endpoint (/api/account/info)
+- Each check retries up to 2 times on failure
 - Automatic rollback if any check fails
 - Can be skipped for emergency deployments (not recommended)
 

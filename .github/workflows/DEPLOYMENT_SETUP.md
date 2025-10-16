@@ -773,15 +773,14 @@ Production deployments include automated health checks:
 
 **What's Tested:**
 
-- Home Page (`/`) - 200 OK
-- API Health (`/api/health`) - 200 OK
-- Identity Service (`/api/health` or `/api/account/info`) - 200 or 401
-- Protected API (`/v1/charterer/vessels`) - 401 (means it's protected = healthy)
+- Home Page (`/`) - expects 200 OK
+- API Health (`/api/health`) - expects 200 OK
+- Protected Authentication (`/api/account/info`) - expects 401 (unauthenticated = healthy)
 
 **Features:**
 
-- 60-second stabilization wait
-- 2 retries per endpoint (5-second delay)
+- 60-second stabilization wait after deployment
+- 2 retries per endpoint (5-second delay between retries)
 - 30-second timeout per check
 - Automatic rollback on any failure
 
@@ -790,9 +789,8 @@ Production deployments include automated health checks:
 ```
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
-✅ Health check: Auth Service - PASS
-✅ Health check: Vessels API - PASS
-📊 Total: 4/4 checks passed
+✅ Health check: Account Info (Protected) - PASS
+📊 Total: 3/3 checks passed
 🎉 Production deployment verified!
 ```
 
