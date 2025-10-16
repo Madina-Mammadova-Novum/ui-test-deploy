@@ -7,7 +7,6 @@
     "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:import/typescript",
     "prettier",
   ],
   "plugins": ["react-hooks", "jest", "jest-formatting", "import", "prettier"],
@@ -31,9 +30,6 @@
     "window": true,
     "document": true,
     "fetch": true,
-  },
-  "parserOptions": {
-    "ecmaVersion": 2020,
   },
   "rules": {
     "jsx-a11y/control-has-associated-label": "off",
@@ -124,7 +120,7 @@
         },
       },
     ],
-    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx"] }],
     "no-use-before-define": "off",
     "prettier/prettier": 0,
     "import/extensions": [
@@ -133,21 +129,32 @@
       {
         "js": "never",
         "jsx": "never",
-        "ts": "never",
-        "tsx": "never",
       },
     ],
     "react/require-default-props": "off",
     "react/destructuring-assignment": "off",
     "react/forbid-prop-types": "off",
   },
-  "parser": "@typescript-eslint/parser",
-  "overrides": [
-    {
-      "files": ["src/**/*.tsx"],
-      "rules": {
-        "react/prop-types": 0,
-      },
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "requireConfigFile": false,
+    "ecmaFeatures": {
+      "jsx": true,
     },
-  ],
+    "babelOptions": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "22",
+            },
+          },
+        ],
+        "@babel/preset-react",
+      ],
+    },
+  },
 }

@@ -1,0 +1,56 @@
+name: Deploy to Development
+
+# 🎯 Triggers: When PR is merged to 'develop' branch
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      # Only deploy when actual application code changes
+      - '**/*.js'
+      - '**/*.jsx'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'next.config.js'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'components/**'
+      - 'pages/**'
+      - 'app/**'
+      - 'lib/**'
+      - 'utils/**'
+      - 'services/**'
+      - 'store/**'
+      - 'adapters/**'
+      - 'models/**'
+      - 'public/**'
+      - 'assets/**'
+      - 'Dockerfile.ci'
+      - '.github/workflows/deploy-dev.yml'
+      - '.github/workflows/deploy-reusable.yml'
+
+  # Allow manual deployment trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deployment'
+        required: false
+        default: 'Manual deployment'
+
+# Prevent multiple deployments from running simultaneously
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false # Don't cancel in-progress deployments
+
+jobs:
+  # Call the reusable deployment workflow
+  deploy:
+    name: Deploy to Development
+    uses: ./.github/workflows/deploy-reusable.yml
+    with:
+      environment: dev
+      image-tag-suffix: dev-latest
+      deployment-reason: ${{ github.event.inputs.reason || 'Automated deployment from develop branch' }}
+      environment-display-name: 'DEV'
+      # app-url will use NEXT_PUBLIC_URL secret as fallback if not provided
+    secrets: inherit # Pass all secrets from the calling workflow to the reusable workflow

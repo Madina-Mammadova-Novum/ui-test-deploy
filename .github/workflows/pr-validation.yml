@@ -4,6 +4,46 @@ on:
   pull_request:
     branches: ['*']
     types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      # Source code files
+      - '**/*.js'
+      - '**/*.jsx'
+
+      # Dependencies
+      - 'package.json'
+      - 'yarn.lock'
+
+      # Configuration files that affect build/lint
+      - 'next.config.js'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'jsconfig.json'
+      - '.env.example'
+      - '.eslintrc'
+      - '.eslintignore'
+      - '.prettierrc'
+      - 'commitlint.config.js'
+      - 'next-sitemap.config.js'
+      - 'turbo.json'
+
+      # Key source directories
+      - 'components/**'
+      - 'pages/**'
+      - 'app/**'
+      - 'public/**'
+      - 'assets/**'
+      - 'styles/**'
+      - 'lib/**'
+      - 'utils/**'
+      - 'services/**'
+      - 'store/**'
+      - 'adapters/**'
+      - 'models/**'
+      - 'middleware.js'
+      - 'instrumentation.js'
+
+      # CI scripts that affect builds
+      - 'ci/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,6 +57,10 @@ jobs:
     name: Code Quality & Build Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    if: github.event.pull_request.draft == false
+    permissions:
+      contents: read # Read repository code for linting and building
+      pull-requests: write # Post comments on PR with validation results
 
     steps:
       - name: Checkout code
@@ -109,12 +153,20 @@ jobs:
           echo "Yarn version: $(yarn --version)"
 
       - name: Cache Next.js build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-
+
+      - name: Cache ESLint
+        uses: actions/cache@v4
+        with:
+          path: .next/cache/eslint
+          key: ${{ runner.os }}-nextjs-eslint-${{ hashFiles('.eslintrc', '.eslintignore') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-eslint-
 
       - name: Run ESLint
         id: eslint
@@ -185,47 +237,101 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: Generate workflow summary
+        if: always()
+        run: |
+          echo "# 📊 PR Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Code Quality Checks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # ESLint
+          if [ "${{ steps.eslint.outputs.eslint_passed }}" = "true" ]; then
+            echo "✅ **ESLint**: Passed" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.eslint.outputs.eslint_passed }}" = "false" ]; then
+            echo "❌ **ESLint**: Failed - Code style issues detected" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```bash' >> $GITHUB_STEP_SUMMARY
+            echo "yarn lint --fix" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Prettier
+          if [ "${{ steps.prettier.outputs.prettier_passed }}" = "true" ]; then
+            echo "✅ **Prettier**: Passed" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.prettier.outputs.prettier_passed }}" = "false" ]; then
+            echo "❌ **Prettier**: Failed - Formatting issues detected" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```bash' >> $GITHUB_STEP_SUMMARY
+            echo "yarn format" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Build
+          if [ "${{ steps.build.outputs.build_passed }}" = "true" ]; then
+            echo "✅ **Build**: Successful" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.build.outputs.build_passed }}" = "false" ]; then
+            echo "❌ **Build**: Failed - Compilation errors" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Tests
+          if [ "${{ steps.test.outputs.test_passed }}" = "true" ]; then
+            echo "✅ **Tests**: Passed" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.test.outputs.test_passed }}" = "false" ]; then
+            echo "❌ **Tests**: Failed" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.test.outputs.test_passed }}" = "skipped" ]; then
+            echo "⏭️ **Tests**: Skipped (no test script found)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View full workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
       - name: Generate PR comment
         if: failure()
         uses: actions/github-script@v7
         with:
           script: |
-            let comment = '## 🔍 PR Validation Results\n\n';
+            let comment = '## 🚨 PR Validation Failed\n\n';
+            comment += '### 📋 Results\n\n';
 
             // Check ESLint
             if ('${{ steps.eslint.outputs.eslint_passed }}' === 'false') {
-              comment += '❌ **ESLint**: Failed - Code style issues detected\n';
-              comment += '```bash\nyarn lint\n```\n';
+              comment += '❌ **ESLint**: Code style issues detected\n';
+              comment += '```bash\nyarn lint --fix\n```\n\n';
             } else {
-              comment += '✅ **ESLint**: Passed\n';
+              comment += '✅ **ESLint**: Passed\n\n';
             }
 
             // Check Prettier
             if ('${{ steps.prettier.outputs.prettier_passed }}' === 'false') {
-              comment += '❌ **Prettier**: Failed - Formatting issues detected\n';
-              comment += '```bash\nyarn format\n```\n';
+              comment += '❌ **Prettier**: Formatting issues detected\n';
+              comment += '```bash\nyarn format\n```\n\n';
             } else {
-              comment += '✅ **Prettier**: Passed\n';
+              comment += '✅ **Prettier**: Passed\n\n';
             }
 
             // Check Build
             if ('${{ steps.build.outputs.build_passed }}' === 'false') {
-              comment += '❌ **Build**: Failed - Compilation errors\n';
+              comment += '❌ **Build**: Compilation failed\n\n';
+              comment += '💡 **Tip**: Check the workflow logs for detailed error messages\n\n';
             } else {
-              comment += '✅ **Build**: Passed\n';
+              comment += '✅ **Build**: Passed\n\n';
             }
-
-
 
             // Check Tests
             if ('${{ steps.test.outputs.test_passed }}' === 'false') {
-              comment += '❌ **Tests**: Failed\n';
+              comment += '❌ **Tests**: Test failures detected\n\n';
             } else if ('${{ steps.test.outputs.test_passed }}' === 'true') {
-              comment += '✅ **Tests**: Passed\n';
+              comment += '✅ **Tests**: Passed\n\n';
             }
 
-            comment += '\n---\n';
-            comment += '*This comment was automatically generated by the PR validation workflow.*';
+            comment += '---\n\n';
+            comment += '📊 [View detailed results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n';
+            comment += '*Automatically generated by PR Validation workflow*';
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -238,6 +344,9 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    if: github.event.pull_request.draft == false
+    permissions:
+      contents: read # Read package.json and yarn.lock for security audit
 
     steps:
       - name: Checkout code
@@ -300,10 +409,24 @@ jobs:
           yarn outdated || true
         continue-on-error: true
 
+      - name: Generate security summary
+        if: always()
+        run: |
+          echo "# 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Security audit completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scope**: Critical vulnerabilities only" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "💡 **Note**: Only critical vulnerabilities will block PRs" >> $GITHUB_STEP_SUMMARY
+
   performance-check:
     name: Performance Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    if: github.event.pull_request.draft == false
+    permissions:
+      contents: read # Read repository code for building and analysis
 
     steps:
       - name: Checkout code
@@ -389,6 +512,7 @@ jobs:
           EOF
 
       - name: Build and analyze bundle size
+        id: perf_build
         run: |
           echo "📊 Analyzing bundle size..."
           yarn build
@@ -397,5 +521,23 @@ jobs:
           if [ -f ".next/static/chunks/webpack.js" ]; then
             echo "✅ Build completed successfully"
             echo "💡 Consider using @next/bundle-analyzer for detailed bundle analysis"
+            echo "perf_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "perf_passed=false" >> $GITHUB_OUTPUT
           fi
         continue-on-error: true
+
+      - name: Generate performance summary
+        if: always()
+        run: |
+          echo "# ⚡ Performance Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.perf_build.outputs.perf_passed }}" = "true" ]; then
+            echo "✅ Performance check completed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Bundle analysis successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Performance check incomplete" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "💡 **Tip**: Add @next/bundle-analyzer for detailed bundle insights" >> $GITHUB_STEP_SUMMARY

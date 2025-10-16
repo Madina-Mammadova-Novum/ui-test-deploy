@@ -148,6 +148,231 @@ Your project uses Azure Pipelines for builds. These GitHub Actions workflows com
 
 This separation provides faster feedback on PRs while keeping production deployments in Azure.
 
+## Deployment Workflows
+
+This project uses GitHub Actions for automated deployment to multiple environments using Docker containers.
+
+### Available Deployment Workflows
+
+#### 1. Deploy to Development (`deploy-dev.yml`)
+
+**Automatic deployment** - Deploys to DEV environment when code is merged to `develop` branch.
+
+**Triggers**:
+
+- Push to `develop` branch (with application code changes)
+- Manual dispatch from GitHub Actions UI
+
+**Environment**: `dev`
+**Docker Tag**: `dev-latest`
+
+#### 2. Deploy to Staging (`deploy-stage.yml`)
+
+**Automatic deployment** - Deploys to STAGE environment when code is merged to `stage` branch.
+
+**Triggers**:
+
+- Push to `stage` branch (with application code changes)
+- Manual dispatch from GitHub Actions UI
+
+**Environment**: `stage`
+**Docker Tag**: `stage-latest`
+
+#### 3. Reusable Deployment Workflow (`deploy-reusable.yml`)
+
+**Shared deployment logic** - Contains all deployment steps used by environment-specific workflows.
+
+**Features**:
+
+- Docker image building with environment variables
+- Push to Azure Container Registry (ACR)
+- SSH-based deployment to remote servers
+- Automatic rollback on deployment failures
+- Production health checks (prod only)
+- Deployment summaries with status and URLs
+
+### Deployment Flow
+
+1. **Build**: Creates Docker image with commit SHA tag
+2. **Push**: Uploads image to Azure Container Registry
+3. **Deploy**: SSHs to target server and deploys container
+4. **Verify**: Checks container health (30s startup wait)
+5. **Rollback**: Automatic rollback if deployment fails
+6. **Health Check**: Production-only comprehensive health checks (with automatic rollback if failed)
+
+### Required Secrets
+
+All secrets must be configured in **GitHub Environments** (Settings → Environments → [environment]):
+
+#### Azure Container Registry Secrets
+
+- `ACR_REGISTRY_URL` - Azure Container Registry URL (e.g., `myregistry.azurecr.io`)
+- `ACR_USERNAME` - ACR username
+- `ACR_PASSWORD` - ACR password
+
+#### SSH Connection Secrets
+
+- `SSH_HOST` - Target server hostname or IP
+- `SSH_USERNAME` - SSH username
+- `SSH_PASSWORD` - SSH password (for password authentication)
+- `SSH_PRIVATE_KEY` - SSH private key (for key-based authentication)
+- `SSH_PORT` - SSH port (optional, defaults to 22)
+
+> **Note**: Use either `SSH_PASSWORD` or `SSH_PRIVATE_KEY` for authentication, not both.
+
+#### Application Secrets
+
+- `NEXTAUTH_SECRET` - NextAuth authentication secret
+- `NEXT_PUBLIC_URL` - Public application URL (also used for deployment summary)
+- `NEXT_PUBLIC_API_URL` - Backend API URL
+- `NEXTAUTH_URL` - NextAuth callback URL
+- `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` - reCAPTCHA site key
+- `RECAPTCHA_SECRET_KEY` - reCAPTCHA secret key
+- `NEXT_PUBLIC_SEAMETRIX_KEY` - Seametrix API key
+- `NEXT_PUBLIC_SEAMETRIX_MAP_KEY` - Seametrix map key
+- `SEAMETRIX_MAP_KEY` - Server-side Seametrix map key
+- `NEXT_PUBLIC_SEAMETRIX_API_URL` - Seametrix API URL
+- `SEAMETRIX_API_URL` - Server-side Seametrix API URL
+- `NEXT_PUBLIC_STRAPI_API_URL` - Strapi CMS API URL
+- `NEXT_PUBLIC_RT_URL` - Real-time service URL
+- `NEXT_PUBLIC_FILE_API_URL` - File service URL
+- `BACKEND_API_URL` - Server-side backend API URL
+- `IDENTITY_API_URL` - Identity service URL
+- `IDENTITY_API_CLIENT_ID` - Identity API client ID
+- `IDENTITY_API_CLIENT_SECRET` - Identity API client secret
+- `IDENTITY_API_GRANT_TYPE` - Identity API grant type
+- `IDENTITY_TOKEN_GRANT_TYPE` - Identity token grant type
+- `PREVIEW_SECRET` - Content preview secret
+- `APP_ENV` - Application environment identifier
+- `NEXT_PUBLIC_APP_ENV` - Public application environment identifier
+- `NEXT_PUBLIC_MAINTENANCE_MODE` - Maintenance mode flag
+- `NEXT_PUBLIC_BETA_MODE` - Beta mode flag
+- `NEXT_PUBLIC_ENABLE_MATOMO` - Analytics enablement flag
+- `NEXT_PUBLIC_ADMIN_URL` - Admin panel URL
+
+#### Monitoring Secrets (Optional)
+
+- `IDENTITY_NEW_RELIC_APP_NAME` - New Relic application name
+- `IDENTITY_NEW_RELIC_LICENSE_KEY` - New Relic license key
+- `OTEL_EXPORTER_OTLP_ENDPOINT` - OpenTelemetry endpoint
+- `OTEL_METRIC_EXPORTER_OTLP_ENDPOINT` - OpenTelemetry metrics endpoint
+- `NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY` - New Relic browser license key
+- `NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID` - New Relic browser app ID
+- `NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID` - New Relic browser agent ID
+- `NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY` - New Relic browser trust key
+- `NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID` - New Relic browser account ID
+
+### Optional Variables
+
+For environment-specific display URLs in deployment summaries, you can set up GitHub Variables:
+
+**Variables** (Settings → Secrets and variables → Actions → Variables tab):
+
+- `DEV_APP_URL` - Development environment URL (e.g., `https://dev.shiplink.com`)
+- `STAGE_APP_URL` - Staging environment URL (e.g., `https://stage.shiplink.com`)
+- `PROD_APP_URL` - Production environment URL (e.g., `https://shiplink.com`)
+
+> **Note**: If these variables are not set, the workflow will automatically use the `NEXT_PUBLIC_URL` secret as a fallback.
+
+### Deployment Features
+
+#### Automatic Rollback
+
+- If deployment fails, the previous version is automatically restored
+- Rollback happens in two scenarios:
+  1. Container fails to start within 30 seconds
+  2. Production health checks fail (prod only)
+
+#### Health Checks (Production Only)
+
+- Runs after successful deployment to production
+- Tests critical endpoints:
+  - Home page
+  - API health endpoint
+  - Identity/authentication service
+  - Protected API endpoints
+- Automatic rollback if any check fails
+- Can be skipped for emergency deployments (not recommended)
+
+#### Deployment Summaries
+
+- Detailed deployment reports in GitHub Actions UI
+- Shows:
+  - Environment name
+  - Image tag (commit SHA)
+  - Deployment timestamp
+  - Deployed by user
+  - Application URL
+  - Success/failure status
+  - Link to workflow run
+
+#### Concurrency Control
+
+- Only one deployment per environment at a time
+- Prevents race conditions
+- Does not cancel in-progress deployments
+
+### Manual Deployment
+
+To manually trigger a deployment:
+
+1. Go to **Actions** tab in GitHub repository
+2. Select the appropriate workflow:
+   - `Deploy to Development`
+   - `Deploy to Staging`
+3. Click **Run workflow**
+4. Select the branch to deploy
+5. Optionally provide a reason for deployment
+6. Click **Run workflow** button
+
+### Environment Setup Checklist
+
+Before deploying to a new environment:
+
+- [ ] Create GitHub Environment (Settings → Environments → New environment)
+- [ ] Configure all required secrets in the environment
+- [ ] Set up Azure Container Registry
+- [ ] Configure target server with Docker installed
+- [ ] Set up SSH access (password or key-based)
+- [ ] Ensure port 3000 is available on the target server
+- [ ] Test SSH connection manually
+- [ ] Optionally configure GitHub Variables for custom URLs
+- [ ] Run a test deployment
+
+### Troubleshooting
+
+#### Deployment Fails
+
+1. Check deployment logs in GitHub Actions
+2. Verify all secrets are configured correctly
+3. Test SSH connection to target server manually
+4. Check if Docker is running on target server
+5. Verify ACR credentials are valid
+6. Check server disk space
+
+#### Container Not Starting
+
+1. Check container logs on the server: `docker logs shiplink-frontend`
+2. Verify all required environment variables are set
+3. Check if port 3000 is already in use
+4. Review Docker image build logs
+5. Test the image locally if possible
+
+#### Rollback Issues
+
+1. Verify previous image exists: `docker images | grep shiplink-frontend-previous`
+2. Check server logs during rollback attempt
+3. Manually start previous version if automatic rollback fails
+4. Contact DevOps team for assistance
+
+### Security Notes
+
+- All secrets are passed as environment variables at runtime, not baked into the Docker image
+- SSH password is passed via `SSHPASS` environment variable for security
+- Container registry credentials are never logged
+- GitHub automatically redacts secret values in logs
+- Use SSH key authentication when possible for better security
+
 ## Branch and Commit Management
 
 This project follows strict conventions for branch naming and commit messages to maintain code quality and enable efficient project tracking.

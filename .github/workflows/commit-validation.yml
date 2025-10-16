@@ -4,12 +4,46 @@ on:
   pull_request:
     branches: ['develop']
     types: [opened, synchronize, reopened]
+    paths:
+      # Source code files
+      - '**/*.js'
+      - '**/*.jsx'
+
+      # Dependencies
+      - 'package.json'
+      - 'yarn.lock'
+
+      # Configuration files
+      - 'next.config.js'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'jsconfig.json'
+      - '.eslintrc'
+      - '.eslintignore'
+      - '.prettierrc'
+      - 'commitlint.config.js'
+
+      # Key source directories
+      - 'components/**'
+      - 'pages/**'
+      - 'app/**'
+      - 'lib/**'
+      - 'utils/**'
+      - 'services/**'
+      - 'store/**'
+      - 'adapters/**'
+      - 'models/**'
+      - 'middleware.js'
+      - 'instrumentation.js'
 
 jobs:
   validate-commits:
     name: Validate Commit Messages
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read # Read repository code and commits
+      pull-requests: read # Read PR details for commit validation
 
     steps:
       - name: Checkout code

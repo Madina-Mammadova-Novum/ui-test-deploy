@@ -1,0 +1,360 @@
+name: Deploy to Production
+
+# 🎯 Triggers: When PR from release/yyyymmdd-count or hotfix/* is merged to 'main' branch
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Only deploy when actual application code changes
+      - '**/*.js'
+      - '**/*.jsx'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'next.config.js'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'components/**'
+      - 'pages/**'
+      - 'app/**'
+      - 'lib/**'
+      - 'utils/**'
+      - 'services/**'
+      - 'store/**'
+      - 'adapters/**'
+      - 'models/**'
+      - 'public/**'
+      - 'assets/**'
+      - 'Dockerfile.ci'
+      - '.github/workflows/deploy-prod.yml'
+      - '.github/workflows/deploy-reusable.yml'
+
+  # Allow manual deployment trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deployment'
+        required: true
+        default: 'Manual production deployment'
+      skip-health-checks:
+        description: 'Skip health checks (emergency only)'
+        required: false
+        type: boolean
+        default: false
+
+# Prevent multiple deployments from running simultaneously
+# CRITICAL: Production deployments must not overlap
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false # Never cancel production deployments
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  # ============================================================================
+  # JOB 1: VALIDATE SOURCE BRANCH
+  # ============================================================================
+  validate:
+    name: Validate Deployment Source
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: read # Read commit history for validation
+
+    outputs:
+      is-valid: ${{ steps.check.outputs.is-valid }}
+      source-branch: ${{ steps.check.outputs.source-branch }}
+      release-version: ${{ steps.check.outputs.release-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10 # Fetch recent commits to check merge source
+
+      - name: Validate merge source branch
+        id: check
+        run: |
+          # For manual triggers, skip validation but log warning
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "⚠️ MANUAL DEPLOYMENT - Skipping branch validation"
+            echo "is-valid=true" >> $GITHUB_OUTPUT
+            echo "source-branch=manual-trigger" >> $GITHUB_OUTPUT
+            echo "release-version=manual-$(date +%Y%m%d-%H%M)" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Get the commit message of the merge commit
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "📝 Commit message: $COMMIT_MSG"
+
+          # Extract source branch from merge commit message
+          # GitHub merge commits have format: "Merge pull request #123 from org/branch-name"
+          if echo "$COMMIT_MSG" | grep -q "Merge pull request"; then
+            SOURCE_BRANCH=$(echo "$COMMIT_MSG" | grep -oP 'from \S+/\K\S+' || echo "unknown")
+            echo "🔍 Detected source branch: $SOURCE_BRANCH"
+          else
+            # Direct push or squash merge - check ref name
+            SOURCE_BRANCH="${GITHUB_REF_NAME}"
+            echo "🔍 Using ref name as source: $SOURCE_BRANCH"
+          fi
+
+          # Validate branch name matches allowed patterns
+          if [[ "$SOURCE_BRANCH" =~ ^release/[0-9]{8}-[0-9]+$ ]] || [[ "$SOURCE_BRANCH" =~ ^hotfix/.+ ]]; then
+            echo "✅ Valid source branch: $SOURCE_BRANCH"
+            echo "is-valid=true" >> $GITHUB_OUTPUT
+            echo "source-branch=$SOURCE_BRANCH" >> $GITHUB_OUTPUT
+            
+            # Extract release version from branch name
+            if [[ "$SOURCE_BRANCH" =~ ^release/([0-9]{8}-[0-9]+)$ ]]; then
+              RELEASE_VERSION="${BASH_REMATCH[1]}"
+              echo "release-version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+              echo "📦 Release version: $RELEASE_VERSION"
+            elif [[ "$SOURCE_BRANCH" =~ ^hotfix/(.+)$ ]]; then
+              HOTFIX_NAME="${BASH_REMATCH[1]}"
+              RELEASE_VERSION="hotfix-${HOTFIX_NAME}-$(date +%Y%m%d)"
+              echo "release-version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+              echo "🚨 Hotfix version: $RELEASE_VERSION"
+            fi
+          else
+            echo "❌ INVALID SOURCE BRANCH: $SOURCE_BRANCH"
+            echo "❌ Production deployments only allowed from:"
+            echo "   - release/yyyymmdd-count (e.g., release/20251010-1)"
+            echo "   - hotfix/* (e.g., hotfix/critical-fix)"
+            echo ""
+            echo "Current source: $SOURCE_BRANCH"
+            echo "is-valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "# 🔍 Deployment Source Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.check.outputs.is-valid }}" = "true" ]; then
+            echo "## ✅ Validation Passed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Source Branch:** \`${{ steps.check.outputs.source-branch }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "**Release Version:** \`${{ steps.check.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "**Deployment Type:** Production" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Validation Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Error:** Invalid source branch for production deployment" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Allowed branches:**" >> $GITHUB_STEP_SUMMARY
+            echo "- \`release/yyyymmdd-count\` (e.g., release/20251010-1)" >> $GITHUB_STEP_SUMMARY
+            echo "- \`hotfix/*\` (e.g., hotfix/critical-security-fix)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ============================================================================
+  # JOB 2: BUILD DOCKER IMAGE
+  # ============================================================================
+  build:
+    name: Build Docker Image
+    needs: validate
+    if: needs.validate.outputs.is-valid == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.image-tag }}
+      deployment-time: ${{ steps.meta.outputs.deployment-time }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate deployment metadata
+        id: meta
+        run: |
+          IMAGE_TAG="${GITHUB_SHA:0:8}"
+          echo "image-tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+
+          DEPLOYMENT_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          echo "deployment-time=${DEPLOYMENT_TIME}" >> $GITHUB_OUTPUT
+
+          echo "🚀 Build Information:"
+          echo "  - Image Tag: ${IMAGE_TAG}"
+          echo "  - Release Version: ${{ needs.validate.outputs.release-version }}"
+          echo "  - Commit SHA: ${{ github.sha }}"
+          echo "  - Branch: ${{ github.ref_name }}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_REGISTRY_URL }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.ci
+          push: true
+          tags: |
+            ${{ secrets.ACR_REGISTRY_URL }}/shiplink-frontend:${{ steps.meta.outputs.image-tag }}
+            ${{ secrets.ACR_REGISTRY_URL }}/shiplink-frontend:prod-latest
+            ${{ secrets.ACR_REGISTRY_URL }}/shiplink-frontend:release-${{ needs.validate.outputs.release-version }}
+          build-args: |
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
+            NEXT_PUBLIC_SEAMETRIX_KEY=${{ secrets.NEXT_PUBLIC_SEAMETRIX_KEY }}
+            NEXT_PUBLIC_SEAMETRIX_API_URL=${{ secrets.NEXT_PUBLIC_SEAMETRIX_API_URL }}
+            NEXT_PUBLIC_SEAMETRIX_MAP_KEY=${{ secrets.NEXT_PUBLIC_SEAMETRIX_MAP_KEY }}
+            RECAPTCHA_SECRET_KEY=${{ secrets.RECAPTCHA_SECRET_KEY }}
+            NEXT_PUBLIC_STRAPI_API_URL=${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }}
+            NEXT_PUBLIC_RT_URL=${{ secrets.NEXT_PUBLIC_RT_URL }}
+            BACKEND_API_URL=${{ secrets.BACKEND_API_URL }}
+            IDENTITY_API_URL=${{ secrets.IDENTITY_API_URL }}
+            NEXT_PUBLIC_FILE_API_URL=${{ secrets.NEXT_PUBLIC_FILE_API_URL }}
+            NEXT_PUBLIC_ADMIN_URL=${{ secrets.NEXT_PUBLIC_ADMIN_URL }}
+            NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV }}
+            NEXT_PUBLIC_MAINTENANCE_MODE=${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}
+            NEXT_PUBLIC_BETA_MODE=${{ secrets.NEXT_PUBLIC_BETA_MODE }}
+            NEXT_PUBLIC_ENABLE_MATOMO=${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}
+            NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}
+            SEAMETRIX_API_URL=${{ secrets.SEAMETRIX_API_URL }}
+            SEAMETRIX_MAP_KEY=${{ secrets.SEAMETRIX_MAP_KEY }}
+            IDENTITY_API_CLIENT_ID=${{ secrets.IDENTITY_API_CLIENT_ID }}
+            IDENTITY_API_CLIENT_SECRET=${{ secrets.IDENTITY_API_CLIENT_SECRET }}
+            IDENTITY_API_GRANT_TYPE=${{ secrets.IDENTITY_API_GRANT_TYPE }}
+            IDENTITY_TOKEN_GRANT_TYPE=${{ secrets.IDENTITY_TOKEN_GRANT_TYPE }}
+            PREVIEW_SECRET=${{ secrets.PREVIEW_SECRET }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify Docker image
+        run: |
+          echo "✅ Docker image built and pushed successfully"
+          echo "📦 Image: ${{ secrets.ACR_REGISTRY_URL }}/shiplink-frontend:${{ steps.meta.outputs.image-tag }}"
+
+  # ============================================================================
+  # JOB 3: REQUEST APPROVAL (if WAIT_FOR_APPROVAL=true)
+  # ============================================================================
+  request-approval:
+    name: Request Deployment Approval
+    needs: [validate, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    environment: prod
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check approval requirement
+        id: check
+        run: |
+          WAIT_FOR_APPROVAL="${{ vars.WAIT_FOR_APPROVAL }}"
+          echo "wait-for-approval=${WAIT_FOR_APPROVAL}" >> $GITHUB_OUTPUT
+
+          if [ "$WAIT_FOR_APPROVAL" = "true" ]; then
+            echo "✋ Manual approval required for production deployment"
+          else
+            echo "✅ Automatic deployment enabled (WAIT_FOR_APPROVAL not set or false)"
+          fi
+
+      - name: Create approval issue
+        if: steps.check.outputs.wait-for-approval == 'true'
+        uses: actions/github-script@v7
+        env:
+          APPROVAL_ASSIGNEES: ${{ vars.APPROVAL_ASSIGNEES }}
+          APPROVAL_LABELS: ${{ vars.APPROVAL_LABELS }}
+        with:
+          script: |
+            const assignees = process.env.APPROVAL_ASSIGNEES ? process.env.APPROVAL_ASSIGNEES.split(',').map(u => u.trim()) : [];
+            const customLabels = process.env.APPROVAL_LABELS ? process.env.APPROVAL_LABELS.split(',').map(l => l.trim()) : [];
+            const labels = ['deploy-approval', ...customLabels];
+
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚀 Production Deployment Approval - Release ${{ needs.validate.outputs.release-version }}`,
+              body: `## Production Deployment Approval Required
+
+            ### Deployment Details
+
+            **Environment:** prod
+            **Release Version:** \`${{ needs.validate.outputs.release-version }}\`
+            **Image Tag:** \`${{ needs.build.outputs.image-tag }}\`
+            **Run ID:** ${{ github.run_id }}
+            **Source Branch:** \`${{ needs.validate.outputs.source-branch }}\`
+            **Commit:** \`${{ github.sha }}\`
+            **Triggered By:** @${{ github.actor }}
+            **Deployment Time:** ${{ needs.build.outputs.deployment-time }}
+            **Reason:** ${{ github.event.inputs.reason || format('Production deployment from {0}', needs.validate.outputs.source-branch) }}
+
+            ### How to Approve
+
+            To proceed with this deployment, add the \`deploy-approved\` label to this issue.
+
+            ### Build Status
+
+            ✅ Docker image built successfully
+            📦 Image ready for deployment
+
+            ---
+
+            [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`,
+              labels: labels,
+              assignees: assignees.length > 0 ? assignees : undefined
+            });
+
+            core.info(`✅ Approval issue created: #${issue.data.number}`);
+            core.info(`🔗 ${issue.data.html_url}`);
+
+      - name: Generate approval summary
+        if: steps.check.outputs.wait-for-approval == 'true'
+        run: |
+          echo "# ⏸️  Deployment Paused - Approval Required" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Manual Approval Needed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "A production deployment approval issue has been created." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**To proceed with deployment:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review the deployment details in the approval issue" >> $GITHUB_STEP_SUMMARY
+          echo "2. Add the \`deploy-approved\` label to the issue" >> $GITHUB_STEP_SUMMARY
+          echo "3. The deployment will automatically continue" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment Details:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment: PRODUCTION" >> $GITHUB_STEP_SUMMARY
+          echo "- Release: \`${{ needs.validate.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Image Tag: \`${{ needs.build.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================================================
+  # JOB 4: DIRECT DEPLOYMENT (if WAIT_FOR_APPROVAL=false)
+  # ============================================================================
+  deploy:
+    name: Deploy to Production
+    needs: [validate, build, request-approval]
+    if: needs.validate.outputs.is-valid == 'true' && vars.WAIT_FOR_APPROVAL != 'true'
+    uses: ./.github/workflows/deploy-reusable.yml
+    with:
+      environment: prod
+      image-tag-suffix: prod-latest
+      deployment-reason: ${{ github.event.inputs.reason || format('Production deployment from {0}', needs.validate.outputs.source-branch) }}
+      release-version: ${{ needs.validate.outputs.release-version }}
+      skip-health-checks: ${{ github.event.inputs.skip-health-checks || false }}
+      pre-built-image-tag: ${{ needs.build.outputs.image-tag }}
+    secrets: inherit # Pass all secrets from the calling workflow to the reusable workflow
+
