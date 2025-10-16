@@ -261,6 +261,9 @@ jobs:
     permissions:
       issues: write
 
+    outputs:
+      wait-for-approval: ${{ steps.check.outputs.wait-for-approval }}
+
     steps:
       - name: Check approval requirement
         id: check
@@ -361,11 +364,11 @@ jobs:
         run: |
           echo "🔍 DEPLOYMENT CONDITION DEBUG:"
           echo "  - Validation valid: ${{ needs.validate.outputs.is-valid }}"
-          echo "  - WAIT_FOR_APPROVAL value: '${{ vars.WAIT_FOR_APPROVAL }}'"
-          echo "  - WAIT_FOR_APPROVAL != 'true': ${{ vars.WAIT_FOR_APPROVAL != 'true' }}"
-          echo "  - Should deploy: ${{ needs.validate.outputs.is-valid == 'true' && vars.WAIT_FOR_APPROVAL != 'true' }}"
+          echo "  - wait-for-approval from output: '${{ needs.request-approval.outputs.wait-for-approval }}'"
+          echo "  - wait-for-approval != 'true': ${{ needs.request-approval.outputs.wait-for-approval != 'true' }}"
+          echo "  - Should deploy: ${{ needs.validate.outputs.is-valid == 'true' && needs.request-approval.outputs.wait-for-approval != 'true' }}"
 
-          if [ "${{ vars.WAIT_FOR_APPROVAL }}" = "true" ]; then
+          if [ "${{ needs.request-approval.outputs.wait-for-approval }}" = "true" ]; then
             echo "⏸️  Deployment should be BLOCKED (waiting for approval)"
           else
             echo "✅ Deployment should PROCEED automatically"
@@ -374,7 +377,7 @@ jobs:
   deploy:
     name: Deploy to Production
     needs: [validate, build, request-approval, debug-deploy-condition]
-    if: needs.validate.outputs.is-valid == 'true' && vars.WAIT_FOR_APPROVAL != 'true'
+    if: needs.validate.outputs.is-valid == 'true' && needs.request-approval.outputs.wait-for-approval != 'true'
     uses: ./.github/workflows/deploy-reusable.yml
     with:
       environment: prod
