@@ -160,6 +160,7 @@ jobs:
     if: needs.validate.outputs.is-valid == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: prod # Required to access ACR secrets from prod environment
     permissions:
       contents: read
 
