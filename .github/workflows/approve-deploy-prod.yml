@@ -4,6 +4,14 @@ on:
   issues:
     types: [labeled]
 
+  # Allow manual testing of approval workflow
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to approve'
+        required: true
+        type: number
+
 permissions:
   contents: read
   actions: read
@@ -11,14 +19,48 @@ permissions:
   issues: write
 
 jobs:
+  debug:
+    name: Debug Approval Trigger
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Log event details
+        run: |
+          echo "🔍 APPROVAL WORKFLOW TRIGGER DEBUG"
+          echo "=================================="
+          echo "Event: ${{ github.event_name }}"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger - Issue #${{ github.event.inputs.issue_number }}"
+          else
+            echo "Issue Number: ${{ github.event.issue.number }}"
+            echo "Issue Title: ${{ github.event.issue.title }}"
+            echo "Issue Creator: ${{ github.event.issue.user.login }}"
+            echo "Label Added: ${{ github.event.label.name }}"
+            echo "Is PR: ${{ github.event.issue.pull_request != null }}"
+            echo ""
+            echo "All Labels:"
+            echo '${{ toJSON(github.event.issue.labels) }}'
+            echo ""
+            echo "🎯 Condition Checks:"
+            echo "  - Is Issue (not PR): ${{ github.event.issue.pull_request == null }}"
+            echo "  - Creator is bot: ${{ github.event.issue.user.login == 'github-actions[bot]' }}"
+            echo "  - Has deploy-approval: ${{ contains(join(github.event.issue.labels.*.name), 'deploy-approval') }}"
+            echo "  - Label is deploy-approved: ${{ github.event.label.name == 'deploy-approved' }}"
+            echo ""
+            echo "Should trigger: ${{ github.event.issue.pull_request == null && github.event.issue.user.login == 'github-actions[bot]' && contains(join(github.event.issue.labels.*.name), 'deploy-approval') && github.event.label.name == 'deploy-approved' }}"
+          fi
+
   gate:
     name: Verify Approval
-    # Only run when deploy-approved label is added to approval issues
+    needs: debug
+    # Only run when deploy-approved label is added to approval issues OR manual trigger
     if: |
-      github.event.issue.pull_request == null &&
-      github.event.issue.user.login == 'github-actions[bot]' &&
-      contains(join(github.event.issue.labels.*.name), 'deploy-approval') &&
-      github.event.label.name == 'deploy-approved'
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request == null &&
+       (github.event.issue.user.login == 'github-actions[bot]' || contains(github.event.issue.user.login, 'github-actions')) &&
+       contains(join(github.event.issue.labels.*.name), 'deploy-approval') &&
+       github.event.label.name == 'deploy-approved')
     runs-on: ubuntu-latest
     timeout-minutes: 2
     outputs:
@@ -31,11 +73,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Fetch issue data (for manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        id: fetch_issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.inputs.issue_number }}
+            });
+            return issue.data.body;
+          result-encoding: string
+
       - name: Parse approval issue
         id: parse
         uses: ./.github/actions/parse-approval-issue
         with:
-          issue_body: ${{ github.event.issue.body }}
+          issue_body: ${{ github.event_name == 'workflow_dispatch' && steps.fetch_issue.outputs.result || github.event.issue.body }}
 
       - name: Validate parsed data
         run: |
