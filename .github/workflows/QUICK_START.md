@@ -329,8 +329,7 @@ Watch for:
 ⏳ Running health checks...
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
-✅ Health check: Auth Service - PASS
-✅ Health check: Vessels API - PASS
+✅ Health check: Account Info (Protected) - PASS
 🎉 Production deployment successful!
 ```
 
@@ -359,10 +358,11 @@ Watch for:
 
 Production deployments include automated health checks:
 
-- **Home Page** (/) - 200 OK
-- **API Health** (/api/health) - 200 OK
-- **Auth Service** - 200 or 401 expected
-- **Protected API** (/v1/charterer/vessels) - 401 (means healthy)
+- **Home Page** (/) - expects 200 OK
+- **API Health** (/api/health) - expects 200 OK
+- **Protected Authentication** (/api/account/info) - expects 401 (unauthenticated = healthy)
+
+**3 total checks** with 2 retries per endpoint
 
 If ANY check fails → **Automatic rollback** to previous version
 

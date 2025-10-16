@@ -192,11 +192,11 @@ Same as dev/stage, with additional:
 #### 🏥 **Production Health Checks** (NEW - Production Only)
 
 - Waits 60 seconds for application stabilization
-- Automated smoke tests:
-  - Home page accessibility (200 OK)
-  - API health endpoint (200 OK)
-  - Authentication service (200 or 401 expected)
-  - Critical API endpoints (401 without auth = healthy)
+- Automated smoke tests (3 endpoints):
+  - Home page (/) - expects 200 OK
+  - API health endpoint (/api/health) - expects 200 OK
+  - Protected authentication endpoint (/api/account/info) - expects 401 (unauthenticated = healthy)
+- Each check retries up to 2 times on failure (5-second delay)
 - **Automatic rollback** if any health check fails
 - Detailed health check report in workflow summary
 
@@ -635,8 +635,11 @@ GitHub provides insights on:
 **Health Check Features**:
 
 - ✅ 60-second stabilization wait
-- ✅ Automated endpoint testing with retries
-- ✅ Tests: Home page, API health, auth service, protected endpoints
+- ✅ Automated endpoint testing with retries (2 retries per endpoint)
+- ✅ Tests 3 critical endpoints:
+  - Home page (/)
+  - API health endpoint (/api/health)
+  - Protected authentication endpoint (/api/account/info)
 - ✅ Detailed health report in workflow summary
 - ✅ Automatic rollback on any failure
 

@@ -377,8 +377,7 @@ Watch the workflow logs for:
 ⏳ Running health checks...
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
-✅ Health check: Auth Service - PASS
-✅ Health check: Vessels API - PASS
+✅ Health check: Account Info (Protected) - PASS
 ✅ Deployment successful!
 ```
 

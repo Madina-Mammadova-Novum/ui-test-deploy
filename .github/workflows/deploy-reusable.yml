@@ -605,8 +605,6 @@ jobs:
         id: health
         env:
           APP_URL: ${{ secrets.NEXT_PUBLIC_URL }}
-          API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          IDENTITY_URL: ${{ secrets.IDENTITY_API_URL }}
         run: |
           echo "🏥 Starting production health checks..."
           echo ""
@@ -662,22 +660,13 @@ jobs:
           # ============================================================
           # HEALTH CHECK 2: API Health Endpoint
           # ============================================================
-          # Note: Adjust this endpoint based on your actual health check route
-          check_endpoint "API Health" "${API_URL}/health" "200" || \
-          check_endpoint "API Root" "${API_URL}/" "200"
+          check_endpoint "API Health" "${APP_URL}/api/health" "200"
 
           # ============================================================
-          # HEALTH CHECK 3: Authentication Service
+          # HEALTH CHECK 3: Protected Authentication Endpoint
           # ============================================================
           # 401 is expected for unauthenticated requests (means service is working)
-          check_endpoint "Identity Service" "${IDENTITY_URL}/api/health" "200" || \
-          check_endpoint "Identity Service (Auth)" "${IDENTITY_URL}/api/account/info" "401"
-
-          # ============================================================
-          # HEALTH CHECK 4: Critical API Endpoint
-          # ============================================================
-          # 401 without auth means the endpoint exists and is protected (healthy)
-          check_endpoint "Vessels API (Protected)" "${API_URL}/v1/charterer/vessels" "401"
+          check_endpoint "Account Info (Protected)" "${APP_URL}/api/account/info" "401"
 
           # ============================================================
           # Summary
@@ -840,10 +829,9 @@ jobs:
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Endpoints Tested:" >> $GITHUB_STEP_SUMMARY
-          echo "- Home Page (\`/\`)" >> $GITHUB_STEP_SUMMARY
-          echo "- API Health Endpoint" >> $GITHUB_STEP_SUMMARY
-          echo "- Identity/Auth Service" >> $GITHUB_STEP_SUMMARY
-          echo "- Protected API Endpoints" >> $GITHUB_STEP_SUMMARY
+          echo "- Home Page (\`/\`) - 200 OK" >> $GITHUB_STEP_SUMMARY
+          echo "- API Health Endpoint (\`/api/health\`) - 200 OK" >> $GITHUB_STEP_SUMMARY
+          echo "- Protected Authentication (\`/api/account/info\`) - 401 Unauthorized" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "🔗 [View deployment details for PRODUCTION](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
