@@ -135,25 +135,37 @@ Like trying to push to GitHub without setting up your SSH key.
    Settings → Environments → dev → Check these secrets:
    - SSH_HOST (hostname or IP, e.g., dev-vm.shiplink.com)
    - SSH_USERNAME (e.g., azureuser, ubuntu)
-   - SSH_PRIVATE_KEY (FULL key with headers)
    - SSH_PORT (usually 22)
+   - SSH_PRIVATE_KEY (FULL key with headers) [for key authentication]
+   - SSH_PASSWORD (server password) [for password authentication]
 
-2. SSH_PRIVATE_KEY must be in this EXACT format:
+2. Choose authentication method:
+
+   For SSH Key Authentication (Recommended):
+   - Set SSH_PRIVATE_KEY with full key (format below)
+   - Leave SSH_PASSWORD empty
+
+   For Password Authentication:
+   - Set SSH_PASSWORD with server password
+   - Leave SSH_PRIVATE_KEY empty
+
+3. SSH_PRIVATE_KEY must be in this EXACT format (if using key auth):
    -----BEGIN RSA PRIVATE KEY-----
    MIIEpAIBAAKCAQEA1234567890abcdef...
    (many lines)
    ...xyz890
    -----END RSA PRIVATE KEY-----
 
-3. Test SSH connection manually:
-   ssh -i path/to/key username@hostname
+4. Test SSH connection manually:
+   ssh -i path/to/key username@hostname  (for key auth)
+   ssh username@hostname  (for password auth)
 
-   If manual connection fails, the key doesn't work.
+   If manual connection fails, the credentials don't work.
 
-4. Generate new SSH key if needed:
+5. Generate new SSH key if needed (for key auth):
    ssh-keygen -t rsa -b 4096 -C "deployment@shiplink"
 
-5. Add public key to server:
+6. Add public key to server (for key auth):
    ssh-copy-id -i key.pub username@hostname
 ```
 
@@ -505,10 +517,10 @@ Actions → Click failed workflow → Look for red X ❌
 
    # Verify count:
    - Registry secrets: 3
-   - SSH secrets: 4
+   - SSH secrets: 5
    - App secrets: 30+
 
-   # Total should be 37+ secrets
+   # Total should be 38+ secrets
    ```
 
 ---
@@ -748,8 +760,8 @@ Permission denied (publickey)
 ```
 
 **What I tried:**
-1. Verified SSH_PRIVATE_KEY is set in GitHub
-2. Checked key format has header/footer
+1. Verified SSH authentication secrets are set in GitHub (SSH_PRIVATE_KEY or SSH_PASSWORD)
+2. Checked key format has header/footer (if using key auth)
 3. Confirmed SSH_HOST is correct (dev-vm.shiplink.com)
 
 **Workflow Link:**
