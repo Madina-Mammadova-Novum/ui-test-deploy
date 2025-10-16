@@ -268,6 +268,11 @@ jobs:
           WAIT_FOR_APPROVAL="${{ vars.WAIT_FOR_APPROVAL }}"
           echo "wait-for-approval=${WAIT_FOR_APPROVAL}" >> $GITHUB_OUTPUT
 
+          # Debug output to verify variable value
+          echo "🔍 DEBUG: WAIT_FOR_APPROVAL raw value: '${{ vars.WAIT_FOR_APPROVAL }}'"
+          echo "🔍 DEBUG: WAIT_FOR_APPROVAL variable: '${WAIT_FOR_APPROVAL}'"
+          echo "🔍 DEBUG: String comparison test: $([ "$WAIT_FOR_APPROVAL" = "true" ] && echo 'MATCH' || echo 'NO MATCH')"
+
           if [ "$WAIT_FOR_APPROVAL" = "true" ]; then
             echo "✋ Manual approval required for production deployment"
           else
@@ -345,9 +350,30 @@ jobs:
   # ============================================================================
   # JOB 4: DIRECT DEPLOYMENT (if WAIT_FOR_APPROVAL=false)
   # ============================================================================
+  # Debug job to log condition evaluation
+  debug-deploy-condition:
+    name: Debug Deploy Condition
+    needs: [validate, build, request-approval]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Log deployment condition evaluation
+        run: |
+          echo "🔍 DEPLOYMENT CONDITION DEBUG:"
+          echo "  - Validation valid: ${{ needs.validate.outputs.is-valid }}"
+          echo "  - WAIT_FOR_APPROVAL value: '${{ vars.WAIT_FOR_APPROVAL }}'"
+          echo "  - WAIT_FOR_APPROVAL != 'true': ${{ vars.WAIT_FOR_APPROVAL != 'true' }}"
+          echo "  - Should deploy: ${{ needs.validate.outputs.is-valid == 'true' && vars.WAIT_FOR_APPROVAL != 'true' }}"
+
+          if [ "${{ vars.WAIT_FOR_APPROVAL }}" = "true" ]; then
+            echo "⏸️  Deployment should be BLOCKED (waiting for approval)"
+          else
+            echo "✅ Deployment should PROCEED automatically"
+          fi
+
   deploy:
     name: Deploy to Production
-    needs: [validate, build, request-approval]
+    needs: [validate, build, request-approval, debug-deploy-condition]
     if: needs.validate.outputs.is-valid == 'true' && vars.WAIT_FOR_APPROVAL != 'true'
     uses: ./.github/workflows/deploy-reusable.yml
     with:
