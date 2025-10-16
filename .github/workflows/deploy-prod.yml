@@ -93,7 +93,7 @@ jobs:
           # Extract source branch from merge commit message
           # GitHub merge commits have format: "Merge pull request #123 from org/branch-name"
           if echo "$COMMIT_MSG" | grep -q "Merge pull request"; then
-            SOURCE_BRANCH=$(echo "$COMMIT_MSG" | grep -oP 'from \S+/\K\S+' || echo "unknown")
+            SOURCE_BRANCH=$(echo "$COMMIT_MSG" | grep -oP 'from [^/]+/\K\S+' || echo "unknown")
             echo "🔍 Detected source branch: $SOURCE_BRANCH"
           else
             # Direct push or squash merge - check ref name
