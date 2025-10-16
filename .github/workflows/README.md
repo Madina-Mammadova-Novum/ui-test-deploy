@@ -346,7 +346,7 @@ The CI workflows are ready to use as-is. No additional configuration required.
 
 2. **Add Secrets to Each Environment**:
    - Registry secrets (ACR credentials) - 3 secrets
-   - SSH secrets (server access) - 4 secrets
+   - SSH secrets (server access) - 5 secrets
    - Application secrets (environment variables) - 33 secrets
    - See detailed list: [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md)
 
@@ -364,8 +364,9 @@ The CI workflows are ready to use as-is. No additional configuration required.
 **Note on SSH Authentication:**
 
 - Workflows support both SSH key-based and password authentication
-- SSH keys are recommended for better security
-- Password authentication is simpler for initial setup
+- SSH keys are recommended for better security (use SSH_PRIVATE_KEY)
+- Password authentication is simpler for initial setup (use SSH_PASSWORD)
+- Use either SSH_PRIVATE_KEY OR SSH_PASSWORD - not both
 - Consult your DevOps team for existing credentials
 
 ### 3. Configure Branch Protection Rules

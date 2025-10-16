@@ -163,14 +163,31 @@ Go to your `dev` environment and add these secrets:
 
 #### **SSH Secrets** (Get from coworkers)
 
-| Secret Name       | Example Value                        | Description               |
-| ----------------- | ------------------------------------ | ------------------------- |
-| `SSH_HOST`        | `dev-vm.shiplink.com`                | Dev server hostname or IP |
-| `SSH_USERNAME`    | `azureuser`                          | SSH username              |
-| `SSH_PORT`        | `22`                                 | SSH port (usually 22)     |
-| `SSH_PRIVATE_KEY` | `-----BEGIN RSA PRIVATE KEY-----...` | Full SSH private key      |
+| Secret Name       | Example Value                        | Description                       |
+| ----------------- | ------------------------------------ | --------------------------------- |
+| `SSH_HOST`        | `dev-vm.shiplink.com`                | Dev server hostname or IP         |
+| `SSH_USERNAME`    | `azureuser`                          | SSH username                      |
+| `SSH_PORT`        | `22`                                 | SSH port (usually 22)             |
+| `SSH_PRIVATE_KEY` | `-----BEGIN RSA PRIVATE KEY-----...` | Full SSH private key              |
+| `SSH_PASSWORD`    | `your-ssh-password`                  | SSH password (alternative to key) |
 
-**❗ IMPORTANT: SSH_PRIVATE_KEY Format**
+**❗ IMPORTANT: SSH Authentication Methods**
+
+The workflow supports both SSH key and password authentication:
+
+**SSH Key Authentication (Recommended):**
+
+- Set `SSH_PRIVATE_KEY` with full private key
+- Leave `SSH_PASSWORD` empty or don't set it
+- More secure and automated
+
+**Password Authentication (Alternative):**
+
+- Set `SSH_PASSWORD` with server password
+- Leave `SSH_PRIVATE_KEY` empty or don't set it
+- Simpler setup but less secure
+
+**SSH_PRIVATE_KEY Format (if using key authentication):**
 
 - Must include `-----BEGIN RSA PRIVATE KEY-----` header
 - Must include `-----END RSA PRIVATE KEY-----` footer
@@ -415,10 +432,12 @@ Each deployment generates a summary with:
 
 **Solution:**
 
-1. Verify `SSH_PRIVATE_KEY` includes header/footer
+1. Verify SSH authentication is properly configured:
+   - For key auth: `SSH_PRIVATE_KEY` includes header/footer
+   - For password auth: `SSH_PASSWORD` is set correctly
 2. Verify `SSH_USERNAME` and `SSH_HOST` are correct
 3. Test SSH connection manually: `ssh username@host`
-4. Ensure the key has access to the server
+4. Ensure the key has access to the server (or password is correct)
 
 ---
 
@@ -603,12 +622,13 @@ Go to `prod` environment and add all 45 secrets (same as dev/stage but with PROD
 - `ACR_USERNAME` (same as dev/stage)
 - `ACR_PASSWORD` (same as dev/stage)
 
-**SSH Secrets** (4):
+**SSH Secrets** (5):
 
 - `SSH_HOST` (production server hostname/IP)
 - `SSH_USERNAME` (production server username)
 - `SSH_PORT` (usually `22`)
-- `SSH_PRIVATE_KEY` (production server SSH key)
+- `SSH_PRIVATE_KEY` (production server SSH key - if using key auth)
+- `SSH_PASSWORD` (production server password - if using password auth)
 
 **Application Secrets** (38):
 

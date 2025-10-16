@@ -48,14 +48,17 @@ ACR_USERNAME         = (get from coworkers)
 ACR_PASSWORD         = (get from coworkers)
 ```
 
-#### SSH Secrets (4 secrets)
+#### SSH Secrets (5 secrets)
 
 ```
 SSH_HOST             = (get from coworkers)
 SSH_USERNAME         = (get from coworkers)
 SSH_PORT             = 22
-SSH_PRIVATE_KEY      = (full key including -----BEGIN----- and -----END-----)
+SSH_PRIVATE_KEY      = (full key including -----BEGIN----- and -----END-----) [for key auth]
+SSH_PASSWORD         = (server password) [for password auth - alternative to key]
 ```
+
+**Note:** Use either `SSH_PRIVATE_KEY` (recommended) OR `SSH_PASSWORD` - not both.
 
 #### Application Secrets (38 secrets)
 
@@ -83,7 +86,7 @@ Repeat Step 3 but:
 
 - Go to **Environments** → **stage**
 - Use same registry secrets (ACR is usually shared)
-- Use different SSH credentials (stage server)
+- Use different SSH credentials (stage server) - 5 SSH secrets
 - Use stage-specific application URLs and secrets (get from coworkers)
 - Change `APP_ENV=stage`
 
@@ -170,7 +173,7 @@ Repeat Step 3 but:
 
 ### Error: "Permission denied (publickey)"
 
-**Fix**: Check SSH_PRIVATE_KEY includes full key with headers/footers
+**Fix**: Check SSH authentication - either SSH_PRIVATE_KEY includes full key with headers/footers OR SSH_PASSWORD is set correctly
 
 ### Error: "Container exited immediately"
 
