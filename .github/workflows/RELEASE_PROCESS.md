@@ -303,8 +303,8 @@ Closes #milestone-number (Release 2025-10-15)
 
 ### 📞 Contacts
 
-- Release Lead: @username
-- On-call Engineer: @username
+- Release Lead: @arifemregursoy
+- On-call Engineer: @DenizCansever
 ```
 
 **3. Code Review**
@@ -333,38 +333,51 @@ After merge, the workflow automatically:
    - Environment tag: `prod-latest`
    - Release tag: `release-20251010-1`
 3. **Pushes to Azure Container Registry**
-4. **Waits for manual approval** ⚠️ **YOU MUST APPROVE HERE**
-5. **Deploys to production server**
-6. **Waits 60 seconds** for stabilization
-7. **Runs health checks** (automated smoke tests)
-8. **Reports success** or triggers automatic rollback
+4. **Creates approval issue** (if `WAIT_FOR_APPROVAL=true`)
+5. **Waits for `deploy-approved` label** ⚠️ **YOU MUST ADD LABEL**
+6. **Deploys to production server** (triggers automatically when label added)
+7. **Waits 60 seconds** for stabilization
+8. **Runs health checks** (automated smoke tests)
+9. **Reports success** or triggers automatic rollback
 
-**6. Manual Approval**
+**6. Manual Approval (Label-Based)**
 
-When workflow pauses for approval:
+When workflow creates approval issue:
 
-1. Go to **Actions** tab
-2. Click on the running workflow
-3. Click **Review deployments**
-4. Select `prod` environment
-5. Click **Approve and deploy**
-6. Monitor health checks
+1. Go to **Issues** tab
+2. Find the issue labeled `deploy-approval`
+3. Review deployment details:
+   - Release version
+   - Image tag
+   - Source branch
+   - Commit SHA
+4. Add the label `deploy-approved` to the issue
+5. Approval workflow will automatically trigger
+6. Monitor health checks in the new workflow run
 
 **7. Monitor Deployment**
 
 Watch the workflow logs for:
 
+**Initial Workflow (deploy-prod.yml):**
+
 ```
+✅ Branch validation successful
 ✅ Build successful
 ✅ Image pushed to registry
-⏳ Waiting for approval...
-✅ Deployment approved
+✅ Approval issue created
+⏸️  Waiting for deploy-approved label...
+```
+
+**After Adding Label (approve-deploy-prod.yml):**
+
+```
+✅ Approval detected
 ✅ Container deployed
 ⏳ Running health checks...
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
-✅ Health check: Auth Service - PASS
-✅ Health check: Vessels API - PASS
+✅ Health check: Account Info (Protected) - PASS
 ✅ Deployment successful!
 ```
 
@@ -641,7 +654,7 @@ Option A: **Automatic trigger** (merge PR)
 ```bash
 # Merge PR to main
 # Workflow triggers automatically
-# Still requires manual approval
+# Still requires manual approval (add deploy-approved label to issue)
 ```
 
 Option B: **Manual trigger** (more control)
@@ -651,7 +664,8 @@ Option B: **Manual trigger** (more control)
 2. Click "Run workflow"
 3. Branch: hotfix/critical-security-fix
 4. Reason: "Critical security patch CVE-2025-12345"
-5. Approve when prompted
+5. Find approval issue in Issues tab
+6. Add deploy-approved label to approve deployment
 ```
 
 **6. Backport to Other Branches**
@@ -713,8 +727,9 @@ You'll see:
 2. Find last successful deployment
 3. Note the image tag (e.g., `abc12345`)
 4. Click **Re-run all jobs**
-5. Approve when prompted
-6. Monitor deployment
+5. Find approval issue in Issues tab
+6. Add `deploy-approved` label to approve
+7. Monitor deployment
 
 #### Method 2: Manual Trigger with Specific Version
 
@@ -723,7 +738,8 @@ You'll see:
 3. Select **main** branch
 4. Reason: "Rolling back to version abc12345"
 5. Run workflow
-6. Approve when prompted
+6. Find approval issue in Issues tab
+7. Add `deploy-approved` label to approve
 
 #### Method 3: Direct Server Rollback (Emergency)
 

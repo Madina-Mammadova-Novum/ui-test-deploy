@@ -192,17 +192,17 @@ Same as dev/stage, with additional:
 #### 🏥 **Production Health Checks** (NEW - Production Only)
 
 - Waits 60 seconds for application stabilization
-- Automated smoke tests:
-  - Home page accessibility (200 OK)
-  - API health endpoint (200 OK)
-  - Authentication service (200 or 401 expected)
-  - Critical API endpoints (401 without auth = healthy)
+- Automated smoke tests (3 endpoints):
+  - Home page (/) - expects 200 OK
+  - API health endpoint (/api/health) - expects 200 OK
+  - Protected authentication endpoint (/api/account/info) - expects 401 (unauthenticated = healthy)
+- Each check retries up to 2 times on failure (5-second delay)
 - **Automatic rollback** if any health check fails
 - Detailed health check report in workflow summary
 
 **Features**:
 
-- ✅ Manual approval required (minimum 1 reviewer)
+- ✅ Label-based approval system (works without GitHub Enterprise)
 - ✅ Branch validation (only `release/*` and `hotfix/*`)
 - ✅ Release version tagging
 - ✅ Automated health checks with retries
@@ -210,7 +210,16 @@ Same as dev/stage, with additional:
 - ✅ Emergency skip health checks option (workflow_dispatch only)
 - ✅ Comprehensive deployment audit trail
 - ✅ Integration with GitHub Milestones
-- ⏱️ ~10-15 minutes total deployment time (including approval and health checks)
+- ⏱️ ~6-8 minutes deployment time + manual approval review time
+
+**Approval System**:
+
+- 🏷️ Issues-based approval (no Enterprise plan required)
+- 🏷️ Approvers add `deploy-approved` label to proceed
+- 🏷️ Auto-assigns designated reviewers
+- 🏷️ Configurable via `WAIT_FOR_APPROVAL` environment variable
+- 🏷️ Build completes before approval (no wasted runner minutes)
+- 🏷️ Deployment continues automatically after label added
 
 **Safety Features**:
 
@@ -337,7 +346,7 @@ The CI workflows are ready to use as-is. No additional configuration required.
 
 2. **Add Secrets to Each Environment**:
    - Registry secrets (ACR credentials) - 3 secrets
-   - SSH secrets (server access) - 4 secrets
+   - SSH secrets (server access) - 5 secrets
    - Application secrets (environment variables) - 33 secrets
    - See detailed list: [DEPLOYMENT_SETUP.md](./DEPLOYMENT_SETUP.md)
 
@@ -355,8 +364,9 @@ The CI workflows are ready to use as-is. No additional configuration required.
 **Note on SSH Authentication:**
 
 - Workflows support both SSH key-based and password authentication
-- SSH keys are recommended for better security
-- Password authentication is simpler for initial setup
+- SSH keys are recommended for better security (use SSH_PRIVATE_KEY)
+- Password authentication is simpler for initial setup (use SSH_PASSWORD)
+- Use either SSH_PRIVATE_KEY OR SSH_PASSWORD - not both
 - Consult your DevOps team for existing credentials
 
 ### 3. Configure Branch Protection Rules
@@ -522,14 +532,17 @@ GitHub provides insights on:
 
 ---
 
-## 🔄 Integration with Azure Pipelines
+## 🔄 CI/CD Migration Complete
 
-**Current Strategy**: Dual CI/CD during migration
+**Current Strategy**: Full GitHub Actions CI/CD
 
-- **GitHub Actions**: PR validation & code quality (this setup)
-- **Azure Pipelines**: Production builds & deployments
+- **GitHub Actions**: Complete CI/CD pipeline
+  - PR validation & code quality checks
+  - Automated deployments to DEV, STAGE, and PROD
+  - Production approval workflow with health checks
+  - Automatic rollback on failures
 
-**Future State**: GitHub Actions only (migration in progress)
+**Note**: Azure Pipelines (`azure-pipelines.yml`, `azure-pipelines-1.yml`) files remain in the repository for reference but are no longer actively used for deployments.
 
 ---
 
@@ -606,6 +619,24 @@ GitHub provides insights on:
 
 ## 📝 Changelog
 
+### 2025-10-17 - v2.2.1 - Workflow Cleanup
+
+**Workflow Optimization**:
+
+- 🧹 Removed debug jobs from production workflows
+- 🧹 Cleaned up debug logging in `approve-deploy-prod.yml`
+- 🧹 Cleaned up debug logging in `deploy-prod.yml`
+- ✅ Workflows now production-ready without testing artifacts
+
+**Changes**:
+
+- Removed `debug` job from approval workflow (logged trigger details)
+- Removed `debug-deploy-condition` job from production deployment
+- Removed verbose debug output from approval requirement check
+- Streamlined workflow execution without unnecessary logging steps
+
+---
+
 ### 2025-10-10 - v2.2.0 - Production Deployment Pipeline
 
 **Setup Status**: ✅ **Production Workflow Ready for Testing**
@@ -625,8 +656,11 @@ GitHub provides insights on:
 **Health Check Features**:
 
 - ✅ 60-second stabilization wait
-- ✅ Automated endpoint testing with retries
-- ✅ Tests: Home page, API health, auth service, protected endpoints
+- ✅ Automated endpoint testing with retries (2 retries per endpoint)
+- ✅ Tests 3 critical endpoints:
+  - Home page (/)
+  - API health endpoint (/api/health)
+  - Protected authentication endpoint (/api/account/info)
 - ✅ Detailed health report in workflow summary
 - ✅ Automatic rollback on any failure
 
@@ -722,6 +756,6 @@ GitHub provides insights on:
 
 ---
 
-_Last updated: 2025-10-07_  
+_Last updated: 2025-10-17_  
 _Maintained by: Frontend Team_  
 _Questions? Check the Support section above_

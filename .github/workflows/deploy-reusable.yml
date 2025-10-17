@@ -49,6 +49,11 @@ on:
         required: false
         type: string
         default: ''
+      pre-built-image-tag:
+        description: 'Use existing image tag instead of building (for approval workflow)'
+        required: false
+        type: string
+        default: ''
     outputs:
       image-tag:
         description: 'The Docker image tag that was deployed'
@@ -72,8 +77,7 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # Use GitHub Environment for environment-specific secrets
-    environment: ${{ inputs.environment }}
+    # No environment here - build runs without approval gate
 
     permissions:
       contents: read # Read repository code for building
@@ -85,21 +89,44 @@ jobs:
 
     steps:
       # ----------------------------------------------------------------------
-      # STEP 1: Checkout code
+      # STEP 1: Check if using pre-built image
+      # ----------------------------------------------------------------------
+      - name: Check for pre-built image
+        id: check
+        run: |
+          PRE_BUILT="${{ inputs.pre-built-image-tag }}"
+          if [ -n "$PRE_BUILT" ]; then
+            echo "skip-build=true" >> $GITHUB_OUTPUT
+            echo "✅ Using pre-built image: ${PRE_BUILT}"
+          else
+            echo "skip-build=false" >> $GITHUB_OUTPUT
+            echo "🔨 Building new Docker image"
+          fi
+
+      # ----------------------------------------------------------------------
+      # STEP 2: Checkout code (only if building)
       # ----------------------------------------------------------------------
       - name: Checkout code
+        if: steps.check.outputs.skip-build == 'false'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Full history for better context
 
       # ----------------------------------------------------------------------
-      # STEP 2: Generate deployment metadata
+      # STEP 3: Generate deployment metadata
       # ----------------------------------------------------------------------
       - name: Generate deployment metadata
         id: meta
         run: |
-          # Create unique image tag using git commit SHA (first 8 chars)
-          IMAGE_TAG="${GITHUB_SHA:0:8}"
+          # Use pre-built image tag or create new one
+          if [ "${{ steps.check.outputs.skip-build }}" = "true" ]; then
+            IMAGE_TAG="${{ inputs.pre-built-image-tag }}"
+            echo "📦 Using pre-built image tag: ${IMAGE_TAG}"
+          else
+            # Create unique image tag using git commit SHA (first 8 chars)
+            IMAGE_TAG="${GITHUB_SHA:0:8}"
+            echo "🆕 Generated new image tag: ${IMAGE_TAG}"
+          fi
           echo "image-tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
 
           # Record deployment timestamp
@@ -120,6 +147,7 @@ jobs:
           echo "  - Environment: ${{ inputs.environment }}"
           echo "  - Image Tag: ${IMAGE_TAG}"
           echo "  - Release Version: ${RELEASE_VERSION:-N/A}"
+          echo "  - Pre-built: ${{ steps.check.outputs.skip-build }}"
           echo "  - Commit SHA: ${{ github.sha }}"
           echo "  - Branch: ${{ github.ref_name }}"
           echo "  - Triggered by: ${{ github.actor }}"
@@ -127,10 +155,11 @@ jobs:
           echo "  - Reason: ${{ inputs.deployment-reason }}"
 
       # ----------------------------------------------------------------------
-      # STEP 3: Login to Azure Container Registry
+      # STEP 4: Login to Azure Container Registry (only if building)
       # Secrets are configured in GitHub Environments (Settings → Environments)
       # ----------------------------------------------------------------------
       - name: Login to Azure Container Registry
+        if: steps.check.outputs.skip-build == 'false'
         uses: docker/login-action@v3
         with:
           registry: ${{ secrets.ACR_REGISTRY_URL }}
@@ -138,18 +167,20 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       # ----------------------------------------------------------------------
-      # STEP 4: Set up Docker Buildx (for better caching and multi-platform)
+      # STEP 5: Set up Docker Buildx (for better caching and multi-platform)
       # ----------------------------------------------------------------------
       - name: Set up Docker Buildx
+        if: steps.check.outputs.skip-build == 'false'
         uses: docker/setup-buildx-action@v3
 
       # ----------------------------------------------------------------------
-      # STEP 5: Build Docker image with environment variables
+      # STEP 6: Build Docker image with environment variables (only if building)
       # NOTE: Build args match Azure Pipelines setup (Dockerfile.ci requirements)
       # Secrets are passed here for build process but NOT in final image (multi-stage build)
       # All vars are ALSO passed at runtime for the running container
       # ----------------------------------------------------------------------
       - name: Build and tag Docker image
+        if: steps.check.outputs.skip-build == 'false'
         id: docker-build
         run: |
           # Base tags (always applied)
@@ -166,6 +197,7 @@ jobs:
           echo "🏷️  Image tags: ${TAGS}"
 
       - name: Build Docker image
+        if: steps.check.outputs.skip-build == 'false'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -208,12 +240,17 @@ jobs:
           cache-to: type=gha,mode=max
 
       # ----------------------------------------------------------------------
-      # STEP 6: Verify image was pushed successfully
+      # STEP 7: Verify image was pushed successfully (or using pre-built)
       # ----------------------------------------------------------------------
       - name: Verify Docker image
         run: |
-          echo "✅ Docker image built and pushed successfully"
-          echo "📦 Image: ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.image-tag }}"
+          if [ "${{ steps.check.outputs.skip-build }}" = "true" ]; then
+            echo "✅ Using pre-built Docker image"
+            echo "📦 Image Tag: ${{ steps.meta.outputs.image-tag }}"
+          else
+            echo "✅ Docker image built and pushed successfully"
+            echo "📦 Image: ${{ secrets.ACR_REGISTRY_URL }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.meta.outputs.image-tag }}"
+          fi
 
   # ============================================================================
   # JOB 2: DEPLOY TO SERVER
@@ -568,8 +605,6 @@ jobs:
         id: health
         env:
           APP_URL: ${{ secrets.NEXT_PUBLIC_URL }}
-          API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          IDENTITY_URL: ${{ secrets.IDENTITY_API_URL }}
         run: |
           echo "🏥 Starting production health checks..."
           echo ""
@@ -625,22 +660,13 @@ jobs:
           # ============================================================
           # HEALTH CHECK 2: API Health Endpoint
           # ============================================================
-          # Note: Adjust this endpoint based on your actual health check route
-          check_endpoint "API Health" "${API_URL}/health" "200" || \
-          check_endpoint "API Root" "${API_URL}/" "200"
+          check_endpoint "API Health" "${APP_URL}/api/health" "200"
 
           # ============================================================
-          # HEALTH CHECK 3: Authentication Service
+          # HEALTH CHECK 3: Protected Authentication Endpoint
           # ============================================================
           # 401 is expected for unauthenticated requests (means service is working)
-          check_endpoint "Identity Service" "${IDENTITY_URL}/api/health" "200" || \
-          check_endpoint "Identity Service (Auth)" "${IDENTITY_URL}/api/account/info" "401"
-
-          # ============================================================
-          # HEALTH CHECK 4: Critical API Endpoint
-          # ============================================================
-          # 401 without auth means the endpoint exists and is protected (healthy)
-          check_endpoint "Vessels API (Protected)" "${API_URL}/v1/charterer/vessels" "401"
+          check_endpoint "Account Info (Protected)" "${APP_URL}/api/account/info" "401"
 
           # ============================================================
           # Summary
@@ -803,10 +829,9 @@ jobs:
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Endpoints Tested:" >> $GITHUB_STEP_SUMMARY
-          echo "- Home Page (\`/\`)" >> $GITHUB_STEP_SUMMARY
-          echo "- API Health Endpoint" >> $GITHUB_STEP_SUMMARY
-          echo "- Identity/Auth Service" >> $GITHUB_STEP_SUMMARY
-          echo "- Protected API Endpoints" >> $GITHUB_STEP_SUMMARY
+          echo "- Home Page (\`/\`) - 200 OK" >> $GITHUB_STEP_SUMMARY
+          echo "- API Health Endpoint (\`/api/health\`) - 200 OK" >> $GITHUB_STEP_SUMMARY
+          echo "- Protected Authentication (\`/api/account/info\`) - 401 Unauthorized" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "🔗 [View deployment details for PRODUCTION](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

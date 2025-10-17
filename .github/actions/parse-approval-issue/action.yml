@@ -1,0 +1,92 @@
+name: Parse Approval Issue
+description: Extracts deployment metadata from approval issue body
+
+inputs:
+  issue_body:
+    description: 'The issue body to parse'
+    required: true
+
+outputs:
+  env_name:
+    description: 'Parsed environment name'
+    value: ${{ steps.parse.outputs.env_name }}
+  run_id:
+    description: 'Parsed workflow run ID'
+    value: ${{ steps.parse.outputs.run_id }}
+  image_tag:
+    description: 'Parsed Docker image tag'
+    value: ${{ steps.parse.outputs.image_tag }}
+  release_version:
+    description: 'Parsed release version'
+    value: ${{ steps.parse.outputs.release_version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Parse issue body
+      id: parse
+      shell: bash
+      run: |
+        ISSUE_BODY=$(cat <<'EOF'
+        ${{ inputs.issue_body }}
+        EOF
+        )
+
+        echo "🔍 Parsing approval issue metadata..."
+        echo ""
+
+        # Extract environment name (more robust parsing with grep and sed)
+        ENV_NAME=$(echo "$ISSUE_BODY" | grep -oP '\*\*Environment:\*\*\s*\K[^`\s]+' | head -1 | xargs || echo "")
+        echo "env_name=${ENV_NAME}" >> $GITHUB_OUTPUT
+        echo "✓ Parsed env_name: '${ENV_NAME}'"
+
+        # Extract run ID (more robust parsing)
+        RUN_ID=$(echo "$ISSUE_BODY" | grep -oP '\*\*Run ID:\*\*\s*\K[0-9]+' | head -1 | xargs || echo "")
+        echo "run_id=${RUN_ID}" >> $GITHUB_OUTPUT
+        echo "✓ Parsed run_id: '${RUN_ID}'"
+
+        # Extract image tag (handle backticks)
+        IMAGE_TAG=$(echo "$ISSUE_BODY" | grep -oP '\*\*Image Tag:\*\*\s*`?\K[^`\s]+' | head -1 | xargs || echo "")
+        echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+        echo "✓ Parsed image_tag: '${IMAGE_TAG}'"
+
+        # Extract release version (handle backticks)
+        RELEASE_VERSION=$(echo "$ISSUE_BODY" | grep -oP '\*\*Release Version:\*\*\s*`?\K[^`\s]+' | head -1 | xargs || echo "")
+        echo "release_version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+        echo "✓ Parsed release_version: '${RELEASE_VERSION}'"
+
+        echo ""
+        echo "🎯 Validating required fields..."
+
+        # Validate that all required fields were parsed
+        VALIDATION_FAILED=false
+
+        if [ -z "$ENV_NAME" ]; then
+          echo "❌ ERROR: Failed to parse environment name from issue body"
+          VALIDATION_FAILED=true
+        fi
+
+        if [ -z "$RUN_ID" ]; then
+          echo "❌ ERROR: Failed to parse run ID from issue body"
+          VALIDATION_FAILED=true
+        fi
+
+        if [ -z "$IMAGE_TAG" ]; then
+          echo "❌ ERROR: Failed to parse image tag from issue body"
+          VALIDATION_FAILED=true
+        fi
+
+        # Release version is optional for some deployments
+        if [ -z "$RELEASE_VERSION" ]; then
+          echo "⚠️  WARNING: Release version not found (may be optional)"
+        fi
+
+        if [ "$VALIDATION_FAILED" = "true" ]; then
+          echo ""
+          echo "❌ Validation failed: Required fields missing from approval issue"
+          echo "Please ensure the approval issue was created with the correct format"
+          exit 1
+        fi
+
+        echo ""
+        echo "✅ All required fields parsed successfully"

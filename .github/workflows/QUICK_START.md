@@ -48,14 +48,17 @@ ACR_USERNAME         = (get from coworkers)
 ACR_PASSWORD         = (get from coworkers)
 ```
 
-#### SSH Secrets (4 secrets)
+#### SSH Secrets (5 secrets)
 
 ```
 SSH_HOST             = (get from coworkers)
 SSH_USERNAME         = (get from coworkers)
 SSH_PORT             = 22
-SSH_PRIVATE_KEY      = (full key including -----BEGIN----- and -----END-----)
+SSH_PRIVATE_KEY      = (full key including -----BEGIN----- and -----END-----) [for key auth]
+SSH_PASSWORD         = (server password) [for password auth - alternative to key]
 ```
+
+**Note:** Use either `SSH_PRIVATE_KEY` (recommended) OR `SSH_PASSWORD` - not both.
 
 #### Application Secrets (38 secrets)
 
@@ -83,7 +86,7 @@ Repeat Step 3 but:
 
 - Go to **Environments** → **stage**
 - Use same registry secrets (ACR is usually shared)
-- Use different SSH credentials (stage server)
+- Use different SSH credentials (stage server) - 5 SSH secrets
 - Use stage-specific application URLs and secrets (get from coworkers)
 - Change `APP_ENV=stage`
 
@@ -170,7 +173,7 @@ Repeat Step 3 but:
 
 ### Error: "Permission denied (publickey)"
 
-**Fix**: Check SSH_PRIVATE_KEY includes full key with headers/footers
+**Fix**: Check SSH authentication - either SSH_PRIVATE_KEY includes full key with headers/footers OR SSH_PASSWORD is set correctly
 
 ### Error: "Container exited immediately"
 
@@ -303,26 +306,30 @@ git push origin release/20251010-1
 
 **Step 4: Approve Deployment**
 
-1. Go to **Actions** tab
-2. Find running workflow
-3. Click **Review deployments**
-4. Select `prod` environment
-5. Click **Approve and deploy**
+1. Go to **Issues** tab
+2. Find the approval issue (labeled `deploy-approval`)
+3. Review deployment details (release version, image tag, etc.)
+4. Add the label `deploy-approved` to the issue
+5. Approval workflow will automatically trigger
 
 **Step 5: Monitor Deployment**
 
 Watch for:
 
 ```
+# Initial Workflow (deploy-prod.yml)
 ✅ Branch validation passed
 ✅ Docker image built
-✅ Waiting for approval... → YOU APPROVED
+✅ Approval issue created
+⏸️  Waiting for approval label...
+
+# After Adding deploy-approved Label (approve-deploy-prod.yml)
+✅ Approval detected
 ✅ Container deployed
 ⏳ Running health checks...
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
-✅ Health check: Auth Service - PASS
-✅ Health check: Vessels API - PASS
+✅ Health check: Account Info (Protected) - PASS
 🎉 Production deployment successful!
 ```
 
@@ -334,24 +341,28 @@ Watch for:
 0:02  - Source branch validated
 0:05  - Docker build starts
 5:00  - Image pushed to registry
-5:30  - ⏸️  WAITING FOR APPROVAL (you must approve)
-6:00  - Approved, deployment starts
-9:00  - Container deployed
-9:30  - Wait 60 seconds for stabilization
-10:30 - Running health checks
-12:00 - ✅ Deployment complete!
+6:00  - Approval issue created
+⏸️    - WAITING FOR deploy-approved LABEL
+      (approver reviews and adds label)
+      - Approval workflow triggers automatically
++0:00 - Container deployment starts
++3:00 - Container deployed
++3:30 - Wait 60 seconds for stabilization
++4:30 - Running health checks
++6:00 - ✅ Deployment complete!
 ```
 
-**Total time: ~12-15 minutes** (including manual approval)
+**Total time: ~6-8 minutes** (from build) + **approval time** (manual review)
 
 ### Health Checks
 
 Production deployments include automated health checks:
 
-- **Home Page** (/) - 200 OK
-- **API Health** (/api/health) - 200 OK
-- **Auth Service** - 200 or 401 expected
-- **Protected API** (/v1/charterer/vessels) - 401 (means healthy)
+- **Home Page** (/) - expects 200 OK
+- **API Health** (/api/health) - expects 200 OK
+- **Protected Authentication** (/api/account/info) - expects 401 (unauthenticated = healthy)
+
+**3 total checks** with 2 retries per endpoint
 
 If ANY check fails → **Automatic rollback** to previous version
 

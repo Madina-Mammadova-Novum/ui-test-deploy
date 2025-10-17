@@ -163,14 +163,31 @@ Go to your `dev` environment and add these secrets:
 
 #### **SSH Secrets** (Get from coworkers)
 
-| Secret Name       | Example Value                        | Description               |
-| ----------------- | ------------------------------------ | ------------------------- |
-| `SSH_HOST`        | `dev-vm.shiplink.com`                | Dev server hostname or IP |
-| `SSH_USERNAME`    | `azureuser`                          | SSH username              |
-| `SSH_PORT`        | `22`                                 | SSH port (usually 22)     |
-| `SSH_PRIVATE_KEY` | `-----BEGIN RSA PRIVATE KEY-----...` | Full SSH private key      |
+| Secret Name       | Example Value                        | Description                       |
+| ----------------- | ------------------------------------ | --------------------------------- |
+| `SSH_HOST`        | `dev-vm.shiplink.com`                | Dev server hostname or IP         |
+| `SSH_USERNAME`    | `azureuser`                          | SSH username                      |
+| `SSH_PORT`        | `22`                                 | SSH port (usually 22)             |
+| `SSH_PRIVATE_KEY` | `-----BEGIN RSA PRIVATE KEY-----...` | Full SSH private key              |
+| `SSH_PASSWORD`    | `your-ssh-password`                  | SSH password (alternative to key) |
 
-**❗ IMPORTANT: SSH_PRIVATE_KEY Format**
+**❗ IMPORTANT: SSH Authentication Methods**
+
+The workflow supports both SSH key and password authentication:
+
+**SSH Key Authentication (Recommended):**
+
+- Set `SSH_PRIVATE_KEY` with full private key
+- Leave `SSH_PASSWORD` empty or don't set it
+- More secure and automated
+
+**Password Authentication (Alternative):**
+
+- Set `SSH_PASSWORD` with server password
+- Leave `SSH_PRIVATE_KEY` empty or don't set it
+- Simpler setup but less secure
+
+**SSH_PRIVATE_KEY Format (if using key authentication):**
 
 - Must include `-----BEGIN RSA PRIVATE KEY-----` header
 - Must include `-----END RSA PRIVATE KEY-----` footer
@@ -415,10 +432,12 @@ Each deployment generates a summary with:
 
 **Solution:**
 
-1. Verify `SSH_PRIVATE_KEY` includes header/footer
+1. Verify SSH authentication is properly configured:
+   - For key auth: `SSH_PRIVATE_KEY` includes header/footer
+   - For password auth: `SSH_PASSWORD` is set correctly
 2. Verify `SSH_USERNAME` and `SSH_HOST` are correct
 3. Test SSH connection manually: `ssh username@host`
-4. Ensure the key has access to the server
+4. Ensure the key has access to the server (or password is correct)
 
 ---
 
@@ -603,12 +622,13 @@ Go to `prod` environment and add all 45 secrets (same as dev/stage but with PROD
 - `ACR_USERNAME` (same as dev/stage)
 - `ACR_PASSWORD` (same as dev/stage)
 
-**SSH Secrets** (4):
+**SSH Secrets** (5):
 
 - `SSH_HOST` (production server hostname/IP)
 - `SSH_USERNAME` (production server username)
 - `SSH_PORT` (usually `22`)
-- `SSH_PRIVATE_KEY` (production server SSH key)
+- `SSH_PRIVATE_KEY` (production server SSH key - if using key auth)
+- `SSH_PASSWORD` (production server password - if using password auth)
 
 **Application Secrets** (38):
 
@@ -643,7 +663,50 @@ Go to `prod` environment and add all 45 secrets (same as dev/stage but with PROD
 - Require 1 approval
 - Require status checks to pass
 
-### Step 4: Understand Production Workflow
+### Step 4: Configure Approval System
+
+**⚠️ IMPORTANT**: This project uses a label-based approval system that works without GitHub Enterprise.
+
+1. Go to **Settings** → **Environments** → **prod**
+2. Add environment **variables** (NOT secrets):
+   - Name: `WAIT_FOR_APPROVAL`
+   - Value: `true`
+
+**Optional Configuration:**
+
+3. **Approval Assignees** (auto-assign approval issues):
+   - Name: `APPROVAL_ASSIGNEES`
+   - Value: `username1,username2` (comma-separated GitHub usernames)
+
+4. **Custom Labels** (additional labels for approval issues):
+   - Name: `APPROVAL_LABELS`
+   - Value: `production,critical` (comma-separated, default includes `deploy-approval`)
+
+**How It Works:**
+
+When a PR is merged to `main`:
+
+1. Workflow validates the source branch (`release/*` or `hotfix/*`)
+2. Builds Docker image and pushes to registry
+3. Creates a GitHub issue labeled `deploy-approval`
+4. **Deployment PAUSES** - waiting for approval
+5. Approver adds `deploy-approved` label to the issue
+6. Deployment automatically continues
+7. Health checks verify deployment success
+
+**To Approve a Deployment:**
+
+1. Find the approval issue in the Issues tab
+2. Review deployment details (release version, image tag, etc.)
+3. Add the label `deploy-approved` to the issue
+4. Deployment will automatically start
+
+**To Disable Approval (Not Recommended for Production):**
+
+- Set `WAIT_FOR_APPROVAL` to `false` or remove the variable
+- Deployments will proceed automatically without approval
+
+### Step 5: Understand Production Workflow
 
 **Branch Flow:**
 
@@ -666,13 +729,13 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
 3. Create PR: `release/20251010-1` → `main`
 4. Get PR approved
 5. Merge PR (triggers deployment workflow)
-6. Workflow validates source branch
-7. **Manual approval required** → You must approve in GitHub Actions
-8. Deployment to server
+6. Workflow validates source branch and builds Docker image
+7. **Manual approval required** → Add `deploy-approved` label to the approval issue
+8. Deployment to server (triggered automatically after approval)
 9. **Automated health checks** run
 10. Automatic rollback if health checks fail
 
-### Step 5: Test Production Deployment
+### Step 6: Test Production Deployment
 
 **First Deployment Test** (recommended):
 
@@ -690,11 +753,11 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
 
 4. Get approval and merge
 
-5. Go to **Actions** tab → Find running workflow
+5. Find approval issue in **Issues** tab
 
-6. **Approve deployment** when prompted
+6. **Approve deployment** by adding `deploy-approved` label to the issue
 
-7. **Monitor**:
+7. **Monitor** (approval workflow will trigger automatically):
    - Container deployment
    - Health checks (Home, API, Auth, Vessels API)
    - Health check summary
@@ -704,21 +767,20 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
    - Test critical features
    - Check monitoring dashboards
 
-### Step 6: Health Checks Information
+### Step 7: Health Checks Information
 
 Production deployments include automated health checks:
 
 **What's Tested:**
 
-- Home Page (`/`) - 200 OK
-- API Health (`/api/health`) - 200 OK
-- Identity Service (`/api/health` or `/api/account/info`) - 200 or 401
-- Protected API (`/v1/charterer/vessels`) - 401 (means it's protected = healthy)
+- Home Page (`/`) - expects 200 OK
+- API Health (`/api/health`) - expects 200 OK
+- Protected Authentication (`/api/account/info`) - expects 401 (unauthenticated = healthy)
 
 **Features:**
 
-- 60-second stabilization wait
-- 2 retries per endpoint (5-second delay)
+- 60-second stabilization wait after deployment
+- 2 retries per endpoint (5-second delay between retries)
 - 30-second timeout per check
 - Automatic rollback on any failure
 
@@ -727,9 +789,8 @@ Production deployments include automated health checks:
 ```
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
-✅ Health check: Auth Service - PASS
-✅ Health check: Vessels API - PASS
-📊 Total: 4/4 checks passed
+✅ Health check: Account Info (Protected) - PASS
+📊 Total: 3/3 checks passed
 🎉 Production deployment verified!
 ```
 
@@ -742,7 +803,7 @@ If health checks fail:
 ✅ Rollback successful
 ```
 
-### Step 7: Hotfix Process
+### Step 8: Hotfix Process
 
 For emergency production fixes:
 

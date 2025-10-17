@@ -1,0 +1,149 @@
+name: Approve Production Deployment
+
+# This workflow triggers when deploy-approved label is added to approval issues
+# It parses the issue metadata and continues the deployment process
+
+on:
+  issues:
+    types: [labeled]
+
+  # Allow manual testing of approval workflow
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to approve'
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+  issues: write
+
+jobs:
+  gate:
+    name: Verify Approval
+    # Only run when deploy-approved label is added to approval issues OR manual trigger
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request == null &&
+       (github.event.issue.user.login == 'github-actions[bot]' || contains(github.event.issue.user.login, 'github-actions')) &&
+       contains(join(github.event.issue.labels.*.name), 'deploy-approval') &&
+       github.event.label.name == 'deploy-approved')
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      env_name: ${{ steps.parse.outputs.env_name }}
+      run_id: ${{ steps.parse.outputs.run_id }}
+      image_tag: ${{ steps.parse.outputs.image_tag }}
+      release_version: ${{ steps.parse.outputs.release_version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch issue data (for manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        id: fetch_issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.inputs.issue_number }}
+            });
+            return issue.data.body;
+          result-encoding: string
+
+      - name: Parse approval issue
+        id: parse
+        uses: ./.github/actions/parse-approval-issue
+        with:
+          issue_body: ${{ github.event_name == 'workflow_dispatch' && steps.fetch_issue.outputs.result || github.event.issue.body }}
+
+      - name: Validate parsed data
+        run: |
+          echo "✅ Approval issue parsed successfully"
+          echo "Environment: ${{ steps.parse.outputs.env_name }}"
+          echo "Run ID: ${{ steps.parse.outputs.run_id }}"
+          echo "Image Tag: ${{ steps.parse.outputs.image_tag }}"
+          echo "Release Version: ${{ steps.parse.outputs.release_version }}"
+
+          # Validate required fields
+          if [ -z "${{ steps.parse.outputs.env_name }}" ]; then
+            echo "❌ Error: Could not parse environment name from issue"
+            exit 1
+          fi
+
+          if [ -z "${{ steps.parse.outputs.run_id }}" ]; then
+            echo "❌ Error: Could not parse run ID from issue"
+            exit 1
+          fi
+
+          if [ -z "${{ steps.parse.outputs.image_tag }}" ]; then
+            echo "❌ Error: Could not parse image tag from issue"
+            exit 1
+          fi
+
+      - name: Add deployment comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Deployment Approved**\n\nStarting production deployment...\n\n- Environment: \`${{ steps.parse.outputs.env_name }}\`\n- Image Tag: \`${{ steps.parse.outputs.image_tag }}\`\n- Release: \`${{ steps.parse.outputs.release_version }}\`\n- Approved by: @${{ github.actor }}\n\n[View deployment workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+            });
+
+  deploy:
+    name: Deploy to Production
+    needs: gate
+    uses: ./.github/workflows/deploy-reusable.yml
+    with:
+      environment: prod
+      image-tag-suffix: prod-latest
+      deployment-reason: ${{ format('Approved deployment - Release {0}', needs.gate.outputs.release_version) }}
+      release-version: ${{ needs.gate.outputs.release_version }}
+      skip-health-checks: false
+      pre-built-image-tag: ${{ needs.gate.outputs.image_tag }}
+    secrets: inherit
+
+  update-issue:
+    name: Update Approval Issue
+    needs: [gate, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      issues: write
+
+    steps:
+      - name: Update issue with result
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const success = '${{ needs.deploy.result }}' === 'success';
+            const emoji = success ? '✅' : '❌';
+            const status = success ? 'SUCCESSFUL' : 'FAILED';
+            const body = `${emoji} **Deployment ${status}**\n\n- Environment: \`${{ needs.gate.outputs.env_name }}\`\n- Image Tag: \`${{ needs.gate.outputs.image_tag }}\`\n- Release: \`${{ needs.gate.outputs.release_version }}\`\n- Result: ${status}\n\n[View deployment details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+            // Close the issue if deployment was successful
+            if (success) {
+              await github.rest.issues.update({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'closed',
+                state_reason: 'completed'
+              });
+            }
