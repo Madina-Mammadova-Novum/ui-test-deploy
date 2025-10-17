@@ -654,7 +654,7 @@ Option A: **Automatic trigger** (merge PR)
 ```bash
 # Merge PR to main
 # Workflow triggers automatically
-# Still requires manual approval
+# Still requires manual approval (add deploy-approved label to issue)
 ```
 
 Option B: **Manual trigger** (more control)
@@ -664,7 +664,8 @@ Option B: **Manual trigger** (more control)
 2. Click "Run workflow"
 3. Branch: hotfix/critical-security-fix
 4. Reason: "Critical security patch CVE-2025-12345"
-5. Approve when prompted
+5. Find approval issue in Issues tab
+6. Add deploy-approved label to approve deployment
 ```
 
 **6. Backport to Other Branches**
@@ -726,8 +727,9 @@ You'll see:
 2. Find last successful deployment
 3. Note the image tag (e.g., `abc12345`)
 4. Click **Re-run all jobs**
-5. Approve when prompted
-6. Monitor deployment
+5. Find approval issue in Issues tab
+6. Add `deploy-approved` label to approve
+7. Monitor deployment
 
 #### Method 2: Manual Trigger with Specific Version
 
@@ -736,7 +738,8 @@ You'll see:
 3. Select **main** branch
 4. Reason: "Rolling back to version abc12345"
 5. Run workflow
-6. Approve when prompted
+6. Find approval issue in Issues tab
+7. Add `deploy-approved` label to approve
 
 #### Method 3: Direct Server Rollback (Emergency)
 

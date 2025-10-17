@@ -7,8 +7,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Tech Stack Versions
 
 - **Node.js**: 22.x (>=22.0.0)
-- **Next.js**: 15.5.3
-- **React**: 19.1.1
+- **Next.js**: 15.5.4
+- **React**: 19.2.0
 - **Package Manager**: Yarn (exclusively)
 
 ## Getting Started
@@ -139,15 +139,6 @@ Add these optional secrets in repository settings if you want to use specific fe
 - **Environment Variables**: Automatically creates `.env.local` with dummy values for CI builds
 - **Error Handling**: Clear error messages with fix suggestions and automated PR comments
 
-### Integration with Azure Pipelines
-
-Your project uses Azure Pipelines for builds. These GitHub Actions workflows complement rather than replace your Azure setup:
-
-- **GitHub Actions**: PR validation and code quality
-- **Azure Pipelines**: Production builds and deployments
-
-This separation provides faster feedback on PRs while keeping production deployments in Azure.
-
 ## Deployment Workflows
 
 This project uses GitHub Actions for automated deployment to multiple environments using Docker containers.
@@ -178,7 +169,53 @@ This project uses GitHub Actions for automated deployment to multiple environmen
 **Environment**: `stage`
 **Docker Tag**: `stage-latest`
 
-#### 3. Reusable Deployment Workflow (`deploy-reusable.yml`)
+#### 3. Deploy to Production (`deploy-prod.yml`)
+
+**Controlled deployment** - Deploys to PRODUCTION environment when code is merged from `release/*` or `hotfix/*` branches to `main`.
+
+**Triggers**:
+
+- Push to `main` branch from `release/yyyymmdd-count` or `hotfix/*` branches
+- Manual dispatch from GitHub Actions UI (with optional health check skip)
+
+**Environment**: `prod`
+**Docker Tag**: `prod-latest` + `release-yyyymmdd-count`
+
+**Features**:
+
+- Branch validation (only `release/*` or `hotfix/*` allowed)
+- Docker image build with release version tagging
+- Optional manual approval via GitHub Issues (configured by `WAIT_FOR_APPROVAL` variable)
+- Automated health checks post-deployment
+- Automatic rollback on health check failure
+
+**Approval Process** (if `WAIT_FOR_APPROVAL=true`):
+
+1. Workflow validates source branch and builds Docker image
+2. Creates GitHub Issue with `deploy-approval` label
+3. Reviewer adds `deploy-approved` label to the issue
+4. Triggers `approve-deploy-prod.yml` workflow automatically
+5. Deploys to production using pre-built image
+6. Runs health checks and updates issue with results
+
+#### 4. Approve Production Deployment (`approve-deploy-prod.yml`)
+
+**Approval workflow** - Triggered when `deploy-approved` label is added to approval issues.
+
+**Triggers**:
+
+- Label `deploy-approved` added to issues with `deploy-approval` label
+- Manual dispatch for testing approval flow
+
+**Process**:
+
+1. Parses deployment metadata from approval issue
+2. Deploys using pre-built Docker image (skips rebuild)
+3. Runs production health checks
+4. Updates issue with deployment results
+5. Closes issue on successful deployment
+
+#### 5. Reusable Deployment Workflow (`deploy-reusable.yml`)
 
 **Shared deployment logic** - Contains all deployment steps used by environment-specific workflows.
 
@@ -318,12 +355,16 @@ To manually trigger a deployment:
 
 1. Go to **Actions** tab in GitHub repository
 2. Select the appropriate workflow:
-   - `Deploy to Development`
-   - `Deploy to Staging`
+   - `Deploy to Development` - for dev environment
+   - `Deploy to Staging` - for stage environment
+   - `Deploy to Production` - for prod environment (requires approval if `WAIT_FOR_APPROVAL=true`)
 3. Click **Run workflow**
 4. Select the branch to deploy
 5. Optionally provide a reason for deployment
-6. Click **Run workflow** button
+6. For production: optionally skip health checks (emergency only)
+7. Click **Run workflow** button
+
+**Note**: Production deployments require approval by adding `deploy-approved` label to the generated issue (if approval is enabled).
 
 ### Environment Setup Checklist
 
