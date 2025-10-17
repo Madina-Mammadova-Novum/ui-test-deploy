@@ -29,10 +29,6 @@ export const useNotificationToast = (notificationData) => {
   return notificationToastFunc(notificationData);
 };
 
-export const pokePr = () => {
-  return toastFunc('success', 'Poke PR', 'Poke PR');
-};
-
 export const redirectAfterToast = (message, url) => {
   return new Promise((resolve) => {
     successToast(message);

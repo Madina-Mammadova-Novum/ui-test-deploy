@@ -729,9 +729,9 @@ Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
 3. Create PR: `release/20251010-1` → `main`
 4. Get PR approved
 5. Merge PR (triggers deployment workflow)
-6. Workflow validates source branch
-7. **Manual approval required** → You must approve in GitHub Actions
-8. Deployment to server
+6. Workflow validates source branch and builds Docker image
+7. **Manual approval required** → Add `deploy-approved` label to the approval issue
+8. Deployment to server (triggered automatically after approval)
 9. **Automated health checks** run
 10. Automatic rollback if health checks fail
 

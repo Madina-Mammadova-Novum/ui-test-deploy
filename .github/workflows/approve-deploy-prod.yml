@@ -22,46 +22,8 @@ permissions:
   issues: write
 
 jobs:
-  debug:
-    name: Debug Approval Trigger
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    steps:
-      - name: Log event details
-        run: |
-          echo "🔍 APPROVAL WORKFLOW TRIGGER DEBUG"
-          echo "=================================="
-          echo "✅ Workflow triggered successfully!"
-          echo "Event: ${{ github.event_name }}"
-          echo "Action: ${{ github.event.action }}"
-          echo ""
-
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "📝 Manual trigger - Issue #${{ github.event.inputs.issue_number }}"
-          else
-            echo "📋 Issue Details:"
-            echo "  - Number: #${{ github.event.issue.number }}"
-            echo "  - Title: ${{ github.event.issue.title }}"
-            echo "  - Creator: ${{ github.event.issue.user.login }}"
-            echo "  - Label: ${{ github.event.label.name }}"
-            echo "  - Is PR: ${{ github.event.issue.pull_request != null }}"
-            echo ""
-            echo "🏷️  All Labels:"
-            echo '${{ toJSON(github.event.issue.labels) }}'
-            echo ""
-            echo "🎯 Condition Checks:"
-            echo "  - Is Issue (not PR): ${{ github.event.issue.pull_request == null }}"
-            echo "  - Creator is bot: ${{ github.event.issue.user.login == 'github-actions[bot]' }}"
-            echo "  - Contains github-actions: ${{ contains(github.event.issue.user.login, 'github-actions') }}"
-            echo "  - Has deploy-approval: ${{ contains(join(github.event.issue.labels.*.name), 'deploy-approval') }}"
-            echo "  - Label is deploy-approved: ${{ github.event.label.name == 'deploy-approved' }}"
-            echo ""
-            echo "✨ Should proceed to deployment: ${{ github.event.issue.pull_request == null && (github.event.issue.user.login == 'github-actions[bot]' || contains(github.event.issue.user.login, 'github-actions')) && contains(join(github.event.issue.labels.*.name), 'deploy-approval') && github.event.label.name == 'deploy-approved' }}"
-          fi
-
   gate:
     name: Verify Approval
-    needs: debug
     # Only run when deploy-approved label is added to approval issues OR manual trigger
     if: |
       github.event_name == 'workflow_dispatch' ||

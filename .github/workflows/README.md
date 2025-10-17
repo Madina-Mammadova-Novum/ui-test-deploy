@@ -532,14 +532,17 @@ GitHub provides insights on:
 
 ---
 
-## 🔄 Integration with Azure Pipelines
+## 🔄 CI/CD Migration Complete
 
-**Current Strategy**: Dual CI/CD during migration
+**Current Strategy**: Full GitHub Actions CI/CD
 
-- **GitHub Actions**: PR validation & code quality (this setup)
-- **Azure Pipelines**: Production builds & deployments
+- **GitHub Actions**: Complete CI/CD pipeline
+  - PR validation & code quality checks
+  - Automated deployments to DEV, STAGE, and PROD
+  - Production approval workflow with health checks
+  - Automatic rollback on failures
 
-**Future State**: GitHub Actions only (migration in progress)
+**Note**: Azure Pipelines (`azure-pipelines.yml`, `azure-pipelines-1.yml`) files remain in the repository for reference but are no longer actively used for deployments.
 
 ---
 
@@ -615,6 +618,24 @@ GitHub provides insights on:
 ---
 
 ## 📝 Changelog
+
+### 2025-10-17 - v2.2.1 - Workflow Cleanup
+
+**Workflow Optimization**:
+
+- 🧹 Removed debug jobs from production workflows
+- 🧹 Cleaned up debug logging in `approve-deploy-prod.yml`
+- 🧹 Cleaned up debug logging in `deploy-prod.yml`
+- ✅ Workflows now production-ready without testing artifacts
+
+**Changes**:
+
+- Removed `debug` job from approval workflow (logged trigger details)
+- Removed `debug-deploy-condition` job from production deployment
+- Removed verbose debug output from approval requirement check
+- Streamlined workflow execution without unnecessary logging steps
+
+---
 
 ### 2025-10-10 - v2.2.0 - Production Deployment Pipeline
 
@@ -735,6 +756,6 @@ GitHub provides insights on:
 
 ---
 
-_Last updated: 2025-10-07_  
+_Last updated: 2025-10-17_  
 _Maintained by: Frontend Team_  
 _Questions? Check the Support section above_
