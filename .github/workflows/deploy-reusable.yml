@@ -77,7 +77,7 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # No environment here - build runs without approval gate
+    environment: ${{ inputs.environment }} # Need environment access for ACR secrets
 
     permissions:
       contents: read # Read repository code for building
