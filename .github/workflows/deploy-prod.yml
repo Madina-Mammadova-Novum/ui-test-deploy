@@ -358,7 +358,7 @@ jobs:
       image-tag-suffix: prod-latest
       deployment-reason: ${{ github.event.inputs.reason || format('Production deployment from {0}', needs.validate.outputs.source-branch) }}
       release-version: ${{ needs.validate.outputs.release-version }}
-      skip-health-checks: ${{ github.event.inputs.skip-health-checks || false }}
+      skip-health-checks: ${{ github.event.inputs.skip-health-checks == 'true' }}
       pre-built-image-tag: ${{ needs.build.outputs.image-tag }}
     secrets: inherit # Pass all secrets from the calling workflow to the reusable workflow
 
