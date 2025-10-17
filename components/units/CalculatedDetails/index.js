@@ -56,7 +56,7 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
         labelBadge="*"
         placeholder="Enter the cargo quantity"
         type="number"
-        helperText="Min value:: 1000 tons"
+        helperText="Min value: 1000 tons"
         min="1000"
       />
     ) : (
