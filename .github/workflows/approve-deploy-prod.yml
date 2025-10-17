@@ -5,7 +5,7 @@ name: Approve Production Deployment
 
 on:
   issues:
-    types: [labeled, unlabeled] # Also trigger on unlabel for testing
+    types: [labeled]
 
   # Allow manual testing of approval workflow
   workflow_dispatch:

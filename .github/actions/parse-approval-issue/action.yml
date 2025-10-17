@@ -35,23 +35,23 @@ runs:
         echo "🔍 Parsing approval issue metadata..."
         echo ""
 
-        # Extract environment name (robust parsing)
-        ENV_NAME=$(echo "$ISSUE_BODY" | awk -F': ' '/^\*\*Environment:\*\*/ {gsub(/\*\*/,"",$1); gsub(/`/,"",$2); print $2}' | xargs || echo "")
+        # Extract environment name (more robust parsing with grep and sed)
+        ENV_NAME=$(echo "$ISSUE_BODY" | grep -oP '\*\*Environment:\*\*\s*\K[^`\s]+' | head -1 | xargs || echo "")
         echo "env_name=${ENV_NAME}" >> $GITHUB_OUTPUT
         echo "✓ Parsed env_name: '${ENV_NAME}'"
 
-        # Extract run ID (robust parsing)
-        RUN_ID=$(echo "$ISSUE_BODY" | awk -F': ' '/^\*\*Run ID:\*\*/ {gsub(/\*\*/,"",$1); gsub(/`/,"",$2); print $2}' | xargs || echo "")
+        # Extract run ID (more robust parsing)
+        RUN_ID=$(echo "$ISSUE_BODY" | grep -oP '\*\*Run ID:\*\*\s*\K[0-9]+' | head -1 | xargs || echo "")
         echo "run_id=${RUN_ID}" >> $GITHUB_OUTPUT
         echo "✓ Parsed run_id: '${RUN_ID}'"
 
-        # Extract image tag (robust parsing)
-        IMAGE_TAG=$(echo "$ISSUE_BODY" | awk -F': ' '/^\*\*Image Tag:\*\*/ {gsub(/\*\*/,"",$1); gsub(/`/,"",$2); print $2}' | xargs || echo "")
+        # Extract image tag (handle backticks)
+        IMAGE_TAG=$(echo "$ISSUE_BODY" | grep -oP '\*\*Image Tag:\*\*\s*`?\K[^`\s]+' | head -1 | xargs || echo "")
         echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
         echo "✓ Parsed image_tag: '${IMAGE_TAG}'"
 
-        # Extract release version (robust parsing)
-        RELEASE_VERSION=$(echo "$ISSUE_BODY" | awk -F': ' '/^\*\*Release Version:\*\*/ {gsub(/\*\*/,"",$1); gsub(/`/,"",$2); print $2}' | xargs || echo "")
+        # Extract release version (handle backticks)
+        RELEASE_VERSION=$(echo "$ISSUE_BODY" | grep -oP '\*\*Release Version:\*\*\s*`?\K[^`\s]+' | head -1 | xargs || echo "")
         echo "release_version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
         echo "✓ Parsed release_version: '${RELEASE_VERSION}'"
 
