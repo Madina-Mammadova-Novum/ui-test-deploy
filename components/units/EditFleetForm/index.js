@@ -37,7 +37,7 @@ const EditFleetForm = ({ closeModal, id }) => {
     if (defaultValues.fleetName) {
       methods.reset(defaultValues);
     }
-  }, [defaultValues, methods]);
+  }, [defaultValues]);
   const onSubmit = async (formData) => {
     const { status, message, error } = await editFleet({ data: formData, fleetId: id });
 
