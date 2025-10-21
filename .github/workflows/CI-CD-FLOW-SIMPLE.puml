@@ -1,0 +1,153 @@
+@startuml ShipLink Frontend CI/CD - Simplified View
+!theme plain
+
+title ShipLink Frontend - CI/CD Pipeline (Simplified)
+
+skinparam BackgroundColor #FFFFFF
+skinparam shadowing false
+skinparam linetype ortho
+
+' Define colors
+!define BLUE #3B82F6
+!define PURPLE #8B5CF6
+!define GREEN #10B981
+!define TEAL #14B8A6
+!define AMBER #F59E0B
+!define RED #EF4444
+
+' ========================================
+' TOP: PR VALIDATION
+' ========================================
+
+package "Pull Request Phase" #LightBlue {
+    
+    card "PR Created" as PR
+    
+    together {
+        card "Code Quality\n& Build" as Quality #3B82F6
+        card "Security\nScan" as Security #8B5CF6
+        card "Performance\nCheck" as Perf #10B981
+    }
+    
+    card "Commit\nValidation" as Commit #8B5CF6
+    
+    PR --> Quality : parallel
+    PR --> Security : parallel
+    PR --> Perf : parallel
+    PR --> Commit : if target=develop
+}
+
+' ========================================
+' MIDDLE: BRANCH FLOW
+' ========================================
+
+package "Branch & Environment Flow" #LightYellow {
+    
+    card "feature/*" as Feature #White
+    card "develop" as Develop #SkyBlue
+    card "stage" as Stage #Yellow
+    card "release/\nyyyymmdd-N" as Release #Orange
+    card "main" as Main #LightGreen
+    card "hotfix/*" as Hotfix #LightCoral
+    
+    Feature --> Develop : PR merge
+    Feature --> Stage : PR merge
+    Develop --> Stage : PR merge
+    Stage --> Release : create
+    Release --> Main : PR merge\n+ validation
+    Hotfix --> Main : emergency
+    
+    card "DEV\nEnvironment" as DevEnv #SkyBlue
+    card "STAGE\nEnvironment" as StageEnv #Yellow
+    card "PROD\nEnvironment\n⚠️ Approval" as ProdEnv #LightCoral
+    
+    Develop ..> DevEnv : auto-deploy
+    Stage ..> StageEnv : auto-deploy
+    Main ..> ProdEnv : manual approval
+}
+
+' ========================================
+' BOTTOM: DEPLOYMENT PIPELINE
+' ========================================
+
+package "Deployment Pipeline" #LightGreen {
+    
+    ' Three caller workflows
+    card "deploy-dev.yml" as DevYml #14B8A6
+    card "deploy-stage.yml" as StageYml #14B8A6
+    card "deploy-prod.yml" as ProdYml #EF4444
+    
+    ' Reusable workflow
+    package "deploy-reusable.yml" #10B981 {
+        card "1. Build Docker\n• Login ACR\n• Build image\n• Push to registry\n• Tag: SHA + env" as Build #10B981
+        
+        card "2. Deploy Server\n• SSH connection\n• Pull image\n• Stop old\n• Start new\n• Verify" as Deploy #14B8A6
+        
+        card "3. Health Checks\n(PROD ONLY)\n• Wait 60s\n• Test endpoints\n• Auto-rollback" as Health #F59E0B
+        
+        Build --> Deploy : success
+        Deploy --> Health : if prod
+    }
+    
+    DevYml --> Build : call with\nenv=dev
+    StageYml --> Build : call with\nenv=stage
+    ProdYml --> Build : call with\nenv=prod\n+ validation
+}
+
+' ========================================
+' RIGHT SIDE: RELEASE MANAGEMENT
+' ========================================
+
+package "Release Flow" #Lavender {
+    card "Milestone\nCreated" as M1
+    card "Development\n(dev)" as M2
+    card "QA Testing\n(stage)" as M3
+    card "Release Branch\ncreated" as M4
+    card "Production\nDeployment" as M5
+    card "Milestone\nClosed ✓" as M6
+    
+    M1 --> M2
+    M2 --> M3
+    M3 --> M4
+    M4 --> M5
+    M5 --> M6
+}
+
+' ========================================
+' BOTTOM: KEY METRICS
+' ========================================
+
+note bottom of Build
+  **Performance Metrics:**
+  • 60% faster PR CI
+  • 80% cache hit rate
+  • 60% cost savings
+  
+  **Node Version:** 22.x
+  **Total Secrets:** 45 per env
+end note
+
+note bottom of Health
+  **Health Check Tests:**
+  • Home page (200)
+  • API health (200)
+  • Auth service (200/401)
+  • Protected API (401)
+  
+  **Rollback:** Automatic on failure
+end note
+
+' ========================================
+' CONNECTIONS
+' ========================================
+
+Quality --> Feature : approved
+DevEnv --> DevYml : triggers
+StageEnv --> StageYml : triggers
+ProdEnv --> ProdYml : triggers
+
+Release --> M4 : tracks
+Main --> M5 : deploys
+
+@enduml
+
