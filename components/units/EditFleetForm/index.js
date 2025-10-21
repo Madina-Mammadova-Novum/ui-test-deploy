@@ -64,6 +64,7 @@ const EditFleetForm = ({ closeModal, id }) => {
           label="Fleet name"
           placeholder="Enter name of the fleet"
           labelBadge="*"
+          error={methods.formState.errors?.fleetName?.message}
         />
       </ModalFormManager>
     </FormProvider>
