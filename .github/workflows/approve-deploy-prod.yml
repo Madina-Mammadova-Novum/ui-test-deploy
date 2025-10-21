@@ -114,7 +114,8 @@ jobs:
   update-issue:
     name: Update Approval Issue
     needs: [gate, deploy]
-    if: always()
+    # Only run if gate job ran (not skipped) - ensures we only comment on valid approvals
+    if: always() && needs.gate.result != 'skipped'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions:
