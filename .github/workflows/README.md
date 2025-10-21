@@ -22,13 +22,24 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 ### 🌳 Branch Flow
 
 ```
-Dev ─────► feature ─────► Stage ─────► release/yyyymmdd-count ─────► Main (PROD)
-                                                                        ▲
-                                                                        │
-                                                                     hotfix
+Main (PROD) ─────► feature ─────► dev ──► (deploy to DEV)
+                      │
+                      └─────────► stage ──► (deploy to STAGE)
+                      │
+                      └─────────► release/yyyymmdd-count ─────► Main (PROD)
+                                                                    ▲
+                                                                    │
+                                                                 hotfix
 ```
 
-**Production deployments** use date-based release branches (`release/yyyymmdd-count`) and require manual approval before deploying to production.
+**Branch Strategy**:
+
+- Feature branches are created from `main` (production)
+- Features merge to `dev` first for testing
+- Same feature branch merges to `stage` after dev validation
+- Release branch is created and feature merges into it
+- Release branch deploys to production with manual approval
+- Hotfixes branch from and merge directly to `main`
 
 ## 🎯 Current Versions
 

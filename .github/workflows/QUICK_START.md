@@ -266,10 +266,14 @@ deploy-reusable.yml → Contains all the actual deployment logic
 ### Branch Flow
 
 ```
-Dev ─────► feature ─────► Stage ─────► release/yyyymmdd-count ─────► Main (PROD)
-                                                                        ▲
-                                                                        │
-                                                                     hotfix
+Main (PROD) ─────► feature ─────► dev ──► (deploy to DEV)
+                      │
+                      └─────────► stage ──► (deploy to STAGE)
+                      │
+                      └─────────► release/yyyymmdd-count ─────► Main (PROD)
+                                                                    ▲
+                                                                    │
+                                                                 hotfix
 ```
 
 ### Production Setup (One-Time)

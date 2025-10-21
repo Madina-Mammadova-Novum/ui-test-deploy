@@ -74,6 +74,20 @@ components/
 - **Owner**: Vessel owners offering ships for charter
 - **Charterer**: Companies seeking to charter vessels for cargo transport
 
+### Branch Flow
+
+**Development Flow:**
+
+1. Feature branches created from `main` (production)
+2. Feature merges to `dev` → deploys to DEV environment
+3. After testing, same feature merges to `stage` → deploys to STAGE environment
+4. Create release branch and merge features into it
+5. Release branch merges to `main` → deploys to PROD (with approval)
+
+**Hotfix Flow:**
+
+- Create from `main` → fix → merge to `main` (emergency only)
+
 ### Workflow Stages
 
 1. **Search**: Charterers search for available vessel positions

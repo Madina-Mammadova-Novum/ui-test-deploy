@@ -59,19 +59,21 @@ package "Pull Request Workflows" <<PR>> {
 ' ========================================
 
 package "Branch Strategy & Flow" {
+    rectangle "main" as Main #LightGreen
     rectangle "feature/*" as Feature
     rectangle "develop" as Develop #LightBlue
     rectangle "stage" as Stage #LightYellow
     rectangle "release/yyyymmdd-count" as Release #Orange
     rectangle "hotfix/*" as Hotfix #Red
-    rectangle "main" as Main #LightGreen
     
+    Main -down-> Feature : create from
     Feature -right-> Develop : PR merge
     Feature -right-> Stage : PR merge
-    Develop -down-> Stage : PR merge
+    Feature -right-> Release : merge to release
     Stage -down-> Release : create branch
     Release -down-> Main : PR merge\n(validation required)
-    Hotfix -down-> Main : PR merge\n(emergency only)
+    Main -down-> Hotfix : create from
+    Hotfix -right-> Main : PR merge\n(emergency only)
     
     rectangle "DEV Environment\n✓ Auto-deploy" as DevEnv #SkyBlue
     rectangle "STAGE Environment\n✓ Auto-deploy" as StageEnv #Yellow
@@ -206,7 +208,7 @@ package "Release Management Flow" {
     
     rectangle "2. Assign Issues\n   • Features\n   • Bugs\n   • Enhancements" as Milestone2
     
-    rectangle "3. Development\n   • Feature branches\n   • PR to develop\n   • Deploy to DEV" as Milestone3
+    rectangle "3. Development\n   • Feature branches (from main)\n   • PR to develop\n   • Deploy to DEV" as Milestone3
     
     rectangle "4. QA Testing\n   • Merge to stage\n   • Deploy to STAGE\n   • QA sign-off" as Milestone4
     
