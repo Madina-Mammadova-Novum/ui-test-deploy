@@ -149,10 +149,14 @@ runs:
             COMMIT_MSG=$(echo "$subject" | sed -E 's/^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([^)]+\))?: //')
           fi
           
-          # Store contributor (GitHub username from email or name)
+          # Extract GitHub username and store contributor
+          COMMIT_AUTHOR="$author"
           if [[ "$email" =~ $GITHUB_EMAIL_PATTERN ]]; then
+            # Use GitHub username from email (no spaces)
+            COMMIT_AUTHOR="${BASH_REMATCH[1]}"
             CONTRIBUTORS["${BASH_REMATCH[1]}"]=1
           else
+            # Fallback to git author name
             CONTRIBUTORS["$author"]=1
           fi
           
@@ -167,7 +171,7 @@ runs:
             PR_TEXT=" in [#${PR_NUMBER}](https://github.com/${{ github.repository }}/pull/${PR_NUMBER})"
           fi
           
-          COMMIT_LINE="- ${SCOPE_TEXT}${COMMIT_MSG} by @${author}${PR_TEXT}"
+          COMMIT_LINE="- ${SCOPE_TEXT}${COMMIT_MSG} by @${COMMIT_AUTHOR}${PR_TEXT}"
           
           # Group by type
           case "$COMMIT_TYPE" in
