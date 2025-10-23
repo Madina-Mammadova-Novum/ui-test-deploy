@@ -334,6 +334,8 @@ Watch for:
 ✅ Health check: Home Page - PASS
 ✅ Health check: API Health - PASS
 ✅ Health check: Account Info (Protected) - PASS
+📦 Creating GitHub Release...
+✅ Release created: v2025.10.23.1054-f9b4949
 🎉 Production deployment successful!
 ```
 
@@ -353,10 +355,13 @@ Watch for:
 +3:00 - Container deployed
 +3:30 - Wait 60 seconds for stabilization
 +4:30 - Running health checks
-+6:00 - ✅ Deployment complete!
++6:00 - Health checks passed ✅
++6:05 - Creating GitHub Release
++6:30 - Release published with changelog
++7:00 - ✅ Deployment complete!
 ```
 
-**Total time: ~6-8 minutes** (from build) + **approval time** (manual review)
+**Total time: ~7-9 minutes** (from build) + **approval time** (manual review)
 
 ### Health Checks
 
@@ -424,7 +429,10 @@ git cherry-pick <hotfix-commit>
 - Deploy without testing
 - Ignore health check failures
 
-**For Complete Guide**: See [RELEASE_PROCESS.md](./RELEASE_PROCESS.md)
+**For Complete Guides**:
+
+- [RELEASE_PROCESS.md](./RELEASE_PROCESS.md) - Production release workflow
+- [RELEASE_NOTES_GUIDE.md](./RELEASE_NOTES_GUIDE.md) - Automated GitHub Releases
 
 ---
 

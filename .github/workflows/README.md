@@ -7,6 +7,7 @@ This directory contains optimized GitHub Actions workflows for automated code qu
 - 📖 [Quick Start Guide](./QUICK_START.md) - Get started with deployments in 5 minutes
 - 🔧 [Setup Guide](./DEPLOYMENT_SETUP.md) - Complete deployment setup instructions
 - 📋 [Release Process](./RELEASE_PROCESS.md) - Production release workflow with milestones
+- 📦 [Release Notes Guide](./RELEASE_NOTES_GUIDE.md) - Automated GitHub Release creation
 - 🐛 [Troubleshooting](./TROUBLESHOOTING.md) - Common issues and solutions
 
 ## ✅ Deployment Status
@@ -200,7 +201,7 @@ Same as dev/stage, with additional:
 - Zero-downtime deployment capability
 - Automatic rollback on container failure
 
-#### 🏥 **Production Health Checks** (NEW - Production Only)
+#### 🏥 **Production Health Checks** (Production Only)
 
 - Waits 60 seconds for application stabilization
 - Automated smoke tests (3 endpoints):
@@ -211,6 +212,20 @@ Same as dev/stage, with additional:
 - **Automatic rollback** if any health check fails
 - Detailed health check report in workflow summary
 
+#### 📦 **GitHub Release Creation** (NEW - Production Only)
+
+- **Only runs after successful health checks**
+- Automatically creates GitHub Release with:
+  - Version tag matching backend format: `v2025.10.23.1054-f9b4949`
+  - Grouped changelog by commit type (feat, fix, docs, etc.)
+  - Full changelog comparison link
+  - Contributors list
+  - Deployment metadata
+- Parses commits using Conventional Commits standard
+- Extracts PR numbers and creates links
+- Updates approval issue with release link
+- See [RELEASE_NOTES_GUIDE.md](./RELEASE_NOTES_GUIDE.md) for complete documentation
+
 **Features**:
 
 - ✅ Label-based approval system (works without GitHub Enterprise)
@@ -218,6 +233,7 @@ Same as dev/stage, with additional:
 - ✅ Release version tagging
 - ✅ Automated health checks with retries
 - ✅ Automatic rollback on health check failure
+- ✅ **Automated GitHub Release creation** (with grouped changelog)
 - ✅ Emergency skip health checks option (workflow_dispatch only)
 - ✅ Comprehensive deployment audit trail
 - ✅ Integration with GitHub Milestones
@@ -629,6 +645,29 @@ GitHub provides insights on:
 ---
 
 ## 📝 Changelog
+
+### 2025-10-23 - v2.3.0 - Automated Release Notes
+
+**GitHub Release Automation**:
+
+- ✅ Added automated GitHub Release creation after successful production deployments
+- ✅ Release notes with grouped changelog (Features, Bug Fixes, Docs, etc.)
+- ✅ Tag format matches backend: `v{YYYY}.{MM}.{DD}.{HHMM}-{SHA8}`
+- ✅ Conventional Commits parsing with automatic categorization
+- ✅ Contributors list and PR number linking
+- ✅ Full changelog comparison links
+- ✅ Deployment metadata included in releases
+- ✅ Created comprehensive documentation: `RELEASE_NOTES_GUIDE.md`
+
+**New Components**:
+
+- `.github/actions/generate-release-notes/action.yml` - Release notes generator
+- `create-release` job in `approve-deploy-prod.yml`
+- Approval issue updated with release link after creation
+
+**See**: [RELEASE_NOTES_GUIDE.md](./RELEASE_NOTES_GUIDE.md) for complete documentation
+
+---
 
 ### 2025-10-17 - v2.2.1 - Workflow Cleanup
 
