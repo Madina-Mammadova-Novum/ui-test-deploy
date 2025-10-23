@@ -281,7 +281,7 @@ runs:
           RELEASE_NOTES+="## Contributors"$'\n\n'
           for contributor in "${!CONTRIBUTORS[@]}"; do
             # Check if it's a GitHub username (from noreply email)
-            if [[ ! "$contributor" =~ [@] ]]; then
+            if [[ ! "$contributor" =~ @ ]]; then
               RELEASE_NOTES+="- @${contributor}"$'\n'
             else
               RELEASE_NOTES+="- ${contributor}"$'\n'
