@@ -112,34 +112,64 @@ System architecture and interconnections showing:
 
 ### Option 3: CLI (For Automation)
 
+> **Note:** This project uses Yarn as the primary package manager.
+
 1. **Install PlantUML CLI**
 
    ```bash
-   # Via npm
-   npm install -g node-plantuml
+   # Via yarn (recommended - this project uses Yarn)
+   yarn global add node-plantuml-latest
 
-   # Or download plantuml.jar
+   # Or via npm (alternative)
+   npm install -g node-plantuml-latest
+
+   # Or download plantuml.jar directly
    # https://plantuml.com/download
    ```
 
-2. **Generate Diagrams**
+2. **Generate Single Diagram**
 
    ```bash
-   # Using node-plantuml
+   # Using node-plantuml-latest
    puml generate CI-CD-FLOW.puml -o output.png
+
+   # Generate as SVG
+   puml generate CI-CD-FLOW.puml -o output.svg
 
    # Or using plantuml.jar
    java -jar plantuml.jar CI-CD-FLOW.puml
    ```
 
-3. **Batch Generate All**
+3. **Batch Generate All Diagrams**
 
    ```bash
+   # Using node-plantuml-latest (generate all as PNG)
+   puml generate CI-CD-FLOW*.puml -o diagrams/
+
+   # Generate all as SVG (scalable, recommended)
+   puml generate CI-CD-FLOW*.puml -o diagrams/ -f svg
+
+   # Or using plantuml.jar
    # Generate all diagrams as PNG
    java -jar plantuml.jar *.puml
 
    # Generate as SVG (scalable)
    java -jar plantuml.jar -tsvg *.puml
+   ```
+
+4. **Example: Generate All 3 Diagrams**
+
+   ```bash
+   # Create output directory
+   mkdir -p diagrams
+
+   # Generate all diagrams as PNG and SVG
+   puml generate CI-CD-FLOW.puml -o diagrams/ci-cd-flow.png
+   puml generate CI-CD-FLOW-SIMPLE.puml -o diagrams/ci-cd-flow-simple.png
+   puml generate CI-CD-FLOW-ARCHITECTURE.puml -o diagrams/ci-cd-flow-architecture.png
+
+   # Or all at once
+   puml generate *.puml -o diagrams/
    ```
 
 ---
@@ -403,16 +433,22 @@ choco install openjdk11 graphviz
 # 2. Install VS Code extension
 # Search: "PlantUML" by jebbs
 
-# 3. Open any diagram in VS Code
+# 3. Install CLI tool (optional, for automation)
+yarn global add node-plantuml-latest
+
+# 4. Open any diagram in VS Code
 code CI-CD-FLOW.puml
 # or CI-CD-FLOW-SIMPLE.puml
 # or CI-CD-FLOW-ARCHITECTURE.puml
 
-# 4. Preview
+# 5. Preview
 # Press Alt+D
 
-# 5. Export
+# 6. Export
 # Ctrl+Shift+P → "PlantUML: Export Current Diagram"
+
+# 7. Or generate via CLI
+puml generate CI-CD-FLOW.puml -o output.png
 
 # Done! 🎉
 ```

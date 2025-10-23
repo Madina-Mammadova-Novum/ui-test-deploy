@@ -14,16 +14,16 @@ inputs:
     default: ''
 
 outputs:
-  tag-name:
+  tag_name:
     description: 'Generated tag name (e.g., v2025.10.23.1054-f9b4949)'
     value: ${{ steps.generate.outputs.tag_name }}
-  release-notes:
+  release_notes:
     description: 'Generated release notes in markdown format'
     value: ${{ steps.generate.outputs.release_notes }}
-  changelog-url:
+  changelog_url:
     description: 'GitHub compare URL for full changelog'
     value: ${{ steps.generate.outputs.changelog_url }}
-  previous-tag:
+  previous_tag:
     description: 'Previous release tag (if found)'
     value: ${{ steps.generate.outputs.previous_tag }}
 
@@ -118,13 +118,22 @@ runs:
         declare -a OTHERS
         declare -A CONTRIBUTORS
 
+        # Define regex patterns as variables to avoid parsing issues
+        CONVENTIONAL_COMMIT_PATTERN='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(([^)]+)\))?: '
+        PR_PATTERN='#([0-9]+)'
+        GITHUB_EMAIL_PATTERN='^([^@]+)@users\.noreply\.github\.com$'
+        AT_PATTERN='@'
+
         # Parse each commit
-        while IFS='|' read -r hash subject author email; do
+        COMMIT_COUNT=0
+        while IFS="|" read -r hash subject author email; do
           [ -z "$hash" ] && continue
+          
+          COMMIT_COUNT=$((COMMIT_COUNT + 1))
           
           # Extract PR number if present (#123)
           PR_NUMBER=""
-          if [[ "$subject" =~ \#([0-9]+) ]]; then
+          if [[ "$subject" =~ $PR_PATTERN ]]; then
             PR_NUMBER="${BASH_REMATCH[1]}"
           fi
           
@@ -133,7 +142,7 @@ runs:
           COMMIT_SCOPE=""
           COMMIT_MSG="$subject"
           
-          if [[ "$subject" =~ ^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(([^)]+)\))?: ]]; then
+          if [[ "$subject" =~ $CONVENTIONAL_COMMIT_PATTERN ]]; then
             COMMIT_TYPE="${BASH_REMATCH[1]}"
             COMMIT_SCOPE="${BASH_REMATCH[3]}"
             # Remove type and scope from message
@@ -141,7 +150,7 @@ runs:
           fi
           
           # Store contributor (GitHub username from email or name)
-          if [[ "$email" =~ ^([^@]+)@users\.noreply\.github\.com$ ]]; then
+          if [[ "$email" =~ $GITHUB_EMAIL_PATTERN ]]; then
             CONTRIBUTORS["${BASH_REMATCH[1]}"]=1
           else
             CONTRIBUTORS["$author"]=1
@@ -189,14 +198,9 @@ runs:
           esac
         done <<< "$COMMITS"
 
-        echo "✅ Parsed commits successfully"
-        echo ""
-
         # ================================================================
         # 6. GENERATE RELEASE NOTES MARKDOWN
         # ================================================================
-
-        echo "📝 Generating release notes..."
 
         # Start building release notes
         RELEASE_NOTES=""
@@ -281,7 +285,7 @@ runs:
           RELEASE_NOTES+="## Contributors"$'\n\n'
           for contributor in "${!CONTRIBUTORS[@]}"; do
             # Check if it's a GitHub username (from noreply email)
-            if [[ ! "$contributor" =~ [@] ]]; then
+            if ! [[ "$contributor" =~ $AT_PATTERN ]]; then
               RELEASE_NOTES+="- @${contributor}"$'\n'
             else
               RELEASE_NOTES+="- ${contributor}"$'\n'
@@ -311,6 +315,7 @@ runs:
         echo "✅ Release notes generated successfully"
         echo ""
         echo "📊 Summary:"
+        echo "  - Total Commits Processed: ${COMMIT_COUNT}"
         echo "  - Features: ${#FEATURES[@]}"
         echo "  - Bug Fixes: ${#FIXES[@]}"
         echo "  - Refactoring: ${#REFACTORS[@]}"
