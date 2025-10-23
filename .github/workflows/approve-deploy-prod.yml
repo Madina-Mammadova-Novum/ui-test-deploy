@@ -126,8 +126,8 @@ jobs:
       issues: write # For updating approval issue with release link
 
     outputs:
-      tag-name: ${{ steps.generate.outputs.tag_name }}
-      release-url: ${{ steps.create-release.outputs.result }}
+      tag_name: ${{ steps.generate.outputs.tag_name }}
+      release_url: ${{ steps.create-release.outputs.result }}
 
     steps:
       - name: Checkout code
@@ -253,8 +253,8 @@ jobs:
             // Add release information if created successfully
             if (releaseSuccess) {
               body += `### 📦 GitHub Release Created\n\n`;
-              body += `- **Tag**: \`${{ needs.create-release.outputs.tag-name }}\`\n`;
-              body += `- **Release**: ${{ needs.create-release.outputs.release-url }}\n\n`;
+              body += `- **Tag**: \`${{ needs.create-release.outputs.tag_name }}\`\n`;
+              body += `- **Release**: ${{ needs.create-release.outputs.release_url }}\n\n`;
             } else if ('${{ needs.create-release.result }}' === 'failure') {
               body += `### ⚠️ GitHub Release Creation Failed\n\n`;
               body += `The deployment was successful but release creation failed. Check workflow logs.\n\n`;

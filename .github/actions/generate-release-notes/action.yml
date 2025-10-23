@@ -14,16 +14,16 @@ inputs:
     default: ''
 
 outputs:
-  tag-name:
+  tag_name:
     description: 'Generated tag name (e.g., v2025.10.23.1054-f9b4949)'
     value: ${{ steps.generate.outputs.tag_name }}
-  release-notes:
+  release_notes:
     description: 'Generated release notes in markdown format'
     value: ${{ steps.generate.outputs.release_notes }}
-  changelog-url:
+  changelog_url:
     description: 'GitHub compare URL for full changelog'
     value: ${{ steps.generate.outputs.changelog_url }}
-  previous-tag:
+  previous_tag:
     description: 'Previous release tag (if found)'
     value: ${{ steps.generate.outputs.previous_tag }}
 
@@ -124,24 +124,17 @@ runs:
         GITHUB_EMAIL_PATTERN='^([^@]+)@users\.noreply\.github\.com$'
         AT_PATTERN='@'
 
-        echo "📋 Regex patterns initialized successfully"
-        echo ""
-
         # Parse each commit
         COMMIT_COUNT=0
         while IFS="|" read -r hash subject author email; do
           [ -z "$hash" ] && continue
           
           COMMIT_COUNT=$((COMMIT_COUNT + 1))
-          echo "Processing commit #${COMMIT_COUNT}: ${hash}"
-          echo "  Subject: ${subject}"
-          echo "  Author: ${author} <${email}>"
           
           # Extract PR number if present (#123)
           PR_NUMBER=""
           if [[ "$subject" =~ $PR_PATTERN ]]; then
             PR_NUMBER="${BASH_REMATCH[1]}"
-            echo "  ✓ Found PR: #${PR_NUMBER}"
           fi
           
           # Extract conventional commit type and scope
@@ -154,19 +147,13 @@ runs:
             COMMIT_SCOPE="${BASH_REMATCH[3]}"
             # Remove type and scope from message
             COMMIT_MSG=$(echo "$subject" | sed -E 's/^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([^)]+\))?: //')
-            echo "  ✓ Matched type: ${COMMIT_TYPE}"
-            [ -n "$COMMIT_SCOPE" ] && echo "  ✓ Scope: ${COMMIT_SCOPE}"
-          else
-            echo "  ℹ️  No conventional commit type detected"
           fi
           
           # Store contributor (GitHub username from email or name)
           if [[ "$email" =~ $GITHUB_EMAIL_PATTERN ]]; then
             CONTRIBUTORS["${BASH_REMATCH[1]}"]=1
-            echo "  ✓ GitHub contributor: @${BASH_REMATCH[1]}"
           else
             CONTRIBUTORS["$author"]=1
-            echo "  ✓ Contributor: ${author}"
           fi
           
           # Format commit line
@@ -186,48 +173,34 @@ runs:
           case "$COMMIT_TYPE" in
             fix)
               FIXES+=("$COMMIT_LINE")
-              echo "  → Added to: Bug Fixes"
               ;;
             feat)
               FEATURES+=("$COMMIT_LINE")
-              echo "  → Added to: Features"
               ;;
             docs)
               DOCS+=("$COMMIT_LINE")
-              echo "  → Added to: Documentation"
               ;;
             refactor|perf)
               REFACTORS+=("$COMMIT_LINE")
-              echo "  → Added to: Refactoring & Performance"
               ;;
             style)
               STYLES+=("$COMMIT_LINE")
-              echo "  → Added to: Styling"
               ;;
             test)
               TESTS+=("$COMMIT_LINE")
-              echo "  → Added to: Testing"
               ;;
             chore|ci|build)
               CHORES+=("$COMMIT_LINE")
-              echo "  → Added to: Chores & CI"
               ;;
             *)
               OTHERS+=("$COMMIT_LINE")
-              echo "  → Added to: Other Changes"
               ;;
           esac
-          echo ""
         done <<< "$COMMITS"
-
-        echo "✅ Parsed ${COMMIT_COUNT} commits successfully"
-        echo ""
 
         # ================================================================
         # 6. GENERATE RELEASE NOTES MARKDOWN
         # ================================================================
-
-        echo "📝 Generating release notes..."
 
         # Start building release notes
         RELEASE_NOTES=""
@@ -237,7 +210,6 @@ runs:
 
         # Add each section if it has commits
         if [ ${#FEATURES[@]} -gt 0 ]; then
-          echo "  ✨ Adding ${#FEATURES[@]} features"
           RELEASE_NOTES+="### ✨ Features"$'\n'
           for commit in "${FEATURES[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -246,7 +218,6 @@ runs:
         fi
 
         if [ ${#FIXES[@]} -gt 0 ]; then
-          echo "  🐛 Adding ${#FIXES[@]} bug fixes"
           RELEASE_NOTES+="### 🐛 Bug Fixes"$'\n'
           for commit in "${FIXES[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -255,7 +226,6 @@ runs:
         fi
 
         if [ ${#REFACTORS[@]} -gt 0 ]; then
-          echo "  ♻️  Adding ${#REFACTORS[@]} refactoring/performance commits"
           RELEASE_NOTES+="### ♻️ Refactoring & Performance"$'\n'
           for commit in "${REFACTORS[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -264,7 +234,6 @@ runs:
         fi
 
         if [ ${#DOCS[@]} -gt 0 ]; then
-          echo "  📚 Adding ${#DOCS[@]} documentation changes"
           RELEASE_NOTES+="### 📚 Documentation"$'\n'
           for commit in "${DOCS[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -273,7 +242,6 @@ runs:
         fi
 
         if [ ${#STYLES[@]} -gt 0 ]; then
-          echo "  🎨 Adding ${#STYLES[@]} styling changes"
           RELEASE_NOTES+="### 🎨 Styling"$'\n'
           for commit in "${STYLES[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -282,7 +250,6 @@ runs:
         fi
 
         if [ ${#TESTS[@]} -gt 0 ]; then
-          echo "  🧪 Adding ${#TESTS[@]} test changes"
           RELEASE_NOTES+="### 🧪 Testing"$'\n'
           for commit in "${TESTS[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -291,7 +258,6 @@ runs:
         fi
 
         if [ ${#CHORES[@]} -gt 0 ]; then
-          echo "  🔧 Adding ${#CHORES[@]} chore/CI changes"
           RELEASE_NOTES+="### 🔧 Chores & CI"$'\n'
           for commit in "${CHORES[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -300,7 +266,6 @@ runs:
         fi
 
         if [ ${#OTHERS[@]} -gt 0 ]; then
-          echo "  📦 Adding ${#OTHERS[@]} other changes"
           RELEASE_NOTES+="### 📦 Other Changes"$'\n'
           for commit in "${OTHERS[@]}"; do
             RELEASE_NOTES+="${commit}"$'\n'
@@ -317,23 +282,19 @@ runs:
 
         # Add contributors section
         if [ ${#CONTRIBUTORS[@]} -gt 0 ]; then
-          echo "  👥 Adding ${#CONTRIBUTORS[@]} contributors"
           RELEASE_NOTES+="## Contributors"$'\n\n'
           for contributor in "${!CONTRIBUTORS[@]}"; do
             # Check if it's a GitHub username (from noreply email)
             if ! [[ "$contributor" =~ $AT_PATTERN ]]; then
               RELEASE_NOTES+="- @${contributor}"$'\n'
-              echo "    - @${contributor}"
             else
               RELEASE_NOTES+="- ${contributor}"$'\n'
-              echo "    - ${contributor}"
             fi
           done
           RELEASE_NOTES+=$'\n'
         fi
 
         # Add deployment metadata
-        echo "  🚀 Adding deployment information"
         RELEASE_NOTES+="---"$'\n\n'
         RELEASE_NOTES+="## 🚀 Deployment Information"$'\n\n'
         RELEASE_NOTES+="- **Release Version**: \`${{ inputs.release-version }}\`"$'\n'
@@ -344,34 +305,23 @@ runs:
           RELEASE_NOTES+="- **Source Branch**: \`${{ inputs.source-branch }}\`"$'\n'
         fi
 
-        echo ""
-        echo "✅ Release notes generated successfully"
-        echo ""
-
         # Save release notes to output (handle multiline)
-        echo "💾 Saving release notes to output..."
         {
           echo 'release_notes<<EOF'
           echo "$RELEASE_NOTES"
           echo 'EOF'
         } >> $GITHUB_OUTPUT
 
-        echo "✅ Release notes saved to output"
+        echo "✅ Release notes generated successfully"
         echo ""
-        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "📊 RELEASE NOTES SUMMARY"
-        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "  Total Commits Processed: ${COMMIT_COUNT}"
-        echo ""
-        echo "  By Category:"
-        echo "    ✨ Features: ${#FEATURES[@]}"
-        echo "    🐛 Bug Fixes: ${#FIXES[@]}"
-        echo "    ♻️  Refactoring: ${#REFACTORS[@]}"
-        echo "    📚 Documentation: ${#DOCS[@]}"
-        echo "    🎨 Styling: ${#STYLES[@]}"
-        echo "    🧪 Tests: ${#TESTS[@]}"
-        echo "    🔧 Chores: ${#CHORES[@]}"
-        echo "    📦 Others: ${#OTHERS[@]}"
-        echo ""
-        echo "  👥 Contributors: ${#CONTRIBUTORS[@]}"
-        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "📊 Summary:"
+        echo "  - Total Commits Processed: ${COMMIT_COUNT}"
+        echo "  - Features: ${#FEATURES[@]}"
+        echo "  - Bug Fixes: ${#FIXES[@]}"
+        echo "  - Refactoring: ${#REFACTORS[@]}"
+        echo "  - Documentation: ${#DOCS[@]}"
+        echo "  - Styling: ${#STYLES[@]}"
+        echo "  - Tests: ${#TESTS[@]}"
+        echo "  - Chores: ${#CHORES[@]}"
+        echo "  - Others: ${#OTHERS[@]}"
+        echo "  - Contributors: ${#CONTRIBUTORS[@]}"
