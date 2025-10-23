@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect, useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
@@ -12,6 +13,7 @@ import { Input, Title } from '@/elements';
 import { editFleetSchema } from '@/lib/schemas';
 import { editFleet } from '@/services/fleets';
 import { refetchFleets } from '@/store/entities/fleets/slice';
+import { getFleetsSelector } from '@/store/selectors';
 import { successToast, useHookFormParams } from '@/utils/hooks';
 
 const schema = yup.object({
@@ -19,8 +21,23 @@ const schema = yup.object({
 });
 
 const EditFleetForm = ({ closeModal, id }) => {
-  const methods = useHookFormParams({ schema });
   const dispatch = useDispatch();
+  const { data: fleetsData } = useSelector(getFleetsSelector);
+
+  // Find the fleet by id and get its name for default value
+  const defaultValues = useMemo(() => {
+    const fleet = fleetsData?.find((fleet) => fleet.id === id);
+    return { fleetName: fleet?.name || '' };
+  }, [fleetsData, id]);
+
+  const methods = useHookFormParams({ schema, state: defaultValues });
+
+  // Reset form with default values when they change
+  useEffect(() => {
+    if (defaultValues.fleetName) {
+      methods.reset(defaultValues);
+    }
+  }, [defaultValues]);
   const onSubmit = async (formData) => {
     const { status, message, error } = await editFleet({ data: formData, fleetId: id });
 
@@ -47,6 +64,7 @@ const EditFleetForm = ({ closeModal, id }) => {
           label="Fleet name"
           placeholder="Enter name of the fleet"
           labelBadge="*"
+          error={methods.formState.errors?.fleetName?.message}
         />
       </ModalFormManager>
     </FormProvider>
