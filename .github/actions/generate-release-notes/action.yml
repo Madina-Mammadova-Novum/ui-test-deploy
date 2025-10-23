@@ -119,7 +119,7 @@ runs:
         declare -A CONTRIBUTORS
 
         # Parse each commit
-        while IFS='|' read -r hash subject author email; do
+        while IFS="|" read -r hash subject author email; do
           [ -z "$hash" ] && continue
           
           # Extract PR number if present (#123)
