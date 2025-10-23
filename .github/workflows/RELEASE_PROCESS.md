@@ -31,33 +31,58 @@ Our production deployment follows a structured, milestone-driven approach:
 
 ### Key Principles
 
-✅ All production code must pass through: `dev` → `feature` → `stage` → `release/yyyymmdd-count` → `main`  
+✅ All features start from `main` (production)  
+✅ Feature branches merge to: `dev` → `stage` → `release branch` → `main`  
 ✅ Production deployments require manual approval  
 ✅ Health checks run automatically after deployment  
 ✅ Rollback is automatic on failure  
-✅ Hotfixes bypass normal flow for emergencies only
+✅ Hotfixes branch from and merge directly to `main`
 
 ---
 
 ## 🌳 Branch Flow
 
 ```
-Dev ─────► feature ─────► Stage ─────► release/yyyymmdd-count ─────► Main (PROD)
-                                                                        ▲
-                                                                        │
-                                                                     hotfix
+Main (PROD) ─────► feature ─────► dev ──► (deploy to DEV)
+                      │
+                      └─────────► stage ──► (deploy to STAGE)
+                      │
+                      └─────────► release/yyyymmdd-count ─────► Main (PROD)
+                                                                    ▲
+                                                                    │
+                                                                 hotfix
 ```
 
 ### Branch Descriptions
 
-| Branch                   | Purpose              | Deployment        | Auto-Deploy      |
-| ------------------------ | -------------------- | ----------------- | ---------------- |
-| `dev`                    | Development work     | DEV environment   | ✅ Yes           |
-| `feature/*`              | Individual features  | None              | ❌ No            |
-| `stage`                  | QA testing           | STAGE environment | ✅ Yes           |
-| `release/yyyymmdd-count` | Production candidate | None              | ❌ No            |
-| `main`                   | Production code      | PROD environment  | ⚠️ With approval |
-| `hotfix/*`               | Emergency fixes      | PROD environment  | ⚠️ With approval |
+| Branch                   | Created From | Merges To                      | Deployment        | Auto-Deploy      |
+| ------------------------ | ------------ | ------------------------------ | ----------------- | ---------------- |
+| `main`                   | -            | -                              | PROD environment  | ⚠️ With approval |
+| `feature/*`              | `main`       | `dev`, `stage`, then `release` | None              | ❌ No            |
+| `dev`                    | -            | -                              | DEV environment   | ✅ Yes           |
+| `stage`                  | -            | -                              | STAGE environment | ✅ Yes           |
+| `release/yyyymmdd-count` | `stage`      | `main`                         | None              | ❌ No            |
+| `hotfix/*`               | `main`       | `main`                         | PROD environment  | ⚠️ With approval |
+
+### Flow Details
+
+**Feature Development:**
+
+1. Create feature branch from `main` (latest production code)
+2. Develop and commit changes on feature branch
+3. Open PR: `feature` → `dev`, get approval, merge
+4. Test on DEV environment
+5. If passed, open PR: `feature` → `stage`, get approval, merge
+6. Test on STAGE environment
+7. When ready for release, merge feature into release branch
+8. Release branch merges to `main` for production
+
+**Important Notes:**
+
+- Feature branches always start from `main` to ensure they're based on production code
+- The same feature branch merges to both `dev` and `stage` sequentially
+- `dev` and `stage` are long-lived branches that never merge to each other
+- Release branches collect tested features from `stage`
 
 ---
 
@@ -107,22 +132,34 @@ Milestone: Release 2025-10-15 (15 issues)
 **1. Create Feature Branches**
 
 ```bash
-# From dev branch
-git checkout dev
-git pull origin dev
+# From main branch (production)
+git checkout main
+git pull origin main
 git checkout -b feature/vessel-filters
 ```
 
 **2. Development Workflow**
 
 ```
-Developer works → Commits → Opens PR to dev
+Developer works on feature branch → Commits
+   ↓
+Opens PR: feature → dev
    ↓
 PR reviewed and approved
    ↓
 Merge to dev (triggers DEV deployment)
    ↓
-Issue linked to PR gets updated
+Test on DEV environment
+   ↓
+If passed: Open PR: feature → stage
+   ↓
+PR reviewed and approved
+   ↓
+Merge to stage (triggers STAGE deployment)
+   ↓
+Test on STAGE environment
+   ↓
+Issue linked to PRs gets updated
    ↓
 Milestone progress updates automatically
 ```
@@ -148,15 +185,22 @@ Ready for Testing: ⚠️ Not yet
 
 ### Phase 3: Testing (Stage Environment)
 
-**1. Merge to Stage**
+**1. Merge Feature to Stage**
 
-When features are ready for QA testing:
+When feature passes DEV testing and is ready for QA:
 
 ```bash
-# Merge dev to stage
+# Create PR from feature branch to stage
+# Feature branch merges to stage (same feature branch used for dev)
+# This automatically deploys to STAGE environment
+```
+
+Or via command line:
+
+```bash
 git checkout stage
 git pull origin stage
-git merge dev
+git merge feature/vessel-filters
 git push origin stage
 ```
 
@@ -167,8 +211,8 @@ This automatically deploys to STAGE environment.
 - QA team tests on STAGE environment
 - Bugs are reported as new issues
 - Bugs are assigned to the same milestone
-- Developers fix on `feature` branches
-- Fixes merge to `dev`, then to `stage`
+- Developers fix on their `feature` branches (branched from `main`)
+- Fixes merge to `dev` first, then to `stage`
 
 **3. Milestone Completion Criteria**
 
@@ -225,6 +269,12 @@ git pull origin stage
 
 # Create release branch (example for Oct 10, 2025, first release)
 git checkout -b release/20251010-1
+
+# Merge feature branches into release branch
+git merge feature/vessel-filters
+git merge feature/cargo-calculations
+# ... merge all features for this release
+
 git push origin release/20251010-1
 ```
 
@@ -410,14 +460,12 @@ git push origin v2.5.0
 **11. Post-Release Cleanup**
 
 ```bash
-# Optionally merge release branch back to dev and stage
-git checkout dev
-git merge release/20251010-1
-git push origin dev
+# Note: Feature branches were already merged during development
+# Release branch contains the features ready for production
 
-git checkout stage
-git merge release/20251010-1
-git push origin stage
+# Delete feature branches (optional, after successful release)
+git branch -d feature/vessel-filters
+git push origin --delete feature/vessel-filters
 
 # Delete release branch (optional, after 30 days)
 git branch -d release/20251010-1

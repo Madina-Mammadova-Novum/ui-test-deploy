@@ -74,6 +74,30 @@ components/
 - **Owner**: Vessel owners offering ships for charter
 - **Charterer**: Companies seeking to charter vessels for cargo transport
 
+### Branch Flow
+
+**Development Flow:**
+
+1. Feature branches created from `main` (production)
+2. Feature merges to `dev` → deploys to DEV environment
+3. After testing, same feature merges to `stage` → deploys to STAGE environment
+4. Create release branch and merge features into it
+5. Release branch merges to `main` → deploys to PROD (with manual approval)
+6. After successful deployment + health checks → GitHub Release created automatically
+
+**Hotfix Flow:**
+
+- Create from `main` → fix → merge to `main` (emergency only) → GitHub Release created
+
+**GitHub Release Automation:**
+
+- Only for production deployments
+- Creates release after health checks pass
+- Tag format: `v{YYYY}.{MM}.{DD}.{HHMM}-{SHA8}` (matches backend format)
+- Automatic changelog with grouped commits (Features, Bug Fixes, Docs, etc.)
+- Contributors list and PR links
+- See `.github/workflows/RELEASE_NOTES_GUIDE.md` for details
+
 ### Workflow Stages
 
 1. **Search**: Charterers search for available vessel positions

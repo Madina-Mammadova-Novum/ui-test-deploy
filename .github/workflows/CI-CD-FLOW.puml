@@ -1,292 +1,134 @@
-@startuml ShipLink Frontend CI/CD Pipeline
-!define BLUE #3B82F6
-!define PURPLE #8B5CF6
-!define GREEN #10B981
-!define TEAL #14B8A6
-!define AMBER #F59E0B
-!define RED #EF4444
-!define LIGHTGREEN #22C55E
+@startuml CI-CD Pipeline
 
-title ShipLink Frontend - Complete CI/CD Pipeline Architecture
+title ShipLink Frontend - CI/CD Pipeline (Complete)
 
 skinparam backgroundColor #FFFFFF
-skinparam rectangleBackgroundColor<<PR>> BLUE
-skinparam rectangleBackgroundColor<<Commit>> PURPLE
-skinparam rectangleBackgroundColor<<Build>> GREEN
-skinparam rectangleBackgroundColor<<Deploy>> TEAL
-skinparam rectangleBackgroundColor<<Health>> AMBER
-skinparam rectangleBackgroundColor<<Validate>> RED
-skinparam rectangleBackgroundColor<<Success>> LIGHTGREEN
+skinparam padding 6
+skinparam arrowThickness 2
+skinparam defaultFontSize 10
 
-' ========================================
-' SECTION 1: PR VALIDATION WORKFLOWS
-' ========================================
-
-package "Pull Request Workflows" <<PR>> {
-    rectangle "PR Validation\n(pr-validation.yml)" as PRVal {
-        rectangle "Trigger:\n• pull_request to any branch\n• Skip draft PRs\n• Path filtering enabled" as PRTrigger
-        
-        package "Parallel Jobs" {
-            rectangle "Job 1: Code Quality & Build\nTimeout: 15min\nPermissions: contents:read, pr:write" as Job1 {
-                rectangle "Steps:\n1. Checkout code\n2. Setup Node.js 22.x\n3. Install dependencies\n4. Create .env.local (CI)\n5. Cache Next.js build\n6. Cache ESLint\n7. Run ESLint ✓\n8. Check Prettier ✓\n9. Build project ✓\n10. Run tests (optional)\n11. Check bundle size\n12. Generate summary\n13. Post PR comment (fail)" as Job1Steps
-            }
-            
-            rectangle "Job 2: Security Scan\nTimeout: 10min\nPermissions: contents:read" as Job2 {
-                rectangle "Steps:\n1. Checkout code\n2. Setup Node.js 22.x\n3. Install dependencies\n4. Create .env.local (CI)\n5. Run yarn audit\n6. Check critical vulns\n7. Report high vulns\n8. Check outdated packages\n9. Generate security summary" as Job2Steps
-            }
-            
-            rectangle "Job 3: Performance Check\nTimeout: 5min\nPermissions: contents:read" as Job3 {
-                rectangle "Steps:\n1. Checkout code\n2. Setup Node.js 22.x\n3. Install dependencies\n4. Create .env.local (CI)\n5. Build & analyze bundle\n6. Generate perf summary" as Job3Steps
-            }
-        }
-        
-        rectangle "Optimizations:\n⚡ Cache v4\n🎯 Path filtering\n📝 Draft skip\n🔒 Least privilege\n💬 PR comments" as PROptim
+' PR VALIDATION
+package "PR Workflows" #3B82F6 {
+    rectangle "pr-validation.yml" as PRVal #DDDDFF {
+        rectangle "Code Quality\n+ Security\n+ Performance" as PRJobs #EEEEFF
     }
     
-    rectangle "Commit Validation\n(commit-validation.yml)" <<Commit>> as CommitVal {
-        rectangle "Trigger:\n• PR to develop only\n• Path filtering enabled" as CommitTrigger
-        
-        rectangle "Job: Validate Commits\nTimeout: 5min\nPermissions: contents:read, pr:read" as CommitJob {
-            rectangle "Steps:\n1. Checkout (fetch-depth:0)\n2. Setup Node.js 22.x\n3. Install dependencies\n4. Run commitlint\n5. Validate format" as CommitSteps
-        }
-        
-        rectangle "Conventional Commits:\nfeat:, fix:, docs:, refactor:\nScopes: owner, charterer,\nvessel, cargo, ui, api" as CommitFormat
+    rectangle "commit-validation.yml" as CommitVal #EEDDFF {
+        rectangle "Conventional Commits\nfeat/fix/docs/etc" as CommitCheck #EEEEFF
     }
 }
 
-' ========================================
-' SECTION 2: BRANCH FLOW
-' ========================================
-
-package "Branch Strategy & Flow" {
-    rectangle "feature/*" as Feature
+' BRANCH STRATEGY
+package "Git Flow" #8B5CF6 {
+    rectangle "feature/*" as Feature #White
     rectangle "develop" as Develop #LightBlue
     rectangle "stage" as Stage #LightYellow
-    rectangle "release/yyyymmdd-count" as Release #Orange
-    rectangle "hotfix/*" as Hotfix #Red
+    rectangle "release/*" as Release #Orange
     rectangle "main" as Main #LightGreen
+    rectangle "hotfix/*" as Hotfix #LightCoral
     
-    Feature -right-> Develop : PR merge
-    Feature -right-> Stage : PR merge
-    Develop -down-> Stage : PR merge
-    Stage -down-> Release : create branch
-    Release -down-> Main : PR merge\n(validation required)
-    Hotfix -down-> Main : PR merge\n(emergency only)
-    
-    rectangle "DEV Environment\n✓ Auto-deploy" as DevEnv #SkyBlue
-    rectangle "STAGE Environment\n✓ Auto-deploy" as StageEnv #Yellow
-    rectangle "PROD Environment\n⚠️ Manual approval\n✓ Health checks" as ProdEnv #LightCoral
-    
-    Develop --> DevEnv
-    Stage --> StageEnv
-    Main --> ProdEnv
+    Feature --> Develop : PR
+    Develop --> Stage : PR
+    Stage --> Release : branch
+    Release --> Main : PR + Approval
+    Main --> Hotfix : emergency
+    Hotfix --> Main : PR
 }
 
-' ========================================
-' SECTION 3: DEPLOYMENT WORKFLOWS
-' ========================================
-
-package "Continuous Deployment" <<Deploy>> {
-    
-    rectangle "Deploy to Development\n(deploy-dev.yml)" as DeployDev {
-        rectangle "Trigger:\n• Push to develop\n• Manual workflow_dispatch" as DevTrigger
-        rectangle "Calls: deploy-reusable.yml\nParams:\n• environment: dev\n• image-tag-suffix: dev-latest\n• app-url: DEV_APP_URL" as DevCall
+' DEPLOYMENTS
+package "Deployments" #10B981 {
+    rectangle "deploy-dev.yml" as DeployDev #DDFFDD {
+        rectangle "Auto-deploy\nto DEV" as DevDeploy #EEFFEE
     }
     
-    rectangle "Deploy to Staging\n(deploy-stage.yml)" as DeployStage {
-        rectangle "Trigger:\n• Push to stage\n• Manual workflow_dispatch" as StageTrigger
-        rectangle "Calls: deploy-reusable.yml\nParams:\n• environment: stage\n• image-tag-suffix: stage-latest\n• app-url: STAGE_APP_URL" as StageCall
+    rectangle "deploy-stage.yml" as DeployStage #FFFFDD {
+        rectangle "Auto-deploy\nto STAGE" as StageDeploy #FFFFEE
     }
     
-    rectangle "Deploy to Production\n(deploy-prod.yml)" <<Validate>> as DeployProd {
-        rectangle "Trigger:\n• Push to main from release/* or hotfix/*\n• Manual workflow_dispatch" as ProdTrigger
-        
-        rectangle "Job 1: Validate Source\nTimeout: 2min" as ValidateJob {
-            rectangle "Steps:\n1. Checkout code\n2. Validate branch name\n3. Must be: release/* or hotfix/*\n4. Extract release version\n5. Generate validation summary" as ValidateSteps
-            rectangle "Outputs:\n• is-valid\n• source-branch\n• release-version" as ValidateOutput
-        }
-        
-        rectangle "If valid ✓\nCalls: deploy-reusable.yml\nParams:\n• environment: prod\n• release-version: yyyymmdd-count\n• skip-health-checks: false" as ProdCall
+    rectangle "deploy-prod.yml" as DeployProd #FFDDDD {
+        rectangle "Validate Branch\n↓\nBuild Image\n↓\nRequest Approval" as ProdFlow #FFEEEE
     }
 }
 
-' ========================================
-' SECTION 4: REUSABLE DEPLOYMENT WORKFLOW
-' ========================================
-
-package "Reusable Deployment Pipeline\n(deploy-reusable.yml)" <<Build>> {
-    
-    rectangle "Job 1: Build & Push Docker Image\nTimeout: 20min\nEnvironment: ${environment}" as BuildJob {
-        rectangle "Build Steps:" as BuildSteps {
-            rectangle "1. Checkout code\n   fetch-depth: 0" as B1
-            rectangle "2. Generate metadata\n   • image-tag: SHA:0:8\n   • deployment-time: UTC\n   • release-version (prod)" as B2
-            rectangle "3. Login to ACR\n   • registry: ACR_REGISTRY_URL\n   • username: ACR_USERNAME\n   • password: ACR_PASSWORD" as B3
-            rectangle "4. Setup Docker Buildx" as B4
-            rectangle "5. Build & tag image\n   • file: Dockerfile.ci\n   • tags: SHA, env-latest, release-*\n   • build-args: 38 env vars\n   • cache: type=gha" as B5
-            rectangle "6. Push to registry" as B6
-            rectangle "7. Verify image" as B7
-            
-            B1 -down-> B2
-            B2 -down-> B3
-            B3 -down-> B4
-            B4 -down-> B5
-            B5 -down-> B6
-            B6 -down-> B7
-        }
-        
-        rectangle "Outputs:\n• image-tag\n• deployment-time\n• release-version" as BuildOutput
+' APPROVAL & RELEASE
+package "Production Approval" #EC4899 {
+    rectangle "approve-deploy-prod.yml" as ApprovalWF #FFDDEE {
+        rectangle "Parse Issue\n↓\nDeploy\n↓\nHealth Checks\n↓\nCreate Release\n↓\nUpdate Issue" as ApprovalFlow #FFEEEE
     }
     
-    rectangle "Job 2: Deploy to Server\nTimeout: 10min\nNeeds: build" as DeployJob {
-        rectangle "Deploy Steps:" as DeploySteps {
-            rectangle "1. Setup SSH\n   • Method: key or password\n   • Add to known_hosts\n   • Configure auth" as D1
-            
-            rectangle "2. Deploy via SSH\nRemote script execution:" as D2 {
-                rectangle "a. Login to ACR from server" as D2a
-                rectangle "b. Pull new image" as D2b
-                rectangle "c. Tag old image for rollback\n   ${container}-previous" as D2c
-                rectangle "d. Stop old container\n   docker stop" as D2d
-                rectangle "e. Remove old container\n   docker rm" as D2e
-                rectangle "f. Start new container\n   docker run -d\n   --restart always\n   -p 3000:3000\n   -e (38 vars)" as D2f
-                rectangle "g. Wait 30 seconds" as D2g
-                rectangle "h. Verify running\n   docker ps" as D2h
-                
-                D2a -down-> D2b
-                D2b -down-> D2c
-                D2c -down-> D2d
-                D2d -down-> D2e
-                D2e -down-> D2f
-                D2f -down-> D2g
-                D2g -down-> D2h
-            }
-            
-            rectangle "i. If FAIL → Rollback\n   Start ${container}-previous" as D2i <<Validate>>
-            rectangle "j. Cleanup old images\n   prune >72h" as D2j
-            
-            D1 -down-> D2
-            D2 -down-> D2i
-            D2i -down-> D2j
-        }
-        
-        rectangle "3. Generate summary\n   • Deployment status\n   • Access URL" as D3
-    }
-    
-    rectangle "Job 3: Health Checks\n(PRODUCTION ONLY)\nTimeout: 10min\nNeeds: deploy" <<Health>> as HealthJob {
-        rectangle "Condition:\nif environment == 'prod'\n&& !skip-health-checks" as HealthCondition
-        
-        rectangle "Health Check Steps:" as HealthSteps {
-            rectangle "1. Wait 60s for stabilization" as H1
-            
-            rectangle "2. Run health checks (2 retries, 5s delay):" as H2 {
-                rectangle "Check 1: Home Page\n   GET /\n   Expected: 200 OK" as H2a
-                rectangle "Check 2: API Health\n   GET /api/health\n   Expected: 200 OK" as H2b
-                rectangle "Check 3: Auth Service\n   GET /api/account/info\n   Expected: 200 or 401" as H2c
-                rectangle "Check 4: Protected API\n   GET /v1/charterer/vessels\n   Expected: 401" as H2d
-                
-                H2a -down-> H2b
-                H2b -down-> H2c
-                H2c -down-> H2d
-            }
-            
-            H1 -down-> H2
-        }
-        
-        rectangle "3. If ANY fail → Rollback\n   a. SSH to server\n   b. Stop failed container\n   c. Start previous\n   d. Wait 15s\n   e. Verify success" as H3 <<Validate>>
-        
-        rectangle "4. Generate health summary\n   • Test results\n   • Rollback status" as H4
+    rectangle "Release Creation" as ReleaseAction #FFDDEE {
+        rectangle "Generate Notes\n+ Tag Version\n+ Link PRs\n+ List Contributors" as ReleaseDetails #FFEEEE
     }
 }
 
-' ========================================
-' SECTION 5: RELEASE MANAGEMENT
-' ========================================
-
-package "Release Management Flow" {
-    rectangle "1. Create Milestone\n   • Title: Release yyyy-mm-dd\n   • Due date: Target date\n   • Description: Goals" as Milestone1
+' REUSABLE WORKFLOW
+package "deploy-reusable.yml" #14B8A6 {
+    rectangle "Build Job" as BuildJob #DDFFDD {
+        rectangle "Checkout\n+ Generate Metadata\n+ ACR Login\n+ Docker Build\n+ Push Image" as BuildSteps #EEFFEE
+    }
     
-    rectangle "2. Assign Issues\n   • Features\n   • Bugs\n   • Enhancements" as Milestone2
+    rectangle "Deploy Job" as DeployJob #DDEEFF {
+        rectangle "SSH Setup\n+ Pull Image\n+ Backup Old\n+ Deploy New\n+ Verify\n+ Rollback (if fail)" as DeploySteps #EEEEFF
+    }
     
-    rectangle "3. Development\n   • Feature branches\n   • PR to develop\n   • Deploy to DEV" as Milestone3
+    rectangle "Health Checks\n(PROD only)" as HealthJob #FFFFDD {
+        rectangle "Test Home\n+ Test API\n+ Test Auth\n+ Auto Rollback" as HealthSteps #FFFFEE
+    }
     
-    rectangle "4. QA Testing\n   • Merge to stage\n   • Deploy to STAGE\n   • QA sign-off" as Milestone4
-    
-    rectangle "5. Create Release Branch\n   • format: release/yyyymmdd-count\n   • from: stage\n   • Final testing" as Milestone5
-    
-    rectangle "6. Production Deployment\n   • PR to main\n   • Branch validation ✓\n   • Manual approval ⚠️\n   • Deploy with health checks\n   • Close milestone" as Milestone6
-    
-    Milestone1 -right-> Milestone2
-    Milestone2 -down-> Milestone3
-    Milestone3 -right-> Milestone4
-    Milestone4 -down-> Milestone5
-    Milestone5 -right-> Milestone6
+    BuildJob --> DeployJob
+    DeployJob --> HealthJob
 }
 
-' ========================================
-' SECTION 6: GITHUB ENVIRONMENTS
-' ========================================
-
-package "GitHub Environments & Secrets" {
-    rectangle "Environment: DEV" as EnvDev {
-        rectangle "Registry Secrets: 3\n• ACR_REGISTRY_URL\n• ACR_USERNAME\n• ACR_PASSWORD" as DevReg
-        rectangle "SSH Secrets: 4\n• SSH_HOST\n• SSH_USERNAME\n• SSH_PORT\n• SSH_PRIVATE_KEY" as DevSSH
-        rectangle "App Secrets: 38\nEnvironment variables" as DevApp
-        rectangle "Protection: None\nAuto-deploy: ✓" as DevProt
+' EXTERNAL SERVICES
+package "GitHub Services" #F59E0B {
+    rectangle "Issues" as GHIssues #FFFFDD {
+        rectangle "Approval Tracking\n+ Status Updates" as IssueFlow #FFFFEE
     }
     
-    rectangle "Environment: STAGE" as EnvStage {
-        rectangle "Registry Secrets: 3\n(same as DEV)" as StageReg
-        rectangle "SSH Secrets: 4\n(different server)" as StageSSH
-        rectangle "App Secrets: 38\nStage-specific values" as StageApp
-        rectangle "Protection: Optional\nAuto-deploy: ✓" as StageProt
+    rectangle "Releases" as GHReleases #FFDDEE {
+        rectangle "Version Tags\n+ Changelogs\n+ Contributors" as ReleaseFlow #FFEEEE
     }
     
-    rectangle "Environment: PROD" as EnvProd {
-        rectangle "Registry Secrets: 3\n(same registry)" as ProdReg
-        rectangle "SSH Secrets: 4\n(production server)" as ProdSSH
-        rectangle "App Secrets: 38\nProduction values" as ProdApp
-        rectangle "Protection:\n✓ Required reviewers: 1+\n✓ Branch: main only\nAuto-deploy: ⚠️ with approval" as ProdProt
+    rectangle "ACR" as ACR #DDEEFF {
+        rectangle "Docker Images\n+ Multi-tags\n+ Auto Cleanup" as ACRFlow #EEEEFF
     }
 }
 
-' ========================================
-' SECTION 7: METRICS & OPTIMIZATIONS
-' ========================================
-
-package "Performance Metrics" <<Success>> {
-    rectangle "Optimization Results:" as Metrics {
-        rectangle "• 60% faster PR CI time\n• 80% cache hit rate\n• 85% reduction unnecessary runs\n• 100% docs changes skipped\n• 60% cost savings monthly" as MetricsList
+' ENVIRONMENTS
+package "Environments" #22C55E {
+    rectangle "DEV" as EnvDev #DDFFDD {
+        rectangle "Auto-deploy\n46 Secrets" as DevSecrets #EEFFEE
     }
     
-    rectangle "Cache Strategy:" as Cache {
-        rectangle "• Actions Cache v4\n• Next.js build cache\n• ESLint cache\n• Node modules cache\n• Docker layer cache (GHA)" as CacheList
+    rectangle "STAGE" as EnvStage #FFFFDD {
+        rectangle "Auto-deploy\n46 Secrets" as StageSecrets #FFFFEE
     }
     
-    rectangle "Path Filtering:" as PathFilter {
-        rectangle "Runs on:\n✓ **/*.js, **/*.jsx\n✓ package.json, yarn.lock\n✓ Config files\n✓ Source directories" as PathRuns
-        rectangle "Skips:\n⏭️ **/*.md, docs/**\n⏭️ .github/workflows/**\n⏭️ LICENSE, .gitignore" as PathSkips
+    rectangle "PROD" as EnvProd #FFDDDD {
+        rectangle "Manual Approval\n46 Secrets" as ProdSecrets #FFEEEE
     }
 }
 
-' ========================================
-' CONNECTIONS
-' ========================================
+' WORKFLOW CONNECTIONS
+PRVal --> Feature : validates
+CommitVal --> Develop : validates commits
 
-PRVal -down-> Feature : PR approved
-CommitVal -down-> Develop : Commits validated
+Develop --> DeployDev : triggers
+Stage --> DeployStage : triggers
+Main --> DeployProd : triggers (release/hotfix only)
 
-DevEnv -down-> DeployDev
-StageEnv -down-> DeployStage
-ProdEnv -down-> DeployProd
+DeployDev --> BuildJob : calls
+DeployStage --> BuildJob : calls
+DeployProd --> GHIssues : creates approval issue
 
-DeployDev -down-> BuildJob
-DeployStage -down-> BuildJob
-DeployProd -down-> BuildJob
+GHIssues --> ApprovalWF : deploy-approved label
+ApprovalWF --> BuildJob : deploys
+ApprovalWF --> ReleaseAction : generates
+ReleaseAction --> GHReleases : creates release
 
-BuildJob -down-> DeployJob
-DeployJob -down-> HealthJob : only prod
-
-Release -down-> Milestone5 : creates
-Main -down-> Milestone6 : completes
+BuildJob --> ACR : pushes images
+EnvDev --> ACR : pulls images
+EnvStage --> ACR : pulls images
+EnvProd --> ACR : pulls images
 
 @enduml
-

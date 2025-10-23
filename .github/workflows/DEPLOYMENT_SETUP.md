@@ -711,10 +711,24 @@ When a PR is merged to `main`:
 **Branch Flow:**
 
 ```
-Dev → feature → Stage → release/yyyymmdd-count → Main (PROD)
-                                                   ↓
-                                                hotfix → Main
+Main (PROD) → feature → dev ──► (deploy to DEV)
+                │
+                └──► stage ──► (deploy to STAGE)
+                │
+                └──► release/yyyymmdd-count ──► Main (PROD)
+                                                   ▲
+                                                   │
+                                                hotfix
 ```
+
+**Flow Explanation:**
+
+- Feature branches are created from `main` (production)
+- Features first merge to `dev` for testing
+- Same feature merges to `stage` after dev validation
+- Release branch is created and features merge into it
+- Release branch merges to `main` for production
+- Hotfixes branch from and merge directly to `main`
 
 **Release Branch Naming:**
 

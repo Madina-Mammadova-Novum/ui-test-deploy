@@ -6,6 +6,11 @@ title ShipLink Frontend - CI/CD Pipeline (Simplified)
 skinparam BackgroundColor #FFFFFF
 skinparam shadowing false
 skinparam linetype ortho
+skinparam padding 10
+skinparam arrowThickness 2
+skinparam defaultFontSize 12
+skinparam rectangleFontSize 12
+skinparam cardFontSize 11
 
 ' Define colors
 !define BLUE #3B82F6
@@ -14,6 +19,7 @@ skinparam linetype ortho
 !define TEAL #14B8A6
 !define AMBER #F59E0B
 !define RED #EF4444
+!define PINK #EC4899
 
 ' ========================================
 ' TOP: PR VALIDATION
@@ -21,15 +27,15 @@ skinparam linetype ortho
 
 package "Pull Request Phase" #LightBlue {
     
-    card "PR Created" as PR
+    card "PR Created\n\n" as PR #White
     
     together {
-        card "Code Quality\n& Build" as Quality #3B82F6
-        card "Security\nScan" as Security #8B5CF6
-        card "Performance\nCheck" as Perf #10B981
+        card "Code Quality\n& Build\n\n15 min" as Quality #3B82F6
+        card "Security\nScan\n\n10 min" as Security #8B5CF6
+        card "Performance\nCheck\n\n5 min" as Perf #10B981
     }
     
-    card "Commit\nValidation" as Commit #8B5CF6
+    card "Commit\nValidation\n\n(to develop)" as Commit #8B5CF6
     
     PR --> Quality : parallel
     PR --> Security : parallel
@@ -43,47 +49,47 @@ package "Pull Request Phase" #LightBlue {
 
 package "Branch & Environment Flow" #LightYellow {
     
-    card "feature/*" as Feature #White
-    card "develop" as Develop #SkyBlue
-    card "stage" as Stage #Yellow
-    card "release/\nyyyymmdd-N" as Release #Orange
-    card "main" as Main #LightGreen
-    card "hotfix/*" as Hotfix #LightCoral
+    card "main\n\nProduction" as Main #LightGreen
+    card "feature/*\n\nDevelopment" as Feature #White
+    card "develop\n\nIntegration" as Develop #SkyBlue
+    card "stage\n\nTesting" as Stage #Yellow
+    card "release/\nyyyymmdd-N\n\nRelease" as Release #Orange
+    card "hotfix/*\n\nEmergency" as Hotfix #LightCoral
     
+    Main --> Feature : create from
     Feature --> Develop : PR merge
     Feature --> Stage : PR merge
-    Develop --> Stage : PR merge
-    Stage --> Release : create
+    Feature --> Release : merge to
     Release --> Main : PR merge\n+ validation
-    Hotfix --> Main : emergency
+    Hotfix --> Main : emergency\n(from main)
     
-    card "DEV\nEnvironment" as DevEnv #SkyBlue
-    card "STAGE\nEnvironment" as StageEnv #Yellow
-    card "PROD\nEnvironment\n⚠️ Approval" as ProdEnv #LightCoral
+    card "DEV\nEnvironment\n\n✓ Auto-deploy" as DevEnv #SkyBlue
+    card "STAGE\nEnvironment\n\n✓ Auto-deploy" as StageEnv #Yellow
+    card "PROD\nEnvironment\n\n⚠️ Manual Approval\n✓ Health Checks\n✓ GitHub Release" as ProdEnv #LightCoral
     
     Develop ..> DevEnv : auto-deploy
     Stage ..> StageEnv : auto-deploy
-    Main ..> ProdEnv : manual approval
+    Main ..> ProdEnv : with approval
 }
 
 ' ========================================
-' BOTTOM: DEPLOYMENT PIPELINE
+' BOTTOM LEFT: DEPLOYMENT PIPELINE
 ' ========================================
 
 package "Deployment Pipeline" #LightGreen {
     
     ' Three caller workflows
-    card "deploy-dev.yml" as DevYml #14B8A6
-    card "deploy-stage.yml" as StageYml #14B8A6
-    card "deploy-prod.yml" as ProdYml #EF4444
+    card "deploy-dev.yml\n\nAuto-deploy\nto DEV" as DevYml #14B8A6
+    card "deploy-stage.yml\n\nAuto-deploy\nto STAGE" as StageYml #14B8A6
+    card "deploy-prod.yml\n\nValidate source\n+ Build image\n+ Request approval" as ProdYml #EF4444
     
     ' Reusable workflow
-    package "deploy-reusable.yml" #10B981 {
-        card "1. Build Docker\n• Login ACR\n• Build image\n• Push to registry\n• Tag: SHA + env" as Build #10B981
+    package "deploy-reusable.yml\n(Reusable Core)" #10B981 {
+        card "1. Build Docker\n\n• Login ACR\n• Build image\n• Push to registry\n• Tag: SHA + env\n\n~5-8 min" as Build #10B981
         
-        card "2. Deploy Server\n• SSH connection\n• Pull image\n• Stop old\n• Start new\n• Verify" as Deploy #14B8A6
+        card "2. Deploy Server\n\n• SSH connection\n• Pull image\n• Stop old\n• Start new\n• Verify\n\n~2-3 min" as Deploy #14B8A6
         
-        card "3. Health Checks\n(PROD ONLY)\n• Wait 60s\n• Test endpoints\n• Auto-rollback" as Health #F59E0B
+        card "3. Health Checks\n\n(PROD ONLY)\n• Wait 60s\n• Test 3 endpoints\n• Auto-rollback\n\n~2-3 min" as Health #F59E0B
         
         Build --> Deploy : success
         Deploy --> Health : if prod
@@ -95,22 +101,47 @@ package "Deployment Pipeline" #LightGreen {
 }
 
 ' ========================================
+' BOTTOM RIGHT: APPROVAL & RELEASE
+' ========================================
+
+package "Production Approval & Release" #FFE0F0 {
+    
+    card "approve-deploy-prod.yml\n\n(Triggered by 'deploy-approved' label)" as ApprovalFlow #EC4899
+    
+    package "Approval Workflow Jobs" {
+        card "1. Verify\nApproval\n\nParse issue\nmetadata" as Verify #FFEEEE
+        
+        card "2. Deploy to\nProduction\n\nCall reusable\nwith pre-built\nimage" as DeployProd #FFEEEE
+        
+        card "3. Create\nGitHub Release\n\nGenerate notes\nCreate tag\nPublish release\n\n~1-2 min" as CreateRelease #FFEEEE
+        
+        card "4. Update\nApproval Issue\n\nAdd release link\nClose issue" as UpdateIssue #FFEEEE
+        
+        Verify --> DeployProd
+        DeployProd --> CreateRelease : if deployment\n+ health checks\n✓ successful
+        CreateRelease --> UpdateIssue
+    }
+}
+
+' ========================================
 ' RIGHT SIDE: RELEASE MANAGEMENT
 ' ========================================
 
-package "Release Flow" #Lavender {
-    card "Milestone\nCreated" as M1
-    card "Development\n(dev)" as M2
-    card "QA Testing\n(stage)" as M3
-    card "Release Branch\ncreated" as M4
-    card "Production\nDeployment" as M5
-    card "Milestone\nClosed ✓" as M6
+package "Release Management Flow" #Lavender {
+    card "1. Milestone\nCreated\n\n" as M1 #F0E0FF
+    card "2. Development\n(dev)\n\n" as M2 #F0E0FF
+    card "3. QA Testing\n(stage)\n\n" as M3 #F0E0FF
+    card "4. Release Branch\ncreated\n\n" as M4 #F0E0FF
+    card "5. Production\nDeployment\n+ Approval\n\n" as M5 #F0E0FF
+    card "6. GitHub Release\nCreated\n\n" as M6 #F0E0FF
+    card "7. Milestone\nClosed ✓\n\n" as M7 #F0E0FF
     
     M1 --> M2
     M2 --> M3
     M3 --> M4
     M4 --> M5
     M5 --> M6
+    M6 --> M7
 }
 
 ' ========================================
@@ -132,9 +163,20 @@ note bottom of Health
   • Home page (200)
   • API health (200)
   • Auth service (200/401)
-  • Protected API (401)
   
   **Rollback:** Automatic on failure
+end note
+
+note bottom of CreateRelease
+  **Release Format:**
+  • Tag: v2025.10.23.1054-f9b4949
+  • Grouped changelog
+  • Contributors list
+  • PR links
+  
+  **Only created after:**
+  ✓ Successful deployment
+  ✓ Health checks pass
 end note
 
 ' ========================================
@@ -146,8 +188,11 @@ DevEnv --> DevYml : triggers
 StageEnv --> StageYml : triggers
 ProdEnv --> ProdYml : triggers
 
+ProdYml -.> ApprovalFlow : manual\napproval
+
+Health --> CreateRelease : if prod\n+ successful
+
 Release --> M4 : tracks
 Main --> M5 : deploys
 
 @enduml
-

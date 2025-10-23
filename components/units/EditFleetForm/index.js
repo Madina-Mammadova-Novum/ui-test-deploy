@@ -26,7 +26,7 @@ const EditFleetForm = ({ closeModal, id }) => {
 
   // Find the fleet by id and get its name for default value
   const defaultValues = useMemo(() => {
-    const fleet = fleetsData?.find((fleet) => fleet.id === id);
+    const fleet = fleetsData?.find((item) => item.id === id);
     return { fleetName: fleet?.name || '' };
   }, [fleetsData, id]);
 
