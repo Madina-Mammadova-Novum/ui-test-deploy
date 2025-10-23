@@ -90,6 +90,7 @@
     "lottie-react": "^2.4.0",
     "next": "15.5.4",
     "next-sitemap": "^4.0.7",
+    "node-plantuml-latest": "^2.4.0",
     "pluralize": "^8.0.0",
     "prop-types": "^15.8.1",
     "react": "19.2.0",

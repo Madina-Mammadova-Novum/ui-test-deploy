@@ -78,15 +78,20 @@ https://www.plantuml.com/plantuml/uml/
 
 ### 3. Generate All Diagrams
 
+> **Note:** This project uses Yarn as the primary package manager.
+
 ```bash
-# Install PlantUML
-npm install -g node-plantuml
+# Install PlantUML (use latest version - recommended)
+yarn global add node-plantuml-latest
 
 # Generate all as PNG
 puml generate *.puml -o diagrams/
 
-# Generate all as SVG
+# Generate all as SVG (scalable, recommended)
 puml generate *.puml -o diagrams/ -f svg
+
+# Generate specific diagram
+puml generate CI-CD-FLOW.puml -o output.png
 ```
 
 ---

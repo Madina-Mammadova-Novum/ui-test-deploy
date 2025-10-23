@@ -5,6 +5,9 @@ title ShipLink Frontend - Workflow Architecture & Interconnections
 
 skinparam componentStyle rectangle
 skinparam linetype ortho
+skinparam padding 8
+skinparam arrowThickness 2
+skinparam defaultFontSize 11
 
 ' ========================================
 ' LEGEND
@@ -17,6 +20,7 @@ legend top right
   |<#10B981> | Build & Registry |
   |<#14B8A6> | Deployment |
   |<#F59E0B> | Health Checks |
+  |<#EC4899> | Approval & Release |
   |<#EF4444> | Validation/Rollback |
   |<#E5E7EB> | External Services |
 endlegend
@@ -26,29 +30,46 @@ endlegend
 ' ========================================
 
 package "External Services" #E5E7EB {
-    component "Azure Container\nRegistry (ACR)" as ACR {
-        database "Docker Images" as Images {
-            artifact "shiplink-frontend:SHA" as ImageSHA
-            artifact "shiplink-frontend:dev-latest" as ImageDev
-            artifact "shiplink-frontend:stage-latest" as ImageStage
-            artifact "shiplink-frontend:prod-latest" as ImageProd
-            artifact "shiplink-frontend:release-*" as ImageRelease
+    component "Azure Container\nRegistry (ACR)\n\n" as ACR {
+        database "Docker Images\n\n" as Images {
+            artifact "shiplink-frontend:SHA\n\n" as ImageSHA
+            artifact "shiplink-frontend:dev-latest\n\n" as ImageDev
+            artifact "shiplink-frontend:stage-latest\n\n" as ImageStage
+            artifact "shiplink-frontend:prod-latest\n\n" as ImageProd
+            artifact "shiplink-frontend:release-*\n\n" as ImageRelease
         }
     }
     
-    node "DEV Server" as DevServer {
-        component "Docker Engine" as DevDocker
-        component "Container\nshiplink-frontend" as DevContainer
+    node "DEV Server\n\n" as DevServer {
+        component "Docker Engine\n\n" as DevDocker
+        component "Container:\nshiplink-frontend\n\n" as DevContainer
     }
     
-    node "STAGE Server" as StageServer {
-        component "Docker Engine" as StageDocker
-        component "Container\nshiplink-frontend" as StageContainer
+    node "STAGE Server\n\n" as StageServer {
+        component "Docker Engine\n\n" as StageDocker
+        component "Container:\nshiplink-frontend\n\n" as StageContainer
     }
     
-    node "PROD Server" as ProdServer {
-        component "Docker Engine" as ProdDocker
-        component "Container\nshiplink-frontend" as ProdContainer
+    node "PROD Server\n\n" as ProdServer {
+        component "Docker Engine\n\n" as ProdDocker
+        component "Container:\nshiplink-frontend\n\n" as ProdContainer
+    }
+}
+
+' ========================================
+' GITHUB SERVICES
+' ========================================
+
+package "GitHub Services" #F0F0FF {
+    component "GitHub Releases\n\n" as GitHubReleases {
+        artifact "Tags:\nv2025.10.23.1054-SHA\n\n" as ReleaseTags
+        artifact "Changelog:\nGrouped by type\n\n" as Changelog
+        artifact "Contributors:\n@username list\n\n" as Contributors
+    }
+    
+    component "GitHub Issues\n\n" as GitHubIssues {
+        artifact "Approval Issues:\ndeploy-approval\n\n" as ApprovalIssues
+        artifact "Labels:\ndeploy-approved\n\n" as ApprovalLabels
     }
 }
 
@@ -56,32 +77,35 @@ package "External Services" #E5E7EB {
 ' GITHUB ENVIRONMENTS
 ' ========================================
 
-package "GitHub Environments" {
-    rectangle "Environment: DEV" as EnvDev {
-        storage "Secrets (45)" as DevSecrets {
-            file "Registry (3)"
-            file "SSH (4)"
-            file "Application (38)"
+package "GitHub Environments\n\n" {
+    rectangle "Environment: DEV\n\n" as EnvDev #DDEEFF {
+        storage "Secrets (46)\n\n" as DevSecrets {
+            file "Registry (3)\n\n"
+            file "SSH (5)\n\n"
+            file "Application (38)\n\n"
         }
-        file "Protection: None"
+        file "Protection: None\nAuto-deploy: ✓\n\n"
     }
     
-    rectangle "Environment: STAGE" as EnvStage {
-        storage "Secrets (45)" as StageSecrets {
-            file "Registry (3)"
-            file "SSH (4)"
-            file "Application (38)"
+    rectangle "Environment: STAGE\n\n" as EnvStage #FFFFDD {
+        storage "Secrets (46)\n\n" as StageSecrets {
+            file "Registry (3)\n\n"
+            file "SSH (5)\n\n"
+            file "Application (38)\n\n"
         }
-        file "Protection: Optional"
+        file "Protection: Optional\nAuto-deploy: ✓\n\n"
     }
     
-    rectangle "Environment: PROD" as EnvProd {
-        storage "Secrets (45)" as ProdSecrets {
-            file "Registry (3)"
-            file "SSH (4)"
-            file "Application (38)"
+    rectangle "Environment: PROD\n\n" as EnvProd #FFDDDD {
+        storage "Secrets (46)\n\n" as ProdSecrets {
+            file "Registry (3)\n\n"
+            file "SSH (5)\n\n"
+            file "Application (38)\n\n"
         }
-        file "Protection: Required\nReviewers: 1+\nBranch: main"
+        storage "Variables (1)\n\n" as ProdVars {
+            file "WAIT_FOR_APPROVAL\n\n"
+        }
+        file "Protection: Required\nReviewers: 1+\nBranch: main only\nManual approval: ✓\n\n"
     }
 }
 
@@ -89,19 +113,19 @@ package "GitHub Environments" {
 ' CI WORKFLOWS (PR PHASE)
 ' ========================================
 
-package "Continuous Integration" #LightBlue {
+package "Continuous Integration\n\n" #LightBlue {
     
     ' PR Validation Workflow
-    component "pr-validation.yml" as PRWorkflow #3B82F6 {
-        rectangle "Trigger:\npull_request\n(any branch)" as PRTrigger
+    component "pr-validation.yml\n\n" as PRWorkflow #3B82F6 {
+        rectangle "Trigger:\npull_request\n(any branch)\n\n" as PRTrigger
         
-        package "Jobs (Parallel)" {
-            rectangle "Code Quality & Build\n• ESLint\n• Prettier\n• Build\n• Tests\nTimeout: 15min" as JobQuality
-            rectangle "Security Scan\n• yarn audit\n• Vulnerabilities\nTimeout: 10min" as JobSecurity
-            rectangle "Performance\n• Bundle analysis\nTimeout: 5min" as JobPerf
+        package "Jobs (Parallel)\n\n" {
+            rectangle "Code Quality\n& Build\n\n• ESLint\n• Prettier\n• Build\n• Tests\n\n15 min" as JobQuality #DDEEFF
+            rectangle "Security Scan\n\n• yarn audit\n• Vulnerabilities\n\n10 min" as JobSecurity #DDEEFF
+            rectangle "Performance\n\n• Bundle analysis\n\n5 min" as JobPerf #DDEEFF
         }
         
-        rectangle "Optimizations:\n• Cache v4\n• Path filtering\n• Draft skip" as PROptim
+        rectangle "Optimizations:\n\n• Cache v4\n• Path filtering\n• Draft skip\n\n" as PROptim #DDFFDD
         
         PRTrigger --> JobQuality
         PRTrigger --> JobSecurity
@@ -109,9 +133,9 @@ package "Continuous Integration" #LightBlue {
     }
     
     ' Commit Validation Workflow
-    component "commit-validation.yml" as CommitWorkflow #8B5CF6 {
-        rectangle "Trigger:\npull_request\n(to develop)" as CommitTrigger
-        rectangle "Validate Commits\n• Commitlint\n• Conventional format\nTimeout: 5min" as JobCommit
+    component "commit-validation.yml\n\n" as CommitWorkflow #8B5CF6 {
+        rectangle "Trigger:\npull_request\n(to develop)\n\n" as CommitTrigger
+        rectangle "Validate Commits\n\n• Commitlint\n• Conventional format\n\n5 min" as JobCommit #EEDDFF
         CommitTrigger --> JobCommit
     }
 }
@@ -120,47 +144,97 @@ package "Continuous Integration" #LightBlue {
 ' CD WORKFLOWS (DEPLOYMENT PHASE)
 ' ========================================
 
-package "Continuous Deployment" #LightGreen {
+package "Continuous Deployment\n\n" #LightGreen {
     
     ' Deployment Caller Workflows
-    component "deploy-dev.yml" as DeployDevWF #14B8A6 {
-        rectangle "Trigger:\npush to develop\nor manual" as DevTrigger
-        rectangle "Call Reusable\nenv=dev" as DevCall
+    component "deploy-dev.yml\n\n" as DeployDevWF #14B8A6 {
+        rectangle "Trigger:\npush to develop\nor manual\n\n" as DevTrigger
+        rectangle "Call Reusable\nenv=dev\n\n" as DevCall #DDEEFF
         DevTrigger --> DevCall
     }
     
-    component "deploy-stage.yml" as DeployStageWF #14B8A6 {
-        rectangle "Trigger:\npush to stage\nor manual" as StageTrigger
-        rectangle "Call Reusable\nenv=stage" as StageCall
+    component "deploy-stage.yml\n\n" as DeployStageWF #14B8A6 {
+        rectangle "Trigger:\npush to stage\nor manual\n\n" as StageTrigger
+        rectangle "Call Reusable\nenv=stage\n\n" as StageCall #DDEEFF
         StageTrigger --> StageCall
     }
     
-    component "deploy-prod.yml" as DeployProdWF #EF4444 {
-        rectangle "Trigger:\npush to main\n(from release/* or hotfix/*)\nor manual" as ProdTrigger
-        rectangle "Validate Source\n• Check branch\n• Extract version\nTimeout: 2min" as ProdValidate
-        rectangle "Call Reusable\nenv=prod\n+ release-version" as ProdCall
+    component "deploy-prod.yml\n\n" as DeployProdWF #EF4444 {
+        rectangle "Trigger:\npush to main\n(from release/*\nor hotfix/*)\nor manual\n\n" as ProdTrigger
+        rectangle "Validate Source\n\n• Check branch\n• Extract version\n\n2 min" as ProdValidate #FFEEEE
+        rectangle "Build Image\n\nPushes to ACR\nCreates tags\n\n5-8 min" as ProdBuildImage #FFEEEE
+        rectangle "Request Approval\n\nCreates issue\nWaits for label\n\n~30 sec" as ProdRequestApproval #FFEEEE
         
         ProdTrigger --> ProdValidate
-        ProdValidate --> ProdCall : if valid
+        ProdValidate --> ProdBuildImage : if valid
+        ProdBuildImage --> ProdRequestApproval
+    }
+    
+    ' Approval Workflow
+    component "approve-deploy-prod.yml\n\n" as ApproveWF #EC4899 {
+        rectangle "Trigger:\nlabel added\n(deploy-approved)\n\n" as ApproveTrigger
+        
+        package "Job Sequence\n\n" {
+            rectangle "1. Verify Approval\n\nParse issue\nExtract metadata\n\n~30 sec" as JobGate #FFEEEE
+            
+            rectangle "2. Call Reusable\n\nDeploy with\npre-built image\n\n~3-5 min" as JobApproveDeploy #FFEEEE
+            
+            rectangle "3. Create Release\n\nGenerate notes\nCreate tag\nPublish release\n\n~1-2 min" as JobCreateRelease #FFEEEE
+            
+            rectangle "4. Update Issue\n\nAdd release link\nClose issue\n\n~10 sec" as JobUpdateIssue #FFEEEE
+        }
+        
+        ApproveTrigger --> JobGate
+        JobGate --> JobApproveDeploy
+        JobApproveDeploy --> JobCreateRelease : if successful\n+ health checks\npass
+        JobCreateRelease --> JobUpdateIssue
     }
     
     ' Reusable Workflow (Core Logic)
-    component "deploy-reusable.yml" as ReusableWF #10B981 {
-        rectangle "Inputs:\n• environment\n• image-tag-suffix\n• release-version\n• skip-health-checks" as ReusableInputs
+    component "deploy-reusable.yml\n\n" as ReusableWF #10B981 {
+        rectangle "Inputs:\n\n• environment\n• image-tag-suffix\n• release-version\n• skip-health-checks\n• pre-built-image-tag\n\n" as ReusableInputs #DDFFDD
         
-        package "Job Sequence" {
-            rectangle "Job 1: Build & Push\n• Checkout\n• Login ACR\n• Build Docker\n• Push image\nTimeout: 20min" as JobBuild #10B981
+        package "Job Sequence\n\n" {
+            rectangle "Job 1:\nBuild & Push\n\n• Checkout\n• Login ACR\n• Build Docker\n• Push image\n\n20 min" as JobBuild #DDFFDD
             
-            rectangle "Job 2: Deploy\n• SSH to server\n• Pull image\n• Stop old\n• Start new\n• Verify\nTimeout: 10min" as JobDeploy #14B8A6
+            rectangle "Job 2:\nDeploy\n\n• SSH to server\n• Pull image\n• Stop old\n• Start new\n• Verify\n\n10 min" as JobDeploy #DDEEFF
             
-            rectangle "Job 3: Health Checks\n(if env=prod)\n• Wait 60s\n• Test endpoints\n• Auto-rollback\nTimeout: 10min" as JobHealth #F59E0B
+            rectangle "Job 3:\nHealth Checks\n\n(if env=prod)\n• Wait 60s\n• Test endpoints\n• Auto-rollback\n\n10 min" as JobHealth #FFFFDD
         }
         
-        rectangle "Outputs:\n• image-tag\n• deployment-time\n• release-version" as ReusableOutputs
+        rectangle "Outputs:\n\n• image-tag\n• deployment-time\n• release-version\n\n" as ReusableOutputs #DDFFDD
         
         ReusableInputs --> JobBuild
         JobBuild --> JobDeploy : needs: build
         JobDeploy --> JobHealth : if prod
+    }
+}
+
+' ========================================
+' CUSTOM ACTIONS
+' ========================================
+
+package "Custom GitHub Actions\n\n" #FFE0F0 {
+    component "generate-release-notes\n\n" as ReleaseNotesAction #EC4899 {
+        rectangle "Inputs:\n\n• release-version\n• image-tag\n• source-branch\n\n" as ActionInputs #FFEEEE
+        
+        rectangle "Processing:\n\n• Generate tag name\n• Find previous tag\n• Parse commits\n• Group by type\n• Extract PR numbers\n• List contributors\n• Add metadata\n\n" as ActionProcess #FFEEEE
+        
+        rectangle "Outputs:\n\n• tag-name\n• release-notes\n• changelog-url\n• previous-tag\n\n" as ActionOutputs #FFEEEE
+        
+        ActionInputs --> ActionProcess
+        ActionProcess --> ActionOutputs
+    }
+    
+    component "parse-approval-issue\n\n" as ParseIssueAction #EC4899 {
+        rectangle "Inputs:\n\n• issue_body\n\n" as ParseInputs #FFEEEE
+        
+        rectangle "Processing:\n\n• Extract env name\n• Extract run ID\n• Extract image tag\n• Extract release version\n• Validate fields\n\n" as ParseProcess #FFEEEE
+        
+        rectangle "Outputs:\n\n• env_name\n• run_id\n• image_tag\n• release_version\n\n" as ParseOutputs #FFEEEE
+        
+        ParseInputs --> ParseProcess
+        ParseProcess --> ParseOutputs
     }
 }
 
@@ -177,15 +251,15 @@ CommitWorkflow -[hidden]down-> DeployDevWF
 
 DevCall -right-> ReusableWF : calls
 StageCall -right-> ReusableWF : calls
-ProdCall -right-> ReusableWF : calls
+JobApproveDeploy -right-> ReusableWF : calls\n(with pre-built image)
 
 ' ========================================
 ' CONNECTIONS: ENVIRONMENTS
 ' ========================================
 
-ReusableWF ..> EnvDev : reads\nsecrets
-ReusableWF ..> EnvStage : reads\nsecrets
-ReusableWF ..> EnvProd : reads\nsecrets\n(with approval)
+ReusableWF ..> EnvDev : reads secrets
+ReusableWF ..> EnvStage : reads secrets
+ReusableWF ..> EnvProd : reads secrets\n(with approval)
 
 ' ========================================
 ' CONNECTIONS: BUILD TO ACR
@@ -197,6 +271,8 @@ JobBuild --> ImageDev : creates
 JobBuild --> ImageStage : creates
 JobBuild --> ImageProd : creates
 JobBuild --> ImageRelease : creates (prod)
+
+ProdBuildImage -down-> ACR : push image
 
 ' ========================================
 ' CONNECTIONS: DEPLOY TO SERVERS
@@ -219,6 +295,17 @@ ProdContainer ..> ACR : pulls from
 ' ========================================
 
 JobHealth -down-> ProdContainer : tests endpoints
+
+' ========================================
+' CONNECTIONS: APPROVAL & RELEASE
+' ========================================
+
+ProdRequestApproval --> GitHubIssues : creates issue
+GitHubIssues --> ApproveWF : triggers\n(label added)
+JobGate --> ParseIssueAction : uses action
+JobCreateRelease --> ReleaseNotesAction : uses action
+ReleaseNotesAction --> GitHubReleases : creates release
+JobUpdateIssue --> GitHubIssues : updates issue
 
 ' ========================================
 ' ANNOTATIONS
@@ -257,7 +344,6 @@ note bottom of JobHealth
   1. Home Page → 200 OK
   2. API Health → 200 OK
   3. Auth Service → 200/401
-  4. Protected API → 401
   
   **On Failure:**
   Automatic rollback to
@@ -271,22 +357,52 @@ note right of EnvProd
   • Health checks mandatory
   • Automatic rollback
   • Audit trail
+  • GitHub Release creation
   
   **Allowed Sources:**
   • release/yyyymmdd-count
   • hotfix/*
 end note
 
+note bottom of ApproveWF
+  **Approval Process:**
+  1. PR merged to main
+  2. Image built
+  3. Issue created
+  4. Team reviews
+  5. Label added
+  6. Deployment starts
+  7. Health checks run
+  8. Release created
+  9. Issue updated
+end note
+
+note bottom of ReleaseNotesAction
+  **Release Tag Format:**
+  v{YYYY}.{MM}.{DD}.{HHMM}-{SHA8}
+  
+  Example:
+  v2025.10.23.1054-f9b4949
+  
+  **Changelog Sections:**
+  ✨ Features
+  🐛 Bug Fixes
+  📚 Documentation
+  ♻️ Refactoring
+  🎨 Styling
+  🧪 Testing
+  🔧 Chores & CI
+end note
+
 ' ========================================
 ' STATISTICS BOX
 ' ========================================
 
-rectangle "Pipeline Statistics" as Stats #FFFACD {
-    rectangle "**Node Version:** 22.x\n**Total Workflows:** 5\n**Total Jobs:** 9\n**Environments:** 3" as Stats1
-    rectangle "**Secrets per Env:** 45\n**Docker Images:** 5 tags\n**Max Timeout:** 20 min\n**Cache Strategy:** GHA" as Stats2
+rectangle "Pipeline Statistics\n\n" as Stats #FFFACD {
+    rectangle "**Node Version:** 22.x\n**Total Workflows:** 6\n**Total Jobs:** 12\n**Environments:** 3\n\n" as Stats1
+    rectangle "**Secrets per Env:** 46\n**Docker Images:** 5 tags\n**Max Timeout:** 20 min\n**Cache Strategy:** GHA\n**Custom Actions:** 2\n\n" as Stats2
 }
 
 Stats -[hidden]-> DevServer
 
 @enduml
-
