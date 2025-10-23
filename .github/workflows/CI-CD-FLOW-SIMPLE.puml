@@ -43,19 +43,19 @@ package "Pull Request Phase" #LightBlue {
 
 package "Branch & Environment Flow" #LightYellow {
     
+    card "main" as Main #LightGreen
     card "feature/*" as Feature #White
     card "develop" as Develop #SkyBlue
     card "stage" as Stage #Yellow
     card "release/\nyyyymmdd-N" as Release #Orange
-    card "main" as Main #LightGreen
     card "hotfix/*" as Hotfix #LightCoral
     
+    Main --> Feature : create from
     Feature --> Develop : PR merge
     Feature --> Stage : PR merge
-    Develop --> Stage : PR merge
-    Stage --> Release : create
+    Feature --> Release : merge to release
     Release --> Main : PR merge\n+ validation
-    Hotfix --> Main : emergency
+    Hotfix --> Main : emergency\n(from main)
     
     card "DEV\nEnvironment" as DevEnv #SkyBlue
     card "STAGE\nEnvironment" as StageEnv #Yellow

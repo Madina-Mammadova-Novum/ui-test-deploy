@@ -1,0 +1,322 @@
+name: Generate Release Notes
+description: Generates release notes with changelog, contributors, and version tag for GitHub Releases
+
+inputs:
+  release-version:
+    description: 'Release version from branch name (e.g., 20251023-1)'
+    required: true
+  image-tag:
+    description: 'Docker image tag (short SHA)'
+    required: true
+  source-branch:
+    description: 'Source branch name (e.g., release/20251023-1)'
+    required: false
+    default: ''
+
+outputs:
+  tag-name:
+    description: 'Generated tag name (e.g., v2025.10.23.1054-f9b4949)'
+    value: ${{ steps.generate.outputs.tag_name }}
+  release-notes:
+    description: 'Generated release notes in markdown format'
+    value: ${{ steps.generate.outputs.release_notes }}
+  changelog-url:
+    description: 'GitHub compare URL for full changelog'
+    value: ${{ steps.generate.outputs.changelog_url }}
+  previous-tag:
+    description: 'Previous release tag (if found)'
+    value: ${{ steps.generate.outputs.previous_tag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Generate release metadata
+      id: generate
+      shell: bash
+      run: |
+        set -e
+
+        echo "🏷️  Generating release metadata..."
+        echo ""
+
+        # ================================================================
+        # 1. GENERATE TAG NAME (Match backend format exactly)
+        # ================================================================
+        # Format: v{YYYY}.{MM}.{DD}.{HHMM}-{SHA8}
+        # Example: v2025.10.23.1054-f9b4949
+
+        TIMESTAMP=$(date -u +"%Y.%m.%d.%H%M")
+        SHORT_SHA="${{ inputs.image-tag }}"
+        TAG_NAME="v${TIMESTAMP}-${SHORT_SHA}"
+
+        echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
+        echo "✅ Generated tag: ${TAG_NAME}"
+        echo ""
+
+        # ================================================================
+        # 2. FIND PREVIOUS RELEASE TAG
+        # ================================================================
+
+        PREV_TAG=$(git describe --tags --abbrev=0 --match "v*" HEAD^ 2>/dev/null || echo "")
+
+        if [ -z "$PREV_TAG" ]; then
+          echo "ℹ️  No previous release tag found (first release)"
+          PREV_TAG="NONE"
+          COMPARE_RANGE=""
+        else
+          echo "✅ Previous release: ${PREV_TAG}"
+          COMPARE_RANGE="${PREV_TAG}..HEAD"
+        fi
+
+        echo "previous_tag=${PREV_TAG}" >> $GITHUB_OUTPUT
+        echo ""
+
+        # ================================================================
+        # 3. GENERATE CHANGELOG URL
+        # ================================================================
+
+        if [ "$PREV_TAG" != "NONE" ]; then
+          CHANGELOG_URL="https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${TAG_NAME}"
+          echo "changelog_url=${CHANGELOG_URL}" >> $GITHUB_OUTPUT
+          echo "🔗 Changelog URL: ${CHANGELOG_URL}"
+        else
+          CHANGELOG_URL="https://github.com/${{ github.repository }}/commits/${TAG_NAME}"
+          echo "changelog_url=${CHANGELOG_URL}" >> $GITHUB_OUTPUT
+          echo "🔗 Commits URL: ${CHANGELOG_URL}"
+        fi
+        echo ""
+
+        # ================================================================
+        # 4. EXTRACT COMMITS
+        # ================================================================
+
+        echo "📝 Extracting commits..."
+
+        # Get commits between previous tag and HEAD (or all commits if first release)
+        # Format: SHA|Subject|Author Name|Author Email|PR Number
+        if [ "$PREV_TAG" != "NONE" ]; then
+          COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"%h|%s|%an|%ae" --no-merges)
+        else
+          # For first release, get last 50 commits (reasonable default)
+          COMMITS=$(git log -50 --pretty=format:"%h|%s|%an|%ae" --no-merges)
+        fi
+
+        # ================================================================
+        # 5. PARSE COMMITS BY CONVENTIONAL COMMIT TYPE
+        # ================================================================
+
+        echo "🔍 Parsing commits by type..."
+
+        # Initialize arrays
+        declare -a FIXES
+        declare -a FEATURES
+        declare -a DOCS
+        declare -a REFACTORS
+        declare -a STYLES
+        declare -a TESTS
+        declare -a CHORES
+        declare -a OTHERS
+        declare -A CONTRIBUTORS
+
+        # Parse each commit
+        while IFS='|' read -r hash subject author email; do
+          [ -z "$hash" ] && continue
+          
+          # Extract PR number if present (#123)
+          PR_NUMBER=""
+          if [[ "$subject" =~ \#([0-9]+) ]]; then
+            PR_NUMBER="${BASH_REMATCH[1]}"
+          fi
+          
+          # Extract conventional commit type and scope
+          COMMIT_TYPE=""
+          COMMIT_SCOPE=""
+          COMMIT_MSG="$subject"
+          
+          if [[ "$subject" =~ ^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(([^)]+)\))?: ]]; then
+            COMMIT_TYPE="${BASH_REMATCH[1]}"
+            COMMIT_SCOPE="${BASH_REMATCH[3]}"
+            # Remove type and scope from message
+            COMMIT_MSG=$(echo "$subject" | sed -E 's/^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([^)]+\))?: //')
+          fi
+          
+          # Store contributor (GitHub username from email or name)
+          if [[ "$email" =~ ^([^@]+)@users\.noreply\.github\.com$ ]]; then
+            CONTRIBUTORS["${BASH_REMATCH[1]}"]=1
+          else
+            CONTRIBUTORS["$author"]=1
+          fi
+          
+          # Format commit line
+          SCOPE_TEXT=""
+          if [ -n "$COMMIT_SCOPE" ]; then
+            SCOPE_TEXT="**${COMMIT_SCOPE}**: "
+          fi
+          
+          PR_TEXT=""
+          if [ -n "$PR_NUMBER" ]; then
+            PR_TEXT=" in [#${PR_NUMBER}](https://github.com/${{ github.repository }}/pull/${PR_NUMBER})"
+          fi
+          
+          COMMIT_LINE="- ${SCOPE_TEXT}${COMMIT_MSG} by @${author}${PR_TEXT}"
+          
+          # Group by type
+          case "$COMMIT_TYPE" in
+            fix)
+              FIXES+=("$COMMIT_LINE")
+              ;;
+            feat)
+              FEATURES+=("$COMMIT_LINE")
+              ;;
+            docs)
+              DOCS+=("$COMMIT_LINE")
+              ;;
+            refactor|perf)
+              REFACTORS+=("$COMMIT_LINE")
+              ;;
+            style)
+              STYLES+=("$COMMIT_LINE")
+              ;;
+            test)
+              TESTS+=("$COMMIT_LINE")
+              ;;
+            chore|ci|build)
+              CHORES+=("$COMMIT_LINE")
+              ;;
+            *)
+              OTHERS+=("$COMMIT_LINE")
+              ;;
+          esac
+        done <<< "$COMMITS"
+
+        echo "✅ Parsed commits successfully"
+        echo ""
+
+        # ================================================================
+        # 6. GENERATE RELEASE NOTES MARKDOWN
+        # ================================================================
+
+        echo "📝 Generating release notes..."
+
+        # Start building release notes
+        RELEASE_NOTES=""
+
+        # Add What's Changed header
+        RELEASE_NOTES+="## What's Changed"$'\n\n'
+
+        # Add each section if it has commits
+        if [ ${#FEATURES[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### ✨ Features"$'\n'
+          for commit in "${FEATURES[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#FIXES[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### 🐛 Bug Fixes"$'\n'
+          for commit in "${FIXES[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#REFACTORS[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### ♻️ Refactoring & Performance"$'\n'
+          for commit in "${REFACTORS[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#DOCS[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### 📚 Documentation"$'\n'
+          for commit in "${DOCS[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#STYLES[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### 🎨 Styling"$'\n'
+          for commit in "${STYLES[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#TESTS[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### 🧪 Testing"$'\n'
+          for commit in "${TESTS[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#CHORES[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### 🔧 Chores & CI"$'\n'
+          for commit in "${CHORES[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        if [ ${#OTHERS[@]} -gt 0 ]; then
+          RELEASE_NOTES+="### 📦 Other Changes"$'\n'
+          for commit in "${OTHERS[@]}"; do
+            RELEASE_NOTES+="${commit}"$'\n'
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        # Add full changelog link
+        if [ "$PREV_TAG" != "NONE" ]; then
+          RELEASE_NOTES+="**Full Changelog**: ${CHANGELOG_URL}"$'\n\n'
+        else
+          RELEASE_NOTES+="**Commits**: ${CHANGELOG_URL}"$'\n\n'
+        fi
+
+        # Add contributors section
+        if [ ${#CONTRIBUTORS[@]} -gt 0 ]; then
+          RELEASE_NOTES+="## Contributors"$'\n\n'
+          for contributor in "${!CONTRIBUTORS[@]}"; do
+            # Check if it's a GitHub username (from noreply email)
+            if [[ ! "$contributor" =~ [@] ]]; then
+              RELEASE_NOTES+="- @${contributor}"$'\n'
+            else
+              RELEASE_NOTES+="- ${contributor}"$'\n'
+            fi
+          done
+          RELEASE_NOTES+=$'\n'
+        fi
+
+        # Add deployment metadata
+        RELEASE_NOTES+="---"$'\n\n'
+        RELEASE_NOTES+="## 🚀 Deployment Information"$'\n\n'
+        RELEASE_NOTES+="- **Release Version**: \`${{ inputs.release-version }}\`"$'\n'
+        RELEASE_NOTES+="- **Image Tag**: \`${{ inputs.image-tag }}\`"$'\n'
+        RELEASE_NOTES+="- **Deployed**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"$'\n'
+
+        if [ -n "${{ inputs.source-branch }}" ]; then
+          RELEASE_NOTES+="- **Source Branch**: \`${{ inputs.source-branch }}\`"$'\n'
+        fi
+
+        # Save release notes to output (handle multiline)
+        {
+          echo 'release_notes<<EOF'
+          echo "$RELEASE_NOTES"
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT
+
+        echo "✅ Release notes generated successfully"
+        echo ""
+        echo "📊 Summary:"
+        echo "  - Features: ${#FEATURES[@]}"
+        echo "  - Bug Fixes: ${#FIXES[@]}"
+        echo "  - Refactoring: ${#REFACTORS[@]}"
+        echo "  - Documentation: ${#DOCS[@]}"
+        echo "  - Styling: ${#STYLES[@]}"
+        echo "  - Tests: ${#TESTS[@]}"
+        echo "  - Chores: ${#CHORES[@]}"
+        echo "  - Others: ${#OTHERS[@]}"
+        echo "  - Contributors: ${#CONTRIBUTORS[@]}"

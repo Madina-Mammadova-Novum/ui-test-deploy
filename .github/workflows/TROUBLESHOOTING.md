@@ -11,7 +11,8 @@ This guide covers common deployment issues and their solutions. As a frontend de
 3. [Step-by-Step Debugging](#step-by-step-debugging)
 4. [Manual Deployment Verification](#manual-deployment-verification)
 5. [Emergency Procedures](#emergency-procedures)
-6. [Getting More Help](#getting-more-help)
+6. [Release Creation Issues](#release-creation-issues-production-only)
+7. [Getting More Help](#getting-more-help)
 
 ---
 
@@ -697,6 +698,213 @@ https://dev-int.ship.link
    - What happened?
    - How was it fixed?
    - How to prevent it?
+
+---
+
+## 📦 Release Creation Issues (Production Only)
+
+### Issue: GitHub Release not created after successful deployment
+
+**What this means:**
+The deployment succeeded but the automated GitHub Release wasn't created.
+
+**Cause:**
+
+- Health checks failed (release only created after successful health checks)
+- Workflow permissions issue
+- Git tag already exists with the same name
+- Network issue communicating with GitHub API
+
+**Solution:**
+
+```bash
+# 1. Check if deployment actually succeeded with health checks
+Go to Actions → Find the workflow run → Check all jobs are green
+
+# 2. Verify permissions in approve-deploy-prod.yml
+Look for:
+  permissions:
+    contents: write  # Required for creating tags and releases
+    issues: write    # For updating approval issue
+
+# 3. Check if tag already exists (rare, timestamp-based)
+Go to repository → Releases → Check if tag v2025.10.23.XXXX-XXXXXXXX exists
+
+# 4. Check workflow logs
+Go to Actions → Click workflow → Click "Create GitHub Release" job
+Look for error messages in the logs
+
+# 5. If tag exists, delete and re-run
+git push origin :refs/tags/v2025.10.23.1054-f9b4949
+# Then re-run the workflow
+```
+
+**Prevention:**
+
+- Ensure workflow has `contents: write` permission
+- Don't manually create tags with the same format
+- Monitor first few deployments to catch issues early
+
+---
+
+### Issue: Release notes missing commits or incorrectly grouped
+
+**What this means:**
+The release was created but commits are not properly categorized or some are missing.
+
+**Cause:**
+
+- Commits don't follow Conventional Commits format
+- Commits made directly to main (not through PR merge)
+- Squash merge combined multiple commits
+
+**Solution:**
+
+```bash
+# For future releases, use conventional commit format:
+feat(scope): Add feature description
+fix(scope): Fix bug description
+docs: Update documentation
+refactor: Improve code structure
+style: Update styling
+test: Add tests
+chore: Update dependencies
+
+# Examples of good commit messages:
+feat(vessel): Add vessel search filters
+fix(countdown): Prevent timer race condition (#617)
+docs(api): Update endpoint documentation
+```
+
+**What happens to non-conventional commits:**
+
+- They still appear in the release
+- Grouped under "📦 Other Changes" section
+- Not categorized by type
+
+**Note:** This is informational, not a blocker. The release will still be created.
+
+---
+
+### Issue: Contributors not showing GitHub usernames
+
+**What this means:**
+Contributors section shows full names instead of `@username` links.
+
+**Cause:**
+Git commits use non-GitHub email addresses (e.g., `user@company.com` instead of GitHub email).
+
+**Solution:**
+
+This is expected behavior for commits made with non-GitHub emails.
+
+**How contributors are detected:**
+
+```bash
+# If commit email matches GitHub format:
+username@users.noreply.github.com
+→ Shows as: @username
+
+# If commit email is regular email:
+user@company.com
+→ Shows as: Full Name from Git commit
+```
+
+**To use GitHub username in future commits:**
+
+```bash
+# Configure Git to use GitHub email
+git config user.email "your-github-username@users.noreply.github.com"
+
+# Or use GitHub's noreply email from Settings → Emails
+```
+
+---
+
+### Issue: PR numbers not linked in release notes
+
+**What this means:**
+Release notes show commit messages but no PR links (e.g., "in #123").
+
+**Cause:**
+Commit messages don't contain PR number references.
+
+**Solution:**
+
+```bash
+# GitHub automatically adds PR numbers to merge commit messages
+# If using "Merge pull request":
+Merge pull request #123 from org/feature-branch
+
+# If using "Squash and merge":
+feat: Add new feature (#123)
+
+# Manual commits should include PR number:
+fix(api): Fix endpoint issue (#456)
+```
+
+**Prevention:**
+
+- Use GitHub's merge options (they auto-add PR numbers)
+- Manually include PR number in commit message: `(#123)`
+- PR numbers are extracted from anywhere in commit message
+
+---
+
+### Issue: Tag format doesn't match expectation
+
+**What this means:**
+Tag is created but format looks different than backend releases.
+
+**Expected Format:**
+
+```
+v{YYYY}.{MM}.{DD}.{HHMM}-{SHA8}
+v2025.10.23.1054-f9b4949
+```
+
+**Components:**
+
+- `v` - Version prefix
+- `2025.10.23` - Deployment date (YYYY.MM.DD) in UTC
+- `1054` - Deployment time (HHMM) in UTC
+- `f9b4949` - Short commit SHA (8 characters)
+
+**If format is different:**
+
+Check the `generate-release-notes` action - the format is hardcoded to match backend.
+
+**See:** [RELEASE_NOTES_GUIDE.md](./RELEASE_NOTES_GUIDE.md) for complete tag format documentation
+
+---
+
+### Issue: Release notes too long or cluttered
+
+**What this means:**
+Release notes contain too many commits or too much detail.
+
+**Cause:**
+Many commits between releases, or commits include verbose messages.
+
+**Solution:**
+
+This is informational - the release will work fine with many commits.
+
+**Best practices for cleaner releases:**
+
+```bash
+# Group related work in release branches
+release/20251023-1 should contain related features
+
+# Use concise commit messages
+✅ Good: feat(vessel): Add search filters
+❌ Too verbose: feat(vessel): Add search filters including name, IMO, flag, type, and deadweight with debounce and caching
+
+# Squash related commits before merging
+If you have 5 commits for one feature, squash to 1 commit
+```
+
+**Remember:** Even with many commits, the release is automatically organized by type (Features, Bug Fixes, etc.)
 
 ---
 
