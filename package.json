@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "lint:staged": "prettier . --write && eslint . --fix && pretty-quick --staged",
-    "prepare": "husky init",
+    "prepare": "husky",
     "release": "standard-version --no-verify",
     "release:first": "standard-version --no-verify -- --first-release",
     "release:minor": "standard-version --no-verify --release-as minor",
