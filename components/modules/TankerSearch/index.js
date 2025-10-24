@@ -55,6 +55,8 @@ const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
   }, []);
 
   useEffect(() => {
+    if (!searchParams) return;
+
     const baseParams = {
       sortBy: sorting?.currentDirection?.value || sorting?.directions[0]?.value,
       rangeBy: sorting?.currentRange?.value || sorting?.range[0]?.value,
@@ -65,7 +67,7 @@ const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
       ...baseParams,
     };
     dispatch(fetchVesselsBySearch(searchParamsWithSorting));
-  }, [searchParams, sorting, dispatch]);
+  }, [searchParams, sorting?.currentDirection, sorting?.currentRange, dispatch]);
 
   const printResult = useMemo(() => {
     if (loading) {
@@ -91,14 +93,14 @@ const TankerSearch = ({ isAccountSearch = false, isDisabled = false }) => {
             <Dropdown
               label="Sort tankers by:"
               options={sorting?.directions}
-              value={sorting?.currentDirection || sorting?.directions[0]}
+              defaultValue={sorting?.currentDirection || sorting?.directions?.[0]}
               onChange={handleDirection}
               customStyles={dropdownStyles}
             />
 
             <Dropdown
               options={sorting?.range}
-              value={sorting?.currentRange || sorting?.range[0]}
+              defaultValue={sorting?.currentRange || sorting?.range?.[0]}
               onChange={handleRange}
               customStyles={dropdownStyles}
             />
