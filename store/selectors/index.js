@@ -193,6 +193,8 @@ export const getNegotiatingDataSelector = createDraftSafeSelector(negotiatingSel
     offerById: state.data.offerById,
     role: state.role,
     initialTab: state.tab,
+    tabsByParentId: state.tabsByParentId,
+    expandedParentId: state.expandedParentId,
   };
 });
 

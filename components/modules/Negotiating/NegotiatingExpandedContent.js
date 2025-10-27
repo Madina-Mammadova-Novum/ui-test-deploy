@@ -28,11 +28,14 @@ import {
 const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   const dispatch = useDispatch();
 
-  const { offerById, role } = useSelector(getNegotiatingDataSelector);
+  const { offerById, role, tabsByParentId } = useSelector(getNegotiatingDataSelector);
   const [currentTab, setCurrentTab] = useState(tabs?.[0]?.value);
 
   const { incoming = [], sent = [], failed = [] } = offerById[data.id];
   const { isOwner } = getRoleIdentity({ role });
+
+  // Check if there's a specific tab set for this card in Redux
+  const tabForThisCard = tabsByParentId[data.id];
 
   // Memoize processed data to prevent unnecessary recalculations
   const sentData = useMemo(
@@ -83,6 +86,13 @@ const NegotiatingExpandedContent = ({ data, tab = null, tabs }) => {
   useEffect(() => {
     updateTabBasedOnData();
   }, [data, sentData, incomingData, dispatch, tab]);
+
+  // Update local tab state when Redux tab for this specific card changes
+  useEffect(() => {
+    if (tabForThisCard) {
+      setCurrentTab(tabForThisCard);
+    }
+  }, [tabForThisCard]);
 
   const tabContent = {
     counteroffers: (

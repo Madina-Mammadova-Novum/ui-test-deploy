@@ -116,6 +116,7 @@ const ViewIncomingOffer = ({ closeModal, itemId, cellData, minimizeModal }) => {
           goBack={() => setStep('view_offer')}
           showCancelButton={false}
           itemId={itemId}
+          parentId={parentId}
           offerDetails={offerDetails}
         />
       );
