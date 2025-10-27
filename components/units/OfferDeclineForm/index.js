@@ -13,6 +13,7 @@ import { FormManager } from '@/common';
 import { declineOfferSchema } from '@/lib/schemas';
 import { declineOffer } from '@/services/offer';
 import { fetchUserNegotiating } from '@/store/entities/negotiating/actions';
+import { setExpandedParent, setTabForParent } from '@/store/entities/negotiating/slice';
 import { getUserDataSelector } from '@/store/selectors';
 import { errorToast, successToast, useHookFormParams } from '@/utils/hooks';
 
@@ -20,7 +21,7 @@ const schema = yup.object({
   ...declineOfferSchema(),
 });
 
-const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, offerDetails, itemId }) => {
+const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, offerDetails, itemId, parentId }) => {
   const dispatch = useDispatch();
   const { role } = useSelector(getUserDataSelector);
 
@@ -35,7 +36,18 @@ const OfferDeclineForm = ({ closeModal, goBack, title = '', showCancelButton, of
 
     if (!error) {
       successToast(successMessage);
-      dispatch(fetchUserNegotiating());
+
+      if (parentId) {
+        // Set the tab for this specific card to 'failed' (Declined)
+        dispatch(setTabForParent({ parentId, tab: 'failed' }));
+
+        // Keep this card expanded after data refetch
+        dispatch(setExpandedParent({ parentId }));
+      }
+
+      // Refetch all negotiating data to get updated offer lists
+      dispatch(fetchUserNegotiating({ page: 1, perPage: 5 }));
+
       closeModal();
     } else {
       errorToast(error?.title, error?.message);

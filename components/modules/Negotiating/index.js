@@ -13,7 +13,7 @@ import { getNegotiatingDataSelector } from '@/store/selectors';
 import { getRoleIdentity } from '@/utils/helpers';
 
 const Negotiating = () => {
-  const { offers, loading, toggle, role, initialTab } = useSelector(getNegotiatingDataSelector);
+  const { offers, loading, toggle, role, initialTab, expandedParentId } = useSelector(getNegotiatingDataSelector);
 
   const { isOwner } = getRoleIdentity({ role });
 
@@ -21,6 +21,9 @@ const Negotiating = () => {
     const rowHeader = isOwner
       ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
       : chartererNegotiatingHeaderDataAdapter({ data: rowData });
+
+    // Determine if this card should be expanded
+    const shouldExpand = expandedParentId ? rowData.id === expandedParentId : index === 0 || toggle;
 
     return (
       <ExpandableRow
@@ -33,7 +36,7 @@ const Negotiating = () => {
           />
         }
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
-        expand={index === 0 || toggle} // Expand the first row by default
+        expand={shouldExpand}
       >
         <NegotiatingExpandedContent
           data={rowData}
@@ -49,7 +52,7 @@ const Negotiating = () => {
     if (offers?.length) return offers.map((rowData, index) => printExpandableRow(rowData, index));
 
     return <Title level="3">No offers at the current stage</Title>;
-  }, [loading, offers, toggle, initialTab, printExpandableRow]);
+  }, [loading, offers, toggle, initialTab, expandedParentId, printExpandableRow]);
 
   return printContent;
 };

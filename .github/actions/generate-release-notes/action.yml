@@ -153,11 +153,23 @@ runs:
           COMMIT_AUTHOR="$author"
           if [[ "$email" =~ $GITHUB_EMAIL_PATTERN ]]; then
             # Use GitHub username from email (no spaces)
-            COMMIT_AUTHOR="${BASH_REMATCH[1]}"
-            CONTRIBUTORS["${BASH_REMATCH[1]}"]=1
+            GITHUB_USERNAME="${BASH_REMATCH[1]}"
+            COMMIT_AUTHOR="$GITHUB_USERNAME"
+            CONTRIBUTORS["$GITHUB_USERNAME"]="github"
+          elif [[ "$email" =~ ^[0-9]+\+([^@]+)@users\.noreply\.github\.com$ ]]; then
+            # Handle numeric GitHub email format (e.g., 123456+username@users.noreply.github.com)
+            GITHUB_USERNAME="${BASH_REMATCH[1]}"
+            COMMIT_AUTHOR="$GITHUB_USERNAME"
+            CONTRIBUTORS["$GITHUB_USERNAME"]="github"
           else
-            # Fallback to git author name
-            CONTRIBUTORS["$author"]=1
+            # Fallback to email username part (before @) if possible
+            if [[ "$email" =~ ^([^@]+)@ ]]; then
+              COMMIT_AUTHOR="${BASH_REMATCH[1]}"
+              CONTRIBUTORS["${BASH_REMATCH[1]}"]="email"
+            else
+              # Last resort: use git author name
+              CONTRIBUTORS["$author"]="name"
+            fi
           fi
           
           # Format commit line
@@ -288,10 +300,15 @@ runs:
         if [ ${#CONTRIBUTORS[@]} -gt 0 ]; then
           RELEASE_NOTES+="## Contributors"$'\n\n'
           for contributor in "${!CONTRIBUTORS[@]}"; do
-            # Check if it's a GitHub username (from noreply email)
-            if ! [[ "$contributor" =~ $AT_PATTERN ]]; then
+            # Get the contributor type (github, email, or name)
+            CONTRIB_TYPE="${CONTRIBUTORS[$contributor]}"
+            
+            # Format based on type
+            if [ "$CONTRIB_TYPE" = "github" ]; then
+              # GitHub usernames always get @ prefix
               RELEASE_NOTES+="- @${contributor}"$'\n'
             else
+              # Email usernames and names display as-is
               RELEASE_NOTES+="- ${contributor}"$'\n'
             fi
           done
