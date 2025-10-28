@@ -14,6 +14,8 @@ const initialState = {
     offerById: {},
   },
   tab: 'incoming',
+  tabsByParentId: {}, // Store tabs per card/parentId for multiple cards
+  expandedParentId: null, // Track which card should be expanded
   countdownData: {}, // For storing individual deal countdown data
 };
 
@@ -26,6 +28,14 @@ const negotiatingSlice = createSlice({
     },
     setTab: (state, { payload }) => {
       state.tab = payload;
+    },
+    setTabForParent: (state, action) => {
+      const { parentId, tab } = action?.payload;
+      state.tabsByParentId[parentId] = tab;
+    },
+    setExpandedParent: (state, action) => {
+      const { parentId } = action?.payload;
+      state.expandedParentId = parentId;
     },
     updateCountdown: (state, action) => {
       const { parentId, offerId, isOwner, extendMinute = 15 } = action?.payload;
@@ -72,6 +82,6 @@ const negotiatingSlice = createSlice({
   },
 });
 
-export const { updateCountdown, setToggle, setTab } = negotiatingSlice.actions;
+export const { updateCountdown, setToggle, setTab, setTabForParent, setExpandedParent } = negotiatingSlice.actions;
 
 export default negotiatingSlice.reducer;

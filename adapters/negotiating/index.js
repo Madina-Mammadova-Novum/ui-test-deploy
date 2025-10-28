@@ -322,6 +322,7 @@ const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
     {
       value: index,
       notified,
+      freezed: frozenAt,
     },
     {
       id,
@@ -336,16 +337,19 @@ const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
         },
       ],
       editable: true,
+      freezed: frozenAt,
     },
     {
       id,
       notified,
       value: laycanStart ? transformDate(laycanStart, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      freezed: frozenAt,
     },
     {
       id,
       notified,
       value: laycanEnd ? transformDate(laycanEnd, 'MMM dd, yyyy') : NO_DATA_MESSAGE.DATE,
+      freezed: frozenAt,
     },
     {
       id,
@@ -353,6 +357,7 @@ const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
       value: `${portName}${portLocode && `, ${portLocode}`}`,
       countryCode: getLocode(portLocode),
       available: true,
+      freezed: frozenAt,
     },
     {
       id,
@@ -376,6 +381,7 @@ const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
         autoStart: countdownStatus === 'Running',
         status: countdownStatus,
       },
+      freezed: frozenAt,
     },
     {
       id,
@@ -389,6 +395,7 @@ const sentCounteroffersTabRowDataAdapter = ({ data, index }) => {
         },
       ],
       editable: true,
+      freezed: frozenAt,
     },
   ];
 };
@@ -465,6 +472,7 @@ const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
         autoStart: countdownStatus === 'Running',
         status: countdownStatus,
       },
+      freezed: frozenAt,
     },
     {
       id,
@@ -478,6 +486,7 @@ const counteroffersTabRowDataAdapter = ({ data, index, parentId }) => {
       ],
       editable: true,
       data: { parentId },
+      freezed: frozenAt,
     },
   ];
 };
