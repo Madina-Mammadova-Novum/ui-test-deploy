@@ -86,7 +86,7 @@ const Table = ({ headerData, fleetId, type, rows, noDataMessage = '' }) => {
             <td className="!z-10" colSpan={headerData.length}>
               <div className="absolute left-0 z-50 mt-2.5 flex !w-full justify-center">
                 <HoverTooltip
-                  className="!-top-7 !left-6 !z-50 h-auto w-full max-w-[50.125rem]"
+                  className="!-top-5 !left-6 !z-50 -mt-4 h-auto max-h-[74px] w-full max-w-[50.125rem] overflow-y-auto !p-1.5"
                   groupClassName="mx-28 my-auto max-w-[53.125rem]"
                   data={{ description: tooltipText }}
                   disabled={disableTooltip}
