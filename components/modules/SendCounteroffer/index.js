@@ -9,7 +9,7 @@ import SendCounterofferFormFields from './SendCounterofferFormFields';
 
 import { SendCounterOfferPropTypes } from '@/lib/types';
 
-import { Dropdown } from '@/elements';
+import { Button, Dropdown } from '@/elements';
 import { CommentsContent, ConfirmCounteroffer } from '@/modules';
 import { getCountdownConfigs } from '@/services/countdownTimer';
 import { fetchСounterOfferValidation } from '@/store/entities/offer/actions';
@@ -223,6 +223,7 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
         handleValidationError={handleValidationError}
         data={{ ...counterofferData, ...additionalDischargeValue, responseCountdown }}
         onFormChange={setFormMethods}
+        hideSubmitButton={confirmCounteroffer}
       >
         {!confirmCounteroffer ? (
           <>
@@ -240,7 +241,24 @@ const SendCounteroffer = ({ closeModal, goBack, offerDetails, dealId }) => {
             </div>
           </>
         ) : (
-          <ConfirmCounteroffer closeModal={closeModal} offerDetails={offerDetails} />
+          <div className="flex h-full flex-col">
+            <ConfirmCounteroffer closeModal={closeModal} offerDetails={offerDetails} />
+            <div className="mt-5 flex justify-end">
+              <Button
+                buttonProps={{
+                  text: 'Confirm Changes and Send',
+                  variant: 'primary',
+                  size: 'large',
+                }}
+                disabled={disabled || !valid}
+                onClick={() => {
+                  if (formMethods?.handleSubmit && formMethods?.submitHandler) {
+                    formMethods.handleSubmit(formMethods.submitHandler)();
+                  }
+                }}
+              />
+            </div>
+          </div>
         )}
       </CounterofferForm>
     </div>
