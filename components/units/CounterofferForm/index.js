@@ -28,6 +28,7 @@ const CounterofferForm = ({
   disabled,
   setDisabled,
   onFormChange = () => {},
+  hideSubmitButton = false,
 }) => {
   const dispatch = useDispatch();
   const role = getCookieFromBrowser('session-user-role');
@@ -42,10 +43,10 @@ const CounterofferForm = ({
   const freightType = methods.watch('freight');
   const freightValue = methods.watch('value');
 
-  // Pass form methods to parent
+  // Pass form methods and submit handler to parent
   useEffect(() => {
-    onFormChange(methods);
-  }, [methods]);
+    onFormChange({ ...methods, submitHandler: (formData) => handleSubmit(formData) });
+  }, [methods, allowSubmit]);
 
   useEffect(() => {
     setFreightState({ type: freightType?.value, value: freightValue });
@@ -91,6 +92,7 @@ const CounterofferForm = ({
         submitAction={handleSubmit}
         onErrorAction={handleValidationError}
         className="flex h-full flex-col justify-between !gap-0 overflow-y-auto"
+        hideSubmitButton={hideSubmitButton}
         submitButton={{
           text: allowSubmit ? 'Confirm Changes and Send' : 'Proceed',
           variant: 'primary',
