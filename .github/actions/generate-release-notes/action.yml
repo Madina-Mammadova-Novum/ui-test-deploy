@@ -126,6 +126,7 @@ runs:
 
         # Cache for GitHub usernames to avoid multiple API calls
         declare -A USERNAME_CACHE
+        declare -A PR_AUTHOR_CACHE
 
         # Helper function to get GitHub username from commit SHA
         get_github_username_from_commit() {
@@ -151,10 +152,13 @@ runs:
             if [ -n "$api_response" ]; then
               # Extract author.login from the commit API response using jq (more reliable)
               if command -v jq >/dev/null 2>&1; then
-                github_username=$(echo "$api_response" | jq -r '.author.login // empty' 2>/dev/null || echo "")
+                github_username=$(echo "$api_response" | jq -r '.author.login // .committer.login // empty' 2>/dev/null || echo "")
               else
                 # Fallback: use sed/grep if jq is not available
                 github_username=$(echo "$api_response" | sed -n 's/.*"author"[^}]*"login"[^"]*"\([^"]*\)".*/\1/p' | head -1 || echo "")
+                if [ -z "$github_username" ]; then
+                  github_username=$(echo "$api_response" | sed -n 's/.*"committer"[^}]*"login"[^"]*"\([^"]*\)".*/\1/p' | head -1 || echo "")
+                fi
               fi
             fi
           fi
@@ -162,6 +166,37 @@ runs:
           # Cache the result (even if empty, to avoid repeated API calls)
           USERNAME_CACHE["$cache_key"]="$github_username"
           echo "$github_username"
+        }
+
+        # Helper to get PR author username as a fallback when commit lookup fails
+        get_pr_author_username() {
+          local pr_number="$1"
+          
+          # Return cached value when available
+          if [ -n "${PR_AUTHOR_CACHE[$pr_number]+_}" ]; then
+            echo "${PR_AUTHOR_CACHE[$pr_number]}"
+            return
+          fi
+
+          local pr_author_username=""
+
+          if [ -n "$pr_number" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
+            local pr_response=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${pr_number}" 2>/dev/null || echo "")
+
+            if [ -n "$pr_response" ]; then
+              if command -v jq >/dev/null 2>&1; then
+                pr_author_username=$(echo "$pr_response" | jq -r '.user.login // empty' 2>/dev/null || echo "")
+              else
+                pr_author_username=$(echo "$pr_response" | sed -n 's/.*"user"[^}]*"login"[^"]*"\([^"]*\)".*/\1/p' | head -1 || echo "")
+              fi
+            fi
+          fi
+
+          # Cache result to avoid duplicate requests
+          PR_AUTHOR_CACHE["$pr_number"]="$pr_author_username"
+          echo "$pr_author_username"
         }
 
         # Parse each commit
@@ -209,11 +244,21 @@ runs:
             # Try to get GitHub username from commit API
             GITHUB_USERNAME=$(get_github_username_from_commit "$hash" "$email" "$author")
             
+            # Fall back to PR author if commit lookup fails but PR number is available
+            if [ -z "$GITHUB_USERNAME" ] && [ -n "$PR_NUMBER" ]; then
+              GITHUB_USERNAME=$(get_pr_author_username "$PR_NUMBER")
+            fi
+            
             if [ -n "$GITHUB_USERNAME" ]; then
               # Found GitHub username via API
               COMMIT_AUTHOR="$GITHUB_USERNAME"
               GITHUB_USERNAME_FOUND="$GITHUB_USERNAME"
               CONTRIBUTORS["$GITHUB_USERNAME"]="github"
+
+              # Remove previously stored full-name entry for the same contributor
+              if [ -n "${CONTRIBUTORS[$author]+_}" ] && [ "${CONTRIBUTORS[$author]}" = "name" ]; then
+                unset "CONTRIBUTORS[$author]"
+              fi
             else
               # No GitHub username found - don't use @ prefix for non-GitHub users
               COMMIT_AUTHOR="$author"

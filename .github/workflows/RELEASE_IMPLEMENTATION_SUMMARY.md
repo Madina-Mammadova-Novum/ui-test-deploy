@@ -80,8 +80,8 @@ New Flow:
 
 ## Contributors
 
-- @sailhokcu
-- @deniz
+- @salihokcu
+- @DenizCansever
 
 ---
 
