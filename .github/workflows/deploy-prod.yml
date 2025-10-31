@@ -318,7 +318,7 @@ jobs:
 
             ---
 
-            [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`,
+            [View workflow run](${{ github.server_url }}/shiplinkdev/shiplink-frontend-ui/actions/runs/${{ github.run_id }})`,
               labels: labels,
               assignees: assignees.length > 0 ? assignees : undefined
             });
