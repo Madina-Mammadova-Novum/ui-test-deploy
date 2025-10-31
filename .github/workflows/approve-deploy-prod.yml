@@ -91,11 +91,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const repoUrl = `${{ github.server_url }}/shiplinkdev/shiplink-frontend-ui`;
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 **Deployment Approved**\n\nStarting production deployment...\n\n- Environment: \`${{ steps.parse.outputs.env_name }}\`\n- Image Tag: \`${{ steps.parse.outputs.image_tag }}\`\n- Release: \`${{ steps.parse.outputs.release_version }}\`\n- Approved by: @${{ github.actor }}\n\n[View deployment workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+              body: `🚀 **Deployment Approved**\n\nStarting production deployment...\n\n- Environment: \`${{ steps.parse.outputs.env_name }}\`\n- Image Tag: \`${{ steps.parse.outputs.image_tag }}\`\n- Release: \`${{ steps.parse.outputs.release_version }}\`\n- Approved by: @${{ github.actor }}\n\n[View deployment workflow](${repoUrl}/actions/runs/${{ github.run_id }})`
             });
 
   deploy:
@@ -245,6 +246,7 @@ jobs:
             const releaseSuccess = '${{ needs.create-release.result }}' === 'success';
             const emoji = deploySuccess ? '✅' : '❌';
             const status = deploySuccess ? 'SUCCESSFUL' : 'FAILED';
+            const repoUrl = `${{ github.server_url }}/shiplinkdev/shiplink-frontend-ui`;
 
             let body = `${emoji} **Deployment ${status}**\n\n`;
             body += `- Environment: \`${{ needs.gate.outputs.env_name }}\`\n`;
@@ -262,7 +264,7 @@ jobs:
               body += `The deployment was successful but release creation failed. Check workflow logs.\n\n`;
             }
 
-            body += `[View deployment details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            body += `[View deployment details](${repoUrl}/actions/runs/${{ github.run_id }})`;
 
             await github.rest.issues.createComment({
               issue_number: context.issue.number,

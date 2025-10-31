@@ -527,8 +527,6 @@ jobs:
       # ----------------------------------------------------------------------
       - name: Generate deployment summary
         if: always()
-        env:
-          APP_URL_FROM_SECRET: ${{ secrets.NEXT_PUBLIC_URL }}
         run: |
           # Use provided display name or default to uppercase environment name
           if [ -n "${{ inputs.environment-display-name }}" ]; then
@@ -537,14 +535,18 @@ jobs:
             ENV_DISPLAY=$(echo "${{ inputs.environment }}" | tr '[:lower:]' '[:upper:]')
           fi
 
-          # Use provided app URL, fallback to secret, or indicate it's configured
+          # Use provided app URL or construct from NEXT_PUBLIC_URL variable
           if [ -n "${{ inputs.app-url }}" ]; then
             APP_URL="${{ inputs.app-url }}"
-          elif [ -n "${APP_URL_FROM_SECRET}" ]; then
-            APP_URL="${APP_URL_FROM_SECRET}"
+          elif [ -n "${{ vars.NEXT_PUBLIC_URL }}" ]; then
+            APP_URL="${{ vars.NEXT_PUBLIC_URL }}"
           else
-            APP_URL="Configured in environment"
+            # If no variable is set, show a generic message
+            APP_URL="Configured in environment secrets"
           fi
+
+          # Construct repository URL properly to avoid masking issues
+          REPO_URL="${{ github.server_url }}/shiplinkdev/shiplink-frontend-ui"
 
           echo "# 🚀 Deployment Summary - ${ENV_DISPLAY} Environment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -577,7 +579,7 @@ jobs:
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "📖 [View full workflow run for ${ENV_DISPLAY}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "📖 [View full workflow run for ${ENV_DISPLAY}](${REPO_URL}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
 
   # ============================================================================
   # JOB 3: PRODUCTION HEALTH CHECKS (Production Only)
@@ -834,4 +836,5 @@ jobs:
           echo "- Protected Authentication (\`/api/account/info\`) - 401 Unauthorized" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [View deployment details for PRODUCTION](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          REPO_URL="${{ github.server_url }}/shiplinkdev/shiplink-frontend-ui"
+          echo "🔗 [View deployment details for PRODUCTION](${REPO_URL}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
