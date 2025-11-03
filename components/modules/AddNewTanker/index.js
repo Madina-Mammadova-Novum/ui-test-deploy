@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AddNewTankerPropTypes } from '@/lib/types';
 
 import { unassignedFleetOption } from '@/lib/constants';
-import { getAllUserFleets } from '@/services';
+import { getUserFleets } from '@/services';
 import { AddTankerForm, AddTankerManuallyForm } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
 import { errorToast } from '@/utils/hooks';
@@ -19,7 +19,7 @@ const AddNewTanker = ({ closeModal }) => {
   useEffect(() => {
     const fetchAllFleets = async () => {
       try {
-        const response = await getAllUserFleets();
+        const response = await getUserFleets({ page: 1, perPage: 100, sortBy: 'asc' });
         if (response?.data && !response.error) {
           setAllFleets(response.data);
         } else if (response?.error) {

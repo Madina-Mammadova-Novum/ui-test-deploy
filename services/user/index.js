@@ -235,15 +235,6 @@ export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
   };
 }
 
-export async function getAllUserFleets() {
-  // Use POST with no pagination parameters to get all fleets
-  const response = await postData(`account/fleets`, {});
-
-  return {
-    ...response,
-  };
-}
-
 export async function getRoleBasedOnSubs({ page, perPage }) {
   return searchDeals({
     page,
