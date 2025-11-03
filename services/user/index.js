@@ -236,7 +236,8 @@ export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
 }
 
 export async function getAllUserFleets() {
-  const response = await getData(`account/fleets/all`);
+  // Use POST with no pagination parameters to get all fleets
+  const response = await postData(`account/fleets`, {});
 
   return {
     ...response,

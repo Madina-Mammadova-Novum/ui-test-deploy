@@ -8,6 +8,7 @@ import { unassignedFleetOption } from '@/lib/constants';
 import { getAllUserFleets } from '@/services';
 import { AddTankerForm, AddTankerManuallyForm } from '@/units';
 import { convertDataToOptions } from '@/utils/helpers';
+import { errorToast } from '@/utils/hooks';
 
 const AddNewTanker = ({ closeModal }) => {
   const [step, setStep] = useState('initial');
@@ -21,9 +22,12 @@ const AddNewTanker = ({ closeModal }) => {
         const response = await getAllUserFleets();
         if (response?.data && !response.error) {
           setAllFleets(response.data);
+        } else if (response?.error) {
+          errorToast('Failed to load fleets', 'Please try again or contact support if the problem persists.');
         }
       } catch (error) {
         console.error('Error fetching all fleets:', error);
+        errorToast('Failed to load fleets', 'Please try again or contact support if the problem persists.');
       }
     };
 
