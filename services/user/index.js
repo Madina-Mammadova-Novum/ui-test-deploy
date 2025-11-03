@@ -235,6 +235,14 @@ export async function getUserFleets({ page, perPage, sortBy = 'asc' }) {
   };
 }
 
+export async function getAllUserFleets() {
+  const response = await getData(`account/fleets/all`);
+
+  return {
+    ...response,
+  };
+}
+
 export async function getRoleBasedOnSubs({ page, perPage }) {
   return searchDeals({
     page,
