@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 import { ChatConversationCardPropTypes } from '@/lib/types';
 
 import { ShipIcon, UserIcon } from '@/assets/icons';
-import { Title } from '@/elements';
+import { HoverTooltip, Title } from '@/elements';
+import { SETTINGS } from '@/lib/constants';
 import { setConversation, setOpenedChat } from '@/store/entities/chat/slice';
 import { getCurrentDealStage } from '@/store/entities/notifications/actions';
 import { resetDealData } from '@/store/entities/notifications/slice';
@@ -30,6 +31,18 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
   const totalQuantity = `${data?.additional?.totalQuantity} mt`;
   const cargoProduct = `${data?.vessel?.type} (${totalQuantity})`;
   const isHelpCenter = contrasted && user?.data?.key === 'support';
+  const cargoProductHoverData = useMemo(() => {
+    if (!cargoProduct) {
+      return { displayText: '', tooltipDisabled: true };
+    }
+
+    const shouldTruncate = cargoProduct.length > SETTINGS.MAX_VISIBLE_TEXT_LENGTH_CHAT;
+
+    return {
+      displayText: shouldTruncate ? `${cargoProduct.slice(0, SETTINGS.MAX_VISIBLE_TEXT_LENGTH_CHAT)}...` : cargoProduct,
+      tooltipDisabled: !shouldTruncate,
+    };
+  }, [cargoProduct]);
 
   const handleChangeState = (key, value) => {
     setState((prevState) => ({
@@ -100,10 +113,12 @@ const ChatConversationCard = ({ data, contrasted = false }) => {
 
         {data?.subtitle && <p className={`text-xsm ${contrasted ? 'text-white' : 'text-black'}`}>{data?.subtitle}</p>}
         {!isHelpCenter && contrasted && (
-          <p className="flex gap-x-1.5 text-xs-sm font-semibold uppercase text-white">
+          <div className="flex gap-x-1.5 text-xs-sm font-semibold uppercase text-white">
             cargo product:
-            <span className="text-xs-sm font-bold uppercase text-white">{cargoProduct}</span>
-          </p>
+            <HoverTooltip data={{ description: cargoProduct }} disabled={cargoProductHoverData.tooltipDisabled}>
+              <span className="text-xs-sm font-bold uppercase text-white">{cargoProductHoverData.displayText}</span>
+            </HoverTooltip>
+          </div>
         )}
         {printCargoModal}
         {!contrasted && (
