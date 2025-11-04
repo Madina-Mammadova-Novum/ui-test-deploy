@@ -218,15 +218,15 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
         isOpen={showConfirmModal}
         onConfirm={handleConfirmUpload}
         onClose={handleCancelUpload}
-        title="Document Request Association"
+        title="Link this upload to the pending request"
         confirmText="Upload"
         cancelText="Cancel"
         variant="primary"
       >
         <div className="space-y-4">
           <p className="text-sm text-black">
-            You have requested documents from this deal. Would you like to associate this file upload with the document
-            request?
+            This deal has a pending document request. If this file (or these files) address that request, check the box
+            below. After uploading, please click Submit to Broker to complete the process.
           </p>
           <div className="flex items-center space-x-2">
             <input
@@ -237,7 +237,7 @@ const DocumentsContent = ({ rowsData = [], offerId }) => {
               className="h-4 w-4 rounded border-gray-300 text-blue-600"
             />
             <label htmlFor="useForDocumentRequest" className="text-sm text-gray-700">
-              Use this file upload for the document request
+              Link this file to the document request
             </label>
           </div>
         </div>
