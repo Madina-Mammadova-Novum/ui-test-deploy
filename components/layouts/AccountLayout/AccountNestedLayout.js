@@ -51,7 +51,7 @@ const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
   }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute, useExpand]);
 
   return (
-    <div className="px-5">
+    <div className="w-full max-w-[112.5rem] px-5">
       <section className="flex min-h-[calc(100vh-200px)] flex-col gap-y-5 md:min-h-[calc(100vh-160px)]">
         <div className="flex items-center justify-between pt-5">
           <div className="flex flex-col">

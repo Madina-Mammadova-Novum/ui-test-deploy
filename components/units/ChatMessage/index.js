@@ -91,7 +91,7 @@ const ChatConversationMessage = ({
       <div className="flex flex-col gap-y-1">
         <p className="text-xs-sm font-semibold uppercase text-black">{senderTitle}</p>
         <div
-          className={`relative break-words rounded-base px-2.5 py-1.5 text-xsm ${
+          className={`relative max-w-[310px] break-words rounded-base px-2.5 py-1.5 text-xsm ${
             isBroker ? 'self-start bg-gray-darker bg-opacity-40' : 'self-end bg-blue-light'
           }`}
         >
