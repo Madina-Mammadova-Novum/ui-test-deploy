@@ -244,7 +244,7 @@ const TableCell = ({ cellProps }) => {
         } items-center text-xsm normal-case`}
       >
         {emptyCell && <Placeholder />}
-        {value && (
+        {value && typeof value !== 'boolean' && (
           <div className="flex items-center gap-x-1 px-1 text-inherit">
             {icon && <IconWrapper iconData={{ icon }} />}
             {printFlag}
@@ -274,7 +274,7 @@ const TableCell = ({ cellProps }) => {
           />
         )}
         {countdownData && <DynamicCountdownTimer {...countdownData} />}
-        {editable && <div className="flex w-full justify-end gap-x-2.5">{printModalView}</div>}
+        {editable && <div className="flex gap-x-2.5">{printModalView}</div>}
       </div>
     </td>
   );
