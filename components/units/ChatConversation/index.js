@@ -217,9 +217,10 @@ const ChatConversation = ({
                   placeholder={uploading ? 'Uploading files...' : 'Message ...'}
                   disabled={uploading}
                   customStyles="!border-gray-darker !w-full"
+                  inputStyles="pr-[1.875rem]"
                 />
                 {!data?.deactivated && (
-                  <div className="absolute right-2">
+                  <div className="absolute right-1">
                     <IconUpload getInputProps={getInputProps} onClick={() => {}} disabled={uploading} />
                   </div>
                 )}
