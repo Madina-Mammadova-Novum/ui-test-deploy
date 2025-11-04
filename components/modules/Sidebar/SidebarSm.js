@@ -10,9 +10,9 @@ const SidebarSm = ({ data, isResized, onResize }) => {
   return (
     <>
       <NextLink href="/">
-        <Logo className="relative right-1.5 fill-white" />
+        <Logo className="relative fill-white" />
       </NextLink>
-      <ul className="relative mt-4 flex flex-col items-center justify-center gap-1.5">
+      <ul className="relative flex flex-col items-center justify-center gap-5">
         <Button
           onClick={onResize}
           customStyles="!rounded !relative flex self-end !bg-blue-dark !p-2 !w-7 !h-7"

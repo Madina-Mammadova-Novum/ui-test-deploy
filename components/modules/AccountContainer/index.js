@@ -9,7 +9,7 @@ export default function AccountContainer({ children }) {
 
   return (
     <div
-      className={`max-w-screen flex min-h-screen grow flex-col bg-gray-light ${collapsed ? 'ml-16' : 'ml-16 lg:ml-64'}`}
+      className={`max-w-screen flex min-h-screen grow flex-col bg-gray-light ${collapsed ? 'ml-[4.25rem]' : 'ml-[4.25rem] lg:ml-[15.5rem]'}`}
     >
       {children}
     </div>
