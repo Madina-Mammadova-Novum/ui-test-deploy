@@ -33,7 +33,7 @@ export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
       type: errorResponse?.type || errorResponse?.error?.type || null,
       traceid: errorResponse?.traceid || errorResponse?.error?.traceid || null,
       title: errorResponse?.title || errorResponse?.error?.title || statusText,
-      message: formatErrors(errorResponse?.errors || errorResponse?.error?.errors),
+      message: errorResponse?.detail || errorResponse?.error?.detail || 'An unexpected error occurred.',
       errors: errorResponse?.errors || errorResponse?.error?.errors || null,
     },
   };
