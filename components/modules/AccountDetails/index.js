@@ -26,7 +26,7 @@ const AccountDetails = () => {
   const pendingRequest = data?.personalDetails?.hasPendingPersonalInfoUpdateRequest ?? false;
 
   return (
-    <section className="flex flex-col items-start justify-start gap-2.5 px-5">
+    <section className="flex w-full max-w-[155.75rem] flex-col items-start justify-start gap-2.5 px-5">
       <Title level="1" className="py-5">
         Account information
       </Title>

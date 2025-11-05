@@ -511,7 +511,7 @@ const ownerFailedTabRowsDataAdapter = ({ data }) => {
 const ownerFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { cargo, laycanStart, laycanEnd, failedAt, notified, reason, id } = data;
+  const { cargo, laycanStart, laycanEnd, failedAt, notified, declinedState, id } = data;
 
   return [
     {
@@ -562,7 +562,7 @@ const ownerFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       freezed: false,
-      value: reason,
+      value: declinedState,
       notified,
       type: TYPE.SEMIBOLD,
     },
@@ -592,7 +592,7 @@ const chartererFailedTabRowsDataAdapter = ({ data }) => {
 const chartererFailedTabRowDataAdapter = ({ data, index }) => {
   if (!data) return null;
 
-  const { vessel, failedAt, reason, id, notified } = data;
+  const { vessel, failedAt, declinedState, id, notified } = data;
   const { details, openPort, openDate } = vessel || {};
 
   const portName = openPort?.name || null;
@@ -642,7 +642,7 @@ const chartererFailedTabRowDataAdapter = ({ data, index }) => {
     {
       id,
       notified,
-      value: reason,
+      value: declinedState,
       type: TYPE.SEMIBOLD,
     },
     {

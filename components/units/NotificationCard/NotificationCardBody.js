@@ -86,7 +86,7 @@ const NotificationCardBody = ({
   return (
     <div className="flex flex-col items-start">
       <div className="flex flex-col">
-        <p className="text-xsm font-normal text-black">
+        <div className="text-xsm font-normal text-black">
           {parse(displayMessage)}
           {isMessageLong && !isExpanded && (
             <Button
@@ -101,7 +101,7 @@ const NotificationCardBody = ({
               customStylesFromWrap="!inline-block"
             />
           )}
-        </p>
+        </div>
       </div>
       <div className="flex">
         {url && (
