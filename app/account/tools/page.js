@@ -13,8 +13,8 @@ export function generateMetadata() {
 
 export default function AccountTool() {
   return (
-    <section className="md:min-h-[calc(100vh-160px) min-h-[calc(100vh-200px)] w-full max-w-[155.75rem] px-5">
-      <AccountTools title="Tools" customHeight="h-[580px]" isLoggedIn />
+    <section className="min-h-[calc(100vh-200px)] w-full max-w-[155.75rem] px-5 md:min-h-[calc(100vh-160px)]">
+      <AccountTools title="Tools" customHeight="h-[calc(100vh-340px)] md:h-[calc(100vh-320px)]" isLoggedIn />
     </section>
   );
 }
