@@ -1,6 +1,6 @@
 import { responseAdapter } from '../response';
 
-import { formatErrors, lowerCaseFormat } from '@/utils/helpers';
+import { lowerCaseFormat } from '@/utils/helpers';
 
 export const successResponseAdapter = (response) => ({
   status: response?.status,
