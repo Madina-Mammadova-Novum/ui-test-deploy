@@ -431,14 +431,6 @@ export const clientIdentification = ({ senderId, clientId, role }) => {
   return senderId === clientId ? role : ROLES.BROKER;
 };
 
-export const getAppropriateFailedBy = ({ failedBy, role }) => {
-  let failedByText = failedBy;
-  if (ROLES[String(failedBy).toUpperCase()]) {
-    failedByText = role === failedBy.toLowerCase() ? 'Me' : 'Counterparty';
-  }
-  return failedByText;
-};
-
 const getFileUrl = ({ url }) => {
   const token = getCookieFromBrowser('session-access-token');
 

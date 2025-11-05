@@ -56,7 +56,7 @@ export const failedOffersHeaderDataAdapter = ({ data }) => {
       text: transformDate(laycanEnd, 'MMM dd, yyyy'),
     },
     {
-      label: 'Reason',
+      label: 'Declined by',
       text: failedBy,
     },
   ];

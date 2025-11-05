@@ -2,14 +2,7 @@ import { postProductsAdapter } from '@/adapters';
 import { nullAdapter, objectAdapter } from '@/adapters/common';
 import { countriesAdapter, countriesReverseAdapter } from '@/adapters/country';
 import { transformDate } from '@/utils/date';
-import {
-  addLocalDateFlag,
-  calculateCountdown,
-  formatCurrency,
-  freightFormatter,
-  getAppropriateFailedBy,
-  getLocode,
-} from '@/utils/helpers';
+import { addLocalDateFlag, calculateCountdown, formatCurrency, freightFormatter, getLocode } from '@/utils/helpers';
 
 export function sendOfferAdapter({ data }) {
   if (!data) return null;
@@ -162,7 +155,7 @@ export function responseSendCounterofferAdapter({ data }) {
   return nullAdapter(data);
 }
 
-export function offerDetailsAdapter({ data, role }) {
+export function offerDetailsAdapter({ data }) {
   if (!data) return null;
 
   const {
@@ -348,7 +341,7 @@ export function offerDetailsAdapter({ data, role }) {
     failedOfferData: {
       isFailed,
       failureReason,
-      declinedBy: getAppropriateFailedBy({ failedBy, role }),
+      declinedBy: failedBy,
     },
   };
 }
