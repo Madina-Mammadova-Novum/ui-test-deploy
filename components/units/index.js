@@ -6,6 +6,7 @@ import AdditionalDischargeForm from '@/units/AdditionalDischargeForm';
 import AddressDetails from '@/units/AddressDetailsForm';
 import AddTankerForm from '@/units/AddTankerForm';
 import AddTankerManuallyForm from '@/units/AddTankerManuallyForm';
+import AdminChangeRequestsModal from '@/units/AdminChangeRequestsModal';
 import AnonChat from '@/units/AnonChat';
 import AssignToFleet from '@/units/AssignToFleet';
 import AuthChat from '@/units/AuthChat';
@@ -120,6 +121,7 @@ export * from '@/units/Account';
 export {
   AnonChat,
   AuthChat,
+  AdminChangeRequestsModal,
   AdditionalDischargeDetails,
   AdditionalDischargeForm,
   AddressDetails,
