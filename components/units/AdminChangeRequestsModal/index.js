@@ -9,11 +9,26 @@ import PropTypes from 'prop-types';
 import { Button, Title } from '@/elements';
 import { approveChangeRequest, rejectChangeRequest } from '@/services/approvals';
 import { Notes } from '@/units';
+import { getCookieFromBrowser } from '@/utils/helpers';
 import { errorToast, successToast } from '@/utils/hooks';
 
-const AdminChangeRequestsModal = ({ closeModal, requests = [], cargoId = 'N/A' }) => {
+const AdminChangeRequestsModal = ({ requests = [], cargoId = 'N/A', onSuccess }) => {
   const [localRequests, setLocalRequests] = useState(requests);
   const [loadingStates, setLoadingStates] = useState({});
+  const userRole = getCookieFromBrowser('session-user-role'); // 'Owner' or 'Charterer'
+
+  // Check if the current user can act on this request
+  const canUserActOnRequest = (request) => {
+    if (!userRole || !request.reviewers) return false;
+
+    // Find the reviewer matching the current user's role
+    const userReviewer = request.reviewers.find(
+      (reviewer) => reviewer.companyType?.toLowerCase() === userRole?.toLowerCase()
+    );
+
+    // User can act if they have a matching reviewer entry with "Pending" status
+    return userReviewer && userReviewer.status === 'Pending';
+  };
 
   const getStatusConfig = (status) => {
     switch (status) {
@@ -50,14 +65,34 @@ const AdminChangeRequestsModal = ({ closeModal, requests = [], cargoId = 'N/A' }
 
       if (!response.error) {
         successToast(response.message);
-        setLocalRequests((prev) => prev.map((req) => (req.id === requestId ? { ...req, status: 'Approved' } : req)));
+        // Update the reviewer status for the current user's role
+        setLocalRequests((prev) =>
+          prev.map((req) => {
+            if (req.id === requestId) {
+              return {
+                ...req,
+                reviewers: req.reviewers.map((reviewer) =>
+                  reviewer.companyType?.toLowerCase() === userRole?.toLowerCase()
+                    ? { ...reviewer, status: 'Approved' }
+                    : reviewer
+                ),
+              };
+            }
+            return req;
+          })
+        );
+
+        // Call onSuccess callback if provided (e.g., to refetch data)
+        if (onSuccess) {
+          onSuccess();
+        }
       } else {
         errorToast('Failed to approve change request', response.message || 'Please try again later.');
       }
     } catch (error) {
       errorToast('Failed to approve change request', 'An unexpected error occurred.');
     } finally {
-      setLoadingStates((prev) => ({ ...prev, [requestId]: null }));
+      setLoadingStates((prev) => ({ ...prev, [requestId]: false }));
     }
   };
 
@@ -69,14 +104,34 @@ const AdminChangeRequestsModal = ({ closeModal, requests = [], cargoId = 'N/A' }
 
       if (!response.error) {
         successToast(response.message);
-        setLocalRequests((prev) => prev.map((req) => (req.id === requestId ? { ...req, status: 'Denied' } : req)));
+        // Update the reviewer status for the current user's role
+        setLocalRequests((prev) =>
+          prev.map((req) => {
+            if (req.id === requestId) {
+              return {
+                ...req,
+                reviewers: req.reviewers.map((reviewer) =>
+                  reviewer.companyType?.toLowerCase() === userRole?.toLowerCase()
+                    ? { ...reviewer, status: 'Denied' }
+                    : reviewer
+                ),
+              };
+            }
+            return req;
+          })
+        );
+
+        // Call onSuccess callback if provided (e.g., to refetch data)
+        if (onSuccess) {
+          onSuccess();
+        }
       } else {
         errorToast('Failed to reject change request', response.message || 'Please try again later.');
       }
     } catch (error) {
       errorToast('Failed to reject change request', 'An unexpected error occurred.');
     } finally {
-      setLoadingStates((prev) => ({ ...prev, [requestId]: null }));
+      setLoadingStates((prev) => ({ ...prev, [requestId]: false }));
     }
   };
 
@@ -168,16 +223,16 @@ const AdminChangeRequestsModal = ({ closeModal, requests = [], cargoId = 'N/A' }
                 </div>
               )}
 
-              {/* Action Buttons */}
-              {request.status === 'Pending' && (
-                <div className="mt-4 flex gap-x-2.5">
+              {/* Action Buttons - Only show if user can act on this request */}
+              {request.status === 'Pending' && canUserActOnRequest(request) && (
+                <div className="mt-4 flex justify-end gap-x-2.5">
                   <Button
                     buttonProps={{
                       text: loadingStates[request.id] === 'rejecting' ? 'Rejecting...' : 'Reject',
                       variant: 'tertiary',
                       size: 'large',
                     }}
-                    disabled={loadingStates[request.id] !== null}
+                    disabled={!!loadingStates[request.id]}
                     customStyles="w-full whitespace-nowrap"
                     onClick={() => handleReject(request.id)}
                   />
@@ -187,7 +242,7 @@ const AdminChangeRequestsModal = ({ closeModal, requests = [], cargoId = 'N/A' }
                       variant: 'primary',
                       size: 'large',
                     }}
-                    disabled={loadingStates[request.id] !== null}
+                    disabled={!!loadingStates[request.id]}
                     customStyles="w-full whitespace-nowrap"
                     onClick={() => handleApprove(request.id)}
                   />
@@ -197,25 +252,13 @@ const AdminChangeRequestsModal = ({ closeModal, requests = [], cargoId = 'N/A' }
           );
         })}
       </div>
-
-      <div className="flex justify-end">
-        <Button
-          buttonProps={{
-            text: 'Close',
-            variant: 'tertiary',
-            size: 'large',
-          }}
-          customStyles="min-w-[120px]"
-          onClick={closeModal}
-        />
-      </div>
     </div>
   );
 };
 
 AdminChangeRequestsModal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
   cargoId: PropTypes.string,
+  onSuccess: PropTypes.func,
   requests: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

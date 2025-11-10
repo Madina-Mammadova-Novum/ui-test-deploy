@@ -3,13 +3,17 @@
 import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { UilEye } from '@iconscout/react-unicons';
+
 import CharterPartyContent from './CharterPartyContent';
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
 import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 
+import { PAGE_STATE } from '@/lib/constants';
 import { updateDealData } from '@/store/entities/notifications/slice';
+import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
 import { updateCountdown } from '@/store/entities/pre-fixture/slice';
 import { AdminChangeRequestsModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { transformDate } from '@/utils/date';
@@ -29,92 +33,6 @@ const tabs = [
   },
 ];
 
-// TODO: Replace with actual API data
-const dummyChangeRequests = [
-  {
-    id: '123e4567-e89b-12d3-a456-426614174000',
-    status: 'Pending',
-    targets: [
-      {
-        name: null,
-        id: null,
-        fieldChanges: [
-          {
-            fieldName: 'Laycan Start Date',
-            newValue: '2025-01-15',
-            oldValue: '2025-01-10',
-          },
-        ],
-      },
-    ],
-    reviewers: [
-      {
-        companyId: 'company-123',
-        companyType: 'Charterer',
-        status: 'Pending',
-      },
-      {
-        companyId: 'company-456',
-        companyType: 'Owner',
-        status: 'Approved',
-      },
-    ],
-  },
-  {
-    id: '223e4567-e89b-12d3-a456-426614174001',
-    status: 'Pending',
-    targets: [
-      {
-        name: null,
-        id: null,
-        fieldChanges: [
-          {
-            fieldName: 'Quantity',
-            newValue: '50,000 MT',
-            oldValue: '45,000 MT',
-          },
-        ],
-      },
-    ],
-    reviewers: [
-      {
-        companyId: 'company-789',
-        companyType: 'Owner',
-        status: 'Pending',
-      },
-      {
-        companyId: 'company-101',
-        companyType: 'Charterer',
-        status: 'Denied',
-      },
-    ],
-  },
-  {
-    id: '323e4567-e89b-12d3-a456-426614174002',
-    status: 'Pending',
-    targets: [
-      {
-        name: null,
-        id: null,
-        fieldChanges: [
-          {
-            fieldName: 'Freight Rate',
-            newValue: '$25.50/MT',
-            oldValue: '$24.00/MT',
-          },
-        ],
-      },
-    ],
-    reviewers: [
-      {
-        companyId: 'company-202',
-        companyType: 'Charterer',
-        status: 'Approved',
-      },
-    ],
-  },
-];
-
 const PreFixtureExpandedContent = ({
   detailsData,
   documentsData,
@@ -128,6 +46,12 @@ const PreFixtureExpandedContent = ({
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
 
   const { allowExtension, extensionTimeOptions, taskId, isCountdownActive } = detailsData || {};
+
+  // Refetch pre-fixture offers after successful approve/reject
+  const handleRefetchOffers = () => {
+    const { page, pageSize } = PAGE_STATE;
+    dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+  };
 
   const handleExtensionSuccess = (extendedMinutes) => {
     // Update the local state
@@ -180,7 +104,7 @@ const PreFixtureExpandedContent = ({
     return <DetailsContent detailsData={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
-  const hasPendingChangeRequests = dummyChangeRequests.some((req) => req.status === 'Pending');
+  const hasChangeRequests = detailsData?.requests && detailsData.requests.length > 0;
 
   return (
     <div className="px-5">
@@ -211,16 +135,22 @@ const PreFixtureExpandedContent = ({
               />
             </ModalWindow>
           )}
-          {hasPendingChangeRequests && (
+          {hasChangeRequests && (
             <ModalWindow
               buttonProps={{
                 text: 'Review deal information changes',
-                variant: 'secondary',
+                variant: 'primary',
                 size: 'small',
-                className: 'tab-btn !text-[10px] font-bold !px-2 !h-5 uppercase leading-none',
+                icon: { before: <UilEye size="14" className="fill-blue" /> },
+                className:
+                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
               }}
             >
-              <AdminChangeRequestsModal requests={dummyChangeRequests} cargoId={offerId || 'CARGO-12345'} />
+              <AdminChangeRequestsModal
+                requests={detailsData.requests}
+                cargoId={detailsData.cargoCode || 'CARGO-###'}
+                onSuccess={handleRefetchOffers}
+              />
             </ModalWindow>
           )}
         </div>

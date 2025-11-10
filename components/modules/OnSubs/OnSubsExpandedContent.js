@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { UilFileInfoAlt } from '@iconscout/react-unicons';
+import { UilEye, UilFileInfoAlt } from '@iconscout/react-unicons';
 
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
@@ -11,13 +11,14 @@ import DocumentsContent from './DocumentsContent';
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
 import { Button } from '@/elements';
-import { ROLES } from '@/lib/constants';
+import { PAGE_STATE, ROLES } from '@/lib/constants';
 import { approveExtensionRequest, rejectExtensionRequest } from '@/services/assignedTasks';
 import { getPdfToView } from '@/services/offer';
 import { updateDealData } from '@/store/entities/notifications/slice';
+import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
 import { updateCountdown, updateDeals } from '@/store/entities/on-subs/slice';
 import { getAuthSelector } from '@/store/selectors';
-import { ConfirmModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
+import { AdminChangeRequestsModal, ConfirmModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { transformDate } from '@/utils/date';
 import { errorToast, successToast } from '@/utils/hooks';
 
@@ -34,6 +35,7 @@ const tabs = [
 
 const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, tab = 'details' }) => {
   const dispatch = useDispatch();
+
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +44,12 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
   const { session } = useSelector(getAuthSelector);
+
+  // Refetch on-subs offers after successful approve/reject
+  const handleRefetchOffers = () => {
+    const { page, pageSize } = PAGE_STATE;
+    dispatch(fetchOnSubsOffers({ page, perPage: pageSize }));
+  };
 
   // Get pending extension request from detailsData
   const pendingExtensionRequest = useMemo(() => {
@@ -264,6 +272,8 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
     return <DetailsContent detailsData={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
+  const hasChangeRequests = detailsData?.requests && detailsData.requests.length > 0;
+
   return (
     <>
       <div
@@ -309,6 +319,26 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
             onClick={handleViewRecap}
             disabled={isLoading}
           />
+
+          {/* Review Change Requests Button */}
+          {hasChangeRequests && (
+            <ModalWindow
+              buttonProps={{
+                text: 'Review deal information changes',
+                variant: 'primary',
+                size: 'small',
+                icon: { before: <UilEye size="14" className="fill-blue" /> },
+                className:
+                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
+              }}
+            >
+              <AdminChangeRequestsModal
+                requests={detailsData.requests}
+                cargoId={detailsData.cargoCode || 'CARGO-###'}
+                onSuccess={handleRefetchOffers}
+              />
+            </ModalWindow>
+          )}
 
           {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
           {detailsData?.extensionRequests?.length > 0 && detailsData?.taskId && hasApprovalPermission() && (
