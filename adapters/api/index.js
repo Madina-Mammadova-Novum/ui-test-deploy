@@ -1,6 +1,7 @@
 import { responseAdapter } from '../response';
 
 import { lowerCaseFormat } from '@/utils/helpers';
+import { ERROR_MESSAGE } from '@/lib/constants';
 
 export const successResponseAdapter = (response) => ({
   status: response?.status,
@@ -33,7 +34,7 @@ export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
       type: errorResponse?.type || errorResponse?.error?.type || null,
       traceid: errorResponse?.traceid || errorResponse?.error?.traceid || null,
       title: errorResponse?.title || errorResponse?.error?.title || statusText,
-      message: errorResponse?.detail || errorResponse?.error?.detail || 'An unexpected error occurred.',
+      message: errorResponse?.detail || errorResponse?.error?.detail || ERROR_MESSAGE,
       errors: errorResponse?.errors || errorResponse?.error?.errors || null,
     },
   };
