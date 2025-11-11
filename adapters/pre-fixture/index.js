@@ -183,7 +183,7 @@ const prefixtureOwnerDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
-    searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal } = {},
+    searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal, code } = {},
     charterer: { averageTonnagePerCharter, estimatedNumberOfChartersPerYear, yearsInOperation, registrationCity } = {},
     additionalDischargeOptions = {},
     sanctionedCountries = [],
@@ -194,6 +194,7 @@ const prefixtureOwnerDetailsAdapter = (data) => {
     countdownStatus,
     additionalTerms = [],
     expiresAt,
+    requests = [],
   } = data;
   const { country: registrationCountry } = registrationCity || {};
 
@@ -240,6 +241,8 @@ const prefixtureOwnerDetailsAdapter = (data) => {
     isCountdownActive: countdownStatus === 'Running',
     additionalTerms,
     expiresAt,
+    cargoCode: code,
+    requests,
   };
 };
 
@@ -256,7 +259,7 @@ const prefixtureChartererDetailsAdapter = (data) => {
     layTime,
     demurragePaymentTerm,
     paymentTerm,
-    searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal },
+    searchedCargo: { laycanStart, laycanEnd, loadTerminal, dischargeTerminal, code },
     charterer,
     additionalDischargeOptions = {},
     sanctionedCountries = [],
@@ -267,6 +270,7 @@ const prefixtureChartererDetailsAdapter = (data) => {
     countdownStatus,
     additionalTerms = [],
     expiresAt,
+    requests = [],
   } = data;
 
   // Safely extract vessel company details with proper null checks
@@ -311,6 +315,8 @@ const prefixtureChartererDetailsAdapter = (data) => {
     excludeInternationallySanctioned,
     additionalTerms,
     expiresAt,
+    cargoCode: code,
+    requests,
   };
 };
 

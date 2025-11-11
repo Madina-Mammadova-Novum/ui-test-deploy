@@ -194,7 +194,7 @@ export const onSubsDetailsAdapter = ({ data }) => {
         flagOfRegistry,
       } = {},
     } = {},
-    searchedCargo: { cargoType, loadTerminal, dischargeTerminal } = {},
+    searchedCargo: { cargoType, loadTerminal, dischargeTerminal, code } = {},
     heat,
     products,
     laycanStart,
@@ -223,6 +223,8 @@ export const onSubsDetailsAdapter = ({ data }) => {
     extensionRequests = [],
     expiresAt,
     additionalTerms = [],
+    requests = [],
+    cargoCode = code,
   } = data;
 
   const { name: registrationCityName, country: registrationCountry } = registrationCity || {};
@@ -382,6 +384,8 @@ export const onSubsDetailsAdapter = ({ data }) => {
     additionalDischargeOptions,
     sanctionedCountries: countriesAdapter({ data: sanctionedCountries }),
     excludeInternationallySanctioned,
+    requests,
+    cargoCode,
   };
 };
 
