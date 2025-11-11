@@ -3,7 +3,6 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-
 import { Button, HoverTooltip } from '@/elements';
 
 const IconButtonWithTooltip = ({
