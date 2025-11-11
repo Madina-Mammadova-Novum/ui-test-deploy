@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { UilEye } from '@iconscout/react-unicons';
+import { UilClock, UilEye } from '@iconscout/react-unicons';
 
 import CharterPartyContent from './CharterPartyContent';
 import DetailsContent from './DetailsContent';
@@ -11,6 +11,7 @@ import DocumentsContent from './DocumentsContent';
 
 import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 
+import { IconButtonWithTooltip } from '@/elements';
 import { PAGE_STATE } from '@/lib/constants';
 import { updateDealData } from '@/store/entities/notifications/slice';
 import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
@@ -108,23 +109,23 @@ const PreFixtureExpandedContent = ({
 
   return (
     <div className="px-5">
-      <div className="py-8 xlMax:h-20">
+      <div className="relative py-[3.75rem] 2md:py-8">
         <Tabs
           tabs={tabs}
           activeTab={currentTab}
           onClick={handleChange}
           customStyles="custom-container my-3 -mr-1/2 mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
-        <div className="flex items-center gap-2">
+        <div className="absolute left-1/2 top-14 flex -translate-x-1/2 items-center gap-2 2md:left-auto 2md:right-0 2md:top-3 2md:translate-x-0">
           {extensionTimeOptions && extensionTimeOptions.length > 0 && (
             <ModalWindow
-              buttonProps={{
-                text: 'Request response time extension',
-                variant: 'primary',
-                size: 'small',
-                className: 'tab-btn !text-[10px] font-bold !px-2 !h-5 uppercase leading-none',
-                disabled: !allowExtension || !isCountdownActive,
-              }}
+              buttonComponent={
+                <IconButtonWithTooltip
+                  icon={<UilClock size="18" className="fill-blue" />}
+                  tooltipText="Request response time extension"
+                  disabled={!allowExtension || !isCountdownActive}
+                />
+              }
             >
               <ExtendCountdown
                 offerId={offerId}
@@ -137,14 +138,12 @@ const PreFixtureExpandedContent = ({
           )}
           {hasChangeRequests && (
             <ModalWindow
-              buttonProps={{
-                text: 'Review deal information changes',
-                variant: 'primary',
-                size: 'small',
-                icon: { before: <UilEye size="14" className="fill-blue" /> },
-                className:
-                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-              }}
+              buttonComponent={
+                <IconButtonWithTooltip
+                  icon={<UilEye size="18" className="fill-blue" />}
+                  tooltipText="Review deal information changes"
+                />
+              }
             >
               <AdminChangeRequestsModal
                 requests={detailsData.requests}
