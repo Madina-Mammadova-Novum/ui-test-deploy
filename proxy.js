@@ -41,7 +41,7 @@ function handleCors(req, response) {
   return response;
 }
 
-export default async function middleware(req) {
+export default async function proxy(req) {
   // Initialize the response
   let response = NextResponse.next();
 

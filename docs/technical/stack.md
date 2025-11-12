@@ -5,13 +5,13 @@ ShipLink is built with modern web technologies, optimized for maritime B2B opera
 ## Current Versions
 
 - **Node.js**: 22.x (>=22.0.0)
-- **Next.js**: 15.5.3
-- **React**: 19.1.1
+- **Next.js**: 16
+- **React**: 19.2.0
 - **Package Manager**: Yarn (exclusively)
 
 ## Core Framework Architecture
 
-### Next.js 15.5.3 Application Structure
+### Next.js 16 Application Structure
 
 ```
 shiplink-frontend-ui/
