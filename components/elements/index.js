@@ -20,6 +20,7 @@ import FieldsetHeader from '@/elements/FieldsetHeader';
 import FieldsetWrapper from '@/elements/FieldsetWrapper';
 import HoverableIcon from '@/elements/HoverableIcon';
 import HoverTooltip from '@/elements/HoverTooltip';
+import IconButtonWithTooltip from '@/elements/IconButtonWithTooltip';
 import Input from '@/elements/Input';
 import CheckBoxInput from '@/elements/Input/CheckBoxInput';
 import OTPInput from '@/elements/Input/OTPInput';
@@ -89,6 +90,7 @@ export {
   PasswordInput,
   Loader,
   HoverableIcon,
+  IconButtonWithTooltip,
   NextLink,
   Label,
   Divider,

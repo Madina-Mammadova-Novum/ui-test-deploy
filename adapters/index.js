@@ -19,3 +19,4 @@ export * from '@/adapters/documentRequests';
 export * from '@/adapters/countdownTimer';
 export * from '@/adapters/common';
 export * from '@/adapters/response';
+export * from '@/adapters/approvals';

@@ -3,21 +3,22 @@
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { UilFileInfoAlt } from '@iconscout/react-unicons';
+import { UilCheck, UilClock, UilEye, UilFileInfoAlt, UilTimes } from '@iconscout/react-unicons';
 
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
 import { OnSubsExpandedContentPropTypes } from '@/lib/types';
 
-import { Button } from '@/elements';
-import { ROLES } from '@/lib/constants';
+import { IconButtonWithTooltip } from '@/elements';
+import { PAGE_STATE, ROLES } from '@/lib/constants';
 import { approveExtensionRequest, rejectExtensionRequest } from '@/services/assignedTasks';
 import { getPdfToView } from '@/services/offer';
 import { updateDealData } from '@/store/entities/notifications/slice';
+import { fetchOnSubsOffers } from '@/store/entities/on-subs/actions';
 import { updateCountdown, updateDeals } from '@/store/entities/on-subs/slice';
 import { getAuthSelector } from '@/store/selectors';
-import { ConfirmModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
+import { AdminChangeRequestsModal, ConfirmModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { transformDate } from '@/utils/date';
 import { errorToast, successToast } from '@/utils/hooks';
 
@@ -34,6 +35,7 @@ const tabs = [
 
 const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, tab = 'details' }) => {
   const dispatch = useDispatch();
+
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0].value);
   const [allowCountdownExtension, setAllowCountdownExtension] = useState(detailsData?.allowExtension);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +44,12 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
   const { session } = useSelector(getAuthSelector);
+
+  // Refetch on-subs offers after successful approve/reject
+  const handleRefetchOffers = () => {
+    const { page, pageSize } = PAGE_STATE;
+    dispatch(fetchOnSubsOffers({ page, perPage: pageSize }));
+  };
 
   // Get pending extension request from detailsData
   const pendingExtensionRequest = useMemo(() => {
@@ -264,11 +272,11 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
     return <DetailsContent detailsData={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
+  const hasChangeRequests = detailsData?.requests && detailsData.requests.length > 0;
+
   return (
     <>
-      <div
-        className={`py-16 2md:py-10 3md:py-8 ${hasApprovalPermission() && detailsData?.extensionRequests?.length > 0 ? '2md:h-36 2mdMax:h-48 lg:h-32' : ''}`}
-      >
+      <div className="py-[3.75rem] 2md:py-8">
         <Tabs
           activeTab={currentTab}
           tabs={tabs}
@@ -276,18 +284,17 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
           customStyles="custom-container my-3 mr-[-50%] mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
 
-        <div className="absolute right-1/2 top-14 flex translate-x-1/2 flex-col items-center gap-2 2md:right-1 2md:top-3 2md:-translate-x-5 2md:items-end">
+        <div className="absolute left-1/2 top-14 flex -translate-x-1/2 flex-row items-center gap-2 2md:left-auto 2md:right-5 2md:top-3 2md:translate-x-0">
           {/* Extend Countdown Button */}
           {detailsData?.taskId && detailsData?.allowExtension && hasExtensionPermission() && (
             <ModalWindow
-              buttonProps={{
-                text: 'Request response time extension',
-                variant: 'primary',
-                size: 'small',
-                disabled: !allowCountdownExtension,
-                className:
-                  'border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-              }}
+              buttonComponent={
+                <IconButtonWithTooltip
+                  icon={<UilClock size="18" className="fill-blue" />}
+                  tooltipText="Request response time extension"
+                  disabled={!allowCountdownExtension}
+                />
+              }
             >
               <ExtendCountdown
                 offerId={offerId}
@@ -298,49 +305,54 @@ const OnSubsExpandedContent = ({ detailsData = {}, documentsData = [], offerId, 
             </ModalWindow>
           )}
 
-          <Button
-            buttonProps={{
-              text: isLoading ? 'Loading...' : 'Recap',
-              variant: 'primary',
-              size: 'small',
-              icon: { before: <UilFileInfoAlt size="14" className="fill-blue" /> },
-            }}
-            customStyles="border border-blue hover:border-blue-darker whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold"
+          <IconButtonWithTooltip
+            icon={<UilFileInfoAlt size="18" className="fill-blue" />}
+            tooltipText={isLoading ? 'Loading...' : 'Recap'}
             onClick={handleViewRecap}
             disabled={isLoading}
+            loading={isLoading}
           />
+
+          {/* Review Change Requests Button */}
+          {hasChangeRequests && (
+            <ModalWindow
+              buttonComponent={
+                <IconButtonWithTooltip
+                  icon={<UilEye size="18" className="fill-blue" />}
+                  tooltipText="Review deal information changes"
+                />
+              }
+            >
+              <AdminChangeRequestsModal
+                requests={detailsData.requests}
+                cargoId={detailsData.cargoCode || 'CARGO-###'}
+                onSuccess={handleRefetchOffers}
+              />
+            </ModalWindow>
+          )}
 
           {/* Approve/Reject Extension Buttons - Show only if user is the initiator */}
           {detailsData?.extensionRequests?.length > 0 && detailsData?.taskId && hasApprovalPermission() && (
-            <div className="flex flex-col gap-2 rounded-md border border-gray-200 p-3 2md:mt-3 lg:mt-0">
-              <p className="text-xsm">
-                {session?.role === ROLES.OWNER ? 'Charterer' : 'Owner'} requested an extension of{' '}
-                <span className="font-semibold">{pendingExtensionRequest?.requestedMinutes}</span>{' '}
-                {pendingExtensionRequest?.requestedMinutes === 1 ? 'minute' : 'minutes'}
+            <div className="flex h-10 items-center gap-2 rounded-md border border-gray-200 bg-white p-2 shadow-sm">
+              <p className="whitespace-nowrap text-xs text-gray-700">
+                {session?.role === ROLES.OWNER ? 'Charterer' : 'Owner'} requests{' '}
+                <span className="font-semibold text-black">{pendingExtensionRequest?.requestedMinutes}min</span>
               </p>
 
-              <div className="flex gap-2">
-                <Button
-                  buttonProps={{
-                    text: 'Approve Extension',
-                    variant: 'primary',
-                    size: 'medium',
-                    className:
-                      'border border-green-500 hover:border-green-600 bg-green-500 hover:bg-green-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-                  }}
-                  disabled={actionLoading}
+              <div className="flex gap-1.5">
+                <IconButtonWithTooltip
+                  icon={<UilCheck size="16" className="fill-green-600" />}
+                  tooltipText="Approve extension"
                   onClick={showApproveModal}
-                />
-                <Button
-                  buttonProps={{
-                    text: 'Reject Extension',
-                    variant: 'delete',
-                    size: 'medium',
-                    className:
-                      'border border-red-500 hover:border-red-600 bg-red-500 hover:bg-red-600 text-white whitespace-nowrap !px-2.5 !py-0.5 uppercase !text-[10px] font-bold',
-                  }}
                   disabled={actionLoading}
+                  className="!border-green-500 !p-1.5 hover:!border-green-600 hover:!bg-green-50"
+                />
+                <IconButtonWithTooltip
+                  icon={<UilTimes size="16" className="fill-red-600" />}
+                  tooltipText="Reject extension"
                   onClick={showRejectModal}
+                  disabled={actionLoading}
+                  className="!border-red-500 !p-1.5 hover:!border-red-600 hover:!bg-red-50"
                 />
               </div>
             </div>

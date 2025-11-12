@@ -3,15 +3,20 @@
 import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { UilClock, UilEye } from '@iconscout/react-unicons';
+
 import CharterPartyContent from './CharterPartyContent';
 import DetailsContent from './DetailsContent';
 import DocumentsContent from './DocumentsContent';
 
 import { PreFixtureExpandedContentPropTypes } from '@/lib/types';
 
+import { IconButtonWithTooltip } from '@/elements';
+import { PAGE_STATE } from '@/lib/constants';
 import { updateDealData } from '@/store/entities/notifications/slice';
+import { fetchPrefixtureOffers } from '@/store/entities/pre-fixture/actions';
 import { updateCountdown } from '@/store/entities/pre-fixture/slice';
-import { ExtendCountdown, ModalWindow, Tabs } from '@/units';
+import { AdminChangeRequestsModal, ExtendCountdown, ModalWindow, Tabs } from '@/units';
 import { transformDate } from '@/utils/date';
 
 const tabs = [
@@ -42,6 +47,12 @@ const PreFixtureExpandedContent = ({
   const [currentTab, setCurrentTab] = useState(tab ?? tabs[0]?.value);
 
   const { allowExtension, extensionTimeOptions, taskId, isCountdownActive } = detailsData || {};
+
+  // Refetch pre-fixture offers after successful approve/reject
+  const handleRefetchOffers = () => {
+    const { page, pageSize } = PAGE_STATE;
+    dispatch(fetchPrefixtureOffers({ page, perPage: pageSize }));
+  };
 
   const handleExtensionSuccess = (extendedMinutes) => {
     // Update the local state
@@ -94,34 +105,54 @@ const PreFixtureExpandedContent = ({
     return <DetailsContent detailsData={detailsData} />;
   }, [currentTab, detailsData, documentsData, offerId]);
 
+  const hasChangeRequests = detailsData?.requests && detailsData.requests.length > 0;
+
   return (
     <div className="px-5">
-      <div className="py-8 xlMax:h-20">
+      <div className="relative py-[3.75rem] 2md:py-8">
         <Tabs
           tabs={tabs}
           activeTab={currentTab}
           onClick={handleChange}
           customStyles="custom-container my-3 -mr-1/2 mx-auto absolute left-1/2 translate-(x/y)-1/2"
         />
-        {extensionTimeOptions && extensionTimeOptions.length > 0 && (
-          <ModalWindow
-            buttonProps={{
-              text: 'Request response time extension',
-              variant: 'primary',
-              size: 'small',
-              className: 'tab-btn !text-[10px] font-bold !px-2 !h-5 uppercase leading-none',
-              disabled: !allowExtension || !isCountdownActive,
-            }}
-          >
-            <ExtendCountdown
-              offerId={offerId}
-              taskId={taskId}
-              onExtensionSuccess={handleExtensionSuccess}
-              description="In order to increase countdown time, please, send the request."
-              options={extensionTimeOptions}
-            />
-          </ModalWindow>
-        )}
+        <div className="absolute left-1/2 top-14 flex -translate-x-1/2 items-center gap-2 2md:left-auto 2md:right-0 2md:top-3 2md:translate-x-0">
+          {extensionTimeOptions && extensionTimeOptions.length > 0 && (
+            <ModalWindow
+              buttonComponent={
+                <IconButtonWithTooltip
+                  icon={<UilClock size="18" className="fill-blue" />}
+                  tooltipText="Request response time extension"
+                  disabled={!allowExtension || !isCountdownActive}
+                />
+              }
+            >
+              <ExtendCountdown
+                offerId={offerId}
+                taskId={taskId}
+                onExtensionSuccess={handleExtensionSuccess}
+                description="In order to increase countdown time, please, send the request."
+                options={extensionTimeOptions}
+              />
+            </ModalWindow>
+          )}
+          {hasChangeRequests && (
+            <ModalWindow
+              buttonComponent={
+                <IconButtonWithTooltip
+                  icon={<UilEye size="18" className="fill-blue" />}
+                  tooltipText="Review deal information changes"
+                />
+              }
+            >
+              <AdminChangeRequestsModal
+                requests={detailsData.requests}
+                cargoId={detailsData.cargoCode || 'CARGO-###'}
+                onSuccess={handleRefetchOffers}
+              />
+            </ModalWindow>
+          )}
+        </div>
       </div>
       {printContent}
     </div>

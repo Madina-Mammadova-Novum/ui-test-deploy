@@ -6,10 +6,8 @@ import { ModalWindowPropTypes } from '@/lib/types';
 
 import { Button, Modal } from '@/elements';
 
-const ModalWindow = ({ children, buttonProps, containerClass }) => {
+const ModalWindow = ({ children, buttonProps, buttonComponent, containerClass }) => {
   const [opened, setOpened] = useState(false);
-
-  const { text, variant, size, icon, className, disabled, ...restButtonProps } = buttonProps;
 
   const handleOpenModal = (e) => {
     e?.stopPropagation();
@@ -23,8 +21,14 @@ const ModalWindow = ({ children, buttonProps, containerClass }) => {
 
   const childrenWithProps = cloneElement(children, { closeModal: handleCloseModal });
 
-  return (
-    <>
+  // If buttonComponent is provided, use it; otherwise, use buttonProps
+  const renderButton = () => {
+    if (buttonComponent) {
+      return cloneElement(buttonComponent, { onClick: handleOpenModal });
+    }
+
+    const { text, variant, size, icon, className, disabled, ...restButtonProps } = buttonProps;
+    return (
       <Button
         buttonProps={{ text, variant, size, icon }}
         disabled={disabled}
@@ -32,6 +36,12 @@ const ModalWindow = ({ children, buttonProps, containerClass }) => {
         onClick={handleOpenModal}
         {...restButtonProps}
       />
+    );
+  };
+
+  return (
+    <>
+      {renderButton()}
       <Modal containerClass={containerClass} opened={opened} onClose={handleCloseModal}>
         {childrenWithProps}
       </Modal>
