@@ -9,8 +9,8 @@ This document summarizes the version upgrades made to the ShipLink Frontend proj
 | Technology | Previous Version | Current Version |
 | ---------- | ---------------- | --------------- |
 | Node.js    | 20.x             | 22.x (>=22.0.0) |
-| Next.js    | 14.x             | 16              |
-| React      | 18.x             | 19.2.0          |
+| Next.js    | 14.x             | 15.5.3          |
+| React      | 18.x             | 19.1.1          |
 
 ## Files Updated
 
@@ -24,9 +24,9 @@ This document summarizes the version upgrades made to the ShipLink Frontend proj
 #### `package.json`
 
 - Node.js engine requirement: `>=22.0.0`
-- Next.js: `16`
-- React: `19.2.0`
-- React DOM: `19.2.0`
+- Next.js: `15.5.3`
+- React: `19.1.1`
+- React DOM: `19.1.1`
 
 #### `Dockerfile.ci`
 
@@ -38,32 +38,32 @@ This document summarizes the version upgrades made to the ShipLink Frontend proj
 #### `README.md`
 
 - Added "Tech Stack Versions" section with current versions
-- Clear visibility of Node.js 22.x, Next.js 16, and React 19.2.0
+- Clear visibility of Node.js 22.x, Next.js 15.5.3, and React 19.1.1
 
 #### `.github/copilot_instructions.md`
 
 - Updated "Project Overview" section
 - Updated "Tech Stack" section with:
   - Runtime: Node.js 22.x (>=22.0.0)
-  - Framework: Next.js 16 with App Router
-  - React: 19.2.0
+  - Framework: Next.js 15.5.3 with App Router
+  - React: 19.1.1
 
 #### `.github/workflows/README.md`
 
 - Added "Current Versions" section at the top
-- Documents Node.js 22.x, Next.js 16, React 19.2.0
+- Documents Node.js 22.x, Next.js 15.5.3, React 19.1.1
 
 #### `.cursor/rules/stack.mdc`
 
 - Updated "Core Technologies" section with:
   - Runtime: Node.js 22.x (>=22.0.0)
-  - Framework: Next.js 16
-  - React: 19.2.0
+  - Framework: Next.js 15.5.3
+  - React: 19.1.1
 
 #### `docs/technical/stack.md`
 
 - Added "Current Versions" section at the beginning
-- Updated "Core Framework Architecture" heading to reflect Next.js 16
+- Updated "Core Framework Architecture" heading to reflect Next.js 15.5.3
 
 ### 3. GitHub Actions Workflows
 
@@ -94,16 +94,14 @@ React 19 includes several breaking changes and new features. Key considerations:
 3. **Server Components** are now stable
 4. **Actions** for form handling are now built-in
 
-### Breaking Changes (Next.js 16)
+### Breaking Changes (Next.js 15)
 
-Next.js 16 includes:
+Next.js 15 includes:
 
-1. **Cache Components** - New caching architecture for improved performance
-2. **Async Request APIs** - All request APIs (params, searchParams, headers, cookies) are now async
-3. **Server Actions** are now stable with enhanced features
-4. **Improved caching** mechanisms with granular control
-5. **Better TypeScript support** with enhanced type inference
-6. **Enhanced App Router** with new features and optimizations
+1. **Partial Prerendering** (experimental) is available
+2. **Server Actions** are now stable
+3. **Improved caching** mechanisms
+4. **Better TypeScript support**
 
 ### Node.js 22 Features
 

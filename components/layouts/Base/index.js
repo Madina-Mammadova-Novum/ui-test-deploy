@@ -4,6 +4,7 @@ import '@/styles/index.css';
 export default async function BaseLayout({ children }) {
   return (
     <html lang="en">
+      <head />
       <body>{children}</body>
     </html>
   );

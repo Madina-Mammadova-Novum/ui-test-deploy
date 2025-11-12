@@ -86,7 +86,6 @@ const Input = React.forwardRef(
   }
 );
 
-Input.displayName = 'Input';
 Input.propTypes = InputPropTypes;
 
 export default Input;

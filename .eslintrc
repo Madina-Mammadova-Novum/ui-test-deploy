@@ -4,7 +4,6 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "airbnb",
-    "next/core-web-vitals",
     "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
