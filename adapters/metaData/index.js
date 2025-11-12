@@ -70,7 +70,7 @@ export const metaData = (props) => {
   const url = getPublicUrl(slug);
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_URL || 'https://ship.link'),
+    metadataBase: data?.route ?? '/',
     title,
     description,
     keywords: keywords !== null ? getKeywords(keywords) : [],
