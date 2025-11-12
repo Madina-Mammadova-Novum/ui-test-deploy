@@ -11,8 +11,8 @@ This rule provides an overview of the technical stack and associated guidelines 
 ## Core Technologies
 
 - **Runtime**: Node.js 22.x (>=22.0.0)
-- **Framework**: Next.js 15.5.3 (using `pages/api`, SSR, App Router partially)
-- **React**: 19.1.1
+- **Framework**: Next.js 16 (using `pages/api`, SSR, App Router partially)
+- **React**: 19.2.0
 - **State Management**: Redux Toolkit (with Redux Persist, custom slices, Thunk)
 - **Styling**: Tailwind CSS (with custom theme, responsive design, utility-first, custom breakpoint `3md: 1024px`)
 - **Forms**: React Hook Form (with Yup for schema validation, custom maritime rules)
