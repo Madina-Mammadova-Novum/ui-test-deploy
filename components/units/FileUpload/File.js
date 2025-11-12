@@ -15,7 +15,6 @@ const File = memo(({ title, onClick }) => {
   );
 });
 
-File.displayName = 'File';
 File.propTypes = {
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,

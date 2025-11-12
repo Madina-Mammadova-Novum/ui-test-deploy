@@ -52,7 +52,6 @@ const TextArea = React.forwardRef(
   }
 );
 
-TextArea.displayName = 'TextArea';
 TextArea.propTypes = TextAreaPropTypes;
 
 export default TextArea;

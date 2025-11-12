@@ -7,7 +7,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Tech Stack Versions
 
 - **Node.js**: 22.x (>=22.0.0)
-- **Next.js**: 16
+- **Next.js**: 15.5.4
 - **React**: 19.2.0
 - **Package Manager**: Yarn (exclusively)
 

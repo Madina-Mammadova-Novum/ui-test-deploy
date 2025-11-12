@@ -1,4 +1,4 @@
-# Next.js 16 Data Fetching Strategy Migration
+# Next.js 15 Data Fetching Strategy Migration
 
 ## ShipLink Frontend Architecture Improvement
 
@@ -6,7 +6,7 @@
 
 ## 📋 Executive Summary
 
-We propose migrating our data fetching architecture to leverage Next.js 16's React Server Components (RSC) and modern features. This will:
+We propose migrating our data fetching architecture to leverage Next.js 15's React Server Components (RSC) and modern features. This will:
 
 - ✅ Reduce page load time by **30-50%** through server-side rendering
 - ✅ Decrease bundle size by moving data fetching to the server
@@ -1560,6 +1560,6 @@ export function NegotiatingContent({ data, currentPage, perPage, activeTab }) {
 
 ## Appendix: Additional Resources
 
-- [Next.js 16 Documentation](https://nextjs.org/docs)
+- [Next.js 15 Documentation](https://nextjs.org/docs)
 - [React Server Components RFC](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md)
 - [Next.js App Router Migration Guide](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)
