@@ -114,7 +114,6 @@ const SimpleDropdown = React.forwardRef(
   }
 );
 
-SimpleDropdown.displayName = 'SimpleDropdown';
 SimpleDropdown.propTypes = SimpleDropdownPropTypes;
 
 export default SimpleDropdown;

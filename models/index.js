@@ -1,9 +1,7 @@
 import LoginModel from '@/models/loginModel';
 import RefreshTokenModel from '@/models/refreshTokenModel';
 
-const models = {
+export default {
   LoginModel,
   RefreshTokenModel,
 };
-
-export default models;
