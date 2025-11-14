@@ -85,7 +85,11 @@ const PersonalDetailsForm = ({ closeModal }) => {
               <span>
                 Email change will only update your contact email, not the email you use to log in. To change your login
                 email address, please contact{' '}
-                <a href="mailto:support@ship.link" className="text-blue-500 underline hover:text-blue-700">
+                <a
+                  href="mailto:support@ship.link"
+                  className="text-blue-500 underline hover:text-blue-700"
+                  aria-label="Email support at support@ship.link"
+                >
                   support@ship.link
                 </a>
               </span>
