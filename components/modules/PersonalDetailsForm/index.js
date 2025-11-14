@@ -78,7 +78,20 @@ const PersonalDetailsForm = ({ closeModal }) => {
         <Title level="3" className="text-lg font-bold capitalize text-black">
           Edit User Details
         </Title>
-        <Notes subtitle="Please note that any changes to these fields will require verification by Ship.Link." />
+        <Notes
+          subtitle={
+            <div className="flex flex-col gap-1.5">
+              <span>Please note that any changes to these fields will require verification by Ship.Link.</span>
+              <span>
+                Email change will only update your contact email, not the email you use to log in. To change your login
+                email address, please contact{' '}
+                <a href="mailto:support@ship.link" className="text-blue-500 underline hover:text-blue-700">
+                  support@ship.link
+                </a>
+              </span>
+            </div>
+          }
+        />
         <PersonalDetails onUpdatePage />
       </ModalFormManager>
     </FormProvider>

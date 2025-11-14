@@ -337,7 +337,6 @@ const PersonalDetails = ({ onUpdatePage = false }) => {
                       size: 'large',
                     }}
                     disabled={isSubmitting || isCheckingAvailability}
-                    isLoading={isCheckingAvailability}
                     onClick={handlePhoneValidationClick}
                   />
                 )}
