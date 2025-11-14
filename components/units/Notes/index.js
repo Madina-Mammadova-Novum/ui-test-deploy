@@ -33,7 +33,12 @@ const Notes = ({ title, subtitle, data, children }) => {
           {title}
         </Title>
       )}
-      {subtitle && <div className="text-xs-sm text-black">{subtitle}</div>}
+      {subtitle &&
+        (typeof subtitle === 'string' || typeof subtitle === 'number' ? (
+          <p className="text-xs-sm text-black">{subtitle}</p>
+        ) : (
+          <div className="text-xs-sm text-black">{subtitle}</div>
+        ))}
       {data && <div className="grid grid-cols-2 pt-1.5 text-xs-sm font-bold text-black">{printRuleList}</div>}
       {children}
     </article>
