@@ -141,9 +141,9 @@ const AdminChangeRequestsModal = ({ requests = [], cargoId = 'N/A', onSuccess })
 
       <Notes title="Action Required">
         <p className="text-xsm text-black">
-          The platform administrator has requested changes to the deal information below. Please review each proposed
-          change carefully and approve or reject based on your agreement. Your counterparty will also be required to
-          review these changes before they can be applied to the deal.
+          A request has been submitted to update the deal information. The broker has forwarded the proposed changes for
+          your review. Please review each change and either approve or reject it. The updates will only take effect if
+          both parties approve the changes.
         </p>
       </Notes>
 
