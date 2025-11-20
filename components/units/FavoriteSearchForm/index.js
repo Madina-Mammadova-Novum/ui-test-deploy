@@ -22,7 +22,7 @@ const FavoriteSearchForm = ({
   message = 'Would you like to receive notifications related to this favorite search?',
   closeModal,
 }) => {
-  const methods = useHookFormParams({ schema });
+  const methods = useHookFormParams({ schema, state: { isNotification: true } });
 
   const { setValue, getValues } = methods;
 

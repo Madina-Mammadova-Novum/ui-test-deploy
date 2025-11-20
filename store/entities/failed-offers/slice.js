@@ -12,7 +12,7 @@ const initialState = {
   },
   loading: false,
   error: null,
-  toggle: false,
+  toggle: null,
 };
 
 const failedOffersSlice = createSlice({

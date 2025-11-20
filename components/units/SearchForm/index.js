@@ -74,11 +74,15 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const searchFormData = methods.getValues();
 
   const handleMarkAsFavorite = async () => {
-    const isValid = await methods.trigger();
-
-    if (isValid) {
-      handleOpenModal(null, 'addFavorite');
-    }
+    // Use handleSubmit to properly trigger validation and update submitCount
+    await methods.handleSubmit(
+      // On valid form
+      () => {
+        handleOpenModal(null, 'addFavorite');
+      },
+      // On invalid form - do nothing, errors will show
+      () => {}
+    )();
   };
 
   const handleViewFavoriteSearches = () => {

@@ -16,7 +16,7 @@ export default function FixtureLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages } = useSelector(getFixtureDataSelector);
+  const { offers, totalPages, toggle } = useSelector(getFixtureDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -36,6 +36,7 @@ export default function FixtureLayout({ children }) {
     data: { label: 'Offer stage #4', title: 'Fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    expandAll: toggle,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

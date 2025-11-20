@@ -7,7 +7,7 @@ import { transformDate } from '@/utils/date';
 const initialState = {
   loading: true,
   error: null,
-  toggle: false,
+  toggle: null,
   data: {
     totalPages: 0,
     offers: [],

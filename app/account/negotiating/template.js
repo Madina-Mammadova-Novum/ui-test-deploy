@@ -16,7 +16,7 @@ export default function NegotiatingLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages } = useSelector(getNegotiatingDataSelector);
+  const { offers, totalPages, toggle } = useSelector(getNegotiatingDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -36,6 +36,7 @@ export default function NegotiatingLayout({ children }) {
     data: { label: 'Offer stage #1', title: 'Negotiating' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    expandAll: toggle,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

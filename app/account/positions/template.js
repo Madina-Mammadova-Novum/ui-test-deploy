@@ -15,7 +15,7 @@ export default function PositionsLayout({ children }) {
 
   const [pageState, setPageState] = useState(PAGE_STATE);
 
-  const { vessels, totalPages } = useSelector(getUserVesselsSelector);
+  const { vessels, totalPages, toggle } = useSelector(getUserVesselsSelector);
   const { page, pageSize, sortOptions, sortValue } = pageState;
 
   /* Change handler by key-value for userStore */
@@ -54,6 +54,7 @@ export default function PositionsLayout({ children }) {
     data: { label: null, title: 'My positions' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    expandAll: toggle,
     sorting: {
       value: sortValue,
       options: sortOptions,

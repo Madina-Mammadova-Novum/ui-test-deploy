@@ -15,7 +15,7 @@ import { useFilters } from '@/utils/hooks';
 export default function OnSubsLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
-  const { offers, totalPages } = useSelector(getOnSubsDataSelector);
+  const { offers, totalPages, toggle } = useSelector(getOnSubsDataSelector);
 
   const { page, pageSize } = PAGE_STATE;
 
@@ -36,6 +36,7 @@ export default function OnSubsLayout({ children }) {
     data: { label: 'Offer stage #3', title: 'On subs' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    expandAll: toggle,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;
