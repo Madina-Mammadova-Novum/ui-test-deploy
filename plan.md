@@ -1,4 +1,5 @@
 # Frontend Split Strategy: Marketing vs App
+
 ## Monorepo with Subdomain Separation & Independent Deployments
 
 > **Document Purpose**: Implementation plan for separating our marketing site from the authenticated app using a hybrid monorepo approach  
@@ -34,6 +35,7 @@
 ### What We're Building
 
 A **monorepo with subdomain separation** where:
+
 - **ship.link** serves marketing pages (public website)
 - **app.ship.link** serves the authenticated application
 - **Same codebase**, deployed to **four separate servers** (2 dev + 2 prod)
@@ -44,15 +46,15 @@ A **monorepo with subdomain separation** where:
 
 ### Why This Approach?
 
-| Benefit | Description |
-|---------|-------------|
-| ✅ **Monorepo Benefits** | Shared components, no npm packages, single source of truth |
-| ✅ **Independent Deployments** | Update marketing without touching app, and vice versa |
-| ✅ **Failure Isolation** | If app crashes, marketing stays up (critical for SEO) |
-| ✅ **Easy Authentication** | Cookie domain `.ship.link` works across both subdomains |
-| ✅ **Testing Environment** | Live dev environment for testing before production |
-| ✅ **Simple Maintenance** | Share components easily, fix bugs once |
-| ✅ **Future Proof** | Can fully split later if needed |
+| Benefit                        | Description                                                |
+| ------------------------------ | ---------------------------------------------------------- |
+| ✅ **Monorepo Benefits**       | Shared components, no npm packages, single source of truth |
+| ✅ **Independent Deployments** | Update marketing without touching app, and vice versa      |
+| ✅ **Failure Isolation**       | If app crashes, marketing stays up (critical for SEO)      |
+| ✅ **Easy Authentication**     | Cookie domain `.ship.link` works across both subdomains    |
+| ✅ **Testing Environment**     | Live dev environment for testing before production         |
+| ✅ **Simple Maintenance**      | Share components easily, fix bugs once                     |
+| ✅ **Future Proof**            | Can fully split later if needed                            |
 
 ### Key Metrics
 
@@ -130,12 +132,12 @@ We keep our **single codebase (monorepo)** but deploy it to **four separate serv
 
 ### Domain Structure
 
-| Domain | Purpose | Environment | Server | Users |
-|--------|---------|-------------|--------|-------|
-| **dev.ship.link** | Dev marketing | Development | Dev Marketing | Testers 🧪 |
-| **dev-app.ship.link** | Dev app | Development | Dev App | Testers 🧪 |
-| **ship.link** | Public website | Production | Prod Marketing | Everyone 🌍 |
-| **app.ship.link** | Authenticated app | Production | Prod App | Logged users 🔐 |
+| Domain                | Purpose           | Environment | Server         | Users           |
+| --------------------- | ----------------- | ----------- | -------------- | --------------- |
+| **dev.ship.link**     | Dev marketing     | Development | Dev Marketing  | Testers 🧪      |
+| **dev-app.ship.link** | Dev app           | Development | Dev App        | Testers 🧪      |
+| **ship.link**         | Public website    | Production  | Prod Marketing | Everyone 🌍     |
+| **app.ship.link**     | Authenticated app | Production  | Prod App       | Logged users 🔐 |
 
 ### User Journey (Production)
 
@@ -271,6 +273,7 @@ shiplink-frontend-ui/
 ```
 
 **Important Notes:**
+
 - Parentheses `(marketing)`, `(auth)`, `(app)` are just for organization - they don't appear in URLs
 - `app/(marketing)/about-us/page.js` → renders at `/about-us`
 - `app/(app)/account/search/page.js` → renders at `/account/search`
@@ -285,11 +288,11 @@ shiplink-frontend-ui/
 
 We have **3 development contexts**:
 
-| Environment | Marketing | App | Branch | Deployment |
-|-------------|-----------|-----|--------|------------|
-| **Local Development** | localhost:3000 | localhost:3001 | feature/* | Manual |
-| **Live Development** | dev.ship.link | dev-app.ship.link | develop | Auto (GitHub Actions) |
-| **Production** | ship.link | app.ship.link | main | Auto (GitHub Actions) |
+| Environment           | Marketing      | App               | Branch     | Deployment            |
+| --------------------- | -------------- | ----------------- | ---------- | --------------------- |
+| **Local Development** | localhost:3000 | localhost:3001    | feature/\* | Manual                |
+| **Live Development**  | dev.ship.link  | dev-app.ship.link | develop    | Auto (GitHub Actions) |
+| **Production**        | ship.link      | app.ship.link     | main       | Auto (GitHub Actions) |
 
 ### Environment Variables Structure
 
@@ -402,36 +405,36 @@ const getConfig = () => {
   const appEnv = process.env.NEXT_PUBLIC_APP_ENV || 'production';
   const isMarketing = siteMode === 'marketing';
   const isApp = siteMode === 'app';
-  
+
   return {
     siteMode,
     isMarketing,
     isApp,
-    
+
     // URLs
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_URL,
-    appUrl: isMarketing 
-      ? process.env.NEXT_PUBLIC_APP_URL 
+    appUrl: isMarketing
+      ? process.env.NEXT_PUBLIC_APP_URL
       : process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_URL,
-    marketingUrl: isApp 
-      ? process.env.NEXT_PUBLIC_MARKETING_URL 
+    marketingUrl: isApp
+      ? process.env.NEXT_PUBLIC_MARKETING_URL
       : process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_URL,
     apiUrl: process.env.NEXT_PUBLIC_API_URL,
-    
+
     // External services
     strapiUrl: process.env.NEXT_PUBLIC_STRAPI_API_URL,
     signalrUrl: process.env.NEXT_PUBLIC_RT_URL,
     backendApiUrl: process.env.BACKEND_API_URL,
-    
+
     // Features
     enableAnalytics: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true',
     enableStrapi: isMarketing, // Marketing needs Strapi
     enableSignalR: isApp, // App needs SignalR
     maintenanceMode: process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true',
-    
+
     // Auth
     cookieDomain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
-    
+
     // Environment checks
     isDevelopment: env === 'development',
     isProduction: env === 'production',
@@ -450,11 +453,11 @@ import getConfig from '@/lib/config';
 
 const MyComponent = () => {
   const config = getConfig();
-  
+
   const handleLogin = () => {
     window.location.href = `${config.appUrl}/account/search`;
   };
-  
+
   return (
     <div>
       {config.isMarketing && <MarketingHeader />}
@@ -716,15 +719,15 @@ Add these scripts to `package.json`:
     "dev": "next dev",
     "dev:marketing": "cross-env NEXT_PUBLIC_SITE_MODE=marketing PORT=3000 next dev",
     "dev:app": "cross-env NEXT_PUBLIC_SITE_MODE=app PORT=3001 next dev",
-    
+
     "build": "next build",
     "build:marketing": "cross-env NEXT_PUBLIC_SITE_MODE=marketing next build",
     "build:app": "cross-env NEXT_PUBLIC_SITE_MODE=app next build",
-    
+
     "start": "next start",
     "start:marketing": "cross-env NEXT_PUBLIC_SITE_MODE=marketing next start",
     "start:app": "cross-env NEXT_PUBLIC_SITE_MODE=app PORT=3001 next start",
-    
+
     "test": "jest",
     "lint": "next lint"
   }
@@ -780,14 +783,16 @@ For subdomain testing locally:
 **Mac/Linux:** `/etc/hosts`
 
 Add:
-   ```
-   127.0.0.1 ship.link
-   127.0.0.1 app.ship.link
-   ```
+
+```
+127.0.0.1 ship.link
+127.0.0.1 app.ship.link
+```
 
 #### Step 5: Run Both Servers
 
 **Terminal 1 - Marketing:**
+
 ```bash
 yarn dev:marketing
 # Runs on http://localhost:3000
@@ -795,6 +800,7 @@ yarn dev:marketing
 ```
 
 **Terminal 2 - App:**
+
 ```bash
 yarn dev:app
 # Runs on http://localhost:3001
@@ -918,12 +924,12 @@ feature/* (local dev)
 export function setAuthCookie(token, refreshToken) {
   const isProduction = process.env.NODE_ENV === 'production';
   const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
-  
+
   // Access token (7 days)
   document.cookie = `auth_token=${token}; domain=${domain}; path=/; ${
     isProduction ? 'secure;' : ''
   } samesite=lax; max-age=604800`;
-  
+
   // Refresh token (30 days)
   document.cookie = `refresh_token=${refreshToken}; domain=${domain}; path=/; ${
     isProduction ? 'secure;' : ''
@@ -932,7 +938,7 @@ export function setAuthCookie(token, refreshToken) {
 
 export function clearAuthCookies() {
   const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
-  
+
   document.cookie = `auth_token=; domain=${domain}; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
   document.cookie = `refresh_token=; domain=${domain}; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 }
@@ -948,53 +954,46 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const siteMode = process.env.NEXT_PUBLIC_SITE_MODE;
   const { pathname } = request.nextUrl;
-  
+
   // Server 1 (Marketing): Only allow marketing routes
   if (siteMode === 'marketing') {
     // Block app routes on marketing server
-    if (pathname.startsWith('/account') || 
-        pathname.startsWith('/deals') ||
-        pathname.startsWith('/negotiating')) {
+    if (pathname.startsWith('/account') || pathname.startsWith('/deals') || pathname.startsWith('/negotiating')) {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL;
       return NextResponse.redirect(new URL(pathname, appUrl));
     }
-    
+
     // Allow marketing routes: /, /about-us, /contact-us, /features, /login, /signup
     return NextResponse.next();
   }
-  
+
   // Server 2 (App): Only allow app routes
   if (siteMode === 'app') {
     // Block marketing routes on app server (except auth and root)
-    if (pathname.startsWith('/about-us') || 
-        pathname.startsWith('/contact-us') ||
-        pathname.startsWith('/features')) {
+    if (pathname.startsWith('/about-us') || pathname.startsWith('/contact-us') || pathname.startsWith('/features')) {
       const marketingUrl = process.env.NEXT_PUBLIC_MARKETING_URL;
       return NextResponse.redirect(new URL(pathname, marketingUrl));
     }
-    
+
     // Check authentication for app routes
     const token = request.cookies.get('auth_token');
-    const isAppRoute = pathname.startsWith('/account') || 
-                       pathname.startsWith('/deals') ||
-                       pathname.startsWith('/negotiating');
-    
+    const isAppRoute =
+      pathname.startsWith('/account') || pathname.startsWith('/deals') || pathname.startsWith('/negotiating');
+
     if (!token && isAppRoute) {
       const marketingUrl = process.env.NEXT_PUBLIC_MARKETING_URL;
       return NextResponse.redirect(new URL('/login', marketingUrl));
     }
-    
+
     // Allow authenticated app access
     return NextResponse.next();
   }
-  
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
 ```
 
@@ -1012,24 +1011,24 @@ export default function LoginForm() {
   const router = useRouter();
   const config = getConfig();
   const [loading, setLoading] = useState(false);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const response = await fetch(`${config.apiUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         // Set cookie with .ship.link domain
         setAuthCookie(data.accessToken, data.refreshToken);
-        
+
         // Redirect to app
         window.location.href = `${config.appUrl}/account/search`;
       }
@@ -1039,12 +1038,8 @@ export default function LoginForm() {
       setLoading(false);
     }
   };
-  
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* Form fields */}
-    </form>
-  );
+
+  return <form onSubmit={handleSubmit}>{/* Form fields */}</form>;
 }
 ```
 
@@ -1055,12 +1050,14 @@ export default function LoginForm() {
 ### Week 1: Setup & Structure
 
 #### Day 1-2: Project Reorganization
+
 - [ ] Create route groups: `(marketing)`, `(auth)`, `(app)`
 - [ ] Move existing pages to appropriate route groups
 - [ ] Reorganize components into `marketing/`, `app/`, `shared/`
 - [ ] Create `lib/config.js` helper
 
 #### Day 3-4: Environment Configuration
+
 - [ ] Create 4 environment files for local dev
 - [ ] Update `.gitignore` to exclude environment files
 - [ ] Add `cross-env` package: `yarn add -D cross-env`
@@ -1068,6 +1065,7 @@ export default function LoginForm() {
 - [ ] Test local development with both servers running
 
 #### Day 5: Middleware & Authentication
+
 - [ ] Update `middleware.js` for subdomain routing
 - [ ] Update cookie configuration in `lib/auth.js`
 - [ ] Test authentication flow locally
@@ -1076,6 +1074,7 @@ export default function LoginForm() {
 ### Week 2: CI/CD & DNS
 
 #### Day 1-2: GitHub Actions & Environments
+
 - [ ] Create 4 GitHub Environments (dev-marketing, dev-app, prod-marketing, prod-app)
 - [ ] Create 4 workflow files
 - [ ] Configure secrets for all 4 environments
@@ -1083,6 +1082,7 @@ export default function LoginForm() {
 - [ ] Update `deploy-reusable.yml` to pass SITE_MODE to Docker container
 
 #### Day 3: DNS Configuration
+
 - [ ] Add DNS records:
   - `dev.ship.link` → CNAME/A to dev marketing server
   - `dev-app.ship.link` → CNAME/A to dev app server
@@ -1090,6 +1090,7 @@ export default function LoginForm() {
 - [ ] Verify DNS propagation
 
 #### Day 4-5: Server Configuration
+
 - [ ] Prepare 4 servers (or containers) for deployment
 - [ ] Configure SSL certificates for all 4 domains
 - [ ] Test deployment to dev environment
@@ -1098,18 +1099,21 @@ export default function LoginForm() {
 ### Week 3: Testing & Launch
 
 #### Day 1-2: Development Environment Testing
+
 - [ ] Test full dev environment (both servers)
 - [ ] Test authentication across subdomains on dev
 - [ ] Test shared component updates on dev
 - [ ] Fix any issues found
 
 #### Day 3-4: Production Deployment
+
 - [ ] Deploy to production (both servers)
 - [ ] Test authentication across subdomains on prod
 - [ ] Test all critical user flows
 - [ ] Monitor for issues
 
 #### Day 5: Documentation & Cleanup
+
 - [ ] Update team documentation
 - [ ] Create runbook for deployments
 - [ ] Monitor and verify stability
@@ -1123,21 +1127,21 @@ export default function LoginForm() {
 
 **Good news:** Since you're using existing servers and Docker deployment, there's **no additional cost** for Azure App Services!
 
-| Resource | Monthly Cost | Notes |
-|----------|--------------|-------|
-| **Existing Servers** | Current cost | No change |
-| **Azure Container Registry** | Current cost | Stores Docker images |
-| **DNS** | Current cost | Add subdomain records |
-| **SSL Certificates** | Current cost or Free | Let's Encrypt or existing |
-| **Total Additional Cost** | **$0** | Uses existing infrastructure |
+| Resource                     | Monthly Cost         | Notes                        |
+| ---------------------------- | -------------------- | ---------------------------- |
+| **Existing Servers**         | Current cost         | No change                    |
+| **Azure Container Registry** | Current cost         | Stores Docker images         |
+| **DNS**                      | Current cost         | Add subdomain records        |
+| **SSL Certificates**         | Current cost or Free | Let's Encrypt or existing    |
+| **Total Additional Cost**    | **$0**               | Uses existing infrastructure |
 
 ### Cost Comparison
 
-| Approach | Monthly Cost | Notes |
-|----------|--------------|-------|
-| **Current (Single Server)** | Baseline | Your existing setup |
-| **Option B Enhanced (4 Docker Containers)** | Baseline + $0 | No additional infrastructure needed |
-| **Azure App Services (4 servers)** | Baseline + $220 | Would require new App Services |
+| Approach                                    | Monthly Cost    | Notes                               |
+| ------------------------------------------- | --------------- | ----------------------------------- |
+| **Current (Single Server)**                 | Baseline        | Your existing setup                 |
+| **Option B Enhanced (4 Docker Containers)** | Baseline + $0   | No additional infrastructure needed |
+| **Azure App Services (4 servers)**          | Baseline + $220 | Would require new App Services      |
 
 **Key Advantage:** You're using Docker containers on existing servers, so there's **no infrastructure cost increase**! 💰
 
@@ -1148,41 +1152,49 @@ export default function LoginForm() {
 ### Pros for Developers
 
 ✅ **Single Codebase**
+
 - Clone one repo
 - All code in one place
 - Single package.json and yarn.lock
 
 ✅ **Easy Component Sharing**
+
 - Import directly: `import { Button } from '@/components/shared/Button'`
 - No npm packages to manage
 - Update once, works everywhere
 
 ✅ **Simple Local Development**
+
 - Two terminals, two ports
 - Test both contexts simultaneously
 - No complex setup
 
 ✅ **Clear Structure**
+
 - Route groups make organization obvious
 - `(marketing)` vs `(app)` is self-documenting
 - Components organized by usage
 
 ✅ **Existing CI/CD**
+
 - Uses your current deployment infrastructure
 - Familiar Docker-based deployment
 - Proven reusable workflow pattern
 
 ✅ **Smart Deployments**
+
 - Path-based triggers (only deploy what changed)
 - Automatic based on file changes
 - Can manually trigger via workflow_dispatch
 
 ✅ **Testing Environment**
+
 - Live dev environment for testing
 - Test before production deployment
 - Matches production architecture
 
 ✅ **Yarn Benefits**
+
 - Fast installations with caching
 - Reliable `yarn.lock` for consistency
 - Built-in workspaces support if needed
@@ -1190,21 +1202,25 @@ export default function LoginForm() {
 ### Cons to Be Aware Of
 
 ⚠️ **Two Servers Running Locally**
+
 - Need to run both for shared component testing
 - Two terminal windows
 - Minor inconvenience
 
 ⚠️ **Environment Variable Management**
+
 - Multiple .env files
 - Need to keep secrets synced across 4 GitHub Environments
 - Use config helper to simplify
 
 ⚠️ **Shared Component Updates**
+
 - Must deploy to both servers (per environment)
 - Automatic via GitHub Actions
 - Slightly slower than single deploy
 
 ⚠️ **Four Production Servers**
+
 - Need to maintain 4 separate server instances
 - More SSH access management
 - More deployment workflows to monitor
@@ -1257,6 +1273,7 @@ A: Ideally yes, but you could run multiple Docker containers on the same server 
 **Q: How do cookies work across ship.link and app.ship.link?**
 
 A: We set cookies with domain `.ship.link` (note the leading dot). This makes them available to:
+
 - ship.link ✅
 - app.ship.link ✅
 - dev.ship.link ✅
@@ -1270,12 +1287,14 @@ A: Only marketing pages are affected. App server (app.ship.link) keeps running. 
 **Q: How do we test subdomain behavior locally?**
 
 A: Two options:
+
 1. Use different ports (localhost:3000 and localhost:3001)
 2. Update hosts file and use ship.link:3000 and app.ship.link:3001
 
 **Q: Do we need to deploy both servers for every change?**
 
 A: No! GitHub Actions has path-based triggers:
+
 - Marketing change → deploys only to marketing servers (dev and/or prod)
 - App change → deploys only to app servers (dev and/or prod)
 - Shared component → deploys to all 4 servers (automatically)
@@ -1293,6 +1312,7 @@ A: SignalR connects from the app server (app.ship.link). Since we use environmen
 **Q: What's the deployment process?**
 
 A:
+
 1. Push to `develop` → Auto-deploys to dev servers (marketing and/or app based on changed files)
 2. Test on dev.ship.link and dev-app.ship.link
 3. Push to `main` → Auto-deploys to prod servers (marketing and/or app based on changed files)
@@ -1305,6 +1325,7 @@ A: Yes! Your existing deployment workflow has automatic rollback built in. Each 
 **Q: How long does deployment take?**
 
 A:
+
 - Build Docker image: ~3-5 minutes
 - Push to ACR: ~1-2 minutes
 - SSH deployment: ~2-3 minutes
@@ -1323,6 +1344,7 @@ A: Because we're using Docker containers on existing servers. We're just running
 **Q: What if we need more resources?**
 
 A: You can:
+
 1. Upgrade your existing servers
 2. Use separate servers for each container
 3. Scale horizontally with load balancers
@@ -1330,6 +1352,7 @@ A: You can:
 **Q: Is it worth the complexity?**
 
 A: Yes, for these reasons:
+
 - Marketing can update frequently without risk to app
 - App stability is critical for users
 - SEO/lead generation stays up even if app has issues
