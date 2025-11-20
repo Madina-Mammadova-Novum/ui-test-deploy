@@ -77,11 +77,12 @@ const FixtureDetails = ({ searchedParams }) => {
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = fixtureHeaderDataAdapter({ data: rowData });
+    const shouldExpand = toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow
         key={rowData?.id}
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles="1.5fr 1.5fr 1fr 1fr 2fr 1fr 1fr 1fr" />}
         footer={<FixtureExpandedFooter identity={{ isOwner }} />}

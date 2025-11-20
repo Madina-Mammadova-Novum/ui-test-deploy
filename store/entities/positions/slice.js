@@ -7,7 +7,7 @@ import { userTankersDetailsAdapter } from '@/adapters/vessel';
 const initialState = {
   loading: true,
   error: null,
-  toggle: false,
+  toggle: null,
   data: {
     vessels: [],
     unassigned: {

@@ -5,7 +5,7 @@ import { fetchFixtureOffers } from './actions';
 const initialState = {
   loading: true,
   error: null,
-  toggle: false,
+  toggle: null,
   data: {
     offers: [],
     totalPages: 0,

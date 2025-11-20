@@ -17,8 +17,8 @@ import { useHookFormParams } from '@/utils/hooks';
 const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
   const { searchParams } = useSelector(getSearchSelector);
 
-  const [expandExactResults, setExpandExactResults] = useState({ value: false });
-  const [expandPartialResults, setExpandPartialResults] = useState({ value: false });
+  const [expandExactResults, setExpandExactResults] = useState({ value: null });
+  const [expandPartialResults, setExpandPartialResults] = useState({ value: null });
   const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
 
   const methods = useHookFormParams({ state: searchParams });
@@ -45,29 +45,36 @@ const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
           <TextRow title="Exact Matches (arrival within laycan)">{`${data?.exactResults.length} ${
             data?.exactResults.length > 1 ? 'results' : 'result'
           }`}</TextRow>
-          <ToggleRows onToggleClick={setExpandExactResults} />
+          <ToggleRows onToggleClick={setExpandExactResults} expandAll={expandExactResults.value} />
         </div>
       )}
       <div className="mt-3 flex flex-col gap-y-2.5">
-        {data?.exactResults.map((rowHeader) => (
-          <ExpandableRow
-            key={rowHeader.id}
-            header={
-              <ExpandableCardHeader key={rowHeader?.id} headerData={searchHeaderDataAdapter({ data: rowHeader })} />
-            }
-            footer={
-              <TankerExpandedFooter
-                key={rowHeader?.id}
-                tankerId={rowHeader.id}
-                tankerData={{ ballastLeg: rowHeader.ballastLeg, estimatedArrivalTime: rowHeader.estimatedArrivalTime }}
-                products={rowHeader.products}
-              />
-            }
-            expand={expandExactResults}
-          >
-            <ExpandedContent data={rowHeader.expandedData} />
-          </ExpandableRow>
-        ))}
+        {data?.exactResults.map((rowHeader, index) => {
+          const shouldExpand = expandExactResults.value !== null ? expandExactResults.value : index === 0;
+
+          return (
+            <ExpandableRow
+              key={rowHeader.id}
+              header={
+                <ExpandableCardHeader key={rowHeader?.id} headerData={searchHeaderDataAdapter({ data: rowHeader })} />
+              }
+              footer={
+                <TankerExpandedFooter
+                  key={rowHeader?.id}
+                  tankerId={rowHeader.id}
+                  tankerData={{
+                    ballastLeg: rowHeader.ballastLeg,
+                    estimatedArrivalTime: rowHeader.estimatedArrivalTime,
+                  }}
+                  products={rowHeader.products}
+                />
+              }
+              expand={shouldExpand}
+            >
+              <ExpandedContent data={rowHeader.expandedData} />
+            </ExpandableRow>
+          );
+        })}
       </div>
 
       {!!data?.partialResults.length && (
@@ -75,29 +82,36 @@ const TankerSearchResults = ({ request, data, isAccountSearch = false }) => {
           <TextRow title="Partial matches (arrival outside of laycan)">{`${data?.partialResults.length} ${
             data?.partialResults.length > 1 ? 'results' : 'result'
           }`}</TextRow>
-          <ToggleRows onToggleClick={setExpandPartialResults} />
+          <ToggleRows onToggleClick={setExpandPartialResults} expandAll={expandPartialResults.value} />
         </div>
       )}
       <div className="mt-3 flex flex-col gap-y-2.5">
-        {data?.partialResults.map((rowHeader) => (
-          <ExpandableRow
-            key={rowHeader?.id}
-            header={
-              <ExpandableCardHeader key={rowHeader?.id} headerData={searchHeaderDataAdapter({ data: rowHeader })} />
-            }
-            footer={
-              <TankerExpandedFooter
-                key={rowHeader?.id}
-                tankerId={rowHeader.id}
-                tankerData={{ ballastLeg: rowHeader.ballastLeg, estimatedArrivalTime: rowHeader.estimatedArrivalTime }}
-                products={rowHeader.products}
-              />
-            }
-            expand={expandPartialResults}
-          >
-            <ExpandedContent data={rowHeader.expandedData} />
-          </ExpandableRow>
-        ))}
+        {data?.partialResults.map((rowHeader, index) => {
+          const shouldExpand = expandPartialResults.value !== null ? expandPartialResults.value : index === 0;
+
+          return (
+            <ExpandableRow
+              key={rowHeader?.id}
+              header={
+                <ExpandableCardHeader key={rowHeader?.id} headerData={searchHeaderDataAdapter({ data: rowHeader })} />
+              }
+              footer={
+                <TankerExpandedFooter
+                  key={rowHeader?.id}
+                  tankerId={rowHeader.id}
+                  tankerData={{
+                    ballastLeg: rowHeader.ballastLeg,
+                    estimatedArrivalTime: rowHeader.estimatedArrivalTime,
+                  }}
+                  products={rowHeader.products}
+                />
+              }
+              expand={shouldExpand}
+            >
+              <ExpandedContent data={rowHeader.expandedData} />
+            </ExpandableRow>
+          );
+        })}
       </div>
     </>
   ) : (

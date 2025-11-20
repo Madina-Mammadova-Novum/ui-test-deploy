@@ -14,13 +14,14 @@ const FailedOffersResultContent = ({ data, toggle, isOpened, tab }) => {
   const printExpandableRow = (rowData, index) => {
     const rowHeader = failedOffersHeaderDataAdapter({ data: rowData });
     const gridStyles = '1fr 1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr';
+    const shouldExpand = toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow
         key={rowData?.id}
         className="px-5"
         header={<ExpandableCardHeader headerData={rowHeader} gridStyles={gridStyles} />}
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         isOpened={isOpened}
       >
         <FailedOffersExpandedContent

@@ -16,7 +16,7 @@ export default function PreFixtureLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages } = useSelector(getPreFixtureDataSelector);
+  const { offers, totalPages, toggle } = useSelector(getPreFixtureDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -36,6 +36,7 @@ export default function PreFixtureLayout({ children }) {
     data: { label: 'Offer stage #2', title: 'Pre-fixture' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    expandAll: toggle,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

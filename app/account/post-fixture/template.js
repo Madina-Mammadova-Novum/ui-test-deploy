@@ -17,7 +17,7 @@ export default function PostFixtureLayout({ children }) {
   const dispatch = useDispatch();
   const searchedParams = useParams();
 
-  const { offers, totalPages, searchParams, sorting } = useSelector(getPostFixtureDataSelector);
+  const { offers, totalPages, searchParams, sorting, toggle } = useSelector(getPostFixtureDataSelector);
   const { page, pageSize } = PAGE_STATE;
 
   const paginationParams = useFilters({
@@ -54,6 +54,7 @@ export default function PostFixtureLayout({ children }) {
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
     isDetailsPage: Boolean(searchedParams.id),
+    expandAll: toggle,
   };
 
   return <AccountNestedLayout config={layoutConfig}>{children}</AccountNestedLayout>;

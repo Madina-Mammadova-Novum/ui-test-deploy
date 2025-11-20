@@ -19,6 +19,7 @@ const Fleets = ({ searchedParams }) => {
 
   const printExpandableRow = (rowData, index) => {
     const rowHeader = fleetsPageHeaderDataAdapter({ data: rowData });
+    const shouldExpand = toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow
@@ -45,7 +46,7 @@ const Fleets = ({ searchedParams }) => {
             ]}
           />
         }
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         isOpened={Boolean(searchedParams?.id)}
       >
         <FleetsExpandedContent

@@ -104,6 +104,7 @@ const OnSubsDetails = ({ searchedParams }) => {
 
     const { frozenAt, isFailed } = rowData;
     const isStatusSectionActive = isFailed || frozenAt;
+    const shouldExpand = toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow
@@ -118,7 +119,7 @@ const OnSubsDetails = ({ searchedParams }) => {
             }
           />
         }
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         className="px-5"
         footer={
           <OnSubsExpandedFooter

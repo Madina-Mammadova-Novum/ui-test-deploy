@@ -12,7 +12,7 @@ import { useFilters } from '@/utils/hooks';
 
 export default function FleetsLayout({ children }) {
   const dispatch = useDispatch();
-  const { refetch, data, totalPages } = useSelector(getFleetsSelector);
+  const { refetch, data, totalPages, toggle } = useSelector(getFleetsSelector);
 
   const { page, pageSize } = PAGE_STATE;
 
@@ -37,6 +37,7 @@ export default function FleetsLayout({ children }) {
     data: { label: null, title: 'Fleet Management' },
     pagination: { ...paginationParams, totalPages },
     onToggle: ({ value }) => dispatch(setToggle(value)),
+    expandAll: toggle,
   };
 
   return (
