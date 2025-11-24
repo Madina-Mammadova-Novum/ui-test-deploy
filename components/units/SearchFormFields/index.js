@@ -91,6 +91,11 @@ const SearchFormFields = ({
     name: 'loadTerminal',
   });
 
+  const watchedDischargePort = useWatch({
+    control,
+    name: 'dischargePort',
+  });
+
   const showAdditionalDischargeValue = useWatch({
     control,
     name: 'showAdditionalDischarge',
@@ -133,10 +138,25 @@ const SearchFormFields = ({
       dischargePort: 'dischargeTerminal',
     };
 
+    const oppositePortKey = {
+      loadPort: 'dischargePort',
+      dischargePort: 'loadPort',
+    };
+
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
     if (error) {
       clearErrors(key);
+    }
+
+    // Check if user selected the same port that's already selected in the opposite field
+    if (portKeys.includes(key)) {
+      const oppositePort = getValues(oppositePortKey[key]);
+      if (oppositePort && value && oppositePort.value === value.value) {
+        // Clear the opposite port if same port is selected
+        setValue(oppositePortKey[key], null);
+        setValue(terminalKeys[oppositePortKey[key]], null);
+      }
     }
 
     setValue(key, value);
@@ -262,12 +282,34 @@ const SearchFormFields = ({
     callback(dropDownOptionsAdapter({ data }));
   }, 400);
 
-  const loadOptions = (inputValue, callback) => {
+  // Mark ports as disabled if they're selected in the opposite dropdown
+  const getPortsWithDisabled = (excludePort) => {
+    if (!excludePort?.value) return ports;
+    return ports.map((port) => ({
+      ...port,
+      isDisabled: port.value === excludePort.value,
+    }));
+  };
+
+  // Mark async loaded ports as disabled if they're selected in the opposite dropdown
+  const getLoadOptionsWithDisabled = (excludePort) => (inputValue, callback) => {
     if (!inputValue) {
-      callback(ports);
+      callback(getPortsWithDisabled(excludePort));
       return;
     }
-    debouncedLoadOptions(inputValue, callback);
+
+    debouncedLoadOptions(inputValue, (options) => {
+      if (!excludePort?.value) {
+        callback(options);
+        return;
+      }
+      callback(
+        options.map((port) => ({
+          ...port,
+          isDisabled: port.value === excludePort.value,
+        }))
+      );
+    });
   };
 
   useEffect(() => {
@@ -420,10 +462,10 @@ const SearchFormFields = ({
             name="loadPort"
             label="load port"
             labelBadge="*"
-            options={ports}
+            options={getPortsWithDisabled(watchedDischargePort)}
             loading={portsLoader}
             onMenuScrollToBottom={handleMore}
-            loadOptions={loadOptions}
+            loadOptions={getLoadOptionsWithDisabled(watchedDischargePort)}
             disabled={initialLoading}
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
             onChange={(option) => handleChange('loadPort', option)}
@@ -445,9 +487,9 @@ const SearchFormFields = ({
             name="dischargePort"
             label="discharge port"
             labelBadge="*"
-            options={ports}
+            options={getPortsWithDisabled(watchedLoadPort)}
             loading={portsLoader}
-            loadOptions={loadOptions}
+            loadOptions={getLoadOptionsWithDisabled(watchedLoadPort)}
             onMenuScrollToBottom={handleMore}
             disabled={initialLoading}
             customStyles={{ className: 'w-full' }}
