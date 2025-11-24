@@ -624,7 +624,7 @@ const SearchFormFields = ({
                     size: 'small',
                     icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
                   }}
-                  customStyles="ml-auto !p-0"
+                  customStyles="ml-auto !p-0 !pt-1"
                   onClick={() => handleRemoveProduct(productId)}
                   disabled={isSubmitting}
                 />
