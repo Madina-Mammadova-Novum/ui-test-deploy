@@ -10,12 +10,12 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
       fill: isSelected ? '#199AF5' : '#072D46',
     },
   }),
-  control: (base, { menuIsOpen }) => ({
+  control: (base, { menuIsOpen, isDisabled }) => ({
     ...base,
     '&:hover': {
       border: menuIsOpen && '1px solid #199AF5',
     },
-    background: selectedOption && '#E7ECF8',
+    background: isDisabled ? '#E7ECF8' : '#ffffff',
     borderRadius: '6px',
     border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#DADFEA' : '#E53636'} `,
     cursor: 'pointer',
