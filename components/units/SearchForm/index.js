@@ -51,6 +51,21 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     }
 
     resetForm(methods);
+
+    // Reset products array to a single empty product to avoid sparse array issues
+    methods.setValue(
+      'products',
+      [
+        {
+          product: null,
+          density: '',
+          quantity: '',
+          tolerance: '',
+        },
+      ],
+      { shouldValidate: false }
+    );
+
     onReset();
     setProductState([0]);
   };

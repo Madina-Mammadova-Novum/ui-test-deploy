@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { addDays } from 'date-fns';
 import { debounce } from 'lodash';
@@ -17,7 +17,6 @@ import { getCargoTypes } from '@/services/cargoTypes';
 import { getPortsForSearchForm } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
-import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
 import { AdditionalDischargeForm, Captcha } from '@/units';
 import {
@@ -36,7 +35,6 @@ const SearchFormFields = ({
   isAccountSearch = false,
   maxQuantity = null,
 }) => {
-  const dispatch = useDispatch();
   const { searchParams } = useSelector(getSearchSelector);
 
   const {
@@ -200,42 +198,49 @@ const SearchFormFields = ({
     const newProductId = availableProductIds.find((el) => !currentProductIndexes.includes(el));
 
     if (newProductId !== undefined) {
+      // Initialize the new product slot with empty values to prevent form state issues
+      setValue(
+        `products[${newProductId}]`,
+        {
+          product: null,
+          density: '',
+          quantity: '',
+          tolerance: '',
+        },
+        { shouldValidate: false, shouldDirty: false }
+      );
+
       setProductState((prevState) => [...prevState, newProductId]);
-
-      const updatedProductsByIndex = [...(searchParams?.productsByIndex || [0]), newProductId];
-      const updatedSearchParams = {
-        ...searchParams,
-        productsByIndex: updatedProductsByIndex,
-      };
-
-      dispatch(setSearchParams(updatedSearchParams));
     }
   };
 
   const handleRemoveProduct = (id) => {
+    // Clear errors for the product being removed
     clearErrors(`products[${id}]`);
-    const currentProducts = getValues('products');
 
-    const updatedProducts = currentProducts.filter((_, index) => index !== id);
+    // Get all current products
+    const allProducts = getValues('products') || [];
 
-    setValue('products', updatedProducts);
+    // Build a mapping of current productState indices to their values
+    const productMap = {};
+    productState.forEach((productId) => {
+      if (productId !== id && allProducts[productId]) {
+        productMap[productId] = allProducts[productId];
+      }
+    });
 
-    setProductState((prevState) => (id === 0 ? prevState.slice(0, -1) : prevState.filter((product) => product !== id)));
+    // Update productState first (remove the deleted id)
+    const newProductState = productState.filter((product) => product !== id);
+    setProductState(newProductState);
 
-    const updatedProductsByIndex =
-      id === 0
-        ? (searchParams?.productsByIndex || []).slice(0, -1) // remove last if `id` is `0`
-        : searchParams?.productsByIndex?.filter((_, index) => index !== id); // remove by `id` otherwise
+    // Rebuild the products array based on the new productState order
+    const newProductsArray = [];
+    newProductState.forEach((productId) => {
+      newProductsArray[productId] = productMap[productId];
+    });
 
-    const updatedSearchParamsProducts = searchParams?.products?.filter((_, index) => index !== id);
-
-    const updatedSearchParams = {
-      ...searchParams,
-      products: updatedSearchParamsProducts,
-      productsByIndex: updatedProductsByIndex,
-    };
-
-    dispatch(setSearchParams(updatedSearchParams));
+    // Update form with new products array
+    setValue('products', newProductsArray, { shouldValidate: false, shouldDirty: false });
   };
 
   const getCargoes = async () => {
