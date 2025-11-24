@@ -23,12 +23,19 @@ import { AdditionalDischargeForm, Captcha } from '@/units';
 import {
   convertDataToOptions,
   convertTerminalDataToOptions,
+  formatCurrency,
   getValueWithPath,
   shouldShowCaptcha,
 } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const SearchFormFields = ({ productState, setProductState, captchaRef, isAccountSearch = false }) => {
+const SearchFormFields = ({
+  productState,
+  setProductState,
+  captchaRef,
+  isAccountSearch = false,
+  maxQuantity = null,
+}) => {
   const dispatch = useDispatch();
   const { searchParams } = useSelector(getSearchSelector);
 
@@ -89,6 +96,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
   const showAdditionalDischargeValue = useWatch({
     control,
     name: 'showAdditionalDischarge',
+  });
+
+  const watchedCargoType = useWatch({
+    control,
+    name: 'cargoType',
   });
 
   const minDateForLaycanEnd = watchedLaycanStart ? new Date(watchedLaycanStart) : new Date();
@@ -478,26 +490,40 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
           asyncCall
         />
         {productState?.map((productId, index) => {
-          const { density = {} } = getValues(`products[${productId}].product`) || {};
+          const selectedProduct = getValues(`products[${productId}].product`);
+          const { density = {} } = selectedProduct || {};
+          const isProductSelected = !!selectedProduct?.value;
 
           const minValue = parseFloat(density?.min?.toFixed(4)).toString();
           const maxValue = parseFloat(density?.max?.toFixed(4)).toString();
 
-          const helperTextDensity = `${minValue} - ${maxValue}`;
+          const helperTextDensity = density.min && density.max ? `${minValue} - ${maxValue} mt/m³` : '';
+          const helperTextTolerance = isProductSelected ? '1% - 20%' : '';
+          const helperTextQuantity =
+            isProductSelected && maxQuantity
+              ? `1 - ${formatCurrency(maxQuantity)} MT`
+              : isProductSelected
+                ? '1 MT - ∞'
+                : '';
 
           return (
             <div key={`product_${productId}`}>
               <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2.5 3md:flex-nowrap">
                 <FormDropdown
-                  onChange={(option) => {
+                  onChange={async (option) => {
                     setSelected(!selected);
-                    handleChange(`products[${productId}].product`, option);
+                    await handleChange(`products[${productId}].product`, option);
+                    // Trigger density validation after product selection
+                    const currentDensity = getValues(`products[${productId}].density`);
+                    if (currentDensity) {
+                      trigger(`products[${productId}].density`);
+                    }
                   }}
                   name={`products[${productId}].product`}
                   loading={products.loading}
                   asyncCall
                   options={products.data}
-                  disabled={!products.data.length}
+                  disabled={!watchedCargoType || !products.data.length || isSubmitting}
                   label={`product #${index + 1}`}
                   labelBadge="*"
                   customStyles={{ className: 'w-full 3md:w-1/2' }}
@@ -509,9 +535,9 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
-                  helperText={density.min && helperTextDensity}
+                  helperText={helperTextDensity}
                   error={errors.products ? errors.products[productId]?.density?.message : null}
-                  disabled={isSubmitting}
+                  disabled={!isProductSelected || isSubmitting}
                   min={String(density.min)}
                   max={String(density.max)}
                   step="any"
@@ -523,8 +549,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   type="number"
                   placeholder="tons"
                   customStyles="w-full md:w-[45%] 3md:w-2/5"
+                  helperText={helperTextQuantity}
                   error={errors.products ? errors.products[productId]?.quantity?.message : null}
-                  disabled={isSubmitting}
+                  disabled={!isProductSelected || isSubmitting}
+                  min="1"
+                  max={maxQuantity ? String(maxQuantity) : undefined}
                 />
                 <Input
                   {...register(`products[${productId}].tolerance`)}
@@ -533,8 +562,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   type="number"
                   placeholder="%"
                   customStyles="w-full md:w-[45%] 3md:w-1/5"
+                  helperText={helperTextTolerance}
                   error={errors.products ? errors.products[productId]?.tolerance?.message : null}
-                  disabled={isSubmitting}
+                  disabled={!isProductSelected || isSubmitting}
+                  min="1"
+                  max="20"
                 />
               </div>
               {productState?.length > 1 && (
@@ -547,6 +579,7 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   }}
                   customStyles="ml-auto !p-0"
                   onClick={() => handleRemoveProduct(productId)}
+                  disabled={isSubmitting}
                 />
               )}
             </div>
@@ -574,6 +607,7 @@ SearchFormFields.propTypes = {
   setProductState: PropTypes.func.isRequired,
   captchaRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   isAccountSearch: PropTypes.bool,
+  maxQuantity: PropTypes.number,
 };
 
 export default SearchFormFields;
