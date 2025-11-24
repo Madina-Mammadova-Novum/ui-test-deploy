@@ -40,7 +40,11 @@ const FormDropdown = ({
         const hasValue = { ...field }.value;
 
         return (
-          <div className={`relative ${className}`}>
+          <div
+            className={classNames('relative', className, {
+              'cursor-not-allowed opacity-80': disabled || isSubmitting,
+            })}
+          >
             <Label
               name={name}
               className={classNames('mb-0.5 block whitespace-nowrap text-xs-sm', {
