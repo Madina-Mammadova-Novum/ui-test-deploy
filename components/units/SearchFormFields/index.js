@@ -548,9 +548,9 @@ const SearchFormFields = ({
           const helperTextTolerance = isProductSelected ? '1% - 20%' : '';
           const helperTextQuantity =
             isProductSelected && maxQuantity
-              ? `1 - ${formatCurrency(maxQuantity)} MT`
+              ? `1,000 - ${formatCurrency(maxQuantity)} MT`
               : isProductSelected
-                ? '1 MT - ∞'
+                ? '1,000 MT - ∞'
                 : '';
 
           return (
@@ -599,7 +599,7 @@ const SearchFormFields = ({
                   helperText={helperTextQuantity}
                   error={errors.products ? errors.products[productId]?.quantity?.message : null}
                   disabled={!isProductSelected || isSubmitting}
-                  min="1"
+                  min="1000"
                   max={maxQuantity ? String(maxQuantity) : undefined}
                 />
                 <Input
