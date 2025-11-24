@@ -622,7 +622,7 @@ const SearchFormFields = ({
                     text: 'Delete',
                     variant: 'tertiary',
                     size: 'small',
-                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
+                    icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
                   }}
                   customStyles="ml-auto !p-0"
                   onClick={() => handleRemoveProduct(productId)}
