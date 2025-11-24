@@ -9,10 +9,11 @@ import { CalculatedDetailsPropTypes } from '@/lib/types';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { FormDropdown, Input } from '@/elements';
 import { getPortsForSearchForm } from '@/services/port';
+import { formatCurrency } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 import { toolsCalculatorOptions } from '@/utils/mock';
 
-const CalculatedDetails = ({ isFreight, onChange }) => {
+const CalculatedDetails = ({ isFreight, onChange, maxQuantity = null, watchedFromPort, watchedToPort }) => {
   const { register, errors } = useHookForm();
   const handleMore = () => setPerList((prev) => prev + 100);
 
@@ -33,12 +34,34 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
     callback(dropDownOptionsAdapter({ data }));
   }, 400);
 
-  const loadOptions = (inputValue, callback) => {
+  // Mark ports as disabled if they're selected in the opposite dropdown
+  const getPortsWithDisabled = (excludePort) => {
+    if (!excludePort?.value) return ports;
+    return ports.map((port) => ({
+      ...port,
+      isDisabled: port.value === excludePort.value,
+    }));
+  };
+
+  // Mark async loaded ports as disabled if they're selected in the opposite dropdown
+  const getLoadOptionsWithDisabled = (excludePort) => (inputValue, callback) => {
     if (!inputValue) {
-      callback(ports);
+      callback(getPortsWithDisabled(excludePort));
       return;
     }
-    debouncedLoadOptions(inputValue, callback);
+
+    debouncedLoadOptions(inputValue, (options) => {
+      if (!excludePort?.value) {
+        callback(options);
+        return;
+      }
+      callback(
+        options.map((port) => ({
+          ...port,
+          isDisabled: port.value === excludePort.value,
+        }))
+      );
+    });
   };
 
   useEffect(() => {
@@ -48,6 +71,9 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
   }, []);
 
   const printOptionalProps = useMemo(() => {
+    const helperTextQuantity =
+      isFreight && maxQuantity ? `1,000 - ${formatCurrency(maxQuantity)} MT` : isFreight ? '1,000 MT - ∞' : '';
+
     return isFreight ? (
       <Input
         {...register('cargoQuantity')}
@@ -56,8 +82,9 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
         labelBadge="*"
         placeholder="Enter the cargo quantity"
         type="number"
-        helperText="Min value: 1000 tons"
+        helperText={helperTextQuantity}
         min="1000"
+        max={maxQuantity ? String(maxQuantity) : undefined}
       />
     ) : (
       <Input
@@ -71,7 +98,7 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
         min="0.1"
       />
     );
-  }, [isFreight, errors, register]);
+  }, [isFreight, errors, register, maxQuantity]);
 
   // TODO: Add back the additional ports
   // const printAdditionalPorts = useMemo(() => {
@@ -115,10 +142,10 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
         asyncCall
         name="fromPort"
         onChange={(option) => onChange('fromPort', option)}
-        options={ports}
+        options={getPortsWithDisabled(watchedToPort)}
         loading={portsLoader}
         onMenuScrollToBottom={handleMore}
-        loadOptions={loadOptions}
+        loadOptions={getLoadOptionsWithDisabled(watchedToPort)}
         disabled={!ports.length}
         label="From which port"
         labelBadge="*"
@@ -128,10 +155,10 @@ const CalculatedDetails = ({ isFreight, onChange }) => {
         asyncCall
         name="toPort"
         onChange={(option) => onChange('toPort', option)}
-        options={ports}
+        options={getPortsWithDisabled(watchedFromPort)}
         loading={portsLoader}
         onMenuScrollToBottom={handleMore}
-        loadOptions={loadOptions}
+        loadOptions={getLoadOptionsWithDisabled(watchedFromPort)}
         disabled={!ports.length}
         label="To which port"
         labelBadge="*"

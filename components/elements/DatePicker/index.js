@@ -35,6 +35,13 @@ const DatePicker = ({
 }) => {
   const [showPicker, setShowPicker] = useState(false);
 
+  const calculateDefaultMaxDate = () => {
+    const nextYear = new Date().getFullYear() + 1;
+    return new Date(nextYear, 11, 31); // December 31st of next year
+  };
+
+  const effectiveMaxDate = maxDate || calculateDefaultMaxDate();
+
   const handleDate = (pickedDate) => {
     onChange(transformDate(pickedDate, 'yyyy-MM-dd'));
     if (closeOnSelect) setShowPicker(false);
@@ -80,7 +87,7 @@ const DatePicker = ({
               >
                 <Calendar
                   minDate={minDate}
-                  maxDate={maxDate}
+                  maxDate={effectiveMaxDate}
                   className={`${calendarClass} rounded-lg`}
                   date={field.value ? new Date(field.value) : null}
                   onChange={handleDate}

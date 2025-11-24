@@ -15,3 +15,4 @@ export * from '@/services/clearanceFiles';
 export * from '@/services/documentRequests';
 export * from '@/services/countdownTimer';
 export * from '@/services/approvals';
+export * from '@/services/calculator';

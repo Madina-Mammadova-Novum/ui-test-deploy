@@ -11,6 +11,7 @@ import { SearchFormPropTypes } from '@/lib/types';
 import { FormManager } from '@/common';
 import { Button, Modal } from '@/elements';
 import { captchaSchema, searchForTankerSchema } from '@/lib/schemas';
+import { getMaxSearchableQuantity } from '@/services';
 import { getSearchSelector } from '@/store/selectors';
 import { FavoriteSearchForm, FavoriteSearchList, SearchFormFields } from '@/units';
 import { resetForm, shouldShowCaptcha } from '@/utils/helpers';
@@ -22,13 +23,14 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   const [productState, setProductState] = useState(searchParams?.productsByIndex || [0]);
   const [isAddFavoriteOpened, setIsAddFavoriteOpened] = useState(false);
   const [isViewFavoriteSearchesOpened, setIsViewFavoriteSearchesOpened] = useState(false);
+  const [maxQuantity, setMaxQuantity] = useState(null);
   const captchaRef = useRef(null);
 
   const schema = yup.object({
-    ...searchForTankerSchema(),
+    ...searchForTankerSchema({ maxQuantity }),
     ...(isAccountSearch || !shouldShowCaptcha() ? {} : captchaSchema()),
   });
-  const methods = useHookFormParams({ schema, state: searchParams });
+  const methods = useHookFormParams({ schema, state: searchParams, mode: 'onChange' });
 
   const handleResetFields = () => {
     // Set initial values for additional discharge form fields
@@ -49,6 +51,21 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
     }
 
     resetForm(methods);
+
+    // Reset products array to a single empty product to avoid sparse array issues
+    methods.setValue(
+      'products',
+      [
+        {
+          product: null,
+          density: '',
+          quantity: '',
+          tolerance: '',
+        },
+      ],
+      { shouldValidate: false }
+    );
+
     onReset();
     setProductState([0]);
   };
@@ -90,6 +107,22 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
   };
 
   useEffect(() => {
+    const fetchMaxQuantity = async () => {
+      try {
+        const response = await getMaxSearchableQuantity();
+        if (response?.data?.maxSearchableQuantity) {
+          setMaxQuantity(response.data.maxSearchableQuantity);
+        }
+      } catch (error) {
+        // Silently fail - validation will use default max if API fails
+        console.error('Failed to fetch max searchable quantity:', error);
+      }
+    };
+
+    fetchMaxQuantity();
+  }, []);
+
+  useEffect(() => {
     if (searchParams) {
       methods.reset(searchParams);
 
@@ -129,6 +162,7 @@ const SearchForm = ({ onSubmit, onReset, isLoading = false, isAccountSearch = fa
             setProductState={setProductState}
             captchaRef={captchaRef}
             isAccountSearch={isAccountSearch}
+            maxQuantity={maxQuantity}
           />
           {/* relative mt-5 w-full rounded-base bg-white px-4 py-8 shadow-2xmd md:px-5 3md:px-7 3md:py-9 */}
           {isAccountSearch && (
