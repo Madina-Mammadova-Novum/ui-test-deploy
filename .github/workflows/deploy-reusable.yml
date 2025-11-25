@@ -224,6 +224,7 @@ jobs:
             NEXT_PUBLIC_MAINTENANCE_MODE=${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}
             NEXT_PUBLIC_BETA_MODE=${{ secrets.NEXT_PUBLIC_BETA_MODE }}
             NEXT_PUBLIC_ENABLE_MATOMO=${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}
+            NEXT_PUBLIC_MARKER_PROJECT_ID=${{ secrets.NEXT_PUBLIC_MARKER_PROJECT_ID }}
             NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}
             NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}
             NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID=${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}
@@ -407,6 +408,7 @@ jobs:
             -e NEXT_PUBLIC_BETA_MODE="${{ secrets.NEXT_PUBLIC_BETA_MODE }}" \
             -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
             -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
+            -e NEXT_PUBLIC_MARKER_PROJECT_ID="${{ secrets.NEXT_PUBLIC_MARKER_PROJECT_ID }}" \
             -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
             -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
             -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \
@@ -482,19 +484,20 @@ jobs:
                 -e OTEL_METRIC_EXPORTER_OTLP_ENDPOINT="${{ secrets.OTEL_METRIC_EXPORTER_OTLP_ENDPOINT }}" \
                 -e NEXT_PUBLIC_MAINTENANCE_MODE="${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}" \
                 -e NEXT_PUBLIC_BETA_MODE="${{ secrets.NEXT_PUBLIC_BETA_MODE }}" \
-                -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
-                -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
-                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
-                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
-                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \
-                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}" \
-                -e NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}" \
-                -e NEXT_PUBLIC_ADMIN_URL="${{ secrets.NEXT_PUBLIC_ADMIN_URL }}" \
-                "${CONTAINER_NAME}-previous"
-              
-              sleep 10
-              if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
-                echo "✅ Rollback successful - previous version restored"
+              -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
+              -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
+              -e NEXT_PUBLIC_MARKER_PROJECT_ID="${{ secrets.NEXT_PUBLIC_MARKER_PROJECT_ID }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_TRUST_KEY }}" \
+              -e NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_ACCOUNT_ID }}" \
+              -e NEXT_PUBLIC_ADMIN_URL="${{ secrets.NEXT_PUBLIC_ADMIN_URL }}" \
+              "${CONTAINER_NAME}-previous"
+            
+            sleep 10
+            if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+              echo "✅ Rollback successful - previous version restored"
               else
                 echo "❌ Rollback failed - manual intervention required"
               fi
@@ -770,6 +773,7 @@ jobs:
               -e NEXT_PUBLIC_BETA_MODE="${{ secrets.NEXT_PUBLIC_BETA_MODE }}" \
               -e NEXT_PUBLIC_APP_ENV="${{ secrets.NEXT_PUBLIC_APP_ENV }}" \
               -e NEXT_PUBLIC_ENABLE_MATOMO="${{ secrets.NEXT_PUBLIC_ENABLE_MATOMO }}" \
+              -e NEXT_PUBLIC_MARKER_PROJECT_ID="${{ secrets.NEXT_PUBLIC_MARKER_PROJECT_ID }}" \
               -e NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_LICENSE_KEY }}" \
               -e NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_APP_ID }}" \
               -e NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID="${{ secrets.NEXT_PUBLIC_NEW_RELIC_BROWSER_AGENT_ID }}" \

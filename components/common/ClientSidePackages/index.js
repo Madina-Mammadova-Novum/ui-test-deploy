@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 import { usePathname } from 'next/navigation';
 
-import { CookieConsent, MatomoAnalytics, NewRelicBrowser } from '@/common';
+import { CookieConsent, MarkerWidget, MatomoAnalytics, NewRelicBrowser } from '@/common';
 import { ROUTES } from '@/lib';
 import { Chat } from '@/modules';
 import { getCookieFromBrowser, getRoleIdentity } from '@/utils/helpers';
@@ -29,6 +29,7 @@ const ClientSidePackages = () => {
       <ToastContainer position="top-right" closeOnClick={false} closeButton={false} autoClose={8000} hideProgressBar />
       {isChatAvailable && <Chat token={token} />}
       {showCookieConsent && <CookieConsent />}
+      <MarkerWidget />
       <NewRelicBrowser />
       <MatomoAnalytics />
     </>
