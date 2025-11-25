@@ -40,7 +40,7 @@ const Dropdown = ({
   }, [defaultValue, selectedOption]);
 
   return (
-    <div className={`relative top-px ${disabled && 'opacity-70'} ${className}`}>
+    <div className={`relative top-px ${disabled && 'cursor-not-allowed opacity-80'} ${className}`}>
       <Label name={name} className="text-xs-sm">
         {label}
       </Label>

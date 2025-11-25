@@ -84,7 +84,7 @@ const SimpleDropdown = React.forwardRef(
           onMenuClose={handleCloseMenu}
           theme={dropdownTheme}
           isDisabled={isDisabled}
-          className={isDisabled ? 'opacity-50' : ''}
+          className={isDisabled ? 'opacity-80' : ''}
           components={mergedComponents}
           closeMenuOnSelect
           cacheOptions
@@ -105,7 +105,7 @@ const SimpleDropdown = React.forwardRef(
         onMenuClose={handleCloseMenu}
         theme={dropdownTheme}
         isDisabled={isDisabled}
-        className={isDisabled ? 'opacity-50' : ''}
+        className={isDisabled ? 'opacity-80' : ''}
         components={mergedComponents}
         isOptionDisabled={(option) => option.isDisabled}
         filterOption={createTurkishFilter()}

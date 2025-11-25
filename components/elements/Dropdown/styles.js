@@ -10,15 +10,16 @@ export const dropdownStyles = (selectedOption, error, minWidth, expand = false) 
       fill: isSelected ? '#199AF5' : '#072D46',
     },
   }),
-  control: (base, { menuIsOpen }) => ({
+  control: (base, { menuIsOpen, isDisabled }) => ({
     ...base,
     '&:hover': {
       border: menuIsOpen && '1px solid #199AF5',
+      cursor: isDisabled && 'not-allowed',
     },
-    background: selectedOption && '#E7ECF8',
+    background: isDisabled ? '#E7ECF8' : '#ffffff',
     borderRadius: '6px',
     border: menuIsOpen ? '1px solid #199AF5' : `1px solid ${!error ? '#DADFEA' : '#E53636'} `,
-    cursor: 'pointer',
+    cursor: isDisabled ? 'not-allowed' : 'pointer',
   }),
   container: (base, { selectProps: { menuIsOpen, options } }) => {
     const containerMinHeight = options?.length > 11 ? 308 : options?.length * 34;

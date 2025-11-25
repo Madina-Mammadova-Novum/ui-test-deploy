@@ -34,7 +34,12 @@ export const apiErrorAdapter = ({ status, statusText, errorResponse }) => {
       type: errorResponse?.type || errorResponse?.error?.type || null,
       traceid: errorResponse?.traceid || errorResponse?.error?.traceid || null,
       title: errorResponse?.title || errorResponse?.error?.title || statusText,
-      message: errorResponse?.detail || errorResponse?.error?.detail || ERROR_MESSAGE,
+      message:
+        errorResponse?.detail ||
+        errorResponse?.error?.detail ||
+        errorResponse?.message ||
+        errorResponse?.error?.message ||
+        ERROR_MESSAGE,
       errors: errorResponse?.errors || errorResponse?.error?.errors || null,
     },
   };

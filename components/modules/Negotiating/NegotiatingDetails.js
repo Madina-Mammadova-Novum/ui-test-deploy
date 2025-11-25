@@ -60,6 +60,8 @@ const NegotiatingDetails = ({ searchedParams }) => {
       ? ownerNegotiatingHeaderDataAdapter({ data: rowData })
       : chartererNegotiatingHeaderDataAdapter({ data: rowData });
 
+    const shouldExpand = toggle !== null ? toggle : index === 0;
+
     return (
       <ExpandableRow
         key={rowData.id}
@@ -71,7 +73,7 @@ const NegotiatingDetails = ({ searchedParams }) => {
           />
         }
         footer={<NegotiatingExpandedFooter isCharterer={!isOwner} cargoId={rowData?.id} />}
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
       >
         <NegotiatingExpandedContent
           tab={searchedParams.status}

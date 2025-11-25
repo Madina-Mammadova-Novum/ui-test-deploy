@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { addDays } from 'date-fns';
 import { debounce } from 'lodash';
@@ -17,19 +17,24 @@ import { getCargoTypes } from '@/services/cargoTypes';
 import { getPortsForSearchForm } from '@/services/port';
 import { getProducts } from '@/services/product';
 import { getTerminals } from '@/services/terminal';
-import { setSearchParams } from '@/store/entities/search/slice';
 import { getSearchSelector } from '@/store/selectors';
 import { AdditionalDischargeForm, Captcha } from '@/units';
 import {
   convertDataToOptions,
   convertTerminalDataToOptions,
+  formatCurrency,
   getValueWithPath,
   shouldShowCaptcha,
 } from '@/utils/helpers';
 import { useHookForm } from '@/utils/hooks';
 
-const SearchFormFields = ({ productState, setProductState, captchaRef, isAccountSearch = false }) => {
-  const dispatch = useDispatch();
+const SearchFormFields = ({
+  productState,
+  setProductState,
+  captchaRef,
+  isAccountSearch = false,
+  maxQuantity = null,
+}) => {
   const { searchParams } = useSelector(getSearchSelector);
 
   const {
@@ -86,9 +91,19 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
     name: 'loadTerminal',
   });
 
+  const watchedDischargePort = useWatch({
+    control,
+    name: 'dischargePort',
+  });
+
   const showAdditionalDischargeValue = useWatch({
     control,
     name: 'showAdditionalDischarge',
+  });
+
+  const watchedCargoType = useWatch({
+    control,
+    name: 'cargoType',
   });
 
   const minDateForLaycanEnd = watchedLaycanStart ? new Date(watchedLaycanStart) : new Date();
@@ -123,10 +138,25 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
       dischargePort: 'dischargeTerminal',
     };
 
+    const oppositePortKey = {
+      loadPort: 'dischargePort',
+      dischargePort: 'loadPort',
+    };
+
     if (JSON.stringify(getValues(key)) === JSON.stringify(value)) return;
 
     if (error) {
       clearErrors(key);
+    }
+
+    // Check if user selected the same port that's already selected in the opposite field
+    if (portKeys.includes(key)) {
+      const oppositePort = getValues(oppositePortKey[key]);
+      if (oppositePort && value && oppositePort.value === value.value) {
+        // Clear the opposite port if same port is selected
+        setValue(oppositePortKey[key], null);
+        setValue(terminalKeys[oppositePortKey[key]], null);
+      }
     }
 
     setValue(key, value);
@@ -188,42 +218,49 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
     const newProductId = availableProductIds.find((el) => !currentProductIndexes.includes(el));
 
     if (newProductId !== undefined) {
+      // Initialize the new product slot with empty values to prevent form state issues
+      setValue(
+        `products[${newProductId}]`,
+        {
+          product: null,
+          density: '',
+          quantity: '',
+          tolerance: '',
+        },
+        { shouldValidate: false, shouldDirty: false }
+      );
+
       setProductState((prevState) => [...prevState, newProductId]);
-
-      const updatedProductsByIndex = [...(searchParams?.productsByIndex || [0]), newProductId];
-      const updatedSearchParams = {
-        ...searchParams,
-        productsByIndex: updatedProductsByIndex,
-      };
-
-      dispatch(setSearchParams(updatedSearchParams));
     }
   };
 
   const handleRemoveProduct = (id) => {
+    // Clear errors for the product being removed
     clearErrors(`products[${id}]`);
-    const currentProducts = getValues('products');
 
-    const updatedProducts = currentProducts.filter((_, index) => index !== id);
+    // Get all current products
+    const allProducts = getValues('products') || [];
 
-    setValue('products', updatedProducts);
+    // Build a mapping of current productState indices to their values
+    const productMap = {};
+    productState.forEach((productId) => {
+      if (productId !== id && allProducts[productId]) {
+        productMap[productId] = allProducts[productId];
+      }
+    });
 
-    setProductState((prevState) => (id === 0 ? prevState.slice(0, -1) : prevState.filter((product) => product !== id)));
+    // Update productState first (remove the deleted id)
+    const newProductState = productState.filter((product) => product !== id);
+    setProductState(newProductState);
 
-    const updatedProductsByIndex =
-      id === 0
-        ? (searchParams?.productsByIndex || []).slice(0, -1) // remove last if `id` is `0`
-        : searchParams?.productsByIndex?.filter((_, index) => index !== id); // remove by `id` otherwise
+    // Rebuild the products array based on the new productState order
+    const newProductsArray = [];
+    newProductState.forEach((productId) => {
+      newProductsArray[productId] = productMap[productId];
+    });
 
-    const updatedSearchParamsProducts = searchParams?.products?.filter((_, index) => index !== id);
-
-    const updatedSearchParams = {
-      ...searchParams,
-      products: updatedSearchParamsProducts,
-      productsByIndex: updatedProductsByIndex,
-    };
-
-    dispatch(setSearchParams(updatedSearchParams));
+    // Update form with new products array
+    setValue('products', newProductsArray, { shouldValidate: false, shouldDirty: false });
   };
 
   const getCargoes = async () => {
@@ -245,12 +282,34 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
     callback(dropDownOptionsAdapter({ data }));
   }, 400);
 
-  const loadOptions = (inputValue, callback) => {
+  // Mark ports as disabled if they're selected in the opposite dropdown
+  const getPortsWithDisabled = (excludePort) => {
+    if (!excludePort?.value) return ports;
+    return ports.map((port) => ({
+      ...port,
+      isDisabled: port.value === excludePort.value,
+    }));
+  };
+
+  // Mark async loaded ports as disabled if they're selected in the opposite dropdown
+  const getLoadOptionsWithDisabled = (excludePort) => (inputValue, callback) => {
     if (!inputValue) {
-      callback(ports);
+      callback(getPortsWithDisabled(excludePort));
       return;
     }
-    debouncedLoadOptions(inputValue, callback);
+
+    debouncedLoadOptions(inputValue, (options) => {
+      if (!excludePort?.value) {
+        callback(options);
+        return;
+      }
+      callback(
+        options.map((port) => ({
+          ...port,
+          isDisabled: port.value === excludePort.value,
+        }))
+      );
+    });
   };
 
   useEffect(() => {
@@ -403,10 +462,10 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
             name="loadPort"
             label="load port"
             labelBadge="*"
-            options={ports}
+            options={getPortsWithDisabled(watchedDischargePort)}
             loading={portsLoader}
             onMenuScrollToBottom={handleMore}
-            loadOptions={loadOptions}
+            loadOptions={getLoadOptionsWithDisabled(watchedDischargePort)}
             disabled={initialLoading}
             customStyles={{ className: 'w-full', dropdownWidth: 3 }}
             onChange={(option) => handleChange('loadPort', option)}
@@ -428,9 +487,9 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
             name="dischargePort"
             label="discharge port"
             labelBadge="*"
-            options={ports}
+            options={getPortsWithDisabled(watchedLoadPort)}
             loading={portsLoader}
-            loadOptions={loadOptions}
+            loadOptions={getLoadOptionsWithDisabled(watchedLoadPort)}
             onMenuScrollToBottom={handleMore}
             disabled={initialLoading}
             customStyles={{ className: 'w-full' }}
@@ -478,26 +537,40 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
           asyncCall
         />
         {productState?.map((productId, index) => {
-          const { density = {} } = getValues(`products[${productId}].product`) || {};
+          const selectedProduct = getValues(`products[${productId}].product`);
+          const { density = {} } = selectedProduct || {};
+          const isProductSelected = !!selectedProduct?.value;
 
           const minValue = parseFloat(density?.min?.toFixed(4)).toString();
           const maxValue = parseFloat(density?.max?.toFixed(4)).toString();
 
-          const helperTextDensity = `${minValue} - ${maxValue}`;
+          const helperTextDensity = density.min && density.max ? `${minValue} - ${maxValue} mt/m³` : '';
+          const helperTextTolerance = isProductSelected ? '1% - 20%' : '';
+          const helperTextQuantity =
+            isProductSelected && maxQuantity
+              ? `1,000 - ${formatCurrency(maxQuantity)} MT`
+              : isProductSelected
+                ? '1,000 MT - ∞'
+                : '';
 
           return (
             <div key={`product_${productId}`}>
               <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2.5 3md:flex-nowrap">
                 <FormDropdown
-                  onChange={(option) => {
+                  onChange={async (option) => {
                     setSelected(!selected);
-                    handleChange(`products[${productId}].product`, option);
+                    await handleChange(`products[${productId}].product`, option);
+                    // Trigger density validation after product selection
+                    const currentDensity = getValues(`products[${productId}].density`);
+                    if (currentDensity) {
+                      trigger(`products[${productId}].density`);
+                    }
                   }}
                   name={`products[${productId}].product`}
                   loading={products.loading}
                   asyncCall
                   options={products.data}
-                  disabled={!products.data.length}
+                  disabled={!watchedCargoType || !products.data.length || isSubmitting}
                   label={`product #${index + 1}`}
                   labelBadge="*"
                   customStyles={{ className: 'w-full 3md:w-1/2' }}
@@ -509,9 +582,9 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   type="number"
                   placeholder="mt/m³"
                   customStyles="w-full 3md:w-2/5"
-                  helperText={density.min && helperTextDensity}
+                  helperText={helperTextDensity}
                   error={errors.products ? errors.products[productId]?.density?.message : null}
-                  disabled={isSubmitting}
+                  disabled={!isProductSelected || isSubmitting}
                   min={String(density.min)}
                   max={String(density.max)}
                   step="any"
@@ -523,8 +596,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   type="number"
                   placeholder="tons"
                   customStyles="w-full md:w-[45%] 3md:w-2/5"
+                  helperText={helperTextQuantity}
                   error={errors.products ? errors.products[productId]?.quantity?.message : null}
-                  disabled={isSubmitting}
+                  disabled={!isProductSelected || isSubmitting}
+                  min="1000"
+                  max={maxQuantity ? String(maxQuantity) : undefined}
                 />
                 <Input
                   {...register(`products[${productId}].tolerance`)}
@@ -533,8 +609,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                   type="number"
                   placeholder="%"
                   customStyles="w-full md:w-[45%] 3md:w-1/5"
+                  helperText={helperTextTolerance}
                   error={errors.products ? errors.products[productId]?.tolerance?.message : null}
-                  disabled={isSubmitting}
+                  disabled={!isProductSelected || isSubmitting}
+                  min="1"
+                  max="20"
                 />
               </div>
               {productState?.length > 1 && (
@@ -543,10 +622,11 @@ const SearchFormFields = ({ productState, setProductState, captchaRef, isAccount
                     text: 'Delete',
                     variant: 'tertiary',
                     size: 'small',
-                    icon: { after: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
+                    icon: { before: <TrashAltSVG viewBox="0 0 24 24" className="h-5 w-5 fill-black" /> },
                   }}
-                  customStyles="ml-auto !p-0"
+                  customStyles="ml-auto !p-0 !pt-1"
                   onClick={() => handleRemoveProduct(productId)}
+                  disabled={isSubmitting}
                 />
               )}
             </div>
@@ -574,6 +654,7 @@ SearchFormFields.propTypes = {
   setProductState: PropTypes.func.isRequired,
   captchaRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   isAccountSearch: PropTypes.bool,
+  maxQuantity: PropTypes.number,
 };
 
 export default SearchFormFields;

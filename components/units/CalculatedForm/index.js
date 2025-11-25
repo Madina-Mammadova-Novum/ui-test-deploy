@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import { successToolsDataAdapter } from '@/adapters';
 import { dropDownOptionsAdapter } from '@/adapters/countryOption';
 import { FormManager } from '@/common';
 import { captchaSchema, toolsSchema } from '@/lib/schemas';
-import { getEstimation } from '@/services';
+import { getEstimation, getMaxSearchableQuantity } from '@/services';
 import { getGeneralDataSelector } from '@/store/selectors';
 import { CalculatedDetails, Captcha } from '@/units';
 import { getValueWithPath, shouldShowCaptcha } from '@/utils/helpers';
@@ -21,6 +21,7 @@ import { toolsCalculatorOptions } from '@/utils/mock';
 const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => {
   const { ports } = useSelector(getGeneralDataSelector);
   const [captcha, setCaptcha] = useState(null);
+  const [maxQuantity, setMaxQuantity] = useState(null);
   const captchaRef = useRef(null);
 
   const [state, setState] = useState({
@@ -39,11 +40,21 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
   const isFreight = calculator?.value === toolsCalculatorOptions[0]?.value;
 
   const schema = yup.object().shape({
-    ...toolsSchema({ isFreight }),
+    ...toolsSchema({ isFreight, maxQuantity }),
     ...(isLoggedIn || !shouldShowCaptcha() ? {} : captchaSchema()),
   });
 
   const methods = useHookFormParams({ schema, state });
+
+  const watchedFromPort = useWatch({
+    control: methods.control,
+    name: 'fromPort',
+  });
+
+  const watchedToPort = useWatch({
+    control: methods.control,
+    name: 'toPort',
+  });
 
   useEffect(() => {
     if (state.fromPort === state.toPort) {
@@ -52,6 +63,22 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
       setErrorMessage('');
     }
   }, [state.fromPort, state.toPort]);
+
+  useEffect(() => {
+    const fetchMaxQuantity = async () => {
+      try {
+        const response = await getMaxSearchableQuantity();
+        if (response?.data?.maxSearchableQuantity) {
+          setMaxQuantity(response.data.maxSearchableQuantity);
+        }
+      } catch (error) {
+        // Silently fail - validation will use default max if API fails
+        console.error('Failed to fetch max searchable quantity:', error);
+      }
+    };
+
+    fetchMaxQuantity();
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn || !shouldShowCaptcha()) return;
@@ -77,6 +104,9 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
   };
 
   const handleReset = () => {
+    // Clear all form errors
+    methods.clearErrors();
+
     // Reset the form values
     methods.setValue('cargoQuantity', null);
     methods.setValue('speed', null);
@@ -84,6 +114,17 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
     methods.setValue('toPort', null);
     methods.setValue('calculator', calculator);
     methods.setValue('response', null);
+
+    // Reset state values
+    setState((prevState) => ({
+      ...prevState,
+      fromPort: null,
+      toPort: null,
+      speed: 11,
+    }));
+
+    // Clear error message
+    setErrorMessage('');
 
     if (isLoggedIn || !shouldShowCaptcha()) return;
 
@@ -118,6 +159,12 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
       }
 
       methods.setValue('response', null);
+    }
+
+    // Trigger validation on change for specific fields
+    const fieldsToValidate = ['cargoQuantity', 'fromPort', 'toPort', 'calculator'];
+    if (fieldsToValidate.includes(key)) {
+      methods.trigger(key);
     }
   };
 
@@ -167,7 +214,13 @@ const CalculatedForm = ({ customHeight = '', children, isLoggedIn = false }) => 
         >
           <div className="flex w-full flex-col gap-5 md:flex-row">
             <div className="flex w-full flex-col gap-4 md:max-w-[336px]">
-              <CalculatedDetails isFreight={isFreight} onChange={handleChangeValue} />
+              <CalculatedDetails
+                isFreight={isFreight}
+                onChange={handleChangeValue}
+                maxQuantity={maxQuantity}
+                watchedFromPort={watchedFromPort}
+                watchedToPort={watchedToPort}
+              />
               {!isLoggedIn && shouldShowCaptcha() && (
                 <Captcha
                   onChange={setCaptcha}

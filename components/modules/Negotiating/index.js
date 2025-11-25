@@ -23,7 +23,7 @@ const Negotiating = () => {
       : chartererNegotiatingHeaderDataAdapter({ data: rowData });
 
     // Determine if this card should be expanded
-    const shouldExpand = expandedParentId ? rowData.id === expandedParentId : index === 0 || toggle;
+    const shouldExpand = expandedParentId ? rowData.id === expandedParentId : toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow

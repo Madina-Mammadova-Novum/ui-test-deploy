@@ -5,7 +5,7 @@ import { fetchFleetsWithVessels, fetchPrefilledDataToUpdate, fetchUnassignedFlee
 const initialState = {
   loading: true,
   refetch: false,
-  toggle: false,
+  toggle: null,
   unassignedFleetData: [],
   prefilledUpdateVesselState: {
     loading: true,

@@ -28,6 +28,7 @@ const OnSubs = () => {
 
     const { frozenAt, isFailed } = rowData;
     const isStatusSectionActive = isFailed || frozenAt;
+    const shouldExpand = toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow
@@ -43,7 +44,7 @@ const OnSubs = () => {
             }
           />
         }
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         footer={
           <OnSubsExpandedFooter
             underRecap={rowData?.countdownStatus !== 'Running'}

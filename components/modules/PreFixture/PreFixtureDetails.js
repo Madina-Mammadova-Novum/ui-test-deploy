@@ -104,11 +104,12 @@ const PreFixtureDetails = ({ searchedParams }) => {
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
     const setAccepted = (isOwner ? rowData?.ownerConfirmed : rowData?.chartererConfirmed) === 'Confirmed';
+    const shouldExpand = toggle !== null ? toggle : index === 0;
 
     return (
       <ExpandableRow
         key={rowData.id}
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         header={
           <ExpandableCardHeader
             headerData={rowHeader}

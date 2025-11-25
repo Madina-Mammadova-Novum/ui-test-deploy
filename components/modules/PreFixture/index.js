@@ -29,10 +29,12 @@ const PreFixture = () => {
       ? ownerPrefixtureHeaderDataAdapter({ data: rowData })
       : chartererPrefixtureHeaderDataAdapter({ data: rowData });
 
+    const shouldExpand = toggle !== null ? toggle : index === 0;
+
     return (
       <ExpandableRow
         key={rowData.id}
-        expand={index === 0 || toggle}
+        expand={shouldExpand}
         className="px-5"
         header={
           <ExpandableCardHeader

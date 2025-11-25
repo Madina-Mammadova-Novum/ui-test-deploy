@@ -281,12 +281,13 @@ export const ownerNegotiatingFailedTableHeader = [
     text: 'Date Declined',
   },
   {
-    text: 'reason',
+    text: 'Declined State',
   },
   {
     text: '',
   },
 ];
+
 export const chartererNegotiatingFailedTableHeader = [
   {
     text: '#',
@@ -307,7 +308,7 @@ export const chartererNegotiatingFailedTableHeader = [
     text: 'Date Declined',
   },
   {
-    text: 'reason',
+    text: 'Declined State',
   },
   {
     text: '',

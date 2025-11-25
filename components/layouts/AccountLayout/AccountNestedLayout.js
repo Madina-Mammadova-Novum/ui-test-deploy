@@ -15,7 +15,16 @@ import { ComplexPagination, ToggleRows } from '@/units';
 const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
   const searchedParams = useParams();
 
-  const { data, pagination, sorting, onToggle, withActions = false, useExpand = true, usePagination = true } = config;
+  const {
+    data,
+    pagination,
+    sorting,
+    onToggle,
+    withActions = false,
+    useExpand = true,
+    usePagination = true,
+    expandAll = false,
+  } = config;
 
   const nestedRoute = new RegExp(`/${searchedParams.id}`, 'g');
   const parentRoute = window.location.pathname.replace(nestedRoute, '');
@@ -32,7 +41,7 @@ const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
     if (sorting?.options?.length) {
       return (
         <div className="flex flex-col-reverse items-end gap-x-5 gap-y-5 3md:flex-row 3md:items-center">
-          {useExpand && <ToggleRows onToggleClick={onToggle} />}
+          {useExpand && <ToggleRows onToggleClick={onToggle} expandAll={expandAll} />}
         </div>
       );
     }
@@ -41,14 +50,14 @@ const AccountNestedLayout = ({ children, config, label = 'offers' }) => {
       return (
         <div className="flex flex-col-reverse items-end gap-x-5 gap-y-5 3md:flex-row 3md:items-center">
           {searchedParams?.id && <NextLink href={parentRoute}>Back to all</NextLink>}
-          <ToggleRows onToggleClick={onToggle} />
+          <ToggleRows onToggleClick={onToggle} expandAll={expandAll} />
           <FleetsActions />
         </div>
       );
     }
 
-    return useExpand && <ToggleRows onToggleClick={onToggle} />;
-  }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute, useExpand]);
+    return useExpand && <ToggleRows onToggleClick={onToggle} expandAll={expandAll} />;
+  }, [onToggle, sorting, withActions, dropdownStyles, searchedParams?.id, parentRoute, useExpand, expandAll]);
 
   return (
     <div className="w-full max-w-[155.75rem] px-5">
