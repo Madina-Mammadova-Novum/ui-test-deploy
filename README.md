@@ -286,6 +286,7 @@ All secrets must be configured in **GitHub Environments** (Settings → Environm
 - `NEXT_PUBLIC_BETA_MODE` - Beta mode flag
 - `NEXT_PUBLIC_ENABLE_MATOMO` - Analytics enablement flag
 - `NEXT_PUBLIC_ADMIN_URL` - Admin panel URL
+- `NEXT_PUBLIC_MARKER_PROJECT_ID` - Marker.io feedback widget project ID (optional)
 
 #### Monitoring Secrets (Optional)
 

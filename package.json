@@ -69,6 +69,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@iconscout/react-unicons": "^2.2.4",
     "@iconscout/react-unicons-solid": "^1.0.2",
+    "@marker.io/browser": "^0.20.2",
     "@microsoft/signalr": "^9.0.6",
     "@newrelic/browser-agent": "^1.285.0",
     "@redux-devtools/extension": "^3.2.5",
