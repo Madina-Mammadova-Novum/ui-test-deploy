@@ -16,7 +16,6 @@ const MarkerWidget = () => {
     const maintenanceMode =
       process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' && process.env.NODE_ENV === 'production';
 
-    console.log({ maintenanceMode });
     // Skip widget loading in maintenance mode
     if (maintenanceMode) {
       return;
@@ -48,7 +47,6 @@ const MarkerWidget = () => {
         // Get project ID from environment variable
         const markerProjectId = process.env.NEXT_PUBLIC_MARKER_PROJECT_ID;
 
-        console.log({ markerProjectId });
         // Skip if project ID is not configured
         if (!markerProjectId) {
           console.warn('Marker.io project ID not configured. Set NEXT_PUBLIC_MARKER_PROJECT_ID in your environment.');
